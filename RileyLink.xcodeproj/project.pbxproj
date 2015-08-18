@@ -37,7 +37,7 @@
 		C12EA255198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA256198B436900309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
 		C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA25C198B436900309FA4 /* InfoPlist.strings */; };
-		C12EA260198B436900309FA4 /* GlucoseLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* GlucoseLinkTests.m */; };
+		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
@@ -63,7 +63,7 @@
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = GlucoseLink;
+			remoteInfo = RileyLink;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -118,7 +118,7 @@
 		C12EA253198B436800309FA4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C12EA25B198B436900309FA4 /* RileyLinkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RileyLinkTests-Info.plist"; sourceTree = "<group>"; };
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C12EA25F198B436900309FA4 /* GlucoseLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlucoseLinkTests.m; sourceTree = "<group>"; };
+		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C12EA26B198B456D00309FA4 /* NightscoutWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightscoutWebView.h; sourceTree = "<group>"; };
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
@@ -286,7 +286,7 @@
 				C1EF58871B3F93FE001C8C80 /* Config.m */,
 			);
 			name = RileyLink;
-			path = GlucoseLink;
+			path = RileyLink;
 			sourceTree = "<group>";
 		};
 		C12EA241198B436800309FA4 /* Supporting Files */ = {
@@ -296,18 +296,18 @@
 				C12EA243198B436800309FA4 /* InfoPlist.strings */,
 				C12EA246198B436800309FA4 /* main.m */,
 				C12EA248198B436800309FA4 /* RileyLink-Prefix.pch */,
-				C12EA259198B436900309FA4 /* GlucoseLinkTests */,
+				C12EA259198B436900309FA4 /* RileyLinkTests */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		C12EA259198B436900309FA4 /* GlucoseLinkTests */ = {
+		C12EA259198B436900309FA4 /* RileyLinkTests */ = {
 			isa = PBXGroup;
 			children = (
-				C12EA25F198B436900309FA4 /* GlucoseLinkTests.m */,
+				C12EA25F198B436900309FA4 /* RileyLinkTests.m */,
 				C12EA25A198B436900309FA4 /* Supporting Files */,
 			);
-			path = GlucoseLinkTests;
+			path = RileyLinkTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		C12EA25A198B436900309FA4 /* Supporting Files */ = {
@@ -406,7 +406,7 @@
 			dependencies = (
 			);
 			name = RileyLink;
-			productName = GlucoseLink;
+			productName = RileyLink;
 			productReference = C12EA237198B436800309FA4 /* RileyLink.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -424,7 +424,7 @@
 				C12EA258198B436900309FA4 /* PBXTargetDependency */,
 			);
 			name = RileyLinkTests;
-			productName = GlucoseLinkTests;
+			productName = RileyLinkTests;
 			productReference = C12EA252198B436800309FA4 /* RileyLinkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -532,7 +532,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C12EA260198B436900309FA4 /* GlucoseLinkTests.m in Sources */,
+				C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,8 +645,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlucoseLink/RileyLink-Prefix.pch";
-				INFOPLIST_FILE = "GlucoseLink/RileyLink-Info.plist";
+				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
+				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
@@ -660,8 +660,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlucoseLink/RileyLink-Prefix.pch";
-				INFOPLIST_FILE = "GlucoseLink/RileyLink-Info.plist";
+				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
+				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
@@ -680,9 +680,9 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlucoseLink/RileyLink-Prefix.pch";
+				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				INFOPLIST_FILE = "GlucoseLinkTests/RileyLinkTests-Info.plist";
+				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glucoselink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -701,8 +701,8 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "GlucoseLink/RileyLink-Prefix.pch";
-				INFOPLIST_FILE = "GlucoseLinkTests/RileyLinkTests-Info.plist";
+				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
+				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glucoselink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";

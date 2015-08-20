@@ -26,7 +26,7 @@
 }
 
 - (NSInteger) glucose {
-  return [self b:@"glucose"];
+  return [self getBits:@"glucose"];
 }
 
 @end

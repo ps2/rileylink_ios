@@ -59,7 +59,7 @@
 }
 
 - (SensorStatus) sensorStatus {
-  NSInteger bgH = [self b:@"bg_h"];
+  NSInteger bgH = [self getBits:@"bg_h"];
   switch (bgH) {
     case 0:
       return SENSOR_STATUS_MISSING;
@@ -82,29 +82,29 @@
 }
 
 - (GlucoseTrend) trend {
-  return (GlucoseTrend)[self b:@"trend"];
+  return (GlucoseTrend)[self getBits:@"trend"];
 }
 
 - (NSInteger) glucose {
   if ([self sensorStatus] == SENSOR_STATUS_OK) {
-    return ([self b:@"bg_h"] << 1) + [self b:@"bg_l"];
+    return ([self getBits:@"bg_h"] << 1) + [self getBits:@"bg_l"];
   } else {
     return 0;
   }
 }
 
 - (double) activeInsulin {
-  return [self b:@"active_ins"] * 0.025;
+  return [self getBits:@"active_ins"] * 0.025;
 }
 
 - (NSDate*) measurementTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
-  [components setYear:[self b:@"sensor_year"]+2000];
-  [components setMonth:[self b:@"sensor_month"]];
-  [components setDay:[self b:@"sensor_day"]];
-  [components setHour:[self b:@"sensor_hour"]];
-  [components setMinute:[self b:@"sensor_minute"]];
+  [components setYear:[self getBits:@"sensor_year"]+2000];
+  [components setMonth:[self getBits:@"sensor_month"]];
+  [components setDay:[self getBits:@"sensor_day"]];
+  [components setHour:[self getBits:@"sensor_hour"]];
+  [components setMinute:[self getBits:@"sensor_minute"]];
   [components setSecond:0];
   return [calendar dateFromComponents:components];
 }

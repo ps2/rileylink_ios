@@ -31,8 +31,14 @@
 
 @implementation MainAppViewController
 
+
 - (void)viewDidLoad {
   [super viewDidLoad];
+  
+  // Hitting a crash like this:
+  // http://stackoverflow.com/questions/26656342/uiwebview-random-crash-at-uiviewanimationstate-release-message-sent-to-deallo
+  // Looks like switching NightscoutWebView to WKWebView should help. Until then:
+  [UIView setAnimationsEnabled:NO];
   
   _dateFormatter = [[ISO8601DateFormatter alloc] init];
   _dateFormatter.includeTime = YES;

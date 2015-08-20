@@ -35,7 +35,7 @@
   }
 }
 
-- (NSInteger) b:(NSString*)key {
+- (NSInteger) getBits:(NSString*)key {
   NSArray *range = [self bitBlocks][key];
   NSInteger bitsNeeded = [[range lastObject] integerValue];
   NSInteger offset = [[range firstObject] integerValue];
@@ -45,6 +45,10 @@
     bitsNeeded--;
   }
   return rval;
+}
+
+- (void) setBits:(NSString*)key toValue:(NSInteger)val {
+  //TODO
 }
 
 

@@ -14,7 +14,8 @@
 
 - (instancetype)initWithData:(NSData*)data;
 - (NSDictionary*) bitBlocks;
-- (NSInteger) b:(NSString*)key;
+- (NSInteger) getBits:(NSString*)key;
+- (void) setBits:(NSString*)key toValue:(NSInteger)val;
 - (unsigned char) getBitAtIndex:(NSInteger)idx;
 
 @end

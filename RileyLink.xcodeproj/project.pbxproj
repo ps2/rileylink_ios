@@ -220,12 +220,6 @@
 			children = (
 				C1E535EE1991E6A200C2AC49 /* MinimedPacket.h */,
 				C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */,
-				C1743CDD199D374500ED623E /* PumpStatusMessage.h */,
-				C1743CDE199D374500ED623E /* PumpStatusMessage.m */,
-				C13DB3A31B1583E900121E02 /* MessageBase.h */,
-				C13DB3A41B1583E900121E02 /* MessageBase.m */,
-				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
-				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
 			);
 			name = MinimedRF;
 			sourceTree = "<group>";
@@ -270,6 +264,7 @@
 				C1EF589B1B3FBA5D001C8C80 /* Nightscout */,
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
+				C14B4EDF1B85A31F00776647 /* MinimedMessages */,
 				C12964E91B1581D200516761 /* MinimedRF */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
@@ -285,7 +280,6 @@
 				C1EF58861B3F93FE001C8C80 /* Config.h */,
 				C1EF58871B3F93FE001C8C80 /* Config.m */,
 			);
-			name = RileyLink;
 			path = RileyLink;
 			sourceTree = "<group>";
 		};
@@ -317,6 +311,19 @@
 				C12EA25C198B436900309FA4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C14B4EDF1B85A31F00776647 /* MinimedMessages */ = {
+			isa = PBXGroup;
+			children = (
+				C1743CDD199D374500ED623E /* PumpStatusMessage.h */,
+				C1743CDE199D374500ED623E /* PumpStatusMessage.m */,
+				C13DB3A31B1583E900121E02 /* MessageBase.h */,
+				C13DB3A41B1583E900121E02 /* MessageBase.m */,
+				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
+				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
+			);
+			name = MinimedMessages;
 			sourceTree = "<group>";
 		};
 		C1AA398B1AB67F6A00BC9E33 /* Categories */ = {

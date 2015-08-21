@@ -148,14 +148,14 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         @"sgv": @(glucose),
         @"direction": [self trendToDirection:msg.trend],
         @"device": @"RileyLink",
-        @"iob": [NSNumber numberWithFloat:msg.activeInsulin],
+        @"iob": @(msg.activeInsulin),
         @"type": @"sgv"
         };
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
     msg.dateReceived = [NSDate date];
     NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
-    NSNumber *epochTime = [NSNumber numberWithLongLong:seconds * 1000];
+    NSNumber *epochTime = @(seconds * 1000);
     entry =
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.dateReceived],

@@ -139,8 +139,8 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
     x = (x << 8) + bytes[i];
     availBits += 8;
     if (availBits >= 12) {
-      NSNumber *hiNibble = codes[[NSNumber numberWithInt:(x >> (availBits - 6))]];
-      NSNumber *loNibble = codes[[NSNumber numberWithInt:(x >> (availBits - 12)) & 0b111111]];
+      NSNumber *hiNibble = codes[@(x >> (availBits - 6))];
+      NSNumber *loNibble = codes[@((x >> (availBits - 12)) & 0b111111)];
       if (hiNibble && loNibble) {
         unsigned char decoded = ([hiNibble integerValue] << 4) + [loNibble integerValue];
         [output appendBytes:&decoded length:1];

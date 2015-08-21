@@ -17,6 +17,6 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (void)saveContext;
-- (NSURL *)applicationDocumentsDirectory;
+@property (nonatomic, readonly, copy) NSURL *applicationDocumentsDirectory;
 
 @end

@@ -86,7 +86,7 @@
 
 
 - (IBAction)autoConnectSwitchToggled:(id)sender {
-  self.rlRecord.autoConnect = [NSNumber numberWithBool:autoConnectSwitch.on];
+  self.rlRecord.autoConnect = @(autoConnectSwitch.on);
   NSError *error;
   if (![self.managedObjectContext save:&error]) {
     NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);

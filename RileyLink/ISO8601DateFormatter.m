@@ -87,7 +87,7 @@ bool ISO8601DateFormatter_GlobalCachesAreWarm(void) {
 	return calendar;
 }
 
-- (id) init {
+- (instancetype) init {
 	if ((self = [super init])) {
 		parsingCalendar = [[self makeCalendarWithDesiredConfiguration] retain];
 		unparsingCalendar = [[self makeCalendarWithDesiredConfiguration] retain];
@@ -615,12 +615,12 @@ static BOOL is_leap_year(NSUInteger year);
 							[[self class] createGlobalCachesThatDoNotAlreadyExist];
 
 							NSInteger timeZoneOffset = (tz_hour * 3600) + (tz_minute * 60);
-							NSNumber *offsetNum = [NSNumber numberWithInteger:timeZoneOffset];
-							timeZone = [timeZoneCache.timeZonesByOffset objectForKey:offsetNum];
+							NSNumber *offsetNum = @(timeZoneOffset);
+							timeZone = (timeZoneCache.timeZonesByOffset)[offsetNum];
 							if (!timeZone) {
 								timeZone = [NSTimeZone timeZoneForSecondsFromGMT:timeZoneOffset];
 								if (timeZone)
-									[timeZoneCache.timeZonesByOffset setObject:timeZone forKey:offsetNum];
+									(timeZoneCache.timeZonesByOffset)[offsetNum] = timeZone;
 							}
 						}
 				}
@@ -1025,10 +1025,10 @@ static NSString *const ISO8601ThreadStorageTimeZoneCacheKey = @"org.boredzo.ISO8
 
 - (NSMutableDictionary *) timeZonesByOffset {
 	NSMutableDictionary *threadDict = [NSThread currentThread].threadDictionary;
-	NSMutableDictionary *currentCacheDict = [threadDict objectForKey:ISO8601ThreadStorageTimeZoneCacheKey];
+	NSMutableDictionary *currentCacheDict = threadDict[ISO8601ThreadStorageTimeZoneCacheKey];
 	if (currentCacheDict == nil) {
 		currentCacheDict = [NSMutableDictionary dictionaryWithCapacity:2UL];
-		[threadDict setObject:currentCacheDict forKey:ISO8601ThreadStorageTimeZoneCacheKey];
+		threadDict[ISO8601ThreadStorageTimeZoneCacheKey] = currentCacheDict;
 	}
 	return currentCacheDict;
 }

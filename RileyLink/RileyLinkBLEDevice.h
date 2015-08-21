@@ -10,11 +10,11 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RILEY_LINK_STATE_CONNECTING,
   RILEY_LINK_STATE_CONNECTED,
   RILEY_LINK_STATE_DISCONNECTED
-} RileyLinkState;
+};
 
 @interface RileyLinkBLEDevice : NSObject
 
@@ -23,9 +23,9 @@ typedef enum {
 @property (nonatomic, retain) NSString * peripheralId;
 @property (nonatomic, retain) CBPeripheral * peripheral;
 
-- (NSArray*) packets;
+@property (nonatomic, readonly, copy) NSArray *packets;
 
-- (RileyLinkState) state;
+@property (nonatomic, readonly) RileyLinkState state;
 - (void) connect;
 - (void) disconnect;
 - (void) cancelSending;

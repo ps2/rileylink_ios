@@ -31,10 +31,10 @@ typedef enum {
 
 @interface PumpStatusMessage : MessageBase
 
-- (NSInteger) glucose;
-- (NSDate*) measurementTime;
-- (GlucoseTrend) trend;
-- (double) activeInsulin;
-- (SensorStatus) sensorStatus;
+@property (nonatomic, readonly) NSInteger glucose;
+@property (nonatomic, readonly, copy) NSDate *measurementTime;
+@property (nonatomic, readonly) GlucoseTrend trend;
+@property (nonatomic, readonly) double activeInsulin;
+@property (nonatomic, readonly) SensorStatus sensorStatus;
 
 @end

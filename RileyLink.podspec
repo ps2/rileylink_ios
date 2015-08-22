@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
                    * Is not intended for therapy
                    DESC
 
-  s.homepage     = "https://github.com/ps2/rileylink"
+  s.homepage     = "https://github.com/ps2/rileylink_ios"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -71,7 +71,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/ps2/rileylink.git", :branch => "master" }
+  s.source       = { :git => "https://github.com/ps2/rileylink_ios.git", :branch => "master" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

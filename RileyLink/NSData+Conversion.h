@@ -10,7 +10,7 @@
 
 @interface NSData (Conversion)
 
-- (NSString *)hexadecimalString;
+@property (nonatomic, readonly, copy) NSString *hexadecimalString;
 + (NSData*)dataWithHexadecimalString: (NSString*)hexStr;
 
 @end

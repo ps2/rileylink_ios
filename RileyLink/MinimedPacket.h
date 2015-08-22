@@ -31,12 +31,12 @@ typedef enum {
 } MessageType;
 
 
-- (instancetype)initWithData:(NSData*)data;
-- (BOOL) isValid;
-- (NSString*) hexadecimalString;
-- (PacketType) packetType;
-- (MessageType) messageType;
-- (NSString*) address;
+- (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, getter=isValid, readonly) BOOL valid;
+@property (nonatomic, readonly, copy) NSString *hexadecimalString;
+@property (nonatomic, readonly) PacketType packetType;
+@property (nonatomic, readonly) MessageType messageType;
+@property (nonatomic, readonly, copy) NSString *address;
 + (NSData*)encodeData:(NSData*)data;
 
 @property (strong, nonatomic) NSData *data;

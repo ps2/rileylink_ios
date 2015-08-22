@@ -31,7 +31,7 @@
 
 @interface RileyLinkBLEManager : NSObject
 
-- (NSArray*)rileyLinkList;
+@property (nonatomic, readonly, copy) NSArray *rileyLinkList;
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device;
 - (void)disconnectRileyLink:(RileyLinkBLEDevice *)device;
 - (void)addDeviceToAutoConnectList:(RileyLinkBLEDevice*)device;

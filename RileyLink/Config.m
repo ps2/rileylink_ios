@@ -27,7 +27,7 @@
   return _sharedObject;
 }
 
-- (id)init {
+- (instancetype)init {
   if (self = [super init]) {
     _defaults = [NSUserDefaults standardUserDefaults];
   }

@@ -42,7 +42,7 @@ static NSDateFormatter *iso8601Formatter;
   return [NSArray arrayWithArray:UUIDs];
 }
 
-+ (id)sharedManager {
++ (instancetype)sharedManager {
   static RileyLinkBLEManager *sharedMyRileyLink = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{

@@ -12,8 +12,8 @@
 
 @property (strong, nonatomic) NSData *data;
 
-- (instancetype)initWithData:(NSData*)data;
-- (NSDictionary*) bitBlocks;
+- (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, readonly, copy) NSDictionary *bitBlocks;
 - (NSInteger) getBits:(NSString*)key;
 - (void) setBits:(NSString*)key toValue:(NSInteger)val;
 - (unsigned char) getBitAtIndex:(NSInteger)idx;

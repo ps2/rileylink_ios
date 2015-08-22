@@ -15,7 +15,7 @@
 void append(NSString *msg){
   // get path to Documents/somefile.txt
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-  NSString *documentsDirectory = [paths objectAtIndex:0];
+  NSString *documentsDirectory = paths[0];
   NSString *path = [documentsDirectory stringByAppendingPathComponent:@"logfile.txt"];
   // create if needed
   if (![[NSFileManager defaultManager] fileExistsAtPath:path]){

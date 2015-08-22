@@ -117,7 +117,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
     PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
-    NSNumber *epochTime = [NSNumber numberWithDouble:[msg.measurementTime timeIntervalSince1970] * 1000];
+    NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
     
     if (![packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
       NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
@@ -145,21 +145,21 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     entry =
       @{@"date": epochTime,
         @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
-        @"sgv": [NSNumber numberWithLong:glucose],
+        @"sgv": @(glucose),
         @"direction": [self trendToDirection:msg.trend],
         @"device": @"RileyLink",
-        @"iob": [NSNumber numberWithFloat:msg.activeInsulin],
+        @"iob": @(msg.activeInsulin),
         @"type": @"sgv"
         };
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
     msg.dateReceived = [NSDate date];
     NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
-    NSNumber *epochTime = [NSNumber numberWithLongLong:seconds * 1000];
+    NSNumber *epochTime = @(seconds * 1000);
     entry =
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.dateReceived],
-      @"mbg": [NSNumber numberWithLong:msg.glucose],
+      @"mbg": @(msg.glucose),
       @"device": @"Contour Next Link",
       @"type": @"mbg"
       };

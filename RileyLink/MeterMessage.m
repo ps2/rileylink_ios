@@ -12,7 +12,7 @@
 
 - (instancetype)initWithData:(NSData*)data
 {
-  self = [super init];
+  self = [super initWithData:data];
   if (self) {
     self.data = [data subdataWithRange:NSMakeRange(4, data.length-5)];
   }

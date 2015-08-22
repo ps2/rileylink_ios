@@ -13,6 +13,6 @@
 
 @property (nonatomic, strong) NSDate *dateReceived;
 
-- (NSInteger) glucose;
+@property (nonatomic, readonly) NSInteger glucose;
 
 @end

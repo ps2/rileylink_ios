@@ -18,6 +18,6 @@
 @property (nonatomic, strong) NSString *nightscoutAPISecret;
 @property (nonatomic, strong) NSString *pumpID;
 
-- (BOOL) hasValidConfiguration;
+@property (nonatomic, readonly) BOOL hasValidConfiguration;
 
 @end

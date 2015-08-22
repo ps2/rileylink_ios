@@ -71,14 +71,14 @@
 }
 
 - (void)deviceDisconnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.object;
+  NSDictionary *attrs = notification.userInfo;
   if (attrs[@"device"] == self.rlDevice) {
     [self updateConnectedHighlight];
   }
 }
 
 - (void)deviceConnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.object;
+  NSDictionary *attrs = notification.userInfo;
   if (attrs[@"device"] == self.rlDevice) {
     [self updateConnectedHighlight];
   }

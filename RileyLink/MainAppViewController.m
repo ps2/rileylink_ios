@@ -68,7 +68,7 @@
                                             inManagedObjectContext:self.managedObjectContext];
   [fetchRequest setEntity:entity];
   NSError *error;
-  NSMutableArray *autoConnectIds = [NSMutableArray array];
+  NSMutableSet *autoConnectIds = [[NSMutableSet alloc] init];
   NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
   for (RileyLinkRecord *record in fetchedObjects) {
     NSLog(@"Loaded: %@ from db", record.name);

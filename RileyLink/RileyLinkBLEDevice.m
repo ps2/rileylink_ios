@@ -34,19 +34,36 @@
 
 @implementation RileyLinkBLEDevice
 
-- (instancetype)init
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
-  self = [super init];
-  if (self) {
-    incomingPackets = [NSMutableArray array];
-    sendTasks = [NSMutableArray array];
-    currentSendTask = nil;
-  }
-  return self;
+    self = [super init];
+    if (self) {
+        incomingPackets = [NSMutableArray array];
+        sendTasks = [NSMutableArray array];
+        currentSendTask = nil;
+
+        _peripheral = peripheral;
+    }
+    return self;
+}
+
+- (instancetype)init NS_UNAVAILABLE
+{
+    return nil;
+}
+
+- (NSString *)name
+{
+    return self.peripheral.name;
+}
+
+- (NSString *)peripheralId
+{
+    return self.peripheral.identifier.UUIDString;
 }
 
 - (NSArray*) packets {
-  return incomingPackets;
+  return [NSArray arrayWithArray:incomingPackets];
 }
 
 - (void) sendPacketData:(NSData*)data {

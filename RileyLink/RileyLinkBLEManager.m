@@ -13,12 +13,10 @@
 static NSDateFormatter *iso8601Formatter;
 
 @interface RileyLinkBLEManager () <CBCentralManagerDelegate> {
-  NSTimer *reconnectTimer;
   NSMutableDictionary *devicesById; // RileyLinkBLEDevices by UUID
 }
 
 @property (strong, nonatomic) CBCentralManager *centralManager;
-@property (strong, nonatomic) NSMutableData *data;
 
 @end
 
@@ -64,7 +62,6 @@ static NSDateFormatter *iso8601Formatter;
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self
                                                              queue:nil
                                                            options:@{CBCentralManagerOptionRestoreIdentifierKey: @"com.rileylink.CentralManager"}];
-    _data = [[NSMutableData alloc] init];
 
     devicesById = [NSMutableDictionary dictionary];
   }
@@ -89,10 +86,6 @@ static NSDateFormatter *iso8601Formatter;
     _scanningEnabled = scanningEnabled;
 }
 
-- (void) sendNotice:(NSString*)name {
-  [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil];
-}
-
 - (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary *)dict {
     NSArray *peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey];
 
@@ -104,9 +97,8 @@ static NSDateFormatter *iso8601Formatter;
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     self.scanningEnabled = self.isScanningEnabled;
 
-    if (central.state != CBCentralManagerStatePoweredOn && reconnectTimer.isValid) {
-        [reconnectTimer invalidate];
-        reconnectTimer = nil;
+    if (central.state == CBCentralManagerStatePoweredOn) {
+        [self attemptReconnectForDisconnectedDevices];
     }
 }
 
@@ -122,7 +114,7 @@ static NSDateFormatter *iso8601Formatter;
 
   device.RSSI = RSSI;
 
-  [self sendNotice:RILEY_LINK_EVENT_LIST_UPDATED];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
 }
 
 - (RileyLinkBLEDevice *)addPeripheralToDeviceList:(CBPeripheral *)peripheral {
@@ -164,6 +156,8 @@ static NSDateFormatter *iso8601Formatter;
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   NSLog(@"Failed to connect to peripheral: %@", error);
+
+  [self attemptReconnectForDisconnectedDevices];
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
@@ -177,31 +171,18 @@ static NSDateFormatter *iso8601Formatter;
                           @"peripheral": peripheral,
                           @"device": devicesById[peripheral.identifier.UUIDString]
                           };
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:nil userInfo:attrs];
   
 }
 
-- (void)restartScan {
-  NSLog(@"Restarting scan.");
-  [_centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]] options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
-}
-
 - (void)attemptReconnectForDisconnectedDevices {
-  NSInteger reconnectCount = 0;
-
   for (RileyLinkBLEDevice *device in [self rileyLinkList]) {
     CBPeripheral *peripheral = device.peripheral;
     if (peripheral.state == CBPeripheralStateDisconnected
         && [self.autoConnectIds indexOfObject:device.peripheralId] != NSNotFound) {
       NSLog(@"Attempting reconnect to %@", device);
       [self connectToRileyLink:device];
-      reconnectCount++;
     }
-  }
-
-  if (reconnectCount == 0 && reconnectTimer.isValid) {
-    [reconnectTimer invalidate];
-    reconnectTimer = nil;
   }
 }
 
@@ -223,13 +204,9 @@ static NSDateFormatter *iso8601Formatter;
     attrs[@"error"] = error;
   }
   
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:nil userInfo:attrs];
   
-  if (!reconnectTimer) {
-    reconnectTimer = [NSTimer timerWithTimeInterval:5 target:self selector:@selector(attemptReconnectForDisconnectedDevices) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:reconnectTimer forMode:NSRunLoopCommonModes];
-  }
-
+  [self attemptReconnectForDisconnectedDevices];
 }
 
 

@@ -86,15 +86,22 @@
 
 
 - (IBAction)autoConnectSwitchToggled:(id)sender {
-  self.rlRecord.autoConnect = @(autoConnectSwitch.on);
+  self.rlRecord.autoConnect = @(autoConnectSwitch.isOn);
+
   NSError *error;
   if (![self.managedObjectContext save:&error]) {
     NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
   }
   
-  if (autoConnectSwitch.on) {
+  if (autoConnectSwitch.isOn) {
+    // TODO: Use KVO on a device property instead
+    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+
+
     [self.rlDevice connect];
   } else {
+    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+
     [self.rlDevice disconnect];
   }
 }

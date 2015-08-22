@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 @property (nonatomic, nullable, readonly) NSString * name;
 @property (nonatomic, nullable, retain) NSNumber * RSSI;
 @property (nonatomic, nonnull, readonly) NSString * peripheralId;
-@property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, readonly, retain) CBPeripheral * peripheral;
 
 @property (nonatomic, nonnull, readonly, copy) NSArray *packets;
 

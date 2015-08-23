@@ -138,39 +138,39 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
     NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
     
-    if (![packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+    if ([packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+    
+      NSInteger glucose = msg.glucose;
+      switch ([msg sensorStatus]) {
+        case SENSOR_STATUS_HIGH_BG:
+          glucose = 401;
+          break;
+        case SENSOR_STATUS_WEAK_SIGNAL:
+          glucose = DX_BAD_RF;
+          break;
+        case SENSOR_STATUS_METER_BG_NOW:
+          glucose = DX_SENSOR_NOT_CALIBRATED;
+          break;
+        case SENSOR_STATUS_LOST:
+          glucose = DX_SENSOR_NOT_ACTIVE;
+          break;
+        default:
+          break;
+      }
+      
+      NSDictionary *entry =
+        @{@"date": epochTime,
+          @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+          @"sgv": @(glucose),
+          @"direction": [self trendToDirection:msg.trend],
+          @"device": @"RileyLink",
+          @"iob": @(msg.activeInsulin),
+          @"type": @"sgv"
+          };
+      [self.entries addObject:entry];
+    } else {
       NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
-      return;
     }
-    
-    NSInteger glucose = msg.glucose;
-    switch ([msg sensorStatus]) {
-      case SENSOR_STATUS_HIGH_BG:
-        glucose = 401;
-        break;
-      case SENSOR_STATUS_WEAK_SIGNAL:
-        glucose = DX_BAD_RF;
-        break;
-      case SENSOR_STATUS_METER_BG_NOW:
-        glucose = DX_SENSOR_NOT_CALIBRATED;
-        break;
-      case SENSOR_STATUS_LOST:
-        glucose = DX_SENSOR_NOT_ACTIVE;
-        break;
-      default:
-        break;
-    }
-    
-    NSDictionary *entry =
-      @{@"date": epochTime,
-        @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
-        @"sgv": @(glucose),
-        @"direction": [self trendToDirection:msg.trend],
-        @"device": @"RileyLink",
-        @"iob": @(msg.activeInsulin),
-        @"type": @"sgv"
-        };
-    [self.entries addObject:entry];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
     msg.dateReceived = [NSDate date];

@@ -7,6 +7,7 @@
 //
 
 #import "MenuController.h"
+#import "MenuHeaderTableViewCell.h"
 
 @interface MenuController ()
 
@@ -42,22 +43,25 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  NSString *cellIdentifier;
   if (indexPath.row == 0) {
-    cellIdentifier = @"header";
-  } else if (indexPath.row == 1) {
-    cellIdentifier = @"configuration";
-  } else if (indexPath.row == 2) {
-    cellIdentifier = @"nightscout";
-  } else if (indexPath.row == 3) {
-    cellIdentifier = @"rileylink";
+    MenuHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"header" forIndexPath:indexPath];
+
+    cell.title = [NSString stringWithFormat:@"RileyLink v%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+
+    return cell;
+  } else {
+    NSString *cellIdentifier;
+
+    if (indexPath.row == 1) {
+      cellIdentifier = @"configuration";
+    } else if (indexPath.row == 2) {
+      cellIdentifier = @"nightscout";
+    } else if (indexPath.row == 3) {
+      cellIdentifier = @"rileylink";
+    }
+
+    return [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
   }
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-  if (cell == nil) {
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-  }
-  
-  return cell;
 }
 
 /*

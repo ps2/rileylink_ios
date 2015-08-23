@@ -184,11 +184,11 @@
                                                                     GLUCOSELINK_BATTERY_SERVICE]
                                               excludingAttributes:peripheral.services]];
 
-  NSDictionary *attrs = @{
-                          @"peripheral": peripheral,
-                          @"device": devicesById[peripheral.identifier.UUIDString]
+  RileyLinkBLEDevice *device = devicesById[peripheral.identifier.UUIDString];
+
+  NSDictionary *attrs = @{@"peripheral": peripheral,
                           };
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:nil userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
   
 }
 
@@ -201,7 +201,6 @@
   
   attrs[@"peripheral"] = peripheral;
   RileyLinkBLEDevice *device = devicesById[peripheral.identifier.UUIDString];
-  attrs[@"device"] = device;
   
   [device didDisconnect:error];
   
@@ -209,7 +208,7 @@
     attrs[@"error"] = error;
   }
   
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:nil userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
   
   [self attemptReconnectForDisconnectedDevices];
 }

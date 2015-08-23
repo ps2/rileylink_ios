@@ -33,12 +33,12 @@
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceDisconnected:)
                                                name:RILEY_LINK_EVENT_DEVICE_DISCONNECTED
-                                             object:nil];
+                                             object:self.rlDevice];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceConnected:)
                                                name:RILEY_LINK_EVENT_DEVICE_CONNECTED
-                                             object:nil];
+                                             object:self.rlDevice];
 
 
   [self updateConnectedHighlight];
@@ -71,17 +71,11 @@
 }
 
 - (void)deviceDisconnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.userInfo;
-  if (attrs[@"device"] == self.rlDevice) {
-    [self updateConnectedHighlight];
-  }
+  [self updateConnectedHighlight];
 }
 
 - (void)deviceConnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.userInfo;
-  if (attrs[@"device"] == self.rlDevice) {
-    [self updateConnectedHighlight];
-  }
+  [self updateConnectedHighlight];
 }
 
 

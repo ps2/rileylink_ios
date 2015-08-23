@@ -28,10 +28,12 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 @property (nonatomic, readonly) RileyLinkState state;
 - (void) connect;
 - (void) disconnect;
+- (void) didDisconnect:(NSError*)error;
 - (void) cancelSending;
 - (void) setRXChannel:(unsigned char)channel;
 - (void) setTXChannel:(unsigned char)channel;
 - (void) sendPacketData:(NSData*)data;
 - (void) sendPacketData:(NSData*)data withCount:(NSInteger)count andTimeBetweenPackets:(NSTimeInterval)timeBetweenPackets;
+- (NSString*) deviceURI;
 
 @end

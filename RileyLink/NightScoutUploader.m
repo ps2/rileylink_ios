@@ -15,6 +15,9 @@
 #import "MeterMessage.h"
 #import "RileyLinkBLEManager.h"
 #import "Config.h"
+#import "NSData+Conversion.h"
+
+#define RECORD_RAW_PACKETS YES
 
 typedef enum {
   DX_SENSOR_NOT_ACTIVE = 1,
@@ -65,7 +68,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 - (void)packetReceived:(NSNotification*)notification {
   NSDictionary *attrs = notification.userInfo;
   MinimedPacket *packet = attrs[@"packet"];
-  [self addPacket:packet];
+  RileyLinkBLEDevice *device = notification.object;
+  [self addPacket:packet fromDevice:device];
 }
 
 //var DIRECTIONS = {
@@ -108,8 +112,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 //    device: 'share2',
 //    type: 'sgv' } ]
 
-- (void)addPacket:(MinimedPacket*)packet {
-  NSDictionary *entry = nil;
+- (void)addPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
   
   if (![packet isValid]) {
     return;
@@ -142,7 +145,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         break;
     }
     
-    entry =
+    NSDictionary *entry =
       @{@"date": epochTime,
         @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
         @"sgv": @(glucose),
@@ -151,12 +154,13 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         @"iob": @(msg.activeInsulin),
         @"type": @"sgv"
         };
+    [self.entries addObject:entry];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
     msg.dateReceived = [NSDate date];
     NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
     NSNumber *epochTime = @(seconds * 1000);
-    entry =
+    NSDictionary *entry =
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.dateReceived],
       @"mbg": @(msg.glucose),
@@ -170,17 +174,36 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         msg.glucose == _lastMeterMessage.glucose) {
       entry = nil;
     } else {
+      [self.entries addObject:entry];
       _lastMeterMessage = msg;
     }
   }
-  if (entry) {
+  
+  if (RECORD_RAW_PACKETS) {
+    NSDate *now = [NSDate date];
+    NSTimeInterval seconds = [now timeIntervalSince1970];
+    NSNumber *epochTime = @(seconds * 1000);
+
+    NSDictionary *entry =
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:now],
+      @"rfpacket": [packet.data hexadecimalString],
+      @"device": device.deviceURI,
+      @"rssi": @(packet.rssi),
+      @"type": @"rfpacket"
+      };
     [self.entries addObject:entry];
-    //NSLog(@"Added entry: %@", entry);
-    [self flushEntries];
   }
+  
+  [self flushEntries];
 }
 
 - (void) flushEntries {
+  
+  if (self.entries.count == 0) {
+    return;
+  }
+  
   NSArray *inFlightEntries = self.entries;
   self.entries = [[NSMutableArray alloc] init];
   [self reportToNightScout:inFlightEntries completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

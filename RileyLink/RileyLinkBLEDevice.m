@@ -94,6 +94,7 @@
     currentSendTask = nil;
     [sendTimer invalidate];
     sendTimer = nil;
+    [self dequeueSendTasks];
   }
 }
 
@@ -102,6 +103,7 @@
   sendTimer = nil;
   copiesLeftToSend = 0;
   currentSendTask = nil;
+  [self dequeueSendTasks];
 }
 
 - (void) setRXChannel:(unsigned char)channel {
@@ -165,6 +167,12 @@
 
 - (void) disconnect {
   [[RileyLinkBLEManager sharedManager] disconnectRileyLink:self];
+}
+
+- (void) didDisconnect:(NSError*)error {
+  if (currentSendTask) {
+    [self cancelSending];
+  }
 }
 
    
@@ -250,11 +258,11 @@
       NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
       NSDictionary *attrs = @{
                               @"packet": packet,
-                              @"peripheral": self.peripheral
+                              @"peripheral": self.peripheral,
                               };
       [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
     }
-    [peripheral readValueForCharacteristic:packetCountCharacteristic];
+    [peripheral readValueForCharacteristic:packetRxCharacteristic];
     
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_BATTERY_UUID]]) {
     //batteryPct = ((const unsigned char*)[characteristic.value bytes])[0];
@@ -306,6 +314,10 @@
   txTriggerCharacteristic = nil;
   packetRssiCharacteristic = nil;
   batteryCharacteristic = nil;
+}
+
+- (NSString*) deviceURI {
+  return [@"rl://" stringByAppendingString:self.name];
 }
 
    

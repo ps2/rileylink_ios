@@ -214,7 +214,10 @@ static NSDateFormatter *iso8601Formatter;
   NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
   
   attrs[@"peripheral"] = peripheral;
-  attrs[@"device"] = devicesById[peripheral.identifier.UUIDString];
+  RileyLinkBLEDevice *device = devicesById[peripheral.identifier.UUIDString];
+  attrs[@"device"] = device;
+  
+  [device didDisconnect:error];
   
   if (error) {
     attrs[@"error"] = error;

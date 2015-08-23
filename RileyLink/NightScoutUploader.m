@@ -118,6 +118,22 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     return;
   }
   
+  if (RECORD_RAW_PACKETS) {
+    NSDate *now = [NSDate date];
+    NSTimeInterval seconds = [now timeIntervalSince1970];
+    NSNumber *epochTime = @(seconds * 1000);
+    
+    NSDictionary *entry =
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:now],
+      @"rfpacket": [packet.data hexadecimalString],
+      @"device": device.deviceURI,
+      @"rssi": @(packet.rssi),
+      @"type": @"rfpacket"
+      };
+    [self.entries addObject:entry];
+  }
+  
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
     PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
     NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
@@ -177,22 +193,6 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       [self.entries addObject:entry];
       _lastMeterMessage = msg;
     }
-  }
-  
-  if (RECORD_RAW_PACKETS) {
-    NSDate *now = [NSDate date];
-    NSTimeInterval seconds = [now timeIntervalSince1970];
-    NSNumber *epochTime = @(seconds * 1000);
-
-    NSDictionary *entry =
-    @{@"date": epochTime,
-      @"dateString": [self.dateFormatter stringFromDate:now],
-      @"rfpacket": [packet.data hexadecimalString],
-      @"device": device.deviceURI,
-      @"rssi": @(packet.rssi),
-      @"type": @"rfpacket"
-      };
-    [self.entries addObject:entry];
   }
   
   [self flushEntries];

@@ -221,17 +221,13 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 - (void) reportToNightScout:(NSArray*)entries
 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
 {
-  NSURLComponents *components = [[NSURLComponents alloc] init];
-  NSURL *baseURL = [NSURL URLWithString:self.endpoint];
-  components.scheme = @"https";
-  components.host = baseURL.host;
-  components.path = [baseURL.path stringByAppendingString:defaultNightscoutUploadPath];
-  
-  NSMutableURLRequest *request = [[NSURLRequest requestWithURL:components.URL] mutableCopy];
+  NSURL *uploadURL = [NSURL URLWithString:defaultNightscoutUploadPath
+                            relativeToURL:[NSURL URLWithString:self.endpoint]];
+  NSMutableURLRequest *request = [[NSURLRequest requestWithURL:uploadURL] mutableCopy];
   NSError *error;
   NSData *sendData = [NSJSONSerialization dataWithJSONObject:entries options:NSJSONWritingPrettyPrinted error:&error];
   NSString *jsonPost = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
-  NSLog(@"Posting to %@, %@", components.URL, jsonPost);
+  NSLog(@"Posting to %@, %@", [uploadURL absoluteString], jsonPost);
   [request setHTTPMethod:@"POST"];
   
   [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

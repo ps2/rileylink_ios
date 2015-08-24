@@ -29,24 +29,50 @@
   NSTimer *sendTimer;
 }
 
+@property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+
 @end
 
 
 @implementation RileyLinkBLEDevice
 
-- (instancetype)init
+@synthesize peripheral = _peripheral;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
-  self = [super init];
-  if (self) {
-    incomingPackets = [NSMutableArray array];
-    sendTasks = [NSMutableArray array];
-    currentSendTask = nil;
-  }
-  return self;
+    self = [super init];
+    if (self) {
+        incomingPackets = [NSMutableArray array];
+        sendTasks = [NSMutableArray array];
+        currentSendTask = nil;
+
+        _peripheral = peripheral;
+        _peripheral.delegate = self;
+
+        for (CBService *service in _peripheral.services) {
+            [self setCharacteristicsFromService:service];
+        }
+    }
+    return self;
+}
+
+- (instancetype)init NS_UNAVAILABLE
+{
+    return nil;
+}
+
+- (NSString *)name
+{
+    return self.peripheral.name;
+}
+
+- (NSString *)peripheralId
+{
+    return self.peripheral.identifier.UUIDString;
 }
 
 - (NSArray*) packets {
-  return incomingPackets;
+  return [NSArray arrayWithArray:incomingPackets];
 }
 
 - (void) sendPacketData:(NSData*)data {
@@ -150,15 +176,6 @@
       break;
   }
   return rval;
-}
-
-- (void) setPeripheral:(CBPeripheral *)peripheral {
-  _peripheral = peripheral;
-    peripheral.delegate = self;
-
-    for (CBService *service in peripheral.services) {
-        [self setCharacteristicsFromService:service];
-    }
 }
 
 - (void) connect {

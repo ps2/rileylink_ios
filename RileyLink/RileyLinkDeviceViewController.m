@@ -33,12 +33,12 @@
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceDisconnected:)
                                                name:RILEY_LINK_EVENT_DEVICE_DISCONNECTED
-                                             object:nil];
+                                             object:self.rlDevice];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceConnected:)
                                                name:RILEY_LINK_EVENT_DEVICE_CONNECTED
-                                             object:nil];
+                                             object:self.rlDevice];
 
 
   [self updateConnectedHighlight];
@@ -71,30 +71,31 @@
 }
 
 - (void)deviceDisconnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.object;
-  if (attrs[@"device"] == self.rlDevice) {
-    [self updateConnectedHighlight];
-  }
+  [self updateConnectedHighlight];
 }
 
 - (void)deviceConnected:(NSNotification*)notification {
-  NSDictionary *attrs = notification.object;
-  if (attrs[@"device"] == self.rlDevice) {
-    [self updateConnectedHighlight];
-  }
+  [self updateConnectedHighlight];
 }
 
 
 - (IBAction)autoConnectSwitchToggled:(id)sender {
-  self.rlRecord.autoConnect = @(autoConnectSwitch.on);
+  self.rlRecord.autoConnect = @(autoConnectSwitch.isOn);
+
   NSError *error;
   if (![self.managedObjectContext save:&error]) {
     NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
   }
   
-  if (autoConnectSwitch.on) {
+  if (autoConnectSwitch.isOn) {
+    // TODO: Use KVO on a device property instead
+    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+
+
     [self.rlDevice connect];
   } else {
+    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+
     [self.rlDevice disconnect];
   }
 }

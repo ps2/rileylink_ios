@@ -90,12 +90,10 @@
 
 
 - (void)packetReceived:(NSNotification*)notification {
-  if (notification.object == self.device) {
     MinimedPacket *packet = notification.userInfo[@"packet"];
     if (packet && [packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
       [self handlePacketFromPump:packet];
     }
-  }
 }
 
 

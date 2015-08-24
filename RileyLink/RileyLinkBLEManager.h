@@ -39,7 +39,7 @@
 + (instancetype)sharedManager;
 
 @property (nonatomic, weak) id<RileyLinkDelegate> delegate;
-@property (nonatomic, strong) NSArray *autoConnectIds;
+@property (nonatomic, strong) NSSet *autoConnectIds;
 @property (nonatomic, getter=isScanningEnabled) BOOL scanningEnabled;
 
 /**

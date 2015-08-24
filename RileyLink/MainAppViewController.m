@@ -86,17 +86,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark GlucoseLinkDelegate methods
-
-- (void)rileyLink:(RileyLinkBLEManager *)rileyLink didReceivePacket:(MinimedPacket*)packet {
-  [self.uploader addPacket:packet];
-}
-
-- (void)rileyLink:(RileyLinkBLEManager *)rileyLink updatedStatus:(NSDictionary*)status {
-  lastStatus = status;
-  // TODO: find place to display, now that we're using nightscout
-}
-
-
 
 @end

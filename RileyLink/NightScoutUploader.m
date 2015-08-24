@@ -119,83 +119,95 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if (RECORD_RAW_PACKETS) {
-    NSDate *now = [NSDate date];
-    NSTimeInterval seconds = [now timeIntervalSince1970];
-    NSNumber *epochTime = @(seconds * 1000);
-    
-    NSDictionary *entry =
-    @{@"date": epochTime,
-      @"dateString": [self.dateFormatter stringFromDate:now],
-      @"rfpacket": [packet.data hexadecimalString],
-      @"device": device.deviceURI,
-      @"rssi": @(packet.rssi),
-      @"type": @"rfpacket"
-      };
-    [self.entries addObject:entry];
+    [self storeRawPacket:packet fromDevice:device];
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
-    PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
-    NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
-    
-    if ([packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
-    
-      NSInteger glucose = msg.glucose;
-      switch ([msg sensorStatus]) {
-        case SENSOR_STATUS_HIGH_BG:
-          glucose = 401;
-          break;
-        case SENSOR_STATUS_WEAK_SIGNAL:
-          glucose = DX_BAD_RF;
-          break;
-        case SENSOR_STATUS_METER_BG_NOW:
-          glucose = DX_SENSOR_NOT_CALIBRATED;
-          break;
-        case SENSOR_STATUS_LOST:
-          glucose = DX_SENSOR_NOT_ACTIVE;
-          break;
-        default:
-          break;
-      }
-      
-      NSDictionary *entry =
-        @{@"date": epochTime,
-          @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
-          @"sgv": @(glucose),
-          @"direction": [self trendToDirection:msg.trend],
-          @"device": @"RileyLink",
-          @"iob": @(msg.activeInsulin),
-          @"type": @"sgv"
-          };
-      [self.entries addObject:entry];
-    } else {
-      NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
-    }
+    [self handlePumpStatus:packet];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
-    MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
-    msg.dateReceived = [NSDate date];
-    NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
-    NSNumber *epochTime = @(seconds * 1000);
-    NSDictionary *entry =
-    @{@"date": epochTime,
-      @"dateString": [self.dateFormatter stringFromDate:msg.dateReceived],
-      @"mbg": @(msg.glucose),
-      @"device": @"Contour Next Link",
-      @"type": @"mbg"
-      };
-    
-    // Skip duplicates
-    if (_lastMeterMessage &&
-        [msg.dateReceived timeIntervalSinceDate:_lastMeterMessage.dateReceived] &&
-        msg.glucose == _lastMeterMessage.glucose) {
-      entry = nil;
-    } else {
-      [self.entries addObject:entry];
-      _lastMeterMessage = msg;
-    }
+    [self handleMeterMessage:packet];
   }
   
   [self flushEntries];
+}
+
+- (void) storeRawPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
+  NSDate *now = [NSDate date];
+  NSTimeInterval seconds = [now timeIntervalSince1970];
+  NSNumber *epochTime = @(seconds * 1000);
+  
+  NSDictionary *entry =
+  @{@"date": epochTime,
+    @"dateString": [self.dateFormatter stringFromDate:now],
+    @"rfpacket": [packet.data hexadecimalString],
+    @"device": device.deviceURI,
+    @"rssi": @(packet.rssi),
+    @"type": @"rfpacket"
+    };
+  [self.entries addObject:entry];
+}
+
+- (void) handlePumpStatus:(MinimedPacket*)packet {
+  PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
+  NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
+  
+  if ([packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+    
+    NSInteger glucose = msg.glucose;
+    switch ([msg sensorStatus]) {
+      case SENSOR_STATUS_HIGH_BG:
+        glucose = 401;
+        break;
+      case SENSOR_STATUS_WEAK_SIGNAL:
+        glucose = DX_BAD_RF;
+        break;
+      case SENSOR_STATUS_METER_BG_NOW:
+        glucose = DX_SENSOR_NOT_CALIBRATED;
+        break;
+      case SENSOR_STATUS_LOST:
+        glucose = DX_SENSOR_NOT_ACTIVE;
+        break;
+      default:
+        break;
+    }
+    
+    NSDictionary *entry =
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+      @"sgv": @(glucose),
+      @"direction": [self trendToDirection:msg.trend],
+      @"device": @"RileyLink",
+      @"iob": @(msg.activeInsulin),
+      @"type": @"sgv"
+      };
+    [self.entries addObject:entry];
+  } else {
+    NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
+  }
+}
+
+- (void) handleMeterMessage:(MinimedPacket*)packet {
+  MeterMessage *msg = [[MeterMessage alloc] initWithData:packet.data];
+  msg.dateReceived = [NSDate date];
+  NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
+  NSNumber *epochTime = @(seconds * 1000);
+  NSDictionary *entry =
+  @{@"date": epochTime,
+    @"dateString": [self.dateFormatter stringFromDate:msg.dateReceived],
+    @"mbg": @(msg.glucose),
+    @"device": @"Contour Next Link",
+    @"type": @"mbg"
+    };
+  
+  // Skip duplicates
+  if (_lastMeterMessage &&
+      [msg.dateReceived timeIntervalSinceDate:_lastMeterMessage.dateReceived] &&
+      msg.glucose == _lastMeterMessage.glucose) {
+    entry = nil;
+  } else {
+    [self.entries addObject:entry];
+    _lastMeterMessage = msg;
+  }
 }
 
 - (void) flushEntries {

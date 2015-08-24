@@ -13,7 +13,6 @@
 
 - (void)reportToNightScout:(NSArray*)entries
          completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
-- (void)addPacket:(MinimedPacket*)packet;
 
 @property (nonatomic, strong) NSString *endpoint;
 @property (nonatomic, strong) NSString *APISecret;

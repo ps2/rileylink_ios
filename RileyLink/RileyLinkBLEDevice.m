@@ -18,7 +18,6 @@
   CBCharacteristic *packetTxCharacteristic;
   CBCharacteristic *txTriggerCharacteristic;
   CBCharacteristic *packetRssiCharacteristic;
-  CBCharacteristic *batteryCharacteristic;
   CBCharacteristic *packetCountCharacteristic;
   CBCharacteristic *txChannelCharacteristic;
   CBCharacteristic *rxChannelCharacteristic;
@@ -192,12 +191,6 @@
   }
 }
 
-   
-- (void)updateBatteryLevel {
-  [self.peripheral readValueForCharacteristic:batteryCharacteristic];
-  [self.peripheral readRSSI];
-}
-
 - (void)setCharacteristicsFromService:(CBService *)service {
     for (CBCharacteristic *characteristic in service.characteristics) {
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
@@ -215,8 +208,6 @@
             packetTxCharacteristic = characteristic;
         } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_TX_TRIGGER_UUID]]) {
             txTriggerCharacteristic = characteristic;
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_BATTERY_UUID]]) {
-            batteryCharacteristic = characteristic;
         }
     }
 }
@@ -228,11 +219,7 @@
   }
   NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
-    if ([service.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_BATTERY_SERVICE]]) {
-      [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[GLUCOSELINK_BATTERY_UUID]
-                                                                excludingAttributes:service.characteristics]
-                               forService:service];
-    } else if ([service.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]]) {
+    if ([service.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]]) {
         [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[GLUCOSELINK_RX_PACKET_UUID,
                                                                                         GLUCOSELINK_RX_CHANNEL_UUID,
                                                                                         GLUCOSELINK_TX_CHANNEL_UUID,
@@ -240,7 +227,7 @@
                                                                                         GLUCOSELINK_TX_PACKET_UUID,
                                                                                         GLUCOSELINK_TX_TRIGGER_UUID]
                                                                 excludingAttributes:service.characteristics]
-                               forService:service];
+                                 forService:service];
     }
   }
   // Discover other characteristics
@@ -281,9 +268,6 @@
     }
     [peripheral readValueForCharacteristic:packetRxCharacteristic];
     
-  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_BATTERY_UUID]]) {
-    //batteryPct = ((const unsigned char*)[characteristic.value bytes])[0];
-    //NSLog(@"Updated battery pct: %d", batteryPct);
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
     const unsigned char packetCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated packet count: %d", packetCount);
@@ -330,7 +314,6 @@
   packetTxCharacteristic = nil;
   txTriggerCharacteristic = nil;
   packetRssiCharacteristic = nil;
-  batteryCharacteristic = nil;
 }
 
 - (NSString*) deviceURI {

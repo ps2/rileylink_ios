@@ -409,6 +409,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C12EA263198B436900309FA4 /* Build configuration list for PBXNativeTarget "RileyLink" */;
 			buildPhases = (
+				43F3CA7E1B8ED50E005A1DC1 /* ShellScript */,
 				C12EA233198B436800309FA4 /* Sources */,
 				C12EA234198B436800309FA4 /* Frameworks */,
 				C12EA235198B436800309FA4 /* Resources */,
@@ -496,6 +497,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43F3CA7E1B8ED50E005A1DC1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/check_version.rb\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C12EA233198B436800309FA4 /* Sources */ = {

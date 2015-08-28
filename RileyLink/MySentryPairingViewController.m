@@ -50,12 +50,16 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
     self.state = PairingStateNeedsConfig;
 
+    self.deviceIDTextField.text = [self.device.peripheral.identifier.UUIDString substringToIndex:6];
     self.deviceIDTextField.delegate = self;
     [self.view addGestureRecognizer:self.flailGestureRecognizer];
+
+    [self textFieldDidEndEditing:self.deviceIDTextField];
 }
 
 - (void)dealloc
 {
+    [self.device setTXChannel:0];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:RILEY_LINK_EVENT_PACKET_RECEIVED
                                                   object:self.device];
@@ -81,19 +85,21 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     switch (state) {
         case PairingStateNeedsConfig:
             self.startButton.enabled = NO;
-
+            self.startButton.hidden = YES;
             self.instructionLabel.text = NSLocalizedString(@"Enter a 6-digit numeric value to identify your MySentry.",
                                                            @"Device ID instruction");
+            self.instructionLabel.hidden = NO;
             break;
         case PairingStateReady:
             self.startButton.enabled = YES;
+            self.startButton.hidden = NO;
             self.progressView.progress = 0;
 
-            self.instructionLabel.text = NSLocalizedString(@"Tap to begin.",
-                                                           @"Start button instruction");
+            self.instructionLabel.hidden = YES;
             break;
         case PairingStateStarted:
             self.startButton.enabled = NO;
+            self.startButton.hidden = YES;
             self.deviceIDTextField.enabled = NO;
             [self.progressView setProgress:1.0 / 4.0 animated:YES];
 
@@ -106,6 +112,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
                                                            @"\nOn >"
                                                            @"\nFind Device",
                                                            @"Pump find device instruction");
+            self.instructionLabel.hidden = NO;
             break;
         case PairingStateReceivedFindPacket:
             [self.progressView setProgress:2.0 / 4.0 animated:YES];

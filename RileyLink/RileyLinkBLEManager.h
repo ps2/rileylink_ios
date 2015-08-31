@@ -15,7 +15,6 @@
 #define RILEY_LINK_EVENT_DEVICE_DISCONNECTED @"RILEY_LINK_EVENT_DEVICE_DISCONNECTED"
 
 #define GLUCOSELINK_SERVICE_UUID       @"d39f1890-17eb-11e4-8c21-0800200c9a66"
-#define GLUCOSELINK_BATTERY_SERVICE    @"180f"
 
 #define GLUCOSELINK_RX_PACKET_UUID     @"2fb1a490-1940-11e4-8c21-0800200c9a66"
 #define GLUCOSELINK_RX_CHANNEL_UUID    @"d93b2af0-1ea8-11e4-8c21-0800200c9a66"
@@ -24,10 +23,6 @@
 #define GLUCOSELINK_TX_TRIGGER_UUID    @"2fb1a490-1942-11e4-8c21-0800200c9a66"
 #define GLUCOSELINK_TX_CHANNEL_UUID    @"d93b2af0-1458-11e4-8c21-0800200c9a66"
 
-#define GLUCOSELINK_BATTERY_UUID       @"2A19"
-
-
-@protocol RileyLinkDelegate;
 
 @interface RileyLinkBLEManager : NSObject
 
@@ -38,7 +33,6 @@
 - (void)removeDeviceFromAutoConnectList:(RileyLinkBLEDevice*)device;
 + (instancetype)sharedManager;
 
-@property (nonatomic, weak) id<RileyLinkDelegate> delegate;
 @property (nonatomic, strong) NSSet *autoConnectIds;
 @property (nonatomic, getter=isScanningEnabled) BOOL scanningEnabled;
 

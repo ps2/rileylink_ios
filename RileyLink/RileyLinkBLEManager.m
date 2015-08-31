@@ -110,7 +110,7 @@
 - (void)startScan {
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]] options:NULL];
 
-    NSLog(@"Scanning started (state = %ld)", self.centralManager.state);
+    NSLog(@"Scanning started (state = %zd)", self.centralManager.state);
 }
 
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device {

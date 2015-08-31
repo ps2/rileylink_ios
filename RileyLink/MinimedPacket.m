@@ -24,6 +24,11 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
 + (void)initialize {
 }
 
+- (instancetype)init NS_UNAVAILABLE
+{
+    return nil;
+}
+
 - (instancetype)initWithData:(NSData*)data
 {
   self = [super init];

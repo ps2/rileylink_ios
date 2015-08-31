@@ -104,7 +104,7 @@
 
 - (void) triggerSend {
   if (copiesLeftToSend > 0) {
-    NSLog(@"Sending copy %ld", (currentSendTask.repeatCount - copiesLeftToSend) + 1);
+    NSLog(@"Sending copy %zd", (currentSendTask.repeatCount - copiesLeftToSend) + 1);
     NSData *trigger = [NSData dataWithHexadecimalString:@"01"];
     [self.peripheral writeValue:trigger forCharacteristic:txTriggerCharacteristic type:CBCharacteristicWriteWithResponse];
     copiesLeftToSend--;

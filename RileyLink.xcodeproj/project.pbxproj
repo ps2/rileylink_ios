@@ -510,7 +510,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/check_version.rb\"";
+			shellScript = "\"${SRCROOT}/sync_version.rb\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

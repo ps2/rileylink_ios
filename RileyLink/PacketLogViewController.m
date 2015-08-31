@@ -12,7 +12,6 @@
 #import "RileyLinkBLEManager.h"
 
 @interface PacketLogViewController () {
-  IBOutlet UITableView *tableView;
 }
 
 @end
@@ -31,7 +30,7 @@
 
 - (void)dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver: self];
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,7 +39,7 @@
 }
 
 - (void)packetReceived:(NSNotification*)notification {
-    [tableView reloadData];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Table view data source
@@ -52,15 +51,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   // Return the number of rows in the section.
-  return [_device.packets count];
+  return self.device.packets.count;
 }
 
 - (MinimedPacket *)packetForIndex:(NSInteger) idx {
-  return _device.packets[_device.packets.count - idx - 1];
+  return self.device.packets[self.device.packets.count - idx - 1];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)theTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  PacketTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"packet" forIndexPath:indexPath];
+  PacketTableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"packet" forIndexPath:indexPath];
   MinimedPacket *packet = [self packetForIndex:indexPath.row];
   cell.packet = packet;
   return cell;

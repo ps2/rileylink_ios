@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "RileyLinkBLEDevice.h"
 
-@interface PacketLogViewController : UIViewController
+@interface PacketLogViewController : UITableViewController
 
 @property (nonatomic, strong) RileyLinkBLEDevice *device;
 

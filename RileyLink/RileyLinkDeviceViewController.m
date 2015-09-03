@@ -51,22 +51,29 @@
 }
 
 - (void)updateConnectedHighlight {
-  switch (self.rlDevice.state) {
-    case RILEY_LINK_STATE_CONNECTING:
-      nameLabel.backgroundColor = [UIColor clearColor];
-      nameLabel.text = @"Connecting...";
-      [connectingIndicator startAnimating];
-      break;
-    case RILEY_LINK_STATE_CONNECTED:
-      nameLabel.backgroundColor = [UIColor greenColor];
-      nameLabel.text = self.rlDevice.name;
-      [connectingIndicator stopAnimating];
-      break;
-    case RILEY_LINK_STATE_DISCONNECTED:
-      nameLabel.backgroundColor = [UIColor clearColor];
-      nameLabel.text = self.rlDevice.name;
-      [connectingIndicator stopAnimating];
-      break;
+  if (self.rlDevice == nil) {
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.text = self.rlRecord.name;
+    [connectingIndicator stopAnimating];
+  } else {  
+    switch (self.rlDevice.state) {
+      case RILEY_LINK_STATE_CONNECTING:
+        nameLabel.backgroundColor = [UIColor clearColor];
+        nameLabel.text = @"Connecting...";
+        [connectingIndicator startAnimating];
+        break;
+      case RILEY_LINK_STATE_CONNECTED:
+        nameLabel.backgroundColor = [UIColor greenColor];
+        nameLabel.text = self.rlDevice.name;
+        [connectingIndicator stopAnimating];
+        break;
+      case RILEY_LINK_STATE_DISCONNECTED:
+      default:
+        nameLabel.backgroundColor = [UIColor clearColor];
+        nameLabel.text = self.rlDevice.name;
+        [connectingIndicator stopAnimating];
+        break;
+    }
   }
 }
 
@@ -87,17 +94,20 @@
     NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
   }
   
-  if (autoConnectSwitch.isOn) {
-    // TODO: Use KVO on a device property instead
-    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+  if (self.rlDevice != nil) {
+    if (autoConnectSwitch.isOn) {
+      // TODO: Use KVO on a device property instead
+      [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
 
 
-    [self.rlDevice connect];
-  } else {
-    [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
+      [self.rlDevice connect];
+    } else {
+      [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
 
-    [self.rlDevice disconnect];
+      [self.rlDevice disconnect];
+    }
   }
+  [self updateConnectedHighlight];
 }
 
 - (void)didReceiveMemoryWarning {

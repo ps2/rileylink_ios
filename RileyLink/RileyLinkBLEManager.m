@@ -188,6 +188,7 @@
   NSDictionary *attrs = @{@"peripheral": peripheral,
                           };
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
   
 }
 
@@ -208,6 +209,8 @@
   }
   
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
   
   [self attemptReconnectForDisconnectedDevices];
 }

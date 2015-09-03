@@ -114,12 +114,12 @@
 }
 
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Connecting to peripheral %@", device.peripheral);
+    NSLog(@"Connecting to %@", device.name);
     [_centralManager connectPeripheral:device.peripheral options:nil];
 }
 
 - (void)disconnectRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Disconnecting from peripheral %@", device.peripheral);
+    NSLog(@"Disconnecting from %@", device.name);
     [_centralManager cancelPeripheralConnection:device.peripheral];
 }
 
@@ -128,7 +128,7 @@
         CBPeripheral *peripheral = device.peripheral;
         if (peripheral.state == CBPeripheralStateDisconnected
             && [self.autoConnectIds containsObject:device.peripheralId]) {
-            NSLog(@"Attempting reconnect to %@", device);
+            NSLog(@"Attempting reconnect to %@", device.name);
             [self connectToRileyLink:device];
         }
     }
@@ -178,6 +178,10 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
+  
+  NSLog(@"Did connect to %@", peripheral.name);
+  
+  [peripheral readRSSI];
 
   NSLog(@"Discovering services");
   [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[GLUCOSELINK_SERVICE_UUID]

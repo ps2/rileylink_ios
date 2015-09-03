@@ -217,7 +217,7 @@
     NSLog(@"Failure while discovering services: %@", error);
     return;
   }
-  NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
+  //NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
     if ([service.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]]) {
         [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[GLUCOSELINK_RX_PACKET_UUID,
@@ -234,7 +234,11 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
-  //[self sendNotice:RILEY_LINK_EVENT_LIST_UPDATED];
+  if (error != nil) {
+    NSLog(@"Error reading RSSI: %@", error);
+  } else {
+    NSLog(@"RSSI for %@: %@", peripheral.name, RSSI);
+  }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
@@ -275,7 +279,6 @@
       [peripheral readValueForCharacteristic:packetRxCharacteristic];
     }
   }
-  
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

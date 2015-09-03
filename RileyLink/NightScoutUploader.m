@@ -53,7 +53,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(packetReceived:)
-                                                 name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                                 name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                object:nil];
 
   }

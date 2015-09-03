@@ -28,7 +28,7 @@
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(packetReceived:)
-                                               name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                               name:RILEYLINK_EVENT_PACKET_RECEIVED
                                              object:self.device];
   
   pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];

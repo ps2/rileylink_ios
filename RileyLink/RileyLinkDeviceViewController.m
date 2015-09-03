@@ -14,7 +14,7 @@
 
 @interface RileyLinkDeviceViewController () {
   IBOutlet UILabel *deviceIDLabel;
-  IBOutlet UILabel *nameLabel;
+  IBOutlet UITextField *nameView;
   IBOutlet UISwitch *autoConnectSwitch;
   IBOutlet UIActivityIndicatorView *connectingIndicator;
 }
@@ -27,17 +27,17 @@
   [super viewDidLoad];
   
   deviceIDLabel.text = self.rlRecord.peripheralId;
-  nameLabel.text = self.rlRecord.name;
+  nameView.text = self.rlRecord.name;
   
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceDisconnected:)
-                                               name:RILEY_LINK_EVENT_DEVICE_DISCONNECTED
+                                               name:RILEYLINK_EVENT_DEVICE_DISCONNECTED
                                              object:self.rlDevice];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceConnected:)
-                                               name:RILEY_LINK_EVENT_DEVICE_CONNECTED
+                                               name:RILEYLINK_EVENT_DEVICE_CONNECTED
                                              object:self.rlDevice];
 
 
@@ -52,19 +52,19 @@
 
 - (void)updateConnectedHighlight {
   switch (self.rlDevice.state) {
-    case RILEY_LINK_STATE_CONNECTING:
-      nameLabel.backgroundColor = [UIColor clearColor];
-      nameLabel.text = @"Connecting...";
+    case RILEYLINK_STATE_CONNECTING:
+      nameView.backgroundColor = [UIColor clearColor];
+      nameView.text = @"Connecting...";
       [connectingIndicator startAnimating];
       break;
-    case RILEY_LINK_STATE_CONNECTED:
-      nameLabel.backgroundColor = [UIColor greenColor];
-      nameLabel.text = self.rlDevice.name;
+    case RILEYLINK_STATE_CONNECTED:
+      nameView.backgroundColor = [UIColor greenColor];
+      nameView.text = self.rlDevice.name;
       [connectingIndicator stopAnimating];
       break;
-    case RILEY_LINK_STATE_DISCONNECTED:
-      nameLabel.backgroundColor = [UIColor clearColor];
-      nameLabel.text = self.rlDevice.name;
+    case RILEYLINK_STATE_DISCONNECTED:
+      nameView.backgroundColor = [UIColor clearColor];
+      nameView.text = self.rlDevice.name;
       [connectingIndicator stopAnimating];
       break;
   }
@@ -104,6 +104,13 @@
   [super didReceiveMemoryWarning];
   // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)field {
+  [field resignFirstResponder];
+  [self.rlDevice setCustomName:nameView.text];
+  return YES;
+}
+
 
 #pragma mark - Navigation
 

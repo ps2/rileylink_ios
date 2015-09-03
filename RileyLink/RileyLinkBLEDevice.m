@@ -21,6 +21,7 @@
   CBCharacteristic *packetCountCharacteristic;
   CBCharacteristic *txChannelCharacteristic;
   CBCharacteristic *rxChannelCharacteristic;
+  CBCharacteristic *customNameCharacteristic;
   NSMutableArray *incomingPackets;
   NSMutableArray *sendTasks;
   SendDataTask *currentSendTask;
@@ -158,6 +159,9 @@
   if (characteristic == packetTxCharacteristic) {
     [self triggerSend];
   }
+  if (characteristic == customNameCharacteristic) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
+  }
   NSLog(@"Did write characteristic: %@", characteristic);
 }
 
@@ -165,13 +169,13 @@
   RileyLinkState rval;
   switch (self.peripheral.state) {
     case CBPeripheralStateConnected:
-      rval = RILEY_LINK_STATE_CONNECTED;
+      rval = RILEYLINK_STATE_CONNECTED;
       break;
     case CBPeripheralStateConnecting:
-      rval = RILEY_LINK_STATE_CONNECTING;
+      rval = RILEYLINK_STATE_CONNECTING;
       break;
     default:
-      rval = RILEY_LINK_STATE_DISCONNECTED;
+      rval = RILEYLINK_STATE_DISCONNECTED;
       break;
   }
   return rval;
@@ -192,24 +196,26 @@
 }
 
 - (void)setCharacteristicsFromService:(CBService *)service {
-    for (CBCharacteristic *characteristic in service.characteristics) {
-        if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
-            [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
-            packetCountCharacteristic = characteristic;
-            [self.peripheral readValueForCharacteristic:characteristic];
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_RX_CHANNEL_UUID]]) {
-            rxChannelCharacteristic = characteristic;
-            [self setRXChannel:2];
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_TX_CHANNEL_UUID]]) {
-            txChannelCharacteristic = characteristic;
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_RX_PACKET_UUID]]) {
-            packetRxCharacteristic = characteristic;
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_TX_PACKET_UUID]]) {
-            packetTxCharacteristic = characteristic;
-        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_TX_TRIGGER_UUID]]) {
-            txTriggerCharacteristic = characteristic;
-        }
+  for (CBCharacteristic *characteristic in service.characteristics) {
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
+      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      packetCountCharacteristic = characteristic;
+      [self.peripheral readValueForCharacteristic:characteristic];
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_CHANNEL_UUID]]) {
+      rxChannelCharacteristic = characteristic;
+      [self setRXChannel:2];
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_CHANNEL_UUID]]) {
+      txChannelCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
+      packetRxCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_PACKET_UUID]]) {
+      packetTxCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_TRIGGER_UUID]]) {
+      txTriggerCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
+      customNameCharacteristic = characteristic;
     }
+  }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -219,13 +225,14 @@
   }
   NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
-    if ([service.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]]) {
-        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[GLUCOSELINK_RX_PACKET_UUID,
-                                                                                        GLUCOSELINK_RX_CHANNEL_UUID,
-                                                                                        GLUCOSELINK_TX_CHANNEL_UUID,
-                                                                                        GLUCOSELINK_PACKET_COUNT,
-                                                                                        GLUCOSELINK_TX_PACKET_UUID,
-                                                                                        GLUCOSELINK_TX_TRIGGER_UUID]
+    if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
+        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RX_PACKET_UUID,
+                                                                                        RILEYLINK_RX_CHANNEL_UUID,
+                                                                                        RILEYLINK_TX_CHANNEL_UUID,
+                                                                                        RILEYLINK_PACKET_COUNT,
+                                                                                        RILEYLINK_TX_PACKET_UUID,
+                                                                                        RILEYLINK_TX_TRIGGER_UUID,
+                                                                                        RILEYLINK_CUSTOM_NAME_UUID]
                                                                 excludingAttributes:service.characteristics]
                                  forService:service];
     }
@@ -234,7 +241,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
-  //[self sendNotice:RILEY_LINK_EVENT_LIST_UPDATED];
+  //[self sendNotice:RILEYLINK_EVENT_LIST_UPDATED];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
@@ -253,7 +260,7 @@
   }
   //NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
   
-  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_RX_PACKET_UUID]]) {
+  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
     if (characteristic.value.length > 0) {
       MinimedPacket *packet = [[MinimedPacket alloc] initWithData:characteristic.value];
       packet.capturedAt = [NSDate date];
@@ -264,11 +271,11 @@
                               @"packet": packet,
                               @"peripheral": self.peripheral,
                               };
-      [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+      [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
     }
     [peripheral readValueForCharacteristic:packetRxCharacteristic];
     
-  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
+  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
     const unsigned char packetCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated packet count: %d", packetCount);
     if (packetCount > 0) {
@@ -280,7 +287,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
   
-  if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
+  if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
     return;
   }
   
@@ -291,6 +298,10 @@
   }
 }
 
+- (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
+}
+
 - (void)cleanup {
   NSLog(@"Entering cleanup");
   
@@ -299,7 +310,7 @@
     for (CBService *service in self.peripheral.services) {
       if (service.characteristics != nil) {
         for (CBCharacteristic *characteristic in service.characteristics) {
-          if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
+          if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
             if (characteristic.isNotifying) {
               [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
               return;
@@ -320,7 +331,15 @@
   return [@"rl://" stringByAppendingString:self.name];
 }
 
-   
+- (void) setCustomName:(nonnull NSString*)customName {
+  if (customNameCharacteristic) {
+    NSData *data = [customName dataUsingEncoding:NSUTF8StringEncoding];
+    [self.peripheral writeValue:data forCharacteristic:customNameCharacteristic type:CBCharacteristicWriteWithResponse];
+  } else {
+    NSLog(@"Missing customNameCharacteristic");
+  }
+
+}
 
 
 @end

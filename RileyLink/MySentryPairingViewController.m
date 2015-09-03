@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(packetReceived:)
-                                                 name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                                 name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                object:self.device];
 
     self.state = PairingStateNeedsConfig;
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 {
     [self.device setTXChannel:0];
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                                    name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                   object:self.device];
 }
 

@@ -108,7 +108,7 @@
 #pragma mark -
 
 - (void)startScan {
-    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]] options:NULL];
+    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]] options:NULL];
 
     NSLog(@"Scanning started (state = %zd)", self.centralManager.state);
 }
@@ -164,7 +164,7 @@
 
   device.RSSI = RSSI;
 
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
 
   if (!self.isScanningEnabled && [self hasDiscoveredAllAutoConnectPeripherals]) {
       [central stopScan];
@@ -180,14 +180,14 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
 
   NSLog(@"Discovering services");
-  [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[GLUCOSELINK_SERVICE_UUID]
+  [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[RILEYLINK_SERVICE_UUID]
                                               excludingAttributes:peripheral.services]];
 
   RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
 
   NSDictionary *attrs = @{@"peripheral": peripheral,
                           };
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
   
 }
 
@@ -207,7 +207,7 @@
     attrs[@"error"] = error;
   }
   
-  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
   
   [self attemptReconnectForDisconnectedDevices];
 }

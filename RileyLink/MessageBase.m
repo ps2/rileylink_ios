@@ -10,6 +10,10 @@
 
 @implementation MessageBase
 
+- (instancetype)init NS_UNAVAILABLE
+{
+    return nil;
+}
 
 - (instancetype)initWithData:(NSData*)data
 {

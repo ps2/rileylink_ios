@@ -11,7 +11,7 @@
 #import "RileyLinkBLEDevice.h"
 
 @interface RileyLinkBLEManager () <CBCentralManagerDelegate> {
-  NSMutableDictionary *devicesById; // RileyLinkBLEDevices by UUID
+  NSMutableDictionary *_devicesById; // RileyLinkBLEDevices by UUID
 }
 
 @property (strong, nonatomic) CBCentralManager *centralManager;
@@ -55,7 +55,7 @@
                                                              queue:nil
                                                            options:@{CBCentralManagerOptionRestoreIdentifierKey: @"com.rileylink.CentralManager"}];
 
-    devicesById = [NSMutableDictionary dictionary];
+    _devicesById = [NSMutableDictionary dictionary];
   }
   return self;
 }
@@ -63,14 +63,14 @@
 #pragma mark -
 
 - (NSArray*)rileyLinkList {
-    return devicesById.allValues;
+    return _devicesById.allValues;
 }
 
 - (RileyLinkBLEDevice *)addPeripheralToDeviceList:(CBPeripheral *)peripheral {
-    RileyLinkBLEDevice *d = devicesById[peripheral.identifier.UUIDString];
-    if (devicesById[peripheral.identifier.UUIDString] == nil) {
+    RileyLinkBLEDevice *d = _devicesById[peripheral.identifier.UUIDString];
+    if (_devicesById[peripheral.identifier.UUIDString] == nil) {
         d = [[RileyLinkBLEDevice alloc] initWithPeripheral:peripheral];
-        devicesById[peripheral.identifier.UUIDString] = d;
+        _devicesById[peripheral.identifier.UUIDString] = d;
     }
 
     if ([self.autoConnectIds containsObject:d.peripheralId]) {
@@ -102,7 +102,7 @@
 
 - (BOOL)hasDiscoveredAllAutoConnectPeripherals
 {
-    return [self.autoConnectIds isSubsetOfSet:[NSSet setWithArray:devicesById.allKeys]];
+    return [self.autoConnectIds isSubsetOfSet:[NSSet setWithArray:_devicesById.allKeys]];
 }
 
 #pragma mark -
@@ -110,7 +110,7 @@
 - (void)startScan {
     [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:GLUCOSELINK_SERVICE_UUID]] options:NULL];
 
-    NSLog(@"Scanning started (state = %ld)", self.centralManager.state);
+    NSLog(@"Scanning started (state = %zd)", self.centralManager.state);
 }
 
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device {
@@ -180,15 +180,15 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
 
   NSLog(@"Discovering services");
-  [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[GLUCOSELINK_SERVICE_UUID,
-                                                                    GLUCOSELINK_BATTERY_SERVICE]
+  [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[GLUCOSELINK_SERVICE_UUID]
                                               excludingAttributes:peripheral.services]];
 
-  RileyLinkBLEDevice *device = devicesById[peripheral.identifier.UUIDString];
+  RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
 
   NSDictionary *attrs = @{@"peripheral": peripheral,
                           };
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
   
 }
 
@@ -200,7 +200,7 @@
   NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
   
   attrs[@"peripheral"] = peripheral;
-  RileyLinkBLEDevice *device = devicesById[peripheral.identifier.UUIDString];
+  RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
   
   [device didDisconnect:error];
   
@@ -209,6 +209,8 @@
   }
   
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_LIST_UPDATED object:nil];
   
   [self attemptReconnectForDisconnectedDevices];
 }

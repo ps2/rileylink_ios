@@ -123,7 +123,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
-    [self handlePumpStatus:packet];
+    [self handlePumpStatus:packet fromDevice:device];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     [self handleMeterMessage:packet];
   }
@@ -147,7 +147,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [self.entries addObject:entry];
 }
 
-- (void) handlePumpStatus:(MinimedPacket*)packet {
+- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
   NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
   
@@ -176,7 +176,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
       @"sgv": @(glucose),
       @"direction": [self trendToDirection:msg.trend],
-      @"device": @"RileyLink",
+      @"device": device.deviceURI,
       @"iob": @(msg.activeInsulin),
       @"type": @"sgv"
       };

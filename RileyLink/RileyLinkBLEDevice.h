@@ -11,9 +11,9 @@
 
 
 typedef NS_ENUM(NSUInteger, RileyLinkState) {
-  RLStateConnecting,
-  RLStateConnected,
-  RLStateDisconnected
+  RileyLinkStateConnecting,
+  RileyLinkStateConnected,
+  RileyLinkStateDisconnected
 };
 
 @interface RileyLinkBLEDevice : NSObject

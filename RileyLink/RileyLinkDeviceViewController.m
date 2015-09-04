@@ -62,17 +62,17 @@
 
 - (void)updateNameView {
   switch (self.rlDevice.state) {
-    case RLStateConnecting:
+    case RileyLinkStateConnecting:
       nameView.backgroundColor = [UIColor clearColor];
       nameView.text = @"Connecting...";
       [connectingIndicator startAnimating];
       break;
-    case RLStateConnected:
+    case RileyLinkStateConnected:
       nameView.backgroundColor = [UIColor greenColor];
       nameView.text = self.rlRecord.name;
       [connectingIndicator stopAnimating];
       break;
-    case RLStateDisconnected:
+    case RileyLinkStateDisconnected:
     default:
       nameView.backgroundColor = [UIColor clearColor];
       nameView.text = self.rlRecord.name;

@@ -169,13 +169,13 @@
   RileyLinkState rval;
   switch (self.peripheral.state) {
     case CBPeripheralStateConnected:
-      rval = RLStateConnected;
+      rval = RileyLinkStateConnected;
       break;
     case CBPeripheralStateConnecting:
-      rval = RLStateConnecting;
+      rval = RileyLinkStateConnecting;
       break;
     default:
-      rval = RLStateDisconnected;
+      rval = RileyLinkStateDisconnected;
       break;
   }
   return rval;
@@ -242,7 +242,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
   if (error != nil) {
-    NSLog(@"Error reading RSSI: %@", error);
+    NSLog(@"Error reading RSSI: %@", [error localizedDescription]);
   } else {
     NSLog(@"RSSI for %@: %@", peripheral.name, RSSI);
   }

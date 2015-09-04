@@ -114,12 +114,12 @@
 }
 
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Connecting to peripheral %@", device.peripheral);
+    NSLog(@"Connecting to %@", device.peripheral.name);
     [_centralManager connectPeripheral:device.peripheral options:nil];
 }
 
 - (void)disconnectRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Disconnecting from peripheral %@", device.peripheral);
+    NSLog(@"Disconnecting from %@", device.peripheral.name);
     [_centralManager cancelPeripheralConnection:device.peripheral];
 }
 
@@ -128,7 +128,7 @@
         CBPeripheral *peripheral = device.peripheral;
         if (peripheral.state == CBPeripheralStateDisconnected
             && [self.autoConnectIds containsObject:device.peripheralId]) {
-            NSLog(@"Attempting reconnect to %@", device);
+            NSLog(@"Attempting reconnect to %@", device.name);
             [self connectToRileyLink:device];
         }
     }
@@ -188,13 +188,13 @@
   NSDictionary *attrs = @{@"peripheral": peripheral,
                           };
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
-  
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   
   if (error) {
-    NSLog(@"Disconnection: %@", error);
+    NSLog(@"Disconnected from %@: %@", peripheral.name, [error localizedDescription]);
   }
   NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
   
@@ -208,6 +208,8 @@
   }
   
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
   
   [self attemptReconnectForDisconnectedDevices];
 }

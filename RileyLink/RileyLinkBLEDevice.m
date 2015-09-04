@@ -162,7 +162,7 @@
   if (characteristic == customNameCharacteristic) {
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
   }
-  NSLog(@"Did write characteristic: %@", characteristic);
+  NSLog(@"Did write characteristic: %@", characteristic.UUID);
 }
 
 - (RileyLinkState) state {
@@ -223,7 +223,7 @@
     NSLog(@"Failure while discovering services: %@", error);
     return;
   }
-  NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
+  //NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
     if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
         [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RX_PACKET_UUID,
@@ -291,11 +291,11 @@
     return;
   }
   
-  if (characteristic.isNotifying) {
-    NSLog(@"Notification began on %@", characteristic);
-  } else {
-    // Notification has stopped
-  }
+//  if (characteristic.isNotifying) {
+//    NSLog(@"Notification began on %@", characteristic.);
+//  } else {
+//    // Notification has stopped
+//  }
 }
 
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {

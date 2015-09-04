@@ -29,6 +29,7 @@
   deviceIDLabel.text = self.rlRecord.peripheralId;
   nameView.text = self.rlRecord.name;
   
+  [self.rlRecord addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceDisconnected:)
@@ -45,8 +46,17 @@
   autoConnectSwitch.on = [self.rlRecord.autoConnect boolValue];
 }
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+  if (object == self.rlRecord && [keyPath isEqualToString:@"name"]) {
+    [self updateConnectedHighlight];
+  } else {
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  }
+}
+
 - (void)dealloc
 {
+  [self.rlRecord removeObserver:self forKeyPath:@"name"];
   [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
@@ -59,12 +69,12 @@
       break;
     case RILEYLINK_STATE_CONNECTED:
       nameView.backgroundColor = [UIColor greenColor];
-      nameView.text = self.rlDevice.name;
+      nameView.text = self.rlRecord.name;
       [connectingIndicator stopAnimating];
       break;
     case RILEYLINK_STATE_DISCONNECTED:
       nameView.backgroundColor = [UIColor clearColor];
-      nameView.text = self.rlDevice.name;
+      nameView.text = self.rlRecord.name;
       [connectingIndicator stopAnimating];
       break;
   }
@@ -108,6 +118,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)field {
   [field resignFirstResponder];
   [self.rlDevice setCustomName:nameView.text];
+  self.rlRecord.name = nameView.text;
   return YES;
 }
 

@@ -241,7 +241,11 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
-  //[self sendNotice:RILEYLINK_EVENT_LIST_UPDATED];
+  if (error != nil) {
+    NSLog(@"Error reading RSSI: %@", error);
+  } else {
+    NSLog(@"RSSI for %@: %@", peripheral.name, RSSI);
+  }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
@@ -282,7 +286,6 @@
       [peripheral readValueForCharacteristic:packetRxCharacteristic];
     }
   }
-  
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

@@ -114,12 +114,12 @@
 }
 
 - (void)connectToRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Connecting to %@", device.peripheral.name);
+    NSLog(@"Connecting to %@", device.name);
     [_centralManager connectPeripheral:device.peripheral options:nil];
 }
 
 - (void)disconnectRileyLink:(RileyLinkBLEDevice *)device {
-    NSLog(@"Disconnecting from %@", device.peripheral.name);
+    NSLog(@"Disconnecting from %@", device.name);
     [_centralManager cancelPeripheralConnection:device.peripheral];
 }
 
@@ -178,6 +178,10 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
+  
+  NSLog(@"Did connect to %@", peripheral.name);
+  
+  [peripheral readRSSI];
 
   NSLog(@"Discovering services");
   [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[RILEYLINK_SERVICE_UUID]

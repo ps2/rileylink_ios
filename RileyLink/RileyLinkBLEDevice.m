@@ -169,13 +169,13 @@
   RileyLinkState rval;
   switch (self.peripheral.state) {
     case CBPeripheralStateConnected:
-      rval = RILEYLINK_STATE_CONNECTED;
+      rval = RLStateConnected;
       break;
     case CBPeripheralStateConnecting:
-      rval = RILEYLINK_STATE_CONNECTING;
+      rval = RLStateConnecting;
       break;
     default:
-      rval = RILEYLINK_STATE_DISCONNECTED;
+      rval = RLStateDisconnected;
       break;
   }
   return rval;

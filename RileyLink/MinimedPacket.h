@@ -10,13 +10,13 @@
 
 @interface MinimedPacket : NSObject
 
-typedef enum {
+typedef NS_OPTIONS(unsigned int, PacketType) {
   PACKET_TYPE_PUMP = 0xa2,
   PACKET_TYPE_METER = 0xa5,
   PACKET_TYPE_SENSOR = 0xa8
-} PacketType;
+};
 
-typedef enum {
+typedef NS_OPTIONS(unsigned int, MessageType) {
   MESSAGE_TYPE_ALERT = 0x01,
   MESSAGE_TYPE_ALERT_CLEARED = 0x02,
   MESSAGE_TYPE_DEVICE_TEST = 0x03,
@@ -28,7 +28,7 @@ typedef enum {
   MESSAGE_TYPE_PUMP_DUMP = 0x0a,
   MESSAGE_TYPE_GET_PUMP_MODEL = 0x8d,
   MESSAGE_TYPE_GET_BATTERY = 0x72,
-} MessageType;
+};
 
 
 - (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;

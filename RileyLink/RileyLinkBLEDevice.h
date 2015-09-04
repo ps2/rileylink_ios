@@ -11,9 +11,9 @@
 
 
 typedef NS_ENUM(NSUInteger, RileyLinkState) {
-  RILEYLINK_STATE_CONNECTING,
-  RILEYLINK_STATE_CONNECTED,
-  RILEYLINK_STATE_DISCONNECTED
+  RLStateConnecting,
+  RLStateConnected,
+  RLStateDisconnected
 };
 
 @interface RileyLinkBLEDevice : NSObject
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 - (void) setTXChannel:(unsigned char)channel;
 - (void) sendPacketData:(nonnull NSData*)data;
 - (void) sendPacketData:(nonnull NSData*)data withCount:(NSInteger)count andTimeBetweenPackets:(NSTimeInterval)timeBetweenPackets;
-- (nonnull NSString*) deviceURI;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * __nonnull deviceURI;
 - (void) setCustomName:(nonnull NSString*)customName;
 
 @end

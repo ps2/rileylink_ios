@@ -19,11 +19,11 @@
 
 #define RECORD_RAW_PACKETS YES
 
-typedef enum {
+typedef NS_ENUM(unsigned int, DexcomSensorError) {
   DX_SENSOR_NOT_ACTIVE = 1,
   DX_SENSOR_NOT_CALIBRATED = 5,
   DX_BAD_RF = 12,
-} DexcomSensorError;
+};
 
 
 @interface NightScoutUploader ()

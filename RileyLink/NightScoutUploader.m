@@ -175,12 +175,30 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
       @"sgv": @(glucose),
+      @"previousSGV": @(msg.previousGlucose),
       @"direction": [self trendToDirection:msg.trend],
       @"device": device.deviceURI,
-      @"iob": @(msg.activeInsulin),
       @"type": @"sgv"
       };
     [self.entries addObject:entry];
+    
+    // Also add pumpStatus entry
+    entry =
+    @{@"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+      @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
+      @"sensorAge": @(msg.sensorAge),
+      @"sensorRemaining": @(msg.sensorRemaining),
+      @"insulinRemaining": @(msg.insulinRemaining),
+      @"device": device.deviceURI,
+      @"iob": @(msg.activeInsulin),
+      @"nextCal": msg.nextCal,
+      @"sensorStatus": msg.sensorStatusString,
+      @"pumpStatus": @"pumpStatus",
+      @"type": @"pumpStatus",
+      };
+    [self.entries addObject:entry];
+    
+    
   } else {
     NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
   }

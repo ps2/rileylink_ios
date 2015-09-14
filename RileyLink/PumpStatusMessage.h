@@ -32,9 +32,16 @@ typedef NS_ENUM(unsigned int, GlucoseTrend) {
 @interface PumpStatusMessage : MessageBase
 
 @property (nonatomic, readonly) NSInteger glucose;
+@property (nonatomic, readonly) NSInteger previousGlucose;
 @property (nonatomic, readonly, copy) NSDate *measurementTime;
 @property (nonatomic, readonly) GlucoseTrend trend;
 @property (nonatomic, readonly) double activeInsulin;
 @property (nonatomic, readonly) SensorStatus sensorStatus;
+@property (nonatomic, readonly) NSString* sensorStatusString;
+@property (nonatomic, readonly) NSInteger sensorAge;
+@property (nonatomic, readonly) NSInteger sensorRemaining;
+@property (nonatomic, readonly) NSInteger battery;
+@property (nonatomic, readonly) double insulinRemaining;
+@property (nonatomic, readonly) NSString* nextCal;
 
 @end

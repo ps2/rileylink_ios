@@ -123,7 +123,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
-    [self handlePumpStatus:packet fromDevice:device];
+    [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     [self handleMeterMessage:packet];
   }
@@ -147,7 +147,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [self.entries addObject:entry];
 }
 
-- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
+- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device withRSSI:(NSInteger)rssi {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
   NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
   
@@ -178,13 +178,15 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       @"previousSGV": @(msg.previousGlucose),
       @"direction": [self trendToDirection:msg.trend],
       @"device": device.deviceURI,
+      @"rssi": @(rssi),
       @"type": @"sgv"
       };
     [self.entries addObject:entry];
     
     // Also add pumpStatus entry
     entry =
-    @{@"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
       @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
       @"sensorAge": @(msg.sensorAge),
       @"sensorRemaining": @(msg.sensorRemaining),
@@ -193,7 +195,9 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       @"iob": @(msg.activeInsulin),
       @"nextCal": msg.nextCal,
       @"sensorStatus": msg.sensorStatusString,
-      @"pumpStatus": @"pumpStatus",
+      @"batt": @(msg.battery),
+      @"rssi": @(rssi),
+      @"pumpStatus": [msg.data hexadecimalString],
       @"type": @"pumpStatus",
       };
     [self.entries addObject:entry];

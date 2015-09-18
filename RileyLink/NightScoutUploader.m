@@ -193,7 +193,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       @"insulinRemaining": @(msg.insulinRemaining),
       @"device": device.deviceURI,
       @"iob": @(msg.activeInsulin),
-      @"nextCal": msg.nextCal,
+      @"nextCal": [self.dateFormatter stringFromDate:msg.nextCal],
       @"sensorStatus": msg.sensorStatusString,
       @"batt": @(msg.battery),
       @"rssi": @(rssi),

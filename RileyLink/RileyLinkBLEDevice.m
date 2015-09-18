@@ -203,7 +203,7 @@
       [self.peripheral readValueForCharacteristic:characteristic];
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_CHANNEL_UUID]]) {
       rxChannelCharacteristic = characteristic;
-      [self setRXChannel:2];
+      [self setRXChannel:1];
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_CHANNEL_UUID]]) {
       txChannelCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {

@@ -42,6 +42,7 @@ typedef NS_ENUM(unsigned int, GlucoseTrend) {
 @property (nonatomic, readonly) NSInteger sensorRemaining;
 @property (nonatomic, readonly) NSInteger battery;
 @property (nonatomic, readonly) double insulinRemaining;
-@property (nonatomic, readonly) NSString* nextCal;
+@property (nonatomic, readonly) NSDate* nextCal;
+@property (nonatomic, readonly) NSDate* pumpTime;
 
 @end

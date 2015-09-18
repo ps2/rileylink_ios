@@ -27,6 +27,12 @@
 - (NSDictionary*) bitBlocks {
   return @{@"sequence":          @[@1, @7],
            @"trend":             @[@12, @3],
+           @"pump_hour":         @[@19, @5],
+           @"pump_minute":       @[@26, @6],
+           @"pump_second":       @[@34, @6],
+           @"pump_year":         @[@40, @8],
+           @"pump_month":        @[@52, @4],
+           @"pump_day":          @[@59, @5],
            @"bg_h":              @[@72, @8],
            @"prev_bg_h":         @[@80, @8],
            @"insulin_remaining": @[@101,@11],
@@ -46,14 +52,13 @@
   };
 }
 
-- (NSString*) nextCal {
+- (NSDate*) nextCal {
   NSInteger hour = [self getBits:@"next_cal_hour"];
   NSInteger minute = [self getBits:@"next_cal_minute"];
-  if (hour != 0 && hour != 0xff) {
-    return [NSString stringWithFormat:@"%02d:%02d", hour, minute];
-  } else {
-    return @"--:--";
-  }
+  
+  NSDate *pumpDate = [self pumpTime];
+  
+  return [[NSCalendar currentCalendar] nextDateAfterDate:pumpDate matchingHour:hour minute:minute second:0 options:NSCalendarMatchNextTime];
 }
 
 - (NSInteger) sensorAge {
@@ -140,6 +145,19 @@
 - (double) insulinRemaining {
   return [self getBits:@"insulin_remaining"] / 10.0;
 }
+                                                 
+- (NSDate*) pumpTime {
+  NSCalendar *calendar = [NSCalendar currentCalendar];
+  NSDateComponents *components = [[NSDateComponents alloc] init];
+  [components setYear:[self getBits:@"pump_year"]+2000];
+  [components setMonth:[self getBits:@"pump_month"]];
+  [components setDay:[self getBits:@"pump_day"]];
+  [components setHour:[self getBits:@"pump_hour"]];
+  [components setMinute:[self getBits:@"pump_minute"]];
+  [components setSecond:0];
+  return [calendar dateFromComponents:components];
+}
+
 
 - (NSDate*) measurementTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];

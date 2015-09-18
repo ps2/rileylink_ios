@@ -83,7 +83,7 @@
     
     NSInteger volts = (((int)data[1]) << 8) + data[2];
     NSString *indicator = data[0] ? @"Low" : @"Normal";
-    batteryVoltage.text = [indicator stringByAppendingFormat:@"%0.02f", volts/100.0];
+    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts/100.0];
   }
   
 }

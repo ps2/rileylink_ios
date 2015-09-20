@@ -123,7 +123,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
-    [self handlePumpStatus:packet fromDevice:device];
+    [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     [self handleMeterMessage:packet];
   }
@@ -147,7 +147,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [self.entries addObject:entry];
 }
 
-- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
+- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device withRSSI:(NSInteger)rssi {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
   NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
   
@@ -175,12 +175,34 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
       @"sgv": @(glucose),
+      @"previousSGV": @(msg.previousGlucose),
       @"direction": [self trendToDirection:msg.trend],
       @"device": device.deviceURI,
-      @"iob": @(msg.activeInsulin),
+      @"rssi": @(rssi),
       @"type": @"sgv"
       };
     [self.entries addObject:entry];
+    
+    // Also add pumpStatus entry
+    entry =
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+      @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
+      @"sensorAge": @(msg.sensorAge),
+      @"sensorRemaining": @(msg.sensorRemaining),
+      @"insulinRemaining": @(msg.insulinRemaining),
+      @"device": device.deviceURI,
+      @"iob": @(msg.activeInsulin),
+      @"nextCal": [self.dateFormatter stringFromDate:msg.nextCal],
+      @"sensorStatus": msg.sensorStatusString,
+      @"batt": @(msg.battery),
+      @"rssi": @(rssi),
+      @"pumpStatus": [msg.data hexadecimalString],
+      @"type": @"pumpStatus",
+      };
+    [self.entries addObject:entry];
+    
+    
   } else {
     NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
   }

@@ -7,15 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MinimedPacket.h"
 
 @interface MessageBase : NSObject
 
-@property (strong, nonatomic) NSData *data;
+@property (nonatomic, nonnull, readonly, strong) NSData *data;
 
-- (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
-@property (nonatomic, readonly, copy) NSDictionary *bitBlocks;
-- (NSInteger) getBits:(NSString*)key;
-- (void) setBits:(NSString*)key toValue:(NSInteger)val;
+- (nonnull instancetype)initWithData:(nonnull NSData*)data NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, nonnull, readonly, copy) NSDictionary *bitBlocks;
+- (NSInteger) getBits:(nullable NSString*)key;
+- (void) setBits:(nonnull NSString*)key toValue:(NSInteger)val;
 - (unsigned char) getBitAtIndex:(NSInteger)idx;
+
+@property (nonatomic, readonly) PacketType packetType;
+@property (nonatomic, readonly) MessageType messageType;
+@property (nonatomic, nonnull, readonly, copy) NSString *address;
 
 @end

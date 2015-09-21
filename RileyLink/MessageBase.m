@@ -8,6 +8,12 @@
 
 #import "MessageBase.h"
 
+@interface MessageBase ()
+
+@property (nonatomic, nonnull, strong) NSData *data;
+
+@end
+
 @implementation MessageBase
 
 - (instancetype)init NS_UNAVAILABLE
@@ -55,6 +61,24 @@
   //TODO
 }
 
+- (unsigned char)byteAt:(NSInteger)index {
+    if (_data && index < [_data length]) {
+        return ((unsigned char*)[_data bytes])[index];
+    } else {
+        return 0;
+    }
+}
 
+- (PacketType) packetType {
+    return [self byteAt:0];
+}
+
+- (MessageType) messageType {
+    return [self byteAt:4];
+}
+
+- (NSString*) address {
+    return [NSString stringWithFormat:@"%02x%02x%02x", [self byteAt:1], [self byteAt:2], [self byteAt:3]];
+}
 
 @end

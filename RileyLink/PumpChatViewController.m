@@ -7,6 +7,8 @@
 //
 
 #import "PumpChatViewController.h"
+#import "MessageSendOperation.h"
+#import "MessageBase.h"
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "Config.h"
@@ -18,6 +20,8 @@
   IBOutlet UILabel *pumpIdLabel;
 }
 
+@property (nonatomic, strong) NSOperationQueue *pumpCommQueue;
+
 @end
 
 @implementation PumpChatViewController
@@ -25,18 +29,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-  
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(packetReceived:)
-                                               name:RILEYLINK_EVENT_PACKET_RECEIVED
-                                             object:self.device];
-  
-  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
-}
 
-- (void)dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver: self];
+    self.pumpCommQueue = [[NSOperationQueue alloc] init];
+    self.pumpCommQueue.maxConcurrentOperationCount = 1;
+    self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+
+  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
 }
 
 
@@ -45,69 +43,102 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)queryPumpButtonPressed:(id)sender {
-  [self queryPumpForVersion];
+- (MessageBase *)powerMessage
+{
+    return [self powerMessageWithArgs:@"00"];
 }
 
-- (void)queryPumpForVersion {
-  resultsLabel.text = @"Sending wakeup packets...";
-  
-  NSString *pumpId = [[Config sharedInstance] pumpID];
-  
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D00", pumpId];
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  [_device sendPacketData:[MinimedPacket encodeData:data] withCount:100 andTimeBetweenPackets:0.078];
+- (MessageBase *)powerMessageWithArgs:(NSString *)args
+{
+    NSString *pumpId = [[Config sharedInstance] pumpID];
+
+    NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D%@", pumpId, args];
+    NSData *data = [NSData dataWithHexadecimalString:packetStr];
+
+    return [[MessageBase alloc] initWithData:data];
 }
 
-- (void)handlePacketFromPump:(MinimedPacket*)p {
-  if (p.messageType == MESSAGE_TYPE_PUMP_STATUS_ACK) {
-    resultsLabel.text = @"Pump acknowleged wakeup!";
-    // Send query for pump model #
+- (MessageBase *)modelQueryMessage
+{
     NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_PUMP_MODEL];
     NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-  } else if (p.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
-    //unsigned char len = [p.data bytes][6];
-    NSString *version = [NSString stringWithCString:&[p.data bytes][7] encoding:NSASCIIStringEncoding];
-    resultsLabel.text = [@"Pump Model: " stringByAppendingString:version];
-    
-    // Send query for battery status
+
+    return [[MessageBase alloc] initWithData:data];
+}
+
+- (MessageBase *)batteryStatusMessage
+{
     NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_BATTERY];
     NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-    
-    
-    
-  } else if (p.messageType == MESSAGE_TYPE_GET_BATTERY) {
-    unsigned char *data = (unsigned char *)[p.data bytes] + 6;
-    
-    NSInteger volts = (((int)data[1]) << 8) + data[2];
-    NSString *indicator = data[0] ? @"Low" : @"Normal";
-    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts/100.0];
-  }
-  
+
+    return [[MessageBase alloc] initWithData:data];
 }
 
-
-- (void)packetReceived:(NSNotification*)notification {
-    MinimedPacket *packet = notification.userInfo[@"packet"];
-    if (packet && [packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
-      [self handlePacketFromPump:packet];
-    }
+- (IBAction)queryPumpButtonPressed:(id)sender {
+    [self enqueuePumpMessages];
 }
 
+- (void)enqueuePumpMessages {
+    resultsLabel.text = @"Sending wakeup packets...";
 
+    __weak UILabel *label = resultsLabel;
 
+    MessageSendOperation *wakeupOperation = [[MessageSendOperation alloc] initWithDevice:self.device
+                                                                                 message:[self powerMessage]
+                                                                       completionHandler:^(MessageSendOperation * _Nonnull operation) {
+        if (operation.responsePacket != nil) {
+            label.text = @"Pump acknowledged wakeup!";
+        } else {
+            label.text = [NSString stringWithFormat:@"Power on error: %@", operation.error];
+        }
+    }];
 
+    wakeupOperation.repeatInterval = 0.078;
+    wakeupOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
 
-/*
-#pragma mark - Navigation
+    MessageSendOperation *wakeupArgsOperation = [[MessageSendOperation alloc] initWithDevice:self.device
+                                                                                     message:[self powerMessageWithArgs:@"02010a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
+                                                                           completionHandler:^(MessageSendOperation * _Nonnull operation) {
+        if (operation.responsePacket != nil) {
+            label.text = @"Power on for 10 minutes";
+        } else {
+            label.text = [NSString stringWithFormat:@"Power on error: %@", operation.error];
+        }
+    }];
+    wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    MessageSendOperation *modelQueryOperation = [[MessageSendOperation alloc] initWithDevice:self.device
+                                                                                     message:[self modelQueryMessage]
+                                                 completionHandler:^(MessageSendOperation * _Nonnull operation) {
+        if (operation.responsePacket != nil) {
+            NSString *version = [NSString stringWithCString:&[operation.responsePacket.data bytes][7] encoding:NSASCIIStringEncoding];
+
+            label.text = [@"Pump Model: " stringByAppendingString:version];
+        } else {
+            label.text = [NSString stringWithFormat:@"Model query error: %@", operation.error];
+        }
+    }];
+    modelQueryOperation.responseMessageType = MESSAGE_TYPE_GET_PUMP_MODEL;
+
+    MessageSendOperation *batteryStatusOperation = [[MessageSendOperation alloc] initWithDevice:self.device
+                                                                                        message:[self batteryStatusMessage]
+                                                                              completionHandler:^(MessageSendOperation * _Nonnull operation) {
+        if (operation.responsePacket != nil) {
+            unsigned char *data = (unsigned char *)[operation.responsePacket.data bytes] + 6;
+
+            NSInteger volts = (((int)data[1]) << 8) + data[2];
+            NSString *indicator = data[0] ? @"Low" : @"Normal";
+            batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts/100.0];
+        } else {
+            label.text = [NSString stringWithFormat:@"Get battery error: %@", operation.error];
+        }
+    }];
+    batteryStatusOperation.responseMessageType = MESSAGE_TYPE_GET_BATTERY;
+
+    [self.pumpCommQueue addOperations:@[wakeupOperation,
+                                        wakeupArgsOperation,
+                                        modelQueryOperation,
+                                        batteryStatusOperation] waitUntilFinished:NO];
 }
-*/
 
 @end

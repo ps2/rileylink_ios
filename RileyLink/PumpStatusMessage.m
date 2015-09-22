@@ -69,8 +69,8 @@
   return [self getBits:@"sensor_remaining"];
 }
 
-- (NSInteger) battery {
-  return [self getBits:@"batt"];
+- (NSInteger) batteryPct {
+  return [self getBits:@"batt"] / 4.0 * 100;
 }
 
 - (SensorStatus) sensorStatus {

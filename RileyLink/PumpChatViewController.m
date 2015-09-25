@@ -28,7 +28,7 @@
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(packetReceived:)
-                                               name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                               name:RILEYLINK_EVENT_PACKET_RECEIVED
                                              object:self.device];
   
   pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
@@ -56,7 +56,7 @@
   
   NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D00", pumpId];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  [_device sendPacketData:[MinimedPacket encodeData:data] withCount:100 andTimeBetweenPackets:0.078];
+  [_device sendPacketData:[MinimedPacket encodeAndCRC8Data:data] withCount:100 andTimeBetweenPackets:0.078];
 }
 
 - (void)handlePacketFromPump:(MinimedPacket*)p {
@@ -65,7 +65,7 @@
     // Send query for pump model #
     NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_PUMP_MODEL];
     NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
+    [_device sendPacketData:[MinimedPacket encodeAndCRC8Data:data]];
   } else if (p.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
     //unsigned char len = [p.data bytes][6];
     NSString *version = [NSString stringWithCString:&[p.data bytes][7] encoding:NSASCIIStringEncoding];
@@ -74,7 +74,7 @@
     // Send query for battery status
     NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_BATTERY];
     NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
+    [_device sendPacketData:[MinimedPacket encodeAndCRC8Data:data]];
     
     
     
@@ -83,7 +83,7 @@
     
     NSInteger volts = (((int)data[1]) << 8) + data[2];
     NSString *indicator = data[0] ? @"Low" : @"Normal";
-    batteryVoltage.text = [indicator stringByAppendingFormat:@"%0.02f", volts/100.0];
+    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts/100.0];
   }
   
 }

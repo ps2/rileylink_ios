@@ -33,7 +33,7 @@
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(listUpdated:)
-                                               name:RILEY_LINK_EVENT_LIST_UPDATED
+                                               name:RILEYLINK_EVENT_LIST_UPDATED
                                              object:nil];
   
   if (self.revealViewController != nil) {

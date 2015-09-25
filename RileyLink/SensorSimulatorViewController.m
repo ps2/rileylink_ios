@@ -40,8 +40,8 @@
 }
 
 - (void)updateGlucose {
-  for (int i=0; i<GLUCOSE_HISTORY_LENGTH-1; i++) {
-    glucoseHistory[i+1] = glucoseHistory[i];
+  for (int i=GLUCOSE_HISTORY_LENGTH-1; i>0; i--) {
+    glucoseHistory[i] = glucoseHistory[i-1];
   }
   glucoseHistory[0] = currentGlucose;
   currentGlucose += glucoseD1;
@@ -64,14 +64,14 @@
 - (void)sendSensorPacket {
   [self.device setTXChannel:0];
   
-  unsigned char d[34];
+  unsigned char d[32];
   
   d[0] = 0xab; // Normal
   d[1] = 0x0f;
   NSInteger sensorID = [sensorIDTextField.text integerValue] & 0xffffff;
-  d[2] = sensorID & 0xff0000 >> 16;
-  d[3] = sensorID & 0xff00 >> 8;
-  d[4] = sensorID & 0xff;
+  d[2] = (sensorID & 0xff0000) >> 16;
+  d[3] = (sensorID & 0xff00) >> 8;
+  d[4] = (sensorID & 0xff);
   d[5] = 0x0d;
   d[6] = 0x1d;
   d[7] = 0x21; // ISIG adjustment
@@ -93,10 +93,10 @@
   d[31] = 0x00;
   // 32 & 33 are crc16
   
-  [NSData dataWithBytes:d length:<#(NSUInteger)#>]
-  
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  [_device sendPacketData:[MinimedPacket encodeAndCRC8Data:data]];
+  NSData *data = [NSData dataWithBytes:d length:32];
+  NSLog(@"data before crc16: %@", [data hexadecimalString]);
+
+  [_device sendPacketData:[MinimedPacket encodeAndCRC16Data:data]];
 }
 
 

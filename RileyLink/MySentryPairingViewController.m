@@ -212,8 +212,8 @@ typedef NS_ENUM(NSUInteger, PairingState) {
                              packet.messageType
                              ];
     NSData *data = [NSData dataWithHexadecimalString:replyString];
-
-    [self.device sendPacketData:[MinimedPacket encodeData:data]];
+  
+    [self.device sendPacketData:[MinimedPacket encodeAndCRC8Data:data]];
 }
 
 - (void)closeKeyboard:(id)sender

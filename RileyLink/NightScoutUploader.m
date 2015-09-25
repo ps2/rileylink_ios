@@ -184,23 +184,25 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [self.entries addObject:entry];
     
     // Also add pumpStatus entry
-    entry =
-    @{@"date": epochTime,
-      @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
-      @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
-      @"sensorAge": @(msg.sensorAge),
-      @"sensorRemaining": @(msg.sensorRemaining),
-      @"insulinRemaining": @(msg.insulinRemaining),
-      @"device": device.deviceURI,
-      @"iob": @(msg.activeInsulin),
-      @"nextCal": [self.dateFormatter stringFromDate:msg.nextCal],
-      @"sensorStatus": msg.sensorStatusString,
-      @"batteryPct": @(msg.batteryPct),
-      @"rssi": @(rssi),
-      @"pumpStatus": [msg.data hexadecimalString],
-      @"type": @"pumpStatus",
-      };
-    [self.entries addObject:entry];
+    NSMutableDictionary *pumpStatusEntry =
+      [@{@"date": epochTime,
+        @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+        @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
+        @"sensorAge": @(msg.sensorAge),
+        @"sensorRemaining": @(msg.sensorRemaining),
+        @"insulinRemaining": @(msg.insulinRemaining),
+        @"device": device.deviceURI,
+        @"iob": @(msg.activeInsulin),
+        @"sensorStatus": msg.sensorStatusString,
+        @"batteryPct": @(msg.batteryPct),
+        @"rssi": @(rssi),
+        @"pumpStatus": [msg.data hexadecimalString],
+        @"type": @"pumpStatus",
+        } mutableCopy];
+    if (msg.nextCal != nil) {
+      pumpStatusEntry[@"nextCal"] = [self.dateFormatter stringFromDate:msg.nextCal];
+    }
+    [self.entries addObject:pumpStatusEntry];
     
     
   } else {

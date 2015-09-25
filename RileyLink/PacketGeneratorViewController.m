@@ -63,7 +63,7 @@
   NSString *packetStr = [@"614C05E077" stringByAppendingFormat:@"%02x", testPacketNum];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   if (encodeDataSwitch.on) {
-    data = [MinimedPacket encodeData:data];
+    data = [MinimedPacket encodeAndCRC8Data:data];
   }
   packetData.text = [data hexadecimalString];
   [_device sendPacketData:data];

@@ -67,6 +67,18 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
   return crc;
 }
 
++ (unsigned short) crc16ForData:(NSData*)data {
+  unsigned char crc = 0;
+  const unsigned char *pdata = data.bytes;
+  unsigned long nbytes = data.length;
+  /* loop over the buffer data */
+  while (nbytes-- > 0) {
+    crc = crcTable[(crc ^ *pdata++) & 0xff];
+  }
+  return crc;
+}
+
+
 - (BOOL) crcValid {
   unsigned char crc = 0;
   const unsigned char *pdata = _data.bytes;
@@ -86,14 +98,11 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
 
 + (NSData*)encodeData:(NSData*)data {
   NSMutableData *outData = [NSMutableData data];
-  NSMutableData *dataPlusCrc = [data mutableCopy];
-  unsigned char crc = [MinimedPacket crcForData:data];
-  [dataPlusCrc appendBytes:&crc length:1];
   char codes[16] = {21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28};
-  const unsigned char *inBytes = [dataPlusCrc bytes];
+  const unsigned char *inBytes = [data bytes];
   unsigned int acc = 0x0;
   int bitcount = 0;
-  for (int i=0; i < dataPlusCrc.length; i++) {
+  for (int i=0; i < data.length; i++) {
     acc <<= 6;
     acc |= codes[inBytes[i] >> 4];
     bitcount += 6;
@@ -115,7 +124,23 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
     [outData appendBytes:&outByte length:1];
   }
   return outData;
+  
 }
+
++ (NSData*)encodeAndCRC8Data:(NSData*)data {
+  NSMutableData *dataPlusCrc = [data mutableCopy];
+  unsigned char crc = [MinimedPacket crcForData:data];
+  [dataPlusCrc appendBytes:&crc length:1];
+  return [self encodeData:dataPlusCrc];
+}
+
++ (NSData*)encodeAndCRC16Data:(NSData*)data {
+  NSMutableData *dataPlusCrc = [data mutableCopy];
+  unsigned short crc = [MinimedPacket crc16ForData:data];
+  [dataPlusCrc appendBytes:&crc length:2];
+  return [self encodeData:dataPlusCrc];
+}
+
 
 - (NSData*)decodeRF:(NSData*) rawData {
   // Converted from ruby using: CODE_SYMBOLS.each{|k,v| puts "@#{Integer("0b"+k)}: @#{Integer("0x"+v)},"};nil

@@ -14,11 +14,15 @@
 
 @interface SensorSimulatorViewController () {
   IBOutlet UITextField *sensorIDTextField;
+  IBOutlet UISwitch *continuousSendSwitch;
+
   int sequenceNum;
+  int duplicateNum;
   int glucoseHistory[GLUCOSE_HISTORY_LENGTH];
   float currentGlucose;
   float glucoseD1;
   float glucoseD2;
+  NSTimer *timer;
 }
 
 @end
@@ -29,6 +33,7 @@
   [super viewDidLoad];
   // Do any additional setup after loading the view.
   sequenceNum = 0;
+  duplicateNum = 0;
   
   currentGlucose = 100;
   glucoseD1 = 5;
@@ -39,6 +44,23 @@
   }
 }
 
+- (void)timerFired:(id)sender {
+  [self updateGlucose];
+  [self sendSensorPacket];
+  [self performSelector:@selector(sendSensorPacket) withObject:nil afterDelay:15];
+}
+
+
+- (IBAction)continuousSendSwitchToggled:(id)sender {
+  [timer invalidate];
+  if (continuousSendSwitch.on) {
+    timer = [NSTimer timerWithTimeInterval:(60 * 5) target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    [self timerFired:nil];
+  }
+}
+
+
 - (void)updateGlucose {
   for (int i=GLUCOSE_HISTORY_LENGTH-1; i>0; i--) {
     glucoseHistory[i] = glucoseHistory[i-1];
@@ -46,6 +68,11 @@
   glucoseHistory[0] = currentGlucose;
   currentGlucose += glucoseD1;
   glucoseD1 += glucoseD2;
+  sequenceNum += 1;
+  if (sequenceNum == 8) {
+    sequenceNum = 0;
+  }
+  duplicateNum = 0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,18 +100,18 @@
   d[3] = (sensorID & 0xff00) >> 8;
   d[4] = (sensorID & 0xff);
   d[5] = 0x0d;
-  d[6] = 0x1d;
+  d[6] = 0x19;
   d[7] = 0x21; // ISIG adjustment
-  d[8] = (sequenceNum << 4) & 0xf0;
+  d[8] = ((sequenceNum << 4) & 0xf0) + duplicateNum;
   for (int i=0; i<2; i++) {
     int isig = [self isigFromGlucose:glucoseHistory[i]];
     d[9 + i * 2] = isig >> 8 & 0xff;
     d[10 + i * 2] = isig & 0xff;
   }
   d[13] = 0x00;
-  d[14] = 0x67;
-  d[15] = 0x67;
-  d[16] = 0x9d;
+  d[14] = 0x52;
+  d[15] = 0x55;
+  d[16] = 0xa0;
   for (int i=2; i<9; i++) {
     int isig = [self isigFromGlucose:glucoseHistory[i]];
     d[17 + (i-2) * 2] = isig >> 8 & 0xff;
@@ -97,6 +124,8 @@
   NSLog(@"data before crc16: %@", [data hexadecimalString]);
 
   [_device sendPacketData:[MinimedPacket encodeAndCRC16Data:data]];
+  
+  duplicateNum++;
 }
 
 

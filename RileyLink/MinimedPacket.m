@@ -142,7 +142,6 @@ static const unsigned short crc16Table[256] = { 0x0000, 0x1021, 0x2042, 0x3063, 
   crcBytes[0] = crc >> 8;
   crcBytes[1] = crc & 0xff;
   [dataPlusCrc appendBytes:crcBytes length:2];
-  NSLog(@"Data after crc: %@", [dataPlusCrc hexadecimalString]);
   return [self encodeData:dataPlusCrc];
 }
 

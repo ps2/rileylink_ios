@@ -631,6 +631,18 @@
                                 <color key="textColor" red="0.25098040699958801" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8Wu-lQ-bT6">
+                                <rect key="frame" x="208" y="129" width="51" height="31"/>
+                                <connections>
+                                    <action selector="continuousSendSwitchToggled:" destination="LoR-ph-llS" eventType="valueChanged" id="mu8-5U-1hP"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Continuous Send" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L52-kW-x02">
+                                <rect key="frame" x="64" y="134" width="133" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -680,21 +692,21 @@
                                     <action selector="sendPacketButtonPressed:" destination="Jig-ug-wCI" eventType="touchUpInside" id="HRf-TP-RvK"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8Wu-lQ-bT6">
-                                <rect key="frame" x="208" y="123" width="51" height="31"/>
-                                <connections>
-                                    <action selector="continuousSendSwitchToggled:" destination="LoR-ph-llS" eventType="valueChanged" id="mu8-5U-1hP"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Continuous Send" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L52-kW-x02">
-                                <rect key="frame" x="64" y="128" width="133" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Current Test Packet #" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jtd-bk-XC6">
                                 <rect key="frame" x="16" y="266" width="288" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="NCJ-pW-Gxs">
+                                <rect key="frame" x="208" y="126" width="51" height="31"/>
+                                <connections>
+                                    <action selector="continuousSendSwitchToggled:" destination="Jig-ug-wCI" eventType="valueChanged" id="xGg-hW-gat"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Continuous Send" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RZ3-md-oFV">
+                                <rect key="frame" x="64" y="131" width="133" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -703,6 +715,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Sensor Simulator" id="aCw-yI-h8w"/>
                     <connections>
+                        <outlet property="continuousSendSwitch" destination="NCJ-pW-Gxs" id="ZEx-kS-PX5"/>
                         <outlet property="sensorIDTextField" destination="qcg-ZJ-WBR" id="obj-rB-1CL"/>
                     </connections>
                 </viewController>

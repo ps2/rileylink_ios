@@ -23,6 +23,8 @@
   float glucoseD1;
   float glucoseD2;
   NSTimer *timer;
+  NSArray *recorded;
+  NSInteger recordIdx;
 }
 
 @end
@@ -39,22 +41,44 @@
   glucoseD1 = 5;
   glucoseD2 = -0.8;
   
+  recorded = @[
+               @"a80f25c1230d191c0000740000000c0099000000000000000000000000000000495a",
+               @"a80f25c1230d191c100094007400340c9800000000000000000000000000000040cc",
+               @"a80f25c1230d191c200092009400343499000000000000000000000000000000f0cf",
+               @"a80f25c1230d191c3000920092003434990000000000000000000000000000000d36",
+               @"a80f25c1230d191c4000910092003434990000000000000000000000000000006ac6",
+               @"a80f25c1230d191c5000910091003434990000000000000000000000000000007440",
+               @"a80f25c1230d191c600090009100343499000000000000000000000000000000d96d"
+               ];
+  
+  recordIdx = 0;
+  
   for (int i=0; i<GLUCOSE_HISTORY_LENGTH; i++) {
     [self updateGlucose];
   }
 }
 
+- (void)sendRecordedPacket {
+  NSString *dataStr = recorded[recordIdx];
+  [_device sendPacketData:[NSData dataWithHexadecimalString:dataStr]];
+  recordIdx+=1;
+  if (recordIdx >= recorded.count) {
+    recordIdx = 0;
+  }
+}
+
 - (void)timerFired:(id)sender {
-  [self updateGlucose];
-  [self sendSensorPacket];
-  [self performSelector:@selector(sendSensorPacket) withObject:nil afterDelay:15];
+//  [self updateGlucose];
+//  [self sendSensorPacket];
+//  [self performSelector:@selector(sendSensorPacket) withObject:nil afterDelay:15];
+  [self sendRecordedPacket];
 }
 
 
 - (IBAction)continuousSendSwitchToggled:(id)sender {
   [timer invalidate];
   if (continuousSendSwitch.on) {
-    timer = [NSTimer timerWithTimeInterval:(60 * 5) target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    timer = [NSTimer timerWithTimeInterval:(10) target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     [self timerFired:nil];
   }

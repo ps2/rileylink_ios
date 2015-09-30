@@ -42,13 +42,8 @@
   glucoseD2 = -0.8;
   
   recorded = @[
-               @"a80f25c1230d191c0000740000000c0099000000000000000000000000000000495a",
-               @"a80f25c1230d191c100094007400340c9800000000000000000000000000000040cc",
-               @"a80f25c1230d191c200092009400343499000000000000000000000000000000f0cf",
-               @"a80f25c1230d191c3000920092003434990000000000000000000000000000000d36",
-               @"a80f25c1230d191c4000910092003434990000000000000000000000000000006ac6",
-               @"a80f25c1230d191c5000910091003434990000000000000000000000000000007440",
-               @"a80f25c1230d191c600090009100343499000000000000000000000000000000d96d"
+               @"ab0f25c1230d1d21000b59106e0067679d110611d512a5133c1374133c12a5006be1",
+               @"ab0f25c1230d1d21010b59106e0067679d110611d512a5133c1374133c12a5005ce2",
                ];
   
   recordIdx = 0;
@@ -60,7 +55,8 @@
 
 - (void)sendRecordedPacket {
   NSString *dataStr = recorded[recordIdx];
-  [_device sendPacketData:[NSData dataWithHexadecimalString:dataStr]];
+  [self.device setTXChannel:0];
+  [_device sendPacketData:[MinimedPacket encodeData:[NSData dataWithHexadecimalString:dataStr]]];
   recordIdx+=1;
   if (recordIdx >= recorded.count) {
     recordIdx = 0;
@@ -117,6 +113,8 @@
   
   unsigned char d[32];
   
+  // AB 0F 25 C1 23 0D 1D 21 00 0B 59 10 6E 00 67 67 9D 11 06 11 D5 12 A5 13 3C 13 74 13 3C 12 A5 00 XX XX
+  
   d[0] = 0xab; // Normal
   d[1] = 0x0f;
   NSInteger sensorID = [sensorIDTextField.text integerValue] & 0xffffff;
@@ -124,7 +122,7 @@
   d[3] = (sensorID & 0xff00) >> 8;
   d[4] = (sensorID & 0xff);
   d[5] = 0x0d;
-  d[6] = 0x19;
+  d[6] = 0x1d;
   d[7] = 0x21; // ISIG adjustment
   d[8] = ((sequenceNum << 4) & 0xf0) + duplicateNum;
   for (int i=0; i<2; i++) {
@@ -133,9 +131,9 @@
     d[10 + i * 2] = isig & 0xff;
   }
   d[13] = 0x00;
-  d[14] = 0x52;
-  d[15] = 0x55;
-  d[16] = 0xa0;
+  d[14] = 0x67;
+  d[15] = 0x67;
+  d[16] = 0x9D;
   for (int i=2; i<9; i++) {
     int isig = [self isigFromGlucose:glucoseHistory[i]];
     d[17 + (i-2) * 2] = isig >> 8 & 0xff;

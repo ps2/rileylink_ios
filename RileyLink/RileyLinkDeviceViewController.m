@@ -14,7 +14,7 @@
 
 @interface RileyLinkDeviceViewController () {
   IBOutlet UILabel *deviceIDLabel;
-  IBOutlet UILabel *nameLabel;
+  IBOutlet UITextField *nameView;
   IBOutlet UISwitch *autoConnectSwitch;
   IBOutlet UIActivityIndicatorView *connectingIndicator;
 }
@@ -27,62 +27,66 @@
   [super viewDidLoad];
   
   deviceIDLabel.text = self.rlRecord.peripheralId;
-  nameLabel.text = self.rlRecord.name;
+  nameView.text = self.rlRecord.name;
   
+  [self.rlRecord addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceDisconnected:)
-                                               name:RILEY_LINK_EVENT_DEVICE_DISCONNECTED
+                                               name:RILEYLINK_EVENT_DEVICE_DISCONNECTED
                                              object:self.rlDevice];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(deviceConnected:)
-                                               name:RILEY_LINK_EVENT_DEVICE_CONNECTED
+                                               name:RILEYLINK_EVENT_DEVICE_CONNECTED
                                              object:self.rlDevice];
 
 
-  [self updateConnectedHighlight];
+  [self updateNameView];
   autoConnectSwitch.on = [self.rlRecord.autoConnect boolValue];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+  if (object == self.rlRecord && [keyPath isEqualToString:@"name"]) {
+    [self updateNameView];
+  } else {
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+  }
 }
 
 - (void)dealloc
 {
+  [self.rlRecord removeObserver:self forKeyPath:@"name"];
   [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
-- (void)updateConnectedHighlight {
-  if (self.rlDevice == nil) {
-    nameLabel.backgroundColor = [UIColor clearColor];
-    nameLabel.text = self.rlRecord.name;
-    [connectingIndicator stopAnimating];
-  } else {  
-    switch (self.rlDevice.state) {
-      case RILEY_LINK_STATE_CONNECTING:
-        nameLabel.backgroundColor = [UIColor clearColor];
-        nameLabel.text = @"Connecting...";
-        [connectingIndicator startAnimating];
-        break;
-      case RILEY_LINK_STATE_CONNECTED:
-        nameLabel.backgroundColor = [UIColor greenColor];
-        nameLabel.text = self.rlDevice.name;
-        [connectingIndicator stopAnimating];
-        break;
-      case RILEY_LINK_STATE_DISCONNECTED:
-      default:
-        nameLabel.backgroundColor = [UIColor clearColor];
-        nameLabel.text = self.rlDevice.name;
-        [connectingIndicator stopAnimating];
-        break;
-    }
+- (void)updateNameView {
+  switch (self.rlDevice.state) {
+    case RileyLinkStateConnecting:
+      nameView.backgroundColor = [UIColor clearColor];
+      nameView.text = @"Connecting...";
+      [connectingIndicator startAnimating];
+      break;
+    case RileyLinkStateConnected:
+      nameView.backgroundColor = [UIColor greenColor];
+      nameView.text = self.rlRecord.name;
+      [connectingIndicator stopAnimating];
+      break;
+    case RileyLinkStateDisconnected:
+    default:
+      nameView.backgroundColor = [UIColor clearColor];
+      nameView.text = self.rlRecord.name;
+      [connectingIndicator stopAnimating];
+      break;
   }
 }
 
 - (void)deviceDisconnected:(NSNotification*)notification {
-  [self updateConnectedHighlight];
+  [self updateNameView];
 }
 
 - (void)deviceConnected:(NSNotification*)notification {
-  [self updateConnectedHighlight];
+  [self updateNameView];
 }
 
 
@@ -105,13 +109,21 @@
       [self.rlDevice disconnect];
     }
   }
-  [self updateConnectedHighlight];
+  [self updateNameView];
 }
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
   // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)field {
+  [field resignFirstResponder];
+  [self.rlDevice setCustomName:nameView.text];
+  self.rlRecord.name = nameView.text;
+  return YES;
+}
+
 
 #pragma mark - Navigation
 

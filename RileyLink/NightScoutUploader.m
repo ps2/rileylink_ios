@@ -19,11 +19,11 @@
 
 #define RECORD_RAW_PACKETS YES
 
-typedef enum {
+typedef NS_ENUM(unsigned int, DexcomSensorError) {
   DX_SENSOR_NOT_ACTIVE = 1,
   DX_SENSOR_NOT_CALIBRATED = 5,
   DX_BAD_RF = 12,
-} DexcomSensorError;
+};
 
 
 @interface NightScoutUploader ()
@@ -53,7 +53,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(packetReceived:)
-                                                 name:RILEY_LINK_EVENT_PACKET_RECEIVED
+                                                 name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                object:nil];
 
   }
@@ -123,7 +123,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
-    [self handlePumpStatus:packet];
+    [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
   } else if ([packet packetType] == PACKET_TYPE_METER) {
     [self handleMeterMessage:packet];
   }
@@ -147,7 +147,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [self.entries addObject:entry];
 }
 
-- (void) handlePumpStatus:(MinimedPacket*)packet {
+- (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device withRSSI:(NSInteger)rssi {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
   NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
   
@@ -175,12 +175,36 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     @{@"date": epochTime,
       @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
       @"sgv": @(glucose),
+      @"previousSGV": @(msg.previousGlucose),
       @"direction": [self trendToDirection:msg.trend],
-      @"device": @"RileyLink",
-      @"iob": @(msg.activeInsulin),
+      @"device": device.deviceURI,
+      @"rssi": @(rssi),
       @"type": @"sgv"
       };
     [self.entries addObject:entry];
+    
+    // Also add pumpStatus entry
+    NSMutableDictionary *pumpStatusEntry =
+      [@{@"date": epochTime,
+        @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+        @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
+        @"sensorAge": @(msg.sensorAge),
+        @"sensorRemaining": @(msg.sensorRemaining),
+        @"insulinRemaining": @(msg.insulinRemaining),
+        @"device": device.deviceURI,
+        @"iob": @(msg.activeInsulin),
+        @"sensorStatus": msg.sensorStatusString,
+        @"batteryPct": @(msg.batteryPct),
+        @"rssi": @(rssi),
+        @"pumpStatus": [msg.data hexadecimalString],
+        @"type": @"pumpStatus",
+        } mutableCopy];
+    if (msg.nextCal != nil) {
+      pumpStatusEntry[@"nextCal"] = [self.dateFormatter stringFromDate:msg.nextCal];
+    }
+    [self.entries addObject:pumpStatusEntry];
+    
+    
   } else {
     NSLog(@"Dropping mysentry packet for pump: %@", packet.address);
   }

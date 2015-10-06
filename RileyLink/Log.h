@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#ifndef GlucoseLink_Log_h
-#define GlucoseLink_Log_h
+#ifndef RILEYLINK_Log_h
+#define RILEYLINK_Log_h
 
 
 #define NSLog(args...) _Log(@"DEBUG ", __FILE__,__LINE__,__PRETTY_FUNCTION__,args);

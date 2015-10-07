@@ -17,7 +17,7 @@
 #import "Config.h"
 #import "NSData+Conversion.h"
 
-#define RECORD_RAW_PACKETS YES
+#define RECORD_RAW_PACKETS NO
 
 typedef NS_ENUM(unsigned int, DexcomSensorError) {
   DX_SENSOR_NOT_ACTIVE = 1,

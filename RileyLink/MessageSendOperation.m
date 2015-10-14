@@ -92,7 +92,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
     _repeatInterval = repeatInterval;
 
     if (repeatInterval > 0) {
-        self.timeout = 30;
+        self.timeout = 20;
     }
 }
 
@@ -232,7 +232,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
         if (self.repeatInterval > 0) {
             NSLog(@"%s sending message %02x every %.02fs", __PRETTY_FUNCTION__, self.message.messageType, self.repeatInterval);
 
-            [self.device sendPacketData:packetData withCount:self.timeout / self.repeatInterval andTimeBetweenPackets:self.repeatInterval];
+            [self.device sendPacketData:packetData withCount:(self.timeout - 10) / self.repeatInterval andTimeBetweenPackets:self.repeatInterval];
         } else {
             NSLog(@"%s sending message %02x", __PRETTY_FUNCTION__, self.message.messageType);
 

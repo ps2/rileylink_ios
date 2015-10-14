@@ -55,6 +55,20 @@
   return [[MessageBase alloc] initWithData:data];
 }
 
+- (MessageBase *)buttonPressMessage
+{
+  return [self buttonPressMessageWithArgs:@"00"];
+}
+
+- (MessageBase *)buttonPressMessageWithArgs:(NSString *)args
+{
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5B%@", pumpId, args];
+  NSData *data = [NSData dataWithHexadecimalString:packetStr];
+  
+  return [[MessageBase alloc] initWithData:data];
+}
+
+
 - (void)wakeup:(NSTimeInterval)duration {
   
   if ([self isAwake] || waking) {
@@ -100,10 +114,93 @@
   return (awakeUntil != nil && [awakeUntil timeIntervalSinceNow] > 0);
 }
 
-- (void) getHistoryPage {
+- (void) wakeIfNeeded {
   [self wakeup:30];
+}
+
+- (void) getHistoryPage {
+  // TODO
+}
+
+- (void) pressButton {
+  [self wakeIfNeeded];
+  MessageSendOperation *buttonPressOperation = [[MessageSendOperation alloc] initWithDevice:device
+                                                                               message:[self buttonPressMessage]
+                                                                     completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                       if (operation.responsePacket != nil) {
+                                                                         NSLog(@"Pump acknowledged button press (no args)!");
+                                                                       } else {
+                                                                         NSLog(@"Error sending button press: %@", operation.error);
+                                                                       }
+                                                                     }];
+  buttonPressOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  [self.pumpCommQueue addOperation:buttonPressOperation];
   
+  MessageSendOperation *buttonPressArgsOperation = [[MessageSendOperation alloc] initWithDevice:device
+                                                                                   message:[self buttonPressMessageWithArgs:@"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
+                                                                         completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                           if (operation.responsePacket != nil) {
+                                                                             NSLog(@"button press down!");
+                                                                           } else {
+                                                                             NSLog(@"Button press error: %@", operation.error);
+                                                                           }
+                                                                         }];
+  buttonPressArgsOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  [self.pumpCommQueue addOperation:buttonPressArgsOperation];
+}
+
+- (MessageBase *)modelQueryMessage
+{
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", pumpId, MESSAGE_TYPE_GET_PUMP_MODEL];
+  NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
+  return [[MessageBase alloc] initWithData:data];
+}
+
+- (void) getPumpModel:(void (^ _Nullable)(NSString*))completionHandler {
+  [self wakeIfNeeded];
+
+  MessageSendOperation *modelQueryOperation = [[MessageSendOperation alloc] initWithDevice:device
+                                                                                   message:[self modelQueryMessage]
+                                               completionHandler:^(MessageSendOperation * _Nonnull operation) {
+      if (operation.responsePacket != nil) {
+          NSString *version = [NSString stringWithCString:&[operation.responsePacket.data bytes][7] encoding:NSASCIIStringEncoding];
+        completionHandler(version);
+      } else {
+        completionHandler(@"Unknown");
+      }
+  }];
+  modelQueryOperation.responseMessageType = MESSAGE_TYPE_GET_PUMP_MODEL;
+  [self.pumpCommQueue addOperation:modelQueryOperation];
+}
+
+- (MessageBase *)batteryStatusMessage
+{
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", pumpId, MESSAGE_TYPE_GET_BATTERY];
+  NSData *data = [NSData dataWithHexadecimalString:packetStr];
+  
+  return [[MessageBase alloc] initWithData:data];
+}
+
+
+- (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler {
+  [self wakeIfNeeded];
+  MessageSendOperation *batteryStatusOperation = [[MessageSendOperation alloc] initWithDevice:device
+                                                                                      message:[self batteryStatusMessage]
+                                                                            completionHandler:^(MessageSendOperation * _Nonnull operation) {
+      if (operation.responsePacket != nil) {
+          unsigned char *data = (unsigned char *)[operation.responsePacket.data bytes] + 6;
+
+          NSInteger volts = (((int)data[1]) << 8) + data[2];
+          NSString *indicator = data[0] ? @"Low" : @"Normal";
+        completionHandler(indicator, volts/100.0);
+      } else {
+        completionHandler(@"Unknown", 0.0);
+      }
+  }];
+  batteryStatusOperation.responseMessageType = MESSAGE_TYPE_GET_BATTERY;
+
+  [self.pumpCommQueue addOperation:batteryStatusOperation];
 }
 
 @end

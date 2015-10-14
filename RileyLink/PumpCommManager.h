@@ -14,6 +14,9 @@
 - (nonnull instancetype)initWithPumpId:(nonnull NSString *)pumpId andDevice:(nonnull RileyLinkBLEDevice *)device NS_DESIGNATED_INITIALIZER;
 
 - (void)wakeup:(NSTimeInterval)duration;
+- (void)pressButton;
 
+- (void) getPumpModel:(void (^ _Nullable)(NSString* _Nonnull))completionHandler;
+- (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler;
 
 @end

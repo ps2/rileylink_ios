@@ -7,16 +7,21 @@
 //
 
 #import "PumpChatViewController.h"
+#import "MessageSendOperation.h"
+#import "MessageBase.h"
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "Config.h"
 #import "RileyLinkBLEManager.h"
+#import "PumpCommManager.h"
 
 @interface PumpChatViewController () {
   IBOutlet UILabel *resultsLabel;
   IBOutlet UILabel *batteryVoltage;
   IBOutlet UILabel *pumpIdLabel;
 }
+
+@property (nonatomic, strong) NSOperationQueue *pumpCommQueue;
 
 @end
 
@@ -25,18 +30,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-  
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(packetReceived:)
-                                               name:RILEYLINK_EVENT_PACKET_RECEIVED
-                                             object:self.device];
-  
-  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
-}
 
-- (void)dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver: self];
+    self.pumpCommQueue = [[NSOperationQueue alloc] init];
+    self.pumpCommQueue.maxConcurrentOperationCount = 1;
+    self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+
+  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
 }
 
 
@@ -45,69 +44,37 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)updateStatusMessage:(NSString*)msg
+{
+  resultsLabel.text = msg;
+  NSLog(@"StatusUpdate: %@", msg);
+}
+
+
 - (IBAction)queryPumpButtonPressed:(id)sender {
-  [self queryPumpForVersion];
+  [self queryPump];
 }
 
-- (void)queryPumpForVersion {
-  resultsLabel.text = @"Sending wakeup packets...";
-  
-  NSString *pumpId = [[Config sharedInstance] pumpID];
-  
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D00", pumpId];
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  [_device sendPacketData:[MinimedPacket encodeData:data] withCount:100 andTimeBetweenPackets:0.078];
-}
 
-- (void)handlePacketFromPump:(MinimedPacket*)p {
-  if (p.messageType == MESSAGE_TYPE_PUMP_STATUS_ACK) {
-    resultsLabel.text = @"Pump acknowleged wakeup!";
-    // Send query for pump model #
-    NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_PUMP_MODEL];
-    NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-  } else if (p.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
-    //unsigned char len = [p.data bytes][6];
-    NSString *version = [NSString stringWithCString:&[p.data bytes][7] encoding:NSASCIIStringEncoding];
-    resultsLabel.text = [@"Pump Model: " stringByAppendingString:version];
-    
-    // Send query for battery status
-    NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_BATTERY];
-    NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-    
-    
-    
-  } else if (p.messageType == MESSAGE_TYPE_GET_BATTERY) {
-    unsigned char *data = (unsigned char *)[p.data bytes] + 6;
-    
-    NSInteger volts = (((int)data[1]) << 8) + data[2];
-    NSString *indicator = data[0] ? @"Low" : @"Normal";
-    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts/100.0];
-  }
+- (void)queryPump {
+  
+  PumpCommManager *mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
+  
+  [mgr getPumpModel:^(NSString* model) {
+    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
+  }];
+  
+  [mgr getPumpModel:^(NSString* model) {
+    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
+  }];
+  
+  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
+    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts];
+  }];
+
+  
+  [mgr pressButton];
   
 }
-
-
-- (void)packetReceived:(NSNotification*)notification {
-    MinimedPacket *packet = notification.userInfo[@"packet"];
-    if (packet && [packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
-      [self handlePacketFromPump:packet];
-    }
-}
-
-
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

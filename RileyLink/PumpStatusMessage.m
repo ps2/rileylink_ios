@@ -142,7 +142,7 @@
 - (double) insulinRemaining {
   return [self getBits:@"insulin_remaining"] / 10.0;
 }
-                                                 
+
 - (NSDate*) pumpTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -151,10 +151,9 @@
   [components setDay:[self getBits:@"pump_day"]];
   [components setHour:[self getBits:@"pump_hour"]];
   [components setMinute:[self getBits:@"pump_minute"]];
-  [components setSecond:0];
+  [components setSecond:[self getBits:@"pump_second"]];
   return [calendar dateFromComponents:components];
 }
-
 
 - (NSDate*) measurementTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];

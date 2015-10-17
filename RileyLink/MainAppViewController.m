@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
 #import "RileyLinkBLEManager.h"
+#import "AlertManager.h"
 
 #import "MainAppViewController.h"
 
@@ -25,6 +26,7 @@
 @property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
 @property (strong, nonatomic) NSTimeZone *utcTimeZone;
 @property (strong, nonatomic) NightScoutUploader *uploader;
+@property (strong, nonatomic) AlertManager *alertManager;
 
 
 @end
@@ -47,6 +49,8 @@
   self.uploader = [[NightScoutUploader alloc] init];
   self.uploader.endpoint = [[Config sharedInstance] nightscoutURL];
   self.uploader.APISecret = [[Config sharedInstance] nightscoutAPISecret];
+  
+  self.alertManager = [[AlertManager alloc] init];
   
   AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   self.managedObjectContext = appDelegate.managedObjectContext;

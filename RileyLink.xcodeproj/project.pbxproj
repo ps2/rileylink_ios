@@ -10,8 +10,8 @@
 		43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */; };
 		43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
-		43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FF3D701BAF940E00DE240A /* MessageSendOperation.m */; settings = {ASSET_TAGS = (); }; };
-		C11F993D1BC406970013158C /* PumpCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpCommManager.m */; settings = {ASSET_TAGS = (); }; };
+		43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FF3D701BAF940E00DE240A /* MessageSendOperation.m */; };
+		C11F993D1BC406970013158C /* PumpCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpCommManager.m */; };
 		C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */; };
 		C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */; };
 		C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C126163B1B67CBC2001FAD87 /* RileyLinkTableViewCell.m */; };
@@ -53,6 +53,8 @@
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */; };
 		C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */; };
+		C1E5EA2F1BD1EBEF0007780A /* AlertManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E5EA2E1BD1EBEF0007780A /* AlertManager.m */; };
+		C1E5EA321BD1F8390007780A /* AlertMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E5EA311BD1F8390007780A /* AlertMessage.m */; };
 		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */; };
@@ -151,6 +153,10 @@
 		C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkBLEManager.m; sourceTree = "<group>"; };
 		C1E535EE1991E6A200C2AC49 /* MinimedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimedPacket.h; sourceTree = "<group>"; };
 		C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimedPacket.m; sourceTree = "<group>"; };
+		C1E5EA2D1BD1EBEF0007780A /* AlertManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertManager.h; sourceTree = "<group>"; };
+		C1E5EA2E1BD1EBEF0007780A /* AlertManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertManager.m; sourceTree = "<group>"; };
+		C1E5EA301BD1F8390007780A /* AlertMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertMessage.h; sourceTree = "<group>"; };
+		C1E5EA311BD1F8390007780A /* AlertMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertMessage.m; sourceTree = "<group>"; };
 		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
@@ -286,6 +292,7 @@
 		C12EA240198B436800309FA4 /* RileyLink */ = {
 			isa = PBXGroup;
 			children = (
+				C1E5EA2C1BD1EBD50007780A /* Alerts */,
 				C11F993A1BC405AA0013158C /* PumpCommManager */,
 				C126165E1B76E8DC001FAD87 /* TPKeyboardAvoiding */,
 				C12616451B685F35001FAD87 /* CoreData */,
@@ -353,6 +360,8 @@
 				C13DB3A41B1583E900121E02 /* MessageBase.m */,
 				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
 				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
+				C1E5EA301BD1F8390007780A /* AlertMessage.h */,
+				C1E5EA311BD1F8390007780A /* AlertMessage.m */,
 			);
 			name = MinimedMessages;
 			sourceTree = "<group>";
@@ -368,6 +377,15 @@
 				C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		C1E5EA2C1BD1EBD50007780A /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				C1E5EA2D1BD1EBEF0007780A /* AlertManager.h */,
+				C1E5EA2E1BD1EBEF0007780A /* AlertManager.m */,
+			);
+			name = Alerts;
 			sourceTree = "<group>";
 		};
 		C1EF58891B3F9730001C8C80 /* SWRevealViewController */ = {
@@ -560,6 +578,7 @@
 				C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C12616511B688D9C001FAD87 /* RileyLinkBLEDevice.m in Sources */,
+				C1E5EA2F1BD1EBEF0007780A /* AlertManager.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
@@ -582,6 +601,7 @@
 				C12EA247198B436800309FA4 /* main.m in Sources */,
 				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
+				C1E5EA321BD1F8390007780A /* AlertMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpCommManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

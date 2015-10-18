@@ -15,15 +15,7 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  UIUserNotificationType types = UIUserNotificationTypeBadge |
-  UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-  
-  UIUserNotificationSettings *mySettings =
-  [UIUserNotificationSettings settingsForTypes:types categories:nil];
-  
-  [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-  
+{  
   return YES;
 }
 

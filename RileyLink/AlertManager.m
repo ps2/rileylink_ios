@@ -12,22 +12,48 @@
 #import "AlertMessage.h"
 #import "Config.h"
 
+@interface AlertManager () {
+  NSMutableDictionary *soundedAlerts;
+}
+
+@end
+
+
 @implementation AlertManager
 
 - (instancetype)init
 {
   self = [super init];
   if (self) {
+    soundedAlerts = [NSMutableDictionary dictionary];
+    
+    if ([[Config sharedInstance] alertsEnable]) {
+      [self registerAsNotificationSender];
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(packetReceived:)
                                                  name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                object:nil];
     
-//    UIApplication* app = [UIApplication sharedApplication];
-//
-//    UIUserNotificationSettings *settings = app.currentUserNotificationSettings;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(alertsToggled:)
+                                                 name:CONFIG_EVENT_ALERTS_TOGGLED
+                                               object:nil];
+
+    
   }
   return self;
+}
+
+- (void)registerAsNotificationSender {
+  UIUserNotificationType types = UIUserNotificationTypeBadge |
+  UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+  
+  UIUserNotificationSettings *mySettings =
+  [UIUserNotificationSettings settingsForTypes:types categories:nil];
+  
+  [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
 }
 
 - (void)dealloc
@@ -42,11 +68,31 @@
   if ([[Config sharedInstance] alertsEnable]) {
     if (packet.packetType == PACKET_TYPE_PUMP && packet.messageType == MESSAGE_TYPE_ALERT) {
       AlertMessage *msg = [[AlertMessage alloc] initWithData:packet.data];
-      if ([[msg address] isEqualToString:[[Config sharedInstance] pumpID]]) {
+      if ([self shouldSoundAlert:msg]) {
         [self soundAlert:msg];
+        [self markAlertAsSounded:msg];
       }
     }
   }
+}
+
+- (BOOL)shouldSoundAlert:(AlertMessage*) msg {
+  if (![msg.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+    return NO;
+  }
+  
+  AlertMessage *soundedAlert = soundedAlerts[[NSNumber numberWithInt:msg.alertType]];
+  
+  if ([soundedAlert.timestamp isEqualToDate:msg.timestamp]) {
+    // Already sounded
+    return NO;
+  }
+  
+  return YES;
+}
+
+- (void)markAlertAsSounded:(AlertMessage*) msg {
+  soundedAlerts[[NSNumber numberWithInt:msg.alertType]] = msg;
 }
 
 - (void)soundAlert:(AlertMessage *)msg {
@@ -81,6 +127,12 @@
     alarm.soundName = soundName;
     alarm.alertBody = msg.alertTypeStr;
     [app presentLocalNotificationNow:alarm];
+  }
+}
+
+- (void)alertsToggled:(NSNotification*)notification {
+  if ([[Config sharedInstance] alertsEnable]) {
+    [self registerAsNotificationSender];
   }
 }
 

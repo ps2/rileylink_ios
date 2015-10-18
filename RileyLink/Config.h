@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define CONFIG_EVENT_ALERTS_TOGGLED @"CONFIG_EVENT_ALERTS_TOGGLED"
+
 @interface Config : NSObject {
   NSUserDefaults *_defaults;
 }

@@ -70,7 +70,7 @@
 
 - (void) setAlertsEnable:(BOOL)alertsEnabled {
   [_defaults setBool:alertsEnabled forKey:@"alertsEnable"];
-  
+  [[NSNotificationCenter defaultCenter] postNotificationName:CONFIG_EVENT_ALERTS_TOGGLED object:self userInfo:nil];
 }
 
 

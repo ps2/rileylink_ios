@@ -60,8 +60,7 @@
 }
 
 - (void)sendTestPacket {
-  //NSString *packetStr = [@"614C05E077" stringByAppendingFormat:@"%02x", testPacketNum];
-  NSString *packetStr = @"a25970550193721734270f0a110000";
+  NSString *packetStr = [@"614C05E077" stringByAppendingFormat:@"%02x", testPacketNum];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   if (encodeDataSwitch.on) {
     data = [MinimedPacket encodeData:data];

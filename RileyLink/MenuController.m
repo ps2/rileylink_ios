@@ -39,7 +39,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 4;
+    return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -53,11 +53,13 @@
     NSString *cellIdentifier;
 
     if (indexPath.row == 1) {
-      cellIdentifier = @"configuration";
-    } else if (indexPath.row == 2) {
       cellIdentifier = @"nightscout";
+    } else if (indexPath.row == 2) {
+      cellIdentifier = @"alerts";
     } else if (indexPath.row == 3) {
       cellIdentifier = @"rileylink";
+    } else if (indexPath.row == 4) {
+      cellIdentifier = @"configuration";
     }
 
     return [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];

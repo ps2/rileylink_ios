@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *nightscoutURL;
 @property (nonatomic, strong) NSString *nightscoutAPISecret;
 @property (nonatomic, strong) NSString *pumpID;
+@property (nonatomic, assign) BOOL alertsEnable;
 
 @property (nonatomic, readonly) BOOL hasValidConfiguration;
 

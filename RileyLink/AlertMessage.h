@@ -26,5 +26,10 @@ typedef NS_ENUM(unsigned int, AlertType) {
 		ALERT_TYPE_LOW_PREDICTED = 0x73,
 };
 
+- (NSDate*) timestamp;
+- (AlertType) alertType;
+- (NSString*) alertTypeStr;
+
+
 
 @end

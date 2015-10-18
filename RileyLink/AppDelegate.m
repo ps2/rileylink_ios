@@ -16,7 +16,28 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  UIUserNotificationType types = UIUserNotificationTypeBadge |
+  UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+  
+  UIUserNotificationSettings *mySettings =
+  [UIUserNotificationSettings settingsForTypes:types categories:nil];
+  
+  [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+  
   return YES;
+}
+
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+  
+  UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Pump Alarm"
+                                                                 message:notification.alertBody
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+  
+  UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * action) {}];
+  
+  [alert addAction:defaultAction];
+  [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

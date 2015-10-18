@@ -49,6 +49,10 @@
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
+		C1A5830E1BD34E8A0097AD88 /* AlertSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A5830D1BD34E8A0097AD88 /* AlertSettingsViewController.m */; };
+		C1A583131BD360DC0097AD88 /* flat.aif in Resources */ = {isa = PBXBuildFile; fileRef = C1A583101BD360DC0097AD88 /* flat.aif */; };
+		C1A583141BD360DC0097AD88 /* high.aif in Resources */ = {isa = PBXBuildFile; fileRef = C1A583111BD360DC0097AD88 /* high.aif */; };
+		C1A583151BD360DC0097AD88 /* low.aif in Resources */ = {isa = PBXBuildFile; fileRef = C1A583121BD360DC0097AD88 /* low.aif */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */; };
@@ -145,6 +149,11 @@
 		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
 		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
+		C1A5830C1BD34E8A0097AD88 /* AlertSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertSettingsViewController.h; sourceTree = "<group>"; };
+		C1A5830D1BD34E8A0097AD88 /* AlertSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertSettingsViewController.m; sourceTree = "<group>"; };
+		C1A583101BD360DC0097AD88 /* flat.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = flat.aif; sourceTree = "<group>"; };
+		C1A583111BD360DC0097AD88 /* high.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = high.aif; sourceTree = "<group>"; };
+		C1A583121BD360DC0097AD88 /* low.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = low.aif; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -292,6 +301,7 @@
 		C12EA240198B436800309FA4 /* RileyLink */ = {
 			isa = PBXGroup;
 			children = (
+				C1A5830F1BD360D00097AD88 /* Audio */,
 				C1E5EA2C1BD1EBD50007780A /* Alerts */,
 				C11F993A1BC405AA0013158C /* PumpCommManager */,
 				C126165E1B76E8DC001FAD87 /* TPKeyboardAvoiding */,
@@ -366,6 +376,16 @@
 			name = MinimedMessages;
 			sourceTree = "<group>";
 		};
+		C1A5830F1BD360D00097AD88 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				C1A583101BD360DC0097AD88 /* flat.aif */,
+				C1A583111BD360DC0097AD88 /* high.aif */,
+				C1A583121BD360DC0097AD88 /* low.aif */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 		C1AA398B1AB67F6A00BC9E33 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,6 +453,8 @@
 				C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */,
 				C12616301B65F4BC001FAD87 /* RileyLinkListTableViewController.h */,
 				C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */,
+				C1A5830C1BD34E8A0097AD88 /* AlertSettingsViewController.h */,
+				C1A5830D1BD34E8A0097AD88 /* AlertSettingsViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -527,8 +549,11 @@
 			files = (
 				43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */,
 				C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */,
+				C1A583151BD360DC0097AD88 /* low.aif in Resources */,
 				C12EA24D198B436800309FA4 /* Images.xcassets in Resources */,
 				C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */,
+				C1A583141BD360DC0097AD88 /* high.aif in Resources */,
+				C1A583131BD360DC0097AD88 /* flat.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +628,7 @@
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
 				C1E5EA321BD1F8390007780A /* AlertMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpCommManager.m in Sources */,
+				C1A5830E1BD34E8A0097AD88 /* AlertSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

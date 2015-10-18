@@ -22,7 +22,7 @@
            };
 }
 
-- (NSDate*) pumpTime {
+- (NSDate*) timestamp {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
   [components setYear:[self getBits:@"alert_year"]+2000];

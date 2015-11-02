@@ -37,7 +37,10 @@ typedef NS_OPTIONS(unsigned int, MessageType) {
 @property (nonatomic, readonly) PacketType packetType;
 @property (nonatomic, readonly) MessageType messageType;
 @property (nonatomic, readonly, copy) NSString *address;
++ (NSData*)encodeAndCRC8Data:(NSData*)data;
++ (NSData*)encodeAndCRC16Data:(NSData*)data;
 + (NSData*)encodeData:(NSData*)data;
+
 
 @property (strong, nonatomic) NSData *data;
 @property (nonatomic, strong) NSDate *capturedAt;

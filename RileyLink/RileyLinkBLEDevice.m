@@ -162,7 +162,7 @@
   if (characteristic == customNameCharacteristic) {
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
   }
-  NSLog(@"Did write characteristic: %@", characteristic.UUID);
+  //NSLog(@"Did write characteristic: %@", characteristic.UUID);
 }
 
 - (RileyLinkState) state {
@@ -203,7 +203,7 @@
       [self.peripheral readValueForCharacteristic:characteristic];
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_CHANNEL_UUID]]) {
       rxChannelCharacteristic = characteristic;
-      [self setRXChannel:0];
+      [self setRXChannel:2];
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_CHANNEL_UUID]]) {
       txChannelCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {

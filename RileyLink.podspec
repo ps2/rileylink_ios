@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RileyLink"
-  s.version      = "0.1.2"
+  s.version      = "0.1.3"
   s.summary      = "Client adaptor for the RileyLink, a 916MHz to BLE bridge peripheral"
 
   s.description  = <<-DESC

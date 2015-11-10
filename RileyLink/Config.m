@@ -64,6 +64,14 @@
   return self.nightscoutURL != NULL && ![self.nightscoutURL isEqualToString:@""];
 }
 
+- (BOOL) alertsEnable {
+  return [_defaults boolForKey:@"alertsEnable"];
+}
+
+- (void) setAlertsEnable:(BOOL)alertsEnabled {
+  [_defaults setBool:alertsEnabled forKey:@"alertsEnable"];
+  [[NSNotificationCenter defaultCenter] postNotificationName:CONFIG_EVENT_ALERTS_TOGGLED object:self userInfo:nil];
+}
 
 
 @end

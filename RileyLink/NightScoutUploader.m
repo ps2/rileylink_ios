@@ -122,9 +122,9 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [self storeRawPacket:packet fromDevice:device];
   }
   
-  if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
+  if (packet.packetType == PACKET_TYPE_PUMP && packet.messageType == MESSAGE_TYPE_PUMP_STATUS) {
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
-  } else if ([packet packetType] == PACKET_TYPE_METER) {
+  } else if (packet.packetType  == PACKET_TYPE_METER) {
     [self handleMeterMessage:packet];
   }
   

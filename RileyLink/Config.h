@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define CONFIG_EVENT_ALERTS_TOGGLED @"CONFIG_EVENT_ALERTS_TOGGLED"
+
 @interface Config : NSObject {
   NSUserDefaults *_defaults;
 }
@@ -17,6 +19,7 @@
 @property (nonatomic, strong) NSString *nightscoutURL;
 @property (nonatomic, strong) NSString *nightscoutAPISecret;
 @property (nonatomic, strong) NSString *pumpID;
+@property (nonatomic, assign) BOOL alertsEnable;
 
 @property (nonatomic, readonly) BOOL hasValidConfiguration;
 

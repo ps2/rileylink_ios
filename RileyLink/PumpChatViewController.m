@@ -60,20 +60,24 @@
   
   PumpCommManager *mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
   
-  [mgr getPumpModel:^(NSString* model) {
-    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
+  [mgr dumpHistory:^(NSDictionary * _Nonnull res) {
+    NSLog(@"Got: %@", res);
   }];
   
-  [mgr getPumpModel:^(NSString* model) {
-    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
-  }];
-  
-  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
-    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts];
-  }];
-
-  
-  [mgr pressButton];
+//  [mgr getPumpModel:^(NSString* model) {
+//    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
+//  }];
+//  
+//  [mgr getPumpModel:^(NSString* model) {
+//    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
+//  }];
+//  
+//  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
+//    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts];
+//  }];
+//
+//  
+//  [mgr pressButton];
   
 }
 

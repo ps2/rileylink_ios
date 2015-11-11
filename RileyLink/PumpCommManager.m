@@ -42,6 +42,13 @@
   return nil;
 }
 
+- (MessageBase *)msgType:(unsigned char)t withArgs:(NSString *)args {
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x%@", pumpId, t, args];
+  NSData *data = [NSData dataWithHexadecimalString:packetStr];
+  
+  return [[MessageBase alloc] initWithData:data];
+}
+
 - (MessageBase *)powerMessage
 {
   return [self powerMessageWithArgs:@"00"];
@@ -49,10 +56,7 @@
 
 - (MessageBase *)powerMessageWithArgs:(NSString *)args
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D%@", pumpId, args];
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  
-  return [[MessageBase alloc] initWithData:data];
+  return [self msgType:MESSAGE_TYPE_POWER withArgs:args];
 }
 
 - (MessageBase *)buttonPressMessage
@@ -62,10 +66,7 @@
 
 - (MessageBase *)buttonPressMessageWithArgs:(NSString *)args
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5B%@", pumpId, args];
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  
-  return [[MessageBase alloc] initWithData:data];
+  return [self msgType:MESSAGE_TYPE_BUTTON_PRESS withArgs:args];
 }
 
 
@@ -88,7 +89,7 @@
                                                                      }];
   
   wakeupOperation.repeatInterval = 0.078;
-  wakeupOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  wakeupOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupOperation];
   
   unsigned char minutes = floor(duration/60);
@@ -106,7 +107,7 @@
                                                                            }
                                                                            waking = NO;
                                                                          }];
-  wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupArgsOperation];
 }
 
@@ -133,7 +134,7 @@
                                                                          NSLog(@"Error sending button press: %@", operation.error);
                                                                        }
                                                                      }];
-  buttonPressOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  buttonPressOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:buttonPressOperation];
   
   MessageSendOperation *buttonPressArgsOperation = [[MessageSendOperation alloc] initWithDevice:device
@@ -145,7 +146,7 @@
                                                                              NSLog(@"Button press error: %@", operation.error);
                                                                            }
                                                                          }];
-  buttonPressArgsOperation.responseMessageType = MESSAGE_TYPE_PUMP_STATUS_ACK;
+  buttonPressArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:buttonPressArgsOperation];
 }
 
@@ -201,6 +202,60 @@
   batteryStatusOperation.responseMessageType = MESSAGE_TYPE_GET_BATTERY;
 
   [self.pumpCommQueue addOperation:batteryStatusOperation];
+}
+
+- (void) dumpHistory:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
+  [self wakeIfNeeded];
+  
+  NSMutableDictionary *pages = [NSMutableDictionary dictionary];
+  NSMutableArray *responses = [NSMutableArray array];
+  
+  MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_HISTORY_PAGE withArgs:@"00"];
+  
+  MessageSendOperation *dumpHistOp = [[MessageSendOperation alloc] initWithDevice:device
+                                                                          message:dumpHistMsg
+                                                                            completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                              if (operation.responsePacket != nil) {
+                                                                                NSLog(@"Pump acked dump msg (0x80)");
+                                                                              } else {
+                                                                                NSLog(@"Error requesting pump dump: %@", operation.error);
+                                                                              }
+  }];
+  dumpHistOp.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
+  [self.pumpCommQueue addOperation:dumpHistOp];
+  
+  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_HISTORY_PAGE withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
+  MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:device
+                                                                          message:dumpHistMsgArgs
+                                                                completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                  if (operation.responsePacket != nil) {
+                                                                    [responses addObject:operation.responsePacket.data];
+                                                                  } else {
+                                                                    NSLog(@"Error requesting pump dump with args: %@", operation.error);
+                                                                  }
+                                                                }];
+  dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
+  [self.pumpCommQueue addOperation:dumpHistOpArgs];
+  
+  // TODO: send 16 acks, and expect 15 more dumps
+  for (int i=0; i<16; i++) {
+    MessageBase *ack = [self msgType:MESSAGE_TYPE_ACK withArgs:@"00"];
+    MessageSendOperation *ackOp = [[MessageSendOperation alloc] initWithDevice:device
+                                                                                message:ack
+                                                                      completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                        if (operation.responsePacket != nil) {
+                                                                          [responses addObject:operation.responsePacket.data]
+                                                                        } else {
+                                                                          NSLog(@"Error requesting pump dump with args: %@", operation.error);
+                                                                        }
+                                                                      }];
+    dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
+    [self.pumpCommQueue addOperation:dumpHistOpArgs];
+    
+  }
+  
+
+
 }
 
 @end

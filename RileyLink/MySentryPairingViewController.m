@@ -206,7 +206,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     NSString *replyString = [NSString stringWithFormat:@"%02x%@%02x%02x%@00%02x000000",
                              PACKET_TYPE_PUMP,
                              [Config sharedInstance].pumpID,
-                             MESSAGE_TYPE_PUMP_STATUS_ACK,
+                             MESSAGE_TYPE_ACK,
                              self.sendCounter++,
                              self.deviceIDTextField.text,
                              packet.messageType

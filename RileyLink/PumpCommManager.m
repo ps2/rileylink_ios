@@ -210,7 +210,7 @@
   NSMutableDictionary *pages = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
   
-  MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_HISTORY_PAGE withArgs:@"00"];
+  MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"];
   
   MessageSendOperation *dumpHistOp = [[MessageSendOperation alloc] initWithDevice:device
                                                                           message:dumpHistMsg
@@ -221,10 +221,10 @@
                                                                                 NSLog(@"Error requesting pump dump: %@", operation.error);
                                                                               }
   }];
-  dumpHistOp.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
+  dumpHistOp.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:dumpHistOp];
   
-  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_HISTORY_PAGE withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
+  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
   MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:device
                                                                           message:dumpHistMsgArgs
                                                                 completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -234,7 +234,7 @@
                                                                     NSLog(@"Error requesting pump dump with args: %@", operation.error);
                                                                   }
                                                                 }];
-  dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
+  dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
   [self.pumpCommQueue addOperation:dumpHistOpArgs];
   
   // TODO: send 16 acks, and expect 15 more dumps
@@ -244,15 +244,19 @@
                                                                                 message:ack
                                                                       completionHandler:^(MessageSendOperation * _Nonnull operation) {
                                                                         if (operation.responsePacket != nil) {
-                                                                          [responses addObject:operation.responsePacket.data]
+                                                                          [responses addObject:operation.responsePacket.data];
+                                                                          if (responses.count == 16) {
+                                                                            pages[@"page0"] = responses;
+                                                                            completionHandler(pages);
+                                                                          }
                                                                         } else {
                                                                           NSLog(@"Error requesting pump dump with args: %@", operation.error);
                                                                         }
                                                                       }];
-    dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_HISTORY_PAGE;
-    [self.pumpCommQueue addOperation:dumpHistOpArgs];
-    
+    ackOp.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
+    [self.pumpCommQueue addOperation:ackOp];
   }
+  NSLog(@"Received %d packets", responses.count);
   
 
 

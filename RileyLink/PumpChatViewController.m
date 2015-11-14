@@ -75,9 +75,9 @@
 //  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
 //    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts];
 //  }];
-//
-//  
-//  [mgr pressButton];
+
+  
+  [mgr pressButton];
   
 }
 

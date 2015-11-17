@@ -118,7 +118,7 @@
 }
 
 - (void) wakeIfNeeded {
-  [self wakeup:5*60];
+  [self wakeup:10*60];
 }
 
 - (void) getHistoryPage {

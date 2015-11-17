@@ -97,7 +97,7 @@
     currentSendTask = sendTasks[0];
     copiesLeftToSend = currentSendTask.repeatCount;
     [sendTasks removeObjectAtIndex:0];
-    NSLog(@"Prepping for send: %@", [currentSendTask.data hexadecimalString]);
+    NSLog(@"Writing packet to tx characteristic: %@", [currentSendTask.data hexadecimalString]);
     [self.peripheral writeValue:currentSendTask.data forCharacteristic:packetTxCharacteristic type:CBCharacteristicWriteWithResponse];
   }
 }
@@ -157,6 +157,7 @@
     return;
   }
   if (characteristic == packetTxCharacteristic) {
+    NSLog(@"Did write packetTxCharacteristic")
     [self triggerSend];
   }
   if (characteristic == customNameCharacteristic) {

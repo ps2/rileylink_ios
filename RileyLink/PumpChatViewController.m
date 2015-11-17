@@ -19,6 +19,7 @@
   IBOutlet UILabel *resultsLabel;
   IBOutlet UILabel *batteryVoltage;
   IBOutlet UILabel *pumpIdLabel;
+  PumpCommManager *mgr;
 }
 
 @property (nonatomic, strong) NSOperationQueue *pumpCommQueue;
@@ -35,6 +36,7 @@
     self.pumpCommQueue.maxConcurrentOperationCount = 1;
     self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 
+  mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
   pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
 }
 
@@ -58,10 +60,9 @@
 
 - (void)queryPump {
   
-  PumpCommManager *mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
-  
   [mgr dumpHistory:^(NSDictionary * _Nonnull res) {
-    NSLog(@"Got: %@", res);
+    NSData *page = res[@"page0"];
+    NSLog(@"Got page: %@", [page hexadecimalString]);
   }];
   
 //  [mgr getPumpModel:^(NSString* model) {
@@ -77,7 +78,7 @@
 //  }];
 
   
-  [mgr pressButton];
+  //[mgr pressButton];
   
 }
 

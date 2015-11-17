@@ -53,11 +53,13 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
 
 @property (nonatomic) MessageSendState state;
 
+@property (nonatomic) NSDate *sentAt;
+
 @end
 
 @implementation MessageSendOperation
 
-- (instancetype)initWithDevice:(RileyLinkBLEDevice *)device message:(MessageBase *)message completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull))completionHandler
+- (instancetype)initWithDevice:(RileyLinkBLEDevice *)device message:(MessageBase *)message timeout:(NSTimeInterval)timeout completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull))completionHandler
 {
     self = [super init];
     if (self) {
@@ -65,7 +67,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
         _device = device;
         _message = message;
         _repeatInterval = 0;
-        _timeout = 10;
+        _timeout = timeout;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:device];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device];
@@ -113,11 +115,14 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
     @synchronized(self) {
         if (self.state == MessageSendStateWaitingForReponse) {
             MinimedPacket *rxPacket = note.userInfo[@"packet"];
-
-            if (self.message.packetType == rxPacket.packetType &&
+          
+            // Need to check capturedAt time, since NSNotifications can arrive at different times for different subscribers.
+            if (self.sentAt && [rxPacket.capturedAt timeIntervalSinceDate:self.sentAt] > 0 &&
+                self.message.packetType == rxPacket.packetType &&
                 [self.message.address isEqualToString:rxPacket.address] &&
                 rxPacket.messageType == self.responseMessageType)
             {
+              
                 NSLog(@"%s with matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
 
                 self.responsePacket = rxPacket;
@@ -238,6 +243,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
 
             [self.device sendPacketData:packetData];
         }
+        self.sentAt = [NSDate date];
 
         if (self.responseMessageType == 0) {
             NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);

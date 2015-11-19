@@ -13,6 +13,7 @@
 #import "ConfigureViewController.h"
 #import "HistoryPage.h"
 #import "NSData+Conversion.h"
+#import "PumpHistoryEventBase.h"
 
 @interface NightscoutWebView () <UIWebViewDelegate> {
   IBOutlet UIBarButtonItem *menuButton;
@@ -31,6 +32,10 @@
   HistoryPage *page = [[HistoryPage alloc] initWithData:data andPumpModel:@"530g"];
   
   NSArray *events = [page decode];
+  
+  for (PumpHistoryEventBase *event in events) {
+    NSLog(@"Event: %@", event);
+  }
   
   
   if (self.revealViewController != nil) {

@@ -15,4 +15,8 @@
   return 52;
 }
 
+- (NSDateComponents*) timestamp {
+  return [self parseDate2Byte:1];
+}
+
 @end

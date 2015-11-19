@@ -7,4 +7,10 @@
 
 @interface PHEBgReceived : PumpHistoryEventBase
 
+- (int) bloodGlucose;
+
+- (nonnull NSString*) meterId;
+
+- (nonnull NSDateComponents*) timestamp;
+
 @end

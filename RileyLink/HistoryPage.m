@@ -35,7 +35,6 @@
         [invocation invoke];
         int returnValue;
         [invocation getReturnValue:&returnValue];
-        NSLog(@"Returned %d", returnValue);
         NSNumber *eventCode = [NSNumber numberWithInt:returnValue];
         d[eventCode] = eventClass;
       }

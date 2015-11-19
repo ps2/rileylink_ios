@@ -15,5 +15,6 @@
 @property (nonatomic, nullable, readonly, strong) NSDictionary *registry;
 
 - (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable NSString *)model;
+- (nonnull NSArray*) decode;
 
 @end

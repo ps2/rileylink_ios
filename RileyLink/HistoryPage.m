@@ -25,8 +25,11 @@
       Class eventClass = NSClassFromString(classStr);
       SEL selector = NSSelectorFromString(@"eventTypeCode");
       if ([eventClass respondsToSelector:selector]) {
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:
-                                    [[eventClass class] instanceMethodSignatureForSelector:selector]];
+        NSMethodSignature *sig = [[eventClass class] methodSignatureForSelector:selector];
+        if (sig == nil) {
+          [NSException raise:@"Missing class method" format:@"%@ does not implement +eventTypeCode.", eventClass];
+        }
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:sig];
         [invocation setSelector:selector];
         [invocation setTarget:eventClass];
         [invocation invoke];
@@ -40,6 +43,38 @@
     _registry = d;
   }
   return self;
+}
+
+- (NSArray*) decode {
+  NSMutableArray *events = [NSMutableArray array];
+  NSUInteger offset = 0;
+  NSUInteger length = _data.length;
+  PumpHistoryEventBase *event;
+  while (offset < length) {
+    event = [self matchEvent:offset];
+    if (event) {
+      [events addObject:event];
+      offset += [event length];
+    } else {
+      // TODO: Track bytes we skipped over
+      offset += 1;
+    }
+  }
+  return events;
+}
+
+- (nonnull const unsigned char *) bytes {
+  return [_data bytes];
+}
+
+- (PumpHistoryEventBase*) matchEvent:(NSUInteger) offset {
+  NSNumber *code = [NSNumber numberWithInt:[self bytes][offset]];
+  Class klazz = _registry[code];
+  if (klazz) {
+    NSData *eventData = [_data subdataWithRange:NSMakeRange(offset, _data.length - offset)];
+    return [[klazz alloc] initWithData:eventData andPumpModel:_pumpModel];
+  }
+  return nil;
 }
 
 @end

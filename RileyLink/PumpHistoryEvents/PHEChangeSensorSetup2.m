@@ -12,7 +12,11 @@
 
 
 - (int) length {
-  return 37;
+  if ([self.pumpModel isEqualToString:@"551"]) {
+    return 41;
+  } else {
+    return 37;
+  }
 }
 
 @end

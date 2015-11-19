@@ -12,7 +12,7 @@
 
 
 - (int) length {
-  return 48;
+  return [self byteAt:0];
 }
 
 @end

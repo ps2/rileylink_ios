@@ -11,6 +11,7 @@
 #import "SWRevealViewController.h"
 #import "Config.h"
 #import "ConfigureViewController.h"
+#import "HistoryPage.h"
 
 @interface NightscoutWebView () <UIWebViewDelegate> {
   IBOutlet UIBarButtonItem *menuButton;
@@ -23,6 +24,10 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  
+  // Just testing
+  HistoryPage *page = [[HistoryPage alloc] initWithData:[NSData data] andPumpModel:@"530g"];
+  
   
   if (self.revealViewController != nil) {
     menuButton.target = self.revealViewController;

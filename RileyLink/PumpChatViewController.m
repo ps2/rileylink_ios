@@ -14,6 +14,7 @@
 #import "Config.h"
 #import "RileyLinkBLEManager.h"
 #import "PumpCommManager.h"
+#import "HistoryPage.h"
 
 @interface PumpChatViewController () {
   IBOutlet UILabel *resultsLabel;
@@ -30,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+  
     // Do any additional setup after loading the view.
 
     self.pumpCommQueue = [[NSOperationQueue alloc] init];

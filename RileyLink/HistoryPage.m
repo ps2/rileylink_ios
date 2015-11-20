@@ -12,7 +12,7 @@
 
 @implementation HistoryPage
 
-- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable NSString *)model
+- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model
 {
   self = [super init];
   if (self) {

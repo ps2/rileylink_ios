@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PumpModel.h"
 
 @interface HistoryPage : NSObject
 
@@ -14,7 +15,7 @@
 @property (nonatomic, nullable, readonly, strong) NSString *pumpModel;
 @property (nonatomic, nullable, readonly, strong) NSDictionary *registry;
 
-- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable NSString *)model;
+- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model;
 - (nonnull NSArray*) decode;
 
 @end

@@ -92,6 +92,7 @@
 		C139ACAC1BFD8CF800B0518F /* PHESara6E.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7C1BFD8CF800B0518F /* PHESara6E.m */; };
 		C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7E1BFD8CF800B0518F /* PHESuspend.m */; };
 		C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */; };
+		C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB01BFEDD9E00B0518F /* PumpModel.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
@@ -278,6 +279,8 @@
 		C139AC7E1BFD8CF800B0518F /* PHESuspend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHESuspend.m; sourceTree = "<group>"; };
 		C139AC7F1BFD8CF800B0518F /* PHEUnabsorbedInsulin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEUnabsorbedInsulin.h; sourceTree = "<group>"; };
 		C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEUnabsorbedInsulin.m; sourceTree = "<group>"; };
+		C139ACAF1BFEDD9E00B0518F /* PumpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpModel.h; sourceTree = "<group>"; };
+		C139ACB01BFEDD9E00B0518F /* PumpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpModel.m; sourceTree = "<group>"; };
 		C13DB3A31B1583E900121E02 /* MessageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBase.h; sourceTree = "<group>"; };
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
@@ -606,6 +609,8 @@
 				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
 				C139AC1F1BFD847F00B0518F /* HistoryPage.h */,
 				C139AC201BFD847F00B0518F /* HistoryPage.m */,
+				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
+				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
 			);
 			name = MinimedProtocol;
 			sourceTree = "<group>";
@@ -819,6 +824,7 @@
 				C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
 				C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */,
+				C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C12616511B688D9C001FAD87 /* RileyLinkBLEDevice.m in Sources */,
 				C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */,

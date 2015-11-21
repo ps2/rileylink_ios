@@ -12,7 +12,7 @@
 
 
 - (int) length {
-  if ([self.pumpModel isEqualToString:@"551"]) {
+  if (self.pumpModel.hasLowSuspend) {
     return 41;
   } else {
     return 37;

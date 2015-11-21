@@ -93,6 +93,10 @@
 		C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7E1BFD8CF800B0518F /* PHESuspend.m */; };
 		C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */; };
 		C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB01BFEDD9E00B0518F /* PumpModel.m */; };
+		C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */; };
+		C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */; };
+		C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */; };
+		C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
@@ -281,6 +285,14 @@
 		C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEUnabsorbedInsulin.m; sourceTree = "<group>"; };
 		C139ACAF1BFEDD9E00B0518F /* PumpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpModel.h; sourceTree = "<group>"; };
 		C139ACB01BFEDD9E00B0518F /* PumpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpModel.m; sourceTree = "<group>"; };
+		C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmClockReminder.h; sourceTree = "<group>"; };
+		C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmClockReminder.m; sourceTree = "<group>"; };
+		C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusWizardBolusEstimate.h; sourceTree = "<group>"; };
+		C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusWizardBolusEstimate.m; sourceTree = "<group>"; };
+		C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryPumpLowBattery.h; sourceTree = "<group>"; };
+		C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryPumpLowBattery.m; sourceTree = "<group>"; };
+		C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEModel522ResultTotals.h; sourceTree = "<group>"; };
+		C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEModel522ResultTotals.m; sourceTree = "<group>"; };
 		C13DB3A31B1583E900121E02 /* MessageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBase.h; sourceTree = "<group>"; };
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
@@ -499,6 +511,14 @@
 		C139AB8E1BFD6A6000B0518F /* PumpHistoryEvents */ = {
 			isa = PBXGroup;
 			children = (
+				C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */,
+				C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */,
+				C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */,
+				C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */,
+				C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */,
+				C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */,
+				C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */,
+				C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */,
 				C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */,
 				C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */,
 				C139AC271BFD8CF800B0518F /* PHEAlarmSensor.h */,
@@ -807,6 +827,8 @@
 				C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
+				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
+				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */,
 				C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */,
@@ -835,6 +857,7 @@
 				C139AC991BFD8CF800B0518F /* PHEChangeParadigmLinkID.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */,
+				C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */,
 				C139ACA31BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m in Sources */,
 				C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
@@ -868,6 +891,7 @@
 				C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
 				C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */,
+				C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */,
 				C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */,
 				C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */,
 				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,

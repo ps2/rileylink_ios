@@ -11,7 +11,11 @@
 }
 
 - (int) length {
-  return 13;
+  if (self.pumpModel.larger) {
+    return 13;
+  } else {
+    return 9;
+  }
 }
 
 - (NSDateComponents*) timestamp {

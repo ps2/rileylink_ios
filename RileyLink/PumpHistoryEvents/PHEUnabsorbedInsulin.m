@@ -10,9 +10,8 @@
   return 0x5c;
 }
 
-
 - (int) length {
-  return [self byteAt:0];
+  return MAX([self byteAt:0], 2);
 }
 
 @end

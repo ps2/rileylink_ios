@@ -24,6 +24,7 @@ Initializes the send operation with a device and message and a completion block
 */
 - (nonnull instancetype)initWithDevice:(nonnull RileyLinkBLEDevice *)device
                                message:(nonnull MessageBase *)message
+                               timeout:(NSTimeInterval)timeout
                      completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull operation))completionHandler;
 
 /**

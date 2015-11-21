@@ -12,6 +12,7 @@
 
 @implementation Log
 
+
 void append(NSString *msg){
   // get path to Documents/somefile.txt
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -30,11 +31,18 @@ void append(NSString *msg){
 }
 
 void _Log(NSString *prefix, const char *file, int lineNumber, const char *funcName, NSString *format,...) {
+  
+  static NSDateFormatter *dateFormat = nil;
+  if (nil == dateFormat) {
+    dateFormat = [[NSDateFormatter alloc] init]; // NOT NSDateFormatter *dateFormat = ...
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+  }
+  
   va_list ap;
   va_start (ap, format);
   format = [format stringByAppendingString:@"\n"];
   NSDate *time = [NSDate date];
-  NSString *msg = [[NSString alloc] initWithFormat:[NSString stringWithFormat:@"%@: %@", time, format] arguments:ap];
+  NSString *msg = [[NSString alloc] initWithFormat:[NSString stringWithFormat:@"%@: %@", [dateFormat stringFromDate:time], format] arguments:ap];
   va_end (ap);
   fprintf(stderr,"%s", [msg UTF8String]);
   append(msg);

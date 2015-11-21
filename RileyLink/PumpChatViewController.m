@@ -15,11 +15,13 @@
 #import "RileyLinkBLEManager.h"
 #import "PumpCommManager.h"
 #import "HistoryPage.h"
+#import "PumpHistoryEventBase.h"
 
 @interface PumpChatViewController () {
-  IBOutlet UILabel *resultsLabel;
+  IBOutlet UITextView *output;
   IBOutlet UILabel *batteryVoltage;
   IBOutlet UILabel *pumpIdLabel;
+  NSString *model;
   PumpCommManager *mgr;
 }
 
@@ -30,13 +32,15 @@
 @implementation PumpChatViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-  
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
 
-    self.pumpCommQueue = [[NSOperationQueue alloc] init];
-    self.pumpCommQueue.maxConcurrentOperationCount = 1;
-    self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+  model = @"551";
+
+  // Do any additional setup after loading the view.
+
+  self.pumpCommQueue = [[NSOperationQueue alloc] init];
+  self.pumpCommQueue.maxConcurrentOperationCount = 1;
+  self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 
   mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
   pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
@@ -48,40 +52,59 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)updateStatusMessage:(NSString*)msg
+- (void)addOutputMessage:(NSString*)msg
 {
-  resultsLabel.text = msg;
-  NSLog(@"StatusUpdate: %@", msg);
+  output.text = [output.text stringByAppendingFormat:@"%@\n", msg];
+  NSLog(@"addOutputMessage: %@", msg);
 }
 
+
+- (IBAction)dumpHistoryButtonPressed:(id)sender {
+  [mgr dumpHistory:^(NSDictionary *res) {
+    if (res) {
+      NSData *page = res[@"page0"];
+      NSLog(@"Got page: %@", [page hexadecimalString]);
+      [self decodeHistoryPage:page];
+    } else {
+      [self addOutputMessage:@"Dump of page 0 failed"];
+    }
+  }];
+}
+
+- (void) decodeHistoryPage:(NSData*)data {
+  
+  PumpModel *m = [PumpModel find:model];
+  HistoryPage *page = [[HistoryPage alloc] initWithData:data andPumpModel:m];
+  
+  NSArray *events = [page decode];
+  
+  for (PumpHistoryEventBase *event in events) {
+    [self addOutputMessage:[NSString stringWithFormat:@"Event: %@", event]];
+    NSLog(@"Event: %@", event);
+  }
+  
+
+}
+
+- (IBAction)pressDownButtonPressed:(id)sender {
+  [mgr pressButton];
+}
 
 - (IBAction)queryPumpButtonPressed:(id)sender {
-  [self queryPump];
-}
-
-
-- (void)queryPump {
   
-  [mgr dumpHistory:^(NSDictionary * _Nonnull res) {
-    NSData *page = res[@"page0"];
-    NSLog(@"Got page: %@", [page hexadecimalString]);
+  [mgr getPumpModel:^(NSString* returnedModel) {
+    if (returnedModel) {
+      model = returnedModel;
+      [self addOutputMessage:[NSString stringWithFormat:@"Pump Model: %@", model]];
+    } else {
+      [self addOutputMessage:@"Get pump model failed."];
+    }
   }];
   
-//  [mgr getPumpModel:^(NSString* model) {
-//    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
-//  }];
-//  
-//  [mgr getPumpModel:^(NSString* model) {
-//    [self updateStatusMessage:[@"Pump Model: " stringByAppendingString:model]];
-//  }];
-//  
-//  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
-//    batteryVoltage.text = [NSString stringWithFormat:@"Battery %@, %0.02f volts", indicator, volts];
-//  }];
-
-  
-  //[mgr pressButton];
-  
+  [mgr getBatteryVoltage:^(NSString *indicator, float volts) {
+    [self addOutputMessage:[NSString stringWithFormat:@"Battery Level: %@, %0.02f volts", indicator, volts]];
+  }];
 }
+
 
 @end

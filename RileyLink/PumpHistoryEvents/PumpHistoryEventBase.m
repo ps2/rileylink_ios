@@ -10,7 +10,7 @@
 
 @implementation PumpHistoryEventBase
 
-- (instancetype)initWithData:(NSData*)data andPumpModel:(NSString*)model
+- (instancetype)initWithData:(NSData*)data andPumpModel:(PumpModel*)model
 {
   self = [super init];
   if (self) {
@@ -21,12 +21,12 @@
 }
 
 - (int) length {
-  [NSException raise:@"Invalid Message" format:@"PumpHistoryRecordBase does not implement length."];
+  [NSException raise:@"Invalid Message" format:@"PumpHistoryEventBase does not implement length."];
   return 0;
 }
 
 + (int) eventTypeCode {
-  [NSException raise:@"Invalid Message" format:@"PumpHistoryRecordBase does not implement eventTypeCode."];
+  [NSException raise:@"Invalid Message" format:@"PumpHistoryEventBase does not implement eventTypeCode."];
   return 0;
 }
 

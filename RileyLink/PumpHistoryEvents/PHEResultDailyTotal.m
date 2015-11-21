@@ -12,7 +12,11 @@
 
 
 - (int) length {
-  return 10;
+  if (self.pumpModel.larger) {
+    return 10;
+  } else {
+    return 7;
+  }  
 }
 
 @end

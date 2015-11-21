@@ -39,7 +39,7 @@
   
   
   
-  return @{
+  NSDictionary *settings = @{
     @"508": base,
     @"511": base,
     @"512": base,
@@ -57,6 +57,8 @@
     @"751": m551,
     @"754": m551
     }[number];
+  
+  return [[PumpModel alloc] initWithSettings:settings];
 }
 
 - (instancetype)initWithSettings:(NSDictionary*)newSettings

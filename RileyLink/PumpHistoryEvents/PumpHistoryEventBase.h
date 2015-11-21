@@ -14,7 +14,7 @@
 @property (nonatomic, nonnull, readonly, strong) NSData *data;
 @property (nonatomic, nullable, readonly, strong) PumpModel *pumpModel;
 
-- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable NSString *)model;
+- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model;
 
 + (int) eventTypeCode;
 

@@ -11,8 +11,8 @@
 
 @interface NightScoutUploader : NSObject
 
-- (void)reportToNightScout:(NSArray*)entries
-         completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
+- (void) reportJSON:(NSArray*)outgoingJSON toNightScoutEndpoint:(NSString*)endpoint
+  completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 
 @property (nonatomic, strong) NSString *endpoint;
 @property (nonatomic, strong) NSString *APISecret;

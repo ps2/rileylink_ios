@@ -13,6 +13,7 @@
 @property (nonatomic, readonly) BOOL larger;
 @property (nonatomic, readonly) BOOL hasLowSuspend;
 @property (nonatomic, readonly) NSInteger strokesPerUnit;
+@property (nonatomic, readonly, strong) NSString *name;
 
 + (PumpModel*) find:(NSString*)number;
 

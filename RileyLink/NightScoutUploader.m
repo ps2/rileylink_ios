@@ -21,6 +21,7 @@
 #import "HistoryPage.h"
 #import "PumpHistoryEventBase.h"
 #import "NSData+Conversion.h"
+#import "PHECalBGForPh.h"
 
 #define RECORD_RAW_PACKETS NO
 
@@ -34,6 +35,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @interface NightScoutUploader ()
 
 @property (strong, nonatomic) NSMutableArray *entries;
+@property (strong, nonatomic) NSMutableArray *treatments;
 @property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
 @property (nonatomic, assign) NSInteger codingErrorCount;
 @property (strong, nonatomic) NSString *pumpSerial;
@@ -51,7 +53,8 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 
 @implementation NightScoutUploader
 
-static NSString *defaultNightscoutUploadPath = @"/api/v1/entries.json";
+static NSString *defaultNightscoutEntriesPath = @"/api/v1/entries.json";
+static NSString *defaultNightscoutTreatmentPath = @"/api/v1/treatments.json";
 static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 - (instancetype)init
@@ -59,6 +62,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   self = [super init];
   if (self) {
     _entries = [[NSMutableArray alloc] init];
+    _treatments = [[NSMutableArray alloc] init];
     _dateFormatter = [[ISO8601DateFormatter alloc] init];
     _dateFormatter.includeTime = YES;
     _dateFormatter.useMillisecondPrecision = YES;
@@ -73,7 +77,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
     
-    [self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
+    //[self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
 
   }
   return self;
@@ -138,7 +142,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   NSLog(@"Using RileyLink \"%@\" to poll history.", self.activeRileyLink.name);
   
   if (self.commManager != nil && self.commManager.device != self.activeRileyLink) {
-    // We need a new commManager for the RL we want to talk to.
+    // We need a new commManager for the new RL we want to talk to.
     self.commManager = nil;
   }
   
@@ -148,23 +152,21 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
                         andDevice:self.activeRileyLink];
   }
   
-//  [self.commManager getPumpModel:^(NSString* returnedModel) {
-//    if (returnedModel) {
-//      self.pumpModel = returnedModel;
-//      NSLog(@"Got model: %@", returnedModel);
-//    } else {
-//      NSLog(@"Get pump model failed.");
-//    }
-//  }];
-//
-//  
-//  [self.commManager dumpHistory:^(NSDictionary * _Nonnull res) {
-//    NSData *page = res[@"page0"];
-//    [self decodeHistoryPage:page];
-//    NSLog(@"Got page: %@", [page hexadecimalString]);
-//  }];
+  [self.commManager getPumpModel:^(NSString* returnedModel) {
+    if (returnedModel) {
+      self.pumpModel = returnedModel;
+      NSLog(@"Got model: %@", returnedModel);
+    } else {
+      NSLog(@"Get pump model failed.");
+    }
+  }];
+
   
-//
+  [self.commManager dumpHistory:^(NSDictionary * _Nonnull res) {
+    NSData *page = res[@"page0"];
+    [self decodeHistoryPage:page];
+    NSLog(@"Got page: %@", [page hexadecimalString]);
+  }];
   
 }
 
@@ -185,7 +187,25 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   
   for (PumpHistoryEventBase *event in events) {
     NSLog(@"Event: %@", [event asJSON]);
+    if ([event isKindOfClass:[PHECalBgForPh class] ]) {
+      PHECalBgForPh *cal = (PHECalBgForPh*) event;
+      NSMutableDictionary *json = [[event asJSON] mutableCopy];
+      json[@"eventType"] = @"<none>";
+      json[@"glucose"] = [NSNumber numberWithInt:cal.amount];
+      json[@"glucoseType"] = @"Finger";
+      json[@"notes"] = @"Pump received finger stick.";
+      [self addTreatment:json fromModel:m];
+    }
   }
+  [self flushTreatments];
+}
+
+
+- (void) addTreatment:(NSMutableDictionary*)treatment fromModel:(PumpModel*)m {
+  treatment[@"enteredBy"] = [@"rileylink://medtronic/" stringByAppendingString:m.name];
+  
+  [self.treatments addObject:treatment];
+  
 }
 
 //var DIRECTIONS = {
@@ -352,6 +372,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 #pragma mark - Uploading
 
+
+
 - (void) flushEntries {
   
   if (self.entries.count == 0) {
@@ -360,7 +382,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   
   NSArray *inFlightEntries = self.entries;
   self.entries = [[NSMutableArray alloc] init];
-  [self reportToNightScout:inFlightEntries completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+  [self reportJSON:inFlightEntries toNightScoutEndpoint:defaultNightscoutEntriesPath completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     if (httpResponse.statusCode != 200) {
       NSLog(@"Requeuing %d sgv entries: %@", inFlightEntries.count, error);
@@ -372,14 +394,35 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }];
 }
 
-- (void) reportToNightScout:(NSArray*)entries
+- (void) flushTreatments {
+  
+  if (self.treatments.count == 0) {
+    return;
+  }
+  
+  NSArray *inFlightTreatments = self.treatments;
+  self.treatments = [[NSMutableArray alloc] init];
+  [self reportJSON:inFlightTreatments toNightScoutEndpoint:defaultNightscoutTreatmentPath completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    if (httpResponse.statusCode != 200) {
+      NSLog(@"Requeuing %d treatments: %@", inFlightTreatments.count, error);
+      [self.treatments addObjectsFromArray:inFlightTreatments];
+    } else {
+      NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);
+    }
+  }];
+}
+
+
+- (void) reportJSON:(NSArray*)outgoingJSON toNightScoutEndpoint:(NSString*)endpoint
 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
 {
-  NSURL *uploadURL = [NSURL URLWithString:defaultNightscoutUploadPath
+  NSURL *uploadURL = [NSURL URLWithString:endpoint
                             relativeToURL:[NSURL URLWithString:self.endpoint]];
   NSMutableURLRequest *request = [[NSURLRequest requestWithURL:uploadURL] mutableCopy];
   NSError *error;
-  NSData *sendData = [NSJSONSerialization dataWithJSONObject:entries options:NSJSONWritingPrettyPrinted error:&error];
+  NSData *sendData = [NSJSONSerialization dataWithJSONObject:outgoingJSON options:NSJSONWritingPrettyPrinted error:&error];
   NSString *jsonPost = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
   NSLog(@"Posting to %@, %@", [uploadURL absoluteString], jsonPost);
   [request setHTTPMethod:@"POST"];

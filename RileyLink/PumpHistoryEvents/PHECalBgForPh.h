@@ -7,4 +7,6 @@
 
 @interface PHECalBgForPh : PumpHistoryEventBase
 
+- (int) amount;
+
 @end

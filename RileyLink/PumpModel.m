@@ -58,14 +58,15 @@
     @"754": m551
     }[number];
   
-  return [[PumpModel alloc] initWithSettings:settings];
+  return [[PumpModel alloc] initWithSettings:settings andName:number];
 }
 
-- (instancetype)initWithSettings:(NSDictionary*)newSettings
+- (instancetype)initWithSettings:(NSDictionary*)newSettings andName:(NSString*)name
 {
   self = [super init];
   if (self) {
     settings = newSettings;
+    _name = name;
   }
   return self;
 }

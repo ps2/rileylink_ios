@@ -11,8 +11,6 @@
 #import "NSData+Conversion.h"
 
 @interface PumpCommManager () {
-  RileyLinkBLEDevice *device;
-  NSString *pumpId;
   NSDate *awakeUntil;
   BOOL waking;
 }
@@ -26,8 +24,8 @@
 - (nonnull instancetype)initWithPumpId:(nonnull NSString *)a_pumpId andDevice:(nonnull RileyLinkBLEDevice *)a_device {
   self = [super init];
   if (self) {
-    pumpId = a_pumpId;
-    device = a_device;
+    _pumpId = a_pumpId;
+    _device = a_device;
     
     self.pumpCommQueue = [[NSOperationQueue alloc] init];
     self.pumpCommQueue.maxConcurrentOperationCount = 1;
@@ -43,7 +41,7 @@
 }
 
 - (MessageBase *)msgType:(unsigned char)t withArgs:(NSString *)args {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x%@", pumpId, t, args];
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x%@", _pumpId, t, args];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];
@@ -78,14 +76,16 @@
   
   waking = YES;
 
-  MessageSendOperation *wakeupOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *wakeupOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                message:[self powerMessage]
                                                                                timeout:15
                                                                      completionHandler:^(MessageSendOperation * _Nonnull operation) {
                                                                        if (operation.responsePacket != nil) {
                                                                          NSLog(@"Pump acknowledged wakeup!");
                                                                        } else {
+                                                                         // Can we clear the queue here?  Since the pump didn't wake.
                                                                          NSLog(@"Power on error: %@", operation.error);
+                                                                         [self.pumpCommQueue cancelAllOperations];
                                                                        }
                                                                      }];
   
@@ -97,7 +97,7 @@
   
   NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", minutes];
   
-  MessageSendOperation *wakeupArgsOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *wakeupArgsOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                    message:[self powerMessageWithArgs:msg]
                                                                                    timeout:10
                                                                          completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -127,7 +127,7 @@
 
 - (void) pressButton {
   [self wakeIfNeeded];
-  MessageSendOperation *buttonPressOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *buttonPressOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                message:[self buttonPressMessage]
                                                                                timeout:10
                                                                      completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -140,7 +140,7 @@
   buttonPressOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:buttonPressOperation];
   
-  MessageSendOperation *buttonPressArgsOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *buttonPressArgsOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                    message:[self buttonPressMessageWithArgs:@"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
                                                                                    timeout:10
                                                                          completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -156,7 +156,7 @@
 
 - (MessageBase *)modelQueryMessage
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", pumpId, MESSAGE_TYPE_GET_PUMP_MODEL];
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", _pumpId, MESSAGE_TYPE_GET_PUMP_MODEL];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];
@@ -165,7 +165,7 @@
 - (void) getPumpModel:(void (^ _Nullable)(NSString*))completionHandler {
   [self wakeIfNeeded];
 
-  MessageSendOperation *modelQueryOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *modelQueryOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                    message:[self modelQueryMessage]
                                                                                    timeout:10
                                                completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -182,7 +182,7 @@
 
 - (MessageBase *)batteryStatusMessage
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", pumpId, MESSAGE_TYPE_GET_BATTERY];
+  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", _pumpId, MESSAGE_TYPE_GET_BATTERY];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];
@@ -191,7 +191,7 @@
 
 - (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler {
   [self wakeIfNeeded];
-  MessageSendOperation *batteryStatusOperation = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *batteryStatusOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                       message:[self batteryStatusMessage]
                                                                                       timeout:10
                                                                             completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -228,7 +228,7 @@
   
   MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"];
   
-  MessageSendOperation *dumpHistOp = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *dumpHistOp = [[MessageSendOperation alloc] initWithDevice:_device
                                                                           message:dumpHistMsg
                                                                           timeout:2
                                                                             completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -242,7 +242,7 @@
   [self.pumpCommQueue addOperation:dumpHistOp];
   
   MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
-  MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:device
+  MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:_device
                                                                           message:dumpHistMsgArgs
                                                                               timeout:2
                                                                 completionHandler:^(MessageSendOperation * _Nonnull operation) {
@@ -258,7 +258,7 @@
   // TODO: send 15 acks, and expect 15 more dumps
   for (int i=0; i<16; i++) {
     MessageBase *ack = [self msgType:MESSAGE_TYPE_ACK withArgs:@"00"];
-    MessageSendOperation *ackOp = [[MessageSendOperation alloc] initWithDevice:device
+    MessageSendOperation *ackOp = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                 message:ack
                                                                         timeout:2
                                                                       completionHandler:^(MessageSendOperation * _Nonnull operation) {

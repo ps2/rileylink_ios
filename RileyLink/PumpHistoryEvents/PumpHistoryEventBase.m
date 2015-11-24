@@ -7,6 +7,7 @@
 //
 
 #import "PumpHistoryEventBase.h"
+#import "NSData+Conversion.h"
 
 @implementation PumpHistoryEventBase
 
@@ -16,6 +17,9 @@
   if (self) {
     _data = data;
     _pumpModel = model;
+    if (_data.length > self.length) {
+      _data = [_data subdataWithRange:NSMakeRange(0, [self length])];
+    }
   }
   return self;
 }
@@ -63,18 +67,36 @@
 
 - (NSString*) timestampStr {
   NSDateComponents *c = [self timestamp];
+  if (c == nil) {
+    return @"<timestamp missing>";
+  }
   if (c.minute == NSDateComponentUndefined && c.hour == NSDateComponentUndefined && c.second == NSDateComponentUndefined) {
     return [NSString stringWithFormat:@"%d/%d/%d",
             (int)c.year, (int)c.month, (int)c.day];
-  } else {
-    return [NSString stringWithFormat:@"%d/%d/%d %02d:%02d:%02d",
-            (int)c.year, (int)c.month, (int)c.day, (int)c.hour, (int)c.minute, (int)c.second];
   }
+  return [NSString stringWithFormat:@"%d/%d/%d %02d:%02d:%02d",
+          (int)c.year, (int)c.month, (int)c.day, (int)c.hour, (int)c.minute, (int)c.second];
 }
 
 - (NSString*) description {
   return [NSString stringWithFormat:@"%@ - %@", self.class, self.timestampStr];
 }
 
+- (NSString*) typeName {
+  NSString *fullName = NSStringFromClass(self.class);
+  if ([fullName hasPrefix:@"PHE"]) {
+    return [fullName substringFromIndex:3];
+  }
+  return fullName;
+}
+
+- (NSDictionary*) asJSON {
+  return @{
+           @"_type": [self typeName],
+           @"_raw": [self.data hexadecimalString],
+           @"timestamp": self.timestampStr,
+           @"description": self.description
+           };
+}
 
 @end

@@ -11,7 +11,12 @@
 }
 
 - (int) length {
-  return MAX([self byteAt:0], 2);
+  return MAX([self byteAt:1], 2);
 }
+
+- (NSDateComponents*) timestamp {
+  return nil;
+}
+
 
 @end

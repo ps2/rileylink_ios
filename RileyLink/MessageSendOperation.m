@@ -70,7 +70,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
         _timeout = timeout;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:device];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidReceivePacket:) name:RILEYLINK_EVENT_PACKET_RECEIVED object:device];
 
         if (device.peripheral.state == CBPeripheralStateConnected) {
@@ -213,11 +213,61 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
 
             if (newState == MessageSendStateFinished && _completionHandler != nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _completionHandler(self);
+                  if (_completionHandler != nil) {
+                      _completionHandler(self);
+                  } else {
+                    NSLog(@"_completionHandler = %@", _completionHandler);
+                  }
                 });
             }
         }
     }
+}
+
+- (void)main
+{
+  if ([self isCancelled]) {
+    return;
+  }
+  NSLog(@"%s: %@", __PRETTY_FUNCTION__, self);
+  
+  if (self.isReady) {
+    self.state = MessageSendStateWaitingForReponse;
+   
+    if ([self isCancelled]) {
+      return;
+    }
+
+    NSData *packetData = [MinimedPacket encodeData:self.message.data];
+    
+    if (self.repeatInterval > 0) {
+      NSLog(@"%s sending message %02x every %.02fs", __PRETTY_FUNCTION__, self.message.messageType, self.repeatInterval);
+      
+      [self.device sendPacketData:packetData withCount:(self.timeout - 10) / self.repeatInterval andTimeBetweenPackets:self.repeatInterval];
+    } else {
+      NSLog(@"%s: %@ sending message %02x", __PRETTY_FUNCTION__, self, self.message.messageType);
+      
+      [self.device sendPacketData:packetData];
+    }
+    self.sentAt = [NSDate date];
+    
+    if (self.responseMessageType == 0) {
+      NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);
+      self.state = MessageSendStateFinished;
+    } else {
+      __weak typeof(self)weakSelf = self;
+      
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (weakSelf && !weakSelf.isFinished) {
+          NSLog(@"MessageSendOperation timeout");
+          weakSelf.error = [NSError errorWithDomain:ErrorDomain
+                                               code:MessageSendErrorTimeout
+                                           userInfo:@{NSLocalizedDescriptionKey: @"Timeout waiting for response message"}];
+          [weakSelf cancel];
+        }
+      });
+    }
+  }
 }
 
 #pragma mark - NSOperation
@@ -227,46 +277,9 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
     return YES;
 }
 
-- (void)start
-{
-    if (self.isReady) {
-        self.state = MessageSendStateWaitingForReponse;
-
-        NSData *packetData = [MinimedPacket encodeData:self.message.data];
-
-        if (self.repeatInterval > 0) {
-            NSLog(@"%s sending message %02x every %.02fs", __PRETTY_FUNCTION__, self.message.messageType, self.repeatInterval);
-
-            [self.device sendPacketData:packetData withCount:(self.timeout - 10) / self.repeatInterval andTimeBetweenPackets:self.repeatInterval];
-        } else {
-            NSLog(@"%s sending message %02x", __PRETTY_FUNCTION__, self.message.messageType);
-
-            [self.device sendPacketData:packetData];
-        }
-        self.sentAt = [NSDate date];
-
-        if (self.responseMessageType == 0) {
-            NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);
-            self.state = MessageSendStateFinished;
-        } else {
-            __weak typeof(self)weakSelf = self;
-
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (weakSelf && !weakSelf.isFinished) {
-                    NSLog(@"MessageSendOperation timeout");
-                    weakSelf.error = [NSError errorWithDomain:ErrorDomain
-                                                         code:MessageSendErrorTimeout
-                                                     userInfo:@{NSLocalizedDescriptionKey: @"Timeout waiting for response message"}];
-                    [weakSelf cancel];
-                }
-            });
-        }
-    }
-}
-
 - (void)cancel
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%s: %@", __PRETTY_FUNCTION__, self);
     [super cancel];
     self.state = MessageSendStateFinished;
 }

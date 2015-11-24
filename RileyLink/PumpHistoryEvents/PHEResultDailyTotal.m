@@ -16,7 +16,7 @@
     return 10;
   } else {
     return 7;
-  }  
+  }
 }
 
 @end

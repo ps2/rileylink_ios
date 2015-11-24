@@ -23,4 +23,9 @@
   return [[self.data subdataWithRange:NSMakeRange(7, 3)] hexadecimalString];
 }
 
+- (NSDateComponents*) timestamp {
+  return [self parseDateComponents:2];
+}
+
+
 @end

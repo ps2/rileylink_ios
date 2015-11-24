@@ -16,6 +16,11 @@
 #import "RileyLinkBLEManager.h"
 #import "Config.h"
 #import "NSData+Conversion.h"
+#import "PumpCommManager.h"
+#import "PumpModel.h"
+#import "HistoryPage.h"
+#import "PumpHistoryEventBase.h"
+#import "NSData+Conversion.h"
 
 #define RECORD_RAW_PACKETS NO
 
@@ -34,6 +39,13 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @property (strong, nonatomic) NSString *pumpSerial;
 @property (strong, nonatomic) NSData *lastSGV;
 @property (strong, nonatomic) MeterMessage *lastMeterMessage;
+@property (strong, nonatomic) NSTimer *pumpPollTimer;
+@property (strong, nonatomic) RileyLinkBLEDevice *activeRileyLink;
+@property (strong, nonatomic) NSTimer *getHistoryTimer;
+@property (strong, nonatomic) PumpCommManager *commManager;
+@property (strong, nonatomic) NSString *pumpModel;
+
+
 @end
 
 
@@ -55,6 +67,13 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
                                              selector:@selector(packetReceived:)
                                                  name:RILEYLINK_EVENT_PACKET_RECEIVED
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:nil];
+    
+    self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
+    
+    [self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
 
   }
   return self;
@@ -65,11 +84,108 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
+#pragma mark - Testing
+
+- (void)testDecodePacket {
+  NSData *page = [NSData dataWithHexadecimalString:@"5c0b702ec03446d058dcd001003c003c005c0091d551760f0a1fbbd134768f3f23bbd1f4760fc527ad5b1f89d314760f0051008c4b504800000000000048965c083cb8c070e0c0010048004800000089d354760f7b0780c015160f2a11000a32aaeb35168f5b32aceb15160f005100b455504800000000240024965c0b4858c03c0cd07034d00100240024002400aceb55160f0a2f89c436168f5b2f8bc416160f005100b455504800000000380010965c0e241dc0486dc03c21d07049d001001000100038008bc456160f0aeb91d737760f3f1d91d777760fc527ad7b0080c000170f000e0007000002f1b68f0000006eb68f0510db931f09000002f1013d2a01b43a006d0138007c0000000004030000040000000000000000c73200000000000000007b0180c001170f0208000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000cbf"];
+  self.pumpModel = @"551";
+  [self decodeHistoryPage:page];
+}
+
+
+#pragma mark - Device updates
+
+- (void)deviceConnected:(NSNotification *)note
+{
+  self.activeRileyLink = [note object];
+}
+
+- (void)deviceDisconnected:(NSNotification *)note
+{
+  if (self.activeRileyLink == [note object]) {
+    self.activeRileyLink = nil;
+  }
+}
+
 - (void)packetReceived:(NSNotification*)notification {
   NSDictionary *attrs = notification.userInfo;
   MinimedPacket *packet = attrs[@"packet"];
   RileyLinkBLEDevice *device = notification.object;
   [self addPacket:packet fromDevice:device];
+}
+
+#pragma mark - Polling
+
+- (void) fetchHistory:(id)sender {
+  if (self.activeRileyLink && self.activeRileyLink.state != RileyLinkStateConnected) {
+    self.activeRileyLink = nil;
+  }
+  
+  if (self.activeRileyLink == nil) {
+    for (RileyLinkBLEDevice *device in [[RileyLinkBLEManager sharedManager] rileyLinkList]) {
+      if (device.state == RileyLinkStateConnected) {
+        self.activeRileyLink = device;
+        break;
+      }
+    }
+  }
+  
+  if (self.activeRileyLink == nil) {
+    NSLog(@"No connected rileylinks to attempt to pull history with. Aborting poll.");
+    return;
+  }
+  
+  NSLog(@"Using RileyLink \"%@\" to poll history.", self.activeRileyLink.name);
+  
+  if (self.commManager != nil && self.commManager.device != self.activeRileyLink) {
+    // We need a new commManager for the RL we want to talk to.
+    self.commManager = nil;
+  }
+  
+  if (self.commManager == nil) {
+    self.commManager = [[PumpCommManager alloc]
+                        initWithPumpId:[[Config sharedInstance] pumpID]
+                        andDevice:self.activeRileyLink];
+  }
+  
+//  [self.commManager getPumpModel:^(NSString* returnedModel) {
+//    if (returnedModel) {
+//      self.pumpModel = returnedModel;
+//      NSLog(@"Got model: %@", returnedModel);
+//    } else {
+//      NSLog(@"Get pump model failed.");
+//    }
+//  }];
+//
+//  
+//  [self.commManager dumpHistory:^(NSDictionary * _Nonnull res) {
+//    NSData *page = res[@"page0"];
+//    [self decodeHistoryPage:page];
+//    NSLog(@"Got page: %@", [page hexadecimalString]);
+//  }];
+  
+//
+  
+}
+
+#pragma mark - Decoding
+
+- (void) decodeHistoryPage:(NSData*)data {
+  NSLog(@"Got page: %@", [data hexadecimalString]);
+  
+  if (self.pumpModel == nil) {
+    NSLog(@"Cannot decode history page without knowing the pump model. pumpModel == nil!");
+    return;
+  }
+  
+  PumpModel *m = [PumpModel find:self.pumpModel];
+  HistoryPage *page = [[HistoryPage alloc] initWithData:data andPumpModel:m];
+  
+  NSArray *events = [page decode];
+  
+  for (PumpHistoryEventBase *event in events) {
+    NSLog(@"Event: %@", [event asJSON]);
+  }
 }
 
 //var DIRECTIONS = {
@@ -233,6 +349,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     _lastMeterMessage = msg;
   }
 }
+
+#pragma mark - Uploading
 
 - (void) flushEntries {
   

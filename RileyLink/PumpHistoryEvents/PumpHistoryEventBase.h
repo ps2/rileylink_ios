@@ -24,5 +24,6 @@
 - (nonnull NSDateComponents*) parseDate2Byte:(NSInteger)offset;
 - (nonnull NSDateComponents*) timestamp;
 - (nonnull NSString*) timestampStr;
+- (nonnull NSDictionary*) asJSON;
 
 @end

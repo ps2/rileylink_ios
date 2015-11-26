@@ -75,9 +75,10 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:nil];
     
-    self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
     
-    //[self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
+    self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
+    
+    [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
 
   }
   return self;
@@ -203,6 +204,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 - (void) addTreatment:(NSMutableDictionary*)treatment fromModel:(PumpModel*)m {
   treatment[@"enteredBy"] = [@"rileylink://medtronic/" stringByAppendingString:m.name];
+  treatment[@"created_at"] = treatment[@"timestamp"];
   
   [self.treatments addObject:treatment];
   
@@ -419,7 +421,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler
 {
   NSURL *uploadURL = [NSURL URLWithString:endpoint
-                            relativeToURL:[NSURL URLWithString:self.endpoint]];
+                            relativeToURL:[NSURL URLWithString:self.siteURL]];
   NSMutableURLRequest *request = [[NSURLRequest requestWithURL:uploadURL] mutableCopy];
   NSError *error;
   NSData *sendData = [NSJSONSerialization dataWithJSONObject:outgoingJSON options:NSJSONWritingPrettyPrinted error:&error];

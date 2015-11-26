@@ -45,7 +45,7 @@
   _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
   
   self.uploader = [[NightScoutUploader alloc] init];
-  self.uploader.endpoint = [[Config sharedInstance] nightscoutURL];
+  self.uploader.siteURL = [[Config sharedInstance] nightscoutURL];
   self.uploader.APISecret = [[Config sharedInstance] nightscoutAPISecret];
   
   AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

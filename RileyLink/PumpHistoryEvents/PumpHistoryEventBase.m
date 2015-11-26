@@ -74,7 +74,7 @@
     return [NSString stringWithFormat:@"%d/%d/%d",
             (int)c.year, (int)c.month, (int)c.day];
   }
-  return [NSString stringWithFormat:@"%d/%d/%d %02d:%02d:%02d",
+  return [NSString stringWithFormat:@"%d-%d-%dT%02d:%02d:%02d",
           (int)c.year, (int)c.month, (int)c.day, (int)c.hour, (int)c.minute, (int)c.second];
 }
 

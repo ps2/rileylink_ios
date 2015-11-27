@@ -215,6 +215,10 @@
   
   NSRange r = NSMakeRange(6, 64);
   for (NSData *frame in packets) {
+    if (frame.length < 70) {
+      NSLog(@"Bad frame in history: %@", [frame hexadecimalString]);
+      return nil;
+    }
     [data appendData:[frame subdataWithRange:r]];
   }
   return data;

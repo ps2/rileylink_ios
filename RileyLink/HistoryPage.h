@@ -17,5 +17,6 @@
 
 - (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model;
 - (nonnull NSArray*) decode;
+- (BOOL) isCRCValid;
 
 @end

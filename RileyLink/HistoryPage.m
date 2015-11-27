@@ -9,6 +9,7 @@
 #import "HistoryPage.h"
 #import "RuntimeUtils.h"
 #import "PumpHistoryEventBase.h"
+#import "CRC16.h"
 
 @implementation HistoryPage
 
@@ -60,6 +61,15 @@
     }
   }
   return events;
+}
+
+- (BOOL) isCRCValid {
+  if (_data.length < 3) {
+    return NO;
+  }
+  uint8_t *bytes = (uint8_t*)_data.bytes;
+  uint16_t packetCRC = bytes[_data.length-1] + (bytes[_data.length-2] << 8);
+  return packetCRC == [CRC16 compute:[_data subdataWithRange:NSMakeRange(0, _data.length-2)]];
 }
 
 - (nonnull const unsigned char *) bytes {

@@ -1,5 +1,5 @@
 //
-//  CRC8.h
+//  CRC16.h
 //  RileyLink
 //
 //  Created by Pete Schwamb on 11/26/15.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CRC8 : NSObject
+@interface CRC16 : NSObject
 
-+ (uint8_t) compute:(NSData*)data;
++ (uint16_t) compute:(NSData*)data;
 
 @end

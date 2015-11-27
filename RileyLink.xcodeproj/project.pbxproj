@@ -44,6 +44,7 @@
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
 		C137A3901C08114600569851 /* CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A38F1C08114600569851 /* CRC8.m */; };
+		C137A3931C08142E00569851 /* CRC16.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3921C08142E00569851 /* CRC16.m */; };
 		C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */; };
 		C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC201BFD847F00B0518F /* HistoryPage.m */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
@@ -187,6 +188,8 @@
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
 		C137A38E1C08114600569851 /* CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC8.h; sourceTree = "<group>"; };
 		C137A38F1C08114600569851 /* CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC8.m; sourceTree = "<group>"; };
+		C137A3911C08142E00569851 /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
+		C137A3921C08142E00569851 /* CRC16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC16.m; sourceTree = "<group>"; };
 		C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpHistoryEventBase.h; sourceTree = "<group>"; };
 		C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpHistoryEventBase.m; sourceTree = "<group>"; };
 		C139AC1F1BFD847F00B0518F /* HistoryPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPage.h; sourceTree = "<group>"; };
@@ -413,6 +416,8 @@
 				C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */,
 				C137A38E1C08114600569851 /* CRC8.h */,
 				C137A38F1C08114600569851 /* CRC8.m */,
+				C137A3911C08142E00569851 /* CRC16.h */,
+				C137A3921C08142E00569851 /* CRC16.m */,
 			);
 			name = MinimedRF;
 			sourceTree = "<group>";
@@ -871,6 +876,7 @@
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
 				C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,
+				C137A3931C08142E00569851 /* CRC16.m in Sources */,
 				C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */,
 				C137A3901C08114600569851 /* CRC8.m in Sources */,
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,

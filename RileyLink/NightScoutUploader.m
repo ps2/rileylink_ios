@@ -79,6 +79,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
     
     [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
+    
+    [self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
 
   }
   return self;
@@ -183,6 +185,11 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   
   PumpModel *m = [PumpModel find:self.pumpModel];
   HistoryPage *page = [[HistoryPage alloc] initWithData:data andPumpModel:m];
+  
+  if (![page isCRCValid]) {
+    NSLog(@"Invalid CRC for history page %@", [data hexadecimalString]);
+    return;
+  }
   
   NSArray *events = [page decode];
   

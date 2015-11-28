@@ -21,7 +21,8 @@
 #import "HistoryPage.h"
 #import "PumpHistoryEventBase.h"
 #import "NSData+Conversion.h"
-#import "PHECalBGForPh.h"
+#import "NightScoutBolus.h"
+#import "NightScoutPump.h"
 
 #define RECORD_RAW_PACKETS NO
 
@@ -35,7 +36,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @interface NightScoutUploader ()
 
 @property (strong, nonatomic) NSMutableArray *entries;
-@property (strong, nonatomic) NSMutableArray *treatments;
+@property (strong, nonatomic) NSMutableArray *treatmentsQueue;
 @property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
 @property (nonatomic, assign) NSInteger codingErrorCount;
 @property (strong, nonatomic) NSString *pumpSerial;
@@ -62,7 +63,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   self = [super init];
   if (self) {
     _entries = [[NSMutableArray alloc] init];
-    _treatments = [[NSMutableArray alloc] init];
+    _treatmentsQueue = [[NSMutableArray alloc] init];
     _dateFormatter = [[ISO8601DateFormatter alloc] init];
     _dateFormatter.includeTime = YES;
     _dateFormatter.useMillisecondPrecision = YES;
@@ -80,7 +81,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
     
-    [self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
+    //[self performSelector:@selector(testDecodePacket) withObject:nil afterDelay:1];
 
   }
   return self;
@@ -94,7 +95,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 #pragma mark - Testing
 
 - (void)testDecodePacket {
-  NSData *page = [NSData dataWithHexadecimalString:@"0100200020000000a4f64d1a0f0ad692eb2e1a0f5bd6a3eb0e1a0f145000b44b5020002c00001c0030965c0b1430c00c3ac05852d00100300030001c00a4eb4e1a0f5b009fc20f1a0f145000b44b5000002c000000002c965c0e301bc01443c00c4dc05865d001002c002c0044009fc24f1a0f7b0680c0101a0f200e005b00adc8127a0f0950008c4b500000180000000018965c0e2cc1c030d5c014fdc00c07d00100180018000000adc8527a0f0a2f82e4321a8f5b2f8ce4121a0f0051008c4b505000000000180038965c11181fc02cddc030f1c01419d00c23d001004800480018008de4521a0f210097f9121a0f030000005182fa321a0f7b068ac2131a0f200e00030003000380c2131a0f7b0780c0151a0f2a110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff34"];
+  NSData *page = [NSData dataWithHexadecimalString:@"0100200020000000a4f64d1a0f0ad692eb2e1a0f5bd6a3eb0e1a0f145000b44b5020002c00001c0030965c0b1430c00c3ac05852d00100300030001c00a4eb4e1a0f5b009fc20f1a0f145000b44b5000002c000000002c965c0e301bc01443c00c4dc05865d001002c002c0044009fc24f1a0f7b0680c0101a0f200e005b00adc8127a0f0950008c4b500000180000000018965c0e2cc1c030d5c014fdc00c07d00100180018000000adc8527a0f0a2f82e4321a8f5b2f8ce4121a0f0051008c4b505000000000180038965c11181fc02cddc030f1c01419d00c23d001004800480018008de4521a0f210097f9121a0f030000005182fa321a0f7b068ac2131a0f200e00030003000380c2131a0f7b0780c0151a0f2a11000adbabeb357a0f3f1babeb757a0fc527ad5bdb80ec151a0f005000b455502000000000000020965c1448bcc018dac02c98d030acd014d4d00cded0010028002800000080ec551a0f7b0080c0001b0f000e000700000279ba8f0000006eba8f0500b644db060000027901012901783b005600b800900030000004030100040000000000000000d62f00000000000000007b0180c0011b0f0208007b0280c0041b0f080e000a5eb1d0257b0f3f0bb1d0c57b0fc527ad7b0380c0061b0f0c10007b0480c00a1b0f140d000808a2c40a1b0f000e00020800080e000c1000140d00180a00200e002a1100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000908a2c40a1b0f000e00020800080e000c1000140b00180a00200e002a1100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007b04a3c40a1b0f140b000aeca2e42b1b0f5beca8e40b1b0f005000b44b502c0000000000002c9601002c002c000000a8e44b1b0f7b0580c00c1b0f180a000a7da5c42f7b0f3f0fa5c4af7b0fc527ad5b7da7cf0f7b0f195000b44b500000340000000034965c052cdcc00100340034000000a8cf4f7b0f7b0680c0101b0f200e000a4a83e0307b0f3f0983e0507b0fc527ad5b00a9d0117b0f1450008c4b500000380000000038965c083479c02c55d00100380038001000a9d0517b0f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009f0b"];
   self.pumpModel = @"551";
   [self decodeHistoryPage:page];
 }
@@ -168,7 +169,6 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [self.commManager dumpHistory:^(NSDictionary * _Nonnull res) {
     NSData *page = res[@"page0"];
     [self decodeHistoryPage:page];
-    NSLog(@"Got page: %@", [page hexadecimalString]);
   }];
   
 }
@@ -193,17 +193,29 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   
   NSArray *events = [page decode];
   
-  for (PumpHistoryEventBase *event in events) {
-    NSLog(@"Event: %@", [event asJSON]);
-    if ([event isKindOfClass:[PHECalBgForPh class] ]) {
-      PHECalBgForPh *cal = (PHECalBgForPh*) event;
-      NSMutableDictionary *json = [[event asJSON] mutableCopy];
-      json[@"eventType"] = @"<none>";
-      json[@"glucose"] = [NSNumber numberWithInt:cal.amount];
-      json[@"glucoseType"] = @"Finger";
-      json[@"notes"] = @"Pump received finger stick.";
-      [self addTreatment:json fromModel:m];
-    }
+  NSMutableArray *jsonEvents = [NSMutableArray array];
+  
+//  for (PumpHistoryEventBase *event in events) {
+//    NSLog(@"Event: %@", [event asJSON]);
+//  }
+//  return ;
+
+  
+  // Processing code expects history in newest first order
+  NSEnumerator *enumerator = [events reverseObjectEnumerator];
+  for (PumpHistoryEventBase *event in enumerator) {
+    [jsonEvents addObject:[event asJSON]];
+  }
+  
+  NSArray *treatments = jsonEvents;
+  
+  treatments = [NightScoutPump process:treatments];
+  treatments = [NightScoutBolus process:treatments];
+  
+  for (NSMutableDictionary *treatment in treatments) {
+    NSLog(@"Treatment: %@", treatment);
+
+    [self addTreatment:treatment fromModel:m];
   }
   [self flushTreatments];
 }
@@ -212,9 +224,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 - (void) addTreatment:(NSMutableDictionary*)treatment fromModel:(PumpModel*)m {
   treatment[@"enteredBy"] = [@"rileylink://medtronic/" stringByAppendingString:m.name];
   treatment[@"created_at"] = treatment[@"timestamp"];
-  
-  [self.treatments addObject:treatment];
-  
+  [self.treatmentsQueue addObject:treatment];
 }
 
 //var DIRECTIONS = {
@@ -405,17 +415,17 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 - (void) flushTreatments {
   
-  if (self.treatments.count == 0) {
+  if (self.treatmentsQueue.count == 0) {
     return;
   }
   
-  NSArray *inFlightTreatments = self.treatments;
-  self.treatments = [[NSMutableArray alloc] init];
+  NSArray *inFlightTreatments = self.treatmentsQueue;
+  self.treatmentsQueue = [NSMutableArray array];
   [self reportJSON:inFlightTreatments toNightScoutEndpoint:defaultNightscoutTreatmentPath completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
     if (httpResponse.statusCode != 200) {
       NSLog(@"Requeuing %d treatments: %@", inFlightTreatments.count, error);
-      [self.treatments addObjectsFromArray:inFlightTreatments];
+      [self.treatmentsQueue addObjectsFromArray:inFlightTreatments];
     } else {
       NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);

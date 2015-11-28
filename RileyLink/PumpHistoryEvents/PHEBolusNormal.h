@@ -11,5 +11,6 @@
 @property (nonatomic, readonly) double programmed_amount;
 @property (nonatomic, readonly) double unabsorbed_insulin_total;
 @property (nonatomic, readonly) NSInteger duration;
+@property (nonatomic, readonly) NSString *type;
 
 @end

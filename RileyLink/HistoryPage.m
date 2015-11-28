@@ -81,7 +81,11 @@
   Class klazz = _registry[code];
   if (klazz) {
     NSData *eventData = [_data subdataWithRange:NSMakeRange(offset, _data.length - offset)];
-    return [[klazz alloc] initWithData:eventData andPumpModel:self.pumpModel];
+    PumpHistoryEventBase *event = [[klazz alloc] initWithData:eventData andPumpModel:self.pumpModel];
+    if (event.length > event.data.length) {
+      return nil;
+    }
+    return event;
   }
   return nil;
 }

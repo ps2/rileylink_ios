@@ -10,7 +10,6 @@
   return 0x0b;
 }
 
-
 - (int) length {
   return 8;
 }

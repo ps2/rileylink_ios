@@ -9,7 +9,6 @@
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
 #import "PumpStatusMessage.h"
-#import "ISO8601DateFormatter.h"
 #import "NightScoutUploader.h"
 #import "Config.h"
 #import "AppDelegate.h"
@@ -22,8 +21,6 @@
   NSDictionary *lastStatus;
 }
 
-@property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
-@property (strong, nonatomic) NSTimeZone *utcTimeZone;
 @property (strong, nonatomic) NightScoutUploader *uploader;
 
 
@@ -39,10 +36,6 @@
   // http://stackoverflow.com/questions/26656342/uiwebview-random-crash-at-uiviewanimationstate-release-message-sent-to-deallo
   // Looks like switching NightscoutWebView to WKWebView should help. Until then:
   [UIView setAnimationsEnabled:NO];
-  
-  _dateFormatter = [[ISO8601DateFormatter alloc] init];
-  _dateFormatter.includeTime = YES;
-  _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
   
   self.uploader = [[NightScoutUploader alloc] init];
   self.uploader.siteURL = [[Config sharedInstance] nightscoutURL];

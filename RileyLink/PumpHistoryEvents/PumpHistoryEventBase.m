@@ -8,6 +8,13 @@
 
 #import "PumpHistoryEventBase.h"
 #import "NSData+Conversion.h"
+#import "ISO8601DateFormatter.h"
+
+@interface PumpHistoryEventBase ()
+
+@property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
+
+@end
 
 @implementation PumpHistoryEventBase
 
@@ -15,6 +22,12 @@
 {
   self = [super init];
   if (self) {
+    _dateFormatter = [[ISO8601DateFormatter alloc] init];
+    _dateFormatter.includeTime = YES;
+    _dateFormatter.useMillisecondPrecision = NO;
+    _dateFormatter.timeZoneSeparator = ':';
+    _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+
     _data = data;
     _pumpModel = model;
     if (_data.length > self.length) {
@@ -66,20 +79,20 @@
 }
 
 - (NSString*) timestampStr {
+  NSCalendar *cal = [NSCalendar currentCalendar];
+  [cal setTimeZone:[NSTimeZone localTimeZone]];
+  [cal setLocale:[NSLocale currentLocale]];
   NSDateComponents *c = [self timestamp];
   if (c == nil) {
     return @"<timestamp missing>";
   }
-  if (c.minute == NSDateComponentUndefined && c.hour == NSDateComponentUndefined && c.second == NSDateComponentUndefined) {
-    return [NSString stringWithFormat:@"%d/%d/%d",
-            (int)c.year, (int)c.month, (int)c.day];
-  }
-  return [NSString stringWithFormat:@"%d-%d-%dT%02d:%02d:%02d",
-          (int)c.year, (int)c.month, (int)c.day, (int)c.hour, (int)c.minute, (int)c.second];
+  NSDate *date = [cal dateFromComponents:c];
+  
+  return [self.dateFormatter stringFromDate:date timeZone:cal.timeZone];
 }
 
 - (NSString*) description {
-  return [NSString stringWithFormat:@"%@ - %@", self.class, self.timestampStr];
+  return [NSString stringWithFormat:@"%@ - %@", self.typeName, self.timestampStr];
 }
 
 - (NSString*) typeName {

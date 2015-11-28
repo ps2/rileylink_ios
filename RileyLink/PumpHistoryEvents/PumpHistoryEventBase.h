@@ -25,5 +25,6 @@
 - (nonnull NSDateComponents*) timestamp;
 - (nonnull NSString*) timestampStr;
 - (nonnull NSDictionary*) asJSON;
+- (nonnull NSString*) typeName;
 
 @end

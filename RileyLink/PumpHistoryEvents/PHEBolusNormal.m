@@ -25,6 +25,8 @@
         _programmed_amount = [self byteAt:1] / 10.0;
         _duration = [self byteAt:3] * 30;
       }
+      _type = _duration > 0 ? @"square" : @"normal";
+
     }
   }
   return self;
@@ -53,8 +55,26 @@
 
 - (NSString*) description {
   return [NSString stringWithFormat:@"%@ - %@ amount:%f programmed:%f unabsorbed:%f duration:%ld",
-          self.class, self.timestampStr, self.amount, self.programmed_amount, self.unabsorbed_insulin_total, (long)self.duration];
+          self.typeName, self.timestampStr, self.amount, self.programmed_amount, self.unabsorbed_insulin_total, (long)self.duration];
 }
+
+- (NSDictionary*) asJSON {
+  NSMutableDictionary *base = [[super asJSON] mutableCopy];
+  [base addEntriesFromDictionary:@{
+                                   @"amount": @(_amount),
+                                   @"programmed": @(_programmed_amount),
+                                   @"type": _type
+                                   }];
+  
+  if (_unabsorbed_insulin_total > 0) {
+    base[@"unabsorbed"] = @(_unabsorbed_insulin_total);
+  }
+  if (_duration > 0) {
+    base[@"duration"] = @(_duration);
+  }
+  return base;
+}
+
 
 
 @end

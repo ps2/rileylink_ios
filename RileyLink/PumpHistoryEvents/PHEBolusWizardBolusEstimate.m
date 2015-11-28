@@ -61,7 +61,6 @@
   [base addEntriesFromDictionary:@{
                                    @"bg_target_high": @(self.bgTargetHigh),
                                    @"correction_estimate": @(self.correctionEstimate),
-                                   @"carb_input": @(self.carbohydrates),
                                    @"unabsorbed_insulin_total": @(self.unabsorbedInsulinTotal),
                                    @"bolus_estimate": @(self.bolusEstimate),
                                    @"carb_ratio": @(self.carbRatio),
@@ -71,6 +70,9 @@
                                    }];
   if (self.bloodGlucose > 0) {
     base[@"bg"] = @(self.bloodGlucose);
+  }
+  if (self.carbohydrates > 0) {
+    base[@"carb_input"] = @(self.carbohydrates);
   }
   
   return base;

@@ -1,11 +1,11 @@
 //
-//  PHECalBgForPh.h
+//  PHECalBGForPH.h
 //
 
 #import <Foundation/Foundation.h>
 #import "PumpHistoryEventBase.h"
 
-@interface PHECalBgForPh : PumpHistoryEventBase
+@interface PHECalBGForPH : PumpHistoryEventBase
 
 - (int) amount;
 

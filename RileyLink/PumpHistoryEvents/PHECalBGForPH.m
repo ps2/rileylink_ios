@@ -1,10 +1,10 @@
 //
-//  PHECalBgForPh.m
+//  PHECalBGForPH.m
 //
 
-#import "PHECalBgForPh.h"
+#import "PHECalBGForPH.h"
 
-@implementation PHECalBgForPh
+@implementation PHECalBGForPH
 
 + (int) eventTypeCode {
   return 0x0a;

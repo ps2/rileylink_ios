@@ -147,7 +147,7 @@
       [self annotate:@"Target low", state[@"wizard"][@"bg_target_low"], nil];
       [self annotate:@"Target high", state[@"wizard"][@"bg_target_high"], nil];
       float delta = [state[@"wizard"][@"sensitivity"] floatValue] * [state[@"insulin"] floatValue] * -1;
-      [self annotate:@"Hypothetical glucose delta", [NSString stringWithFormat:@"%f", delta], nil];
+      [self annotate:@"Hypothetical glucose delta", [NSString stringWithFormat:@"%d", (int)delta], nil];
       if (state[@"bg"] && [state[@"bg"] integerValue] > 0) {
         [self annotate:@"Glucose was:", state[@"bg"], nil];
         // TODO: annotate prediction

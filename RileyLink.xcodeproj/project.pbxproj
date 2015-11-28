@@ -56,7 +56,7 @@
 		C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2C1BFD8CF800B0518F /* PHEBattery.m */; };
 		C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */; };
 		C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */; };
-		C139AC881BFD8CF800B0518F /* PHECalBgForPh.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC341BFD8CF800B0518F /* PHECalBgForPh.m */; };
+		C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */; };
 		C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */; };
 		C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */; };
 		C139AC8B1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */; };
@@ -214,8 +214,8 @@
 		C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBgReceived.m; sourceTree = "<group>"; };
 		C139AC2F1BFD8CF800B0518F /* PHEBolusNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusNormal.h; sourceTree = "<group>"; };
 		C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusNormal.m; sourceTree = "<group>"; };
-		C139AC331BFD8CF800B0518F /* PHECalBgForPh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHECalBgForPh.h; sourceTree = "<group>"; };
-		C139AC341BFD8CF800B0518F /* PHECalBgForPh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHECalBgForPh.m; sourceTree = "<group>"; };
+		C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHECalBGForPH.h; sourceTree = "<group>"; };
+		C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHECalBGForPH.m; sourceTree = "<group>"; };
 		C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockEnable.h; sourceTree = "<group>"; };
 		C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmClockEnable.m; sourceTree = "<group>"; };
 		C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockTime.h; sourceTree = "<group>"; };
@@ -540,8 +540,8 @@
 				C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */,
 				C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */,
 				C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */,
-				C139AC331BFD8CF800B0518F /* PHECalBgForPh.h */,
-				C139AC341BFD8CF800B0518F /* PHECalBgForPh.m */,
+				C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */,
+				C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */,
 				C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */,
 				C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */,
 				C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */,
@@ -916,7 +916,7 @@
 				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
 				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
-				C139AC881BFD8CF800B0518F /* PHECalBgForPh.m in Sources */,
+				C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */,
 				C139AC8C1BFD8CF800B0518F /* PHEChangeAudioBolus.m in Sources */,
 				C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */,
 				C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */,

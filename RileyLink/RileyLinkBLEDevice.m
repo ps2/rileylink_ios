@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import <CoreBluetooth/CoreBluetooth.h>
 #import "MinimedPacket.h"
 #import "RileyLinkBLEDevice.h"
 #import "RileyLinkBLEManager.h"
@@ -157,7 +156,6 @@
     return;
   }
   if (characteristic == packetTxCharacteristic) {
-    NSLog(@"Did write packetTxCharacteristic")
     [self triggerSend];
   }
   if (characteristic == customNameCharacteristic) {
@@ -180,14 +178,6 @@
       break;
   }
   return rval;
-}
-
-- (void) connect {
-  [[RileyLinkBLEManager sharedManager] connectToRileyLink:self];
-}
-
-- (void) disconnect {
-  [[RileyLinkBLEManager sharedManager] disconnectRileyLink:self];
 }
 
 - (void) didDisconnect:(NSError*)error {
@@ -310,25 +300,24 @@
   NSLog(@"Entering cleanup");
   
   // See if we are subscribed to a characteristic on the peripheral
-  if (self.peripheral.services != nil) {
-    for (CBService *service in self.peripheral.services) {
-      if (service.characteristics != nil) {
-        for (CBCharacteristic *characteristic in service.characteristics) {
-          if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-            if (characteristic.isNotifying) {
-              [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
-              return;
-            }
-          }
+  for (CBService *service in self.peripheral.services) {
+    for (CBCharacteristic *characteristic in service.characteristics) {
+      if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
+        if (characteristic.isNotifying) {
+          [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
+          return;
         }
       }
     }
   }
-  
+
+  packetCountCharacteristic = nil;
+  packetRssiCharacteristic = nil;
   packetRxCharacteristic = nil;
   packetTxCharacteristic = nil;
+  rxChannelCharacteristic = nil;
+  txChannelCharacteristic = nil;
   txTriggerCharacteristic = nil;
-  packetRssiCharacteristic = nil;
 }
 
 - (NSString*) deviceURI {

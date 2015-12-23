@@ -35,6 +35,14 @@
                                            selector:@selector(listUpdated:)
                                                name:RILEYLINK_EVENT_LIST_UPDATED
                                              object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(listUpdated:)
+                                               name:RILEYLINK_EVENT_DEVICE_CONNECTED
+                                             object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(listUpdated:)
+                                               name:RILEYLINK_EVENT_DEVICE_DISCONNECTED
+                                             object:nil];
   
   if (self.revealViewController != nil) {
     menuButton.target = self.revealViewController;

@@ -27,14 +27,14 @@
 
 @interface RileyLinkBLEManager : NSObject
 
-@property (nonatomic, readonly, copy) NSArray *rileyLinkList;
-- (void)connectToRileyLink:(RileyLinkBLEDevice *)device;
-- (void)disconnectRileyLink:(RileyLinkBLEDevice *)device;
-- (void)addDeviceToAutoConnectList:(RileyLinkBLEDevice*)device;
-- (void)removeDeviceFromAutoConnectList:(RileyLinkBLEDevice*)device;
-+ (instancetype)sharedManager;
+@property (nonatomic, nonnull, readonly, copy) NSArray *rileyLinkList;
 
-@property (nonatomic, strong) NSSet *autoConnectIds;
+- (void)connectPeripheral:(nonnull CBPeripheral *)peripheral;
+- (void)disconnectPeripheral:(nonnull CBPeripheral *)peripheral;
+
++ (nonnull instancetype)sharedManager;
+
+@property (nonatomic, nonnull, strong) NSSet *autoConnectIds;
 @property (nonatomic, getter=isScanningEnabled) BOOL scanningEnabled;
 
 /**
@@ -45,7 +45,7 @@
 
  @return An array of CBUUID objects
  */
-+ (NSArray *)UUIDsFromUUIDStrings:(NSArray *)UUIDStrings excludingAttributes:(NSArray *)attributes;
++ (nonnull NSArray *)UUIDsFromUUIDStrings:(nonnull NSArray *)UUIDStrings excludingAttributes:(nullable NSArray *)attributes;
 
 @end
 

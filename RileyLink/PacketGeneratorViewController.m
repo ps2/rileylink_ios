@@ -82,8 +82,7 @@
 - (IBAction)continuousSendSwitchToggled:(id)sender {
   [timer invalidate];
   if (continuousSendSwitch.on) {
-    timer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
   }
 }
 

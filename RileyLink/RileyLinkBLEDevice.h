@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
-
+@import Foundation;
+@import CoreBluetooth;
 
 typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RileyLinkStateConnecting,
@@ -36,15 +35,13 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
  */
 - (nonnull instancetype)initWithPeripheral:(nonnull CBPeripheral *)peripheral NS_DESIGNATED_INITIALIZER;
 
-- (void) connect;
-- (void) disconnect;
 - (void) didDisconnect:(nullable NSError*)error;
 - (void) cancelSending;
 - (void) setRXChannel:(unsigned char)channel;
 - (void) setTXChannel:(unsigned char)channel;
 - (void) sendPacketData:(nonnull NSData*)data;
 - (void) sendPacketData:(nonnull NSData*)data withCount:(NSInteger)count andTimeBetweenPackets:(NSTimeInterval)timeBetweenPackets;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * __nonnull deviceURI;
+@property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
 - (void) setCustomName:(nonnull NSString*)customName;
 
 @end

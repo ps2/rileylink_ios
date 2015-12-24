@@ -34,16 +34,16 @@ typedef NS_OPTIONS(unsigned int, MessageType) {
 };
 
 
-- (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithData:(nonnull NSData*)data NS_DESIGNATED_INITIALIZER;
 @property (nonatomic, getter=isValid, readonly) BOOL valid;
-@property (nonatomic, readonly, copy) NSString *hexadecimalString;
+@property (nonatomic, nullable, readonly, copy) NSString *hexadecimalString;
 @property (nonatomic, readonly) PacketType packetType;
 @property (nonatomic, readonly) MessageType messageType;
-@property (nonatomic, readonly, copy) NSString *address;
-+ (NSData*)encodeData:(NSData*)data;
+@property (nonatomic, nonnull, readonly, copy) NSString *address;
++ (nonnull NSData*)encodeData:(nonnull NSData*)data;
 
-@property (strong, nonatomic) NSData *data;
-@property (nonatomic, strong) NSDate *capturedAt;
+@property (nonatomic, nullable, strong) NSData *data;
+@property (nonatomic, nullable, strong) NSDate *capturedAt;
 @property (nonatomic, assign) int rssi;
 @property (nonatomic, assign) int packetNumber;
 

@@ -41,7 +41,7 @@
 }
 
 - (MessageBase *)msgType:(unsigned char)t withArgs:(NSString *)args {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x%@", _pumpId, t, args];
+    NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x%@", PacketTypeCarelink, _pumpId, t, args];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];
@@ -156,7 +156,7 @@
 
 - (MessageBase *)modelQueryMessage
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", _pumpId, MESSAGE_TYPE_GET_PUMP_MODEL];
+  NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x00", PacketTypeCarelink, _pumpId, MESSAGE_TYPE_GET_PUMP_MODEL];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];
@@ -182,7 +182,7 @@
 
 - (MessageBase *)batteryStatusMessage
 {
-  NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", _pumpId, MESSAGE_TYPE_GET_BATTERY];
+    NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x00", PacketTypeCarelink, _pumpId, MESSAGE_TYPE_GET_BATTERY];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
   return [[MessageBase alloc] initWithData:data];

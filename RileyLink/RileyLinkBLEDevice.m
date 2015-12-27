@@ -13,13 +13,8 @@
 #import "SendDataTask.h"
 
 @interface RileyLinkBLEDevice () <CBPeripheralDelegate> {
-  CBCharacteristic *packetRxCharacteristic;
-  CBCharacteristic *packetTxCharacteristic;
-  CBCharacteristic *txTriggerCharacteristic;
-  CBCharacteristic *packetRssiCharacteristic;
-  CBCharacteristic *packetCountCharacteristic;
-  CBCharacteristic *txChannelCharacteristic;
-  CBCharacteristic *rxChannelCharacteristic;
+  CBCharacteristic *dataCharacteristic;
+  CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
   NSMutableArray *incomingPackets;
   NSMutableArray *sendTasks;
@@ -188,21 +183,12 @@
 
 - (void)setCharacteristicsFromService:(CBService *)service {
   for (CBCharacteristic *characteristic in service.characteristics) {
-    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
       [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
-      packetCountCharacteristic = characteristic;
+      responseCountCharacteristic = characteristic;
       [self.peripheral readValueForCharacteristic:characteristic];
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_CHANNEL_UUID]]) {
-      rxChannelCharacteristic = characteristic;
-      [self setRXChannel:2];
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_CHANNEL_UUID]]) {
-      txChannelCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
-      packetRxCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_PACKET_UUID]]) {
-      packetTxCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_TRIGGER_UUID]]) {
-      txTriggerCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
+      dataCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
     }
@@ -217,12 +203,8 @@
   //NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
     if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
-        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RX_PACKET_UUID,
-                                                                                        RILEYLINK_RX_CHANNEL_UUID,
-                                                                                        RILEYLINK_TX_CHANNEL_UUID,
-                                                                                        RILEYLINK_PACKET_COUNT,
-                                                                                        RILEYLINK_TX_PACKET_UUID,
-                                                                                        RILEYLINK_TX_TRIGGER_UUID,
+        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
+                                                                                        RILEYLINK_DATA_UUID,
                                                                                         RILEYLINK_CUSTOM_NAME_UUID]
                                                                 excludingAttributes:service.characteristics]
                                  forService:service];
@@ -255,7 +237,7 @@
   }
   //NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
   
-  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
+  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
     if (characteristic.value.length > 0) {
       MinimedPacket *packet = [[MinimedPacket alloc] initWithData:characteristic.value];
       packet.capturedAt = [NSDate date];
@@ -268,28 +250,16 @@
                               };
       [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
     }
-    [peripheral readValueForCharacteristic:packetRxCharacteristic];
-    
-  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-    const unsigned char packetCount = ((const unsigned char*)[characteristic.value bytes])[0];
-    NSLog(@"Updated packet count: %d", packetCount);
-    if (packetCount > 0) {
-      [peripheral readValueForCharacteristic:packetRxCharacteristic];
+  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
+    const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
+    NSLog(@"Updated response count: %d", responseCount);
+    if (responseCount > 0) {
+      [peripheral readValueForCharacteristic:dataCharacteristic];
     }
   }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  
-  if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-    return;
-  }
-  
-//  if (characteristic.isNotifying) {
-//    NSLog(@"Notification began on %@", characteristic.);
-//  } else {
-//    // Notification has stopped
-//  }
 }
 
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {

@@ -175,7 +175,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     MinimedPacket *packet = note.userInfo[@"packet"];
 
     if (packet &&
-        PACKET_TYPE_PUMP == packet.packetType &&
+        PacketTypeSentry == packet.packetType &&
         [packet.address isEqualToString:[Config sharedInstance].pumpID])
     {
         [self sendReplyToPacket:packet];
@@ -204,7 +204,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 - (void)sendReplyToPacket:(MinimedPacket *)packet
 {
     NSString *replyString = [NSString stringWithFormat:@"%02x%@%02x%02x%@00%02x000000",
-                             PACKET_TYPE_PUMP,
+                             PacketTypeSentry,
                              [Config sharedInstance].pumpID,
                              MESSAGE_TYPE_ACK,
                              self.sendCounter++,

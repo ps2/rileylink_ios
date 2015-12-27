@@ -10,13 +10,14 @@
 
 @interface MinimedPacket : NSObject
 
-typedef NS_OPTIONS(unsigned int, PacketType) {
-  PACKET_TYPE_PUMP = 0xa2,
-  PACKET_TYPE_METER = 0xa5,
-  PACKET_TYPE_SENSOR = 0xa8
+typedef NS_ENUM(unsigned char, PacketType) {
+  PacketTypeSentry    = 0xa2,
+  PacketTypeMeter     = 0xa5,
+  PacketTypeCarelink  = 0xa7,
+  PacketTypeSensor    = 0xa8
 };
 
-typedef NS_OPTIONS(unsigned int, MessageType) {
+typedef NS_ENUM(unsigned char, MessageType) {
   MESSAGE_TYPE_ALERT = 0x01,
   MESSAGE_TYPE_ALERT_CLEARED = 0x02,
   MESSAGE_TYPE_DEVICE_TEST = 0x03,

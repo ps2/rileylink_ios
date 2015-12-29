@@ -107,22 +107,24 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
   @synchronized(self) {
     if (self.state == MessageSendStateWaitingForReponse) {
       
-      if (response.length < 2) {
+      if (response.length == 1 && ((uint8_t*)[response bytes])[0] == 0) {
         NSLog(@"Packet timeout");
       }
-      MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:response];
-      
-      if (rxPacket.data == nil) {
+      else if (response.length < 4) {
+        NSLog(@"Short packet")
       }
+      else {
+        MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:response];
       
-      if (self.responseMessageType == 0 || (self.message.packetType == rxPacket.packetType &&
-                                            [self.message.address isEqualToString:rxPacket.address] &&
-                                            rxPacket.messageType == self.responseMessageType))
-      {
-        NSLog(@"%s with matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
-        self.responsePacket = rxPacket;
-      } else {
-        NSLog(@"%s for non-matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
+        if (self.responseMessageType == 0 || (self.message.packetType == rxPacket.packetType &&
+                                              [self.message.address isEqualToString:rxPacket.address] &&
+                                              rxPacket.messageType == self.responseMessageType))
+        {
+          NSLog(@"%s with matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
+          self.responsePacket = rxPacket;
+        } else {
+          NSLog(@"%s for non-matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
+        }
       }
       [self finishAfterWaiting:0];
     }

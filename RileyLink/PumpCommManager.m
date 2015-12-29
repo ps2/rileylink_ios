@@ -10,6 +10,8 @@
 #import "MessageSendOperation.h"
 #import "NSData+Conversion.h"
 
+#define STANDARD_PUMP_RESPONSE_WINDOW 180
+
 @interface PumpCommManager () {
   NSDate *awakeUntil;
   BOOL waking;
@@ -87,7 +89,7 @@
                                                                      }];
   
   wakeupOperation.waitTimeMS = 15000;
-  wakeupOperation.repeatCount = 100;
+  wakeupOperation.repeatCount = 200;
   wakeupOperation.msBetweenPackets = 0;
   wakeupOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupOperation];
@@ -107,7 +109,7 @@
                                                                            }
                                                                            waking = NO;
                                                                          }];
-  wakeupArgsOperation.waitTimeMS = 100;
+  wakeupArgsOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupArgsOperation];
 }
@@ -136,7 +138,7 @@
                                                                        }
                                                                      }];
   buttonPressOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  buttonPressOperation.waitTimeMS = 100;
+  buttonPressOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
 
   [self.pumpCommQueue addOperation:buttonPressOperation];
   
@@ -150,7 +152,7 @@
                                                                            }
                                                                          }];
   buttonPressArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  buttonPressArgsOperation.waitTimeMS = 100;
+  buttonPressArgsOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   [self.pumpCommQueue addOperation:buttonPressArgsOperation];
 }
 
@@ -176,7 +178,7 @@
       }
   }];
   modelQueryOperation.responseMessageType = MESSAGE_TYPE_GET_PUMP_MODEL;
-  modelQueryOperation.waitTimeMS = 100;
+  modelQueryOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   [self.pumpCommQueue addOperation:modelQueryOperation];
 }
 
@@ -205,7 +207,7 @@
       }
   }];
   batteryStatusOperation.responseMessageType = MESSAGE_TYPE_GET_BATTERY;
-  batteryStatusOperation.waitTimeMS = 100;
+  batteryStatusOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
 
   [self.pumpCommQueue addOperation:batteryStatusOperation];
 }
@@ -242,7 +244,7 @@
                                                                               }
   }];
   dumpHistOp.responseMessageType = MESSAGE_TYPE_ACK;
-  dumpHistOp.waitTimeMS = 100;
+  dumpHistOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   [self.pumpCommQueue addOperation:dumpHistOp];
   
   MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
@@ -256,7 +258,7 @@
                                                                   }
                                                                 }];
   dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
-  dumpHistOpArgs.waitTimeMS = 100;
+  dumpHistOpArgs.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   [self.pumpCommQueue addOperation:dumpHistOpArgs];
   
   // TODO: send 15 acks, and expect 15 more dumps
@@ -282,7 +284,7 @@
     // Last packet doesn't need a response
     if (i < 15) {
       ackOp.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
-      ackOp.waitTimeMS = 100;
+      ackOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
     }
     [self.pumpCommQueue addOperation:ackOp];
   }

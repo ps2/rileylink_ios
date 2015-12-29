@@ -47,7 +47,7 @@
 
     if (data.length > 2) {
       _data = [self decodeRF:[data subdataWithRange:NSMakeRange(2, data.length - 2)]];
-      //NSLog(@"New packet: %@", [data hexadecimalString]);
+      NSLog(@"New packet: %@", [_data hexadecimalString]);
     }
   }
   return self;

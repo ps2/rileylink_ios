@@ -53,7 +53,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
 
 @property (nonatomic, nonnull, strong) MessageBase *message;
 
-@property (nonatomic, nonnull, strong) CmdBase *cmd;
+@property (nonatomic, nullable, strong) CmdBase *cmd;
 
 @end
 

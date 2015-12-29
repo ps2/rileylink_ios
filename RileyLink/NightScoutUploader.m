@@ -85,7 +85,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 //    [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
     
     // This is to just test decoding history
-    [self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];
+    //[self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];
 
   }
   return self;

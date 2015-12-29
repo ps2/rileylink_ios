@@ -9,9 +9,11 @@
 #import "PacketGeneratorViewController.h"
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
+#import "SendAndListenCmd.h"
 
 @interface PacketGeneratorViewController () {
   int testPacketNum;
+  int txChannel;
   IBOutlet UILabel *testPacketNumberLabel;
   IBOutlet UISwitch *continuousSendSwitch;
   IBOutlet UISwitch *encodeDataSwitch;
@@ -38,7 +40,7 @@
 }
 
 - (void)doneChangingChannel {
-  [self.device setTXChannel:[channelNumberTextField.text intValue]];
+  txChannel = [channelNumberTextField.text intValue];
   [channelNumberTextField resignFirstResponder];
 }
 
@@ -66,7 +68,11 @@
     data = [MinimedPacket encodeData:data];
   }
   packetData.text = [data hexadecimalString];
-  [_device sendPacketData:data];
+  SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
+  cmd.sendChannel = txChannel;
+  cmd.repeatCount = 0;
+  cmd.msBetweenPackets = 0;
+  [_device doCmd:cmd withCompletionHandler:nil];
 }
 
 - (IBAction)sendPacketButtonPressed:(id)sender {

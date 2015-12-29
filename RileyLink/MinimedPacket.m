@@ -46,8 +46,7 @@
     }
 
     if (data.length > 2) {
-      //_data = [self decodeRFEncoding:data]; // cc1110 is doing decoding now
-      _data = [data subdataWithRange:NSMakeRange(2, data.length - 2)];
+      _data = [self decodeRF:[data subdataWithRange:NSMakeRange(2, data.length - 2)]];
       //NSLog(@"New packet: %@", [data hexadecimalString]);
     }
   }

@@ -110,6 +110,7 @@
                                                                            waking = NO;
                                                                          }];
   wakeupArgsOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
+  wakeupArgsOperation.retryCount = 3;
   wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupArgsOperation];
 }
@@ -245,6 +246,7 @@
   }];
   dumpHistOp.responseMessageType = MESSAGE_TYPE_ACK;
   dumpHistOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
+  dumpHistOp.retryCount = 3;
   [self.pumpCommQueue addOperation:dumpHistOp];
   
   MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
@@ -259,6 +261,7 @@
                                                                 }];
   dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
   dumpHistOpArgs.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
+  dumpHistOpArgs.retryCount = 3;
   [self.pumpCommQueue addOperation:dumpHistOpArgs];
   
   // TODO: send 15 acks, and expect 15 more dumps
@@ -268,9 +271,6 @@
                                                                                 message:ack
                                                                       completionHandler:^(MessageSendOperation * _Nonnull operation) {
                                                                         if (operation.responsePacket != nil) {
-                                                                          if (operation.responsePacket.data == nil) {
-                                                                            NSLog(@"Nil data for response: %@", operation.responsePacket);
-                                                                          }
                                                                           [responses addObject:operation.responsePacket.data];
                                                                           if (responses.count == 16) {
                                                                             pages[@"page0"] = [self parseFramesIntoHistoryPage:responses];
@@ -285,6 +285,7 @@
     if (i < 15) {
       ackOp.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
       ackOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
+      ackOp.retryCount = 3;
     }
     [self.pumpCommQueue addOperation:ackOp];
   }

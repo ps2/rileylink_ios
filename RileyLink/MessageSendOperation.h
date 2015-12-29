@@ -50,6 +50,11 @@ Initializes the send operation with a device and message and a completion block
 @property (nonatomic) uint8_t repeatCount;
 
 /**
+ If we don't get a packet within the waitTime, send the message again, and listen again.
+ */
+@property (nonatomic) uint8_t retryCount;
+
+/**
  The channel to listen for a response on. Defaults to 2.
  */
 @property (nonatomic) uint8_t listenChannel;

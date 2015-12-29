@@ -17,5 +17,6 @@
 @property (nonatomic, assign) uint8_t msBetweenPackets;
 @property (nonatomic, assign) uint8_t listenChannel;
 @property (nonatomic, assign) uint16_t timeoutMS;
+@property (nonatomic, assign) uint8_t retryCount;
 
 @end

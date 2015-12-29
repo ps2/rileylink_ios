@@ -234,6 +234,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
       sendAndListen.msBetweenPackets = _msBetweenPackets;
       sendAndListen.listenChannel = _listenChannel;
       sendAndListen.timeoutMS = _waitTimeMS;
+      sendAndListen.retryCount = _retryCount;
       sendAndListen.packet = [MinimedPacket encodeData:_message.data];
       self.cmd = sendAndListen;
     } else {
@@ -252,8 +253,10 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
     
     __weak typeof(self)weakSelf = self;
     
+    int64_t totalWaitTime = self.waitTimeMS * (self.retryCount + 1) + EXPECTED_MAX_BLE_LATENCY_MS;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, ((int64_t)self.waitTimeMS + EXPECTED_MAX_BLE_LATENCY_MS) * 1000000), dispatch_get_main_queue(), ^{
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, totalWaitTime * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
       if (weakSelf && !weakSelf.isFinished) {
         NSLog(@"MessageSendOperation timeout");
         weakSelf.error = [NSError errorWithDomain:ErrorDomain

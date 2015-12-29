@@ -12,7 +12,7 @@
 @implementation SendAndListenCmd
 
 - (NSData*)data {
-  uint8_t cmd[7];
+  uint8_t cmd[8];
   cmd[0] = RILEYLINK_CMD_SEND_AND_LISTEN;
   cmd[1] = _sendChannel;
   cmd[2] = _repeatCount;
@@ -20,8 +20,9 @@
   cmd[4] = _listenChannel;
   cmd[5] = _timeoutMS >> 8;
   cmd[6] = _timeoutMS & 0xff;
+  cmd[7] = _retryCount;
   
-  NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:7];
+  NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:8];
   [serialized appendData:_packet];
   uint8_t nullTerminator = 0;
   [serialized appendBytes:&nullTerminator length:1];

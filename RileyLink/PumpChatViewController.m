@@ -93,16 +93,6 @@
 }
 
 - (IBAction)queryPumpButtonPressed:(id)sender {
-  SendAndListenCmd *sendAndListen = [[SendAndListenCmd alloc] init];
-  sendAndListen.sendChannel = 0;
-  sendAndListen.repeatCount = 0;
-  sendAndListen.msBetweenPackets = 0;
-  sendAndListen.listenChannel = 2;
-  sendAndListen.timeoutMS = 5000;
-  sendAndListen.packet = [NSData dataWithHexadecimalString:@"a968e55658e594d57257156a5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559950"];
-
-  [self.device doCmd:sendAndListen withCompletionHandler:nil];
-  return;
   
   [mgr getPumpModel:^(NSString* returnedModel) {
     if (returnedModel) {

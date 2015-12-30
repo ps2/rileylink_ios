@@ -213,7 +213,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
   }
 }
 
-- (void)main
+- (void)start
 {
   if ([self isCancelled]) {
     return;

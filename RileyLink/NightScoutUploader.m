@@ -49,6 +49,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @property (strong, nonatomic) NSTimer *getHistoryTimer;
 @property (strong, nonatomic) PumpCommManager *commManager;
 @property (strong, nonatomic) NSString *pumpModel;
+@property (strong, nonatomic) NSMutableSet *sentTreatments;
 
 
 @end
@@ -65,6 +66,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   self = [super init];
   if (self) {
     _entries = [[NSMutableArray alloc] init];
+    _sentTreatments = [NSMutableSet set];
     _treatmentsQueue = [[NSMutableArray alloc] init];
     _dateFormatter = [[ISO8601DateFormatter alloc] init];
     _dateFormatter.includeTime = YES;
@@ -80,9 +82,9 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     
     // This is for doing a dumb 5-min history poll
-//    self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
-//    
-//    [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
+    //self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
+    
+    [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
     
     // This is to just test decoding history
     //[self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];
@@ -229,7 +231,12 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 - (void) addTreatment:(NSMutableDictionary*)treatment fromModel:(PumpModel*)m {
   treatment[@"enteredBy"] = [@"rileylink://medtronic/" stringByAppendingString:m.name];
   treatment[@"created_at"] = treatment[@"timestamp"];
-  [self.treatmentsQueue addObject:treatment];
+  
+  if ([self.sentTreatments member:treatment]) {
+    NSLog(@"Already sent %@", treatment);
+  } else {
+    [self.treatmentsQueue addObject:treatment];
+  }
 }
 
 //var DIRECTIONS = {
@@ -439,6 +446,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       [self.treatmentsQueue addObjectsFromArray:inFlightTreatments];
     } else {
       NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      [self.sentTreatments addObjectsFromArray:inFlightTreatments];
       NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);
     }
   }];

@@ -225,7 +225,7 @@
   return data;
 }
 
-- (void) dumpHistory:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
+- (void) dumpHistoryPage:(uint8_t)pageNum completionHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
   [self wakeIfNeeded];
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
@@ -251,7 +251,10 @@
   dumpHistOp.retryCount = 3;
   [self.pumpCommQueue addOperation:dumpHistOp];
   
-  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
+  NSString *dumpHistArgs = [NSString stringWithFormat:@"01%02x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", pageNum];
+
+
+  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs];
   MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:_device
                                                                           message:dumpHistMsgArgs
                                                                 completionHandler:^(MessageSendOperation * _Nonnull operation) {

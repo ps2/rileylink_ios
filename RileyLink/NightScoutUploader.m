@@ -173,12 +173,12 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }];
 
   
-  [self.commManager dumpHistory:^(NSDictionary * _Nonnull res) {
+  [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
     if ([res[@"totalErrorCount"] intValue] == 0) {
       NSData *page = res[@"pageData"];
       [self decodeHistoryPage:page];
     } else {
-      NSLog(@"dumpHistory failed");
+      NSLog(@"dumpHistory failed: %@", res);
     }
   }];
   

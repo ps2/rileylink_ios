@@ -217,7 +217,7 @@
   NSRange r = NSMakeRange(6, 64);
   for (NSData *frame in packets) {
     if (frame.length < 70) {
-      NSLog(@"Bad frame in history: %@", [frame hexadecimalString]);
+      NSLog(@"Bad frame length in history: %@", [frame hexadecimalString]);
       return nil;
     }
     [data appendData:[frame subdataWithRange:r]];
@@ -228,8 +228,12 @@
 - (void) dumpHistory:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
   [self wakeIfNeeded];
   
-  NSMutableDictionary *pages = [NSMutableDictionary dictionary];
+  NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
+  
+  __block NSInteger finishedCount = 0;
+  __block NSInteger frameCrcErrorCount = 0;
+  __block NSInteger missedResponseCount = 0;
   
   MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"];
   
@@ -260,22 +264,34 @@
   dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
   dumpHistOpArgs.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
   dumpHistOpArgs.retryCount = 3;
+  
   [self.pumpCommQueue addOperation:dumpHistOpArgs];
   
-  // TODO: send 15 acks, and expect 15 more dumps
+  // TODO: send 16 acks, and expect 15 more dumps
   for (int i=0; i<16; i++) {
     MessageBase *ack = [self msgType:MESSAGE_TYPE_ACK withArgs:@"00"];
     MessageSendOperation *ackOp = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                 message:ack
                                                                       completionHandler:^(MessageSendOperation * _Nonnull operation) {
+                                                                        finishedCount++;
                                                                         if (operation.responsePacket != nil) {
+                                                                          if (![operation.responsePacket isValid]) {
+                                                                            NSLog(@"Invalid history page packet!");
+                                                                            frameCrcErrorCount++;
+                                                                          }
                                                                           [responses addObject:operation.responsePacket.data];
                                                                           if (responses.count == 16) {
-                                                                            pages[@"page0"] = [self parseFramesIntoHistoryPage:responses];
-                                                                            completionHandler(pages);
+                                                                            responseDict[@"pageData"] = [self parseFramesIntoHistoryPage:responses];
                                                                           }
                                                                         } else if (operation.responseMessageType != 0) {
+                                                                          missedResponseCount++;
                                                                           NSLog(@"Error requesting pump dump with args: %@", operation.error);
+                                                                        }
+                                                                        if (finishedCount == 16) {
+                                                                          responseDict[@"frameCrcErrorCount"] = [NSNumber numberWithLong:frameCrcErrorCount];
+                                                                          responseDict[@"missedResponseCount"] = [NSNumber numberWithLong:missedResponseCount];
+                                                                          responseDict[@"totalErrorCount"] = [NSNumber numberWithLong:(missedResponseCount+frameCrcErrorCount)];
+                                                                          completionHandler(responseDict);
                                                                         }
                                                                       }];
     

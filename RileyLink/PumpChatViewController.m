@@ -62,9 +62,9 @@
 
 - (IBAction)dumpHistoryButtonPressed:(id)sender {
   [mgr dumpHistory:^(NSDictionary *res) {
-    if (res) {
-      NSData *page = res[@"page0"];
-      NSLog(@"Got page: %@", [page hexadecimalString]);
+    if ([res[@"totalErrorCount"] intValue] == 0) {
+      NSData *page = res[@"pageData"];
+      NSLog(@"Got page data: %@", [page hexadecimalString]);
       [self decodeHistoryPage:page];
     } else {
       [self addOutputMessage:@"Dump of page 0 failed"];

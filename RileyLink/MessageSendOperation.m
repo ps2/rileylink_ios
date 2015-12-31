@@ -251,20 +251,23 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
       [self receivedResponse:self.cmd.response];
     }];
     
-    __weak typeof(self)weakSelf = self;
     
-    int64_t totalWaitTime = self.waitTimeMS * (self.retryCount + 1) + EXPECTED_MAX_BLE_LATENCY_MS;
-    
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, totalWaitTime * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-      if (weakSelf && !weakSelf.isFinished) {
-        NSLog(@"MessageSendOperation timeout");
-        weakSelf.error = [NSError errorWithDomain:ErrorDomain
-                                             code:MessageSendErrorTimeout
-                                         userInfo:@{NSLocalizedDescriptionKey: @"Timeout waiting for response message"}];
-        [weakSelf cancel];
-      }
-    });
+    if (_waitTimeMS > 0) {
+      __weak typeof(self)weakSelf = self;
+      int64_t totalWaitTime = self.waitTimeMS * (self.retryCount + 1) + EXPECTED_MAX_BLE_LATENCY_MS;
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, totalWaitTime * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+        if (weakSelf && !weakSelf.isFinished) {
+          NSLog(@"MessageSendOperation timeout");
+          weakSelf.error = [NSError errorWithDomain:ErrorDomain
+                                               code:MessageSendErrorTimeout
+                                           userInfo:@{NSLocalizedDescriptionKey: @"Timeout waiting for response message"}];
+          [weakSelf cancel];
+        }
+      });
+    } else {
+      NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);
+      self.state = MessageSendStateFinished;
+    }
   }
 }
 

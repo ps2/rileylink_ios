@@ -68,7 +68,7 @@
 }
 
 
-- (void)wakeup:(NSTimeInterval)duration {
+- (void)wakeup:(uint8_t)durationMinutes {
   
   if ([self isAwake] || waking) {
     return;
@@ -94,16 +94,14 @@
   wakeupOperation.responseMessageType = MESSAGE_TYPE_ACK;
   [self.pumpCommQueue addOperation:wakeupOperation];
   
-  unsigned char minutes = floor(duration/60);
-  
-  NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", minutes];
+  NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", durationMinutes];
   
   MessageSendOperation *wakeupArgsOperation = [[MessageSendOperation alloc] initWithDevice:_device
                                                                                    message:[self powerMessageWithArgs:msg]
                                                                          completionHandler:^(MessageSendOperation * _Nonnull operation) {
                                                                            if (operation.responsePacket != nil) {
-                                                                             NSLog(@"Power on for %d minutes", minutes);
-                                                                             awakeUntil = [NSDate dateWithTimeIntervalSinceNow:duration];
+                                                                             NSLog(@"Power on for %d minutes", durationMinutes);
+                                                                             awakeUntil = [NSDate dateWithTimeIntervalSinceNow:durationMinutes*60];
                                                                            } else {
                                                                              NSLog(@"Power on with args error: %@", operation.error);
                                                                            }
@@ -120,7 +118,7 @@
 }
 
 - (void) wakeIfNeeded {
-  [self wakeup:10*60];
+  [self wakeup:1];
 }
 
 - (void) getHistoryPage {

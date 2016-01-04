@@ -105,6 +105,9 @@
 		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
 		C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */; };
 		C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */; };
+		C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */; };
+		C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */; };
+		C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
@@ -317,6 +320,12 @@
 		C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceLinkMessage.m; sourceTree = "<group>"; };
 		C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDeviceMessage.h; sourceTree = "<group>"; };
 		C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDeviceMessage.m; sourceTree = "<group>"; };
+		C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeOtherDeviceID.m; sourceTree = "<group>"; };
+		C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogMarriageProfile.h; sourceTree = "<group>"; };
+		C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogMarriageProfile.m; sourceTree = "<group>"; };
+		C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteOtherDeviceID.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -639,6 +648,12 @@
 				C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */,
 				C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */,
 				C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */,
+				C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */,
+				C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */,
+				C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */,
+				C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */,
+				C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */,
+				C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */,
 			);
 			path = PumpHistoryEvents;
 			sourceTree = "<group>";
@@ -939,9 +954,11 @@
 				C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
 				C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */,
+				C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */,
 				C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */,
 				C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */,
 				C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */,
+				C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */,
 				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
 				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
@@ -956,6 +973,7 @@
 				C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */,
 				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
+				C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */,
 				C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */,
 				C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */,
 				C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */,

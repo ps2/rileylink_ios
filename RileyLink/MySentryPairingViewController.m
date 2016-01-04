@@ -136,12 +136,15 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     case PairingStateReceivedFindPacket:
       [self.progressView setProgress:2.0 / 4.0 animated:YES];
       
-      self.instructionLabel.text = NSLocalizedString(@"Pairing in process, please wait."
-                                                     @"\nIt may take up to 2 minutes to complete.",
+      self.instructionLabel.text = NSLocalizedString(@"Pairing in process, please wait.",
                                                      @"Pairing waiting instruction");
       break;
     case PairingStateReceivedLinkPacket:
       [self.progressView setProgress:3.0 / 4.0 animated:YES];
+      self.instructionLabel.text = NSLocalizedString(@"Pump accepted pairing. "
+                                                     @"Waiting for MySentry update from pump. "
+                                                     @"This could take up to five minutes...",
+                                                     @"Pairing waiting instruction");
       break;
     case PairingStateComplete:
       [self.progressView setProgress:4.0 / 4.0 animated:YES];

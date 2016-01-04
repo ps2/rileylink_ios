@@ -82,9 +82,9 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     
     // This is for doing a dumb 5-min history poll
-    self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
+    //self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
     
-    [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
+    //[self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
     
     // This is to just test decoding history
     //[self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];

@@ -67,7 +67,8 @@
       NSLog(@"Got page data: %@", [page hexadecimalString]);
       [self decodeHistoryPage:page];
     } else {
-      [self addOutputMessage:@"Dump of page 0 failed"];
+      NSString *log = [NSString stringWithFormat:@"Dump of page 0 failed: %@", res];
+      [self addOutputMessage:log];
     }
   }];
 }

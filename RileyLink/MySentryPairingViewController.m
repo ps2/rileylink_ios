@@ -11,7 +11,11 @@
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "RileyLinkBLEManager.h"
-#import "SendPacketCmd.h"
+#import "GetPacketCmd.h"
+#import "SendAndListenCmd.h"
+#import "DeviceLinkMessage.h"
+#import "FindDeviceMessage.h"
+#import "PumpStatusMessage.h"
 
 typedef NS_ENUM(NSUInteger, PairingState) {
   PairingStateComplete,
@@ -23,7 +27,9 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 };
 
 
-@interface MySentryPairingViewController () <UITextFieldDelegate>
+@interface MySentryPairingViewController () <UITextFieldDelegate> {
+  BOOL wasDismissed;
+}
 
 @property (weak, nonatomic) IBOutlet UILabel *instructionLabel;
 @property (weak, nonatomic) IBOutlet UITextField *deviceIDTextField;
@@ -49,6 +55,33 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   [self.view addGestureRecognizer:self.flailGestureRecognizer];
   
   [self textFieldDidEndEditing:self.deviceIDTextField];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  wasDismissed = YES;
+}
+
+- (void)listenForPairing {
+  if (wasDismissed) {
+    return;
+  }
+  GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
+  cmd.listenChannel = 2;
+  cmd.timeoutMS = 30000;
+  
+  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+    if (cmd.response) {
+      MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
+      [self packetReceived:rxPacket];
+    }
+  }];
+}
+
+- (void)handleResponse:(NSData*)response {
+  if (response) {
+    MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:response];
+    [self packetReceived:rxPacket];
+  }
 }
 
 - (UITapGestureRecognizer *)flailGestureRecognizer
@@ -158,55 +191,90 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 #pragma mark - Actions
 
 
-// TODO: There needs to be an active RILEYLINK_CMD_GET_PACKET running to get a packet here.
-
-- (void)packetReceived:(NSNotification *)note {
-  MinimedPacket *packet = note.userInfo[@"packet"];
+- (void)packetReceived:(MinimedPacket *)packet {
+  
+  BOOL handled = NO;
   
   if (packet &&
       PACKET_TYPE_PUMP == packet.packetType &&
       [packet.address isEqualToString:[Config sharedInstance].pumpID])
   {
-    [self sendReplyToPacket:packet];
-    
-    switch (packet.messageType) {
-      case MESSAGE_TYPE_FIND_DEVICE:
-        if (PairingStateStarted == self.state) {
-          self.state = PairingStateReceivedFindPacket;
-        }
-        break;
-      case MESSAGE_TYPE_DEVICE_LINK:
-        if (PairingStateReceivedFindPacket == self.state) {
-          self.state = PairingStateReceivedLinkPacket;
-        }
-      case MESSAGE_TYPE_PUMP_STATUS:
-      case MESSAGE_TYPE_PUMP_BACKFILL:
-        if (PairingStateReceivedLinkPacket == self.state) {
-          self.state = PairingStateComplete;
-        }
-      default:
-        break;
+    MessageBase *msg = [packet toMessage];
+    if ([msg class] == [FindDeviceMessage class]) {
+      [self handleFindDevice:(FindDeviceMessage*)msg];
+      handled = YES;
     }
+    else if ([msg class] == [DeviceLinkMessage class]) {
+      [self handleDeviceLink:(DeviceLinkMessage*)msg];
+      handled = YES;
+    }
+    else if ([msg class] == [PumpStatusMessage class]) {
+      [self handlePumpStatus:(PumpStatusMessage*)msg];
+      handled = YES;
+    }
+  }
+  if (!handled) {
+    // Other random packet; ignore and start listening again.
+    [self performSelector:@selector(listenForPairing) withObject:nil afterDelay:0];
   }
 }
 
-- (void)sendReplyToPacket:(MinimedPacket *)packet
-{
+- (CmdBase *)makeCommandForAckAndListen:(uint8_t)sequence forMessageType:(uint8_t)messageType {
   NSString *replyString = [NSString stringWithFormat:@"%02x%@%02x%02x%@00%02x000000",
                            PACKET_TYPE_PUMP,
                            [Config sharedInstance].pumpID,
                            MESSAGE_TYPE_ACK,
-                           self.sendCounter++,
+                           sequence,
                            self.deviceIDTextField.text,
-                           packet.messageType
+                           messageType
                            ];
   NSData *data = [NSData dataWithHexadecimalString:replyString];
-  
-  SendPacketCmd *send = [[SendPacketCmd alloc] init];
-  send.sendChannel = 3;
+  SendAndListenCmd *send = [[SendAndListenCmd alloc] init];
+  send.sendChannel = 0;
+  send.timeoutMS = 180;
+  send.listenChannel = 2;
   send.packet = [MinimedPacket encodeData:data];
+  return send;
+}
+
+- (void)runCommand:(CmdBase*) cmd {
+  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+    if (cmd.response) {
+      [self handleResponse:cmd.response];
+    }
+  }];
+}
+
+- (void)handleFindDevice:(FindDeviceMessage *)msg
+{
+  if (PairingStateStarted == self.state) {
+    self.state = PairingStateReceivedFindPacket;
+  }
   
-  [self.device doCmd:send withCompletionHandler:nil];
+  CmdBase *cmd = [self makeCommandForAckAndListen:msg.sequence forMessageType:(uint8_t)msg.messageType];
+  
+  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
+  //[self runCommand:cmd];
+}
+
+- (void)handleDeviceLink:(DeviceLinkMessage *)msg
+{
+  if (PairingStateReceivedFindPacket == self.state) {
+    self.state = PairingStateReceivedLinkPacket;
+  }
+  
+  CmdBase *cmd = [self makeCommandForAckAndListen:msg.sequence forMessageType:(uint8_t)msg.messageType];
+  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
+  //[self runCommand:cmd];
+}
+
+- (void)handlePumpStatus:(PumpStatusMessage *)msg {
+  if (PairingStateReceivedLinkPacket == self.state) {
+    self.state = PairingStateComplete;
+  }
+  CmdBase *cmd = [self makeCommandForAckAndListen:0 forMessageType:(uint8_t)msg.messageType];
+  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
+  //[self runCommand:cmd];
 }
 
 - (void)closeKeyboard:(id)sender
@@ -217,6 +285,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 - (IBAction)startPairing:(id)sender {
   if (PairingStateReady == self.state) {
     self.state = PairingStateStarted;
+    [self listenForPairing];
   }
 }
 

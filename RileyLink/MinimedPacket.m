@@ -9,6 +9,10 @@
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "CRC8.h"
+#import "PumpStatusMessage.h"
+#import "DeviceLinkMessage.h"
+#import "FindDeviceMessage.h"
+#import "MeterMessage.h"
 
 
 @interface MinimedPacket ()
@@ -165,5 +169,23 @@
 - (NSString*) address {
   return [NSString stringWithFormat:@"%02x%02x%02x", [self byteAt:1], [self byteAt:2], [self byteAt:3]];
 }
+
+- (MessageBase*)toMessage {
+  if (self.packetType == PACKET_TYPE_PUMP) {
+    switch (self.messageType) {
+      case MESSAGE_TYPE_PUMP_STATUS:
+        return [[PumpStatusMessage alloc] initWithData:_data];
+      case MESSAGE_TYPE_DEVICE_LINK:
+        return [[DeviceLinkMessage alloc] initWithData:_data];
+      case MESSAGE_TYPE_FIND_DEVICE:
+        return [[FindDeviceMessage alloc] initWithData:_data];
+    }
+  } else if (self.packetType == PACKET_TYPE_METER) {
+    return [[MeterMessage alloc] initWithData:_data];
+  }
+  return nil;
+}
+
+
 
 @end

@@ -29,6 +29,9 @@
   NSMutableArray *incomingPackets;
   NSMutableArray *commands;
   __CmdInvocation *currentInvocation;
+  NSMutableData *inBuf;
+  NSData *endOfResponseMarker;
+
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
@@ -42,34 +45,37 @@
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
-    self = [super init];
-    if (self) {
-        incomingPackets = [NSMutableArray array];
-        commands = [NSMutableArray array];
-
-        _peripheral = peripheral;
-        _peripheral.delegate = self;
-
-        for (CBService *service in _peripheral.services) {
-            [self setCharacteristicsFromService:service];
-        }
+  self = [super init];
+  if (self) {
+    incomingPackets = [NSMutableArray array];
+    commands = [NSMutableArray array];
+    
+    inBuf = [NSMutableData data];
+    endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
+    
+    _peripheral = peripheral;
+    _peripheral.delegate = self;
+    
+    for (CBService *service in _peripheral.services) {
+      [self setCharacteristicsFromService:service];
     }
-    return self;
+  }
+  return self;
 }
 
 - (instancetype)init NS_UNAVAILABLE
 {
-    return nil;
+  return nil;
 }
 
 - (NSString *)name
 {
-    return self.peripheral.name;
+  return self.peripheral.name;
 }
 
 - (NSString *)peripheralId
 {
-    return self.peripheral.identifier.UUIDString;
+  return self.peripheral.identifier.UUIDString;
 }
 
 - (NSArray*) packets {
@@ -172,11 +178,11 @@
   //NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
     if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
-        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
-                                                                                        RILEYLINK_DATA_UUID,
-                                                                                        RILEYLINK_CUSTOM_NAME_UUID]
+      [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
+                                                                                      RILEYLINK_DATA_UUID,
+                                                                                      RILEYLINK_CUSTOM_NAME_UUID]
                                                                 excludingAttributes:service.characteristics]
-                                 forService:service];
+                               forService:service];
     }
   }
   // Discover other characteristics
@@ -195,8 +201,8 @@
     [self cleanup];
     return;
   }
-
-    [self setCharacteristicsFromService:service];
+  
+  [self setCharacteristicsFromService:service];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -208,21 +214,38 @@
   
   if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
     if (characteristic.value.length > 0) {
-      if (currentInvocation != nil) {
-        currentInvocation.cmd.response = characteristic.value;
-        if (currentInvocation.completionHandler != nil) {
-          currentInvocation.completionHandler(currentInvocation.cmd);
-        }
-        currentInvocation = nil;
-      }
+      [self dataReceivedFromRL:characteristic.value];
     }
     [self dequeueCommands];
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
     const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated response count: %d", responseCount);
-    if (responseCount > 0) {
-      [peripheral readValueForCharacteristic:dataCharacteristic];
+    [peripheral readValueForCharacteristic:dataCharacteristic];
+  }
+}
+
+- (void)dataReceivedFromRL:(NSData*) data {
+  [inBuf appendData:data];
+  
+  NSRange endOfResp = [inBuf rangeOfData:endOfResponseMarker options:0 range:NSMakeRange(0, inBuf.length)];
+  NSLog(@"******* New Data: %@", [data hexadecimalString]);
+  
+  if (endOfResp.location != NSNotFound && currentInvocation != nil) {
+    currentInvocation.cmd.response = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
+    NSLog(@"******* Full packet: %@", [currentInvocation.cmd.response hexadecimalString]);
+    if (currentInvocation.completionHandler != nil) {
+      currentInvocation.completionHandler(currentInvocation.cmd);
     }
+    currentInvocation = nil;
+    NSInteger remainder = inBuf.length - endOfResp.location - 1;
+    if (remainder > 0) {
+      inBuf = [[inBuf subdataWithRange:NSMakeRange(endOfResp.location+1, remainder)] mutableCopy];
+      NSLog(@"******* Remainder: %@", [inBuf hexadecimalString]);
+    } else {
+      inBuf = [NSMutableData data];
+    }
+  } else {
+    NSLog(@"******* Buffering: %@", [inBuf hexadecimalString]);
   }
 }
 
@@ -248,7 +271,7 @@
       }
     }
   }
-
+  
   dataCharacteristic = nil;
   responseCountCharacteristic = nil;
   customNameCharacteristic = nil;
@@ -265,7 +288,7 @@
   } else {
     NSLog(@"Missing customNameCharacteristic");
   }
-
+  
 }
 
 

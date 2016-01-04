@@ -15,12 +15,6 @@
 
 @implementation PumpStatusMessage
 
-- (instancetype)initWithData:(NSData*)data
-{
-  self = [super initWithData:[data subdataWithRange:NSMakeRange(5, data.length-6)]];
-  return self;
-}
-
 - (NSDictionary*) bitBlocks {
   return @{@"sequence":          @[@1, @7],
            @"trend":             @[@12, @3],

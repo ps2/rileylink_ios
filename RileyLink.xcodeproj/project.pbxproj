@@ -102,6 +102,9 @@
 		C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
+		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
+		C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */; };
+		C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
@@ -308,6 +311,12 @@
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
 		C14AA33A1B1A2FB100299A55 /* MeterMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterMessage.m; sourceTree = "<group>"; };
+		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
+		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
+		C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceLinkMessage.h; sourceTree = "<group>"; };
+		C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceLinkMessage.m; sourceTree = "<group>"; };
+		C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDeviceMessage.h; sourceTree = "<group>"; };
+		C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDeviceMessage.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -648,6 +657,10 @@
 				C139AC201BFD847F00B0518F /* HistoryPage.m */,
 				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
 				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
+				C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */,
+				C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */,
+				C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */,
+				C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */,
 			);
 			name = MinimedProtocol;
 			sourceTree = "<group>";
@@ -687,6 +700,8 @@
 				C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */,
 				C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */,
 				C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */,
+				C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */,
+				C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */,
 			);
 			name = RileyLink;
 			sourceTree = "<group>";
@@ -853,6 +868,7 @@
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
 				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
+				C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */,
 				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */,
@@ -891,6 +907,7 @@
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */,
 				C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */,
+				C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */,
 				C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */,
 				C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
@@ -943,6 +960,7 @@
 				C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */,
 				C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */,
 				C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */,
+				C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpCommManager.m in Sources */,
 				C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */,
 			);

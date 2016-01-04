@@ -12,7 +12,7 @@
 #import "SendAndListenCmd.h"
 #import "SendPacketCmd.h"
 
-#define EXPECTED_MAX_BLE_LATENCY_MS 5000
+#define EXPECTED_MAX_BLE_LATENCY_MS 1500
 
 typedef NS_ENUM(NSUInteger, MessageSendState) {
   MessageSendStateDisconnected,

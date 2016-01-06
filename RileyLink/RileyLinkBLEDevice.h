@@ -42,4 +42,7 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) cancelCommand:(nonnull CmdBase*)cmd;
 
+- (void) enableIdleListeningOnChannel:(uint8_t)channel;
+- (void) disableIdleListening;
+
 @end

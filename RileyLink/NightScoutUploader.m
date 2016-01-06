@@ -79,6 +79,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceAttrsDiscovered:) name:RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED object:nil];
     
     
     // This is for doing a dumb 5-min history poll
@@ -89,7 +90,9 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     
     // This is to just test decoding history
     //[self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];
-
+    
+    // Test storing MySentry packet:
+    //[self testHandleMySentry];
   }
   return self;
 }
@@ -100,6 +103,15 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 }
 
 #pragma mark - Testing
+
+- (void)testHandleMySentry {
+  NSMutableData *dataWithHeader = [[NSData dataWithHexadecimalString:@"0101"] mutableCopy];
+  NSData *packet = [NSData dataWithHexadecimalString:@"a259705504e9401334001001050000000001d7040205e4000000000054000001240000000000000000dd"];
+  packet = [MinimedPacket encodeData:packet];
+  [dataWithHeader appendData:packet];
+  MinimedPacket *mySentryPacket = [[MinimedPacket alloc] initWithData:dataWithHeader];
+  [self handlePumpStatus:mySentryPacket fromDevice:nil withRSSI:1];
+}
 
 - (void)testDecodeHistory {
   NSData *page = [NSData dataWithHexadecimalString:@"7b000040000310000e00070000042b02900000006e02900511119c6c0d0000042b01431e02e8460087016c017c0000000004090000040000000000000000d08600000000000000007b0100400103100208007b020040040310080e007b0300400603100c10000a0218552863903f201855486310c527ad5b020758086310005100784b5038000000000000389601003800380000000758486310190000410903101a0012500903101a012c500903107b032c500903100c10000a7004512903905b700651090310005100784b50740000000028004c965c080234c0363ec001004c004c002800065149031082010953090310001234567882010b5309031000a200069582010d5309031002a210144882010f5309031002a20014488101275409031000a2d577087d01275409031000a2d57708000000000000000000000000000000000000000000000000007d01135509031000a2d57708000000000000000000000000000000000000000000000000007b0400400a0310140b005b00154c0a63100a5000784b500000200000000020965c0b4c39c0026bc03675c00100200020004800154c4a63107b0500400c0310180a005b002c660e0310285000b44b500000580000000058965c0e2011d04c43d00275d0367fd001005800580000002c664e03107b060040100310200e000a5824703163903f2b2470116310c527ad5b583170110310175100784b5064004c00000000b0965c0858c1c020cfd00100b000b000000031705103102100006a1203100300000048206a3203107b06226d120310200e000300030003186d1203107b0700401303102610000acc24423363103f192442936310c527ad5b00216f1363100f5000784b500000300000000030965c08b07ac05838d00100300030002c00216f5363107b0800401503102a13000abd05513503100ad011513503105bd02c51156310005000b455501800000000180000965c0b305cc0b0d4c05892d001001800180018002c515563100ae9175c3603105be9185c160310005000b455502400000000140010965c0e1849c030a3c0b01bd058d9d00100100010001400195c5603100ad83a5e3663103f1b3a5e166310c527ad8201236116031000a2d577088101036216031000a2d577087d01036216031000a2d57708000000000000000000000000000000000000000000000000008201076816031000a2d577088101346816031000a2d577087d01346816031000a2d57708000000000000000000000000000000000000000000000000000adc0a753603105bdc0d75160310005000b455502000000000180008965c0e101cc01862c030bcc0b034d001000800080018000d75560310000000000000000000000000000000000000000000000000000000000000000000000000000000000cfb"];
@@ -122,11 +134,20 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
 }
 
+- (void)deviceAttrsDiscovered:(NSNotification *)note
+{
+  RileyLinkBLEDevice *device = [note object];
+  [device enableIdleListeningOnChannel:2];
+}
+
+
 - (void)packetReceived:(NSNotification*)notification {
   NSDictionary *attrs = notification.userInfo;
   MinimedPacket *packet = attrs[@"packet"];
   RileyLinkBLEDevice *device = notification.object;
   [self addPacket:packet fromDevice:device];
+  
+  //TODO: find some way to sleep for 4 mins to save on RL battery?
 }
 
 #pragma mark - Polling
@@ -295,10 +316,12 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   }
   
   if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
+    // Make this RL the active one, for history dumping.
+    self.activeRileyLink = device;
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
-    // Just got a MySentry packet; in 30s would be a good time to poll.
+    // Just got a MySentry packet; in 20s would be a good time to poll.
     if (!dumpHistoryScheduled) {
-      [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:30];
+      [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:20];
       dumpHistoryScheduled = YES;
     }
 
@@ -327,9 +350,10 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 - (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device withRSSI:(NSInteger)rssi {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
-  NSNumber *epochTime = @([msg.measurementTime timeIntervalSince1970] * 1000);
   
   if ([packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+  
+    NSDate *validTime = msg.sensorTime;
     
     NSInteger glucose = msg.glucose;
     switch ([msg sensorStatus]) {
@@ -343,28 +367,36 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         glucose = DX_SENSOR_NOT_CALIBRATED;
         break;
       case SENSOR_STATUS_LOST:
+      case SENSOR_STATUS_MISSING:
         glucose = DX_SENSOR_NOT_ACTIVE;
+        validTime = msg.pumpTime;
         break;
       default:
         break;
     }
-    
-    NSDictionary *entry =
-    @{@"date": epochTime,
-      @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
-      @"sgv": @(glucose),
-      @"previousSGV": @(msg.previousGlucose),
-      @"direction": [self trendToDirection:msg.trend],
-      @"device": device.deviceURI,
-      @"rssi": @(rssi),
-      @"type": @"sgv"
-      };
-    [self.entries addObject:entry];
+  
+    NSNumber *epochTime = @([validTime timeIntervalSince1970] * 1000);
+
+    // Do not store sgv values if sensor missing; we're likely just
+    // using MySentry to gather pump status.
+    if (msg.sensorStatus != SENSOR_STATUS_MISSING) {
+      NSDictionary *entry =
+      @{@"date": epochTime,
+        @"dateString": [self.dateFormatter stringFromDate:validTime],
+        @"sgv": @(glucose),
+        @"previousSGV": @(msg.previousGlucose),
+        @"direction": [self trendToDirection:msg.trend],
+        @"device": device.deviceURI,
+        @"rssi": @(rssi),
+        @"type": @"sgv"
+        };
+      [self.entries addObject:entry];
+    }
     
     // Also add pumpStatus entry
     NSMutableDictionary *pumpStatusEntry =
       [@{@"date": epochTime,
-        @"dateString": [self.dateFormatter stringFromDate:msg.measurementTime],
+        @"dateString": [self.dateFormatter stringFromDate:validTime],
         @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
         @"sensorAge": @(msg.sensorAge),
         @"sensorRemaining": @(msg.sensorRemaining),

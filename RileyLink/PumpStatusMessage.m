@@ -150,7 +150,7 @@
 }
 
 
-- (NSDate*) measurementTime {
+- (NSDate*) sensorTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
   [components setYear:[self getBits:@"sensor_year"]+2000];

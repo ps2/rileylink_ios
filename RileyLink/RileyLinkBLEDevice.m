@@ -11,6 +11,7 @@
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
 #import "SendAndListenCmd.h"
+#import "GetPacketCmd.h"
 
 
 @interface __CmdInvocation: NSObject
@@ -31,7 +32,8 @@
   __CmdInvocation *currentInvocation;
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
-
+  BOOL idleListeningEnabled;
+  uint8_t idleListenChannel;
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
@@ -94,16 +96,24 @@
   if (!currentInvocation && commands.count > 0) {
     currentInvocation = commands[0];
     [commands removeObjectAtIndex:0];
-    NSLog(@"Writing command to data characteristic: %@", [currentInvocation.cmd.data hexadecimalString]);
-    // 255 is the real limit (buf limit in bgscript), but we set the limit at 220, as we need room for escaping special chars.
-    if (currentInvocation.cmd.data.length > 220) {
-      NSLog(@"********** Warning: packet too large: %d bytes ************", currentInvocation.cmd.data.length);
-    } else {
-      uint8_t count = currentInvocation.cmd.data.length;
-      NSMutableData *outBuf = [NSMutableData dataWithBytes:&count length:1];
-      [outBuf appendData:currentInvocation.cmd.data];
-      [self.peripheral writeValue:outBuf forCharacteristic:dataCharacteristic type:CBCharacteristicWriteWithResponse];
-    }
+    [self issueCommand:currentInvocation.cmd];
+  }
+}
+
+- (void) issueCommand:(nonnull CmdBase*)cmd {
+  if (dataCharacteristic == nil) {
+    NSLog(@"Ignoring command issued before we have discovered characteristics");
+    return;
+  }
+  NSLog(@"Writing command to data characteristic: %@", [cmd.data hexadecimalString]);
+  // 255 is the real limit (buf limit in bgscript), but we set the limit at 220, as we need room for escaping special chars.
+  if (cmd.data.length > 220) {
+    NSLog(@"********** Warning: packet too large: %d bytes ************", cmd.data.length);
+  } else {
+    uint8_t count = cmd.data.length;
+    NSMutableData *outBuf = [NSMutableData dataWithBytes:&count length:1];
+    [outBuf appendData:cmd.data];
+    [self.peripheral writeValue:outBuf forCharacteristic:dataCharacteristic type:CBCharacteristicWriteWithResponse];
   }
 }
 
@@ -168,6 +178,9 @@
       customNameCharacteristic = characteristic;
     }
   }
+  
+  NSDictionary *attrs = @{@"peripheral": self.peripheral};
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED object:self userInfo:attrs];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -230,13 +243,11 @@
   NSRange endOfResp = [inBuf rangeOfData:endOfResponseMarker options:0 range:NSMakeRange(0, inBuf.length)];
   NSLog(@"******* New Data: %@", [data hexadecimalString]);
   
-  if (endOfResp.location != NSNotFound && currentInvocation != nil) {
-    currentInvocation.cmd.response = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
-    NSLog(@"******* Full packet: %@", [currentInvocation.cmd.response hexadecimalString]);
-    if (currentInvocation.completionHandler != nil) {
-      currentInvocation.completionHandler(currentInvocation.cmd);
-    }
-    currentInvocation = nil;
+  NSData *fullResponse;
+  
+  if (endOfResp.location != NSNotFound) {
+    fullResponse = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
+    NSLog(@"******* Full response: %@", [fullResponse hexadecimalString]);
     NSInteger remainder = inBuf.length - endOfResp.location - 1;
     if (remainder > 0) {
       inBuf = [[inBuf subdataWithRange:NSMakeRange(endOfResp.location+1, remainder)] mutableCopy];
@@ -246,6 +257,21 @@
     }
   } else {
     NSLog(@"******* Buffering: %@", [inBuf hexadecimalString]);
+  }
+  
+  if (fullResponse) {
+    if (currentInvocation) {
+      currentInvocation.cmd.response = fullResponse;
+      if (currentInvocation.completionHandler != nil) {
+        currentInvocation.completionHandler(currentInvocation.cmd);
+      }
+      currentInvocation = nil;
+      if (commands.count == 0) {
+        [self onIdle];
+      }
+    } else {
+      [self handleIdleListenerResponse:fullResponse];
+    }
   }
 }
 
@@ -291,5 +317,44 @@
   
 }
 
+- (void) onIdle {
+  if (idleListeningEnabled) {
+    GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
+    cmd.listenChannel = idleListenChannel;
+    cmd.timeoutMS = 30000;
+    [self issueCommand:cmd];
+  }
+}
+
+- (void) enableIdleListeningOnChannel:(uint8_t)channel {
+  idleListeningEnabled = YES;
+  idleListenChannel = channel;
+  if (commands.count == 0 && currentInvocation == nil) {
+    [self onIdle];
+  }
+}
+
+- (void) disableIdleListening {
+  idleListeningEnabled = NO;
+}
+
+- (void) handleIdleListenerResponse:(NSData *)response {
+  if (response.length > 3) {
+    // This is a response to our idle listen command
+    MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
+    packet.capturedAt = [NSDate date];
+    //if ([packet isValid]) {
+    [incomingPackets addObject:packet];
+    NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
+    NSDictionary *attrs = @{
+                            @"packet": packet,
+                            @"peripheral": self.peripheral,
+                            };
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+  } else {
+    NSLog(@"Idle timeout");
+  }
+  [self onIdle];
+}
 
 @end

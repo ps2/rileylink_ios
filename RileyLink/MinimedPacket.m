@@ -171,7 +171,7 @@
 }
 
 - (MessageBase*)toMessage {
-  if (self.packetType == PACKET_TYPE_PUMP) {
+  if (self.packetType == PacketTypeSentry) {
     switch (self.messageType) {
       case MESSAGE_TYPE_PUMP_STATUS:
         return [[PumpStatusMessage alloc] initWithData:_data];
@@ -180,7 +180,7 @@
       case MESSAGE_TYPE_FIND_DEVICE:
         return [[FindDeviceMessage alloc] initWithData:_data];
     }
-  } else if (self.packetType == PACKET_TYPE_METER) {
+  } else if (self.packetType == PacketTypeMeter) {
     return [[MeterMessage alloc] initWithData:_data];
   }
   return nil;

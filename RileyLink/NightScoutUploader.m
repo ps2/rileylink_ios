@@ -315,7 +315,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [self storeRawPacket:packet fromDevice:device];
   }
   
-  if ([packet packetType] == PACKET_TYPE_PUMP && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
+  if ([packet packetType] == PacketTypeSentry && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
     // Make this RL the active one, for history dumping.
     self.activeRileyLink = device;
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
@@ -325,7 +325,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
       dumpHistoryScheduled = YES;
     }
 
-  } else if ([packet packetType] == PACKET_TYPE_METER) {
+  } else if ([packet packetType] == PacketTypeMeter) {
     [self handleMeterMessage:packet];
   }
   

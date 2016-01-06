@@ -193,13 +193,12 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
 #pragma mark - Actions
 
-
 - (void)packetReceived:(MinimedPacket *)packet {
   
   BOOL handled = NO;
   
   if (packet &&
-      PACKET_TYPE_PUMP == packet.packetType &&
+      PacketTypeSentry == packet.packetType &&
       [packet.address isEqualToString:[Config sharedInstance].pumpID])
   {
     MessageBase *msg = [packet toMessage];
@@ -224,7 +223,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
 - (CmdBase *)makeCommandForAckAndListen:(uint8_t)sequence forMessageType:(uint8_t)messageType {
   NSString *replyString = [NSString stringWithFormat:@"%02x%@%02x%02x%@00%02x000000",
-                           PACKET_TYPE_PUMP,
+                           PacketTypeSentry,
                            [Config sharedInstance].pumpID,
                            MESSAGE_TYPE_ACK,
                            sequence,

@@ -15,7 +15,7 @@
 }
 
 - (NSString*) alarmTypeStr {
-  return @{
+  NSString *str = @{
     @101: @"High Glucose",
     @102: @"Low Glucose",
     @104: @"Meter BG Now",
@@ -27,7 +27,10 @@
     @114: @"High Glucose Predicted",
     @115: @"Low Glucose Predicted"
     }[[NSNumber numberWithInt:[self alarmType]]];
-  
+  if (str == nil) {
+    str = [NSString stringWithFormat:@"Unknown(0x%02x)", [self alarmType]];
+  }
+  return str;  
 }
 
 - (uint8_t) alarmType {

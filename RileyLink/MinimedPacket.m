@@ -9,6 +9,10 @@
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "CRC8.h"
+#import "PumpStatusMessage.h"
+#import "DeviceLinkMessage.h"
+#import "FindDeviceMessage.h"
+#import "MeterMessage.h"
 
 
 @interface MinimedPacket ()
@@ -46,9 +50,8 @@
     }
 
     if (data.length > 2) {
-      //_data = [self decodeRFEncoding:data]; // cc1110 is doing decoding now
-      _data = [data subdataWithRange:NSMakeRange(2, data.length - 2)];
-      //NSLog(@"New packet: %@", [data hexadecimalString]);
+      _data = [self decodeRF:[data subdataWithRange:NSMakeRange(2, data.length - 2)]];
+      NSLog(@"New packet: %@", [_data hexadecimalString]);
     }
   }
   return self;
@@ -166,5 +169,23 @@
 - (NSString*) address {
   return [NSString stringWithFormat:@"%02x%02x%02x", [self byteAt:1], [self byteAt:2], [self byteAt:3]];
 }
+
+- (MessageBase*)toMessage {
+  if (self.packetType == PacketTypeSentry) {
+    switch (self.messageType) {
+      case MESSAGE_TYPE_PUMP_STATUS:
+        return [[PumpStatusMessage alloc] initWithData:_data];
+      case MESSAGE_TYPE_DEVICE_LINK:
+        return [[DeviceLinkMessage alloc] initWithData:_data];
+      case MESSAGE_TYPE_FIND_DEVICE:
+        return [[FindDeviceMessage alloc] initWithData:_data];
+    }
+  } else if (self.packetType == PacketTypeMeter) {
+    return [[MeterMessage alloc] initWithData:_data];
+  }
+  return nil;
+}
+
+
 
 @end

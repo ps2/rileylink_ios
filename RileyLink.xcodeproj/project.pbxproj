@@ -27,7 +27,7 @@
 		C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */; };
 		C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */; };
-		C12616701B7790DF001FAD87 /* SendDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166F1B7790DF001FAD87 /* SendDataTask.m */; };
+		C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
@@ -102,11 +102,19 @@
 		C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
+		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
+		C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */; };
+		C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */; };
+		C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */; };
+		C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */; };
+		C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
+		C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */; };
+		C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */; };
 		C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */; };
@@ -165,8 +173,8 @@
 		C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		C126166B1B76ECBA001FAD87 /* PumpChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpChatViewController.h; sourceTree = "<group>"; };
 		C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpChatViewController.m; sourceTree = "<group>"; };
-		C126166E1B7790DF001FAD87 /* SendDataTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendDataTask.h; sourceTree = "<group>"; };
-		C126166F1B7790DF001FAD87 /* SendDataTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendDataTask.m; sourceTree = "<group>"; };
+		C126166E1B7790DF001FAD87 /* SendAndListenCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAndListenCmd.h; sourceTree = "<group>"; };
+		C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendAndListenCmd.m; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -306,6 +314,18 @@
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
 		C14AA33A1B1A2FB100299A55 /* MeterMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterMessage.m; sourceTree = "<group>"; };
+		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
+		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
+		C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceLinkMessage.h; sourceTree = "<group>"; };
+		C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceLinkMessage.m; sourceTree = "<group>"; };
+		C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDeviceMessage.h; sourceTree = "<group>"; };
+		C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDeviceMessage.m; sourceTree = "<group>"; };
+		C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeOtherDeviceID.m; sourceTree = "<group>"; };
+		C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogMarriageProfile.h; sourceTree = "<group>"; };
+		C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogMarriageProfile.m; sourceTree = "<group>"; };
+		C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteOtherDeviceID.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -316,6 +336,10 @@
 		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		C1D2B67C1C2FAD0100DB4AEA /* CmdBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdBase.h; sourceTree = "<group>"; };
+		C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdBase.m; sourceTree = "<group>"; };
+		C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPacketCmd.h; sourceTree = "<group>"; };
+		C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPacketCmd.m; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E535EB1991E49600C2AC49 /* RileyLinkBLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEManager.h; sourceTree = "<group>"; };
@@ -359,13 +383,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		43FF3D6E1BAF938E00DE240A /* Message Operation */ = {
+		43FF3D6E1BAF938E00DE240A /* MessageSendOperation */ = {
 			isa = PBXGroup;
 			children = (
 				43FF3D6F1BAF940E00DE240A /* MessageSendOperation.h */,
 				43FF3D701BAF940E00DE240A /* MessageSendOperation.m */,
 			);
-			name = "Message Operation";
+			name = MessageSendOperation;
 			sourceTree = "<group>";
 		};
 		C11F993A1BC405AA0013158C /* PumpCommManager */ = {
@@ -471,7 +495,7 @@
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
 				C12964E91B1581D200516761 /* MinimedRF */,
-				43FF3D6E1BAF938E00DE240A /* Message Operation */,
+				43FF3D6E1BAF938E00DE240A /* MessageSendOperation */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
 				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
@@ -624,6 +648,12 @@
 				C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */,
 				C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */,
 				C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */,
+				C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */,
+				C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */,
+				C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */,
+				C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */,
+				C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */,
+				C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */,
 			);
 			path = PumpHistoryEvents;
 			sourceTree = "<group>";
@@ -642,6 +672,10 @@
 				C139AC201BFD847F00B0518F /* HistoryPage.m */,
 				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
 				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
+				C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */,
+				C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */,
+				C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */,
+				C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */,
 			);
 			name = MinimedProtocol;
 			sourceTree = "<group>";
@@ -675,8 +709,14 @@
 				C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */,
 				C126164F1B688D9C001FAD87 /* RileyLinkBLEDevice.h */,
 				C12616501B688D9C001FAD87 /* RileyLinkBLEDevice.m */,
-				C126166E1B7790DF001FAD87 /* SendDataTask.h */,
-				C126166F1B7790DF001FAD87 /* SendDataTask.m */,
+				C1D2B67C1C2FAD0100DB4AEA /* CmdBase.h */,
+				C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */,
+				C126166E1B7790DF001FAD87 /* SendAndListenCmd.h */,
+				C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */,
+				C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */,
+				C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */,
+				C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */,
+				C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */,
 			);
 			name = RileyLink;
 			sourceTree = "<group>";
@@ -843,6 +883,7 @@
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
 				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
+				C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */,
 				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */,
@@ -857,10 +898,12 @@
 				C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */,
 				C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */,
 				43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */,
+				C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */,
 				C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */,
 				C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */,
 				C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
+				C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */,
 				C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */,
 				C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
@@ -878,7 +921,8 @@
 				C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */,
-				C12616701B7790DF001FAD87 /* SendDataTask.m in Sources */,
+				C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */,
+				C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */,
 				C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */,
 				C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
@@ -910,9 +954,11 @@
 				C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
 				C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */,
+				C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */,
 				C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */,
 				C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */,
 				C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */,
+				C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */,
 				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
 				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
@@ -927,10 +973,12 @@
 				C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */,
 				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
+				C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */,
 				C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */,
 				C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */,
 				C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */,
 				C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */,
+				C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpCommManager.m in Sources */,
 				C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */,
 			);

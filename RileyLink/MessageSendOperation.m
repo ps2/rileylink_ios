@@ -9,222 +9,211 @@
 #import "MessageSendOperation.h"
 #import "RileyLinkBLEManager.h"
 #import "MinimedPacket.h"
+#import "SendAndListenCmd.h"
+#import "SendPacketCmd.h"
+
+#define EXPECTED_MAX_BLE_LATENCY_MS 1500
 
 typedef NS_ENUM(NSUInteger, MessageSendState) {
-    MessageSendStateDisconnected,
-    MessageSendStateReady,
-    MessageSendStateWaitingForReponse,
-    MessageSendStateCoolDown,
-    MessageSendStateFinished,
+  MessageSendStateDisconnected,
+  MessageSendStateReady,
+  MessageSendStateWaitingForReponse,
+  MessageSendStateCoolDown,
+  MessageSendStateFinished,
 };
 
 typedef NS_ENUM(NSInteger, MessageSendError) {
-    MessageSendErrorTimeout = -1001
+  MessageSendErrorTimeout = -1001
 };
 
 static NSString * const ErrorDomain = @"com.ps2.RileyLink.error";
 
 NSString * KeyPathForMessageSendState(MessageSendState state) {
-    switch (state) {
-        case MessageSendStateDisconnected:
-            return @"isDisconnected";
-        case MessageSendStateReady:
-            return @"isReady";
-        case MessageSendStateWaitingForReponse:
-            return @"isExecuting";
-        case MessageSendStateCoolDown:
-            return @"isCoolDown";
-        case MessageSendStateFinished:
-            return @"isFinished";
-    }
+  switch (state) {
+    case MessageSendStateDisconnected:
+      return @"isDisconnected";
+    case MessageSendStateReady:
+      return @"isReady";
+    case MessageSendStateWaitingForReponse:
+      return @"isExecuting";
+    case MessageSendStateCoolDown:
+      return @"isCoolDown";
+    case MessageSendStateFinished:
+      return @"isFinished";
+  }
 }
 
 @interface MessageSendOperation ()
-
-@property (nonatomic) NSTimeInterval timeout;
 
 @property (nonatomic, nullable, copy) void (^completionHandler)(MessageSendOperation *operation);
 
 @property (nonatomic, nonnull, strong) RileyLinkBLEDevice *device;
 
-
+@property (nonatomic) MessageSendState state;
 
 @property (nonatomic, nonnull, strong) MessageBase *message;
 
-@property (nonatomic) MessageSendState state;
-
-@property (nonatomic) NSDate *sentAt;
+@property (nonatomic, nullable, strong) CmdBase *cmd;
 
 @end
 
 @implementation MessageSendOperation
 
-- (instancetype)initWithDevice:(RileyLinkBLEDevice *)device message:(MessageBase *)message timeout:(NSTimeInterval)timeout completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull))completionHandler
+- (nonnull instancetype)initWithDevice:(nonnull RileyLinkBLEDevice *)device
+                               message:(nonnull MessageBase *)message
+                     completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull operation))completionHandler
 {
-    self = [super init];
-    if (self) {
-        _completionHandler = [completionHandler copy];
-        _device = device;
-        _message = message;
-        _repeatInterval = 0;
-        _timeout = timeout;
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:device];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidReceivePacket:) name:RILEYLINK_EVENT_PACKET_RECEIVED object:device];
-
-        if (device.peripheral.state == CBPeripheralStateConnected) {
-            _state = MessageSendStateReady;
-        } else {
-            _state = MessageSendStateDisconnected;
-        }
+  self = [super init];
+  if (self) {
+    _completionHandler = [completionHandler copy];
+    _device = device;
+    _repeatCount = 0;
+    _listenChannel = 2;
+    _sendChannel = 0;
+    _message = message;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:device];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device];
+    
+    if (device.peripheral.state == CBPeripheralStateConnected) {
+      _state = MessageSendStateReady;
+    } else {
+      _state = MessageSendStateDisconnected;
     }
-    return self;
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RILEYLINK_EVENT_DEVICE_CONNECTED object:self.device];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:self.device];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RILEYLINK_EVENT_PACKET_RECEIVED object:self.device];
-}
-
-- (void)setRepeatInterval:(NSTimeInterval)repeatInterval
-{
-    _repeatInterval = repeatInterval;
-
-    if (repeatInterval > 0) {
-        self.timeout = 20;
-    }
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:RILEYLINK_EVENT_DEVICE_CONNECTED object:self.device];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:self.device];
 }
 
 #pragma mark - Device updates
 
 - (void)deviceConnected:(NSNotification *)note
 {
-    self.state = MessageSendStateReady;
+  self.state = MessageSendStateReady;
 }
 
 - (void)deviceDisconnected:(NSNotification *)note
 {
-    [self cancel];
+  [self cancel];
 }
 
-- (void)deviceDidReceivePacket:(NSNotification *)note
+- (void)receivedResponse:(NSData *)response
 {
-    @synchronized(self) {
-        if (self.state == MessageSendStateWaitingForReponse) {
-            MinimedPacket *rxPacket = note.userInfo[@"packet"];
-          
-            // Need to check capturedAt time, since NSNotifications can arrive at different times for different subscribers.
-            if (self.sentAt && [rxPacket.capturedAt timeIntervalSinceDate:self.sentAt] > 0 &&
-                self.message.packetType == rxPacket.packetType &&
-                [self.message.address isEqualToString:rxPacket.address] &&
-                rxPacket.messageType == self.responseMessageType)
-            {
-              
-                NSLog(@"%s with matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
-
-                self.responsePacket = rxPacket;
-
-                NSTimeInterval waitTime = 0;
-
-                if (self.repeatInterval > 0) {
-                    [self.device cancelSending];
-                    waitTime = 1;
-                }
-
-                [self finishAfterWaiting:waitTime];
-            } else {
-                NSLog(@"%s for non-matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
-            }
+  @synchronized(self) {
+    if (self.state == MessageSendStateWaitingForReponse) {
+      
+      if (response.length == 1 && ((uint8_t*)[response bytes])[0] == 0) {
+        NSLog(@"Packet timeout");
+      }
+      else if (response.length < 4) {
+        NSLog(@"Short packet")
+      }
+      else {
+        MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:response];
+      
+        if (self.responseMessageType == 0 || (self.message.packetType == rxPacket.packetType &&
+                                              [self.message.address isEqualToString:rxPacket.address] &&
+                                              rxPacket.messageType == self.responseMessageType))
+        {
+          NSLog(@"%s with matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
+          self.responsePacket = rxPacket;
+        } else {
+          NSLog(@"%s for non-matching packet %02x", __PRETTY_FUNCTION__, rxPacket.messageType);
         }
+      }
+      [self finishAfterWaiting:0];
     }
+  }
 }
 
 #pragma mark - State machine
 
 - (void)setState:(MessageSendState)state
 {
-    @synchronized(self) {
-        MessageSendState oldState = self.state;
-        MessageSendState newState = state;
-
-        BOOL isValid = NO;
-
-        switch (oldState) {
-            case MessageSendStateDisconnected:
-                switch (newState) {
-                    case MessageSendStateReady:
-                        isValid = YES;
-                        break;
-                    default:
-                        break;
-                }
-            case MessageSendStateReady:
-                switch (newState) {
-                    case MessageSendStateWaitingForReponse:
-                        isValid = YES;
-                        break;
-                    case MessageSendStateFinished:
-                        if (self.isCancelled) {
-                            isValid = YES;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case MessageSendStateWaitingForReponse:
-                switch (newState) {
-                    case MessageSendStateCoolDown:
-                        isValid = YES;
-                        break;
-                    case MessageSendStateFinished:
-                        isValid = YES;
-                    default:
-                        break;
-                }
-                break;
-            case MessageSendStateCoolDown:
-                switch (newState) {
-                    case MessageSendStateFinished:
-                        isValid = YES;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case MessageSendStateFinished:
-                break;
+  @synchronized(self) {
+    MessageSendState oldState = self.state;
+    MessageSendState newState = state;
+    
+    BOOL isValid = NO;
+    
+    switch (oldState) {
+      case MessageSendStateDisconnected:
+        switch (newState) {
+          case MessageSendStateReady:
+            isValid = YES;
+            break;
+          default:
+            break;
         }
-
-        if (isValid) {
-            NSString *oldKeyPath = KeyPathForMessageSendState(oldState);
-            NSString *newKeyPath = KeyPathForMessageSendState(newState);
-
-            NSLog(@"%@ -> %@", oldKeyPath, newKeyPath);
-
-            [self willChangeValueForKey:newKeyPath];
-            [self willChangeValueForKey:oldKeyPath];
-            _state = newState;
-            [self didChangeValueForKey:oldKeyPath];
-            [self didChangeValueForKey:newKeyPath];
-
-            if (newState == MessageSendStateFinished && _completionHandler != nil) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                  if (_completionHandler != nil) {
-                      _completionHandler(self);
-                  } else {
-                    NSLog(@"_completionHandler = %@", _completionHandler);
-                  }
-                });
+      case MessageSendStateReady:
+        switch (newState) {
+          case MessageSendStateWaitingForReponse:
+            isValid = YES;
+            break;
+          case MessageSendStateFinished:
+            if (self.isCancelled) {
+              isValid = YES;
             }
+            break;
+          default:
+            break;
         }
+        break;
+      case MessageSendStateWaitingForReponse:
+        switch (newState) {
+          case MessageSendStateCoolDown:
+            isValid = YES;
+            break;
+          case MessageSendStateFinished:
+            isValid = YES;
+          default:
+            break;
+        }
+        break;
+      case MessageSendStateCoolDown:
+        switch (newState) {
+          case MessageSendStateFinished:
+            isValid = YES;
+            break;
+          default:
+            break;
+        }
+        break;
+      case MessageSendStateFinished:
+        break;
     }
+    
+    if (isValid) {
+      NSString *oldKeyPath = KeyPathForMessageSendState(oldState);
+      NSString *newKeyPath = KeyPathForMessageSendState(newState);
+      
+      NSLog(@"%@ -> %@", oldKeyPath, newKeyPath);
+      
+      [self willChangeValueForKey:newKeyPath];
+      [self willChangeValueForKey:oldKeyPath];
+      _state = newState;
+      [self didChangeValueForKey:oldKeyPath];
+      [self didChangeValueForKey:newKeyPath];
+      
+      if (newState == MessageSendStateFinished && _completionHandler != nil) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          if (_completionHandler != nil) {
+            _completionHandler(self);
+          } else {
+            NSLog(@"_completionHandler = %@", _completionHandler);
+          }
+        });
+      }
+    }
+  }
 }
 
-- (void)main
+- (void)start
 {
   if ([self isCancelled]) {
     return;
@@ -233,31 +222,40 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
   
   if (self.isReady) {
     self.state = MessageSendStateWaitingForReponse;
-   
+    
     if ([self isCancelled]) {
       return;
     }
-
-    NSData *packetData = [MinimedPacket encodeData:self.message.data];
     
-    if (self.repeatInterval > 0) {
-      NSLog(@"%s sending message %02x every %.02fs", __PRETTY_FUNCTION__, self.message.messageType, self.repeatInterval);
-      
-      [self.device sendPacketData:packetData withCount:(self.timeout - 10) / self.repeatInterval andTimeBetweenPackets:self.repeatInterval];
+    if (_waitTimeMS > 0) {
+      SendAndListenCmd *sendAndListen = [[SendAndListenCmd alloc] init];
+      sendAndListen.sendChannel = _sendChannel;
+      sendAndListen.repeatCount = _repeatCount;
+      sendAndListen.msBetweenPackets = _msBetweenPackets;
+      sendAndListen.listenChannel = _listenChannel;
+      sendAndListen.timeoutMS = _waitTimeMS;
+      sendAndListen.retryCount = _retryCount;
+      sendAndListen.packet = [MinimedPacket encodeData:_message.data];
+      self.cmd = sendAndListen;
     } else {
-      NSLog(@"%s: %@ sending message %02x", __PRETTY_FUNCTION__, self, self.message.messageType);
-      
-      [self.device sendPacketData:packetData];
+      SendPacketCmd *send = [[SendPacketCmd alloc] init];
+      send.sendChannel = _sendChannel;
+      send.repeatCount = _repeatCount;
+      send.msBetweenPackets = _msBetweenPackets;
+      send.packet = [MinimedPacket encodeData:_message.data];
+      self.cmd = send;
     }
-    self.sentAt = [NSDate date];
     
-    if (self.responseMessageType == 0) {
-      NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);
-      self.state = MessageSendStateFinished;
-    } else {
+    NSLog(@"Running cmd: %@, %@", self.cmd, _message);
+    [self.device doCmd:self.cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+      [self receivedResponse:self.cmd.response];
+    }];
+    
+    
+    if (_waitTimeMS > 0) {
       __weak typeof(self)weakSelf = self;
-      
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      int64_t totalWaitTime = self.waitTimeMS * (self.retryCount + 1) + EXPECTED_MAX_BLE_LATENCY_MS;
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, totalWaitTime * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
         if (weakSelf && !weakSelf.isFinished) {
           NSLog(@"MessageSendOperation timeout");
           weakSelf.error = [NSError errorWithDomain:ErrorDomain
@@ -266,6 +264,9 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
           [weakSelf cancel];
         }
       });
+    } else {
+      NSLog(@"%s not waiting for response", __PRETTY_FUNCTION__);
+      self.state = MessageSendStateFinished;
     }
   }
 }
@@ -274,43 +275,46 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
 
 - (BOOL)isAsynchronous
 {
-    return YES;
+  return YES;
 }
 
 - (void)cancel
 {
-    NSLog(@"%s: %@", __PRETTY_FUNCTION__, self);
-    [super cancel];
-    self.state = MessageSendStateFinished;
+  NSLog(@"%s: %@", __PRETTY_FUNCTION__, self);
+  [super cancel];
+  self.state = MessageSendStateFinished;
+  if (self.cmd != nil) {
+    [self.device cancelCommand:self.cmd];
+  }
 }
 
 - (void)finishAfterWaiting:(NSTimeInterval)waitTime
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    if (waitTime > 0) {
-        self.state = MessageSendStateCoolDown;
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(waitTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.state = MessageSendStateFinished;
-        });
-    } else {
-        self.state = MessageSendStateFinished;
-    }
+  NSLog(@"%s", __PRETTY_FUNCTION__);
+  if (waitTime > 0) {
+    self.state = MessageSendStateCoolDown;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(waitTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      self.state = MessageSendStateFinished;
+    });
+  } else {
+    self.state = MessageSendStateFinished;
+  }
 }
 
 - (BOOL)isExecuting
 {
-    return self.state == MessageSendStateWaitingForReponse;
+  return self.state == MessageSendStateWaitingForReponse;
 }
 
 - (BOOL)isFinished
 {
-    return self.state == MessageSendStateFinished;
+  return self.state == MessageSendStateFinished;
 }
 
 - (BOOL)isReady
 {
-    return self.state == MessageSendStateReady && super.isReady;
+  return self.state == MessageSendStateReady && super.isReady;
 }
 
 @end

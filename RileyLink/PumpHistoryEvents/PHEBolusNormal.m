@@ -72,6 +72,9 @@
   if (_duration > 0) {
     base[@"duration"] = @(_duration);
   }
+  if (_unabsorbedInsulinRecord) {
+    base[@"appended"] = [_unabsorbedInsulinRecord asJSON];
+  }
   return base;
 }
 

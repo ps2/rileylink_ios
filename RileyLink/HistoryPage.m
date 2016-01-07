@@ -10,6 +10,8 @@
 #import "RuntimeUtils.h"
 #import "PumpHistoryEventBase.h"
 #import "CRC16.h"
+#import "PHEUnabsorbedInsulin.h"
+#import "PHEBolusNormal.h"
 
 @implementation HistoryPage
 
@@ -50,10 +52,20 @@
   NSUInteger offset = 0;
   NSUInteger length = _data.length;
   PumpHistoryEventBase *event;
+  PHEUnabsorbedInsulin *unabsorbedInsulinRecord;
   while (offset < length) {
     event = [self matchEvent:offset];
     if (event) {
-      [events addObject:event];
+      if ([event class] == [PHEBolusNormal class] && unabsorbedInsulinRecord != nil) {
+        PHEBolusNormal *bolus = (PHEBolusNormal*)event;
+        bolus.unabsorbedInsulinRecord = unabsorbedInsulinRecord;
+        unabsorbedInsulinRecord = nil;
+      }
+      if ([event class] == [PHEUnabsorbedInsulin class]) {
+        unabsorbedInsulinRecord = (PHEUnabsorbedInsulin*)event;
+      } else {
+        [events addObject:event];
+      }
       offset += [event length];
     } else {
       // TODO: Track bytes we skipped over

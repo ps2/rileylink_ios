@@ -14,7 +14,7 @@
   return MAX([self byteAt:1], 2);
 }
 
-- (NSDateComponents*) timestamp {
+- (nullable NSDateComponents*) timestamp {
   return nil;
 }
 

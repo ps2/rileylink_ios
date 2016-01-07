@@ -22,7 +22,7 @@
 - (uint8_t)byteAt:(NSInteger)index;
 - (nonnull NSDateComponents*) parseDateComponents:(NSInteger)offset;
 - (nonnull NSDateComponents*) parseDate2Byte:(NSInteger)offset;
-- (nonnull NSDateComponents*) timestamp;
+- (nullable NSDateComponents*) timestamp;
 - (nonnull NSString*) timestampStr;
 - (nonnull NSDictionary*) asJSON;
 - (nonnull NSString*) typeName;

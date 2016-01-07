@@ -74,7 +74,7 @@
   return comps;
 }
 
-- (nonnull NSDateComponents*) timestamp {
+- (nullable NSDateComponents*) timestamp {
   return [self parseDateComponents:2];
 }
 

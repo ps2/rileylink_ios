@@ -11,13 +11,21 @@
 @implementation MeterMessage
 
 - (NSDictionary*) bitBlocks {
-  return @{@"alert": @[@5, @2],
-           @"glucose": @[@7, @9]
+  return @{@"flags": @[@37, @2],
+           @"glucose": @[@39, @9]
            };
+}
+
+- (BOOL) isAck {
+  return [self getBits:@"flags"] == 3;
 }
 
 - (NSInteger) glucose {
   return [self getBits:@"glucose"];
+}
+
+- (NSInteger) bitsOffset {
+  return 0;
 }
 
 @end

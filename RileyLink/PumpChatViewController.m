@@ -16,6 +16,7 @@
 #import "PumpCommManager.h"
 #import "HistoryPage.h"
 #import "PumpHistoryEventBase.h"
+#import "SendAndListenCmd.h"
 
 @interface PumpChatViewController () {
   IBOutlet UITextView *output;
@@ -60,13 +61,14 @@
 
 
 - (IBAction)dumpHistoryButtonPressed:(id)sender {
-  [mgr dumpHistory:^(NSDictionary *res) {
-    if (res) {
-      NSData *page = res[@"page0"];
-      NSLog(@"Got page: %@", [page hexadecimalString]);
+  [mgr dumpHistoryPage:0 completionHandler:^(NSDictionary *res) {
+    if ([res[@"totalErrorCount"] intValue] == 0) {
+      NSData *page = res[@"pageData"];
+      NSLog(@"Got page data: %@", [page hexadecimalString]);
       [self decodeHistoryPage:page];
     } else {
-      [self addOutputMessage:@"Dump of page 0 failed"];
+      NSString *log = [NSString stringWithFormat:@"Dump of page 0 failed: %@", res];
+      [self addOutputMessage:log];
     }
   }];
 }
@@ -87,6 +89,7 @@
 }
 
 - (IBAction)pressDownButtonPressed:(id)sender {
+  
   [mgr pressButton];
 }
 

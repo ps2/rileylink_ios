@@ -8,6 +8,7 @@
 
 @import Foundation;
 @import CoreBluetooth;
+#import "CmdBase.h"
 
 typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RileyLinkStateConnecting,
@@ -36,12 +37,12 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 - (nonnull instancetype)initWithPeripheral:(nonnull CBPeripheral *)peripheral NS_DESIGNATED_INITIALIZER;
 
 - (void) didDisconnect:(nullable NSError*)error;
-- (void) cancelSending;
-- (void) setRXChannel:(unsigned char)channel;
-- (void) setTXChannel:(unsigned char)channel;
-- (void) sendPacketData:(nonnull NSData*)data;
-- (void) sendPacketData:(nonnull NSData*)data withCount:(NSInteger)count andTimeBetweenPackets:(NSTimeInterval)timeBetweenPackets;
+- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler;
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
 - (void) setCustomName:(nonnull NSString*)customName;
+- (void) cancelCommand:(nonnull CmdBase*)cmd;
+
+- (void) enableIdleListeningOnChannel:(uint8_t)channel;
+- (void) disableIdleListening;
 
 @end

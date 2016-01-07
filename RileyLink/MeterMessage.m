@@ -10,12 +10,6 @@
 
 @implementation MeterMessage
 
-- (instancetype)initWithData:(NSData*)data
-{
-  self = [super initWithData:[data subdataWithRange:NSMakeRange(4, data.length-5)]];
-  return self;
-}
-
 - (NSDictionary*) bitBlocks {
   return @{@"alert": @[@5, @2],
            @"glucose": @[@7, @9]

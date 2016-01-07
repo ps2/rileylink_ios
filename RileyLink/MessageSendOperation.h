@@ -24,25 +24,48 @@ Initializes the send operation with a device and message and a completion block
 */
 - (nonnull instancetype)initWithDevice:(nonnull RileyLinkBLEDevice *)device
                                message:(nonnull MessageBase *)message
-                               timeout:(NSTimeInterval)timeout
                      completionHandler:(void (^ _Nullable)(MessageSendOperation * _Nonnull operation))completionHandler;
 
 /**
  The type of response to wait for before completing the operation.
  
- If not set, the operation will complete immediately after sending.
+ If not set, the operation will accept any packet type as a response.
  */
 @property (nonatomic) MessageType responseMessageType;
 
 /**
- The interval at which to repeat the send until the response message is received.
- 
- This value is 0 by default, indicating the message should only send once.
+ Delay time in ms to wait between repeating the send packet.
  */
-@property (nonatomic) NSTimeInterval repeatInterval;
+@property (nonatomic) uint8_t msBetweenPackets;
 
 /**
- The error, if any, that occurred while sending or receiving
+ Time in ms to wait for a response.
+ If set to 0 (default), the operation will complete immediately after sending.
+ */
+@property (nonatomic) uint16_t waitTimeMS;
+
+/**
+ Number of times to repeat message. Defaults to 0, which means only send one packet. I.E. no repeat.
+ */
+@property (nonatomic) uint8_t repeatCount;
+
+/**
+ If we don't get a packet within the waitTime, send the message again, and listen again.
+ */
+@property (nonatomic) uint8_t retryCount;
+
+/**
+ The channel to listen for a response on. Defaults to 2.
+ */
+@property (nonatomic) uint8_t listenChannel;
+
+/**
+ The channel to send the message on. Defaults to 0.
+ */
+@property (nonatomic) uint8_t sendChannel;
+
+/**
+ The error, if any, that occurred while sending or receiving.
  */
 @property (nonatomic, nonnull, strong) NSError *error;
 

@@ -36,7 +36,8 @@
   
   NSDate *nextDate = [cal dateByAddingComponents:dayComponent toDate:date options:0];
 
-  return [cal components:0 fromDate:nextDate];
+  unsigned flags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+  return [cal components:flags fromDate:nextDate];
 }
 
 

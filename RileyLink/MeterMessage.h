@@ -15,4 +15,7 @@
 
 @property (nonatomic, readonly) NSInteger glucose;
 
+- (BOOL) isAck;
+
+
 @end

@@ -15,4 +15,8 @@
   return 10;
 }
 
+- (nullable NSDateComponents*) timestamp {
+  return [self parseDateComponents:5];
+}
+
 @end

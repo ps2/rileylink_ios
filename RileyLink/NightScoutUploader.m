@@ -38,6 +38,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 }
 
 @property (strong, nonatomic) NSMutableArray *entries;
+@property (strong, nonatomic) NSMutableArray *deviceStatuses;
 @property (strong, nonatomic) NSMutableArray *treatmentsQueue;
 @property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
 @property (nonatomic, assign) NSInteger codingErrorCount;
@@ -59,7 +60,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 
 static NSString *defaultNightscoutEntriesPath = @"/api/v1/entries.json";
 static NSString *defaultNightscoutTreatmentPath = @"/api/v1/treatments.json";
-static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
+static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json";
 
 - (instancetype)init
 {
@@ -68,6 +69,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     _entries = [[NSMutableArray alloc] init];
     _sentTreatments = [NSMutableSet set];
     _treatmentsQueue = [[NSMutableArray alloc] init];
+    _deviceStatuses = [[NSMutableArray alloc] init];
     _dateFormatter = [[ISO8601DateFormatter alloc] init];
     _dateFormatter.includeTime = YES;
     _dateFormatter.useMillisecondPrecision = YES;
@@ -81,6 +83,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceAttrsDiscovered:) name:RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED object:nil];
     
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    
     
     // This is for doing a dumb 5-min history poll
     //self.getHistoryTimer = [NSTimer scheduledTimerWithTimeInterval:(5.0 * 60) target:self selector:@selector(fetchHistory:) userInfo:nil repeats:YES];
@@ -92,7 +96,8 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     //[self performSelector:@selector(testDecodeHistory) withObject:nil afterDelay:1];
     
     // Test storing MySentry packet:
-    //[self testHandleMySentry];
+    //[self performSelector:@selector(testHandleMySentry) withObject:nil afterDelay:10];
+    
   }
   return self;
 }
@@ -111,6 +116,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
   [dataWithHeader appendData:packet];
   MinimedPacket *mySentryPacket = [[MinimedPacket alloc] initWithData:dataWithHeader];
   [self handlePumpStatus:mySentryPacket fromDevice:nil withRSSI:1];
+  [self flushAll];
 }
 
 - (void)testDecodeHistory {
@@ -329,7 +335,7 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     [self handleMeterMessage:packet];
   }
   
-  [self flushEntries];
+  [self flushAll];
 }
 
 - (void) storeRawPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
@@ -376,6 +382,38 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
     }
   
     NSNumber *epochTime = @([validTime timeIntervalSince1970] * 1000);
+    
+    NSMutableDictionary *status = [NSMutableDictionary dictionary];
+    
+    status[@"device"] = device.deviceURI;
+    status[@"created_at"] = [self.dateFormatter stringFromDate:[NSDate date]];
+    
+    // TODO: use battery monitoring to post updates if we're not hearing from pump?
+    UIDevice *uploaderDevice = [UIDevice currentDevice];
+    if (uploaderDevice.isBatteryMonitoringEnabled) {
+      NSNumber *batteryPct = @((int)([[UIDevice currentDevice] batteryLevel] * 100));
+      status[@"uploader"] = @{@"battery":batteryPct};
+    }
+    
+    status[@"pump"] = @{
+                        @"iob": @{
+                          @"timestamp": [self.dateFormatter stringFromDate:validTime],
+                          @"bolusiob": @(msg.activeInsulin),
+                        },
+                        @"reservoir": @(msg.insulinRemaining),
+                        @"battery": @{
+                            @"percent": @(msg.batteryPct)
+                            }
+                        };
+    
+    if (msg.sensorStatus != SENSOR_STATUS_MISSING) {
+      status[@"sensor"] = @{
+                            @"sensorAge": @(msg.sensorAge),
+                            @"sensorRemaining": @(msg.sensorRemaining),
+                            @"sensorStatus": msg.sensorStatusString
+                            };
+    }
+    [self.deviceStatuses addObject:status];
 
     // Do not store sgv values if sensor missing; we're likely just
     // using MySentry to gather pump status.
@@ -392,27 +430,6 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
         };
       [self.entries addObject:entry];
     }
-    
-    // Also add pumpStatus entry
-    NSMutableDictionary *pumpStatusEntry =
-      [@{@"date": epochTime,
-        @"dateString": [self.dateFormatter stringFromDate:validTime],
-        @"receivedAt": [self.dateFormatter stringFromDate:[NSDate date]],
-        @"sensorAge": @(msg.sensorAge),
-        @"sensorRemaining": @(msg.sensorRemaining),
-        @"insulinRemaining": @(msg.insulinRemaining),
-        @"device": device.deviceURI,
-        @"iob": @(msg.activeInsulin),
-        @"sensorStatus": msg.sensorStatusString,
-        @"batteryPct": @(msg.batteryPct),
-        @"rssi": @(rssi),
-        @"pumpStatus": [msg.data hexadecimalString],
-        @"type": @"pumpStatus",
-        } mutableCopy];
-    if (msg.nextCal != nil) {
-      pumpStatusEntry[@"nextCal"] = [self.dateFormatter stringFromDate:msg.nextCal];
-    }
-    [self.entries addObject:pumpStatusEntry];
     
     
   } else {
@@ -451,7 +468,31 @@ static NSString *defaultNightscoutBatteryPath = @"/api/v1/devicestatus.json";
 
 #pragma mark - Uploading
 
+- (void) flushAll {
+  [self flushDeviceStatuses];
+  [self flushEntries];
+  [self flushTreatments];
+}
 
+- (void) flushDeviceStatuses {
+  
+  if (self.deviceStatuses.count == 0) {
+    return;
+  }
+  
+  NSArray *inFlightDeviceStatuses = self.deviceStatuses;
+  self.deviceStatuses = [[NSMutableArray alloc] init];
+  [self reportJSON:inFlightDeviceStatuses toNightScoutEndpoint:defaultNightscoutDeviceStatusPath completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    if (httpResponse.statusCode != 200) {
+      NSLog(@"Requeuing %d device statuses: %@", inFlightDeviceStatuses.count, error);
+      [self.deviceStatuses addObjectsFromArray:inFlightDeviceStatuses];
+    } else {
+      NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      NSLog(@"Submitted %d device statuses to nightscout: %@", inFlightDeviceStatuses.count, resp);
+    }
+  }];
+}
 
 - (void) flushEntries {
   

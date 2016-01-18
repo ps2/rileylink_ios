@@ -256,7 +256,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
     [self addTreatment:treatment fromModel:m];
   }
-  [self flushTreatments];
+  [self flushAll];
 }
 
 
@@ -469,6 +469,22 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 #pragma mark - Uploading
 
 - (void) flushAll {
+  
+  NSArray *logEntries = [Log popLogEntries];
+  if (logEntries.count > 0) {
+    NSDate *date = [NSDate date];
+    NSTimeInterval seconds = [date timeIntervalSince1970];
+    NSNumber *epochTime = @(seconds * 1000);
+
+    NSDictionary *entry =
+    @{@"date": epochTime,
+      @"dateString": [self.dateFormatter stringFromDate:date],
+      @"entries": logEntries,
+      @"type": @"logs"
+      };
+    [self.entries addObject:entry];
+  }
+  
   [self flushDeviceStatuses];
   [self flushEntries];
   [self flushTreatments];
@@ -489,7 +505,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       [self.deviceStatuses addObjectsFromArray:inFlightDeviceStatuses];
     } else {
       NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-      NSLog(@"Submitted %d device statuses to nightscout: %@", inFlightDeviceStatuses.count, resp);
+      //NSLog(@"Submitted %d device statuses to nightscout: %@", inFlightDeviceStatuses.count, resp);
     }
   }];
 }
@@ -509,7 +525,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       [self.entries addObjectsFromArray:inFlightEntries];
     } else {
       NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-      NSLog(@"Submitted %d entries to nightscout: %@", inFlightEntries.count, resp);
+      //NSLog(@"Submitted %d entries to nightscout: %@", inFlightEntries.count, resp);
     }
   }];
 }
@@ -530,7 +546,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     } else {
       NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       [self.sentTreatments addObjectsFromArray:inFlightTreatments];
-      NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);
+      //NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);
     }
   }];
 }
@@ -544,8 +560,8 @@ completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *erro
   NSMutableURLRequest *request = [[NSURLRequest requestWithURL:uploadURL] mutableCopy];
   NSError *error;
   NSData *sendData = [NSJSONSerialization dataWithJSONObject:outgoingJSON options:NSJSONWritingPrettyPrinted error:&error];
-  NSString *jsonPost = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
-  NSLog(@"Posting to %@, %@", [uploadURL absoluteString], jsonPost);
+  //NSString *jsonPost = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
+  //NSLog(@"Posting to %@, %@", [uploadURL absoluteString], jsonPost);
   [request setHTTPMethod:@"POST"];
   
   [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

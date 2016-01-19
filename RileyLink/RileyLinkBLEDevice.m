@@ -321,7 +321,7 @@
   if (idleListeningEnabled) {
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 30000;
+    cmd.timeoutMS = 60 * 1000;
     [self issueCommand:cmd];
   }
 }

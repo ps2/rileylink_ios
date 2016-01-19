@@ -315,13 +315,15 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     [self storeRawPacket:packet fromDevice:device];
   }
   
-  if ([packet packetType] == PacketTypeSentry && [packet messageType] == MESSAGE_TYPE_PUMP_STATUS) {
+  if ([packet packetType] == PacketTypeSentry &&
+      [packet messageType] == MESSAGE_TYPE_PUMP_STATUS &&
+      [packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
     // Make this RL the active one, for history dumping.
     self.activeRileyLink = device;
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
-    // Just got a MySentry packet; in 20s would be a good time to poll.
+    // Just got a MySentry packet; in 25s would be a good time to poll.
     if (!dumpHistoryScheduled) {
-      [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:20];
+      [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:25];
       dumpHistoryScheduled = YES;
     }
 

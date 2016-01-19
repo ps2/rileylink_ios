@@ -173,7 +173,7 @@
           NSString *version = [NSString stringWithCString:&[operation.responsePacket.data bytes][7] encoding:NSASCIIStringEncoding];
         completionHandler(version);
       } else {
-        completionHandler(@"Unknown");
+        completionHandler(nil);
       }
   }];
   modelQueryOperation.responseMessageType = MESSAGE_TYPE_GET_PUMP_MODEL;

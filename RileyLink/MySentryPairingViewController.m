@@ -69,7 +69,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   cmd.listenChannel = 2;
   cmd.timeoutMS = 30000;
   
-  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+  [self.device doCmd:cmd interruptable:NO withCompletionHandler:^(CmdBase * _Nonnull cmd) {
     if (cmd.response) {
       MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
       [self packetReceived:rxPacket];
@@ -240,7 +240,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 }
 
 - (void)runCommand:(CmdBase*) cmd {
-  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+  [self.device doCmd:cmd interruptable:NO withCompletionHandler:^(CmdBase * _Nonnull cmd) {
     if (cmd.response) {
       [self handleResponse:cmd.response];
     }

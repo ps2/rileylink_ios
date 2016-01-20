@@ -17,6 +17,7 @@
 @interface __CmdInvocation: NSObject
 @property (nonatomic, nonnull, strong) CmdBase *cmd;
 @property (nonatomic, nullable, copy) void (^completionHandler)(CmdBase *cmd);
+@property (nonatomic, assign) BOOL interruptable;
 @end
 
 @implementation __CmdInvocation
@@ -34,6 +35,7 @@
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
+  BOOL fetchingResponse;
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
@@ -84,19 +86,27 @@
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
+- (void) doCmd:(nonnull CmdBase*)cmd interruptable:(BOOL)interruptable withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
   __CmdInvocation *inv = [[__CmdInvocation alloc] init];
   inv.cmd = cmd;
   inv.completionHandler = completionHandler;
+  inv.interruptable = interruptable;
   [commands addObject:inv];
   [self dequeueCommands];
 }
 
 - (void) dequeueCommands {
-  if (!currentInvocation && commands.count > 0) {
+  if (fetchingResponse) {
+    return;
+  }
+  if (commands.count > 0 && (!currentInvocation || currentInvocation.interruptable)) {
     currentInvocation = commands[0];
     [commands removeObjectAtIndex:0];
     [self issueCommand:currentInvocation.cmd];
+  }
+  
+  if (currentInvocation == nil) {
+    [self onIdle];
   }
 }
 
@@ -229,10 +239,12 @@
     if (characteristic.value.length > 0) {
       [self dataReceivedFromRL:characteristic.value];
     }
+    fetchingResponse = NO;
     [self dequeueCommands];
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
     const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated response count: %d", responseCount);
+    fetchingResponse = YES;
     [peripheral readValueForCharacteristic:dataCharacteristic];
   }
 }
@@ -260,17 +272,12 @@
   }
   
   if (fullResponse) {
-    if (currentInvocation && fullResponse.length > 1) {
+    if (currentInvocation) {
       currentInvocation.cmd.response = fullResponse;
       if (currentInvocation.completionHandler != nil) {
         currentInvocation.completionHandler(currentInvocation.cmd);
       }
       currentInvocation = nil;
-      if (commands.count == 0) {
-        [self onIdle];
-      }
-    } else {
-      [self handleIdleListenerResponse:fullResponse];
     }
   }
 }
@@ -322,16 +329,18 @@
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
-    [self issueCommand:cmd];
+    NSLog(@"Starting idle RX");
+    
+    [self doCmd:cmd interruptable:YES withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+      [self handleIdleListenerResponse:cmd.response];
+    }];
   }
 }
 
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
-  if (commands.count == 0 && currentInvocation == nil) {
-    [self onIdle];
-  }
+  [self dequeueCommands];
 }
 
 - (void) disableIdleListening {
@@ -343,7 +352,6 @@
     // This is a response to our idle listen command
     MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
     packet.capturedAt = [NSDate date];
-    //if ([packet isValid]) {
     [incomingPackets addObject:packet];
     NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
     NSDictionary *attrs = @{
@@ -354,7 +362,6 @@
   } else {
     NSLog(@"Idle timeout");
   }
-  [self onIdle];
 }
 
 @end

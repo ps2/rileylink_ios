@@ -247,7 +247,7 @@ NSString * KeyPathForMessageSendState(MessageSendState state) {
     }
     
     NSLog(@"Running cmd: %@, %@", self.cmd, _message);
-    [self.device doCmd:self.cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+    [self.device doCmd:self.cmd interruptable:NO withCompletionHandler:^(CmdBase * _Nonnull cmd) {
       [self receivedResponse:self.cmd.response];
     }];
     

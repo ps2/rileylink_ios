@@ -24,7 +24,9 @@ void append(NSString *msg){
   if (logEntries == nil) {
     logEntries = [NSMutableArray array];
   }
+#ifdef LOG_TO_NS
   [logEntries addObject:msg];
+#endif
   // get path to Documents/somefile.txt
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = paths[0];

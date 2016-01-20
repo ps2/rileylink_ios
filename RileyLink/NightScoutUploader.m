@@ -500,7 +500,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       NSLog(@"Requeuing %d device statuses: %@", inFlightDeviceStatuses.count, error);
       [self.deviceStatuses addObjectsFromArray:inFlightDeviceStatuses];
     } else {
-      NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       //NSLog(@"Submitted %d device statuses to nightscout: %@", inFlightDeviceStatuses.count, resp);
     }
   }];
@@ -520,7 +520,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       NSLog(@"Requeuing %d sgv entries: %@", inFlightEntries.count, error);
       [self.entries addObjectsFromArray:inFlightEntries];
     } else {
-      NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       //NSLog(@"Submitted %d entries to nightscout: %@", inFlightEntries.count, resp);
     }
   }];
@@ -540,7 +540,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       NSLog(@"Requeuing %d treatments: %@", inFlightTreatments.count, error);
       [self.treatmentsQueue addObjectsFromArray:inFlightTreatments];
     } else {
-      NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+      //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
       [self.sentTreatments addObjectsFromArray:inFlightTreatments];
       //NSLog(@"Submitted %d treatments to nightscout: %@", inFlightTreatments.count, resp);
     }

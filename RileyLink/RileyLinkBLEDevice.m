@@ -33,7 +33,6 @@
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
-  BOOL expectingIdleCmdResponse;
   uint8_t idleListenChannel;
 }
 
@@ -261,10 +260,7 @@
   }
   
   if (fullResponse) {
-    if (expectingIdleCmdResponse) {
-      expectingIdleCmdResponse = NO;
-      [self handleIdleListenerResponse:fullResponse];
-    } else if (currentInvocation) {
+    if (currentInvocation && fullResponse.length > 1) {
       currentInvocation.cmd.response = fullResponse;
       if (currentInvocation.completionHandler != nil) {
         currentInvocation.completionHandler(currentInvocation.cmd);
@@ -273,6 +269,8 @@
       if (commands.count == 0) {
         [self onIdle];
       }
+    } else {
+      [self handleIdleListenerResponse:fullResponse];
     }
   }
 }
@@ -324,7 +322,6 @@
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
-    expectingIdleCmdResponse = YES;
     [self issueCommand:cmd];
   }
 }
@@ -343,8 +340,10 @@
 
 - (void) handleIdleListenerResponse:(NSData *)response {
   if (response.length > 3) {
+    // This is a response to our idle listen command
     MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
     packet.capturedAt = [NSDate date];
+    //if ([packet isValid]) {
     [incomingPackets addObject:packet];
     NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
     NSDictionary *attrs = @{

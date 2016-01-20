@@ -10,10 +10,23 @@
 
 #import "Log.h"
 
+NSMutableArray *logEntries = nil;
+
 @implementation Log
 
++ (NSArray*) popLogEntries {
+  NSArray *rval = logEntries;
+  logEntries = [NSMutableArray array];
+  return rval;
+}
 
 void append(NSString *msg){
+  if (logEntries == nil) {
+    logEntries = [NSMutableArray array];
+  }
+#ifdef LOG_TO_NS
+  [logEntries addObject:msg];
+#endif
   // get path to Documents/somefile.txt
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = paths[0];

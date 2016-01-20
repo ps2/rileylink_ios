@@ -260,7 +260,7 @@
   }
   
   if (fullResponse) {
-    if (currentInvocation) {
+    if (currentInvocation && fullResponse.length > 1) {
       currentInvocation.cmd.response = fullResponse;
       if (currentInvocation.completionHandler != nil) {
         currentInvocation.completionHandler(currentInvocation.cmd);
@@ -321,7 +321,7 @@
   if (idleListeningEnabled) {
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 30000;
+    cmd.timeoutMS = 60 * 1000;
     [self issueCommand:cmd];
   }
 }

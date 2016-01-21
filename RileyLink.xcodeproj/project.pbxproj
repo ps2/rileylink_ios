@@ -108,6 +108,7 @@
 		C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */; };
 		C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */; };
 		C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */; };
+		C15807E41C509FAF00351BC8 /* HistoryFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = C15807E31C509FAF00351BC8 /* HistoryFetcher.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
@@ -326,6 +327,8 @@
 		C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogMarriageProfile.m; sourceTree = "<group>"; };
 		C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteOtherDeviceID.h; sourceTree = "<group>"; };
 		C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteOtherDeviceID.m; sourceTree = "<group>"; };
+		C15807E21C509FAF00351BC8 /* HistoryFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryFetcher.h; sourceTree = "<group>"; };
+		C15807E31C509FAF00351BC8 /* HistoryFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryFetcher.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -397,6 +400,8 @@
 			children = (
 				C11F993B1BC406970013158C /* PumpCommManager.h */,
 				C11F993C1BC406970013158C /* PumpCommManager.m */,
+				C15807E21C509FAF00351BC8 /* HistoryFetcher.h */,
+				C15807E31C509FAF00351BC8 /* HistoryFetcher.m */,
 			);
 			name = PumpCommManager;
 			sourceTree = "<group>";
@@ -900,6 +905,7 @@
 				43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */,
 				C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */,
 				C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */,
+				C15807E41C509FAF00351BC8 /* HistoryFetcher.m in Sources */,
 				C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */,
 				C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,

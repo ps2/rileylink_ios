@@ -37,10 +37,12 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 - (nonnull instancetype)initWithPeripheral:(nonnull CBPeripheral *)peripheral NS_DESIGNATED_INITIALIZER;
 
 - (void) didDisconnect:(nullable NSError*)error;
-- (void) doCmd:(nonnull CmdBase*)cmd interruptable:(BOOL)interruptable withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler;
+- (nonnull NSData*) doCmdSynchronous:(nonnull CmdBase*)cmd;
+- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler;
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) cancelCommand:(nonnull CmdBase*)cmd;
+
 
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;

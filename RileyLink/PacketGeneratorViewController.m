@@ -72,7 +72,7 @@
   cmd.sendChannel = txChannel;
   cmd.repeatCount = 0;
   cmd.msBetweenPackets = 0;
-  [_device doCmd:cmd interruptable:NO withCompletionHandler:nil];
+  [_device doCmd:cmd withCompletionHandler:nil];
 }
 
 - (IBAction)sendPacketButtonPressed:(id)sender {

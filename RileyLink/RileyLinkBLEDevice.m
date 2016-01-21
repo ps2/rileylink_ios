@@ -17,7 +17,6 @@
 @interface __CmdInvocation: NSObject
 @property (nonatomic, nonnull, strong) CmdBase *cmd;
 @property (nonatomic, nullable, copy) void (^completionHandler)(CmdBase *cmd);
-@property (nonatomic, assign) BOOL interruptable;
 @end
 
 @implementation __CmdInvocation
@@ -29,7 +28,7 @@
   CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
   NSMutableArray *incomingPackets;
-  NSMutableArray *commands;
+  NSMutableArray *cmdQueue;
   __CmdInvocation *currentInvocation;
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
@@ -52,7 +51,7 @@
   self = [super init];
   if (self) {
     incomingPackets = [NSMutableArray array];
-    commands = [NSMutableArray array];
+    cmdQueue = [NSMutableArray array];
     
     inBuf = [NSMutableData data];
     endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
@@ -86,23 +85,48 @@
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (void) doCmd:(nonnull CmdBase*)cmd interruptable:(BOOL)interruptable withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
+- (nonnull NSData *) doCmdSynchronous:(nonnull CmdBase*)cmd {
+  dispatch_group_t serviceGroup = dispatch_group_create();
+  dispatch_group_enter(serviceGroup);
+  
+  __CmdInvocation *inv = [[__CmdInvocation alloc] init];
+  inv.cmd = cmd;
+  inv.completionHandler = ^(CmdBase * _Nonnull cmd) {
+    dispatch_group_leave(serviceGroup);
+  };
+  
+  [self enqueueCommand:inv];
+  
+  [self performSelectorOnMainThread:@selector(dequeueCommands) withObject:nil waitUntilDone:NO];
+  dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
+  return cmd.response;
+}
+
+- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
   __CmdInvocation *inv = [[__CmdInvocation alloc] init];
   inv.cmd = cmd;
   inv.completionHandler = completionHandler;
-  inv.interruptable = interruptable;
-  [commands addObject:inv];
+ 
+  [self enqueueCommand:inv];
   [self dequeueCommands];
+}
+
+- (void) enqueueCommand:(__CmdInvocation*)inv {
+  @synchronized(self) {
+    [cmdQueue addObject:inv];
+  }
 }
 
 - (void) dequeueCommands {
   if (fetchingResponse) {
     return;
   }
-  if (commands.count > 0 && (!currentInvocation || currentInvocation.interruptable)) {
-    currentInvocation = commands[0];
-    [commands removeObjectAtIndex:0];
-    [self issueCommand:currentInvocation.cmd];
+  @synchronized(self) {
+    if (cmdQueue.count > 0 && (!currentInvocation || currentInvocation.cmd.interruptable)) {
+      currentInvocation = cmdQueue[0];
+      [cmdQueue removeObjectAtIndex:0];
+      [self issueCommand:currentInvocation.cmd];
+    }
   }
   
   if (currentInvocation == nil) {
@@ -131,18 +155,14 @@
   if (currentInvocation.cmd == cmd) {
     currentInvocation = nil;
   }
-  for (__CmdInvocation *inv in commands) {
-    if (inv.cmd == cmd) {
-      [commands removeObject:inv];
-      break;
+  @synchronized(self) {
+    for (__CmdInvocation *inv in cmdQueue) {
+      if (inv.cmd == cmd) {
+        [cmdQueue removeObject:inv];
+        break;
+      }
     }
   }
-  [self dequeueCommands];
-}
-
-
-// TODO: this method needs to be called when a write response is finished.
-- (void) sendTaskFinished {
   [self dequeueCommands];
 }
 
@@ -329,9 +349,10 @@
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
+    cmd.interruptable = YES;
     NSLog(@"Starting idle RX");
     
-    [self doCmd:cmd interruptable:YES withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+    [self doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
       [self handleIdleListenerResponse:cmd.response];
     }];
   }

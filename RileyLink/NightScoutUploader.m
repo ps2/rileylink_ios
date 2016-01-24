@@ -196,11 +196,11 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   }];
 
   [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
-    if ([res[@"totalErrorCount"] intValue] == 0) {
+    if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       [self decodeHistoryPage:page];
     } else {
-      NSLog(@"dumpHistory failed: %@", res);
+      NSLog(@"dumpHistory failed: %@", res[@"error"]);
     }
   }];
   

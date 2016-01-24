@@ -16,6 +16,10 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RileyLinkStateDisconnected
 };
 
+@interface RileyLinkCmdRunner : NSObject
+- (nonnull NSData*) doCmd:(nonnull CmdBase*)cmd;
+@end
+
 @interface RileyLinkBLEDevice : NSObject
 
 @property (nonatomic, nullable, readonly) NSString * name;
@@ -27,6 +31,8 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 
 @property (nonatomic, readonly) RileyLinkState state;
 
+@property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
+
 /**
  Initializes the device with a specified peripheral
 
@@ -37,13 +43,9 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 - (nonnull instancetype)initWithPeripheral:(nonnull CBPeripheral *)peripheral NS_DESIGNATED_INITIALIZER;
 
 - (void) didDisconnect:(nullable NSError*)error;
-- (nonnull NSData*) doCmdSynchronous:(nonnull CmdBase*)cmd;
-- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler;
-@property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
+
+- (void) dispatch:(void (^ _Nonnull)(RileyLinkCmdRunner* _Nonnull))proc;
 - (void) setCustomName:(nonnull NSString*)customName;
-- (void) cancelCommand:(nonnull CmdBase*)cmd;
-
-
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;
 

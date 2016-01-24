@@ -19,6 +19,5 @@
 - (NSData*)data;
 
 @property (nonatomic, strong) NSData *response;
-@property (nonatomic, assign) BOOL interruptable;
 
 @end

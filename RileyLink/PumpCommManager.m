@@ -7,14 +7,17 @@
 //
 
 #import "PumpCommManager.h"
-#import "MessageSendOperation.h"
 #import "NSData+Conversion.h"
+#import "SendPacketCmd.h"
+#import "SendAndListenCmd.h"
+#import "RileyLinkBLEDevice.h"
+#import "MinimedPacket.h"
+#import "MessageBase.h"
 
 #define STANDARD_PUMP_RESPONSE_WINDOW 180
 
 @interface PumpCommManager () {
   NSDate *awakeUntil;
-  BOOL waking;
 }
 
 @property (nonatomic, strong) NSOperationQueue *pumpCommQueue;
@@ -67,50 +70,48 @@
   return [self msgType:MESSAGE_TYPE_BUTTON_PRESS withArgs:args];
 }
 
+- (MessageBase *)batteryStatusMessage
+{
+  NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x00", PacketTypeCarelink, _pumpId, MESSAGE_TYPE_GET_BATTERY];
+  NSData *data = [NSData dataWithHexadecimalString:packetStr];
+  
+  return [[MessageBase alloc] initWithData:data];
+}
+
+
+- (MinimedPacket*) sendAndListen:(NSData*)msg
+                       timeoutMS:(uint16_t)timeoutMS
+                          repeat:(uint8_t)repeat
+                msBetweenPackets:(uint8_t)msBetweenPackets
+                      retryCount:(uint8_t)retryCount
+                      withRunner:(RileyLinkCmdRunner*)runner {
+  SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
+  cmd.packet = [MinimedPacket encodeData:msg];
+  cmd.timeoutMS = timeoutMS;
+  cmd.repeatCount = repeat;
+  cmd.msBetweenPackets = msBetweenPackets;
+  cmd.retryCount = retryCount;
+  cmd.listenChannel = 2;
+  MinimedPacket *rxPacket = nil;
+  NSData *response = [runner doCmd:cmd];
+  if (response && response.length > 2) {
+    rxPacket = [[MinimedPacket alloc] initWithData:response];
+  }
+  return rxPacket;
+}
+
+- (MinimedPacket*) sendAndListen:(NSData*)msg withRunner:(RileyLinkCmdRunner*)runner {
+  return [self sendAndListen:msg
+                   timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
+                      repeat:0
+            msBetweenPackets:0
+                  retryCount:3
+                  withRunner:runner];
+}
+
 
 - (void)wakeup:(uint8_t)durationMinutes {
   
-  if ([self isAwake] || waking) {
-    return;
-  }
-  
-  waking = YES;
-
-  MessageSendOperation *wakeupOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                               message:[self powerMessage]
-                                                                     completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                       if (operation.responsePacket != nil) {
-                                                                         NSLog(@"Pump acknowledged wakeup!");
-                                                                       } else {
-                                                                         // Can we clear the queue here?  Since the pump didn't wake.
-                                                                         NSLog(@"Power on error: %@", operation.error);
-                                                                         [self.pumpCommQueue cancelAllOperations];
-                                                                       }
-                                                                     }];
-  
-  wakeupOperation.waitTimeMS = 15000;
-  wakeupOperation.repeatCount = 200;
-  wakeupOperation.msBetweenPackets = 0;
-  wakeupOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  [self.pumpCommQueue addOperation:wakeupOperation];
-  
-  NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", durationMinutes];
-  
-  MessageSendOperation *wakeupArgsOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                                   message:[self powerMessageWithArgs:msg]
-                                                                         completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                           if (operation.responsePacket != nil) {
-                                                                             NSLog(@"Power on for %d minutes", durationMinutes);
-                                                                             awakeUntil = [NSDate dateWithTimeIntervalSinceNow:durationMinutes*60];
-                                                                           } else {
-                                                                             NSLog(@"Power on with args error: %@", operation.error);
-                                                                           }
-                                                                           waking = NO;
-                                                                         }];
-  wakeupArgsOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-  wakeupArgsOperation.retryCount = 3;
-  wakeupArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  [self.pumpCommQueue addOperation:wakeupArgsOperation];
 }
 
 - (BOOL) isAwake {
@@ -126,33 +127,35 @@
 }
 
 - (void) pressButton {
-  [self wakeIfNeeded];
-  MessageSendOperation *buttonPressOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                               message:[self buttonPressMessage]
-                                                                     completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                       if (operation.responsePacket != nil) {
-                                                                         NSLog(@"Pump acknowledged button press (no args)!");
-                                                                       } else {
-                                                                         NSLog(@"Error sending button press: %@", operation.error);
-                                                                       }
-                                                                     }];
-  buttonPressOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  buttonPressOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
+  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+    
+    if ([self doWakeup:3 withRunner:runner]) {
+      
+      MinimedPacket *response = [self sendAndListen:[[self buttonPressMessage] data]
+                                         withRunner:runner];
 
-  [self.pumpCommQueue addOperation:buttonPressOperation];
-  
-  MessageSendOperation *buttonPressArgsOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                                   message:[self buttonPressMessageWithArgs:@"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"]
-                                                                         completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                           if (operation.responsePacket != nil) {
-                                                                             NSLog(@"button press down!");
-                                                                           } else {
-                                                                             NSLog(@"Button press error: %@", operation.error);
-                                                                           }
-                                                                         }];
-  buttonPressArgsOperation.responseMessageType = MESSAGE_TYPE_ACK;
-  buttonPressArgsOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-  [self.pumpCommQueue addOperation:buttonPressArgsOperation];
+      if (response && response.messageType == MESSAGE_TYPE_ACK) {
+        NSLog(@"Pump acknowledged button press (no args)!");
+      } else {
+        NSLog(@"Pump did not acknowledge button press (no args)");
+        return;
+      }
+      
+      NSString *args = @"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+      
+      response = [self sendAndListen:[[self buttonPressMessageWithArgs:args] data]
+                          withRunner:runner];
+      
+      if (response && response.messageType == MESSAGE_TYPE_ACK) {
+        NSLog(@"Pump acknowledged button press (with args)!");
+      } else {
+        NSLog(@"Pump did not acknowledge button press (with args)");
+        return;
+      }
+
+    }
+  }];
+
 }
 
 - (MessageBase *)modelQueryMessage
@@ -164,51 +167,53 @@
 }
 
 - (void) getPumpModel:(void (^ _Nullable)(NSString*))completionHandler {
-  [self wakeIfNeeded];
-
-  MessageSendOperation *modelQueryOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                                   message:[self modelQueryMessage]
-                                               completionHandler:^(MessageSendOperation * _Nonnull operation) {
-      if (operation.responsePacket != nil) {
-          NSString *version = [NSString stringWithCString:&[operation.responsePacket.data bytes][7] encoding:NSASCIIStringEncoding];
-        completionHandler(version);
-      } else {
-        completionHandler(nil);
-      }
-  }];
-  modelQueryOperation.responseMessageType = MESSAGE_TYPE_GET_PUMP_MODEL;
-  modelQueryOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-  [self.pumpCommQueue addOperation:modelQueryOperation];
-}
-
-- (MessageBase *)batteryStatusMessage
-{
-    NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x00", PacketTypeCarelink, _pumpId, MESSAGE_TYPE_GET_BATTERY];
-  NSData *data = [NSData dataWithHexadecimalString:packetStr];
   
-  return [[MessageBase alloc] initWithData:data];
+  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+    
+    NSString *rval = nil;
+    
+    if ([self doWakeup:3 withRunner:runner]) {
+    
+      MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]
+                                         withRunner:runner];
+      
+      if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
+        rval = [NSString stringWithCString:&[response.data bytes][7]
+                                  encoding:NSASCIIStringEncoding];
+      }
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      completionHandler(rval);
+    });
+  }];
 }
-
 
 - (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler {
-  [self wakeIfNeeded];
-  MessageSendOperation *batteryStatusOperation = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                                      message:[self batteryStatusMessage]
-                                                                            completionHandler:^(MessageSendOperation * _Nonnull operation) {
-      if (operation.responsePacket != nil) {
-          unsigned char *data = (unsigned char *)[operation.responsePacket.data bytes] + 6;
-
-          NSInteger volts = (((int)data[1]) << 8) + data[2];
-          NSString *indicator = data[0] ? @"Low" : @"Normal";
-        completionHandler(indicator, volts/100.0);
-      } else {
-        completionHandler(@"Unknown", 0.0);
+  
+  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+    
+    NSString *rvalStatus = @"Unknown";
+    float rvalValue = 0.0;
+    
+    if ([self doWakeup:3 withRunner:runner]) {
+      
+      MinimedPacket *response = [self sendAndListen:[[self batteryStatusMessage] data]
+                                         withRunner:runner];
+      
+      if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_BATTERY) {
+        unsigned char *data = (unsigned char *)[response.data bytes] + 6;
+        
+        NSInteger volts = (((int)data[1]) << 8) + data[2];
+        rvalStatus = data[0] ? @"Low" : @"Normal";
+        rvalValue = volts/100.0;
       }
+    }
+   
+    dispatch_async(dispatch_get_main_queue(), ^{
+      completionHandler(rvalStatus, rvalValue);
+    });
   }];
-  batteryStatusOperation.responseMessageType = MESSAGE_TYPE_GET_BATTERY;
-  batteryStatusOperation.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-
-  [self.pumpCommQueue addOperation:batteryStatusOperation];
 }
 
 - (NSData*)parseFramesIntoHistoryPage:(NSArray*)packets {
@@ -225,87 +230,113 @@
   return data;
 }
 
-- (void) dumpHistoryPage:(uint8_t)pageNum completionHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
-  [self wakeIfNeeded];
+
+- (BOOL) doWakeup:(uint8_t) durationMinutes withRunner:(RileyLinkCmdRunner*)runner {
+  
+  if ([self isAwake]) {
+    return YES;
+  }
+  
+  MinimedPacket *response = [self sendAndListen:[[self powerMessage] data]
+                                      timeoutMS:15000
+                                         repeat:200
+                               msBetweenPackets:0
+                                     retryCount:0
+                                     withRunner:runner];
+  
+  if (response && response.messageType == MESSAGE_TYPE_ACK) {
+    NSLog(@"Pump acknowledged wakeup!");
+  } else {
+    return NO;
+  }
+  
+  NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", durationMinutes];
+  
+  response = [self sendAndListen:[[self powerMessageWithArgs:msg] data]
+                       timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
+                          repeat:0
+                msBetweenPackets:0
+                      retryCount:3
+                      withRunner:runner];
+
+  
+  if (response && response.messageType == MESSAGE_TYPE_ACK) {
+    NSLog(@"Power on for %d minutes", durationMinutes);
+    awakeUntil = [NSDate dateWithTimeIntervalSinceNow:durationMinutes*60];
+  } else {
+    return NO;
+  }
+  return YES;
+}
+
+
+- (NSDictionary*) doHistoryPageDump:(uint8_t)pageNum withRunner:(RileyLinkCmdRunner*)runner {
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
   
-  __block NSInteger finishedCount = 0;
-  __block NSInteger frameCrcErrorCount = 0;
-  __block NSInteger missedResponseCount = 0;
+  if (![self doWakeup:3 withRunner:runner]) {
+    responseDict[@"error"] = @"Unable to wake pump";
+    return responseDict;
+  }
   
-  MessageBase *dumpHistMsg = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"];
-  
-  MessageSendOperation *dumpHistOp = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                          message:dumpHistMsg
-                                                                            completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                              if (operation.responsePacket != nil) {
-                                                                                NSLog(@"Pump acked dump msg (0x80)");
-                                                                              } else {
-                                                                                NSLog(@"Error requesting pump dump: %@", operation.error);
-                                                                              }
-  }];
-  dumpHistOp.responseMessageType = MESSAGE_TYPE_ACK;
-  dumpHistOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-  dumpHistOp.retryCount = 3;
-  [self.pumpCommQueue addOperation:dumpHistOp];
-  
+  MinimedPacket *response;
+  response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"] data]
+                      withRunner:runner];
+
+  if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
+    NSLog(@"Pump acked dump msg (0x80)")
+  } else {
+    NSLog(@"Missing response to initial read history command");
+    responseDict[@"error"] = @"Missing response to initial read history command";
+    return responseDict;
+  }
+
+    
   NSString *dumpHistArgs = [NSString stringWithFormat:@"01%02x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", pageNum];
 
+  response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs] data]
+                      withRunner:runner];
 
-  MessageBase *dumpHistMsgArgs = [self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs];
-  MessageSendOperation *dumpHistOpArgs = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                          message:dumpHistMsgArgs
-                                                                completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                  if (operation.responsePacket != nil) {
-                                                                    [responses addObject:operation.responsePacket.data];
-                                                                  } else {
-                                                                    NSLog(@"Error requesting pump dump with args: %@", operation.error);
-                                                                  }
-                                                                }];
-  dumpHistOpArgs.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
-  dumpHistOpArgs.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-  dumpHistOpArgs.retryCount = 3;
-  
-  [self.pumpCommQueue addOperation:dumpHistOpArgs];
-  
-  // TODO: send 16 acks, and expect 15 more dumps
-  for (int i=0; i<16; i++) {
-    MessageBase *ack = [self msgType:MESSAGE_TYPE_ACK withArgs:@"00"];
-    MessageSendOperation *ackOp = [[MessageSendOperation alloc] initWithDevice:_device
-                                                                                message:ack
-                                                                      completionHandler:^(MessageSendOperation * _Nonnull operation) {
-                                                                        finishedCount++;
-                                                                        if (operation.responsePacket != nil) {
-                                                                          if (![operation.responsePacket isValid]) {
-                                                                            NSLog(@"Invalid history page packet!");
-                                                                            frameCrcErrorCount++;
-                                                                          }
-                                                                          [responses addObject:operation.responsePacket.data];
-                                                                          if (responses.count == 16) {
-                                                                            responseDict[@"pageData"] = [self parseFramesIntoHistoryPage:responses];
-                                                                          }
-                                                                        } else if (operation.responseMessageType != 0) {
-                                                                          missedResponseCount++;
-                                                                          NSLog(@"Error requesting pump dump with args: %@", operation.error);
-                                                                        }
-                                                                        if (finishedCount == 16) {
-                                                                          responseDict[@"frameCrcErrorCount"] = [NSNumber numberWithLong:frameCrcErrorCount];
-                                                                          responseDict[@"missedResponseCount"] = [NSNumber numberWithLong:missedResponseCount];
-                                                                          responseDict[@"totalErrorCount"] = [NSNumber numberWithLong:(missedResponseCount+frameCrcErrorCount)];
-                                                                          completionHandler(responseDict);
-                                                                        }
-                                                                      }];
-    
-    // Last packet doesn't need a response
-    if (i < 15) {
-      ackOp.responseMessageType = MESSAGE_TYPE_READ_HISTORY;
-      ackOp.waitTimeMS = STANDARD_PUMP_RESPONSE_WINDOW;
-      ackOp.retryCount = 3;
-    }
-    [self.pumpCommQueue addOperation:ackOp];
+  if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+    [responses addObject:response.data];
+  } else {
+    NSLog(@"Read history with args command failed");
+    responseDict[@"error"] = @"Read history with args command failed";
+    return responseDict;
   }
+  
+  // Send 15 acks, and expect 15 more dumps
+  for (int i=0; i<15; i++) {
+    
+    response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]
+                        withRunner:runner];
+    
+    if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+      [responses addObject:response.data];
+    } else {
+      NSLog(@"Read history segment %d with args command failed", i);
+      responseDict[@"error"] = @"Read history with args command failed";
+      return responseDict;
+    }
+    responseDict[@"pageData"] = [self parseFramesIntoHistoryPage:responses];
+  }
+  
+  // Last ack packet doesn't need a response
+  SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
+  cmd.packet = [MinimedPacket encodeData:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]];
+  [runner doCmd:cmd];
+  return responseDict;
+}
+
+
+- (void) dumpHistoryPage:(uint8_t)pageNum completionHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
+  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+    NSDictionary *results = [self doHistoryPageDump:pageNum withRunner:runner];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      completionHandler(results);
+    });
+  }];
 }
 
 @end

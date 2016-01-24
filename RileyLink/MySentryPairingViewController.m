@@ -69,12 +69,13 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   cmd.listenChannel = 2;
   cmd.timeoutMS = 30000;
   
-  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-    if (cmd.response) {
-      MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
-      [self packetReceived:rxPacket];
-    }
-  }];
+  // TODO: Upgrade to new api
+//  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+//    if (cmd.response) {
+//      MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
+//      [self packetReceived:rxPacket];
+//    }
+//  }];
 }
 
 - (void)handleResponse:(NSData*)response {
@@ -240,11 +241,12 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 }
 
 - (void)runCommand:(CmdBase*) cmd {
-  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-    if (cmd.response) {
-      [self handleResponse:cmd.response];
-    }
-  }];
+  // TODO: Upgrade to new api
+//  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
+//    if (cmd.response) {
+//      [self handleResponse:cmd.response];
+//    }
+//  }];
 }
 
 - (void)handleFindDevice:(FindDeviceMessage *)msg

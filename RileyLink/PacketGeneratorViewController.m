@@ -72,7 +72,8 @@
   cmd.sendChannel = txChannel;
   cmd.repeatCount = 0;
   cmd.msBetweenPackets = 0;
-  [_device doCmd:cmd withCompletionHandler:nil];
+  // TODO: Upgrade to new api
+  //[_device doCmd:cmd withCompletionHandler:nil];
 }
 
 - (IBAction)sendPacketButtonPressed:(id)sender {

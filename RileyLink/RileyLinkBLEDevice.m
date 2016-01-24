@@ -14,12 +14,9 @@
 #import "GetPacketCmd.h"
 
 
-@interface __CmdInvocation: NSObject
-@property (nonatomic, nonnull, strong) CmdBase *cmd;
-@property (nonatomic, nullable, copy) void (^completionHandler)(CmdBase *cmd);
-@end
-
-@implementation __CmdInvocation
+// See impl at bottom of file.
+@interface RileyLinkCmdRunner ()
+@property (nonatomic, weak) RileyLinkBLEDevice *device;
 @end
 
 
@@ -28,16 +25,19 @@
   CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
   NSMutableArray *incomingPackets;
-  NSMutableArray *cmdQueue;
-  __CmdInvocation *currentInvocation;
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
   BOOL fetchingResponse;
+  CmdBase *currentCommand;
+  BOOL runningIdle;
+  dispatch_group_t cmdDispatchGroup;
+  dispatch_group_t idleDetectDispatchGroup;
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end
 
@@ -50,8 +50,14 @@
 {
   self = [super init];
   if (self) {
+    // All processes that interact that run commands on this device should be serialized through
+    // this queue.
+    _serialDispatchQueue = dispatch_queue_create("com.rileylink.rlbledevice", DISPATCH_QUEUE_SERIAL);
+    
+    cmdDispatchGroup = dispatch_group_create();
+    idleDetectDispatchGroup = dispatch_group_create();
+
     incomingPackets = [NSMutableArray array];
-    cmdQueue = [NSMutableArray array];
     
     inBuf = [NSMutableData data];
     endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
@@ -85,53 +91,29 @@
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (nonnull NSData *) doCmdSynchronous:(nonnull CmdBase*)cmd {
-  dispatch_group_t serviceGroup = dispatch_group_create();
-  dispatch_group_enter(serviceGroup);
+- (void) dispatch:(void (^ _Nonnull)(RileyLinkCmdRunner* _Nonnull))proc {
+  dispatch_group_enter(idleDetectDispatchGroup);
+  RileyLinkCmdRunner *runner = [[RileyLinkCmdRunner alloc] init];
+  runner.device = self;
+  dispatch_async(_serialDispatchQueue, ^{
+    NSLog(@"Running dispatched RL comms task");
+    proc(runner);
+    NSLog(@"Finished running dispatched RL comms task");
+    dispatch_group_leave(idleDetectDispatchGroup);
+  });
   
-  __CmdInvocation *inv = [[__CmdInvocation alloc] init];
-  inv.cmd = cmd;
-  inv.completionHandler = ^(CmdBase * _Nonnull cmd) {
-    dispatch_group_leave(serviceGroup);
-  };
-  
-  [self enqueueCommand:inv];
-  
-  [self performSelectorOnMainThread:@selector(dequeueCommands) withObject:nil waitUntilDone:NO];
-  dispatch_group_wait(serviceGroup,DISPATCH_TIME_FOREVER);
+  dispatch_group_notify(idleDetectDispatchGroup,
+                        dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
+                          [self onIdle];
+                        });
+}
+
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd {
+  dispatch_group_enter(cmdDispatchGroup);
+  currentCommand = cmd;
+  [self issueCommand:cmd];
+  dispatch_group_wait(cmdDispatchGroup,DISPATCH_TIME_FOREVER);
   return cmd.response;
-}
-
-- (void) doCmd:(nonnull CmdBase*)cmd withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
-  __CmdInvocation *inv = [[__CmdInvocation alloc] init];
-  inv.cmd = cmd;
-  inv.completionHandler = completionHandler;
- 
-  [self enqueueCommand:inv];
-  [self dequeueCommands];
-}
-
-- (void) enqueueCommand:(__CmdInvocation*)inv {
-  @synchronized(self) {
-    [cmdQueue addObject:inv];
-  }
-}
-
-- (void) dequeueCommands {
-  if (fetchingResponse) {
-    return;
-  }
-  @synchronized(self) {
-    if (cmdQueue.count > 0 && (!currentInvocation || currentInvocation.cmd.interruptable)) {
-      currentInvocation = cmdQueue[0];
-      [cmdQueue removeObjectAtIndex:0];
-      [self issueCommand:currentInvocation.cmd];
-    }
-  }
-  
-  if (currentInvocation == nil) {
-    [self onIdle];
-  }
 }
 
 - (void) issueCommand:(nonnull CmdBase*)cmd {
@@ -149,21 +131,6 @@
     [outBuf appendData:cmd.data];
     [self.peripheral writeValue:outBuf forCharacteristic:dataCharacteristic type:CBCharacteristicWriteWithResponse];
   }
-}
-
-- (void) cancelCommand:(nonnull CmdBase*)cmd {
-  if (currentInvocation.cmd == cmd) {
-    currentInvocation = nil;
-  }
-  @synchronized(self) {
-    for (__CmdInvocation *inv in cmdQueue) {
-      if (inv.cmd == cmd) {
-        [cmdQueue removeObject:inv];
-        break;
-      }
-    }
-  }
-  [self dequeueCommands];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -260,7 +227,6 @@
       [self dataReceivedFromRL:characteristic.value];
     }
     fetchingResponse = NO;
-    [self dequeueCommands];
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
     const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated response count: %d", responseCount);
@@ -292,12 +258,13 @@
   }
   
   if (fullResponse) {
-    if (currentInvocation) {
-      currentInvocation.cmd.response = fullResponse;
-      if (currentInvocation.completionHandler != nil) {
-        currentInvocation.completionHandler(currentInvocation.cmd);
-      }
-      currentInvocation = nil;
+    if (runningIdle) {
+      runningIdle = NO;
+      [self handleIdleListenerResponse:fullResponse];
+    } else if (currentCommand) {
+      currentCommand.response = fullResponse;
+      currentCommand = nil;
+      dispatch_group_leave(cmdDispatchGroup);
     }
   }
 }
@@ -346,22 +313,18 @@
 
 - (void) onIdle {
   if (idleListeningEnabled) {
+    NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
-    cmd.interruptable = YES;
-    NSLog(@"Starting idle RX");
-    
-    [self doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-      [self handleIdleListenerResponse:cmd.response];
-    }];
+    runningIdle = YES;
+    [self issueCommand:cmd];
   }
 }
 
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
-  [self dequeueCommands];
 }
 
 - (void) disableIdleListening {
@@ -386,3 +349,11 @@
 }
 
 @end
+
+@implementation RileyLinkCmdRunner
+- (nonnull NSData*) doCmd:(nonnull CmdBase*)cmd {
+  return [_device doCmd:cmd];
+}
+@end
+
+

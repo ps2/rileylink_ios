@@ -191,19 +191,15 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
                         andDevice:self.activeRileyLink];
   }
   
-  [self.commManager getPumpModel:^(NSString* returnedModel) {
-    self.pumpModel = returnedModel;
-    if (returnedModel) {
-      [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
-        if (!res[@"error"]) {
-          NSData *page = res[@"pageData"];
-          [self decodeHistoryPage:page];
-        } else {
-          NSLog(@"dumpHistory failed: %@", res[@"error"]);
-        }
-      }];
+
+  
+  [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
+    if (!res[@"error"]) {
+      NSData *page = res[@"pageData"];
+      self.pumpModel = res[@"pumpModel"];
+      [self decodeHistoryPage:page];
     } else {
-      NSLog(@"dumpHistory failed: couldn't get pump model");
+      NSLog(@"dumpHistory failed: %@", res[@"error"]);
     }
   }];
 }

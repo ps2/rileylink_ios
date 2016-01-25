@@ -168,6 +168,18 @@
   return [[MessageBase alloc] initWithData:data];
 }
 
+- (NSString*) doGetPumpModel:(RileyLinkCmdSession*)s {
+  MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]
+                                    withSession:s];
+  
+  if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
+    return [NSString stringWithCString:&[response.data bytes][7]
+                              encoding:NSASCIIStringEncoding];
+  }
+  return nil;
+  
+}
+
 - (void) getPumpModel:(void (^ _Nullable)(NSString*))completionHandler {
   
   [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
@@ -175,14 +187,7 @@
     NSString *rval = nil;
     
     if ([self doWakeup:3 withSession:s]) {
-    
-      MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]
-                                        withSession:s];
-      
-      if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
-        rval = [NSString stringWithCString:&[response.data bytes][7]
-                                  encoding:NSASCIIStringEncoding];
-      }
+      rval = [self doGetPumpModel:s];
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -280,6 +285,14 @@
   if (![self doWakeup:3 withSession:s]) {
     responseDict[@"error"] = @"Unable to wake pump";
     return responseDict;
+  }
+  
+  NSString *pumpModel = [self doGetPumpModel:s];
+  if (!pumpModel) {
+    responseDict[@"error"] = @"get model failed";
+    return responseDict;
+  } else {
+    responseDict[@"pumpModel"] = pumpModel;
   }
   
   MinimedPacket *response;

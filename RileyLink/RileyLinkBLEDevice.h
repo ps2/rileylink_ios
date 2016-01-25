@@ -16,8 +16,20 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RileyLinkStateDisconnected
 };
 
-@interface RileyLinkCmdRunner : NSObject
-- (nonnull NSData*) doCmd:(nonnull CmdBase*)cmd;
+typedef NS_ENUM(NSUInteger, SubgRfspyError) {
+  SubgRfspyErrorRxTimeout = 0xaa,
+  SubgRfspyErrorCmdInterrupted = 0xbb,
+  SubgRfspyErrorZeroData = 0xcc
+};
+
+
+#define ERROR_RX_TIMEOUT 0xaa
+#define ERROR_CMD_INTERRUPTED 0xbb
+#define ERROR_ZERO_DATA 0xcc
+
+
+@interface RileyLinkCmdSession : NSObject
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
 @end
 
 @interface RileyLinkBLEDevice : NSObject
@@ -44,7 +56,7 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
 
 - (void) didDisconnect:(nullable NSError*)error;
 
-- (void) dispatch:(void (^ _Nonnull)(RileyLinkCmdRunner* _Nonnull))proc;
+- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc;
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;

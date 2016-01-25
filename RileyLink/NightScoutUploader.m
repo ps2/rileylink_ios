@@ -193,17 +193,19 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   
   [self.commManager getPumpModel:^(NSString* returnedModel) {
     self.pumpModel = returnedModel;
-  }];
-
-  [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
-    if (!res[@"error"]) {
-      NSData *page = res[@"pageData"];
-      [self decodeHistoryPage:page];
+    if (returnedModel) {
+      [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
+        if (!res[@"error"]) {
+          NSData *page = res[@"pageData"];
+          [self decodeHistoryPage:page];
+        } else {
+          NSLog(@"dumpHistory failed: %@", res[@"error"]);
+        }
+      }];
     } else {
-      NSLog(@"dumpHistory failed: %@", res[@"error"]);
+      NSLog(@"dumpHistory failed: couldn't get pump model");
     }
   }];
-  
 }
 
 #pragma mark - Decoding

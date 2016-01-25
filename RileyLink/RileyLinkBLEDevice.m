@@ -15,7 +15,7 @@
 
 
 // See impl at bottom of file.
-@interface RileyLinkCmdRunner ()
+@interface RileyLinkCmdSession ()
 @property (nonatomic, weak) RileyLinkBLEDevice *device;
 @end
 
@@ -32,6 +32,7 @@
   BOOL fetchingResponse;
   CmdBase *currentCommand;
   BOOL runningIdle;
+  BOOL runningSession;
   dispatch_group_t cmdDispatchGroup;
   dispatch_group_t idleDetectDispatchGroup;
 }
@@ -91,28 +92,37 @@
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (void) dispatch:(void (^ _Nonnull)(RileyLinkCmdRunner* _Nonnull))proc {
+- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
   dispatch_group_enter(idleDetectDispatchGroup);
-  RileyLinkCmdRunner *runner = [[RileyLinkCmdRunner alloc] init];
-  runner.device = self;
+  RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
+  session.device = self;
+  runningSession = YES;
   dispatch_async(_serialDispatchQueue, ^{
     NSLog(@"Running dispatched RL comms task");
-    proc(runner);
+    proc(session);
     NSLog(@"Finished running dispatched RL comms task");
     dispatch_group_leave(idleDetectDispatchGroup);
   });
   
   dispatch_group_notify(idleDetectDispatchGroup,
                         dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
-                          [self onIdle];
+                          runningSession = NO;
+                          if (!runningIdle) {
+                            [self onIdle];
+                          }
                         });
 }
 
-- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd {
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
   dispatch_group_enter(cmdDispatchGroup);
   currentCommand = cmd;
   [self issueCommand:cmd];
-  dispatch_group_wait(cmdDispatchGroup,DISPATCH_TIME_FOREVER);
+  dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
+  if (dispatch_group_wait(cmdDispatchGroup,timeoutAt) != 0) {
+    NSLog(@"No response from RileyLink... timing out command.");
+    dispatch_group_leave(cmdDispatchGroup);
+    currentCommand = nil;
+  }
   return cmd.response;
 }
 
@@ -225,6 +235,8 @@
   if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
     if (characteristic.value.length > 0) {
       [self dataReceivedFromRL:characteristic.value];
+    } else {
+      NSLog(@"Error: Empty data update!!!");
     }
     fetchingResponse = NO;
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
@@ -261,6 +273,13 @@
     if (runningIdle) {
       runningIdle = NO;
       [self handleIdleListenerResponse:fullResponse];
+      if (!runningSession) {
+        if (inBuf.length > 0) {
+          NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
+          inBuf = [NSMutableData data];
+        }
+        [self onIdle];
+      }
     } else if (currentCommand) {
       currentCommand.response = fullResponse;
       currentCommand = nil;
@@ -313,11 +332,11 @@
 
 - (void) onIdle {
   if (idleListeningEnabled) {
+    runningIdle = YES;
     NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
-    runningIdle = YES;
     [self issueCommand:cmd];
   }
 }
@@ -325,6 +344,9 @@
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
+  if (!runningIdle && !runningSession) {
+    [self onIdle];
+  }
 }
 
 - (void) disableIdleListening {
@@ -344,15 +366,29 @@
                             };
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
   } else {
-    NSLog(@"Idle timeout");
+    uint8_t errorCode = ((uint8_t*)[response bytes])[0];
+    switch (errorCode) {
+      case SubgRfspyErrorRxTimeout:
+        NSLog(@"Idle rx timeout");
+        break;
+      case SubgRfspyErrorCmdInterrupted:
+        NSLog(@"Idle rx command interrupted.");
+        break;
+      case SubgRfspyErrorZeroData:
+        NSLog(@"Idle rx zero data?!?!");
+        break;
+      default:
+        NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
+        break;
+    }
   }
 }
 
 @end
 
-@implementation RileyLinkCmdRunner
-- (nonnull NSData*) doCmd:(nonnull CmdBase*)cmd {
-  return [_device doCmd:cmd];
+@implementation RileyLinkCmdSession
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+  return [_device doCmd:cmd withTimeoutMs:timeoutMS];
 }
 @end
 

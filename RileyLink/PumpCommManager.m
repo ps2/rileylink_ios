@@ -15,6 +15,7 @@
 #import "MessageBase.h"
 
 #define STANDARD_PUMP_RESPONSE_WINDOW 180
+#define EXPECTED_MAX_BLE_LATENCY_MS 1500
 
 @interface PumpCommManager () {
   NSDate *awakeUntil;
@@ -84,7 +85,7 @@
                           repeat:(uint8_t)repeat
                 msBetweenPackets:(uint8_t)msBetweenPackets
                       retryCount:(uint8_t)retryCount
-                      withRunner:(RileyLinkCmdRunner*)runner {
+                     withSession:(RileyLinkCmdSession*)session {
   SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
   cmd.packet = [MinimedPacket encodeData:msg];
   cmd.timeoutMS = timeoutMS;
@@ -93,20 +94,21 @@
   cmd.retryCount = retryCount;
   cmd.listenChannel = 2;
   MinimedPacket *rxPacket = nil;
-  NSData *response = [runner doCmd:cmd];
+  NSInteger totalTimeout = repeat * msBetweenPackets + timeoutMS + EXPECTED_MAX_BLE_LATENCY_MS;
+  NSData *response = [session doCmd:cmd withTimeoutMs:totalTimeout];
   if (response && response.length > 2) {
     rxPacket = [[MinimedPacket alloc] initWithData:response];
   }
   return rxPacket;
 }
 
-- (MinimedPacket*) sendAndListen:(NSData*)msg withRunner:(RileyLinkCmdRunner*)runner {
+- (MinimedPacket*) sendAndListen:(NSData*)msg withSession:(RileyLinkCmdSession*)session {
   return [self sendAndListen:msg
                    timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
                       repeat:0
             msBetweenPackets:0
                   retryCount:3
-                  withRunner:runner];
+                 withSession:session];
 }
 
 
@@ -127,12 +129,12 @@
 }
 
 - (void) pressButton {
-  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
     
-    if ([self doWakeup:3 withRunner:runner]) {
+    if ([self doWakeup:3 withSession:s]) {
       
       MinimedPacket *response = [self sendAndListen:[[self buttonPressMessage] data]
-                                         withRunner:runner];
+                                         withSession:s];
 
       if (response && response.messageType == MESSAGE_TYPE_ACK) {
         NSLog(@"Pump acknowledged button press (no args)!");
@@ -144,7 +146,7 @@
       NSString *args = @"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
       
       response = [self sendAndListen:[[self buttonPressMessageWithArgs:args] data]
-                          withRunner:runner];
+                          withSession:s];
       
       if (response && response.messageType == MESSAGE_TYPE_ACK) {
         NSLog(@"Pump acknowledged button press (with args)!");
@@ -168,14 +170,14 @@
 
 - (void) getPumpModel:(void (^ _Nullable)(NSString*))completionHandler {
   
-  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
     
     NSString *rval = nil;
     
-    if ([self doWakeup:3 withRunner:runner]) {
+    if ([self doWakeup:3 withSession:s]) {
     
       MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]
-                                         withRunner:runner];
+                                        withSession:s];
       
       if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
         rval = [NSString stringWithCString:&[response.data bytes][7]
@@ -191,15 +193,15 @@
 
 - (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler {
   
-  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
     
     NSString *rvalStatus = @"Unknown";
     float rvalValue = 0.0;
     
-    if ([self doWakeup:3 withRunner:runner]) {
+    if ([self doWakeup:3 withSession:s]) {
       
       MinimedPacket *response = [self sendAndListen:[[self batteryStatusMessage] data]
-                                         withRunner:runner];
+                                         withSession:s];
       
       if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_BATTERY) {
         unsigned char *data = (unsigned char *)[response.data bytes] + 6;
@@ -231,7 +233,7 @@
 }
 
 
-- (BOOL) doWakeup:(uint8_t) durationMinutes withRunner:(RileyLinkCmdRunner*)runner {
+- (BOOL) doWakeup:(uint8_t) durationMinutes withSession:(RileyLinkCmdSession*)s {
   
   if ([self isAwake]) {
     return YES;
@@ -242,7 +244,7 @@
                                          repeat:200
                                msBetweenPackets:0
                                      retryCount:0
-                                     withRunner:runner];
+                                     withSession:s];
   
   if (response && response.messageType == MESSAGE_TYPE_ACK) {
     NSLog(@"Pump acknowledged wakeup!");
@@ -257,7 +259,7 @@
                           repeat:0
                 msBetweenPackets:0
                       retryCount:3
-                      withRunner:runner];
+                      withSession:s];
 
   
   if (response && response.messageType == MESSAGE_TYPE_ACK) {
@@ -270,19 +272,19 @@
 }
 
 
-- (NSDictionary*) doHistoryPageDump:(uint8_t)pageNum withRunner:(RileyLinkCmdRunner*)runner {
+- (NSDictionary*) doHistoryPageDump:(uint8_t)pageNum withSession:(RileyLinkCmdSession*)s {
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
   
-  if (![self doWakeup:3 withRunner:runner]) {
+  if (![self doWakeup:3 withSession:s]) {
     responseDict[@"error"] = @"Unable to wake pump";
     return responseDict;
   }
   
   MinimedPacket *response;
   response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"] data]
-                      withRunner:runner];
+                      withSession:s];
 
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
     NSLog(@"Pump acked dump msg (0x80)")
@@ -296,7 +298,7 @@
   NSString *dumpHistArgs = [NSString stringWithFormat:@"01%02x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", pageNum];
 
   response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs] data]
-                      withRunner:runner];
+                      withSession:s];
 
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
     [responses addObject:response.data];
@@ -310,7 +312,7 @@
   for (int i=0; i<15; i++) {
     
     response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]
-                        withRunner:runner];
+                        withSession:s];
     
     if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
       [responses addObject:response.data];
@@ -325,14 +327,14 @@
   // Last ack packet doesn't need a response
   SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
   cmd.packet = [MinimedPacket encodeData:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]];
-  [runner doCmd:cmd];
+  [s doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
   return responseDict;
 }
 
 
 - (void) dumpHistoryPage:(uint8_t)pageNum completionHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
-  [_device dispatch:^(RileyLinkCmdRunner * _Nonnull runner) {
-    NSDictionary *results = [self doHistoryPageDump:pageNum withRunner:runner];
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
+    NSDictionary *results = [self doHistoryPageDump:pageNum withSession:s];
     dispatch_async(dispatch_get_main_queue(), ^{
       completionHandler(results);
     });

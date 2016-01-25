@@ -10,7 +10,6 @@
 		43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */; };
 		43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
-		43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FF3D701BAF940E00DE240A /* MessageSendOperation.m */; };
 		C11F993D1BC406970013158C /* PumpCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpCommManager.m */; };
 		C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */; };
 		C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */; };
@@ -141,8 +140,6 @@
 		43C99C6D1B898B7100BC03D4 /* MenuHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuHeaderTableViewCell.h; sourceTree = "<group>"; };
 		43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuHeaderTableViewCell.m; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		43FF3D6F1BAF940E00DE240A /* MessageSendOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageSendOperation.h; sourceTree = "<group>"; };
-		43FF3D701BAF940E00DE240A /* MessageSendOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageSendOperation.m; sourceTree = "<group>"; };
 		C11F993B1BC406970013158C /* PumpCommManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpCommManager.h; sourceTree = "<group>"; };
 		C11F993C1BC406970013158C /* PumpCommManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpCommManager.m; sourceTree = "<group>"; };
 		C126162A1B65E9BF001FAD87 /* RileyLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkDeviceViewController.h; sourceTree = "<group>"; };
@@ -201,7 +198,7 @@
 		C137A3911C08142E00569851 /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
 		C137A3921C08142E00569851 /* CRC16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC16.m; sourceTree = "<group>"; };
 		C137A3941C08A35C00569851 /* NightScoutBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutBolus.h; sourceTree = "<group>"; };
-		C137A3951C08A35C00569851 /* NightScoutBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutBolus.m; sourceTree = "<group>"; };
+		C137A3951C08A35C00569851 /* NightScoutBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.objc; path = NightScoutBolus.m; sourceTree = "<group>"; };
 		C137A39A1C08A48100569851 /* NightScoutPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutPump.h; sourceTree = "<group>"; };
 		C137A39B1C08A48100569851 /* NightScoutPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutPump.m; sourceTree = "<group>"; };
 		C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpHistoryEventBase.h; sourceTree = "<group>"; };
@@ -383,15 +380,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		43FF3D6E1BAF938E00DE240A /* MessageSendOperation */ = {
-			isa = PBXGroup;
-			children = (
-				43FF3D6F1BAF940E00DE240A /* MessageSendOperation.h */,
-				43FF3D701BAF940E00DE240A /* MessageSendOperation.m */,
-			);
-			name = MessageSendOperation;
-			sourceTree = "<group>";
-		};
 		C11F993A1BC405AA0013158C /* PumpCommManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -495,7 +483,6 @@
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
 				C12964E91B1581D200516761 /* MinimedRF */,
-				43FF3D6E1BAF938E00DE240A /* MessageSendOperation */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
 				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
@@ -897,7 +884,6 @@
 				C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */,
 				C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */,
 				C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */,
-				43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */,
 				C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */,
 				C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */,
 				C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */,

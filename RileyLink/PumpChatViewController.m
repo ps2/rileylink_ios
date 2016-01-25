@@ -7,7 +7,6 @@
 //
 
 #import "PumpChatViewController.h"
-#import "MessageSendOperation.h"
 #import "MessageBase.h"
 #import "MinimedPacket.h"
 #import "NSData+Conversion.h"
@@ -62,12 +61,12 @@
 
 - (IBAction)dumpHistoryButtonPressed:(id)sender {
   [mgr dumpHistoryPage:0 completionHandler:^(NSDictionary *res) {
-    if ([res[@"totalErrorCount"] intValue] == 0) {
+    if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       NSLog(@"Got page data: %@", [page hexadecimalString]);
       [self decodeHistoryPage:page];
     } else {
-      NSString *log = [NSString stringWithFormat:@"Dump of page 0 failed: %@", res];
+      NSString *log = [NSString stringWithFormat:@"Dump of page 0 failed: %@", res[@"error"]];
       [self addOutputMessage:log];
     }
   }];

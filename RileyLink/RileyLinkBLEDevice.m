@@ -14,13 +14,9 @@
 #import "GetPacketCmd.h"
 
 
-@interface __CmdInvocation: NSObject
-@property (nonatomic, nonnull, strong) CmdBase *cmd;
-@property (nonatomic, nullable, copy) void (^completionHandler)(CmdBase *cmd);
-@property (nonatomic, assign) BOOL interruptable;
-@end
-
-@implementation __CmdInvocation
+// See impl at bottom of file.
+@interface RileyLinkCmdSession ()
+@property (nonatomic, weak) RileyLinkBLEDevice *device;
 @end
 
 
@@ -29,16 +25,20 @@
   CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
   NSMutableArray *incomingPackets;
-  NSMutableArray *commands;
-  __CmdInvocation *currentInvocation;
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
   BOOL fetchingResponse;
+  CmdBase *currentCommand;
+  BOOL runningIdle;
+  BOOL runningSession;
+  dispatch_group_t cmdDispatchGroup;
+  dispatch_group_t idleDetectDispatchGroup;
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end
 
@@ -51,8 +51,14 @@
 {
   self = [super init];
   if (self) {
+    // All processes that interact that run commands on this device should be serialized through
+    // this queue.
+    _serialDispatchQueue = dispatch_queue_create("com.rileylink.rlbledevice", DISPATCH_QUEUE_SERIAL);
+    
+    cmdDispatchGroup = dispatch_group_create();
+    idleDetectDispatchGroup = dispatch_group_create();
+
     incomingPackets = [NSMutableArray array];
-    commands = [NSMutableArray array];
     
     inBuf = [NSMutableData data];
     endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
@@ -86,28 +92,38 @@
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (void) doCmd:(nonnull CmdBase*)cmd interruptable:(BOOL)interruptable withCompletionHandler:(void (^ _Nullable)(CmdBase * _Nonnull cmd))completionHandler {
-  __CmdInvocation *inv = [[__CmdInvocation alloc] init];
-  inv.cmd = cmd;
-  inv.completionHandler = completionHandler;
-  inv.interruptable = interruptable;
-  [commands addObject:inv];
-  [self dequeueCommands];
+- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
+  dispatch_group_enter(idleDetectDispatchGroup);
+  RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
+  session.device = self;
+  runningSession = YES;
+  dispatch_async(_serialDispatchQueue, ^{
+    NSLog(@"Running dispatched RL comms task");
+    proc(session);
+    NSLog(@"Finished running dispatched RL comms task");
+    dispatch_group_leave(idleDetectDispatchGroup);
+  });
+  
+  dispatch_group_notify(idleDetectDispatchGroup,
+                        dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
+                          runningSession = NO;
+                          if (!runningIdle) {
+                            [self onIdle];
+                          }
+                        });
 }
 
-- (void) dequeueCommands {
-  if (fetchingResponse) {
-    return;
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+  dispatch_group_enter(cmdDispatchGroup);
+  currentCommand = cmd;
+  [self issueCommand:cmd];
+  dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
+  if (dispatch_group_wait(cmdDispatchGroup,timeoutAt) != 0) {
+    NSLog(@"No response from RileyLink... timing out command.");
+    dispatch_group_leave(cmdDispatchGroup);
+    currentCommand = nil;
   }
-  if (commands.count > 0 && (!currentInvocation || currentInvocation.interruptable)) {
-    currentInvocation = commands[0];
-    [commands removeObjectAtIndex:0];
-    [self issueCommand:currentInvocation.cmd];
-  }
-  
-  if (currentInvocation == nil) {
-    [self onIdle];
-  }
+  return cmd.response;
 }
 
 - (void) issueCommand:(nonnull CmdBase*)cmd {
@@ -125,25 +141,6 @@
     [outBuf appendData:cmd.data];
     [self.peripheral writeValue:outBuf forCharacteristic:dataCharacteristic type:CBCharacteristicWriteWithResponse];
   }
-}
-
-- (void) cancelCommand:(nonnull CmdBase*)cmd {
-  if (currentInvocation.cmd == cmd) {
-    currentInvocation = nil;
-  }
-  for (__CmdInvocation *inv in commands) {
-    if (inv.cmd == cmd) {
-      [commands removeObject:inv];
-      break;
-    }
-  }
-  [self dequeueCommands];
-}
-
-
-// TODO: this method needs to be called when a write response is finished.
-- (void) sendTaskFinished {
-  [self dequeueCommands];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -238,9 +235,10 @@
   if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
     if (characteristic.value.length > 0) {
       [self dataReceivedFromRL:characteristic.value];
+    } else {
+      NSLog(@"Error: Empty data update!!!");
     }
     fetchingResponse = NO;
-    [self dequeueCommands];
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
     const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
     NSLog(@"Updated response count: %d", responseCount);
@@ -272,12 +270,20 @@
   }
   
   if (fullResponse) {
-    if (currentInvocation) {
-      currentInvocation.cmd.response = fullResponse;
-      if (currentInvocation.completionHandler != nil) {
-        currentInvocation.completionHandler(currentInvocation.cmd);
+    if (runningIdle) {
+      runningIdle = NO;
+      [self handleIdleListenerResponse:fullResponse];
+      if (!runningSession) {
+        if (inBuf.length > 0) {
+          NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
+          inBuf = [NSMutableData data];
+        }
+        [self onIdle];
       }
-      currentInvocation = nil;
+    } else if (currentCommand) {
+      currentCommand.response = fullResponse;
+      currentCommand = nil;
+      dispatch_group_leave(cmdDispatchGroup);
     }
   }
 }
@@ -326,21 +332,21 @@
 
 - (void) onIdle {
   if (idleListeningEnabled) {
+    runningIdle = YES;
+    NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 60 * 1000;
-    NSLog(@"Starting idle RX");
-    
-    [self doCmd:cmd interruptable:YES withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-      [self handleIdleListenerResponse:cmd.response];
-    }];
+    [self issueCommand:cmd];
   }
 }
 
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
-  [self dequeueCommands];
+  if (!runningIdle && !runningSession) {
+    [self onIdle];
+  }
 }
 
 - (void) disableIdleListening {
@@ -360,8 +366,30 @@
                             };
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
   } else {
-    NSLog(@"Idle timeout");
+    uint8_t errorCode = ((uint8_t*)[response bytes])[0];
+    switch (errorCode) {
+      case SubgRfspyErrorRxTimeout:
+        NSLog(@"Idle rx timeout");
+        break;
+      case SubgRfspyErrorCmdInterrupted:
+        NSLog(@"Idle rx command interrupted.");
+        break;
+      case SubgRfspyErrorZeroData:
+        NSLog(@"Idle rx zero data?!?!");
+        break;
+      default:
+        NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
+        break;
+    }
   }
 }
 
 @end
+
+@implementation RileyLinkCmdSession
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+  return [_device doCmd:cmd withTimeoutMs:timeoutMS];
+}
+@end
+
+

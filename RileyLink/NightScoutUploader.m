@@ -191,19 +191,17 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
                         andDevice:self.activeRileyLink];
   }
   
-  [self.commManager getPumpModel:^(NSString* returnedModel) {
-    self.pumpModel = returnedModel;
-  }];
 
+  
   [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
-    if ([res[@"totalErrorCount"] intValue] == 0) {
+    if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
+      self.pumpModel = res[@"pumpModel"];
       [self decodeHistoryPage:page];
     } else {
-      NSLog(@"dumpHistory failed: %@", res);
+      NSLog(@"dumpHistory failed: %@", res[@"error"]);
     }
   }];
-  
 }
 
 #pragma mark - Decoding

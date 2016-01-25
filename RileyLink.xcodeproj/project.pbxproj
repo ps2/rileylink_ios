@@ -10,8 +10,7 @@
 		43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */; };
 		43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
-		43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FF3D701BAF940E00DE240A /* MessageSendOperation.m */; settings = {ASSET_TAGS = (); }; };
-		C11F993D1BC406970013158C /* PumpCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpCommManager.m */; settings = {ASSET_TAGS = (); }; };
+		C11F993D1BC406970013158C /* PumpCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpCommManager.m */; };
 		C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */; };
 		C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */; };
 		C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C126163B1B67CBC2001FAD87 /* RileyLinkTableViewCell.m */; };
@@ -27,7 +26,7 @@
 		C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */; };
 		C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */; };
-		C12616701B7790DF001FAD87 /* SendDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166F1B7790DF001FAD87 /* SendDataTask.m */; };
+		C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
@@ -43,13 +42,78 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
+		C137A3901C08114600569851 /* CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A38F1C08114600569851 /* CRC8.m */; };
+		C137A3931C08142E00569851 /* CRC16.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3921C08142E00569851 /* CRC16.m */; };
+		C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3951C08A35C00569851 /* NightScoutBolus.m */; };
+		C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A39B1C08A48100569851 /* NightScoutPump.m */; };
+		C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */; };
+		C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC201BFD847F00B0518F /* HistoryPage.m */; };
+		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
+		C139AC811BFD8CF800B0518F /* PHEAlarmPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */; };
+		C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */; };
+		C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */; };
+		C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2C1BFD8CF800B0518F /* PHEBattery.m */; };
+		C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */; };
+		C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */; };
+		C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */; };
+		C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */; };
+		C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */; };
+		C139AC8B1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */; };
+		C139AC8C1BFD8CF800B0518F /* PHEChangeAudioBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */; };
+		C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */; };
+		C139AC8E1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */; };
+		C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */; };
+		C139AC901BFD8CF800B0518F /* PHEChangeBGReminderOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */; };
+		C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */; };
+		C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */; };
+		C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */; };
+		C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */; };
+		C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */; };
+		C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */; };
+		C139AC971BFD8CF800B0518F /* PHEChangeChildBlockEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */; };
+		C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */; };
+		C139AC991BFD8CF800B0518F /* PHEChangeParadigmLinkID.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */; };
+		C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */; };
+		C139AC9B1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */; };
+		C139AC9C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */; };
+		C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */; };
+		C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC601BFD8CF800B0518F /* PHEChangeTime.m */; };
+		C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */; };
+		C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */; };
+		C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */; };
+		C139ACA21BFD8CF800B0518F /* PHEClearAlarm.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */; };
+		C139ACA31BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */; };
+		C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */; };
+		C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */; };
+		C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */; };
+		C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */; };
+		C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC741BFD8CF800B0518F /* PHEPrime.m */; };
+		C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */; };
+		C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC781BFD8CF800B0518F /* PHEResume.m */; };
+		C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7A1BFD8CF800B0518F /* PHERewind.m */; };
+		C139ACAC1BFD8CF800B0518F /* PHESara6E.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7C1BFD8CF800B0518F /* PHESara6E.m */; };
+		C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7E1BFD8CF800B0518F /* PHESuspend.m */; };
+		C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */; };
+		C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB01BFEDD9E00B0518F /* PumpModel.m */; };
+		C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */; };
+		C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */; };
+		C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */; };
+		C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
+		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
+		C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */; };
+		C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */; };
+		C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */; };
+		C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */; };
+		C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
+		C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */; };
+		C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */; };
 		C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */; };
@@ -76,8 +140,6 @@
 		43C99C6D1B898B7100BC03D4 /* MenuHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuHeaderTableViewCell.h; sourceTree = "<group>"; };
 		43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuHeaderTableViewCell.m; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		43FF3D6F1BAF940E00DE240A /* MessageSendOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageSendOperation.h; sourceTree = "<group>"; };
-		43FF3D701BAF940E00DE240A /* MessageSendOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageSendOperation.m; sourceTree = "<group>"; };
 		C11F993B1BC406970013158C /* PumpCommManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpCommManager.h; sourceTree = "<group>"; };
 		C11F993C1BC406970013158C /* PumpCommManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpCommManager.m; sourceTree = "<group>"; };
 		C126162A1B65E9BF001FAD87 /* RileyLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkDeviceViewController.h; sourceTree = "<group>"; };
@@ -108,8 +170,8 @@
 		C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		C126166B1B76ECBA001FAD87 /* PumpChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpChatViewController.h; sourceTree = "<group>"; };
 		C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpChatViewController.m; sourceTree = "<group>"; };
-		C126166E1B7790DF001FAD87 /* SendDataTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendDataTask.h; sourceTree = "<group>"; };
-		C126166F1B7790DF001FAD87 /* SendDataTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendDataTask.m; sourceTree = "<group>"; };
+		C126166E1B7790DF001FAD87 /* SendAndListenCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAndListenCmd.h; sourceTree = "<group>"; };
+		C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendAndListenCmd.m; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,10 +193,136 @@
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C12EA26B198B456D00309FA4 /* NightscoutWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightscoutWebView.h; sourceTree = "<group>"; };
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
+		C137A38E1C08114600569851 /* CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC8.h; sourceTree = "<group>"; };
+		C137A38F1C08114600569851 /* CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC8.m; sourceTree = "<group>"; };
+		C137A3911C08142E00569851 /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
+		C137A3921C08142E00569851 /* CRC16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC16.m; sourceTree = "<group>"; };
+		C137A3941C08A35C00569851 /* NightScoutBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutBolus.h; sourceTree = "<group>"; };
+		C137A3951C08A35C00569851 /* NightScoutBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.objc; path = NightScoutBolus.m; sourceTree = "<group>"; };
+		C137A39A1C08A48100569851 /* NightScoutPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutPump.h; sourceTree = "<group>"; };
+		C137A39B1C08A48100569851 /* NightScoutPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutPump.m; sourceTree = "<group>"; };
+		C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpHistoryEventBase.h; sourceTree = "<group>"; };
+		C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpHistoryEventBase.m; sourceTree = "<group>"; };
+		C139AC1F1BFD847F00B0518F /* HistoryPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPage.h; sourceTree = "<group>"; };
+		C139AC201BFD847F00B0518F /* HistoryPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPage.m; sourceTree = "<group>"; };
+		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
+		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
+		C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmPump.h; sourceTree = "<group>"; };
+		C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmPump.m; sourceTree = "<group>"; };
+		C139AC271BFD8CF800B0518F /* PHEAlarmSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmSensor.h; sourceTree = "<group>"; };
+		C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmSensor.m; sourceTree = "<group>"; };
+		C139AC291BFD8CF800B0518F /* PHEBasalProfileStart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBasalProfileStart.h; sourceTree = "<group>"; };
+		C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBasalProfileStart.m; sourceTree = "<group>"; };
+		C139AC2B1BFD8CF800B0518F /* PHEBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBattery.h; sourceTree = "<group>"; };
+		C139AC2C1BFD8CF800B0518F /* PHEBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBattery.m; sourceTree = "<group>"; };
+		C139AC2D1BFD8CF800B0518F /* PHEBgReceived.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBgReceived.h; sourceTree = "<group>"; };
+		C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBgReceived.m; sourceTree = "<group>"; };
+		C139AC2F1BFD8CF800B0518F /* PHEBolusNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusNormal.h; sourceTree = "<group>"; };
+		C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusNormal.m; sourceTree = "<group>"; };
+		C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHECalBGForPH.h; sourceTree = "<group>"; };
+		C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHECalBGForPH.m; sourceTree = "<group>"; };
+		C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockEnable.h; sourceTree = "<group>"; };
+		C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmClockEnable.m; sourceTree = "<group>"; };
+		C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockTime.h; sourceTree = "<group>"; };
+		C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmClockTime.m; sourceTree = "<group>"; };
+		C139AC391BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmNotifyMode.h; sourceTree = "<group>"; };
+		C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmNotifyMode.m; sourceTree = "<group>"; };
+		C139AC3B1BFD8CF800B0518F /* PHEChangeAudioBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAudioBolus.h; sourceTree = "<group>"; };
+		C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAudioBolus.m; sourceTree = "<group>"; };
+		C139AC3D1BFD8CF800B0518F /* PHEChangeBasalProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBasalProfile.h; sourceTree = "<group>"; };
+		C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBasalProfile.m; sourceTree = "<group>"; };
+		C139AC3F1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBasalProfilePattern.h; sourceTree = "<group>"; };
+		C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBasalProfilePattern.m; sourceTree = "<group>"; };
+		C139AC411BFD8CF800B0518F /* PHEChangeBGReminderEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBGReminderEnable.h; sourceTree = "<group>"; };
+		C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBGReminderEnable.m; sourceTree = "<group>"; };
+		C139AC431BFD8CF800B0518F /* PHEChangeBGReminderOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBGReminderOffset.h; sourceTree = "<group>"; };
+		C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBGReminderOffset.m; sourceTree = "<group>"; };
+		C139AC451BFD8CF800B0518F /* PHEChangeBolusReminderEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusReminderEnable.h; sourceTree = "<group>"; };
+		C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusReminderEnable.m; sourceTree = "<group>"; };
+		C139AC471BFD8CF800B0518F /* PHEChangeBolusReminderTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusReminderTime.h; sourceTree = "<group>"; };
+		C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusReminderTime.m; sourceTree = "<group>"; };
+		C139AC491BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusScrollStepSize.h; sourceTree = "<group>"; };
+		C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusScrollStepSize.m; sourceTree = "<group>"; };
+		C139AC4B1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusWizardSetup.h; sourceTree = "<group>"; };
+		C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusWizardSetup.m; sourceTree = "<group>"; };
+		C139AC4D1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeCaptureEventEnable.h; sourceTree = "<group>"; };
+		C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeCaptureEventEnable.m; sourceTree = "<group>"; };
+		C139AC4F1BFD8CF800B0518F /* PHEChangeCarbUnits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeCarbUnits.h; sourceTree = "<group>"; };
+		C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeCarbUnits.m; sourceTree = "<group>"; };
+		C139AC511BFD8CF800B0518F /* PHEChangeChildBlockEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeChildBlockEnable.h; sourceTree = "<group>"; };
+		C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeChildBlockEnable.m; sourceTree = "<group>"; };
+		C139AC531BFD8CF800B0518F /* PHEChangeMaxBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeMaxBolus.h; sourceTree = "<group>"; };
+		C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeMaxBolus.m; sourceTree = "<group>"; };
+		C139AC551BFD8CF800B0518F /* PHEChangeParadigmLinkID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeParadigmLinkID.h; sourceTree = "<group>"; };
+		C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeParadigmLinkID.m; sourceTree = "<group>"; };
+		C139AC571BFD8CF800B0518F /* PHEChangeReservoirWarningTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeReservoirWarningTime.h; sourceTree = "<group>"; };
+		C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeReservoirWarningTime.m; sourceTree = "<group>"; };
+		C139AC591BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeSensorRateOfChangeAlertSetup.h; sourceTree = "<group>"; };
+		C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeSensorRateOfChangeAlertSetup.m; sourceTree = "<group>"; };
+		C139AC5B1BFD8CF800B0518F /* PHEChangeSensorSetup2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeSensorSetup2.h; sourceTree = "<group>"; };
+		C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeSensorSetup2.m; sourceTree = "<group>"; };
+		C139AC5D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTempBasalPercent.h; sourceTree = "<group>"; };
+		C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTempBasalPercent.m; sourceTree = "<group>"; };
+		C139AC5F1BFD8CF800B0518F /* PHEChangeTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTime.h; sourceTree = "<group>"; };
+		C139AC601BFD8CF800B0518F /* PHEChangeTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTime.m; sourceTree = "<group>"; };
+		C139AC611BFD8CF800B0518F /* PHEChangeTimeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTimeFormat.h; sourceTree = "<group>"; };
+		C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTimeFormat.m; sourceTree = "<group>"; };
+		C139AC631BFD8CF800B0518F /* PHEChangeVariableBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeVariableBolus.h; sourceTree = "<group>"; };
+		C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeVariableBolus.m; sourceTree = "<group>"; };
+		C139AC651BFD8CF800B0518F /* PHEChangeWatchdogEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogEnable.h; sourceTree = "<group>"; };
+		C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogEnable.m; sourceTree = "<group>"; };
+		C139AC671BFD8CF800B0518F /* PHEClearAlarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEClearAlarm.h; sourceTree = "<group>"; };
+		C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEClearAlarm.m; sourceTree = "<group>"; };
+		C139AC691BFD8CF800B0518F /* PHEDeleteAlarmClockTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteAlarmClockTime.h; sourceTree = "<group>"; };
+		C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteAlarmClockTime.m; sourceTree = "<group>"; };
+		C139AC6B1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteBolusReminderTime.h; sourceTree = "<group>"; };
+		C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteBolusReminderTime.m; sourceTree = "<group>"; };
+		C139AC6D1BFD8CF800B0518F /* PHEEnableDisableRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEEnableDisableRemote.h; sourceTree = "<group>"; };
+		C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEEnableDisableRemote.m; sourceTree = "<group>"; };
+		C139AC6F1BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryExerciseMarker.h; sourceTree = "<group>"; };
+		C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryExerciseMarker.m; sourceTree = "<group>"; };
+		C139AC711BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryPumpLowReservoir.h; sourceTree = "<group>"; };
+		C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryPumpLowReservoir.m; sourceTree = "<group>"; };
+		C139AC731BFD8CF800B0518F /* PHEPrime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEPrime.h; sourceTree = "<group>"; };
+		C139AC741BFD8CF800B0518F /* PHEPrime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEPrime.m; sourceTree = "<group>"; };
+		C139AC751BFD8CF800B0518F /* PHEResultDailyTotal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEResultDailyTotal.h; sourceTree = "<group>"; };
+		C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEResultDailyTotal.m; sourceTree = "<group>"; };
+		C139AC771BFD8CF800B0518F /* PHEResume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEResume.h; sourceTree = "<group>"; };
+		C139AC781BFD8CF800B0518F /* PHEResume.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEResume.m; sourceTree = "<group>"; };
+		C139AC791BFD8CF800B0518F /* PHERewind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHERewind.h; sourceTree = "<group>"; };
+		C139AC7A1BFD8CF800B0518F /* PHERewind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHERewind.m; sourceTree = "<group>"; };
+		C139AC7B1BFD8CF800B0518F /* PHESara6E.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHESara6E.h; sourceTree = "<group>"; };
+		C139AC7C1BFD8CF800B0518F /* PHESara6E.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHESara6E.m; sourceTree = "<group>"; };
+		C139AC7D1BFD8CF800B0518F /* PHESuspend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHESuspend.h; sourceTree = "<group>"; };
+		C139AC7E1BFD8CF800B0518F /* PHESuspend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHESuspend.m; sourceTree = "<group>"; };
+		C139AC7F1BFD8CF800B0518F /* PHEUnabsorbedInsulin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEUnabsorbedInsulin.h; sourceTree = "<group>"; };
+		C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEUnabsorbedInsulin.m; sourceTree = "<group>"; };
+		C139ACAF1BFEDD9E00B0518F /* PumpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpModel.h; sourceTree = "<group>"; };
+		C139ACB01BFEDD9E00B0518F /* PumpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpModel.m; sourceTree = "<group>"; };
+		C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmClockReminder.h; sourceTree = "<group>"; };
+		C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmClockReminder.m; sourceTree = "<group>"; };
+		C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusWizardBolusEstimate.h; sourceTree = "<group>"; };
+		C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusWizardBolusEstimate.m; sourceTree = "<group>"; };
+		C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryPumpLowBattery.h; sourceTree = "<group>"; };
+		C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryPumpLowBattery.m; sourceTree = "<group>"; };
+		C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEModel522ResultTotals.h; sourceTree = "<group>"; };
+		C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEModel522ResultTotals.m; sourceTree = "<group>"; };
 		C13DB3A31B1583E900121E02 /* MessageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBase.h; sourceTree = "<group>"; };
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
 		C14AA33A1B1A2FB100299A55 /* MeterMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterMessage.m; sourceTree = "<group>"; };
+		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
+		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
+		C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceLinkMessage.h; sourceTree = "<group>"; };
+		C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceLinkMessage.m; sourceTree = "<group>"; };
+		C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDeviceMessage.h; sourceTree = "<group>"; };
+		C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDeviceMessage.m; sourceTree = "<group>"; };
+		C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeOtherDeviceID.m; sourceTree = "<group>"; };
+		C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogMarriageProfile.h; sourceTree = "<group>"; };
+		C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogMarriageProfile.m; sourceTree = "<group>"; };
+		C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteOtherDeviceID.h; sourceTree = "<group>"; };
+		C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteOtherDeviceID.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -145,6 +333,10 @@
 		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		C1D2B67C1C2FAD0100DB4AEA /* CmdBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdBase.h; sourceTree = "<group>"; };
+		C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdBase.m; sourceTree = "<group>"; };
+		C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPacketCmd.h; sourceTree = "<group>"; };
+		C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPacketCmd.m; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E535EB1991E49600C2AC49 /* RileyLinkBLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEManager.h; sourceTree = "<group>"; };
@@ -188,15 +380,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		43FF3D6E1BAF938E00DE240A /* Message Operation */ = {
-			isa = PBXGroup;
-			children = (
-				43FF3D6F1BAF940E00DE240A /* MessageSendOperation.h */,
-				43FF3D701BAF940E00DE240A /* MessageSendOperation.m */,
-			);
-			name = "Message Operation";
-			sourceTree = "<group>";
-		};
 		C11F993A1BC405AA0013158C /* PumpCommManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +432,10 @@
 			children = (
 				C1E535EE1991E6A200C2AC49 /* MinimedPacket.h */,
 				C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */,
+				C137A38E1C08114600569851 /* CRC8.h */,
+				C137A38F1C08114600569851 /* CRC8.m */,
+				C137A3911C08142E00569851 /* CRC16.h */,
+				C137A3921C08142E00569851 /* CRC16.m */,
 			);
 			name = MinimedRF;
 			sourceTree = "<group>";
@@ -294,9 +481,8 @@
 				C1EF589B1B3FBA5D001C8C80 /* Nightscout */,
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
-				C14B4EDF1B85A31F00776647 /* MinimedMessages */,
+				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
 				C12964E91B1581D200516761 /* MinimedRF */,
-				43FF3D6E1BAF938E00DE240A /* Message Operation */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
 				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
@@ -310,6 +496,8 @@
 				C1271B081A9A350400B7C949 /* Log.h */,
 				C1EF58861B3F93FE001C8C80 /* Config.h */,
 				C1EF58871B3F93FE001C8C80 /* Config.m */,
+				C139AC221BFD84B500B0518F /* RuntimeUtils.h */,
+				C139AC231BFD84B500B0518F /* RuntimeUtils.m */,
 			);
 			path = RileyLink;
 			sourceTree = "<group>";
@@ -344,17 +532,139 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		C14B4EDF1B85A31F00776647 /* MinimedMessages */ = {
+		C139AB8E1BFD6A6000B0518F /* PumpHistoryEvents */ = {
 			isa = PBXGroup;
 			children = (
+				C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */,
+				C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */,
+				C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */,
+				C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */,
+				C139AC271BFD8CF800B0518F /* PHEAlarmSensor.h */,
+				C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */,
+				C139AC291BFD8CF800B0518F /* PHEBasalProfileStart.h */,
+				C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */,
+				C139AC2B1BFD8CF800B0518F /* PHEBattery.h */,
+				C139AC2C1BFD8CF800B0518F /* PHEBattery.m */,
+				C139AC2D1BFD8CF800B0518F /* PHEBgReceived.h */,
+				C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */,
+				C139AC2F1BFD8CF800B0518F /* PHEBolusNormal.h */,
+				C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */,
+				C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */,
+				C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */,
+				C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */,
+				C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */,
+				C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */,
+				C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */,
+				C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */,
+				C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */,
+				C139AC391BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.h */,
+				C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */,
+				C139AC3B1BFD8CF800B0518F /* PHEChangeAudioBolus.h */,
+				C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */,
+				C139AC3D1BFD8CF800B0518F /* PHEChangeBasalProfile.h */,
+				C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */,
+				C139AC3F1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.h */,
+				C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */,
+				C139AC411BFD8CF800B0518F /* PHEChangeBGReminderEnable.h */,
+				C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */,
+				C139AC431BFD8CF800B0518F /* PHEChangeBGReminderOffset.h */,
+				C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */,
+				C139AC451BFD8CF800B0518F /* PHEChangeBolusReminderEnable.h */,
+				C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */,
+				C139AC471BFD8CF800B0518F /* PHEChangeBolusReminderTime.h */,
+				C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */,
+				C139AC491BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.h */,
+				C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */,
+				C139AC4B1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.h */,
+				C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */,
+				C139AC4D1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.h */,
+				C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */,
+				C139AC4F1BFD8CF800B0518F /* PHEChangeCarbUnits.h */,
+				C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */,
+				C139AC511BFD8CF800B0518F /* PHEChangeChildBlockEnable.h */,
+				C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */,
+				C139AC531BFD8CF800B0518F /* PHEChangeMaxBolus.h */,
+				C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */,
+				C139AC551BFD8CF800B0518F /* PHEChangeParadigmLinkID.h */,
+				C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */,
+				C139AC571BFD8CF800B0518F /* PHEChangeReservoirWarningTime.h */,
+				C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */,
+				C139AC591BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.h */,
+				C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */,
+				C139AC5B1BFD8CF800B0518F /* PHEChangeSensorSetup2.h */,
+				C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */,
+				C139AC5D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.h */,
+				C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */,
+				C139AC5F1BFD8CF800B0518F /* PHEChangeTime.h */,
+				C139AC601BFD8CF800B0518F /* PHEChangeTime.m */,
+				C139AC611BFD8CF800B0518F /* PHEChangeTimeFormat.h */,
+				C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */,
+				C139AC631BFD8CF800B0518F /* PHEChangeVariableBolus.h */,
+				C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */,
+				C139AC651BFD8CF800B0518F /* PHEChangeWatchdogEnable.h */,
+				C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */,
+				C139AC671BFD8CF800B0518F /* PHEClearAlarm.h */,
+				C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */,
+				C139AC691BFD8CF800B0518F /* PHEDeleteAlarmClockTime.h */,
+				C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */,
+				C139AC6B1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.h */,
+				C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */,
+				C139AC6D1BFD8CF800B0518F /* PHEEnableDisableRemote.h */,
+				C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */,
+				C139AC6F1BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.h */,
+				C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */,
+				C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */,
+				C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */,
+				C139AC711BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.h */,
+				C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */,
+				C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */,
+				C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */,
+				C139AC731BFD8CF800B0518F /* PHEPrime.h */,
+				C139AC741BFD8CF800B0518F /* PHEPrime.m */,
+				C139AC751BFD8CF800B0518F /* PHEResultDailyTotal.h */,
+				C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */,
+				C139AC771BFD8CF800B0518F /* PHEResume.h */,
+				C139AC781BFD8CF800B0518F /* PHEResume.m */,
+				C139AC791BFD8CF800B0518F /* PHERewind.h */,
+				C139AC7A1BFD8CF800B0518F /* PHERewind.m */,
+				C139AC7B1BFD8CF800B0518F /* PHESara6E.h */,
+				C139AC7C1BFD8CF800B0518F /* PHESara6E.m */,
+				C139AC7D1BFD8CF800B0518F /* PHESuspend.h */,
+				C139AC7E1BFD8CF800B0518F /* PHESuspend.m */,
+				C139AC7F1BFD8CF800B0518F /* PHEUnabsorbedInsulin.h */,
+				C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */,
+				C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */,
+				C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */,
+				C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */,
+				C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */,
+				C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */,
+				C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */,
+				C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */,
+				C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */,
+			);
+			path = PumpHistoryEvents;
+			sourceTree = "<group>";
+		};
+		C14B4EDF1B85A31F00776647 /* MinimedProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				C139AB8E1BFD6A6000B0518F /* PumpHistoryEvents */,
 				C1743CDD199D374500ED623E /* PumpStatusMessage.h */,
 				C1743CDE199D374500ED623E /* PumpStatusMessage.m */,
 				C13DB3A31B1583E900121E02 /* MessageBase.h */,
 				C13DB3A41B1583E900121E02 /* MessageBase.m */,
 				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
 				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
+				C139AC1F1BFD847F00B0518F /* HistoryPage.h */,
+				C139AC201BFD847F00B0518F /* HistoryPage.m */,
+				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
+				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
+				C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */,
+				C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */,
+				C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */,
+				C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */,
 			);
-			name = MinimedMessages;
+			name = MinimedProtocol;
 			sourceTree = "<group>";
 		};
 		C1AA398B1AB67F6A00BC9E33 /* Categories */ = {
@@ -386,8 +696,14 @@
 				C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */,
 				C126164F1B688D9C001FAD87 /* RileyLinkBLEDevice.h */,
 				C12616501B688D9C001FAD87 /* RileyLinkBLEDevice.m */,
-				C126166E1B7790DF001FAD87 /* SendDataTask.h */,
-				C126166F1B7790DF001FAD87 /* SendDataTask.m */,
+				C1D2B67C1C2FAD0100DB4AEA /* CmdBase.h */,
+				C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */,
+				C126166E1B7790DF001FAD87 /* SendAndListenCmd.h */,
+				C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */,
+				C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */,
+				C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */,
+				C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */,
+				C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */,
 			);
 			name = RileyLink;
 			sourceTree = "<group>";
@@ -424,6 +740,10 @@
 			children = (
 				C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */,
 				C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */,
+				C137A3941C08A35C00569851 /* NightScoutBolus.h */,
+				C137A3951C08A35C00569851 /* NightScoutBolus.m */,
+				C137A39A1C08A48100569851 /* NightScoutPump.h */,
+				C137A39B1C08A48100569851 /* NightScoutPump.m */,
 			);
 			name = Nightscout;
 			sourceTree = "<group>";
@@ -546,43 +866,107 @@
 			buildActionMask = 2147483647;
 			files = (
 				C12EA24B198B436800309FA4 /* AppDelegate.m in Sources */,
+				C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
+				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
+				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
+				C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */,
+				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */,
 				C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */,
 				C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */,
+				C139AC9B1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m in Sources */,
+				C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */,
 				C1EF58971B3FA462001C8C80 /* MenuController.m in Sources */,
+				C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */,
+				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
 				C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */,
-				43FF3D711BAF940E00DE240A /* MessageSendOperation.m in Sources */,
+				C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */,
+				C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */,
+				C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */,
+				C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */,
 				C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */,
 				C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
+				C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */,
 				C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */,
+				C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C12616511B688D9C001FAD87 /* RileyLinkBLEDevice.m in Sources */,
+				C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
+				C139AC8B1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m in Sources */,
+				C139AC8E1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
+				C139AC991BFD8CF800B0518F /* PHEChangeParadigmLinkID.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */,
+				C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */,
+				C139ACA31BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m in Sources */,
+				C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
-				C12616701B7790DF001FAD87 /* SendDataTask.m in Sources */,
+				C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */,
+				C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */,
+				C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */,
+				C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */,
 				C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
+				C139AC901BFD8CF800B0518F /* PHEChangeBGReminderOffset.m in Sources */,
+				C139AC811BFD8CF800B0518F /* PHEAlarmPump.m in Sources */,
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
+				C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,
+				C137A3931C08142E00569851 /* CRC16.m in Sources */,
+				C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */,
+				C137A3901C08114600569851 /* CRC8.m in Sources */,
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,
 				C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */,
+				C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */,
+				C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */,
+				C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */,
+				C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */,
 				43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */,
+				C139ACA21BFD8CF800B0518F /* PHEClearAlarm.m in Sources */,
 				C1EF589E1B3FBFE7001C8C80 /* MainAppViewController.m in Sources */,
 				C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */,
 				43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */,
+				C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */,
+				C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */,
+				C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */,
+				C139AC971BFD8CF800B0518F /* PHEChangeChildBlockEnable.m in Sources */,
 				C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */,
+				C139ACAC1BFD8CF800B0518F /* PHESara6E.m in Sources */,
+				C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
+				C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */,
+				C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */,
+				C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */,
+				C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */,
+				C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */,
+				C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */,
+				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
+				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
+				C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */,
+				C139AC8C1BFD8CF800B0518F /* PHEChangeAudioBolus.m in Sources */,
+				C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */,
+				C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */,
+				C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */,
+				C139AC9C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m in Sources */,
+				C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */,
 				C12EA247198B436800309FA4 /* main.m in Sources */,
+				C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */,
 				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
+				C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */,
+				C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */,
+				C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */,
+				C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */,
+				C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */,
+				C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpCommManager.m in Sources */,
+				C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,10 +1086,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -717,10 +1102,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

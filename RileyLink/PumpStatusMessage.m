@@ -15,12 +15,6 @@
 
 @implementation PumpStatusMessage
 
-- (instancetype)initWithData:(NSData*)data
-{
-  self = [super initWithData:[data subdataWithRange:NSMakeRange(5, data.length-6)]];
-  return self;
-}
-
 - (NSDictionary*) bitBlocks {
   return @{@"sequence":          @[@1, @7],
            @"trend":             @[@12, @3],
@@ -156,7 +150,7 @@
 }
 
 
-- (NSDate*) measurementTime {
+- (NSDate*) sensorTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
   [components setYear:[self getBits:@"sensor_year"]+2000];

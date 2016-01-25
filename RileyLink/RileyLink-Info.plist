@@ -28,6 +28,11 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
@@ -40,6 +45,7 @@
 	<string>Storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
+		<string>bluetooth-le</string>
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarHidden</key>

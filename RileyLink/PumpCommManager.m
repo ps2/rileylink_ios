@@ -13,15 +13,21 @@
 #import "RileyLinkBLEDevice.h"
 #import "MinimedPacket.h"
 #import "MessageBase.h"
+#import "UpdateRegisterCmd.h"
 
 #define STANDARD_PUMP_RESPONSE_WINDOW 180
 #define EXPECTED_MAX_BLE_LATENCY_MS 1500
 
 @interface PumpCommManager () {
+  
+  // TODO: these probably belong on some object representing
+  // our current idea of the state of an individual pump.
   NSDate *awakeUntil;
+  double currentFreqMhz;
+  
+  NSArray *alternateFrequencies;
+  NSInteger selectedFrequencyIdx;
 }
-
-@property (nonatomic, strong) NSOperationQueue *pumpCommQueue;
 
 @end
 
@@ -33,7 +39,13 @@
     _pumpId = a_pumpId;
     _device = a_device;
     
-    self.pumpCommQueue = [NSOperationQueue mainQueue];
+    alternateFrequencies = @[@916.630, @916.70, @916.77];
+    selectedFrequencyIdx = 0;
+    
+    [_device runSession:^(RileyLinkCmdSession * _Nonnull s) {
+      [self setBaseFrequency:[alternateFrequencies[selectedFrequencyIdx] floatValue] withSession:s];
+    }];
+
   }
   return self;
 
@@ -92,7 +104,7 @@
   cmd.repeatCount = repeat;
   cmd.msBetweenPackets = msBetweenPackets;
   cmd.retryCount = retryCount;
-  cmd.listenChannel = 2;
+  cmd.listenChannel = 0;
   MinimedPacket *rxPacket = nil;
   NSInteger totalTimeout = repeat * msBetweenPackets + timeoutMS + EXPECTED_MAX_BLE_LATENCY_MS;
   NSData *response = [session doCmd:cmd withTimeoutMs:totalTimeout];
@@ -157,7 +169,6 @@
 
     }
   }];
-
 }
 
 - (MessageBase *)modelQueryMessage
@@ -237,12 +248,39 @@
   return data;
 }
 
+- (void) selectNextFrequency:(RileyLinkCmdSession*)s {
+  selectedFrequencyIdx++;
+  if (selectedFrequencyIdx >= alternateFrequencies.count) {
+    selectedFrequencyIdx = 0;
+  }
+  NSLog(@"Setting base freq to %@", alternateFrequencies[selectedFrequencyIdx]);
+  [self setBaseFrequency:[alternateFrequencies[selectedFrequencyIdx] floatValue] withSession:s];
+}
+
+- (BOOL) doGetPumpModelWithFrequencyCycling:(RileyLinkCmdSession*)s {
+  NSInteger retries = alternateFrequencies.count;
+  
+  while (retries > 0) {
+    NSLog(@"doGetPumpModel");
+    if ([self doGetPumpModel:s]) {
+      return YES;
+    }
+    retries--;
+    if (retries > 0) {
+      NSLog(@"Get pump model failed.  Trying next frequency");
+      [self selectNextFrequency:s];
+    }
+  }
+  return NO;
+}
 
 - (BOOL) doWakeup:(uint8_t) durationMinutes withSession:(RileyLinkCmdSession*)s {
   
   if ([self isAwake]) {
     return YES;
   }
+  
+  
   
   MinimedPacket *response = [self sendAndListen:[[self powerMessage] data]
                                       timeoutMS:15000
@@ -276,13 +314,30 @@
   return YES;
 }
 
+- (void)updateRegister:(uint8_t)addr toValue:(uint8_t)value withSession:(RileyLinkCmdSession*)s {
+  UpdateRegisterCmd *cmd = [[UpdateRegisterCmd alloc] init];
+  cmd.addr = addr;
+  cmd.value = value;
+  [s doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
+}
+
+- (void)setBaseFrequency:(float)freqMhz withSession:(RileyLinkCmdSession*)s {
+  uint32_t val = (freqMhz * 1000000)/(RILEYLINK_FREQ_XTAL/pow(2.0,16.0));
+  
+  [self updateRegister:CC111X_REG_FREQ0 toValue:val & 0xff withSession:s];
+  [self updateRegister:CC111X_REG_FREQ1 toValue:(val >> 8) & 0xff withSession:s];
+  [self updateRegister:CC111X_REG_FREQ2 toValue:(val >> 16) & 0xff withSession:s];
+  NSLog(@"Set frequency to %f", freqMhz);
+}
 
 - (NSDictionary*) doHistoryPageDump:(uint8_t)pageNum withSession:(RileyLinkCmdSession*)s {
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
   
-  if (![self doWakeup:3 withSession:s]) {
+  [self doWakeup:3 withSession:s];
+  
+  if (![self doGetPumpModelWithFrequencyCycling:s]) {
     responseDict[@"error"] = @"Unable to wake pump";
     return responseDict;
   }
@@ -294,6 +349,8 @@
   } else {
     responseDict[@"pumpModel"] = pumpModel;
   }
+  
+  responseDict[@"baseFrequency"] = alternateFrequencies[selectedFrequencyIdx];
   
   MinimedPacket *response;
   response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"] data]

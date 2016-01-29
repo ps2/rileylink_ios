@@ -36,12 +36,6 @@
 
   model = @"551";
 
-  // Do any additional setup after loading the view.
-
-  self.pumpCommQueue = [[NSOperationQueue alloc] init];
-  self.pumpCommQueue.maxConcurrentOperationCount = 1;
-  self.pumpCommQueue.qualityOfService = NSQualityOfServiceUserInitiated;
-
   mgr = [[PumpCommManager alloc] initWithPumpId:[[Config sharedInstance] pumpID] andDevice:self.device];
   pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
 }

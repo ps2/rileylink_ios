@@ -27,6 +27,22 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 #define ERROR_CMD_INTERRUPTED 0xbb
 #define ERROR_ZERO_DATA 0xcc
 
+#define RILEYLINK_FREQ_XTAL 24000000
+
+#define CC111X_REG_FREQ2    0x09
+#define CC111X_REG_FREQ1    0x0A
+#define CC111X_REG_FREQ0    0x0B
+#define CC111X_REG_MDMCFG4  0x0C
+#define CC111X_REG_MDMCFG3  0x0D
+#define CC111X_REG_MDMCFG2  0x0E
+#define CC111X_REG_MDMCFG1  0x0F
+#define CC111X_REG_MDMCFG0  0x10
+#define CC111X_REG_AGCCTRL2 0x17
+#define CC111X_REG_AGCCTRL1 0x18
+#define CC111X_REG_AGCCTRL0 0x19
+#define CC111X_REG_FREND1   0x1A
+#define CC111X_REG_FREND0   0x1B
+
 
 @interface RileyLinkCmdSession : NSObject
 - (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;

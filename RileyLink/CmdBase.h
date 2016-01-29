@@ -13,6 +13,8 @@
 #define RILEYLINK_CMD_GET_PACKET      3
 #define RILEYLINK_CMD_SEND_PACKET     4
 #define RILEYLINK_CMD_SEND_AND_LISTEN 5
+#define RILEYLINK_CMD_UPDATE_REGISTER 6
+#define RILEYLINK_CMD_RESET           7
 
 @interface CmdBase : NSObject
 

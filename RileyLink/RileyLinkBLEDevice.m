@@ -12,6 +12,8 @@
 #import "NSData+Conversion.h"
 #import "SendAndListenCmd.h"
 #import "GetPacketCmd.h"
+#import "GetVersionCmd.h"
+#import "UIAlertView+Blocks.h"
 
 
 // See impl at bottom of file.
@@ -33,6 +35,8 @@
   CmdBase *currentCommand;
   BOOL runningIdle;
   BOOL runningSession;
+  BOOL ready;
+  BOOL haveResponseCount;
   dispatch_group_t cmdDispatchGroup;
   dispatch_group_t idleDetectDispatchGroup;
 }
@@ -225,6 +229,54 @@
   [self setCharacteristicsFromService:service];
 }
 
+- (void)checkVersion {
+  [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
+    GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
+    // We run two commands here, to flush out responses to any old commands
+    [s doCmd:cmd withTimeoutMs:1000];
+    NSData *response = [s doCmd:cmd withTimeoutMs:1000];
+    NSString *foundVersion;
+    BOOL versionOK = NO;
+    if (response && response.length > 0) {
+      foundVersion = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+      NSLog(@"Got version: %@", foundVersion);
+      NSRange range = [foundVersion rangeOfString:@"subg_rfspy"];
+      if (range.location == 0 && foundVersion.length > 11) {
+        NSString *numberPart = [foundVersion substringFromIndex:11];
+        NSLog(@"numberPart: %@", numberPart);
+        NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
+        if (versionComponents.count > 1) {
+          NSInteger major = [versionComponents[0] integerValue];
+          NSInteger minor = [versionComponents[1] integerValue];
+          if (major == 0 && minor > 4) {
+            versionOK = YES;
+          }
+        }
+      }
+    }
+    if (versionOK) {
+      ready = YES;
+      dispatch_async(dispatch_get_main_queue(),^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_READY object:self];
+      });
+    } else {
+      dispatch_async(dispatch_get_main_queue(),^{
+        NSString *msg;
+        if (foundVersion != nil) {
+          msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.5 or newer.", foundVersion];
+        } else {
+          msg = @"Could not determine firmware version.";
+        }
+        [UIAlertView showWithTitle:@"Firmware version check failed."
+                           message:msg
+                 cancelButtonTitle:@"OK"
+                 otherButtonTitles:nil
+                          tapBlock:nil];
+      });
+    }
+  }];
+}
+
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
   if (error) {
     NSLog(@"Error updating %@: %@", characteristic, error);
@@ -233,57 +285,73 @@
   NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
   
   if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
-    if (characteristic.value.length > 0) {
-      [self dataReceivedFromRL:characteristic.value];
-    } else {
-      NSLog(@"Error: Empty data update!!!");
-    }
+    [self dataReceivedFromRL:characteristic.value];
     fetchingResponse = NO;
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
-    const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
-    NSLog(@"Updated response count: %d", responseCount);
-    fetchingResponse = YES;
-    [peripheral readValueForCharacteristic:dataCharacteristic];
+    if (!haveResponseCount) {
+      // The first time we get a notice on this is just from connecting.
+      haveResponseCount = YES;
+      [self checkVersion];
+    } else {
+      const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
+      NSLog(@"Updated response count: %d", responseCount);
+      fetchingResponse = YES;
+      [peripheral readValueForCharacteristic:dataCharacteristic];
+    }
   }
 }
 
 - (void)dataReceivedFromRL:(NSData*) data {
+  //NSLog(@"******* New Data: %@", [data hexadecimalString]);
   [inBuf appendData:data];
   
-  NSRange endOfResp = [inBuf rangeOfData:endOfResponseMarker options:0 range:NSMakeRange(0, inBuf.length)];
-  NSLog(@"******* New Data: %@", [data hexadecimalString]);
-  
-  NSData *fullResponse;
-  
-  if (endOfResp.location != NSNotFound) {
-    fullResponse = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
-    NSLog(@"******* Full response: %@", [fullResponse hexadecimalString]);
-    NSInteger remainder = inBuf.length - endOfResp.location - 1;
-    if (remainder > 0) {
-      inBuf = [[inBuf subdataWithRange:NSMakeRange(endOfResp.location+1, remainder)] mutableCopy];
-      NSLog(@"******* Remainder: %@", [inBuf hexadecimalString]);
-    } else {
-      inBuf = [NSMutableData data];
-    }
-  } else {
-    NSLog(@"******* Buffering: %@", [inBuf hexadecimalString]);
-  }
-  
-  if (fullResponse) {
-    if (runningIdle) {
-      runningIdle = NO;
-      [self handleIdleListenerResponse:fullResponse];
-      if (!runningSession) {
-        if (inBuf.length > 0) {
-          NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
-          inBuf = [NSMutableData data];
-        }
-        [self onIdle];
+  while(inBuf.length > 0) {
+    NSRange endOfResp = [inBuf rangeOfData:endOfResponseMarker options:0 range:NSMakeRange(0, inBuf.length)];
+    
+    NSData *fullResponse;
+    if (endOfResp.location != NSNotFound) {
+      fullResponse = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
+      //NSLog(@"******* Full response: %@", [fullResponse hexadecimalString]);
+      NSInteger remainder = inBuf.length - endOfResp.location - 1;
+      if (remainder > 0) {
+        inBuf = [[inBuf subdataWithRange:NSMakeRange(endOfResp.location+1, remainder)] mutableCopy];
+        //NSLog(@"******* Remainder: %@", [inBuf hexadecimalString]);
+      } else {
+        inBuf = [NSMutableData data];
       }
-    } else if (currentCommand) {
-      currentCommand.response = fullResponse;
-      currentCommand = nil;
-      dispatch_group_leave(cmdDispatchGroup);
+    } else {
+      //NSLog(@"******* Buffering: %@", [inBuf hexadecimalString]);
+    }
+    
+    if (fullResponse) {
+      if (runningIdle) {
+        NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
+        runningIdle = NO;
+        [self handleIdleListenerResponse:fullResponse];
+        if (!runningSession) {
+          if (inBuf.length > 0) {
+            NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
+            inBuf = [NSMutableData data];
+          }
+          [self onIdle];
+        }
+      } else if (currentCommand) {
+        NSLog(@"Response to command: %@", [fullResponse hexadecimalString]);
+        currentCommand.response = fullResponse;
+        if (inBuf.length > 0) {
+          // This happens when connecting to a RL that is still running a command
+          // from a previous connection.
+          NSLog(@"Dropping extraneous data: %@", [inBuf hexadecimalString]);
+          inBuf.length = 0;
+        }
+        currentCommand = nil;
+        dispatch_group_leave(cmdDispatchGroup);
+      } else {
+        NSLog(@"Received data but no outstanding command!")
+        inBuf.length = 0;
+      }
+    } else {
+      break;
     }
   }
 }
@@ -327,7 +395,6 @@
   } else {
     NSLog(@"Missing customNameCharacteristic");
   }
-  
 }
 
 - (void) onIdle {
@@ -365,7 +432,7 @@
                             @"peripheral": self.peripheral,
                             };
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
-  } else {
+  } else if (response.length > 0) {
     uint8_t errorCode = ((uint8_t*)[response bytes])[0];
     switch (errorCode) {
       case SubgRfspyErrorRxTimeout:
@@ -381,6 +448,8 @@
         NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
         break;
     }
+  } else {
+    NSLog(@"Idle command got empty response!!");
   }
 }
 

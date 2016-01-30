@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Config.h"
 
 @implementation AppDelegate
 
@@ -16,6 +17,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  self.pump = [[PumpState alloc] initWithPumpId:[[Config sharedInstance] pumpID]];  
+  
   return YES;
 }
 

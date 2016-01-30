@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="oBH-3z-2fj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="oBH-3z-2fj">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -226,7 +226,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a 6 digit number that can be found on the back of your pump." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAc-jo-xof">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This is a 6 digit number that can be found on the back of your pump." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAc-jo-xof">
                                         <rect key="frame" x="20" y="244" width="284" height="27"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -241,7 +241,7 @@
                                             <action selector="continuePressed:" destination="1pp-Ej-SdS" eventType="touchUpInside" id="BNt-Le-LKe"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the API_SECRET for the REST API, usually entered into the Azure Management portal." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7zY-vs-lJP">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This is the API_SECRET for the REST API, usually entered into the Azure Management portal." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7zY-vs-lJP">
                                         <rect key="frame" x="20" y="141" width="284" height="27"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -347,7 +347,7 @@
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LlF-8z-sPI" id="flN-zP-nQW">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="-65db" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vnK-YK-N1I">
@@ -499,7 +499,7 @@
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lxM-ji-kRt" id="EaC-oC-BPB">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="6Ut-vI-33J">
@@ -526,7 +526,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="b99-Bd-oMs">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="b99-Bd-oMs">
                                             <rect key="frame" x="51" y="11" width="211" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -784,12 +784,6 @@
                                 <color key="textColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
-                                <rect key="frame" x="0.0" y="158" width="320" height="214"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s07-hb-96I">
                                 <rect key="frame" x="83" y="109" width="155" height="30"/>
                                 <state key="normal" title="Dump History Records">
@@ -799,12 +793,26 @@
                                     <action selector="dumpHistoryButtonPressed:" destination="U6s-FT-nQH" eventType="touchUpInside" id="lPz-NP-916"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sSk-OV-dTa">
+                                <rect key="frame" x="94" y="142" width="133" height="30"/>
+                                <state key="normal" title="Tune To Pump Freq">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tuneButtonPressed:" destination="U6s-FT-nQH" eventType="touchUpInside" id="B77-LN-Tfi"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
+                                <rect key="frame" x="0.0" y="180" width="320" height="192"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="YQ0-DI-aEl" firstAttribute="centerX" secondItem="T33-ad-KLw" secondAttribute="centerX" id="2LP-Km-wy7"/>
                             <constraint firstItem="deA-p4-R7V" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="67Y-gB-Axy"/>
-                            <constraint firstItem="T33-ad-KLw" firstAttribute="top" secondItem="s07-hb-96I" secondAttribute="bottom" constant="19" id="791-bo-4nL"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="BtS-BD-aFZ"/>
                             <constraint firstItem="deA-p4-R7V" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" constant="78" id="ChW-ZQ-5Jz"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="top" secondItem="fjO-7e-9wj" secondAttribute="bottom" constant="2" id="Ddw-N7-WgQ"/>
@@ -815,7 +823,10 @@
                             <constraint firstItem="deA-p4-R7V" firstAttribute="top" secondItem="Xh4-dw-jok" secondAttribute="bottom" constant="10" id="Tua-7a-LiL"/>
                             <constraint firstItem="Xh4-dw-jok" firstAttribute="top" secondItem="C8M-0L-0jj" secondAttribute="bottom" constant="16" id="UAe-0S-qKU"/>
                             <constraint firstAttribute="trailing" secondItem="T33-ad-KLw" secondAttribute="trailing" id="VIX-wK-Upx"/>
+                            <constraint firstItem="sSk-OV-dTa" firstAttribute="centerX" secondItem="yBb-jp-prw" secondAttribute="centerX" id="WNg-rl-ezI"/>
+                            <constraint firstItem="T33-ad-KLw" firstAttribute="top" secondItem="YQ0-DI-aEl" secondAttribute="top" id="bwq-hA-YOH"/>
                             <constraint firstItem="YQ0-DI-aEl" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" id="hyg-YQ-XW1"/>
+                            <constraint firstItem="YQ0-DI-aEl" firstAttribute="top" secondItem="sSk-OV-dTa" secondAttribute="bottom" constant="8" symbolic="YES" id="kYM-0R-5Ln"/>
                             <constraint firstItem="deA-p4-R7V" firstAttribute="centerX" secondItem="Xh4-dw-jok" secondAttribute="centerX" id="lig-6r-jPp"/>
                             <constraint firstItem="YQ0-DI-aEl" firstAttribute="top" secondItem="s07-hb-96I" secondAttribute="bottom" constant="41" id="lwA-Mc-nmE"/>
                             <constraint firstItem="Xh4-dw-jok" firstAttribute="trailing" secondItem="YQ0-DI-aEl" secondAttribute="trailing" id="uqt-En-7EG"/>
@@ -906,6 +917,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Puw-Eq-S9g"/>
+        <segue reference="feD-GC-K0e"/>
     </inferredMetricsTieBreakers>
 </document>

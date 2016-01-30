@@ -16,13 +16,15 @@
 #import "RileyLinkBLEManager.h"
 #import "Config.h"
 #import "NSData+Conversion.h"
-#import "PumpCommManager.h"
+#import "PumpState.h"
 #import "PumpModel.h"
+#import "PumpOps.h"
 #import "HistoryPage.h"
 #import "PumpHistoryEventBase.h"
 #import "NSData+Conversion.h"
 #import "NightScoutBolus.h"
 #import "NightScoutPump.h"
+#import "AppDelegate.h"
 
 #define RECORD_RAW_PACKETS NO
 
@@ -49,9 +51,9 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @property (strong, nonatomic) NSTimer *pumpPollTimer;
 @property (strong, nonatomic) RileyLinkBLEDevice *activeRileyLink;
 @property (strong, nonatomic) NSTimer *getHistoryTimer;
-@property (strong, nonatomic) PumpCommManager *commManager;
 @property (strong, nonatomic) NSString *pumpModel;
 @property (strong, nonatomic) NSMutableSet *sentTreatments;
+@property (nonatomic, strong) PumpOps *pumpOps;
 
 
 
@@ -76,6 +78,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     _dateFormatter.includeTime = YES;
     _dateFormatter.useMillisecondPrecision = YES;
     _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(packetReceived:)
                                                  name:RILEYLINK_EVENT_PACKET_RECEIVED
@@ -145,6 +148,9 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 {
   RileyLinkBLEDevice *device = [note object];
   [device enableIdleListeningOnChannel:0];
+  
+  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  _pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:device];
 }
 
 - (void)timerTriggered:(id)sender {
@@ -191,24 +197,15 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   
   NSLog(@"Using RileyLink \"%@\" to poll history.", self.activeRileyLink.name);
   
-  if (self.commManager != nil && self.commManager.device != self.activeRileyLink) {
-    // We need a new commManager for the new RL we want to talk to.
-    self.commManager = nil;
+  if (!_pumpOps) {
+    NSLog(@"No pumpOps available");
   }
   
-  if (self.commManager == nil) {
-    self.commManager = [[PumpCommManager alloc]
-                        initWithPumpId:[[Config sharedInstance] pumpID]
-                        andDevice:self.activeRileyLink];
-  }
-  
-
-  
-  [self.commManager dumpHistoryPage:0 completionHandler:^(NSDictionary * _Nonnull res) {
+  [self.pumpOps getHistoryPage:0 withHandler:^(NSDictionary * _Nonnull res) {
     if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       self.pumpModel = res[@"pumpModel"];
-      NSLog(@"dumpHistory succeded with base frequency: %@", res[@"baseFrequency"]);
+      NSLog(@"dumpHistory succeeded with base frequency: %@", res[@"baseFrequency"]);
       [self decodeHistoryPage:page];
     } else {
       NSLog(@"dumpHistory failed: %@", res[@"error"]);

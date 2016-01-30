@@ -1,0 +1,10 @@
+//
+//  PHEChangeCarbUnits.h
+//
+
+#import <Foundation/Foundation.h>
+#import "PumpHistoryEventBase.h"
+
+@interface PHEChangeCarbUnits : PumpHistoryEventBase
+
+@end

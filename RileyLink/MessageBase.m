@@ -45,10 +45,15 @@
   }
 }
 
+- (NSInteger)bitsOffset {
+  return 5;
+}
+
 - (NSInteger) getBits:(NSString*)key {
   NSArray *range = [self bitBlocks][key];
   NSInteger bitsNeeded = [[range lastObject] integerValue];
-  NSInteger offset = [[range firstObject] integerValue];
+  // bitBlocks start at byte idx 5
+  NSInteger offset = [[range firstObject] integerValue] + ([self bitsOffset]*8);
   NSInteger rval = 0;
   while (bitsNeeded > 0) {
     rval = (rval << 1) + [self getBitAtIndex:offset++];

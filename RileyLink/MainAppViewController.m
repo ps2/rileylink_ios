@@ -9,12 +9,12 @@
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
 #import "PumpStatusMessage.h"
-#import "ISO8601DateFormatter.h"
 #import "NightScoutUploader.h"
 #import "Config.h"
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
 #import "RileyLinkBLEManager.h"
+#import "PumpState.h"
 
 #import "MainAppViewController.h"
 
@@ -22,10 +22,7 @@
   NSDictionary *lastStatus;
 }
 
-@property (strong, nonatomic) ISO8601DateFormatter *dateFormatter;
-@property (strong, nonatomic) NSTimeZone *utcTimeZone;
 @property (strong, nonatomic) NightScoutUploader *uploader;
-
 
 @end
 
@@ -40,12 +37,8 @@
   // Looks like switching NightscoutWebView to WKWebView should help. Until then:
   [UIView setAnimationsEnabled:NO];
   
-  _dateFormatter = [[ISO8601DateFormatter alloc] init];
-  _dateFormatter.includeTime = YES;
-  _dateFormatter.defaultTimeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-  
   self.uploader = [[NightScoutUploader alloc] init];
-  self.uploader.endpoint = [[Config sharedInstance] nightscoutURL];
+  self.uploader.siteURL = [[Config sharedInstance] nightscoutURL];
   self.uploader.APISecret = [[Config sharedInstance] nightscoutAPISecret];
   
   AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

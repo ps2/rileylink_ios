@@ -101,12 +101,9 @@
   if (self.rlDevice != nil) {
     if (autoConnectSwitch.isOn) {
       // TODO: Use KVO on a device property instead
-      [[RileyLinkBLEManager sharedManager] addDeviceToAutoConnectList:self.rlDevice];
-      [self.rlDevice connect];
+      [[RileyLinkBLEManager sharedManager] connectPeripheral:self.rlDevice.peripheral];
     } else {
-      [[RileyLinkBLEManager sharedManager] removeDeviceFromAutoConnectList:self.rlDevice];
-
-      [self.rlDevice disconnect];
+      [[RileyLinkBLEManager sharedManager] disconnectPeripheral:self.rlDevice.peripheral];
     }
   }
   [self updateNameView];

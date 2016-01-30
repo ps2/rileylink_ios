@@ -53,8 +53,6 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 @property (strong, nonatomic) NSTimer *getHistoryTimer;
 @property (strong, nonatomic) NSString *pumpModel;
 @property (strong, nonatomic) NSMutableSet *sentTreatments;
-@property (nonatomic, strong) PumpOps *pumpOps;
-
 
 
 @end
@@ -148,9 +146,6 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 {
   RileyLinkBLEDevice *device = [note object];
   [device enableIdleListeningOnChannel:0];
-  
-  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-  _pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:device];
 }
 
 - (void)timerTriggered:(id)sender {
@@ -197,15 +192,14 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   
   NSLog(@"Using RileyLink \"%@\" to poll history.", self.activeRileyLink.name);
   
-  if (!_pumpOps) {
-    NSLog(@"No pumpOps available");
-  }
-  
-  [self.pumpOps getHistoryPage:0 withHandler:^(NSDictionary * _Nonnull res) {
+  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  PumpOps *pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:self.activeRileyLink];
+
+  [pumpOps getHistoryPage:0 withHandler:^(NSDictionary * _Nonnull res) {
     if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       self.pumpModel = res[@"pumpModel"];
-      NSLog(@"dumpHistory succeeded with base frequency: %@", res[@"baseFrequency"]);
+      NSLog(@"dumpHistory succeeded.");
       [self decodeHistoryPage:page];
     } else {
       NSLog(@"dumpHistory failed: %@", res[@"error"]);

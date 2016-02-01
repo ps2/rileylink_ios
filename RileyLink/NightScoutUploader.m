@@ -393,6 +393,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     }
     
     status[@"pump"] = @{
+                        @"clock": [self.dateFormatter stringFromDate:validTime],
                         @"iob": @{
                           @"timestamp": [self.dateFormatter stringFromDate:validTime],
                           @"bolusiob": @(msg.activeInsulin),

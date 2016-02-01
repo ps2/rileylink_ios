@@ -110,7 +110,8 @@
   });
   
   dispatch_group_notify(idleDetectDispatchGroup,
-                        dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
+                        dispatch_get_main_queue(), ^{
+                          NSLog(@"idleDetectDispatchGroup empty");
                           runningSession = NO;
                           if (!runningIdle) {
                             [self onIdle];

@@ -9,6 +9,12 @@
 #import "PumpOps.h"
 #import "PumpOpsSynchronous.h"
 
+@interface PumpOps ()
+
+@property (nonatomic) UIBackgroundTaskIdentifier historyTask;
+
+@end
+
 @implementation PumpOps
 
 - (nonnull instancetype)initWithPumpState:(nonnull PumpState *)a_pump andDevice:(nonnull RileyLinkBLEDevice *)a_device {
@@ -54,9 +60,9 @@
 }
 
 - (void) getHistoryPage:(NSInteger)page withHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
-  UIBackgroundTaskIdentifier historyFetcher = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+  self.historyTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
     NSLog(@"History fetching task expired.")
-    [[UIApplication sharedApplication] endBackgroundTask:historyFetcher];
+    [[UIApplication sharedApplication] endBackgroundTask:self.historyTask];
   } ];
   NSLog(@"History fetching task started.");
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
@@ -64,7 +70,7 @@
     NSDictionary *res = [ops dumpHistoryPage:0];
     dispatch_async(dispatch_get_main_queue(),^{
       completionHandler(res);
-      [[UIApplication sharedApplication] endBackgroundTask:historyFetcher];
+      [[UIApplication sharedApplication] endBackgroundTask:self.historyTask];
       NSLog(@"History fetching task completed normally.")
     });
   }];

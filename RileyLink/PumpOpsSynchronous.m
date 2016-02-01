@@ -214,8 +214,8 @@
       } else {
         avgRSSI += -99;
       }
-      avgRSSI = avgRSSI / ((float)tries);
     }
+    avgRSSI = avgRSSI / ((float)tries);
     [scanResults addObject:@(successCount)];
     [rssi addObject:@(avgRSSI)];
   }
@@ -239,6 +239,8 @@
     rval[@"error"] = @"Pump did not respond on any of the attempted frequencies.";
   }
   [self setBaseFrequency:[frequencies[bestIndex] floatValue]];
+  
+  NSLog(@"Frequency scan results: %@", rval);
 
   return rval;
 }

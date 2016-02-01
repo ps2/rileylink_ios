@@ -26,6 +26,7 @@
   CBCharacteristic *dataCharacteristic;
   CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
+  CBCharacteristic *timerTickCharacteristic;
   NSMutableArray *incomingPackets;
   NSMutableData *inBuf;
   NSData *endOfResponseMarker;
@@ -124,6 +125,7 @@
   dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
   if (dispatch_group_wait(cmdDispatchGroup,timeoutAt) != 0) {
     NSLog(@"No response from RileyLink... timing out command.");
+    [self.peripheral readValueForCharacteristic:dataCharacteristic];
     dispatch_group_leave(cmdDispatchGroup);
     currentCommand = nil;
   }
@@ -187,6 +189,9 @@
       dataCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
+      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      timerTickCharacteristic = characteristic;
     }
   }
   
@@ -204,7 +209,8 @@
     if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
       [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
                                                                                       RILEYLINK_DATA_UUID,
-                                                                                      RILEYLINK_CUSTOM_NAME_UUID]
+                                                                                      RILEYLINK_CUSTOM_NAME_UUID,
+                                                                                      RILEYLINK_TIMER_TICK_UUID]
                                                                 excludingAttributes:service.characteristics]
                                forService:service];
     }
@@ -243,7 +249,6 @@
       NSRange range = [foundVersion rangeOfString:@"subg_rfspy"];
       if (range.location == 0 && foundVersion.length > 11) {
         NSString *numberPart = [foundVersion substringFromIndex:11];
-        NSLog(@"numberPart: %@", numberPart);
         NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
         if (versionComponents.count > 1) {
           NSInteger major = [versionComponents[0] integerValue];
@@ -298,6 +303,9 @@
       fetchingResponse = YES;
       [peripheral readValueForCharacteristic:dataCharacteristic];
     }
+  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
+    const unsigned char timerTick = ((const unsigned char*)[characteristic.value bytes])[0];
+    NSLog(@"Updated timer tick: %d", timerTick);
   }
 }
 

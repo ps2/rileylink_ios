@@ -204,6 +204,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     } else {
       NSLog(@"dumpHistory failed: %@", res[@"error"]);
     }
+    [self flushAll];
   }];
 }
 
@@ -251,7 +252,6 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
     [self addTreatment:treatment fromModel:m];
   }
-  [self flushAll];
 }
 
 

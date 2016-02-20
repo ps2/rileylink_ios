@@ -36,7 +36,7 @@ typedef NS_ENUM(unsigned int, DexcomSensorError) {
 
 
 @interface NightScoutUploader () {
-  BOOL dumpHistoryScheduled;
+  BOOL fetchHistoryScheduled;
   NSDate *lastHistoryAttempt;
 }
 
@@ -84,7 +84,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RILEYLINK_EVENT_DEVICE_CONNECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceReady:) name:RILEYLINK_EVENT_DEVICE_READY object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rileyLinkAdded:) name:RILEYLINK_EVENT_DEVICE_ADDED object:nil];
     
     [UIDevice currentDevice].batteryMonitoringEnabled = YES;
     
@@ -142,15 +142,18 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   }
 }
 
-- (void)deviceReady:(NSNotification *)note
+- (void)rileyLinkAdded:(NSNotification *)note
 {
   RileyLinkBLEDevice *device = [note object];
   [device enableIdleListeningOnChannel:0];
 }
 
 - (void)timerTriggered:(id)sender {
-  if ([lastHistoryAttempt timeIntervalSinceNow] < (- 5 * 60)) {
-    NSLog(@"No dumpHistory for over five minutes.  Triggering one");
+  
+  logMemUsage();
+  
+  if ([lastHistoryAttempt timeIntervalSinceNow] < (- 5 * 60) && !fetchHistoryScheduled) {
+    NSLog(@"No fetchHistory for over five minutes.  Triggering one");
     [self fetchHistory:nil];
   }
   [self flushAll];
@@ -171,7 +174,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 - (void) fetchHistory:(id)sender {
   lastHistoryAttempt = [NSDate date];
 
-  dumpHistoryScheduled = NO;
+  fetchHistoryScheduled = NO;
   if (self.activeRileyLink && self.activeRileyLink.state != RileyLinkStateConnected) {
     self.activeRileyLink = nil;
   }
@@ -186,11 +189,11 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   }
   
   if (self.activeRileyLink == nil) {
-    NSLog(@"No connected rileylinks to attempt to pull history with. Aborting poll.");
+    NSLog(@"fetchHistory failed: No connected rileylinks to attempt to pull history with.");
     return;
   }
   
-  NSLog(@"Using RileyLink \"%@\" to poll history.", self.activeRileyLink.name);
+  NSLog(@"Using RileyLink \"%@\" to fetchHistory.", self.activeRileyLink.name);
   
   AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   PumpOps *pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:self.activeRileyLink];
@@ -199,10 +202,10 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       self.pumpModel = res[@"pumpModel"];
-      NSLog(@"dumpHistory succeeded.");
+      NSLog(@"fetchHistory succeeded.");
       [self decodeHistoryPage:page];
     } else {
-      NSLog(@"dumpHistory failed: %@", res[@"error"]);
+      NSLog(@"fetchHistory failed: %@", res[@"error"]);
     }
     [self flushAll];
   }];
@@ -323,9 +326,9 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     self.activeRileyLink = device;
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
     // Just got a MySentry packet; in 25s would be a good time to poll.
-    if (!dumpHistoryScheduled) {
+    if (!fetchHistoryScheduled) {
       [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:25];
-      dumpHistoryScheduled = YES;
+      fetchHistoryScheduled = YES;
     }
 
   } else if ([packet packetType] == PacketTypeMeter) {

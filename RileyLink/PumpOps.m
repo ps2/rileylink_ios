@@ -67,7 +67,7 @@
   NSLog(@"History fetching task started.");
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
     PumpOpsSynchronous *ops = [[PumpOpsSynchronous alloc] initWithPump:_pump andSession:session];
-    NSDictionary *res = [ops dumpHistoryPage:0];
+    NSDictionary *res = [ops getHistoryPage:0];
     dispatch_async(dispatch_get_main_queue(),^{
       completionHandler(res);
       [[UIApplication sharedApplication] endBackgroundTask:self.historyTask];

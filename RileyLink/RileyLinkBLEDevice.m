@@ -271,7 +271,7 @@
         if (foundVersion != nil) {
           msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.5 or newer.", foundVersion];
         } else {
-          msg = @"Could not determine firmware version.";
+          msg = @"Communication issue with RileyLink. Please power cycle the RileyLink and try again.";
         }
         [UIAlertView showWithTitle:@"Firmware version check failed."
                            message:msg

@@ -73,6 +73,7 @@
     d = [[RileyLinkBLEDevice alloc] initWithPeripheral:peripheral];
     d.RSSI = RSSI;
     _devicesById[peripheral.identifier.UUIDString] = d;
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_ADDED object:d userInfo:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:self userInfo:@{@"device": d}];
   }

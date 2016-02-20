@@ -20,7 +20,7 @@
 - (void) pressButton;
 - (NSString* _Nullable) getPumpModel;
 - (NSDictionary* _Nonnull) getBatteryVoltage;
-- (NSDictionary* _Nonnull) dumpHistoryPage:(uint8_t)pageNum;
+- (NSDictionary* _Nonnull) getHistoryPage:(uint8_t)pageNum;
 - (NSDictionary* _Nonnull) scanForPump;
 
 @end

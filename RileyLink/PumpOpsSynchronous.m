@@ -297,7 +297,7 @@
   NSLog(@"Set frequency to %f", freqMhz);
 }
 
-- (NSDictionary*) dumpHistoryPage:(uint8_t)pageNum {
+- (NSDictionary*) getHistoryPage:(uint8_t)pageNum {
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];

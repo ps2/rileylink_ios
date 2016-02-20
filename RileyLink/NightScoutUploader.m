@@ -330,6 +330,8 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
       [self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:25];
       fetchHistoryScheduled = YES;
     }
+    // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s
+    // above is mainly to avoid colliding with subsequent packets.
 
   } else if ([packet packetType] == PacketTypeMeter) {
     [self handleMeterMessage:packet];

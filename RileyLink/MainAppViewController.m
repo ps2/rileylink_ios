@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
 #import "RileyLinkBLEManager.h"
+#import "PumpState.h"
 
 #import "MainAppViewController.h"
 
@@ -22,7 +23,6 @@
 }
 
 @property (strong, nonatomic) NightScoutUploader *uploader;
-
 
 @end
 

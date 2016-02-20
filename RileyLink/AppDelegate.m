@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Config.h"
 
 @implementation AppDelegate
 
@@ -16,6 +17,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+  // Remove old log file
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSString *documentsDirectory = paths[0];
+  NSString *path = [documentsDirectory stringByAppendingPathComponent:@"logfile.txt"];
+  NSError *error;
+  [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+  if (error != nil) {
+    NSLog(@"Could not remove file: %@", path);
+  }
+  
+  self.pump = [[PumpState alloc] initWithPumpId:[[Config sharedInstance] pumpID]];  
+  
   return YES;
 }
 

@@ -94,6 +94,8 @@
   [[Config sharedInstance] setNightscoutURL: nightscoutURL.text];
   [[Config sharedInstance] setNightscoutAPISecret: nightscoutAPISecret.text];
   [[Config sharedInstance] setPumpID:pumpId.text];
+  
+  
 }
 
 - (BOOL) validateValues {

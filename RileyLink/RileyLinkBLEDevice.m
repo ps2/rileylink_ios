@@ -6,30 +6,44 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import <CoreBluetooth/CoreBluetooth.h>
 #import "MinimedPacket.h"
 #import "RileyLinkBLEDevice.h"
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
-#import "SendDataTask.h"
+#import "SendAndListenCmd.h"
+#import "GetPacketCmd.h"
+#import "GetVersionCmd.h"
+#import "UIAlertView+Blocks.h"
+
+
+// See impl at bottom of file.
+@interface RileyLinkCmdSession ()
+@property (nonatomic, weak) RileyLinkBLEDevice *device;
+@end
+
 
 @interface RileyLinkBLEDevice () <CBPeripheralDelegate> {
-  CBCharacteristic *packetRxCharacteristic;
-  CBCharacteristic *packetTxCharacteristic;
-  CBCharacteristic *txTriggerCharacteristic;
-  CBCharacteristic *packetRssiCharacteristic;
-  CBCharacteristic *packetCountCharacteristic;
-  CBCharacteristic *txChannelCharacteristic;
-  CBCharacteristic *rxChannelCharacteristic;
+  CBCharacteristic *dataCharacteristic;
+  CBCharacteristic *responseCountCharacteristic;
   CBCharacteristic *customNameCharacteristic;
+  CBCharacteristic *timerTickCharacteristic;
   NSMutableArray *incomingPackets;
-  NSMutableArray *sendTasks;
-  SendDataTask *currentSendTask;
-  NSInteger copiesLeftToSend;
-  NSTimer *sendTimer;
+  NSMutableData *inBuf;
+  NSData *endOfResponseMarker;
+  BOOL idleListeningEnabled;
+  uint8_t idleListenChannel;
+  BOOL fetchingResponse;
+  CmdBase *currentCommand;
+  BOOL runningIdle;
+  BOOL runningSession;
+  BOOL ready;
+  BOOL haveResponseCount;
+  dispatch_group_t cmdDispatchGroup;
+  dispatch_group_t idleDetectDispatchGroup;
 }
 
 @property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end
 
@@ -40,124 +54,106 @@
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
-    self = [super init];
-    if (self) {
-        incomingPackets = [NSMutableArray array];
-        sendTasks = [NSMutableArray array];
-        currentSendTask = nil;
+  self = [super init];
+  if (self) {
+    // All processes that interact that run commands on this device should be serialized through
+    // this queue.
+    _serialDispatchQueue = dispatch_queue_create("com.rileylink.rlbledevice", DISPATCH_QUEUE_SERIAL);
+    
+    cmdDispatchGroup = dispatch_group_create();
+    idleDetectDispatchGroup = dispatch_group_create();
 
-        _peripheral = peripheral;
-        _peripheral.delegate = self;
-
-        for (CBService *service in _peripheral.services) {
-            [self setCharacteristicsFromService:service];
-        }
+    incomingPackets = [NSMutableArray array];
+    
+    inBuf = [NSMutableData data];
+    endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
+    
+    _peripheral = peripheral;
+    _peripheral.delegate = self;
+    
+    for (CBService *service in _peripheral.services) {
+      [self setCharacteristicsFromService:service];
     }
-    return self;
+  }
+  return self;
 }
 
 - (instancetype)init NS_UNAVAILABLE
 {
-    return nil;
+  return nil;
 }
 
 - (NSString *)name
 {
-    return self.peripheral.name;
+  return self.peripheral.name;
 }
 
 - (NSString *)peripheralId
 {
-    return self.peripheral.identifier.UUIDString;
+  return self.peripheral.identifier.UUIDString;
 }
 
 - (NSArray*) packets {
   return [NSArray arrayWithArray:incomingPackets];
 }
 
-- (void) sendPacketData:(NSData*)data {
-  [self sendPacketData:data withCount:1 andTimeBetweenPackets:0];
+- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
+  dispatch_group_enter(idleDetectDispatchGroup);
+  RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
+  session.device = self;
+  runningSession = YES;
+  dispatch_async(_serialDispatchQueue, ^{
+    NSLog(@"Running dispatched RL comms task");
+    proc(session);
+    NSLog(@"Finished running dispatched RL comms task");
+    dispatch_group_leave(idleDetectDispatchGroup);
+  });
+  
+  dispatch_group_notify(idleDetectDispatchGroup,
+                        dispatch_get_main_queue(), ^{
+                          NSLog(@"idleDetectDispatchGroup empty");
+                          runningSession = NO;
+                          if (!runningIdle) {
+                            [self onIdle];
+                          }
+                        });
 }
 
-- (void) sendPacketData:(NSData*)data withCount:(NSInteger)count andTimeBetweenPackets:(NSTimeInterval)timeBetweenPackets {
-  if (count <= 0) {
-    NSLog(@"Invalid repeat count for sendPacketData");
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+  dispatch_group_enter(cmdDispatchGroup);
+  currentCommand = cmd;
+  [self issueCommand:cmd];
+  dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
+  if (dispatch_group_wait(cmdDispatchGroup,timeoutAt) != 0) {
+    NSLog(@"No response from RileyLink... timing out command.");
+    [self.peripheral readValueForCharacteristic:dataCharacteristic];
+    dispatch_group_leave(cmdDispatchGroup);
+    currentCommand = nil;
+  }
+  return cmd.response;
+}
+
+- (void) issueCommand:(nonnull CmdBase*)cmd {
+  if (dataCharacteristic == nil) {
+    NSLog(@"Ignoring command issued before we have discovered characteristics");
     return;
   }
-  SendDataTask *task = [[SendDataTask alloc] init];
-  task.data = data;
-  task.repeatCount = count;
-  task.timeBetweenPackets = timeBetweenPackets;
-  [sendTasks addObject:task];
-  [self dequeueSendTasks];
-}
-
-- (void) dequeueSendTasks {
-  if (!currentSendTask && sendTasks.count > 0) {
-    currentSendTask = sendTasks[0];
-    copiesLeftToSend = currentSendTask.repeatCount;
-    [sendTasks removeObjectAtIndex:0];
-    NSLog(@"Prepping for send: %@", [currentSendTask.data hexadecimalString]);
-    [self.peripheral writeValue:currentSendTask.data forCharacteristic:packetTxCharacteristic type:CBCharacteristicWriteWithResponse];
-  }
-}
-
-- (void) triggerSend {
-  if (copiesLeftToSend > 0) {
-    NSLog(@"Sending copy %zd", (currentSendTask.repeatCount - copiesLeftToSend) + 1);
-    NSData *trigger = [NSData dataWithHexadecimalString:@"01"];
-    [self.peripheral writeValue:trigger forCharacteristic:txTriggerCharacteristic type:CBCharacteristicWriteWithResponse];
-    copiesLeftToSend--;
-  }
-  
-  if (copiesLeftToSend > 0) {
-    if (!sendTimer) {
-      sendTimer = [NSTimer timerWithTimeInterval:currentSendTask.timeBetweenPackets target:self selector:@selector(triggerSend) userInfo:nil repeats:YES];
-      [[NSRunLoop currentRunLoop] addTimer:sendTimer forMode:NSRunLoopCommonModes];
-    }
-  }
-  else {
-    currentSendTask = nil;
-    [sendTimer invalidate];
-    sendTimer = nil;
-    [self dequeueSendTasks];
-  }
-}
-
-- (void) cancelSending {
-  [sendTimer invalidate];
-  sendTimer = nil;
-  copiesLeftToSend = 0;
-  currentSendTask = nil;
-  [self dequeueSendTasks];
-}
-
-- (void) setRXChannel:(unsigned char)channel {
-  if (rxChannelCharacteristic) {
-    NSData *data = [NSData dataWithBytes:&channel length:1];
-    [self.peripheral writeValue:data forCharacteristic:rxChannelCharacteristic type:CBCharacteristicWriteWithResponse];
+  NSLog(@"Writing command to data characteristic: %@", [cmd.data hexadecimalString]);
+  // 255 is the real limit (buf limit in bgscript), but we set the limit at 220, as we need room for escaping special chars.
+  if (cmd.data.length > 220) {
+    NSLog(@"********** Warning: packet too large: %d bytes ************", cmd.data.length);
   } else {
-    NSLog(@"Missing rx channel characteristic");
+    uint8_t count = cmd.data.length;
+    NSMutableData *outBuf = [NSMutableData dataWithBytes:&count length:1];
+    [outBuf appendData:cmd.data];
+    [self.peripheral writeValue:outBuf forCharacteristic:dataCharacteristic type:CBCharacteristicWriteWithResponse];
   }
 }
-
-- (void) setTXChannel:(unsigned char)channel {
-  if (rxChannelCharacteristic) {
-    NSData *data = [NSData dataWithBytes:&channel length:1];
-    [self.peripheral writeValue:data forCharacteristic:txChannelCharacteristic type:CBCharacteristicWriteWithResponse];
-  } else {
-    NSLog(@"Missing tx channel characteristic");    
-  }
-}
-
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
   if (error) {
     NSLog(@"Could not write characteristic: %@", error);
     return;
-  }
-  if (characteristic == packetTxCharacteristic) {
-    [self triggerSend];
   }
   if (characteristic == customNameCharacteristic) {
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
@@ -181,41 +177,27 @@
   return rval;
 }
 
-- (void) connect {
-  [[RileyLinkBLEManager sharedManager] connectToRileyLink:self];
-}
-
-- (void) disconnect {
-  [[RileyLinkBLEManager sharedManager] disconnectRileyLink:self];
-}
-
 - (void) didDisconnect:(NSError*)error {
-  if (currentSendTask) {
-    [self cancelSending];
-  }
 }
 
 - (void)setCharacteristicsFromService:(CBService *)service {
   for (CBCharacteristic *characteristic in service.characteristics) {
-    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
       [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
-      packetCountCharacteristic = characteristic;
+      responseCountCharacteristic = characteristic;
       [self.peripheral readValueForCharacteristic:characteristic];
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_CHANNEL_UUID]]) {
-      rxChannelCharacteristic = characteristic;
-      [self setRXChannel:2];
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_CHANNEL_UUID]]) {
-      txChannelCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
-      packetRxCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_PACKET_UUID]]) {
-      packetTxCharacteristic = characteristic;
-    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TX_TRIGGER_UUID]]) {
-      txTriggerCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
+      dataCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
+      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      timerTickCharacteristic = characteristic;
     }
   }
+  
+  NSDictionary *attrs = @{@"peripheral": self.peripheral};
+  [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED object:self userInfo:attrs];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -226,15 +208,12 @@
   //NSLog(@"didDiscoverServices: %@, %@", peripheral, peripheral.services);
   for (CBService *service in peripheral.services) {
     if ([service.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_SERVICE_UUID]]) {
-        [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RX_PACKET_UUID,
-                                                                                        RILEYLINK_RX_CHANNEL_UUID,
-                                                                                        RILEYLINK_TX_CHANNEL_UUID,
-                                                                                        RILEYLINK_PACKET_COUNT,
-                                                                                        RILEYLINK_TX_PACKET_UUID,
-                                                                                        RILEYLINK_TX_TRIGGER_UUID,
-                                                                                        RILEYLINK_CUSTOM_NAME_UUID]
+      [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
+                                                                                      RILEYLINK_DATA_UUID,
+                                                                                      RILEYLINK_CUSTOM_NAME_UUID,
+                                                                                      RILEYLINK_TIMER_TICK_UUID]
                                                                 excludingAttributes:service.characteristics]
-                                 forService:service];
+                               forService:service];
     }
   }
   // Discover other characteristics
@@ -253,8 +232,55 @@
     [self cleanup];
     return;
   }
+  
+  [self setCharacteristicsFromService:service];
+}
 
-    [self setCharacteristicsFromService:service];
+- (void)checkVersion {
+  [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
+    GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
+    // We run two commands here, to flush out responses to any old commands
+    [s doCmd:cmd withTimeoutMs:1000];
+    NSData *response = [s doCmd:cmd withTimeoutMs:1000];
+    NSString *foundVersion;
+    BOOL versionOK = NO;
+    if (response && response.length > 0) {
+      foundVersion = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+      NSLog(@"Got version: %@", foundVersion);
+      NSRange range = [foundVersion rangeOfString:@"subg_rfspy"];
+      if (range.location == 0 && foundVersion.length > 11) {
+        NSString *numberPart = [foundVersion substringFromIndex:11];
+        NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
+        if (versionComponents.count > 1) {
+          NSInteger major = [versionComponents[0] integerValue];
+          NSInteger minor = [versionComponents[1] integerValue];
+          if (major == 0 && minor > 4) {
+            versionOK = YES;
+          }
+        }
+      }
+    }
+    if (versionOK) {
+      ready = YES;
+      dispatch_async(dispatch_get_main_queue(),^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_READY object:self];
+      });
+    } else {
+      dispatch_async(dispatch_get_main_queue(),^{
+        NSString *msg;
+        if (foundVersion != nil) {
+          msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.5 or newer.", foundVersion];
+        } else {
+          msg = @"Communication issue with RileyLink. Please power cycle the RileyLink and try again.";
+        }
+        [UIAlertView showWithTitle:@"Firmware version check failed."
+                           message:msg
+                 cancelButtonTitle:@"OK"
+                 otherButtonTitles:nil
+                          tapBlock:nil];
+      });
+    }
+  }];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -262,43 +288,85 @@
     NSLog(@"Error updating %@: %@", characteristic, error);
     return;
   }
-  //NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
+  NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
   
-  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RX_PACKET_UUID]]) {
-    if (characteristic.value.length > 0) {
-      MinimedPacket *packet = [[MinimedPacket alloc] initWithData:characteristic.value];
-      packet.capturedAt = [NSDate date];
-      //if ([packet isValid]) {
-      [incomingPackets addObject:packet];
-      NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
-      NSDictionary *attrs = @{
-                              @"packet": packet,
-                              @"peripheral": self.peripheral,
-                              };
-      [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+  if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
+    [self dataReceivedFromRL:characteristic.value];
+    fetchingResponse = NO;
+  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
+    if (!haveResponseCount) {
+      // The first time we get a notice on this is just from connecting.
+      haveResponseCount = YES;
+      [self checkVersion];
+    } else {
+      const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
+      NSLog(@"Updated response count: %d", responseCount);
+      fetchingResponse = YES;
+      [peripheral readValueForCharacteristic:dataCharacteristic];
     }
-    [peripheral readValueForCharacteristic:packetRxCharacteristic];
+  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
+    const unsigned char timerTick = ((const unsigned char*)[characteristic.value bytes])[0];
+    NSLog(@"Updated timer tick: %d", timerTick);
+  }
+}
+
+- (void)dataReceivedFromRL:(NSData*) data {
+  //NSLog(@"******* New Data: %@", [data hexadecimalString]);
+  [inBuf appendData:data];
+  
+  while(inBuf.length > 0) {
+    NSRange endOfResp = [inBuf rangeOfData:endOfResponseMarker options:0 range:NSMakeRange(0, inBuf.length)];
     
-  } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-    const unsigned char packetCount = ((const unsigned char*)[characteristic.value bytes])[0];
-    NSLog(@"Updated packet count: %d", packetCount);
-    if (packetCount > 0) {
-      [peripheral readValueForCharacteristic:packetRxCharacteristic];
+    NSData *fullResponse;
+    if (endOfResp.location != NSNotFound) {
+      fullResponse = [inBuf subdataWithRange:NSMakeRange(0, endOfResp.location)];
+      //NSLog(@"******* Full response: %@", [fullResponse hexadecimalString]);
+      NSInteger remainder = inBuf.length - endOfResp.location - 1;
+      if (remainder > 0) {
+        inBuf = [[inBuf subdataWithRange:NSMakeRange(endOfResp.location+1, remainder)] mutableCopy];
+        //NSLog(@"******* Remainder: %@", [inBuf hexadecimalString]);
+      } else {
+        inBuf = [NSMutableData data];
+      }
+    } else {
+      //NSLog(@"******* Buffering: %@", [inBuf hexadecimalString]);
+    }
+    
+    if (fullResponse) {
+      if (runningIdle) {
+        NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
+        runningIdle = NO;
+        [self handleIdleListenerResponse:fullResponse];
+        if (!runningSession) {
+          if (inBuf.length > 0) {
+            NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
+            inBuf = [NSMutableData data];
+          }
+          [self onIdle];
+        }
+      } else if (currentCommand) {
+        NSLog(@"Response to command: %@", [fullResponse hexadecimalString]);
+        currentCommand.response = fullResponse;
+        if (inBuf.length > 0) {
+          // This happens when connecting to a RL that is still running a command
+          // from a previous connection.
+          NSLog(@"Dropping extraneous data: %@", [inBuf hexadecimalString]);
+          inBuf.length = 0;
+        }
+        currentCommand = nil;
+        dispatch_group_leave(cmdDispatchGroup);
+      } else {
+        NSLog(@"Received data but no outstanding command!")
+        inBuf.length = 0;
+      }
+    } else {
+      break;
     }
   }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  
-  if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-    return;
-  }
-  
-//  if (characteristic.isNotifying) {
-//    NSLog(@"Notification began on %@", characteristic.);
-//  } else {
-//    // Notification has stopped
-//  }
+  NSLog(@"Updated notification state for %@, %@", characteristic, error);
 }
 
 - (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {
@@ -309,25 +377,20 @@
   NSLog(@"Entering cleanup");
   
   // See if we are subscribed to a characteristic on the peripheral
-  if (self.peripheral.services != nil) {
-    for (CBService *service in self.peripheral.services) {
-      if (service.characteristics != nil) {
-        for (CBCharacteristic *characteristic in service.characteristics) {
-          if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_PACKET_COUNT]]) {
-            if (characteristic.isNotifying) {
-              [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
-              return;
-            }
-          }
+  for (CBService *service in self.peripheral.services) {
+    for (CBCharacteristic *characteristic in service.characteristics) {
+      if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
+        if (characteristic.isNotifying) {
+          [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
+          return;
         }
       }
     }
   }
   
-  packetRxCharacteristic = nil;
-  packetTxCharacteristic = nil;
-  txTriggerCharacteristic = nil;
-  packetRssiCharacteristic = nil;
+  dataCharacteristic = nil;
+  responseCountCharacteristic = nil;
+  customNameCharacteristic = nil;
 }
 
 - (NSString*) deviceURI {
@@ -341,8 +404,70 @@
   } else {
     NSLog(@"Missing customNameCharacteristic");
   }
-
 }
 
+- (void) onIdle {
+  if (idleListeningEnabled) {
+    runningIdle = YES;
+    NSLog(@"Starting idle RX");
+    GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
+    cmd.listenChannel = idleListenChannel;
+    cmd.timeoutMS = 60 * 1000;
+    [self issueCommand:cmd];
+  }
+}
+
+- (void) enableIdleListeningOnChannel:(uint8_t)channel {
+  idleListeningEnabled = YES;
+  idleListenChannel = channel;
+  if (!runningIdle && !runningSession) {
+    [self onIdle];
+  }
+}
+
+- (void) disableIdleListening {
+  idleListeningEnabled = NO;
+}
+
+- (void) handleIdleListenerResponse:(NSData *)response {
+  if (response.length > 3) {
+    // This is a response to our idle listen command
+    MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
+    packet.capturedAt = [NSDate date];
+    [incomingPackets addObject:packet];
+    NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
+    NSDictionary *attrs = @{
+                            @"packet": packet,
+                            @"peripheral": self.peripheral,
+                            };
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+  } else if (response.length > 0) {
+    uint8_t errorCode = ((uint8_t*)[response bytes])[0];
+    switch (errorCode) {
+      case SubgRfspyErrorRxTimeout:
+        NSLog(@"Idle rx timeout");
+        break;
+      case SubgRfspyErrorCmdInterrupted:
+        NSLog(@"Idle rx command interrupted.");
+        break;
+      case SubgRfspyErrorZeroData:
+        NSLog(@"Idle rx zero data?!?!");
+        break;
+      default:
+        NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
+        break;
+    }
+  } else {
+    NSLog(@"Idle command got empty response!!");
+  }
+}
 
 @end
+
+@implementation RileyLinkCmdSession
+- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+  return [_device doCmd:cmd withTimeoutMs:timeoutMS];
+}
+@end
+
+

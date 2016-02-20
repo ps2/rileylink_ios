@@ -9,32 +9,31 @@
 #import <Foundation/Foundation.h>
 #import "RileyLinkBLEDevice.h"
 
-#define RILEYLINK_EVENT_LIST_UPDATED        @"RILEYLINK_EVENT_LIST_UPDATED"
-#define RILEYLINK_EVENT_PACKET_RECEIVED     @"RILEYLINK_EVENT_PACKET_RECEIVED"
-#define RILEYLINK_EVENT_DEVICE_CONNECTED    @"RILEYLINK_EVENT_DEVICE_CONNECTED"
-#define RILEYLINK_EVENT_DEVICE_DISCONNECTED @"RILEYLINK_EVENT_DEVICE_DISCONNECTED"
+#define RILEYLINK_EVENT_LIST_UPDATED            @"RILEYLINK_EVENT_LIST_UPDATED"
+#define RILEYLINK_EVENT_PACKET_RECEIVED         @"RILEYLINK_EVENT_PACKET_RECEIVED"
+#define RILEYLINK_EVENT_DEVICE_ADDED            @"RILEYLINK_EVENT_DEVICE_ADDED"
+#define RILEYLINK_EVENT_DEVICE_CONNECTED        @"RILEYLINK_EVENT_DEVICE_CONNECTED"
+#define RILEYLINK_EVENT_DEVICE_DISCONNECTED     @"RILEYLINK_EVENT_DEVICE_DISCONNECTED"
+#define RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED @"RILEYLINK_EVENT_DEVICE_ATTRS_DISCOVERED"
+#define RILEYLINK_EVENT_DEVICE_READY            @"RILEYLINK_EVENT_DEVICE_READY"
 
-#define RILEYLINK_SERVICE_UUID       @"d39f1890-17eb-11e4-8c21-0800200c9a66"
-
-#define RILEYLINK_RX_PACKET_UUID     @"2fb1a490-1940-11e4-8c21-0800200c9a66"
-#define RILEYLINK_RX_CHANNEL_UUID    @"d93b2af0-1ea8-11e4-8c21-0800200c9a66"
-#define RILEYLINK_PACKET_COUNT       @"41825a20-7402-11e4-8c21-0800200c9a66"
-#define RILEYLINK_TX_PACKET_UUID     @"2fb1a490-1941-11e4-8c21-0800200c9a66"
-#define RILEYLINK_TX_TRIGGER_UUID    @"2fb1a490-1942-11e4-8c21-0800200c9a66"
-#define RILEYLINK_TX_CHANNEL_UUID    @"d93b2af0-1458-11e4-8c21-0800200c9a66"
-#define RILEYLINK_CUSTOM_NAME_UUID   @"d93b2af0-1e28-11e4-8c21-0800200c9a66"
+#define RILEYLINK_SERVICE_UUID         @"0235733b-99c5-4197-b856-69219c2a3845"
+#define RILEYLINK_DATA_UUID            @"c842e849-5028-42e2-867c-016adada9155"
+#define RILEYLINK_RESPONSE_COUNT_UUID  @"6e6c7910-b89e-43a5-a0fe-50c5e2b81f4a"
+#define RILEYLINK_CUSTOM_NAME_UUID     @"d93b2af0-1e28-11e4-8c21-0800200c9a66"
+#define RILEYLINK_TIMER_TICK_UUID      @"6e6c7910-b89e-43a5-78af-50c5e2b86f7e"
 
 
 @interface RileyLinkBLEManager : NSObject
 
-@property (nonatomic, readonly, copy) NSArray *rileyLinkList;
-- (void)connectToRileyLink:(RileyLinkBLEDevice *)device;
-- (void)disconnectRileyLink:(RileyLinkBLEDevice *)device;
-- (void)addDeviceToAutoConnectList:(RileyLinkBLEDevice*)device;
-- (void)removeDeviceFromAutoConnectList:(RileyLinkBLEDevice*)device;
-+ (instancetype)sharedManager;
+@property (nonatomic, nonnull, readonly, copy) NSArray *rileyLinkList;
 
-@property (nonatomic, strong) NSSet *autoConnectIds;
+- (void)connectPeripheral:(nonnull CBPeripheral *)peripheral;
+- (void)disconnectPeripheral:(nonnull CBPeripheral *)peripheral;
+
++ (nonnull instancetype)sharedManager;
+
+@property (nonatomic, nonnull, strong) NSSet *autoConnectIds;
 @property (nonatomic, getter=isScanningEnabled) BOOL scanningEnabled;
 
 /**
@@ -45,7 +44,7 @@
 
  @return An array of CBUUID objects
  */
-+ (NSArray *)UUIDsFromUUIDStrings:(NSArray *)UUIDStrings excludingAttributes:(NSArray *)attributes;
++ (nonnull NSArray *)UUIDsFromUUIDStrings:(nonnull NSArray *)UUIDStrings excludingAttributes:(nullable NSArray *)attributes;
 
 @end
 

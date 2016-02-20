@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PumpState.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,5 +18,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, readonly, copy) NSURL *applicationDocumentsDirectory;
+
+@property (strong, nonatomic) PumpState *pump;
+
 
 @end

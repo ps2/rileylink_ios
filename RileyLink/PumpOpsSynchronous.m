@@ -298,6 +298,8 @@
 }
 
 - (NSDictionary*) getHistoryPage:(uint8_t)pageNum {
+  float rssiSum = 0;
+  int rssiCount = 0;
   
   NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
   NSMutableArray *responses = [NSMutableArray array];
@@ -326,6 +328,8 @@
   response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"] data]];
   
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
+    rssiSum += response.rssi;
+    rssiCount += 1;
     NSLog(@"Pump acked dump msg (0x80)")
   } else {
     NSLog(@"Missing response to initial read history command");
@@ -338,6 +342,8 @@
   response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs] data]];
   
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+    rssiSum += response.rssi;
+    rssiCount += 1;
     [responses addObject:response.data];
   } else {
     NSLog(@"Read history with args command failed");
@@ -351,6 +357,8 @@
     response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]];
     
     if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+      rssiSum += response.rssi;
+      rssiCount += 1;
       [responses addObject:response.data];
     } else {
       NSLog(@"Read history segment %d with args command failed", i);
@@ -358,6 +366,10 @@
       return responseDict;
     }
     responseDict[@"pageData"] = [self parseFramesIntoHistoryPage:responses];
+  }
+  
+  if (rssiCount > 0) {
+    responseDict[@"avgRSSI"] = @((int)(rssiSum / rssiCount));
   }
   
   // Last ack packet doesn't need a response

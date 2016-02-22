@@ -202,6 +202,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     if (!res[@"error"]) {
       NSData *page = res[@"pageData"];
       self.pumpModel = res[@"pumpModel"];
+      NSLog(@"Avg RSSI for history dump: %@", res[@"avgRSSI"]);
       NSLog(@"fetchHistory succeeded.");
       [self decodeHistoryPage:page];
     } else {
@@ -553,7 +554,6 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     }
   }];
 }
-
 
 - (void) reportJSON:(NSArray*)outgoingJSON toNightScoutEndpoint:(NSString*)endpoint
 completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler

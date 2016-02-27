@@ -27,8 +27,8 @@
   NSDateComponents *c = [self parseDate2Byte:5];
   
   NSCalendar *cal = [NSCalendar currentCalendar];
-  [cal setTimeZone:[NSTimeZone localTimeZone]];
-  [cal setLocale:[NSLocale currentLocale]];
+  cal.timeZone = [NSTimeZone localTimeZone];
+  cal.locale = [NSLocale currentLocale];
   NSDate *date = [cal dateFromComponents:c];
   
   NSDateComponents *dayComponent = [[NSDateComponents alloc] init];

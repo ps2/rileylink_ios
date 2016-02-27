@@ -18,7 +18,7 @@
 - (NSInteger) getBits:(nullable NSString*)key;
 - (void) setBits:(nonnull NSString*)key toValue:(NSInteger)val;
 - (unsigned char) getBitAtIndex:(NSInteger)idx;
-- (NSInteger)bitsOffset;
+@property (NS_NONATOMIC_IOSONLY, readonly) NSInteger bitsOffset;
 
 @property (nonatomic, readonly) PacketType packetType;
 @property (nonatomic, readonly) MessageType messageType;

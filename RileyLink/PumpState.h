@@ -13,7 +13,7 @@
 
 - (nonnull instancetype)initWithPumpId:(nonnull NSString *)pumpId NS_DESIGNATED_INITIALIZER;
 
-- (BOOL) isAwake;
+@property (NS_NONATOMIC_IOSONLY, getter=isAwake, readonly) BOOL awake;
 
 @property (strong, nonatomic, nonnull) NSString *pumpId;
 @property (strong, nonatomic, nonnull) NSDate *lastHistoryDump;

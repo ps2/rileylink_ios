@@ -28,7 +28,7 @@
     NSLog(@"Could not remove file: %@", path);
   }
   
-  self.pump = [[PumpState alloc] initWithPumpId:[[Config sharedInstance] pumpID]];  
+  self.pump = [[PumpState alloc] initWithPumpId:[Config sharedInstance].pumpID];  
   
   return YES;
 }
@@ -75,10 +75,10 @@
     return _managedObjectContext;
   }
   
-  NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+  NSPersistentStoreCoordinator *coordinator = self.persistentStoreCoordinator;
   if (coordinator != nil) {
     _managedObjectContext = [[NSManagedObjectContext alloc] init];
-    [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    _managedObjectContext.persistentStoreCoordinator = coordinator;
   }
   return _managedObjectContext;
 }
@@ -103,10 +103,10 @@
     return _persistentStoreCoordinator;
   }
   
-  NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"RileyLink.sqlite"];
+  NSURL *storeURL = [self.applicationDocumentsDirectory URLByAppendingPathComponent:@"RileyLink.sqlite"];
   
   NSError *error = nil;
-  _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+  _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
   if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
     /*
      Replace this implementation with code to handle the error appropriately.
@@ -142,7 +142,7 @@
 // Returns the URL to the application's Documents directory.
 - (NSURL *)applicationDocumentsDirectory
 {
-  return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+  return [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
 }
 
 

@@ -7,6 +7,6 @@
 
 @interface PHECalBGForPH : PumpHistoryEventBase
 
-- (int) amount;
+@property (NS_NONATOMIC_IOSONLY, readonly) int amount;
 
 @end

@@ -21,7 +21,7 @@
 - (NSDictionary*) asJSON {
   NSMutableDictionary *base = [[super asJSON] mutableCopy];
   if ([self amount] > 0) {
-    base[@"amount"] = [NSNumber numberWithInt:[self amount]];
+    base[@"amount"] = @([self amount]);
   }
   return base;
 }

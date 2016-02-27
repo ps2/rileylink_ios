@@ -7,10 +7,10 @@
 
 @interface PHEBgReceived : PumpHistoryEventBase
 
-- (int) bloodGlucose;
+@property (NS_NONATOMIC_IOSONLY, readonly) int bloodGlucose;
 
-- (nonnull NSString*) meterId;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull meterId;
 
-- (nonnull NSDateComponents*) timestamp;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSDateComponents * _Nonnull timestamp;
 
 @end

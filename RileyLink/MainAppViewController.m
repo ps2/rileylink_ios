@@ -38,10 +38,10 @@
   [UIView setAnimationsEnabled:NO];
   
   self.uploader = [[NightScoutUploader alloc] init];
-  self.uploader.siteURL = [[Config sharedInstance] nightscoutURL];
-  self.uploader.APISecret = [[Config sharedInstance] nightscoutAPISecret];
+  self.uploader.siteURL = [Config sharedInstance].nightscoutURL;
+  self.uploader.APISecret = [Config sharedInstance].nightscoutAPISecret;
   
-  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
   self.managedObjectContext = appDelegate.managedObjectContext;
 
   [self setupAutoConnect];
@@ -59,17 +59,17 @@
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
   NSEntityDescription *entity = [NSEntityDescription entityForName:@"RileyLinkRecord"
                                             inManagedObjectContext:self.managedObjectContext];
-  [fetchRequest setEntity:entity];
+  fetchRequest.entity = entity;
   NSError *error;
   NSMutableSet *autoConnectIds = [[NSMutableSet alloc] init];
   NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
   for (RileyLinkRecord *record in fetchedObjects) {
     NSLog(@"Loaded: %@ from db", record.name);
-    if ([record.autoConnect boolValue]) {
+    if ((record.autoConnect).boolValue) {
       [autoConnectIds addObject:record.peripheralId];
     }
   }
-  [[RileyLinkBLEManager sharedManager] setAutoConnectIds:autoConnectIds];
+  [RileyLinkBLEManager sharedManager].autoConnectIds = autoConnectIds;
 }
 
 

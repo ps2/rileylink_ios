@@ -31,7 +31,7 @@
     state = [NSMutableDictionary dictionary];
     previous = [NSMutableArray array];
     dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss";
   }
   return self;
 }

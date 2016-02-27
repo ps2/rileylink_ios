@@ -26,16 +26,16 @@
   
   if (self.revealViewController != nil) {
     menuButton.target = self.revealViewController;
-    [menuButton setAction:@selector(revealToggle:)];
+    menuButton.action = @selector(revealToggle:);
     [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
     
     self.revealViewController.rearViewRevealWidth = 162;
     
-    if (![[Config sharedInstance]  hasValidConfiguration]) {
+    if (![Config sharedInstance].hasValidConfiguration) {
       UINavigationController *configNav = [self.storyboard instantiateViewControllerWithIdentifier:@"configuration"];
-      ConfigureViewController *configViewController = [configNav viewControllers][0];
+      ConfigureViewController *configViewController = configNav.viewControllers[0];
       [configViewController doInitialConfiguration];
-      [self.revealViewController setFrontViewController:configNav];
+      (self.revealViewController).frontViewController = configNav;
     }
   }
   
@@ -43,7 +43,7 @@
 }
 
 - (void)loadPage {
-  NSURL *url = [NSURL URLWithString:[[Config sharedInstance] nightscoutURL]];
+  NSURL *url = [NSURL URLWithString:[Config sharedInstance].nightscoutURL];
   NSURLRequest *request = [NSURLRequest requestWithURL:url];
   [_webView loadRequest:request];
 }
@@ -62,7 +62,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
   [UIAlertView showWithTitle:@"Network Error"
-                     message:[error localizedDescription]
+                     message:error.localizedDescription
            cancelButtonTitle:@"OK"
            otherButtonTitles:@[@"Retry"]
                     tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {

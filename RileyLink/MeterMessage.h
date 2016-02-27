@@ -15,7 +15,7 @@
 
 @property (nonatomic, readonly) NSInteger glucose;
 
-- (BOOL) isAck;
+@property (NS_NONATOMIC_IOSONLY, getter=isAck, readonly) BOOL ack;
 
 
 @end

@@ -241,7 +241,7 @@ static BOOL is_leap_year(NSUInteger year);
 	if (strict) timeSep = ISO8601DefaultTimeSeparatorCharacter;
 	NSAssert(timeSep != '\0', @"Time separator must not be NUL.");
 
-	BOOL isValidDate = ([string length] > 0U);
+	BOOL isValidDate = (string.length > 0U);
 	NSTimeZone *timeZone = nil;
 
 	const unichar *ch = (const unichar *)[string cStringUsingEncoding:NSUnicodeStringEncoding];
@@ -728,7 +728,7 @@ static BOOL is_leap_year(NSUInteger year);
 		[timeFormatMutable replaceOccurrencesOfString:@":"
 		                               	   withString:[NSString stringWithCharacters:&timeSep length:1U]
 	                                      	  options:NSBackwardsSearch | NSLiteralSearch
-	                                        	range:(NSRange){ 0UL, [timeFormat length] }];
+	                                        	range:(NSRange){ 0UL, timeFormat.length }];
 		timeFormat = timeFormatMutable;
 	}
 	return timeFormat;

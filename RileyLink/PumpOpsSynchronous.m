@@ -109,7 +109,7 @@
   
   if ([self wakeIfNeeded]) {
     
-    MinimedPacket *response = [self sendAndListen:[[self buttonPressMessage] data]];
+    MinimedPacket *response = [self sendAndListen:[self buttonPressMessage].data];
     
     if (response && response.messageType == MESSAGE_TYPE_ACK) {
       NSLog(@"Pump acknowledged button press (no args)!");
@@ -120,7 +120,7 @@
     
     NSString *args = @"0104000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
     
-    response = [self sendAndListen:[[self buttonPressMessageWithArgs:args] data]];
+    response = [self sendAndListen:[self buttonPressMessageWithArgs:args].data];
     
     if (response && response.messageType == MESSAGE_TYPE_ACK) {
       NSLog(@"Pump acknowledged button press (with args)!");
@@ -142,12 +142,12 @@
 
 - (NSString*) getPumpModel {
   if ([self wakeIfNeeded]) {
-    MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]];
+    MinimedPacket *response = [self sendAndListen:[self modelQueryMessage].data];
     
     NSLog(@"*********** getPumpModel: %@", [response hexadecimalString]);
     
     if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
-      return [NSString stringWithCString:&[response.data bytes][7]
+      return [NSString stringWithCString:&(response.data).bytes[7]
                                 encoding:NSASCIIStringEncoding];
     }
   }
@@ -161,10 +161,10 @@
   
   if ([self wakeIfNeeded]) {
     
-    MinimedPacket *response = [self sendAndListen:[[self batteryStatusMessage] data]];
+    MinimedPacket *response = [self sendAndListen:[self batteryStatusMessage].data];
     
     if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_BATTERY) {
-      unsigned char *data = (unsigned char *)[response.data bytes] + 6;
+      unsigned char *data = (unsigned char *)(response.data).bytes + 6;
       
       NSInteger volts = (((int)data[1]) << 8) + data[2];
       rvalStatus = data[0] ? @"Low" : @"Normal";
@@ -201,12 +201,12 @@
   NSInteger totalSuccesses = 0;
   
   for (NSNumber *freq in frequencies) {
-    [self setBaseFrequency:[freq floatValue]];
+    [self setBaseFrequency:freq.floatValue];
     NSInteger successCount = 0;
     int avgRSSI = 0;
     int tries = 3;
     for (int i=0; i<tries; i++) {
-      MinimedPacket *response = [self sendAndListen:[[self modelQueryMessage] data]];
+      MinimedPacket *response = [self sendAndListen:[self modelQueryMessage].data];
       if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
         avgRSSI += response.rssi;
         successCount++;
@@ -222,8 +222,8 @@
   int bestResult = -99, bestIndex = 0;
   for (int i=0; i<rssi.count; i++) {
     NSNumber *result = rssi[i];
-    if ([result intValue] > bestResult) {
-      bestResult = [result intValue];
+    if (result.intValue > bestResult) {
+      bestResult = result.intValue;
       bestIndex = i;
     }
   }
@@ -251,7 +251,7 @@
     return YES;
   }
   
-  MinimedPacket *response = [self sendAndListen:[[self powerMessage] data]
+  MinimedPacket *response = [self sendAndListen:[self powerMessage].data
                                       timeoutMS:15000
                                          repeat:200
                                msBetweenPackets:0
@@ -265,7 +265,7 @@
   
   NSString *msg = [NSString stringWithFormat:@"0201%02x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", durationMinutes];
   
-  response = [self sendAndListen:[[self powerMessageWithArgs:msg] data]
+  response = [self sendAndListen:[self powerMessageWithArgs:msg].data
                        timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
                           repeat:0
                 msBetweenPackets:0
@@ -325,7 +325,7 @@
   }
 
   MinimedPacket *response;
-  response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"] data]];
+  response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"].data];
   
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
     rssiSum += response.rssi;
@@ -339,7 +339,7 @@
   
   NSString *dumpHistArgs = [NSString stringWithFormat:@"01%02x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", pageNum];
   
-  response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs] data]];
+  response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs].data];
   
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
     rssiSum += response.rssi;
@@ -354,7 +354,7 @@
   // Send 15 acks, and expect 15 more dumps
   for (int i=0; i<15; i++) {
     
-    response = [self sendAndListen:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]];
+    response = [self sendAndListen:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
     
     if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
       rssiSum += response.rssi;
@@ -374,7 +374,7 @@
   
   // Last ack packet doesn't need a response
   SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
-  cmd.packet = [MinimedPacket encodeData:[[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"] data]];
+  cmd.packet = [MinimedPacket encodeData:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
   [_session doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
   return responseDict;
 }

@@ -10,6 +10,6 @@
 #import "UIScrollView+TPKeyboardAvoidingAdditions.h"
 
 @interface TPKeyboardAvoidingCollectionView : UICollectionView <UITextFieldDelegate, UITextViewDelegate>
-- (BOOL)focusNextTextField;
+@property (NS_NONATOMIC_IOSONLY, readonly) BOOL focusNextTextField;
 - (void)scrollToActiveTextField;
 @end

@@ -37,7 +37,7 @@
   if (self) {
     _codingErrorCount = 0;
     if (data.length > 0) {
-      unsigned char rssiDec = ((const unsigned char*)[data bytes])[0];
+      unsigned char rssiDec = ((const unsigned char*)data.bytes)[0];
       unsigned char rssiOffset = 73;
       if (rssiDec >= 128) {
         self.rssi = (short)((short)( rssiDec - 256) / 2) - rssiOffset;
@@ -46,7 +46,7 @@
       }
     }
     if (data.length > 1) {
-      self.packetNumber = ((const unsigned char*)[data bytes])[1];
+      self.packetNumber = ((const unsigned char*)data.bytes)[1];
     }
 
     if (data.length > 2) {
@@ -61,7 +61,7 @@
   if (_data.length < 2) {
     return NO;
   }
-  uint8_t packetCrc = ((uint8_t*)[_data bytes])[_data.length-1];
+  uint8_t packetCrc = ((uint8_t*)_data.bytes)[_data.length-1];
   uint8_t crc = [CRC8 compute:[_data subdataWithRange:NSMakeRange(0, _data.length-1)]];
   return crc == packetCrc;
 }
@@ -76,7 +76,7 @@
   unsigned char crc = [CRC8 compute:data];
   [dataPlusCrc appendBytes:&crc length:1];
   char codes[16] = {21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28};
-  const unsigned char *inBytes = [dataPlusCrc bytes];
+  const unsigned char *inBytes = dataPlusCrc.bytes;
   unsigned int acc = 0x0;
   int bitcount = 0;
   for (int i=0; i < dataPlusCrc.length; i++) {
@@ -122,10 +122,10 @@
                           @14: @14,
                           @28: @15};
   NSMutableData *output = [NSMutableData data];
-  const unsigned char *bytes = [rawData bytes];
+  const unsigned char *bytes = rawData.bytes;
   int availBits = 0;
   unsigned int x = 0;
-  for (int i = 0; i < [rawData length]; i++)
+  for (int i = 0; i < rawData.length; i++)
   {
     x = (x << 8) + bytes[i];
     availBits += 8;
@@ -133,7 +133,7 @@
       NSNumber *hiNibble = codes[@(x >> (availBits - 6))];
       NSNumber *loNibble = codes[@((x >> (availBits - 12)) & 0b111111)];
       if (hiNibble && loNibble) {
-        unsigned char decoded = ([hiNibble integerValue] << 4) + [loNibble integerValue];
+        unsigned char decoded = (hiNibble.integerValue << 4) + loNibble.integerValue;
         [output appendBytes:&decoded length:1];
       } else {
         _codingErrorCount += 1;
@@ -146,12 +146,12 @@
 }
 
 - (NSString*) hexadecimalString {
-  return [_data hexadecimalString];
+  return _data.hexadecimalString;
 }
 
 - (unsigned char)byteAt:(NSInteger)index {
-  if (_data && index < [_data length]) {
-    return ((unsigned char*)[_data bytes])[index];
+  if (_data && index < _data.length) {
+    return ((unsigned char*)_data.bytes)[index];
   } else {
     return 0;
   }

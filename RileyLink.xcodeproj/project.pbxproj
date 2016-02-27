@@ -11,6 +11,7 @@
 		43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		C10A62921C55F8E200E635EE /* UpdateRegisterCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */; };
+		C10D9B981C7D6F5200378342 /* PHEChangeMaxBasal.m in Sources */ = {isa = PBXBuildFile; fileRef = C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */; };
 		C10EAA9D1C5AE9A600B0838F /* GetVersionCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */; };
 		C10EAAA31C5B3A0800B0838F /* PumpOpsSynchronous.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA21C5B3A0800B0838F /* PumpOpsSynchronous.m */; };
 		C10EAAA61C5C507E00B0838F /* PumpOps.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA51C5C507E00B0838F /* PumpOps.m */; };
@@ -146,6 +147,8 @@
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		C10A62901C55F8E200E635EE /* UpdateRegisterCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRegisterCmd.h; sourceTree = "<group>"; };
 		C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRegisterCmd.m; sourceTree = "<group>"; };
+		C10D9B961C7D6F5200378342 /* PHEChangeMaxBasal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeMaxBasal.h; sourceTree = "<group>"; };
+		C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeMaxBasal.m; sourceTree = "<group>"; };
 		C10EAA9B1C5AE9A600B0838F /* GetVersionCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetVersionCmd.h; sourceTree = "<group>"; };
 		C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetVersionCmd.m; sourceTree = "<group>"; };
 		C10EAAA11C5B3A0800B0838F /* PumpOpsSynchronous.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpOpsSynchronous.h; sourceTree = "<group>"; };
@@ -657,6 +660,8 @@
 				C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */,
 				C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */,
 				C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */,
+				C10D9B961C7D6F5200378342 /* PHEChangeMaxBasal.h */,
+				C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */,
 			);
 			path = PumpHistoryEvents;
 			sourceTree = "<group>";
@@ -976,6 +981,7 @@
 				C10EAAA31C5B3A0800B0838F /* PumpOpsSynchronous.m in Sources */,
 				C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */,
 				C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */,
+				C10D9B981C7D6F5200378342 /* PHEChangeMaxBasal.m in Sources */,
 				C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */,
 				C139AC9C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m in Sources */,
 				C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */,

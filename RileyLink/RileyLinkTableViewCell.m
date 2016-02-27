@@ -26,7 +26,7 @@
 
 - (void)setRSSI:(NSNumber *)RSSI {
   _RSSI = RSSI;
-  rssiLabel.text = [RSSI stringValue];
+  rssiLabel.text = RSSI.stringValue;
 }
 
 - (void)setAutoConnect:(BOOL)autoConnect {

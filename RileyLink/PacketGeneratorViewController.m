@@ -40,7 +40,7 @@
 }
 
 - (void)doneChangingChannel {
-  txChannel = [channelNumberTextField.text intValue];
+  txChannel = (channelNumberTextField.text).intValue;
   [channelNumberTextField resignFirstResponder];
 }
 
@@ -67,7 +67,7 @@
   if (encodeDataSwitch.on) {
     data = [MinimedPacket encodeData:data];
   }
-  packetData.text = [data hexadecimalString];
+  packetData.text = data.hexadecimalString;
   SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
   cmd.sendChannel = txChannel;
   cmd.repeatCount = 0;

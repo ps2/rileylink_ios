@@ -31,7 +31,7 @@
 }
 
 - (BOOL) isAwake {
-  return (_awakeUntil != nil && [_awakeUntil timeIntervalSinceNow] > 0);
+  return (_awakeUntil != nil && _awakeUntil.timeIntervalSinceNow > 0);
 }
 
 

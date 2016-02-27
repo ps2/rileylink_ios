@@ -38,7 +38,7 @@
   return [NSArray arrayWithArray:UUIDs];
 }
 
-+ (instancetype)sharedManager {
++ (RileyLinkBLEManager*)sharedManager {
   static RileyLinkBLEManager *sharedMyRileyLink = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
@@ -143,7 +143,7 @@
 }
 
 - (void)attemptReconnectForDisconnectedDevices {
-  for (RileyLinkBLEDevice *device in [self rileyLinkList]) {
+  for (RileyLinkBLEDevice *device in self.rileyLinkList) {
     CBPeripheral *peripheral = device.peripheral;
     if (peripheral.state == CBPeripheralStateDisconnected
         && [self.autoConnectIds containsObject:device.peripheralId]) {

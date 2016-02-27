@@ -4,11 +4,11 @@ plist_path = File.absolute_path("RileyLink/RileyLink-Info.plist")
 
 canonical_version = `defaults read #{plist_path} CFBundleShortVersionString`.chomp
 
-bundle_version = `defaults read #{plist_path} CFBundleVersion`.chomp
-if bundle_version != canonical_version
-  puts "Updating CFBundleVersion to #{canonical_version}"
-  `defaults write  #{plist_path} CFBundleVersion -string "#{canonical_version}"`
-end
+#bundle_version = `defaults read #{plist_path} CFBundleVersion`.chomp
+#if bundle_version != canonical_version
+#  puts "Updating CFBundleVersion to #{canonical_version}"
+#  `defaults write  #{plist_path} CFBundleVersion -string "#{canonical_version}"`
+#end
 
 podspec_text = File.open("RileyLink.podspec",:encoding => "UTF-8").read
 

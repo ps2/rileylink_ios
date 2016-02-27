@@ -20,7 +20,7 @@
 }
 
 - (NSString*) meterId {
-  return [[self.data subdataWithRange:NSMakeRange(7, 3)] hexadecimalString];
+  return [self.data subdataWithRange:NSMakeRange(7, 3)].hexadecimalString;
 }
 
 - (NSDateComponents*) timestamp {

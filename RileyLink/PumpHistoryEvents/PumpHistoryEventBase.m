@@ -48,8 +48,8 @@
 }
 
 - (uint8_t)byteAt:(NSInteger)index {
-  if (_data && index < [_data length]) {
-    return ((uint8_t*)[_data bytes])[index];
+  if (_data && index < _data.length) {
+    return ((uint8_t*)_data.bytes)[index];
   } else {
     return 0;
   }
@@ -57,20 +57,20 @@
 
 - (NSDateComponents*) parseDateComponents:(NSInteger)offset {
   NSDateComponents *comps = [[NSDateComponents alloc] init];
-  [comps setSecond:[self byteAt:offset] & 0x3f];
-  [comps setMinute:[self byteAt:offset+1] & 0x3f];
-  [comps setHour:[self byteAt:offset+2] & 0x1f];
-  [comps setDay:[self byteAt:offset+3] & 0x1f];
-  [comps setMonth:([self byteAt:offset] >>4 & 0xc) + ([self byteAt:offset+1] >> 6)];
-  [comps setYear:2000 + ([self byteAt:offset+4] & 0b1111111)];
+  comps.second = [self byteAt:offset] & 0x3f;
+  comps.minute = [self byteAt:offset+1] & 0x3f;
+  comps.hour = [self byteAt:offset+2] & 0x1f;
+  comps.day = [self byteAt:offset+3] & 0x1f;
+  comps.month = ([self byteAt:offset] >>4 & 0xc) + ([self byteAt:offset+1] >> 6);
+  comps.year = 2000 + ([self byteAt:offset+4] & 0b1111111);
   return comps;
 }
 
 - (NSDateComponents*) parseDate2Byte:(NSInteger)offset {
   NSDateComponents *comps = [[NSDateComponents alloc] init];
-  [comps setDay:[self byteAt:offset] & 0x1f];
-  [comps setMonth:(([self byteAt:offset] & 0xe0) >> 4) + (([self byteAt:offset+1] & 0x80) >> 7)];
-  [comps setYear:2000 + ([self byteAt:offset+1] & 0b1111111)];
+  comps.day = [self byteAt:offset] & 0x1f;
+  comps.month = (([self byteAt:offset] & 0xe0) >> 4) + (([self byteAt:offset+1] & 0x80) >> 7);
+  comps.year = 2000 + ([self byteAt:offset+1] & 0b1111111);
   return comps;
 }
 
@@ -80,8 +80,8 @@
 
 - (NSString*) timestampStr {
   NSCalendar *cal = [NSCalendar currentCalendar];
-  [cal setTimeZone:[NSTimeZone localTimeZone]];
-  [cal setLocale:[NSLocale currentLocale]];
+  cal.timeZone = [NSTimeZone localTimeZone];
+  cal.locale = [NSLocale currentLocale];
   NSDateComponents *c = [self timestamp];
   if (c == nil) {
     return @"<timestamp missing>";
@@ -106,7 +106,7 @@
 - (NSDictionary*) asJSON {
   return @{
            @"_type": [self typeName],
-           @"_raw": [self.data hexadecimalString],
+           @"_raw": (self.data).hexadecimalString,
            @"timestamp": self.timestampStr,
            @"description": self.description
            };

@@ -36,7 +36,7 @@ typedef NS_ENUM(unsigned char, MessageType) {
   MESSAGE_TYPE_READ_HISTORY = 0x80,
 };
 
-- ( MessageBase* _Nullable)toMessage;
+@property (NS_NONATOMIC_IOSONLY, readonly, strong) MessageBase * _Nullable toMessage;
 
 - (nonnull instancetype)initWithData:(nonnull NSData*)data NS_DESIGNATED_INITIALIZER;
 @property (nonatomic, getter=isValid, readonly) BOOL valid;

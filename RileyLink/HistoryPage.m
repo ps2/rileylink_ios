@@ -33,12 +33,12 @@
           [NSException raise:@"Missing class method" format:@"%@ does not implement +eventTypeCode.", eventClass];
         }
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:sig];
-        [invocation setSelector:selector];
-        [invocation setTarget:eventClass];
+        invocation.selector = selector;
+        invocation.target = eventClass;
         [invocation invoke];
         int returnValue;
         [invocation getReturnValue:&returnValue];
-        NSNumber *eventCode = [NSNumber numberWithInt:returnValue];
+        NSNumber *eventCode = @(returnValue);
         d[eventCode] = eventClass;
       }
     }
@@ -85,7 +85,7 @@
 }
 
 - (nonnull const unsigned char *) bytes {
-  return [_data bytes];
+  return _data.bytes;
 }
 
 - (PumpHistoryEventBase*) matchEvent:(NSUInteger) offset {

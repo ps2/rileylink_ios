@@ -35,9 +35,9 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [[Config sharedInstance] pumpID]];
+  pumpIdLabel.text = [NSString stringWithFormat:@"PumpID: %@", [Config sharedInstance].pumpID];
   
-  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
   _pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:_device];
 }
 

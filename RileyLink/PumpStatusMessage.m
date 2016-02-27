@@ -47,7 +47,7 @@
   NSInteger hour = [self getBits:@"next_cal_hour"];
   NSInteger minute = [self getBits:@"next_cal_minute"];
   
-  NSDate *pumpDate = [self pumpTime];
+  NSDate *pumpDate = self.pumpTime;
   
   return [[NSCalendar currentCalendar] nextDateAfterDate:pumpDate matchingHour:hour minute:minute second:0 options:NSCalendarMatchNextTime];
 }
@@ -88,7 +88,7 @@
 }
 
 - (NSString*) sensorStatusString {
-  switch ([self sensorStatus]) {
+  switch (self.sensorStatus) {
     case SENSOR_STATUS_MISSING:
       return @"Sensor Missing";
     case SENSOR_STATUS_METER_BG_NOW:
@@ -114,7 +114,7 @@
 }
 
 - (NSInteger) glucose {
-  if ([self sensorStatus] == SENSOR_STATUS_OK) {
+  if (self.sensorStatus == SENSOR_STATUS_OK) {
     return ([self getBits:@"bg_h"] << 1) + [self getBits:@"bg_l"];
   } else {
     return 0;
@@ -122,7 +122,7 @@
 }
 
 - (NSInteger) previousGlucose {
-  if ([self sensorStatus] == SENSOR_STATUS_OK) {
+  if (self.sensorStatus == SENSOR_STATUS_OK) {
     return ([self getBits:@"prev_bg_h"] << 1) + [self getBits:@"prev_bg_l"];
   } else {
     return 0;
@@ -140,12 +140,12 @@
 - (NSDate*) pumpTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
-  [components setYear:[self getBits:@"pump_year"]+2000];
-  [components setMonth:[self getBits:@"pump_month"]];
-  [components setDay:[self getBits:@"pump_day"]];
-  [components setHour:[self getBits:@"pump_hour"]];
-  [components setMinute:[self getBits:@"pump_minute"]];
-  [components setSecond:0];
+  components.year = [self getBits:@"pump_year"]+2000;
+  components.month = [self getBits:@"pump_month"];
+  components.day = [self getBits:@"pump_day"];
+  components.hour = [self getBits:@"pump_hour"];
+  components.minute = [self getBits:@"pump_minute"];
+  components.second = 0;
   return [calendar dateFromComponents:components];
 }
 
@@ -153,12 +153,12 @@
 - (NSDate*) sensorTime {
   NSCalendar *calendar = [NSCalendar currentCalendar];
   NSDateComponents *components = [[NSDateComponents alloc] init];
-  [components setYear:[self getBits:@"sensor_year"]+2000];
-  [components setMonth:[self getBits:@"sensor_month"]];
-  [components setDay:[self getBits:@"sensor_day"]];
-  [components setHour:[self getBits:@"sensor_hour"]];
-  [components setMinute:[self getBits:@"sensor_minute"]];
-  [components setSecond:0];
+  components.year = [self getBits:@"sensor_year"]+2000;
+  components.month = [self getBits:@"sensor_month"];
+  components.day = [self getBits:@"sensor_day"];
+  components.hour = [self getBits:@"sensor_hour"];
+  components.minute = [self getBits:@"sensor_minute"];
+  components.second = 0;
   return [calendar dateFromComponents:components];
 }
 

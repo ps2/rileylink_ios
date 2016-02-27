@@ -21,7 +21,7 @@
 }
 
 - (NSString*) deviceAddress {
-  return [[self.data hexadecimalString] substringWithRange:NSMakeRange(2, 6)];
+  return [(self.data).hexadecimalString substringWithRange:NSMakeRange(2, 6)];
 }
 
 @end

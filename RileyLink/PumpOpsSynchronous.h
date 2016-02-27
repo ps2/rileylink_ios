@@ -18,9 +18,9 @@
 
 - (BOOL) wakeup:(uint8_t)duration;
 - (void) pressButton;
-- (NSString* _Nullable) getPumpModel;
-- (NSDictionary* _Nonnull) getBatteryVoltage;
+@property (NS_NONATOMIC_IOSONLY, getter=getPumpModel, readonly, copy) NSString * _Nullable pumpModel;
+@property (NS_NONATOMIC_IOSONLY, getter=getBatteryVoltage, readonly, copy) NSDictionary * _Nonnull batteryVoltage;
 - (NSDictionary* _Nonnull) getHistoryPage:(uint8_t)pageNum;
-- (NSDictionary* _Nonnull) scanForPump;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSDictionary * _Nonnull scanForPump;
 
 @end

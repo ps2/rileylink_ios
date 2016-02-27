@@ -63,7 +63,7 @@ void append(NSString *msg){
   NSString *path = [documentsDirectory stringByAppendingPathComponent:@"logfile.txt"];
   // create if needed
   if (![[NSFileManager defaultManager] fileExistsAtPath:path]){
-    fprintf(stderr,"Creating file at %s",[path UTF8String]);
+    fprintf(stderr,"Creating file at %s",path.UTF8String);
     [[NSData data] writeToFile:path atomically:YES];
   }
   // append
@@ -78,7 +78,7 @@ void _Log(NSString *prefix, const char *file, int lineNumber, const char *funcNa
   static NSDateFormatter *dateFormat = nil;
   if (nil == dateFormat) {
     dateFormat = [[NSDateFormatter alloc] init]; // NOT NSDateFormatter *dateFormat = ...
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss.SSS";
   }
   
   va_list ap;
@@ -87,7 +87,7 @@ void _Log(NSString *prefix, const char *file, int lineNumber, const char *funcNa
   NSDate *time = [NSDate date];
   NSString *msg = [[NSString alloc] initWithFormat:[NSString stringWithFormat:@"%@: %@", [dateFormat stringFromDate:time], format] arguments:ap];
   va_end (ap);
-  fprintf(stderr,"%s", [msg UTF8String]);
+  fprintf(stderr,"%s", msg.UTF8String);
   append(msg);
 }
 @end

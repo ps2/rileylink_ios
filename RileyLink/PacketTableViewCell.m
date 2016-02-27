@@ -25,11 +25,11 @@ static NSDateFormatter *timeFormatter;
 
 + (void)initialize {
   dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setLocale:[NSLocale currentLocale]];
-  [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+  dateFormatter.locale = [NSLocale currentLocale];
+  dateFormatter.dateStyle = NSDateFormatterShortStyle;
   timeFormatter = [[NSDateFormatter alloc] init];
-  [timeFormatter setLocale:[NSLocale currentLocale]];
-  [timeFormatter setTimeStyle:NSDateFormatterShortStyle];
+  timeFormatter.locale = [NSLocale currentLocale];
+  timeFormatter.timeStyle = NSDateFormatterShortStyle;
 }
 
 - (void)awakeFromNib {

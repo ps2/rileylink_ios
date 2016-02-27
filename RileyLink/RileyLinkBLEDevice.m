@@ -299,13 +299,13 @@
       haveResponseCount = YES;
       [self checkVersion];
     } else {
-      const unsigned char responseCount = ((const unsigned char*)[characteristic.value bytes])[0];
+      const unsigned char responseCount = ((const unsigned char*)(characteristic.value).bytes)[0];
       NSLog(@"Updated response count: %d", responseCount);
       fetchingResponse = YES;
       [peripheral readValueForCharacteristic:dataCharacteristic];
     }
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
-    const unsigned char timerTick = ((const unsigned char*)[characteristic.value bytes])[0];
+    const unsigned char timerTick = ((const unsigned char*)(characteristic.value).bytes)[0];
     NSLog(@"Updated timer tick: %d", timerTick);
   }
 }
@@ -442,7 +442,7 @@
                             };
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
   } else if (response.length > 0) {
-    uint8_t errorCode = ((uint8_t*)[response bytes])[0];
+    uint8_t errorCode = ((uint8_t*)response.bytes)[0];
     switch (errorCode) {
       case SubgRfspyErrorRxTimeout:
         NSLog(@"Idle rx timeout");

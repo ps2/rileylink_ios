@@ -15,8 +15,8 @@
 @property (nonatomic, nullable, readonly, strong) PumpModel *pumpModel;
 @property (nonatomic, nullable, readonly, strong) NSDictionary *registry;
 
-- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model;
-- (nonnull NSArray*) decode;
-- (BOOL) isCRCValid;
+- (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model NS_DESIGNATED_INITIALIZER;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray * _Nonnull decode;
+@property (NS_NONATOMIC_IOSONLY, getter=isCRCValid, readonly) BOOL CRCValid;
 
 @end

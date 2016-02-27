@@ -132,19 +132,19 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
 - (void)deviceConnected:(NSNotification *)note
 {
-  self.activeRileyLink = [note object];
+  self.activeRileyLink = note.object;
 }
 
 - (void)deviceDisconnected:(NSNotification *)note
 {
-  if (self.activeRileyLink == [note object]) {
+  if (self.activeRileyLink == note.object) {
     self.activeRileyLink = nil;
   }
 }
 
 - (void)rileyLinkAdded:(NSNotification *)note
 {
-  RileyLinkBLEDevice *device = [note object];
+  RileyLinkBLEDevice *device = note.object;
   [device enableIdleListeningOnChannel:0];
 }
 
@@ -152,7 +152,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   
   logMemUsage();
   
-  if ([lastHistoryAttempt timeIntervalSinceNow] < (- 5 * 60) && !fetchHistoryScheduled) {
+  if (lastHistoryAttempt.timeIntervalSinceNow < (- 5 * 60) && !fetchHistoryScheduled) {
     NSLog(@"No fetchHistory for over five minutes.  Triggering one");
     [self fetchHistory:nil];
   }
@@ -180,7 +180,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   }
   
   if (self.activeRileyLink == nil) {
-    for (RileyLinkBLEDevice *device in [[RileyLinkBLEManager sharedManager] rileyLinkList]) {
+    for (RileyLinkBLEDevice *device in [RileyLinkBLEManager sharedManager].rileyLinkList) {
       if (device.state == RileyLinkStateConnected) {
         self.activeRileyLink = device;
         break;
@@ -195,7 +195,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   
   NSLog(@"Using RileyLink \"%@\" to fetchHistory.", self.activeRileyLink.name);
   
-  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
   PumpOps *pumpOps = [[PumpOps alloc] initWithPumpState:appDelegate.pump andDevice:self.activeRileyLink];
 
   [pumpOps getHistoryPage:0 withHandler:^(NSDictionary * _Nonnull res) {
@@ -312,7 +312,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
 - (void)addPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
   
-  if (![packet isValid]) {
+  if (!packet.valid) {
     return;
   }
   
@@ -320,9 +320,9 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     [self storeRawPacket:packet fromDevice:device];
   }
   
-  if ([packet packetType] == PacketTypeSentry &&
-      [packet messageType] == MESSAGE_TYPE_PUMP_STATUS &&
-      [packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+  if (packet.packetType == PacketTypeSentry &&
+      packet.messageType == MESSAGE_TYPE_PUMP_STATUS &&
+      [packet.address isEqualToString:[Config sharedInstance].pumpID]) {
     // Make this RL the active one, for history dumping.
     self.activeRileyLink = device;
     [self handlePumpStatus:packet fromDevice:device withRSSI:packet.rssi];
@@ -334,7 +334,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s
     // above is mainly to avoid colliding with subsequent packets.
 
-  } else if ([packet packetType] == PacketTypeMeter) {
+  } else if (packet.packetType == PacketTypeMeter) {
     [self handleMeterMessage:packet];
   }
   
@@ -343,13 +343,13 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
 - (void) storeRawPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
   NSDate *now = [NSDate date];
-  NSTimeInterval seconds = [now timeIntervalSince1970];
+  NSTimeInterval seconds = now.timeIntervalSince1970;
   NSNumber *epochTime = @(seconds * 1000);
   
   NSDictionary *entry =
   @{@"date": epochTime,
     @"dateString": [self.dateFormatter stringFromDate:now],
-    @"rfpacket": [packet.data hexadecimalString],
+    @"rfpacket": (packet.data).hexadecimalString,
     @"device": device.deviceURI,
     @"rssi": @(packet.rssi),
     @"type": @"rfpacket"
@@ -360,12 +360,12 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 - (void) handlePumpStatus:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device withRSSI:(NSInteger)rssi {
   PumpStatusMessage *msg = [[PumpStatusMessage alloc] initWithData:packet.data];
   
-  if ([packet.address isEqualToString:[[Config sharedInstance] pumpID]]) {
+  if ([packet.address isEqualToString:[Config sharedInstance].pumpID]) {
   
     NSDate *validTime = msg.sensorTime;
     
     NSInteger glucose = msg.glucose;
-    switch ([msg sensorStatus]) {
+    switch (msg.sensorStatus) {
       case SENSOR_STATUS_HIGH_BG:
         glucose = 401;
         break;
@@ -384,7 +384,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
         break;
     }
   
-    NSNumber *epochTime = @([validTime timeIntervalSince1970] * 1000);
+    NSNumber *epochTime = @(validTime.timeIntervalSince1970 * 1000);
     
     NSMutableDictionary *status = [NSMutableDictionary dictionary];
     
@@ -394,7 +394,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
     // TODO: use battery monitoring to post updates if we're not hearing from pump?
     UIDevice *uploaderDevice = [UIDevice currentDevice];
     if (uploaderDevice.isBatteryMonitoringEnabled) {
-      NSNumber *batteryPct = @((int)([[UIDevice currentDevice] batteryLevel] * 100));
+      NSNumber *batteryPct = @((int)([UIDevice currentDevice].batteryLevel * 100));
       status[@"uploader"] = @{@"battery":batteryPct};
     }
     
@@ -449,7 +449,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   }
   
   msg.dateReceived = [NSDate date];
-  NSTimeInterval seconds = [msg.dateReceived timeIntervalSince1970];
+  NSTimeInterval seconds = (msg.dateReceived).timeIntervalSince1970;
   NSNumber *epochTime = @(seconds * 1000);
   NSDictionary *entry =
   @{@"date": epochTime,
@@ -477,7 +477,7 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
   NSArray *logEntries = [Log popLogEntries];
   if (logEntries.count > 0) {
     NSDate *date = [NSDate date];
-    NSTimeInterval seconds = [date timeIntervalSince1970];
+    NSTimeInterval seconds = date.timeIntervalSince1970;
     NSNumber *epochTime = @(seconds * 1000);
 
     NSDictionary *entry =
@@ -565,13 +565,13 @@ completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *erro
   NSData *sendData = [NSJSONSerialization dataWithJSONObject:outgoingJSON options:NSJSONWritingPrettyPrinted error:&error];
   //NSString *jsonPost = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
   //NSLog(@"Posting to %@, %@", [uploadURL absoluteString], jsonPost);
-  [request setHTTPMethod:@"POST"];
+  request.HTTPMethod = @"POST";
   
   [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
   [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-  [request setValue:[self.APISecret sha1] forHTTPHeaderField:@"api-secret"];
+  [request setValue:(self.APISecret).sha1 forHTTPHeaderField:@"api-secret"];
   
-  [request setHTTPBody: sendData];
+  request.HTTPBody = sendData;
   
   [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:completionHandler] resume];
 }

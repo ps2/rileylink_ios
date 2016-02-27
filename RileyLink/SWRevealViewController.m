@@ -37,8 +37,8 @@ static CGFloat statusBarAdjustment( UIView* view )
 {
     CGFloat adjustment = 0.0f;
     UIApplication *app = [UIApplication sharedApplication];
-    CGRect viewFrame = [view convertRect:view.bounds toView:[app keyWindow]];
-    CGRect statusBarFrame = [app statusBarFrame];
+    CGRect viewFrame = [view convertRect:view.bounds toView:app.keyWindow];
+    CGRect statusBarFrame = app.statusBarFrame;
     
     if ( CGRectIntersectsRect(viewFrame, statusBarFrame) )
         adjustment = fminf(statusBarFrame.size.width, statusBarFrame.size.height);
@@ -82,7 +82,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 }
 
 
-- (id)initWithFrame:(CGRect)frame controller:(SWRevealViewController*)controller
+- (instancetype)initWithFrame:(CGRect)frame controller:(SWRevealViewController*)controller
 {
     self = [super initWithFrame:frame];
     if ( self )
@@ -103,7 +103,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 - (void)reloadShadow
 {
     CALayer *frontViewLayer = _frontView.layer;
-    frontViewLayer.shadowColor = [_c.frontViewShadowColor CGColor];
+    frontViewLayer.shadowColor = (_c.frontViewShadowColor).CGColor;
     frontViewLayer.shadowOpacity = _c.frontViewShadowOpacity;
     frontViewLayer.shadowOffset = _c.frontViewShadowOffset;
     frontViewLayer.shadowRadius = _c.frontViewShadowRadius;
@@ -374,7 +374,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 }
 
 
-- (id)initWithRevealController:(SWRevealViewController*)revealVC containerView:(UIView*)view fromVC:(UIViewController*)fromVC
+- (instancetype)initWithRevealController:(SWRevealViewController*)revealVC containerView:(UIView*)view fromVC:(UIViewController*)fromVC
     toVC:(UIViewController*)toVC completion:(void (^)(void))completion
 {
     self = [super init];
@@ -493,7 +493,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 }
 
 
-- (id)initWithDuration:(NSTimeInterval)duration
+- (instancetype)initWithDuration:(NSTimeInterval)duration
 {
     self = [super init];
     if ( self )
@@ -609,7 +609,7 @@ const int FrontViewPositionNone = 0xff;
 
 #pragma mark - Init
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if ( self )
@@ -620,13 +620,13 @@ const int FrontViewPositionNone = 0xff;
 }
 
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithRearViewController:nil frontViewController:nil];
 }
 
 
-- (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
+- (instancetype)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
 {
     self = [super init];
     if ( self )
@@ -708,16 +708,16 @@ const int FrontViewPositionNone = 0xff;
     
     // On iOS7 the applicationFrame does not return the whole screen. This is possibly a bug.
     // As a workaround we use the screen bounds, this still works on iOS6, any zero based frame would work anyway!
-    CGRect frame = [[UIScreen mainScreen] bounds];
+    CGRect frame = [UIScreen mainScreen].bounds;
 
     // create a custom content view for the controller
     _contentView = [[SWRevealView alloc] initWithFrame:frame controller:self];
     
     // set the content view to resize along with its superview
-    [_contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
     // set the content view to clip its bounds if requested
-    [_contentView setClipsToBounds:_clipsViewsToBounds];
+    _contentView.clipsToBounds = _clipsViewsToBounds;
 
     // set our contentView to the controllers view
     self.view = _contentView;
@@ -928,7 +928,7 @@ const int FrontViewPositionNone = 0xff;
 - (void)setClipsViewsToBounds:(BOOL)clipsViewsToBounds
 {
     _clipsViewsToBounds = clipsViewsToBounds;
-    [_contentView setClipsToBounds:clipsViewsToBounds];
+    _contentView.clipsToBounds = clipsViewsToBounds;
 }
 
 
@@ -961,7 +961,7 @@ const int FrontViewPositionNone = 0xff;
 {
     // we use the stored userInteraction state just in case a developer decided
     // to have our view interaction disabled beforehand
-    [_contentView setUserInteractionEnabled:_userInteractionStore];
+    _contentView.userInteractionEnabled = _userInteractionStore;
     [_contentView setDisableLayout:NO];
 }
 
@@ -1087,7 +1087,7 @@ const int FrontViewPositionNone = 0xff;
 
     if ( _animationQueue.count > 0 )
     {
-        void (^block)(void) = [_animationQueue lastObject];
+        void (^block)(void) = _animationQueue.lastObject;
         block();
     }
 }
@@ -1719,7 +1719,7 @@ const int FrontViewPositionNone = 0xff;
     if (sb)
     {
         vc = (SWRevealViewController*)[sb instantiateViewControllerWithIdentifier:@"SWRevealViewController"];
-        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationIdentifier = identifierComponents.lastObject;
         vc.restorationClass = [SWRevealViewController class];
     }
     return vc;
@@ -1791,11 +1791,11 @@ const int FrontViewPositionNone = 0xff;
     _clipsViewsToBounds = [coder decodeBoolForKey:@"_clipsViewsToBounds"];
     _extendsPointInsideHit = [coder decodeBoolForKey:@"_extendsPointInsideHit"];
 
-    [self setRearViewController:[coder decodeObjectForKey:@"_rearViewController"]];
-    [self setFrontViewController:[coder decodeObjectForKey:@"_frontViewController"]];
-    [self setRightViewController:[coder decodeObjectForKey:@"_rightViewController"]];
+    self.rearViewController = [coder decodeObjectForKey:@"_rearViewController"];
+    self.frontViewController = [coder decodeObjectForKey:@"_frontViewController"];
+    self.rightViewController = [coder decodeObjectForKey:@"_rightViewController"];
     
-    [self setFrontViewPosition:[coder decodeIntForKey: @"_frontViewPosition"]];
+    self.frontViewPosition = [coder decodeIntForKey: @"_frontViewPosition"];
     
     [super decodeRestorableStateWithCoder:coder];
 }
@@ -1818,7 +1818,7 @@ const int FrontViewPositionNone = 0xff;
 {
     UIViewController *parent = self;
     Class revealClass = [SWRevealViewController class];
-    while ( nil != (parent = [parent parentViewController]) && ![parent isKindOfClass:revealClass] ) {}
+    while ( nil != (parent = parent.parentViewController) && ![parent isKindOfClass:revealClass] ) {}
     return (id)parent;
 }
 

@@ -22,13 +22,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToActiveTextField) name:UITextFieldTextDidBeginEditingNotification object:nil];
 }
 
--(id)initWithFrame:(CGRect)frame {
+-(instancetype)initWithFrame:(CGRect)frame {
     if ( !(self = [super initWithFrame:frame]) ) return nil;
     [self setup];
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
+- (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout *)layout {
     if ( !(self = [super initWithFrame:frame collectionViewLayout:layout]) ) return nil;
     [self setup];
     return self;
@@ -46,7 +46,7 @@
 }
 
 -(void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+    super.frame = frame;
     [self TPKeyboardAvoiding_updateContentInset];
 }
 
@@ -56,7 +56,7 @@
         // cause weird infinte scrolling and locking bug
         return;
     }
-    [super setContentSize:contentSize];
+    super.contentSize = contentSize;
     [self TPKeyboardAvoiding_updateContentInset];
 }
 

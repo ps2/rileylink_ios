@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIScrollView (TPKeyboardAvoidingAdditions)
-- (BOOL)TPKeyboardAvoiding_focusNextTextField;
+@property (NS_NONATOMIC_IOSONLY, readonly) BOOL TPKeyboardAvoiding_focusNextTextField;
 - (void)TPKeyboardAvoiding_scrollToActiveTextField;
 
 - (void)TPKeyboardAvoiding_keyboardWillShow:(NSNotification*)notification;
@@ -18,5 +18,5 @@
 - (void)TPKeyboardAvoiding_updateFromContentSizeChange;
 - (void)TPKeyboardAvoiding_assignTextDelegateForViewsBeneathView:(UIView*)view;
 - (UIView*)TPKeyboardAvoiding_findFirstResponderBeneathView:(UIView*)view;
--(CGSize)TPKeyboardAvoiding_calculatedContentSizeFromSubviewFrames;
+@property (NS_NONATOMIC_IOSONLY, readonly) CGSize TPKeyboardAvoiding_calculatedContentSizeFromSubviewFrames;
 @end

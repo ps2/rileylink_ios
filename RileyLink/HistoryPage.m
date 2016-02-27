@@ -47,6 +47,12 @@
   return self;
 }
 
+- (instancetype)init NS_UNAVAILABLE
+{
+  return nil;
+}
+
+
 - (NSArray*) decode {
   NSMutableArray *events = [NSMutableArray array];
   NSUInteger offset = 0;

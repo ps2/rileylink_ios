@@ -37,6 +37,12 @@
   return self;
 }
 
+- (instancetype)init NS_UNAVAILABLE
+{
+  return nil;
+}
+
+
 - (int) length {
   [NSException raise:@"Invalid Message" format:@"PumpHistoryEventBase does not implement length."];
   return 0;

@@ -146,6 +146,10 @@
 		C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */; };
 		C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */; };
 		C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */; };
+		C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D91C829104006DBA60 /* RFTools.swift */; };
+		C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */; };
+		C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
+		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
 		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */; };
@@ -442,6 +446,10 @@
 		C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryPumpStatusMessageBodyTests.swift; sourceTree = "<group>"; };
 		C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDataTests.swift; sourceTree = "<group>"; };
 		C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadSettingsCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C1EAD6D91C829104006DBA60 /* RFTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFTools.swift; sourceTree = "<group>"; };
+		C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFToolsTests.swift; sourceTree = "<group>"; };
+		C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8.swift; sourceTree = "<group>"; };
+		C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8Tests.swift; sourceTree = "<group>"; };
 		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
@@ -498,6 +506,8 @@
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
 			isa = PBXGroup;
 			children = (
+				C10D9BC31C8269D500378342 /* MinimedKit.h */,
+				C10D9BC51C8269D500378342 /* Info.plist */,
 				C1EAD6B81C826B92006DBA60 /* Extensions */,
 				C1EAD6BC1C826B92006DBA60 /* Messages */,
 				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
@@ -505,8 +515,8 @@
 				C1EAD6B01C826B6D006DBA60 /* MessageType.swift */,
 				C1EAD6B11C826B6D006DBA60 /* PacketType.swift */,
 				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
-				C10D9BC31C8269D500378342 /* MinimedKit.h */,
-				C10D9BC51C8269D500378342 /* Info.plist */,
+				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
+				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 			);
 			path = MinimedKit;
 			sourceTree = "<group>";
@@ -519,6 +529,8 @@
 				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
 				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
 				C10D9BD31C8269D500378342 /* Info.plist */,
+				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
+				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -1131,12 +1143,14 @@
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
+				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
 				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
 				C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
 				C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */,
+				C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */,
 				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1148,6 +1162,8 @@
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
+				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
+				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,
 				C1EAD6D51C826C43006DBA60 /* MinimedKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

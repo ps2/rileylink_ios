@@ -24,7 +24,7 @@ func decode4b6b(rawData: NSData) -> NSData? {
         else {
         return nil
       }
-      let decoded: UInt8 = UInt8((hiNibble << 4) + loNibble)
+      let decoded = UInt8((hiNibble << 4) + loNibble)
       buffer.append(decoded)
       availBits -= 12;
       x = x & (0xffff >> (16-availBits));
@@ -35,10 +35,10 @@ func decode4b6b(rawData: NSData) -> NSData? {
 
 func encode4b6b(rawData: NSData) -> NSData {
   var buffer = [UInt8]()
-  let codes: [UInt] = [21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28]
+  let codes: [Int] = [21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28]
   let bytes: [UInt8] = rawData[0..<rawData.length]
-  var acc: UInt = 0x0
-  var bitcount: UInt = 0
+  var acc = 0x0
+  var bitcount = 0
   for byte in bytes {
     acc <<= 6;
     acc |= codes[Int(byte >> 4)]

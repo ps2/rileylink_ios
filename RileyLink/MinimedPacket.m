@@ -178,6 +178,8 @@
         return [[DeviceLinkMessage alloc] initWithData:_data];
       case MESSAGE_TYPE_FIND_DEVICE:
         return [[FindDeviceMessage alloc] initWithData:_data];
+      default:
+        return nil;
     }
   } else if (self.packetType == PacketTypeMeter) {
     return [[MeterMessage alloc] initWithData:_data];

@@ -18,6 +18,11 @@
 
 @implementation PumpHistoryEventBase
 
+- (instancetype)init NS_UNAVAILABLE
+{
+  return nil;
+}
+
 - (instancetype)initWithData:(NSData*)data andPumpModel:(PumpModel*)model
 {
   self = [super init];

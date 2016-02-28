@@ -150,6 +150,8 @@
 		C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */; };
 		C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
+		C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */; };
+		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */; };
@@ -450,6 +452,8 @@
 		C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFToolsTests.swift; sourceTree = "<group>"; };
 		C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8.swift; sourceTree = "<group>"; };
 		C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8Tests.swift; sourceTree = "<group>"; };
+		C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16.swift; sourceTree = "<group>"; };
+		C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16Tests.swift; sourceTree = "<group>"; };
 		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
@@ -517,6 +521,7 @@
 				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
 				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
 				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
+				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
 			);
 			path = MinimedKit;
 			sourceTree = "<group>";
@@ -531,6 +536,7 @@
 				C10D9BD31C8269D500378342 /* Info.plist */,
 				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
 				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
+				C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -1149,6 +1155,7 @@
 				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
 				C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
+				C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */,
 				C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */,
 				C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */,
 				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
@@ -1161,6 +1168,7 @@
 			files = (
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
+				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
 				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,

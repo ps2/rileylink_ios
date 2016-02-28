@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
  */
 - (nonnull instancetype)initWithPeripheral:(nonnull CBPeripheral *)peripheral NS_DESIGNATED_INITIALIZER;
 
-- (void) didDisconnect:(nullable NSError*)error;
+- (void) connectionStateDidChange:(nullable NSError *)error;
 
 - (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc;
 - (void) setCustomName:(nonnull NSString*)customName;

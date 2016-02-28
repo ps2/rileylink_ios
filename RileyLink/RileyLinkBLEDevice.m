@@ -177,7 +177,22 @@
   return rval;
 }
 
-- (void) didDisconnect:(NSError*)error {
+- (void)connectionStateDidChange:(NSError *)error
+{
+  switch (self.peripheral.state) {
+    case CBPeripheralStateConnected:
+      if (idleListeningEnabled) {
+        [self onIdle];
+      }
+      break;
+    case CBPeripheralStateDisconnected:
+      runningIdle = NO;
+      runningSession = NO;
+      break;
+    case CBPeripheralStateConnecting:
+    case CBPeripheralStateDisconnecting:
+      break;
+  }
 }
 
 - (void)setCharacteristicsFromService:(CBService *)service {
@@ -427,6 +442,7 @@
 
 - (void) disableIdleListening {
   idleListeningEnabled = NO;
+  runningIdle = NO;
 }
 
 - (void) handleIdleListenerResponse:(NSData *)response {

@@ -19,9 +19,9 @@ func computeCRC8(data: NSData) -> UInt8 {
   var nbytes = data.length
   /* loop over the buffer data */
   while nbytes-- > 0 {
-    crc = crcTable[Int((crc ^ pdata.memory) & 0xff)];
-    pdata++;
+    crc = crcTable[Int((crc ^ pdata.memory) & 0xff)]
+    pdata++
   }
-  return crc;
+  return crc
 }
 

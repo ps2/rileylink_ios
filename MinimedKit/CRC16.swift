@@ -18,8 +18,8 @@ func computeCRC16(data: NSData) -> UInt16 {
   /* loop over the buffer data */
   while nbytes-- > 0 {
     let idx = ((crc >> 8) ^ UInt16(pdata.memory)) & 0xff
-    crc = ((crc << 8) ^ crcTable[Int(idx)]) & 0xffff;
+    crc = ((crc << 8) ^ crcTable[Int(idx)]) & 0xffff
     pdata++
   }
-  return crc;
+  return crc
 }

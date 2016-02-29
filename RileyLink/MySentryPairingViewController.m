@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
       handled = YES;
     }
   }
-  if (!handled) {
+  if (!handled && PairingStateStarted == self.state) {
     // Other random packet; ignore and start listening again.
     [self performSelector:@selector(listenForPairing) withObject:nil afterDelay:0];
   }
@@ -243,7 +243,6 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 }
 
 - (void)runCommand:(CmdBase*) cmd {
-  NSLog(@"*************************************************************************** runCommand ***********************");
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
     NSData *response = [session doCmd:cmd withTimeoutMs:31000];
     if (response) {

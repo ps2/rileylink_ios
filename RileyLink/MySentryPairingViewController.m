@@ -15,6 +15,7 @@
 #import "DeviceLinkMessage.h"
 #import "FindDeviceMessage.h"
 #import "PumpStatusMessage.h"
+#import "RFPacket.h"
 
 typedef NS_ENUM(NSUInteger, PairingState) {
   PairingStateComplete,
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     NSData *response = [session doCmd:cmd withTimeoutMs:31000];
     if (response) {
       dispatch_async(dispatch_get_main_queue(),^{
-        MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
+        RFPacket *rxPacket = [[RFPacket alloc] initWithData:cmd.response];
         [self packetReceived:rxPacket];
       });
     }
@@ -81,7 +82,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
 - (void)handleResponse:(NSData*)response {
   if (response) {
-    MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:response];
+    RFPacket *rxPacket = [[RFPacket alloc] initWithData:response];
     [self packetReceived:rxPacket];
   }
 }
@@ -195,7 +196,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
 
 #pragma mark - Actions
 
-- (void)packetReceived:(MinimedPacket *)packet {
+- (void)packetReceived:(RFPacket *)packet {
   
   BOOL handled = NO;
   

@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
       handled = YES;
     }
   }
-  if (!handled) {
+  if (!handled && PairingStateComplete != self.state) {
     // Other random packet; ignore and start listening again.
     [self performSelector:@selector(listenForPairing) withObject:nil afterDelay:0];
   }

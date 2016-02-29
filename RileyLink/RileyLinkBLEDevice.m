@@ -101,19 +101,19 @@
   dispatch_group_enter(idleDetectDispatchGroup);
   RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
   session.device = self;
-  runningSession = YES;
   dispatch_async(_serialDispatchQueue, ^{
+    runningSession = YES;
     NSLog(@"Running dispatched RL comms task");
     proc(session);
     NSLog(@"Finished running dispatched RL comms task");
+    runningSession = NO;
     dispatch_group_leave(idleDetectDispatchGroup);
   });
   
   dispatch_group_notify(idleDetectDispatchGroup,
                         dispatch_get_main_queue(), ^{
                           NSLog(@"idleDetectDispatchGroup empty");
-                          runningSession = NO;
-                          if (!runningIdle) {
+                          if (!runningIdle && !runningSession) {
                             [self onIdle];
                           }
                         });

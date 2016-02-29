@@ -190,7 +190,10 @@
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   NSLog(@"Failed to connect to peripheral: %@", error);
-  
+
+  RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
+  [device connectionStateDidChange:error];
+
   [self attemptReconnectForDisconnectedDevices];
 }
 
@@ -201,7 +204,9 @@
                                               excludingAttributes:peripheral.services]];
   
   RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
-  
+
+  [device connectionStateDidChange:nil];
+
   NSDictionary *attrs = @{@"peripheral": peripheral};
   [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
   
@@ -217,7 +222,7 @@
   attrs[@"peripheral"] = peripheral;
   RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
   
-  [device didDisconnect:error];
+  [device connectionStateDidChange:error];
   
   if (error) {
     attrs[@"error"] = error;

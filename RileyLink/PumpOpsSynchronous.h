@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PumpState.h"
+#import "RileyLinkBLEDevice.h"
 
 @interface PumpOpsSynchronous : NSObject
 

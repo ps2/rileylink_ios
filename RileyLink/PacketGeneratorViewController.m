@@ -8,7 +8,7 @@
 
 #import "PacketGeneratorViewController.h"
 #import "NSData+Conversion.h"
-#import "SendAndListenCmd.h"
+#import "SendPacketCmd.h"
 
 @interface PacketGeneratorViewController () {
   int testPacketNum;
@@ -67,12 +67,10 @@
 //    data = [MinimedPacket encodeData:data];
 //  }
   packetData.text = data.hexadecimalString;
-  SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
+  SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
   cmd.sendChannel = txChannel;
   cmd.repeatCount = 0;
   cmd.msBetweenPackets = 0;
-  cmd.timeoutMS = 1000;
-
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
     [session doCmd:cmd withTimeoutMs:1000];
   }];

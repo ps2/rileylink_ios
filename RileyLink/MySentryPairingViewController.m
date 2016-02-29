@@ -65,18 +65,18 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     return;
   }
   GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
-  cmd.listenChannel = 2;
+  cmd.listenChannel = 0;
   cmd.timeoutMS = 30000;
   
-  
-  
-  // TODO: Upgrade to new api
-//  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-//    if (cmd.response) {
-//      MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
-//      [self packetReceived:rxPacket];
-//    }
-//  }];
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
+    NSData *response = [session doCmd:cmd withTimeoutMs:31000];
+    if (response) {
+      dispatch_async(dispatch_get_main_queue(),^{
+        MinimedPacket *rxPacket = [[MinimedPacket alloc] initWithData:cmd.response];
+        [self packetReceived:rxPacket];
+      });
+    }
+  }];
 }
 
 - (void)handleResponse:(NSData*)response {
@@ -236,18 +236,20 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   SendAndListenCmd *send = [[SendAndListenCmd alloc] init];
   send.sendChannel = 0;
   send.timeoutMS = 180;
-  send.listenChannel = 2;
+  send.listenChannel = 0;
   send.packet = [MinimedPacket encodeData:data];
   return send;
 }
 
 - (void)runCommand:(CmdBase*) cmd {
-  // TODO: Upgrade to new api
-//  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {
-//    if (cmd.response) {
-//      [self handleResponse:cmd.response];
-//    }
-//  }];
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
+    NSData *response = [session doCmd:cmd withTimeoutMs:31000];
+    if (response) {
+      dispatch_async(dispatch_get_main_queue(),^{
+        [self handleResponse:response];
+      });
+    }
+  }];
 }
 
 - (void)handleFindDevice:(FindDeviceMessage *)msg
@@ -258,8 +260,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   
   CmdBase *cmd = [self makeCommandForAckAndListen:msg.sequence forMessageType:(uint8_t)msg.messageType];
   
-  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
-  //[self runCommand:cmd];
+  [self runCommand:cmd];
 }
 
 - (void)handleDeviceLink:(DeviceLinkMessage *)msg
@@ -269,8 +270,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   }
   
   CmdBase *cmd = [self makeCommandForAckAndListen:msg.sequence forMessageType:(uint8_t)msg.messageType];
-  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
-  //[self runCommand:cmd];
+  [self runCommand:cmd];
 }
 
 - (void)handlePumpStatus:(PumpStatusMessage *)msg {
@@ -278,8 +278,7 @@ typedef NS_ENUM(NSUInteger, PairingState) {
     self.state = PairingStateComplete;
   }
   CmdBase *cmd = [self makeCommandForAckAndListen:0 forMessageType:(uint8_t)msg.messageType];
-  [self performSelector:@selector(runCommand:) withObject:cmd afterDelay:1];
-  //[self runCommand:cmd];
+  [self runCommand:cmd];
 }
 
 - (void)closeKeyboard:(id)sender

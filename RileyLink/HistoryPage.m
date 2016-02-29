@@ -15,6 +15,11 @@
 
 @implementation HistoryPage
 
+- (instancetype)init NS_UNAVAILABLE
+{
+  return nil;
+}
+
 - (nonnull instancetype)initWithData:(nonnull NSData *)data andPumpModel:(nullable PumpModel *)model
 {
   self = [super init];

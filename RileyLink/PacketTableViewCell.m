@@ -7,6 +7,7 @@
 //
 
 #import "PacketTableViewCell.h"
+#import "MinimedKit.h"
 
 static NSDateFormatter *dateFormatter;
 static NSDateFormatter *timeFormatter;
@@ -36,10 +37,10 @@ static NSDateFormatter *timeFormatter;
     // Initialization code
 }
 
-- (void)setPacket:(MinimedPacket *)packet {
+- (void)setPacket:(RFPacket *)packet {
   _packet = packet;
   
-  rawDataLabel.text = packet.hexadecimalString;
+  rawDataLabel.text = packet.data.hexadecimalString;
   dateLabel.text = [dateFormatter stringFromDate:packet.capturedAt];
   timeLabel.text = [timeFormatter stringFromDate:packet.capturedAt];
   rssiLabel.text = [NSString stringWithFormat:@"%d", packet.rssi];

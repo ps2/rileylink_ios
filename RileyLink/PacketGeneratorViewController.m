@@ -7,7 +7,6 @@
 //
 
 #import "PacketGeneratorViewController.h"
-#import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "SendAndListenCmd.h"
 
@@ -64,16 +63,19 @@
 - (void)sendTestPacket {
   NSString *packetStr = [@"614C05E077" stringByAppendingFormat:@"%02x", testPacketNum];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  if (encodeDataSwitch.on) {
-    data = [MinimedPacket encodeData:data];
-  }
+//  if (encodeDataSwitch.on) {
+//    data = [MinimedPacket encodeData:data];
+//  }
   packetData.text = data.hexadecimalString;
   SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
   cmd.sendChannel = txChannel;
   cmd.repeatCount = 0;
   cmd.msBetweenPackets = 0;
-  // TODO: Upgrade to new api
-  //[_device doCmd:cmd withCompletionHandler:nil];
+  cmd.timeoutMS = 1000;
+
+  [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
+    [session doCmd:cmd withTimeoutMs:1000];
+  }];
 }
 
 - (IBAction)sendPacketButtonPressed:(id)sender {

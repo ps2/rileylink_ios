@@ -8,7 +8,6 @@
 
 #import "MySentryPairingViewController.h"
 #import "Config.h"
-#import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "RileyLinkBLEManager.h"
 #import "GetPacketCmd.h"
@@ -68,6 +67,8 @@ typedef NS_ENUM(NSUInteger, PairingState) {
   GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
   cmd.listenChannel = 2;
   cmd.timeoutMS = 30000;
+  
+  
   
   // TODO: Upgrade to new api
 //  [self.device doCmd:cmd withCompletionHandler:^(CmdBase * _Nonnull cmd) {

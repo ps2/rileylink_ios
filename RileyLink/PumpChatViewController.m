@@ -8,7 +8,6 @@
 
 #import "PumpChatViewController.h"
 #import "MessageBase.h"
-#import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "Config.h"
 #import "RileyLinkBLEManager.h"

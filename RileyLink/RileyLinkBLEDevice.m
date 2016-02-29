@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import "MinimedPacket.h"
 #import "RileyLinkBLEDevice.h"
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
 #import "SendAndListenCmd.h"
 #import "GetPacketCmd.h"
 #import "GetVersionCmd.h"
+#import "RFPacket.h"
 #import "UIAlertView+Blocks.h"
 
 
@@ -91,10 +91,6 @@
 - (NSString *)peripheralId
 {
   return self.peripheral.identifier.UUIDString;
-}
-
-- (NSArray*) packets {
-  return [NSArray arrayWithArray:incomingPackets];
 }
 
 - (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
@@ -432,10 +428,9 @@
 - (void) handleIdleListenerResponse:(NSData *)response {
   if (response.length > 3) {
     // This is a response to our idle listen command
-    MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
+    RFPacket *packet = [[RFPacket alloc] initWithData:response];
     packet.capturedAt = [NSDate date];
-    [incomingPackets addObject:packet];
-    NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
+    NSLog(@"Read packet (%d): %d bytes", packet.rssi, packet.data.length);
     NSDictionary *attrs = @{
                             @"packet": packet,
                             @"peripheral": self.peripheral,

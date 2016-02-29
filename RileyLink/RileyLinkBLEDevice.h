@@ -55,8 +55,6 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 @property (nonatomic, nonnull, readonly) NSString * peripheralId;
 @property (nonatomic, nonnull, readonly, retain) CBPeripheral * peripheral;
 
-@property (nonatomic, nonnull, readonly, copy) NSArray *packets;
-
 @property (nonatomic, readonly) RileyLinkState state;
 
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;

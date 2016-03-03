@@ -10,7 +10,6 @@
 #import "NSData+Conversion.h"
 #import "SendPacketCmd.h"
 #import "SendAndListenCmd.h"
-#import "MinimedPacket.h"
 #import "MessageBase.h"
 #import "UpdateRegisterCmd.h"
 

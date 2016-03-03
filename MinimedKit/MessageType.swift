@@ -32,6 +32,10 @@ public enum MessageType: UInt8 {
             return MySentryAckMessageBody.self
         case .ReadSettings:
             return ReadSettingsCarelinkMessageBody.self
+        case .FindDevice:
+          return FindDeviceMessageBody.self
+        case .DeviceLink:
+          return DeviceLinkMessageBody.self
         default:
             return UnknownMessageBody.self
         }

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public struct PumpMessage {
     public let packetType: PacketType
     public let address: NSData

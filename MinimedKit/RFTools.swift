@@ -12,7 +12,7 @@ private let codesRev:Dictionary<Int, UInt8> = [21: 0, 49: 1, 50: 2, 35: 3, 52: 4
 
 private let codes = [21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28]
 
-func decode4b6b(rawData: NSData) -> NSData? {
+public func decode4b6b(rawData: NSData) -> NSData? {
   var buffer = [UInt8]()
   let bytes: [UInt8] = rawData[0..<rawData.length]
   var availBits = 0
@@ -36,7 +36,7 @@ func decode4b6b(rawData: NSData) -> NSData? {
   return NSData(bytes: &buffer, length: buffer.count)
 }
 
-func encode4b6b(rawData: NSData) -> NSData {
+public func encode4b6b(rawData: NSData) -> NSData {
   var buffer = [UInt8]()
   let bytes: [UInt8] = rawData[0..<rawData.length]
   var acc = 0x0

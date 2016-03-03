@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MinimedPacket.h"
 
 @interface NightScoutUploader : NSObject
 

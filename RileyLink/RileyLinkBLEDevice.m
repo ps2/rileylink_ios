@@ -141,7 +141,7 @@
   NSLog(@"Writing command to data characteristic: %@", [cmd.data hexadecimalString]);
   // 255 is the real limit (buf limit in bgscript), but we set the limit at 220, as we need room for escaping special chars.
   if (cmd.data.length > 220) {
-    NSLog(@"********** Warning: packet too large: %d bytes ************", cmd.data.length);
+    NSLog(@"********** Warning: packet too large: %zd bytes ************", cmd.data.length);
   } else {
     uint8_t count = cmd.data.length;
     NSMutableData *outBuf = [NSMutableData dataWithBytes:&count length:1];
@@ -371,7 +371,7 @@
         currentCommand = nil;
         dispatch_group_leave(cmdDispatchGroup);
       } else {
-        NSLog(@"Received data but no outstanding command!")
+        NSLog(@"Received data but no outstanding command!");
         inBuf.length = 0;
       }
     } else {

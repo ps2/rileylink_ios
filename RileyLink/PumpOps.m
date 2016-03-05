@@ -61,7 +61,7 @@
 
 - (void) getHistoryPage:(NSInteger)page withHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
   self.historyTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-    NSLog(@"History fetching task expired.")
+    NSLog(@"History fetching task expired.");
     [[UIApplication sharedApplication] endBackgroundTask:self.historyTask];
   } ];
   NSLog(@"History fetching task started.");
@@ -71,7 +71,7 @@
     dispatch_async(dispatch_get_main_queue(),^{
       completionHandler(res);
       [[UIApplication sharedApplication] endBackgroundTask:self.historyTask];
-      NSLog(@"History fetching task completed normally.")
+      NSLog(@"History fetching task completed normally.");
     });
   }];
 

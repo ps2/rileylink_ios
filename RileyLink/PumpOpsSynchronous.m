@@ -330,7 +330,7 @@
   if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
     rssiSum += response.rssi;
     rssiCount += 1;
-    NSLog(@"Pump acked dump msg (0x80)")
+    NSLog(@"Pump acked dump msg (0x80)");
   } else {
     NSLog(@"Missing response to initial read history command");
     responseDict[@"error"] = @"Missing response to initial read history command";

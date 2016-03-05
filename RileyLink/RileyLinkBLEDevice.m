@@ -371,7 +371,7 @@
         currentCommand = nil;
         dispatch_group_leave(cmdDispatchGroup);
       } else {
-        NSLog(@"Received data but no outstanding command!")
+        NSLog(@"Received data but no outstanding command!");
         inBuf.length = 0;
       }
     } else {

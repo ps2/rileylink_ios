@@ -154,11 +154,15 @@
 		C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */; };
 		C1EAD6E91C83E121006DBA60 /* RFPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E81C83E121006DBA60 /* RFPacket.m */; };
 		C1EB955D1C887FE5002517DF /* HistoryPageTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPageTemp.swift */; };
+		C1EB95651C8886D4002517DF /* CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95601C8886D4002517DF /* CRC8.m */; };
+		C1EB95661C8886D4002517DF /* CRC16.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95621C8886D4002517DF /* CRC16.m */; };
+		C1EB95671C8886D4002517DF /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95641C8886D4002517DF /* MinimedPacket.m */; };
 		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */; };
 		C1EF58971B3FA462001C8C80 /* MenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58961B3FA462001C8C80 /* MenuController.m */; };
 		C1EF589E1B3FBFE7001C8C80 /* MainAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF589D1B3FBFE7001C8C80 /* MainAppViewController.m */; };
+		C1F003901C894D2E00B381B9 /* ReceivingPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -456,6 +460,12 @@
 		C1EAD6E81C83E121006DBA60 /* RFPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPacket.m; sourceTree = "<group>"; };
 		C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Bridging-Header.h"; sourceTree = "<group>"; };
 		C1EB955C1C887FE5002517DF /* HistoryPageTemp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTemp.swift; sourceTree = "<group>"; };
+		C1EB955F1C8886D4002517DF /* CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC8.h; sourceTree = "<group>"; };
+		C1EB95601C8886D4002517DF /* CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC8.m; sourceTree = "<group>"; };
+		C1EB95611C8886D4002517DF /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
+		C1EB95621C8886D4002517DF /* CRC16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC16.m; sourceTree = "<group>"; };
+		C1EB95631C8886D4002517DF /* MinimedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimedPacket.h; sourceTree = "<group>"; };
+		C1EB95641C8886D4002517DF /* MinimedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimedPacket.m; sourceTree = "<group>"; };
 		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
@@ -466,6 +476,8 @@
 		C1EF58961B3FA462001C8C80 /* MenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuController.m; sourceTree = "<group>"; };
 		C1EF589C1B3FBFE7001C8C80 /* MainAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainAppViewController.h; sourceTree = "<group>"; };
 		C1EF589D1B3FBFE7001C8C80 /* MainAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainAppViewController.m; sourceTree = "<group>"; };
+		C1F0038E1C894D2E00B381B9 /* ReceivingPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivingPacketCmd.h; sourceTree = "<group>"; };
+		C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceivingPacketCmd.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -642,6 +654,7 @@
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
+				C1EB955E1C88869F002517DF /* MinimedRF */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
 				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
@@ -868,6 +881,19 @@
 			path = Messages;
 			sourceTree = "<group>";
 		};
+		C1EB955E1C88869F002517DF /* MinimedRF */ = {
+			isa = PBXGroup;
+			children = (
+				C1EB955F1C8886D4002517DF /* CRC8.h */,
+				C1EB95601C8886D4002517DF /* CRC8.m */,
+				C1EB95611C8886D4002517DF /* CRC16.h */,
+				C1EB95621C8886D4002517DF /* CRC16.m */,
+				C1EB95631C8886D4002517DF /* MinimedPacket.h */,
+				C1EB95641C8886D4002517DF /* MinimedPacket.m */,
+			);
+			name = MinimedRF;
+			sourceTree = "<group>";
+		};
 		C1EF58891B3F9730001C8C80 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -898,6 +924,8 @@
 				C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */,
 				C1EAD6E71C83E121006DBA60 /* RFPacket.h */,
 				C1EAD6E81C83E121006DBA60 /* RFPacket.m */,
+				C1F0038E1C894D2E00B381B9 /* ReceivingPacketCmd.h */,
+				C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */,
 			);
 			name = RileyLink;
 			sourceTree = "<group>";
@@ -1235,6 +1263,7 @@
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,
 				C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */,
 				C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */,
+				C1EB95671C8886D4002517DF /* MinimedPacket.m in Sources */,
 				C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */,
 				C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */,
 				C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */,
@@ -1244,6 +1273,7 @@
 				43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */,
 				C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */,
 				C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */,
+				C1F003901C894D2E00B381B9 /* ReceivingPacketCmd.m in Sources */,
 				C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */,
 				C139AC971BFD8CF800B0518F /* PHEChangeChildBlockEnable.m in Sources */,
 				C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */,
@@ -1259,6 +1289,7 @@
 				C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */,
 				C10AB08B1C8519E2000F102E /* MySentryPairViewController.swift in Sources */,
 				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
+				C1EB95651C8886D4002517DF /* CRC8.m in Sources */,
 				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
 				C10EAA9D1C5AE9A600B0838F /* GetVersionCmd.m in Sources */,
@@ -1283,6 +1314,7 @@
 				C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpState.m in Sources */,
 				C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */,
+				C1EB95661C8886D4002517DF /* CRC16.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

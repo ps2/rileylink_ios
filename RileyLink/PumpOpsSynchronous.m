@@ -10,8 +10,10 @@
 #import "NSData+Conversion.h"
 #import "SendPacketCmd.h"
 #import "SendAndListenCmd.h"
+#import "MinimedPacket.h"
 #import "MessageBase.h"
 #import "UpdateRegisterCmd.h"
+#import "RFPacket.h"
 
 #define STANDARD_PUMP_RESPONSE_WINDOW 180
 #define EXPECTED_MAX_BLE_LATENCY_MS 1500
@@ -77,7 +79,7 @@
                 msBetweenPackets:(uint8_t)msBetweenPackets
                       retryCount:(uint8_t)retryCount {
   SendAndListenCmd *cmd = [[SendAndListenCmd alloc] init];
-  cmd.packet = [MinimedPacket encodeData:msg];
+  cmd.packet = [[RFPacket alloc] initWithData:msg];
   cmd.timeoutMS = timeoutMS;
   cmd.repeatCount = repeat;
   cmd.msBetweenPackets = msBetweenPackets;
@@ -85,9 +87,8 @@
   cmd.listenChannel = 0;
   MinimedPacket *rxPacket = nil;
   NSInteger totalTimeout = repeat * msBetweenPackets + timeoutMS + EXPECTED_MAX_BLE_LATENCY_MS;
-  NSData *response = [_session doCmd:cmd withTimeoutMs:totalTimeout];
-  if (response && response.length > 2) {
-    rxPacket = [[MinimedPacket alloc] initWithData:response];
+  if ([_session doCmd:cmd withTimeoutMs:totalTimeout]) {
+    rxPacket = [[MinimedPacket alloc] initWithRFPacket:cmd.receivedPacket];
   }
   return rxPacket;
 }
@@ -143,7 +144,7 @@
   if ([self wakeIfNeeded]) {
     MinimedPacket *response = [self sendAndListen:[self modelQueryMessage].data];
     
-    NSLog(@"*********** getPumpModel: %@", [response hexadecimalString]);
+    NSLog(@"*********** getPumpModel: %@", [response.data hexadecimalString]);
     
     if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
       return [NSString stringWithCString:&(response.data).bytes[7]
@@ -162,7 +163,7 @@
     
     MinimedPacket *response = [self sendAndListen:[self batteryStatusMessage].data];
     
-    if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_BATTERY) {
+    if (response && response.messageType == MESSAGE_TYPE_GET_BATTERY) {
       unsigned char *data = (unsigned char *)(response.data).bytes + 6;
       
       NSInteger volts = (((int)data[1]) << 8) + data[2];
@@ -206,7 +207,7 @@
     int tries = 3;
     for (int i=0; i<tries; i++) {
       MinimedPacket *response = [self sendAndListen:[self modelQueryMessage].data];
-      if (response && response.valid && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
+      if (response && response.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
         avgRSSI += response.rssi;
         successCount++;
         totalSuccesses++;
@@ -326,7 +327,7 @@
   MinimedPacket *response;
   response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"].data];
   
-  if (response && response.isValid && response.messageType == MESSAGE_TYPE_ACK) {
+  if (response && response.messageType == MESSAGE_TYPE_ACK) {
     rssiSum += response.rssi;
     rssiCount += 1;
     NSLog(@"Pump acked dump msg (0x80)")
@@ -340,7 +341,7 @@
   
   response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs].data];
   
-  if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+  if (response && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
     rssiSum += response.rssi;
     rssiCount += 1;
     [responses addObject:response.data];
@@ -355,7 +356,7 @@
     
     response = [self sendAndListen:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
     
-    if (response && response.isValid && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
+    if (response && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
       rssiSum += response.rssi;
       rssiCount += 1;
       [responses addObject:response.data];
@@ -373,7 +374,7 @@
   
   // Last ack packet doesn't need a response
   SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
-  cmd.packet = [MinimedPacket encodeData:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
+  cmd.packet = [[RFPacket alloc] initWithData:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
   [_session doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
   return responseDict;
 }

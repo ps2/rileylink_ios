@@ -8,7 +8,7 @@
 
 #import "GetPacketCmd.h"
 
-@implementation GetPacketCmd
+@implementation GetPacketCmd 
 
 - (NSData*)data {
   uint8_t cmd[4];

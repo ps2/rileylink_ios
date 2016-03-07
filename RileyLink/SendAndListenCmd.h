@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CmdBase.h"
+#import "ReceivingPacketCmd.h"
+#import "RFPacket.h"
 
-@interface SendAndListenCmd : CmdBase
+@interface SendAndListenCmd : ReceivingPacketCmd
 
-@property (nonatomic, strong) NSData *packet;
+@property (nonatomic, strong) RFPacket *packet;
 @property (nonatomic, assign) uint8_t sendChannel; // In general, 0 = meter, cgm. 2 = pump
 @property (nonatomic, assign) uint8_t repeatCount; // 0 = no repeat, i.e. only one packet.  1 repeat = 2 packets sent total.
 @property (nonatomic, assign) uint8_t msBetweenPackets;

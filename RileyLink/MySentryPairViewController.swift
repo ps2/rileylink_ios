@@ -110,11 +110,6 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     runCommand(cmd)
   }
   
-  func handleResponse(response: NSData) {
-    let rxPacket = RFPacket.init(data: response)
-    packetReceived(rxPacket)
-  }
-  
   func setState(state: PairingState) {
     if (state == self.state) {
       return
@@ -205,7 +200,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     }
   }
   
-  func makeCommandForAckAndListen(sequence: UInt8, messageType: MessageType) -> CmdBase {
+  func makeCommandForAckAndListen(sequence: UInt8, messageType: MessageType) -> ReceivingPacketCmd {
     let replyString = String(format: "%02x%@%02x%02x%@00%02x000000",
       PacketType.MySentry.rawValue,
       Config.sharedInstance().pumpID,
@@ -215,22 +210,26 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
       messageType.rawValue)
     let data = NSData.init(hexadecimalString: replyString)
     let send = SendAndListenCmd()
-    send.sendChannel = 0;
-    send.timeoutMS = 180;
-    send.listenChannel = 0;
-    send.packet = encode4b6b(data!)
+    send.sendChannel = 0
+    send.timeoutMS = 180
+    send.listenChannel = 0
+    send.packet = RFPacket(data: data!)
     return send;
   }
   
-  func runCommand(cmd: CmdBase) {
+  func runCommand(cmd: ReceivingPacketCmd) {
     device.runSession {
       (session: RileyLinkCmdSession) -> Void in
-      let response = session.doCmd(cmd, withTimeoutMs: 31000)
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        let rxPacket = RFPacket.init(data: response)
-        self.packetReceived(rxPacket)
-      })
+      if (session.doCmd(cmd, withTimeoutMs: 31000)) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          let rxPacket = cmd.receivedPacket
+          self.packetReceived(rxPacket)
+        })
+      } else {
+        // Timed out. Try again
+        self.performSelector(Selector("listenForPairing"), withObject:nil, afterDelay:0)
       }
+    }
   }
 
   func handleFindDevice(msg: FindDeviceMessageBody) {
@@ -259,20 +258,19 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     let cmd = makeCommandForAckAndListen(0, messageType: MessageType.PumpStatus)
     runCommand(cmd)
   }
-//
-//  - (void)closeKeyboard:(id)sender
-//  {
-//  [self.view endEditing:YES];
-//  }
-//  
-//  - (IBAction)startPairing:(id)sender {
-//  if (PairingStateReady == self.state) {
-//  self.state = PairingStateStarted;
-//  [self listenForPairing];
-//  }
-//  }
-//
-//
+
+  func closeKeyboard(recognizer: UITapGestureRecognizer) {
+    self.view.endEditing(true)
+  }
+  
+  @IBAction func startPairing(sender: UIButton) {
+    if (.Ready == self.state) {
+      self.state = .Started
+      listenForPairing()
+    }
+  }
+
+
   
   /*
   // MARK: - Navigation

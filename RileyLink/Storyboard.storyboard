@@ -659,7 +659,7 @@
         <!--MySentry Pairing-->
         <scene sceneID="tb3-wT-tie">
             <objects>
-                <viewController id="bIR-nw-zEq" customClass="MySentryPairViewController" sceneMemberID="viewController">
+                <viewController id="bIR-nw-zEq" customClass="MySentryPairViewController" customModule="RileyLink" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Csu-xg-nGE"/>
                         <viewControllerLayoutGuide type="bottom" id="NjR-4H-1y0"/>
@@ -729,7 +729,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="MySentry Pairing" id="Ygr-Ws-7Av"/>
                     <connections>
-                        <outlet property="deviceIDTextField" destination="itA-Oe-kgM" id="xbo-Nk-Axn"/>
+                        <outlet property="deviceIDTextField" destination="itA-Oe-kgM" id="qhm-jR-26r"/>
                         <outlet property="instructionLabel" destination="wm9-qS-bD9" id="AYH-6r-sUb"/>
                         <outlet property="progressView" destination="hKP-sR-LXH" id="lp5-nK-X2S"/>
                         <outlet property="startButton" destination="Eu8-3h-oKB" id="gc4-t7-Lf3"/>

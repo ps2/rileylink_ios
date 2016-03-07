@@ -25,6 +25,7 @@
 #import "NightScoutBolus.h"
 #import "NightScoutPump.h"
 #import "AppDelegate.h"
+#import "RFPacket.h"
 
 #define RECORD_RAW_PACKETS NO
 
@@ -112,11 +113,8 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 #pragma mark - Testing
 
 - (void)testHandleMySentry {
-  NSMutableData *dataWithHeader = [[NSData dataWithHexadecimalString:@"0101"] mutableCopy];
-  NSData *packet = [NSData dataWithHexadecimalString:@"a259705504e9401334001001050000000001d7040205e4000000000054000001240000000000000000dd"];
-  packet = [MinimedPacket encodeData:packet];
-  [dataWithHeader appendData:packet];
-  MinimedPacket *mySentryPacket = [[MinimedPacket alloc] initWithData:dataWithHeader];
+  NSData *data = [NSData dataWithHexadecimalString:@"a259705504e9401334001001050000000001d7040205e4000000000054000001240000000000000000dd"];
+  MinimedPacket *mySentryPacket = [[MinimedPacket alloc] initWithData:data];
   [self handlePumpStatus:mySentryPacket fromDevice:nil withRSSI:1];
   [self flushAll];
 }
@@ -162,9 +160,11 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 
 - (void)packetReceived:(NSNotification*)notification {
   NSDictionary *attrs = notification.userInfo;
-  MinimedPacket *packet = attrs[@"packet"];
+  RFPacket *packet = attrs[@"packet"];
   RileyLinkBLEDevice *device = notification.object;
-  [self addPacket:packet fromDevice:device];
+  
+  MinimedPacket *mPacket = [[MinimedPacket alloc] initWithRFPacket:packet];
+  [self addPacket:mPacket fromDevice:device];
   
   //TODO: find some way to sleep for 4 mins to save on RL battery?
 }
@@ -311,10 +311,6 @@ static NSString *defaultNightscoutDeviceStatusPath = @"/api/v1/devicestatus.json
 //    type: 'sgv' } ]
 
 - (void)addPacket:(MinimedPacket*)packet fromDevice:(RileyLinkBLEDevice*)device {
-  
-  if (!packet.valid) {
-    return;
-  }
   
   if (RECORD_RAW_PACKETS) {
     [self storeRawPacket:packet fromDevice:device];

@@ -115,8 +115,9 @@
                         });
 }
 
-- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
   dispatch_group_enter(cmdDispatchGroup);
+  BOOL timedOut = NO;
   currentCommand = cmd;
   [self issueCommand:cmd];
   dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
@@ -125,8 +126,9 @@
     [self.peripheral readValueForCharacteristic:dataCharacteristic];
     dispatch_group_leave(cmdDispatchGroup);
     currentCommand = nil;
+    timedOut = YES;
   }
-  return cmd.response;
+  return !timedOut;
 }
 
 - (void) issueCommand:(nonnull CmdBase*)cmd {
@@ -247,16 +249,25 @@
   [self setCharacteristicsFromService:service];
 }
 
+- (void)showMessage:(NSString*)msg withTitle:(NSString*)title {
+  dispatch_async(dispatch_get_main_queue(),^{
+    [UIAlertView showWithTitle:title
+                       message:msg
+             cancelButtonTitle:@"OK"
+             otherButtonTitles:nil
+                      tapBlock:nil];
+  });
+}
+
 - (void)checkVersion {
   [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
     GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
-    // We run two commands here, to flush out responses to any old commands
-    [s doCmd:cmd withTimeoutMs:1000];
-    NSData *response = [s doCmd:cmd withTimeoutMs:1000];
     NSString *foundVersion;
     BOOL versionOK = NO;
-    if (response && response.length > 0) {
-      foundVersion = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    // We run two commands here, to flush out responses to any old commands
+    [s doCmd:cmd withTimeoutMs:1000];
+    if ([s doCmd:cmd withTimeoutMs:1000]) {
+      foundVersion = [[NSString alloc] initWithData:cmd.response encoding:NSUTF8StringEncoding];
       NSLog(@"Got version: %@", foundVersion);
       NSRange range = [foundVersion rangeOfString:@"subg_rfspy"];
       if (range.location == 0 && foundVersion.length > 11) {
@@ -265,30 +276,28 @@
         if (versionComponents.count > 1) {
           NSInteger major = [versionComponents[0] integerValue];
           NSInteger minor = [versionComponents[1] integerValue];
-          if (major == 0 && minor > 4) {
+          if (major <= 0 && minor < 6) {
+            NSString *msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.6 or newer.", foundVersion];
+            [self showMessage:msg withTitle:@"Firmware version issue."];
+          } else {
             versionOK = YES;
           }
+        } else {
+          NSString *msg = [NSString stringWithFormat:@"Unable to parse version... expecting 0.x, found %@", foundVersion];
+          [self showMessage:msg withTitle:@"Firmware version issue."];
         }
+      } else {
+        NSString *msg = [NSString stringWithFormat:@"Unable to parse version... expecting 0.x, found %@", foundVersion];
+        [self showMessage:msg withTitle:@"Firmware version issue."];
       }
+    } else {
+      NSString *msg = @"Unable to retrieve version from RileyLink. Get version command timed out.";
+      [self showMessage:msg withTitle:@"Firmware version issue."];
     }
     if (versionOK) {
       ready = YES;
       dispatch_async(dispatch_get_main_queue(),^{
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_READY object:self];
-      });
-    } else {
-      dispatch_async(dispatch_get_main_queue(),^{
-        NSString *msg;
-        if (foundVersion != nil) {
-          msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.5 or newer.", foundVersion];
-        } else {
-          msg = @"Communication issue with RileyLink. Please power cycle the RileyLink and try again.";
-        }
-        [UIAlertView showWithTitle:@"Firmware version check failed."
-                           message:msg
-                 cancelButtonTitle:@"OK"
-                 otherButtonTitles:nil
-                          tapBlock:nil];
       });
     }
   }];
@@ -444,7 +453,7 @@
 - (void) handleIdleListenerResponse:(NSData *)response {
   if (response.length > 3) {
     // This is a response to our idle listen command
-    RFPacket *packet = [[RFPacket alloc] initWithData:response];
+    RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
     packet.capturedAt = [NSDate date];
     NSLog(@"Read packet (%d): %d bytes", packet.rssi, packet.data.length);
     NSDictionary *attrs = @{
@@ -476,7 +485,7 @@
 @end
 
 @implementation RileyLinkCmdSession
-- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
+- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
   return [_device doCmd:cmd withTimeoutMs:timeoutMS];
 }
 @end

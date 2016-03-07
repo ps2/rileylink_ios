@@ -7,6 +7,7 @@
 //
 
 #import "MessageBase.h"
+#import "MinimedPacket.h"
 
 @interface MessageBase ()
 
@@ -75,11 +76,11 @@
 }
 
 - (PacketType) packetType {
-    return [self byteAt:0];
+  return [self byteAt:0];
 }
 
 - (MessageType) messageType {
-    return [self byteAt:4];
+  return [self byteAt:4];
 }
 
 - (NSString*) address {

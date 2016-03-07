@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MessageBase : NSObject
-
 typedef NS_ENUM(unsigned char, PacketType) {
   PacketTypeSentry    = 0xa2,
   PacketTypeMeter     = 0xa5,
@@ -33,6 +31,8 @@ typedef NS_ENUM(unsigned char, MessageType) {
   MESSAGE_TYPE_GET_BATTERY = 0x72,
   MESSAGE_TYPE_READ_HISTORY = 0x80,
 };
+
+@interface MessageBase : NSObject
 
 @property (nonatomic, nonnull, readonly, strong) NSData *data;
 

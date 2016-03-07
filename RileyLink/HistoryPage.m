@@ -11,7 +11,7 @@
 #import "PumpHistoryEventBase.h"
 #import "PHEUnabsorbedInsulin.h"
 #import "PHEBolusNormal.h"
-#import "MinimedKit/MinimedKit-Swift.h"
+@import MinimedKit;
 
 @implementation HistoryPage
 

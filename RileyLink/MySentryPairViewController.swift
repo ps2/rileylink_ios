@@ -35,7 +35,6 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     return r
   }()
 
-  var state: PairingState = .NeedsConfig
   var sendCounter: UInt8 = 0
   
   override func viewDidLoad() {
@@ -110,66 +109,65 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     runCommand(cmd)
   }
   
-  func setState(state: PairingState) {
-    if (state == self.state) {
-      return
-    }
-  
-    self.state = state;
-  
-    switch state {
-    case .NeedsConfig:
-      startButton.enabled = false
-      startButton.hidden = true
-      instructionLabel.text = NSLocalizedString(
-        "Enter a 6-digit numeric value to identify your MySentry.",
-        comment: "Device ID instruction")
-      instructionLabel.hidden = false
-    case .Ready:
-      startButton.enabled = true
-      startButton.hidden = false
-      progressView.progress = 0
-  
-      instructionLabel.hidden = true
-    case .Started:
-      startButton.enabled = false
-      startButton.hidden = true
-      deviceIDTextField.enabled = false
-      progressView.setProgress(1.0 / 4.0, animated:true)
-  
-      instructionLabel.text = NSLocalizedString(
-        "On your pump, go to the Find Device screen and select \"Find Device\"." +
-        "\n" +
-        "\nMain Menu >" +
-        "\nUtilities >" +
-        "\nConnect Devices >" +
-        "\nOther Devices >" +
-        "\nOn >" +
-        "\nFind Device",
-        comment: "Pump find device instruction")
-      instructionLabel.hidden = false
-    case .ReceivedFindPacket:
-      progressView.setProgress(2.0 / 4.0, animated:true)
-  
-      instructionLabel.text = NSLocalizedString(
-        "Pairing in process, please wait.",
-        comment: "Pairing waiting instruction")
-    case .ReceivedLinkPacket:
-      progressView.setProgress(3.0 / 4.0, animated:true)
-      instructionLabel.text = NSLocalizedString(
-        "Pump accepted pairing. " +
-        "Waiting for MySentry update from pump. " +
-        "This could take up to five minutes...",
-        comment: "Pairing waiting instruction")
-    case .Complete:
-      progressView.setProgress(4.0 / 4.0, animated:true)
-  
-      instructionLabel.text = NSLocalizedString(
-        "Congratulations! Pairing is complete.",
-        comment: "Pairing waiting instruction")
+  var state: PairingState = .NeedsConfig {
+    didSet {
+      if (oldValue == state) {
+        return
+      }
+      switch state {
+      case .NeedsConfig:
+        startButton.enabled = false
+        startButton.hidden = true
+        instructionLabel.text = NSLocalizedString(
+          "Enter a 6-digit numeric value to identify your MySentry.",
+          comment: "Device ID instruction")
+        instructionLabel.hidden = false
+      case .Ready:
+        startButton.enabled = true
+        startButton.hidden = false
+        progressView.progress = 0
+        
+        instructionLabel.hidden = true
+      case .Started:
+        startButton.enabled = false
+        startButton.hidden = true
+        deviceIDTextField.enabled = false
+        progressView.setProgress(1.0 / 4.0, animated:true)
+        
+        instructionLabel.text = NSLocalizedString(
+          "On your pump, go to the Find Device screen and select \"Find Device\"." +
+            "\n" +
+            "\nMain Menu >" +
+            "\nUtilities >" +
+            "\nConnect Devices >" +
+            "\nOther Devices >" +
+            "\nOn >" +
+          "\nFind Device",
+          comment: "Pump find device instruction")
+        instructionLabel.hidden = false
+      case .ReceivedFindPacket:
+        progressView.setProgress(2.0 / 4.0, animated:true)
+        
+        instructionLabel.text = NSLocalizedString(
+          "Pairing in process, please wait.",
+          comment: "Pairing waiting instruction")
+      case .ReceivedLinkPacket:
+        progressView.setProgress(3.0 / 4.0, animated:true)
+        instructionLabel.text = NSLocalizedString(
+          "Pump accepted pairing. " +
+            "Waiting for MySentry update from pump. " +
+          "This could take up to five minutes...",
+          comment: "Pairing waiting instruction")
+      case .Complete:
+        progressView.setProgress(4.0 / 4.0, animated:true)
+        
+        instructionLabel.text = NSLocalizedString(
+          "Congratulations! Pairing is complete.",
+          comment: "Pairing waiting instruction")
+      }
     }
   }
-  
+
   // MARK: - Actions
   
   func packetReceived(packet: RFPacket) {
@@ -178,7 +176,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   
     if let data = packet.data, msg = PumpMessage.init(rxData: data) {
       if msg.packetType == PacketType.MySentry &&
-        msg.address == Config.sharedInstance().pumpID {
+        msg.address.hexadecimalString == Config.sharedInstance().pumpID {
           switch (msg.messageType) {
           case MessageType.FindDevice:
             handleFindDevice(msg.messageBody as! FindDeviceMessageBody)
@@ -241,8 +239,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     runCommand(cmd)
   }
   
-  func handleDeviceLink(msg: DeviceLinkMessageBody)
-  {
+  func handleDeviceLink(msg: DeviceLinkMessageBody) {
     if .ReceivedFindPacket == self.state {
       self.state = .ReceivedLinkPacket
     }

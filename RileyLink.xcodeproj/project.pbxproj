@@ -22,6 +22,8 @@
 		C10EAAA31C5B3A0800B0838F /* PumpOpsSynchronous.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA21C5B3A0800B0838F /* PumpOpsSynchronous.m */; };
 		C10EAAA61C5C507E00B0838F /* PumpOps.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA51C5C507E00B0838F /* PumpOps.m */; };
 		C11F993D1BC406970013158C /* PumpState.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpState.m */; };
+		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
+		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
 		C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */; };
 		C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */; };
 		C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C126163B1B67CBC2001FAD87 /* RileyLinkTableViewCell.m */; };
@@ -234,6 +236,8 @@
 		C10EAAA51C5C507E00B0838F /* PumpOps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpOps.m; sourceTree = "<group>"; };
 		C11F993B1BC406970013158C /* PumpState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpState.h; sourceTree = "<group>"; };
 		C11F993C1BC406970013158C /* PumpState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpState.m; sourceTree = "<group>"; };
+		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
+		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C126162A1B65E9BF001FAD87 /* RileyLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkDeviceViewController.h; sourceTree = "<group>"; };
 		C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkDeviceViewController.m; sourceTree = "<group>"; };
 		C12616301B65F4BC001FAD87 /* RileyLinkListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkListTableViewController.h; sourceTree = "<group>"; };
@@ -446,9 +450,9 @@
 		C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadSettingsCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnknownMessageBody.swift; sourceTree = "<group>"; };
 		C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedKitTests.swift; sourceTree = "<group>"; };
-		C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryPumpStatusMessageBodyTests.swift; sourceTree = "<group>"; };
+		C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MySentryPumpStatusMessageBodyTests.swift; path = ../MySentryPumpStatusMessageBodyTests.swift; sourceTree = "<group>"; };
 		C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDataTests.swift; sourceTree = "<group>"; };
-		C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadSettingsCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadSettingsCarelinkMessageBodyTests.swift; path = ../ReadSettingsCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C1EAD6D91C829104006DBA60 /* RFTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFTools.swift; sourceTree = "<group>"; };
 		C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFToolsTests.swift; sourceTree = "<group>"; };
 		C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8.swift; sourceTree = "<group>"; };
@@ -544,10 +548,9 @@
 		C10D9BD01C8269D500378342 /* MinimedKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				C121985D1C8DE72500BC374C /* Messages */,
 				C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */,
-				C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */,
 				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
-				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
 				C10D9BD31C8269D500378342 /* Info.plist */,
 				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
 				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
@@ -568,6 +571,17 @@
 				C10EAAA51C5C507E00B0838F /* PumpOps.m */,
 			);
 			name = Pump;
+			sourceTree = "<group>";
+		};
+		C121985D1C8DE72500BC374C /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */,
+				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
+				C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */,
+				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 		C12616391B67CB9C001FAD87 /* TableViewCells */ = {
@@ -1193,8 +1207,10 @@
 			files = (
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
+				C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */,
 				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
 				C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */,
+				C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */,
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
 				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,

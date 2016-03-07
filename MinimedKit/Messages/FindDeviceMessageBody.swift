@@ -10,9 +10,9 @@ import Foundation
 
 public struct FindDeviceMessageBody: MessageBody {
 
-  public static let length = 8
+  public static let length = 5
   
-  let pumpID: [UInt8]
+  let deviceAddress: NSData
   public let sequence: UInt8
   let rxData: NSData
 
@@ -21,7 +21,7 @@ public struct FindDeviceMessageBody: MessageBody {
     self.rxData = rxData
 
     if rxData.length == self.dynamicType.length {
-      pumpID = rxData[1...3]
+      self.deviceAddress = rxData.subdataWithRange(NSRange(1...3))
       sequence = rxData[0] & 0b1111111
     } else {
       return nil
@@ -35,7 +35,7 @@ public struct FindDeviceMessageBody: MessageBody {
   public var dictionaryRepresentation: [String: AnyObject] {
     return [
       "sequence": Int(sequence),
-      "pumpId": NSData(bytes: pumpID, length: 3).hexadecimalString,
+      "deviceAddress": deviceAddress.hexadecimalString,
     ]
   }
 

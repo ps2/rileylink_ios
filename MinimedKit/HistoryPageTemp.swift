@@ -21,7 +21,7 @@ import Foundation
     //return packetCRC == [CRC16 compute:[_data subdataWithRange:NSMakeRange(0, _data.length-2)]];
     let lowByte: UInt8 = pageData[pageData.length - 1]
     let hiByte: UInt8 = pageData[pageData.length - 2]
-    let packetCRC: UInt16 =  (UInt16(hiByte) << 16) + UInt16(lowByte)
-    return packetCRC == computeCRC16(pageData)
+    let packetCRC: UInt16 =  (UInt16(hiByte) << 8) + UInt16(lowByte)
+    return packetCRC == computeCRC16(pageData.subdataWithRange(NSMakeRange(0, pageData.length-2)))
   }
 }

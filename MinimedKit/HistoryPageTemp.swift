@@ -17,8 +17,6 @@ import Foundation
   }
   
   @objc public func crcOK() -> Bool {
-    //uint16_t packetCRC = bytes[_data.length-1] + (bytes[_data.length-2] << 8);
-    //return packetCRC == [CRC16 compute:[_data subdataWithRange:NSMakeRange(0, _data.length-2)]];
     let lowByte: UInt8 = pageData[pageData.length - 1]
     let hiByte: UInt8 = pageData[pageData.length - 2]
     let packetCRC: UInt16 =  (UInt16(hiByte) << 8) + UInt16(lowByte)

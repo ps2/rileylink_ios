@@ -66,6 +66,11 @@ class HistoryPageTempTests: XCTestCase {
     XCTAssertEqual(unabsorbedInsulinRecords[1].age, 459)
     XCTAssertEqual(unabsorbedInsulinRecords[2].amount, 0.2)
     XCTAssertEqual(unabsorbedInsulinRecords[2].age, 469)
+    
+    let basalProfileStart = events[2] as! BasalProfileStartPumpEvent
+    XCTAssertEqual(basalProfileStart.offset, 43200000)
+    XCTAssertEqual(basalProfileStart.rate, 0.25)
+    XCTAssertEqual(basalProfileStart.profileIndex, 5)
   }
   
 }

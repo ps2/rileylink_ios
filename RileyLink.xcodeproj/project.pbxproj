@@ -134,6 +134,7 @@
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
 		C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */; };
 		C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */; };
+		C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
@@ -445,6 +446,7 @@
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
 		C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnabsorbedInsulinPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNormalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalProfileStartPumpEvent.swift; sourceTree = "<group>"; };
 		C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutUploader.h; sourceTree = "<group>"; };
 		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
@@ -895,6 +897,7 @@
 				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
 				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
 				C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */,
+				C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -1223,6 +1226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */,
+				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
 				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
 				C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */,
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,

@@ -38,7 +38,7 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
       length = 20
     }
     
-    if length > availableData.length {
+    if length >= availableData.length {
       carbohydrates = 0
       bloodGlucose = 0
       foodEstimate = 0

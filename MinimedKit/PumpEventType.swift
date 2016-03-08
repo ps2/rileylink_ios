@@ -16,6 +16,7 @@ public enum PumpEventType: UInt8 {
   case CalBGForPH = 0x0a
   case BGReceived = 0x3f
   case Rewind = 0x21
+  case Prime = 0x03
   
   var eventType: PumpEvent.Type {
     switch self {
@@ -35,6 +36,8 @@ public enum PumpEventType: UInt8 {
       return BGReceivedPumpEvent.self
     case .Rewind:
       return RewindPumpEvent.self
+    case .Prime:
+      return PrimePumpEvent.self
     }
   }
 }

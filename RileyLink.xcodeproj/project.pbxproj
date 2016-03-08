@@ -138,6 +138,7 @@
 		C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */; };
 		C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */; };
 		C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */; };
+		C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
@@ -453,6 +454,7 @@
 		C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalBGForPHPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGReceivedPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewindPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimePumpEvent.swift; sourceTree = "<group>"; };
 		C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutUploader.h; sourceTree = "<group>"; };
 		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
@@ -907,6 +909,7 @@
 				C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */,
 				C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */,
 				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
+				C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -1254,6 +1257,7 @@
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
+				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,

@@ -86,6 +86,13 @@ class HistoryPageTempTests: XCTestCase {
     
     let rewind = events[20] as! RewindPumpEvent
     XCTAssertEqual(rewind.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T02:04:03Z")
+    
+    let prime = events[21] as! PrimePumpEvent
+    XCTAssertEqual(prime.amount, 5.4)
+    XCTAssertEqual(prime.primeType, "manual")
+    XCTAssertEqual(prime.programmedAmount, 0.0)
+    XCTAssertEqual(prime.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T02:05:07Z")
+
   }
   
 }

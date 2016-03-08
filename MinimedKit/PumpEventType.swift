@@ -14,6 +14,7 @@ public enum PumpEventType: UInt8 {
   case Sara6E = 0x6e
   case BasalProfileStart = 0x7b
   case CalBGForPH = 0x0a
+  case BGReceived = 0x3f
   
   var eventType: PumpEvent.Type {
     switch self {
@@ -29,6 +30,8 @@ public enum PumpEventType: UInt8 {
       return BasalProfileStartPumpEvent.self
     case .CalBGForPH:
       return CalBGForPHPumpEvent.self
+    case .BGReceived:
+      return BGReceivedPumpEvent.self
     }
   }
 }

@@ -12,7 +12,7 @@ public struct FindDeviceMessageBody: MessageBody {
 
   public static let length = 5
   
-  let deviceAddress: NSData
+  public let deviceAddress: NSData
   public let sequence: UInt8
   let rxData: NSData
 

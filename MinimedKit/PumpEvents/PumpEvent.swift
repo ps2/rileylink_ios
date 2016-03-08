@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol PumpEvent {
+public protocol PumpEvent : DictionaryRepresentable {
   
   init?(availableData: NSData, pumpModel: PumpModel)
   

@@ -9,14 +9,54 @@
 import UIKit
 
 public class UnabsorbedInsulinPumpEvent: PumpEvent {
+  
+  public struct Record : DictionaryRepresentable {
+    var amount: Float
+    var age: Int
+    
+    init(amount: Float, age: Int) {
+      self.amount = amount
+      self.age = age
+    }
+    
+    public var dictionaryRepresentation: [String: AnyObject] {
+      return [
+        "amount": amount,
+        "age": age,
+      ]
+    }
+  }
+  
   public let length: Int
+  
+  public var records: [Record]
   
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     length = Int(max(availableData[1] as UInt8, UInt8(2)))
+    records = [Record]()
     
-    if length < availableData.length {
+    if length > availableData.length {
       return nil
     }
-
+    
+    func d(idx:Int) -> Int {
+      return Int(availableData[idx] as UInt8)
+    }
+    
+    let numRecords = (d(1) - 2) / 3
+    
+    for idx in 0...(numRecords-1) {
+      let record = Record(
+        amount:  Float(d(2 + idx * 3)) / 40,
+        age: d(3 + idx * 3) + ((d(4 + idx * 3) & 0b110000) << 4))
+      records.append(record)
+    }
+  }
+  
+  public var dictionaryRepresentation: [String: AnyObject] {
+    return [
+      "_type": "UnabsorbedInsulin",
+      "data": records as! AnyObject
+    ]
   }
 }

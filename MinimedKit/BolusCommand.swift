@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import MinimedKit
-
 
 class BolusCommand {
 

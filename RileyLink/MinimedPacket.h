@@ -14,8 +14,6 @@
 
 @interface MinimedPacket : NSObject
 
-- ( MessageBase* _Nullable)toMessage;
-
 - (nonnull instancetype)initWithData:(nonnull NSData*)data NS_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)initWithRFPacket:(nonnull RFPacket*)data NS_DESIGNATED_INITIALIZER;
 

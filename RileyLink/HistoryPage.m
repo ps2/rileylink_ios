@@ -11,6 +11,7 @@
 #import "PumpHistoryEventBase.h"
 #import "PHEUnabsorbedInsulin.h"
 #import "PHEBolusNormal.h"
+#import "CRC16.h"
 @import MinimedKit;
 
 @implementation HistoryPage
@@ -81,8 +82,12 @@
 }
 
 - (BOOL) isCRCValid {
-  // TODO: temporarily using the incomplete swift version for this
-  return [[[HistoryPageTemp alloc] initWithPageData:_data] crcOK];
+  if (_data.length < 3) {
+    return NO;
+  }
+  uint8_t *bytes = (uint8_t*)_data.bytes;
+  uint16_t packetCRC = bytes[_data.length-1] + (bytes[_data.length-2] << 8);
+  return packetCRC == [CRC16 compute:[_data subdataWithRange:NSMakeRange(0, _data.length-2)]];
 }
 
 - (nonnull const unsigned char *) bytes {

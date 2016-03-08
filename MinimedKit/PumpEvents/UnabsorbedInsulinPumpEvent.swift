@@ -56,7 +56,9 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
   public var dictionaryRepresentation: [String: AnyObject] {
     return [
       "_type": "UnabsorbedInsulin",
-      "data": records as! AnyObject
+      "data": records.map({ (r: Record) -> [String: AnyObject] in
+        return r.dictionaryRepresentation
+      }),
     ]
   }
 }

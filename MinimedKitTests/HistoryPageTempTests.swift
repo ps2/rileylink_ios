@@ -50,6 +50,7 @@ class HistoryPageTempTests: XCTestCase {
     XCTAssertEqual(bolusWizard.foodEstimate, 4.1)
     XCTAssertEqual(bolusWizard.insulinSensitivity, 75)
     XCTAssertEqual(bolusWizard.unabsorbedInsulinTotal, 0.9)
+    XCTAssertEqual(bolusWizard.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T16:34:09Z")
     
     let bolus = events[1] as! BolusNormalPumpEvent
     XCTAssertEqual(bolus.amount, 3.2)
@@ -57,6 +58,7 @@ class HistoryPageTempTests: XCTestCase {
     XCTAssertEqual(bolus.duration, 0)
     XCTAssertEqual(bolus.programmed, 3.2)
     XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.9)
+    XCTAssertEqual(bolus.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T16:34:09Z")
     
     let unabsorbedInsulinRecords = bolus.unabsorbedInsulinRecord!.records
     XCTAssertEqual(unabsorbedInsulinRecords.count, 3)
@@ -71,6 +73,11 @@ class HistoryPageTempTests: XCTestCase {
     XCTAssertEqual(basalProfileStart.offset, 43200000)
     XCTAssertEqual(basalProfileStart.rate, 0.25)
     XCTAssertEqual(basalProfileStart.profileIndex, 5)
+    XCTAssertEqual(basalProfileStart.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T18:00:00Z")
+    
+    let calBGForPH = events[3] as! CalBGForPHPumpEvent
+    XCTAssertEqual(calBGForPH.amount, 222)
+    XCTAssertEqual(calBGForPH.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T18:35:25Z")
   }
   
 }

@@ -139,6 +139,50 @@
 		C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */; };
 		C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */; };
 		C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */; };
+		C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */; };
+		C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */; };
+		C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */; };
+		C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */; };
+		C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */; };
+		C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */; };
+		C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */; };
+		C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */; };
+		C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */; };
+		C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */; };
+		C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */; };
+		C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */; };
+		C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */; };
+		C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */; };
+		C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */; };
+		C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */; };
+		C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */; };
+		C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */; };
+		C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */; };
+		C1842C0D1C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */; };
+		C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */; };
+		C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */; };
+		C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */; };
+		C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */; };
+		C1842C121C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */; };
+		C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */; };
+		C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */; };
+		C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */; };
+		C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */; };
+		C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */; };
+		C1842C181C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */; };
+		C1842C191C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */; };
+		C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */; };
+		C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */; };
+		C1842C1C1C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */; };
+		C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */; };
+		C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */; };
+		C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */; };
+		C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */; };
+		C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */; };
+		C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */; };
+		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
+		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
+		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
@@ -455,6 +499,50 @@
 		C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGReceivedPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewindPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAlarmPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmClockReminderPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResumePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultDailyTotalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model522ResultTotalsPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryPumpLowReservoirPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryPumpLowBatteryPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryExerciseMarkerPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableDisableRemotePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteOtherDeviceIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteBolusReminderTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearAlarmPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeWatchdogMarriageProfilePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeWatchdogEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeVariableBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeFormatPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalPercentPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorSetup2PumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorRateOfChangeAlertSetupPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeReservoirWarningTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeParadigmLinkIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeOtherDeviceIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMaxBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMaxBasalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeChildBlockEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarbUnitsPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCaptureEventEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusScrollStepSizePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusReminderTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusReminderEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBGReminderOffsetPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBGReminderEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBasalProfilePatternPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAudioBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmNotifyModePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmClockEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; };
 		C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutUploader.h; sourceTree = "<group>"; };
 		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
@@ -899,17 +987,61 @@
 		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
 			isa = PBXGroup;
 			children = (
-				C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */,
-				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
-				C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */,
-				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
-				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
-				C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */,
+				C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */,
+				C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */,
 				C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */,
-				C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */,
+				C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */,
 				C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */,
-				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
+				C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */,
+				C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */,
+				C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */,
+				C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */,
+				C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */,
+				C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */,
+				C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */,
+				C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */,
+				C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */,
+				C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */,
+				C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */,
+				C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */,
+				C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */,
+				C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */,
+				C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */,
+				C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */,
+				C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */,
+				C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */,
+				C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */,
+				C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */,
+				C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */,
+				C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */,
+				C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */,
+				C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */,
+				C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */,
+				C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */,
+				C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */,
+				C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */,
+				C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */,
+				C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */,
+				C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */,
+				C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */,
+				C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */,
+				C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */,
+				C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */,
+				C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */,
+				C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */,
+				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
+				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
+				C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */,
 				C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */,
+				C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */,
+				C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */,
+				C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */,
+				C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */,
+				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
+				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
+				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
+				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
+				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -1237,43 +1369,87 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1842C1C1C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift in Sources */,
 				C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */,
+				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
+				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
+				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
+				C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */,
+				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,
 				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
 				C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */,
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
 				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
+				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
 				C12198A51C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift in Sources */,
+				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,
 				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,
+				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
+				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
+				C1842C0D1C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift in Sources */,
+				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
 				C1EB955D1C887FE5002517DF /* HistoryPageTemp.swift in Sources */,
 				C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */,
+				C1842C181C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,
+				C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */,
 				C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */,
+				C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */,
+				C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */,
+				C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */,
 				C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */,
+				C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */,
 				C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */,
+				C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */,
+				C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */,
 				C1EAD6CD1C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift in Sources */,
 				C1EAD6C81C826B92006DBA60 /* CarelinkMessageBody.swift in Sources */,
+				C1842C121C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift in Sources */,
 				C12198A11C8DFC2D00BC374C /* BolusCommand.swift in Sources */,
+				C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */,
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
+				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
+				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
+				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
+				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
 				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
+				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
 				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
+				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
 				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
 				C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */,
+				C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */,
 				C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */,
+				C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */,
+				C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */,
 				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
+				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,
+				C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */,
 				C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */,
+				C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */,
 				C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */,
+				C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */,
+				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
+				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,
+				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,
 				C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */,
 				C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */,
+				C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */,
+				C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */,
+				C1842C191C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift in Sources */,
+				C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */,
 				C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */,
 				C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */,
+				C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */,
 				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
 				C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */,
 			);

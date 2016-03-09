@@ -49,4 +49,27 @@ public class TimeFormat: NSObject {
     }
   }
   
+  static func midnightForDate(comps: NSDateComponents) -> NSDateComponents {
+    // Used to find the next midnight for the given date comps, for compatibility with decocare/nightscout.
+    // The thinking is to represent the time the entry was recorded (which is midnight at the end of the day)
+    var rval: NSDateComponents
+    let cal = NSCalendar.currentCalendar()
+    cal.timeZone = NSTimeZone.localTimeZone()
+    cal.locale = NSLocale.currentLocale()
+    if let date = cal.dateFromComponents(comps) {
+      let dayComponent = NSDateComponents()
+      dayComponent.day = 1
+      if let nextDate = cal.dateByAddingComponents(dayComponent, toDate:date, options:NSCalendarOptions(rawValue: 0)) {
+        let unitFlags: NSCalendarUnit = [.Second, .Minute, .Hour, .Day, .Month, .Year]
+        rval = cal.components(unitFlags, fromDate: nextDate)
+      }
+      else {
+        rval = comps
+      }
+    } else {
+      rval = comps
+    }
+    return rval
+  }
+  
 }

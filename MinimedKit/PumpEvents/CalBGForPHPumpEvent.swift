@@ -10,8 +10,8 @@ import UIKit
 
 public class CalBGForPHPumpEvent: PumpEvent {
   public let length: Int
-  let timestamp: NSDateComponents
-  let amount: Int
+  public let timestamp: NSDateComponents
+  public let amount: Int
 
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     length = 7

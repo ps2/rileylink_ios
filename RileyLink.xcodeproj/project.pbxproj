@@ -66,10 +66,7 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
-		C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3951C08A35C00569851 /* NightScoutBolus.m */; };
-		C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A39B1C08A48100569851 /* NightScoutPump.m */; };
 		C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */; };
-		C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC201BFD847F00B0518F /* HistoryPage.m */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
 		C139AC811BFD8CF800B0518F /* PHEAlarmPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */; };
 		C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */; };
@@ -183,7 +180,9 @@
 		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
 		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
 		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
-		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
+		C1842C291C908A3C00DB42AC /* NightscoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */; };
+		C1842C2B1C90DFB600DB42AC /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
+		C1842C2F1C90F6D900DB42AC /* NightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */; };
@@ -218,7 +217,7 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */; };
 		C1EAD6E91C83E121006DBA60 /* RFPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E81C83E121006DBA60 /* RFPacket.m */; };
-		C1EB955D1C887FE5002517DF /* HistoryPageTemp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPageTemp.swift */; };
+		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EB95651C8886D4002517DF /* CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95601C8886D4002517DF /* CRC8.m */; };
 		C1EB95661C8886D4002517DF /* CRC16.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95621C8886D4002517DF /* CRC16.m */; };
 		C1EB95671C8886D4002517DF /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EB95641C8886D4002517DF /* MinimedPacket.m */; };
@@ -363,14 +362,8 @@
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C12EA26B198B456D00309FA4 /* NightscoutWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightscoutWebView.h; sourceTree = "<group>"; };
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
-		C137A3941C08A35C00569851 /* NightScoutBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutBolus.h; sourceTree = "<group>"; };
-		C137A3951C08A35C00569851 /* NightScoutBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.objc; path = NightScoutBolus.m; sourceTree = "<group>"; };
-		C137A39A1C08A48100569851 /* NightScoutPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutPump.h; sourceTree = "<group>"; };
-		C137A39B1C08A48100569851 /* NightScoutPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutPump.m; sourceTree = "<group>"; };
 		C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpHistoryEventBase.h; sourceTree = "<group>"; };
 		C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpHistoryEventBase.m; sourceTree = "<group>"; };
-		C139AC1F1BFD847F00B0518F /* HistoryPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPage.h; sourceTree = "<group>"; };
-		C139AC201BFD847F00B0518F /* HistoryPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPage.m; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
 		C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmPump.h; sourceTree = "<group>"; };
@@ -543,8 +536,9 @@
 		C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmClockEnablePumpEvent.swift; sourceTree = "<group>"; };
 		C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; };
-		C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutUploader.h; sourceTree = "<group>"; };
-		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
+		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
+		C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEvents.swift; sourceTree = "<group>"; };
+		C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
 		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
@@ -587,7 +581,7 @@
 		C1EAD6E71C83E121006DBA60 /* RFPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPacket.h; sourceTree = "<group>"; };
 		C1EAD6E81C83E121006DBA60 /* RFPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPacket.m; sourceTree = "<group>"; };
 		C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Bridging-Header.h"; sourceTree = "<group>"; };
-		C1EB955C1C887FE5002517DF /* HistoryPageTemp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTemp.swift; sourceTree = "<group>"; };
+		C1EB955C1C887FE5002517DF /* HistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		C1EB955F1C8886D4002517DF /* CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC8.h; sourceTree = "<group>"; };
 		C1EB95601C8886D4002517DF /* CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC8.m; sourceTree = "<group>"; };
 		C1EB95611C8886D4002517DF /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
@@ -666,7 +660,7 @@
 				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
 				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
-				C1EB955C1C887FE5002517DF /* HistoryPageTemp.swift */,
+				C1EB955C1C887FE5002517DF /* HistoryPage.swift */,
 				C1842BBA1C8E184300DB42AC /* PumpModel.swift */,
 				C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */,
 				C12198AE1C8F46FF00BC374C /* TimeFormat.swift */,
@@ -797,7 +791,7 @@
 				C12616451B685F35001FAD87 /* CoreData */,
 				C12616391B67CB9C001FAD87 /* TableViewCells */,
 				C1EF589A1B3FBA32001C8C80 /* ViewControllers */,
-				C1EF589B1B3FBA5D001C8C80 /* Nightscout */,
+				C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */,
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
@@ -976,8 +970,6 @@
 				C13DB3A41B1583E900121E02 /* MessageBase.m */,
 				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
 				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
-				C139AC1F1BFD847F00B0518F /* HistoryPage.h */,
-				C139AC201BFD847F00B0518F /* HistoryPage.m */,
 				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
 				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
 			);
@@ -1164,17 +1156,14 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
-		C1EF589B1B3FBA5D001C8C80 /* Nightscout */ = {
+		C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */,
-				C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */,
-				C137A3941C08A35C00569851 /* NightScoutBolus.h */,
-				C137A3951C08A35C00569851 /* NightScoutBolus.m */,
-				C137A39A1C08A48100569851 /* NightScoutPump.h */,
-				C137A39B1C08A48100569851 /* NightScoutPump.m */,
+				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
+				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
+				C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */,
 			);
-			name = Nightscout;
+			path = NightscoutUploadKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1391,7 +1380,7 @@
 				C1842C0D1C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift in Sources */,
 				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
-				C1EB955D1C887FE5002517DF /* HistoryPageTemp.swift in Sources */,
+				C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */,
 				C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */,
 				C1842C181C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,
 				C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */,
@@ -1484,6 +1473,7 @@
 				C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
+				C1842C2B1C90DFB600DB42AC /* NightscoutPumpEvents.swift in Sources */,
 				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
 				C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */,
 				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
@@ -1493,7 +1483,6 @@
 				C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */,
 				C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */,
 				C139AC9B1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m in Sources */,
-				C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */,
 				C1EF58971B3FA462001C8C80 /* MenuController.m in Sources */,
 				C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */,
 				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
@@ -1532,19 +1521,19 @@
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
 				C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,
+				C1842C291C908A3C00DB42AC /* NightscoutUploader.swift in Sources */,
 				C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */,
+				C1842C2F1C90F6D900DB42AC /* NightscoutTreatment.swift in Sources */,
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,
 				C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */,
 				C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */,
 				C1EB95671C8886D4002517DF /* MinimedPacket.m in Sources */,
-				C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */,
 				C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */,
 				C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */,
 				C139ACA21BFD8CF800B0518F /* PHEClearAlarm.m in Sources */,
 				C1EF589E1B3FBFE7001C8C80 /* MainAppViewController.m in Sources */,
 				C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */,
 				43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */,
-				C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */,
 				C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */,
 				C1F003901C894D2E00B381B9 /* ReceivingPacketCmd.m in Sources */,
 				C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */,
@@ -1577,7 +1566,6 @@
 				C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */,
 				C12EA247198B436800309FA4 /* main.m in Sources */,
 				C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */,
-				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
 				C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */,
 				C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */,

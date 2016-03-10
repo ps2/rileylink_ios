@@ -10,9 +10,9 @@ import UIKit
 
 public class BGReceivedPumpEvent: PumpEvent {
   public let length: Int
-  let timestamp: NSDateComponents
-  let amount: Int
-  let meter: String
+  public let timestamp: NSDateComponents
+  public let amount: Int
+  public let meter: String
   
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     length = 10

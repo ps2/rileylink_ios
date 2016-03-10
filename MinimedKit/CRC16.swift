@@ -23,3 +23,15 @@ func computeCRC16(data: NSData) -> UInt16 {
   }
   return crc
 }
+
+func checkCRC16(data: NSData) -> Bool {
+  if data.length > 2 {
+    let lowByte: UInt8 = data[data.length - 1]
+    let hiByte: UInt8 = data[data.length - 2]
+    let packetCRC: UInt16 =  (UInt16(hiByte) << 8) + UInt16(lowByte)
+    return packetCRC == computeCRC16(data.subdataWithRange(NSMakeRange(0, data.length-2)))
+  } else {
+    return false
+  }
+
+}

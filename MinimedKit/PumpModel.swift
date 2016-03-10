@@ -6,44 +6,40 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
-
-public class PumpModel: NSObject {
+public class PumpModel {
   
-  var larger: Bool = false
-  var hasLowSuspend: Bool = false
-  var strokesPerUnit: Int = 10
+  public let larger: Bool
+  public let hasLowSuspend: Bool
+  public let strokesPerUnit: Int
+  public let name: String
   
-  private static var base = PumpModel.init(larger:false, hasLowSuspend: false, strokesPerUnit: 10)
-  private static var m523 = PumpModel.init(larger:true, hasLowSuspend: false, strokesPerUnit: 40)
-  private static var m551 = PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40)
-
-  private static var models = [
-    "508": base,
-    "511": base,
-    "512": base,
-    "515": base,
-    "522": base,
-    "722": base,
-    "523": m523,
-    "723": m523,
-    "530": m523,
-    "730": m523,
-    "540": m523,
-    "740": m523,
-    "551": m551,
-    "554": m551,
-    "751": m551,
-    "754": m551
+  private static let models = [
+    "508": PumpModel.init(name: "508"),
+    "511": PumpModel.init(name: "511"),
+    "512": PumpModel.init(name: "512"),
+    "515": PumpModel.init(name: "515"),
+    "522": PumpModel.init(name: "522"),
+    "722": PumpModel.init(name: "722"),
+    "523": PumpModel.init(larger:true, strokesPerUnit: 40, name: "523"),
+    "723": PumpModel.init(larger:true, strokesPerUnit: 40, name: "723"),
+    "530": PumpModel.init(larger:true, strokesPerUnit: 40, name: "530"),
+    "730": PumpModel.init(larger:true, strokesPerUnit: 40, name: "730"),
+    "540": PumpModel.init(larger:true, strokesPerUnit: 40, name: "540"),
+    "740": PumpModel.init(larger:true, strokesPerUnit: 40, name: "740"),
+    "551": PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
+    "554": PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
+    "751": PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
+    "754": PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551")
   ]
   
-  class func byModelNumber(model: String) -> PumpModel {
+  public class func byModelNumber(model: String) -> PumpModel {
     return models[model]!
   }
 
-  init(larger: Bool, hasLowSuspend: Bool, strokesPerUnit: Int) {
+  init(larger: Bool = false, hasLowSuspend: Bool = false, strokesPerUnit: Int = 10, name: String) {
     self.larger = larger
     self.hasLowSuspend = hasLowSuspend
     self.strokesPerUnit = strokesPerUnit
+    self.name = name
   }
 }

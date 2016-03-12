@@ -32,8 +32,8 @@ public class PumpModel {
     "754": PumpModel.init(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551")
   ]
   
-  public class func byModelNumber(model: String) -> PumpModel {
-    return models[model]!
+  public class func byModelNumber(model: String) -> PumpModel? {
+    return models[model]
   }
 
   init(larger: Bool = false, hasLowSuspend: Bool = false, strokesPerUnit: Int = 10, name: String) {

@@ -12,9 +12,9 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
   public let length: Int
   let timestamp: NSDateComponents
   var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
-  let amount: Float
-  let programmed: Float
-  let unabsorbedInsulinTotal: Float
+  let amount: Double
+  let programmed: Double
+  let unabsorbedInsulinTotal: Double
   let bolusType: String
   let duration: Int
   
@@ -24,8 +24,8 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
       return Int(availableData[idx] as UInt8)
     }
 
-    func insulinDecode(a: Int, b: Int) -> Float {
-      return Float((a << 8) + b) / 40.0
+    func insulinDecode(a: Int, b: Int) -> Double {
+      return Double((a << 8) + b) / 40.0
     }
     
     if pumpModel.larger {
@@ -52,8 +52,8 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
       duration = d(7) * 30
     } else {
       timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
-      amount = Float(d(2))/10.0
-      programmed = Float(d(1))/10.0
+      amount = Double(d(2))/10.0
+      programmed = Double(d(1))/10.0
       duration = d(3) * 30
       unabsorbedInsulinTotal = 0
     }

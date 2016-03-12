@@ -10,8 +10,6 @@
 #import "NSData+Conversion.h"
 #import "SendPacketCmd.h"
 #import "SendAndListenCmd.h"
-#import "MinimedPacket.h"
-#import "MessageBase.h"
 #import "UpdateRegisterCmd.h"
 #import "RFPacket.h"
 
@@ -156,8 +154,6 @@
 
 - (NSDictionary*) getBatteryVoltage {
   
-  NSString *rvalStatus = @"Unknown";
-  float rvalValue = 0.0;
   
   if ([self wakeIfNeeded]) {
     
@@ -167,12 +163,12 @@
       unsigned char *data = (unsigned char *)(response.data).bytes + 6;
       
       NSInteger volts = (((int)data[1]) << 8) + data[2];
-      rvalStatus = data[0] ? @"Low" : @"Normal";
-      rvalValue = volts/100.0;
+      NSString rvalStatus = data[0] ? @"Low" : @"Normal";
+      float rvalValue = volts/100.0;
+      return @{@"status": rvalStatus, @"value": @(rvalValue)};
     }
   }
-  
-  return @{@"status": rvalStatus, @"value": @(rvalValue)};
+  return @{};
 }
 
 - (NSData*)parseFramesIntoHistoryPage:(NSArray*)packets {

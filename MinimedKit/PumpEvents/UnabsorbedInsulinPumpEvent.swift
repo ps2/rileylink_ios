@@ -11,10 +11,10 @@ import UIKit
 public class UnabsorbedInsulinPumpEvent: PumpEvent {
   
   public struct Record : DictionaryRepresentable {
-    var amount: Float
+    var amount: Double
     var age: Int
     
-    init(amount: Float, age: Int) {
+    init(amount: Double, age: Int) {
       self.amount = amount
       self.age = age
     }
@@ -47,7 +47,7 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
     
     for idx in 0...(numRecords-1) {
       let record = Record(
-        amount:  Float(d(2 + idx * 3)) / 40,
+        amount:  Double(d(2 + idx * 3)) / 40,
         age: d(3 + idx * 3) + ((d(4 + idx * 3) & 0b110000) << 4))
       records.append(record)
     }

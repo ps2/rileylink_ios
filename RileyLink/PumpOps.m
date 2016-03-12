@@ -39,7 +39,7 @@
   }];
 }
 
-- (void) getPumpModel:(void (^ _Nullable)(NSString* _Nonnull))completionHandler {
+- (void) getPumpModel:(void (^ _Nullable)(NSString* _Nullable))completionHandler {
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
     PumpOpsSynchronous *ops = [[PumpOpsSynchronous alloc] initWithPump:_pump andSession:session];
     NSString *model = [ops getPumpModel];
@@ -49,12 +49,12 @@
   }];
 }
 
-- (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler {
+- (void) getBatteryVoltage:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler {
   [_device runSession:^(RileyLinkCmdSession * _Nonnull session) {
     PumpOpsSynchronous *ops = [[PumpOpsSynchronous alloc] initWithPump:_pump andSession:session];
     NSDictionary *results = [ops getBatteryVoltage];
     dispatch_async(dispatch_get_main_queue(),^{
-      completionHandler(results[@"status"], [results[@"value"] floatValue]);
+      completionHandler(results);
     });
   }];
 }

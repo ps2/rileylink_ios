@@ -11,7 +11,7 @@ import UIKit
 public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
   public let length: Int
   let timestamp: NSDateComponents
-  let rate: Float
+  let rate: Double
   let profileIndex: Int
   let offset: Int
 
@@ -32,7 +32,7 @@ public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
     }
     
     timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
-    rate = Float(d(8)) / 40.0
+    rate = Double(d(8)) / 40.0
     profileIndex = d(1)
     offset = d(7) * 30 * 1000 * 60
   }

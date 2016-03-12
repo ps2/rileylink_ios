@@ -15,8 +15,8 @@
 - (nonnull instancetype)initWithPumpState:(nonnull PumpState *)pump andDevice:(nonnull RileyLinkBLEDevice *)device NS_DESIGNATED_INITIALIZER;
 
 - (void) pressButton;
-- (void) getPumpModel:(void (^ _Nullable)(NSString* _Nonnull))completionHandler;
-- (void) getBatteryVoltage:(void (^ _Nullable)(NSString * _Nonnull, float))completionHandler;
+- (void) getPumpModel:(void (^ _Nullable)(NSString* _Nullable))completionHandler;
+- (void) getBatteryVoltage:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler;
 - (void) getHistoryPage:(NSInteger)page withHandler:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler;
 - (void) tunePump:(void (^ _Nullable)(NSDictionary * _Nonnull))completionHandler;
 

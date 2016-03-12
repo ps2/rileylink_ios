@@ -37,6 +37,7 @@ public enum GlucoseTrend {
 
 public enum SensorReading {
     case Off
+    case Missing
     case MeterBGNow
     case WeakSignal
     case CalError
@@ -51,6 +52,8 @@ public enum SensorReading {
         switch glucose {
         case 0:
             self = .Off
+        case 1:
+            self = .Missing
         case 2:
             self = .MeterBGNow
         case 4:
@@ -142,7 +145,7 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
             previousGlucose = SensorReading(glucose: previousGlucoseValue)
 
             switch glucose {
-            case .Off:
+            case .Off, .Missing:
                 glucoseDate = nil
             default:
                 glucoseDate = NSDateComponents(mySentryBytes: rxData[28...33]).date

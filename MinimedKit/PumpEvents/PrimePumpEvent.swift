@@ -11,9 +11,9 @@ import UIKit
 public class PrimePumpEvent: PumpEvent {
   public let length: Int
   let timestamp: NSDateComponents
-  let amount: Float
+  let amount: Double
   let primeType: String
-  let programmedAmount: Float
+  let programmedAmount: Double
   
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     length = 10
@@ -31,8 +31,8 @@ public class PrimePumpEvent: PumpEvent {
     }
 
     timestamp = TimeFormat.parse5ByteDate(availableData, offset: 5)
-    amount = Float(d(4) << 2) / 40.0
-    programmedAmount = Float(d(2) << 2) / 40.0
+    amount = Double(d(4) << 2) / 40.0
+    programmedAmount = Double(d(2) << 2) / 40.0
     primeType = programmedAmount == 0 ? "manual" : "fixed"
   }
   

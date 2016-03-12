@@ -37,17 +37,26 @@ public class TimeFormat: NSObject {
     comps.year = 2000 + Int(data[offset + 4] as UInt8 & UInt8(0b1111111))
     return comps;
   }
-
-  static func timestampStr(comps: NSDateComponents) -> String {
+  
+  public static func timestampAsLocalDate(comps: NSDateComponents) -> NSDate? {
     let cal = NSCalendar.currentCalendar()
     cal.timeZone = NSTimeZone.localTimeZone()
     cal.locale = NSLocale.currentLocale()
-    if let date = cal.dateFromComponents(comps) {
+    return cal.dateFromComponents(comps)
+  }
+
+  public static func timestampStr(comps: NSDateComponents) -> String {
+    if let date = timestampAsLocalDate(comps) {
       return formatterISO8601.stringFromDate(date)
     } else {
       return "Invalid"
     }
   }
+  
+  public static func timestampStrFromDate(date: NSDate) -> String {
+    return formatterISO8601.stringFromDate(date)
+  }
+
   
   static func midnightForDate(comps: NSDateComponents) -> NSDateComponents {
     // Used to find the next midnight for the given date comps, for compatibility with decocare/nightscout.

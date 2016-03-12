@@ -8,15 +8,14 @@
 
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
-#import "PumpStatusMessage.h"
-#import "NightScoutUploader.h"
 #import "Config.h"
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
 #import "RileyLinkBLEManager.h"
 #import "PumpState.h"
-
 #import "MainAppViewController.h"
+#import "RileyLink-Swift.h"
+
 
 @interface MainAppViewController () {
   NSDictionary *lastStatus;

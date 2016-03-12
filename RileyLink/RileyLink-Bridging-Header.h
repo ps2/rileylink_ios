@@ -8,8 +8,7 @@
 #import "Config.h"
 #import "SendAndListenCmd.h"
 #import "GetPacketCmd.h"
-#import "MeterMessage.h"
-#import "MinimedPacket.h"
 #import "Log.h"
 #import "PumpOps.h"
 #import "AppDelegate.h"
+#import <CommonCrypto/CommonCrypto.h>

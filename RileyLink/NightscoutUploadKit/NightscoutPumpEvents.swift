@@ -11,20 +11,22 @@ import MinimedKit
 
 class NightScoutPumpEvents: NSObject {
   
-  class func translate(events: [PumpEvent]) -> [[String: AnyObject]] {
-    var results = [[String: AnyObject]]()
+  class func translate(events: [PumpEvent], eventSource: String) -> [NightscoutTreatment] {
+    var results = [NightscoutTreatment]()
     for event in events {
-      
       if let bgReceived = event as? BGReceivedPumpEvent {
-        let entry: [String: AnyObject] = [
-          "eventType": "<none>",
-          "glucose": bgReceived.amount,
-          "glucoseType": "Finger",
-          "notes": "Pump received finger stick."
-        ]
-        results.append(entry)
+        if let date = TimeFormat.timestampAsLocalDate(bgReceived.timestamp) {
+          let entry = BGCheckNightscoutTreatment(
+            timestamp: date,
+            enteredBy: eventSource,
+            glucose: bgReceived.amount,
+            glucoseType: .Meter,
+            units: .MGDL)  // TODO: can we tell this from the pump?
+          results.append(entry)
+        }
       }
     }
     return results
-  }  
+  }
 }
+

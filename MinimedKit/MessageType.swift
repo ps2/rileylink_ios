@@ -11,12 +11,13 @@ public enum MessageType: UInt8 {
     case AlertCleared   = 0x02
     case DeviceTest     = 0x03
     case PumpStatus     = 0x04
-    case PumpStatusAck  = 0x06
+    case PumpStatusAck  = 0x06 // TODO: rename this; it's ACK for many different kinds of packets
     case PumpBackfill   = 0x08
     case FindDevice     = 0x09
     case DeviceLink     = 0x0A
     case Bolus          = 0x42
     case TempBasal      = 0x4c
+    case ButtonPress    = 0x5b
     case PowerOn        = 0x5d
     case GetBattery     = 0x72
     case GetPumpModel   = 0x8d
@@ -38,6 +39,10 @@ public enum MessageType: UInt8 {
           return FindDeviceMessageBody.self
         case .DeviceLink:
           return DeviceLinkMessageBody.self
+        case .ButtonPress:
+          return ButtonPressCarelinkMessageBody.self
+        case .GetPumpModel:
+          return GetPumpModelCarelinkMessageBody.self
         default:
             return UnknownMessageBody.self
         }

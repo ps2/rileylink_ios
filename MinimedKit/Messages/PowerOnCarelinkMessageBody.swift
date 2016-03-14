@@ -12,13 +12,13 @@ import Foundation
 public class PowerOnCarelinkMessageBody: CarelinkLongMessageBody {
 
     public convenience init(duration: NSTimeInterval) {
-
-        let sequence = 2
+        let numArgs = 2
         let on = 1
         let durationMinutes: Int = Int(ceil(duration / 60.0))
 
-        let data = NSData(hexadecimalString: String(format: "%02x%02x%02x", sequence, on, durationMinutes))!
+        let data = NSData(hexadecimalString: String(format: "%02x%02x%02x", numArgs, on, durationMinutes))!
 
         self.init(rxData: data)!
     }
+  
 }

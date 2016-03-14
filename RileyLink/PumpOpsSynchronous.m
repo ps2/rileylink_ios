@@ -12,6 +12,7 @@
 #import "SendAndListenCmd.h"
 #import "UpdateRegisterCmd.h"
 #import "RFPacket.h"
+@import MinimedKit;
 
 #define STANDARD_PUMP_RESPONSE_WINDOW 180
 #define EXPECTED_MAX_BLE_LATENCY_MS 1500
@@ -35,7 +36,7 @@
   return nil;
 }
 
-- (MessageBase *)msgType:(unsigned char)t withArgs:(NSString *)args {
+- (PumpMessage *)msgType:(unsigned char)t withArgs:(NSString *)args {
   NSString *packetStr = [NSString stringWithFormat:@"%02x%@%02x%@", PacketTypeCarelink, _pump.pumpId, t, args];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
   

@@ -249,7 +249,7 @@ class NightScoutUploader: NSObject {
       handlePumpStatus(msg, device:device.deviceURI, rssi:rssi)
       // Just got a MySentry packet; in 25s would be a good time to poll.
       if !fetchHistoryScheduled {
-        performSelector(Selector("fetchHistory:"), withObject:nil, afterDelay:25)
+        performSelector(Selector("fetchHistory"), withObject:nil, afterDelay:25)
         fetchHistoryScheduled = true
       }
       // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s

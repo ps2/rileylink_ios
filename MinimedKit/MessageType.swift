@@ -11,7 +11,7 @@ public enum MessageType: UInt8 {
     case AlertCleared   = 0x02
     case DeviceTest     = 0x03
     case PumpStatus     = 0x04
-    case PumpStatusAck  = 0x06 // TODO: rename this; it's ACK for many different kinds of packets
+    case PumpAck        = 0x06
     case PumpBackfill   = 0x08
     case FindDevice     = 0x09
     case DeviceLink     = 0x0A
@@ -32,8 +32,8 @@ public enum MessageType: UInt8 {
             return MySentryAlertClearedMessageBody.self
         case .PumpStatus:
             return MySentryPumpStatusMessageBody.self
-        case .PumpStatusAck:
-            return MySentryAckMessageBody.self
+        case .PumpAck:
+            return PumpAckMessageBody.self
         case .ReadSettings:
             return ReadSettingsCarelinkMessageBody.self
         case .FindDevice:

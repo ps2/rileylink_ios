@@ -63,6 +63,8 @@
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
+		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
+		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
 		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
 		C1711A541C94E36000CB25BD /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -229,7 +231,7 @@
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		C10A62901C55F8E200E635EE /* UpdateRegisterCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRegisterCmd.h; sourceTree = "<group>"; };
 		C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRegisterCmd.m; sourceTree = "<group>"; };
-		C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryPairViewController.swift; sourceTree = "<group>"; };
+		C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MySentryPairViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,7 +247,7 @@
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198621C8DF4C800BC374C /* HistoryPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTests.swift; sourceTree = "<group>"; };
 		C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBody.swift; sourceTree = "<group>"; };
-		C12198A01C8DFC2D00BC374C /* BolusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCommand.swift; sourceTree = "<group>"; };
+		C12198A01C8DFC2D00BC374C /* BolusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusCommand.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198A41C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -305,9 +307,11 @@
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
+		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
+		C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
 		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
-		C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; };
+		C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonPressCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBody.swift; sourceTree = "<group>"; };
@@ -393,7 +397,7 @@
 		C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkBLEManager.m; sourceTree = "<group>"; };
 		C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
 		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
-		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageType.swift; sourceTree = "<group>"; };
+		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1EAD6B11C826B6D006DBA60 /* PacketType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketType.swift; sourceTree = "<group>"; };
 		C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpMessage.swift; sourceTree = "<group>"; };
 		C1EAD6B91C826B92006DBA60 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
@@ -541,6 +545,7 @@
 				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
 				C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */,
 				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
+				C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -790,6 +795,7 @@
 				C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */,
 				C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */,
 				C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */,
+				C14303151C97C98000A40450 /* PumpAckMessageBody.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -1139,6 +1145,7 @@
 				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,
 				C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */,
 				C1711A5E1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift in Sources */,
+				C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */,
 				C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */,
 				C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */,
 				C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */,
@@ -1163,6 +1170,7 @@
 				C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */,
 				C12198A71C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift in Sources */,
 				C12198B11C8F6DD800BC374C /* TimeFormatTests.swift in Sources */,
+				C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
 				C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */,
 				C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */,

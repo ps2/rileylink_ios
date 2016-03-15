@@ -96,7 +96,10 @@ class PumpChatViewController: UIViewController {
   @IBAction func tuneButtonPressed(sender: UIButton) {
     pumpOps.tunePump { (results) -> Void in
       if results.error == nil {
-        self.addOutputMessage(String(format:"Best Freq: %@", results.bestFrequency))
+        for trial in results.trials {
+          self.addOutputMessage(String(format:"Trial: %0.02f - %d, %0.01f", trial.frequencyMHz, trial.successes, trial.avgRSSI))
+        }
+        self.addOutputMessage(String(format:"Best Freq: %0.02f", results.bestFrequency))
       } else {
         self.addOutputMessage(results.error!)
       }

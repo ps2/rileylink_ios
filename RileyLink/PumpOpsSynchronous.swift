@@ -55,7 +55,7 @@ class PumpOpsSynchronous: NSObject {
     let shortPowerMessage = makePumpMessage(.PowerOn, body: CarelinkShortMessageBody())
     let shortResponse = sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
     
-    guard let response1 = shortResponse where response1.messageType == .PumpStatusAck else {
+    guard let response1 = shortResponse where response1.messageType == .PumpAck else {
       return false
     }
     NSLog("Pump acknowledged wakeup!")
@@ -63,7 +63,7 @@ class PumpOpsSynchronous: NSObject {
     let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: NSTimeInterval(durationMinutes * 60)))
     let longResponse = sendAndListen(longPowerMessage)
     
-    guard let response2 = longResponse where response2.messageType == .PumpStatusAck else {
+    guard let response2 = longResponse where response2.messageType == .PumpAck else {
       return false
     }
 
@@ -80,7 +80,7 @@ class PumpOpsSynchronous: NSObject {
     let shortMsg = makePumpMessage(msg.messageType, body: CarelinkShortMessageBody())
     let shortResponseOpt = sendAndListen(shortMsg)
     
-    guard let shortResponse = shortResponseOpt where shortResponse.messageType == .PumpStatusAck else {
+    guard let shortResponse = shortResponseOpt where shortResponse.messageType == .PumpAck else {
       return nil
     }
     
@@ -134,10 +134,7 @@ class PumpOpsSynchronous: NSObject {
     let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     var results = FrequencyScanResults()
     
-    guard defaultWake() else {
-      results.error = "Unable to wake pump"
-      return results
-    }
+    defaultWake()
     
     for freq in frequencies {
       let tries = 3
@@ -145,16 +142,15 @@ class PumpOpsSynchronous: NSObject {
       trial.frequencyMHz = freq
       setBaseFrequency(freq)
       var sumRSSI = 0
-      for _ in 0...tries {
+      for _ in 1...tries {
         let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
         let cmd = SendAndListenCmd()
         cmd.packet = RFPacket(data: msg.txData)
         cmd.timeoutMS = standardPumpResponseWindow
-        var sumRSSI: Double = 0
         if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
           if let data =  cmd.receivedPacket.data,
             let response = PumpMessage.init(rxData: data) where response.messageType == .GetPumpModel {
-              sumRSSI += Double(cmd.receivedPacket.rssi)
+              sumRSSI += Int(cmd.receivedPacket.rssi)
               trial.successes += 1
           }
         } else {
@@ -168,11 +164,12 @@ class PumpOpsSynchronous: NSObject {
       results.trials.append(trial)
     }
     let sortedTrials = results.trials.sort({ (a, b) -> Bool in
-      return a.avgRSSI < b.avgRSSI
+      return a.avgRSSI > b.avgRSSI
     })
     results.bestFrequency = sortedTrials.first!.frequencyMHz
-    
     setBaseFrequency(results.bestFrequency)
+    
+    
     return results
   }
 
@@ -225,7 +222,7 @@ class PumpOpsSynchronous: NSObject {
     while(expectedFrameNum == curResp.frameNumber) {
       frameData.appendData(curResp.frame)
       expectedFrameNum += 1
-      let msg = makePumpMessage(.PumpStatusAck, body: CarelinkShortMessageBody())
+      let msg = makePumpMessage(.PumpAck, body: CarelinkShortMessageBody())
       if !curResp.lastFrame {
         let resp = sendAndListen(msg)
         guard resp != nil else {

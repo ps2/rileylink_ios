@@ -22,7 +22,6 @@ public struct PumpMessage {
     }
 
     public init?(rxData: NSData) {
-        NSLog("New pump message: %d, %d, %d", rxData.length, rxData[0] as UInt8, rxData[4] as UInt8);
         if rxData.length >= 7,
           let packetType = PacketType(rawValue: rxData[0]) where packetType != .Meter,
           let messageType = MessageType(rawValue: rxData[4]),

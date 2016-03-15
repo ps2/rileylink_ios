@@ -13,7 +13,7 @@ public class GetPumpModelCarelinkMessageBody: CarelinkLongMessageBody {
   
   public required init?(rxData: NSData) {
     guard rxData.length == self.dynamicType.length,
-      let mdl = String(data: rxData.subdataWithRange(NSMakeRange(7, 3)), encoding: NSASCIIStringEncoding) else {
+      let mdl = String(data: rxData.subdataWithRange(NSMakeRange(2, 3)), encoding: NSASCIIStringEncoding) else {
         model = ""
         super.init(rxData: rxData)
         return nil

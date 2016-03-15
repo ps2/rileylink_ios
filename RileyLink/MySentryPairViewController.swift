@@ -202,7 +202,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     let replyString = String(format: "%02x%@%02x%02x%@00%02x000000",
       PacketType.MySentry.rawValue,
       Config.sharedInstance().pumpID,
-      MessageType.PumpStatusAck.rawValue,
+      MessageType.PumpAck.rawValue,
       sequence,
       self.deviceIDTextField.text!,
       messageType.rawValue)

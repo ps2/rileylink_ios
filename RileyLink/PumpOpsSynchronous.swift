@@ -100,54 +100,33 @@ class PumpOpsSynchronous: NSObject {
   
   func getPumpModel() -> String? {
     
-    if defaultWake() {
-      let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
-      let responseOpt = sendAndListen(msg)
-      
-      guard let response = responseOpt where response.messageType == .GetPumpModel else {
-        return nil
-      }
-      
-      return (response.messageBody as! GetPumpModelCarelinkMessageBody).model
+    guard defaultWake() else {
+      return nil
     }
+
+    let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
+    let responseOpt = sendAndListen(msg)
+    
+    guard let response = responseOpt where response.messageType == .GetPumpModel else {
+      return nil
+    }
+    
+    return (response.messageBody as! GetPumpModelCarelinkMessageBody).model
   }
   
   func getBatteryVoltage() -> GetBatteryCarelinkMessageBody? {
     
-    if defaultWake() {
-      let msg = makePumpMessage(.GetBattery, body: CarelinkShortMessageBody())
-      let responseOpt = sendAndListen(msg)
+    guard defaultWake() else {
+      return nil
+    }
     
-      guard let response = responseOpt where response.messageType == .GetBattery else {
-        return nil
-      }
-      return response.messageBody as? GetBatteryCarelinkMessageBody
+    let msg = makePumpMessage(.GetBattery, body: CarelinkShortMessageBody())
+    let responseOpt = sendAndListen(msg)
+  
+    guard let response = responseOpt where response.messageType == .GetBattery else {
+      return nil
     }
-  }
-  
-  func parseFramesIntoHistoryPage(frames: [NSData]) -> NSData? {
-    let data = NSMutableData()
-    let r = NSMakeRange(6, 64)
-    for frame in frames {
-      if frame.length < 70 {
-        return nil
-      }
-      data.appendData(frame.subdataWithRange(r))
-    }
-    return data
-  }
-  
-  struct FrequencyTrial {
-    var tries: Int = 0
-    var successes: Int = 0
-    var avgRSSI: Double = -99
-    var frequencyMHz: Double = 0
-  }
-  
-  struct FrequencyScanResults {
-    var trials = [FrequencyTrial]()
-    var bestFrequency: Double = 0
-    var error: String?
+    return response.messageBody as? GetBatteryCarelinkMessageBody
   }
   
   func scanForPump() -> FrequencyScanResults {
@@ -161,18 +140,16 @@ class PumpOpsSynchronous: NSObject {
     }
     
     for freq in frequencies {
-      var avgRSSI = 0
       let tries = 3
       var trial = FrequencyTrial()
       trial.frequencyMHz = freq
       setBaseFrequency(freq)
       var sumRSSI = 0
-      for i in 0...tries {
+      for _ in 0...tries {
         let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
         let cmd = SendAndListenCmd()
         cmd.packet = RFPacket(data: msg.txData)
         cmd.timeoutMS = standardPumpResponseWindow
-        var success = false
         var sumRSSI: Double = 0
         if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
           if let data =  cmd.receivedPacket.data,
@@ -186,135 +163,110 @@ class PumpOpsSynchronous: NSObject {
         trial.tries += 1
       }
       // Mark each failure as a -99 rssi, so we can use highest rssi as best freq
-      sumRSSI += -99 * (trial.tries - trial.successes)'
-      trial.avgRSSI = sumRSSI / trial.tries
-    
-      avgRSSI = avgRSSI / ((float)tries);
-      [scanResults addObject:@(successCount)];
-      [rssi addObject:@(avgRSSI)];
+      sumRSSI += -99 * (trial.tries - trial.successes)
+      trial.avgRSSI = Double(sumRSSI) / Double(trial.tries)
+      results.trials.append(trial)
     }
-    int bestResult = -99, bestIndex = 0;
-    for (int i=0; i<rssi.count; i++) {
-    NSNumber *result = rssi[i];
-    if (result.intValue > bestResult) {
-    bestResult = result.intValue;
-    bestIndex = i;
-    }
-    }
-    NSMutableDictionary *rval = [NSMutableDictionary dictionary];
-    rval[@"frequencies"] = frequencies;
-    rval[@"scanResults"] = scanResults;
-    rval[@"avgRSSI"] = rssi;
+    let sortedTrials = results.trials.sort({ (a, b) -> Bool in
+      return a.avgRSSI < b.avgRSSI
+    })
+    results.bestFrequency = sortedTrials.first!.frequencyMHz
     
-    if (totalSuccesses > 0) {
-    rval[@"bestFreq"] = frequencies[bestIndex];
-    NSLog(@"Scanning found best results at %@MHz (RSSI: %@)", frequencies[bestIndex], rssi[bestIndex]);
-    } else {
-    rval[@"error"] = @"Pump did not respond on any of the attempted frequencies.";
-    }
-    [self setBaseFrequency:[frequencies[bestIndex] floatValue]];
-    
-    NSLog(@"Frequency scan results: %@", rval);
-    
-    return rval;
+    setBaseFrequency(results.bestFrequency)
+    return results
   }
 
-  - (void)updateRegister:(uint8_t)addr toValue:(uint8_t)value {
-  UpdateRegisterCmd *cmd = [[UpdateRegisterCmd alloc] init];
-  cmd.addr = addr;
-  cmd.value = value;
-  [_session doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
+  func updateRegister(addr: UInt8, value: UInt8) {
+    let cmd = UpdateRegisterCmd()
+    cmd.addr = addr;
+    cmd.value = value;
+    session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
   }
   
-  - (void)setBaseFrequency:(float)freqMhz {
-  uint32_t val = (freqMhz * 1000000)/(RILEYLINK_FREQ_XTAL/pow(2.0,16.0));
+  func setBaseFrequency(freqMhz: Double) {
+    let val = Int((freqMhz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
   
-  [self updateRegister:CC111X_REG_FREQ0 toValue:val & 0xff];
-  [self updateRegister:CC111X_REG_FREQ1 toValue:(val >> 8) & 0xff];
-  [self updateRegister:CC111X_REG_FREQ2 toValue:(val >> 16) & 0xff];
-  NSLog(@"Set frequency to %f", freqMhz);
+    updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
+    updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
+    updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
+    NSLog("Set frequency to %f", freqMhz)
   }
   
-  - (NSDictionary*) getHistoryPage:(uint8_t)pageNum {
-  float rssiSum = 0;
-  int rssiCount = 0;
-  
-  NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
-  NSMutableArray *responses = [NSMutableArray array];
-  
-  [self wakeIfNeeded];
-  
-  NSString *pumpModel = [self getPumpModel];
-  
-  if (!pumpModel) {
-  NSDictionary *tuneResults = [self scanForPump];
-  if (tuneResults[@"error"]) {
-  responseDict[@"error"] = @"Could not find pump, even after scanning.";
+  func getHistoryPage(pageNum: Int) -> HistoryFetchResults {
+    let frameData = NSMutableData()
+    
+    var results = HistoryFetchResults()
+    
+    if !defaultWake() {
+      let scanResults = scanForPump()
+      guard scanResults.error != nil else {
+        results.error = "Frequency tuning failed."
+        return results
+      }
+    }
+    
+    results.pumpModel = getPumpModel()
+    guard results.pumpModel != nil else {
+      results.error = "Unable to get pump model"
+      return results
+    }
+    
+    let msg = makePumpMessage(.GetHistoryPage, body: GetHistoryPageCarelinkMessageBody(pageNum: pageNum))
+    let firstResponse = runCommandWithArguments(msg)
+    
+    guard firstResponse != nil else {
+      results.error = "Pump did not respond to GetHistory command"
+      return results
+    }
+    
+    var expectedFrameNum = 0
+    var curResp = firstResponse!.messageBody as! GetHistoryPageCarelinkMessageBody
+    
+    while(expectedFrameNum == curResp.frameNumber) {
+      frameData.appendData(curResp.frame)
+      expectedFrameNum += 1
+      let msg = makePumpMessage(.PumpStatusAck, body: CarelinkShortMessageBody())
+      if !curResp.lastFrame {
+        let resp = sendAndListen(msg)
+        guard resp != nil else {
+          results.error = "Missed frame " + String(expectedFrameNum)
+          return results
+        }
+        curResp = resp!.messageBody as! GetHistoryPageCarelinkMessageBody
+      } else {
+        let cmd = SendPacketCmd()
+        cmd.packet = RFPacket(data: msg.txData)
+        session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+        break
+      }
+    }
+    
+    guard frameData.length == 1024 else {
+      results.error = "Unexpected page size: " + String(frameData.length)
+      return results
+    }
+    return results
   }
-  // Try again to get pump model, after scanning/tuning
-  pumpModel = [self getPumpModel];
-  }
-  
-  if (!pumpModel) {
-  responseDict[@"error"] = @"get model failed";
-  return responseDict;
-  } else {
-  responseDict[@"pumpModel"] = pumpModel;
-  }
-  
-  MinimedPacket *response;
-  response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:@"00"].data];
-  
-  if (response && response.messageType == MESSAGE_TYPE_ACK) {
-  rssiSum += response.rssi;
-  rssiCount += 1;
-  NSLog(@"Pump acked dump msg (0x80)")
-  } else {
-  NSLog(@"Missing response to initial read history command");
-  responseDict[@"error"] = @"Missing response to initial read history command";
-  return responseDict;
-  }
-  
-  NSString *dumpHistArgs = [NSString stringWithFormat:@"01%02x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", pageNum];
-  
-  response = [self sendAndListen:[self msgType:MESSAGE_TYPE_READ_HISTORY withArgs:dumpHistArgs].data];
-  
-  if (response && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
-  rssiSum += response.rssi;
-  rssiCount += 1;
-  [responses addObject:response.data];
-  } else {
-  NSLog(@"Read history with args command failed");
-  responseDict[@"error"] = @"Read history with args command failed";
-  return responseDict;
-  }
-  
-  // Send 15 acks, and expect 15 more dumps
-  for (int i=0; i<15; i++) {
-  
-  response = [self sendAndListen:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
-  
-  if (response && response.messageType == MESSAGE_TYPE_READ_HISTORY) {
-  rssiSum += response.rssi;
-  rssiCount += 1;
-  [responses addObject:response.data];
-  } else {
-  NSLog(@"Read history segment %d with args command failed", i);
-  responseDict[@"error"] = @"Read history with args command failed";
-  return responseDict;
-  }
-  responseDict[@"pageData"] = [self parseFramesIntoHistoryPage:responses];
-  }
-  
-  if (rssiCount > 0) {
-  responseDict[@"avgRSSI"] = @((int)(rssiSum / rssiCount));
-  }
-  
-  // Last ack packet doesn't need a response
-  SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
-  cmd.packet = [[RFPacket alloc] initWithData:[self msgType:MESSAGE_TYPE_ACK withArgs:@"00"].data];
-  [_session doCmd:cmd withTimeoutMs:EXPECTED_MAX_BLE_LATENCY_MS];
-  return responseDict;
-
-
 }
+
+struct HistoryFetchResults {
+  var error: String?
+  var pumpModel: String?
+  var pageData: NSData?
+}
+
+struct FrequencyTrial {
+  var tries: Int = 0
+  var successes: Int = 0
+  var avgRSSI: Double = -99
+  var frequencyMHz: Double = 0
+}
+
+struct FrequencyScanResults {
+  var trials = [FrequencyTrial]()
+  var bestFrequency: Double = 0
+  var error: String?
+}
+
+
+

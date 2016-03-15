@@ -22,8 +22,10 @@ public class HistoryPage {
       throw Error.InvalidCRC
     }
     
+    let pageData = pageData.subdataWithRange(NSMakeRange(0, 1022))
+    
     func matchEvent(offset: Int) -> PumpEvent? {
-      if let eventType = PumpEventType(rawValue:pageData[offset]) {
+      if let eventType = PumpEventType(rawValue:(pageData[offset] as UInt8)) {
         let remainingData = pageData.subdataWithRange(NSMakeRange(offset, pageData.length - offset))
         if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
           return event
@@ -38,6 +40,11 @@ public class HistoryPage {
     var tempEvents = [PumpEvent]()
     
     while offset < length {
+      // Slurp up 0's
+      if pageData[offset] as UInt8 == 0 {
+        offset++
+        continue
+      }
       guard let event = matchEvent(offset) else {
         events = [PumpEvent]()
         throw Error.UnknownEventType(eventType: pageData[offset] as UInt8)

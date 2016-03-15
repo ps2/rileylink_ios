@@ -22,10 +22,11 @@ class MeterMessageTests: XCTestCase {
     }
     
   func testValidMeterMessage() {
-    let message = PumpMessage(rxData: NSData(hexadecimalString: "a5c527ad018e")!)
+    let message = MeterMessage(rxData: NSData(hexadecimalString: "a5c527ad018e")!)
     
     if let message = message {
-      XCTAssertTrue(message.messageBody is MeterMessage)
+      XCTAssertEqual(message.glucose, 257)
+      XCTAssertEqual(message.ackFlag, false)
     } else {
       XCTFail("\(message) is nil")
     }

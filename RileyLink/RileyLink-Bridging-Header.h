@@ -7,8 +7,10 @@
 #import "RileyLinkBLEManager.h"
 #import "Config.h"
 #import "SendAndListenCmd.h"
+#import "SendPacketCmd.h"
+#import "UpdateRegisterCmd.h"
 #import "GetPacketCmd.h"
 #import "Log.h"
-#import "PumpOps.h"
 #import "AppDelegate.h"
 #import <CommonCrypto/CommonCrypto.h>
+

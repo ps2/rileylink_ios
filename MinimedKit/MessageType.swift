@@ -20,6 +20,7 @@ public enum MessageType: UInt8 {
     case ButtonPress    = 0x5b
     case PowerOn        = 0x5d
     case GetBattery     = 0x72
+    case GetHistoryPage = 0x80
     case GetPumpModel   = 0x8d
     case ReadSettings   = 0xc0
 
@@ -43,6 +44,8 @@ public enum MessageType: UInt8 {
           return ButtonPressCarelinkMessageBody.self
         case .GetPumpModel:
           return GetPumpModelCarelinkMessageBody.self
+        case .GetHistoryPage:
+          return GetHistoryPageCarelinkMessageBody.self
         default:
             return UnknownMessageBody.self
         }

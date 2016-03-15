@@ -14,7 +14,7 @@ public class PumpAlarmPumpEvent: PumpEvent {
   let rawType: Int
   
   public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 10
+    length = 9
     
     if length > availableData.length {
       timestamp = NSDateComponents()

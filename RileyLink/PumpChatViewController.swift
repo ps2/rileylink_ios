@@ -24,7 +24,7 @@ class PumpChatViewController: UIViewController {
     pumpIdLabel.text = String(format:"PumpID: %@", Config.sharedInstance().pumpID)
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    pumpOps = PumpOps(pumpState:appDelegate.pump, andDevice:device)
+    pumpOps = PumpOps(pumpState:appDelegate.pump, device:device)
   }
 
   override func didReceiveMemoryWarning() {
@@ -39,14 +39,14 @@ class PumpChatViewController: UIViewController {
   }
   
   @IBAction func dumpHistoryButtonPressed(sender: UIButton) {
-    pumpOps.getHistoryPage(0) { (res: [NSObject: AnyObject]) -> Void in
-      if let error = res["error"] {
-        let log = String(format:"Dump of page 0 failed: %@", (error as! String))
+    pumpOps.getHistoryPage(0) { (res: HistoryFetchResults) -> Void in
+      if let error = res.error {
+        let log = String(format:"Dump of page 0 failed: %@", error)
         self.addOutputMessage(log)
-      } else if let page = res["pageData"],
-        let model = res["pumpModel"] {
-        NSLog("Got page data: %@", (page as! NSData).hexadecimalString)
-        self.decodeHistoryPage((page as! NSData), model:(model as! String))
+      } else if let page = res.pageData,
+        let model = res.pumpModel {
+        NSLog("Got page data: %@", page.hexadecimalString)
+        self.decodeHistoryPage(page, model:model)
       } else {
         NSLog("Invalid dictionary response from getHistoryPage()")
       }
@@ -77,7 +77,7 @@ class PumpChatViewController: UIViewController {
   }
   
   @IBAction func queryPumpButtonPressed(sender: UIButton) {
-    pumpOps.getPumpModel { (model: String?) -> Void in
+    pumpOps.getPumpModel { (model) -> Void in
       if let model = model {
         self.addOutputMessage(String(format:"Pump Model: %@", model))
       } else {
@@ -86,9 +86,8 @@ class PumpChatViewController: UIViewController {
     }
   
     pumpOps.getBatteryVoltage { (results) -> Void in
-      if let battery = results["status"],
-        let volts = results["value"] {
-          self.addOutputMessage(String(format:"Battery Level: %@, %0.02f volts", (battery as! String), (volts as! Float)))
+      if let results = results {
+        self.addOutputMessage(String(format:"Battery Level: %@, %0.02f volts", results.status, results.volts))
       }
     }
   }
@@ -96,7 +95,11 @@ class PumpChatViewController: UIViewController {
   
   @IBAction func tuneButtonPressed(sender: UIButton) {
     pumpOps.tunePump { (results) -> Void in
-      self.addOutputMessage(String(format:"Tuning results: %@", results))
+      if results.error == nil {
+        self.addOutputMessage(String(format:"Best Freq: %@", results.bestFrequency))
+      } else {
+        self.addOutputMessage(results.error!)
+      }
     }
   }
 }

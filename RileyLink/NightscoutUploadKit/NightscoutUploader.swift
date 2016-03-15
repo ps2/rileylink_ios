@@ -163,17 +163,13 @@ class NightScoutUploader: NSObject {
       NSLog("Using RileyLink \"%@\" to fetchHistory.", rl.name!)
       
       let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-      let pumpOps = PumpOps(pumpState: appDelegate.pump, andDevice:rl)
-      
-      pumpOps.getHistoryPage(0, withHandler: { (res: [NSObject : AnyObject]) -> Void in
-        if let error = res["error"] {
-          NSLog("fetchHistory failed: %@", error as! String);
+      let pumpOps = PumpOps(pumpState: appDelegate.pump, device:rl)
+      pumpOps.getHistoryPage(0, completion: { (results) -> Void in
+        if let error = results.error {
+          NSLog("fetchHistory failed: %@", error);
         } else {
-          let page = res["pageData"] as! NSData
-          let pumpModel = res["pumpModel"] as! String
-          NSLog("Avg RSSI for history dump: %@", res["avgRSSI"] as! NSNumber);
           do {
-            try self.decodeHistoryPage(page, pumpModel: pumpModel)
+            try self.decodeHistoryPage(results.pageData!, pumpModel: results.pumpModel!)
             NSLog("fetchHistory succeeded.");
           } catch HistoryPage.Error.InvalidCRC {
             NSLog("CRC error in history page.");

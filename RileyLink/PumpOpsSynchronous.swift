@@ -216,7 +216,7 @@ class PumpOpsSynchronous: NSObject {
       return results
     }
     
-    var expectedFrameNum = 0
+    var expectedFrameNum = 1
     var curResp = firstResponse!.messageBody as! GetHistoryPageCarelinkMessageBody
     
     while(expectedFrameNum == curResp.frameNumber) {
@@ -242,6 +242,7 @@ class PumpOpsSynchronous: NSObject {
       results.error = "Unexpected page size: " + String(frameData.length)
       return results
     }
+    results.pageData = frameData
     return results
   }
 }

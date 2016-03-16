@@ -29,7 +29,6 @@ class NightScoutUploader: NSObject {
   var lastMeterMessageRxTime: NSDate?
   var activeRileyLink: RileyLinkBLEDevice?
   var getHistoryTimer: NSTimer?
-  var pumpModel: String?
   
   // TODO: since some treatments update, we should instead keep track of the time
   // of the most recent non-mutating event, and send all events newer than that.

@@ -27,10 +27,13 @@ public class GetHistoryPageCarelinkMessageBody: CarelinkLongMessageBody {
     super.init(rxData: rxData)
   }
   
-  public convenience init(pageNum: Int) {
+  public required init(pageNum: Int) {
     let numArgs = 1
+    lastFrame = false
+    frame = NSData()
+    frameNumber = 0
     let data = NSData(hexadecimalString: String(format: "%02x%02x", numArgs, UInt8(pageNum)))!
-    self.init(rxData: data)!
+    super.init(rxData: data)!
   }
 
 }

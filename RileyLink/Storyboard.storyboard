@@ -802,7 +802,7 @@
                                     <action selector="tuneButtonPressed:" destination="U6s-FT-nQH" eventType="touchUpInside" id="B77-LN-Tfi"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output... " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
                                 <rect key="frame" x="0.0" y="180" width="320" height="192"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>

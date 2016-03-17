@@ -757,9 +757,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deA-p4-R7V">
-                                <rect key="frame" x="94" y="47" width="133" height="30"/>
-                                <state key="normal" title="Query Pump Model">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deA-p4-R7V">
+                                <rect key="frame" x="27" y="45" width="267" height="32"/>
+                                <state key="normal" title="Query Pump Model &amp; Battery">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -814,7 +814,7 @@
                             <constraint firstItem="YQ0-DI-aEl" firstAttribute="centerX" secondItem="T33-ad-KLw" secondAttribute="centerX" id="2LP-Km-wy7"/>
                             <constraint firstItem="deA-p4-R7V" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="67Y-gB-Axy"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="BtS-BD-aFZ"/>
-                            <constraint firstItem="deA-p4-R7V" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" constant="78" id="ChW-ZQ-5Jz"/>
+                            <constraint firstItem="deA-p4-R7V" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" constant="10" id="ChW-ZQ-5Jz"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="top" secondItem="fjO-7e-9wj" secondAttribute="bottom" constant="2" id="Ddw-N7-WgQ"/>
                             <constraint firstItem="T33-ad-KLw" firstAttribute="bottom" secondItem="WXK-wk-Az1" secondAttribute="top" id="FEp-EA-xLU"/>
                             <constraint firstItem="fjO-7e-9wj" firstAttribute="top" secondItem="deA-p4-R7V" secondAttribute="bottom" id="J1T-TU-Zxf"/>

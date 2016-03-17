@@ -299,10 +299,12 @@ class NightScoutUploader: NSObject {
         nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
       }
       
+      let pumpDate = TimeFormat.timestampStr(status.pumpDateComponents)
+      
       nsStatus["pump"] = [
-        "clock": TimeFormat.timestampStrFromDate(status.pumpDate),
+        "clock": pumpDate,
         "iob": [
-          "timestamp": TimeFormat.timestampStrFromDate(status.pumpDate),
+          "timestamp": pumpDate,
           "bolusiob": status.iob,
         ],
         "reservoir": status.reservoirRemainingUnits,
@@ -330,9 +332,10 @@ class NightScoutUploader: NSObject {
         "rssi": rssi,
         "type": "sgv"
       ]
-      if let sensorDate = status.glucoseDate {
+      if let sensorDateComponents = status.glucoseDateComponents,
+        let sensorDate = TimeFormat.timestampAsLocalDate(sensorDateComponents) {
         entry["date"] = sensorDate.timeIntervalSince1970 * 1000
-        entry["dateString"] = TimeFormat.timestampStrFromDate(sensorDate)
+        entry["dateString"] = TimeFormat.timestampStr(sensorDateComponents)
       }
       switch status.previousGlucose {
       case .Active(glucose: let previousGlucose):

@@ -88,6 +88,8 @@ class PumpChatViewController: UIViewController {
     pumpOps.getBatteryVoltage { (results) -> Void in
       if let results = results {
         self.addOutputMessage(String(format:"Battery Level: %@, %0.02f volts", results.status, results.volts))
+      } else {
+        self.addOutputMessage("Get battery voltage failed.")        
       }
     }
   }

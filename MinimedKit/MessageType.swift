@@ -46,6 +46,8 @@ public enum MessageType: UInt8 {
           return GetPumpModelCarelinkMessageBody.self
         case .GetHistoryPage:
           return GetHistoryPageCarelinkMessageBody.self
+        case .GetBattery:
+          return GetBatteryCarelinkMessageBody.self
         default:
             return UnknownMessageBody.self
         }

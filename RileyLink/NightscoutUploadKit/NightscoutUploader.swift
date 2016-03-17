@@ -207,7 +207,7 @@ class NightScoutUploader: NSObject {
   
   func addTreatment(treatment:NightscoutTreatment, pumpModel:PumpModel) {
     if sendEntriesNewerThan == nil || treatment.timestamp.timeIntervalSinceDate(sendEntriesNewerThan!) > 0 {
-      treatmentsQueue.append(treatment)
+      treatmentsQueue.append(treatment.dictionaryRepresentation)
     }
   }
   

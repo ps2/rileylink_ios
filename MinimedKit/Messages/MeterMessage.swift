@@ -10,7 +10,7 @@ import Foundation
 
 public class MeterMessage {
 
-  let length = 6
+  let length = 7
   
   public let glucose: Int
   public let ackFlag: Bool

@@ -14,10 +14,12 @@
   uint8_t cmd[4];
   cmd[0] = RILEYLINK_CMD_GET_PACKET;
   cmd[1] = _listenChannel;
-  cmd[2] = _timeoutMS >> 8;
-  cmd[3] = _timeoutMS & 0xff;
-  
-  return [NSData dataWithBytes:cmd length:4];
+
+  for (int i = 0; i < 4; i++) {
+    cmd[2 + i] = _timeoutMS >> ((3 - i) * 8) & 0xff;
+  }
+
+  return [NSData dataWithBytes:cmd length:6];
 }
 
 @end

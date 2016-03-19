@@ -18,11 +18,14 @@
   cmd[2] = _repeatCount;
   cmd[3] = _msBetweenPackets;
   cmd[4] = _listenChannel;
-  cmd[5] = _timeoutMS >> 8;
-  cmd[6] = _timeoutMS & 0xff;
+
+  for (int i = 0; i < 4; i++) {
+    cmd[5 + i] = _timeoutMS >> ((3 - i) * 8) & 0xff;
+  }
+
   cmd[7] = _retryCount;
   
-  NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:8];
+  NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:10];
   [serialized appendData:_packet];
   uint8_t nullTerminator = 0;
   [serialized appendBytes:&nullTerminator length:1];

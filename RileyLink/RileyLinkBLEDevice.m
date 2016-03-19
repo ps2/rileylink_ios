@@ -429,7 +429,7 @@
     NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 2 * 60 * 1000;
+    cmd.timeoutMS = 60 * 2000;
     [self issueCommand:cmd];
   }
 }

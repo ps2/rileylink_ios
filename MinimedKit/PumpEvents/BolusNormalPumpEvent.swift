@@ -10,13 +10,13 @@ import UIKit
 
 public class BolusNormalPumpEvent: TimestampedPumpEvent {
   public let length: Int
-  let timestamp: NSDateComponents
-  var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
-  let amount: Double
-  let programmed: Double
-  let unabsorbedInsulinTotal: Double
-  let bolusType: String
-  let duration: Int
+  public let timestamp: NSDateComponents
+  public var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
+  public let amount: Double
+  public let programmed: Double
+  public let unabsorbedInsulinTotal: Double
+  public let bolusType: String
+  public let duration: Int
   
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     

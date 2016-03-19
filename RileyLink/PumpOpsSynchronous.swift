@@ -196,8 +196,8 @@ class PumpOpsSynchronous: NSObject {
     
     if !defaultWake() {
       let scanResults = scanForPump()
-      guard scanResults.error != nil else {
-        results.error = "Frequency tuning failed."
+      if scanResults.error != nil {
+        results.error = "Frequency tuning failed: " + scanResults.error!
         return results
       }
     }

@@ -53,7 +53,7 @@ class PumpOps: NSObject {
       UIApplication.sharedApplication().endBackgroundTask(historyTask!)
     }
     device.runSession { (session) -> Void in
-      NSLog("History fetching task expired.")
+      NSLog("History fetching task started.")
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
       let response = ops.getHistoryPage(page)
       dispatch_async(dispatch_get_main_queue(), { () -> Void in

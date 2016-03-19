@@ -25,6 +25,19 @@ class NightScoutPumpEvents: NSObject {
           results.append(entry)
         }
       }
+      if let bolusNormal = event as? BolusNormalPumpEvent {
+        if let date = TimeFormat.timestampAsLocalDate(bolusNormal.timestamp) {
+          let entry = BolusNightscoutTreatment(
+            timestamp: date,
+            enteredBy: eventSource,
+            bolusType: .Normal,
+            amount: bolusNormal.amount,
+            programmed: bolusNormal.programmed,
+            unabsorbed: bolusNormal.unabsorbedInsulinTotal,
+            duration: bolusNormal.duration)
+          results.append(entry)
+        }
+      }
     }
     return results
   }

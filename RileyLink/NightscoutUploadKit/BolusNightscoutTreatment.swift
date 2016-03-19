@@ -33,8 +33,9 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
   
   override public var dictionaryRepresentation: [String: AnyObject] {
     var rval = super.dictionaryRepresentation
+    rval["eventType"] = "Correction Bolus"
     rval["type"] = bolusType.rawValue
-    rval["amount"] = amount
+    rval["insulin"] = amount
     rval["programmed"] = programmed
     rval["unabsorbed"] = unabsorbed
     rval["duration"] = duration

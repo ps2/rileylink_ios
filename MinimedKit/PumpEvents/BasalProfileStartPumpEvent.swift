@@ -10,7 +10,7 @@ import UIKit
 
 public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
   public let length: Int
-  let timestamp: NSDateComponents
+  public let timestamp: NSDateComponents
   let rate: Double
   let profileIndex: Int
   let offset: Int

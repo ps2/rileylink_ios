@@ -10,7 +10,7 @@ import UIKit
 
 public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
   public let length: Int
-  let timestamp: NSDateComponents
+  public let timestamp: NSDateComponents
   let carbohydrates: Int
   let bloodGlucose: Int
   let foodEstimate: Double

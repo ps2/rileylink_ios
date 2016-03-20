@@ -9,6 +9,12 @@
 import UIKit
 import MinimedKit
 
+public enum PumpCommsError: ErrorType {
+  case RFCommsFailure
+  case UnknownPumpModel
+  case RileyLinkTimeout
+}
+
 class PumpOpsSynchronous: NSObject {
 
   let standardPumpResponseWindow: UInt16 = 180
@@ -129,7 +135,26 @@ class PumpOpsSynchronous: NSObject {
     return response.messageBody as? GetBatteryCarelinkMessageBody
   }
   
-  func scanForPump() -> FrequencyScanResults {
+  func updateRegister(addr: UInt8, value: UInt8) throws {
+    let cmd = UpdateRegisterCmd()
+    cmd.addr = addr;
+    cmd.value = value;
+    if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
+      throw PumpCommsError.RileyLinkTimeout
+    }
+  }
+  
+  func setBaseFrequency(freqMhz: Double) throws {
+    let val = Int((freqMhz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
+    
+    try updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
+    try updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
+    try updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
+    NSLog("Set frequency to %f", freqMhz)
+  }
+
+  
+  func scanForPump() throws -> FrequencyScanResults {
     
     let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     var results = FrequencyScanResults()
@@ -140,7 +165,7 @@ class PumpOpsSynchronous: NSObject {
       let tries = 3
       var trial = FrequencyTrial()
       trial.frequencyMHz = freq
-      setBaseFrequency(freq)
+      try setBaseFrequency(freq)
       var sumRSSI = 0
       for _ in 1...tries {
         let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
@@ -154,7 +179,7 @@ class PumpOpsSynchronous: NSObject {
               trial.successes += 1
           }
         } else {
-          // RL Not responding?
+          throw PumpCommsError.RileyLinkTimeout
         }
         trial.tries += 1
       }
@@ -166,54 +191,67 @@ class PumpOpsSynchronous: NSObject {
     let sortedTrials = results.trials.sort({ (a, b) -> Bool in
       return a.avgRSSI > b.avgRSSI
     })
-    results.bestFrequency = sortedTrials.first!.frequencyMHz
-    setBaseFrequency(results.bestFrequency)
-    
+    if sortedTrials.first!.successes > 0 {
+      results.bestFrequency = sortedTrials.first!.frequencyMHz
+      try setBaseFrequency(results.bestFrequency)
+    }
     
     return results
   }
 
-  func updateRegister(addr: UInt8, value: UInt8) {
-    let cmd = UpdateRegisterCmd()
-    cmd.addr = addr;
-    cmd.value = value;
-    session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
-  }
-  
-  func setBaseFrequency(freqMhz: Double) {
-    let val = Int((freqMhz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
-  
-    updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
-    updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
-    updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
-    NSLog("Set frequency to %f", freqMhz)
-  }
-  
-  func getHistoryPage(pageNum: Int) -> HistoryFetchResults {
-    let frameData = NSMutableData()
-    
-    var results = HistoryFetchResults()
+  func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
     
     if !defaultWake() {
-      let scanResults = scanForPump()
-      if scanResults.error != nil {
-        results.error = "Frequency tuning failed: " + scanResults.error!
-        return results
-      }
+      try scanForPump()
     }
     
-    results.pumpModel = getPumpModel()
-    guard results.pumpModel != nil else {
-      results.error = "Unable to get pump model"
-      return results
+    guard let pumpModelStr = getPumpModel() else {
+      throw PumpCommsError.RFCommsFailure
     }
+    
+    guard let pumpModel = PumpModel.byModelNumber(pumpModelStr) else {
+      throw PumpCommsError.UnknownPumpModel
+    }
+    
+    var pageNum = 0
+    var events = [PumpEvent]()
+    while pageNum < 16 {
+      NSLog("Fetching page %d", pageNum)
+      let pageData = try getHistoryPage(pageNum)
+      NSLog("Fetched page %d: %@", pageNum, pageData.hexadecimalString)
+      let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
+      var eventIdxBeforeStartDate = 0
+      for (index, event) in page.events.enumerate() {
+        if event is TimestampedPumpEvent {
+          let event = event as! TimestampedPumpEvent
+          if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
+            if date.compare(startDate) == .OrderedAscending  {
+              NSLog("Found event (%@) before startDate(%@)", date, startDate)
+              eventIdxBeforeStartDate = index
+              break
+            }
+          }
+        }
+      }
+      if eventIdxBeforeStartDate > 0 {
+        let slice = page.events[eventIdxBeforeStartDate..<(page.events.count)]
+        events.insertContentsOf(slice, at: 0)
+        break
+      }
+      events.insertContentsOf(page.events, at: 0)
+      pageNum++
+    }
+    return (events, pumpModel)
+  }
+  
+  func getHistoryPage(pageNum: Int) throws -> NSData {
+    let frameData = NSMutableData()
     
     let msg = makePumpMessage(.GetHistoryPage, body: GetHistoryPageCarelinkMessageBody(pageNum: pageNum))
     let firstResponse = runCommandWithArguments(msg)
     
     guard firstResponse != nil else {
-      results.error = "Pump did not respond to GetHistory command"
-      return results
+      throw PumpCommsError.RFCommsFailure
     }
     
     var expectedFrameNum = 1
@@ -226,8 +264,7 @@ class PumpOpsSynchronous: NSObject {
       if !curResp.lastFrame {
         let resp = sendAndListen(msg)
         guard resp != nil else {
-          results.error = "Missed frame " + String(expectedFrameNum)
-          return results
+          throw PumpCommsError.RFCommsFailure
         }
         curResp = resp!.messageBody as! GetHistoryPageCarelinkMessageBody
       } else {
@@ -239,11 +276,9 @@ class PumpOpsSynchronous: NSObject {
     }
     
     guard frameData.length == 1024 else {
-      results.error = "Unexpected page size: " + String(frameData.length)
-      return results
+      throw PumpCommsError.RFCommsFailure
     }
-    results.pageData = frameData
-    return results
+    return frameData
   }
 }
 
@@ -263,7 +298,6 @@ struct FrequencyTrial {
 struct FrequencyScanResults {
   var trials = [FrequencyTrial]()
   var bestFrequency: Double = 0
-  var error: String?
 }
 
 

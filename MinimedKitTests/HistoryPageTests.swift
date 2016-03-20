@@ -110,6 +110,10 @@ class HistoryPageTests: XCTestCase {
       XCTAssertEqual(prime.programmedAmount, 0.0)
       XCTAssertEqual(prime.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T02:05:07Z")
       
+      let sara6e = events[50] as! Sara6EPumpEvent
+      // 2016-02-22T00:00:00
+      XCTAssertEqual(sara6e.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T06:00:00Z")
+      
     } catch HistoryPage.Error.InvalidCRC {
       XCTFail("page decoding threw invalid crc")
     } catch HistoryPage.Error.UnknownEventType(_) {

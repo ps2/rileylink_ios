@@ -39,35 +39,18 @@ class PumpChatViewController: UIViewController {
   }
   
   @IBAction func dumpHistoryButtonPressed(sender: UIButton) {
-    pumpOps.getHistoryPage(0) { (res: HistoryFetchResults) -> Void in
-      if let error = res.error {
-        let log = String(format:"Dump of page 0 failed: %@", error)
-        self.addOutputMessage(log)
-      } else if let page = res.pageData,
-        let model = res.pumpModel {
-        NSLog("Got page data: %@", page.hexadecimalString)
-        self.decodeHistoryPage(page, model:model)
-      } else {
-        NSLog("Invalid dictionary response from getHistoryPage()")
-      }
-    }
-  }
-  
-  func decodeHistoryPage(data: NSData, model: String) {
-    if let m = PumpModel.byModelNumber(model) {
-      do {
-        let page = try HistoryPage(pageData: data, pumpModel: m)
-      
-        for event in page.events {
-          addOutputMessage(String(format:"Event: %@", event.dictionaryRepresentation))
+    let calendar = NSCalendar.currentCalendar()
+    let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
+    pumpOps.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
+      switch response {
+      case .Success(let (events, _)):
+        for event in events {
+          self.addOutputMessage(String(format:"Event: %@", event.dictionaryRepresentation))
           NSLog("Event: %@", event.dictionaryRepresentation)
         }
-      } catch HistoryPage.Error.InvalidCRC {
-        addOutputMessage(String(format:"CRC error in history page."))
-      } catch HistoryPage.Error.UnknownEventType(let eventType) {
-        addOutputMessage(String(format:"Encountered unknown event type %d", eventType))
-      } catch {
-        NSLog("Unexpected exception...")
+      case .Failure(let error):
+        let errorMsg = String(format:"History fetch failed: %@", String(error))
+        self.addOutputMessage(errorMsg)
       }
     }
   }
@@ -96,14 +79,16 @@ class PumpChatViewController: UIViewController {
   
   
   @IBAction func tuneButtonPressed(sender: UIButton) {
-    pumpOps.tunePump { (results) -> Void in
-      if results.error == nil {
-        for trial in results.trials {
+    pumpOps.tunePump { (result) -> Void in
+      switch result {
+      case .Success(let scanResults):
+        for trial in scanResults.trials {
           self.addOutputMessage(String(format:"Trial: %0.02f - %d, %0.01f", trial.frequencyMHz, trial.successes, trial.avgRSSI))
         }
-        self.addOutputMessage(String(format:"Best Freq: %0.02f", results.bestFrequency))
-      } else {
-        self.addOutputMessage(results.error!)
+        self.addOutputMessage(String(format:"Best Freq: %0.02f", scanResults.bestFrequency))
+      case .Failure(let error):
+        let errorMsg = String(format:"Tune failed: %@", String(error))
+        self.addOutputMessage(errorMsg)
       }
     }
   }

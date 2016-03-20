@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TimestampedPumpEvent: PumpEvent {
+public protocol TimestampedPumpEvent: PumpEvent {
   
   var timestamp: NSDateComponents {
     get

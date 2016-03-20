@@ -1,5 +1,5 @@
 //
-//  NightScoutPumpEvents.swift
+//  NightscoutPumpEvents.swift
 //  RileyLink
 //
 //  Created by Pete Schwamb on 3/9/16.
@@ -9,7 +9,7 @@
 import UIKit
 import MinimedKit
 
-class NightScoutPumpEvents: NSObject {
+class NightscoutPumpEvents: NSObject {
   
   class func translate(events: [PumpEvent], eventSource: String) -> [NightscoutTreatment] {
     var results = [NightscoutTreatment]()

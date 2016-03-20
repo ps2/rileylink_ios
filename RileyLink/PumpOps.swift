@@ -10,7 +10,7 @@ import UIKit
 import MinimedKit
 
 class PumpOps: NSObject {
-  
+    
   var pumpState: PumpState
   var device: RileyLinkBLEDevice
   
@@ -45,32 +45,37 @@ class PumpOps: NSObject {
       })
     }
   }
-  
-  func getHistoryPage(page: Int, completion: (HistoryFetchResults) -> Void)  {
-    var historyTask: UIBackgroundTaskIdentifier? = nil
-    historyTask = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler { () -> Void in
-      NSLog("History fetching task expired.")
-      UIApplication.sharedApplication().endBackgroundTask(historyTask!)
-    }
+
+  func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [PumpEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
     device.runSession { (session) -> Void in
       NSLog("History fetching task started.")
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
-      let response = ops.getHistoryPage(page)
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        completion(response)
-        UIApplication.sharedApplication().endBackgroundTask(historyTask!)
-      })
-      NSLog("History fetching task completed normally.")
+      do {
+        let (events, pumpModel) = try ops.getHistoryEventsSinceDate(startDate)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          completion(.Success(events: events, pumpModel: pumpModel))
+        })
+      } catch let error {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          completion(.Failure(error))
+        })
+      }
     }
   }
   
-  func tunePump(completion: (FrequencyScanResults) -> Void)  {
+  func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
-      let response = ops.scanForPump()
-      dispatch_async(dispatch_get_main_queue(), { () -> Void in
-        completion(response)
-      })
+      do {
+        let response = try ops.scanForPump()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          completion(.Success(response))
+        })
+      } catch let error {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          completion(.Failure(error))
+        })
+      }
     }
   }
 

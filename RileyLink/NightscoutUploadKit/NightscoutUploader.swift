@@ -33,7 +33,7 @@ class NightScoutUploader: NSObject {
   // TODO: since some treatments update, we should instead keep track of the time
   // of the most recent non-mutating event, and send all events newer than that.
   //var sentTreatments: [AnyObject]
-  var sendEntriesNewerThan: NSDate?
+  var observingPumpEventsAfter: NSDate
   
   let defaultNightscoutEntriesPath = "/api/v1/entries.json"
   let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
@@ -43,6 +43,9 @@ class NightScoutUploader: NSObject {
     entries = [AnyObject]()
     treatmentsQueue = [AnyObject]()
     deviceStatuses = [AnyObject]()
+    
+    let calendar = NSCalendar.currentCalendar()
+    observingPumpEventsAfter = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
     
     super.init()
     
@@ -57,10 +60,10 @@ class NightScoutUploader: NSObject {
     getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:Selector("timerTriggered"), userInfo:nil, repeats:true)
       
     // This triggers one dump right away (in 10s).d
-    //[self performSelector:@selector(fetchHistory:) withObject:nil afterDelay:10];
+    performSelector(Selector("fetchHistory"), withObject: nil, afterDelay: 10)
     
     // This is to just test decoding history
-    performSelector(Selector("testDecodeHistory"), withObject: nil, afterDelay: 1)
+    //performSelector(Selector("testDecodeHistory"), withObject: nil, afterDelay: 1)
     
     // Test storing MySentry packet:
     //[self performSelector:@selector(testHandleMySentry) withObject:nil afterDelay:10];
@@ -80,10 +83,12 @@ class NightScoutUploader: NSObject {
   }
   
   func testDecodeHistory() {
-    let page = NSData(hexadecimalString: "7b0100de080a101122007b0200c0160a102c1c007b0000c0000b1000160007000002be2a900000006e2a90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080b101122007b0200c0160b102c1c007b0000c0000c1000160007000002be2b900000006e2b90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080c10112200346418d3110c107b0200c0160c102c1c00343233db170c107b0000c0000d1000160007000002be2c900000006e2c90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080d101122007b0200c0160d102c1c007b0000c0000e1000160007000002be2d900000006e2d90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080e10112200063e033303c74f4e100c3e28d7100e1021001ce2150e1003000000202ce4350e101a000ae5150e101a0120e5150e107b0214c0160e102c1c00030001000112c0160e107b0000c0000f1000160007000001d32e900000006e2e90050000000000000001d301d3640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080f10112200820108db150f1000a2ce8aa0810134e0150f1000a2ce8aa07d0134e0150f1000a2ce8aa0000000000000000000000000000000000000000000000000007b0200c0160f102c1c007b0000c000101000160007000002be2f900000006e2f90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0810101122007b0200c01610102c1c000a5e36d03670103f0b36d0d67010c228060a5b0cd43670103f0b0cd4767010c228067b0000c000111000160007000002be30900000006e309005005d5b5e02000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0811101122000a600ada3171103f0c0ada117110c2280601002200220000001dea521110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e35")!
+    let pageData = NSData(hexadecimalString: "7b0100de080a101122007b0200c0160a102c1c007b0000c0000b1000160007000002be2a900000006e2a90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080b101122007b0200c0160b102c1c007b0000c0000c1000160007000002be2b900000006e2b90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080c10112200346418d3110c107b0200c0160c102c1c00343233db170c107b0000c0000d1000160007000002be2c900000006e2c90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080d101122007b0200c0160d102c1c007b0000c0000e1000160007000002be2d900000006e2d90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080e10112200063e033303c74f4e100c3e28d7100e1021001ce2150e1003000000202ce4350e101a000ae5150e101a0120e5150e107b0214c0160e102c1c00030001000112c0160e107b0000c0000f1000160007000001d32e900000006e2e90050000000000000001d301d3640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080f10112200820108db150f1000a2ce8aa0810134e0150f1000a2ce8aa07d0134e0150f1000a2ce8aa0000000000000000000000000000000000000000000000000007b0200c0160f102c1c007b0000c000101000160007000002be2f900000006e2f90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0810101122007b0200c01610102c1c000a5e36d03670103f0b36d0d67010c228060a5b0cd43670103f0b0cd4767010c228067b0000c000111000160007000002be30900000006e309005005d5b5e02000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0811101122000a600ada3171103f0c0ada117110c2280601002200220000001dea521110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e35")!
     do {
-      try decodeHistoryPage(page, pumpModel: "523")
-      flushAll()
+      let pumpModel = PumpModel.byModelNumber("523")!
+      let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
+      let source = "testing/" + pumpModel.name
+      self.processPumpEvents(page.events, source: source, pumpModel: pumpModel)
     } catch _ {
       
     }
@@ -164,50 +169,34 @@ class NightScoutUploader: NSObject {
       
       let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
       let pumpOps = PumpOps(pumpState: appDelegate.pump, device:rl)
-      pumpOps.getHistoryPage(0, completion: { (results) -> Void in
-        if let error = results.error {
-          NSLog("fetchHistory failed: %@", error);
-        } else {
-          do {
-            try self.decodeHistoryPage(results.pageData!, pumpModel: results.pumpModel!)
-            NSLog("fetchHistory succeeded.");
-          } catch HistoryPage.Error.InvalidCRC {
-            NSLog("CRC error in history page.");
-          } catch HistoryPage.Error.UnknownEventType(let eventType) {
-            // TODO: Need some way let users submit this error (and the history page)
-            // back to us to discover new history events.
-            NSLog("Encountered unknown event type %d", eventType)
-          } catch {
-            NSLog("Unexpected exception...")
-          }
+      pumpOps.getHistoryEventsSinceDate(observingPumpEventsAfter) { (response) -> Void in
+        switch response {
+        case .Success(let (events, pumpModel)):
+          NSLog("fetchHistory succeeded.")
+          let source = "rileylink://medtronic/" + pumpModel.name
+          self.processPumpEvents(events, source: source, pumpModel: pumpModel)
+        case .Failure(let error):
+          // TODO: Check for HistoryPage.Error.UnknownEventType, and let users submit 
+          //  back to us to discover new history events.
+          NSLog("History fetch failed: %@", String(error))
         }
-        self.flushAll()
-      })
+      }
     } else {
       NSLog("fetchHistory failed: No connected rileylinks to attempt to pull history with.")
-      
     }
-    
   }
   
   // MARK: - Decoding Treatments
   
-  func decodeHistoryPage(data: NSData, pumpModel: String) throws {
-    NSLog("Got page: %@", data.hexadecimalString)
-    
-    if let m = PumpModel.byModelNumber(pumpModel) {
-      let page = try HistoryPage(pageData: data, pumpModel: m)
-    
-      for treatment in NightScoutPumpEvents.translate(page.events, eventSource: "rileylink://medtronic/" + m.name) {
-        addTreatment(treatment, pumpModel:m)
-      }
-    } else {
-      NSLog("Unknown pump model: " + pumpModel)
+  func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
+    for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
+      addTreatment(treatment, pumpModel:pumpModel)
     }
+    self.flushAll()
   }
   
   func addTreatment(treatment:NightscoutTreatment, pumpModel:PumpModel) {
-    if sendEntriesNewerThan == nil || treatment.timestamp.timeIntervalSinceDate(sendEntriesNewerThan!) > 0 {
+    if treatment.timestamp.timeIntervalSinceDate(observingPumpEventsAfter) > 0 {
       var rep = treatment.dictionaryRepresentation
       if rep["created_at"] == nil && rep["timestamp"] != nil {
         rep["created_at"] = rep["timestamp"]

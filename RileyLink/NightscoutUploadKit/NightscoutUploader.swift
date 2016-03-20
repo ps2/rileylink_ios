@@ -33,7 +33,7 @@ class NightScoutUploader: NSObject {
   // TODO: since some treatments update, we should instead keep track of the time
   // of the most recent non-mutating event, and send all events newer than that.
   //var sentTreatments: [AnyObject]
-  var observingPumpEventsAfter: NSDate
+  var observingPumpEventsSince: NSDate
   
   let defaultNightscoutEntriesPath = "/api/v1/entries.json"
   let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
@@ -45,7 +45,7 @@ class NightScoutUploader: NSObject {
     deviceStatuses = [AnyObject]()
     
     let calendar = NSCalendar.currentCalendar()
-    observingPumpEventsAfter = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
+    observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
     
     super.init()
     
@@ -169,7 +169,7 @@ class NightScoutUploader: NSObject {
       
       let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
       let pumpOps = PumpOps(pumpState: appDelegate.pump, device:rl)
-      pumpOps.getHistoryEventsSinceDate(observingPumpEventsAfter) { (response) -> Void in
+      pumpOps.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
         switch response {
         case .Success(let (events, pumpModel)):
           NSLog("fetchHistory succeeded.")
@@ -189,6 +189,49 @@ class NightScoutUploader: NSObject {
   // MARK: - Decoding Treatments
   
   func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
+    
+    // Find valid event times
+    var validEventTimes = [NSDate]()
+    for event in events {
+      if event is TimestampedPumpEvent {
+        let timestamp = (event as! TimestampedPumpEvent).timestamp
+        if let date = TimeFormat.timestampAsLocalDate(timestamp) {
+          validEventTimes.append(date)
+        }
+      }
+    }
+    let newestEventTime = validEventTimes.last
+    
+    
+    // Find the oldest event that might still be updated.
+    var oldestUpdatingEventDate: NSDate?
+    let cal = NSCalendar.currentCalendar()
+    for event in events {
+      switch event {
+      case is BolusNormalPumpEvent:
+        let event = event as! BolusNormalPumpEvent
+        if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
+          let duration = NSDateComponents()
+          duration.minute = event.duration
+          let deliveryFinishDate = cal.dateByAddingComponents(duration, toDate: date, options: NSCalendarOptions(rawValue:0))
+          if newestEventTime == nil || deliveryFinishDate?.compare(newestEventTime!) == .OrderedDescending {
+            // This event might still be updated.
+            oldestUpdatingEventDate = date
+            break
+          }
+        }
+      default:
+        continue
+      }
+    }
+    
+    if oldestUpdatingEventDate != nil {
+      observingPumpEventsSince = oldestUpdatingEventDate!
+    } else if newestEventTime != nil {
+      observingPumpEventsSince = newestEventTime!
+    }
+    NSLog("Updated fetch start time to %@", observingPumpEventsSince)
+    
     for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
       addTreatment(treatment, pumpModel:pumpModel)
     }
@@ -196,16 +239,14 @@ class NightScoutUploader: NSObject {
   }
   
   func addTreatment(treatment:NightscoutTreatment, pumpModel:PumpModel) {
-    if treatment.timestamp.timeIntervalSinceDate(observingPumpEventsAfter) > 0 {
-      var rep = treatment.dictionaryRepresentation
-      if rep["created_at"] == nil && rep["timestamp"] != nil {
-        rep["created_at"] = rep["timestamp"]
-      }
-      if rep["created_at"] == nil {
-        rep["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-      }
-      treatmentsQueue.append(rep)
+    var rep = treatment.dictionaryRepresentation
+    if rep["created_at"] == nil && rep["timestamp"] != nil {
+      rep["created_at"] = rep["timestamp"]
     }
+    if rep["created_at"] == nil {
+      rep["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
+    }
+    treatmentsQueue.append(rep)
   }
   
   

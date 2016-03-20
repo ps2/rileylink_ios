@@ -30,7 +30,7 @@ class NightscoutPumpEvents: NSObject {
           let entry = BolusNightscoutTreatment(
             timestamp: date,
             enteredBy: eventSource,
-            bolusType: .Normal,
+            bolusType: bolusNormal.duration > 0 ? .Square : .Normal,
             amount: bolusNormal.amount,
             programmed: bolusNormal.programmed,
             unabsorbed: bolusNormal.unabsorbedInsulinTotal,

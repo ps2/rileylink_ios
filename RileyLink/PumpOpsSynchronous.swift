@@ -220,20 +220,20 @@ class PumpOpsSynchronous: NSObject {
       let pageData = try getHistoryPage(pageNum)
       NSLog("Fetched page %d: %@", pageNum, pageData.hexadecimalString)
       let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
-      var eventIdxBeforeStartDate = 0
-      for (index, event) in page.events.enumerate() {
+      var eventIdxBeforeStartDate = -1
+      for (reverseIndex, event) in page.events.reverse().enumerate() {
         if event is TimestampedPumpEvent {
           let event = event as! TimestampedPumpEvent
           if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
             if date.compare(startDate) == .OrderedAscending  {
-              NSLog("Found event (%@) before startDate(%@)", date, startDate)
-              eventIdxBeforeStartDate = index
+              NSLog("Found event (%@) before startDate(%@)", date, startDate);
+              eventIdxBeforeStartDate = page.events.count - reverseIndex
               break
             }
           }
         }
       }
-      if eventIdxBeforeStartDate > 0 {
+      if eventIdxBeforeStartDate >= 0 {
         let slice = page.events[eventIdxBeforeStartDate..<(page.events.count)]
         events.insertContentsOf(slice, at: 0)
         break

@@ -276,8 +276,8 @@
         if (versionComponents.count > 1) {
           NSInteger major = [versionComponents[0] integerValue];
           NSInteger minor = [versionComponents[1] integerValue];
-          if (major <= 0 && minor < 6) {
-            NSString *msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.6 or newer.", foundVersion];
+          if (major <= 0 && minor < 7) {
+            NSString *msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.7 or newer.", foundVersion];
             [self showMessage:msg withTitle:@"Firmware version issue."];
           } else {
             versionOK = YES;
@@ -432,7 +432,7 @@
     NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 60 * 1000;
+    cmd.timeoutMS = 2 * 60 * 1000;
     [self issueCommand:cmd];
   }
 }

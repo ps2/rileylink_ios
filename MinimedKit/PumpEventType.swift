@@ -17,6 +17,7 @@ public enum PumpEventType: UInt8 {
   case CalBGForPH = 0x0a
   case AlarmSensor = 0x0b
   case ClearAlarm = 0x0c
+  case TempBasalDuration = 0x16
   case ChangeTime = 0x17
   case JournalEntryPumpLowBattery = 0x19
   case Battery = 0x1a
@@ -29,7 +30,7 @@ public enum PumpEventType: UInt8 {
   case ChangeMaxBasal = 0x2c
   case ChangeBGReminderOffset = 0x31
   case ChangeAlarmClockTime = 0x32
-  case ChangeTempBasalPercent = 0x33
+  case TempBasal = 0x33
   case JournalEntryPumpLowReservoir = 0x34
   case AlarmClockReminder = 0x35
   case ChangeParadigmLinkID = 0x3c
@@ -45,6 +46,7 @@ public enum PumpEventType: UInt8 {
   case ChangeAudioBolus = 0x5f
   case ChangeBGReminderEnable = 0x60
   case ChangeAlarmClockEnable = 0x61
+  case ChangeTempBasalType = 0x62
   case ChangeAlarmNotifyMode = 0x63
   case ChangeTimeFormat = 0x64
   case ChangeReservoirWarningTime = 0x65
@@ -82,6 +84,8 @@ public enum PumpEventType: UInt8 {
       return AlarmSensorPumpEvent.self
     case .ClearAlarm:
       return ClearAlarmPumpEvent.self
+    case TempBasalDuration:
+      return TempBasalDurationPumpEvent.self
     case .ChangeTime:
       return ChangeTimePumpEvent.self
     case .JournalEntryPumpLowBattery:
@@ -106,8 +110,8 @@ public enum PumpEventType: UInt8 {
       return ChangeBGReminderOffsetPumpEvent.self
     case .ChangeAlarmClockTime:
       return ChangeAlarmClockTimePumpEvent.self
-    case .ChangeTempBasalPercent:
-      return ChangeTempBasalPercentPumpEvent.self
+    case .TempBasal:
+      return TempBasalPumpEvent.self
     case .JournalEntryPumpLowReservoir:
       return JournalEntryPumpLowReservoirPumpEvent.self
     case .AlarmClockReminder:
@@ -138,6 +142,8 @@ public enum PumpEventType: UInt8 {
       return ChangeBGReminderEnablePumpEvent.self
     case .ChangeAlarmClockEnable:
       return ChangeAlarmClockEnablePumpEvent.self
+    case .ChangeTempBasalType:
+      return ChangeTempBasalTypePumpEvent.self
     case .ChangeAlarmNotifyMode:
       return ChangeAlarmNotifyModePumpEvent.self
     case .ChangeTimeFormat:

@@ -263,7 +263,7 @@ class PumpOpsSynchronous: NSObject {
       let msg = makePumpMessage(.PumpAck, body: CarelinkShortMessageBody())
       if !curResp.lastFrame {
         let resp = sendAndListen(msg)
-        guard resp != nil else {
+        guard resp != nil && resp!.packetType == .Carelink && resp!.messageType == .GetHistoryPage else {
           throw PumpCommsError.RFCommsFailure
         }
         curResp = resp!.messageBody as! GetHistoryPageCarelinkMessageBody

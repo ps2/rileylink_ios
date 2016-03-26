@@ -68,6 +68,8 @@
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
 		C14C8A801C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
 		C14C8A821C9E0D57000F72C5 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A811C9E0D57000F72C5 /* Either.swift */; };
+		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
+		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
 		C1711A541C94E36000CB25BD /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -105,7 +107,7 @@
 		C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */; };
 		C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */; };
 		C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */; };
-		C1842C0D1C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */; };
+		C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */; };
 		C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */; };
 		C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */; };
 		C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */; };
@@ -315,6 +317,8 @@
 		C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEventsTests.swift; sourceTree = "<group>"; };
 		C14C8A811C9E0D57000F72C5 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
+		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; };
+		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; };
 		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
 		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
 		C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -354,7 +358,7 @@
 		C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeVariableBolusPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimePumpEvent.swift; sourceTree = "<group>"; };
 		C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeFormatPumpEvent.swift; sourceTree = "<group>"; };
-		C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalPercentPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorSetup2PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorRateOfChangeAlertSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeReservoirWarningTimePumpEvent.swift; sourceTree = "<group>"; };
@@ -725,7 +729,7 @@
 				C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */,
 				C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */,
 				C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */,
-				C1842BE31C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift */,
+				C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */,
 				C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */,
 				C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */,
 				C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */,
@@ -748,6 +752,8 @@
 				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
 				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
 				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
+				C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */,
+				C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */,
 				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
 				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
 			);
@@ -1096,7 +1102,7 @@
 				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,
 				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
 				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
-				C1842C0D1C8FA45100DB42AC /* ChangeTempBasalPercentPumpEvent.swift in Sources */,
+				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
 				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
 				C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */,
@@ -1139,7 +1145,9 @@
 				C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */,
 				C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */,
 				C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */,
+				C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */,
 				C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */,
+				C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */,
 				C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */,
 				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
 				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,

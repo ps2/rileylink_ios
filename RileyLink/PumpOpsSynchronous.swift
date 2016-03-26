@@ -10,7 +10,7 @@ import UIKit
 import MinimedKit
 
 public enum PumpCommsError: ErrorType {
-  case RFCommsFailure
+  case RFCommsFailure(String)
   case UnknownPumpModel
   case RileyLinkTimeout
 }
@@ -206,7 +206,7 @@ class PumpOpsSynchronous: NSObject {
     }
     
     guard let pumpModelStr = getPumpModel() else {
-      throw PumpCommsError.RFCommsFailure
+      throw PumpCommsError.RFCommsFailure("getPumpModel failed")
     }
     
     guard let pumpModel = PumpModel.byModelNumber(pumpModelStr) else {
@@ -239,7 +239,7 @@ class PumpOpsSynchronous: NSObject {
         break
       }
       events.insertContentsOf(page.events, at: 0)
-      pageNum++
+      pageNum += 1
     }
     return (events, pumpModel)
   }
@@ -251,7 +251,7 @@ class PumpOpsSynchronous: NSObject {
     let firstResponse = runCommandWithArguments(msg)
     
     guard firstResponse != nil else {
-      throw PumpCommsError.RFCommsFailure
+      throw PumpCommsError.RFCommsFailure("Pump not responding to GetHistory command")
     }
     
     var expectedFrameNum = 1
@@ -263,8 +263,11 @@ class PumpOpsSynchronous: NSObject {
       let msg = makePumpMessage(.PumpAck, body: CarelinkShortMessageBody())
       if !curResp.lastFrame {
         let resp = sendAndListen(msg)
-        guard resp != nil && resp!.packetType == .Carelink && resp!.messageType == .GetHistoryPage else {
-          throw PumpCommsError.RFCommsFailure
+        guard resp != nil else {
+          throw PumpCommsError.RFCommsFailure("Did not receive frame data from pump")
+        }
+        guard resp!.packetType == .Carelink && resp!.messageType == .GetHistoryPage else {
+          throw PumpCommsError.RFCommsFailure("Bad packet type or message type. Possible interference.")
         }
         curResp = resp!.messageBody as! GetHistoryPageCarelinkMessageBody
       } else {
@@ -276,7 +279,7 @@ class PumpOpsSynchronous: NSObject {
     }
     
     guard frameData.length == 1024 else {
-      throw PumpCommsError.RFCommsFailure
+      throw PumpCommsError.RFCommsFailure("Short history page: " + String(frameData.length) + " bytes. Expected 1024")
     }
     return frameData
   }

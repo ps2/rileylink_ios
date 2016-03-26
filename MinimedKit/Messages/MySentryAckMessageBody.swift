@@ -38,7 +38,7 @@ public struct MySentryAckMessageBody: MessageBody {
     public var txData: NSData {
         var buffer = self.dynamicType.emptyBuffer
 
-        buffer[0] = self.dynamicType.MessageCounter++
+        buffer[0] = UInt8(self.dynamicType.MessageCounter += 1)
         buffer.replaceRange(1...3, with: mySentryID)
 
         buffer.replaceRange(5..<5 + responseMessageTypes.count, with: responseMessageTypes.map({ $0.rawValue }))

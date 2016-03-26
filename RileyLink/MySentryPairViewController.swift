@@ -29,7 +29,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   @IBOutlet var progressView: UIProgressView!
   
   lazy var flailGestureRecognizer: UITapGestureRecognizer = {
-    let r = UITapGestureRecognizer.init(target: self, action: Selector("closeKeyboard:"))
+    let r = UITapGestureRecognizer.init(target: self, action: #selector(MySentryPairViewController.closeKeyboard(_:)))
     r.cancelsTouchesInView = false;
     r.enabled = false;
     return r
@@ -194,7 +194,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     }
     if (!handled && .Complete != self.state) {
       // Other random packet; ignore and start listening again.
-      performSelector(Selector("listenForPairing"), withObject:nil, afterDelay:0)
+      performSelector(#selector(MySentryPairViewController.listenForPairing), withObject:nil, afterDelay:0)
     }
   }
   
@@ -225,7 +225,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
         })
       } else {
         // Timed out. Try again
-        self.performSelector(Selector("listenForPairing"), withObject:nil, afterDelay:0)
+        self.performSelector(#selector(MySentryPairViewController.listenForPairing), withObject:nil, afterDelay:0)
       }
     }
   }

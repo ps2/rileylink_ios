@@ -16,10 +16,11 @@ func computeCRC16(data: NSData) -> UInt16 {
   var pdata = UnsafePointer<UInt8>(data.bytes)
   var nbytes = data.length
   /* loop over the buffer data */
-  while nbytes-- > 0 {
+  while nbytes > 0 {
     let idx = ((crc >> 8) ^ UInt16(pdata.memory)) & 0xff
     crc = ((crc << 8) ^ crcTable[Int(idx)]) & 0xffff
-    pdata++
+    pdata = pdata.successor()
+    nbytes -= 1
   }
   return crc
 }

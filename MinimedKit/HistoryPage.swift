@@ -42,7 +42,7 @@ public class HistoryPage {
     while offset < length {
       // Slurp up 0's
       if pageData[offset] as UInt8 == 0 {
-        offset++
+        offset += 1
         continue
       }
       guard let event = matchEvent(offset) else {

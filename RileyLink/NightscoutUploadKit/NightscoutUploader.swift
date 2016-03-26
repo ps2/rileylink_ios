@@ -49,15 +49,15 @@ class NightScoutUploader: NSObject {
     
     super.init()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("packetReceived:"), name: RILEYLINK_EVENT_PACKET_RECEIVED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("deviceConnected:"), name: RILEYLINK_EVENT_DEVICE_CONNECTED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("deviceDisconnected:"), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("rileyLinkAdded:"), name: RILEYLINK_EVENT_DEVICE_ADDED, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.packetReceived(_:)), name: RILEYLINK_EVENT_PACKET_RECEIVED, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.deviceConnected(_:)), name: RILEYLINK_EVENT_DEVICE_CONNECTED, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.deviceDisconnected(_:)), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.rileyLinkAdded(_:)), name: RILEYLINK_EVENT_DEVICE_ADDED, object: nil)
     
     UIDevice.currentDevice().batteryMonitoringEnabled = true
     lastHistoryAttempt = nil
     
-    getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:Selector("timerTriggered"), userInfo:nil, repeats:true)
+    getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(NightScoutUploader.timerTriggered), userInfo:nil, repeats:true)
       
     // This triggers one dump right away (in 10s).d
     //performSelector(Selector("fetchHistory"), withObject: nil, afterDelay: 10)
@@ -286,7 +286,7 @@ class NightScoutUploader: NSObject {
       handlePumpStatus(msg, device:device.deviceURI, rssi:rssi)
       // Just got a MySentry packet; in 25s would be a good time to poll.
       if !fetchHistoryScheduled {
-        performSelector(Selector("fetchHistory"), withObject:nil, afterDelay:25)
+        performSelector(#selector(NightScoutUploader.fetchHistory), withObject:nil, afterDelay:25)
         fetchHistoryScheduled = true
       }
       // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s

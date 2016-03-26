@@ -32,7 +32,6 @@
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
-  BOOL fetchingResponse;
   CmdBase *currentCommand;
   BOOL runningIdle;
   BOOL runningSession;
@@ -312,7 +311,6 @@
   
   if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
     [self dataReceivedFromRL:characteristic.value];
-    fetchingResponse = NO;
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_RESPONSE_COUNT_UUID]]) {
     if (!haveResponseCount) {
       // The first time we get a notice on this is just from connecting.
@@ -321,7 +319,6 @@
     } else {
       const unsigned char responseCount = ((const unsigned char*)(characteristic.value).bytes)[0];
       NSLog(@"Updated response count: %d", responseCount);
-      fetchingResponse = YES;
       [peripheral readValueForCharacteristic:dataCharacteristic];
     }
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {

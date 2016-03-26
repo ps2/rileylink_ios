@@ -11,16 +11,16 @@ import UIKit
 public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
   public let length: Int
   public let timestamp: NSDateComponents
-  let carbohydrates: Int
-  let bloodGlucose: Int
-  let foodEstimate: Double
-  let correctionEstimate: Double
-  let bolusEstimate: Double
-  let unabsorbedInsulinTotal: Double
-  let bgTargetLow: Int
-  let bgTargetHigh: Int
-  let insulinSensitivity: Int
-  let carbRatio: Double
+  public let carbohydrates: Int
+  public let bloodGlucose: Int
+  public let foodEstimate: Double
+  public let correctionEstimate: Double
+  public let bolusEstimate: Double
+  public let unabsorbedInsulinTotal: Double
+  public let bgTargetLow: Int
+  public let bgTargetHigh: Int
+  public let insulinSensitivity: Int
+  public let carbRatio: Double
 
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     

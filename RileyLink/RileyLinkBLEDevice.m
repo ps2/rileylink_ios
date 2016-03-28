@@ -50,6 +50,7 @@
 @implementation RileyLinkBLEDevice
 
 @synthesize peripheral = _peripheral;
+@synthesize lastIdle = _lastIdle;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
@@ -431,6 +432,8 @@
     cmd.listenChannel = idleListenChannel;
     cmd.timeoutMS = 65 * 1000;
     [self issueCommand:cmd];
+
+    _lastIdle = [NSDate date];
   }
 }
 

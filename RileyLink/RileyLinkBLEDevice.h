@@ -64,6 +64,8 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
 
+@property (nonatomic, readonly, nullable) NSDate *lastIdle;
+
 /**
  Initializes the device with a specified peripheral
 

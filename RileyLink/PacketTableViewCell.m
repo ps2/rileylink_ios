@@ -8,6 +8,7 @@
 
 #import "PacketTableViewCell.h"
 #import "MinimedKit.h"
+#import "NSData+Conversion.h"
 
 static NSDateFormatter *dateFormatter;
 static NSDateFormatter *timeFormatter;

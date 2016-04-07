@@ -8,7 +8,6 @@
 
 #import "RileyLinkDeviceViewController.h"
 #import "PacketLogViewController.h"
-#import "PumpChatViewController.h"
 #import "PacketGeneratorViewController.h"
 #import "RileyLinkBLEManager.h"
 

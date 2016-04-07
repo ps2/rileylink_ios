@@ -8,16 +8,18 @@
 
 #import "GetPacketCmd.h"
 
-@implementation GetPacketCmd
+@implementation GetPacketCmd 
 
 - (NSData*)data {
-  uint8_t cmd[4];
+  uint8_t cmd[6];
   cmd[0] = RILEYLINK_CMD_GET_PACKET;
   cmd[1] = _listenChannel;
-  cmd[2] = _timeoutMS >> 8;
-  cmd[3] = _timeoutMS & 0xff;
+  cmd[2] = _timeoutMS >> 24;
+  cmd[3] = (_timeoutMS >> 16) & 0xff;
+  cmd[4] = (_timeoutMS >> 8) & 0xff;
+  cmd[5] = _timeoutMS & 0xff;
   
-  return [NSData dataWithBytes:cmd length:4];
+  return [NSData dataWithBytes:cmd length:6];
 }
 
 @end

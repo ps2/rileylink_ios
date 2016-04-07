@@ -45,7 +45,12 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 
 
 @interface RileyLinkCmdSession : NSObject
-- (nonnull NSData *) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
+/**
+ Runs a command synchronously. I.E. this method will not return until the command 
+ finishes, or times out. Returns NO if the command timed out. The command's response
+ is set if the command did not time out. 
+ */
+- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
 @end
 
 @interface RileyLinkBLEDevice : NSObject
@@ -54,8 +59,6 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 @property (nonatomic, nullable, retain) NSNumber * RSSI;
 @property (nonatomic, nonnull, readonly) NSString * peripheralId;
 @property (nonatomic, nonnull, readonly, retain) CBPeripheral * peripheral;
-
-@property (nonatomic, nonnull, readonly, copy) NSArray *packets;
 
 @property (nonatomic, readonly) RileyLinkState state;
 

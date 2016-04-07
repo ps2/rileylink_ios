@@ -7,15 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */; };
 		43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		C10A62921C55F8E200E635EE /* UpdateRegisterCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */; };
-		C10D9B981C7D6F5200378342 /* PHEChangeMaxBasal.m in Sources */ = {isa = PBXBuildFile; fileRef = C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */; };
+		C10AB08B1C8519E2000F102E /* MySentryPairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */; };
+		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
+		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
+		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C10D9BCB1C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
+		C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
+		C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C10EAA9D1C5AE9A600B0838F /* GetVersionCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */; };
-		C10EAAA31C5B3A0800B0838F /* PumpOpsSynchronous.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA21C5B3A0800B0838F /* PumpOpsSynchronous.m */; };
-		C10EAAA61C5C507E00B0838F /* PumpOps.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EAAA51C5C507E00B0838F /* PumpOps.m */; };
 		C11F993D1BC406970013158C /* PumpState.m in Sources */ = {isa = PBXBuildFile; fileRef = C11F993C1BC406970013158C /* PumpState.m */; };
+		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
+		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
+		C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198621C8DF4C800BC374C /* HistoryPageTests.swift */; };
+		C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */; };
+		C12198A11C8DFC2D00BC374C /* BolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A01C8DFC2D00BC374C /* BolusCommand.swift */; };
+		C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */; };
+		C12198A51C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A41C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift */; };
+		C12198A71C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */; };
+		C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */; };
+		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
+		C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AE1C8F46FF00BC374C /* TimeFormat.swift */; };
+		C12198B11C8F6DD800BC374C /* TimeFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B01C8F6DD800BC374C /* TimeFormatTests.swift */; };
+		C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */; };
 		C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */; };
 		C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616311B65F4BC001FAD87 /* RileyLinkListTableViewController.m */; };
 		C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C126163B1B67CBC2001FAD87 /* RileyLinkTableViewCell.m */; };
@@ -30,7 +46,6 @@
 		C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616621B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m */; };
 		C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */; };
 		C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
-		C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */; };
 		C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
@@ -47,89 +62,151 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
-		C137A3901C08114600569851 /* CRC8.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A38F1C08114600569851 /* CRC8.m */; };
-		C137A3931C08142E00569851 /* CRC16.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3921C08142E00569851 /* CRC16.m */; };
-		C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A3951C08A35C00569851 /* NightScoutBolus.m */; };
-		C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C137A39B1C08A48100569851 /* NightScoutPump.m */; };
-		C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */; };
-		C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC201BFD847F00B0518F /* HistoryPage.m */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
-		C139AC811BFD8CF800B0518F /* PHEAlarmPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */; };
-		C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */; };
-		C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */; };
-		C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2C1BFD8CF800B0518F /* PHEBattery.m */; };
-		C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */; };
-		C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */; };
-		C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */; };
-		C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */; };
-		C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */; };
-		C139AC8B1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */; };
-		C139AC8C1BFD8CF800B0518F /* PHEChangeAudioBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */; };
-		C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */; };
-		C139AC8E1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */; };
-		C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */; };
-		C139AC901BFD8CF800B0518F /* PHEChangeBGReminderOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */; };
-		C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */; };
-		C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */; };
-		C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */; };
-		C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */; };
-		C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */; };
-		C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */; };
-		C139AC971BFD8CF800B0518F /* PHEChangeChildBlockEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */; };
-		C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */; };
-		C139AC991BFD8CF800B0518F /* PHEChangeParadigmLinkID.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */; };
-		C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */; };
-		C139AC9B1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */; };
-		C139AC9C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */; };
-		C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */; };
-		C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC601BFD8CF800B0518F /* PHEChangeTime.m */; };
-		C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */; };
-		C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */; };
-		C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */; };
-		C139ACA21BFD8CF800B0518F /* PHEClearAlarm.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */; };
-		C139ACA31BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */; };
-		C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */; };
-		C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */; };
-		C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */; };
-		C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */; };
-		C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC741BFD8CF800B0518F /* PHEPrime.m */; };
-		C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */; };
-		C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC781BFD8CF800B0518F /* PHEResume.m */; };
-		C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7A1BFD8CF800B0518F /* PHERewind.m */; };
-		C139ACAC1BFD8CF800B0518F /* PHESara6E.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7C1BFD8CF800B0518F /* PHESara6E.m */; };
-		C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC7E1BFD8CF800B0518F /* PHESuspend.m */; };
-		C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */; };
-		C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB01BFEDD9E00B0518F /* PumpModel.m */; };
-		C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */; };
-		C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */; };
-		C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */; };
-		C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */ = {isa = PBXBuildFile; fileRef = C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */; };
-		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
-		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
+		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
+		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
+		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
+		C14C8A801C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
+		C14C8A821C9E0D57000F72C5 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A811C9E0D57000F72C5 /* Either.swift */; };
+		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
+		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */; };
-		C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */; };
-		C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */; };
-		C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */; };
-		C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */; };
-		C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */ = {isa = PBXBuildFile; fileRef = C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */; };
-		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
+		C1711A541C94E36000CB25BD /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */; };
+		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
+		C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */; };
+		C1711A5C1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */; };
+		C1711A5E1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */; };
+		C1711A601C978C5A00CB25BD /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5F1C978C5A00CB25BD /* PumpOps.swift */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
+		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
+		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
+		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
+		C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */; };
+		C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */; };
+		C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */; };
+		C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */; };
+		C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */; };
+		C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */; };
+		C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */; };
+		C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */; };
+		C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */; };
+		C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */; };
+		C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */; };
+		C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */; };
+		C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */; };
+		C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */; };
+		C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */; };
+		C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */; };
+		C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */; };
+		C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */; };
+		C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */; };
+		C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */; };
+		C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */; };
+		C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */; };
+		C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */; };
+		C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */; };
+		C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */; };
+		C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */; };
+		C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */; };
+		C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */; };
+		C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */; };
+		C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */; };
+		C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */; };
+		C1842C121C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */; };
+		C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */; };
+		C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */; };
+		C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */; };
+		C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */; };
+		C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */; };
+		C1842C181C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */; };
+		C1842C191C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */; };
+		C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */; };
+		C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */; };
+		C1842C1C1C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */; };
+		C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */; };
+		C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */; };
+		C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */; };
+		C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */; };
+		C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */; };
+		C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */; };
+		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
+		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
+		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
+		C1842C291C908A3C00DB42AC /* NightscoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */; };
+		C1842C2B1C90DFB600DB42AC /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
+		C1842C2F1C90F6D900DB42AC /* NightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */; };
+		C1842C311C91D56400DB42AC /* BGCheckNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */; };
+		C1842C331C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */; };
+		C1890B5F1C94B9D9005F7474 /* PumpChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1890B5E1C94B9D9005F7474 /* PumpChatViewController.swift */; };
+		C19F94AB1C91DF6E00018F7D /* BolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */; };
 		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
+		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
+		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
+		C1C357941C929529009BDD4F /* StringCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357931C929529009BDD4F /* StringCrypto.swift */; };
 		C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */; };
 		C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D2B6801C30AAE000DB4AEA /* SendPacketCmd.m */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */; };
-		C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */; };
+		C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */; };
+		C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */; };
+		C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B01C826B6D006DBA60 /* MessageType.swift */; };
+		C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B11C826B6D006DBA60 /* PacketType.swift */; };
+		C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */; };
+		C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B91C826B92006DBA60 /* Int.swift */; };
+		C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
+		C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BB1C826B92006DBA60 /* NSDateComponents.swift */; };
+		C1EAD6C81C826B92006DBA60 /* CarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BD1C826B92006DBA60 /* CarelinkMessageBody.swift */; };
+		C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BE1C826B92006DBA60 /* MySentryAckMessageBody.swift */; };
+		C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BF1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift */; };
+		C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6C01C826B92006DBA60 /* MySentryAlertMessageBody.swift */; };
+		C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6C11C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift */; };
+		C1EAD6CD1C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6C21C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift */; };
+		C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */; };
+		C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */; };
+		C1EAD6D51C826C43006DBA60 /* MinimedKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */; };
+		C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */; };
+		C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */; };
+		C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */; };
+		C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D91C829104006DBA60 /* RFTools.swift */; };
+		C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */; };
+		C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
+		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
+		C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */; };
+		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
+		C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */; };
+		C1EAD6E91C83E121006DBA60 /* RFPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E81C83E121006DBA60 /* RFPacket.m */; };
+		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */; };
 		C1EF58971B3FA462001C8C80 /* MenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58961B3FA462001C8C80 /* MenuController.m */; };
 		C1EF589E1B3FBFE7001C8C80 /* MainAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF589D1B3FBFE7001C8C80 /* MainAppViewController.m */; };
+		C1F003901C894D2E00B381B9 /* ReceivingPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C10D9BCC1C8269D500378342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C10D9BC01C8269D500378342;
+			remoteInfo = MinimedKit;
+		};
+		C10D9BCE1C8269D500378342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
+		C10D9BD41C8269D500378342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C10D9BC01C8269D500378342;
+			remoteInfo = MinimedKit;
+		};
 		C12EA257198B436900309FA4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -139,24 +216,51 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C10D9BB81C82614F00378342 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		43737CDF1B7F06F100835F8D /* MySentryPairingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySentryPairingViewController.h; sourceTree = "<group>"; };
-		43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySentryPairingViewController.m; sourceTree = "<group>"; };
 		43C99C6D1B898B7100BC03D4 /* MenuHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuHeaderTableViewCell.h; sourceTree = "<group>"; };
 		43C99C6E1B898B7100BC03D4 /* MenuHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuHeaderTableViewCell.m; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		C10A62901C55F8E200E635EE /* UpdateRegisterCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRegisterCmd.h; sourceTree = "<group>"; };
 		C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRegisterCmd.m; sourceTree = "<group>"; };
-		C10D9B961C7D6F5200378342 /* PHEChangeMaxBasal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeMaxBasal.h; sourceTree = "<group>"; };
-		C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeMaxBasal.m; sourceTree = "<group>"; };
+		C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MySentryPairViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
+		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
+		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C10D9BC31C8269D500378342 /* MinimedKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimedKit.h; sourceTree = "<group>"; };
+		C10D9BC51C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C10D9BD31C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C10EAA9B1C5AE9A600B0838F /* GetVersionCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetVersionCmd.h; sourceTree = "<group>"; };
 		C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetVersionCmd.m; sourceTree = "<group>"; };
-		C10EAAA11C5B3A0800B0838F /* PumpOpsSynchronous.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpOpsSynchronous.h; sourceTree = "<group>"; };
-		C10EAAA21C5B3A0800B0838F /* PumpOpsSynchronous.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpOpsSynchronous.m; sourceTree = "<group>"; };
-		C10EAAA41C5C507E00B0838F /* PumpOps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpOps.h; sourceTree = "<group>"; };
-		C10EAAA51C5C507E00B0838F /* PumpOps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpOps.m; sourceTree = "<group>"; };
 		C11F993B1BC406970013158C /* PumpState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpState.h; sourceTree = "<group>"; };
 		C11F993C1BC406970013158C /* PumpState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpState.m; sourceTree = "<group>"; };
+		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
+		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C12198621C8DF4C800BC374C /* HistoryPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTests.swift; sourceTree = "<group>"; };
+		C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C12198A01C8DFC2D00BC374C /* BolusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusCommand.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C12198A41C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sara6EPumpEvent.swift; sourceTree = "<group>"; };
+		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; };
+		C12198AE1C8F46FF00BC374C /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
+		C12198B01C8F6DD800BC374C /* TimeFormatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormatTests.swift; sourceTree = "<group>"; };
+		C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusWizardEstimatePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C126162A1B65E9BF001FAD87 /* RileyLinkDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkDeviceViewController.h; sourceTree = "<group>"; };
 		C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkDeviceViewController.m; sourceTree = "<group>"; };
 		C12616301B65F4BC001FAD87 /* RileyLinkListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkListTableViewController.h; sourceTree = "<group>"; };
@@ -182,9 +286,7 @@
 		C12616631B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
 		C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		C12616651B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
-		C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
-		C126166B1B76ECBA001FAD87 /* PumpChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpChatViewController.h; sourceTree = "<group>"; };
-		C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpChatViewController.m; sourceTree = "<group>"; };
+		C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C126166E1B7790DF001FAD87 /* SendAndListenCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAndListenCmd.h; sourceTree = "<group>"; };
 		C126166F1B7790DF001FAD87 /* SendAndListenCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendAndListenCmd.m; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
@@ -208,146 +310,93 @@
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C12EA26B198B456D00309FA4 /* NightscoutWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightscoutWebView.h; sourceTree = "<group>"; };
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
-		C137A38E1C08114600569851 /* CRC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC8.h; sourceTree = "<group>"; };
-		C137A38F1C08114600569851 /* CRC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC8.m; sourceTree = "<group>"; };
-		C137A3911C08142E00569851 /* CRC16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRC16.h; sourceTree = "<group>"; };
-		C137A3921C08142E00569851 /* CRC16.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRC16.m; sourceTree = "<group>"; };
-		C137A3941C08A35C00569851 /* NightScoutBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutBolus.h; sourceTree = "<group>"; };
-		C137A3951C08A35C00569851 /* NightScoutBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 3; lastKnownFileType = sourcecode.c.objc; path = NightScoutBolus.m; sourceTree = "<group>"; };
-		C137A39A1C08A48100569851 /* NightScoutPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutPump.h; sourceTree = "<group>"; };
-		C137A39B1C08A48100569851 /* NightScoutPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutPump.m; sourceTree = "<group>"; };
-		C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpHistoryEventBase.h; sourceTree = "<group>"; };
-		C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpHistoryEventBase.m; sourceTree = "<group>"; };
-		C139AC1F1BFD847F00B0518F /* HistoryPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPage.h; sourceTree = "<group>"; };
-		C139AC201BFD847F00B0518F /* HistoryPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPage.m; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
-		C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmPump.h; sourceTree = "<group>"; };
-		C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmPump.m; sourceTree = "<group>"; };
-		C139AC271BFD8CF800B0518F /* PHEAlarmSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmSensor.h; sourceTree = "<group>"; };
-		C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmSensor.m; sourceTree = "<group>"; };
-		C139AC291BFD8CF800B0518F /* PHEBasalProfileStart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBasalProfileStart.h; sourceTree = "<group>"; };
-		C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBasalProfileStart.m; sourceTree = "<group>"; };
-		C139AC2B1BFD8CF800B0518F /* PHEBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBattery.h; sourceTree = "<group>"; };
-		C139AC2C1BFD8CF800B0518F /* PHEBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBattery.m; sourceTree = "<group>"; };
-		C139AC2D1BFD8CF800B0518F /* PHEBgReceived.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBgReceived.h; sourceTree = "<group>"; };
-		C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBgReceived.m; sourceTree = "<group>"; };
-		C139AC2F1BFD8CF800B0518F /* PHEBolusNormal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusNormal.h; sourceTree = "<group>"; };
-		C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusNormal.m; sourceTree = "<group>"; };
-		C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHECalBGForPH.h; sourceTree = "<group>"; };
-		C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHECalBGForPH.m; sourceTree = "<group>"; };
-		C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockEnable.h; sourceTree = "<group>"; };
-		C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmClockEnable.m; sourceTree = "<group>"; };
-		C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmClockTime.h; sourceTree = "<group>"; };
-		C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmClockTime.m; sourceTree = "<group>"; };
-		C139AC391BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAlarmNotifyMode.h; sourceTree = "<group>"; };
-		C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAlarmNotifyMode.m; sourceTree = "<group>"; };
-		C139AC3B1BFD8CF800B0518F /* PHEChangeAudioBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeAudioBolus.h; sourceTree = "<group>"; };
-		C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeAudioBolus.m; sourceTree = "<group>"; };
-		C139AC3D1BFD8CF800B0518F /* PHEChangeBasalProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBasalProfile.h; sourceTree = "<group>"; };
-		C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBasalProfile.m; sourceTree = "<group>"; };
-		C139AC3F1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBasalProfilePattern.h; sourceTree = "<group>"; };
-		C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBasalProfilePattern.m; sourceTree = "<group>"; };
-		C139AC411BFD8CF800B0518F /* PHEChangeBGReminderEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBGReminderEnable.h; sourceTree = "<group>"; };
-		C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBGReminderEnable.m; sourceTree = "<group>"; };
-		C139AC431BFD8CF800B0518F /* PHEChangeBGReminderOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBGReminderOffset.h; sourceTree = "<group>"; };
-		C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBGReminderOffset.m; sourceTree = "<group>"; };
-		C139AC451BFD8CF800B0518F /* PHEChangeBolusReminderEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusReminderEnable.h; sourceTree = "<group>"; };
-		C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusReminderEnable.m; sourceTree = "<group>"; };
-		C139AC471BFD8CF800B0518F /* PHEChangeBolusReminderTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusReminderTime.h; sourceTree = "<group>"; };
-		C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusReminderTime.m; sourceTree = "<group>"; };
-		C139AC491BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusScrollStepSize.h; sourceTree = "<group>"; };
-		C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusScrollStepSize.m; sourceTree = "<group>"; };
-		C139AC4B1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeBolusWizardSetup.h; sourceTree = "<group>"; };
-		C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeBolusWizardSetup.m; sourceTree = "<group>"; };
-		C139AC4D1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeCaptureEventEnable.h; sourceTree = "<group>"; };
-		C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeCaptureEventEnable.m; sourceTree = "<group>"; };
-		C139AC4F1BFD8CF800B0518F /* PHEChangeCarbUnits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeCarbUnits.h; sourceTree = "<group>"; };
-		C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeCarbUnits.m; sourceTree = "<group>"; };
-		C139AC511BFD8CF800B0518F /* PHEChangeChildBlockEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeChildBlockEnable.h; sourceTree = "<group>"; };
-		C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeChildBlockEnable.m; sourceTree = "<group>"; };
-		C139AC531BFD8CF800B0518F /* PHEChangeMaxBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeMaxBolus.h; sourceTree = "<group>"; };
-		C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeMaxBolus.m; sourceTree = "<group>"; };
-		C139AC551BFD8CF800B0518F /* PHEChangeParadigmLinkID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeParadigmLinkID.h; sourceTree = "<group>"; };
-		C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeParadigmLinkID.m; sourceTree = "<group>"; };
-		C139AC571BFD8CF800B0518F /* PHEChangeReservoirWarningTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeReservoirWarningTime.h; sourceTree = "<group>"; };
-		C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeReservoirWarningTime.m; sourceTree = "<group>"; };
-		C139AC591BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeSensorRateOfChangeAlertSetup.h; sourceTree = "<group>"; };
-		C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeSensorRateOfChangeAlertSetup.m; sourceTree = "<group>"; };
-		C139AC5B1BFD8CF800B0518F /* PHEChangeSensorSetup2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeSensorSetup2.h; sourceTree = "<group>"; };
-		C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeSensorSetup2.m; sourceTree = "<group>"; };
-		C139AC5D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTempBasalPercent.h; sourceTree = "<group>"; };
-		C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTempBasalPercent.m; sourceTree = "<group>"; };
-		C139AC5F1BFD8CF800B0518F /* PHEChangeTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTime.h; sourceTree = "<group>"; };
-		C139AC601BFD8CF800B0518F /* PHEChangeTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTime.m; sourceTree = "<group>"; };
-		C139AC611BFD8CF800B0518F /* PHEChangeTimeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeTimeFormat.h; sourceTree = "<group>"; };
-		C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeTimeFormat.m; sourceTree = "<group>"; };
-		C139AC631BFD8CF800B0518F /* PHEChangeVariableBolus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeVariableBolus.h; sourceTree = "<group>"; };
-		C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeVariableBolus.m; sourceTree = "<group>"; };
-		C139AC651BFD8CF800B0518F /* PHEChangeWatchdogEnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogEnable.h; sourceTree = "<group>"; };
-		C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogEnable.m; sourceTree = "<group>"; };
-		C139AC671BFD8CF800B0518F /* PHEClearAlarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEClearAlarm.h; sourceTree = "<group>"; };
-		C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEClearAlarm.m; sourceTree = "<group>"; };
-		C139AC691BFD8CF800B0518F /* PHEDeleteAlarmClockTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteAlarmClockTime.h; sourceTree = "<group>"; };
-		C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteAlarmClockTime.m; sourceTree = "<group>"; };
-		C139AC6B1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteBolusReminderTime.h; sourceTree = "<group>"; };
-		C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteBolusReminderTime.m; sourceTree = "<group>"; };
-		C139AC6D1BFD8CF800B0518F /* PHEEnableDisableRemote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEEnableDisableRemote.h; sourceTree = "<group>"; };
-		C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEEnableDisableRemote.m; sourceTree = "<group>"; };
-		C139AC6F1BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryExerciseMarker.h; sourceTree = "<group>"; };
-		C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryExerciseMarker.m; sourceTree = "<group>"; };
-		C139AC711BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryPumpLowReservoir.h; sourceTree = "<group>"; };
-		C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryPumpLowReservoir.m; sourceTree = "<group>"; };
-		C139AC731BFD8CF800B0518F /* PHEPrime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEPrime.h; sourceTree = "<group>"; };
-		C139AC741BFD8CF800B0518F /* PHEPrime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEPrime.m; sourceTree = "<group>"; };
-		C139AC751BFD8CF800B0518F /* PHEResultDailyTotal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEResultDailyTotal.h; sourceTree = "<group>"; };
-		C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEResultDailyTotal.m; sourceTree = "<group>"; };
-		C139AC771BFD8CF800B0518F /* PHEResume.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEResume.h; sourceTree = "<group>"; };
-		C139AC781BFD8CF800B0518F /* PHEResume.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEResume.m; sourceTree = "<group>"; };
-		C139AC791BFD8CF800B0518F /* PHERewind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHERewind.h; sourceTree = "<group>"; };
-		C139AC7A1BFD8CF800B0518F /* PHERewind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHERewind.m; sourceTree = "<group>"; };
-		C139AC7B1BFD8CF800B0518F /* PHESara6E.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHESara6E.h; sourceTree = "<group>"; };
-		C139AC7C1BFD8CF800B0518F /* PHESara6E.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHESara6E.m; sourceTree = "<group>"; };
-		C139AC7D1BFD8CF800B0518F /* PHESuspend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHESuspend.h; sourceTree = "<group>"; };
-		C139AC7E1BFD8CF800B0518F /* PHESuspend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHESuspend.m; sourceTree = "<group>"; };
-		C139AC7F1BFD8CF800B0518F /* PHEUnabsorbedInsulin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEUnabsorbedInsulin.h; sourceTree = "<group>"; };
-		C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEUnabsorbedInsulin.m; sourceTree = "<group>"; };
-		C139ACAF1BFEDD9E00B0518F /* PumpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpModel.h; sourceTree = "<group>"; };
-		C139ACB01BFEDD9E00B0518F /* PumpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpModel.m; sourceTree = "<group>"; };
-		C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEAlarmClockReminder.h; sourceTree = "<group>"; };
-		C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEAlarmClockReminder.m; sourceTree = "<group>"; };
-		C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEBolusWizardBolusEstimate.h; sourceTree = "<group>"; };
-		C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEBolusWizardBolusEstimate.m; sourceTree = "<group>"; };
-		C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEJournalEntryPumpLowBattery.h; sourceTree = "<group>"; };
-		C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEJournalEntryPumpLowBattery.m; sourceTree = "<group>"; };
-		C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEModel522ResultTotals.h; sourceTree = "<group>"; };
-		C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEModel522ResultTotals.m; sourceTree = "<group>"; };
-		C13DB3A31B1583E900121E02 /* MessageBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBase.h; sourceTree = "<group>"; };
-		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
-		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
-		C14AA33A1B1A2FB100299A55 /* MeterMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterMessage.m; sourceTree = "<group>"; };
+		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
+		C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEventsTests.swift; sourceTree = "<group>"; };
+		C14C8A811C9E0D57000F72C5 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
+		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; };
+		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; };
 		C152C19A1C3875EA0009B4B8 /* GetPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPacketCmd.h; sourceTree = "<group>"; };
 		C152C19B1C3875EA0009B4B8 /* GetPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPacketCmd.m; sourceTree = "<group>"; };
-		C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceLinkMessage.h; sourceTree = "<group>"; };
-		C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceLinkMessage.m; sourceTree = "<group>"; };
-		C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindDeviceMessage.h; sourceTree = "<group>"; };
-		C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindDeviceMessage.m; sourceTree = "<group>"; };
-		C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeOtherDeviceID.h; sourceTree = "<group>"; };
-		C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeOtherDeviceID.m; sourceTree = "<group>"; };
-		C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEChangeWatchdogMarriageProfile.h; sourceTree = "<group>"; };
-		C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEChangeWatchdogMarriageProfile.m; sourceTree = "<group>"; };
-		C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHEDeleteOtherDeviceID.h; sourceTree = "<group>"; };
-		C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHEDeleteOtherDeviceID.m; sourceTree = "<group>"; };
-		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
-		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
+		C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonPressCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetHistoryPageCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1711A5F1C978C5A00CB25BD /* PumpOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
-		C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISO8601DateFormatter.m; sourceTree = "<group>"; };
-		C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightScoutUploader.h; sourceTree = "<group>"; };
-		C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightScoutUploader.m; sourceTree = "<group>"; };
+		C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ISO8601DateFormatter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
+		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
+		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
+		C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UnabsorbedInsulinPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusNormalPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalProfileStartPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalBGForPHPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGReceivedPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewindPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PrimePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAlarmPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmClockReminderPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResumePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultDailyTotalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model522ResultTotalsPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryPumpLowReservoirPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryPumpLowBatteryPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryExerciseMarkerPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableDisableRemotePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteOtherDeviceIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteBolusReminderTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearAlarmPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeWatchdogMarriageProfilePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeWatchdogEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeVariableBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeFormatPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorSetup2PumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorRateOfChangeAlertSetupPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeReservoirWarningTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeParadigmLinkIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeOtherDeviceIDPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMaxBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMaxBasalPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeChildBlockEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarbUnitsPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCaptureEventEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusScrollStepSizePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusReminderTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusReminderEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBGReminderOffsetPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBGReminderEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBasalProfilePatternPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAudioBolusPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmNotifyModePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeAlarmClockEnablePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryPumpEvent.swift; sourceTree = "<group>"; };
+		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; };
+		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
+		C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEvents.swift; sourceTree = "<group>"; };
+		C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGCheckNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1890B5E1C94B9D9005F7474 /* PumpChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpChatViewController.swift; sourceTree = "<group>"; };
+		C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
 		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
+		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessage.swift; path = Messages/MeterMessage.swift; sourceTree = "<group>"; };
+		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
+		C1C357931C929529009BDD4F /* StringCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringCrypto.swift; sourceTree = "<group>"; };
 		C1D2B67C1C2FAD0100DB4AEA /* CmdBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdBase.h; sourceTree = "<group>"; };
 		C1D2B67D1C2FAD0100DB4AEA /* CmdBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdBase.m; sourceTree = "<group>"; };
 		C1D2B67F1C30AAE000DB4AEA /* SendPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPacketCmd.h; sourceTree = "<group>"; };
@@ -356,21 +405,67 @@
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E535EB1991E49600C2AC49 /* RileyLinkBLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEManager.h; sourceTree = "<group>"; };
 		C1E535EC1991E49600C2AC49 /* RileyLinkBLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkBLEManager.m; sourceTree = "<group>"; };
-		C1E535EE1991E6A200C2AC49 /* MinimedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimedPacket.h; sourceTree = "<group>"; };
-		C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimedPacket.m; sourceTree = "<group>"; };
+		C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
+		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1EAD6B11C826B6D006DBA60 /* PacketType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketType.swift; sourceTree = "<group>"; };
+		C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpMessage.swift; sourceTree = "<group>"; };
+		C1EAD6B91C826B92006DBA60 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		C1EAD6BA1C826B92006DBA60 /* NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSData.swift; sourceTree = "<group>"; };
+		C1EAD6BB1C826B92006DBA60 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
+		C1EAD6BD1C826B92006DBA60 /* CarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6BE1C826B92006DBA60 /* MySentryAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryAckMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6BF1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryAlertClearedMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6C01C826B92006DBA60 /* MySentryAlertMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryAlertMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6C11C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryPumpStatusMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6C21C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerOnCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadSettingsCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnknownMessageBody.swift; sourceTree = "<group>"; };
+		C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedKitTests.swift; sourceTree = "<group>"; };
+		C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MySentryPumpStatusMessageBodyTests.swift; path = ../MySentryPumpStatusMessageBodyTests.swift; sourceTree = "<group>"; };
+		C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDataTests.swift; sourceTree = "<group>"; };
+		C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadSettingsCarelinkMessageBodyTests.swift; path = ../ReadSettingsCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C1EAD6D91C829104006DBA60 /* RFTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFTools.swift; sourceTree = "<group>"; };
+		C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFToolsTests.swift; sourceTree = "<group>"; };
+		C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8.swift; sourceTree = "<group>"; };
+		C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8Tests.swift; sourceTree = "<group>"; };
+		C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16.swift; sourceTree = "<group>"; };
+		C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16Tests.swift; sourceTree = "<group>"; };
+		C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpMessageTests.swift; sourceTree = "<group>"; };
+		C1EAD6E71C83E121006DBA60 /* RFPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPacket.h; sourceTree = "<group>"; };
+		C1EAD6E81C83E121006DBA60 /* RFPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPacket.m; sourceTree = "<group>"; };
+		C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Bridging-Header.h"; sourceTree = "<group>"; };
+		C1EB955C1C887FE5002517DF /* HistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
 		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		C1EF58871B3F93FE001C8C80 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
-		C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
-		C1EF588B1B3F9748001C8C80 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		C1EF588A1B3F9748001C8C80 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SWRevealViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C1EF588B1B3F9748001C8C80 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = SWRevealViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C1EF58951B3FA462001C8C80 /* MenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuController.h; sourceTree = "<group>"; };
 		C1EF58961B3FA462001C8C80 /* MenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuController.m; sourceTree = "<group>"; };
 		C1EF589C1B3FBFE7001C8C80 /* MainAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainAppViewController.h; sourceTree = "<group>"; };
 		C1EF589D1B3FBFE7001C8C80 /* MainAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainAppViewController.m; sourceTree = "<group>"; };
+		C1F0038E1C894D2E00B381B9 /* ReceivingPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivingPacketCmd.h; sourceTree = "<group>"; };
+		C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceivingPacketCmd.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C10D9BBD1C8269D500378342 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C10D9BC71C8269D500378342 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C10D9BCB1C8269D500378342 /* MinimedKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C12EA234198B436800309FA4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +473,7 @@
 				C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */,
 				C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */,
 				C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */,
+				C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,17 +491,75 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C10D9BC21C8269D500378342 /* MinimedKit */ = {
+			isa = PBXGroup;
+			children = (
+				C1842BB91C8E15C600DB42AC /* PumpEvents */,
+				C12198A01C8DFC2D00BC374C /* BolusCommand.swift */,
+				C10D9BC31C8269D500378342 /* MinimedKit.h */,
+				C10D9BC51C8269D500378342 /* Info.plist */,
+				C1EAD6B81C826B92006DBA60 /* Extensions */,
+				C1EAD6BC1C826B92006DBA60 /* Messages */,
+				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
+				C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */,
+				C1EAD6B01C826B6D006DBA60 /* MessageType.swift */,
+				C1EAD6B11C826B6D006DBA60 /* PacketType.swift */,
+				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
+				C1C3578E1C927303009BDD4F /* MeterMessage.swift */,
+				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
+				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
+				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
+				C1EB955C1C887FE5002517DF /* HistoryPage.swift */,
+				C1842BBA1C8E184300DB42AC /* PumpModel.swift */,
+				C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */,
+				C12198AE1C8F46FF00BC374C /* TimeFormat.swift */,
+			);
+			path = MinimedKit;
+			sourceTree = "<group>";
+		};
+		C10D9BD01C8269D500378342 /* MinimedKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				C121985D1C8DE72500BC374C /* Messages */,
+				C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */,
+				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
+				C10D9BD31C8269D500378342 /* Info.plist */,
+				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
+				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
+				C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */,
+				C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */,
+				C12198621C8DF4C800BC374C /* HistoryPageTests.swift */,
+				C12198B01C8F6DD800BC374C /* TimeFormatTests.swift */,
+				C1C357901C92733A009BDD4F /* MeterMessageTests.swift */,
+			);
+			path = MinimedKitTests;
+			sourceTree = "<group>";
+		};
 		C11F993A1BC405AA0013158C /* Pump */ = {
 			isa = PBXGroup;
 			children = (
 				C11F993B1BC406970013158C /* PumpState.h */,
 				C11F993C1BC406970013158C /* PumpState.m */,
-				C10EAAA11C5B3A0800B0838F /* PumpOpsSynchronous.h */,
-				C10EAAA21C5B3A0800B0838F /* PumpOpsSynchronous.m */,
-				C10EAAA41C5C507E00B0838F /* PumpOps.h */,
-				C10EAAA51C5C507E00B0838F /* PumpOps.m */,
+				C1711A531C94E36000CB25BD /* PumpOpsSynchronous.swift */,
+				C1711A5F1C978C5A00CB25BD /* PumpOps.swift */,
+				C14C8A811C9E0D57000F72C5 /* Either.swift */,
 			);
 			name = Pump;
+			sourceTree = "<group>";
+		};
+		C121985D1C8DE72500BC374C /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */,
+				C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */,
+				C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */,
+				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
+				C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */,
+				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
+				C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */,
+				C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 		C12616391B67CB9C001FAD87 /* TableViewCells */ = {
@@ -446,23 +600,12 @@
 			path = TPKeyboardAvoiding;
 			sourceTree = "<group>";
 		};
-		C12964E91B1581D200516761 /* MinimedRF */ = {
-			isa = PBXGroup;
-			children = (
-				C1E535EE1991E6A200C2AC49 /* MinimedPacket.h */,
-				C1E535EF1991E6A200C2AC49 /* MinimedPacket.m */,
-				C137A38E1C08114600569851 /* CRC8.h */,
-				C137A38F1C08114600569851 /* CRC8.m */,
-				C137A3911C08142E00569851 /* CRC16.h */,
-				C137A3921C08142E00569851 /* CRC16.m */,
-			);
-			name = MinimedRF;
-			sourceTree = "<group>";
-		};
 		C12EA22E198B436800309FA4 = {
 			isa = PBXGroup;
 			children = (
 				C12EA240198B436800309FA4 /* RileyLink */,
+				C10D9BC21C8269D500378342 /* MinimedKit */,
+				C10D9BD01C8269D500378342 /* MinimedKitTests */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 			);
@@ -473,6 +616,8 @@
 			children = (
 				C12EA237198B436800309FA4 /* RileyLink.app */,
 				C12EA252198B436800309FA4 /* RileyLinkTests.xctest */,
+				C10D9BC11C8269D500378342 /* MinimedKit.framework */,
+				C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -497,11 +642,9 @@
 				C12616451B685F35001FAD87 /* CoreData */,
 				C12616391B67CB9C001FAD87 /* TableViewCells */,
 				C1EF589A1B3FBA32001C8C80 /* ViewControllers */,
-				C1EF589B1B3FBA5D001C8C80 /* Nightscout */,
+				C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */,
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
-				C14B4EDF1B85A31F00776647 /* MinimedProtocol */,
-				C12964E91B1581D200516761 /* MinimedRF */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
 				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
@@ -524,6 +667,7 @@
 		C12EA241198B436800309FA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */,
 				C12EA242198B436800309FA4 /* RileyLink-Info.plist */,
 				C12EA243198B436800309FA4 /* InfoPlist.strings */,
 				C12EA246198B436800309FA4 /* main.m */,
@@ -537,6 +681,7 @@
 			isa = PBXGroup;
 			children = (
 				C12EA25F198B436900309FA4 /* RileyLinkTests.m */,
+				C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */,
 				C12EA25A198B436900309FA4 /* Supporting Files */,
 			);
 			path = RileyLinkTests;
@@ -551,141 +696,68 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		C139AB8E1BFD6A6000B0518F /* PumpHistoryEvents */ = {
+		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
 			isa = PBXGroup;
 			children = (
-				C139ACB21C00046D00B0518F /* PHEAlarmClockReminder.h */,
-				C139ACB31C00046D00B0518F /* PHEAlarmClockReminder.m */,
-				C139AC251BFD8CF800B0518F /* PHEAlarmPump.h */,
-				C139AC261BFD8CF800B0518F /* PHEAlarmPump.m */,
-				C139AC271BFD8CF800B0518F /* PHEAlarmSensor.h */,
-				C139AC281BFD8CF800B0518F /* PHEAlarmSensor.m */,
-				C139AC291BFD8CF800B0518F /* PHEBasalProfileStart.h */,
-				C139AC2A1BFD8CF800B0518F /* PHEBasalProfileStart.m */,
-				C139AC2B1BFD8CF800B0518F /* PHEBattery.h */,
-				C139AC2C1BFD8CF800B0518F /* PHEBattery.m */,
-				C139AC2D1BFD8CF800B0518F /* PHEBgReceived.h */,
-				C139AC2E1BFD8CF800B0518F /* PHEBgReceived.m */,
-				C139AC2F1BFD8CF800B0518F /* PHEBolusNormal.h */,
-				C139AC301BFD8CF800B0518F /* PHEBolusNormal.m */,
-				C139ACB41C00046D00B0518F /* PHEBolusWizardBolusEstimate.h */,
-				C139ACB51C00046D00B0518F /* PHEBolusWizardBolusEstimate.m */,
-				C139AC331BFD8CF800B0518F /* PHECalBGForPH.h */,
-				C139AC341BFD8CF800B0518F /* PHECalBGForPH.m */,
-				C139AC351BFD8CF800B0518F /* PHEChangeAlarmClockEnable.h */,
-				C139AC361BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m */,
-				C139AC371BFD8CF800B0518F /* PHEChangeAlarmClockTime.h */,
-				C139AC381BFD8CF800B0518F /* PHEChangeAlarmClockTime.m */,
-				C139AC391BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.h */,
-				C139AC3A1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m */,
-				C139AC3B1BFD8CF800B0518F /* PHEChangeAudioBolus.h */,
-				C139AC3C1BFD8CF800B0518F /* PHEChangeAudioBolus.m */,
-				C139AC3D1BFD8CF800B0518F /* PHEChangeBasalProfile.h */,
-				C139AC3E1BFD8CF800B0518F /* PHEChangeBasalProfile.m */,
-				C139AC3F1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.h */,
-				C139AC401BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m */,
-				C139AC411BFD8CF800B0518F /* PHEChangeBGReminderEnable.h */,
-				C139AC421BFD8CF800B0518F /* PHEChangeBGReminderEnable.m */,
-				C139AC431BFD8CF800B0518F /* PHEChangeBGReminderOffset.h */,
-				C139AC441BFD8CF800B0518F /* PHEChangeBGReminderOffset.m */,
-				C139AC451BFD8CF800B0518F /* PHEChangeBolusReminderEnable.h */,
-				C139AC461BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m */,
-				C139AC471BFD8CF800B0518F /* PHEChangeBolusReminderTime.h */,
-				C139AC481BFD8CF800B0518F /* PHEChangeBolusReminderTime.m */,
-				C139AC491BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.h */,
-				C139AC4A1BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m */,
-				C139AC4B1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.h */,
-				C139AC4C1BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m */,
-				C139AC4D1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.h */,
-				C139AC4E1BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m */,
-				C139AC4F1BFD8CF800B0518F /* PHEChangeCarbUnits.h */,
-				C139AC501BFD8CF800B0518F /* PHEChangeCarbUnits.m */,
-				C139AC511BFD8CF800B0518F /* PHEChangeChildBlockEnable.h */,
-				C139AC521BFD8CF800B0518F /* PHEChangeChildBlockEnable.m */,
-				C139AC531BFD8CF800B0518F /* PHEChangeMaxBolus.h */,
-				C139AC541BFD8CF800B0518F /* PHEChangeMaxBolus.m */,
-				C139AC551BFD8CF800B0518F /* PHEChangeParadigmLinkID.h */,
-				C139AC561BFD8CF800B0518F /* PHEChangeParadigmLinkID.m */,
-				C139AC571BFD8CF800B0518F /* PHEChangeReservoirWarningTime.h */,
-				C139AC581BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m */,
-				C139AC591BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.h */,
-				C139AC5A1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m */,
-				C139AC5B1BFD8CF800B0518F /* PHEChangeSensorSetup2.h */,
-				C139AC5C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m */,
-				C139AC5D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.h */,
-				C139AC5E1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m */,
-				C139AC5F1BFD8CF800B0518F /* PHEChangeTime.h */,
-				C139AC601BFD8CF800B0518F /* PHEChangeTime.m */,
-				C139AC611BFD8CF800B0518F /* PHEChangeTimeFormat.h */,
-				C139AC621BFD8CF800B0518F /* PHEChangeTimeFormat.m */,
-				C139AC631BFD8CF800B0518F /* PHEChangeVariableBolus.h */,
-				C139AC641BFD8CF800B0518F /* PHEChangeVariableBolus.m */,
-				C139AC651BFD8CF800B0518F /* PHEChangeWatchdogEnable.h */,
-				C139AC661BFD8CF800B0518F /* PHEChangeWatchdogEnable.m */,
-				C139AC671BFD8CF800B0518F /* PHEClearAlarm.h */,
-				C139AC681BFD8CF800B0518F /* PHEClearAlarm.m */,
-				C139AC691BFD8CF800B0518F /* PHEDeleteAlarmClockTime.h */,
-				C139AC6A1BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m */,
-				C139AC6B1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.h */,
-				C139AC6C1BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m */,
-				C139AC6D1BFD8CF800B0518F /* PHEEnableDisableRemote.h */,
-				C139AC6E1BFD8CF800B0518F /* PHEEnableDisableRemote.m */,
-				C139AC6F1BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.h */,
-				C139AC701BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m */,
-				C139ACB61C00046D00B0518F /* PHEJournalEntryPumpLowBattery.h */,
-				C139ACB71C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m */,
-				C139AC711BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.h */,
-				C139AC721BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m */,
-				C139ACB81C00046D00B0518F /* PHEModel522ResultTotals.h */,
-				C139ACB91C00046D00B0518F /* PHEModel522ResultTotals.m */,
-				C139AC731BFD8CF800B0518F /* PHEPrime.h */,
-				C139AC741BFD8CF800B0518F /* PHEPrime.m */,
-				C139AC751BFD8CF800B0518F /* PHEResultDailyTotal.h */,
-				C139AC761BFD8CF800B0518F /* PHEResultDailyTotal.m */,
-				C139AC771BFD8CF800B0518F /* PHEResume.h */,
-				C139AC781BFD8CF800B0518F /* PHEResume.m */,
-				C139AC791BFD8CF800B0518F /* PHERewind.h */,
-				C139AC7A1BFD8CF800B0518F /* PHERewind.m */,
-				C139AC7B1BFD8CF800B0518F /* PHESara6E.h */,
-				C139AC7C1BFD8CF800B0518F /* PHESara6E.m */,
-				C139AC7D1BFD8CF800B0518F /* PHESuspend.h */,
-				C139AC7E1BFD8CF800B0518F /* PHESuspend.m */,
-				C139AC7F1BFD8CF800B0518F /* PHEUnabsorbedInsulin.h */,
-				C139AC801BFD8CF800B0518F /* PHEUnabsorbedInsulin.m */,
-				C139AB8F1BFD6A9000B0518F /* PumpHistoryEventBase.h */,
-				C139AB901BFD6A9000B0518F /* PumpHistoryEventBase.m */,
-				C152C1A31C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.h */,
-				C152C1A41C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m */,
-				C152C1A61C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.h */,
-				C152C1A71C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m */,
-				C152C1A91C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.h */,
-				C152C1AA1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m */,
-				C10D9B961C7D6F5200378342 /* PHEChangeMaxBasal.h */,
-				C10D9B971C7D6F5200378342 /* PHEChangeMaxBasal.m */,
+				C1842BD01C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift */,
+				C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */,
+				C1842BC41C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift */,
+				C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */,
+				C1842BC81C8F968B00DB42AC /* BGReceivedPumpEvent.swift */,
+				C1842BC21C8E931E00DB42AC /* BolusNormalPumpEvent.swift */,
+				C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */,
+				C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */,
+				C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */,
+				C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */,
+				C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */,
+				C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */,
+				C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */,
+				C1842BF41C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift */,
+				C1842BF31C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift */,
+				C1842BF21C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift */,
+				C1842BF11C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift */,
+				C1842BF01C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift */,
+				C1842BEF1C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift */,
+				C1842BEE1C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift */,
+				C1842BED1C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift */,
+				C1842BEC1C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift */,
+				C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */,
+				C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */,
+				C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */,
+				C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */,
+				C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */,
+				C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */,
+				C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */,
+				C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */,
+				C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */,
+				C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */,
+				C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */,
+				C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */,
+				C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */,
+				C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */,
+				C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */,
+				C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */,
+				C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */,
+				C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */,
+				C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */,
+				C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */,
+				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
+				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
+				C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */,
+				C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */,
+				C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */,
+				C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */,
+				C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */,
+				C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */,
+				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
+				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
+				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
+				C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */,
+				C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */,
+				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
+				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
 			);
-			path = PumpHistoryEvents;
-			sourceTree = "<group>";
-		};
-		C14B4EDF1B85A31F00776647 /* MinimedProtocol */ = {
-			isa = PBXGroup;
-			children = (
-				C139AB8E1BFD6A6000B0518F /* PumpHistoryEvents */,
-				C1743CDD199D374500ED623E /* PumpStatusMessage.h */,
-				C1743CDE199D374500ED623E /* PumpStatusMessage.m */,
-				C13DB3A31B1583E900121E02 /* MessageBase.h */,
-				C13DB3A41B1583E900121E02 /* MessageBase.m */,
-				C14AA3391B1A2FB100299A55 /* MeterMessage.h */,
-				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
-				C139AC1F1BFD847F00B0518F /* HistoryPage.h */,
-				C139AC201BFD847F00B0518F /* HistoryPage.m */,
-				C139ACAF1BFEDD9E00B0518F /* PumpModel.h */,
-				C139ACB01BFEDD9E00B0518F /* PumpModel.m */,
-				C152C19D1C38B5A30009B4B8 /* DeviceLinkMessage.h */,
-				C152C19E1C38B5A30009B4B8 /* DeviceLinkMessage.m */,
-				C152C1A01C38B8850009B4B8 /* FindDeviceMessage.h */,
-				C152C1A11C38B8850009B4B8 /* FindDeviceMessage.m */,
-			);
-			name = MinimedProtocol;
+			path = PumpEvents;
 			sourceTree = "<group>";
 		};
 		C1AA398B1AB67F6A00BC9E33 /* Categories */ = {
@@ -699,6 +771,48 @@
 				C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		C1C357921C929507009BDD4F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C1C357931C929529009BDD4F /* StringCrypto.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C1EAD6B91C826B92006DBA60 /* Int.swift */,
+				C1EAD6BA1C826B92006DBA60 /* NSData.swift */,
+				C1EAD6BB1C826B92006DBA60 /* NSDateComponents.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C1EAD6BC1C826B92006DBA60 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				C12198A41C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift */,
+				C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */,
+				C1EAD6BD1C826B92006DBA60 /* CarelinkMessageBody.swift */,
+				C1EAD6BE1C826B92006DBA60 /* MySentryAckMessageBody.swift */,
+				C1EAD6BF1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift */,
+				C1EAD6C01C826B92006DBA60 /* MySentryAlertMessageBody.swift */,
+				C1EAD6C11C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift */,
+				C1EAD6C21C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift */,
+				C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */,
+				C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */,
+				C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */,
+				C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */,
+				C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */,
+				C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */,
+				C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */,
+				C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */,
+				C14303151C97C98000A40450 /* PumpAckMessageBody.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 		C1EF58891B3F9730001C8C80 /* SWRevealViewController */ = {
@@ -729,6 +843,10 @@
 				C10A62911C55F8E200E635EE /* UpdateRegisterCmd.m */,
 				C10EAA9B1C5AE9A600B0838F /* GetVersionCmd.h */,
 				C10EAA9C1C5AE9A600B0838F /* GetVersionCmd.m */,
+				C1EAD6E71C83E121006DBA60 /* RFPacket.h */,
+				C1EAD6E81C83E121006DBA60 /* RFPacket.m */,
+				C1F0038E1C894D2E00B381B9 /* ReceivingPacketCmd.h */,
+				C1F0038F1C894D2E00B381B9 /* ReceivingPacketCmd.m */,
 			);
 			name = RileyLink;
 			sourceTree = "<group>";
@@ -742,16 +860,14 @@
 				C1EF589D1B3FBFE7001C8C80 /* MainAppViewController.m */,
 				C1EF58951B3FA462001C8C80 /* MenuController.h */,
 				C1EF58961B3FA462001C8C80 /* MenuController.m */,
-				43737CDF1B7F06F100835F8D /* MySentryPairingViewController.h */,
-				43737CE01B7F06F100835F8D /* MySentryPairingViewController.m */,
+				C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */,
 				C12EA26B198B456D00309FA4 /* NightscoutWebView.h */,
 				C12EA26C198B456D00309FA4 /* NightscoutWebView.m */,
 				C126165B1B6C8076001FAD87 /* PacketGeneratorViewController.h */,
 				C126165C1B6C8076001FAD87 /* PacketGeneratorViewController.m */,
 				C12616551B6A6130001FAD87 /* PacketLogViewController.h */,
 				C12616561B6A6130001FAD87 /* PacketLogViewController.m */,
-				C126166B1B76ECBA001FAD87 /* PumpChatViewController.h */,
-				C126166C1B76ECBA001FAD87 /* PumpChatViewController.m */,
+				C1890B5E1C94B9D9005F7474 /* PumpChatViewController.swift */,
 				C126162A1B65E9BF001FAD87 /* RileyLinkDeviceViewController.h */,
 				C126162B1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m */,
 				C12616301B65F4BC001FAD87 /* RileyLinkListTableViewController.h */,
@@ -760,22 +876,71 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
-		C1EF589B1B3FBA5D001C8C80 /* Nightscout */ = {
+		C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1A47EBD1B117DE900756B99 /* NightScoutUploader.h */,
-				C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */,
-				C137A3941C08A35C00569851 /* NightScoutBolus.h */,
-				C137A3951C08A35C00569851 /* NightScoutBolus.m */,
-				C137A39A1C08A48100569851 /* NightScoutPump.h */,
-				C137A39B1C08A48100569851 /* NightScoutPump.m */,
+				C1C357921C929507009BDD4F /* Extensions */,
+				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
+				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
+				C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */,
+				C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */,
+				C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */,
+				C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */,
 			);
-			name = Nightscout;
+			path = NightscoutUploadKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		C10D9BBE1C8269D500378342 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		C10D9BC01C8269D500378342 /* MinimedKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C10D9BD81C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKit" */;
+			buildPhases = (
+				C10D9BBC1C8269D500378342 /* Sources */,
+				C10D9BBD1C8269D500378342 /* Frameworks */,
+				C10D9BBE1C8269D500378342 /* Headers */,
+				C10D9BBF1C8269D500378342 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MinimedKit;
+			productName = MinimedKit;
+			productReference = C10D9BC11C8269D500378342 /* MinimedKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C10D9BC91C8269D500378342 /* MinimedKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C10D9BDB1C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKitTests" */;
+			buildPhases = (
+				C10D9BC61C8269D500378342 /* Sources */,
+				C10D9BC71C8269D500378342 /* Frameworks */,
+				C10D9BC81C8269D500378342 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C10D9BCD1C8269D500378342 /* PBXTargetDependency */,
+				C10D9BCF1C8269D500378342 /* PBXTargetDependency */,
+			);
+			name = MinimedKitTests;
+			productName = MinimedKitTests;
+			productReference = C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C12EA236198B436800309FA4 /* RileyLink */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C12EA263198B436900309FA4 /* Build configuration list for PBXNativeTarget "RileyLink" */;
@@ -784,10 +949,12 @@
 				C12EA233198B436800309FA4 /* Sources */,
 				C12EA234198B436800309FA4 /* Frameworks */,
 				C12EA235198B436800309FA4 /* Resources */,
+				C10D9BB81C82614F00378342 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C10D9BD51C8269D500378342 /* PBXTargetDependency */,
 			);
 			name = RileyLink;
 			productName = RileyLink;
@@ -818,9 +985,18 @@
 		C12EA22F198B436800309FA4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Pete Schwamb";
 				TargetAttributes = {
+					C10D9BC01C8269D500378342 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = UY678SP37Q;
+					};
+					C10D9BC91C8269D500378342 = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = C12EA236198B436800309FA4;
+					};
 					C12EA236198B436800309FA4 = {
 						DevelopmentTeam = UY678SP37Q;
 					};
@@ -843,11 +1019,27 @@
 			targets = (
 				C12EA236198B436800309FA4 /* RileyLink */,
 				C12EA251198B436800309FA4 /* RileyLinkTests */,
+				C10D9BC01C8269D500378342 /* MinimedKit */,
+				C10D9BC91C8269D500378342 /* MinimedKitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C10D9BBF1C8269D500378342 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C10D9BC81C8269D500378342 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C12EA235198B436800309FA4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -886,117 +1078,182 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C10D9BBC1C8269D500378342 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1842C1C1C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift in Sources */,
+				C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */,
+				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
+				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
+				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
+				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
+				C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */,
+				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,
+				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
+				C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */,
+				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
+				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
+				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
+				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
+				C12198A51C8DFD3200BC374C /* TempBasalCarelinkMessageBody.swift in Sources */,
+				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,
+				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,
+				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
+				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
+				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
+				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
+				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
+				C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */,
+				C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */,
+				C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */,
+				C1842C181C8FA45100DB42AC /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,
+				C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */,
+				C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */,
+				C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */,
+				C1711A5C1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift in Sources */,
+				C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */,
+				C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */,
+				C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */,
+				C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */,
+				C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */,
+				C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */,
+				C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */,
+				C1EAD6CD1C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift in Sources */,
+				C1EAD6C81C826B92006DBA60 /* CarelinkMessageBody.swift in Sources */,
+				C1842C121C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift in Sources */,
+				C12198A11C8DFC2D00BC374C /* BolusCommand.swift in Sources */,
+				C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */,
+				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
+				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
+				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
+				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
+				C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */,
+				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
+				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
+				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
+				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
+				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
+				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
+				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
+				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
+				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
+				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
+				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
+				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
+				C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */,
+				C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */,
+				C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */,
+				C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */,
+				C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */,
+				C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */,
+				C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */,
+				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
+				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,
+				C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */,
+				C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */,
+				C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */,
+				C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */,
+				C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */,
+				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
+				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
+				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,
+				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,
+				C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */,
+				C1711A5E1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift in Sources */,
+				C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */,
+				C1EAD6C71C826B92006DBA60 /* NSDateComponents.swift in Sources */,
+				C1842C0E1C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift in Sources */,
+				C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */,
+				C1842C191C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift in Sources */,
+				C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */,
+				C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */,
+				C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */,
+				C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */,
+				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
+				C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C10D9BC61C8269D500378342 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */,
+				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
+				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
+				C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */,
+				C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */,
+				C12198A71C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift in Sources */,
+				C12198B11C8F6DD800BC374C /* TimeFormatTests.swift in Sources */,
+				C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */,
+				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
+				C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */,
+				C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */,
+				C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */,
+				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
+				C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */,
+				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
+				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,
+				C1EAD6D51C826C43006DBA60 /* MinimedKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C12EA233198B436800309FA4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1842C311C91D56400DB42AC /* BGCheckNightscoutTreatment.swift in Sources */,
 				C12EA24B198B436800309FA4 /* AppDelegate.m in Sources */,
-				C139ACA71BFD8CF800B0518F /* PHEJournalEntryPumpLowReservoir.m in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
-				C139AC841BFD8CF800B0518F /* PHEBattery.m in Sources */,
-				C139ACBC1C00046D00B0518F /* PHEJournalEntryPumpLowBattery.m in Sources */,
+				C1842C2B1C90DFB600DB42AC /* NightscoutPumpEvents.swift in Sources */,
 				C152C19C1C3875EA0009B4B8 /* GetPacketCmd.m in Sources */,
-				C139ACBD1C00046D00B0518F /* PHEModel522ResultTotals.m in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C10A62921C55F8E200E635EE /* UpdateRegisterCmd.m in Sources */,
-				C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */,
-				C126166D1B76ECBA001FAD87 /* PumpChatViewController.m in Sources */,
 				C12616321B65F4BC001FAD87 /* RileyLinkListTableViewController.m in Sources */,
-				C139AC9B1BFD8CF800B0518F /* PHEChangeSensorRateOfChangeAlertSetup.m in Sources */,
-				C137A3961C08A35C00569851 /* NightScoutBolus.m in Sources */,
+				C1711A541C94E36000CB25BD /* PumpOpsSynchronous.swift in Sources */,
 				C1EF58971B3FA462001C8C80 /* MenuController.m in Sources */,
-				C139ACAE1BFD8CF800B0518F /* PHEUnabsorbedInsulin.m in Sources */,
 				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
 				C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */,
-				C139AC951BFD8CF800B0518F /* PHEChangeCaptureEventEnable.m in Sources */,
-				C139AC9E1BFD8CF800B0518F /* PHEChangeTime.m in Sources */,
 				C1D2B67E1C2FAD0100DB4AEA /* CmdBase.m in Sources */,
-				C139ACA61BFD8CF800B0518F /* PHEJournalEntryExerciseMarker.m in Sources */,
 				C1E535ED1991E49600C2AC49 /* RileyLinkBLEManager.m in Sources */,
+				C14C8A821C9E0D57000F72C5 /* Either.swift in Sources */,
 				C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
 				C1D2B6811C30AAE000DB4AEA /* SendPacketCmd.m in Sources */,
-				C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */,
-				C139ACB11BFEDD9E00B0518F /* PumpModel.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C12616511B688D9C001FAD87 /* RileyLinkBLEDevice.m in Sources */,
-				C139AC851BFD8CF800B0518F /* PHEBgReceived.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
-				C139AC8B1BFD8CF800B0518F /* PHEChangeAlarmNotifyMode.m in Sources */,
-				C139AC8E1BFD8CF800B0518F /* PHEChangeBasalProfilePattern.m in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
-				C139AC991BFD8CF800B0518F /* PHEChangeParadigmLinkID.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
-				C1E535F01991E6A200C2AC49 /* MinimedPacket.m in Sources */,
-				C139ACBB1C00046D00B0518F /* PHEBolusWizardBolusEstimate.m in Sources */,
-				C139ACA31BFD8CF800B0518F /* PHEDeleteAlarmClockTime.m in Sources */,
-				C139AC961BFD8CF800B0518F /* PHEChangeCarbUnits.m in Sources */,
+				C1EAD6E91C83E121006DBA60 /* RFPacket.m in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
-				C139AB911BFD6A9000B0518F /* PumpHistoryEventBase.m in Sources */,
+				C1890B5F1C94B9D9005F7474 /* PumpChatViewController.swift in Sources */,
 				C12616701B7790DF001FAD87 /* SendAndListenCmd.m in Sources */,
-				C152C1A21C38B8850009B4B8 /* FindDeviceMessage.m in Sources */,
-				C139ACA51BFD8CF800B0518F /* PHEEnableDisableRemote.m in Sources */,
 				C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
-				C139AC901BFD8CF800B0518F /* PHEChangeBGReminderOffset.m in Sources */,
-				C139AC811BFD8CF800B0518F /* PHEAlarmPump.m in Sources */,
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
-				C139AC8F1BFD8CF800B0518F /* PHEChangeBGReminderEnable.m in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,
-				C137A3931C08142E00569851 /* CRC16.m in Sources */,
-				C139AC911BFD8CF800B0518F /* PHEChangeBolusReminderEnable.m in Sources */,
-				C137A3901C08114600569851 /* CRC8.m in Sources */,
+				C1C357941C929529009BDD4F /* StringCrypto.swift in Sources */,
+				C1842C291C908A3C00DB42AC /* NightscoutUploader.swift in Sources */,
+				C1842C2F1C90F6D900DB42AC /* NightscoutTreatment.swift in Sources */,
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,
-				C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */,
-				C139AC941BFD8CF800B0518F /* PHEChangeBolusWizardSetup.m in Sources */,
-				C137A39C1C08A48100569851 /* NightScoutPump.m in Sources */,
-				C139ACA11BFD8CF800B0518F /* PHEChangeWatchdogEnable.m in Sources */,
-				C139AC8D1BFD8CF800B0518F /* PHEChangeBasalProfile.m in Sources */,
-				43737CE11B7F06F100835F8D /* MySentryPairingViewController.m in Sources */,
-				C139ACA21BFD8CF800B0518F /* PHEClearAlarm.m in Sources */,
 				C1EF589E1B3FBFE7001C8C80 /* MainAppViewController.m in Sources */,
 				C1EF588C1B3F9748001C8C80 /* SWRevealViewController.m in Sources */,
 				43C99C6F1B898B7100BC03D4 /* MenuHeaderTableViewCell.m in Sources */,
-				C139AC211BFD847F00B0518F /* HistoryPage.m in Sources */,
-				C139AC931BFD8CF800B0518F /* PHEChangeBolusScrollStepSize.m in Sources */,
-				C139ACA41BFD8CF800B0518F /* PHEDeleteBolusReminderTime.m in Sources */,
-				C139AC971BFD8CF800B0518F /* PHEChangeChildBlockEnable.m in Sources */,
+				C1F003901C894D2E00B381B9 /* ReceivingPacketCmd.m in Sources */,
 				C126163C1B67CBC2001FAD87 /* RileyLinkTableViewCell.m in Sources */,
-				C139ACAC1BFD8CF800B0518F /* PHESara6E.m in Sources */,
-				C139AC921BFD8CF800B0518F /* PHEChangeBolusReminderTime.m in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
-				C139ACA91BFD8CF800B0518F /* PHEResultDailyTotal.m in Sources */,
-				C152C1A81C3A40760009B4B8 /* PHEChangeWatchdogMarriageProfile.m in Sources */,
-				C139ACBA1C00046D00B0518F /* PHEAlarmClockReminder.m in Sources */,
-				C139AC9A1BFD8CF800B0518F /* PHEChangeReservoirWarningTime.m in Sources */,
-				C139AC891BFD8CF800B0518F /* PHEChangeAlarmClockEnable.m in Sources */,
-				C10EAAA61C5C507E00B0838F /* PumpOps.m in Sources */,
-				C152C1AB1C3A40A80009B4B8 /* PHEDeleteOtherDeviceID.m in Sources */,
-				C139ACAA1BFD8CF800B0518F /* PHEResume.m in Sources */,
-				C139ACAD1BFD8CF800B0518F /* PHESuspend.m in Sources */,
+				C19F94AB1C91DF6E00018F7D /* BolusNightscoutTreatment.swift in Sources */,
+				C10AB08B1C8519E2000F102E /* MySentryPairViewController.swift in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
 				C10EAA9D1C5AE9A600B0838F /* GetVersionCmd.m in Sources */,
-				C139AC881BFD8CF800B0518F /* PHECalBGForPH.m in Sources */,
-				C139AC8C1BFD8CF800B0518F /* PHEChangeAudioBolus.m in Sources */,
-				C10EAAA31C5B3A0800B0838F /* PumpOpsSynchronous.m in Sources */,
-				C139AC821BFD8CF800B0518F /* PHEAlarmSensor.m in Sources */,
-				C139ACA81BFD8CF800B0518F /* PHEPrime.m in Sources */,
-				C10D9B981C7D6F5200378342 /* PHEChangeMaxBasal.m in Sources */,
-				C139AC861BFD8CF800B0518F /* PHEBolusNormal.m in Sources */,
-				C139AC9C1BFD8CF800B0518F /* PHEChangeSensorSetup2.m in Sources */,
-				C139ACAB1BFD8CF800B0518F /* PHERewind.m in Sources */,
 				C12EA247198B436800309FA4 /* main.m in Sources */,
-				C139AC831BFD8CF800B0518F /* PHEBasalProfileStart.m in Sources */,
-				C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */,
+				C1711A601C978C5A00CB25BD /* PumpOps.swift in Sources */,
+				C1842C331C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift in Sources */,
 				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
-				C152C1A51C3A3FF40009B4B8 /* PHEChangeOtherDeviceID.m in Sources */,
-				C139AC9D1BFD8CF800B0518F /* PHEChangeTempBasalPercent.m in Sources */,
-				C139AC9F1BFD8CF800B0518F /* PHEChangeTimeFormat.m in Sources */,
-				C139AC8A1BFD8CF800B0518F /* PHEChangeAlarmClockTime.m in Sources */,
-				C139AC981BFD8CF800B0518F /* PHEChangeMaxBolus.m in Sources */,
-				C152C19F1C38B5A30009B4B8 /* DeviceLinkMessage.m in Sources */,
 				C11F993D1BC406970013158C /* PumpState.m in Sources */,
-				C139ACA01BFD8CF800B0518F /* PHEChangeVariableBolus.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,6 +1261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C14C8A801C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift in Sources */,
 				C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1011,6 +1269,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C10D9BCD1C8269D500378342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C10D9BC01C8269D500378342 /* MinimedKit */;
+			targetProxy = C10D9BCC1C8269D500378342 /* PBXContainerItemProxy */;
+		};
+		C10D9BCF1C8269D500378342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = C10D9BCE1C8269D500378342 /* PBXContainerItemProxy */;
+		};
+		C10D9BD51C8269D500378342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C10D9BC01C8269D500378342 /* MinimedKit */;
+			targetProxy = C10D9BD41C8269D500378342 /* PBXContainerItemProxy */;
+		};
 		C12EA258198B436900309FA4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C12EA236198B436800309FA4 /* RileyLink */;
@@ -1038,6 +1311,104 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C10D9BD91C8269D600378342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = MinimedKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C10D9BDA1C8269D600378342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = MinimedKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C10D9BDC1C8269D600378342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = MinimedKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
+			};
+			name = Debug;
+		};
+		C10D9BDD1C8269D600378342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = MinimedKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
+			};
+			name = Release;
+		};
 		C12EA261198B436900309FA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1115,14 +1486,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1131,14 +1508,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1147,6 +1529,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1157,8 +1540,11 @@
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glucoselink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1168,6 +1554,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1177,6 +1564,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glucoselink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1187,6 +1576,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C10D9BD81C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10D9BD91C8269D600378342 /* Debug */,
+				C10D9BDA1C8269D600378342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C10D9BDB1C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10D9BDC1C8269D600378342 /* Debug */,
+				C10D9BDD1C8269D600378342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C12EA232198B436800309FA4 /* Build configuration list for PBXProject "RileyLink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

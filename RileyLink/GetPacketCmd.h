@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CmdBase.h"
+#import "ReceivingPacketCmd.h"
 
 
-@interface GetPacketCmd : CmdBase
+@interface GetPacketCmd : ReceivingPacketCmd
 
 @property (nonatomic, assign) uint8_t listenChannel;
 @property (nonatomic, assign) uint16_t timeoutMS;

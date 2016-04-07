@@ -7,7 +7,6 @@
 //
 
 #import "PacketGeneratorViewController.h"
-#import "MinimedPacket.h"
 #import "NSData+Conversion.h"
 #import "SendPacketCmd.h"
 
@@ -64,9 +63,9 @@
 - (void)sendTestPacket {
   NSString *packetStr = [@"614C05E077" stringByAppendingFormat:@"%02x", testPacketNum];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
-  if (encodeDataSwitch.on) {
-    data = [MinimedPacket encodeData:data];
-  }
+//  if (encodeDataSwitch.on) {
+//    data = [MinimedPacket encodeData:data];
+//  }
   packetData.text = data.hexadecimalString;
   SendPacketCmd *cmd = [[SendPacketCmd alloc] init];
   cmd.sendChannel = txChannel;

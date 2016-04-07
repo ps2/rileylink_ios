@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="oBH-3z-2fj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="oBH-3z-2fj">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -659,7 +659,7 @@
         <!--MySentry Pairing-->
         <scene sceneID="tb3-wT-tie">
             <objects>
-                <viewController id="bIR-nw-zEq" customClass="MySentryPairingViewController" sceneMemberID="viewController">
+                <viewController id="bIR-nw-zEq" customClass="MySentryPairViewController" customModule="RileyLink" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Csu-xg-nGE"/>
                         <viewControllerLayoutGuide type="bottom" id="NjR-4H-1y0"/>
@@ -729,7 +729,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="MySentry Pairing" id="Ygr-Ws-7Av"/>
                     <connections>
-                        <outlet property="deviceIDTextField" destination="itA-Oe-kgM" id="xbo-Nk-Axn"/>
+                        <outlet property="deviceIDTextField" destination="itA-Oe-kgM" id="qhm-jR-26r"/>
                         <outlet property="instructionLabel" destination="wm9-qS-bD9" id="AYH-6r-sUb"/>
                         <outlet property="progressView" destination="hKP-sR-LXH" id="lp5-nK-X2S"/>
                         <outlet property="startButton" destination="Eu8-3h-oKB" id="gc4-t7-Lf3"/>
@@ -742,7 +742,7 @@
         <!--Pump Chat-->
         <scene sceneID="FHn-lU-ghE">
             <objects>
-                <viewController id="U6s-FT-nQH" userLabel="Pump Chat" customClass="PumpChatViewController" sceneMemberID="viewController">
+                <viewController id="U6s-FT-nQH" userLabel="Pump Chat" customClass="PumpChatViewController" customModule="RileyLink" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="C8M-0L-0jj"/>
                         <viewControllerLayoutGuide type="bottom" id="WXK-wk-Az1"/>
@@ -757,9 +757,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deA-p4-R7V">
-                                <rect key="frame" x="94" y="47" width="133" height="30"/>
-                                <state key="normal" title="Query Pump Model">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deA-p4-R7V">
+                                <rect key="frame" x="27" y="45" width="267" height="32"/>
+                                <state key="normal" title="Query Pump Model &amp; Battery">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -802,7 +802,7 @@
                                     <action selector="tuneButtonPressed:" destination="U6s-FT-nQH" eventType="touchUpInside" id="B77-LN-Tfi"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Output... " textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T33-ad-KLw">
                                 <rect key="frame" x="0.0" y="180" width="320" height="192"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -814,7 +814,7 @@
                             <constraint firstItem="YQ0-DI-aEl" firstAttribute="centerX" secondItem="T33-ad-KLw" secondAttribute="centerX" id="2LP-Km-wy7"/>
                             <constraint firstItem="deA-p4-R7V" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="67Y-gB-Axy"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="centerX" secondItem="fjO-7e-9wj" secondAttribute="centerX" id="BtS-BD-aFZ"/>
-                            <constraint firstItem="deA-p4-R7V" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" constant="78" id="ChW-ZQ-5Jz"/>
+                            <constraint firstItem="deA-p4-R7V" firstAttribute="leading" secondItem="yBb-jp-prw" secondAttribute="leadingMargin" constant="10" id="ChW-ZQ-5Jz"/>
                             <constraint firstItem="s07-hb-96I" firstAttribute="top" secondItem="fjO-7e-9wj" secondAttribute="bottom" constant="2" id="Ddw-N7-WgQ"/>
                             <constraint firstItem="T33-ad-KLw" firstAttribute="bottom" secondItem="WXK-wk-Az1" secondAttribute="top" id="FEp-EA-xLU"/>
                             <constraint firstItem="fjO-7e-9wj" firstAttribute="top" secondItem="deA-p4-R7V" secondAttribute="bottom" id="J1T-TU-Zxf"/>

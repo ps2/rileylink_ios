@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MinimedPacket.h"
+#import "RFPacket.h"
 
 @interface PacketTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) MinimedPacket *packet;
+@property (nonatomic, strong) RFPacket *packet;
 
 @end

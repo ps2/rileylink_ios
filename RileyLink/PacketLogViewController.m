@@ -8,10 +8,11 @@
 
 #import "PacketLogViewController.h"
 #import "PacketTableViewCell.h"
-#import "MinimedPacket.h"
+#import "RFPacket.h"
 #import "RileyLinkBLEManager.h"
 
 @interface PacketLogViewController () {
+  NSMutableArray *packets;
 }
 
 @end
@@ -20,6 +21,8 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  
+  packets = [NSMutableArray array];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(packetReceived:)
@@ -51,16 +54,16 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   // Return the number of rows in the section.
-  return self.device.packets.count;
+  return packets.count;
 }
 
-- (MinimedPacket *)packetForIndex:(NSInteger) idx {
-  return self.device.packets[self.device.packets.count - idx - 1];
+- (RFPacket *)packetForIndex:(NSInteger) idx {
+  return packets[packets.count - idx - 1];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)theTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   PacketTableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"packet" forIndexPath:indexPath];
-  MinimedPacket *packet = [self packetForIndex:indexPath.row];
+  RFPacket *packet = [self packetForIndex:indexPath.row];
   cell.packet = packet;
   return cell;
 }

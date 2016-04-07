@@ -33,7 +33,7 @@ public class TimeFormat: NSObject {
     comps.minute = Int(data[offset + 1] as UInt8 & UInt8(0x3f))
     comps.hour = Int(data[offset + 2] as UInt8 & UInt8(0x1f))
     comps.day = Int(data[offset + 3] as UInt8 & UInt8(0x1f))
-    comps.month = Int((((data[offset + 4] as UInt8) >> 4) & UInt8(0x0c)) + (data[offset + 1] as UInt8 >> 6))
+    comps.month = Int((((data[offset] as UInt8) >> 4) & UInt8(0x0c)) + (data[offset + 1] as UInt8 >> 6))
     comps.year = 2000 + Int(data[offset + 4] as UInt8 & UInt8(0b1111111))
     return comps;
   }

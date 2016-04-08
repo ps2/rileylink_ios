@@ -204,7 +204,7 @@
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
-      [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
+      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
       timerTickCharacteristic = characteristic;
     }
   }

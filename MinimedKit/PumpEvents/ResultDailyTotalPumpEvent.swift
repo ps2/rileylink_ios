@@ -29,13 +29,13 @@ public class ResultDailyTotalPumpEvent: PumpEvent {
 
     let dateComponents = TimeFormat.parse2ByteDate(availableData, offset: 5)
     validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
-    timestamp = TimeFormat.midnightForDate(dateComponents)
+    timestamp = dateComponents
   }
 
   public var dictionaryRepresentation: [String: AnyObject] {
     return [
       "_type": "ResultDailyTotal",
-      "timestamp": TimeFormat.timestampStr(timestamp),
+      "timestamp": TimeFormat.timestampStr(TimeFormat.nextMidnightForDateComponents(timestamp)),
       "validDate": validDateStr,
     ]
   }

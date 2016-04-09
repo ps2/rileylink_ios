@@ -6,12 +6,12 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import "RileyLinkBLEManager.h"
+@import RileyLinkBLEKit;
+
 #import "NSData+Conversion.h"
 #import "Config.h"
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
-#import "RileyLinkBLEManager.h"
 #import "PumpState.h"
 #import "MainAppViewController.h"
 #import "RileyLink-Swift.h"

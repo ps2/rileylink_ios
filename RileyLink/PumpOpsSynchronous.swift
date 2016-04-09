@@ -8,12 +8,15 @@
 
 import UIKit
 import MinimedKit
+import RileyLinkBLEKit
+
 
 public enum PumpCommsError: ErrorType {
   case RFCommsFailure(String)
   case UnknownPumpModel
   case RileyLinkTimeout
 }
+
 
 class PumpOpsSynchronous: NSObject {
 

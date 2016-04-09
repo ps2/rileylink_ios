@@ -6,7 +6,7 @@
 //  Copyright © 2015 Pete Schwamb. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 #define RILEYLINK_CMD_GET_STATE       1
 #define RILEYLINK_CMD_GET_VERSION     2

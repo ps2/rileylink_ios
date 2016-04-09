@@ -8,6 +8,8 @@
 
 import UIKit
 import MinimedKit
+import RileyLinkBLEKit
+
 
 class PumpOps: NSObject {
     

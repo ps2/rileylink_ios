@@ -6,4 +6,4 @@
 #import "Log.h"
 #import "AppDelegate.h"
 #import <CommonCrypto/CommonCrypto.h>
-
+#import "NSData+Conversion.h"

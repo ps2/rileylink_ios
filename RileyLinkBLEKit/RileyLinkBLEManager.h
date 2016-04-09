@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Pete Schwamb. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "RileyLinkBLEDevice.h"
+@import CoreBluetooth;
+@import Foundation;
 
 #define RILEYLINK_EVENT_LIST_UPDATED            @"RILEYLINK_EVENT_LIST_UPDATED"
 #define RILEYLINK_EVENT_PACKET_RECEIVED         @"RILEYLINK_EVENT_PACKET_RECEIVED"

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "ReceivingPacketCmd.h"
 #import "RFPacket.h"
 

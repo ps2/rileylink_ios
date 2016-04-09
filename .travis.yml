@@ -3,11 +3,6 @@ osx_image: xcode7.3
 xcode_sdk: 
     - iphonesimulator9.3
     - iphonesimulator9.2
-    - iphonesimulator9.1
-    - iphonesimulator9.0
-    - iphonesimulator8.4
-    - iphonesimulator8.3
-    - iphonesimulator8.2
 xcode_project: RileyLink.xcodeproj
 xcode_scheme: 
     - RileyLink
@@ -15,8 +10,3 @@ script:
     # We need to enumerate these manually until xctool is fixed
     - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.3 test
     - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.2 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.1 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.0 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator8.4 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator8.3 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator8.2 test

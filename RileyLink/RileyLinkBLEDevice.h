@@ -64,6 +64,8 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
 
+@property (nonatomic, readonly, nullable) NSDate *lastIdle;
+
 /**
  Initializes the device with a specified peripheral
 
@@ -79,5 +81,6 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;
+- (void) assertIdleListening;
 
 @end

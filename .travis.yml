@@ -8,5 +8,5 @@ xcode_scheme:
     - RileyLink
 script:
     # We need to enumerate these manually until xctool is fixed
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.3 test
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink    -sdk iphonesimulator9.2 test
+    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator9.3 test
+    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator9.2 test

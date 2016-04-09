@@ -38,6 +38,9 @@
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
 		43CA932E1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */; };
 		43CA932F1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932D1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift */; };
+		43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */; };
+		43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */; };
+		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		C10AB08B1C8519E2000F102E /* MySentryPairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
@@ -53,7 +56,6 @@
 		C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */; };
 		C12198A11C8DFC2D00BC374C /* BolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A01C8DFC2D00BC374C /* BolusCommand.swift */; };
 		C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */; };
-		C12198A71C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */; };
 		C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */; };
 		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
 		C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AE1C8F46FF00BC374C /* TimeFormat.swift */; };
@@ -305,6 +307,9 @@
 		43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		43CA932D1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTimeCarelinkMessageBody.swift; sourceTree = "<group>"; };
+		43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinMessageBodyTests.swift; sourceTree = "<group>"; };
+		43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		C10AB08A1C8519E2000F102E /* MySentryPairViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MySentryPairViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
@@ -322,7 +327,6 @@
 		C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C12198A01C8DFC2D00BC374C /* BolusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusCommand.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
-		C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sara6EPumpEvent.swift; sourceTree = "<group>"; };
 		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; };
 		C12198AE1C8F46FF00BC374C /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
@@ -626,17 +630,17 @@
 		C10D9BD01C8269D500378342 /* MinimedKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				C121985D1C8DE72500BC374C /* Messages */,
-				C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */,
-				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
 				C10D9BD31C8269D500378342 /* Info.plist */,
-				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
 				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
 				C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */,
-				C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */,
 				C12198621C8DF4C800BC374C /* HistoryPageTests.swift */,
-				C12198B01C8F6DD800BC374C /* TimeFormatTests.swift */,
 				C1C357901C92733A009BDD4F /* MeterMessageTests.swift */,
+				C1EAD6D11C826C43006DBA60 /* MinimedKitTests.swift */,
+				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
+				C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */,
+				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
+				C12198B01C8F6DD800BC374C /* TimeFormatTests.swift */,
+				C121985D1C8DE72500BC374C /* Messages */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -656,14 +660,16 @@
 		C121985D1C8DE72500BC374C /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				C12198A61C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift */,
 				C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */,
+				43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */,
+				43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */,
+				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
+				C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */,
+				C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */,
+				C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */,
 				C1EAD6D21C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift */,
 				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
-				C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */,
-				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
-				C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */,
-				C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */,
+				43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -1379,16 +1385,18 @@
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
 				C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */,
 				C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */,
-				C12198A71C8DFD6700BC374C /* TempBasalCarelinkMessageBodyTests.swift in Sources */,
 				C12198B11C8F6DD800BC374C /* TimeFormatTests.swift in Sources */,
 				C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
 				C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */,
+				43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */,
 				C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */,
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
 				C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */,
+				43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
+				43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */,
 				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,
 				C1EAD6D51C826C43006DBA60 /* MinimedKitTests.swift in Sources */,
 			);

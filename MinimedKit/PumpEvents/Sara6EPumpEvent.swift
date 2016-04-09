@@ -33,7 +33,7 @@ public class Sara6EPumpEvent: TimestampedPumpEvent {
   public var dictionaryRepresentation: [String: AnyObject] {
     return [
       "_type": "Sara6E",
-      "timestamp": TimeFormat.timestampStr(timestamp),
+      "timestamp": TimeFormat.timestampStr(TimeFormat.nextMidnightForDateComponents(timestamp)),
       "validDate": validDateStr,
     ]
   }

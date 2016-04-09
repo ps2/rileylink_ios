@@ -716,6 +716,7 @@
 			isa = PBXGroup;
 			children = (
 				C12EA240198B436800309FA4 /* RileyLink */,
+				C12EA259198B436900309FA4 /* RileyLinkTests */,
 				C10D9BC21C8269D500378342 /* MinimedKit */,
 				C10D9BD01C8269D500378342 /* MinimedKitTests */,
 				430D64CC1CB855AB00FCA750 /* RileyLinkBLEKit */,
@@ -788,7 +789,6 @@
 				C12EA243198B436800309FA4 /* InfoPlist.strings */,
 				C12EA246198B436800309FA4 /* main.m */,
 				C12EA248198B436800309FA4 /* RileyLink-Prefix.pch */,
-				C12EA259198B436900309FA4 /* RileyLinkTests */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

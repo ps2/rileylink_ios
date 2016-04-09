@@ -20,15 +20,17 @@ public class TimeFormat: NSObject {
     
   public static func parse2ByteDate(data: NSData, offset: Int) -> NSDateComponents {
     let comps = NSDateComponents()
-    comps.day = Int(data[offset + 0] as UInt8 & UInt8(0x1f))
+    comps.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+    comps.year = 2000 + Int(data[offset + 1] as UInt8 & UInt8(0b1111111))
     comps.month = (Int(data[offset + 0] as UInt8 & UInt8(0xe0)) >> 4) +
       (Int(data[offset + 1] as UInt8 & UInt8(0x80)) >> 7)
-    comps.year = 2000 + Int(data[offset + 1] as UInt8 & UInt8(0b1111111))
+    comps.day = Int(data[offset + 0] as UInt8 & UInt8(0x1f))
     return comps;
   }
   
   static func parse5ByteDate(data: NSData, offset: Int) -> NSDateComponents {
     let comps = NSDateComponents()
+    comps.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
     comps.second = Int(data[offset + 0] as UInt8 & UInt8(0x3f))
     comps.minute = Int(data[offset + 1] as UInt8 & UInt8(0x3f))
     comps.hour = Int(data[offset + 2] as UInt8 & UInt8(0x1f))

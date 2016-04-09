@@ -27,7 +27,7 @@ public class Sara6EPumpEvent: TimestampedPumpEvent {
     
     let dateComponents = TimeFormat.parse2ByteDate(availableData, offset: 1)
     validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
-    timestamp = TimeFormat.midnightForDate(dateComponents)
+    timestamp = dateComponents
   }
   
   public var dictionaryRepresentation: [String: AnyObject] {

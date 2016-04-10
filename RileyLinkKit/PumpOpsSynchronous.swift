@@ -47,13 +47,15 @@ public class PumpOpsSynchronous: NSObject {
 
     let totalTimeout = Int(retryCount) * Int(msBetweenPackets) + Int(timeoutMS) + expectedMaxBLELatencyMS
 
-    if session.doCmd(cmd, withTimeoutMs: totalTimeout) {
-      guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) else {
-        throw PumpCommsError.UnknownResponse
-      }
-      return message
+    guard session.doCmd(cmd, withTimeoutMs: totalTimeout) else {
+      throw PumpCommsError.RileyLinkTimeout
     }
-    throw PumpCommsError.RileyLinkTimeout
+
+    guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) where message.address == msg.address else {
+      throw PumpCommsError.UnknownResponse
+    }
+
+    return message
   }
 
   private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) throws {
@@ -80,7 +82,7 @@ public class PumpOpsSynchronous: NSObject {
     pump.awakeUntil = NSDate(timeIntervalSinceNow: duration)
   }
 
-  private func runCommandWithArguments(msg: PumpMessage) throws -> PumpMessage {
+  internal func runCommandWithArguments(msg: PumpMessage) throws -> PumpMessage {
     let shortMsg = makePumpMessage(msg.messageType, body: CarelinkShortMessageBody())
     let shortResponse = try sendAndListen(shortMsg)
     
@@ -102,25 +104,17 @@ public class PumpOpsSynchronous: NSObject {
   }
   
   internal func getPumpModel() throws -> String {
-    try wakeup()
-
-    let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
-    let response = try sendAndListen(msg)
-    
-    guard response.messageType == .GetPumpModel, let body = response.messageBody as? GetPumpModelCarelinkMessageBody else {
-      throw PumpCommsError.UnknownResponse
-    }
-    
+    let body: GetPumpModelCarelinkMessageBody = try getMessageBodyWithType(.GetPumpModel)
     return body.model
   }
-  
-  internal func getBatteryVoltage() throws -> GetBatteryCarelinkMessageBody {
+
+  internal func getMessageBodyWithType<T: MessageBody>(messageType: MessageType) throws -> T {
     try wakeup()
-    
-    let msg = makePumpMessage(.GetBattery, body: CarelinkShortMessageBody())
+
+    let msg = makePumpMessage(messageType, body: CarelinkShortMessageBody())
     let response = try sendAndListen(msg)
-  
-    guard response.messageType == .GetBattery, let body = response.messageBody as? GetBatteryCarelinkMessageBody else {
+
+    guard response.messageType == messageType, let body = response.messageBody as? T else {
       throw PumpCommsError.UnknownResponse
     }
     return body

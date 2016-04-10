@@ -44,7 +44,8 @@ public class PumpOps: NSObject {
   public func getBatteryVoltage(completion: (GetBatteryCarelinkMessageBody?) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-      let response = try? ops.getBatteryVoltage()
+      let response: GetBatteryCarelinkMessageBody? = try? ops.getMessageBodyWithType(.GetBattery)
+
       dispatch_async(dispatch_get_main_queue(), { () -> Void in
         completion(response)
       })

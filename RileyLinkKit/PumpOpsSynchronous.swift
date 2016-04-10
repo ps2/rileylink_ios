@@ -217,7 +217,7 @@ public class PumpOpsSynchronous: NSObject {
     while pageNum < 16 {
       NSLog("Fetching page %d", pageNum)
       let pageData = try getHistoryPage(pageNum)
-      NSLog("Fetched page %d: %@", pageNum, pageData.hexadecimalString)
+      NSLog("Fetched page %d: %@", pageNum, pageData)
       let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
       var eventIdxBeforeStartDate = -1
       for (reverseIndex, event) in page.events.reverse().enumerate() {

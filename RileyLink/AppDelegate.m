@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkKit;
+
 #import "AppDelegate.h"
 #import "Config.h"
 #import "RileyLink-Swift.h"

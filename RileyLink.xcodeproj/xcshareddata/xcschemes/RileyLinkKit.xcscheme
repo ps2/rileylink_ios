@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C10D9BC01C8269D500378342"
-               BuildableName = "MinimedKit.framework"
-               BlueprintName = "MinimedKit"
+               BlueprintIdentifier = "43722FAD1CB9F7630038B7F2"
+               BuildableName = "RileyLinkKit.framework"
+               BlueprintName = "RileyLinkKit"
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,36 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C10D9BC91C8269D500378342"
-               BuildableName = "MinimedKitTests.xctest"
-               BlueprintName = "MinimedKitTests"
-               ReferencedContainer = "container:RileyLink.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "43722FB61CB9F7640038B7F2"
-               BuildableName = "RileyLinkKitTests.xctest"
-               BlueprintName = "RileyLinkKitTests"
-               ReferencedContainer = "container:RileyLink.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C10D9BC01C8269D500378342"
-            BuildableName = "MinimedKit.framework"
-            BlueprintName = "MinimedKit"
-            ReferencedContainer = "container:RileyLink.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -74,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C10D9BC01C8269D500378342"
-            BuildableName = "MinimedKit.framework"
-            BlueprintName = "MinimedKit"
+            BlueprintIdentifier = "43722FAD1CB9F7630038B7F2"
+            BuildableName = "RileyLinkKit.framework"
+            BlueprintName = "RileyLinkKit"
             ReferencedContainer = "container:RileyLink.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -92,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C10D9BC01C8269D500378342"
-            BuildableName = "MinimedKit.framework"
-            BlueprintName = "MinimedKit"
+            BlueprintIdentifier = "43722FAD1CB9F7630038B7F2"
+            BuildableName = "RileyLinkKit.framework"
+            BlueprintName = "RileyLinkKit"
             ReferencedContainer = "container:RileyLink.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

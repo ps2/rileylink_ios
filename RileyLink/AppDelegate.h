@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PumpState.h"
+
+@class PumpState;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

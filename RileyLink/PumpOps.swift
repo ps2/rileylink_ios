@@ -11,24 +11,24 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
-class PumpOps: NSObject {
+public class PumpOps: NSObject {
     
-  var pumpState: PumpState
-  var device: RileyLinkBLEDevice
+  public let pumpState: PumpState
+  public let device: RileyLinkBLEDevice
   
-  init(pumpState: PumpState, device: RileyLinkBLEDevice) {
+  public init(pumpState: PumpState, device: RileyLinkBLEDevice) {
     self.pumpState = pumpState
     self.device = device
   }
   
-  func pressButton() {
+  public func pressButton() {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
       ops.pressButton(.Down)
     }
   }
   
-  func getPumpModel(completion: (String?) -> Void)  {
+  public func getPumpModel(completion: (String?) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
       let model = ops.getPumpModel()
@@ -38,7 +38,7 @@ class PumpOps: NSObject {
     }
   }
   
-  func getBatteryVoltage(completion: (GetBatteryCarelinkMessageBody?) -> Void)  {
+  public func getBatteryVoltage(completion: (GetBatteryCarelinkMessageBody?) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
       let response = ops.getBatteryVoltage()
@@ -48,7 +48,7 @@ class PumpOps: NSObject {
     }
   }
 
-  func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [PumpEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
+  public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [PumpEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
     device.runSession { (session) -> Void in
       NSLog("History fetching task started.")
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
@@ -65,7 +65,7 @@ class PumpOps: NSObject {
     }
   }
   
-  func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
+  public func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous.init(pumpState: self.pumpState, session: session)
       do {

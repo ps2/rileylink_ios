@@ -32,7 +32,7 @@ public class PumpOpsSynchronous: NSObject {
   }
   
   private func makePumpMessage(messageType: MessageType, body: MessageBody) -> PumpMessage {
-    return PumpMessage.init(packetType: .Carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
+    return PumpMessage(packetType: .Carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
   }
   
   public func sendAndListen(msg: PumpMessage, timeoutMS: UInt16 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) -> PumpMessage? {
@@ -46,13 +46,13 @@ public class PumpOpsSynchronous: NSObject {
     let totalTimeout = Int(retryCount) * Int(msBetweenPackets) + Int(timeoutMS) + expectedMaxBLELatencyMS
     if session.doCmd(cmd, withTimeoutMs: totalTimeout) {
       if let data =  cmd.receivedPacket.data {
-        return PumpMessage.init(rxData: data)
+        return PumpMessage(rxData: data)
       }
     }
     return nil
   }
 
-  private func wakeup(durationMinutes: Int) -> Bool {
+  private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) -> Bool {
     if pump.isAwake {
       return true
     }
@@ -65,23 +65,19 @@ public class PumpOpsSynchronous: NSObject {
     }
     NSLog("Pump acknowledged wakeup!")
 
-    let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: NSTimeInterval(durationMinutes * 60)))
+    let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
     let longResponse = sendAndListen(longPowerMessage)
     
     guard let response2 = longResponse where response2.messageType == .PumpAck else {
       return false
     }
 
-    NSLog("Power on for %d minutes", durationMinutes)
-    pump.awakeUntil = NSDate(timeIntervalSinceNow: NSTimeInterval(durationMinutes*60))
+    NSLog("Power on for %d minutes", duration.minutes)
+    pump.awakeUntil = NSDate(timeIntervalSinceNow: duration)
     return true
   }
-  
-  private func defaultWake() -> Bool {
-    return wakeup(1)
-  }
-  
-  public func runCommandWithArguments(msg: PumpMessage) -> PumpMessage? {
+
+  private func runCommandWithArguments(msg: PumpMessage) -> PumpMessage? {
     let shortMsg = makePumpMessage(msg.messageType, body: CarelinkShortMessageBody())
     let shortResponseOpt = sendAndListen(shortMsg)
     
@@ -94,7 +90,7 @@ public class PumpOpsSynchronous: NSObject {
 
   internal func pressButton(buttonType: ButtonPressCarelinkMessageBody.ButtonType) {
   
-    if defaultWake() {
+    if wakeup() {
       let msg = makePumpMessage(.ButtonPress, body: ButtonPressCarelinkMessageBody(buttonType: buttonType))
       if runCommandWithArguments(msg) != nil {
         NSLog("Pump acknowledged button press (with args)!")
@@ -105,7 +101,7 @@ public class PumpOpsSynchronous: NSObject {
   
   internal func getPumpModel() -> String? {
     
-    guard defaultWake() else {
+    guard wakeup() else {
       return nil
     }
 
@@ -121,7 +117,7 @@ public class PumpOpsSynchronous: NSObject {
   
   internal func getBatteryVoltage() -> GetBatteryCarelinkMessageBody? {
     
-    guard defaultWake() else {
+    guard wakeup() else {
       return nil
     }
     
@@ -158,7 +154,7 @@ public class PumpOpsSynchronous: NSObject {
     let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     var results = FrequencyScanResults()
     
-    defaultWake()
+    wakeup()
     
     for freq in frequencies {
       let tries = 3
@@ -173,7 +169,7 @@ public class PumpOpsSynchronous: NSObject {
         cmd.timeoutMS = self.dynamicType.standardPumpResponseWindow
         if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
           if let data =  cmd.receivedPacket.data,
-            let response = PumpMessage.init(rxData: data) where response.messageType == .GetPumpModel {
+            let response = PumpMessage(rxData: data) where response.messageType == .GetPumpModel {
               sumRSSI += Int(cmd.receivedPacket.rssi)
               trial.successes += 1
           }
@@ -200,7 +196,7 @@ public class PumpOpsSynchronous: NSObject {
 
   internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
     
-    if !defaultWake() {
+    if !wakeup() {
       try scanForPump()
     }
     

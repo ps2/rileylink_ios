@@ -66,6 +66,8 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 
 @property (nonatomic, readonly, nullable) NSDate *lastIdle;
 
+@property (nonatomic) BOOL timerTickEnabled;
+
 /**
  Initializes the device with a specified peripheral
 

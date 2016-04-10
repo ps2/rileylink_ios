@@ -18,24 +18,24 @@ public enum PumpCommsError: ErrorType {
 }
 
 
-class PumpOpsSynchronous: NSObject {
+public class PumpOpsSynchronous: NSObject {
 
-  let standardPumpResponseWindow: UInt16 = 180
-  let expectedMaxBLELatencyMS = 1500
+  private static let standardPumpResponseWindow: UInt16 = 180
+  private let expectedMaxBLELatencyMS = 1500
   
-  let pump: PumpState
-  let session: RileyLinkCmdSession
+  public let pump: PumpState
+  public let session: RileyLinkCmdSession
   
-  init(pumpState: PumpState, session: RileyLinkCmdSession) {
+  public init(pumpState: PumpState, session: RileyLinkCmdSession) {
     self.pump = pumpState
     self.session = session
   }
   
-  func makePumpMessage(messageType: MessageType, body: MessageBody) -> PumpMessage {
-    return PumpMessage.init(packetType: .Carelink, address: pump.pumpId, messageType: messageType, messageBody: body)
+  private func makePumpMessage(messageType: MessageType, body: MessageBody) -> PumpMessage {
+    return PumpMessage.init(packetType: .Carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
   }
   
-  func sendAndListen(msg: PumpMessage, timeoutMS: UInt16, repeatCount: UInt8, msBetweenPackets: UInt8, retryCount: UInt8) -> PumpMessage? {
+  public func sendAndListen(msg: PumpMessage, timeoutMS: UInt16 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) -> PumpMessage? {
     let cmd = SendAndListenCmd()
     cmd.packet = RFPacket(data: msg.txData)
     cmd.timeoutMS = timeoutMS
@@ -51,13 +51,9 @@ class PumpOpsSynchronous: NSObject {
     }
     return nil
   }
-  
-  func sendAndListen(msg: PumpMessage) -> PumpMessage? {
-    return sendAndListen(msg, timeoutMS: standardPumpResponseWindow, repeatCount: 0, msBetweenPackets: 0, retryCount: 3)
-  }
 
-  func wakeup(durationMinutes: Int) -> Bool {
-    if pump.awake {
+  private func wakeup(durationMinutes: Int) -> Bool {
+    if pump.isAwake {
       return true
     }
     
@@ -81,11 +77,11 @@ class PumpOpsSynchronous: NSObject {
     return true
   }
   
-  func defaultWake() -> Bool {
+  private func defaultWake() -> Bool {
     return wakeup(1)
   }
   
-  func runCommandWithArguments(msg: PumpMessage) -> PumpMessage? {
+  public func runCommandWithArguments(msg: PumpMessage) -> PumpMessage? {
     let shortMsg = makePumpMessage(msg.messageType, body: CarelinkShortMessageBody())
     let shortResponseOpt = sendAndListen(shortMsg)
     
@@ -96,7 +92,7 @@ class PumpOpsSynchronous: NSObject {
     return sendAndListen(msg)
   }
 
-  func pressButton(buttonType: ButtonPressCarelinkMessageBody.ButtonType) {
+  internal func pressButton(buttonType: ButtonPressCarelinkMessageBody.ButtonType) {
   
     if defaultWake() {
       let msg = makePumpMessage(.ButtonPress, body: ButtonPressCarelinkMessageBody(buttonType: buttonType))
@@ -107,7 +103,7 @@ class PumpOpsSynchronous: NSObject {
     
   }
   
-  func getPumpModel() -> String? {
+  internal func getPumpModel() -> String? {
     
     guard defaultWake() else {
       return nil
@@ -123,7 +119,7 @@ class PumpOpsSynchronous: NSObject {
     return (response.messageBody as! GetPumpModelCarelinkMessageBody).model
   }
   
-  func getBatteryVoltage() -> GetBatteryCarelinkMessageBody? {
+  internal func getBatteryVoltage() -> GetBatteryCarelinkMessageBody? {
     
     guard defaultWake() else {
       return nil
@@ -138,7 +134,7 @@ class PumpOpsSynchronous: NSObject {
     return response.messageBody as? GetBatteryCarelinkMessageBody
   }
   
-  func updateRegister(addr: UInt8, value: UInt8) throws {
+  private func updateRegister(addr: UInt8, value: UInt8) throws {
     let cmd = UpdateRegisterCmd()
     cmd.addr = addr;
     cmd.value = value;
@@ -147,7 +143,7 @@ class PumpOpsSynchronous: NSObject {
     }
   }
   
-  func setBaseFrequency(freqMhz: Double) throws {
+  private func setBaseFrequency(freqMhz: Double) throws {
     let val = Int((freqMhz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
     
     try updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
@@ -157,7 +153,7 @@ class PumpOpsSynchronous: NSObject {
   }
 
   
-  func scanForPump() throws -> FrequencyScanResults {
+  internal func scanForPump() throws -> FrequencyScanResults {
     
     let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     var results = FrequencyScanResults()
@@ -174,7 +170,7 @@ class PumpOpsSynchronous: NSObject {
         let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
         let cmd = SendAndListenCmd()
         cmd.packet = RFPacket(data: msg.txData)
-        cmd.timeoutMS = standardPumpResponseWindow
+        cmd.timeoutMS = self.dynamicType.standardPumpResponseWindow
         if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
           if let data =  cmd.receivedPacket.data,
             let response = PumpMessage.init(rxData: data) where response.messageType == .GetPumpModel {
@@ -202,7 +198,7 @@ class PumpOpsSynchronous: NSObject {
     return results
   }
 
-  func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
+  internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
     
     if !defaultWake() {
       try scanForPump()
@@ -221,7 +217,7 @@ class PumpOpsSynchronous: NSObject {
     while pageNum < 16 {
       NSLog("Fetching page %d", pageNum)
       let pageData = try getHistoryPage(pageNum)
-      NSLog("Fetched page %d: %@", pageNum, pageData.hexadecimalString)
+      NSLog("Fetched page %d: %@", pageNum, pageData)
       let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
       var eventIdxBeforeStartDate = -1
       for (reverseIndex, event) in page.events.reverse().enumerate() {
@@ -247,7 +243,7 @@ class PumpOpsSynchronous: NSObject {
     return (events, pumpModel)
   }
   
-  func getHistoryPage(pageNum: Int) throws -> NSData {
+  private func getHistoryPage(pageNum: Int) throws -> NSData {
     let frameData = NSMutableData()
     
     let msg = makePumpMessage(.GetHistoryPage, body: GetHistoryPageCarelinkMessageBody(pageNum: pageNum))
@@ -288,23 +284,14 @@ class PumpOpsSynchronous: NSObject {
   }
 }
 
-struct HistoryFetchResults {
-  var error: String?
-  var pumpModel: String?
-  var pageData: NSData?
+public struct FrequencyTrial {
+  public var tries: Int = 0
+  public var successes: Int = 0
+  public var avgRSSI: Double = -99
+  public var frequencyMHz: Double = 0
 }
 
-struct FrequencyTrial {
-  var tries: Int = 0
-  var successes: Int = 0
-  var avgRSSI: Double = -99
-  var frequencyMHz: Double = 0
+public struct FrequencyScanResults {
+  public var trials = [FrequencyTrial]()
+  public var bestFrequency: Double = 0
 }
-
-struct FrequencyScanResults {
-  var trials = [FrequencyTrial]()
-  var bestFrequency: Double = 0
-}
-
-
-

@@ -38,16 +38,6 @@
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "43722FB61CB9F7640038B7F2"
-               BuildableName = "RileyLinkKitTests.xctest"
-               BlueprintName = "RileyLinkKitTests"
-               ReferencedContainer = "container:RileyLink.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

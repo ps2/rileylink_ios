@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "430D64D31CB855AB00FCA750"
+               BuildableName = "RileyLinkBLEKitTests.xctest"
+               BlueprintName = "RileyLinkBLEKitTests"
+               ReferencedContainer = "container:RileyLink.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "430D64CA1CB855AB00FCA750"
+            BuildableName = "RileyLinkBLEKit.framework"
+            BlueprintName = "RileyLinkBLEKit"
+            ReferencedContainer = "container:RileyLink.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

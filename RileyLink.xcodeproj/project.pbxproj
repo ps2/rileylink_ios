@@ -222,13 +222,6 @@
 			remoteGlobalIDString = 430D64CA1CB855AB00FCA750;
 			remoteInfo = RileyLinkBLEKit;
 		};
-		430D64D81CB855AB00FCA750 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		430D64DE1CB855AB00FCA750 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -243,13 +236,6 @@
 			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
 			remoteInfo = RileyLinkKit;
 		};
-		43722FBB1CB9F7640038B7F2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		43722FC11CB9F7640038B7F2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -263,13 +249,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = C10D9BC01C8269D500378342;
 			remoteInfo = MinimedKit;
-		};
-		C10D9BCE1C8269D500378342 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
 		};
 		C10D9BD41C8269D500378342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1120,7 +1099,6 @@
 			);
 			dependencies = (
 				430D64D71CB855AB00FCA750 /* PBXTargetDependency */,
-				430D64D91CB855AB00FCA750 /* PBXTargetDependency */,
 			);
 			name = RileyLinkBLEKitTests;
 			productName = RileyLinkBLEKitTests;
@@ -1157,7 +1135,6 @@
 			);
 			dependencies = (
 				43722FBA1CB9F7640038B7F2 /* PBXTargetDependency */,
-				43722FBC1CB9F7640038B7F2 /* PBXTargetDependency */,
 			);
 			name = RileyLinkKitTests;
 			productName = RileyLinkKitTests;
@@ -1194,7 +1171,6 @@
 			);
 			dependencies = (
 				C10D9BCD1C8269D500378342 /* PBXTargetDependency */,
-				C10D9BCF1C8269D500378342 /* PBXTargetDependency */,
 			);
 			name = MinimedKitTests;
 			productName = MinimedKitTests;
@@ -1270,7 +1246,6 @@
 					};
 					C10D9BC91C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
-						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C12EA236198B436800309FA4 = {
 						DevelopmentTeam = UY678SP37Q;
@@ -1601,11 +1576,6 @@
 			target = 430D64CA1CB855AB00FCA750 /* RileyLinkBLEKit */;
 			targetProxy = 430D64D61CB855AB00FCA750 /* PBXContainerItemProxy */;
 		};
-		430D64D91CB855AB00FCA750 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = 430D64D81CB855AB00FCA750 /* PBXContainerItemProxy */;
-		};
 		430D64DF1CB855AB00FCA750 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 430D64CA1CB855AB00FCA750 /* RileyLinkBLEKit */;
@@ -1616,11 +1586,6 @@
 			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
 			targetProxy = 43722FB91CB9F7640038B7F2 /* PBXContainerItemProxy */;
 		};
-		43722FBC1CB9F7640038B7F2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = 43722FBB1CB9F7640038B7F2 /* PBXContainerItemProxy */;
-		};
 		43722FC21CB9F7640038B7F2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
@@ -1630,11 +1595,6 @@
 			isa = PBXTargetDependency;
 			target = C10D9BC01C8269D500378342 /* MinimedKit */;
 			targetProxy = C10D9BCC1C8269D500378342 /* PBXContainerItemProxy */;
-		};
-		C10D9BCF1C8269D500378342 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C10D9BCE1C8269D500378342 /* PBXContainerItemProxy */;
 		};
 		C10D9BD51C8269D500378342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1923,7 +1883,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -1942,7 +1901,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};

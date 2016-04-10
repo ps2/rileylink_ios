@@ -15,6 +15,7 @@ public enum PumpCommsError: ErrorType {
   case RFCommsFailure(String)
   case UnknownPumpModel
   case RileyLinkTimeout
+  case UnknownResponse
 }
 
 
@@ -32,10 +33,10 @@ public class PumpOpsSynchronous: NSObject {
   }
   
   private func makePumpMessage(messageType: MessageType, body: MessageBody) -> PumpMessage {
-    return PumpMessage.init(packetType: .Carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
+    return PumpMessage(packetType: .Carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
   }
   
-  public func sendAndListen(msg: PumpMessage, timeoutMS: UInt16 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) -> PumpMessage? {
+  internal func sendAndListen(msg: PumpMessage, timeoutMS: UInt16 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
     let cmd = SendAndListenCmd()
     cmd.packet = RFPacket(data: msg.txData)
     cmd.timeoutMS = timeoutMS
@@ -43,95 +44,86 @@ public class PumpOpsSynchronous: NSObject {
     cmd.msBetweenPackets = msBetweenPackets
     cmd.retryCount = retryCount
     cmd.listenChannel = 0
+
     let totalTimeout = Int(retryCount) * Int(msBetweenPackets) + Int(timeoutMS) + expectedMaxBLELatencyMS
+
     if session.doCmd(cmd, withTimeoutMs: totalTimeout) {
-      if let data =  cmd.receivedPacket.data {
-        return PumpMessage.init(rxData: data)
+      guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) else {
+        throw PumpCommsError.UnknownResponse
       }
+      return message
     }
-    return nil
+    throw PumpCommsError.RileyLinkTimeout
   }
 
-  private func wakeup(durationMinutes: Int) -> Bool {
-    if pump.isAwake {
-      return true
+  private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) throws {
+    guard !pump.isAwake else {
+      return
     }
     
     let shortPowerMessage = makePumpMessage(.PowerOn, body: CarelinkShortMessageBody())
-    let shortResponse = sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
+    let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
     
-    guard let response1 = shortResponse where response1.messageType == .PumpAck else {
-      return false
+    guard shortResponse.messageType == .PumpAck else {
+      throw PumpCommsError.UnknownResponse
     }
     NSLog("Pump acknowledged wakeup!")
 
-    let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: NSTimeInterval(durationMinutes * 60)))
-    let longResponse = sendAndListen(longPowerMessage)
+    let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
+    let longResponse = try sendAndListen(longPowerMessage)
     
-    guard let response2 = longResponse where response2.messageType == .PumpAck else {
-      return false
+    guard longResponse.messageType == .PumpAck else {
+      throw PumpCommsError.UnknownResponse
     }
 
-    NSLog("Power on for %d minutes", durationMinutes)
-    pump.awakeUntil = NSDate(timeIntervalSinceNow: NSTimeInterval(durationMinutes*60))
-    return true
+    NSLog("Power on for %d minutes", duration.minutes)
+    pump.awakeUntil = NSDate(timeIntervalSinceNow: duration)
   }
-  
-  private func defaultWake() -> Bool {
-    return wakeup(1)
-  }
-  
-  public func runCommandWithArguments(msg: PumpMessage) -> PumpMessage? {
+
+  private func runCommandWithArguments(msg: PumpMessage) throws -> PumpMessage {
     let shortMsg = makePumpMessage(msg.messageType, body: CarelinkShortMessageBody())
-    let shortResponseOpt = sendAndListen(shortMsg)
+    let shortResponse = try sendAndListen(shortMsg)
     
-    guard let shortResponse = shortResponseOpt where shortResponse.messageType == .PumpAck else {
-      return nil
+    guard shortResponse.messageType == .PumpAck else {
+      throw PumpCommsError.UnknownResponse
     }
     
-    return sendAndListen(msg)
+    return try sendAndListen(msg)
   }
 
-  internal func pressButton(buttonType: ButtonPressCarelinkMessageBody.ButtonType) {
-  
-    if defaultWake() {
-      let msg = makePumpMessage(.ButtonPress, body: ButtonPressCarelinkMessageBody(buttonType: buttonType))
-      if runCommandWithArguments(msg) != nil {
-        NSLog("Pump acknowledged button press (with args)!")
-      }
-    }
-    
+  internal func pressButton(buttonType: ButtonPressCarelinkMessageBody.ButtonType) throws {
+    try wakeup()
+
+    let msg = makePumpMessage(.ButtonPress, body: ButtonPressCarelinkMessageBody(buttonType: buttonType))
+
+    try runCommandWithArguments(msg)
+
+    NSLog("Pump acknowledged button press (with args)!")
   }
   
-  internal func getPumpModel() -> String? {
-    
-    guard defaultWake() else {
-      return nil
-    }
+  internal func getPumpModel() throws -> String {
+    try wakeup()
 
     let msg = makePumpMessage(.GetPumpModel, body: CarelinkShortMessageBody())
-    let responseOpt = sendAndListen(msg)
+    let response = try sendAndListen(msg)
     
-    guard let response = responseOpt where response.messageType == .GetPumpModel else {
-      return nil
+    guard response.messageType == .GetPumpModel, let body = response.messageBody as? GetPumpModelCarelinkMessageBody else {
+      throw PumpCommsError.UnknownResponse
     }
     
-    return (response.messageBody as! GetPumpModelCarelinkMessageBody).model
+    return body.model
   }
   
-  internal func getBatteryVoltage() -> GetBatteryCarelinkMessageBody? {
-    
-    guard defaultWake() else {
-      return nil
-    }
+  internal func getBatteryVoltage() throws -> GetBatteryCarelinkMessageBody {
+    try wakeup()
     
     let msg = makePumpMessage(.GetBattery, body: CarelinkShortMessageBody())
-    let responseOpt = sendAndListen(msg)
+    let response = try sendAndListen(msg)
   
-    guard let response = responseOpt where response.messageType == .GetBattery else {
-      return nil
+    guard response.messageType == .GetBattery, let body = response.messageBody as? GetBatteryCarelinkMessageBody else {
+      throw PumpCommsError.UnknownResponse
     }
-    return response.messageBody as? GetBatteryCarelinkMessageBody
+    return body
   }
   
   private func updateRegister(addr: UInt8, value: UInt8) throws {
@@ -157,8 +149,12 @@ public class PumpOpsSynchronous: NSObject {
     
     let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     var results = FrequencyScanResults()
-    
-    defaultWake()
+
+    do {
+      try wakeup()
+    } catch {
+      // Continue anyway
+    }
     
     for freq in frequencies {
       let tries = 3
@@ -173,7 +169,7 @@ public class PumpOpsSynchronous: NSObject {
         cmd.timeoutMS = self.dynamicType.standardPumpResponseWindow
         if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
           if let data =  cmd.receivedPacket.data,
-            let response = PumpMessage.init(rxData: data) where response.messageType == .GetPumpModel {
+            let response = PumpMessage(rxData: data) where response.messageType == .GetPumpModel {
               sumRSSI += Int(cmd.receivedPacket.rssi)
               trial.successes += 1
           }
@@ -199,12 +195,14 @@ public class PumpOpsSynchronous: NSObject {
   }
 
   internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
-    
-    if !defaultWake() {
+
+    do {
+      try wakeup()
+    } catch _ as PumpCommsError {
       try scanForPump()
     }
-    
-    guard let pumpModelStr = getPumpModel() else {
+
+    guard let pumpModelStr = try? getPumpModel() else {
       throw PumpCommsError.RFCommsFailure("getPumpModel failed")
     }
     
@@ -247,28 +245,26 @@ public class PumpOpsSynchronous: NSObject {
     let frameData = NSMutableData()
     
     let msg = makePumpMessage(.GetHistoryPage, body: GetHistoryPageCarelinkMessageBody(pageNum: pageNum))
-    let firstResponse = runCommandWithArguments(msg)
     
-    guard firstResponse != nil else {
+    guard let firstResponse = try? runCommandWithArguments(msg) else {
       throw PumpCommsError.RFCommsFailure("Pump not responding to GetHistory command")
     }
     
     var expectedFrameNum = 1
-    var curResp = firstResponse!.messageBody as! GetHistoryPageCarelinkMessageBody
+    var curResp = firstResponse.messageBody as! GetHistoryPageCarelinkMessageBody
     
     while(expectedFrameNum == curResp.frameNumber) {
       frameData.appendData(curResp.frame)
       expectedFrameNum += 1
       let msg = makePumpMessage(.PumpAck, body: CarelinkShortMessageBody())
       if !curResp.lastFrame {
-        let resp = sendAndListen(msg)
-        guard resp != nil else {
+        guard let resp = try? sendAndListen(msg) else {
           throw PumpCommsError.RFCommsFailure("Did not receive frame data from pump")
         }
-        guard resp!.packetType == .Carelink && resp!.messageType == .GetHistoryPage else {
+        guard resp.packetType == .Carelink && resp.messageType == .GetHistoryPage else {
           throw PumpCommsError.RFCommsFailure("Bad packet type or message type. Possible interference.")
         }
-        curResp = resp!.messageBody as! GetHistoryPageCarelinkMessageBody
+        curResp = resp.messageBody as! GetHistoryPageCarelinkMessageBody
       } else {
         let cmd = SendPacketCmd()
         cmd.packet = RFPacket(data: msg.txData)

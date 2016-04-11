@@ -7,19 +7,22 @@
 //
 
 import UIKit
+import MinimedKit
 
 public class PumpState: NSObject {
-    public var pumpID: String
-    public var lastHistoryDump: NSDate?
-    public var awakeUntil: NSDate?
+  public var pumpID: String
+  public var timeZone: NSTimeZone = NSTimeZone.localTimeZone()
+  public var pumpModel: PumpModel?
+  public var lastHistoryDump: NSDate?
+  public var awakeUntil: NSDate?
 
-    public init(pumpID: String) {
-        self.pumpID = pumpID
+  public init(pumpID: String) {
+    self.pumpID = pumpID
 
-        super.init()
-    }
+    super.init()
+  }
 
-    public var isAwake: Bool {
-        return awakeUntil?.timeIntervalSinceNow > 0
-    }
+  public var isAwake: Bool {
+    return awakeUntil?.timeIntervalSinceNow > 0
+  }
 }

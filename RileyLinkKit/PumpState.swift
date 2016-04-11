@@ -9,8 +9,9 @@
 import UIKit
 import MinimedKit
 
+
 public class PumpState: NSObject {
-  public var pumpID: String
+  public let pumpID: String
   public var timeZone: NSTimeZone = NSTimeZone.localTimeZone()
   public var pumpModel: PumpModel?
   public var lastHistoryDump: NSDate?

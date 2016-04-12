@@ -137,7 +137,7 @@ class PumpOpsSynchronous {
 
         let response: ReadTempBasalCarelinkMessageBody = try getMessageBodyWithType(.ReadTempBasal)
 
-        if response.timeRemaining == duration {
+        if response.timeRemaining == duration && response.rateType == .Absolute {
           return response
         } else {
           lastError = PumpCommsError.RFCommsFailure("Could not verify TempBasal on attempt \(attempt)")

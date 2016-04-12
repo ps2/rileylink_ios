@@ -18,21 +18,16 @@ public class RileyLinkDeviceManager {
 
   public static let RileyLinkDeviceKey = "com.rileylink.RileyLinkKit.RileyLinkDevice"
 
-  public enum ReadyState {
-    case NeedsConfiguration
-    case Ready(PumpState)
+  public var pumpState: PumpState? {
+    didSet {
+      for device in _devices {
+        device.pumpState = pumpState
+      }
+    }
   }
 
-  public var readyState: ReadyState
-
   public init(pumpState: PumpState?, autoConnectIDs: Set<String>) {
-
-    if let pumpState = pumpState {
-      readyState = .Ready(pumpState)
-    } else {
-      readyState = .NeedsConfiguration
-    }
-
+    self.pumpState = pumpState
     self.autoConnectIDs = autoConnectIDs
 
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: RILEYLINK_EVENT_LIST_UPDATED, object: BLEManager)
@@ -81,7 +76,7 @@ public class RileyLinkDeviceManager {
 
   @objc private func discoveredBLEDevice(note: NSNotification) {
     if let BLEDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
-      let device = RileyLinkDevice(BLEDevice: BLEDevice)
+      let device = RileyLinkDevice(BLEDevice: BLEDevice, pumpState: pumpState)
 
       _devices.append(device)
 

@@ -143,8 +143,9 @@ public class PumpOps: NSObject {
       }
     }
   }
-  
-  internal func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
+
+  // TODO: Internal scope
+  public func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
     device.runSession { (session) -> Void in
       let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
       do {

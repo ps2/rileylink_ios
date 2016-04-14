@@ -76,9 +76,22 @@ public class RileyLinkDevice {
     }
   }
 
-  // TODO:
-  public func tunePumpWithResultHandler(resultHandler: ([String: AnyObject]) -> Void) {
-    resultHandler([:])
+  public func tunePumpWithResultHandler(resultHandler: (Either<FrequencyScanResults, ErrorType>) -> Void) {
+    if let ops = ops {
+      ops.tunePump { (result) in
+        switch result {
+        case .Success(let scanResults):
+          self.lastTuned = NSDate()
+          self.radioFrequency = scanResults.bestFrequency
+        case .Failure:
+          break
+        }
+
+        resultHandler(result)
+      }
+    } else {
+      resultHandler(.Failure(Error.ConfigurationError))
+    }
   }
 
   public var ops: PumpOps? {

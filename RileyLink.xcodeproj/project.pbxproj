@@ -37,6 +37,7 @@
 		434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */; };
 		434AB0981CBA0DF600422F4A /* PumpState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0941CBA0DF600422F4A /* PumpState.swift */; };
 		434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
+		43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		43722FBF1CB9F7640038B7F2 /* RileyLinkKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43722FBE1CB9F7640038B7F2 /* RileyLinkKitTests.swift */; };
@@ -1352,6 +1353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				430D64ED1CB85A4300FCA750 /* RileyLinkBLEDevice.m in Sources */,
+				43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */,
 				430D65031CB89FC000FCA750 /* GetPacketCmd.m in Sources */,
 				430D65091CB89FC000FCA750 /* RFPacket.m in Sources */,
 				430D65011CB89FC000FCA750 /* CmdBase.m in Sources */,

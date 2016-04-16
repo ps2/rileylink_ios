@@ -40,6 +40,7 @@
 		434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */; };
 		434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */; };
 		434AB0C71CBCB76400422F4A /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
+		43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		43722FBF1CB9F7640038B7F2 /* RileyLinkKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43722FBE1CB9F7640038B7F2 /* RileyLinkKitTests.swift */; };
@@ -1359,6 +1360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				430D64ED1CB85A4300FCA750 /* RileyLinkBLEDevice.m in Sources */,
+				43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */,
 				430D65031CB89FC000FCA750 /* GetPacketCmd.m in Sources */,
 				430D65091CB89FC000FCA750 /* RFPacket.m in Sources */,
 				430D65011CB89FC000FCA750 /* CmdBase.m in Sources */,

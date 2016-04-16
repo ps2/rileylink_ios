@@ -28,7 +28,8 @@ public class RileyLinkDeviceManager {
 
   public init(pumpState: PumpState?, autoConnectIDs: Set<String>) {
     self.pumpState = pumpState
-    self.autoConnectIDs = autoConnectIDs
+
+    BLEManager.autoConnectIds = autoConnectIDs
 
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: RILEYLINK_EVENT_LIST_UPDATED, object: BLEManager)
 
@@ -37,14 +38,20 @@ public class RileyLinkDeviceManager {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: BLEManager)
   }
 
-  private var autoConnectIDs: Set<String>
-
   public var deviceScanningEnabled: Bool {
     get {
       return BLEManager.scanningEnabled
     }
     set {
       BLEManager.scanningEnabled = newValue
+    }
+  }
+
+  public var timerTickEnabled = true {
+    didSet {
+      for device in _devices {
+        device.device.timerTickEnabled = timerTickEnabled
+      }
     }
   }
 
@@ -76,6 +83,8 @@ public class RileyLinkDeviceManager {
 
   @objc private func discoveredBLEDevice(note: NSNotification) {
     if let BLEDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
+      BLEDevice.timerTickEnabled = timerTickEnabled
+
       let device = RileyLinkDevice(BLEDevice: BLEDevice, pumpState: pumpState)
 
       _devices.append(device)

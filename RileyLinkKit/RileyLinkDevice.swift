@@ -104,7 +104,7 @@ public class RileyLinkDevice {
 
   // MARK: -
 
-  private var device: RileyLinkBLEDevice
+  internal var device: RileyLinkBLEDevice
 
   @objc private func receivedDeviceNotification(note: NSNotification) {
     switch note.name {

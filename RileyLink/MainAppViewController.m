@@ -12,7 +12,6 @@
 #import "Config.h"
 #import "AppDelegate.h"
 #import "RileyLinkRecord.h"
-#import "PumpState.h"
 #import "MainAppViewController.h"
 #import "RileyLink-Swift.h"
 

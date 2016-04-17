@@ -66,6 +66,7 @@
     idleDetectDispatchGroup = dispatch_group_create();
 
     _idleTimeout = 60 * 1000;
+    _timerTickEnabled = YES;
 
     incomingPackets = [NSMutableArray array];
     
@@ -95,6 +96,19 @@
 - (NSString *)peripheralId
 {
   return self.peripheral.identifier.UUIDString;
+}
+
+- (void)setTimerTickEnabled:(BOOL)timerTickEnabled
+{
+    _timerTickEnabled = timerTickEnabled;
+
+    if (timerTickCharacteristic != nil &&
+        timerTickCharacteristic.isNotifying != timerTickEnabled &&
+        self.peripheral.state == CBPeripheralStateConnected)
+    {
+        [self.peripheral setNotifyValue:_timerTickEnabled
+                      forCharacteristic:timerTickCharacteristic];
+    }
 }
 
 - (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
@@ -204,7 +218,7 @@
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
-      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      [self.peripheral setNotifyValue:_timerTickEnabled forCharacteristic:characteristic];
       timerTickCharacteristic = characteristic;
     }
   }

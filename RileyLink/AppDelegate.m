@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkKit;
+
 #import "AppDelegate.h"
 #import "Config.h"
+#import "RileyLink-Swift.h"
 
 @implementation AppDelegate
 
@@ -28,7 +31,7 @@
     NSLog(@"Could not remove file: %@", path);
   }
   
-  self.pump = [[PumpState alloc] initWithPumpId:[Config sharedInstance].pumpID];  
+  self.pump = [[PumpState alloc] initWithPumpID:[Config sharedInstance].pumpID];
   
   return YES;
 }

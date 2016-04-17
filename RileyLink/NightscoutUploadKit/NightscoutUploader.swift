@@ -8,6 +8,7 @@
 
 import UIKit
 import MinimedKit
+import RileyLinkKit
 import RileyLinkBLEKit
 
 

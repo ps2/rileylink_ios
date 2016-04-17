@@ -65,7 +65,7 @@
     cmdDispatchGroup = dispatch_group_create();
     idleDetectDispatchGroup = dispatch_group_create();
 
-    _idleTimeout = 60 * 1000;
+    _idleTimeout = 63 * 1000;
     _timerTickEnabled = YES;
 
     incomingPackets = [NSMutableArray array];

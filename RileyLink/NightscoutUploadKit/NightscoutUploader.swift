@@ -286,9 +286,9 @@ class NightScoutUploader: NSObject {
       // Make this RL the active one, for history dumping.
       activeRileyLink = device
       handlePumpStatus(msg, device:device.deviceURI, rssi:rssi)
-      // Just got a MySentry packet; in 25s would be a good time to poll.
+      // Just got a MySentry packet; in 11s would be a good time to poll.
       if !fetchHistoryScheduled {
-        performSelector(#selector(NightScoutUploader.fetchHistory), withObject:nil, afterDelay:25)
+        performSelector(#selector(NightScoutUploader.fetchHistory), withObject:nil, afterDelay:11)
         fetchHistoryScheduled = true
       }
       // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s
@@ -482,8 +482,13 @@ class NightScoutUploader: NSObject {
     entries = [AnyObject]()
     reportJSON(inFlightEntries, endpoint: defaultNightscoutEntriesPath) { (data, response, error) -> Void in
       let httpResponse = response as! NSHTTPURLResponse
-      if httpResponse.statusCode != 200 {
+      
+      if (error != nil) {
         NSLog("Requeuing %d sgv entries: %@", inFlightEntries.count, error!)
+      }
+      else if httpResponse.statusCode != 200 {
+        let resp = String(data: data!, encoding: NSUTF8StringEncoding)
+        NSLog("Requeuing %d sgv entries, http response code = %d, message = %@", inFlightEntries.count, httpResponse.statusCode, resp!)
         self.entries += inFlightEntries
       } else {
         //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

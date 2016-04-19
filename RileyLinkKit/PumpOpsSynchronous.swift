@@ -15,7 +15,7 @@ public enum PumpCommsError: ErrorType {
   case RFCommsFailure(String)
   case UnknownPumpModel
   case RileyLinkTimeout
-  case UnknownResponse
+  case UnknownResponse(String)
 }
 
 
@@ -52,7 +52,7 @@ class PumpOpsSynchronous {
     }
 
     guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) where message.address == msg.address else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse("Sent \(msg.txData) and received \(cmd.receivedPacket.data ?? NSData())")
     }
 
     return message
@@ -67,7 +67,7 @@ class PumpOpsSynchronous {
     let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
     
     guard shortResponse.messageType == .PumpAck else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
     }
     NSLog("Pump acknowledged wakeup!")
 
@@ -75,10 +75,10 @@ class PumpOpsSynchronous {
     let longResponse = try sendAndListen(longPowerMessage)
     
     guard longResponse.messageType == .PumpAck else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse("Wakeup longResponse: \(longResponse.txData)")
     }
 
-    NSLog("Power on for %d minutes", duration.minutes)
+    NSLog("Power on for %.0f minutes", duration.minutes)
     pump.awakeUntil = NSDate(timeIntervalSinceNow: duration)
   }
 
@@ -89,13 +89,13 @@ class PumpOpsSynchronous {
     let shortResponse = try sendAndListen(shortMsg)
     
     guard shortResponse.messageType == .PumpAck else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse(String(shortResponse.txData))
     }
     
     let response = try sendAndListen(msg)
 
     guard response.messageType == responseMessageType else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse(String(response.txData))
     }
 
     return response
@@ -113,7 +113,7 @@ class PumpOpsSynchronous {
     let response = try sendAndListen(msg)
 
     guard response.messageType == messageType, let body = response.messageBody as? T else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse(String(response.txData))
     }
     return body
   }
@@ -137,7 +137,7 @@ class PumpOpsSynchronous {
 
         let response: ReadTempBasalCarelinkMessageBody = try getMessageBodyWithType(.ReadTempBasal)
 
-        if response.timeRemaining == duration {
+        if response.timeRemaining == duration && response.rateType == .Absolute {
           return response
         } else {
           lastError = PumpCommsError.RFCommsFailure("Could not verify TempBasal on attempt \(attempt)")
@@ -156,13 +156,13 @@ class PumpOpsSynchronous {
     let shortResponse = try sendAndListen(makePumpMessage(.ChangeTime))
 
     guard shortResponse.messageType == .PumpAck else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse("changeTime shortResponse: \(shortResponse.txData)")
     }
 
     let response = try sendAndListen(messageGenerator())
 
     guard response.messageType == .PumpAck else {
-      throw PumpCommsError.UnknownResponse
+      throw PumpCommsError.UnknownResponse("changeTime response: \(response.txData)")
     }
   }
   

@@ -486,7 +486,7 @@ class NightScoutUploader: NSObject {
         completion("Couldn't encode data to json.")
       }
     } else {
-      completion(String(format:"Invalid URL: %@, %@", siteURL, endpoint))
+      completion("Invalid URL: \(siteURL), \(endpoint)")
     }
   }
   
@@ -495,7 +495,7 @@ class NightScoutUploader: NSObject {
     deviceStatuses =  [AnyObject]()
     uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
       if error != nil {
-        NSLog("Uploading device statuses failed: %@", error!)
+        NSLog("Uploading device status to nightscout failed: %@", error!)
         // Requeue
         self.deviceStatuses.appendContentsOf(inFlight)
       }
@@ -507,7 +507,7 @@ class NightScoutUploader: NSObject {
     entries =  [AnyObject]()
     uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
       if error != nil {
-        NSLog("Uploading device statuses failed: %@", error!)
+        NSLog("Uploading nightscout entries failed: %@", error!)
         // Requeue
         self.entries.appendContentsOf(inFlight)
       }
@@ -519,7 +519,7 @@ class NightScoutUploader: NSObject {
     treatmentsQueue =  [AnyObject]()
     uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
       if error != nil {
-        NSLog("Uploading device statuses failed: %@", error!)
+        NSLog("Uploading nightscout treatment records failed: %@", error!)
         // Requeue
         self.treatmentsQueue.appendContentsOf(inFlight)
       }

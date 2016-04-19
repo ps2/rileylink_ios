@@ -9,10 +9,17 @@
 import Foundation
 
 public class TempBasalPumpEvent: PumpEvent {
+  
+  public enum RateType : String {
+    case Absolute = "absolute"
+    case Percent = "percent"
+  }
+
+  
   public let length: Int
-  public let rateType: String
+  public let rateType: RateType
   public let rate: Double
-  let timestamp: NSDateComponents
+  public let timestamp: NSDateComponents
 
   public required init?(availableData: NSData, pumpModel: PumpModel) {
     length = 8
@@ -24,12 +31,12 @@ public class TempBasalPumpEvent: PumpEvent {
     if length > availableData.length {
       timestamp = NSDateComponents()
       rate = 0
-      rateType = ""
+      rateType = .Absolute
       return nil
     }
     
-    rateType = (d(7) >> 3) == 0 ? "absolute" : "percent"
-    if rateType == "absolute" {
+    rateType = (d(7) >> 3) == 0 ? .Absolute : .Percent
+    if rateType == .Absolute {
       rate = Double(d(1)) / 40.0
     } else {
       rate = Double(d(1))
@@ -42,8 +49,9 @@ public class TempBasalPumpEvent: PumpEvent {
     return [
       "_type": "TempBasal",
       "rate": rate,
-      "temp": rateType,
+      "temp": rateType.rawValue,
       "timestamp": TimeFormat.timestampStr(timestamp),
     ]
   }
 }
+

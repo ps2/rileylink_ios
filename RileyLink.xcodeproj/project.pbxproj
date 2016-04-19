@@ -103,6 +103,7 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
+		C12FB2761CC5893C00879B80 /* TempBasalNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
@@ -176,7 +177,6 @@
 		C1842C331C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */; };
 		C1890B5F1C94B9D9005F7474 /* PumpChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1890B5E1C94B9D9005F7474 /* PumpChatViewController.swift */; };
 		C19F94AB1C91DF6E00018F7D /* BolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */; };
-		C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EC11B1190D800756B99 /* NSString+Hashes.m */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
@@ -399,6 +399,7 @@
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C12EA26B198B456D00309FA4 /* NightscoutWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NightscoutWebView.h; sourceTree = "<group>"; };
 		C12EA26C198B456D00309FA4 /* NightscoutWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NightscoutWebView.m; sourceTree = "<group>"; };
+		C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
@@ -474,8 +475,6 @@
 		C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1890B5E1C94B9D9005F7474 /* PumpChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpChatViewController.swift; sourceTree = "<group>"; };
 		C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNightscoutTreatment.swift; sourceTree = "<group>"; };
-		C1A47EC01B1190D800756B99 /* NSString+Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashes.h"; sourceTree = "<group>"; };
-		C1A47EC11B1190D800756B99 /* NSString+Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashes.m"; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessage.swift; path = Messages/MeterMessage.swift; sourceTree = "<group>"; };
@@ -864,6 +863,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C12FB2741CC588FB00879B80 /* Treatments */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Treatments;
+			sourceTree = "<group>";
+		};
 		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
 			isa = PBXGroup;
 			children = (
@@ -933,8 +939,6 @@
 			children = (
 				C1E535E81991E36700C2AC49 /* NSData+Conversion.h */,
 				C1E535E91991E36700C2AC49 /* NSData+Conversion.m */,
-				C1A47EC01B1190D800756B99 /* NSString+Hashes.h */,
-				C1A47EC11B1190D800756B99 /* NSString+Hashes.m */,
 				C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */,
 				C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */,
 			);
@@ -1023,6 +1027,7 @@
 		C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
+				C12FB2741CC588FB00879B80 /* Treatments */,
 				C1C357921C929507009BDD4F /* Extensions */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
@@ -1030,6 +1035,7 @@
 				C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */,
 				C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */,
 				C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */,
+				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -1542,6 +1548,7 @@
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
+				C12FB2761CC5893C00879B80 /* TempBasalNightscoutTreatment.swift in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C1890B5F1C94B9D9005F7474 /* PumpChatViewController.swift in Sources */,
@@ -1563,7 +1570,6 @@
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
 				C12EA247198B436800309FA4 /* main.m in Sources */,
 				C1842C331C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift in Sources */,
-				C1A47EC21B1190D800756B99 /* NSString+Hashes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -454,67 +454,12 @@ class NightScoutUploader: NSObject {
     flushTreatments()
   }
   
-  func flushDeviceStatuses() {
-  
-    if deviceStatuses.count == 0 {
+  func uploadToNS(json: [AnyObject], endpoint:String, completion: (String?) -> Void) {
+    if json.count == 0 {
+      completion(nil)
       return
     }
     
-    let inFlightDeviceStatuses = deviceStatuses
-    deviceStatuses = [AnyObject]()
-    reportJSON(inFlightDeviceStatuses, endpoint: defaultNightscoutDeviceStatusPath) { (data, response, error) -> Void in
-      let httpResponse = response as! NSHTTPURLResponse
-      if httpResponse.statusCode != 200 {
-        NSLog("Requeuing %d device statuses: %@", inFlightDeviceStatuses.count, error!)
-        self.deviceStatuses += inFlightDeviceStatuses
-      } else {
-        //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        //NSLog(@"Submitted %d device statuses to nightscout: %@", inFlightDeviceStatuses.count, resp);
-      }
-    }
-  }
-  
-  func flushEntries() {
-    if (self.entries.count == 0) {
-    return;
-    }
-    
-    let inFlightEntries = entries
-    entries = [AnyObject]()
-    reportJSON(inFlightEntries, endpoint: defaultNightscoutEntriesPath) { (data, response, error) -> Void in
-      let httpResponse = response as! NSHTTPURLResponse
-      
-      if (error != nil) {
-        NSLog("Requeuing %d sgv entries: %@", inFlightEntries.count, error!)
-      }
-      else if httpResponse.statusCode != 200 {
-        let resp = String(data: data!, encoding: NSUTF8StringEncoding)
-        NSLog("Requeuing %d sgv entries, http response code = %d, message = %@", inFlightEntries.count, httpResponse.statusCode, resp!)
-        self.entries += inFlightEntries
-      } else {
-        //NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        //NSLog(@"Submitted %d entries to nightscout: %@", inFlightEntries.count, resp);
-      }
-    }
-  }
-  
-  func flushTreatments() {
-    if (self.treatmentsQueue.count == 0) {
-      return;
-    }
-    
-    let inFlightTreatments = treatmentsQueue
-    treatmentsQueue = [AnyObject]()
-    reportJSON(inFlightTreatments, endpoint: defaultNightscoutTreatmentPath) { (data, response, error) -> Void in
-      let httpResponse = response as! NSHTTPURLResponse
-      if httpResponse.statusCode != 200 {
-        NSLog("Requeuing %d treatments: %@", inFlightTreatments.count, error!)
-        self.treatmentsQueue += inFlightTreatments
-      }
-    }
-  }
-  
-  func reportJSON(json: [AnyObject], endpoint:String, completion: (NSData?, NSURLResponse?, NSError?) -> Void) {
     if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
       let request = NSMutableURLRequest(URL: uploadURL)
       do {
@@ -526,14 +471,58 @@ class NightScoutUploader: NSObject {
         request.setValue(self.APISecret.sha1(), forHTTPHeaderField:"api-secret")
         request.HTTPBody = sendData
         
-        NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: completion).resume()
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
+          let httpResponse = response as! NSHTTPURLResponse
+          if let error = error {
+            completion(error.description)
+          } else if httpResponse.statusCode != 200 {
+            completion(String(data: data!, encoding: NSUTF8StringEncoding)!)
+          } else {
+            completion(nil)
+          }
+        })
+        task.resume()
       } catch {
-        NSLog("Couldn't encode data to json.");
+        completion("Couldn't encode data to json.")
       }
     } else {
-      NSLog("Invalid URL: %@, %@", siteURL, endpoint)
+      completion("Invalid URL: \(siteURL), \(endpoint)")
     }
   }
   
-
+  func flushDeviceStatuses() {
+    let inFlight = deviceStatuses
+    deviceStatuses =  [AnyObject]()
+    uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
+      if error != nil {
+        NSLog("Uploading device status to nightscout failed: %@", error!)
+        // Requeue
+        self.deviceStatuses.appendContentsOf(inFlight)
+      }
+    }
+  }
+  
+  func flushEntries() {
+    let inFlight = entries
+    entries =  [AnyObject]()
+    uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
+      if error != nil {
+        NSLog("Uploading nightscout entries failed: %@", error!)
+        // Requeue
+        self.entries.appendContentsOf(inFlight)
+      }
+    }
+  }
+  
+  func flushTreatments() {
+    let inFlight = treatmentsQueue
+    treatmentsQueue =  [AnyObject]()
+    uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
+      if error != nil {
+        NSLog("Uploading nightscout treatment records failed: %@", error!)
+        // Requeue
+        self.treatmentsQueue.appendContentsOf(inFlight)
+      }
+    }
+  }
 }

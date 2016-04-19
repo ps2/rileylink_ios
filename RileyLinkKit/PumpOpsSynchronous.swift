@@ -250,6 +250,7 @@ class PumpOpsSynchronous {
     while pageNum < 16 {
       NSLog("Fetching page %d", pageNum)
       let pageData = try getHistoryPage(pageNum)
+      
       NSLog("Fetched page %d: %@", pageNum, pageData)
       let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
       var eventIdxBeforeStartDate = -1

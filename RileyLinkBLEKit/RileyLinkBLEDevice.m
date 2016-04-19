@@ -478,7 +478,7 @@
     // This is a response to our idle listen command
     RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
     packet.capturedAt = [NSDate date];
-    NSLog(@"Read packet (%d): %d bytes", packet.rssi, packet.data.length);
+    NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
     NSDictionary *attrs = @{
                             @"packet": packet,
                             @"peripheral": self.peripheral,

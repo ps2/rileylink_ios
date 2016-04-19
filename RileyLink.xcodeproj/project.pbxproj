@@ -37,6 +37,9 @@
 		434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */; };
 		434AB0981CBA0DF600422F4A /* PumpState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0941CBA0DF600422F4A /* PumpState.swift */; };
 		434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
+		434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */; };
+		434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */; };
+		434AB0C71CBCB76400422F4A /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
 		43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		43523ED81CC2C820001850F1 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -317,6 +320,8 @@
 		434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; };
 		434AB0941CBA0DF600422F4A /* PumpState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpState.swift; sourceTree = "<group>"; };
 		434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
+		434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceManager.swift; sourceTree = "<group>"; };
+		434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDevice.swift; sourceTree = "<group>"; };
 		43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkKit.h; sourceTree = "<group>"; };
 		43722FB21CB9F7640038B7F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -644,10 +649,12 @@
 				43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */,
 				43722FB21CB9F7640038B7F2 /* Info.plist */,
 				434AB0911CBA0DF600422F4A /* Either.swift */,
+				434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */,
 				434AB0921CBA0DF600422F4A /* PumpOps.swift */,
 				434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */,
 				434AB0941CBA0DF600422F4A /* PumpState.swift */,
-				434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */,
+				434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */,
+				434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */,
 			);
 			path = RileyLinkKit;
 			sourceTree = "<group>";
@@ -1381,8 +1388,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */,
+				434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */,
+				434AB0C71CBCB76400422F4A /* NSData.swift in Sources */,
 				434AB0981CBA0DF600422F4A /* PumpState.swift in Sources */,
 				434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */,
+				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
 				434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
 			);

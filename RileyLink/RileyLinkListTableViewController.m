@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkBLEKit;
+
 #import "RileyLinkListTableViewController.h"
 #import "SWRevealViewController.h"
-#import "RileyLinkBLEManager.h"
 #import "RileyLinkTableViewCell.h"
-#import "RileyLinkBLEDevice.h"
 #import "AppDelegate.h"
 #import "RileyLinkDeviceViewController.h"
 

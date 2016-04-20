@@ -32,6 +32,8 @@
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
+  uint16_t _idleTimeout;
+  BOOL fetchingResponse;
   CmdBase *currentCommand;
   BOOL runningIdle;
   BOOL runningSession;
@@ -50,6 +52,7 @@
 @implementation RileyLinkBLEDevice
 
 @synthesize peripheral = _peripheral;
+@synthesize lastIdle = _lastIdle;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
@@ -61,6 +64,9 @@
     
     cmdDispatchGroup = dispatch_group_create();
     idleDetectDispatchGroup = dispatch_group_create();
+
+    _idleTimeout = 60 * 1000;
+    _timerTickEnabled = YES;
 
     incomingPackets = [NSMutableArray array];
     
@@ -92,6 +98,19 @@
   return self.peripheral.identifier.UUIDString;
 }
 
+- (void)setTimerTickEnabled:(BOOL)timerTickEnabled
+{
+    _timerTickEnabled = timerTickEnabled;
+
+    if (timerTickCharacteristic != nil &&
+        timerTickCharacteristic.isNotifying != timerTickEnabled &&
+        self.peripheral.state == CBPeripheralStateConnected)
+    {
+        [self.peripheral setNotifyValue:_timerTickEnabled
+                      forCharacteristic:timerTickCharacteristic];
+    }
+}
+
 - (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
   dispatch_group_enter(idleDetectDispatchGroup);
   RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
@@ -108,9 +127,7 @@
   dispatch_group_notify(idleDetectDispatchGroup,
                         dispatch_get_main_queue(), ^{
                           NSLog(@"idleDetectDispatchGroup empty");
-                          if (!runningIdle && !runningSession) {
-                            [self onIdle];
-                          }
+                          [self assertIdleListening];
                         });
 }
 
@@ -178,9 +195,7 @@
 {
   switch (self.peripheral.state) {
     case CBPeripheralStateConnected:
-      if (idleListeningEnabled) {
-        [self onIdle];
-      }
+      [self assertIdleListening];
       break;
     case CBPeripheralStateDisconnected:
       runningIdle = NO;
@@ -203,7 +218,7 @@
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
-      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      [self.peripheral setNotifyValue:_timerTickEnabled forCharacteristic:characteristic];
       timerTickCharacteristic = characteristic;
     }
   }
@@ -429,17 +444,18 @@
     NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 2 * 60 * 1000;
+    cmd.timeoutMS = _idleTimeout;
     [self issueCommand:cmd];
+
+    _lastIdle = [NSDate date];
   }
 }
 
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
-  if (!runningIdle && !runningSession) {
-    [self onIdle];
-  }
+
+  [self assertIdleListening];
 }
 
 - (void) disableIdleListening {
@@ -447,12 +463,22 @@
   runningIdle = NO;
 }
 
+- (void) assertIdleListening {
+  if (idleListeningEnabled && !runningSession) {
+    NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
+
+    if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+      [self onIdle];
+    }
+  }
+}
+
 - (void) handleIdleListenerResponse:(NSData *)response {
   if (response.length > 3) {
     // This is a response to our idle listen command
     RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
     packet.capturedAt = [NSDate date];
-    NSLog(@"Read packet (%d): %d bytes", packet.rssi, packet.data.length);
+    NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
     NSDictionary *attrs = @{
                             @"packet": packet,
                             @"peripheral": self.peripheral,

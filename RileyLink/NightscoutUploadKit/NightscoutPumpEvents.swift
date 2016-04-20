@@ -14,6 +14,7 @@ class NightscoutPumpEvents: NSObject {
   class func translate(events: [PumpEvent], eventSource: String) -> [NightscoutTreatment] {
     var results = [NightscoutTreatment]()
     var lastBolusWizard: BolusWizardEstimatePumpEvent?
+    var lastTempBasal: TempBasalPumpEvent?
     for event in events {
       if let bgReceived = event as? BGReceivedPumpEvent {
         if let date = TimeFormat.timestampAsLocalDate(bgReceived.timestamp) {
@@ -51,6 +52,23 @@ class NightscoutPumpEvents: NSObject {
       }
       if let bolusWizard = event as? BolusWizardEstimatePumpEvent {
         lastBolusWizard = bolusWizard
+      }
+      if let tempBasal = event as? TempBasalPumpEvent {
+        lastTempBasal = tempBasal
+      }
+      if let tempBasalDuration = event as? TempBasalDurationPumpEvent,
+        tempBasal = lastTempBasal {
+        
+        if let date = TimeFormat.timestampAsLocalDate(tempBasal.timestamp) {
+          let absolute: Double? = tempBasal.rateType == .Absolute ? tempBasal.rate : nil
+          let entry = TempBasalNightscoutTreatment(
+            timestamp: date,
+            enteredBy: eventSource,
+            temp: tempBasal.rateType == .Absolute ? .Absolute : .Percentage,
+          rate: tempBasal.rate, absolute: absolute, duration: tempBasalDuration.duration)
+          
+          results.append(entry)
+        }
       }
     }
     return results

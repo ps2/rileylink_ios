@@ -22,18 +22,18 @@ public struct PumpMessage {
     }
 
     public init?(rxData: NSData) {
-        if rxData.length >= 7,
-          let packetType = PacketType(rawValue: rxData[0]) where packetType != .Meter,
-          let messageType = MessageType(rawValue: rxData[4]),
-            messageBody = messageType.bodyType.init(rxData: rxData.subdataWithRange(NSRange(5..<rxData.length - 1)))
-        {
-            self.packetType = packetType
-            self.address = rxData.subdataWithRange(NSRange(1...3))
-            self.messageType = messageType
-            self.messageBody = messageBody
-        } else {
+        guard rxData.length >= 7,
+            let packetType = PacketType(rawValue: rxData[0]) where packetType != .Meter,
+            let messageType = MessageType(rawValue: rxData[4]),
+                messageBody = messageType.bodyType.init(rxData: rxData.subdataWithRange(NSRange(5..<rxData.length - 1)))
+        else {
             return nil
         }
+
+        self.packetType = packetType
+        self.address = rxData.subdataWithRange(NSRange(1...3))
+        self.messageType = messageType
+        self.messageBody = messageBody
     }
 
     public var txData: NSData {

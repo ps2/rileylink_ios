@@ -48,6 +48,37 @@ class HistoryPageTests: XCTestCase {
     }
   }
   
+  
+  func testTempBasalDecoding() {
+    let pumpModel = PumpModel.byModelNumber("551")
+    do {
+      let page = try HistoryPage(pageData: NSData(hexadecimalString: "160179230c121033104a2a0c12100016014a2a0c1210330854000d121000160154000d12107b05541e0d1210180a007b064000101210200e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004876")!, pumpModel: pumpModel!)
+      
+      let events = page.events
+      XCTAssertEqual(events.count, 7)
+      
+      let duration = events[0] as! TempBasalDurationPumpEvent
+      XCTAssertEqual(duration.duration, 30)
+      XCTAssertEqual(duration.timestamp, NSDateComponents(gregorianYear: 2016, month: 4, day: 18, hour: 12, minute: 35, second: 57))
+      
+      let tempBasal = events[1] as! TempBasalPumpEvent
+      XCTAssertEqual(tempBasal.rateType, TempBasalPumpEvent.RateType.Absolute)
+      XCTAssertEqual(tempBasal.rate, 0.4)
+      XCTAssertEqual(tempBasal.timestamp, NSDateComponents(gregorianYear: 2016, month: 4, day: 18, hour: 12, minute: 42, second: 10))
+
+      let duration2 = events[2] as! TempBasalDurationPumpEvent
+      XCTAssertEqual(duration2.duration, 30)
+      XCTAssertEqual(duration2.timestamp, NSDateComponents(gregorianYear: 2016, month: 4, day: 18, hour: 12, minute: 42, second: 10))
+
+    } catch HistoryPage.Error.InvalidCRC {
+      XCTFail("page decoding threw invalid crc")
+    } catch HistoryPage.Error.UnknownEventType(_) {
+      XCTFail("unknown event type")
+    } catch {
+      NSLog("Unexpected exception...")
+    }
+  }
+  
   func testHistoryDecoding() {
     let pumpModel = PumpModel.byModelNumber("551")
     do {
@@ -67,7 +98,7 @@ class HistoryPageTests: XCTestCase {
       XCTAssertEqual(bolusWizard.foodEstimate, 4.1)
       XCTAssertEqual(bolusWizard.insulinSensitivity, 75)
       XCTAssertEqual(bolusWizard.unabsorbedInsulinTotal, 0.9)
-      XCTAssertEqual(bolusWizard.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T16:34:09Z")
+      XCTAssertEqual(bolusWizard.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 10, minute: 34, second: 9))
       
       let bolus = events[1] as! BolusNormalPumpEvent
       XCTAssertEqual(bolus.amount, 3.2)
@@ -75,7 +106,7 @@ class HistoryPageTests: XCTestCase {
       XCTAssertEqual(bolus.duration, 0)
       XCTAssertEqual(bolus.programmed, 3.2)
       XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.9)
-      XCTAssertEqual(bolus.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T16:34:09Z")
+      XCTAssertEqual(bolus.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 10, minute: 34, second: 9))
       
       let unabsorbedInsulinRecords = bolus.unabsorbedInsulinRecord!.records
       XCTAssertEqual(unabsorbedInsulinRecords.count, 3)
@@ -90,29 +121,39 @@ class HistoryPageTests: XCTestCase {
       XCTAssertEqual(basalProfileStart.offset, 43200000)
       XCTAssertEqual(basalProfileStart.rate, 0.25)
       XCTAssertEqual(basalProfileStart.profileIndex, 5)
-      XCTAssertEqual(basalProfileStart.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T18:00:00Z")
+      XCTAssertEqual(basalProfileStart.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 12, minute: 0, second: 0))
       
       let calBGForPH = events[3] as! CalBGForPHPumpEvent
       XCTAssertEqual(calBGForPH.amount, 222)
-      XCTAssertEqual(calBGForPH.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T18:35:25Z")
+      XCTAssertEqual(calBGForPH.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 12, minute: 35, second: 25))
       
       let bgReceived = events[7] as! BGReceivedPumpEvent
       XCTAssertEqual(bgReceived.amount, 268)
       XCTAssertEqual(bgReceived.meter, "c527ad")
-      XCTAssertEqual(bgReceived.dictionaryRepresentation["timestamp"] as? String, "2016-02-21T19:19:34Z")
+      XCTAssertEqual(bgReceived.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 13, minute: 19, second: 34))
       
       let rewind = events[20] as! RewindPumpEvent
-      XCTAssertEqual(rewind.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T02:04:03Z")
+      XCTAssertEqual(rewind.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 20, minute: 4, second: 3))
       
       let prime = events[21] as! PrimePumpEvent
       XCTAssertEqual(prime.amount, 5.4)
       XCTAssertEqual(prime.primeType, "manual")
       XCTAssertEqual(prime.programmedAmount, 0.0)
-      XCTAssertEqual(prime.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T02:05:07Z")
+      XCTAssertEqual(prime.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 20, minute: 5, second: 7))
       
       let sara6e = events[50] as! Sara6EPumpEvent
       // 2016-02-22T00:00:00
-      XCTAssertEqual(sara6e.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T06:00:00Z")
+      let sara6eDate = NSDateComponents()
+      sara6eDate.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+      sara6eDate.year = 2016
+      sara6eDate.month = 2
+      sara6eDate.day = 21
+
+      XCTAssertEqual(sara6e.timestamp, sara6eDate)
+
+      sara6e.timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
+
+      XCTAssertEqual(sara6e.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T05:00:00Z")
       
     } catch HistoryPage.Error.InvalidCRC {
       XCTFail("page decoding threw invalid crc")
@@ -137,7 +178,10 @@ class HistoryPageTests: XCTestCase {
       XCTAssertEqual(bolus.duration, 0)
       XCTAssertEqual(bolus.programmed, 2.05)
       XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.0)
-      XCTAssertEqual(bolus.dictionaryRepresentation["timestamp"] as? String, "2016-04-06T01:34:02Z")
+
+      let timestamp = NSDateComponents(gregorianYear: 2016, month: 4, day: 5, hour: 20, minute: 34, second: 02)
+
+      XCTAssertEqual(bolus.timestamp, timestamp)
       
     } catch HistoryPage.Error.InvalidCRC {
       XCTFail("page decoding threw invalid crc")

@@ -9,7 +9,7 @@
 import Foundation
 
 
-public extension NSData {
+extension NSData {
     @nonobjc subscript(index: Int) -> Int8 {
         let bytes: [Int8] = self[index...index]
 
@@ -83,6 +83,7 @@ public extension NSData {
                     case 97...102:  // 'a'-'f'
                         offset = 97 - 10         // 10 since 'a' is 10, not 0
                     default:
+                        self.init()
                         return nil
                     }
 

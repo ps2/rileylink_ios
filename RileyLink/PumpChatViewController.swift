@@ -8,6 +8,9 @@
 
 import UIKit
 import MinimedKit
+import RileyLinkKit
+import RileyLinkBLEKit
+
 
 class PumpChatViewController: UIViewController {
   

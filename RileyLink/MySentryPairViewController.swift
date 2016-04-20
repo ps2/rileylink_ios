@@ -8,6 +8,8 @@
 
 import UIKit
 import MinimedKit
+import RileyLinkBLEKit
+
 
 class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   
@@ -29,7 +31,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   @IBOutlet var progressView: UIProgressView!
   
   lazy var flailGestureRecognizer: UITapGestureRecognizer = {
-    let r = UITapGestureRecognizer.init(target: self, action: #selector(MySentryPairViewController.closeKeyboard(_:)))
+    let r = UITapGestureRecognizer(target: self, action: #selector(MySentryPairViewController.closeKeyboard(_:)))
     r.cancelsTouchesInView = false;
     r.enabled = false;
     return r
@@ -174,7 +176,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   
     var handled = false
   
-    if let data = packet.data, msg = PumpMessage.init(rxData: data) {
+    if let data = packet.data, msg = PumpMessage(rxData: data) {
       if msg.packetType == PacketType.MySentry &&
         msg.address.hexadecimalString == Config.sharedInstance().pumpID {
           switch (msg.messageType) {
@@ -206,7 +208,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
       sequence,
       self.deviceIDTextField.text!,
       messageType.rawValue)
-    let data = NSData.init(hexadecimalString: replyString)
+    let data = NSData(hexadecimalString: replyString)
     let send = SendAndListenCmd()
     send.sendChannel = 0
     send.timeoutMS = 180

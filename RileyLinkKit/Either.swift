@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Either<T1, T2> {
+public enum Either<T1, T2> {
   case Success(T1)
   case Failure(T2)
 }

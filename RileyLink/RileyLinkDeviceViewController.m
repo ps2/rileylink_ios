@@ -6,10 +6,11 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkBLEKit;
+
 #import "RileyLinkDeviceViewController.h"
 #import "PacketLogViewController.h"
 #import "PacketGeneratorViewController.h"
-#import "RileyLinkBLEManager.h"
 
 @interface RileyLinkDeviceViewController () {
   IBOutlet UILabel *deviceIDLabel;

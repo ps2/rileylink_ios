@@ -44,6 +44,7 @@ class PumpChatViewController: UIViewController {
     pumpOps.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
       switch response {
       case .Success(let (events, _)):
+        self.addOutputMessage(String(format:"Found %d events since %@", events.count, oneDayAgo!))
         for event in events {
           self.addOutputMessage(String(format:"Event: %@", event.dictionaryRepresentation))
           NSLog("Event: %@", event.dictionaryRepresentation)

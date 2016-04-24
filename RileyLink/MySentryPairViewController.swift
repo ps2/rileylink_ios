@@ -203,7 +203,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   func makeCommandForAckAndListen(sequence: UInt8, messageType: MessageType) -> ReceivingPacketCmd {
     let replyString = String(format: "%02x%@%02x%02x%@00%02x000000",
       PacketType.MySentry.rawValue,
-      Config.sharedInstance().pumpID,
+      Config.sharedInstance().pumpID!,
       MessageType.PumpAck.rawValue,
       sequence,
       self.deviceIDTextField.text!,

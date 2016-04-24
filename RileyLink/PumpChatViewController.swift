@@ -24,7 +24,7 @@ class PumpChatViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    pumpIdLabel.text = String(format:"PumpID: %@", Config.sharedInstance().pumpID)
+    pumpIdLabel.text = "PumpID: \(Config.sharedInstance().pumpID ?? "nil")"
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     pumpOps = PumpOps(pumpState:appDelegate.pump, device:device)

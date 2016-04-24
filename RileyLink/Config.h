@@ -12,11 +12,11 @@
   NSUserDefaults *_defaults;
 }
 
-+ (Config *)sharedInstance;
++ (nonnull Config *)sharedInstance;
 
-@property (nonatomic, strong) NSString *nightscoutURL;
-@property (nonatomic, strong) NSString *nightscoutAPISecret;
-@property (nonatomic, strong) NSString *pumpID;
+@property (nonatomic, nullable, strong) NSString *nightscoutURL;
+@property (nonatomic, nullable, strong) NSString *nightscoutAPISecret;
+@property (nonatomic, nullable, strong) NSString *pumpID;
 
 @property (nonatomic, readonly) BOOL hasValidConfiguration;
 

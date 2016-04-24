@@ -32,6 +32,7 @@
 		430D650D1CB89FC000FCA750 /* SendPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64FD1CB89FC000FCA750 /* SendPacketCmd.m */; };
 		430D650E1CB89FC000FCA750 /* UpdateRegisterCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */; };
+		43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43462E8A1CCB06F500F958A8 /* AppDelegate.swift */; };
 		434AB0951CBA0DF600422F4A /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0911CBA0DF600422F4A /* Either.swift */; };
 		434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0921CBA0DF600422F4A /* PumpOps.swift */; };
 		434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */; };
@@ -96,8 +97,6 @@
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
 		C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA243198B436800309FA4 /* InfoPlist.strings */; };
-		C12EA247198B436800309FA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA246198B436800309FA4 /* main.m */; };
-		C12EA24B198B436800309FA4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA24A198B436800309FA4 /* AppDelegate.m */; };
 		C12EA24D198B436800309FA4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C12EA24C198B436800309FA4 /* Images.xcassets */; };
 		C12EA254198B436800309FA4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA253198B436800309FA4 /* XCTest.framework */; };
 		C12EA255198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
@@ -315,6 +314,7 @@
 		430D64FD1CB89FC000FCA750 /* SendPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPacketCmd.m; sourceTree = "<group>"; };
 		430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRegisterCmd.h; sourceTree = "<group>"; };
 		430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRegisterCmd.m; sourceTree = "<group>"; };
+		43462E8A1CCB06F500F958A8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		434AB0911CBA0DF600422F4A /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		434AB0921CBA0DF600422F4A /* PumpOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
 		434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; };
@@ -391,10 +391,6 @@
 		C12EA23E198B436800309FA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C12EA242198B436800309FA4 /* RileyLink-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RileyLink-Info.plist"; sourceTree = "<group>"; };
 		C12EA244198B436800309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C12EA246198B436800309FA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C12EA248198B436800309FA4 /* RileyLink-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Prefix.pch"; sourceTree = "<group>"; };
-		C12EA249198B436800309FA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		C12EA24A198B436800309FA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C12EA24C198B436800309FA4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C12EA252198B436800309FA4 /* RileyLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RileyLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA253198B436800309FA4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -814,27 +810,26 @@
 		C12EA240198B436800309FA4 /* RileyLink */ = {
 			isa = PBXGroup;
 			children = (
-				C126165E1B76E8DC001FAD87 /* TPKeyboardAvoiding */,
-				C12616451B685F35001FAD87 /* CoreData */,
-				C12616391B67CB9C001FAD87 /* TableViewCells */,
-				C1EF589A1B3FBA32001C8C80 /* ViewControllers */,
-				C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */,
-				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
-				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
-				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
-				C12EA249198B436800309FA4 /* AppDelegate.h */,
-				C12EA24A198B436800309FA4 /* AppDelegate.m */,
-				43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */,
-				C12EA269198B442100309FA4 /* Storyboard.storyboard */,
-				C12EA24C198B436800309FA4 /* Images.xcassets */,
+				C12616451B685F35001FAD87 /* CoreData */,
+				C1EF589B1B3FBA5D001C8C80 /* NightscoutUploadKit */,
 				C12EA241198B436800309FA4 /* Supporting Files */,
-				C1271B061A9A34E900B7C949 /* Log.m */,
-				C1271B081A9A350400B7C949 /* Log.h */,
+				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
+				C12616391B67CB9C001FAD87 /* TableViewCells */,
+				C126165E1B76E8DC001FAD87 /* TPKeyboardAvoiding */,
+				C1EF589A1B3FBA32001C8C80 /* ViewControllers */,
+				43462E8A1CCB06F500F958A8 /* AppDelegate.swift */,
 				C1EF58861B3F93FE001C8C80 /* Config.h */,
 				C1EF58871B3F93FE001C8C80 /* Config.m */,
+				C12EA24C198B436800309FA4 /* Images.xcassets */,
+				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
+				C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */,
+				43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */,
+				C1271B081A9A350400B7C949 /* Log.h */,
+				C1271B061A9A34E900B7C949 /* Log.m */,
 				C139AC221BFD84B500B0518F /* RuntimeUtils.h */,
 				C139AC231BFD84B500B0518F /* RuntimeUtils.m */,
+				C12EA269198B442100309FA4 /* Storyboard.storyboard */,
 			);
 			path = RileyLink;
 			sourceTree = "<group>";
@@ -845,8 +840,6 @@
 				C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */,
 				C12EA242198B436800309FA4 /* RileyLink-Info.plist */,
 				C12EA243198B436800309FA4 /* InfoPlist.strings */,
-				C12EA246198B436800309FA4 /* main.m */,
-				C12EA248198B436800309FA4 /* RileyLink-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1545,7 +1538,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1842C311C91D56400DB42AC /* BGCheckNightscoutTreatment.swift in Sources */,
-				C12EA24B198B436800309FA4 /* AppDelegate.m in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C1842C2B1C90DFB600DB42AC /* NightscoutPumpEvents.swift in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
@@ -1557,6 +1549,7 @@
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
+				43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
 				C12FB2761CC5893C00879B80 /* TempBasalNightscoutTreatment.swift in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
@@ -1578,7 +1571,6 @@
 				C19F94AB1C91DF6E00018F7D /* BolusNightscoutTreatment.swift in Sources */,
 				C10AB08B1C8519E2000F102E /* MySentryPairViewController.swift in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
-				C12EA247198B436800309FA4 /* main.m in Sources */,
 				C1842C331C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2013,8 +2005,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2035,8 +2025,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2059,8 +2047,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
@@ -2084,8 +2070,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RileyLink/RileyLink-Prefix.pch";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

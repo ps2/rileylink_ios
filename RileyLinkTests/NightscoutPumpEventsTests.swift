@@ -25,7 +25,7 @@ class NightscoutPumpEventsTests: XCTestCase {
   func testBgCheckFromMeter() {
     let events: [PumpEvent] = [
       BGReceivedPumpEvent(availableData: NSData(hexadecimalString: "3f2122938d7510c527ad")!,
-        pumpModel: PumpModel.byModelNumber("523")!)!
+        pumpModel: PumpModel.Model523)!
     ]
     let treatments = NightscoutPumpEvents.translate(events, eventSource: "testing")
     XCTAssertEqual(1, treatments.count)
@@ -39,7 +39,7 @@ class NightscoutPumpEventsTests: XCTestCase {
   func testStandaloneBolus() {
     let events: [PumpEvent] = [
       BolusNormalPumpEvent(availableData: NSData(hexadecimalString: "010080008000240009a24a1510")!,
-        pumpModel: PumpModel.byModelNumber("551")!)!
+        pumpModel: PumpModel.Model551)!
     ]
     let treatments = NightscoutPumpEvents.translate(events, eventSource: "testing")
     XCTAssertEqual(1, treatments.count)

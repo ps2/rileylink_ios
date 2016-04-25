@@ -33,7 +33,7 @@ public class PumpState: NSObject {
 
   public var pumpModel: PumpModel? {
     didSet {
-      postChangeNotificationForKey("pumpModel", oldValue: oldValue?.name)
+      postChangeNotificationForKey("pumpModel", oldValue: oldValue?.rawValue)
     }
   }
 

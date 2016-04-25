@@ -6,40 +6,51 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-public class PumpModel {
-  
-  public let larger: Bool
-  public let hasLowSuspend: Bool
-  public let strokesPerUnit: Int
-  public let name: String
-  
-  private static let models = [
-    "508": PumpModel(name: "508"),
-    "511": PumpModel(name: "511"),
-    "512": PumpModel(name: "512"),
-    "515": PumpModel(name: "515"),
-    "522": PumpModel(name: "522"),
-    "722": PumpModel(name: "722"),
-    "523": PumpModel(larger:true, strokesPerUnit: 40, name: "523"),
-    "723": PumpModel(larger:true, strokesPerUnit: 40, name: "723"),
-    "530": PumpModel(larger:true, strokesPerUnit: 40, name: "530"),
-    "730": PumpModel(larger:true, strokesPerUnit: 40, name: "730"),
-    "540": PumpModel(larger:true, strokesPerUnit: 40, name: "540"),
-    "740": PumpModel(larger:true, strokesPerUnit: 40, name: "740"),
-    "551": PumpModel(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
-    "554": PumpModel(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
-    "751": PumpModel(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551"),
-    "754": PumpModel(larger:true, hasLowSuspend: true, strokesPerUnit: 40, name: "551")
-  ]
-  
-  public class func byModelNumber(model: String) -> PumpModel? {
-    return models[model]
+
+/// Represents a pump model and its defining characteristics.
+/// This class implements the `RawRepresentable` protocol
+public enum PumpModel: String {
+  case Model508 = "508"
+  case Model511 = "511"
+  case Model512 = "512"
+  case Model515 = "515"
+  case Model522 = "522"
+  case Model722 = "722"
+  case Model523 = "523"
+  case Model723 = "723"
+  case Model530 = "530"
+  case Model730 = "730"
+  case Model540 = "540"
+  case Model740 = "740"
+  case Model551 = "551"
+  case Model751 = "751"
+  case Model554 = "554"
+  case Model754 = "754"
+
+  var generation: Int {
+    return Int(rawValue)! % 100
   }
 
-  init(larger: Bool = false, hasLowSuspend: Bool = false, strokesPerUnit: Int = 10, name: String) {
-    self.larger = larger
-    self.hasLowSuspend = hasLowSuspend
-    self.strokesPerUnit = strokesPerUnit
-    self.name = name
+  /// Identifies pumps that support a major-generation shift in record format, starting with the x23.
+  /// Mirrors the "larger" flag as defined by decoding-carelink
+  public var larger: Bool {
+    return generation >= 23
+  }
+
+  var hasLowSuspend: Bool {
+    return generation >= 51
+  }
+
+  /// The number of turns of the stepper motor required to deliver 1 U of U-100 insulin.
+  /// This is a measure of motor precision.
+  public var strokesPerUnit: Int {
+    return (generation >= 23) ? 40 : 10
+  }
+}
+
+
+extension PumpModel: CustomStringConvertible {
+  public var description: String {
+    return rawValue
   }
 }

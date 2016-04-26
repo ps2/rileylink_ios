@@ -13,7 +13,6 @@
 #import "GetPacketCmd.h"
 #import "GetVersionCmd.h"
 #import "RFPacket.h"
-#import "UIAlertView+Blocks.h"
 
 
 // See impl at bottom of file.
@@ -53,6 +52,7 @@
 
 @synthesize peripheral = _peripheral;
 @synthesize lastIdle = _lastIdle;
+@synthesize firmwareVersion = _firmwareVersion;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
@@ -263,16 +263,6 @@
   [self setCharacteristicsFromService:service];
 }
 
-- (void)showMessage:(NSString*)msg withTitle:(NSString*)title {
-  dispatch_async(dispatch_get_main_queue(),^{
-    [UIAlertView showWithTitle:title
-                       message:msg
-             cancelButtonTitle:@"OK"
-             otherButtonTitles:nil
-                      tapBlock:nil];
-  });
-}
-
 - (void)checkVersion {
   [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
     GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
@@ -283,31 +273,25 @@
     if ([s doCmd:cmd withTimeoutMs:1000]) {
       foundVersion = [[NSString alloc] initWithData:cmd.response encoding:NSUTF8StringEncoding];
       NSLog(@"Got version: %@", foundVersion);
-      NSRange range = [foundVersion rangeOfString:@"subg_rfspy"];
-      if (range.location == 0 && foundVersion.length > 11) {
-        NSString *numberPart = [foundVersion substringFromIndex:11];
-        NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
-        if (versionComponents.count > 1) {
-          NSInteger major = [versionComponents[0] integerValue];
-          NSInteger minor = [versionComponents[1] integerValue];
-          if (major <= 0 && minor < 7) {
-            NSString *msg = [NSString stringWithFormat:@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.7 or newer.", foundVersion];
-            [self showMessage:msg withTitle:@"Firmware version issue."];
-          } else {
-            versionOK = YES;
-          }
-        } else {
-          NSString *msg = [NSString stringWithFormat:@"Unable to parse version... expecting 0.x, found %@", foundVersion];
-          [self showMessage:msg withTitle:@"Firmware version issue."];
-        }
-      } else {
-        NSString *msg = [NSString stringWithFormat:@"Unable to parse version... expecting 0.x, found %@", foundVersion];
-        [self showMessage:msg withTitle:@"Firmware version issue."];
+
+      switch ([self firmwareStateForVersionString:foundVersion]) {
+        case SubgRfspyVersionStateUnknown:
+        case SubgRfspyVersionStateInvalid:
+          NSLog(@"Unable to parse version... expecting 0.x, found %@", foundVersion);
+          break;
+        case SubgRfspyVersionStateUpToDate:
+          versionOK = YES;
+          break;
+        case SubgRfspyVersionStateOutOfDate:
+          NSLog(@"The firmware version on this RileyLink is out of date. Found version\"%@\". Please use subg_rfspy version 0.7 or newer.", foundVersion);
+          break;
       }
+
+      _firmwareVersion = foundVersion;
     } else {
-      NSString *msg = @"Unable to retrieve version from RileyLink. Get version command timed out.";
-      [self showMessage:msg withTitle:@"Firmware version issue."];
+      NSLog(@"Unable to retrieve version from RileyLink. Get version command timed out.");
     }
+
     if (versionOK) {
       ready = YES;
       dispatch_async(dispatch_get_main_queue(),^{
@@ -315,6 +299,40 @@
       });
     }
   }];
+}
+
+- (SubgRfspyVersionState)firmwareStateForVersionString:(NSString *)firmwareVersion
+{
+  if (_firmwareVersion == nil) {
+    return SubgRfspyVersionStateUnknown;
+  }
+
+  NSRange range = [firmwareVersion rangeOfString:@"subg_rfspy"];
+
+  if (range.location == 0 && firmwareVersion.length > 11) {
+    NSString *numberPart = [firmwareVersion substringFromIndex:11];
+    NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
+
+    if (versionComponents.count > 1) {
+      NSInteger major = [versionComponents[0] integerValue];
+      NSInteger minor = [versionComponents[1] integerValue];
+
+      if (major <= 0 && minor < 7) {
+        return SubgRfspyVersionStateOutOfDate;
+      } else {
+        return SubgRfspyVersionStateUpToDate;
+      }
+    } else {
+      return SubgRfspyVersionStateInvalid;
+    }
+  } else {
+    return SubgRfspyVersionStateInvalid;
+  }
+}
+
+- (SubgRfspyVersionState)firmwareState
+{
+  return [self firmwareStateForVersionString:_firmwareVersion];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

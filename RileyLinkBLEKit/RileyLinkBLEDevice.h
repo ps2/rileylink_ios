@@ -22,6 +22,13 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
   SubgRfspyErrorZeroData = 0xcc
 };
 
+typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
+  SubgRfspyVersionStateUnknown = 0,
+  SubgRfspyVersionStateUpToDate,
+  SubgRfspyVersionStateOutOfDate,
+  SubgRfspyVersionStateInvalid
+};
+
 
 #define ERROR_RX_TIMEOUT 0xaa
 #define ERROR_CMD_INTERRUPTED 0xbb
@@ -63,6 +70,10 @@ typedef NS_ENUM(NSUInteger, SubgRfspyError) {
 @property (nonatomic, readonly) RileyLinkState state;
 
 @property (nonatomic, readonly, copy, nonnull) NSString * deviceURI;
+
+@property (nonatomic, readonly, nullable) NSString *firmwareVersion;
+
+@property (nonatomic, readonly) SubgRfspyVersionState firmwareState;
 
 @property (nonatomic, readonly, nullable) NSDate *lastIdle;
 

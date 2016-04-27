@@ -8,8 +8,8 @@
 
 import UIKit
 import MinimedKit
-import RileyLinkKit
-import RileyLinkBLEKit
+//import RileyLinkKit
+//import RileyLinkBLEKit
 
 
 class NightScoutUploader: NSObject {
@@ -120,7 +120,6 @@ class NightScoutUploader: NSObject {
   }
   
   func timerTriggered() {
-    logMemUsage()
   
     if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) && !fetchHistoryScheduled {
       NSLog("No fetchHistory for over five minutes.  Triggering one")

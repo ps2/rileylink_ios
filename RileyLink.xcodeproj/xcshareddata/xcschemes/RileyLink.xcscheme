@@ -82,6 +82,16 @@
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C1B383131CD0665D00CE7782"
+               BuildableName = "NightscoutUploadKitTests.xctest"
+               BlueprintName = "NightscoutUploadKitTests"
+               ReferencedContainer = "container:RileyLink.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

@@ -32,6 +32,10 @@ public class RileyLinkDevice {
 
   public private(set) var radioFrequency: Double?
 
+  public var firmwareVersion: String? {
+    return device.firmwareVersion
+  }
+
   public var name: String? {
     return device.name
   }

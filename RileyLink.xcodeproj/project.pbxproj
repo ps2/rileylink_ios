@@ -42,7 +42,6 @@
 		434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */; };
 		434AB0C71CBCB76400422F4A /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
 		43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
-		43523ED81CC2C820001850F1 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		43722FBF1CB9F7640038B7F2 /* RileyLinkKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43722FBE1CB9F7640038B7F2 /* RileyLinkKitTests.swift */; };
@@ -1368,7 +1367,6 @@
 				430D650B1CB89FC000FCA750 /* SendAndListenCmd.m in Sources */,
 				430D65051CB89FC000FCA750 /* GetVersionCmd.m in Sources */,
 				430D650D1CB89FC000FCA750 /* SendPacketCmd.m in Sources */,
-				43523ED81CC2C820001850F1 /* UIAlertView+Blocks.m in Sources */,
 				430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */,
 				430D65071CB89FC000FCA750 /* ReceivingPacketCmd.m in Sources */,
 			);

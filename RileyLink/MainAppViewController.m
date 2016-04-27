@@ -10,7 +10,6 @@
 
 #import "NSData+Conversion.h"
 #import "Config.h"
-#import "AppDelegate.h"
 #import "RileyLinkRecord.h"
 #import "MainAppViewController.h"
 #import "RileyLink-Swift.h"

@@ -303,7 +303,7 @@
 
 - (SubgRfspyVersionState)firmwareStateForVersionString:(NSString *)firmwareVersion
 {
-  if (_firmwareVersion == nil) {
+  if (firmwareVersion == nil) {
     return SubgRfspyVersionStateUnknown;
   }
 

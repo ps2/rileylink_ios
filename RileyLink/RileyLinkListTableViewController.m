@@ -11,8 +11,8 @@
 #import "RileyLinkListTableViewController.h"
 #import "SWRevealViewController.h"
 #import "RileyLinkTableViewCell.h"
-#import "AppDelegate.h"
 #import "RileyLinkDeviceViewController.h"
+#import "RileyLink-Swift.h"
 
 @interface RileyLinkListTableViewController () {
   NSMutableArray *rileyLinkRecords;

@@ -243,7 +243,7 @@ class PumpOpsSynchronous {
       try scanForPump()
     }
 
-    guard let pumpModel = try (pump.pumpModel ?? PumpModel.byModelNumber(getPumpModelNumber())) else {
+    guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
       throw PumpCommsError.UnknownPumpModel
     }
     

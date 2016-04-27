@@ -14,14 +14,14 @@ public class PumpState: NSObject {
 
   /// Posted when values of the properties of the PumpState object have changed.
   /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`
-  static let ValuesDidChangeNotification = "com.rileylink.RileyLinkKit.PumpState.ValuesDidChangeNotification"
+  public static let ValuesDidChangeNotification = "com.rileylink.RileyLinkKit.PumpState.ValuesDidChangeNotification"
 
   /// The key for a string value naming the object property whose value changed
-  static let PropertyKey = "com.rileylink.RileyLinkKit.PumpState.PropertyKey"
+  public static let PropertyKey = "com.rileylink.RileyLinkKit.PumpState.PropertyKey"
 
   /// The key for the previous value of the object property whose value changed.
   /// If the value type does not conform to AnyObject, a raw representation will be provided instead.
-  static let ValueChangeOldKey = "com.rileylink.RileyLinkKit.PumpState.ValueChangeOldKey"
+  public static let ValueChangeOldKey = "com.rileylink.RileyLinkKit.PumpState.ValueChangeOldKey"
 
   public let pumpID: String
 
@@ -33,7 +33,7 @@ public class PumpState: NSObject {
 
   public var pumpModel: PumpModel? {
     didSet {
-      postChangeNotificationForKey("pumpModel", oldValue: oldValue?.name)
+      postChangeNotificationForKey("pumpModel", oldValue: oldValue?.rawValue)
     }
   }
 

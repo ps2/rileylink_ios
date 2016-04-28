@@ -6,12 +6,12 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
 
-public class PumpOps: NSObject {
+public class PumpOps {
     
   public let pumpState: PumpState
   public let device: RileyLinkBLEDevice

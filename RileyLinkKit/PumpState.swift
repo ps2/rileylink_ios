@@ -6,11 +6,11 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MinimedKit
 
 
-public class PumpState: NSObject {
+public class PumpState {
 
   /// Posted when values of the properties of the PumpState object have changed.
   /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`
@@ -51,8 +51,6 @@ public class PumpState: NSObject {
 
   public init(pumpID: String) {
     self.pumpID = pumpID
-
-    super.init()
   }
 
   public var isAwake: Bool {

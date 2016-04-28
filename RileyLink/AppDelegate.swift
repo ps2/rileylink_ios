@@ -15,8 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
-  var pump: PumpState!
-
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     let logFileURL = applicationDocumentsDirectory().URLByAppendingPathComponent("logfile.txt")
 
@@ -26,9 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       NSLog("Could not remove file at path: \(logFileURL): \(error)")
     }
 
-    if let pumpID = Config.sharedInstance().pumpID {
-      pump = PumpState(pumpID: pumpID)
-    }
+    // Just instantiate the DeviceDataManager
+    DeviceDataManager.sharedManager
 
     return true
   }

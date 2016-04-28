@@ -48,7 +48,7 @@ public class NightscoutUploader: NSObject {
     
   // MARK: - Decoding Treatments
   
-  func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
+  public func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
     
     // Find valid event times
     var validEventTimes = [NSDate]()

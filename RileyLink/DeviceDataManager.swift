@@ -1,4 +1,4 @@
-//
+create//
 //  DeviceDataManager.swift
 //  RileyLink
 //
@@ -175,6 +175,7 @@ class DeviceDataManager {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
         let source = "rileylink://medtronic/\(pumpModel)"
+        nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)
     }
     
     // MARK: - Initialization

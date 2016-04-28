@@ -106,6 +106,14 @@ class PumpOpsSynchronous {
     return body.model
   }
 
+  internal func getPumpModel() throws -> PumpModel {
+    guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
+      throw PumpCommsError.UnknownPumpModel
+    }
+
+    return pumpModel
+  }
+
   internal func getMessageBodyWithType<T: MessageBody>(messageType: MessageType) throws -> T {
     try wakeup()
 
@@ -243,9 +251,7 @@ class PumpOpsSynchronous {
       try scanForPump()
     }
 
-    guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
-      throw PumpCommsError.UnknownPumpModel
-    }
+    let pumpModel = try getPumpModel()
     
     var pageNum = 0
     var events = [PumpEvent]()

@@ -1,5 +1,5 @@
 //
-//  NightScoutUploader.swift
+//  NightscoutUploader.swift
 //  RileyLink
 //
 //  Created by Pete Schwamb on 3/9/16.
@@ -8,11 +8,9 @@
 
 import UIKit
 import MinimedKit
-//import RileyLinkKit
-//import RileyLinkBLEKit
+import CryptoSwift
 
-
-class NightScoutUploader: NSObject {
+public class NightscoutUploader: NSObject {
 
   enum DexcomSensorError: UInt8 {
     case SensorNotActive = 1
@@ -20,8 +18,8 @@ class NightScoutUploader: NSObject {
     case BadRF = 12
   }
   
-  var siteURL: String = ""
-  var APISecret: String = ""
+  public var siteURL: String = ""
+  public var APISecret: String = ""
   
   var fetchHistoryScheduled: Bool = false
   var lastHistoryAttempt: NSDate?
@@ -30,19 +28,14 @@ class NightScoutUploader: NSObject {
   var treatmentsQueue: [AnyObject]
   
   var lastMeterMessageRxTime: NSDate?
-  var activeRileyLink: RileyLinkBLEDevice?
-  var getHistoryTimer: NSTimer?
   
-  // TODO: since some treatments update, we should instead keep track of the time
-  // of the most recent non-mutating event, and send all events newer than that.
-  //var sentTreatments: [AnyObject]
   var observingPumpEventsSince: NSDate
   
   let defaultNightscoutEntriesPath = "/api/v1/entries.json"
   let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
   let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
     
-  override init() {
+  public override init() {
     entries = [AnyObject]()
     treatmentsQueue = [AnyObject]()
     deviceStatuses = [AnyObject]()
@@ -51,143 +44,8 @@ class NightScoutUploader: NSObject {
     observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
     
     super.init()
+  }
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.packetReceived(_:)), name: RILEYLINK_EVENT_PACKET_RECEIVED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.deviceConnected(_:)), name: RILEYLINK_EVENT_DEVICE_CONNECTED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.deviceDisconnected(_:)), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NightScoutUploader.rileyLinkAdded(_:)), name: RILEYLINK_EVENT_DEVICE_ADDED, object: nil)
-    
-    UIDevice.currentDevice().batteryMonitoringEnabled = true
-    lastHistoryAttempt = nil
-    
-    getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(NightScoutUploader.timerTriggered), userInfo:nil, repeats:true)
-      
-    // This triggers one history fetch right away (in 10s)
-    //performSelector(#selector(NightScoutUploader.fetchHistory), withObject: nil, afterDelay: 10)
-    
-    // This is to just test decoding history
-    //performSelector(Selector("testDecodeHistory"), withObject: nil, afterDelay: 1)
-    
-    // Test storing MySentry packet:
-    //[self performSelector:@selector(testHandleMySentry) withObject:nil afterDelay:10];
-  }
-  
-  deinit {
-    NSNotificationCenter.defaultCenter().removeObserver(self)
-  }
-  
-  // MARK: - Testing
-  
-  func testHandleMySentry() {
-    let data = NSData(hexadecimalString: "a259705504e9401334001001050000000001d7040205e4000000000054000001240000000000000000dd")!
-    let mySentryPacket = PumpMessage(rxData: data)!
-    handlePumpStatus(mySentryPacket, device:"testData", rssi:1)
-    flushAll()
-  }
-  
-  func testDecodeHistory() {
-    let pageData = NSData(hexadecimalString: "7b0100de080a101122007b0200c0160a102c1c007b0000c0000b1000160007000002be2a900000006e2a90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080b101122007b0200c0160b102c1c007b0000c0000c1000160007000002be2b900000006e2b90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080c10112200346418d3110c107b0200c0160c102c1c00343233db170c107b0000c0000d1000160007000002be2c900000006e2c90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080d101122007b0200c0160d102c1c007b0000c0000e1000160007000002be2d900000006e2d90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080e10112200063e033303c74f4e100c3e28d7100e1021001ce2150e1003000000202ce4350e101a000ae5150e101a0120e5150e107b0214c0160e102c1c00030001000112c0160e107b0000c0000f1000160007000001d32e900000006e2e90050000000000000001d301d3640000000000000000000000000000000000000000000000000000000000000000000000007b0100de080f10112200820108db150f1000a2ce8aa0810134e0150f1000a2ce8aa07d0134e0150f1000a2ce8aa0000000000000000000000000000000000000000000000000007b0200c0160f102c1c007b0000c000101000160007000002be2f900000006e2f90050000000000000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0810101122007b0200c01610102c1c000a5e36d03670103f0b36d0d67010c228060a5b0cd43670103f0b0cd4767010c228067b0000c000111000160007000002be30900000006e309005005d5b5e02000002be02be640000000000000000000000000000000000000000000000000000000000000000000000007b0100de0811101122000a600ada3171103f0c0ada117110c2280601002200220000001dea521110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003e35")!
-    do {
-      let pumpModel = PumpModel.Model523
-      let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
-      let source = "testing/\(pumpModel)"
-      self.processPumpEvents(page.events, source: source, pumpModel: pumpModel)
-    } catch _ {
-      
-    }
-  }
-  
-  
-  // MARK: - Device updates
-  
-  func deviceConnected(note: NSNotification)
-  {
-    activeRileyLink = note.object as? RileyLinkBLEDevice
-  }
-  
-  func deviceDisconnected(note: NSNotification)
-  {
-    if activeRileyLink == (note.object as? RileyLinkBLEDevice) {
-      activeRileyLink = nil
-    }
-  }
-  
-  func rileyLinkAdded(note: NSNotification)
-  {
-    if let device = note.object as? RileyLinkBLEDevice  {
-      device.enableIdleListeningOnChannel(0)
-    }
-  }
-  
-  func timerTriggered() {
-  
-    if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) && !fetchHistoryScheduled {
-      NSLog("No fetchHistory for over five minutes.  Triggering one")
-      fetchHistory()
-    }
-    flushAll()
-  }
-  
-  
-  func packetReceived(note: NSNotification) {
-    let attrs = note.userInfo!
-    let packet = attrs["packet"] as! RFPacket
-    let device = note.object as! RileyLinkBLEDevice
-    
-    if let data = packet.data {
-      
-      if let msg = PumpMessage(rxData: data) {
-        handlePumpMessage(msg, device:device, rssi: Int(packet.rssi))
-        //TODO: tell RL to sleep for 4 mins to save on RL battery?
-        
-      } else if let msg = MeterMessage(rxData: data) {
-        handleMeterMessage(msg)
-      }
-
-    }
-  }
-  
-  // MARK: - Polling
-  
-  func fetchHistory() {
-    lastHistoryAttempt = NSDate()
-  
-    fetchHistoryScheduled = false
-    if let device = activeRileyLink where device.state != .Connected {
-      activeRileyLink = nil
-    }
-  
-    if (self.activeRileyLink == nil) {
-      for item in RileyLinkBLEManager.sharedManager().rileyLinkList {
-        if let device = item as? RileyLinkBLEDevice where device.state == .Connected {
-          activeRileyLink = device
-          break
-        }
-      }
-    }
-  
-    if let rl = activeRileyLink {
-      NSLog("Using RileyLink \"%@\" to fetchHistory.", rl.name!)
-      
-      let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-      let pumpOps = PumpOps(pumpState: appDelegate.pump, device:rl)
-      pumpOps.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
-        switch response {
-        case .Success(let (events, pumpModel)):
-          NSLog("fetchHistory succeeded.")
-          let source = "rileylink://medtronic/\(pumpModel)"
-          self.processPumpEvents(events, source: source, pumpModel: pumpModel)
-        case .Failure(let error):
-          // TODO: Check for HistoryPage.Error.UnknownEventType, and let users submit 
-          //  back to us to discover new history events.
-          NSLog("History fetch failed: %@", String(error))
-        }
-      }
-    } else {
-      NSLog("fetchHistory failed: No connected rileylinks to attempt to pull history with.")
-    }
-  }
-  
   // MARK: - Decoding Treatments
   
   func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
@@ -252,24 +110,6 @@ class NightScoutUploader: NSObject {
   }
   
   
-//  - (NSString*)trendToDirection:(GlucoseTrend)trend {
-//  switch (trend) {
-//  case GLUCOSE_TREND_NONE:
-//  return @"";
-//  case GLUCOSE_TREND_UP:
-//  return @"SingleUp";
-//  case GLUCOSE_TREND_DOUBLE_UP:
-//  return @"DoubleUp";
-//  case GLUCOSE_TREND_DOWN:
-//  return @"SingleDown";
-//  case GLUCOSE_TREND_DOUBLE_DOWN:
-//  return @"DoubleDown";
-//  default:
-//  return @"NOT COMPUTABLE";
-//  break;
-//  }
-//  }
-  
   //  Entries [ { sgv: 375,
   //    date: 1432421525000,
   //    dateString: '2015-05-23T22:52:05.000Z',
@@ -278,31 +118,8 @@ class NightScoutUploader: NSObject {
   //    device: 'share2',
   //    type: 'sgv' } ]
   
-  func handlePumpMessage(msg: PumpMessage, device: RileyLinkBLEDevice, rssi: Int) {
-
-    if (msg.packetType == .MySentry &&
-    msg.messageType == .PumpStatus &&
-    (msg.address.hexadecimalString == Config.sharedInstance().pumpID)) {
-      // Make this RL the active one, for history dumping.
-      activeRileyLink = device
-      handlePumpStatus(msg, device:device.deviceURI, rssi:rssi)
-      // Just got a MySentry packet; in 11s would be a good time to poll.
-      if !fetchHistoryScheduled {
-        performSelector(#selector(NightScoutUploader.fetchHistory), withObject:nil, afterDelay:11)
-        fetchHistoryScheduled = true
-      }
-      // TODO: send ack. also, we can probably wait less than 25s if we ack; the 25s
-      // above is mainly to avoid colliding with subsequent packets.
-    }
-    flushAll()
-  }
-  
-  func handlePumpStatus(msg: PumpMessage, device: String, rssi: Int) {
+  func handlePumpStatus(status: MySentryPumpStatusMessageBody, device: String, rssi: Int) {
     
-    let status: MySentryPumpStatusMessageBody = msg.messageBody as! MySentryPumpStatusMessageBody
-    
-    if msg.address.hexadecimalString == Config.sharedInstance().pumpID {
-      
       enum DexcomSensorErrorType: Int {
         case DX_SENSOR_NOT_ACTIVE = 1
         case DX_SENSOR_NOT_CALIBRATED = 5
@@ -398,12 +215,9 @@ class NightScoutUploader: NSObject {
         }
       }()
       entries.append(entry)
-    } else {
-      NSLog("Dropping mysentry packet for pump: %@", msg.address.hexadecimalString);
-    }
   }
   
-  func handleMeterMessage(msg: MeterMessage) {
+  public func handleMeterMessage(msg: MeterMessage) {
     
     // TODO: Should only accept meter messages from specified meter ids.
     // Need to add an interface to allow user to specify linked meters.
@@ -432,21 +246,6 @@ class NightScoutUploader: NSObject {
   // MARK: - Uploading
   
   func flushAll() {
-    
-    let logEntries = Log.popLogEntries()
-    
-    if logEntries.count > 0 {
-      let date = NSDate()
-      let epochTime = date.timeIntervalSince1970 * 1000
-      
-      let entry = [
-        "date": epochTime,
-        "dateString": TimeFormat.timestampStrFromDate(date),
-        "entries": logEntries,
-        "type": "logs"
-      ]
-      entries.append(entry)
-    }
     
     flushDeviceStatuses()
     flushEntries()

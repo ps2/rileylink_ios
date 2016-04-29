@@ -18,8 +18,8 @@ public class NightscoutUploader: NSObject {
     case BadRF = 12
   }
   
-  public var siteURL: String = ""
-  public var APISecret: String = ""
+  public var siteURL: String?
+  public var APISecret: String?
   
   var fetchHistoryScheduled: Bool = false
   var lastHistoryAttempt: NSDate?
@@ -258,7 +258,9 @@ public class NightscoutUploader: NSObject {
       return
     }
     
-    if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
+    if let siteURL = siteURL,
+       let APISecret = APISecret,
+       let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
       let request = NSMutableURLRequest(URL: uploadURL)
       do {
         let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
@@ -266,7 +268,7 @@ public class NightscoutUploader: NSObject {
         
         request.setValue("application/json", forHTTPHeaderField:"Content-Type")
         request.setValue("application/json", forHTTPHeaderField:"Accept")
-        request.setValue(self.APISecret.sha1(), forHTTPHeaderField:"api-secret")
+        request.setValue(APISecret.sha1(), forHTTPHeaderField:"api-secret")
         request.HTTPBody = sendData
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in

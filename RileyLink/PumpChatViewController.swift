@@ -25,9 +25,7 @@ class PumpChatViewController: UIViewController {
     super.viewDidLoad()
 
     pumpIdLabel.text = "PumpID: \(Config.sharedInstance().pumpID ?? "nil")"
-    
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    pumpOps = PumpOps(pumpState:appDelegate.pump, device:device)
+    pumpOps = DeviceDataManager.sharedManager.preferredRileyLink()?.ops
   }
 
   override func didReceiveMemoryWarning() {

@@ -202,8 +202,8 @@ class DeviceDataManager {
         )
         
         nightscoutUploader = NightscoutUploader()
-        nightscoutUploader.siteURL = Config.sharedInstance().nightscoutURL!
-        nightscoutUploader.APISecret = Config.sharedInstance().nightscoutAPISecret!
+        nightscoutUploader.siteURL = Config.sharedInstance().nightscoutURL
+        nightscoutUploader.APISecret = Config.sharedInstance().nightscoutAPISecret
         
         
         let calendar = NSCalendar.currentCalendar()

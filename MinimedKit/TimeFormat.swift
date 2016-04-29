@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public class TimeFormat: NSObject {
   static var formatterISO8601: NSDateFormatter = {

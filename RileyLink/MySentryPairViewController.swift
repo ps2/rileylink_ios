@@ -8,8 +8,8 @@
 
 import UIKit
 import MinimedKit
-import RileyLinkKit
 import RileyLinkBLEKit
+
 
 class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   
@@ -22,7 +22,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     case ReceivedLinkPacket
   }
   
-  var device: RileyLinkDevice!
+  var device: RileyLinkBLEDevice!
   var wasDismissed = false
  
   @IBOutlet var instructionLabel: UILabel!
@@ -218,7 +218,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
   }
   
   func runCommand(cmd: ReceivingPacketCmd) {
-    device.device runSession {
+    device.runSession {
       (session: RileyLinkCmdSession) -> Void in
       if (session.doCmd(cmd, withTimeoutMs: 31000)) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in

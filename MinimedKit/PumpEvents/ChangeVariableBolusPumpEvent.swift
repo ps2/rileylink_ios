@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public class ChangeVariableBolusPumpEvent: PumpEvent {
   public let length: Int

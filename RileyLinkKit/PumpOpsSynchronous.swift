@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
@@ -104,6 +104,14 @@ class PumpOpsSynchronous {
   internal func getPumpModelNumber() throws -> String {
     let body: GetPumpModelCarelinkMessageBody = try getMessageBodyWithType(.GetPumpModel)
     return body.model
+  }
+
+  internal func getPumpModel() throws -> PumpModel {
+    guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
+      throw PumpCommsError.UnknownPumpModel
+    }
+
+    return pumpModel
   }
 
   internal func getMessageBodyWithType<T: MessageBody>(messageType: MessageType) throws -> T {
@@ -228,6 +236,8 @@ class PumpOpsSynchronous {
     if sortedTrials.first!.successes > 0 {
       results.bestFrequency = sortedTrials.first!.frequencyMHz
       try setBaseFrequency(results.bestFrequency)
+    } else {
+      throw PumpCommsError.RFCommsFailure("No pump responses during scan")
     }
     
     return results
@@ -241,9 +251,7 @@ class PumpOpsSynchronous {
       try scanForPump()
     }
 
-    guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
-      throw PumpCommsError.UnknownPumpModel
-    }
+    let pumpModel = try getPumpModel()
     
     var pageNum = 0
     var events = [PumpEvent]()

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for MinimedKit.
 FOUNDATION_EXPORT double MinimedKitVersionNumber;

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public class ChangeSensorSetup2PumpEvent: PumpEvent {
   public let length: Int

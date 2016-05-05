@@ -6,12 +6,12 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
 
-public class PumpOps: NSObject {
+public class PumpOps {
     
   public let pumpState: PumpState
   public let device: RileyLinkBLEDevice
@@ -73,7 +73,7 @@ public class PumpOps: NSObject {
   /**
    Sets a bolus
    
-   *Note: This assumes a X23 size and greater. Do not use on a live pump!*
+   *Note: Use at your own risk!*
    
    This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
@@ -84,9 +84,13 @@ public class PumpOps: NSObject {
   public func setNormalBolus(units: Double, completion: (error: ErrorType?) -> Void) {
     device.runSession { (session) in
       let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-      let message = PumpMessage(packetType: .Carelink, address: self.pumpState.pumpID, messageType: .Bolus, messageBody: BolusCarelinkMessageBody(units: units))
+
 
       do {
+        let pumpModel = try ops.getPumpModel()
+
+        let message = PumpMessage(packetType: .Carelink, address: self.pumpState.pumpID, messageType: .Bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
+
         try ops.runCommandWithArguments(message)
 
         completion(error: nil)

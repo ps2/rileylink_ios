@@ -79,7 +79,12 @@
   }
   
   if ([self.autoConnectIds containsObject:d.peripheralId]) {
-    [self connectPeripheral:d.peripheral];
+    if (peripheral.state == CBPeripheralStateConnected) {
+      [self centralManager:_centralManager
+      didConnectPeripheral:peripheral];
+    } else {
+      [self connectPeripheral:d.peripheral];
+    }
   }
   
   return d;

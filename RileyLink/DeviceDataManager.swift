@@ -148,6 +148,8 @@ class DeviceDataManager {
             if status.batteryRemainingPercent == 0 {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
+            let source = "rileylink://medtronic/\(device.name)"
+            nightscoutUploader.handlePumpStatus(status, device: source)
             
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(11 * NSEC_PER_SEC))

@@ -8,7 +8,7 @@
 
 import UIKit
 import MinimedKit
-import CryptoSwift
+import Crypto
 
 public class NightscoutUploader: NSObject {
     
@@ -272,7 +272,7 @@ public class NightscoutUploader: NSObject {
                 
                 request.setValue("application/json", forHTTPHeaderField:"Content-Type")
                 request.setValue("application/json", forHTTPHeaderField:"Accept")
-                request.setValue(APISecret.sha1(), forHTTPHeaderField:"api-secret")
+                request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
                 request.HTTPBody = sendData
                 
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in

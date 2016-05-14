@@ -30,7 +30,7 @@
   [super viewDidLoad];
   if (self.revealViewController != nil) {
     menuButton.target = self.revealViewController;
-    [menuButton setAction:@selector(revealToggle:)];
+    menuButton.action = @selector(revealToggle:);
     [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
   }
   
@@ -85,15 +85,15 @@
 }
 
 - (void) loadValues {
-  nightscoutURL.text = [[Config sharedInstance] nightscoutURL];
-  nightscoutAPISecret.text = [[Config sharedInstance] nightscoutAPISecret];
-  pumpId.text = [[Config sharedInstance] pumpID];
+  nightscoutURL.text = [Config sharedInstance].nightscoutURL;
+  nightscoutAPISecret.text = [Config sharedInstance].nightscoutAPISecret;
+  pumpId.text = [Config sharedInstance].pumpID;
 }
 
 - (void) saveValues {
-  [[Config sharedInstance] setNightscoutURL: nightscoutURL.text];
-  [[Config sharedInstance] setNightscoutAPISecret: nightscoutAPISecret.text];
-  [[Config sharedInstance] setPumpID:pumpId.text];
+  [Config sharedInstance].nightscoutURL = nightscoutURL.text;
+  [Config sharedInstance].nightscoutAPISecret = nightscoutAPISecret.text;
+  [Config sharedInstance].pumpID = pumpId.text;
   
   
 }

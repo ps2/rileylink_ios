@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkBLEKit;
+
 #import "RileyLinkListTableViewController.h"
 #import "SWRevealViewController.h"
-#import "RileyLinkBLEManager.h"
 #import "RileyLinkTableViewCell.h"
-#import "RileyLinkBLEDevice.h"
-#import "AppDelegate.h"
 #import "RileyLinkDeviceViewController.h"
+#import "RileyLink-Swift.h"
 
 @interface RileyLinkListTableViewController () {
   NSMutableArray *rileyLinkRecords;
@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
   self.managedObjectContext = appDelegate.managedObjectContext;
   
   [[NSNotificationCenter defaultCenter] addObserver:self
@@ -46,7 +46,7 @@
   
   if (self.revealViewController != nil) {
     menuButton.target = self.revealViewController;
-    [menuButton setAction:@selector(revealToggle:)];
+    menuButton.action = @selector(revealToggle:);
     [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
   }
   
@@ -76,7 +76,7 @@
 - (void)processVisibleDevices {
   devicesById = [NSMutableDictionary dictionary];
   
-  for (RileyLinkBLEDevice *device in [[RileyLinkBLEManager sharedManager] rileyLinkList]) {
+  for (RileyLinkBLEDevice *device in [RileyLinkBLEManager sharedManager].rileyLinkList) {
     devicesById[device.peripheralId] = device;
     
     RileyLinkRecord *existingRecord = recordsById[device.peripheralId];
@@ -114,10 +114,10 @@
   
   NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
   NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"firstSeenAt" ascending:YES];
-  [fetchRequest setSortDescriptors:@[sortDescriptor1]];
+  fetchRequest.sortDescriptors = @[sortDescriptor1];
   NSEntityDescription *entity = [NSEntityDescription entityForName:@"RileyLinkRecord"
                                             inManagedObjectContext:self.managedObjectContext];
-  [fetchRequest setEntity:entity];
+  fetchRequest.entity = entity;
   NSError *error;
   NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
   for (RileyLinkRecord *record in fetchedObjects) {
@@ -142,14 +142,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   // Return the number of rows in the section.
-  return [rileyLinkRecords count];
+  return rileyLinkRecords.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   RileyLinkTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rileylink" forIndexPath:indexPath];
   RileyLinkRecord *record = rileyLinkRecords[indexPath.row];
   cell.name = record.name;
-  cell.autoConnect = [record.autoConnect boolValue];
+  cell.autoConnect = (record.autoConnect).boolValue;
   
   RileyLinkBLEDevice *device = devicesById[record.peripheralId];
   if (device) {
@@ -200,8 +200,8 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  RileyLinkDeviceViewController *controller = [segue destinationViewController];
-  NSIndexPath *ip = [self.tableView indexPathForSelectedRow];
+  RileyLinkDeviceViewController *controller = segue.destinationViewController;
+  NSIndexPath *ip = (self.tableView).indexPathForSelectedRow;
   RileyLinkRecord *record = rileyLinkRecords[ip.row];
   controller.rlRecord = record;
   controller.rlDevice = devicesById[record.peripheralId];

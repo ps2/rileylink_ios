@@ -187,7 +187,7 @@ typedef NS_ENUM(NSInteger, SWRevealToggleAnimationType)
 /* Basic API */
 
 // Object instance init and rear view setting
-- (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
+- (instancetype)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController NS_DESIGNATED_INITIALIZER;
 
 // Rear view controller, can be nil if not used
 @property (nonatomic) UIViewController *rearViewController;
@@ -227,13 +227,13 @@ typedef NS_ENUM(NSInteger, SWRevealToggleAnimationType)
 // By default, the panGestureRecognizer is added to the view containing the front controller view. To keep this default behavior
 // you still need to call this method, just don't add it to any of your views. The default setup allows you to dissable
 // user interactions on your controller views without affecting the recognizer.
-- (UIPanGestureRecognizer*)panGestureRecognizer;
+@property (NS_NONATOMIC_IOSONLY, readonly, strong) UIPanGestureRecognizer *panGestureRecognizer;
 
 // The following method will provide a tapGestureRecognizer suitable to be added to any view on the frontController
 // for concealing the rear views. By default no tap recognizer is created or added to any view, however if you call this method after
 // the controller's view has been loaded the recognizer is added to the reveal controller's front container view.
 // Thus, you can disable user interactions on your frontViewController view without affecting the tap recognizer.
-- (UITapGestureRecognizer*)tapGestureRecognizer;
+@property (NS_NONATOMIC_IOSONLY, readonly, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 /* The following properties are provided for further customization, they are set to default values on initialization,
    you do not generally have to set them */
@@ -318,14 +318,14 @@ typedef NS_ENUM(NSInteger, SWRevealToggleAnimationType)
 
 #pragma mark - SWRevealViewControllerDelegate Protocol
 
-typedef enum
+typedef NS_ENUM(unsigned int, SWRevealControllerOperation)
 {
     SWRevealControllerOperationNone,
     SWRevealControllerOperationReplaceRearController,
     SWRevealControllerOperationReplaceFrontController,
     SWRevealControllerOperationReplaceRightController,
     
-} SWRevealControllerOperation;
+};
 
 
 @protocol SWRevealViewControllerDelegate<NSObject>
@@ -390,7 +390,7 @@ typedef enum
 // A category of UIViewController to let childViewControllers easily access their parent SWRevealViewController
 @interface UIViewController(SWRevealViewController)
 
-- (SWRevealViewController*)revealViewController;
+@property (NS_NONATOMIC_IOSONLY, readonly, strong) SWRevealViewController *revealViewController;
 
 @end
 

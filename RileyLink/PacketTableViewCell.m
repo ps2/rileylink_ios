@@ -7,6 +7,8 @@
 //
 
 #import "PacketTableViewCell.h"
+#import "MinimedKit.h"
+#import "NSData+Conversion.h"
 
 static NSDateFormatter *dateFormatter;
 static NSDateFormatter *timeFormatter;
@@ -25,21 +27,21 @@ static NSDateFormatter *timeFormatter;
 
 + (void)initialize {
   dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setLocale:[NSLocale currentLocale]];
-  [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+  dateFormatter.locale = [NSLocale currentLocale];
+  dateFormatter.dateStyle = NSDateFormatterShortStyle;
   timeFormatter = [[NSDateFormatter alloc] init];
-  [timeFormatter setLocale:[NSLocale currentLocale]];
-  [timeFormatter setTimeStyle:NSDateFormatterShortStyle];
+  timeFormatter.locale = [NSLocale currentLocale];
+  timeFormatter.timeStyle = NSDateFormatterShortStyle;
 }
 
 - (void)awakeFromNib {
     // Initialization code
 }
 
-- (void)setPacket:(MinimedPacket *)packet {
+- (void)setPacket:(RFPacket *)packet {
   _packet = packet;
   
-  rawDataLabel.text = packet.hexadecimalString;
+  rawDataLabel.text = packet.data.hexadecimalString;
   dateLabel.text = [dateFormatter stringFromDate:packet.capturedAt];
   timeLabel.text = [timeFormatter stringFromDate:packet.capturedAt];
   rssiLabel.text = [NSString stringWithFormat:@"%d", packet.rssi];

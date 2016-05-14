@@ -1,6 +1,6 @@
 //
-//  GlucoseLinkTests.m
-//  GlucoseLinkTests
+//  RileyLinkTests.m
+//  RileyLinkTests
 //
 //  Created by Pete Schwamb on 7/31/14.
 //  Copyright (c) 2014 Pete Schwamb. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface GlucoseLinkTests : XCTestCase
+@interface RileyLinkTests : XCTestCase
 
 @end
 
-@implementation GlucoseLinkTests
+@implementation RileyLinkTests
 
 - (void)setUp
 {
@@ -28,7 +28,7 @@
 
 - (void)testExample
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+  XCTAssertTrue(YES);
 }
 
 @end

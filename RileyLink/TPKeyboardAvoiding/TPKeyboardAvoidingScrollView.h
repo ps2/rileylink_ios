@@ -11,6 +11,6 @@
 
 @interface TPKeyboardAvoidingScrollView : UIScrollView <UITextFieldDelegate, UITextViewDelegate>
 - (void)contentSizeToFit;
-- (BOOL)focusNextTextField;
+@property (NS_NONATOMIC_IOSONLY, readonly) BOOL focusNextTextField;
 - (void)scrollToActiveTextField;
 @end

@@ -24,13 +24,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToActiveTextField) name:UITextFieldTextDidBeginEditingNotification object:nil];
 }
 
--(id)initWithFrame:(CGRect)frame {
+-(instancetype)initWithFrame:(CGRect)frame {
     if ( !(self = [super initWithFrame:frame]) ) return nil;
     [self setup];
     return self;
 }
 
--(id)initWithFrame:(CGRect)frame style:(UITableViewStyle)withStyle {
+-(instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)withStyle {
     if ( !(self = [super initWithFrame:frame style:withStyle]) ) return nil;
     [self setup];
     return self;
@@ -59,14 +59,14 @@
 }
 
 -(void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
+    super.frame = frame;
     if ( [self hasAutomaticKeyboardAvoidingBehaviour] ) return;
     [self TPKeyboardAvoiding_updateContentInset];
 }
 
 -(void)setContentSize:(CGSize)contentSize {
     if ( [self hasAutomaticKeyboardAvoidingBehaviour] ) {
-        [super setContentSize:contentSize];
+        super.contentSize = contentSize;
         return;
     }
 	if (CGSizeEqualToSize(contentSize, self.contentSize)) {
@@ -74,7 +74,7 @@
 		// this cause table view to scroll to top on contentInset changes
 		return;
 	}
-    [super setContentSize:contentSize];
+    super.contentSize = contentSize;
     [self TPKeyboardAvoiding_updateContentInset];
 }
 

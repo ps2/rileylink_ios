@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
+@import RileyLinkBLEKit;
+
 #import "RileyLinkDeviceViewController.h"
 #import "PacketLogViewController.h"
-#import "PumpChatViewController.h"
 #import "PacketGeneratorViewController.h"
-#import "RileyLinkBLEManager.h"
 
 @interface RileyLinkDeviceViewController () {
   IBOutlet UILabel *deviceIDLabel;
@@ -43,7 +43,7 @@
 
 
   [self updateNameView];
-  autoConnectSwitch.on = [self.rlRecord.autoConnect boolValue];
+  autoConnectSwitch.on = (self.rlRecord.autoConnect).boolValue;
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

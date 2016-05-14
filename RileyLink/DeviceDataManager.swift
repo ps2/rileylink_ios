@@ -20,7 +20,11 @@ class DeviceDataManager {
     
     let rileyLinkManager: RileyLinkDeviceManager
     
-    var connectedPeripheralIDs: Set<String> = Config.sharedInstance().autoConnectIds as! Set<String>
+    var connectedPeripheralIDs: Set<String> = Config.sharedInstance().autoConnectIds as! Set<String> {
+        didSet {
+            Config.sharedInstance().autoConnectIds = connectedPeripheralIDs
+        }
+    }
     
     var latestPumpStatus: MySentryPumpStatusMessageBody?
     

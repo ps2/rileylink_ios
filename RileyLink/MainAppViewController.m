@@ -36,13 +36,6 @@
   self.managedObjectContext = appDelegate.managedObjectContext;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-  [super viewDidDisappear:animated];
-
-  NSLog(@"Stopping scan");
-  [RileyLinkBLEManager sharedManager].scanningEnabled = NO;
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

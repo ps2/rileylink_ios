@@ -88,27 +88,15 @@
 }
 
 - (NSSet*) autoConnectIds {
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *managedObjectContext = appDelegate.managedObjectContext;
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"RileyLinkRecord"
-                                              inManagedObjectContext:managedObjectContext];
-    fetchRequest.entity = entity;
-    NSError *error;
-    NSMutableSet *autoConnectIds = [[NSMutableSet alloc] init];
-    NSArray *fetchedObjects = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    for (RileyLinkRecord *record in fetchedObjects) {
-        NSLog(@"Loaded: %@ from db", record.name);
-        if ((record.autoConnect).boolValue) {
-            [autoConnectIds addObject:record.peripheralId];
-        }
+    NSSet *set = [[NSUserDefaults standardUserDefaults] objectForKey:@"autoConnectIds"];
+    if (!set) {
+        set = [NSSet set];
     }
-    return autoConnectIds;
+    return set;
 }
 
 - (void) setAutoConnectIds:(NSSet *)autoConnectIds {
-    
+    [[NSUserDefaults standardUserDefaults] setObject:[autoConnectIds allObjects] forKey:@"autoConnectIds"];
 }
 
 

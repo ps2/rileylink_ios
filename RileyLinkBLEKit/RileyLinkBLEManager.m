@@ -131,6 +131,7 @@
     [_centralManager connectPeripheral:peripheral options:nil];
   } else {
     NSLog(@"Skipped request to connect to %@:%@", _centralManager, peripheral);
+    [self centralManager:_centralManager didConnectPeripheral:peripheral];
   }
   
   [self addPeripheralToAutoConnectList:peripheral];

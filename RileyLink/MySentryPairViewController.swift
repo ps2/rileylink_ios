@@ -263,10 +263,15 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
     
-    @IBAction func startPairing(sender: UIButton) {
+    @IBAction func beginPairing(sender: UIButton) {
         if (.Ready == self.state) {
             self.state = .Started
-            listenForPairing()
+            device.ops?.setRXFilterMode(.Wide, completion: { (error) in
+                if let error = error {
+                    NSLog("Error setting filter bandwidth: %s", String(error))
+                }
+                self.listenForPairing()
+            })
         }
     }
 }

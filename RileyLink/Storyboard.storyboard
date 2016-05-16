@@ -681,7 +681,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="startPairing:" destination="bIR-nw-zEq" eventType="touchUpInside" id="11Y-CQ-qJQ"/>
+                                    <action selector="beginPairing:" destination="bIR-nw-zEq" eventType="touchUpInside" id="SxM-f1-PdJ"/>
                                 </connections>
                             </button>
                         </subviews>

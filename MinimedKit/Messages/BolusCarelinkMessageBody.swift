@@ -10,34 +10,34 @@ import Foundation
 
 
 public class BolusCarelinkMessageBody: CarelinkLongMessageBody {
-
-  public convenience init(units: Double, strokesPerUnit: Int = 10) {
-
-    let length: Int
-    let scrollRate: Int
-
-    if strokesPerUnit >= 40 {
-      length = 2
-
-      // 40-stroke pumps scroll faster for higher unit values
-      switch units {
-      case let u where u > 10:
-        scrollRate = 4
-      case let u where u > 1:
-        scrollRate = 2
-      default:
-        scrollRate = 1
-      }
-    } else {
-      length = 1
-      scrollRate = 1
+    
+    public convenience init(units: Double, strokesPerUnit: Int = 10) {
+        
+        let length: Int
+        let scrollRate: Int
+        
+        if strokesPerUnit >= 40 {
+            length = 2
+            
+            // 40-stroke pumps scroll faster for higher unit values
+            switch units {
+            case let u where u > 10:
+                scrollRate = 4
+            case let u where u > 1:
+                scrollRate = 2
+            default:
+                scrollRate = 1
+            }
+        } else {
+            length = 1
+            scrollRate = 1
+        }
+        
+        let strokes = Int(units * Double(strokesPerUnit / scrollRate)) * scrollRate
+        
+        let data = NSData(hexadecimalString: String(format: "%02x%0\(2 * length)x", length, strokes))!
+        
+        self.init(rxData: data)!
     }
-
-    let strokes = Int(units * Double(strokesPerUnit / scrollRate)) * scrollRate
-
-    let data = NSData(hexadecimalString: String(format: "%02x%0\(2 * length)x", length, strokes))!
-
-    self.init(rxData: data)!
-  }
-
+    
 }

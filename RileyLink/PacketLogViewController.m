@@ -12,7 +12,7 @@
 #import "RileyLinkBLEManager.h"
 
 @interface PacketLogViewController () {
-  NSMutableArray *packets;
+    NSMutableArray *packets;
 }
 
 @end
@@ -20,25 +20,25 @@
 @implementation PacketLogViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  
-  packets = [NSMutableArray array];
-  
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(packetReceived:)
-                                               name:RILEYLINK_EVENT_PACKET_RECEIVED
-                                             object:self.device];
-
+    [super viewDidLoad];
+    
+    packets = [NSMutableArray array];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(packetReceived:)
+                                                 name:RILEYLINK_EVENT_PACKET_RECEIVED
+                                               object:self.device];
+    
 }
 
 - (void)dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (void)packetReceived:(NSNotification*)notification {
@@ -48,24 +48,24 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-  // Return the number of sections.
-  return 1;
+    // Return the number of sections.
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  // Return the number of rows in the section.
-  return packets.count;
+    // Return the number of rows in the section.
+    return packets.count;
 }
 
 - (RFPacket *)packetForIndex:(NSInteger) idx {
-  return packets[packets.count - idx - 1];
+    return packets[packets.count - idx - 1];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)theTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  PacketTableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"packet" forIndexPath:indexPath];
-  RFPacket *packet = [self packetForIndex:indexPath.row];
-  cell.packet = packet;
-  return cell;
+    PacketTableViewCell *cell = [theTableView dequeueReusableCellWithIdentifier:@"packet" forIndexPath:indexPath];
+    RFPacket *packet = [self packetForIndex:indexPath.row];
+    cell.packet = packet;
+    return cell;
 }
 
 /*

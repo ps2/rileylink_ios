@@ -10,28 +10,28 @@ import XCTest
 @testable import MinimedKit
 
 class GetBatteryCarelinkMessageBodyTests: XCTestCase {
-  
-  override func setUp() {
-    super.setUp()
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-  }
-  
-  override func tearDown() {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    super.tearDown()
-  }
-  
-  func testValidGetBatteryResponse() {
-    let message = PumpMessage(rxData: NSData(hexadecimalString: "a7350535720300008c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a")!)
     
-    if let message = message {
-      XCTAssertTrue(message.messageBody is GetBatteryCarelinkMessageBody)
-      let body = message.messageBody as! GetBatteryCarelinkMessageBody
-      XCTAssertEqual(body.volts, 1.4)
-      XCTAssertEqual(body.status, "Normal")
-    } else {
-      XCTFail("\(message) is nil")
+    override func setUp() {
+        super.setUp()
+        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-  }
-  
+    
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
+    }
+    
+    func testValidGetBatteryResponse() {
+        let message = PumpMessage(rxData: NSData(hexadecimalString: "a7350535720300008c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a")!)
+        
+        if let message = message {
+            XCTAssertTrue(message.messageBody is GetBatteryCarelinkMessageBody)
+            let body = message.messageBody as! GetBatteryCarelinkMessageBody
+            XCTAssertEqual(body.volts, 1.4)
+            XCTAssertEqual(body.status, "Normal")
+        } else {
+            XCTFail("\(message) is nil")
+        }
+    }
+    
 }

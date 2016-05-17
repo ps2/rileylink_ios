@@ -13,13 +13,13 @@
 
 
 @interface ConfigureViewController () {
-
-  IBOutlet UITextField *nightscoutURL;
-  IBOutlet UITextField *nightscoutAPISecret;
-  IBOutlet UITextField *pumpId;
-  IBOutlet UIBarButtonItem *menuButton;
-  BOOL initialConfig;
-  IBOutlet UIButton *continueButton;
+    
+    IBOutlet UITextField *nightscoutURL;
+    IBOutlet UITextField *nightscoutAPISecret;
+    IBOutlet UITextField *pumpId;
+    IBOutlet UIBarButtonItem *menuButton;
+    BOOL initialConfig;
+    IBOutlet UIButton *continueButton;
 }
 
 @end
@@ -27,33 +27,33 @@
 @implementation ConfigureViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  if (self.revealViewController != nil) {
-    menuButton.target = self.revealViewController;
-    menuButton.action = @selector(revealToggle:);
-    [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-  }
-  
-  if (initialConfig && self.navigationItem != NULL) {
-    self.navigationItem.leftBarButtonItem = NULL;
-  } else {
-    [continueButton setHidden:YES];
-  }
+    [super viewDidLoad];
+    if (self.revealViewController != nil) {
+        menuButton.target = self.revealViewController;
+        menuButton.action = @selector(revealToggle:);
+        [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+    }
+    
+    if (initialConfig && self.navigationItem != NULL) {
+        self.navigationItem.leftBarButtonItem = NULL;
+    } else {
+        [continueButton setHidden:YES];
+    }
 }
 
 - (IBAction)continuePressed:(id)sender {
-  if ([self validateValues]) {
-    // TODO: next step would be to connect rileylink
-    UINavigationController *nightscoutNav = [self.storyboard instantiateViewControllerWithIdentifier:@"nightscout"];
-    [self.revealViewController setFrontViewController:nightscoutNav animated:YES];
-  } else {
-    [UIAlertView showWithTitle:@"Invalid Configuration"
-                       message:@"Please set valid values for Nightscout URL and Nightscout API Secret."
-             cancelButtonTitle:@"OK"
-             otherButtonTitles:nil
-            tapBlock:nil];
-
-  }
+    if ([self validateValues]) {
+        // TODO: next step would be to connect rileylink
+        UINavigationController *nightscoutNav = [self.storyboard instantiateViewControllerWithIdentifier:@"nightscout"];
+        [self.revealViewController setFrontViewController:nightscoutNav animated:YES];
+    } else {
+        [UIAlertView showWithTitle:@"Invalid Configuration"
+                           message:@"Please set valid values for Nightscout URL and Nightscout API Secret."
+                 cancelButtonTitle:@"OK"
+                 otherButtonTitles:nil
+                          tapBlock:nil];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,7 +62,7 @@
 }
 
 - (void)doInitialConfiguration {
-  initialConfig = YES;
+    initialConfig = YES;
 }
 
 #pragma mark - Navigation
@@ -71,7 +71,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-  
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -80,26 +80,26 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-  [self loadValues];
+    [super viewDidAppear:animated];
+    [self loadValues];
 }
 
 - (void) loadValues {
-  nightscoutURL.text = [Config sharedInstance].nightscoutURL;
-  nightscoutAPISecret.text = [Config sharedInstance].nightscoutAPISecret;
-  pumpId.text = [Config sharedInstance].pumpID;
+    nightscoutURL.text = [Config sharedInstance].nightscoutURL;
+    nightscoutAPISecret.text = [Config sharedInstance].nightscoutAPISecret;
+    pumpId.text = [Config sharedInstance].pumpID;
 }
 
 - (void) saveValues {
-  [Config sharedInstance].nightscoutURL = nightscoutURL.text;
-  [Config sharedInstance].nightscoutAPISecret = nightscoutAPISecret.text;
-  [Config sharedInstance].pumpID = pumpId.text;
-  
-  
+    [Config sharedInstance].nightscoutURL = nightscoutURL.text;
+    [Config sharedInstance].nightscoutAPISecret = nightscoutAPISecret.text;
+    [Config sharedInstance].pumpID = pumpId.text;
+    
+    
 }
 
 - (BOOL) validateValues {
-  return ![nightscoutURL.text isEqualToString:@""] && ![nightscoutAPISecret.text isEqualToString:@""];
+    return ![nightscoutURL.text isEqualToString:@""] && ![nightscoutAPISecret.text isEqualToString:@""];
 }
 
 @end

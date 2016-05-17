@@ -204,7 +204,7 @@ class PumpOpsSynchronous {
     
     internal func scanForPump() throws -> FrequencyScanResults {
         
-        let frequencies = [916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
+        let frequencies = [916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
         //let frequencies = [868.0]
         var results = FrequencyScanResults()
         

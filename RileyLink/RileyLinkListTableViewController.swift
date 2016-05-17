@@ -34,6 +34,10 @@ class RileyLinkListTableViewController: UITableViewController {
                     if let device = note.userInfo?[RileyLinkDeviceManager.RileyLinkDeviceKey] as? RileyLinkDevice, index = deviceManager.devices.indexOf({ $0 === device }) {
                         self?.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
                     }
+                case RileyLinkDeviceManager.RSSIDidChangeNotification:
+                    if let device = note.userInfo?[RileyLinkDeviceManager.RileyLinkDeviceKey] as? RileyLinkDevice, index = deviceManager.devices.indexOf({ $0 === device }) {
+                        self?.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
+                    }
                 default:
                     break
                 }

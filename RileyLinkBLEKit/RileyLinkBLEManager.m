@@ -185,6 +185,10 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
   
   NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    
+  NSString *localName = [advertisementData objectForKey:CBAdvertisementDataLocalNameKey];
+  NSLog(@"localName =  %@", localName);
+
   
   [self addPeripheralToDeviceList:peripheral RSSI:RSSI];
   

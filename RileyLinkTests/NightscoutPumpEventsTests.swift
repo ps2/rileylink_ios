@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import MinimedKit
-@testable import RileyLink
+@testable import NightscoutUploadKit
 
 class NightscoutPumpEventsTests: XCTestCase {
   

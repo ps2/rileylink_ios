@@ -139,7 +139,9 @@
   dispatch_time_t timeoutAt = dispatch_time(DISPATCH_TIME_NOW, timeoutMS * NSEC_PER_MSEC);
   if (dispatch_group_wait(cmdDispatchGroup,timeoutAt) != 0) {
     NSLog(@"No response from RileyLink... timing out command.");
-    [self.peripheral readValueForCharacteristic:dataCharacteristic];
+    if (dataCharacteristic != nil) {
+      [self.peripheral readValueForCharacteristic:dataCharacteristic];
+    }
     dispatch_group_leave(cmdDispatchGroup);
     currentCommand = nil;
     timedOut = YES;

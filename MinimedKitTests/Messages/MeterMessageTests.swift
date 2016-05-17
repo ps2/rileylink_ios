@@ -21,15 +21,15 @@ class MeterMessageTests: XCTestCase {
         super.tearDown()
     }
     
-  func testValidMeterMessage() {
-    let message = MeterMessage(rxData: NSData(hexadecimalString: "a5c527ad018e77")!)
-    
-    if let message = message {
-      XCTAssertEqual(message.glucose, 257)
-      XCTAssertEqual(message.ackFlag, false)
-    } else {
-      XCTFail("\(message) is nil")
+    func testValidMeterMessage() {
+        let message = MeterMessage(rxData: NSData(hexadecimalString: "a5c527ad018e77")!)
+        
+        if let message = message {
+            XCTAssertEqual(message.glucose, 257)
+            XCTAssertEqual(message.ackFlag, false)
+        } else {
+            XCTFail("\(message) is nil")
+        }
     }
-  }
-  
+    
 }

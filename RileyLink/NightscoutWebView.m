@@ -13,7 +13,7 @@
 #import "ConfigureViewController.h"
 
 @interface NightscoutWebView () <UIWebViewDelegate> {
-  IBOutlet UIBarButtonItem *menuButton;
+    IBOutlet UIBarButtonItem *menuButton;
 }
 
 @end
@@ -22,55 +22,55 @@
 
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
-  
-  if (self.revealViewController != nil) {
-    menuButton.target = self.revealViewController;
-    menuButton.action = @selector(revealToggle:);
-    [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+    [super viewDidLoad];
     
-    self.revealViewController.rearViewRevealWidth = 162;
-    
-    if (![Config sharedInstance].hasValidConfiguration) {
-      UINavigationController *configNav = [self.storyboard instantiateViewControllerWithIdentifier:@"configuration"];
-      ConfigureViewController *configViewController = configNav.viewControllers[0];
-      [configViewController doInitialConfiguration];
-      (self.revealViewController).frontViewController = configNav;
+    if (self.revealViewController != nil) {
+        menuButton.target = self.revealViewController;
+        menuButton.action = @selector(revealToggle:);
+        [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
+        
+        self.revealViewController.rearViewRevealWidth = 162;
+        
+        if (![Config sharedInstance].hasValidConfiguration) {
+            UINavigationController *configNav = [self.storyboard instantiateViewControllerWithIdentifier:@"configuration"];
+            ConfigureViewController *configViewController = configNav.viewControllers[0];
+            [configViewController doInitialConfiguration];
+            (self.revealViewController).frontViewController = configNav;
+        }
     }
-  }
-  
-  [self loadPage];
+    
+    [self loadPage];
 }
 
 - (void)loadPage {
-  NSURL *url = [NSURL URLWithString:[Config sharedInstance].nightscoutURL];
-  NSURLRequest *request = [NSURLRequest requestWithURL:url];
-  [_webView loadRequest:request];
+    NSURL *url = [NSURL URLWithString:[Config sharedInstance].nightscoutURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [_webView loadRequest:request];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-  return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning
 {
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark UIWebViewDelegate methods
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-  [UIAlertView showWithTitle:@"Network Error"
-                     message:error.localizedDescription
-           cancelButtonTitle:@"OK"
-           otherButtonTitles:@[@"Retry"]
-                    tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                      if (buttonIndex == 1) {
-                        [self loadPage];
-                      }
-                      NSLog(@"Retrying");
-                    }];
+    [UIAlertView showWithTitle:@"Network Error"
+                       message:error.localizedDescription
+             cancelButtonTitle:@"OK"
+             otherButtonTitles:@[@"Retry"]
+                      tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                          if (buttonIndex == 1) {
+                              [self loadPage];
+                          }
+                          NSLog(@"Retrying");
+                      }];
 }
 
 @end

@@ -12,17 +12,17 @@ private let crcTable: [UInt8] = [0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 0x6C, 0xF7, 
 
 
 func computeCRC8(data: NSData) -> UInt8 {
-  
-  var crc: UInt8 = 0
-  
-  var pdata = UnsafePointer<UInt8>(data.bytes)
-  var nbytes = data.length
-  /* loop over the buffer data */
-  while nbytes > 0 {
-    crc = crcTable[Int((crc ^ pdata.memory) & 0xff)]
-    pdata = pdata.successor()
-    nbytes -= 1
-  }
-  return crc
+    
+    var crc: UInt8 = 0
+    
+    var pdata = UnsafePointer<UInt8>(data.bytes)
+    var nbytes = data.length
+    /* loop over the buffer data */
+    while nbytes > 0 {
+        crc = crcTable[Int((crc ^ pdata.memory) & 0xff)]
+        pdata = pdata.successor()
+        nbytes -= 1
+    }
+    return crc
 }
 

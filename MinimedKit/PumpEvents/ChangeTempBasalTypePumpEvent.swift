@@ -9,32 +9,32 @@
 import Foundation
 
 public class ChangeTempBasalTypePumpEvent: PumpEvent {
-  public let length: Int
-  public let basalType: String
-  let timestamp: NSDateComponents
-  
-  public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 7
+    public let length: Int
+    public let basalType: String
+    let timestamp: NSDateComponents
     
-    func d(idx:Int) -> Int {
-      return Int(availableData[idx] as UInt8)
+    public required init?(availableData: NSData, pumpModel: PumpModel) {
+        length = 7
+        
+        func d(idx:Int) -> Int {
+            return Int(availableData[idx] as UInt8)
+        }
+        
+        if length > availableData.length {
+            timestamp = NSDateComponents()
+            basalType = ""
+            return nil
+        }
+        
+        basalType = d(1) == 1 ? "percent" : "absolute"
+        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
     }
     
-    if length > availableData.length {
-      timestamp = NSDateComponents()
-      basalType = ""
-      return nil
+    public var dictionaryRepresentation: [String: AnyObject] {
+        return [
+            "_type": "TempBasal",
+            "temp": basalType,
+            "timestamp": TimeFormat.timestampStr(timestamp),
+        ]
     }
-    
-    basalType = d(1) == 1 ? "percent" : "absolute"
-    timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
-  }
-  
-  public var dictionaryRepresentation: [String: AnyObject] {
-    return [
-      "_type": "TempBasal",
-      "temp": basalType,
-      "timestamp": TimeFormat.timestampStr(timestamp),
-    ]
-  }
 }

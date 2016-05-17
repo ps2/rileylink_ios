@@ -16,7 +16,7 @@
 
 
 @interface MainAppViewController () {
-  NSDictionary *lastStatus;
+    NSDictionary *lastStatus;
 }
 
 @end
@@ -25,15 +25,15 @@
 
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  
-  // Hitting a crash like this:
-  // http://stackoverflow.com/questions/26656342/uiwebview-random-crash-at-uiviewanimationstate-release-message-sent-to-deallo
-  // Looks like switching NightscoutWebView to WKWebView should help. Until then:
-  [UIView setAnimationsEnabled:NO];
-  
-  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-  self.managedObjectContext = appDelegate.managedObjectContext;
+    [super viewDidLoad];
+    
+    // Hitting a crash like this:
+    // http://stackoverflow.com/questions/26656342/uiwebview-random-crash-at-uiviewanimationstate-release-message-sent-to-deallo
+    // Looks like switching NightscoutWebView to WKWebView should help. Until then:
+    [UIView setAnimationsEnabled:NO];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.managedObjectContext = appDelegate.managedObjectContext;
 }
 
 - (void)didReceiveMemoryWarning {

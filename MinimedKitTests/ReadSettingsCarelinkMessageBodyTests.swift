@@ -23,20 +23,20 @@ class ReadSettingsCarelinkMessageBodyTests: XCTestCase {
     
     func testValidSettings() {
         let message = PumpMessage(rxData: NSData(hexadecimalString: "a7594040c01900010001010096008c00000000000064010400140019010101000000000000000000000000000000000000000000000000000000000000000000000000000000e9")!)
-
+        
         if let message = message {
             XCTAssertTrue(message.messageBody is ReadSettingsCarelinkMessageBody)
-
+            
             if let body = message.messageBody as? ReadSettingsCarelinkMessageBody {
                 XCTAssertEqual(3.5, body.maxBasal)
                 XCTAssertEqual(15, body.maxBolus)
                 XCTAssertEqual(BasalProfile.Standard, body.selectedBasalProfile)
                 XCTAssertEqual(4, body.insulinActionCurveHours)
             }
-
+            
         } else {
             XCTFail("Message is nil")
         }
     }
-
+    
 }

@@ -104,11 +104,7 @@ public class RileyLinkDeviceManager {
             index = _devices.indexOf({ $0.peripheral == BLEDevice.peripheral }) {
             let device = _devices[index]
             
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ConnectionStateDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device])
-            
-            if device.peripheral.state == CBPeripheralState.Connected {
-                
-            }
+            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ConnectionStateDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device])            
         }
     }
     

@@ -81,8 +81,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case Tune
         case ChangeTime
         case MySentryPair
+        case DumpHistory
+        case GetPumpModel
+        case PressDownButton
 
-        static let count = 3
+        static let count = 6
     }
 
     public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -186,6 +189,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = "MySentry Pair"
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .DisclosureIndicator
+            case .DumpHistory:
+                cell.textLabel?.text = "Fetch Recent History"
+                cell.detailTextLabel?.text = nil
+                cell.accessoryType = .DisclosureIndicator
+            case .GetPumpModel:
+                cell.textLabel?.text = "Get Pump Model"
+                cell.detailTextLabel?.text = nil
+                cell.accessoryType = .DisclosureIndicator
+            case .PressDownButton:
+                cell.textLabel?.text = "Send Button Press"
+                cell.detailTextLabel?.text = nil
+                cell.accessoryType = .DisclosureIndicator
             }
         }
 
@@ -276,6 +291,58 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc.device = device
                 
                 vc.title = "MySentry Pair"
+                
+                self.showViewController(vc, sender: indexPath)
+            case .DumpHistory:
+                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                    let calendar = NSCalendar.currentCalendar()
+                    let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
+                    self.device.ops?.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
+                        switch response {
+                        case .Success(let (events, _)):
+                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo!)
+                            for event in events {
+                                responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
+                            }
+                            completionHandler(responseText: responseText)
+                        case .Failure(let error):
+                            completionHandler(responseText: String(error))
+                        }
+                    }
+                    return "Fetching history..."
+                }
+                
+                vc.title = "Fetch History"
+                
+                self.showViewController(vc, sender: indexPath)
+            case .GetPumpModel:
+                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                    self.device.ops?.getPumpModel({ (response) in
+                        switch response {
+                        case .Success(let model):
+                            completionHandler(responseText: "Pump Model: " + model)
+                        case .Failure(let error):
+                            completionHandler(responseText: String(error))
+                        }
+                    })
+                    return "Fetching pump model..."
+                }
+                vc.title = "Fetch Pump Model"
+                
+                self.showViewController(vc, sender: indexPath)
+            case .PressDownButton:
+                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                    self.device.ops?.pressButton({ (response) in
+                        switch response {
+                        case .Success(let msg):
+                            completionHandler(responseText: "Result: " + msg)
+                        case .Failure(let error):
+                            completionHandler(responseText: String(error))
+                        }
+                    })
+                    return "Sending button press..."
+                }
+                vc.title = "Button Press"
                 
                 self.showViewController(vc, sender: indexPath)
             }

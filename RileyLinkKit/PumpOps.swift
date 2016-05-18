@@ -21,35 +21,50 @@ public class PumpOps {
         self.device = device
     }
     
-    public func pressButton() {
+    public func pressButton(completion: (Either<String, ErrorType>) -> Void) {
         device.runSession { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             let message = PumpMessage(packetType: .Carelink, address: self.pumpState.pumpID, messageType: .ButtonPress, messageBody: ButtonPressCarelinkMessageBody(buttonType: .Down))
             do {
                 try ops.runCommandWithArguments(message)
-            } catch { }
+                completion(.Success("Success."))
+            } catch let error {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion(.Failure(error))
+                })
+            }
         }
     }
     
-    public func getPumpModel(completion: (String?) -> Void)  {
+    public func getPumpModel(completion: (Either<String, ErrorType>) -> Void)  {
         device.runSession { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            let model = try? ops.getPumpModelNumber()
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                completion(model)
-            })
+            do {
+                let model = try ops.getPumpModelNumber()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion(.Success(model))
+                })
+            } catch let error {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion(.Failure(error))
+                })
+            }
         }
     }
     
-    public func getBatteryVoltage(completion: (GetBatteryCarelinkMessageBody?) -> Void)  {
+    public func getBatteryVoltage(completion: (Either<GetBatteryCarelinkMessageBody, ErrorType>) -> Void)  {
         device.runSession { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            let response: GetBatteryCarelinkMessageBody? = try? ops.getMessageBodyWithType(.GetBattery)
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                completion(response)
-            })
+            do {
+                let response: GetBatteryCarelinkMessageBody = try ops.getMessageBodyWithType(.GetBattery)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion(.Success(response))
+                })
+            } catch let error {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion(.Failure(error))
+                })
+            }
         }
     }
     

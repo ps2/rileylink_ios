@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
     return lhs === rhs || lhs.compare(rhs) == .OrderedSame
 }

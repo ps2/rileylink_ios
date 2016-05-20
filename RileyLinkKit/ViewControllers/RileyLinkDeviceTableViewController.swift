@@ -186,19 +186,19 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     cell.detailTextLabel?.text = localTimeZoneName
                 }
             case .MySentryPair:
-                cell.textLabel?.text = "MySentry Pair"
+                cell.textLabel?.text = NSLocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .DisclosureIndicator
             case .DumpHistory:
-                cell.textLabel?.text = "Fetch Recent History"
+                cell.textLabel?.text = NSLocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .DisclosureIndicator
             case .GetPumpModel:
-                cell.textLabel?.text = "Get Pump Model"
+                cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .DisclosureIndicator
             case .PressDownButton:
-                cell.textLabel?.text = "Send Button Press"
+                cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .DisclosureIndicator
             }
@@ -252,7 +252,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             if let data = try? NSJSONSerialization.dataWithJSONObject(resultDict, options: .PrettyPrinted), string = String(data: data, encoding: NSUTF8StringEncoding) {
                                 responseText = string
                             } else {
-                                responseText = "No response"
+                                responseText = NSLocalizedString("No response", comment: "Message display when no response from tuning pump")
                             }
 
                             completionHandler(responseText: responseText)
@@ -261,7 +261,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     })
 
-                    return "Tuning radio..."
+                    return NSLocalizedString("Tuning radio...", comment: "Progress message for tuning radio")
                 })
 
                 vc.title = "Tune device radio"
@@ -279,10 +279,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     }
 
-                    return "Changing time..."
+                    return NSLocalizedString("Changing time...", comment: "Progress message for changing pump time.")
                 }
 
-                vc.title = "Change Time"
+                vc.title = NSLocalizedString("Change Time", comment: "Title of screen for changing pump time.")
 
                 self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
@@ -290,7 +290,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 
                 vc.device = device
                 
-                vc.title = "MySentry Pair"
+                vc.title = NSLocalizedString("MySentry Pair", comment: "Title of screen for pairing with MySentry.")
                 
                 self.showViewController(vc, sender: indexPath)
             case .DumpHistory:
@@ -309,10 +309,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     }
-                    return "Fetching history..."
+                    return NSLocalizedString("Fetching history...", comment: "Progress message for fetching pump history.")
                 }
                 
-                vc.title = "Fetch History"
+                vc.title = NSLocalizedString("Fetch History", comment: "Title of screen for fetching history.")
                 
                 self.showViewController(vc, sender: indexPath)
             case .GetPumpModel:
@@ -325,9 +325,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return "Fetching pump model..."
+                    return NSLocalizedString("Fetching pump model...", comment: "Progress message for fetching pump model.")
                 }
-                vc.title = "Fetch Pump Model"
+                vc.title = NSLocalizedString("Fetch Pump Model", comment: "Title of screen for fetching pump model.")
                 
                 self.showViewController(vc, sender: indexPath)
             case .PressDownButton:
@@ -340,9 +340,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return "Sending button press..."
+                    return NSLocalizedString("Sending button press...", comment: "Progress message for sending button press to pump.")
                 }
-                vc.title = "Button Press"
+                vc.title = NSLocalizedString("Button Press", comment: "Title of screen for sending button press to pump.")
                 
                 self.showViewController(vc, sender: indexPath)
             }

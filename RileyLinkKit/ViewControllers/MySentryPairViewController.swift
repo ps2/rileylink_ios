@@ -177,7 +177,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
         
         if let data = packet.data, msg = PumpMessage(rxData: data) {
             if msg.packetType == PacketType.MySentry &&
-                msg.address.hexadecimalString == device.pumpState!.pumpID {
+                msg.address.hexadecimalString == device.pumpState?.pumpID {
                 switch (msg.messageType) {
                 case MessageType.FindDevice:
                     handleFindDevice(msg.messageBody as! FindDeviceMessageBody)

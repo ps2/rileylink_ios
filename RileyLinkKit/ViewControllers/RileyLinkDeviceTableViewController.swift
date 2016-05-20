@@ -286,7 +286,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
                 self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
-                let vc = self.storyboard!.instantiateViewControllerWithIdentifier("mySentryPair") as! MySentryPairViewController
+                let vc = self.storyboard!.instantiateViewControllerWithIdentifier(MySentryPairViewController.className) as! MySentryPairViewController
                 
                 vc.device = device
                 

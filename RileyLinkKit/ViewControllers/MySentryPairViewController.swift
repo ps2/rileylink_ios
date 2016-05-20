@@ -10,7 +10,7 @@ import UIKit
 import MinimedKit
 import RileyLinkBLEKit
 
-class MySentryPairViewController: UIViewController, UITextFieldDelegate {
+class MySentryPairViewController: UIViewController, UITextFieldDelegate, IdentifiableClass {
     
     enum PairingState {
         case Complete

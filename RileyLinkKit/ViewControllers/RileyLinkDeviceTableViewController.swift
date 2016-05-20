@@ -295,7 +295,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 self.showViewController(vc, sender: indexPath)
             case .DumpHistory:
                 let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    let calendar = NSCalendar.currentCalendar()
+                    let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!
                     let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
                     self.device.ops?.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
                         switch response {

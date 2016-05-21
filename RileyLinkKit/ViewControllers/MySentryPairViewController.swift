@@ -8,11 +8,9 @@
 
 import UIKit
 import MinimedKit
-import RileyLinkKit
 import RileyLinkBLEKit
 
-
-class MySentryPairViewController: UIViewController, UITextFieldDelegate {
+class MySentryPairViewController: UIViewController, UITextFieldDelegate, IdentifiableClass {
     
     enum PairingState {
         case Complete
@@ -179,7 +177,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
         
         if let data = packet.data, msg = PumpMessage(rxData: data) {
             if msg.packetType == PacketType.MySentry &&
-                msg.address.hexadecimalString == Config.sharedInstance().pumpID {
+                msg.address.hexadecimalString == device.pumpState?.pumpID {
                 switch (msg.messageType) {
                 case MessageType.FindDevice:
                     handleFindDevice(msg.messageBody as! FindDeviceMessageBody)
@@ -204,7 +202,7 @@ class MySentryPairViewController: UIViewController, UITextFieldDelegate {
     func makeCommandForAckAndListen(sequence: UInt8, messageType: MessageType) -> ReceivingPacketCmd {
         let replyString = String(format: "%02x%@%02x%02x%@00%02x000000",
                                  PacketType.MySentry.rawValue,
-                                 Config.sharedInstance().pumpID!,
+                                 device.pumpState!.pumpID,
                                  MessageType.PumpAck.rawValue,
                                  sequence,
                                  self.deviceIDTextField.text!,

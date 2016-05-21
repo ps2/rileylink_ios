@@ -9,15 +9,15 @@
 import CoreBluetooth
 import UIKit
 
-class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
+public class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
     
-    @IBOutlet weak var connectSwitch: UISwitch!
+    @IBOutlet public weak var connectSwitch: UISwitch!
     
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var signalLabel: UILabel!
     
-    func configureCellWithName(name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
+    public func configureCellWithName(name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
         nameLabel.text = name
         signalLabel.text = signal != nil ? "\(signal!) dB" : nil
         
@@ -42,7 +42,7 @@ class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
         
     }
     
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         
         connectSwitch?.removeTarget(nil, action: nil, forControlEvents: .ValueChanged)

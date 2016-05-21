@@ -162,7 +162,7 @@ class RileyLinkListTableViewController: UITableViewController {
         {
 
             switch segue.destinationViewController {
-            case let vc as RileyLinkDeviceViewController:
+            case let vc as RileyLinkDeviceTableViewController:
                 vc.device = dataManager.rileyLinkManager.devices[indexPath.row]
             default:
                 break

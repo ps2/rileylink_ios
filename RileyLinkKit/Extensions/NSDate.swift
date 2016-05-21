@@ -8,7 +8,7 @@
 
 import Foundation
 
-public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
+internal func ==(lhs: NSDate, rhs: NSDate) -> Bool {
     return lhs === rhs || lhs.compare(rhs) == .OrderedSame
 }
 

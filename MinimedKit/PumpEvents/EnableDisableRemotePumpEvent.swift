@@ -9,24 +9,24 @@
 import Foundation
 
 public class EnableDisableRemotePumpEvent: PumpEvent {
-  public let length: Int
-  let timestamp: NSDateComponents
-
-  public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 21
-
-    if length > availableData.length {
-      timestamp = NSDateComponents()
-      return nil
+    public let length: Int
+    let timestamp: NSDateComponents
+    
+    public required init?(availableData: NSData, pumpModel: PumpModel) {
+        length = 21
+        
+        if length > availableData.length {
+            timestamp = NSDateComponents()
+            return nil
+        }
+        
+        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
     }
-
-    timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
-  }
-
-  public var dictionaryRepresentation: [String: AnyObject] {
-    return [
-      "_type": "EnableDisableRemote",
-      "timestamp": TimeFormat.timestampStr(timestamp),
-    ]
-  }
+    
+    public var dictionaryRepresentation: [String: AnyObject] {
+        return [
+            "_type": "EnableDisableRemote",
+            "timestamp": TimeFormat.timestampStr(timestamp),
+        ]
+    }
 }

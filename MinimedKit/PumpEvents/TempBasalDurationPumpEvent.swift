@@ -9,32 +9,32 @@
 import Foundation
 
 public class TempBasalDurationPumpEvent: PumpEvent {
-  public let length: Int
-  public let duration: Int
-  let timestamp: NSDateComponents
-  
-  public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 7
+    public let length: Int
+    public let duration: Int
+    let timestamp: NSDateComponents
     
-    func d(idx:Int) -> Int {
-      return Int(availableData[idx] as UInt8)
+    public required init?(availableData: NSData, pumpModel: PumpModel) {
+        length = 7
+        
+        func d(idx:Int) -> Int {
+            return Int(availableData[idx] as UInt8)
+        }
+        
+        if length > availableData.length {
+            timestamp = NSDateComponents()
+            duration = 0
+            return nil
+        }
+        
+        duration = d(1) * 30
+        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
     }
     
-    if length > availableData.length {
-      timestamp = NSDateComponents()
-      duration = 0
-      return nil
+    public var dictionaryRepresentation: [String: AnyObject] {
+        return [
+            "_type": "TempBasal",
+            "duration": duration,
+            "timestamp": TimeFormat.timestampStr(timestamp),
+        ]
     }
-    
-    duration = d(1) * 30
-    timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
-  }
-  
-  public var dictionaryRepresentation: [String: AnyObject] {
-    return [
-      "_type": "TempBasal",
-      "duration": duration,
-      "timestamp": TimeFormat.timestampStr(timestamp),
-    ]
-  }
 }

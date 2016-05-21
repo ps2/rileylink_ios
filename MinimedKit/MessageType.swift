@@ -26,7 +26,7 @@ public enum MessageType: UInt8 {
     case GetPumpModel       = 0x8d
     case ReadTempBasal      = 0x98
     case ReadSettings       = 0xc0
-
+    
     var bodyType: MessageBody.Type {
         switch self {
         case .Alert:
@@ -44,17 +44,17 @@ public enum MessageType: UInt8 {
         case .ReadTime:
             return ReadTimeCarelinkMessageBody.self
         case .FindDevice:
-          return FindDeviceMessageBody.self
+            return FindDeviceMessageBody.self
         case .DeviceLink:
-          return DeviceLinkMessageBody.self
+            return DeviceLinkMessageBody.self
         case .ButtonPress:
-          return ButtonPressCarelinkMessageBody.self
+            return ButtonPressCarelinkMessageBody.self
         case .GetPumpModel:
-          return GetPumpModelCarelinkMessageBody.self
+            return GetPumpModelCarelinkMessageBody.self
         case .GetHistoryPage:
-          return GetHistoryPageCarelinkMessageBody.self
+            return GetHistoryPageCarelinkMessageBody.self
         case .GetBattery:
-          return GetBatteryCarelinkMessageBody.self
+            return GetBatteryCarelinkMessageBody.self
         default:
             return UnknownMessageBody.self
         }

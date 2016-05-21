@@ -5,5 +5,7 @@ xcode_sdk:
 xcode_project: RileyLink.xcodeproj
 xcode_scheme: 
     - RileyLink
+before_script:
+    - carthage bootstrap
 script:
     - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator9.3 test

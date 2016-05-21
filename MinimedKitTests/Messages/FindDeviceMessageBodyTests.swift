@@ -21,22 +21,22 @@ class FindDeviceMessageBodyTests: XCTestCase {
         super.tearDown()
     }
     
-  func testValidFindDeviceMessage() {
-    let message = PumpMessage(rxData: NSData(hexadecimalString: "a235053509cf9999990062")!)
+    func testValidFindDeviceMessage() {
+        let message = PumpMessage(rxData: NSData(hexadecimalString: "a235053509cf9999990062")!)
+        
+        if let message = message {
+            XCTAssertTrue(message.messageBody is FindDeviceMessageBody)
+        } else {
+            XCTFail("\(message) is nil")
+        }
+    }
     
-    if let message = message {
-      XCTAssertTrue(message.messageBody is FindDeviceMessageBody)
-    } else {
-      XCTFail("\(message) is nil")
-    }    
-  }
-  
-  func testMidnightSensor() {
-    let message = PumpMessage(rxData: NSData(hexadecimalString: "a235053509cf9999990062")!)!
-    
-    let body = message.messageBody as! FindDeviceMessageBody
-
-    XCTAssertEqual(body.sequence, 79)
-    XCTAssertEqual(body.deviceAddress.hexadecimalString, "999999")
-  }
+    func testMidnightSensor() {
+        let message = PumpMessage(rxData: NSData(hexadecimalString: "a235053509cf9999990062")!)!
+        
+        let body = message.messageBody as! FindDeviceMessageBody
+        
+        XCTAssertEqual(body.sequence, 79)
+        XCTAssertEqual(body.deviceAddress.hexadecimalString, "999999")
+    }
 }

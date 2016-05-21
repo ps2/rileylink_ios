@@ -47,6 +47,9 @@ void logMemUsage(void) {
 + (NSArray*) popLogEntries {
   NSArray *rval = logEntries;
   logEntries = [NSMutableArray array];
+  if (rval == nil) {
+    rval = [NSMutableArray array];
+  }
   return rval;
 }
 

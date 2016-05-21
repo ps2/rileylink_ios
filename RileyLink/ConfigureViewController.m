@@ -9,8 +9,6 @@
 #import "ConfigureViewController.h"
 #import "Config.h"
 #import "UIAlertView+Blocks.h"
-#import "SWRevealViewController.h"
-
 
 @interface ConfigureViewController () {
     
@@ -28,12 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.revealViewController != nil) {
-        menuButton.target = self.revealViewController;
-        menuButton.action = @selector(revealToggle:);
-        [self.view addGestureRecognizer: self.revealViewController.panGestureRecognizer];
-    }
-    
+  
     if (initialConfig && self.navigationItem != NULL) {
         self.navigationItem.leftBarButtonItem = NULL;
     } else {
@@ -44,8 +37,7 @@
 - (IBAction)continuePressed:(id)sender {
     if ([self validateValues]) {
         // TODO: next step would be to connect rileylink
-        UINavigationController *nightscoutNav = [self.storyboard instantiateViewControllerWithIdentifier:@"nightscout"];
-        [self.revealViewController setFrontViewController:nightscoutNav animated:YES];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } else {
         [UIAlertView showWithTitle:@"Invalid Configuration"
                            message:@"Please set valid values for Nightscout URL and Nightscout API Secret."

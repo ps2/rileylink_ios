@@ -6,4 +6,3 @@
 #import "Log.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "NSData+Conversion.h"
-#import "SWRevealViewController.h"

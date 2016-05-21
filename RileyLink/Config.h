@@ -19,7 +19,6 @@
 @property (nonatomic, nullable, strong) NSString *pumpID;
 @property (nonatomic, nullable, strong) NSTimeZone *pumpTimeZone;
 @property (nonatomic, nullable, strong) NSSet *autoConnectIds;
-
-@property (nonatomic, readonly) BOOL hasValidConfiguration;
+@property (nonatomic, assign) BOOL uploadEnabled;
 
 @end

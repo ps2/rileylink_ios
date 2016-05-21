@@ -223,7 +223,6 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
-		C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 /* End PBXBuildFile section */
 
@@ -549,8 +548,6 @@
 		C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpMessageTests.swift; sourceTree = "<group>"; };
 		C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Bridging-Header.h"; sourceTree = "<group>"; };
 		C1EB955C1C887FE5002517DF /* HistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
-		C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigureViewController.h; sourceTree = "<group>"; };
-		C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigureViewController.m; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		C1EF58871B3F93FE001C8C80 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1086,8 +1083,6 @@
 			children = (
 				C16843721CF009E600D53CCD /* SettingsTableViewController.swift */,
 				C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */,
-				C1EF58831B3E5DA4001C8C80 /* ConfigureViewController.h */,
-				C1EF58841B3E5DA4001C8C80 /* ConfigureViewController.m */,
 				C126165B1B6C8076001FAD87 /* PacketGeneratorViewController.h */,
 				C126165C1B6C8076001FAD87 /* PacketGeneratorViewController.m */,
 				C12616551B6A6130001FAD87 /* PacketLogViewController.h */,
@@ -1673,7 +1668,6 @@
 				C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
-				C1EF58851B3E5DA4001C8C80 /* ConfigureViewController.m in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C16843791CF0108B00D53CCD /* IdentifiableClass.swift in Sources */,

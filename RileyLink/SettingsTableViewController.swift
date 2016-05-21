@@ -72,13 +72,13 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .PumpID:
                 configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
-                configCell.detailTextLabel?.text = Config.sharedInstance().pumpID ?? TapToSetString
+                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
             case .NightscoutURL:
                 configCell.textLabel?.text = NSLocalizedString("Nightscout URL", comment: "The title text for the Nightscout URL config value")
-                configCell.detailTextLabel?.text = Config.sharedInstance().nightscoutURL ?? TapToSetString
+                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutURL ?? TapToSetString
             case .NightscoutAPISecret:
                 configCell.textLabel?.text = NSLocalizedString("Nightscout API Secret", comment: "The title text for the Nightscout API Secret config value")
-                configCell.detailTextLabel?.text = Config.sharedInstance().nightscoutAPISecret ?? TapToSetString
+                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutAPISecret ?? TapToSetString
             }            
             cell = configCell
         }
@@ -129,14 +129,14 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 switch ConfigurationRow(rawValue: indexPath.row)! {
                 case .PumpID:
                     vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
-                    vc.value = Config.sharedInstance().pumpID
+                    vc.value = DeviceDataManager.sharedManager.pumpID
                 case .NightscoutURL:
                     vc.placeholder = NSLocalizedString("Enter the URL of your Nightscout site", comment: "The placeholder text instructing users how to enter the Nightscout URL")
-                    vc.value = Config.sharedInstance().nightscoutURL
+                    vc.value = DeviceDataManager.sharedManager.nightscoutURL
                     vc.keyboardType = .URL
                 case .NightscoutAPISecret:
                     vc.placeholder = NSLocalizedString("Enter your Nightscout API Secret", comment: "The placeholder text instructing users how to enter their Nightscout API Secret")
-                    vc.value = Config.sharedInstance().nightscoutAPISecret
+                    vc.value = DeviceDataManager.sharedManager.nightscoutAPISecret
                 }
                 
                 vc.title = cell.textLabel?.text
@@ -160,11 +160,11 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         if let indexPath = controller.indexPath {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .PumpID:
-                Config.sharedInstance().pumpID = controller.value
+                DeviceDataManager.sharedManager.pumpID = controller.value
             case .NightscoutURL:
-                Config.sharedInstance().nightscoutURL = controller.value
+                DeviceDataManager.sharedManager.nightscoutURL = controller.value
             case .NightscoutAPISecret:
-                Config.sharedInstance().nightscoutAPISecret = controller.value
+                DeviceDataManager.sharedManager.nightscoutAPISecret = controller.value
             }
         }
 

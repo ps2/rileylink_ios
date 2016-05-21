@@ -67,6 +67,31 @@ class DeviceDataManager {
         }
     }
     
+    var nightscoutURL: String? = Config.sharedInstance().nightscoutURL {
+        didSet {
+            if nightscoutURL?.characters.count == 0 {
+                nightscoutURL = nil
+            }
+            
+            if let nightscoutURL = nightscoutURL {
+                nightscoutUploader.siteURL = nightscoutURL
+            }
+        }
+    }
+    
+    var nightscoutAPISecret: String? = Config.sharedInstance().nightscoutAPISecret {
+        didSet {
+            if nightscoutAPISecret?.characters.count == 0 {
+                nightscoutAPISecret = nil
+            }
+            
+            if let nightscoutAPISecret = nightscoutAPISecret {
+                nightscoutUploader.APISecret = nightscoutAPISecret
+            }
+        }
+    }
+
+    
     var lastHistoryAttempt: NSDate? = nil
     
     var lastRileyLinkHeardFrom: RileyLinkDevice? = nil
@@ -212,8 +237,8 @@ class DeviceDataManager {
         )
         
         nightscoutUploader = NightscoutUploader()
-        nightscoutUploader.siteURL = Config.sharedInstance().nightscoutURL
-        nightscoutUploader.APISecret = Config.sharedInstance().nightscoutAPISecret
+        nightscoutUploader.siteURL = nightscoutURL
+        nightscoutUploader.APISecret = nightscoutAPISecret
         
         
         let calendar = NSCalendar.currentCalendar()

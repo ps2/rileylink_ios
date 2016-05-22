@@ -169,7 +169,6 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response = try ops.scanForPump(self.pumpState.scanFrequencies)
-                self.pumpState.lastTune = NSDate()
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completion(.Success(response))
                 })

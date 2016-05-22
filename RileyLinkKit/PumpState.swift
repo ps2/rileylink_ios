@@ -26,13 +26,7 @@ public class PumpState {
     public var scanFrequencies = [916.45, 916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
     
     public let pumpID: String
-    
-    public var lastTune: NSDate? {
-        didSet {
-            postChangeNotificationForKey("lastTune", oldValue: oldValue)
-        }
-    }
-    
+        
     public var timeZone: NSTimeZone = NSTimeZone.defaultTimeZone() {
         didSet {
             postChangeNotificationForKey("timeZone", oldValue: oldValue)

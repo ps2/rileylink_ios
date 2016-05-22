@@ -145,7 +145,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 }
             case .Awake:
                 switch device.pumpState?.awakeUntil {
-                case let until? where until < NSDate():
+                case let until? where until.timeIntervalSinceNow < 0:
                     cell.textLabel?.text = NSLocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
                     cell.detailTextLabel?.text = dateFormatter.stringFromDate(until)
                 case let until?:
@@ -286,13 +286,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
                 self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
-                let vc = self.storyboard!.instantiateViewControllerWithIdentifier(MySentryPairViewController.className) as! MySentryPairViewController
-                
-                vc.device = device
-                
-                vc.title = NSLocalizedString("MySentry Pair", comment: "Title of screen for pairing with MySentry.")
-                
-                self.showViewController(vc, sender: indexPath)
+                if let vc = self.storyboard?.instantiateViewControllerWithIdentifier(MySentryPairViewController.className) as? MySentryPairViewController {
+                    vc.device = device
+
+                    vc.title = NSLocalizedString("MySentry Pair", comment: "Title of screen for pairing with MySentry.")
+
+                    self.showViewController(vc, sender: indexPath)
+                }
             case .DumpHistory:
                 let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!

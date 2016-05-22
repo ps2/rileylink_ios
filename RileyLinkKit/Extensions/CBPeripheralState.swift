@@ -9,8 +9,11 @@
 import CoreBluetooth
 
 
-extension CBPeripheralState: CustomStringConvertible {
-    public var description: String {
+extension CBPeripheralState {
+
+    // MARK: - CustomStringConvertible
+
+    var description: String {
         switch self {
         case .Connected:
             return NSLocalizedString("Connected", comment: "The connected state")

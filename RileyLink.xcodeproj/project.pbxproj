@@ -32,6 +32,8 @@
 		430D650D1CB89FC000FCA750 /* SendPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64FD1CB89FC000FCA750 /* SendPacketCmd.m */; };
 		430D650E1CB89FC000FCA750 /* UpdateRegisterCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */; };
+		431185A61CF21F6E0059ED98 /* RileyLinkDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431185A51CF21F6E0059ED98 /* RileyLinkDeviceTableViewCell.swift */; };
+		431185A81CF21FC50059ED98 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843781CF0108B00D53CCD /* IdentifiableClass.swift */; };
 		43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43462E8A1CCB06F500F958A8 /* AppDelegate.swift */; };
 		434AB0951CBA0DF600422F4A /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0911CBA0DF600422F4A /* Either.swift */; };
 		434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0921CBA0DF600422F4A /* PumpOps.swift */; };
@@ -111,7 +113,6 @@
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
 		C16843791CF0108B00D53CCD /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843781CF0108B00D53CCD /* IdentifiableClass.swift */; };
 		C170C98E1CECD6F300F3D8E5 /* CBPeripheralState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */; };
-		C170C9911CECD72800F3D8E5 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C98F1CECD72800F3D8E5 /* IdentifiableClass.swift */; };
 		C170C9921CECD72800F3D8E5 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9901CECD72800F3D8E5 /* NSDate.swift */; };
 		C170C9991CECD80000F3D8E5 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */; };
 		C170C99A1CECD80000F3D8E5 /* MySentryPairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9971CECD80000F3D8E5 /* MySentryPairViewController.swift */; };
@@ -344,6 +345,7 @@
 		430D64FD1CB89FC000FCA750 /* SendPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPacketCmd.m; sourceTree = "<group>"; };
 		430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRegisterCmd.h; sourceTree = "<group>"; };
 		430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRegisterCmd.m; sourceTree = "<group>"; };
+		431185A51CF21F6E0059ED98 /* RileyLinkDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		43462E8A1CCB06F500F958A8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		434AB0911CBA0DF600422F4A /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		434AB0921CBA0DF600422F4A /* PumpOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
@@ -434,7 +436,6 @@
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		C16843781CF0108B00D53CCD /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
-		C170C98F1CECD72800F3D8E5 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		C170C9901CECD72800F3D8E5 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
 		C170C9971CECD80000F3D8E5 /* MySentryPairViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryPairViewController.swift; sourceTree = "<group>"; };
@@ -784,9 +785,10 @@
 		C12616391B67CB9C001FAD87 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */,
 				C12616581B6B2D20001FAD87 /* PacketTableViewCell.h */,
 				C12616591B6B2D20001FAD87 /* PacketTableViewCell.m */,
+				431185A51CF21F6E0059ED98 /* RileyLinkDeviceTableViewCell.swift */,
+				C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -922,7 +924,6 @@
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C170C98F1CECD72800F3D8E5 /* IdentifiableClass.swift */,
 				C170C9901CECD72800F3D8E5 /* NSDate.swift */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
 			);
@@ -1515,9 +1516,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C170C9911CECD72800F3D8E5 /* IdentifiableClass.swift in Sources */,
 				434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */,
 				C170C9921CECD72800F3D8E5 /* NSDate.swift in Sources */,
+				431185A81CF21FC50059ED98 /* IdentifiableClass.swift in Sources */,
 				434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* NSData.swift in Sources */,
 				439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */,
@@ -1683,6 +1684,7 @@
 				43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
+				431185A61CF21F6E0059ED98 /* RileyLinkDeviceTableViewCell.swift in Sources */,
 				C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,

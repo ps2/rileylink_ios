@@ -181,10 +181,7 @@ class PumpOpsSynchronous {
     internal func changeWatchdogMarriageProfile(watchdogID: NSData) throws {
         let commandTimeoutMS: UInt16 = 30_000
 
-        print("\n\nPairing with \(watchdogID)\n\n")
-
         // Wait for the pump to start polling
-        print("Wait for the pump to start polling")
         let listenForFindMessageCmd = GetPacketCmd()
         listenForFindMessageCmd.listenChannel = 0
         listenForFindMessageCmd.timeoutMS = commandTimeoutMS
@@ -200,7 +197,6 @@ class PumpOpsSynchronous {
         }
 
         // Identify as a MySentry device
-        print("Identify as a MySentry device")
         let findMessageResponse = PumpMessage(packetType: .MySentry, address: pump.pumpID, messageType: .PumpAck, messageBody: findMessageResponseBody)
 
         let linkMessage = try sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
@@ -213,7 +209,6 @@ class PumpOpsSynchronous {
         }
 
         // Acknowledge the pump linked with us
-        print("Acknowledge the pump linked with us")
         let linkMessageResponse = PumpMessage(packetType: .MySentry, address: pump.pumpID, messageType: .PumpAck, messageBody: linkMessageResponseBody)
 
         let cmd = SendPacketCmd()

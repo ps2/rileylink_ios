@@ -185,7 +185,6 @@ public class PumpOps {
                     lastError = nil
                     break
                 } catch let error {
-                    print(error)
                     lastError = error
                 }
             }

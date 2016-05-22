@@ -69,7 +69,6 @@
                                     <outlet property="connectSwitch" destination="Z4T-jR-AXg" id="Cp3-NB-gD2"/>
                                     <outlet property="nameLabel" destination="aWq-Th-bCg" id="DGt-bv-Gvi"/>
                                     <outlet property="signalLabel" destination="oq7-Gp-hJM" id="bco-mg-L9v"/>
-                                    <segue destination="gN4-xe-ckr" kind="push" id="pH7-Ke-htY"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -346,25 +345,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fk6-QL-ZgM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="245" y="1760"/>
-        </scene>
-        <!--Riley Link Device Table View Controller-->
-        <scene sceneID="I0X-Ze-Fi9">
-            <objects>
-                <tableViewController id="gN4-xe-ckr" customClass="RileyLinkDeviceTableViewController" customModule="RileyLinkKit" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="fcl-g1-lCo">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <connections>
-                            <outlet property="dataSource" destination="gN4-xe-ckr" id="OaK-ff-R0f"/>
-                            <outlet property="delegate" destination="gN4-xe-ckr" id="y75-dC-WIu"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="7bY-Ao-g7V"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LB0-4b-Lw0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="517" y="1189"/>
         </scene>
         <!--Settings-->
         <scene sceneID="jnw-BC-ZTf">

@@ -17,6 +17,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private var appeared = false
 
+    convenience init() {
+        self.init(style: .Grouped)
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 

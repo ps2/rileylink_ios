@@ -9,6 +9,8 @@
 import UIKit
 import MinimedKit
 
+let CellIdentifier = "Cell"
+
 public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public var device: RileyLinkDevice!
@@ -108,7 +110,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell: UITableViewCell
+
+        if let reusableCell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) {
+            cell = reusableCell
+        } else {
+            cell = UITableViewCell(style: .Value1, reuseIdentifier: CellIdentifier)
+        }
 
         cell.accessoryType = .None
 
@@ -261,10 +269,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     })
 
-                    return NSLocalizedString("Tuning radio...", comment: "Progress message for tuning radio")
+                    return NSLocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
                 })
 
-                vc.title = "Tune device radio"
+                vc.title = NSLocalizedString("Tune device radio", comment: "Title of screen for tuning radio")
 
                 self.showViewController(vc, sender: indexPath)
             case .ChangeTime:
@@ -279,7 +287,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     }
 
-                    return NSLocalizedString("Changing time...", comment: "Progress message for changing pump time.")
+                    return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
                 }
 
                 vc.title = NSLocalizedString("Change Time", comment: "Title of screen for changing pump time.")
@@ -309,7 +317,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     }
-                    return NSLocalizedString("Fetching history...", comment: "Progress message for fetching pump history.")
+                    return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
                 }
                 
                 vc.title = NSLocalizedString("Fetch History", comment: "Title of screen for fetching history.")
@@ -325,7 +333,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return NSLocalizedString("Fetching pump model...", comment: "Progress message for fetching pump model.")
+                    return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
                 }
                 vc.title = NSLocalizedString("Fetch Pump Model", comment: "Title of screen for fetching pump model.")
                 
@@ -340,7 +348,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return NSLocalizedString("Sending button press...", comment: "Progress message for sending button press to pump.")
+                    return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
                 vc.title = NSLocalizedString("Button Press", comment: "Title of screen for sending button press to pump.")
                 

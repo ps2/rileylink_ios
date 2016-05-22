@@ -9,7 +9,7 @@
 import CoreBluetooth
 import UIKit
 
-public class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
+public class RileyLinkDeviceTableViewCell: UITableViewCell {
     
     @IBOutlet public weak var connectSwitch: UISwitch!
     
@@ -53,3 +53,6 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
     }
     
 }
+
+extension RileyLinkDeviceTableViewCell: IdentifiableClass { }
+

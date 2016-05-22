@@ -83,10 +83,6 @@
     }
 }
 
-- (BOOL) hasValidConfiguration {
-    return self.nightscoutURL != NULL && ![self.nightscoutURL isEqualToString:@""];
-}
-
 - (NSSet*) autoConnectIds {
     NSSet *set = [[NSUserDefaults standardUserDefaults] objectForKey:@"autoConnectIds"];
     if (!set) {
@@ -97,6 +93,14 @@
 
 - (void) setAutoConnectIds:(NSSet *)autoConnectIds {
     [[NSUserDefaults standardUserDefaults] setObject:[autoConnectIds allObjects] forKey:@"autoConnectIds"];
+}
+
+- (BOOL) uploadEnabled {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"uploadEnabled"];
+}
+
+- (void) setUploadEnabled:(BOOL)uploadEnabled {
+    [[NSUserDefaults standardUserDefaults] setBool:uploadEnabled forKey:@"uploadEnabled"];
 }
 
 

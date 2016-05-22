@@ -13,17 +13,9 @@ class RileyLinkListTableViewController: UITableViewController {
     
     // Retreive the managedObjectContext from AppDelegate
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-        
-    @IBOutlet var menuButton: UIBarButtonItem?
     
     override func viewDidLoad() {
       super.viewDidLoad()
-        
-        if (self.revealViewController != nil) {
-            menuButton!.target = self.revealViewController
-            menuButton!.action = #selector(SWRevealViewController.revealToggle)
-            self.view.addGestureRecognizer(self.revealViewController.panGestureRecognizer)
-        }
         
         dataManagerObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: dataManager, queue: nil) { [weak self = self] (note) -> Void in
             if let deviceManager = self?.dataManager.rileyLinkManager {

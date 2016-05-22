@@ -67,6 +67,31 @@ class DeviceDataManager {
         }
     }
     
+    var nightscoutURL: String? = Config.sharedInstance().nightscoutURL {
+        didSet {
+            if nightscoutURL?.characters.count == 0 {
+                nightscoutURL = nil
+            }
+            
+            if let nightscoutURL = nightscoutURL {
+                nightscoutUploader.siteURL = nightscoutURL
+            }
+        }
+    }
+    
+    var nightscoutAPISecret: String? = Config.sharedInstance().nightscoutAPISecret {
+        didSet {
+            if nightscoutAPISecret?.characters.count == 0 {
+                nightscoutAPISecret = nil
+            }
+            
+            if let nightscoutAPISecret = nightscoutAPISecret {
+                nightscoutUploader.APISecret = nightscoutAPISecret
+            }
+        }
+    }
+
+    
     var lastHistoryAttempt: NSDate? = nil
     
     var lastRileyLinkHeardFrom: RileyLinkDevice? = nil
@@ -153,7 +178,9 @@ class DeviceDataManager {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
             let source = "rileylink://medtronic/\(device.name)"
-            nightscoutUploader.handlePumpStatus(status, device: source)
+            if Config.sharedInstance().uploadEnabled {
+                nightscoutUploader.handlePumpStatus(status, device: source)
+            }
             
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(11 * NSEC_PER_SEC))
@@ -181,7 +208,9 @@ class DeviceDataManager {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
         let source = "rileylink://medtronic/\(pumpModel)"
-        nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)
+        if Config.sharedInstance().uploadEnabled {
+            nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)
+        }
     }
     
     // MARK: - Initialization
@@ -208,8 +237,8 @@ class DeviceDataManager {
         )
         
         nightscoutUploader = NightscoutUploader()
-        nightscoutUploader.siteURL = Config.sharedInstance().nightscoutURL
-        nightscoutUploader.APISecret = Config.sharedInstance().nightscoutAPISecret
+        nightscoutUploader.siteURL = nightscoutURL
+        nightscoutUploader.APISecret = nightscoutAPISecret
         
         
         let calendar = NSCalendar.currentCalendar()

@@ -408,23 +408,24 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" misplaced="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkQ-79-Mbe">
-                                            <rect key="frame" x="15" y="8" width="513" height="28"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dTl-is-Nh7">
+                                            <rect key="frame" x="15" y="8" width="32" height="20"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" ambiguous="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DkQ-79-Mbe">
+                                                    <rect key="frame" x="0.0" y="0.0" width="32" height="20"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lue-5j-LeY">
                                             <rect key="frame" x="536" y="6" width="51" height="31"/>
                                         </switch>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailingMargin" secondItem="lue-5j-LeY" secondAttribute="trailing" constant="7" id="Dbm-pT-alu"/>
-                                        <constraint firstItem="DkQ-79-Mbe" firstAttribute="top" secondItem="ytm-t6-Tat" secondAttribute="topMargin" id="Rbv-Qi-o48"/>
                                         <constraint firstItem="lue-5j-LeY" firstAttribute="centerY" secondItem="ytm-t6-Tat" secondAttribute="centerY" id="jWE-Qn-Pa6"/>
-                                        <constraint firstItem="DkQ-79-Mbe" firstAttribute="leading" secondItem="ytm-t6-Tat" secondAttribute="leadingMargin" constant="7" id="low-6J-e8o"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="DkQ-79-Mbe" secondAttribute="bottom" priority="750" id="p1b-Mv-aa3"/>
-                                        <constraint firstItem="lue-5j-LeY" firstAttribute="leading" secondItem="DkQ-79-Mbe" secondAttribute="trailing" constant="8" symbolic="YES" id="zoi-rr-63E"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

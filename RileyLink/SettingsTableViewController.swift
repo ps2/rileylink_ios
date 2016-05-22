@@ -16,10 +16,17 @@ private let TapToSetString = NSLocalizedString("Tap to set", comment: "The empty
 class SettingsTableViewController: UITableViewController, TextFieldTableViewControllerDelegate {
 
     private enum Section: Int {
-        case Upload = 0
+        case About = 0
+        case Upload
         case Configuration
 
-        static let count = 2
+        static let count = 3
+    }
+    
+    private enum AboutRow: Int {
+        case Version = 0
+        
+        static let count = 1
     }
 
     private enum UploadRow: Int {
@@ -44,6 +51,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
+        case .About:
+            return AboutRow.count
         case .Upload:
             return UploadRow.count
         case .Configuration:
@@ -55,8 +64,18 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         let cell: UITableViewCell
 
         switch Section(rawValue: indexPath.section)! {
+        case .About:
+            switch AboutRow(rawValue: indexPath.row)! {
+            case .Version:
+                let versionCell = UITableViewCell(style: .Default, reuseIdentifier: "Version")
+                versionCell.selectionStyle = .None
+                let version = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!
+                versionCell.textLabel?.text = "RileyLink iOS v\(version)"
+                
+                return versionCell
+            }
         case .Upload:
-            switch UploadRow(rawValue: indexPath.section)! {
+            switch UploadRow(rawValue: indexPath.row)! {
             case .Upload:
                 let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchTableViewCell.className, forIndexPath: indexPath) as! SwitchTableViewCell
 
@@ -87,6 +106,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
+        case .About:
+            return NSLocalizedString("About", comment: "The title of the about section")
         case .Upload:
             return nil
         case .Configuration:
@@ -105,14 +126,14 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .PumpID, .NightscoutAPISecret, .NightscoutURL:
                 performSegueWithIdentifier(TextFieldTableViewController.className, sender: sender)
             }
-        case .Upload:
+        case .Upload, .About:
             break
         }
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch Section(rawValue: section)! {
-        case .Upload, .Configuration:
+        case .Upload, .Configuration, .About:
             return nil
         }
     }
@@ -148,7 +169,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         }
     }
 
-    // MARK: - Device mangement
+    // MARK: - Uploader mangement
 
     func uploadEnabledChanged(sender: UISwitch) {
         Config.sharedInstance().uploadEnabled = sender.on

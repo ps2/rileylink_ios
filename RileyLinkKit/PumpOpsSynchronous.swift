@@ -177,7 +177,50 @@ class PumpOpsSynchronous {
             throw PumpCommsError.UnknownResponse("changeTime response: \(response.txData)")
         }
     }
-    
+
+    internal func changeWatchdogMarriageProfile(watchdogID: NSData) throws {
+        let commandTimeoutMS: UInt16 = 30_000
+
+        print("\n\nPairing with \(watchdogID)\n\n")
+
+        // Wait for the pump to start polling
+        print("Wait for the pump to start polling")
+        let listenForFindMessageCmd = GetPacketCmd()
+        listenForFindMessageCmd.listenChannel = 0
+        listenForFindMessageCmd.timeoutMS = commandTimeoutMS
+
+        guard session.doCmd(listenForFindMessageCmd, withTimeoutMs: Int(commandTimeoutMS) + expectedMaxBLELatencyMS) else {
+            throw PumpCommsError.RileyLinkTimeout
+        }
+
+        guard let data = listenForFindMessageCmd.receivedPacket.data, findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
+            let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
+        else {
+            throw PumpCommsError.UnknownResponse("Received \(listenForFindMessageCmd.receivedPacket.data ?? NSData())")
+        }
+
+        // Identify as a MySentry device
+        print("Identify as a MySentry device")
+        let findMessageResponse = PumpMessage(packetType: .MySentry, address: pump.pumpID, messageType: .PumpAck, messageBody: findMessageResponseBody)
+
+        let linkMessage = try sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
+
+        guard let
+            linkMessageBody = linkMessage.messageBody as? DeviceLinkMessageBody,
+            linkMessageResponseBody = MySentryAckMessageBody(sequence: linkMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [linkMessage.messageType])
+        else {
+            throw PumpCommsError.UnknownResponse("Received \(linkMessage.messageBody.txData)")
+        }
+
+        // Acknowledge the pump linked with us
+        print("Acknowledge the pump linked with us")
+        let linkMessageResponse = PumpMessage(packetType: .MySentry, address: pump.pumpID, messageType: .PumpAck, messageBody: linkMessageResponseBody)
+
+        let cmd = SendPacketCmd()
+        cmd.packet = RFPacket(data: linkMessageResponse.txData)
+        session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+    }
+
     internal func setRXFilterMode(mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue

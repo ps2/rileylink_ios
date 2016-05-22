@@ -298,13 +298,42 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
                 self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
-                if let vc = self.storyboard?.instantiateViewControllerWithIdentifier(MySentryPairViewController.className) as? MySentryPairViewController {
-                    vc.device = device
+                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
 
-                    vc.title = NSLocalizedString("MySentry Pair", comment: "Title of screen for pairing with MySentry.")
+                    self.device.ops?.setRXFilterMode(.Wide) { (error) in
+                        if let error = error {
+                            completionHandler(responseText: String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(error)))
+                        } else {
+                            var byteArray = [UInt8](count: 16, repeatedValue: 0)
+                            self.device.peripheral.identifier.getUUIDBytes(&byteArray)
+                            let watchdogID = NSData(bytes: &byteArray, length: 3)
 
-                    self.showViewController(vc, sender: indexPath)
+                            self.device.ops?.changeWatchdogMarriageProfile(watchdogID, completion: { (error) in
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    if let error = error {
+                                        completionHandler(responseText: String(format: NSLocalizedString("Failed: %@", comment: "A message indicating a command failed, with a substitution parameter for the error message"), String(error)))
+                                    } else {
+                                        completionHandler(responseText: NSLocalizedString("Succeeded", comment: "A message indicating a command succeeded"))
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                    return NSLocalizedString(
+                        "On your pump, go to the Find Device screen and select \"Find Device\"." +
+                            "\n" +
+                            "\nMain Menu >" +
+                            "\nUtilities >" +
+                            "\nConnect Devices >" +
+                            "\nOther Devices >" +
+                            "\nOn >" +
+                        "\nFind Device",
+                        comment: "Pump find device instruction"
+                    )
                 }
+
+                showViewController(vc, sender: indexPath)
             case .DumpHistory:
                 let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!

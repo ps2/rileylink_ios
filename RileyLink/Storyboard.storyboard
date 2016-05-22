@@ -32,46 +32,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RileyLinkDeviceTableViewCell" id="ypX-La-UD4" customClass="RileyLinkDeviceTableViewCell" customModule="RileyLinkKit">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ypX-La-UD4" id="2no-oe-PZi">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aWq-Th-bCg">
-                                            <rect key="frame" x="15" y="12" width="97" height="20"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00 dB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oq7-Gp-hJM">
-                                            <rect key="frame" x="120" y="12" width="51" height="20"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z4T-jR-AXg">
-                                            <rect key="frame" x="503" y="6" width="51" height="31"/>
-                                        </switch>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="oq7-Gp-hJM" firstAttribute="baseline" secondItem="aWq-Th-bCg" secondAttribute="baseline" id="9wJ-TB-ew6"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Z4T-jR-AXg" secondAttribute="trailing" constant="7" id="Blc-2d-Nwt"/>
-                                        <constraint firstItem="oq7-Gp-hJM" firstAttribute="leading" secondItem="aWq-Th-bCg" secondAttribute="trailing" constant="8" symbolic="YES" id="Mcy-8r-JtU"/>
-                                        <constraint firstItem="aWq-Th-bCg" firstAttribute="centerY" secondItem="2no-oe-PZi" secondAttribute="centerY" id="OFk-8a-Txc"/>
-                                        <constraint firstItem="Z4T-jR-AXg" firstAttribute="centerY" secondItem="2no-oe-PZi" secondAttribute="centerY" id="S8P-Pc-aTE"/>
-                                        <constraint firstItem="aWq-Th-bCg" firstAttribute="leading" secondItem="2no-oe-PZi" secondAttribute="leadingMargin" constant="7" id="bJf-hd-WYB"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="connectSwitch" destination="Z4T-jR-AXg" id="Cp3-NB-gD2"/>
-                                    <outlet property="nameLabel" destination="aWq-Th-bCg" id="DGt-bv-Gvi"/>
-                                    <outlet property="signalLabel" destination="oq7-Gp-hJM" id="bco-mg-L9v"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="1do-Ic-9Nf" id="G2F-ab-1f9"/>
                             <outlet property="delegate" destination="1do-Ic-9Nf" id="otV-5a-mBz"/>

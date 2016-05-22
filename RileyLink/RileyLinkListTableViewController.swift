@@ -17,6 +17,8 @@ class RileyLinkListTableViewController: UITableViewController {
     override func viewDidLoad() {
       super.viewDidLoad()
 
+        tableView.registerNib(RileyLinkDeviceTableViewCell.nib(), forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)
+
         dataManagerObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: dataManager, queue: nil) { [weak self = self] (note) -> Void in
             if let deviceManager = self?.dataManager.rileyLinkManager {
                 switch note.name {

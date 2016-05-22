@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RileyLinkKit
 
 class SwitchTableViewCell: UITableViewCell, IdentifiableClass {
 

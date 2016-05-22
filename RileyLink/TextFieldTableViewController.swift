@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RileyLinkKit
 
 protocol TextFieldTableViewControllerDelegate: class {
     func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController)

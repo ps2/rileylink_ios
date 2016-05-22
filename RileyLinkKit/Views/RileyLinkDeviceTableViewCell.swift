@@ -9,14 +9,18 @@
 import CoreBluetooth
 import UIKit
 
-public class RileyLinkDeviceTableViewCell: UITableViewCell {
+public class RileyLinkDeviceTableViewCell: UITableViewCell, IdentifiableClass {
     
     @IBOutlet public weak var connectSwitch: UISwitch!
     
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var signalLabel: UILabel!
-    
+
+    public static func nib() -> UINib {
+        return UINib(nibName: className, bundle: NSBundle(forClass: self))
+    }
+
     public func configureCellWithName(name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
         nameLabel.text = name
         signalLabel.text = signal != nil ? "\(signal!) dB" : nil

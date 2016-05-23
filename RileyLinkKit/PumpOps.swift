@@ -94,7 +94,7 @@ public class PumpOps {
      
      - parameter units:      The number of units to deliver
      - parameter completion: A closure called after the command is complete. This closure takes a single argument:
-     - error: An error describing why the command failed
+        - error: An error describing why the command failed
      */
     public func setNormalBolus(units: Double, completion: (error: ErrorType?) -> Void) {
         device.runSession { (session) in
@@ -123,8 +123,8 @@ public class PumpOps {
      - parameter unitsPerHour: The new basal rate, in Units per hour
      - parameter duration:     The duration of the rate
      - parameter completion:   A closure called after the command is complete. This closure takes a single Result argument:
-     - Success(messageBody): The pump message body describing the new basal rate
-     - Failure(error):       An error describing why the command failed
+        - Success(messageBody): The pump message body describing the new basal rate
+        - Failure(error):       An error describing why the command failed
      */
     public func setTempBasal(unitsPerHour: Double, duration: NSTimeInterval, completion: (Either<ReadTempBasalCarelinkMessageBody, ErrorType>) -> Void) {
         device.runSession { (session) in
@@ -146,7 +146,7 @@ public class PumpOps {
      
      - parameter generator:  A closure which returns the desired date components. An exeception is raised if the date components are not valid.
      - parameter completion: A closure called after the command is complete. This closure takes a single argument:
-     - error: An error describing why the command failed
+        - error: An error describing why the command failed
      */
     public func setTime(generator: () -> NSDateComponents, completion: (error: ErrorType?) -> Void) {
         device.runSession { (session) in
@@ -162,9 +162,38 @@ public class PumpOps {
             }
         }
     }
-    
-    // TODO: Internal scope
-    public func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
+
+    /**
+     Pairs the pump with a virtual "watchdog" device to enable it to broadcast periodic status packets. Only pump models x23 and up are supported.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter watchdogID: A 3-byte address for the watchdog device.
+     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
+        - error: An error describing why the command failed.
+     */
+    public func changeWatchdogMarriageProfile(watchdogID: NSData, completion: (error: ErrorType?) -> Void) {
+        device.runSession { (session) in
+            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+
+            var lastError: ErrorType?
+
+            for _ in 0..<3 {
+                do {
+                    try ops.changeWatchdogMarriageProfile(watchdogID)
+
+                    lastError = nil
+                    break
+                } catch let error {
+                    lastError = error
+                }
+            }
+
+            completion(error: lastError)
+        }
+    }
+
+    func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
         device.runSession { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {

@@ -16,7 +16,9 @@ class RileyLinkListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
       super.viewDidLoad()
-        
+
+        tableView.registerNib(RileyLinkDeviceTableViewCell.nib(), forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)
+
         dataManagerObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: dataManager, queue: nil) { [weak self = self] (note) -> Void in
             if let deviceManager = self?.dataManager.rileyLinkManager {
                 switch note.name {
@@ -108,7 +110,15 @@ class RileyLinkListTableViewController: UITableViewController {
         }
     }
 
-    
+    // MARK: - UITableViewDelegate
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let vc = RileyLinkDeviceTableViewController()
+
+        vc.device = dataManager.rileyLinkManager.devices[indexPath.row]
+
+        showViewController(vc, sender: indexPath)
+    }
     
     /*
      // Override to support conditional editing of the table view.
@@ -143,22 +153,5 @@ class RileyLinkListTableViewController: UITableViewController {
      return YES;
      }
      */
-    
-    // MARK: Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let
-            cell = sender as? UITableViewCell,
-            indexPath = tableView.indexPathForCell(cell)
-        {
 
-            switch segue.destinationViewController {
-            case let vc as RileyLinkDeviceTableViewController:
-                vc.device = dataManager.rileyLinkManager.devices[indexPath.row]
-            default:
-                break
-            }
-        }
-    }
 }

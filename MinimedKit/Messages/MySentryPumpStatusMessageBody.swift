@@ -83,7 +83,7 @@ public enum SensorReading {
  See: [MinimedRF Class](https://github.com/ps2/minimed_rf/blob/master/lib/minimed_rf/messages/pump_status.rb)
  ```
  -- ------ -- 00 01 020304050607 08 09 10 11 1213 14 15 16 17 18 19 20 21 2223 24 25 26 27 282930313233 3435 --
- se tr    pump date 01 bh ph    resv bt          st sr nxcal  iob bl             sens date 0000
+              se tr    pump date 01 bh ph    resv bt          st sr nxcal  iob bl             sens date 0000
  a2 594040 04 c9 51 092c1e0f0904 01 32 33 00 037a 02 02 05 b0 18 30 13 2b 00d1 00 00 00 70 092b000f0904 0000 33
  a2 594040 04 fb 51 1205000f0906 01 05 05 02 0000 04 00 00 00 ff 00 ff ff 0040 00 00 00 71 1205000f0906 0000 2b
  a2 594040 04 ff 50 1219000f0906 01 00 00 00 0000 04 00 00 00 00 00 00 00 005e 00 00 00 72 000000000000 0000 8b
@@ -97,7 +97,9 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
     private static let reservoirSignificantDigit = 0.1
     private static let iobSigificantDigit = 0.025
     public static let length = 36
-    
+
+    public let sequence: UInt8
+
     public let pumpDateComponents: NSDateComponents
     public let batteryRemainingPercent: Int
     public let iob: Double
@@ -122,7 +124,9 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         }
         
         self.rxData = rxData
-        
+
+        sequence = rxData[0]
+
         let pumpDateComponents = NSDateComponents(mySentryBytes: rxData[2...7])
         
         guard let calendar = pumpDateComponents.calendar where pumpDateComponents.isValidDateInCalendar(calendar) else {

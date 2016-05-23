@@ -16,7 +16,11 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var signalLabel: UILabel!
-    
+
+    public static func nib() -> UINib {
+        return UINib(nibName: className, bundle: NSBundle(forClass: self))
+    }
+
     public func configureCellWithName(name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
         nameLabel.text = name
         signalLabel.text = signal != nil ? "\(signal!) dB" : nil
@@ -49,3 +53,6 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
     }
     
 }
+
+extension RileyLinkDeviceTableViewCell: IdentifiableClass { }
+

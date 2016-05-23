@@ -9,11 +9,17 @@
 import UIKit
 import MinimedKit
 
+let CellIdentifier = "Cell"
+
 public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public var device: RileyLinkDevice!
 
     private var appeared = false
+
+    convenience init() {
+        self.init(style: .Grouped)
+    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +114,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell: UITableViewCell
+
+        if let reusableCell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) {
+            cell = reusableCell
+        } else {
+            cell = UITableViewCell(style: .Value1, reuseIdentifier: CellIdentifier)
+        }
 
         cell.accessoryType = .None
 
@@ -261,10 +273,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     })
 
-                    return NSLocalizedString("Tuning radio...", comment: "Progress message for tuning radio")
+                    return NSLocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
                 })
 
-                vc.title = "Tune device radio"
+                vc.title = NSLocalizedString("Tune device radio", comment: "Title of screen for tuning radio")
 
                 self.showViewController(vc, sender: indexPath)
             case .ChangeTime:
@@ -279,20 +291,49 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         }
                     }
 
-                    return NSLocalizedString("Changing time...", comment: "Progress message for changing pump time.")
+                    return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
                 }
 
                 vc.title = NSLocalizedString("Change Time", comment: "Title of screen for changing pump time.")
 
                 self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
-                if let vc = self.storyboard?.instantiateViewControllerWithIdentifier(MySentryPairViewController.className) as? MySentryPairViewController {
-                    vc.device = device
+                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
 
-                    vc.title = NSLocalizedString("MySentry Pair", comment: "Title of screen for pairing with MySentry.")
+                    self.device.ops?.setRXFilterMode(.Wide) { (error) in
+                        if let error = error {
+                            completionHandler(responseText: String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(error)))
+                        } else {
+                            var byteArray = [UInt8](count: 16, repeatedValue: 0)
+                            self.device.peripheral.identifier.getUUIDBytes(&byteArray)
+                            let watchdogID = NSData(bytes: &byteArray, length: 3)
 
-                    self.showViewController(vc, sender: indexPath)
+                            self.device.ops?.changeWatchdogMarriageProfile(watchdogID, completion: { (error) in
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    if let error = error {
+                                        completionHandler(responseText: String(format: NSLocalizedString("Failed: %@", comment: "A message indicating a command failed, with a substitution parameter for the error message"), String(error)))
+                                    } else {
+                                        completionHandler(responseText: NSLocalizedString("Succeeded", comment: "A message indicating a command succeeded"))
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                    return NSLocalizedString(
+                        "On your pump, go to the Find Device screen and select \"Find Device\"." +
+                            "\n" +
+                            "\nMain Menu >" +
+                            "\nUtilities >" +
+                            "\nConnect Devices >" +
+                            "\nOther Devices >" +
+                            "\nOn >" +
+                        "\nFind Device",
+                        comment: "Pump find device instruction"
+                    )
                 }
+
+                showViewController(vc, sender: indexPath)
             case .DumpHistory:
                 let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!
@@ -309,7 +350,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     }
-                    return NSLocalizedString("Fetching history...", comment: "Progress message for fetching pump history.")
+                    return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
                 }
                 
                 vc.title = NSLocalizedString("Fetch History", comment: "Title of screen for fetching history.")
@@ -325,7 +366,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return NSLocalizedString("Fetching pump model...", comment: "Progress message for fetching pump model.")
+                    return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
                 }
                 vc.title = NSLocalizedString("Fetch Pump Model", comment: "Title of screen for fetching pump model.")
                 
@@ -340,7 +381,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             completionHandler(responseText: String(error))
                         }
                     })
-                    return NSLocalizedString("Sending button press...", comment: "Progress message for sending button press to pump.")
+                    return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
                 vc.title = NSLocalizedString("Button Press", comment: "Title of screen for sending button press to pump.")
                 

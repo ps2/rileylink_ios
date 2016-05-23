@@ -202,16 +202,15 @@ class PumpOpsSynchronous {
         NSLog("Set frequency to %f", freqMHz)
     }
     
-    internal func scanForPump() throws -> FrequencyScanResults {
+    internal func scanForPump(frequencies: [Double]) throws -> FrequencyScanResults {
         
-        let frequencies = [916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
-        //let frequencies = [868.0]
         var results = FrequencyScanResults()
         
         do {
+            // Needed to put the pump in listen mode
             try wakeup()
         } catch {
-            // Continue anyway
+            // Continue anyway; the pump likely heard us, even if we didn't hear it.
         }
         
         for freq in frequencies {
@@ -256,11 +255,7 @@ class PumpOpsSynchronous {
     
     internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
         
-        do {
-            try wakeup()
-        } catch _ as PumpCommsError {
-            try scanForPump()
-        }
+        try wakeup()
         
         let pumpModel = try getPumpModel()
         

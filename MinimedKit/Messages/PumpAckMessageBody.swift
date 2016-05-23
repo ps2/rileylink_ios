@@ -9,15 +9,15 @@
 import Foundation
 
 public class PumpAckMessageBody: MessageBody {
-  public static let length = 1
-  
-  let rxData: NSData
-  
-  public required init?(rxData: NSData) {
-    self.rxData = rxData
-  }
-  
-  public var txData: NSData {
-    return rxData
-  }
+    public static let length = 1
+    
+    let rxData: NSData
+    
+    public required init?(rxData: NSData) {
+        self.rxData = rxData
+    }
+    
+    public var txData: NSData {
+        return rxData
+    }
 }

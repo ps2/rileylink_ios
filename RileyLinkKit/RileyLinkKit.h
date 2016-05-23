@@ -15,5 +15,3 @@ FOUNDATION_EXPORT double RileyLinkKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char RileyLinkKitVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <RileyLinkKit/PublicHeader.h>
-
-

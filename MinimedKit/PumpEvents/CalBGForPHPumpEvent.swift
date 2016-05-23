@@ -9,32 +9,32 @@
 import Foundation
 
 public class CalBGForPHPumpEvent: PumpEvent {
-  public let length: Int
-  public let timestamp: NSDateComponents
-  public let amount: Int
-
-  public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 7
+    public let length: Int
+    public let timestamp: NSDateComponents
+    public let amount: Int
     
-    if length > availableData.length {
-      timestamp = NSDateComponents()
-      amount = 0
-      return nil
+    public required init?(availableData: NSData, pumpModel: PumpModel) {
+        length = 7
+        
+        if length > availableData.length {
+            timestamp = NSDateComponents()
+            amount = 0
+            return nil
+        }
+        
+        func d(idx:Int) -> Int {
+            return Int(availableData[idx] as UInt8)
+        }
+        
+        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        amount = ((d(6) & 0b10000000) << 1) + d(1)
     }
     
-    func d(idx:Int) -> Int {
-      return Int(availableData[idx] as UInt8)
+    public var dictionaryRepresentation: [String: AnyObject] {
+        return [
+            "_type": "CalBGForPH",
+            "timestamp": TimeFormat.timestampStr(timestamp),
+            "amount": amount,
+        ]
     }
-    
-    timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
-    amount = ((d(6) & 0b10000000) << 1) + d(1)
-  }
-  
-  public var dictionaryRepresentation: [String: AnyObject] {
-    return [
-      "_type": "CalBGForPH",
-      "timestamp": TimeFormat.timestampStr(timestamp),
-      "amount": amount,
-    ]
-  }
 }

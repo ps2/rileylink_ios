@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol PumpEvent : DictionaryRepresentable {
-  
-  init?(availableData: NSData, pumpModel: PumpModel)
-  
-  var length: Int {
-    get
-  }
-
+    
+    init?(availableData: NSData, pumpModel: PumpModel)
+    
+    var length: Int {
+        get
+    }
+    
 }

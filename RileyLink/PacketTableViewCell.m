@@ -14,11 +14,11 @@ static NSDateFormatter *dateFormatter;
 static NSDateFormatter *timeFormatter;
 
 @interface PacketTableViewCell () {
-  IBOutlet UILabel *rawDataLabel;
-  IBOutlet UILabel *dateLabel;
-  IBOutlet UILabel *timeLabel;
-  IBOutlet UILabel *rssiLabel;
-  IBOutlet UILabel *packetNumberLabel;
+    IBOutlet UILabel *rawDataLabel;
+    IBOutlet UILabel *dateLabel;
+    IBOutlet UILabel *timeLabel;
+    IBOutlet UILabel *rssiLabel;
+    IBOutlet UILabel *packetNumberLabel;
 }
 
 @end
@@ -26,12 +26,12 @@ static NSDateFormatter *timeFormatter;
 @implementation PacketTableViewCell
 
 + (void)initialize {
-  dateFormatter = [[NSDateFormatter alloc] init];
-  dateFormatter.locale = [NSLocale currentLocale];
-  dateFormatter.dateStyle = NSDateFormatterShortStyle;
-  timeFormatter = [[NSDateFormatter alloc] init];
-  timeFormatter.locale = [NSLocale currentLocale];
-  timeFormatter.timeStyle = NSDateFormatterShortStyle;
+    dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.locale = [NSLocale currentLocale];
+    dateFormatter.dateStyle = NSDateFormatterShortStyle;
+    timeFormatter = [[NSDateFormatter alloc] init];
+    timeFormatter.locale = [NSLocale currentLocale];
+    timeFormatter.timeStyle = NSDateFormatterShortStyle;
 }
 
 - (void)awakeFromNib {
@@ -39,18 +39,18 @@ static NSDateFormatter *timeFormatter;
 }
 
 - (void)setPacket:(RFPacket *)packet {
-  _packet = packet;
-  
-  rawDataLabel.text = packet.data.hexadecimalString;
-  dateLabel.text = [dateFormatter stringFromDate:packet.capturedAt];
-  timeLabel.text = [timeFormatter stringFromDate:packet.capturedAt];
-  rssiLabel.text = [NSString stringWithFormat:@"%d", packet.rssi];
-  packetNumberLabel.text = [NSString stringWithFormat:@"#%d", packet.packetNumber];
+    _packet = packet;
+    
+    rawDataLabel.text = packet.data.hexadecimalString;
+    dateLabel.text = [dateFormatter stringFromDate:packet.capturedAt];
+    timeLabel.text = [timeFormatter stringFromDate:packet.capturedAt];
+    rssiLabel.text = [NSString stringWithFormat:@"%d", packet.rssi];
+    packetNumberLabel.text = [NSString stringWithFormat:@"#%d", packet.packetNumber];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

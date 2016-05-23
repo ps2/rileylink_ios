@@ -33,11 +33,11 @@
 
 - (void)testVersionParsing {
     id peripheral = nil;
-
+    
     RileyLinkBLEDevice *device = [[RileyLinkBLEDevice alloc] initWithPeripheral:peripheral];
-
+    
     SubgRfspyVersionState state = [device firmwareStateForVersionString:@"subg_rfspy 0.8"];
-
+    
     XCTAssertEqual(SubgRfspyVersionStateUpToDate, state);
 }
 

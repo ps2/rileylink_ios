@@ -9,28 +9,28 @@
 import Foundation
 
 public class PumpAlarmPumpEvent: PumpEvent {
-  public let length: Int
-  let timestamp: NSDateComponents
-  let rawType: Int
-  
-  public required init?(availableData: NSData, pumpModel: PumpModel) {
-    length = 9
+    public let length: Int
+    let timestamp: NSDateComponents
+    let rawType: Int
     
-    if length > availableData.length {
-      timestamp = NSDateComponents()
-      rawType = 0
-      return nil
+    public required init?(availableData: NSData, pumpModel: PumpModel) {
+        length = 9
+        
+        if length > availableData.length {
+            timestamp = NSDateComponents()
+            rawType = 0
+            return nil
+        }
+        
+        rawType = Int(availableData[1] as UInt8)
+        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
     }
     
-    rawType = Int(availableData[1] as UInt8)
-    timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
-  }
-  
-  public var dictionaryRepresentation: [String: AnyObject] {
-    return [
-      "_type": "AlarmPump",
-      "rawType": rawType,
-      "timestamp": TimeFormat.timestampStr(timestamp),
-    ]
-  }
+    public var dictionaryRepresentation: [String: AnyObject] {
+        return [
+            "_type": "AlarmPump",
+            "rawType": rawType,
+            "timestamp": TimeFormat.timestampStr(timestamp),
+        ]
+    }
 }

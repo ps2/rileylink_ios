@@ -11,7 +11,7 @@
 @implementation CmdBase
 
 - (NSData*)data {
-  return nil;
+    return nil;
 }
 
 @end

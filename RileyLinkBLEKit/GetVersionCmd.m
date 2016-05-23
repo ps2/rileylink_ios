@@ -11,9 +11,9 @@
 @implementation GetVersionCmd
 
 - (NSData*)data {
-  uint8_t cmd[1];
-  cmd[0] = RILEYLINK_CMD_GET_VERSION;
-  return [NSData dataWithBytes:cmd length:1];
+    uint8_t cmd[1];
+    cmd[0] = RILEYLINK_CMD_GET_VERSION;
+    return [NSData dataWithBytes:cmd length:1];
 }
 
 @end

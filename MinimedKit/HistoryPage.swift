@@ -7,60 +7,60 @@
 //
 
 public class HistoryPage {
-  
-  public enum Error: ErrorType {
-    case InvalidCRC
-    case UnknownEventType(eventType: UInt8)
-  }
-  
-  public let events: [PumpEvent]
-  
-  public init(pageData: NSData, pumpModel: PumpModel) throws {
     
-    guard checkCRC16(pageData) else {
-      events = [PumpEvent]()
-      throw Error.InvalidCRC
+    public enum Error: ErrorType {
+        case InvalidCRC
+        case UnknownEventType(eventType: UInt8)
     }
     
-    let pageData = pageData.subdataWithRange(NSMakeRange(0, 1022))
+    public let events: [PumpEvent]
     
-    func matchEvent(offset: Int) -> PumpEvent? {
-      if let eventType = PumpEventType(rawValue:(pageData[offset] as UInt8)) {
-        let remainingData = pageData.subdataWithRange(NSMakeRange(offset, pageData.length - offset))
-        if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
-          return event
+    public init(pageData: NSData, pumpModel: PumpModel) throws {
+        
+        guard checkCRC16(pageData) else {
+            events = [PumpEvent]()
+            throw Error.InvalidCRC
         }
-      }
-      return nil
+        
+        let pageData = pageData.subdataWithRange(NSMakeRange(0, 1022))
+        
+        func matchEvent(offset: Int) -> PumpEvent? {
+            if let eventType = PumpEventType(rawValue:(pageData[offset] as UInt8)) {
+                let remainingData = pageData.subdataWithRange(NSMakeRange(offset, pageData.length - offset))
+                if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
+                    return event
+                }
+            }
+            return nil
+        }
+        
+        var offset = 0
+        let length = pageData.length
+        var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
+        var tempEvents = [PumpEvent]()
+        
+        while offset < length {
+            // Slurp up 0's
+            if pageData[offset] as UInt8 == 0 {
+                offset += 1
+                continue
+            }
+            guard let event = matchEvent(offset) else {
+                events = [PumpEvent]()
+                throw Error.UnknownEventType(eventType: pageData[offset] as UInt8)
+            }
+            if event.dynamicType == BolusNormalPumpEvent.self && unabsorbedInsulinRecord != nil {
+                let bolus: BolusNormalPumpEvent = event as! BolusNormalPumpEvent
+                bolus.unabsorbedInsulinRecord = unabsorbedInsulinRecord
+                unabsorbedInsulinRecord = nil
+            }
+            if event.dynamicType == UnabsorbedInsulinPumpEvent.self {
+                unabsorbedInsulinRecord = event as? UnabsorbedInsulinPumpEvent
+            } else {
+                tempEvents.append(event)
+            }
+            offset += event.length
+        }
+        events = tempEvents
     }
-    
-    var offset = 0
-    let length = pageData.length
-    var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
-    var tempEvents = [PumpEvent]()
-    
-    while offset < length {
-      // Slurp up 0's
-      if pageData[offset] as UInt8 == 0 {
-        offset += 1
-        continue
-      }
-      guard let event = matchEvent(offset) else {
-        events = [PumpEvent]()
-        throw Error.UnknownEventType(eventType: pageData[offset] as UInt8)
-      }
-      if event.dynamicType == BolusNormalPumpEvent.self && unabsorbedInsulinRecord != nil {
-        let bolus: BolusNormalPumpEvent = event as! BolusNormalPumpEvent
-        bolus.unabsorbedInsulinRecord = unabsorbedInsulinRecord
-        unabsorbedInsulinRecord = nil
-      }
-      if event.dynamicType == UnabsorbedInsulinPumpEvent.self {
-        unabsorbedInsulinRecord = event as? UnabsorbedInsulinPumpEvent
-      } else {
-        tempEvents.append(event)
-      }
-      offset += event.length
-    }
-    events = tempEvents
-  }
 }

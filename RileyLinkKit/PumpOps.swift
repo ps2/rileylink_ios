@@ -67,6 +67,31 @@ public class PumpOps {
             }
         }
     }
+
+    /**
+     Reads the current insulin reservoir volume.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
+        - Success(units): The reservoir volume, in units of insulin
+        - Failure(error): An error describing why the command failed.
+     */
+    public func readRemainingInsulin(completion: (Either<Double, ErrorType>) -> Void) {
+        device.runSession { (session) in
+            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+
+            do {
+                let pumpModel = try ops.getPumpModel()
+
+                let response: ReadRemainingInsulinMessageBody = try ops.getMessageBodyWithType(.ReadRemainingInsulin)
+
+                completion(.Success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)))
+            } catch let error {
+                completion(.Failure(error))
+            }
+        }
+    }
     
     public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [PumpEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
         device.runSession { (session) -> Void in

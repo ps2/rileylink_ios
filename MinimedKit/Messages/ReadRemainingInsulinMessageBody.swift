@@ -29,8 +29,6 @@ public class ReadRemainingInsulinMessageBody: CarelinkLongMessageBody {
             return nil
         }
 
-        print(rxData.hexadecimalString)
-
         super.init(rxData: rxData)
     }
 

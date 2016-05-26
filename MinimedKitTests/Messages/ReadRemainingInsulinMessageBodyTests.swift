@@ -18,5 +18,13 @@ class ReadRemainingInsulinMessageBodyTests: XCTestCase {
 
         XCTAssertEqual(80.875, body.getUnitsRemainingForStrokes(PumpModel.Model723.strokesPerUnit))
     }
-    
+
+    func testReservoir522() {
+        let message = PumpMessage(rxData: NSData(hexadecimalString: "a7578398730205460000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c2")!)
+
+        let body = message?.messageBody as! ReadRemainingInsulinMessageBody
+
+        XCTAssertEqual(135.0, body.getUnitsRemainingForStrokes(PumpModel.Model522.strokesPerUnit))
+    }
+
 }

@@ -12,16 +12,16 @@ public class ReadRemainingInsulinMessageBody: CarelinkLongMessageBody {
 
     public func getUnitsRemainingForStrokes(strokesPerUnit: Int) -> Double {
 
-        let strokes: UInt16
+        let strokes: [UInt8]
 
         switch strokesPerUnit {
         case let x where x > 10:
-            strokes = rxData[2..<4]
+            strokes = rxData[3..<5]
         default:
-            strokes = rxData[0..<2]
+            strokes = rxData[1..<3]
         }
 
-        return Double(strokes) / Double(strokesPerUnit)
+        return Double(Int(bigEndianBytes: strokes)) / Double(strokesPerUnit)
     }
 
     public required init?(rxData: NSData) {

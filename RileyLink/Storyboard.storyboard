@@ -264,7 +264,7 @@
                                     <outlet property="titleLabel" destination="DkQ-79-Mbe" id="LCD-mO-GdS"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ConfigTableViewCell" textLabel="Fua-6z-WAu" detailTextLabel="pa7-en-cSv" style="IBUITableViewCellStyleValue1" id="TPO-za-DLA" customClass="RileyLinkDeviceTableViewCell" customModule="RileyLink" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ConfigTableViewCell" textLabel="Fua-6z-WAu" detailTextLabel="pa7-en-cSv" style="IBUITableViewCellStyleValue1" id="TPO-za-DLA">
                                 <rect key="frame" x="0.0" y="94" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TPO-za-DLA" id="b7r-fZ-3MR">

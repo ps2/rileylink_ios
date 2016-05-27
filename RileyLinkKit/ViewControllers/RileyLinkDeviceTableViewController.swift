@@ -52,11 +52,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         let decimalFormatter = NSNumberFormatter()
 
         decimalFormatter.numberStyle = .DecimalStyle
-        decimalFormatter.minimumFractionDigits = 2
-        decimalFormatter.maximumFractionDigits = 2
+        decimalFormatter.minimumSignificantDigits = 5
 
         return decimalFormatter
     }()
+
+    private lazy var successText = NSLocalizedString("Succeeded", comment: "A message indicating a command succeeded")
 
     // MARK: - Table view data source
 
@@ -90,8 +91,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case DumpHistory
         case GetPumpModel
         case PressDownButton
+        case ReadRemainingInsulin
 
-        static let count = 6
+        static let count = 7
     }
 
     public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -169,6 +171,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 }
             }
         case .Commands:
+            cell.accessoryType = .DisclosureIndicator
+            cell.detailTextLabel?.text = nil
+
             switch CommandRow(rawValue: indexPath.row)! {
             case .Tune:
                 switch (device.radioFrequency, device.lastTuned) {
@@ -176,13 +181,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     cell.textLabel?.text = "\(decimalFormatter.stringFromNumber(frequency)!) MHz"
                     cell.detailTextLabel?.text = dateFormatter.stringFromDate(date)
                 default:
-                    cell.textLabel?.text = NSLocalizedString("Tune radio frequency", comment: "The title of the cell describing the command to re-tune the radio")
-                    cell.detailTextLabel?.text = nil
+                    cell.textLabel?.text = NSLocalizedString("Tune radio frequency", comment: "The title of the command to re-tune the radio")
                 }
-                cell.accessoryType = .DisclosureIndicator
+
             case .ChangeTime:
-                cell.textLabel?.text = "Change Time"
-                cell.accessoryType = .DisclosureIndicator
+                cell.textLabel?.text = NSLocalizedString("Change Time", comment: "The title of the command to change pump time")
 
                 let localTimeZone = NSTimeZone.defaultTimeZone()
                 let localTimeZoneName = localTimeZone.abbreviation ?? localTimeZone.name
@@ -199,20 +202,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 }
             case .MySentryPair:
                 cell.textLabel?.text = NSLocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
-                cell.detailTextLabel?.text = nil
-                cell.accessoryType = .DisclosureIndicator
+
             case .DumpHistory:
                 cell.textLabel?.text = NSLocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
-                cell.detailTextLabel?.text = nil
-                cell.accessoryType = .DisclosureIndicator
+
             case .GetPumpModel:
                 cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
-                cell.detailTextLabel?.text = nil
-                cell.accessoryType = .DisclosureIndicator
+
             case .PressDownButton:
                 cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
-                cell.detailTextLabel?.text = nil
-                cell.accessoryType = .DisclosureIndicator
+
+            case .ReadRemainingInsulin:
+                cell.textLabel?.text = NSLocalizedString("Read Remaining Insulin", comment: "The title of the command to read remaining insulin")
             }
         }
 
@@ -244,19 +245,29 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(rawValue: indexPath.section)! {
         case .Commands:
+            let vc: CommandResponseViewController
+
             switch CommandRow(rawValue: indexPath.row)! {
             case .Tune:
-                let vc = CommandResponseViewController(command: { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController(command: { [unowned self] (completionHandler) -> String in
                     self.device.tunePumpWithResultHandler({ (response) -> Void in
                         switch response {
                         case .Success(let scanResult):
                             var resultDict: [String: AnyObject] = [:]
-                            let decimalFormatter = NSNumberFormatter()
-                            decimalFormatter.minimumSignificantDigits = 5
 
-                            resultDict["Best Frequency"] = scanResult.bestFrequency
-                            resultDict["Trials"] = scanResult.trials.map({ (trial) -> String in
-                                return "\(decimalFormatter.stringFromNumber(trial.frequencyMHz)!) MHz  \(trial.successes)/\(trial.tries)  \(trial.avgRSSI)"
+                            let intFormatter = NSNumberFormatter()
+
+                            let formatString = NSLocalizedString("%1$@ MHz  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
+
+                            resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = self.decimalFormatter.stringFromNumber(scanResult.bestFrequency)!
+                            resultDict[NSLocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
+
+                                return String(format: formatString,
+                                    self.decimalFormatter.stringFromNumber(trial.frequencyMHz)!,
+                                    intFormatter.stringFromNumber(trial.successes)!,
+                                    intFormatter.stringFromNumber(trial.tries)!,
+                                    intFormatter.stringFromNumber(trial.avgRSSI)!
+                                )
                             })
 
                             var responseText: String
@@ -275,30 +286,22 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
                     return NSLocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
                 })
-
-                vc.title = NSLocalizedString("Tune device radio", comment: "Title of screen for tuning radio")
-
-                self.showViewController(vc, sender: indexPath)
             case .ChangeTime:
-                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.syncPumpTime { (error) -> Void in
                         dispatch_async(dispatch_get_main_queue()) {
                             if let error = error {
-                                completionHandler(responseText: "Failed: \(error)")
+                                completionHandler(responseText: String(error))
                             } else {
-                                completionHandler(responseText: "Succeeded")
+                                completionHandler(responseText: self.successText)
                             }
                         }
                     }
 
                     return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
                 }
-
-                vc.title = NSLocalizedString("Change Time", comment: "Title of screen for changing pump time.")
-
-                self.showViewController(vc, sender: indexPath)
             case .MySentryPair:
-                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
 
                     self.device.ops?.setRXFilterMode(.Wide) { (error) in
                         if let error = error {
@@ -311,9 +314,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                             self.device.ops?.changeWatchdogMarriageProfile(watchdogID, completion: { (error) in
                                 dispatch_async(dispatch_get_main_queue()) {
                                     if let error = error {
-                                        completionHandler(responseText: String(format: NSLocalizedString("Failed: %@", comment: "A message indicating a command failed, with a substitution parameter for the error message"), String(error)))
+                                        completionHandler(responseText: String(error))
                                     } else {
-                                        completionHandler(responseText: NSLocalizedString("Succeeded", comment: "A message indicating a command succeeded"))
+                                        completionHandler(responseText: self.successText)
                                     }
                                 }
                             })
@@ -332,10 +335,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                         comment: "Pump find device instruction"
                     )
                 }
-
-                showViewController(vc, sender: indexPath)
             case .DumpHistory:
-                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!
                     let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
                     self.device.ops?.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
@@ -352,12 +353,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     }
                     return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
                 }
-                
-                vc.title = NSLocalizedString("Fetch History", comment: "Title of screen for fetching history.")
-                
-                self.showViewController(vc, sender: indexPath)
             case .GetPumpModel:
-                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.getPumpModel({ (response) in
                         switch response {
                         case .Success(let model):
@@ -368,11 +365,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     })
                     return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
                 }
-                vc.title = NSLocalizedString("Fetch Pump Model", comment: "Title of screen for fetching pump model.")
-                
-                self.showViewController(vc, sender: indexPath)
             case .PressDownButton:
-                let vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.pressButton({ (response) in
                         switch response {
                         case .Success(let msg):
@@ -383,10 +377,29 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
-                vc.title = NSLocalizedString("Button Press", comment: "Title of screen for sending button press to pump.")
-                
-                self.showViewController(vc, sender: indexPath)
+            case .ReadRemainingInsulin:
+                vc = CommandResponseViewController {
+                    [unowned self] (completionHandler) -> String in
+                    self.device.ops?.readRemainingInsulin { (result) in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            switch result {
+                            case .Success(let units):
+                                completionHandler(responseText: String(format: NSLocalizedString("%1$@ Units remaining", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.stringFromNumber(units)!))
+                            case .Failure(let error):
+                                completionHandler(responseText: String(error))
+                            }
+                        }
+                    }
+
+                    return NSLocalizedString("Reading remaining insulin…", comment: "Progress message for reading pump insulin reservoir volume")
+                }
             }
+
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                vc.title = cell.textLabel?.text
+            }
+
+            showViewController(vc, sender: indexPath)
         case .Device, .Pump:
             break
         }

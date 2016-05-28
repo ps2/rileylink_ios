@@ -116,8 +116,6 @@ public class RileyLinkDevice {
             if let packet = note.userInfo?["packet"] as? RFPacket, pumpID = pumpState?.pumpID, data = packet.data, message = PumpMessage(rxData: data) where message.address.hexadecimalString == pumpID {
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidReceiveIdleMessageNotification, object: self, userInfo: [self.dynamicType.IdleMessageDataKey: data])
             }
-        case RILEYLINK_EVENT_DEVICE_CONNECTED:
-            device.enableIdleListeningOnChannel(0)
         default:
             break
         }

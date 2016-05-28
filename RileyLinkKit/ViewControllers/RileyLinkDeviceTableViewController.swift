@@ -70,18 +70,20 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     private enum DeviceRow: Int {
+        case Version
         case RSSI
         case Connection
         case IdleStatus
 
-        static let count = 3
+        static let count = 4
     }
 
     private enum PumpRow: Int {
         case ID
+        case Model
         case Awake
 
-        static let count = 2
+        static let count = 3
     }
 
     private enum CommandRow: Int {
@@ -129,11 +131,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         switch Section(rawValue: indexPath.section)! {
         case .Device:
             switch DeviceRow(rawValue: indexPath.row)! {
+            case .Version:
+                cell.textLabel?.text = NSLocalizedString("Firmware Version", comment: "The title of the cell showing firmware version")
+                cell.detailTextLabel?.text = device.firmwareVersion
             case .Connection:
-                cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing connection state")
+                cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
                 cell.detailTextLabel?.text = device.peripheral.state.description
             case .RSSI:
-                cell.textLabel?.text = NSLocalizedString("Signal strength", comment: "The title of the cell showing signal strength (RSSI)")
+                cell.textLabel?.text = NSLocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
                 if let RSSI = device.RSSI {
                     cell.detailTextLabel?.text = "\(RSSI) dB"
                 } else {
@@ -156,6 +161,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     cell.detailTextLabel?.text = pumpID
                 } else {
                     cell.detailTextLabel?.text = "–"
+                }
+            case .Model:
+                cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
+                if let pumpModel = device.pumpState?.pumpModel {
+                    cell.detailTextLabel?.text = String(pumpModel)
+                } else {
+                    cell.detailTextLabel?.text = NSLocalizedString("Unknown", comment: "The detail text for an unknown pump model")
                 }
             case .Awake:
                 switch device.pumpState?.awakeUntil {
@@ -181,7 +193,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     cell.textLabel?.text = "\(decimalFormatter.stringFromNumber(frequency)!) MHz"
                     cell.detailTextLabel?.text = dateFormatter.stringFromDate(date)
                 default:
-                    cell.textLabel?.text = NSLocalizedString("Tune radio frequency", comment: "The title of the command to re-tune the radio")
+                    cell.textLabel?.text = NSLocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
                 }
 
             case .ChangeTime:
@@ -223,7 +235,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .Device:
-            return NSLocalizedString("Bluetooth", comment: "The title of the section describing the device")
+            return NSLocalizedString("Device", comment: "The title of the section describing the device")
         case .Pump:
             return NSLocalizedString("Pump", comment: "The title of the section describing the pump")
         case .Commands:
@@ -238,7 +250,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .Device, .Pump:
             return false
         case .Commands:
-            return true
+            return device.peripheral.state == .Connected
         }
     }
 

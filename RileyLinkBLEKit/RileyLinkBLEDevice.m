@@ -463,7 +463,7 @@
 }
 
 - (void) onIdle {
-    if (idleListeningEnabled) {
+    if (idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected) {
         runningIdle = YES;
         NSLog(@"Starting idle RX");
         GetPacketCmd *cmd = [[GetPacketCmd alloc] init];

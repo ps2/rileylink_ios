@@ -34,13 +34,7 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
             length = 9
         }
         
-        if length > availableData.length {
-            amount = 0
-            programmed = 0
-            unabsorbedInsulinTotal = 0
-            duration = 0
-            bolusType = "Unset"
-            timestamp = NSDateComponents()
+        guard length <= availableData.length else {
             return nil
         }
         

@@ -21,9 +21,7 @@ public class ResultDailyTotalPumpEvent: PumpEvent {
             length = 7
         }
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            validDateStr = "Invalid"
+        guard length <= availableData.length else {
             return nil
         }
         

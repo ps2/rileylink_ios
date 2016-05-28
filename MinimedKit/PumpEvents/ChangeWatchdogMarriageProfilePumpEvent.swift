@@ -15,8 +15,7 @@ public class ChangeWatchdogMarriageProfilePumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 12
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
+        guard length <= availableData.length else {
             return nil
         }
         

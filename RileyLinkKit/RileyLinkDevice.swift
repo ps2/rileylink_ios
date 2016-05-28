@@ -64,15 +64,15 @@ public class RileyLinkDevice {
     public func syncPumpTime(resultHandler: (ErrorType?) -> Void) {
         if let ops = ops {
             ops.setTime({ () -> NSDateComponents in
-                let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-                return calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: NSDate())
+                    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+                    return calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: NSDate())
                 },
-                        completion: { (error) in
-                            if error == nil {
-                                ops.pumpState.timeZone = NSTimeZone.defaultTimeZone()
-                            }
-                            
-                            resultHandler(error)
+                completion: { (error) in
+                    if error == nil {
+                        ops.pumpState.timeZone = NSTimeZone.defaultTimeZone()
+                    }
+
+                    resultHandler(error)
                 }
             )
         } else {

@@ -15,8 +15,7 @@ public class DeleteBolusReminderTimePumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
+        guard length <= availableData.length else {
             return nil
         }
         

@@ -17,10 +17,7 @@ public class BGReceivedPumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            amount = 0
-            meter = "Invalid"
+        guard length <= availableData.length else {
             return nil
         }
         

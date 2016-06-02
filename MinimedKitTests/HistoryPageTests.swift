@@ -30,7 +30,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(let eventType) {
             XCTFail("unknown event type" + String(eventType))
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
     }
     
@@ -44,7 +44,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(let eventType) {
             XCTFail("unknown event type" + String(eventType))
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
     }
     
@@ -75,7 +75,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(_) {
             XCTFail("unknown event type")
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
     }
     
@@ -160,7 +160,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(_) {
             XCTFail("unknown event type")
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
     }
     
@@ -188,7 +188,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(_) {
             XCTFail("unknown event type")
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
         
     }
@@ -215,7 +215,7 @@ class HistoryPageTests: XCTestCase {
         } catch HistoryPage.Error.UnknownEventType(_) {
             XCTFail("unknown event type")
         } catch {
-            NSLog("Unexpected exception...")
+            XCTFail("Unexpected exception...")
         }
         
     }

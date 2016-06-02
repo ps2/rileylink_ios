@@ -13,7 +13,11 @@ public class ChangeBolusWizardSetupPumpEvent: PumpEvent {
     let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
-        length = 144
+        if pumpModel.larger {
+            length = 144
+        } else {
+            length = 124
+        }
         
         if length > availableData.length {
             timestamp = NSDateComponents()

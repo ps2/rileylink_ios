@@ -32,7 +32,7 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
                 connectSwitch.enabled = true
             case .Connecting:
                 connectSwitch.on = true
-                connectSwitch.enabled = false
+                connectSwitch.enabled = true
             case .Disconnected:
                 connectSwitch.on = false
                 connectSwitch.enabled = true

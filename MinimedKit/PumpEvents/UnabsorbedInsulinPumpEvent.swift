@@ -35,7 +35,7 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
         length = Int(max(availableData[1] as UInt8, UInt8(2)))
         records = [Record]()
         
-        if length > availableData.length {
+        guard length <= availableData.length else {
             return nil
         }
         

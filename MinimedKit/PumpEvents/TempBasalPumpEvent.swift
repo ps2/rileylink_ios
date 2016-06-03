@@ -28,10 +28,7 @@ public class TempBasalPumpEvent: PumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            rate = 0
-            rateType = .Absolute
+        guard length <= availableData.length else {
             return nil
         }
         

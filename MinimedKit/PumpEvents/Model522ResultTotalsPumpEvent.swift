@@ -15,8 +15,7 @@ public class Model522ResultTotalsPumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 44
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
+        guard length <= availableData.length else {
             return nil
         }
         

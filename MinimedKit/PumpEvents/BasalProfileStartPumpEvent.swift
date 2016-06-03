@@ -19,11 +19,7 @@ public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            rate = 0
-            profileIndex = 0
-            offset = 0
+        guard length <= availableData.length else {
             return nil
         }
         

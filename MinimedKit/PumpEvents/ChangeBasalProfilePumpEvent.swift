@@ -15,8 +15,7 @@ public class ChangeBasalProfilePumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 152
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
+        guard length <= availableData.length else {
             return nil
         }
         

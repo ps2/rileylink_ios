@@ -18,11 +18,7 @@ public class PrimePumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            amount = 0
-            primeType = "Unknown"
-            programmedAmount = 0
+        guard length <= availableData.length else {
             return nil
         }
         

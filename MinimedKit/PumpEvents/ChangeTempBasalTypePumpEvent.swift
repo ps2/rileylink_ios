@@ -20,9 +20,7 @@ public class ChangeTempBasalTypePumpEvent: PumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            basalType = ""
+        guard length <= availableData.length else {
             return nil
         }
         

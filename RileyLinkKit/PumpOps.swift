@@ -41,6 +41,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let model = try ops.getPumpModelNumber()
+
+                self.pumpState.pumpModel = PumpModel(rawValue: model)
+
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completion(.Success(model))
                 })
@@ -124,8 +127,7 @@ public class PumpOps {
     public func setNormalBolus(units: Double, completion: (error: ErrorType?) -> Void) {
         device.runSession { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            
-            
+
             do {
                 let pumpModel = try ops.getPumpModel()
                 

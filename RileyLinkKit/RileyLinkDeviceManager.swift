@@ -51,11 +51,26 @@ public class RileyLinkDeviceManager {
             BLEManager.scanningEnabled = newValue
         }
     }
-    
+
+    /// Whether to subscribe devices to a timer characteristic changing every ~60s.
+    /// Provides a reliable, external heartbeat for executing periodic tasks.
     public var timerTickEnabled = true {
         didSet {
             for device in _devices {
                 device.device.timerTickEnabled = timerTickEnabled
+            }
+        }
+    }
+
+    /// Whether devices should listen for broadcast packets when not running commands
+    public var idleListeningEnabled = true {
+        didSet {
+            for device in _devices {
+                if idleListeningEnabled {
+                    device.device.enableIdleListeningOnChannel(0)
+                } else {
+                    device.device.disableIdleListening()
+                }
             }
         }
     }
@@ -89,7 +104,11 @@ public class RileyLinkDeviceManager {
     @objc private func discoveredBLEDevice(note: NSNotification) {
         if let BLEDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
             BLEDevice.timerTickEnabled = timerTickEnabled
-            
+
+            if idleListeningEnabled {
+                BLEDevice.enableIdleListeningOnChannel(0)
+            }
+
             let device = RileyLinkDevice(BLEDevice: BLEDevice, pumpState: pumpState)
             
             _devices.append(device)

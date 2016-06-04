@@ -64,15 +64,15 @@ public class RileyLinkDevice {
     public func syncPumpTime(resultHandler: (ErrorType?) -> Void) {
         if let ops = ops {
             ops.setTime({ () -> NSDateComponents in
-                let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-                return calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: NSDate())
+                    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+                    return calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: NSDate())
                 },
-                        completion: { (error) in
-                            if error == nil {
-                                ops.pumpState.timeZone = NSTimeZone.defaultTimeZone()
-                            }
-                            
-                            resultHandler(error)
+                completion: { (error) in
+                    if error == nil {
+                        ops.pumpState.timeZone = NSTimeZone.defaultTimeZone()
+                    }
+
+                    resultHandler(error)
                 }
             )
         } else {
@@ -116,8 +116,6 @@ public class RileyLinkDevice {
             if let packet = note.userInfo?["packet"] as? RFPacket, pumpID = pumpState?.pumpID, data = packet.data, message = PumpMessage(rxData: data) where message.address.hexadecimalString == pumpID {
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidReceiveIdleMessageNotification, object: self, userInfo: [self.dynamicType.IdleMessageDataKey: data])
             }
-        case RILEYLINK_EVENT_DEVICE_CONNECTED:
-            device.enableIdleListeningOnChannel(0)
         default:
             break
         }

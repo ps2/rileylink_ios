@@ -20,9 +20,7 @@ public class TempBasalDurationPumpEvent: PumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            duration = 0
+        guard length <= availableData.length else {
             return nil
         }
         

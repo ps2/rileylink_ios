@@ -111,9 +111,15 @@ class PumpOpsSynchronous {
     }
     
     internal func getPumpModel() throws -> PumpModel {
-        guard let pumpModel = try (pump.pumpModel ?? PumpModel(rawValue: getPumpModelNumber())) else {
+        if let pumpModel = pump.pumpModel {
+            return pumpModel
+        }
+
+        guard let pumpModel = try PumpModel(rawValue: getPumpModelNumber()) else {
             throw PumpCommsError.UnknownPumpModel
         }
+
+        pump.pumpModel = pumpModel
         
         return pumpModel
     }

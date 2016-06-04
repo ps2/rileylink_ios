@@ -16,9 +16,7 @@ public class CalBGForPHPumpEvent: PumpEvent {
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
-        if length > availableData.length {
-            timestamp = NSDateComponents()
-            amount = 0
+        guard length <= availableData.length else {
             return nil
         }
         

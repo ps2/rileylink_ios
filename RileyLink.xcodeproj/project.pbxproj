@@ -66,6 +66,7 @@
 		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
+		C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -635,6 +636,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */,
 				C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */,
 				C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */,
 			);

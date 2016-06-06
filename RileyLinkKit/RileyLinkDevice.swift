@@ -21,6 +21,8 @@ public class RileyLinkDevice {
     public static let DidReceiveIdleMessageNotification = "com.rileylink.RileyLinkKit.RileyLinkDeviceDidReceiveIdleMessageNotification"
     
     public static let IdleMessageDataKey = "com.rileylink.RileyLinkKit.RileyLinkDeviceIdleMessageData"
+
+    public static let DidUpdateTimerTickNotification = "com.rileylink.RileyLinkKit.RileyLinkDeviceDidUpdateTimerTickNotification"
     
     public internal(set) var pumpState: PumpState?
     
@@ -116,6 +118,8 @@ public class RileyLinkDevice {
             if let packet = note.userInfo?["packet"] as? RFPacket, pumpID = pumpState?.pumpID, data = packet.data, message = PumpMessage(rxData: data) where message.address.hexadecimalString == pumpID {
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidReceiveIdleMessageNotification, object: self, userInfo: [self.dynamicType.IdleMessageDataKey: data])
             }
+        case RILEYLINK_EVENT_DEVICE_TIMER_TICK:
+            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidUpdateTimerTickNotification, object: self)
         default:
             break
         }

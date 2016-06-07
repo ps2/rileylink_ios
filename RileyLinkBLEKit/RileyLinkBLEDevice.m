@@ -362,6 +362,7 @@
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
         const unsigned char timerTick = ((const unsigned char*)(characteristic.value).bytes)[0];
         [self assertIdleListening];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_TIMER_TICK object:self];
         NSLog(@"Updated timer tick: %d", timerTick);
     }
 }

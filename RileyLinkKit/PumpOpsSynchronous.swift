@@ -79,21 +79,21 @@ class PumpOpsSynchronous {
                 let shortPowerMessage = makePumpMessage(.PowerOn)
                 let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
 
-                guard shortResponse.messageType == .PumpAck else {
-                    throw PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
+                if shortResponse.messageType == .PumpAck {
+                    // Pump successfully received and responded to short wakeup message!
+                    return
+                } else {
+                    lastError = PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
                 }
-
-                // Pump successfully received and responded to short wakeup message!
-                return
             } catch let error {
                 print("Wakeup failure on attempt #\(attempt): \(error)")
                 lastError = error
             }
         }
 
-        if lastError != nil {
+        if let lastError = lastError {
             // If all attempts failed, throw the final error
-            throw lastError!
+            throw lastError
         }
     }
 

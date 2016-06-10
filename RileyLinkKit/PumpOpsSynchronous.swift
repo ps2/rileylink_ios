@@ -86,7 +86,6 @@ class PumpOpsSynchronous {
                     lastError = PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
                 }
             } catch let error {
-                print("Wakeup failure on attempt #\(attempt): \(error)")
                 lastError = error
             }
         }
@@ -102,7 +101,7 @@ class PumpOpsSynchronous {
             return
         }
         
-        try attemptShortWakeUp();
+        try attemptShortWakeUp()
         
         let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
         let longResponse = try sendAndListen(longPowerMessage)

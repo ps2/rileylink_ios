@@ -247,14 +247,13 @@ class DeviceDataManager {
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         
         // This triggers one history fetch right away (in 10s)
-        //performSelector(#selector(DeviceDataManager.fetchHistory), withObject: nil, afterDelay: 10)
-        
-        // This is to just test decoding history
-        //performSelector(Selector("testDecodeHistory"), withObject: nil, afterDelay: 1)
-        
-        // Test storing MySentry packet:
-        //[self performSelector:@selector(testHandleMySentry) withObject:nil afterDelay:10];
-        
+//        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC)))
+//        dispatch_after(delayTime, dispatch_get_main_queue()) {
+//            if let rl = DeviceDataManager.sharedManager.preferredRileyLink() {
+//                DeviceDataManager.sharedManager.getPumpHistory(rl)
+//            }
+//        }
+
         UIDevice.currentDevice().batteryMonitoringEnabled = true
         
         rileyLinkManager.timerTickEnabled = false

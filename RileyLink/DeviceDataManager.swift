@@ -76,6 +76,8 @@ class DeviceDataManager {
             if let nightscoutURL = nightscoutURL {
                 nightscoutUploader.siteURL = nightscoutURL
             }
+            
+            Config.sharedInstance().nightscoutURL = nightscoutURL
         }
     }
     
@@ -88,6 +90,8 @@ class DeviceDataManager {
             if let nightscoutAPISecret = nightscoutAPISecret {
                 nightscoutUploader.APISecret = nightscoutAPISecret
             }
+            
+            Config.sharedInstance().nightscoutAPISecret = nightscoutAPISecret
         }
     }
 

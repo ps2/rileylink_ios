@@ -29,6 +29,7 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
     }
 
     var keyboardType = UIKeyboardType.Default
+    var autocapitalizationType = UITextAutocapitalizationType.None
 
     weak var delegate: TextFieldTableViewControllerDelegate?
 
@@ -38,6 +39,7 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
         textField.text = value
         textField.keyboardType = keyboardType
         textField.placeholder = placeholder
+        textField.autocapitalizationType = autocapitalizationType
     }
 
     override func viewWillAppear(animated: Bool) {

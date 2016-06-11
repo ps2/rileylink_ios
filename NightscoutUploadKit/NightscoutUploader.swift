@@ -21,8 +21,6 @@ public class NightscoutUploader: NSObject {
     public var siteURL: String?
     public var APISecret: String?
     
-    var fetchHistoryScheduled: Bool = false
-    var lastHistoryAttempt: NSDate?
     var entries: [AnyObject]
     var deviceStatuses: [AnyObject]
     var treatmentsQueue: [AnyObject]

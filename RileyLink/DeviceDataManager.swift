@@ -195,6 +195,7 @@ class DeviceDataManager {
     }
     
     private func getPumpHistory(device: RileyLinkDevice) {
+        lastHistoryAttempt = NSDate()
         device.ops!.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):

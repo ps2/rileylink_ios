@@ -62,18 +62,46 @@ class PumpOpsSynchronous {
         return message
     }
     
+    /**
+     Attempts to send initial short wakeup message that kicks off the wakeup process.
+
+     Makes multiple attempts to send this message in order to work around issue w/
+     x22 pump/RileyLink combos not responding to the initial short wakeup message.
+
+     If successful, still does not fully wake up the pump - only alerts it such that the
+     longer wakeup message can be sent next.
+     */
+    private func attemptShortWakeUp(attempts: Int = 3) throws {
+        var lastError: ErrorType?
+
+        for attempt in 0..<attempts {
+            do {
+                let shortPowerMessage = makePumpMessage(.PowerOn)
+                let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+
+                if shortResponse.messageType == .PumpAck {
+                    // Pump successfully received and responded to short wakeup message!
+                    return
+                } else {
+                    lastError = PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
+                }
+            } catch let error {
+                lastError = error
+            }
+        }
+
+        if let lastError = lastError {
+            // If all attempts failed, throw the final error
+            throw lastError
+        }
+    }
+
     private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) throws {
         guard !pump.isAwake else {
             return
         }
         
-        let shortPowerMessage = makePumpMessage(.PowerOn)
-        let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
-        
-        guard shortResponse.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
-        }
-        NSLog("Pump acknowledged wakeup!")
+        try attemptShortWakeUp()
         
         let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
         let longResponse = try sendAndListen(longPowerMessage)

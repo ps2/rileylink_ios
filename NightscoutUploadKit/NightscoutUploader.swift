@@ -63,16 +63,14 @@ public class NightscoutUploader: NSObject {
         
         // Find the oldest event that might still be updated.
         var oldestUpdatingEventDate: NSDate?
-        let cal = NSCalendar.currentCalendar()
+
         for event in events {
             switch event {
             case is BolusNormalPumpEvent:
                 let event = event as! BolusNormalPumpEvent
                 if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
-                    let duration = NSDateComponents()
-                    duration.minute = event.duration
-                    let deliveryFinishDate = cal.dateByAddingComponents(duration, toDate: date, options: NSCalendarOptions(rawValue:0))
-                    if newestEventTime == nil || deliveryFinishDate?.compare(newestEventTime!) == .OrderedDescending {
+                    let deliveryFinishDate = date.dateByAddingTimeInterval(event.duration)
+                    if newestEventTime == nil || deliveryFinishDate.compare(newestEventTime!) == .OrderedDescending {
                         // This event might still be updated.
                         oldestUpdatingEventDate = date
                         break

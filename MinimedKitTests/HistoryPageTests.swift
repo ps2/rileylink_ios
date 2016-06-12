@@ -102,7 +102,8 @@ class HistoryPageTests: XCTestCase {
             
             let bolus = events[1] as! BolusNormalPumpEvent
             XCTAssertEqual(bolus.amount, 3.2)
-            XCTAssertEqual(bolus.bolusType, "normal")
+
+            XCTAssertEqual(bolus.type, BolusNormalPumpEvent.BolusType.Normal)
             XCTAssertEqual(bolus.duration, 0)
             XCTAssertEqual(bolus.programmed, 3.2)
             XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.9)
@@ -174,7 +175,7 @@ class HistoryPageTests: XCTestCase {
             
             let bolus = events[0] as! BolusNormalPumpEvent
             XCTAssertEqual(bolus.amount, 2.05)
-            XCTAssertEqual(bolus.bolusType, "normal")
+            XCTAssertEqual(bolus.type, BolusNormalPumpEvent.BolusType.Normal)
             XCTAssertEqual(bolus.duration, 0)
             XCTAssertEqual(bolus.programmed, 2.05)
             XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.0)

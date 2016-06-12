@@ -64,6 +64,8 @@
 		43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */; };
 		43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */; };
 		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
+		43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
+		43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
 		C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
@@ -1602,6 +1604,7 @@
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
 				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
 				C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */,
+				43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */,
 				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
@@ -1726,6 +1729,7 @@
 				C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */,
+				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
 				C1B3832A1CD0668600CE7782 /* NightscoutTreatment.swift in Sources */,

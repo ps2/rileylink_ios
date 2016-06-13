@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class ChangeMaxBasalPumpEvent: PumpEvent {
+public class ChangeMaxBasalPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7

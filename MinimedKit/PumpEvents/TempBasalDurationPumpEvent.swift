@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class TempBasalDurationPumpEvent: PumpEvent {
+public class TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let duration: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7

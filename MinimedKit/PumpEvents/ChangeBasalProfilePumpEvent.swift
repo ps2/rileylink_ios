@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class ChangeBasalProfilePumpEvent: PumpEvent {
+public class ChangeBasalProfilePumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 152

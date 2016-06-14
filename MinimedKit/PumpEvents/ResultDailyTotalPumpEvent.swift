@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class ResultDailyTotalPumpEvent: TimestampedPumpEvent {
+public class ResultDailyTotalPumpEvent: PumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     let validDateStr: String

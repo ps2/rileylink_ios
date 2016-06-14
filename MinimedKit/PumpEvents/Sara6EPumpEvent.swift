@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Sara6EPumpEvent: TimestampedPumpEvent {
+public class Sara6EPumpEvent: PumpEvent {
     
     public var length: Int
     public var timestamp: NSDateComponents

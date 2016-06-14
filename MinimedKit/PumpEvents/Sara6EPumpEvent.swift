@@ -24,8 +24,8 @@ public class Sara6EPumpEvent: PumpEvent {
             validDateStr = "Invalid"
             return nil
         }
-        
-        let dateComponents = TimeFormat.parse2ByteDate(availableData, offset: 1)
+
+        let dateComponents = NSDateComponents(pumpEventBytes: availableData[1..<3])
         validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
         timestamp = dateComponents
     }

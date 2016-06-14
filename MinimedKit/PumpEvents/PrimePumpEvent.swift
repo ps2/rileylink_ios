@@ -26,7 +26,7 @@ public class PrimePumpEvent: TimestampedPumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 5)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 5)
         amount = Double(d(4) << 2) / 40.0
         programmedAmount = Double(d(2) << 2) / 40.0
         primeType = programmedAmount == 0 ? "manual" : "fixed"

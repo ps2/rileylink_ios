@@ -27,7 +27,7 @@ public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         rate = Double(d(8)) / 40.0
         profileIndex = d(1)
         offset = d(7) * 30 * 1000 * 60

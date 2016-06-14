@@ -9,7 +9,7 @@
 import Foundation
 
 public class TimeFormat: NSObject {
-    static var formatterISO8601: NSDateFormatter = {
+    private static var formatterISO8601: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierISO8601)
         formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
@@ -17,29 +17,7 @@ public class TimeFormat: NSObject {
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssX"
         return formatter
     }()
-    
-    public static func parse2ByteDate(data: NSData, offset: Int) -> NSDateComponents {
-        let comps = NSDateComponents()
-        comps.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        comps.year = 2000 + Int(data[offset + 1] as UInt8 & UInt8(0b1111111))
-        comps.month = (Int(data[offset + 0] as UInt8 & UInt8(0xe0)) >> 4) +
-            (Int(data[offset + 1] as UInt8 & UInt8(0x80)) >> 7)
-        comps.day = Int(data[offset + 0] as UInt8 & UInt8(0x1f))
-        return comps;
-    }
-    
-    static func parse5ByteDate(data: NSData, offset: Int) -> NSDateComponents {
-        let comps = NSDateComponents()
-        comps.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        comps.second = Int(data[offset + 0] as UInt8 & UInt8(0x3f))
-        comps.minute = Int(data[offset + 1] as UInt8 & UInt8(0x3f))
-        comps.hour = Int(data[offset + 2] as UInt8 & UInt8(0x1f))
-        comps.day = Int(data[offset + 3] as UInt8 & UInt8(0x1f))
-        comps.month = Int((((data[offset] as UInt8) >> 4) & UInt8(0x0c)) + (data[offset + 1] as UInt8 >> 6))
-        comps.year = 2000 + Int(data[offset + 4] as UInt8 & UInt8(0b1111111))
-        return comps;
-    }
-    
+
     public static func timestampAsLocalDate(comps: NSDateComponents) -> NSDate? {
         let cal = comps.calendar ?? NSCalendar.currentCalendar()
         cal.timeZone = comps.timeZone ?? NSTimeZone.localTimeZone()

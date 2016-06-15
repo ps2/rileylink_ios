@@ -19,7 +19,7 @@ public class ChangeWatchdogMarriageProfilePumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

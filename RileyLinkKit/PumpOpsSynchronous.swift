@@ -342,7 +342,10 @@ class PumpOpsSynchronous {
             var eventIdxBeforeStartDate = -1
             for (reverseIndex, event) in page.events.reverse().enumerate() {
                 if let event = event as? TimestampedPumpEvent {
-                    if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
+                    let timestamp = event.timestamp
+                    timestamp.timeZone = pump.timeZone
+
+                    if let date = event.timestamp.date {
                         if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
                             eventIdxBeforeStartDate = page.events.count - reverseIndex

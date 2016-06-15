@@ -25,7 +25,7 @@ public class BGReceivedPumpEvent: TimestampedPumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         amount = (d(1) << 3) + (d(4) >> 5)
         meter = availableData.subdataWithRange(NSMakeRange(7, 3)).hexadecimalString
     }

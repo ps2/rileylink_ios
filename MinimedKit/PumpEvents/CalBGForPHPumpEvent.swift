@@ -24,7 +24,7 @@ public class CalBGForPHPumpEvent: TimestampedPumpEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         amount = ((d(6) & 0b10000000) << 1) + d(1)
     }
     

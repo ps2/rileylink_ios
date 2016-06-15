@@ -21,7 +21,7 @@ public class PumpAlarmPumpEvent: TimestampedPumpEvent {
         }
         
         rawType = Int(availableData[1] as UInt8)
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

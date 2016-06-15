@@ -45,13 +45,13 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
         }
         
         if pumpModel.larger {
-            timestamp = TimeFormat.parse5ByteDate(availableData, offset: 8)
+            timestamp = NSDateComponents(pumpEventData: availableData, offset: 8)
             programmed = decodeInsulinFromBytes(availableData[1...2])
             amount = decodeInsulinFromBytes(availableData[3...4])
             unabsorbedInsulinTotal = decodeInsulinFromBytes(availableData[5...6])
             duration = NSTimeInterval(minutes: 30 * doubleValueFromDataAtIndex(7))
         } else {
-            timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
+            timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
             programmed = decodeInsulinFromBytes([availableData[1]])
             amount = decodeInsulinFromBytes([availableData[2]])
             duration = NSTimeInterval(minutes: 30 * doubleValueFromDataAtIndex(3))

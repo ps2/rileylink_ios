@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class BGReceivedPumpEvent: TimestampedPumpEvent {
+public struct BGReceivedPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     public let amount: Int
     public let meter: String
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
         guard length <= availableData.length else {

@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeSensorRateOfChangeAlertSetupPumpEvent: TimestampedPumpEvent {
+public struct ChangeSensorRateOfChangeAlertSetupPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 12
         
         guard length <= availableData.length else {

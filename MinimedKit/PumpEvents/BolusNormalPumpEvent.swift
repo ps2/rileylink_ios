@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BolusNormalPumpEvent: TimestampedPumpEvent {
+public struct BolusNormalPumpEvent: TimestampedPumpEvent {
 
     public enum BolusType: String {
         case Normal
@@ -24,7 +24,7 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
     public let type: BolusType
     public let duration: NSTimeInterval
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         
         func doubleValueFromDataAtIndex(index: Int) -> Double {
             return Double(availableData[index] as UInt8)

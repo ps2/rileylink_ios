@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeBasalProfilePumpEvent: TimestampedPumpEvent {
+public struct ChangeBasalProfilePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 152
         
         guard length <= availableData.length else {

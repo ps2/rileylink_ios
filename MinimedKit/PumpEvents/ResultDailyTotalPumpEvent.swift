@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class ResultDailyTotalPumpEvent: PumpEvent {
+public struct ResultDailyTotalPumpEvent: PumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     let validDateStr: String
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         
         if pumpModel.larger {
             length = 10

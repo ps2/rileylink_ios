@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeAlarmClockTimePumpEvent: TimestampedPumpEvent {
+public struct ChangeAlarmClockTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 14
         
         guard length <= availableData.length else {

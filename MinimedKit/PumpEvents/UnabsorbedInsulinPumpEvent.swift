@@ -29,11 +29,11 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
     
     public let length: Int
     
-    public var records: [Record]
+    public let records: [Record]
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = Int(max(availableData[1] as UInt8, UInt8(2)))
-        records = [Record]()
+        var records = [Record]()
         
         guard length <= availableData.length else {
             return nil
@@ -51,6 +51,8 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
                 age: d(3 + idx * 3) + ((d(4 + idx * 3) & 0b110000) << 4))
             records.append(record)
         }
+
+        self.records = records
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

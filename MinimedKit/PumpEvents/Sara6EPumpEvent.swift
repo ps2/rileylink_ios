@@ -10,8 +10,8 @@ import Foundation
 
 public class Sara6EPumpEvent: PumpEvent {
     
-    public var length: Int
-    public var timestamp: NSDateComponents
+    public let length: Int
+    public let timestamp: NSDateComponents
     let validDateStr: String
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {

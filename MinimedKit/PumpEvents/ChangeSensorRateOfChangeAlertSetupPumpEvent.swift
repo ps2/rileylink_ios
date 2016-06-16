@@ -25,7 +25,6 @@ public struct ChangeSensorRateOfChangeAlertSetupPumpEvent: TimestampedPumpEvent 
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeSensorRateOfChangeAlertSetup",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

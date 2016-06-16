@@ -25,7 +25,6 @@ public struct ChangeCarbUnitsPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeCarbUnits",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

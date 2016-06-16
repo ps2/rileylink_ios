@@ -25,7 +25,6 @@ public struct ChangeCaptureEventEnablePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeCaptureEventEnable",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

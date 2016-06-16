@@ -36,7 +36,6 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "BasalProfileStart",
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "offset": offset,
             "rate": rate,
             "profileIndex": profileIndex,

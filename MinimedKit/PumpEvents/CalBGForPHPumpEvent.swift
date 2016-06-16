@@ -31,7 +31,6 @@ public struct CalBGForPHPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "CalBGForPH",
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "amount": amount,
         ]
     }

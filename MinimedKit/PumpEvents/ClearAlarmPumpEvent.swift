@@ -25,7 +25,6 @@ public struct ClearAlarmPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ClearAlarm",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

@@ -25,7 +25,6 @@ public struct ChangeReservoirWarningTimePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeReservoirWarningTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

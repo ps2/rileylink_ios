@@ -84,7 +84,6 @@ public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "BolusWizardBolusEstimate",
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "bg": bloodGlucose,
             "bgTargetHigh": bgTargetHigh,
             "correctionEstimate": correctionEstimate,

@@ -32,7 +32,6 @@ public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
         return [
             "_type": "TempBasal",
             "duration": duration,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

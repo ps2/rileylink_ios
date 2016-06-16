@@ -25,7 +25,6 @@ public struct DeleteAlarmClockTimePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "DeleteAlarmClockTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

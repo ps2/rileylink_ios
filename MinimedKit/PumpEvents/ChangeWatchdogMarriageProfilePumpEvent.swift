@@ -25,7 +25,6 @@ public struct ChangeWatchdogMarriageProfilePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeWatchdogMarriageProfile",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

@@ -96,7 +96,7 @@ public class PumpOps {
         }
     }
     
-    public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [PumpEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
+    public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
         device.runSession { (session) -> Void in
             NSLog("History fetching task started.")
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)

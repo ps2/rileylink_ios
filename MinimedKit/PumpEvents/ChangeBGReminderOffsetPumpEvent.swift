@@ -25,7 +25,6 @@ public struct ChangeBGReminderOffsetPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBGReminderOffset",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

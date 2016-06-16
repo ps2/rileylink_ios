@@ -47,7 +47,6 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
             "_type": "TempBasal",
             "rate": rate,
             "temp": rateType.rawValue,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

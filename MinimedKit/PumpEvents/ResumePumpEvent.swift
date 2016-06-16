@@ -25,7 +25,6 @@ public struct ResumePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Resume",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

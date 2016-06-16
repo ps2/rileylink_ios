@@ -25,7 +25,6 @@ public struct ChangeMaxBolusPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeMaxBolus",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

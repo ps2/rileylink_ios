@@ -25,7 +25,6 @@ public struct ChangeAudioBolusPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeAudioBolus",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

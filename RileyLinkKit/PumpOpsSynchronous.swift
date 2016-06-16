@@ -325,42 +325,35 @@ class PumpOpsSynchronous {
         return results
     }
     
-    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
-        
+    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([TimestampedHistoryEvent], PumpModel) {
         try wakeup()
         
         let pumpModel = try getPumpModel()
-        
-        var pageNum = 0
-        var events = [PumpEvent]()
-        while pageNum < 16 {
+
+        var events = [TimestampedHistoryEvent]()
+
+        pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
             let pageData = try getHistoryPage(pageNum)
             
             NSLog("Fetched page %d: %@", pageNum, pageData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
-            var eventIdxBeforeStartDate = -1
-            for (reverseIndex, event) in page.events.reverse().enumerate() {
+
+            for event in page.events.reverse() {
                 if let event = event as? TimestampedPumpEvent {
                     let timestamp = event.timestamp
                     timestamp.timeZone = pump.timeZone
 
-                    if let date = event.timestamp.date {
+                    if let date = timestamp.date {
                         if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
-                            eventIdxBeforeStartDate = page.events.count - reverseIndex
-                            break
+                            break pages
+                        } else {
+                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
                 }
             }
-            if eventIdxBeforeStartDate >= 0 {
-                let slice = page.events[eventIdxBeforeStartDate..<(page.events.count)]
-                events.insertContentsOf(slice, at: 0)
-                break
-            }
-            events.insertContentsOf(page.events, at: 0)
-            pageNum += 1
         }
         return (events, pumpModel)
     }

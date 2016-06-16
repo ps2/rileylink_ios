@@ -209,7 +209,7 @@ class DeviceDataManager {
         }
     }
     
-    private func handleNewHistoryEvents(events: [PumpEvent], pumpModel: PumpModel) {
+    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel) {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
         let source = "rileylink://medtronic/\(pumpModel)"

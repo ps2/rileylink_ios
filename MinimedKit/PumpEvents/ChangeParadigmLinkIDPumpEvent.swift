@@ -25,7 +25,6 @@ public struct ChangeParadigmLinkIDPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeParadigmLinkID",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

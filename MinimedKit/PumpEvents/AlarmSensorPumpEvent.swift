@@ -25,7 +25,6 @@ public struct AlarmSensorPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "AlarmSensor",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

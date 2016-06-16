@@ -33,7 +33,6 @@ public struct ResultDailyTotalPumpEvent: PumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ResultDailyTotal",
-            "timestamp": TimeFormat.timestampStr(TimeFormat.nextMidnightForDateComponents(timestamp)),
             "validDate": validDateStr,
         ]
     }

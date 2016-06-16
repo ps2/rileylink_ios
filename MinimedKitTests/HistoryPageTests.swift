@@ -154,7 +154,7 @@ class HistoryPageTests: XCTestCase {
             
             sara6e.timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
             
-            XCTAssertEqual(sara6e.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T05:00:00Z")
+            XCTAssertEqual(sara6e.dictionaryRepresentation["validDate"] as? String, "2016-02-21")
             
         } catch HistoryPage.Error.InvalidCRC {
             XCTFail("page decoding threw invalid crc")

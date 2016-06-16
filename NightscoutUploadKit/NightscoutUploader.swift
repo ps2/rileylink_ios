@@ -11,7 +11,7 @@ import MinimedKit
 import Crypto
 
 public class NightscoutUploader: NSObject {
-    
+
     enum DexcomSensorError: UInt8 {
         case SensorNotActive = 1
         case SensorNotCalibrated = 5
@@ -32,7 +32,7 @@ public class NightscoutUploader: NSObject {
     let defaultNightscoutEntriesPath = "/api/v1/entries.json"
     let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
     let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
-    
+
     public override init() {
         entries = [AnyObject]()
         treatmentsQueue = [AnyObject]()
@@ -46,32 +46,22 @@ public class NightscoutUploader: NSObject {
     
     // MARK: - Decoding Treatments
     
-    public func processPumpEvents(events: [PumpEvent], source: String, pumpModel: PumpModel) {
+    public func processPumpEvents(events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
         
         // Find valid event times
-        var validEventTimes = [NSDate]()
-        for event in events where event is TimestampedPumpEvent {
-            let timestamp = (event as! TimestampedPumpEvent).timestamp
-            if let date = TimeFormat.timestampAsLocalDate(timestamp) {
-                validEventTimes.append(date)
-            }
-        }
-        let newestEventTime = validEventTimes.last
-        
+        let newestEventTime = events.last?.date
         
         // Find the oldest event that might still be updated.
         var oldestUpdatingEventDate: NSDate?
 
         for event in events {
-            switch event {
-            case let event as BolusNormalPumpEvent:
-                if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
-                    let deliveryFinishDate = date.dateByAddingTimeInterval(event.duration)
-                    if newestEventTime == nil || deliveryFinishDate.compare(newestEventTime!) == .OrderedDescending {
-                        // This event might still be updated.
-                        oldestUpdatingEventDate = date
-                        break
-                    }
+            switch event.pumpEvent {
+            case let bolus as BolusNormalPumpEvent:
+                let deliveryFinishDate = event.date.dateByAddingTimeInterval(bolus.duration)
+                if newestEventTime == nil || deliveryFinishDate.compare(newestEventTime!) == .OrderedDescending {
+                    // This event might still be updated.
+                    oldestUpdatingEventDate = event.date
+                    break
                 }
             default:
                 continue

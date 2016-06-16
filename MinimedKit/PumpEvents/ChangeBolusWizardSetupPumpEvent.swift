@@ -29,7 +29,6 @@ public struct ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBolusWizardSetup",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

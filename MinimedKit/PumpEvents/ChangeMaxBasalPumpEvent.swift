@@ -25,7 +25,6 @@ public struct ChangeMaxBasalPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeMaxBasal",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

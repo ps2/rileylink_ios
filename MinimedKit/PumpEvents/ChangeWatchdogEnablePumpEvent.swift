@@ -25,7 +25,6 @@ public struct ChangeWatchdogEnablePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeWatchdogEnable",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

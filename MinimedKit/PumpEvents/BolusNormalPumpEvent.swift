@@ -66,7 +66,6 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             "amount": amount,
             "programmed": programmed,
             "type": type.rawValue,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
         
         if let unabsorbedInsulinRecord = unabsorbedInsulinRecord {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Model522ResultTotalsPumpEvent: TimestampedPumpEvent {
+public struct Model522ResultTotalsPumpEvent: PumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
@@ -19,13 +19,12 @@ public struct Model522ResultTotalsPumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventBytes: availableData[1..<3])
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Model522ResultTotals",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

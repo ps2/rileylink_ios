@@ -53,7 +53,7 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         
         if pumpModel.larger {
             carbohydrates = ((d(8) & 0xc) << 6) + d(7)

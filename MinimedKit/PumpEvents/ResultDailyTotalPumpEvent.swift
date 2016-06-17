@@ -25,7 +25,7 @@ public class ResultDailyTotalPumpEvent: PumpEvent {
             return nil
         }
         
-        let dateComponents = TimeFormat.parse2ByteDate(availableData, offset: 5)
+        let dateComponents = NSDateComponents(pumpEventBytes: availableData[5..<7])
         validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
         timestamp = dateComponents
     }

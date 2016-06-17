@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BGReceivedPumpEvent: PumpEvent {
+public class BGReceivedPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     public let amount: Int

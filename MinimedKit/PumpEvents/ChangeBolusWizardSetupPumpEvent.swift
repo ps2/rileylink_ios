@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class ChangeBolusWizardSetupPumpEvent: PumpEvent {
+public class ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         if pumpModel.larger {

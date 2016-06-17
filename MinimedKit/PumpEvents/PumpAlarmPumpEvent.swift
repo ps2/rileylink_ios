@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class PumpAlarmPumpEvent: PumpEvent {
+public class PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     let rawType: Int
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {

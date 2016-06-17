@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class PrimePumpEvent: PumpEvent {
+public class PrimePumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     let amount: Double
     let primeType: String
     let programmedAmount: Double

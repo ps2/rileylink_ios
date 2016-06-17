@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class CalBGForPHPumpEvent: PumpEvent {
+public class CalBGForPHPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     public let amount: Int

@@ -10,7 +10,7 @@ import Foundation
 
 public class ResultDailyTotalPumpEvent: PumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     let validDateStr: String
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {

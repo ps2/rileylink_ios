@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class DeleteBolusReminderTimePumpEvent: PumpEvent {
+public class DeleteBolusReminderTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
     public required init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9

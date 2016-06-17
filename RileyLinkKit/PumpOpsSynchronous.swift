@@ -74,7 +74,7 @@ class PumpOpsSynchronous {
     private func attemptShortWakeUp(attempts: Int = 3) throws {
         var lastError: ErrorType?
 
-        for attempt in 0..<attempts {
+        for _ in 0..<attempts {
             do {
                 let shortPowerMessage = makePumpMessage(.PowerOn)
                 let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)

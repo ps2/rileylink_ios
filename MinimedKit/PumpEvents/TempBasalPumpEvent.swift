@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class TempBasalPumpEvent: PumpEvent {
+public class TempBasalPumpEvent: TimestampedPumpEvent {
     
     public enum RateType : String {
         case Absolute = "absolute"

@@ -11,7 +11,12 @@ import Foundation
 public struct ChangeTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
-    
+    public let oldTimestamp: NSDateComponents
+
+    public var adjustmentInterval: NSTimeInterval {
+        return timestamp.date!.timeIntervalSinceDate(oldTimestamp.date!)
+    }
+
     public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 14
         
@@ -19,7 +24,8 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        oldTimestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 9)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

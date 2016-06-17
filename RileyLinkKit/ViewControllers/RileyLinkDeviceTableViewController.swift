@@ -380,11 +380,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .PressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.pressButton({ (response) in
-                        switch response {
-                        case .Success(let msg):
-                            completionHandler(responseText: "Result: " + msg)
-                        case .Failure(let error):
-                            completionHandler(responseText: String(error))
+                        dispatch_async(dispatch_get_main_queue()) {
+                            switch response {
+                            case .Success(let msg):
+                                completionHandler(responseText: "Result: " + msg)
+                            case .Failure(let error):
+                                completionHandler(responseText: String(error))
+                            }
                         }
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")

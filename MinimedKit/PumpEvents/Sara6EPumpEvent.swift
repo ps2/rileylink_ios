@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class Sara6EPumpEvent: PumpEvent {
+public struct Sara6EPumpEvent: PumpEvent {
     
     public let length: Int
     public let timestamp: NSDateComponents
     let validDateStr: String
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 52
         
         // Sometimes we encounter this at the end of a page, and it can be less characters???

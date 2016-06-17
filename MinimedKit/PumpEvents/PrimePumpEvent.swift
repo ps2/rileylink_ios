@@ -8,14 +8,14 @@
 
 import Foundation
 
-public class PrimePumpEvent: TimestampedPumpEvent {
+public struct PrimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     let amount: Double
     let primeType: String
     let programmedAmount: Double
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
         guard length <= availableData.length else {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class TempBasalPumpEvent: TimestampedPumpEvent {
+public struct TempBasalPumpEvent: TimestampedPumpEvent {
     
     public enum RateType : String {
         case Absolute = "absolute"
@@ -21,7 +21,7 @@ public class TempBasalPumpEvent: TimestampedPumpEvent {
     public let rate: Double
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 8
         
         func d(idx:Int) -> Int {

@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class PumpAlarmPumpEvent: TimestampedPumpEvent {
+public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     let rawType: Int
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9
         
         guard length <= availableData.length else {

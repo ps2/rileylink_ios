@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class TempBasalDurationPumpEvent: TimestampedPumpEvent {
+public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let duration: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
         func d(idx:Int) -> Int {

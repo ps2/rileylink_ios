@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
+public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     public let carbohydrates: Int
@@ -22,7 +22,7 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public let insulinSensitivity: Int
     public let carbRatio: Double
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)

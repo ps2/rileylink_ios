@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class Model522ResultTotalsPumpEvent: TimestampedPumpEvent {
+public struct Model522ResultTotalsPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 44
         
         guard length <= availableData.length else {

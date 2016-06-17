@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeParadigmLinkIDPumpEvent: TimestampedPumpEvent {
+public struct ChangeParadigmLinkIDPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 21
         
         guard length <= availableData.length else {

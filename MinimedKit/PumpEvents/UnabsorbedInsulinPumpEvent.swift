@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class UnabsorbedInsulinPumpEvent: PumpEvent {
+public struct UnabsorbedInsulinPumpEvent: PumpEvent {
     
     public struct Record : DictionaryRepresentable {
         var amount: Double
@@ -31,7 +31,7 @@ public class UnabsorbedInsulinPumpEvent: PumpEvent {
     
     public let records: [Record]
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = Int(max(availableData[1] as UInt8, UInt8(2)))
         var records = [Record]()
         

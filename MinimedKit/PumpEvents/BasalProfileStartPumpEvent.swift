@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
+public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     let rate: Double
@@ -16,7 +16,7 @@ public class BasalProfileStartPumpEvent: TimestampedPumpEvent {
     let offset: Int
     
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 10
         
         guard length <= availableData.length else {

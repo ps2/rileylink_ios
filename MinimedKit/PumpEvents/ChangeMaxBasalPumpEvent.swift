@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeMaxBasalPumpEvent: TimestampedPumpEvent {
+public struct ChangeMaxBasalPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
         guard length <= availableData.length else {

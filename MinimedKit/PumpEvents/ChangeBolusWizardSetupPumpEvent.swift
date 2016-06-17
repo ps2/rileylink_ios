@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
+public struct ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         if pumpModel.larger {
             length = 144
         } else {

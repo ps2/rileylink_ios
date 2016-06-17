@@ -25,7 +25,6 @@ public struct RewindPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Rewind",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

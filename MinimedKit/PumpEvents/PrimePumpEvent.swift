@@ -37,7 +37,6 @@ public struct PrimePumpEvent: TimestampedPumpEvent {
             "_type": "Prime",
             "amount": amount,
             "programmedAmount": programmedAmount,
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "primeType": primeType,
         ]
     }

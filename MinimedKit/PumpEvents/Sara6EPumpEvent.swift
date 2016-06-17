@@ -33,7 +33,6 @@ public struct Sara6EPumpEvent: PumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Sara6E",
-            "timestamp": TimeFormat.timestampStr(TimeFormat.nextMidnightForDateComponents(timestamp)),
             "validDate": validDateStr,
         ]
     }

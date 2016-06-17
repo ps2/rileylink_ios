@@ -25,7 +25,6 @@ public struct ChangeBasalProfilePatternPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBasalProfilePattern",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

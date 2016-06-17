@@ -25,7 +25,6 @@ public struct SuspendPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Suspend",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

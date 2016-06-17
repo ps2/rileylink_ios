@@ -25,7 +25,6 @@ public struct JournalEntryPumpLowBatteryPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "JournalEntryPumpLowBattery",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

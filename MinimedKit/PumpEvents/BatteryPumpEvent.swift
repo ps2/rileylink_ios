@@ -25,7 +25,6 @@ public struct BatteryPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Battery",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

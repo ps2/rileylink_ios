@@ -25,7 +25,6 @@ public struct ChangeSensorSetup2PumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeSensorSetup2",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

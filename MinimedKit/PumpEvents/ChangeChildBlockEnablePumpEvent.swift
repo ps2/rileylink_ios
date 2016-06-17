@@ -25,7 +25,6 @@ public struct ChangeChildBlockEnablePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeChildBlockEnable",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

@@ -17,6 +17,7 @@ public enum PumpEventType: UInt8 {
     case CalBGForPH = 0x0a
     case AlarmSensor = 0x0b
     case ClearAlarm = 0x0c
+    case SelectBasalProfile = 0x14
     case TempBasalDuration = 0x16
     case ChangeTime = 0x17
     case JournalEntryPumpLowBattery = 0x19
@@ -176,6 +177,8 @@ public enum PumpEventType: UInt8 {
             return DeleteOtherDeviceIDPumpEvent.self
         case .ChangeCaptureEventEnable:
             return ChangeCaptureEventEnablePumpEvent.self
+        case .SelectBasalProfile:
+            return SelectBasalProfilePumpEvent.self
         }
     }
 }

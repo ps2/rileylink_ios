@@ -25,7 +25,6 @@ public struct ChangeBolusReminderTimePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBolusReminderTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

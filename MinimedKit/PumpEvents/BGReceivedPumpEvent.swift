@@ -33,7 +33,6 @@ public struct BGReceivedPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "BGReceivedPumpEvent",
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "amount": amount,
             "meter": meter,
         ]

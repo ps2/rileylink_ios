@@ -25,7 +25,6 @@ public struct DeleteOtherDeviceIDPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "DeleteOtherDeviceID",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

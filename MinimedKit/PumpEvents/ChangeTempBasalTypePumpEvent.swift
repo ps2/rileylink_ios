@@ -32,7 +32,6 @@ public struct ChangeTempBasalTypePumpEvent: TimestampedPumpEvent {
         return [
             "_type": "TempBasal",
             "temp": basalType,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

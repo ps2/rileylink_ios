@@ -25,7 +25,6 @@ public struct ChangeAlarmClockTimePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeAlarmClockTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

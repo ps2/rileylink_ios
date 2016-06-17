@@ -28,7 +28,6 @@ public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
         return [
             "_type": "AlarmPump",
             "rawType": rawType,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

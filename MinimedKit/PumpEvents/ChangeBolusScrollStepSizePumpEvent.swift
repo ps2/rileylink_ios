@@ -25,7 +25,6 @@ public struct ChangeBolusScrollStepSizePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBolusScrollStepSize",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

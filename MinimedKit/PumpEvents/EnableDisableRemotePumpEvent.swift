@@ -25,7 +25,6 @@ public struct EnableDisableRemotePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "EnableDisableRemote",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

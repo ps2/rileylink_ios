@@ -57,6 +57,11 @@
 		439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */; };
 		43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */; };
 		43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */; };
+		43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */; };
+		43B0ADC41D12506A00AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
+		43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC81D1268B300AAD278 /* TimeFormat.swift */; };
+		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
+		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
 		43CA93251CB8BB33000026B5 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */; };
 		43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */; };
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
@@ -83,7 +88,6 @@
 		C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */; };
 		C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */; };
 		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
-		C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AE1C8F46FF00BC374C /* TimeFormat.swift */; };
 		C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */; };
 		C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12616431B685F0A001FAD87 /* CoreData.framework */; };
 		C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C12616491B685F93001FAD87 /* RileyLink.xcdatamodeld */; };
@@ -371,6 +375,10 @@
 		439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadRemainingInsulinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponentsTests.swift; sourceTree = "<group>"; };
+		43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedHistoryEvent.swift; sourceTree = "<group>"; };
+		43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateFormatter.swift; sourceTree = "<group>"; };
+		43B0ADC81D1268B300AAD278 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
+		43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
 		43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinkMessageBody.swift; sourceTree = "<group>"; };
@@ -395,7 +403,6 @@
 		C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sara6EPumpEvent.swift; sourceTree = "<group>"; };
 		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C12198AE1C8F46FF00BC374C /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusWizardEstimatePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12616431B685F0A001FAD87 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C126164A1B685F93001FAD87 /* RileyLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RileyLink.xcdatamodel; sourceTree = "<group>"; };
@@ -480,7 +487,7 @@
 		C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeWatchdogMarriageProfilePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeWatchdogEnablePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BE01C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeVariableBolusPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimePumpEvent.swift; sourceTree = "<group>"; };
+		C1842BE11C8FA45100DB42AC /* ChangeTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTimePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BE21C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTimeFormatPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeSensorSetup2PumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -747,7 +754,7 @@
 				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
 				C1842BBA1C8E184300DB42AC /* PumpModel.swift */,
 				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
-				C12198AE1C8F46FF00BC374C /* TimeFormat.swift */,
+				43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */,
 				C1EAD6B81C826B92006DBA60 /* Extensions */,
 				C1EAD6BC1C826B92006DBA60 /* Messages */,
 				C1842BB91C8E15C600DB42AC /* PumpEvents */,
@@ -1005,6 +1012,7 @@
 				C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */,
 				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
 				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
+				43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */,
 				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
 				C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */,
 				C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */,
@@ -1028,15 +1036,16 @@
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
-				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
-				C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */,
-				C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */,
-				C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */,
-				C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */,
-				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
+				C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */,
+				C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */,
+				C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */,
+				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
+				C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */,
+				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
+				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
+				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -1065,6 +1074,7 @@
 				C1EAD6B91C826B92006DBA60 /* Int.swift */,
 				C1EAD6BA1C826B92006DBA60 /* NSData.swift */,
 				C1EAD6BB1C826B92006DBA60 /* NSDateComponents.swift */,
+				43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1557,7 +1567,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1842C1C1C8FA45100DB42AC /* ChangeBGReminderOffsetPumpEvent.swift in Sources */,
-				C12198AF1C8F46FF00BC374C /* TimeFormat.swift in Sources */,
 				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
 				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
@@ -1576,6 +1585,7 @@
 				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
 				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
 				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
+				43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */,
 				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
 				C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */,
@@ -1610,6 +1620,7 @@
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
 				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
 				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
+				43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
@@ -1645,6 +1656,7 @@
 				C1842C0A1C8FA45100DB42AC /* ChangeVariableBolusPumpEvent.swift in Sources */,
 				C1842C191C8FA45100DB42AC /* ChangeBolusScrollStepSizePumpEvent.swift in Sources */,
 				C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */,
+				43B0ADC41D12506A00AAD278 /* NSDateFormatter.swift in Sources */,
 				C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */,
 				43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */,
 				C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */,
@@ -1728,9 +1740,11 @@
 				C1B3832E1CD0668600CE7782 /* TempBasalNightscoutTreatment.swift in Sources */,
 				C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
+				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */,
+				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
 				C1B3832A1CD0668600CE7782 /* NightscoutTreatment.swift in Sources */,
 			);

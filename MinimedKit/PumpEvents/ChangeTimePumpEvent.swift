@@ -25,7 +25,6 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

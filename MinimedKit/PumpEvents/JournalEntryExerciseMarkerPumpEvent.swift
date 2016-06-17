@@ -25,7 +25,6 @@ public struct JournalEntryExerciseMarkerPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "JournalEntryExerciseMarker",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

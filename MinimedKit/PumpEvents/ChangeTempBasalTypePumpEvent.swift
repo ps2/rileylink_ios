@@ -10,6 +10,7 @@ import Foundation
 
 public struct ChangeTempBasalTypePumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let basalType: String
     public let timestamp: NSDateComponents
     
@@ -23,6 +24,8 @@ public struct ChangeTempBasalTypePumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         basalType = d(1) == 1 ? "percent" : "absolute"
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)

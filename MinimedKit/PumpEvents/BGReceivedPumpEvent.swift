@@ -10,6 +10,7 @@ import Foundation
 
 public struct BGReceivedPumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     public let amount: Int
     public let meter: String
@@ -20,6 +21,8 @@ public struct BGReceivedPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)

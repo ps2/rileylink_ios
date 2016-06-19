@@ -10,6 +10,7 @@ import Foundation
 
 public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     let rate: Double
     let profileIndex: Int
@@ -22,6 +23,8 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)

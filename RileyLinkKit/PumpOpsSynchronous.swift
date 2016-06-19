@@ -331,6 +331,7 @@ class PumpOpsSynchronous {
         let pumpModel = try getPumpModel()
 
         var events = [TimestampedHistoryEvent]()
+        var timeAdjustmentInterval: NSTimeInterval = 0
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
@@ -344,7 +345,7 @@ class PumpOpsSynchronous {
                     let timestamp = event.timestamp
                     timestamp.timeZone = pump.timeZone
 
-                    if let date = timestamp.date {
+                    if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
                         if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
                             break pages
@@ -352,6 +353,10 @@ class PumpOpsSynchronous {
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
+                }
+
+                if let event = event as? ChangeTimePumpEvent {
+                    timeAdjustmentInterval += event.adjustmentInterval
                 }
             }
         }

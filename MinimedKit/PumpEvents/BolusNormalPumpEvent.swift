@@ -23,7 +23,22 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
     public let unabsorbedInsulinTotal: Double
     public let type: BolusType
     public let duration: NSTimeInterval
-    
+
+    /*
+     It takes a MM pump about 40s to deliver 1 Unit while bolusing
+     See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
+     */
+    private let deliveryUnitsPerMinute = 1.5
+
+    // The actual expected time of delivery, based on bolus speed
+    public var deliveryTime: NSTimeInterval {
+        if duration > 0 {
+            return duration
+        } else {
+            return NSTimeInterval(minutes: programmed / deliveryUnitsPerMinute)
+        }
+    }
+
     public init?(availableData: NSData, pumpModel: PumpModel) {
         
         func doubleValueFromDataAtIndex(index: Int) -> Double {

@@ -10,6 +10,7 @@ import Foundation
 
 public struct ChangeTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     public let oldTimestamp: NSDateComponents
 
@@ -23,6 +24,8 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         oldTimestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 9)

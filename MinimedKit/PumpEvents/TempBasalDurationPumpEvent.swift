@@ -10,6 +10,7 @@ import Foundation
 
 public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let duration: Int
     public let timestamp: NSDateComponents
     
@@ -23,6 +24,8 @@ public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         duration = d(1) * 30
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)

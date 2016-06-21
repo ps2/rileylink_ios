@@ -1397,7 +1397,6 @@
 					};
 					C1B383131CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
-						TestTargetID = C12EA236198B436800309FA4;
 					};
 				};
 			};
@@ -2361,7 +2360,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.NightscoutUploadKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -2381,7 +2379,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.NightscoutUploadKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};

@@ -158,6 +158,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 case .NightscoutAPISecret:
                     vc.placeholder = NSLocalizedString("Enter your Nightscout API Secret", comment: "The placeholder text instructing users how to enter their Nightscout API Secret")
                     vc.value = DeviceDataManager.sharedManager.nightscoutAPISecret
+                    vc.keyboardType = .Default
                 }
                 
                 vc.title = cell.textLabel?.text

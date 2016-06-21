@@ -62,18 +62,46 @@ class PumpOpsSynchronous {
         return message
     }
     
+    /**
+     Attempts to send initial short wakeup message that kicks off the wakeup process.
+
+     Makes multiple attempts to send this message in order to work around issue w/
+     x22 pump/RileyLink combos not responding to the initial short wakeup message.
+
+     If successful, still does not fully wake up the pump - only alerts it such that the
+     longer wakeup message can be sent next.
+     */
+    private func attemptShortWakeUp(attempts: Int = 3) throws {
+        var lastError: ErrorType?
+
+        for _ in 0..<attempts {
+            do {
+                let shortPowerMessage = makePumpMessage(.PowerOn)
+                let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+
+                if shortResponse.messageType == .PumpAck {
+                    // Pump successfully received and responded to short wakeup message!
+                    return
+                } else {
+                    lastError = PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
+                }
+            } catch let error {
+                lastError = error
+            }
+        }
+
+        if let lastError = lastError {
+            // If all attempts failed, throw the final error
+            throw lastError
+        }
+    }
+
     private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) throws {
         guard !pump.isAwake else {
             return
         }
         
-        let shortPowerMessage = makePumpMessage(.PowerOn)
-        let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 200, msBetweenPackets: 0, retryCount: 0)
-        
-        guard shortResponse.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
-        }
-        NSLog("Pump acknowledged wakeup!")
+        try attemptShortWakeUp()
         
         let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
         let longResponse = try sendAndListen(longPowerMessage)
@@ -297,40 +325,40 @@ class PumpOpsSynchronous {
         return results
     }
     
-    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([PumpEvent], PumpModel) {
-        
+    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([TimestampedHistoryEvent], PumpModel) {
         try wakeup()
         
         let pumpModel = try getPumpModel()
-        
-        var pageNum = 0
-        var events = [PumpEvent]()
-        while pageNum < 16 {
+
+        var events = [TimestampedHistoryEvent]()
+        var timeAdjustmentInterval: NSTimeInterval = 0
+
+        pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
             let pageData = try getHistoryPage(pageNum)
             
             NSLog("Fetched page %d: %@", pageNum, pageData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
-            var eventIdxBeforeStartDate = -1
-            for (reverseIndex, event) in page.events.reverse().enumerate() {
-                if event is TimestampedPumpEvent {
-                    let event = event as! TimestampedPumpEvent
-                    if let date = TimeFormat.timestampAsLocalDate(event.timestamp) {
+
+            for event in page.events.reverse() {
+                if let event = event as? TimestampedPumpEvent {
+                    let timestamp = event.timestamp
+                    timestamp.timeZone = pump.timeZone
+
+                    if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
                         if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
-                            eventIdxBeforeStartDate = page.events.count - reverseIndex
-                            break
+                            break pages
+                        } else {
+                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
                 }
+
+                if let event = event as? ChangeTimePumpEvent {
+                    timeAdjustmentInterval += event.adjustmentInterval
+                }
             }
-            if eventIdxBeforeStartDate >= 0 {
-                let slice = page.events[eventIdxBeforeStartDate..<(page.events.count)]
-                events.insertContentsOf(slice, at: 0)
-                break
-            }
-            events.insertContentsOf(page.events, at: 0)
-            pageNum += 1
         }
         return (events, pumpModel)
     }

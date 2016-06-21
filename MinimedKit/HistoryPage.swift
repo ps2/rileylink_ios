@@ -45,17 +45,18 @@ public class HistoryPage {
                 offset += 1
                 continue
             }
-            guard let event = matchEvent(offset) else {
+            guard var event = matchEvent(offset) else {
                 events = [PumpEvent]()
                 throw Error.UnknownEventType(eventType: pageData[offset] as UInt8)
             }
-            if event.dynamicType == BolusNormalPumpEvent.self && unabsorbedInsulinRecord != nil {
-                let bolus: BolusNormalPumpEvent = event as! BolusNormalPumpEvent
+
+            if unabsorbedInsulinRecord != nil, var bolus = event as? BolusNormalPumpEvent {
                 bolus.unabsorbedInsulinRecord = unabsorbedInsulinRecord
                 unabsorbedInsulinRecord = nil
+                event = bolus
             }
-            if event.dynamicType == UnabsorbedInsulinPumpEvent.self {
-                unabsorbedInsulinRecord = event as? UnabsorbedInsulinPumpEvent
+            if let event = event as? UnabsorbedInsulinPumpEvent {
+                unabsorbedInsulinRecord = event
             } else {
                 tempEvents.append(event)
             }

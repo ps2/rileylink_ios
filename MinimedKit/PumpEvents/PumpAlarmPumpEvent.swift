@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class PumpAlarmPumpEvent: PumpEvent {
+public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     let rawType: Int
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9
         
         guard length <= availableData.length else {
@@ -21,14 +21,13 @@ public class PumpAlarmPumpEvent: PumpEvent {
         }
         
         rawType = Int(availableData[1] as UInt8)
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "AlarmPump",
             "rawType": rawType,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

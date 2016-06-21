@@ -8,24 +8,29 @@
 
 import Foundation
 
-public class ChangeTimePumpEvent: PumpEvent {
+public struct ChangeTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
-    
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public let timestamp: NSDateComponents
+    public let oldTimestamp: NSDateComponents
+
+    public var adjustmentInterval: NSTimeInterval {
+        return timestamp.date!.timeIntervalSinceDate(oldTimestamp.date!)
+    }
+
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 14
         
         guard length <= availableData.length else {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        oldTimestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 9)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

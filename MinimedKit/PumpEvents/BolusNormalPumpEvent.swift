@@ -8,24 +8,45 @@
 
 import Foundation
 
-public class BolusNormalPumpEvent: TimestampedPumpEvent {
+public struct BolusNormalPumpEvent: TimestampedPumpEvent {
+
+    public enum BolusType: String {
+        case Normal
+        case Square
+    }
+
     public let length: Int
     public let timestamp: NSDateComponents
     public var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
     public let amount: Double
     public let programmed: Double
     public let unabsorbedInsulinTotal: Double
-    public let bolusType: String
-    public let duration: Int
-    
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public let type: BolusType
+    public let duration: NSTimeInterval
+
+    /*
+     It takes a MM pump about 40s to deliver 1 Unit while bolusing
+     See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
+     */
+    private let deliveryUnitsPerMinute = 1.5
+
+    // The actual expected time of delivery, based on bolus speed
+    public var deliveryTime: NSTimeInterval {
+        if duration > 0 {
+            return duration
+        } else {
+            return NSTimeInterval(minutes: programmed / deliveryUnitsPerMinute)
+        }
+    }
+
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         
-        func d(idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func doubleValueFromDataAtIndex(index: Int) -> Double {
+            return Double(availableData[index] as UInt8)
         }
         
-        func insulinDecode(a: Int, b: Int) -> Double {
-            return Double((a << 8) + b) / 40.0
+        func decodeInsulinFromBytes(bytes: [UInt8]) -> Double {
+            return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.strokesPerUnit)
         }
         
         if pumpModel.larger {
@@ -39,19 +60,19 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
         }
         
         if pumpModel.larger {
-            timestamp = TimeFormat.parse5ByteDate(availableData, offset: 8)
-            amount = insulinDecode(d(3), b: d(4))
-            programmed = insulinDecode(d(1), b: d(2))
-            unabsorbedInsulinTotal = insulinDecode(d(5), b: d(6))
-            duration = d(7) * 30
+            timestamp = NSDateComponents(pumpEventData: availableData, offset: 8)
+            programmed = decodeInsulinFromBytes(availableData[1...2])
+            amount = decodeInsulinFromBytes(availableData[3...4])
+            unabsorbedInsulinTotal = decodeInsulinFromBytes(availableData[5...6])
+            duration = NSTimeInterval(minutes: 30 * doubleValueFromDataAtIndex(7))
         } else {
-            timestamp = TimeFormat.parse5ByteDate(availableData, offset: 4)
-            amount = Double(d(2))/10.0
-            programmed = Double(d(1))/10.0
-            duration = d(3) * 30
+            timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
+            programmed = decodeInsulinFromBytes([availableData[1]])
+            amount = decodeInsulinFromBytes([availableData[2]])
+            duration = NSTimeInterval(minutes: 30 * doubleValueFromDataAtIndex(3))
             unabsorbedInsulinTotal = 0
         }
-        bolusType = duration > 0 ? "square" : "normal"
+        type = duration > 0 ? .Square : .Normal
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -59,9 +80,8 @@ public class BolusNormalPumpEvent: TimestampedPumpEvent {
             "_type": "BolusNormal",
             "amount": amount,
             "programmed": programmed,
-            "type": bolusType,
-            "timestamp": TimeFormat.timestampStr(timestamp),
-            ]
+            "type": type.rawValue,
+        ]
         
         if let unabsorbedInsulinRecord = unabsorbedInsulinRecord {
             dictionary["appended"] = unabsorbedInsulinRecord.dictionaryRepresentation

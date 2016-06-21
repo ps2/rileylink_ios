@@ -8,24 +8,23 @@
 
 import Foundation
 
-public class DeleteAlarmClockTimePumpEvent: PumpEvent {
+public struct DeleteAlarmClockTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 14
         
         guard length <= availableData.length else {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "DeleteAlarmClockTime",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

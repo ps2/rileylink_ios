@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class ChangeTempBasalTypePumpEvent: PumpEvent {
+public struct ChangeTempBasalTypePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let basalType: String
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
         func d(idx:Int) -> Int {
@@ -25,14 +25,13 @@ public class ChangeTempBasalTypePumpEvent: PumpEvent {
         }
         
         basalType = d(1) == 1 ? "percent" : "absolute"
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "TempBasal",
             "temp": basalType,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

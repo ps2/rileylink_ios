@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class Sara6EPumpEvent: TimestampedPumpEvent {
+public struct Sara6EPumpEvent: PumpEvent {
     
-    public var length: Int
-    public var timestamp: NSDateComponents
+    public let length: Int
+    public let timestamp: NSDateComponents
     let validDateStr: String
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 52
         
         // Sometimes we encounter this at the end of a page, and it can be less characters???
@@ -24,8 +24,8 @@ public class Sara6EPumpEvent: TimestampedPumpEvent {
             validDateStr = "Invalid"
             return nil
         }
-        
-        let dateComponents = TimeFormat.parse2ByteDate(availableData, offset: 1)
+
+        let dateComponents = NSDateComponents(pumpEventBytes: availableData[1..<3])
         validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
         timestamp = dateComponents
     }
@@ -33,7 +33,6 @@ public class Sara6EPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Sara6E",
-            "timestamp": TimeFormat.timestampStr(TimeFormat.nextMidnightForDateComponents(timestamp)),
             "validDate": validDateStr,
         ]
     }

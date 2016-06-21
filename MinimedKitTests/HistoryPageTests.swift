@@ -102,7 +102,8 @@ class HistoryPageTests: XCTestCase {
             
             let bolus = events[1] as! BolusNormalPumpEvent
             XCTAssertEqual(bolus.amount, 3.2)
-            XCTAssertEqual(bolus.bolusType, "normal")
+
+            XCTAssertEqual(bolus.type, BolusNormalPumpEvent.BolusType.Normal)
             XCTAssertEqual(bolus.duration, 0)
             XCTAssertEqual(bolus.programmed, 3.2)
             XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.9)
@@ -153,7 +154,7 @@ class HistoryPageTests: XCTestCase {
             
             sara6e.timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
             
-            XCTAssertEqual(sara6e.dictionaryRepresentation["timestamp"] as? String, "2016-02-22T05:00:00Z")
+            XCTAssertEqual(sara6e.dictionaryRepresentation["validDate"] as? String, "2016-02-21")
             
         } catch HistoryPage.Error.InvalidCRC {
             XCTFail("page decoding threw invalid crc")
@@ -174,7 +175,7 @@ class HistoryPageTests: XCTestCase {
             
             let bolus = events[0] as! BolusNormalPumpEvent
             XCTAssertEqual(bolus.amount, 2.05)
-            XCTAssertEqual(bolus.bolusType, "normal")
+            XCTAssertEqual(bolus.type, BolusNormalPumpEvent.BolusType.Normal)
             XCTAssertEqual(bolus.duration, 0)
             XCTAssertEqual(bolus.programmed, 2.05)
             XCTAssertEqual(bolus.unabsorbedInsulinTotal, 0.0)
@@ -218,6 +219,27 @@ class HistoryPageTests: XCTestCase {
             XCTFail("Unexpected exception...")
         }
         
+    }
+
+    func testHistoryDecodingChangeTimeBackward() throws {
+        let pumpModel = PumpModel.Model523
+
+        let page = try HistoryPage(pageData: NSData(hexadecimalString: "070000000061100000006e611005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000062100000006e621005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000063100000006e631005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000064100000006e641005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000065100000006e651005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000066100000006e661005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000067100000006e671005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000068100000006e681005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000069100000006e69100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006a100000006e6a100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006b100000006e6b100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006c100000006e6c100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006d100000006e6d100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006e100000006e6e100500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007000000006f100000006e6f1005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010010001000000047a83470101e0169a81410107b0071a81410100000001f2071a81410101e0150a91410107b0042af1410100000001f2042af141010170044af14501018006dae1450101e0171ae1410107b0079ae141010000000a89b")!, pumpModel: pumpModel)
+        let events = page.events
+
+        let previousEvent = events[36] as! TimestampedPumpEvent
+        XCTAssertEqual(NSDateComponents(gregorianYear: 2016, month: 6, day: 16, hour: 20, minute: 47, second: 2), previousEvent.timestamp)
+
+        let changeTime = events[37] as! ChangeTimePumpEvent
+        let oldTimestamp = NSDateComponents(gregorianYear: 2016, month: 6, day: 16, hour: 20, minute: 47, second: 4)
+        let timestamp = NSDateComponents(gregorianYear: 2016, month: 6, day: 16, hour: 20, minute: 46, second: 45)
+
+        XCTAssertEqual(oldTimestamp, changeTime.oldTimestamp)
+        XCTAssertEqual(timestamp, changeTime.timestamp)
+        XCTAssertEqual(-19, changeTime.adjustmentInterval)
+
+        let nextEvent = events[38] as! TimestampedPumpEvent
+        XCTAssertEqual(NSDateComponents(gregorianYear: 2016, month: 6, day: 16, hour: 20, minute: 46, second: 49), nextEvent.timestamp)
     }
 
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
+public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let timestamp: NSDateComponents
     public let carbohydrates: Int
@@ -22,7 +22,7 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public let insulinSensitivity: Int
     public let carbRatio: Double
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)
@@ -53,7 +53,7 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         
         if pumpModel.larger {
             carbohydrates = ((d(8) & 0xc) << 6) + d(7)
@@ -84,7 +84,6 @@ public class BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "BolusWizardBolusEstimate",
-            "timestamp": TimeFormat.timestampStr(timestamp),
             "bg": bloodGlucose,
             "bgTargetHigh": bgTargetHigh,
             "correctionEstimate": correctionEstimate,

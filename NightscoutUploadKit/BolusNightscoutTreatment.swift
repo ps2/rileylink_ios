@@ -20,11 +20,11 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     let amount: Double
     let programmed: Double
     let unabsorbed: Double
-    let duration: Int
+    let duration: NSTimeInterval
     let carbs: Int
     let ratio: Double
     
-    init(timestamp: NSDate, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: Int, carbs: Int, ratio: Double) {
+    init(timestamp: NSDate, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: NSTimeInterval, carbs: Int, ratio: Double) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
@@ -48,7 +48,7 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         rval["insulin"] = amount
         rval["programmed"] = programmed
         rval["unabsorbed"] = unabsorbed
-        rval["duration"] = duration
+        rval["duration"] = duration.minutes
         return rval
     }
 }

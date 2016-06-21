@@ -8,24 +8,23 @@
 
 import Foundation
 
-public class Model522ResultTotalsPumpEvent: PumpEvent {
+public struct Model522ResultTotalsPumpEvent: PumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 44
         
         guard length <= availableData.length else {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventBytes: availableData[1..<3])
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Model522ResultTotals",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

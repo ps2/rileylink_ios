@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class TempBasalPumpEvent: PumpEvent {
+public struct TempBasalPumpEvent: TimestampedPumpEvent {
     
     public enum RateType : String {
         case Absolute = "absolute"
@@ -21,7 +21,7 @@ public class TempBasalPumpEvent: PumpEvent {
     public let rate: Double
     public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 8
         
         func d(idx:Int) -> Int {
@@ -39,7 +39,7 @@ public class TempBasalPumpEvent: PumpEvent {
             rate = Double(d(1))
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -47,7 +47,6 @@ public class TempBasalPumpEvent: PumpEvent {
             "_type": "TempBasal",
             "rate": rate,
             "temp": rateType.rawValue,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

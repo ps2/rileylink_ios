@@ -76,6 +76,8 @@ class DeviceDataManager {
             if let nightscoutURL = nightscoutURL {
                 nightscoutUploader.siteURL = nightscoutURL
             }
+            
+            Config.sharedInstance().nightscoutURL = nightscoutURL
         }
     }
     
@@ -88,6 +90,8 @@ class DeviceDataManager {
             if let nightscoutAPISecret = nightscoutAPISecret {
                 nightscoutUploader.APISecret = nightscoutAPISecret
             }
+            
+            Config.sharedInstance().nightscoutAPISecret = nightscoutAPISecret
         }
     }
 
@@ -191,6 +195,7 @@ class DeviceDataManager {
     }
     
     private func getPumpHistory(device: RileyLinkDevice) {
+        lastHistoryAttempt = NSDate()
         device.ops!.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):
@@ -204,7 +209,7 @@ class DeviceDataManager {
         }
     }
     
-    private func handleNewHistoryEvents(events: [PumpEvent], pumpModel: PumpModel) {
+    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel) {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
         let source = "rileylink://medtronic/\(pumpModel)"
@@ -247,14 +252,13 @@ class DeviceDataManager {
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         
         // This triggers one history fetch right away (in 10s)
-        //performSelector(#selector(DeviceDataManager.fetchHistory), withObject: nil, afterDelay: 10)
-        
-        // This is to just test decoding history
-        //performSelector(Selector("testDecodeHistory"), withObject: nil, afterDelay: 1)
-        
-        // Test storing MySentry packet:
-        //[self performSelector:@selector(testHandleMySentry) withObject:nil afterDelay:10];
-        
+//        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC)))
+//        dispatch_after(delayTime, dispatch_get_main_queue()) {
+//            if let rl = DeviceDataManager.sharedManager.preferredRileyLink() {
+//                DeviceDataManager.sharedManager.getPumpHistory(rl)
+//            }
+//        }
+
         UIDevice.currentDevice().batteryMonitoringEnabled = true
         
         rileyLinkManager.timerTickEnabled = false

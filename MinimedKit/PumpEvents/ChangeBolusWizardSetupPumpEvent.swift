@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class ChangeBolusWizardSetupPumpEvent: PumpEvent {
+public struct ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         if pumpModel.larger {
             length = 144
         } else {
@@ -23,13 +23,12 @@ public class ChangeBolusWizardSetupPumpEvent: PumpEvent {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeBolusWizardSetup",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

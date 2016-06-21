@@ -8,24 +8,23 @@
 
 import Foundation
 
-public class SuspendPumpEvent: PumpEvent {
+public struct SuspendPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
         guard length <= availableData.length else {
             return nil
         }
         
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "Suspend",
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class TempBasalDurationPumpEvent: PumpEvent {
+public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let duration: Int
-    let timestamp: NSDateComponents
+    public let timestamp: NSDateComponents
     
-    public required init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 7
         
         func d(idx:Int) -> Int {
@@ -25,14 +25,13 @@ public class TempBasalDurationPumpEvent: PumpEvent {
         }
         
         duration = d(1) * 30
-        timestamp = TimeFormat.parse5ByteDate(availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "TempBasal",
             "duration": duration,
-            "timestamp": TimeFormat.timestampStr(timestamp),
         ]
     }
 }

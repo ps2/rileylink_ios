@@ -6,4 +6,4 @@ xcode_scheme: RileyLink
 before_script:
     - carthage bootstrap
 script:
-#    - xctool -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator9.3 test
+	- xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator9.3 test | xcpretty

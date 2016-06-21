@@ -34,6 +34,7 @@ public enum PumpEventType: UInt8 {
     case TempBasal = 0x33
     case JournalEntryPumpLowReservoir = 0x34
     case AlarmClockReminder = 0x35
+    case Questionable3b = 0x3b
     case ChangeParadigmLinkID = 0x3c
     case BGReceived = 0x3f
     case JournalEntryExerciseMarker = 0x41
@@ -179,6 +180,8 @@ public enum PumpEventType: UInt8 {
             return ChangeCaptureEventEnablePumpEvent.self
         case .SelectBasalProfile:
             return SelectBasalProfilePumpEvent.self
+        case .Questionable3b:
+            return UnknownPumpEvent.self
         }
     }
 }

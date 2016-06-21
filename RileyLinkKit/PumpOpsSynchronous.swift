@@ -335,7 +335,17 @@ class PumpOpsSynchronous {
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
-            let pageData = try getHistoryPage(pageNum)
+            let pageData: NSData
+
+            do {
+                pageData = try getHistoryPage(pageNum)
+            } catch let error as PumpCommsError {
+                if pageNum > 0 {
+                    break
+                } else {
+                    throw error
+                }
+            }
             
             NSLog("Fetched page %d: %@", pageNum, pageData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)

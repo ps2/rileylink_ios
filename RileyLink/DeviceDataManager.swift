@@ -174,6 +174,7 @@ class DeviceDataManager {
     
     private func updatePumpStatus(status: MySentryPumpStatusMessageBody, fromDevice device: RileyLinkDevice) {
         status.pumpDateComponents.timeZone = pumpTimeZone
+        status.glucoseDateComponents?.timeZone = pumpTimeZone
         
         if status != latestPumpStatus {
             latestPumpStatus = status

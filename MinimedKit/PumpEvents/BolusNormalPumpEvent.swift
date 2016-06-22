@@ -16,6 +16,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
     }
 
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     public var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
     public let amount: Double
@@ -58,6 +59,8 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         if pumpModel.larger {
             timestamp = NSDateComponents(pumpEventData: availableData, offset: 8)

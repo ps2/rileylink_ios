@@ -10,6 +10,7 @@ import Foundation
 
 public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     let rawType: Int
     
@@ -19,6 +20,8 @@ public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         rawType = Int(availableData[1] as UInt8)
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)

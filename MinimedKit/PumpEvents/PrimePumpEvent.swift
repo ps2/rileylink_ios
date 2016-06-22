@@ -10,6 +10,7 @@ import Foundation
 
 public struct PrimePumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     let amount: Double
     let primeType: String
@@ -21,6 +22,8 @@ public struct PrimePumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)

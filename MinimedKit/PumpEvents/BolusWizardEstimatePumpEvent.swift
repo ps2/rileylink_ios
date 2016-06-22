@@ -10,6 +10,7 @@ import Foundation
 
 public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     public let carbohydrates: Int
     public let bloodGlucose: Int
@@ -37,22 +38,13 @@ public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
         } else {
             length = 20
         }
-        
-        if length >= availableData.length {
-            carbohydrates = 0
-            bloodGlucose = 0
-            foodEstimate = 0
-            correctionEstimate = 0
-            bolusEstimate = 0
-            unabsorbedInsulinTotal = 0
-            bgTargetLow = 0
-            bgTargetHigh = 0
-            insulinSensitivity = 0
-            carbRatio = 0
-            timestamp = NSDateComponents()
+
+        guard length <= availableData.length else {
             return nil
         }
-        
+
+        rawData = availableData[0..<length]
+
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         
         if pumpModel.larger {

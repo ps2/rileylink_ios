@@ -10,6 +10,7 @@ import Foundation
 
 public struct ChangeOtherDeviceIDPumpEvent: TimestampedPumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     
     public init?(availableData: NSData, pumpModel: PumpModel) {
@@ -18,6 +19,8 @@ public struct ChangeOtherDeviceIDPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
     }

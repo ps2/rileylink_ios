@@ -142,12 +142,17 @@ public class NightscoutUploader: NSObject {
             nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
         }
         
-        let pumpDate = TimeFormat.timestampStr(status.pumpDateComponents)
+        guard let pumpDate = status.pumpDateComponents.date else {
+            NSLog("Pump date not set (or timezone missing) in pump status message!")
+            return
+        }
+        
+        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
         
         nsStatus["pump"] = [
-            "clock": pumpDate,
+            "clock": pumpDateStr,
             "iob": [
-                "timestamp": pumpDate,
+                "timestamp": pumpDateStr,
                 "bolusiob": status.iob,
             ],
             "reservoir": status.reservoirRemainingUnits,
@@ -176,9 +181,9 @@ public class NightscoutUploader: NSObject {
                 "type": "sgv"
             ]
             if let sensorDateComponents = status.glucoseDateComponents,
-                let sensorDate = TimeFormat.timestampAsLocalDate(sensorDateComponents) {
+                let sensorDate = sensorDateComponents.date {
                 entry["date"] = sensorDate.timeIntervalSince1970 * 1000
-                entry["dateString"] = TimeFormat.timestampStr(sensorDateComponents)
+                entry["dateString"] = TimeFormat.timestampStrFromDate(sensorDate)
             }
             switch status.previousGlucose {
             case .Active(glucose: let previousGlucose):

@@ -182,9 +182,8 @@ class DeviceDataManager {
             if status.batteryRemainingPercent == 0 {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
-            let source = "rileylink://medtronic/\(device.name)"
             if Config.sharedInstance().uploadEnabled {
-                nightscoutUploader.handlePumpStatus(status, device: source)
+                nightscoutUploader.handlePumpStatus(status, device: device.deviceURI)
             }
             
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
@@ -201,7 +200,7 @@ class DeviceDataManager {
             switch response {
             case .Success(let (events, pumpModel)):
                 NSLog("fetchHistory succeeded.")
-                self.handleNewHistoryEvents(events, pumpModel: pumpModel)
+                self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.PumpEventsUpdatedNotification, object: self)
                 
             case .Failure(let error):
@@ -210,12 +209,11 @@ class DeviceDataManager {
         }
     }
     
-    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel) {
+    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel, device: RileyLinkDevice) {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
-        let source = "rileylink://medtronic/\(pumpModel)"
         if Config.sharedInstance().uploadEnabled {
-            nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)
+            nightscoutUploader.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
         }
     }
     

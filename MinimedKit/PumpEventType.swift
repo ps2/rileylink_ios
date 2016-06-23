@@ -180,7 +180,7 @@ public enum PumpEventType: UInt8 {
             return ChangeCaptureEventEnablePumpEvent.self
         case .SelectBasalProfile:
             return SelectBasalProfilePumpEvent.self
-        case .Questionable3b:
+        default:
             return UnknownPumpEvent.self
         }
     }

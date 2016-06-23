@@ -7,5 +7,5 @@ The RileyLink iOS app connects to a RileyLink device via Bluetooth Low Energy (B
 ### Configuration
 
 * Pump ID - Enter in your six digit pump ID
-* Nightscout URL - Should look like `http://mysite.azurewebsites.net`
+* Nightscout URL - Should look like `http://mysite.azurewebsites.net`. You can use http or https.  Trailing slash or no trailing slash.
 * Nightscout API Secret - Use the unhashed form, exactly specified in your `API_SECRET` variable.

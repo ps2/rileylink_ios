@@ -203,6 +203,7 @@
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
+		C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
@@ -532,6 +533,7 @@
 		C1B3831B1CD0665D00CE7782 /* NightscoutUploadKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutUploadKitTests.swift; sourceTree = "<group>"; };
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
+		C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = SOURCE_ROOT; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessage.swift; path = Messages/MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -1049,6 +1051,7 @@
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
+				C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -1744,6 +1747,7 @@
 				C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
+				C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */,
 				C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */,

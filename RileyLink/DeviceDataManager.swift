@@ -28,8 +28,6 @@ class DeviceDataManager {
     
     var latestPumpStatus: MySentryPumpStatusMessageBody?
     
-    private var observingPumpEventsSince: NSDate
-    
     var nightscoutUploader: NightscoutUploader
     
     var pumpTimeZone: NSTimeZone? = Config.sharedInstance().pumpTimeZone {
@@ -196,7 +194,7 @@ class DeviceDataManager {
     
     private func getPumpHistory(device: RileyLinkDevice) {
         lastHistoryAttempt = NSDate()
-        device.ops!.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
+        device.ops!.getHistoryEventsSinceDate(nightscoutUploader.observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):
                 NSLog("fetchHistory succeeded.")
@@ -246,10 +244,6 @@ class DeviceDataManager {
         nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
             print("Error \(error), while \(context)")
         }
-        
-        
-        let calendar = NSCalendar.currentCalendar()
-        observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
         
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         

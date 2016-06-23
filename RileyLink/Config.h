@@ -20,5 +20,6 @@
 @property (nonatomic, nullable, strong) NSTimeZone *pumpTimeZone;
 @property (nonatomic, nullable, strong) NSSet *autoConnectIds;
 @property (nonatomic, assign) BOOL uploadEnabled;
+@property (nonatomic, assign) BOOL worldwideRadioLocale;
 
 @end

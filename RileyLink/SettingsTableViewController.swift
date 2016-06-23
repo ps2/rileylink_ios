@@ -18,9 +18,10 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
     private enum Section: Int {
         case About = 0
         case Upload
+        case RadioLocale
         case Configuration
 
-        static let count = 3
+        static let count = 4
     }
     
     private enum AboutRow: Int {
@@ -31,7 +32,13 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     private enum UploadRow: Int {
         case Upload = 0
+        
+        static let count = 1
+    }
 
+    private enum RadioLocaleRow: Int {
+        case Worldwide = 0
+        
         static let count = 1
     }
 
@@ -55,6 +62,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             return AboutRow.count
         case .Upload:
             return UploadRow.count
+        case .RadioLocale:
+            return RadioLocaleRow.count
         case .Configuration:
             return ConfigurationRow.count
         }
@@ -78,10 +87,21 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             switch UploadRow(rawValue: indexPath.row)! {
             case .Upload:
                 let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchTableViewCell.className, forIndexPath: indexPath) as! SwitchTableViewCell
-
+                
                 switchCell.`switch`?.on = Config.sharedInstance().uploadEnabled
                 switchCell.titleLabel.text = NSLocalizedString("Upload To Nightscout", comment: "The title text for the nightscout upload enabled switch cell")
                 switchCell.`switch`?.addTarget(self, action: #selector(uploadEnabledChanged(_:)), forControlEvents: .ValueChanged)
+                
+                return switchCell
+            }
+        case .RadioLocale:
+            switch RadioLocaleRow(rawValue: indexPath.row)! {
+            case .Worldwide:
+                let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchTableViewCell.className, forIndexPath: indexPath) as! SwitchTableViewCell
+                
+                switchCell.`switch`?.on = Config.sharedInstance().worldwideRadioLocale
+                switchCell.titleLabel.text = NSLocalizedString("Worldwide (868Mhz) Frequency", comment: "If set, use 868Mhz for communication")
+                switchCell.`switch`?.addTarget(self, action: #selector(enableWorldwideRadioLocaleChanged(_:)), forControlEvents: .ValueChanged)
                 
                 return switchCell
             }
@@ -110,6 +130,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             return NSLocalizedString("About", comment: "The title of the about section")
         case .Upload:
             return nil
+        case .RadioLocale:
+            return nil
         case .Configuration:
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
         }
@@ -126,14 +148,14 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .PumpID, .NightscoutAPISecret, .NightscoutURL:
                 performSegueWithIdentifier(TextFieldTableViewController.className, sender: sender)
             }
-        case .Upload, .About:
+        case .Upload, .RadioLocale, .About:
             break
         }
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch Section(rawValue: section)! {
-        case .Upload, .Configuration, .About:
+        case .Upload, .RadioLocale, .Configuration, .About:
             return nil
         }
     }
@@ -174,6 +196,10 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     func uploadEnabledChanged(sender: UISwitch) {
         Config.sharedInstance().uploadEnabled = sender.on
+    }
+    
+    func enableWorldwideRadioLocaleChanged(sender: UISwitch) {
+        Config.sharedInstance().worldwideRadioLocale = sender.on
     }
 
     // MARK: - TextFieldTableViewControllerDelegate

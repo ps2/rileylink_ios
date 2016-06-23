@@ -103,6 +103,12 @@
     [[NSUserDefaults standardUserDefaults] setBool:uploadEnabled forKey:@"uploadEnabled"];
 }
 
+- (void) setworldwideRadioLocale:(BOOL)worldwideRadioLocale {
+    [[NSUserDefaults standardUserDefaults] setBool:worldwideRadioLocale forKey:@"worldwideRadioLocale"];
+}
 
+- (BOOL) worldwideRadioLocale {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"worldwideRadioLocale"];
+}
 
 @end

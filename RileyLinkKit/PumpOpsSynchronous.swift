@@ -15,7 +15,7 @@ public enum PumpCommsError: ErrorType {
     case RFCommsFailure(String)
     case UnknownPumpModel
     case RileyLinkTimeout
-    case UnknownResponse(rx: NSData?, during: String?)
+    case UnknownResponse(rx: NSData?, during: String)
     case UnexpectedResponse(PumpMessage, from: PumpMessage)
 }
 

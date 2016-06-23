@@ -284,10 +284,14 @@ public class NightscoutUploader: NSObject {
                 request.HTTPBody = sendData
                 
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                    let httpResponse = response as! NSHTTPURLResponse
+                    
                     if let error = error {
                         completion(error)
-                    } else if httpResponse.statusCode != 200 {
+                        return
+                    }
+                    
+                    if let httpResponse = response as? NSHTTPURLResponse where
+                        httpResponse.statusCode != 200 {
                         completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
                     } else {
                         completion(nil)
@@ -306,8 +310,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = deviceStatuses
         deviceStatuses =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
-            if error != nil {
-                self.errorHandler?(error: error!, context: "Uploading device status")
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading device status")
                 // Requeue
                 self.deviceStatuses.appendContentsOf(inFlight)
             }
@@ -318,8 +322,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = entries
         entries =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
-            if error != nil {
-                self.errorHandler?(error: error!, context: "Uploading nightscout entries")
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout entries")
                 // Requeue
                 self.entries.appendContentsOf(inFlight)
             }
@@ -330,8 +334,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = treatmentsQueue
         treatmentsQueue =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
-            if error != nil {
-                self.errorHandler?(error: error!, context: "Uploading nightscout treatment records")
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.appendContentsOf(inFlight)
             }

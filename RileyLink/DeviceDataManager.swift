@@ -244,7 +244,7 @@ class DeviceDataManager {
         nightscoutUploader.siteURL = nightscoutURL
         nightscoutUploader.APISecret = nightscoutAPISecret
         nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
-            NSLog("Error %@, while %@", String(error), context)
+            print("Error \(error), while \(context)")
         }
         
         

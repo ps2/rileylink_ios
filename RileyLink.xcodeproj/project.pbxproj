@@ -1369,34 +1369,34 @@
 				TargetAttributes = {
 					430D64CA1CB855AB00FCA750 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 57NRR26737;
+						DevelopmentTeam = UY678SP37Q;
 					};
 					430D64D31CB855AB00FCA750 = {
 						CreatedOnToolsVersion = 7.3;
 					};
 					43722FAD1CB9F7630038B7F2 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 57NRR26737;
+						DevelopmentTeam = UY678SP37Q;
 					};
 					43722FB61CB9F7640038B7F2 = {
 						CreatedOnToolsVersion = 7.3;
 					};
 					C10D9BC01C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 57NRR26737;
+						DevelopmentTeam = UY678SP37Q;
 					};
 					C10D9BC91C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
 					C12EA236198B436800309FA4 = {
-						DevelopmentTeam = 57NRR26737;
+						DevelopmentTeam = UY678SP37Q;
 					};
 					C12EA251198B436800309FA4 = {
 						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C1B3830A1CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 57NRR26737;
+						DevelopmentTeam = UY678SP37Q;
 					};
 					C1B383131CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;

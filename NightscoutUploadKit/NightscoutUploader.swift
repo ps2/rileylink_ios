@@ -10,6 +10,14 @@ import UIKit
 import MinimedKit
 import Crypto
 
+public enum UploadError: ErrorType {
+    case MissingAPISecret
+    case MissingNightscoutURL
+    case InvalidNightscoutURL(String)
+    case HTTPError(status: Int, body: String)
+    case MissingTimezone
+}
+
 public class NightscoutUploader: NSObject {
 
     enum DexcomSensorError: UInt8 {
@@ -32,6 +40,8 @@ public class NightscoutUploader: NSObject {
     let defaultNightscoutEntriesPath = "/api/v1/entries.json"
     let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
     let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
+    
+    public var errorHandler: ((error: ErrorType, context: String) -> Void)?
 
     public override init() {
         entries = [AnyObject]()
@@ -73,7 +83,6 @@ public class NightscoutUploader: NSObject {
         } else if newestEventTime != nil {
             observingPumpEventsSince = newestEventTime!
         }
-        NSLog("Updated fetch start time to %@", observingPumpEventsSince)
         
         for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
             addTreatment(treatment, pumpModel:pumpModel)
@@ -143,7 +152,7 @@ public class NightscoutUploader: NSObject {
         }
         
         guard let pumpDate = status.pumpDateComponents.date else {
-            NSLog("Pump date not set (or timezone missing) in pump status message!")
+            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
             return
         }
         
@@ -207,6 +216,7 @@ public class NightscoutUploader: NSObject {
                 }()
             entries.append(entry)
         }
+        flushAll()
     }
     
     public func handleMeterMessage(msg: MeterMessage) {
@@ -244,17 +254,27 @@ public class NightscoutUploader: NSObject {
         flushTreatments()
     }
     
-    func uploadToNS(json: [AnyObject], endpoint:String, completion: (String?) -> Void) {
+    func uploadToNS(json: [AnyObject], endpoint:String, completion: (ErrorType?) -> Void) {
         if json.count == 0 {
             completion(nil)
             return
         }
         
-        if let siteURL = siteURL,
-            let APISecret = APISecret,
-            let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
+        guard let siteURL = siteURL else {
+            completion(UploadError.MissingNightscoutURL)
+            return
+        }
+        
+        guard let APISecret = APISecret else {
+            completion(UploadError.MissingAPISecret)
+            return
+        }
+
+        
+        if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
             let request = NSMutableURLRequest(URL: uploadURL)
             do {
+                
                 let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                 request.HTTPMethod = "POST"
                 
@@ -264,21 +284,25 @@ public class NightscoutUploader: NSObject {
                 request.HTTPBody = sendData
                 
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                    let httpResponse = response as! NSHTTPURLResponse
+                    
                     if let error = error {
-                        completion(error.description)
-                    } else if httpResponse.statusCode != 200 {
-                        completion(String(data: data!, encoding: NSUTF8StringEncoding)!)
+                        completion(error)
+                        return
+                    }
+                    
+                    if let httpResponse = response as? NSHTTPURLResponse where
+                        httpResponse.statusCode != 200 {
+                        completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
                     } else {
                         completion(nil)
                     }
                 })
                 task.resume()
-            } catch {
-                completion("Couldn't encode data to json.")
+            } catch let error as NSError {
+                completion(error)
             }
         } else {
-            completion("Invalid URL: \(siteURL), \(endpoint)")
+            completion(UploadError.InvalidNightscoutURL("\(siteURL), \(endpoint)"))
         }
     }
     
@@ -286,8 +310,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = deviceStatuses
         deviceStatuses =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
-            if error != nil {
-                NSLog("Uploading device status to nightscout failed: %@", error!)
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading device status")
                 // Requeue
                 self.deviceStatuses.appendContentsOf(inFlight)
             }
@@ -298,8 +322,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = entries
         entries =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
-            if error != nil {
-                NSLog("Uploading nightscout entries failed: %@", error!)
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout entries")
                 // Requeue
                 self.entries.appendContentsOf(inFlight)
             }
@@ -310,8 +334,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = treatmentsQueue
         treatmentsQueue =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
-            if error != nil {
-                NSLog("Uploading nightscout treatment records failed: %@", error!)
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.appendContentsOf(inFlight)
             }

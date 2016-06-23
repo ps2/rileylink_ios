@@ -243,6 +243,9 @@ class DeviceDataManager {
         nightscoutUploader = NightscoutUploader()
         nightscoutUploader.siteURL = nightscoutURL
         nightscoutUploader.APISecret = nightscoutAPISecret
+        nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
+            print("Error \(error), while \(context)")
+        }
         
         
         let calendar = NSCalendar.currentCalendar()

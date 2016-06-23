@@ -38,6 +38,10 @@ public class RileyLinkDevice {
         return device.firmwareVersion
     }
     
+    public var deviceURI: String {
+        return device.deviceURI
+    }
+    
     public var name: String? {
         return device.name
     }

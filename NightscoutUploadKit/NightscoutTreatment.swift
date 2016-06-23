@@ -30,6 +30,7 @@ public class NightscoutTreatment : DictionaryRepresentable {
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
+            "created_at": TimeFormat.timestampStrFromDate(timestamp),
             "timestamp": TimeFormat.timestampStrFromDate(timestamp),
             "enteredBy": enteredBy,
         ]

@@ -31,30 +31,47 @@ public class NightscoutUploader: NSObject {
     
     var entries: [AnyObject]
     var deviceStatuses: [AnyObject]
-    var treatmentsQueue: [AnyObject]
+    var treatmentsQueue: [NightscoutTreatment]
     
     var lastMeterMessageRxTime: NSDate?
     
-    var observingPumpEventsSince: NSDate
+    public private(set) var observingPumpEventsSince: NSDate
+    
+    var lastStoredTreatmentTimestamp: NSDate = NSDate.distantPast() {
+        didSet {
+            NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp = lastStoredTreatmentTimestamp
+        }
+    }
     
     let defaultNightscoutEntriesPath = "/api/v1/entries.json"
     let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
     let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
     
     public var errorHandler: ((error: ErrorType, context: String) -> Void)?
+    
+    public var pumpID: String? {
+        didSet {
+            if oldValue != nil {
+                self.observingPumpEventsSince = NSDate().dateByAddingTimeInterval(60*60*24*(-1))
+            }
+        }
+    }
 
-    public override init() {
+    public init(siteURL: String?, APISecret: String?, pumpID: String?) {
         entries = [AnyObject]()
-        treatmentsQueue = [AnyObject]()
+        treatmentsQueue = [NightscoutTreatment]()
         deviceStatuses = [AnyObject]()
         
-        let calendar = NSCalendar.currentCalendar()
-        observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
+        self.siteURL = siteURL
+        self.APISecret = APISecret
+        self.pumpID = pumpID
+        
+        self.observingPumpEventsSince = NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp ?? NSDate().dateByAddingTimeInterval(60*60*24*(-1))
         
         super.init()
     }
     
-    // MARK: - Decoding Treatments
+    // MARK: - Processing data from pump
     
     public func processPumpEvents(events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
         
@@ -85,22 +102,10 @@ public class NightscoutUploader: NSObject {
         }
         
         for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
-            addTreatment(treatment, pumpModel:pumpModel)
+            treatmentsQueue.append(treatment)
         }
         self.flushAll()
     }
-    
-    func addTreatment(treatment:NightscoutTreatment, pumpModel:PumpModel) {
-        var rep = treatment.dictionaryRepresentation
-        if rep["created_at"] == nil && rep["timestamp"] != nil {
-            rep["created_at"] = rep["timestamp"]
-        }
-        if rep["created_at"] == nil {
-            rep["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-        }
-        treatmentsQueue.append(rep)
-    }
-    
     
     //  Entries [ { sgv: 375,
     //    date: 1432421525000,
@@ -248,7 +253,6 @@ public class NightscoutUploader: NSObject {
     // MARK: - Uploading
     
     func flushAll() {
-        
         flushDeviceStatuses()
         flushEntries()
         flushTreatments()
@@ -332,12 +336,16 @@ public class NightscoutUploader: NSObject {
     
     func flushTreatments() {
         let inFlight = treatmentsQueue
-        treatmentsQueue =  [AnyObject]()
-        uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
+        treatmentsQueue =  [NightscoutTreatment]()
+        uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (error) in
             if let error = error {
                 self.errorHandler?(error: error, context: "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.appendContentsOf(inFlight)
+            } else {
+                if let last = inFlight.last {
+                    self.lastStoredTreatmentTimestamp = last.timestamp
+                }
             }
         }
     }

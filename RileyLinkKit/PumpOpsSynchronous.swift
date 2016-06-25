@@ -184,6 +184,8 @@ class PumpOpsSynchronous {
                 
                 let response: ReadTempBasalCarelinkMessageBody = try getMessageBodyWithType(.ReadTempBasal)
                 
+                print("temp basal results: \(duration) \(response.rateType)")
+                
                 if response.timeRemaining == duration && response.rateType == .Absolute {
                     return response
                 } else {

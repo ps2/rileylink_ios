@@ -103,6 +103,10 @@ public class RileyLinkDevice {
             resultHandler(.Failure(Error.ConfigurationError))
         }
     }
+
+    public func setCustomName(name: String) {
+        device.setCustomName(name)
+    }
     
     public var ops: PumpOps? {
         if let pumpState = pumpState {

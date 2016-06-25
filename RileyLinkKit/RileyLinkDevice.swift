@@ -38,6 +38,10 @@ public class RileyLinkDevice {
         return device.firmwareVersion
     }
     
+    public var deviceURI: String {
+        return device.deviceURI
+    }
+    
     public var name: String? {
         return device.name
     }
@@ -98,6 +102,10 @@ public class RileyLinkDevice {
         } else {
             resultHandler(.Failure(Error.ConfigurationError))
         }
+    }
+
+    public func setCustomName(name: String) {
+        device.setCustomName(name)
     }
     
     public var ops: PumpOps? {

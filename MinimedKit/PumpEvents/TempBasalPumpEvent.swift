@@ -17,6 +17,7 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
     
     
     public let length: Int
+    public let rawData: NSData
     public let rateType: RateType
     public let rate: Double
     public let timestamp: NSDateComponents
@@ -31,6 +32,8 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         rateType = (d(7) >> 3) == 0 ? .Absolute : .Percent
         if rateType == .Absolute {

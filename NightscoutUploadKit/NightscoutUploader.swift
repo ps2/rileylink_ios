@@ -10,6 +10,14 @@ import UIKit
 import MinimedKit
 import Crypto
 
+public enum UploadError: ErrorType {
+    case MissingAPISecret
+    case MissingNightscoutURL
+    case InvalidNightscoutURL(String)
+    case HTTPError(status: Int, body: String)
+    case MissingTimezone
+}
+
 public class NightscoutUploader: NSObject {
 
     enum DexcomSensorError: UInt8 {
@@ -23,28 +31,47 @@ public class NightscoutUploader: NSObject {
     
     var entries: [AnyObject]
     var deviceStatuses: [AnyObject]
-    var treatmentsQueue: [AnyObject]
+    var treatmentsQueue: [NightscoutTreatment]
     
     var lastMeterMessageRxTime: NSDate?
     
-    var observingPumpEventsSince: NSDate
+    public private(set) var observingPumpEventsSince: NSDate
+    
+    var lastStoredTreatmentTimestamp: NSDate = NSDate.distantPast() {
+        didSet {
+            NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp = lastStoredTreatmentTimestamp
+        }
+    }
     
     let defaultNightscoutEntriesPath = "/api/v1/entries.json"
     let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
     let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
+    
+    public var errorHandler: ((error: ErrorType, context: String) -> Void)?
+    
+    public var pumpID: String? {
+        didSet {
+            if oldValue != nil {
+                self.observingPumpEventsSince = NSDate().dateByAddingTimeInterval(60*60*24*(-1))
+            }
+        }
+    }
 
-    public override init() {
+    public init(siteURL: String?, APISecret: String?, pumpID: String?) {
         entries = [AnyObject]()
-        treatmentsQueue = [AnyObject]()
+        treatmentsQueue = [NightscoutTreatment]()
         deviceStatuses = [AnyObject]()
         
-        let calendar = NSCalendar.currentCalendar()
-        observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
+        self.siteURL = siteURL
+        self.APISecret = APISecret
+        self.pumpID = pumpID
+        
+        self.observingPumpEventsSince = NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp ?? NSDate().dateByAddingTimeInterval(60*60*24*(-1))
         
         super.init()
     }
     
-    // MARK: - Decoding Treatments
+    // MARK: - Processing data from pump
     
     public func processPumpEvents(events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
         
@@ -73,25 +100,12 @@ public class NightscoutUploader: NSObject {
         } else if newestEventTime != nil {
             observingPumpEventsSince = newestEventTime!
         }
-        NSLog("Updated fetch start time to %@", observingPumpEventsSince)
         
         for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
-            addTreatment(treatment, pumpModel:pumpModel)
+            treatmentsQueue.append(treatment)
         }
         self.flushAll()
     }
-    
-    func addTreatment(treatment:NightscoutTreatment, pumpModel:PumpModel) {
-        var rep = treatment.dictionaryRepresentation
-        if rep["created_at"] == nil && rep["timestamp"] != nil {
-            rep["created_at"] = rep["timestamp"]
-        }
-        if rep["created_at"] == nil {
-            rep["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-        }
-        treatmentsQueue.append(rep)
-    }
-    
     
     //  Entries [ { sgv: 375,
     //    date: 1432421525000,
@@ -142,12 +156,17 @@ public class NightscoutUploader: NSObject {
             nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
         }
         
-        let pumpDate = TimeFormat.timestampStr(status.pumpDateComponents)
+        guard let pumpDate = status.pumpDateComponents.date else {
+            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
+            return
+        }
+        
+        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
         
         nsStatus["pump"] = [
-            "clock": pumpDate,
+            "clock": pumpDateStr,
             "iob": [
-                "timestamp": pumpDate,
+                "timestamp": pumpDateStr,
                 "bolusiob": status.iob,
             ],
             "reservoir": status.reservoirRemainingUnits,
@@ -176,9 +195,9 @@ public class NightscoutUploader: NSObject {
                 "type": "sgv"
             ]
             if let sensorDateComponents = status.glucoseDateComponents,
-                let sensorDate = TimeFormat.timestampAsLocalDate(sensorDateComponents) {
+                let sensorDate = sensorDateComponents.date {
                 entry["date"] = sensorDate.timeIntervalSince1970 * 1000
-                entry["dateString"] = TimeFormat.timestampStr(sensorDateComponents)
+                entry["dateString"] = TimeFormat.timestampStrFromDate(sensorDate)
             }
             switch status.previousGlucose {
             case .Active(glucose: let previousGlucose):
@@ -202,6 +221,7 @@ public class NightscoutUploader: NSObject {
                 }()
             entries.append(entry)
         }
+        flushAll()
     }
     
     public func handleMeterMessage(msg: MeterMessage) {
@@ -233,23 +253,32 @@ public class NightscoutUploader: NSObject {
     // MARK: - Uploading
     
     func flushAll() {
-        
         flushDeviceStatuses()
         flushEntries()
         flushTreatments()
     }
     
-    func uploadToNS(json: [AnyObject], endpoint:String, completion: (String?) -> Void) {
+    func uploadToNS(json: [AnyObject], endpoint:String, completion: (ErrorType?) -> Void) {
         if json.count == 0 {
             completion(nil)
             return
         }
         
-        if let siteURL = siteURL,
-            let APISecret = APISecret,
-            let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
+        guard let siteURL = siteURL else {
+            completion(UploadError.MissingNightscoutURL)
+            return
+        }
+        
+        guard let APISecret = APISecret else {
+            completion(UploadError.MissingAPISecret)
+            return
+        }
+
+        
+        if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
             let request = NSMutableURLRequest(URL: uploadURL)
             do {
+                
                 let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
                 request.HTTPMethod = "POST"
                 
@@ -259,21 +288,25 @@ public class NightscoutUploader: NSObject {
                 request.HTTPBody = sendData
                 
                 let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                    let httpResponse = response as! NSHTTPURLResponse
+                    
                     if let error = error {
-                        completion(error.description)
-                    } else if httpResponse.statusCode != 200 {
-                        completion(String(data: data!, encoding: NSUTF8StringEncoding)!)
+                        completion(error)
+                        return
+                    }
+                    
+                    if let httpResponse = response as? NSHTTPURLResponse where
+                        httpResponse.statusCode != 200 {
+                        completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
                     } else {
                         completion(nil)
                     }
                 })
                 task.resume()
-            } catch {
-                completion("Couldn't encode data to json.")
+            } catch let error as NSError {
+                completion(error)
             }
         } else {
-            completion("Invalid URL: \(siteURL), \(endpoint)")
+            completion(UploadError.InvalidNightscoutURL("\(siteURL), \(endpoint)"))
         }
     }
     
@@ -281,8 +314,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = deviceStatuses
         deviceStatuses =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
-            if error != nil {
-                NSLog("Uploading device status to nightscout failed: %@", error!)
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading device status")
                 // Requeue
                 self.deviceStatuses.appendContentsOf(inFlight)
             }
@@ -293,8 +326,8 @@ public class NightscoutUploader: NSObject {
         let inFlight = entries
         entries =  [AnyObject]()
         uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
-            if error != nil {
-                NSLog("Uploading nightscout entries failed: %@", error!)
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout entries")
                 // Requeue
                 self.entries.appendContentsOf(inFlight)
             }
@@ -303,12 +336,16 @@ public class NightscoutUploader: NSObject {
     
     func flushTreatments() {
         let inFlight = treatmentsQueue
-        treatmentsQueue =  [AnyObject]()
-        uploadToNS(inFlight, endpoint: defaultNightscoutTreatmentPath) { (error) in
-            if error != nil {
-                NSLog("Uploading nightscout treatment records failed: %@", error!)
+        treatmentsQueue =  [NightscoutTreatment]()
+        uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (error) in
+            if let error = error {
+                self.errorHandler?(error: error, context: "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.appendContentsOf(inFlight)
+            } else {
+                if let last = inFlight.last {
+                    self.lastStoredTreatmentTimestamp = last.timestamp
+                }
             }
         }
     }

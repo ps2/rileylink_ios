@@ -268,6 +268,10 @@
     [self setCharacteristicsFromService:service];
 }
 
+- (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {
+     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_NAME_CHANGED object:self userInfo:@{@"Name": peripheral.name}];
+}
+
 - (void)checkVersion {
     [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
         GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
@@ -426,10 +430,6 @@
     NSLog(@"Updated notification state for %@, %@", characteristic, error);
 }
 
-- (void)peripheralDidUpdateName:(CBPeripheral *)peripheral {
-    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
-}
-
 - (void)cleanup {
     NSLog(@"Entering cleanup");
     
@@ -451,7 +451,7 @@
 }
 
 - (NSString*) deviceURI {
-    return [@"rl://" stringByAppendingString:self.name];
+    return [@"rileylink://" stringByAppendingString:self.name];
 }
 
 - (void) setCustomName:(nonnull NSString*)customName {

@@ -17,10 +17,12 @@ public class RileyLinkDeviceManager {
     public static let ConnectionStateDidChangeNotification = "com.rileylink.RileyLinkKit.ConnectionStateDidChangeNotification"
 
     public static let RSSIDidChangeNotification = "com.rileylink.RileyLinkKit.RSSIDidChangeNotification"
+    public static let NameDidChangeNotification = "com.rileylink.RileyLinkKit.NameDidChangeNotification"
 
     public static let RileyLinkDeviceKey = "com.rileylink.RileyLinkKit.RileyLinkDevice"
     public static let RileyLinkRSSIKey = "com.rileylink.RileyLinkKit.RileyLinkRSSI"
-    
+    public static let RileyLinkNameKey = "com.rileylink.RileyLinkKit.RileyLinkName"
+
     public var pumpState: PumpState? {
         didSet {
             for device in _devices {
@@ -41,8 +43,10 @@ public class RileyLinkDeviceManager {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(rssiDidChange(_:)), name: RILEYLINK_EVENT_RSSI_CHANGED, object: nil)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(nameDidChange(_:)), name: RILEYLINK_EVENT_NAME_CHANGED, object: nil)
     }
-    
+
     public var deviceScanningEnabled: Bool {
         get {
             return BLEManager.scanningEnabled
@@ -135,5 +139,14 @@ public class RileyLinkDeviceManager {
             NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.RSSIDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device, self.dynamicType.RileyLinkRSSIKey: note.userInfo!["RSSI"]!])
         }
     }
-    
+
+    @objc private func nameDidChange(note: NSNotification) {
+        if let BLEDevice = note.object as? RileyLinkBLEDevice,
+            index = _devices.indexOf({ $0.peripheral == BLEDevice.peripheral }) {
+            let device = _devices[index]
+
+            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.NameDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device, self.dynamicType.RileyLinkNameKey: note.userInfo!["Name"]!])
+        }
+    }
+
 }

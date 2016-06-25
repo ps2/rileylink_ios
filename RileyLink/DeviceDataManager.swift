@@ -28,8 +28,6 @@ class DeviceDataManager {
     
     var latestPumpStatus: MySentryPumpStatusMessageBody?
     
-    private var observingPumpEventsSince: NSDate
-    
     var nightscoutUploader: NightscoutUploader
     
     var pumpTimeZone: NSTimeZone? = Config.sharedInstance().pumpTimeZone {
@@ -62,6 +60,8 @@ class DeviceDataManager {
             } else {
                 rileyLinkManager.pumpState = nil
             }
+            
+            nightscoutUploader.pumpID = pumpID
             
             Config.sharedInstance().pumpID = pumpID
         }
@@ -174,6 +174,7 @@ class DeviceDataManager {
     
     private func updatePumpStatus(status: MySentryPumpStatusMessageBody, fromDevice device: RileyLinkDevice) {
         status.pumpDateComponents.timeZone = pumpTimeZone
+        status.glucoseDateComponents?.timeZone = pumpTimeZone
         
         if status != latestPumpStatus {
             latestPumpStatus = status
@@ -181,9 +182,8 @@ class DeviceDataManager {
             if status.batteryRemainingPercent == 0 {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
-            let source = "rileylink://medtronic/\(device.name)"
             if Config.sharedInstance().uploadEnabled {
-                nightscoutUploader.handlePumpStatus(status, device: source)
+                nightscoutUploader.handlePumpStatus(status, device: device.deviceURI)
             }
             
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
@@ -196,11 +196,11 @@ class DeviceDataManager {
     
     private func getPumpHistory(device: RileyLinkDevice) {
         lastHistoryAttempt = NSDate()
-        device.ops!.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
+        device.ops!.getHistoryEventsSinceDate(nightscoutUploader.observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):
                 NSLog("fetchHistory succeeded.")
-                self.handleNewHistoryEvents(events, pumpModel: pumpModel)
+                self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.PumpEventsUpdatedNotification, object: self)
                 
             case .Failure(let error):
@@ -209,12 +209,11 @@ class DeviceDataManager {
         }
     }
     
-    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel) {
+    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel, device: RileyLinkDevice) {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
-        let source = "rileylink://medtronic/\(pumpModel)"
         if Config.sharedInstance().uploadEnabled {
-            nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)
+            nightscoutUploader.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
         }
     }
     
@@ -241,13 +240,11 @@ class DeviceDataManager {
             autoConnectIDs: connectedPeripheralIDs
         )
         
-        nightscoutUploader = NightscoutUploader()
-        nightscoutUploader.siteURL = nightscoutURL
-        nightscoutUploader.APISecret = nightscoutAPISecret
-        
-        
-        let calendar = NSCalendar.currentCalendar()
-        observingPumpEventsSince = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])!
+        nightscoutUploader = NightscoutUploader(siteURL: nightscoutURL, APISecret: nightscoutAPISecret, pumpID: pumpID)
+        nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
+            print("Error \(error), while \(context)")
+        }
+        nightscoutUploader.pumpID = pumpID
         
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         

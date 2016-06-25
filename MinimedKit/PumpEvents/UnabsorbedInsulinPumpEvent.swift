@@ -28,6 +28,7 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
     }
     
     public let length: Int
+    public let rawData: NSData
     
     public let records: [Record]
     
@@ -38,6 +39,8 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         func d(idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)

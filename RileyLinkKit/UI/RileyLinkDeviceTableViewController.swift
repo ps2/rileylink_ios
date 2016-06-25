@@ -11,7 +11,7 @@ import MinimedKit
 
 let CellIdentifier = "Cell"
 
-public class RileyLinkDeviceTableViewController: UITableViewController {
+public class RileyLinkDeviceTableViewController: UITableViewController, TextFieldTableViewControllerDelegate {
 
     public var device: RileyLinkDevice!
 
@@ -25,7 +25,34 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         super.viewDidLoad()
 
         title = device.name
+
+        self.observe()
     }
+
+    // References to registered notification center observers
+    deinit {
+        deviceObserver = nil
+    }
+
+    private var deviceObserver: AnyObject? {
+        willSet {
+            if let observer = deviceObserver {
+                NSNotificationCenter.defaultCenter().removeObserver(observer)
+            }
+        }
+    }
+
+    private func observe() {
+        let center = NSNotificationCenter.defaultCenter()
+
+        deviceObserver = center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+
+                let indexPath = NSIndexPath(forRow: DeviceRow.CustomName.rawValue, inSection: Section.Device.rawValue)
+                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                self?.title = self?.device.name
+        }
+    }
+
 
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,6 +97,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     private enum DeviceRow: Int {
+        case CustomName
         case Version
         case RSSI
         case Connection
@@ -131,6 +159,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         switch Section(rawValue: indexPath.section)! {
         case .Device:
             switch DeviceRow(rawValue: indexPath.row)! {
+            case .CustomName:
+                cell.textLabel?.text = NSLocalizedString("Name", comment: "The title of the cell showing device name")
+                cell.detailTextLabel?.text = device.name
             case .Version:
                 cell.textLabel?.text = NSLocalizedString("Firmware Version", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = device.firmwareVersion
@@ -247,7 +278,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
-        case .Device, .Pump:
+        case .Device:
+            switch DeviceRow(rawValue: indexPath.row)! {
+            case .CustomName:
+                return true
+            default:
+                return false
+            }
+        case .Pump:
             return false
         case .Commands:
             return device.peripheral.state == .Connected
@@ -256,6 +294,21 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch Section(rawValue: indexPath.section)! {
+        case .Device:
+            switch DeviceRow(rawValue: indexPath.row)! {
+            case .CustomName:
+                let vc = TextFieldTableViewController()
+                if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                    vc.title = cell.textLabel?.text
+                    vc.value = device.name
+                    vc.delegate = self
+                    vc.keyboardType = .Default
+                }
+
+                showViewController(vc, sender: indexPath)
+            default:
+                break
+            }
         case .Commands:
             let vc: CommandResponseViewController
 
@@ -379,14 +432,22 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 }
             case .PressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    self.device.ops?.pressButton({ (response) in
-                        dispatch_async(dispatch_get_main_queue()) {
-                            switch response {
-                            case .Success(let msg):
-                                completionHandler(responseText: "Result: " + msg)
-                            case .Failure(let error):
-                                completionHandler(responseText: String(error))
-                            }
+//                    self.device.ops?.pressButton({ (response) in
+//                        dispatch_async(dispatch_get_main_queue()) {
+//                            switch response {
+//                            case .Success(let msg):
+//                                completionHandler(responseText: "Result: " + msg)
+//                            case .Failure(let error):
+//                                completionHandler(responseText: String(error))
+//                            }
+//                        }
+//                    })
+                    self.device.ops?.setTempBasal(1.2, duration: 60*30, completion: { (response) in
+                        switch response {
+                        case .Success(let msg):
+                            completionHandler(responseText: "Result: " + String(msg.timeRemaining))
+                        case .Failure(let error):
+                            completionHandler(responseText: String(error))
                         }
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
@@ -414,8 +475,34 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             }
 
             showViewController(vc, sender: indexPath)
-        case .Device, .Pump:
+        case .Pump:
             break
         }
     }
+
+    // MARK: - TextFieldTableViewControllerDelegate
+
+    func textFieldTableViewControllerDidReturn(controller: TextFieldTableViewController) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+
+    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController) {
+        if let indexPath = tableView.indexPathForSelectedRow {
+            switch Section(rawValue: indexPath.section)! {
+            case .Device:
+                switch DeviceRow(rawValue: indexPath.row)! {
+                case .CustomName:
+                    device.setCustomName(controller.value!)
+                default:
+                    break
+                }
+            default:
+                break
+
+            }
+
+            tableView.reloadData()
+        }
+    }
+
 }

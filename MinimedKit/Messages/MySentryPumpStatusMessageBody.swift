@@ -94,8 +94,8 @@ public enum SensorReading {
  ```
  */
 public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentable {
-    private static let reservoirSignificantDigit = 0.1
-    private static let iobSigificantDigit = 0.025
+    private static let reservoirMultiplier: Double = 10
+    private static let iobMultiplier: Double = 40
     public static let length = 36
 
     public let sequence: UInt8
@@ -137,14 +137,14 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         
         self.glucoseTrend = trend
         
-        reservoirRemainingUnits = Double(Int(bigEndianBytes: rxData[12...13])) * self.dynamicType.reservoirSignificantDigit
+        reservoirRemainingUnits = Double(Int(bigEndianBytes: rxData[12...13])) / self.dynamicType.reservoirMultiplier
         
         let reservoirRemainingPercent: UInt8 = rxData[15]
         self.reservoirRemainingPercent = Int(round(Double(reservoirRemainingPercent) / 4.0 * 100))
         
         reservoirRemainingMinutes = Int(bigEndianBytes: [rxData[16], rxData[17]])
         
-        iob = Double(Int(bigEndianBytes: rxData[22...23])) * self.dynamicType.iobSigificantDigit
+        iob = Double(Int(bigEndianBytes: rxData[22...23])) / self.dynamicType.iobMultiplier
         
         let batteryRemainingPercent: UInt8 = rxData[14]
         self.batteryRemainingPercent = Int(round(Double(batteryRemainingPercent) / 4.0 * 100))

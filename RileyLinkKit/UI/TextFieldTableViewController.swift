@@ -65,6 +65,7 @@ internal class TextFieldTableViewController: UITableViewController, UITextFieldD
         cell.textField.text = value
         cell.textField.keyboardType = keyboardType
         cell.textField.placeholder = placeholder
+        cell.textField.autocapitalizationType = .Words
 
         return cell
     }

@@ -15,7 +15,8 @@ public enum PumpCommsError: ErrorType {
     case RFCommsFailure(String)
     case UnknownPumpModel
     case RileyLinkTimeout
-    case UnknownResponse(String)
+    case UnknownResponse(rx: NSData?, during: String)
+    case UnexpectedResponse(PumpMessage, from: PumpMessage)
 }
 
 public enum RXFilterMode: UInt8 {
@@ -56,7 +57,7 @@ class PumpOpsSynchronous {
         }
         
         guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) where message.address == msg.address else {
-            throw PumpCommsError.UnknownResponse("Sent \(msg.txData) and received \(cmd.receivedPacket.data ?? NSData())")
+            throw PumpCommsError.UnknownResponse(rx: cmd.receivedPacket.data, during: "Sent \(msg.txData)")
         }
         
         return message
@@ -83,7 +84,7 @@ class PumpOpsSynchronous {
                     // Pump successfully received and responded to short wakeup message!
                     return
                 } else {
-                    lastError = PumpCommsError.UnknownResponse("Wakeup shortResponse: \(shortResponse.txData)")
+                    lastError = PumpCommsError.UnexpectedResponse(shortResponse, from: shortPowerMessage)
                 }
             } catch let error {
                 lastError = error
@@ -107,7 +108,7 @@ class PumpOpsSynchronous {
         let longResponse = try sendAndListen(longPowerMessage)
         
         guard longResponse.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse("Wakeup longResponse: \(longResponse.txData)")
+            throw PumpCommsError.UnexpectedResponse(longResponse, from: longPowerMessage)
         }
         
         NSLog("Power on for %.0f minutes", duration.minutes)
@@ -121,13 +122,13 @@ class PumpOpsSynchronous {
         let shortResponse = try sendAndListen(shortMsg)
         
         guard shortResponse.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse(String(shortResponse.txData))
+            throw PumpCommsError.UnexpectedResponse(shortResponse, from: shortMsg)
         }
         
         let response = try sendAndListen(msg)
         
         guard response.messageType == responseMessageType else {
-            throw PumpCommsError.UnknownResponse(String(response.txData))
+            throw PumpCommsError.UnexpectedResponse(response, from: msg)
         }
         
         return response
@@ -159,7 +160,7 @@ class PumpOpsSynchronous {
         let response = try sendAndListen(msg)
         
         guard response.messageType == messageType, let body = response.messageBody as? T else {
-            throw PumpCommsError.UnknownResponse(String(response.txData))
+            throw PumpCommsError.UnexpectedResponse(response, from: msg)
         }
         return body
     }
@@ -198,17 +199,19 @@ class PumpOpsSynchronous {
     
     internal func changeTime(messageGenerator: () -> PumpMessage) throws {
         try wakeup()
-        
-        let shortResponse = try sendAndListen(makePumpMessage(.ChangeTime))
+
+        let shortMessage = makePumpMessage(.ChangeTime)
+        let shortResponse = try sendAndListen(shortMessage)
         
         guard shortResponse.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse("changeTime shortResponse: \(shortResponse.txData)")
+            throw PumpCommsError.UnexpectedResponse(shortResponse, from: shortMessage)
         }
-        
-        let response = try sendAndListen(messageGenerator())
+
+        let message = messageGenerator()
+        let response = try sendAndListen(message)
         
         guard response.messageType == .PumpAck else {
-            throw PumpCommsError.UnknownResponse("changeTime response: \(response.txData)")
+            throw PumpCommsError.UnexpectedResponse(response, from: message)
         }
     }
 
@@ -227,7 +230,7 @@ class PumpOpsSynchronous {
         guard let data = listenForFindMessageCmd.receivedPacket.data, findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
             let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
         else {
-            throw PumpCommsError.UnknownResponse("Received \(listenForFindMessageCmd.receivedPacket.data ?? NSData())")
+            throw PumpCommsError.UnknownResponse(rx: listenForFindMessageCmd.receivedPacket.data, during: "Watchdog listening")
         }
 
         // Identify as a MySentry device
@@ -239,7 +242,7 @@ class PumpOpsSynchronous {
             linkMessageBody = linkMessage.messageBody as? DeviceLinkMessageBody,
             linkMessageResponseBody = MySentryAckMessageBody(sequence: linkMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [linkMessage.messageType])
         else {
-            throw PumpCommsError.UnknownResponse("Received \(linkMessage.messageBody.txData)")
+            throw PumpCommsError.UnexpectedResponse(linkMessage, from: findMessageResponse)
         }
 
         // Acknowledge the pump linked with us
@@ -335,7 +338,17 @@ class PumpOpsSynchronous {
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
-            let pageData = try getHistoryPage(pageNum)
+            let pageData: NSData
+
+            do {
+                pageData = try getHistoryPage(pageNum)
+            } catch let error as PumpCommsError {
+                if case .UnexpectedResponse(let response, from: _) = error where response.messageType == .EmptyHistoryPage {
+                    break pages
+                } else {
+                    throw error
+                }
+            }
             
             NSLog("Fetched page %d: %@", pageNum, pageData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
@@ -368,10 +381,8 @@ class PumpOpsSynchronous {
         
         let msg = makePumpMessage(.GetHistoryPage, body: GetHistoryPageCarelinkMessageBody(pageNum: pageNum))
         
-        guard let firstResponse = try? runCommandWithArguments(msg, responseMessageType: .GetHistoryPage) else {
-            throw PumpCommsError.RFCommsFailure("Pump not responding to GetHistory command")
-        }
-        
+        let firstResponse = try runCommandWithArguments(msg, responseMessageType: .GetHistoryPage)
+
         var expectedFrameNum = 1
         var curResp = firstResponse.messageBody as! GetHistoryPageCarelinkMessageBody
         

@@ -10,6 +10,7 @@ import Foundation
 
 public struct ResultDailyTotalPumpEvent: PumpEvent {
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     let validDateStr: String
     
@@ -24,6 +25,8 @@ public struct ResultDailyTotalPumpEvent: PumpEvent {
         guard length <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<length]
         
         let dateComponents = NSDateComponents(pumpEventBytes: availableData[5..<7])
         validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)

@@ -451,7 +451,7 @@
 }
 
 - (NSString*) deviceURI {
-    return [@"rl://" stringByAppendingString:self.name];
+    return [@"rileylink://" stringByAppendingString:self.name];
 }
 
 - (void) setCustomName:(nonnull NSString*)customName {

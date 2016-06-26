@@ -38,8 +38,8 @@ public enum BasalProfile {
  ```
  */
 public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
-    private static let maxBolusSignificantDigit = 0.1
-    private static let maxBasalSignificantDigit = 0.025
+    private static let maxBolusMultiplier: Double = 10
+    private static let maxBasalMultiplier: Double = 40
 
     public let maxBasal: Double
     public let maxBolus: Double
@@ -54,10 +54,10 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
         }
 
         let maxBolusTicks: UInt8 = rxData[7]
-        maxBolus = Double(maxBolusTicks) * self.dynamicType.maxBolusSignificantDigit
+        maxBolus = Double(maxBolusTicks) * self.dynamicType.maxBolusMultiplier
 
         let maxBasalTicks: Int = Int(bigEndianBytes: rxData[8...9])
-        maxBasal = Double(maxBasalTicks) * self.dynamicType.maxBasalSignificantDigit
+        maxBasal = Double(maxBasalTicks) * self.dynamicType.maxBasalMultiplier
 
         let rawSelectedBasalProfile: UInt8 = rxData[12]
         selectedBasalProfile = BasalProfile(rawValue: rawSelectedBasalProfile)

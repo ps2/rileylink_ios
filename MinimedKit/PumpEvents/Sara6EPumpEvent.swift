@@ -11,6 +11,7 @@ import Foundation
 public struct Sara6EPumpEvent: PumpEvent {
     
     public let length: Int
+    public let rawData: NSData
     public let timestamp: NSDateComponents
     let validDateStr: String
     
@@ -19,11 +20,11 @@ public struct Sara6EPumpEvent: PumpEvent {
         
         // Sometimes we encounter this at the end of a page, and it can be less characters???
         // need at least 16, I think.
-        if 16 > availableData.length {
-            timestamp = NSDateComponents()
-            validDateStr = "Invalid"
+        guard 16 <= availableData.length else {
             return nil
         }
+
+        rawData = availableData[0..<min(length, availableData.length)]
 
         let dateComponents = NSDateComponents(pumpEventBytes: availableData[1..<3])
         validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)

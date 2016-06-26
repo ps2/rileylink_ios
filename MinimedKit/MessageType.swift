@@ -15,6 +15,7 @@ public enum MessageType: UInt8 {
     case PumpBackfill           = 0x08
     case FindDevice             = 0x09
     case DeviceLink             = 0x0A
+    case EmptyHistoryPage       = 0x15
     case ChangeTime             = 0x40
     case Bolus                  = 0x42
     case ChangeTempBasal        = 0x4c

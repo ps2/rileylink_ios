@@ -42,7 +42,21 @@ class DeviceDataManager {
             }
         }
     }
+    
+    var pumpWorldwideRadioLocale: Bool = Config.sharedInstance().worldwideRadioLocale {
+        didSet {
+            Config.sharedInstance().worldwideRadioLocale = pumpWorldwideRadioLocale
+            
+            if let worldwideRadioLocale = pumpWorldwideRadioLocale {
 
+                if let pumpState = rileyLinkManager.pumpState {
+                    pumpState.worldwideRadioLocale = worldwideRadioLocale
+                }
+            }
+        }
+    
+    }
+    
     var pumpID: String? = Config.sharedInstance().pumpID {
         didSet {
             if pumpID?.characters.count != 6 {
@@ -51,6 +65,10 @@ class DeviceDataManager {
             
             if let pumpID = pumpID {
                 let pumpState = PumpState(pumpID: pumpID)
+                
+                if let worldwideRadioLocale = pumpWorldwideRadioLocale {
+                    pumpState.worldWideRadioLocale = worldwideRadioLocale
+                }
                 
                 if let timeZone = pumpTimeZone {
                     pumpState.timeZone = timeZone
@@ -226,12 +244,18 @@ class DeviceDataManager {
         let pumpState: PumpState?
         
         if let pumpID = pumpID {
+            let worldwideRadioLocale = Config.sharedInstance().worldwideRadioLocale
+
             pumpState = PumpState(pumpID: pumpID)
             
             if let timeZone = pumpTimeZone {
                 pumpState?.timeZone = timeZone
             }
-        } else {
+
+            if let worldwideRadioLocale = pumpWorldwideRadioLocale {
+                pumpState?.worldwideRadioLocale = worldwideRadioLocale
+            }
+} else {
             pumpState = nil
         }
         

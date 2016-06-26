@@ -222,9 +222,14 @@ public class PumpOps {
 
     func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
         device.runSession { (session) -> Void in
+            let defaultFrequency = self.pumpState.worldwideRadioLocale ? self.pumpState.worldwideDefaultFrequency : self.pumpState.americanDefaultFrequency
+            let scanFrequencies = self.pumpState.worldwideRadioLocale ? self.pumpState.worldwideFrequencies : self.pumpState.americanFrequencies
+            
+            NSLog("Tuning for pump - using default frequency %f", defaultFrequency);
+            
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
-                let response = try ops.scanForPump(self.pumpState.scanFrequencies)
+                let response = try ops.scanForPump(defaultFrequency, frequencies: scanFrequencies)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completion(.Success(response))
                 })

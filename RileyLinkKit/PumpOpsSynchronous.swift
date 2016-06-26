@@ -277,10 +277,12 @@ class PumpOpsSynchronous {
         NSLog("Set frequency to %f", freqMHz)
     }
     
-    internal func scanForPump(frequencies: [Double]) throws -> FrequencyScanResults {
-        
+    internal func scanForPump(defaultFrequency: Double, frequencies: [Double]) throws -> FrequencyScanResults {
         var results = FrequencyScanResults()
-        
+
+        // Start off at the default frequency, so that we have the highest chance of waking the pump
+        try setBaseFrequency(defaultFrequency)
+
         do {
             // Needed to put the pump in listen mode
             try wakeup()
@@ -322,7 +324,11 @@ class PumpOpsSynchronous {
             results.bestFrequency = sortedTrials.first!.frequencyMHz
             try setBaseFrequency(results.bestFrequency)
         } else {
-            throw PumpCommsError.RFCommsFailure("No pump responses during scan")
+            // If we couldn't find the pump on any frequency, reset things to the default frequency,
+            // otherwise the radio will remain on the last frequency used (probably too high for most cases)
+            try setBaseFrequency(defaultFrequency)
+            
+            throw PumpCommsError.RFCommsFailure("No pump responses during scan. Using default frequency")
         }
         
         return results

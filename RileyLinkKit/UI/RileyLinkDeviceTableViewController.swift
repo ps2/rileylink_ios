@@ -162,6 +162,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
             case .CustomName:
                 cell.textLabel?.text = NSLocalizedString("Name", comment: "The title of the cell showing device name")
                 cell.detailTextLabel?.text = device.name
+                cell.accessoryType = .DisclosureIndicator
             case .Version:
                 cell.textLabel?.text = NSLocalizedString("Firmware Version", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = device.firmwareVersion
@@ -432,22 +433,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 }
             case .PressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-//                    self.device.ops?.pressButton({ (response) in
-//                        dispatch_async(dispatch_get_main_queue()) {
-//                            switch response {
-//                            case .Success(let msg):
-//                                completionHandler(responseText: "Result: " + msg)
-//                            case .Failure(let error):
-//                                completionHandler(responseText: String(error))
-//                            }
-//                        }
-//                    })
-                    self.device.ops?.setTempBasal(1.2, duration: 60*30, completion: { (response) in
-                        switch response {
-                        case .Success(let msg):
-                            completionHandler(responseText: "Result: " + String(msg.timeRemaining))
-                        case .Failure(let error):
-                            completionHandler(responseText: String(error))
+                    self.device.ops?.pressButton({ (response) in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            switch response {
+                            case .Success(let msg):
+                                completionHandler(responseText: "Result: " + msg)
+                            case .Failure(let error):
+                                completionHandler(responseText: String(error))
+                            }
                         }
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
@@ -500,8 +493,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 break
 
             }
-
-            tableView.reloadData()
         }
     }
 

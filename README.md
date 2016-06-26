@@ -9,3 +9,7 @@ The RileyLink iOS app connects to a RileyLink device via Bluetooth Low Energy (B
 * Pump ID - Enter in your six digit pump ID
 * Nightscout URL - Should look like `http://mysite.azurewebsites.net`. You can use http or https.  Trailing slash or no trailing slash.
 * Nightscout API Secret - Use the unhashed form, exactly specified in your `API_SECRET` variable.
+
+### Nightscout
+
+To see treatments and pump data uploaded to nightscout, you'll need to be running the [dev branch](https://github.com/nightscout/cgm-remote-monitor/tree/dev) of cgm-remote-monitor.  You'll also want to set the nightscout DEVICESTATUS_ADVANCED variable to 'true'.

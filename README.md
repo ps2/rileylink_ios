@@ -12,4 +12,10 @@ The RileyLink iOS app connects to a RileyLink device via Bluetooth Low Energy (B
 
 ### Nightscout
 
-To see treatments and pump data uploaded to nightscout, you'll need to be running the [dev branch](https://github.com/nightscout/cgm-remote-monitor/tree/dev) of cgm-remote-monitor.  You'll also want to set the nightscout DEVICESTATUS_ADVANCED variable to 'true'.
+To see treatments and pump data uploaded to nightscout, you'll need to be running the [dev branch](https://github.com/nightscout/cgm-remote-monitor/tree/dev) of cgm-remote-monitor.  You'll want to set the following Nightscout variables:
+
+* DEVICESTATUS_ADVANCED = true
+* ENABLE = pump openaps basal careportal iob
+* PUMP_FIELDS = reservoir battery clock status
+
+

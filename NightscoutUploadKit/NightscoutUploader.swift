@@ -169,7 +169,7 @@ public class NightscoutUploader: NSObject {
                 "timestamp": pumpDateStr,
                 "bolusiob": status.iob,
             ],
-            "reservoir": status.reservoirRemainingUnits,
+            "reservoir": Double(round(status.reservoirRemainingUnits*1000)/1000,
             "battery": [
                 "percent": status.batteryRemainingPercent
             ]

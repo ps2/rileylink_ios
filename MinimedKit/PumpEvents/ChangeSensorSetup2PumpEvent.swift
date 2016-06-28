@@ -14,8 +14,12 @@ public struct ChangeSensorSetup2PumpEvent: TimestampedPumpEvent {
     public let timestamp: NSDateComponents
     
     public init?(availableData: NSData, pumpModel: PumpModel) {
-        length = 37
-        
+        if pumpModel.hasLowSuspend {
+            length = 41
+        } else {
+            length = 37
+        }
+
         guard length <= availableData.length else {
             return nil
         }

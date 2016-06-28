@@ -204,6 +204,10 @@
 		C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */; };
+		C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */; };
+		C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */; };
+		C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */; };
+		C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
@@ -534,6 +538,10 @@
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSUserDefaults.swift; path = NightscoutUploadKit/NSUserDefaults.swift; sourceTree = SOURCE_ROOT; };
+		C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
+		C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessage.swift; path = Messages/MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -707,8 +715,7 @@
 		43722FAF1CB9F7630038B7F2 /* RileyLinkKit */ = {
 			isa = PBXGroup;
 			children = (
-				439731251CF21BB800F474E5 /* Views */,
-				C170C9951CECD76500F3D8E5 /* ViewControllers */,
+				C1B4A9511D1E610F003B8985 /* UI */,
 				C170C98C1CECD6CE00F3D8E5 /* Extensions */,
 				43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */,
 				43722FB21CB9F7640038B7F2 /* Info.plist */,
@@ -730,15 +737,6 @@
 				43722FC01CB9F7640038B7F2 /* Info.plist */,
 			);
 			path = RileyLinkKitTests;
-			sourceTree = "<group>";
-		};
-		439731251CF21BB800F474E5 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
-				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
@@ -945,20 +943,12 @@
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
 				431185AE1CF25A590059ED98 /* IdentifiableClass.swift */,
 				C170C9901CECD72800F3D8E5 /* NSDate.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		C170C9951CECD76500F3D8E5 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
-				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
@@ -1072,6 +1062,20 @@
 				C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */,
 			);
 			name = Managers;
+			sourceTree = "<group>";
+		};
+		C1B4A9511D1E610F003B8985 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */,
+				C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */,
+				C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */,
+				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
+				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
+				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
+				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
@@ -1452,6 +1456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				431185AA1CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib in Resources */,
+				C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1545,6 +1550,8 @@
 				434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */,
 				C170C9921CECD72800F3D8E5 /* NSDate.swift in Sources */,
 				431185AF1CF25A590059ED98 /* IdentifiableClass.swift in Sources */,
+				C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */,
+				C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */,
 				434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* NSData.swift in Sources */,
 				439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */,
@@ -1556,6 +1563,7 @@
 				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
 				434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
+				C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

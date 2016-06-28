@@ -24,11 +24,9 @@ class RileyLinkListTableViewController: UITableViewController {
                 switch note.name {
                 case RileyLinkDeviceManager.DidDiscoverDeviceNotification:
                     self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: deviceManager.devices.count - 1, inSection: 0)], withRowAnimation: .Automatic)
-                case RileyLinkDeviceManager.ConnectionStateDidChangeNotification:
-                    if let device = note.userInfo?[RileyLinkDeviceManager.RileyLinkDeviceKey] as? RileyLinkDevice, index = deviceManager.devices.indexOf({ $0 === device }) {
-                        self?.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
-                    }
-                case RileyLinkDeviceManager.RSSIDidChangeNotification:
+                case RileyLinkDeviceManager.ConnectionStateDidChangeNotification,
+                     RileyLinkDeviceManager.RSSIDidChangeNotification,
+                     RileyLinkDeviceManager.NameDidChangeNotification:
                     if let device = note.userInfo?[RileyLinkDeviceManager.RileyLinkDeviceKey] as? RileyLinkDevice, index = deviceManager.devices.indexOf({ $0 === device }) {
                         self?.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
                     }

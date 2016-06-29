@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CommandResponseViewController: UIViewController {
+class CommandResponseViewController: UIViewController, UIActivityItemSource {
     typealias Command = (completionHandler: (responseText: String) -> Void) -> String
 
     init(command: Command) {
@@ -36,6 +36,28 @@ class CommandResponseViewController: UIViewController {
         textView.text = command { [weak self] (responseText) -> Void in
             self?.textView.text = responseText
         }
+        textView.editable = false
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(shareText(_:)))
     }
 
+    @objc func shareText(_: AnyObject?) {
+        let activityVC = UIActivityViewController(activityItems: [self], applicationActivities: nil)
+
+        presentViewController(activityVC, animated: true, completion: nil)
+    }
+
+    // MARK: - UIActivityItemSource
+
+    func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+        return title ?? textView.text
+    }
+
+    func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+        return textView.attributedText
+    }
+
+    func activityViewController(activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
+        return title ?? textView.text
+    }
 }

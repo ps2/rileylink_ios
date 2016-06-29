@@ -1067,13 +1067,13 @@
 		C1B4A9511D1E610F003B8985 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
+				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
+				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
+				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
 				C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */,
 				C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */,
 				C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */,
-				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
-				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
-				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
-				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";

@@ -103,7 +103,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case Connection
         case IdleStatus
 
-        static let count = 4
+        static let count = 5
     }
 
     private enum PumpRow: Int {

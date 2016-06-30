@@ -54,10 +54,10 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
         }
 
         let maxBolusTicks: UInt8 = rxData[7]
-        maxBolus = Double(maxBolusTicks) * self.dynamicType.maxBolusMultiplier
+        maxBolus = Double(maxBolusTicks) / self.dynamicType.maxBolusMultiplier
 
         let maxBasalTicks: Int = Int(bigEndianBytes: rxData[8...9])
-        maxBasal = Double(maxBasalTicks) * self.dynamicType.maxBasalMultiplier
+        maxBasal = Double(maxBasalTicks) / self.dynamicType.maxBasalMultiplier
 
         let rawSelectedBasalProfile: UInt8 = rxData[12]
         selectedBasalProfile = BasalProfile(rawValue: rawSelectedBasalProfile)

@@ -61,7 +61,7 @@ class DeviceDataManager {
                 rileyLinkManager.pumpState = nil
             }
             
-            nightscoutUploader.pumpID = pumpID
+            nightscoutUploader.reset()
             
             Config.sharedInstance().pumpID = pumpID
         }
@@ -240,11 +240,10 @@ class DeviceDataManager {
             autoConnectIDs: connectedPeripheralIDs
         )
         
-        nightscoutUploader = NightscoutUploader(siteURL: nightscoutURL, APISecret: nightscoutAPISecret, pumpID: pumpID)
+        nightscoutUploader = NightscoutUploader(siteURL: nightscoutURL, APISecret: nightscoutAPISecret)
         nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
             print("Error \(error), while \(context)")
         }
-        nightscoutUploader.pumpID = pumpID
         
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         

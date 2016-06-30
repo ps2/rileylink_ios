@@ -18,9 +18,13 @@ public enum UploadError: ErrorType {
     case MissingTimezone
 }
 
-public class NightscoutUploader: NSObject {
+private let defaultNightscoutEntriesPath = "/api/v1/entries.json"
+private let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
+private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
 
-    enum DexcomSensorError: UInt8 {
+public class NightscoutUploader {
+
+    enum DexcomSensorError: Int {
         case SensorNotActive = 1
         case SensorNotCalibrated = 5
         case BadRF = 12
@@ -29,46 +33,35 @@ public class NightscoutUploader: NSObject {
     public var siteURL: String?
     public var APISecret: String?
     
-    var entries: [AnyObject]
-    var deviceStatuses: [AnyObject]
-    var treatmentsQueue: [NightscoutTreatment]
+    private(set) var entries = [[String: AnyObject]]()
+    private(set) var deviceStatuses = [[String: AnyObject]]()
+    private(set) var treatmentsQueue = [NightscoutTreatment]()
     
-    var lastMeterMessageRxTime: NSDate?
+    private(set) var lastMeterMessageRxTime: NSDate?
     
-    public private(set) var observingPumpEventsSince: NSDate
+    public private(set) var observingPumpEventsSince: NSDate!
     
-    var lastStoredTreatmentTimestamp: NSDate = NSDate.distantPast() {
-        didSet {
-            NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp = lastStoredTreatmentTimestamp
+    private(set) var lastStoredTreatmentTimestamp: NSDate? {
+        get {
+            return NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp
         }
-    }
-    
-    let defaultNightscoutEntriesPath = "/api/v1/entries.json"
-    let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
-    let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
-    
-    public var errorHandler: ((error: ErrorType, context: String) -> Void)?
-    
-    public var pumpID: String? {
-        didSet {
-            if oldValue != nil {
-                self.observingPumpEventsSince = NSDate().dateByAddingTimeInterval(60*60*24*(-1))
-            }
+        set {
+            NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp = newValue
         }
     }
 
-    public init(siteURL: String?, APISecret: String?, pumpID: String?) {
-        entries = [AnyObject]()
-        treatmentsQueue = [NightscoutTreatment]()
-        deviceStatuses = [AnyObject]()
-        
+    public var errorHandler: ((error: ErrorType, context: String) -> Void)?
+
+    public func reset() {
+        observingPumpEventsSince = NSDate(timeIntervalSinceNow: NSTimeInterval(hours: -24))
+        lastStoredTreatmentTimestamp = nil
+    }
+
+    public init(siteURL: String?, APISecret: String?) {
         self.siteURL = siteURL
         self.APISecret = APISecret
-        self.pumpID = pumpID
         
-        self.observingPumpEventsSince = NSUserDefaults.standardUserDefaults().lastStoredTreatmentTimestamp ?? NSDate().dateByAddingTimeInterval(60*60*24*(-1))
-        
-        super.init()
+        observingPumpEventsSince = lastStoredTreatmentTimestamp ?? NSDate(timeIntervalSinceNow: NSTimeInterval(hours: -24))
     }
     
     // MARK: - Processing data from pump
@@ -117,12 +110,6 @@ public class NightscoutUploader: NSObject {
     
     public func handlePumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
-        enum DexcomSensorErrorType: Int {
-            case DX_SENSOR_NOT_ACTIVE = 1
-            case DX_SENSOR_NOT_CALIBRATED = 5
-            case DX_BAD_RF = 12
-        }
-        
         var recordSGV = true
         
         let glucose: Int = {
@@ -132,12 +119,12 @@ public class NightscoutUploader: NSObject {
             case .HighBG:
                 return 401
             case .WeakSignal:
-                return DexcomSensorErrorType.DX_BAD_RF.rawValue
+                return DexcomSensorError.BadRF.rawValue
             case .MeterBGNow, .CalError:
-                return DexcomSensorErrorType.DX_SENSOR_NOT_CALIBRATED.rawValue
+                return DexcomSensorError.SensorNotCalibrated.rawValue
             case .Lost, .Missing, .Ended, .Unknown, .Off, .Warmup:
                 recordSGV = false
-                return DexcomSensorErrorType.DX_SENSOR_NOT_ACTIVE.rawValue
+                return DexcomSensorError.SensorNotActive.rawValue
             }
         }()
         
@@ -235,7 +222,7 @@ public class NightscoutUploader: NSObject {
         
         let date = NSDate()
         let epochTime = date.timeIntervalSince1970 * 1000
-        let entry = [
+        let entry: [String: AnyObject] = [
             "date": epochTime,
             "dateString": TimeFormat.timestampStrFromDate(date),
             "mbg": msg.glucose,
@@ -244,7 +231,7 @@ public class NightscoutUploader: NSObject {
         ]
         
         // Skip duplicates
-        if lastMeterMessageRxTime == nil || lastMeterMessageRxTime!.timeIntervalSinceNow < -3 * 60 {
+        if lastMeterMessageRxTime == nil || lastMeterMessageRxTime!.timeIntervalSinceNow.minutes < -3 {
             entries.append(entry)
             lastMeterMessageRxTime = NSDate()
         }
@@ -312,7 +299,7 @@ public class NightscoutUploader: NSObject {
     
     func flushDeviceStatuses() {
         let inFlight = deviceStatuses
-        deviceStatuses =  [AnyObject]()
+        deviceStatuses = []
         uploadToNS(inFlight, endpoint: defaultNightscoutDeviceStatusPath) { (error) in
             if let error = error {
                 self.errorHandler?(error: error, context: "Uploading device status")
@@ -324,7 +311,7 @@ public class NightscoutUploader: NSObject {
     
     func flushEntries() {
         let inFlight = entries
-        entries =  [AnyObject]()
+        entries = []
         uploadToNS(inFlight, endpoint: defaultNightscoutEntriesPath) { (error) in
             if let error = error {
                 self.errorHandler?(error: error, context: "Uploading nightscout entries")
@@ -336,7 +323,7 @@ public class NightscoutUploader: NSObject {
     
     func flushTreatments() {
         let inFlight = treatmentsQueue
-        treatmentsQueue =  [NightscoutTreatment]()
+        treatmentsQueue = []
         uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (error) in
             if let error = error {
                 self.errorHandler?(error: error, context: "Uploading nightscout treatment records")

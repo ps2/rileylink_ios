@@ -63,6 +63,8 @@
 		43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC81D1268B300AAD278 /* TimeFormat.swift */; };
 		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
 		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
+		43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
+		43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43CA93251CB8BB33000026B5 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */; };
 		43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */; };
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
@@ -117,7 +119,6 @@
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
-		C14C8A801C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843721CF009E600D53CCD /* SettingsTableViewController.swift */; };
@@ -204,6 +205,10 @@
 		C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */; };
+		C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */; };
+		C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */; };
+		C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */; };
+		C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
@@ -233,7 +238,6 @@
 		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
 		C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */; };
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
-		C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 /* End PBXBuildFile section */
@@ -312,6 +316,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		43B6E0151D24E4610022E6D7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10D9BB81C82614F00378342 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -534,6 +548,10 @@
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSUserDefaults.swift; path = NightscoutUploadKit/NSUserDefaults.swift; sourceTree = SOURCE_ROOT; };
+		C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
+		C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessage.swift; path = Messages/MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -564,7 +582,6 @@
 		C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8Tests.swift; sourceTree = "<group>"; };
 		C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16.swift; sourceTree = "<group>"; };
 		C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16Tests.swift; sourceTree = "<group>"; };
-		C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpMessageTests.swift; sourceTree = "<group>"; };
 		C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RileyLink-Bridging-Header.h"; sourceTree = "<group>"; };
 		C1EB955C1C887FE5002517DF /* HistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
@@ -707,8 +724,7 @@
 		43722FAF1CB9F7630038B7F2 /* RileyLinkKit */ = {
 			isa = PBXGroup;
 			children = (
-				439731251CF21BB800F474E5 /* Views */,
-				C170C9951CECD76500F3D8E5 /* ViewControllers */,
+				C1B4A9511D1E610F003B8985 /* UI */,
 				C170C98C1CECD6CE00F3D8E5 /* Extensions */,
 				43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */,
 				43722FB21CB9F7640038B7F2 /* Info.plist */,
@@ -730,15 +746,6 @@
 				43722FC01CB9F7640038B7F2 /* Info.plist */,
 			);
 			path = RileyLinkKitTests;
-			sourceTree = "<group>";
-		};
-		439731251CF21BB800F474E5 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
-				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
@@ -778,7 +785,6 @@
 				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
 				43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */,
 				43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */,
-				C1EAD6E51C83966D006DBA60 /* PumpMessageTests.swift */,
 				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
 				C121985D1C8DE72500BC374C /* Messages */,
 			);
@@ -945,20 +951,12 @@
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
 				431185AE1CF25A590059ED98 /* IdentifiableClass.swift */,
 				C170C9901CECD72800F3D8E5 /* NSDate.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		C170C9951CECD76500F3D8E5 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
-				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
@@ -1072,6 +1070,20 @@
 				C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */,
 			);
 			name = Managers;
+			sourceTree = "<group>";
+		};
+		C1B4A9511D1E610F003B8985 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
+				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
+				431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */,
+				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
+				C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */,
+				C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */,
+				C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
@@ -1348,6 +1360,7 @@
 				C1B383101CD0665D00CE7782 /* Sources */,
 				C1B383111CD0665D00CE7782 /* Frameworks */,
 				C1B383121CD0665D00CE7782 /* Resources */,
+				43B6E0151D24E4610022E6D7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1452,6 +1465,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				431185AA1CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib in Resources */,
+				C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1545,6 +1559,8 @@
 				434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */,
 				C170C9921CECD72800F3D8E5 /* NSDate.swift in Sources */,
 				431185AF1CF25A590059ED98 /* IdentifiableClass.swift in Sources */,
+				C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */,
+				C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */,
 				434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* NSData.swift in Sources */,
 				439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */,
@@ -1556,6 +1572,7 @@
 				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
 				434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
+				C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1685,7 +1702,6 @@
 				C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */,
 				C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
-				C1EAD6E61C83966D006DBA60 /* PumpMessageTests.swift in Sources */,
 				43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */,
 				C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */,
@@ -1734,7 +1750,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C14C8A801C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift in Sources */,
 				C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1761,6 +1776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */,
 				C1B3831C1CD0665D00CE7782 /* NightscoutUploadKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1847,11 +1863,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1875,11 +1891,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1938,11 +1954,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1968,11 +1984,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2031,11 +2047,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2060,11 +2076,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2133,7 +2149,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2175,7 +2191,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2280,11 +2296,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2313,11 +2329,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 7;
+				DYLIB_CURRENT_VERSION = 8;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2344,6 +2360,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = NightscoutUploadKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2363,6 +2383,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = NightscoutUploadKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

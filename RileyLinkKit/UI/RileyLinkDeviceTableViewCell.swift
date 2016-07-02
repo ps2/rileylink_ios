@@ -54,5 +54,4 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
     
 }
 
-extension RileyLinkDeviceTableViewCell: IdentifiableClass { }
 

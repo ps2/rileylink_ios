@@ -215,5 +215,35 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
         
         XCTAssertEqual(GlucoseTrend.Flat, body.glucoseTrend)
     }
-    
+ 
+    func testClockType24Hour() {
+        let message = PumpMessage(rxData: NSData(hexadecimalString: "a295099004b6d5971f1510070a013f3a0002dd020105bd08880825000502000755171e0010070a00008d")!)!
+        
+        let body = message.messageBody as! MySentryPumpStatusMessageBody
+        
+        let dateComponents = NSDateComponents()
+        dateComponents.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        dateComponents.year = 2016
+        dateComponents.month = 7
+        dateComponents.day = 10
+        dateComponents.hour = 23
+        dateComponents.minute = 31
+        dateComponents.second = 21
+        
+        XCTAssertEqual(dateComponents, body.pumpDateComponents)
+        
+        let glucoseDateComponents = NSDateComponents()
+        glucoseDateComponents.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        glucoseDateComponents.year = 2016
+        glucoseDateComponents.month = 7
+        glucoseDateComponents.day = 10
+        glucoseDateComponents.hour = 23
+        glucoseDateComponents.minute = 30
+        glucoseDateComponents.second = 0
+
+        XCTAssertEqual(glucoseDateComponents, body.glucoseDateComponents)
+        
+        XCTAssertEqual(ClockType.TwentyFourHour, body.clockType)
+    }
+   
 }

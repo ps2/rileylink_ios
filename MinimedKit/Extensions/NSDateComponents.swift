@@ -13,12 +13,12 @@ extension NSDateComponents {
     convenience init(mySentryBytes: [UInt8]) {
         self.init()
 
-        hour   = Int(mySentryBytes[0])
-        minute = Int(mySentryBytes[1])
-        second = Int(mySentryBytes[2])
+        hour   = Int(mySentryBytes[0] & 0b00011111)
+        minute = Int(mySentryBytes[1] & 0b00111111)
+        second = Int(mySentryBytes[2] & 0b00111111)
         year   = Int(mySentryBytes[3]) + 2000
-        month  = Int(mySentryBytes[4])
-        day    = Int(mySentryBytes[5])
+        month  = Int(mySentryBytes[4] & 0b00001111)
+        day    = Int(mySentryBytes[5] & 0b00011111)
 
         calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
     }

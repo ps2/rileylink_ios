@@ -123,6 +123,7 @@
 		C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843721CF009E600D53CCD /* SettingsTableViewController.swift */; };
 		C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
+		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
 		C170C98E1CECD6F300F3D8E5 /* CBPeripheralState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */; };
 		C170C9921CECD72800F3D8E5 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9901CECD72800F3D8E5 /* NSDate.swift */; };
 		C170C9991CECD80000F3D8E5 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */; };
@@ -457,6 +458,7 @@
 		C16843721CF009E600D53CCD /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
 		C170C9901CECD72800F3D8E5 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
@@ -996,6 +998,7 @@
 				C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */,
 				C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */,
 				C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */,
+				C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */,
 				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
 				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
 				C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */,
@@ -1660,6 +1663,7 @@
 				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
 				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,
+				C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */,
 				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,
 				43CA932E1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift in Sources */,
 				C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */,

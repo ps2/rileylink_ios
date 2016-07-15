@@ -196,7 +196,13 @@ class DeviceDataManager {
     
     private func getPumpHistory(device: RileyLinkDevice) {
         lastHistoryAttempt = NSDate()
-        device.ops!.getHistoryEventsSinceDate(nightscoutUploader.observingPumpEventsSince) { (response) -> Void in
+        
+        guard let ops = device.ops else {
+            print("Missing pumpOps; is your pumpId configured?")
+            return
+        }
+        
+        ops.getHistoryEventsSinceDate(nightscoutUploader.observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):
                 NSLog("fetchHistory succeeded.")
@@ -276,7 +282,6 @@ class DeviceDataManager {
     }
     
     // MARK: - Device updates
-    
     func rileyLinkAdded(note: NSNotification)
     {
         if let device = note.object as? RileyLinkBLEDevice  {

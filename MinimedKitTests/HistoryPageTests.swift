@@ -260,6 +260,11 @@ class HistoryPageTests: XCTestCase {
         XCTAssertEqual(93, events.count)
 
         let mealMarker = events[75] as! JournalEntryMealMarkerPumpEvent
+        
+        XCTAssertEqual(JournalEntryMealMarkerPumpEvent.CarbUnits.Grams, mealMarker.carbUnits)
+        XCTAssertEqual(268, mealMarker.carbohydrates)
+        
+        
         XCTAssertEqual(NSDateComponents(gregorianYear: 2016, month: 7, day: 11, hour: 5, minute: 9, second: 29), mealMarker.timestamp)
 
     }

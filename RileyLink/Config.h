@@ -14,7 +14,7 @@
 
 + (nonnull Config *)sharedInstance;
 
-@property (nonatomic, nullable, strong) NSString *nightscoutURL;
+@property (nonatomic, nullable, strong) NSURL *nightscoutURL;
 @property (nonatomic, nullable, strong) NSString *nightscoutAPISecret;
 @property (nonatomic, nullable, strong) NSString *pumpID;
 @property (nonatomic, nullable, strong) NSTimeZone *pumpTimeZone;

@@ -30,7 +30,7 @@ public class NightscoutUploader {
         case BadRF = 12
     }
     
-    public var siteURL: String?
+    public var siteURL: NSURL?
     public var APISecret: String?
     
     private(set) var entries = [[String: AnyObject]]()
@@ -57,7 +57,7 @@ public class NightscoutUploader {
         lastStoredTreatmentTimestamp = nil
     }
 
-    public init(siteURL: String?, APISecret: String?) {
+    public init(siteURL: NSURL?, APISecret: String?) {
         self.siteURL = siteURL
         self.APISecret = APISecret
         
@@ -262,38 +262,36 @@ public class NightscoutUploader {
         }
 
         
-        if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
-            let request = NSMutableURLRequest(URL: uploadURL)
-            do {
+        
+        let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
+        let request = NSMutableURLRequest(URL: uploadURL)
+        do {
+            
+            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+            request.HTTPMethod = "POST"
+            
+            request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+            request.setValue("application/json", forHTTPHeaderField:"Accept")
+            request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
+            request.HTTPBody = sendData
+            
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
                 
-                let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
-                request.HTTPMethod = "POST"
+                if let error = error {
+                    completion(error)
+                    return
+                }
                 
-                request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-                request.setValue("application/json", forHTTPHeaderField:"Accept")
-                request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
-                request.HTTPBody = sendData
-                
-                let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                    
-                    if let error = error {
-                        completion(error)
-                        return
-                    }
-                    
-                    if let httpResponse = response as? NSHTTPURLResponse where
-                        httpResponse.statusCode != 200 {
-                        completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
-                    } else {
-                        completion(nil)
-                    }
-                })
-                task.resume()
-            } catch let error as NSError {
-                completion(error)
-            }
-        } else {
-            completion(UploadError.InvalidNightscoutURL("\(siteURL), \(endpoint)"))
+                if let httpResponse = response as? NSHTTPURLResponse where
+                    httpResponse.statusCode != 200 {
+                    completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
+                } else {
+                    completion(nil)
+                }
+            })
+            task.resume()
+        } catch let error as NSError {
+            completion(error)
         }
     }
     
@@ -336,4 +334,19 @@ public class NightscoutUploader {
             }
         }
     }
+    
+//    func checkAuth() {
+//        NSURLSession.sharedSession().dataTaskWithURL(siteURL) { (_, response, error) in
+//            var error: ErrorType? = error
+//            if error == nil, let response = response as? NSHTTPURLResponse where response.statusCode >= 300 {
+//                error = LoopError.ConnectionError
+//            }
+//            
+//            self.isAuthorized = error == nil
+//            
+//            completion(success: self.isAuthorized, error: error)
+//            }.resume()
+//        
+//
+//    }
 }

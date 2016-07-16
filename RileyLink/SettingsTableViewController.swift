@@ -94,7 +94,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
             case .NightscoutURL:
                 configCell.textLabel?.text = NSLocalizedString("Nightscout URL", comment: "The title text for the Nightscout URL config value")
-                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutURL ?? TapToSetString
+                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutURL?.absoluteString ?? TapToSetString
             case .NightscoutAPISecret:
                 configCell.textLabel?.text = NSLocalizedString("Nightscout API Secret", comment: "The title text for the Nightscout API Secret config value")
                 configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutAPISecret ?? TapToSetString
@@ -153,7 +153,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                     vc.value = DeviceDataManager.sharedManager.pumpID
                 case .NightscoutURL:
                     vc.placeholder = NSLocalizedString("Enter the URL of your Nightscout site", comment: "The placeholder text instructing users how to enter the Nightscout URL")
-                    vc.value = DeviceDataManager.sharedManager.nightscoutURL
+                    vc.value = DeviceDataManager.sharedManager.nightscoutURL?.absoluteString
                     vc.keyboardType = .URL
                 case .NightscoutAPISecret:
                     vc.placeholder = NSLocalizedString("Enter your Nightscout API Secret", comment: "The placeholder text instructing users how to enter their Nightscout API Secret")
@@ -184,7 +184,11 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .PumpID:
                 DeviceDataManager.sharedManager.pumpID = controller.value
             case .NightscoutURL:
-                DeviceDataManager.sharedManager.nightscoutURL = controller.value
+                if let urlStr = controller.value {
+                    DeviceDataManager.sharedManager.nightscoutURL = NSURL(string: urlStr)
+                } else {
+                    DeviceDataManager.sharedManager.nightscoutURL = nil
+                }
             case .NightscoutAPISecret:
                 DeviceDataManager.sharedManager.nightscoutAPISecret = controller.value
             }

@@ -67,12 +67,8 @@ class DeviceDataManager {
         }
     }
     
-    var nightscoutURL: String? = Config.sharedInstance().nightscoutURL {
-        didSet {
-            if nightscoutURL?.characters.count == 0 {
-                nightscoutURL = nil
-            }
-            
+    var nightscoutURL: NSURL? = Config.sharedInstance().nightscoutURL {
+        didSet {            
             if let nightscoutURL = nightscoutURL {
                 nightscoutUploader.siteURL = nightscoutURL
             }

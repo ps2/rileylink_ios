@@ -28,7 +28,7 @@ public struct CalBGForPHPumpEvent: TimestampedPumpEvent {
         }
         
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
-        amount = ((d(6) & 0b10000000) << 1) + d(1)
+        amount = ((d(4) & 0b10000000) << 2) + ((d(6) & 0b10000000) << 1) + d(1)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

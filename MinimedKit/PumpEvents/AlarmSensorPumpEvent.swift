@@ -22,7 +22,7 @@ public struct AlarmSensorPumpEvent: TimestampedPumpEvent {
 
         rawData = availableData[0..<length]
         
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = NSDateComponents(pumpEventData: availableData, offset: 3)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

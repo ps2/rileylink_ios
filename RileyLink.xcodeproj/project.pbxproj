@@ -54,7 +54,7 @@
 		43722FC41CB9F7640038B7F2 /* RileyLinkKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43722FCB1CB9F7DB0038B7F2 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		43722FCC1CB9F7DB0038B7F2 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
-		438D39221D19011700D40CA4 /* UnknownPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438D39211D19011700D40CA4 /* UnknownPumpEvent.swift */; };
+		438D39221D19011700D40CA4 /* PlaceholderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */; };
 		439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */; };
 		43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */; };
 		43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */; };
@@ -389,7 +389,7 @@
 		43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RileyLinkKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43722FBE1CB9F7640038B7F2 /* RileyLinkKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkKitTests.swift; sourceTree = "<group>"; };
 		43722FC01CB9F7640038B7F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		438D39211D19011700D40CA4 /* UnknownPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnknownPumpEvent.swift; sourceTree = "<group>"; };
+		438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderPumpEvent.swift; sourceTree = "<group>"; };
 		439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadRemainingInsulinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponentsTests.swift; sourceTree = "<group>"; };
@@ -1023,7 +1023,7 @@
 				C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */,
 				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
 				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
-				438D39211D19011700D40CA4 /* UnknownPumpEvent.swift */,
+				438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -1660,7 +1660,7 @@
 				C1842C1E1C8FA45100DB42AC /* ChangeBasalProfilePumpEvent.swift in Sources */,
 				C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */,
 				C1842C151C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift in Sources */,
-				438D39221D19011700D40CA4 /* UnknownPumpEvent.swift in Sources */,
+				438D39221D19011700D40CA4 /* PlaceholderPumpEvent.swift in Sources */,
 				C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */,
 				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,
 				C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */,

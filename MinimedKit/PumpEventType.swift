@@ -39,6 +39,7 @@ public enum PumpEventType: UInt8 {
     case BGReceived = 0x3f
     case JournalEntryMealMarker = 0x40
     case JournalEntryExerciseMarker = 0x41
+    case JournalEntryInsulinMarker = 0x42
     case JournalEntryOtherMarker = 0x43
     case ChangeSensorSetup2 = 0x50
     case ChangeSensorRateOfChangeAlertSetup = 0x56
@@ -126,6 +127,8 @@ public enum PumpEventType: UInt8 {
             return BGReceivedPumpEvent.self
         case .JournalEntryExerciseMarker:
             return JournalEntryExerciseMarkerPumpEvent.self
+        case .JournalEntryInsulinMarker:
+            return JournalEntryInsulinMarkerPumpEvent.self
         case .JournalEntryMealMarker:
             return JournalEntryMealMarkerPumpEvent.self
         case .ChangeSensorSetup2:

@@ -121,6 +121,7 @@
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
+		C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */; };
 		C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843721CF009E600D53CCD /* SettingsTableViewController.swift */; };
 		C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
@@ -465,6 +466,7 @@
 		C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NightscoutPumpEventsTests.swift; path = ../RileyLinkTests/NightscoutPumpEventsTests.swift; sourceTree = "<group>"; };
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryInsulinMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C16843721CF009E600D53CCD /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
@@ -1007,6 +1009,7 @@
 				C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */,
 				C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */,
 				C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */,
+				C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */,
 				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
 				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
 				C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */,
@@ -1595,6 +1598,7 @@
 				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
 				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
+				C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */,
 				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
 				C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */,
 				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,

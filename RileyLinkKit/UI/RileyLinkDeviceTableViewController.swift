@@ -27,11 +27,22 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         title = device.name
 
         self.observe()
+        
+        NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(RileyLinkDeviceTableViewController.updateRSSI), userInfo: nil, repeats: true)
+    }
+    
+    func updateRSSI()
+    {
+        device.peripheral.readRSSI()
     }
 
     // References to registered notification center observers
+    private var notificationObservers: [AnyObject] = []
+    
     deinit {
-        deviceObserver = nil
+        for observer in notificationObservers {
+            NSNotificationCenter.defaultCenter().removeObserver(observer)
+        }
     }
 
     private var deviceObserver: AnyObject? {
@@ -44,16 +55,25 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     private func observe() {
         let center = NSNotificationCenter.defaultCenter()
-
-        deviceObserver = center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
-
+        
+        notificationObservers = [
+            center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+                
                 let indexPath = NSIndexPath(forRow: DeviceRow.CustomName.rawValue, inSection: Section.Device.rawValue)
                 self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
                 self?.title = self?.device.name
-        }
+            },
+            center.addObserverForName(RileyLinkDeviceManager.ConnectionStateDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+                let indexPath = NSIndexPath(forRow: DeviceRow.Connection.rawValue, inSection: Section.Device.rawValue)
+                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            },
+            center.addObserverForName(RileyLinkDeviceManager.RSSIDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+                let indexPath = NSIndexPath(forRow: DeviceRow.RSSI.rawValue, inSection: Section.Device.rawValue)
+                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            }
+        ]
     }
-
-
+    
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 

@@ -122,6 +122,22 @@
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */; };
+		C14FFC4C1D3D6D510049CF85 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4B1D3D6D510049CF85 /* AuthenticationViewController.swift */; };
+		C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */; };
+		C14FFC511D3D6DEF0049CF85 /* ServiceCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */; };
+		C14FFC531D3D70170049CF85 /* ValidatingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC521D3D70170049CF85 /* ValidatingIndicatorView.swift */; };
+		C14FFC551D3D72A50049CF85 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC541D3D72A50049CF85 /* UIViewController.swift */; };
+		C14FFC581D3D72D30049CF85 /* AuthenticationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC561D3D72D30049CF85 /* AuthenticationTableViewCell.swift */; };
+		C14FFC591D3D72D30049CF85 /* AuthenticationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C14FFC571D3D72D30049CF85 /* AuthenticationTableViewCell.xib */; };
+		C14FFC5B1D3D74F90049CF85 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
+		C14FFC5E1D3D75200049CF85 /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5C1D3D75200049CF85 /* ButtonTableViewCell.swift */; };
+		C14FFC5F1D3D75200049CF85 /* ButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C14FFC5D1D3D75200049CF85 /* ButtonTableViewCell.xib */; };
+		C14FFC611D3D75470049CF85 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC601D3D75470049CF85 /* UIColor.swift */; };
+		C14FFC631D3D7CE20049CF85 /* NightscoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC621D3D7CE20049CF85 /* NightscoutService.swift */; };
+		C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */; };
+		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
+		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
+		C14FFC6D1D3D85A40049CF85 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */; };
 		C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843721CF009E600D53CCD /* SettingsTableViewController.swift */; };
 		C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
@@ -467,6 +483,22 @@
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryInsulinMarkerPumpEvent.swift; sourceTree = "<group>"; };
+		C14FFC4B1D3D6D510049CF85 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
+		C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceAuthentication.swift; sourceTree = "<group>"; };
+		C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCredential.swift; sourceTree = "<group>"; };
+		C14FFC521D3D70170049CF85 /* ValidatingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidatingIndicatorView.swift; sourceTree = "<group>"; };
+		C14FFC541D3D72A50049CF85 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		C14FFC561D3D72D30049CF85 /* AuthenticationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTableViewCell.swift; sourceTree = "<group>"; };
+		C14FFC571D3D72D30049CF85 /* AuthenticationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthenticationTableViewCell.xib; sourceTree = "<group>"; };
+		C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibLoadable.swift; sourceTree = "<group>"; };
+		C14FFC5C1D3D75200049CF85 /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
+		C14FFC5D1D3D75200049CF85 /* ButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonTableViewCell.xib; sourceTree = "<group>"; };
+		C14FFC601D3D75470049CF85 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		C14FFC621D3D7CE20049CF85 /* NightscoutService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutService.swift; sourceTree = "<group>"; };
+		C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataManager.swift; sourceTree = "<group>"; };
+		C14FFC661D3D7E390049CF85 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainManager+RileyLink.swift"; sourceTree = "<group>"; };
+		C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
 		C16843721CF009E600D53CCD /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
@@ -813,15 +845,20 @@
 			path = Messages;
 			sourceTree = "<group>";
 		};
-		C12616391B67CB9C001FAD87 /* TableViewCells */ = {
+		C12616391B67CB9C001FAD87 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C14FFC561D3D72D30049CF85 /* AuthenticationTableViewCell.swift */,
+				C14FFC571D3D72D30049CF85 /* AuthenticationTableViewCell.xib */,
+				C14FFC521D3D70170049CF85 /* ValidatingIndicatorView.swift */,
+				C14FFC5C1D3D75200049CF85 /* ButtonTableViewCell.swift */,
+				C14FFC5D1D3D75200049CF85 /* ButtonTableViewCell.xib */,
 				C12616581B6B2D20001FAD87 /* PacketTableViewCell.h */,
 				C12616591B6B2D20001FAD87 /* PacketTableViewCell.m */,
 				434FF1DD1CF268F3000DB779 /* RileyLinkDeviceTableViewCell.swift */,
 				C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */,
 			);
-			name = TableViewCells;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C12616451B685F35001FAD87 /* CoreData */ = {
@@ -901,11 +938,12 @@
 		C12EA240198B436800309FA4 /* RileyLink */ = {
 			isa = PBXGroup;
 			children = (
+				C14FFC4D1D3D6D8E0049CF85 /* Models */,
 				C1B383341CD1BA6700CE7782 /* Managers */,
 				C1AA398B1AB67F6A00BC9E33 /* Extensions */,
 				C12616451B685F35001FAD87 /* CoreData */,
 				C12EA241198B436800309FA4 /* Supporting Files */,
-				C12616391B67CB9C001FAD87 /* TableViewCells */,
+				C12616391B67CB9C001FAD87 /* Views */,
 				C126165E1B76E8DC001FAD87 /* TPKeyboardAvoiding */,
 				C1EF589A1B3FBA32001C8C80 /* ViewControllers */,
 				43462E8A1CCB06F500F958A8 /* AppDelegate.swift */,
@@ -950,6 +988,16 @@
 				C12EA25C198B436900309FA4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C14FFC4D1D3D6D8E0049CF85 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C14FFC621D3D7CE20049CF85 /* NightscoutService.swift */,
+				C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */,
+				C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
@@ -1038,6 +1086,10 @@
 				C1E535E91991E36700C2AC49 /* NSData+Conversion.m */,
 				C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */,
 				C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */,
+				C14FFC541D3D72A50049CF85 /* UIViewController.swift */,
+				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
+				C14FFC601D3D75470049CF85 /* UIColor.swift */,
+				C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1073,6 +1125,9 @@
 		C1B383341CD1BA6700CE7782 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				C14FFC661D3D7E390049CF85 /* KeychainManager.swift */,
+				C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */,
+				C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */,
 				C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */,
 			);
 			name = Managers;
@@ -1134,6 +1189,7 @@
 		C1EF589A1B3FBA32001C8C80 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C14FFC4B1D3D6D510049CF85 /* AuthenticationViewController.swift */,
 				C16843721CF009E600D53CCD /* SettingsTableViewController.swift */,
 				C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */,
 				C126165B1B6C8076001FAD87 /* PacketGeneratorViewController.h */,
@@ -1501,9 +1557,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */,
+				C14FFC5F1D3D75200049CF85 /* ButtonTableViewCell.xib in Resources */,
 				C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */,
 				C12EA24D198B436800309FA4 /* Images.xcassets in Resources */,
 				C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */,
+				C14FFC591D3D72D30049CF85 /* AuthenticationTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1728,27 +1786,41 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C14FFC5E1D3D75200049CF85 /* ButtonTableViewCell.swift in Sources */,
+				C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */,
+				C14FFC511D3D6DEF0049CF85 /* ServiceCredential.swift in Sources */,
+				C14FFC5B1D3D74F90049CF85 /* NibLoadable.swift in Sources */,
+				C14FFC611D3D75470049CF85 /* UIColor.swift in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
+				C14FFC4C1D3D6D510049CF85 /* AuthenticationViewController.swift in Sources */,
+				C14FFC6D1D3D85A40049CF85 /* NSTimeInterval.swift in Sources */,
+				C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
+				C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
 				43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */,
+				C14FFC551D3D72A50049CF85 /* UIViewController.swift in Sources */,
 				434FF1DE1CF268F3000DB779 /* RileyLinkDeviceTableViewCell.swift in Sources */,
+				C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,
+				C14FFC581D3D72D30049CF85 /* AuthenticationTableViewCell.swift in Sources */,
 				C12616571B6A6130001FAD87 /* PacketLogViewController.m in Sources */,
+				C14FFC631D3D7CE20049CF85 /* NightscoutService.swift in Sources */,
 				C1AACC6B1CECD5F500C07049 /* RileyLinkListTableViewController.swift in Sources */,
 				C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
 				C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */,
+				C14FFC531D3D70170049CF85 /* ValidatingIndicatorView.swift in Sources */,
 				434FF1DC1CF268BD000DB779 /* IdentifiableClass.swift in Sources */,
 				C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */,
 			);

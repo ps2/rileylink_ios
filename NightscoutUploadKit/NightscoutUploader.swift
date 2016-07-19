@@ -13,14 +13,15 @@ import Crypto
 public enum UploadError: ErrorType {
     case MissingAPISecret
     case MissingNightscoutURL
-    case InvalidNightscoutURL(String)
     case HTTPError(status: Int, body: String)
     case MissingTimezone
+    case Unauthorized
 }
 
 private let defaultNightscoutEntriesPath = "/api/v1/entries.json"
 private let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
 private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
+private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
 
 public class NightscoutUploader {
 
@@ -335,18 +336,43 @@ public class NightscoutUploader {
         }
     }
     
-//    func checkAuth() {
-//        NSURLSession.sharedSession().dataTaskWithURL(siteURL) { (_, response, error) in
-//            var error: ErrorType? = error
-//            if error == nil, let response = response as? NSHTTPURLResponse where response.statusCode >= 300 {
-//                error = LoopError.ConnectionError
-//            }
-//            
-//            self.isAuthorized = error == nil
-//            
-//            completion(success: self.isAuthorized, error: error)
-//            }.resume()
-//        
-//
-//    }
+    public func checkAuth(completion: (ErrorType?) -> Void) {
+        
+        guard let siteURL = siteURL else {
+            completion(UploadError.MissingNightscoutURL)
+            return
+        }
+        
+        guard let APISecret = APISecret else {
+            completion(UploadError.MissingAPISecret)
+            return
+        }
+        
+        let testURL = siteURL.URLByAppendingPathComponent(defaultNightscoutAuthTestPath)
+        
+        let request = NSMutableURLRequest(URL: testURL)
+        
+        request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+        request.setValue("application/json", forHTTPHeaderField:"Accept")
+        request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            if let httpResponse = response as? NSHTTPURLResponse where
+                httpResponse.statusCode != 200 {
+                    if httpResponse.statusCode == 401 {
+                        completion(UploadError.Unauthorized)
+                    } else {
+                        let error = UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!)
+                        completion(error)
+                    }
+            } else {
+                completion(nil)
+            }
+        })
+        task.resume()
+    }
 }

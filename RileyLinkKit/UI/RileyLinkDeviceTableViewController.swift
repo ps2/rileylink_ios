@@ -30,7 +30,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
         self.observe()
         
-        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(RileyLinkDeviceTableViewController.updateRSSI), userInfo: nil, repeats: true)
+        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
     }
     
     func updateRSSI()

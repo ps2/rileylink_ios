@@ -59,8 +59,8 @@ class RileyLinkListTableViewController: UITableViewController {
         dataManager.rileyLinkManager.deviceScanningEnabled = true
     }
 
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
         dataManager.rileyLinkManager.deviceScanningEnabled = false
     }

@@ -14,6 +14,8 @@ let CellIdentifier = "Cell"
 public class RileyLinkDeviceTableViewController: UITableViewController, TextFieldTableViewControllerDelegate {
 
     public var device: RileyLinkDevice!
+    
+    var rssiFetchTimer: NSTimer!
 
     private var appeared = false
 
@@ -28,7 +30,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
         self.observe()
         
-        NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(RileyLinkDeviceTableViewController.updateRSSI), userInfo: nil, repeats: true)
+        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(RileyLinkDeviceTableViewController.updateRSSI), userInfo: nil, repeats: true)
     }
     
     func updateRSSI()
@@ -55,19 +57,19 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     private func observe() {
         let center = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
         
         notificationObservers = [
-            center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
-                
+            center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
                 let indexPath = NSIndexPath(forRow: DeviceRow.CustomName.rawValue, inSection: Section.Device.rawValue)
                 self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
                 self?.title = self?.device.name
             },
-            center.addObserverForName(RileyLinkDeviceManager.ConnectionStateDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+            center.addObserverForName(RileyLinkDeviceManager.ConnectionStateDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
                 let indexPath = NSIndexPath(forRow: DeviceRow.Connection.rawValue, inSection: Section.Device.rawValue)
                 self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
             },
-            center.addObserverForName(RileyLinkDeviceManager.RSSIDidChangeNotification, object: nil, queue: nil) { [weak self = self] (note) -> Void in
+            center.addObserverForName(RileyLinkDeviceManager.RSSIDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
                 let indexPath = NSIndexPath(forRow: DeviceRow.RSSI.rawValue, inSection: Section.Device.rawValue)
                 self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
             }
@@ -83,6 +85,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
         appeared = true
     }
+    
+    public override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        rssiFetchTimer.invalidate()
+        rssiFetchTimer = nil
+    }
+
 
     // MARK: - Formatters
 

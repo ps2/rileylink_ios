@@ -1,41 +1,39 @@
 //
-//  ChangeTimeFormatPumpEvent.swift
+//  JournalEntryInsulinMarkerPumpEvent.swift
 //  RileyLink
 //
-//  Created by Pete Schwamb on 3/8/16.
+//  Created by Pete Schwamb on 7/16/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct ChangeTimeFormatPumpEvent: TimestampedPumpEvent {
+public struct JournalEntryInsulinMarkerPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: NSData
     public let timestamp: NSDateComponents
-    public let timeFormat: String
-
+    public let amount: Double
+    
     public init?(availableData: NSData, pumpModel: PumpModel) {
-        length = 7
+        length = 8
         
         guard length <= availableData.length else {
             return nil
         }
-
+        
         rawData = availableData[0..<length]
         
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         
-        func d(idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
-        }
-
-        timeFormat = d(1) == 1 ? "24hr" : "am_pm"
+        let lowBits = rawData[1] as UInt8
+        let highBits = rawData[4] as UInt8
+        amount = Double((Int(highBits & 0b1100000) << 3) + Int(lowBits)) / 10.0
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
-            "_type": "ChangeTimeFormat",
-            "timeFormat": timeFormat,
+            "_type": "JournalEntryInsulinMarker",
+            "amount": amount,
         ]
     }
 }

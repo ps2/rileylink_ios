@@ -37,7 +37,10 @@ public enum PumpEventType: UInt8 {
     case Questionable3b = 0x3b
     case ChangeParadigmLinkID = 0x3c
     case BGReceived = 0x3f
+    case JournalEntryMealMarker = 0x40
     case JournalEntryExerciseMarker = 0x41
+    case JournalEntryInsulinMarker = 0x42
+    case JournalEntryOtherMarker = 0x43
     case ChangeSensorSetup2 = 0x50
     case ChangeSensorRateOfChangeAlertSetup = 0x56
     case ChangeBolusScrollStepSize = 0x57
@@ -124,6 +127,10 @@ public enum PumpEventType: UInt8 {
             return BGReceivedPumpEvent.self
         case .JournalEntryExerciseMarker:
             return JournalEntryExerciseMarkerPumpEvent.self
+        case .JournalEntryInsulinMarker:
+            return JournalEntryInsulinMarkerPumpEvent.self
+        case .JournalEntryMealMarker:
+            return JournalEntryMealMarkerPumpEvent.self
         case .ChangeSensorSetup2:
             return ChangeSensorSetup2PumpEvent.self
         case .ChangeSensorRateOfChangeAlertSetup:
@@ -181,7 +188,7 @@ public enum PumpEventType: UInt8 {
         case .SelectBasalProfile:
             return SelectBasalProfilePumpEvent.self
         default:
-            return UnknownPumpEvent.self
+            return PlaceholderPumpEvent.self
         }
     }
 }

@@ -76,6 +76,11 @@ public enum SensorReading {
     }
 }
 
+public enum ClockType {
+    case TwentyFourHour
+    case TwelveHour
+}
+
 
 /**
  Describes a status message sent periodically from the pump to any paired MySentry devices
@@ -113,6 +118,7 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
     public let previousGlucose: SensorReading
     public let sensorAgeHours: Int
     public let sensorRemainingHours: Int
+    public let clockType: ClockType
     
     public let nextSensorCalibrationDateComponents: NSDateComponents?
     
@@ -128,6 +134,9 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         sequence = rxData[0]
 
         let pumpDateComponents = NSDateComponents(mySentryBytes: rxData[2...7])
+        
+        let hourByte: UInt8 = rxData[2]
+        clockType = ((hourByte & 0b10000000) > 0) ? .TwentyFourHour : .TwelveHour
         
         guard let calendar = pumpDateComponents.calendar where pumpDateComponents.isValidDateInCalendar(calendar) else {
             return nil

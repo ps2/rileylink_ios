@@ -95,7 +95,20 @@ public class PumpOps {
             }
         }
     }
-    
+
+    /**
+     Fetches history entries which occurred on or after the specified date.
+ 
+     It is possible for Minimed Pumps to non-atomically append multiple history entries with the same timestamp, for example, `BolusWizardEstimatePumpEvent` may appear and be read before `BolusNormalPumpEvent` is written. Therefore, the `startDate` parameter is used as part of an inclusive range, leaving the client to manage the possibility of duplicates.
+
+     History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
+
+     - parameter startDate:  The earliest date of events to retrieve
+     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
+        - Success(events): An array of fetched history entries
+        - Failure(error):  An error describing why the command failed
+
+     */
     public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
         device.runSession { (session) -> Void in
             NSLog("History fetching task started.")

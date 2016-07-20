@@ -40,12 +40,12 @@
 }
 
 
-- (void) setNightscoutURL:(NSString *)nightscoutURL {
-    [_defaults setValue:nightscoutURL forKey:@"nightscoutURL"];
+- (void) setNightscoutURL:(NSURL *)nightscoutURL {
+    [_defaults setValue:nightscoutURL.absoluteString forKey:@"nightscoutURL"];
 }
 
-- (NSString*) nightscoutURL {
-    return [_defaults stringForKey:@"nightscoutURL"];
+- (NSURL*) nightscoutURL {
+    return [NSURL URLWithString:[_defaults stringForKey:@"nightscoutURL"]];
 }
 
 - (void) setNightscoutAPISecret:(NSString *)nightscoutAPISecret {

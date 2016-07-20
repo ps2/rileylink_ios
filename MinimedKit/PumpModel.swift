@@ -26,8 +26,12 @@ public enum PumpModel: String {
     case Model751 = "751"
     case Model554 = "554"
     case Model754 = "754"
-    
-    var generation: Int {
+
+    private var size: Int {
+        return Int(rawValue)! / 100
+    }
+
+    private var generation: Int {
         return Int(rawValue)! % 100
     }
     
@@ -45,6 +49,17 @@ public enum PumpModel: String {
     /// This is a measure of motor precision.
     public var strokesPerUnit: Int {
         return (generation >= 23) ? 40 : 10
+    }
+
+    var reservoirCapacity: Double {
+        switch size {
+        case 5:
+            return 176
+        case 7:
+            return 300
+        default:
+            fatalError("Unknown reservoir capacity for PumpModel.\(self)")
+        }
     }
 }
 

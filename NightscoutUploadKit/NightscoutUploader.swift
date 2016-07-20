@@ -11,16 +11,15 @@ import MinimedKit
 import Crypto
 
 public enum UploadError: ErrorType {
-    case MissingAPISecret
-    case MissingNightscoutURL
-    case InvalidNightscoutURL(String)
     case HTTPError(status: Int, body: String)
     case MissingTimezone
+    case Unauthorized
 }
 
 private let defaultNightscoutEntriesPath = "/api/v1/entries.json"
 private let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
 private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
+private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
 
 public class NightscoutUploader {
 
@@ -30,8 +29,8 @@ public class NightscoutUploader {
         case BadRF = 12
     }
     
-    public var siteURL: String?
-    public var APISecret: String?
+    public var siteURL: NSURL
+    public var APISecret: String
     
     private(set) var entries = [[String: AnyObject]]()
     private(set) var deviceStatuses = [[String: AnyObject]]()
@@ -57,7 +56,7 @@ public class NightscoutUploader {
         lastStoredTreatmentTimestamp = nil
     }
 
-    public init(siteURL: String?, APISecret: String?) {
+    public init(siteURL: NSURL, APISecret: String) {
         self.siteURL = siteURL
         self.APISecret = APISecret
         
@@ -251,49 +250,35 @@ public class NightscoutUploader {
             return
         }
         
-        guard let siteURL = siteURL else {
-            completion(UploadError.MissingNightscoutURL)
-            return
-        }
-        
-        guard let APISecret = APISecret else {
-            completion(UploadError.MissingAPISecret)
-            return
-        }
-
-        
-        if let uploadURL = NSURL(string: endpoint, relativeToURL: NSURL(string: siteURL)) {
-            let request = NSMutableURLRequest(URL: uploadURL)
-            do {
+        let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
+        let request = NSMutableURLRequest(URL: uploadURL)
+        do {
+            
+            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+            request.HTTPMethod = "POST"
+            
+            request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+            request.setValue("application/json", forHTTPHeaderField:"Accept")
+            request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
+            request.HTTPBody = sendData
+            
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
                 
-                let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
-                request.HTTPMethod = "POST"
+                if let error = error {
+                    completion(error)
+                    return
+                }
                 
-                request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-                request.setValue("application/json", forHTTPHeaderField:"Accept")
-                request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
-                request.HTTPBody = sendData
-                
-                let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                    
-                    if let error = error {
-                        completion(error)
-                        return
-                    }
-                    
-                    if let httpResponse = response as? NSHTTPURLResponse where
-                        httpResponse.statusCode != 200 {
-                        completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
-                    } else {
-                        completion(nil)
-                    }
-                })
-                task.resume()
-            } catch let error as NSError {
-                completion(error)
-            }
-        } else {
-            completion(UploadError.InvalidNightscoutURL("\(siteURL), \(endpoint)"))
+                if let httpResponse = response as? NSHTTPURLResponse where
+                    httpResponse.statusCode != 200 {
+                    completion(UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!))
+                } else {
+                    completion(nil)
+                }
+            })
+            task.resume()
+        } catch let error as NSError {
+            completion(error)
         }
     }
     
@@ -335,5 +320,35 @@ public class NightscoutUploader {
                 }
             }
         }
+    }
+    
+    public func checkAuth(completion: (ErrorType?) -> Void) {
+        
+        let testURL = siteURL.URLByAppendingPathComponent(defaultNightscoutAuthTestPath)
+        
+        let request = NSMutableURLRequest(URL: testURL)
+        
+        request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+        request.setValue("application/json", forHTTPHeaderField:"Accept")
+        request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            if let httpResponse = response as? NSHTTPURLResponse where
+                httpResponse.statusCode != 200 {
+                    if httpResponse.statusCode == 401 {
+                        completion(UploadError.Unauthorized)
+                    } else {
+                        let error = UploadError.HTTPError(status: httpResponse.statusCode, body:String(data: data!, encoding: NSUTF8StringEncoding)!)
+                        completion(error)
+                    }
+            } else {
+                completion(nil)
+            }
+        })
+        task.resume()
     }
 }

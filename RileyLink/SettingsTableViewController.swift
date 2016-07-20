@@ -37,10 +37,12 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     private enum ConfigurationRow: Int {
         case PumpID = 0
-        case NightscoutURL
-        case NightscoutAPISecret
-
-        static let count = 3
+        case Nightscout
+        static let count = 2
+    }
+    
+    private var dataManager: DeviceDataManager {
+        return DeviceDataManager.sharedManager
     }
 
     // MARK: - UITableViewDataSource
@@ -92,13 +94,12 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .PumpID:
                 configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
                 configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
-            case .NightscoutURL:
-                configCell.textLabel?.text = NSLocalizedString("Nightscout URL", comment: "The title text for the Nightscout URL config value")
-                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutURL ?? TapToSetString
-            case .NightscoutAPISecret:
-                configCell.textLabel?.text = NSLocalizedString("Nightscout API Secret", comment: "The title text for the Nightscout API Secret config value")
-                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.nightscoutAPISecret ?? TapToSetString
-            }            
+            case .Nightscout:
+                let nightscoutService = dataManager.remoteDataManager.nightscoutService
+                
+                configCell.textLabel?.text = nightscoutService.title
+                configCell.detailTextLabel?.text = nightscoutService.siteURL?.absoluteString ?? TapToSetString
+            }
             cell = configCell
         }
         return cell
@@ -123,8 +124,18 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             let sender = tableView.cellForRowAtIndexPath(indexPath)
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .PumpID, .NightscoutAPISecret, .NightscoutURL:
+            case .PumpID:
                 performSegueWithIdentifier(TextFieldTableViewController.className, sender: sender)
+            case .Nightscout:
+                let service = dataManager.remoteDataManager.nightscoutService
+                let vc = AuthenticationViewController(authentication: service)
+                vc.authenticationObserver = { [unowned self] (service) in
+                    self.dataManager.remoteDataManager.nightscoutService = service
+                    
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                }
+                
+                showViewController(vc, sender: indexPath)
             }
         case .Upload, .About:
             break
@@ -151,14 +162,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 case .PumpID:
                     vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
                     vc.value = DeviceDataManager.sharedManager.pumpID
-                case .NightscoutURL:
-                    vc.placeholder = NSLocalizedString("Enter the URL of your Nightscout site", comment: "The placeholder text instructing users how to enter the Nightscout URL")
-                    vc.value = DeviceDataManager.sharedManager.nightscoutURL
-                    vc.keyboardType = .URL
-                case .NightscoutAPISecret:
-                    vc.placeholder = NSLocalizedString("Enter your Nightscout API Secret", comment: "The placeholder text instructing users how to enter their Nightscout API Secret")
-                    vc.value = DeviceDataManager.sharedManager.nightscoutAPISecret
-                    vc.keyboardType = .Default
+                default:
+                    break
                 }
                 
                 vc.title = cell.textLabel?.text
@@ -183,10 +188,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .PumpID:
                 DeviceDataManager.sharedManager.pumpID = controller.value
-            case .NightscoutURL:
-                DeviceDataManager.sharedManager.nightscoutURL = controller.value
-            case .NightscoutAPISecret:
-                DeviceDataManager.sharedManager.nightscoutAPISecret = controller.value
+            default:
+                break
             }
         }
 

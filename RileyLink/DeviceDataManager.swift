@@ -20,6 +20,9 @@ class DeviceDataManager {
     
     let rileyLinkManager: RileyLinkDeviceManager
     
+    /// Manages remote data (TODO: the lazy initialization isn't thread-safe)
+    lazy var remoteDataManager = RemoteDataManager()
+    
     var connectedPeripheralIDs: Set<String> = Config.sharedInstance().autoConnectIds as! Set<String> {
         didSet {
             Config.sharedInstance().autoConnectIds = connectedPeripheralIDs
@@ -27,8 +30,6 @@ class DeviceDataManager {
     }
     
     var latestPumpStatus: MySentryPumpStatusMessageBody?
-    
-    var nightscoutUploader: NightscoutUploader
     
     var pumpTimeZone: NSTimeZone? = Config.sharedInstance().pumpTimeZone {
         didSet {
@@ -60,41 +61,12 @@ class DeviceDataManager {
             } else {
                 rileyLinkManager.pumpState = nil
             }
-            
-            nightscoutUploader.reset()
+
+            remoteDataManager.nightscoutUploader?.reset()
             
             Config.sharedInstance().pumpID = pumpID
         }
     }
-    
-    var nightscoutURL: String? = Config.sharedInstance().nightscoutURL {
-        didSet {
-            if nightscoutURL?.characters.count == 0 {
-                nightscoutURL = nil
-            }
-            
-            if let nightscoutURL = nightscoutURL {
-                nightscoutUploader.siteURL = nightscoutURL
-            }
-            
-            Config.sharedInstance().nightscoutURL = nightscoutURL
-        }
-    }
-    
-    var nightscoutAPISecret: String? = Config.sharedInstance().nightscoutAPISecret {
-        didSet {
-            if nightscoutAPISecret?.characters.count == 0 {
-                nightscoutAPISecret = nil
-            }
-            
-            if let nightscoutAPISecret = nightscoutAPISecret {
-                nightscoutUploader.APISecret = nightscoutAPISecret
-            }
-            
-            Config.sharedInstance().nightscoutAPISecret = nightscoutAPISecret
-        }
-    }
-
     
     var lastHistoryAttempt: NSDate? = nil
     
@@ -183,7 +155,7 @@ class DeviceDataManager {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
             if Config.sharedInstance().uploadEnabled {
-                nightscoutUploader.handlePumpStatus(status, device: device.deviceURI)
+                remoteDataManager.nightscoutUploader?.handlePumpStatus(status, device: device.deviceURI)
             }
             
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
@@ -202,7 +174,12 @@ class DeviceDataManager {
             return
         }
         
-        ops.getHistoryEventsSinceDate(nightscoutUploader.observingPumpEventsSince) { (response) -> Void in
+        
+        let oneDayAgo = NSDate(timeIntervalSinceNow: NSTimeInterval(hours: -24))
+        let observingPumpEventsSince = remoteDataManager.nightscoutUploader?.observingPumpEventsSince ?? oneDayAgo
+
+        
+        ops.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
             switch response {
             case .Success(let (events, pumpModel)):
                 NSLog("fetchHistory succeeded.")
@@ -219,7 +196,7 @@ class DeviceDataManager {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
         if Config.sharedInstance().uploadEnabled {
-            nightscoutUploader.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
+            remoteDataManager.nightscoutUploader?.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
         }
     }
     
@@ -245,11 +222,6 @@ class DeviceDataManager {
             pumpState: pumpState,
             autoConnectIDs: connectedPeripheralIDs
         )
-        
-        nightscoutUploader = NightscoutUploader(siteURL: nightscoutURL, APISecret: nightscoutAPISecret)
-        nightscoutUploader.errorHandler = { (error: ErrorType, context: String) -> Void in
-            print("Error \(error), while \(context)")
-        }
         
         getHistoryTimer = NSTimer.scheduledTimerWithTimeInterval(5.0 * 60, target:self, selector:#selector(DeviceDataManager.timerTriggered), userInfo:nil, repeats:true)
         

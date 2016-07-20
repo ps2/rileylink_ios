@@ -11,8 +11,6 @@ import MinimedKit
 import Crypto
 
 public enum UploadError: ErrorType {
-    case MissingAPISecret
-    case MissingNightscoutURL
     case HTTPError(status: Int, body: String)
     case MissingTimezone
     case Unauthorized
@@ -31,8 +29,8 @@ public class NightscoutUploader {
         case BadRF = 12
     }
     
-    public var siteURL: NSURL?
-    public var APISecret: String?
+    public var siteURL: NSURL
+    public var APISecret: String
     
     private(set) var entries = [[String: AnyObject]]()
     private(set) var deviceStatuses = [[String: AnyObject]]()
@@ -58,7 +56,7 @@ public class NightscoutUploader {
         lastStoredTreatmentTimestamp = nil
     }
 
-    public init(siteURL: NSURL?, APISecret: String?) {
+    public init(siteURL: NSURL, APISecret: String) {
         self.siteURL = siteURL
         self.APISecret = APISecret
         
@@ -252,18 +250,6 @@ public class NightscoutUploader {
             return
         }
         
-        guard let siteURL = siteURL else {
-            completion(UploadError.MissingNightscoutURL)
-            return
-        }
-        
-        guard let APISecret = APISecret else {
-            completion(UploadError.MissingAPISecret)
-            return
-        }
-
-        
-        
         let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
         let request = NSMutableURLRequest(URL: uploadURL)
         do {
@@ -337,16 +323,6 @@ public class NightscoutUploader {
     }
     
     public func checkAuth(completion: (ErrorType?) -> Void) {
-        
-        guard let siteURL = siteURL else {
-            completion(UploadError.MissingNightscoutURL)
-            return
-        }
-        
-        guard let APISecret = APISecret else {
-            completion(UploadError.MissingAPISecret)
-            return
-        }
         
         let testURL = siteURL.URLByAppendingPathComponent(defaultNightscoutAuthTestPath)
         

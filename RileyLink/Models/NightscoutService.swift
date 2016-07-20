@@ -70,6 +70,7 @@ struct NightscoutService: ServiceAuthentication {
         
         self.uploader?.checkAuth({ (error) in
             if let error = error {
+                self.isAuthorized = false
                 completion(success: false, error: error)
             } else {
                 self.isAuthorized = true

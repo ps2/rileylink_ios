@@ -17,9 +17,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     
     var rssiFetchTimer: NSTimer? {
         willSet {
-            if let timer = rssiFetchTimer {
-                timer.invalidate()
-            }
+            rssiFetchTimer?.invalidate()
         }
     }
 

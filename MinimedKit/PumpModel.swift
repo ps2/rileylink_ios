@@ -51,7 +51,7 @@ public enum PumpModel: String {
         return (generation >= 23) ? 40 : 10
     }
 
-    var reservoirCapacity: Int {
+    public var reservoirCapacity: Int {
         switch size {
         case 5:
             return 176

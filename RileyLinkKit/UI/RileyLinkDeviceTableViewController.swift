@@ -15,7 +15,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     public var device: RileyLinkDevice!
     
-    var rssiFetchTimer: NSTimer?
+    var rssiFetchTimer: NSTimer? {
+        willSet {
+            if let timer = rssiFetchTimer {
+                timer.invalidate()
+            }
+        }
+    }
 
     private var appeared = false
 
@@ -86,12 +92,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         appeared = true
     }
     
-    public override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let timer = rssiFetchTimer {
-            timer.invalidate()
-        }
+    public override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         rssiFetchTimer = nil
     }
 

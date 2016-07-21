@@ -15,7 +15,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     public var device: RileyLinkDevice!
     
-    var rssiFetchTimer: NSTimer!
+    var rssiFetchTimer: NSTimer?
 
     private var appeared = false
 
@@ -29,8 +29,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         title = device.name
 
         self.observe()
-        
-        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
     }
     
     func updateRSSI()
@@ -82,6 +80,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         if appeared {
             tableView.reloadData()
         }
+        
+        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
 
         appeared = true
     }
@@ -89,7 +89,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     public override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         
-        rssiFetchTimer.invalidate()
+        if let timer = rssiFetchTimer {
+            timer.invalidate()
+        }
         rssiFetchTimer = nil
     }
 

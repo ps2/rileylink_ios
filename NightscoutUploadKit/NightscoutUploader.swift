@@ -109,51 +109,14 @@ public class NightscoutUploader {
 
         let pumpStatus = PumpStatus()
         pumpStatus.batteryPct = status.batteryRemainingPercent
-        pumpStatus.iob = status.iob
+        pumpStatus.bolusIOB = status.iob
         pumpStatus.timestamp = pumpDate
         return pumpStatus
     }
 
     public func uploadDeviceStatus(status: DeviceStatus) {
-        // Create deviceStatus record from this mysentry packet
-
-        var nsStatus = [String: AnyObject]()
-
-        nsStatus["device"] = device
-
-        nsStatus["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-
-        nsStatus["uploader"] = uploaderStatus
-
-        guard let pumpDate = status.pumpDateComponents.date else {
-            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
-            return
-        }
-
-        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
-
-        nsStatus["pump"] = [
-            "clock": pumpDateStr,
-            "iob": [
-                "timestamp": pumpDateStr,
-                "bolusiob": status.iob,
-            ],
-            "reservoir": status.reservoirRemainingUnits,
-            "battery": [
-                "percent": status.batteryRemainingPercent
-            ]
-        ]
-
-        switch status.glucose {
-        case .Active(glucose: _):
-            nsStatus["sensor"] = [
-                "sensorAge": status.sensorAgeHours,
-                "sensorRemaining": status.sensorRemainingHours,
-            ]
-        default:
-            nsStatus["sensorNotActive"] = true
-        }
-        deviceStatuses.append(nsStatus)
+        deviceStatuses.append(status.dictionaryRepresentation)
+        flushAll()
     }
     
     //  Entries [ { sgv: 375,
@@ -167,7 +130,6 @@ public class NightscoutUploader {
     public func uploadSGVFromMySentryStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
         var recordSGV = true
-        
         let glucose: Int = {
             switch status.glucose {
             case .Active(glucose: let glucose):

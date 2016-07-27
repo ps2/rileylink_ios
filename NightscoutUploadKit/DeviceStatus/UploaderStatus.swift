@@ -10,6 +10,24 @@ import Foundation
 
 public class UploaderStatus {
     var batteryPct: Int? = nil
-    var name: String? = nil
-    var timestamp: NSDate? = nil
+    var name: String
+    var timestamp: NSDate
+    
+    init(name: String, timestamp: NSDate) {
+        self.name = name
+        self.timestamp = timestamp
+    }
+    
+    public var dictionaryRepresentation: [String: AnyObject] {
+        var rval = [String: AnyObject]()
+        
+        rval["name"] = name
+        rval["timestamp"] = timestamp
+        
+        if let battery = batteryPct {
+            rval["battery"] = battery
+        }
+
+        return rval
+    }
 }

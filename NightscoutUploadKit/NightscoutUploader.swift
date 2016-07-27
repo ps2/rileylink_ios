@@ -98,6 +98,63 @@ public class NightscoutUploader {
         }
         self.flushAll()
     }
+
+    public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) -> PumpStatus {
+
+        let pumpDate = status.pumpDateComponents.date
+
+        if pumpDate == nil {
+            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date from \(status.pumpDateComponents)")
+        }
+
+        let pumpStatus = PumpStatus()
+        pumpStatus.batteryPct = status.batteryRemainingPercent
+        pumpStatus.iob = status.iob
+        pumpStatus.timestamp = pumpDate
+        return pumpStatus
+    }
+
+    public func uploadDeviceStatus(status: DeviceStatus) {
+        // Create deviceStatus record from this mysentry packet
+
+        var nsStatus = [String: AnyObject]()
+
+        nsStatus["device"] = device
+
+        nsStatus["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
+
+        nsStatus["uploader"] = uploaderStatus
+
+        guard let pumpDate = status.pumpDateComponents.date else {
+            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
+            return
+        }
+
+        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
+
+        nsStatus["pump"] = [
+            "clock": pumpDateStr,
+            "iob": [
+                "timestamp": pumpDateStr,
+                "bolusiob": status.iob,
+            ],
+            "reservoir": status.reservoirRemainingUnits,
+            "battery": [
+                "percent": status.batteryRemainingPercent
+            ]
+        ]
+
+        switch status.glucose {
+        case .Active(glucose: _):
+            nsStatus["sensor"] = [
+                "sensorAge": status.sensorAgeHours,
+                "sensorRemaining": status.sensorRemainingHours,
+            ]
+        default:
+            nsStatus["sensorNotActive"] = true
+        }
+        deviceStatuses.append(nsStatus)
+    }
     
     //  Entries [ { sgv: 375,
     //    date: 1432421525000,
@@ -107,7 +164,7 @@ public class NightscoutUploader {
     //    device: 'share2',
     //    type: 'sgv' } ]
     
-    public func handlePumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
+    public func uploadSGVFromMySentryStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
         var recordSGV = true
         
@@ -127,52 +184,7 @@ public class NightscoutUploader {
             }
         }()
         
-        // Create deviceStatus record from this mysentry packet
-        
-        var nsStatus = [String: AnyObject]()
-        
-        nsStatus["device"] = device
-        nsStatus["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-        
-        // TODO: use battery monitoring to post updates if we're not hearing from pump?
-        
-        let uploaderDevice = UIDevice.currentDevice()
-        
-        if uploaderDevice.batteryMonitoringEnabled {
-            nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
-        }
-        
-        guard let pumpDate = status.pumpDateComponents.date else {
-            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
-            return
-        }
-        
-        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
-        
-        nsStatus["pump"] = [
-            "clock": pumpDateStr,
-            "iob": [
-                "timestamp": pumpDateStr,
-                "bolusiob": status.iob,
-            ],
-            "reservoir": status.reservoirRemainingUnits,
-            "battery": [
-                "percent": status.batteryRemainingPercent
-            ]
-        ]
-        
-        switch status.glucose {
-        case .Active(glucose: _):
-            nsStatus["sensor"] = [
-                "sensorAge": status.sensorAgeHours,
-                "sensorRemaining": status.sensorRemainingHours,
-            ]
-        default:
-            nsStatus["sensorNotActive"] = true
-        }
-        deviceStatuses.append(nsStatus)
-        
-        
+
         // Create SGV entry from this mysentry packet
         if (recordSGV) {
             var entry: [String: AnyObject] = [

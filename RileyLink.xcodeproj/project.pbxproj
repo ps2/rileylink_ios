@@ -207,6 +207,10 @@
 		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1AACC6B1CECD5F500C07049 /* RileyLinkListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */; };
+		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
+		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
+		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
+		C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E71D4866960088C41D /* PumpStatus.swift */; };
 		C1B3830E1CD0665D00CE7782 /* NightscoutUploadKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; };
 		C1B3831C1CD0665D00CE7782 /* NightscoutUploadKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B3831B1CD0665D00CE7782 /* NightscoutUploadKitTests.swift */; };
@@ -576,6 +580,10 @@
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkListTableViewController.swift; sourceTree = "<group>"; };
+		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
+		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
+		C1AF21E51D48667F0088C41D /* UploaderStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploaderStatus.swift; sourceTree = "<group>"; };
+		C1AF21E71D4866960088C41D /* PumpStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpStatus.swift; sourceTree = "<group>"; };
 		C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutUploadKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutUploadKit.h; sourceTree = "<group>"; };
 		C1B3830F1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1108,6 +1116,10 @@
 				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
 				C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */,
+				C1AF21E11D4838C90088C41D /* DeviceStatus.swift */,
+				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
+				C1AF21E51D48667F0088C41D /* UploaderStatus.swift */,
+				C1AF21E71D4866960088C41D /* PumpStatus.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -1842,11 +1854,15 @@
 				C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
+				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
 				C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */,
+				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
 				C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */,
+				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
+				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
 				C1B3832A1CD0668600CE7782 /* NightscoutTreatment.swift in Sources */,
 			);

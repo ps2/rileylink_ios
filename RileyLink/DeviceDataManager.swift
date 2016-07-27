@@ -154,6 +154,35 @@ class DeviceDataManager {
             if status.batteryRemainingPercent == 0 {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
+
+            // Gather UploaderStatus
+            let uploaderStatus = UploaderStatus()
+            let uploaderDevice = UIDevice.currentDevice()
+            uploaderStatus.name = uploaderDevice.name
+            if uploaderDevice.batteryMonitoringEnabled {
+                uploaderStatus.battery = uploaderDevice.batteryLevel * 100
+            }
+
+            // Gather PumpStatus
+            let pumpStatus = remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status, device: device.deviceURI)
+
+            // Send DeviceStatus
+            let deviceStatus = DeviceStatus()
+            deviceStatus.uploaderStatus = uploaderStatus
+            deviceStatus.pumpStatus = pumpStatus
+            deviceStatus.device = device.deviceURI
+            //deviceStatus.loopStatus = ?
+            if Config.sharedInstance().uploadEnabled {
+                remoteDataManager.nightscoutUploader?.uploadDeviceStatus(deviceStatus)
+            }
+
+
+
+            // Send SGVs
+            if Config.sharedInstance().uploadEnabled {
+                remoteDataManager.nightscoutUploader?.uploadSGVFromMySentryStatus(status, device: device.deviceURI)
+            }
+
             if Config.sharedInstance().uploadEnabled {
                 remoteDataManager.nightscoutUploader?.handlePumpStatus(status, device: device.deviceURI)
             }

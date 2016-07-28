@@ -111,6 +111,13 @@ public class NightscoutUploader {
         pumpStatus.batteryPct = status.batteryRemainingPercent
         pumpStatus.bolusIOB = status.iob
         pumpStatus.timestamp = pumpDate
+        pumpStatus.reservoirRemainingUnits = status.reservoirRemainingUnits
+        
+        // TODO:
+        // pumpStatus.batteryVoltage
+        // pumpStatus.batteryStatus
+        // pumpStatus.suspended
+        
         return pumpStatus
     }
 
@@ -127,7 +134,7 @@ public class NightscoutUploader {
     //    device: 'share2',
     //    type: 'sgv' } ]
     
-    public func uploadSGVFromMySentryStatus(status: MySentryPumpStatusMessageBody, device: String) {
+    public func uploadSGVFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
         var recordSGV = true
         let glucose: Int = {

@@ -14,6 +14,7 @@ public class LoopStatus {
     
     var glucose: Int? = nil
     var iob: Double? = nil
+    var iobTimestamp: NSDate? = nil
     var eventualBG: Int? = nil
     var suggestedRate: Double? = nil
     var suggestedDuration: NSTimeInterval? = nil
@@ -30,27 +31,42 @@ public class LoopStatus {
     public var dictionaryRepresentation: [String: AnyObject] {
         var rval = [String: AnyObject]()
         
-        rval["timestamp"] = timestamp
+        rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["name"] = name
         
+        // IOB
+        var iobDict = [String: AnyObject]()
         if let iob = iob {
-            rval["iob"] = ["iob": iob]
+            iobDict["iob"] = iob
         }
+        if let iobTimestamp = iobTimestamp {
+            iobDict["timestamp"] = TimeFormat.timestampStrFromDate(iobTimestamp)
+        }
+        rval["iob"] = iobDict
         
+        
+        // Suggested
         var suggested = [String: AnyObject]()
-        
         if let glucose = glucose {
             suggested["bg"] = glucose
         }
-        
         if let rate = suggestedRate {
             suggested["rate"] = rate
         }
-        
-        
+        if let eventualBG = eventualBG {
+            suggested["eventualBG"] = eventualBG
+        }
         rval["suggested"] = suggested
         
-        
+        // Enacted
+        var enacted = [String: AnyObject]()
+        if let rate = enactedRate {
+            enacted["rate"] = rate
+        }
+        if let duration = enactedDuration {
+            enacted["duration"] = duration
+        }
+        rval["enacted"] = enacted
         return rval
     }
 }

@@ -156,37 +156,29 @@ class DeviceDataManager {
             }
 
             // Gather UploaderStatus
-            let uploaderStatus = UploaderStatus()
             let uploaderDevice = UIDevice.currentDevice()
-            uploaderStatus.name = uploaderDevice.name
+            let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate())
             if uploaderDevice.batteryMonitoringEnabled {
-                uploaderStatus.battery = uploaderDevice.batteryLevel * 100
+                uploaderStatus.batteryPct = Int(uploaderDevice.batteryLevel * 100)
             }
 
-            // Gather PumpStatus
-            let pumpStatus = remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status, device: device.deviceURI)
+            // Gather PumpStatus from MySentry packet
+            let pumpStatus = remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status)
 
             // Send DeviceStatus
-            let deviceStatus = DeviceStatus()
+            let deviceStatus = DeviceStatus(device: device.deviceURI, timestamp: NSDate())
             deviceStatus.uploaderStatus = uploaderStatus
             deviceStatus.pumpStatus = pumpStatus
-            deviceStatus.device = device.deviceURI
             //deviceStatus.loopStatus = ?
             if Config.sharedInstance().uploadEnabled {
                 remoteDataManager.nightscoutUploader?.uploadDeviceStatus(deviceStatus)
             }
 
-
-
             // Send SGVs
             if Config.sharedInstance().uploadEnabled {
-                remoteDataManager.nightscoutUploader?.uploadSGVFromMySentryStatus(status, device: device.deviceURI)
+                remoteDataManager.nightscoutUploader?.uploadSGVFromMySentryPumpStatus(status, device: device.deviceURI)
             }
 
-            if Config.sharedInstance().uploadEnabled {
-                remoteDataManager.nightscoutUploader?.handlePumpStatus(status, device: device.deviceURI)
-            }
-            
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(11 * NSEC_PER_SEC))
             dispatch_after(delay, dispatch_get_main_queue()) {

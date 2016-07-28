@@ -9,11 +9,12 @@
 import Foundation
 
 public class UploaderStatus {
-    var batteryPct: Int? = nil
-    var name: String
-    var timestamp: NSDate
+    public var batteryPct: Int? = nil
     
-    init(name: String, timestamp: NSDate) {
+    public let name: String
+    public let timestamp: NSDate
+    
+    public init(name: String, timestamp: NSDate) {
         self.name = name
         self.timestamp = timestamp
     }
@@ -22,7 +23,7 @@ public class UploaderStatus {
         var rval = [String: AnyObject]()
         
         rval["name"] = name
-        rval["timestamp"] = timestamp
+        rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         
         if let battery = batteryPct {
             rval["battery"] = battery

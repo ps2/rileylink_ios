@@ -13,7 +13,6 @@ public class PumpStatus {
     var batteryStatus: String? = nil
     var batteryVoltage: Double? = nil
     var timestamp: NSDate? = nil
-    var status: String? = nil
     var suspended: Bool? = nil
     var bolusIOB: Double? = nil
     var reservoirRemainingUnits: Double? = nil
@@ -58,5 +57,4 @@ public class PumpStatus {
         
         return rval
     }
-
 }

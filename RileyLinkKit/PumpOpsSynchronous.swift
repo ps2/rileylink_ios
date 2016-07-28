@@ -366,6 +366,16 @@ class PumpOpsSynchronous {
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
+                    
+                    if let alarm = event as? PumpAlarmPumpEvent {
+                        switch alarm.alarmType {
+                        case .BatteryDepleted, .BatteryOutLimitExceeded, .DeviceReset:
+                            print("Found clock loss in pump history.  Ending history fetch.")
+                            break pages
+                        default:
+                            break
+                        }
+                    }
                 }
 
                 if let event = event as? ChangeTimePumpEvent {

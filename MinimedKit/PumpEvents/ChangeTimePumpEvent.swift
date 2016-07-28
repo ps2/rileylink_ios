@@ -30,7 +30,7 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
         oldTimestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 9)
     }
-    
+
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
             "_type": "ChangeTime",

@@ -12,13 +12,17 @@ public class PumpStatus {
     let clock: NSDate
     let iob: IOBStatus?
     let battery: BatteryStatus?
-    var suspended: Bool? = nil
-    var reservoir: Double? = nil
+    let suspended: Bool?
+    let bolusing: Bool?
+    let reservoir: Double?
     
-    public init(clock: NSDate, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, reservoir: Double? = nil) {
+    public init(clock: NSDate, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil) {
         self.clock = clock
         self.iob = iob
         self.battery = battery
+        self.suspended = suspended
+        self.bolusing = bolusing
+        self.reservoir = reservoir
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {

@@ -9,15 +9,18 @@
 import Foundation
 
 public class DeviceStatus {
-    public var loopStatus: LoopStatus? = nil
-    public var uploaderStatus: UploaderStatus? = nil
-    public var pumpStatus: PumpStatus? = nil
-    public let device: String
-    public let timestamp: NSDate
+    let device: String
+    let timestamp: NSDate
+    let pumpStatus: PumpStatus?
+    let uploaderStatus: UploaderStatus?
+    let loopStatus: LoopStatus?
     
-    public init(device: String, timestamp: NSDate) {
+    public init(device: String, timestamp: NSDate, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil) {
         self.device = device
         self.timestamp = timestamp
+        self.pumpStatus = pumpStatus
+        self.uploaderStatus = uploaderStatus
+        self.loopStatus = loopStatus
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -35,7 +38,8 @@ public class DeviceStatus {
         }
         
         if let loop = loopStatus {
-            rval["loop"] = loop.dictionaryRepresentation
+            // Would like to change this to avoid confusion about whether or not this was uploaded from Loop or openaps
+            rval["openaps"] = loop.dictionaryRepresentation
         }
         
         return rval

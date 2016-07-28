@@ -99,24 +99,16 @@ public class NightscoutUploader {
         self.flushAll()
     }
 
-    public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) -> PumpStatus {
+    public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) throws -> PumpStatus {
 
-        let pumpDate = status.pumpDateComponents.date
-
-        if pumpDate == nil {
-            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date from \(status.pumpDateComponents)")
+        guard let pumpDate = status.pumpDateComponents.date else {
+            throw UploadError.MissingTimezone
         }
-
-        let pumpStatus = PumpStatus()
-        pumpStatus.batteryPct = status.batteryRemainingPercent
-        pumpStatus.bolusIOB = status.iob
-        pumpStatus.timestamp = pumpDate
-        pumpStatus.reservoirRemainingUnits = status.reservoirRemainingUnits
         
-        // TODO:
-        // pumpStatus.batteryVoltage
-        // pumpStatus.batteryStatus
-        // pumpStatus.suspended
+        let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
+        let iobStatus = IOBStatus(iob: status.iob, basaliob: 0, timestamp: pumpDate)
+
+        let pumpStatus = PumpStatus(clock: pumpDate, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
         
         return pumpStatus
     }

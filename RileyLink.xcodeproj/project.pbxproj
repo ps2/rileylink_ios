@@ -205,6 +205,10 @@
 		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
 		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
 		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
+		C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492621D4A5A19008964FF /* IOBStatus.swift */; };
+		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
+		C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* LoopSuggested.swift */; };
+		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1AACC6B1CECD5F500C07049 /* RileyLinkListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */; };
 		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
@@ -572,6 +576,10 @@
 		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
 		C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEvents.swift; sourceTree = "<group>"; };
+		C1A492621D4A5A19008964FF /* IOBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOBStatus.swift; sourceTree = "<group>"; };
+		C1A492641D4A5DEB008964FF /* BatteryStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryStatus.swift; sourceTree = "<group>"; };
+		C1A492661D4A65D9008964FF /* LoopSuggested.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopSuggested.swift; sourceTree = "<group>"; };
+		C1A492681D4A66C0008964FF /* LoopEnacted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopEnacted.swift; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkListTableViewController.swift; sourceTree = "<group>"; };
@@ -1106,9 +1114,13 @@
 			isa = PBXGroup;
 			children = (
 				C1AF21E11D4838C90088C41D /* DeviceStatus.swift */,
-				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
 				C1AF21E51D48667F0088C41D /* UploaderStatus.swift */,
 				C1AF21E71D4866960088C41D /* PumpStatus.swift */,
+				C1A492621D4A5A19008964FF /* IOBStatus.swift */,
+				C1A492641D4A5DEB008964FF /* BatteryStatus.swift */,
+				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
+				C1A492661D4A65D9008964FF /* LoopSuggested.swift */,
+				C1A492681D4A66C0008964FF /* LoopEnacted.swift */,
 			);
 			path = DeviceStatus;
 			sourceTree = "<group>";
@@ -1874,9 +1886,13 @@
 				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
 				C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */,
+				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
+				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
+				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
+				C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */,
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
 				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,

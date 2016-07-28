@@ -161,15 +161,26 @@ class DeviceDataManager {
             if uploaderDevice.batteryMonitoringEnabled {
                 uploaderStatus.batteryPct = Int(uploaderDevice.batteryLevel * 100)
             }
-
-            // Gather PumpStatus from MySentry packet
-            let pumpStatus = remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status)
-
-            // Send DeviceStatus
+            
+            // Build DeviceStatus
             let deviceStatus = DeviceStatus(device: device.deviceURI, timestamp: NSDate())
             deviceStatus.uploaderStatus = uploaderStatus
-            deviceStatus.pumpStatus = pumpStatus
-            //deviceStatus.loopStatus = ?
+            
+            // Mock out some loop data for testing
+//            let loopTime = NSDate()
+//            let iob = IOBStatus(iob: 3.0, basaliob: 1.2, timestamp: NSDate())
+//            let loopSuggested = LoopSuggested(timestamp: loopTime, rate: 1.2, duration: NSTimeInterval(30*60), correction: 0, eventualBG: 200, reason: "Test Reason", bg: 205, tick: 5)
+//            let loopEnacted = LoopEnacted(rate: 1.2, duration: NSTimeInterval(30*60), timestamp: loopTime, received: true)
+//            deviceStatus.loopStatus = LoopStatus(name: "TestLoopName", timestamp: NSDate(), iob: iob, suggested: loopSuggested, enacted: loopEnacted, failureReason: nil)
+            
+            // Gather PumpStatus from MySentry packet
+            do {
+                let pumpStatus = try remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status)
+                deviceStatus.pumpStatus = pumpStatus
+            } catch {
+                print("Could not get pump status: \(error)")
+            }
+            
             if Config.sharedInstance().uploadEnabled {
                 remoteDataManager.nightscoutUploader?.uploadDeviceStatus(deviceStatus)
             }

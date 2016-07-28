@@ -9,64 +9,42 @@
 import Foundation
 
 public class LoopStatus {
-    var name: String
-    var timestamp: NSDate
+    let name: String
+    let timestamp: NSDate
     
-    var glucose: Int? = nil
-    var iob: Double? = nil
-    var iobTimestamp: NSDate? = nil
-    var eventualBG: Int? = nil
-    var suggestedRate: Double? = nil
-    var suggestedDuration: NSTimeInterval? = nil
-    var enactedRate: Double? = nil
-    var enactedDuration: NSTimeInterval? = nil
-    var suggestedBolus: Double? = nil
-    var reason: String? = nil
+    let iob: IOBStatus?
+    let suggested: LoopSuggested?
+    let enacted: LoopEnacted?
     
-    init(name: String, timestamp: NSDate) {
+    let failureReason: String?
+    
+    public init(name: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: String? = nil) {
         self.name = name
         self.timestamp = timestamp
+        self.suggested = suggested
+        self.enacted = enacted
+        self.iob = iob
+        self.failureReason = failureReason
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         var rval = [String: AnyObject]()
         
-        rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["name"] = name
+        rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         
-        // IOB
-        var iobDict = [String: AnyObject]()
+        if let suggested = suggested {
+            rval["suggested"] = suggested.dictionaryRepresentation
+        }
+        
+        if let enacted = enacted {
+            rval["enacted"] = enacted.dictionaryRepresentation
+        }
+        
         if let iob = iob {
-            iobDict["iob"] = iob
+            rval["iob"] = iob.dictionaryRepresentation
         }
-        if let iobTimestamp = iobTimestamp {
-            iobDict["timestamp"] = TimeFormat.timestampStrFromDate(iobTimestamp)
-        }
-        rval["iob"] = iobDict
         
-        
-        // Suggested
-        var suggested = [String: AnyObject]()
-        if let glucose = glucose {
-            suggested["bg"] = glucose
-        }
-        if let rate = suggestedRate {
-            suggested["rate"] = rate
-        }
-        if let eventualBG = eventualBG {
-            suggested["eventualBG"] = eventualBG
-        }
-        rval["suggested"] = suggested
-        
-        // Enacted
-        var enacted = [String: AnyObject]()
-        if let rate = enactedRate {
-            enacted["rate"] = rate
-        }
-        if let duration = enactedDuration {
-            enacted["duration"] = duration
-        }
-        rval["enacted"] = enacted
         return rval
     }
 }

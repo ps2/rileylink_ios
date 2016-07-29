@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class LoopEnacted {
+public struct LoopEnacted {
     let rate: Double
     let duration: NSTimeInterval
     let timestamp: NSDate

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class IOBStatus {
+public struct IOBStatus {
     let iob: Double // basal iob + bolus iob: can be negative
     let basaliob: Double
     let timestamp: NSDate

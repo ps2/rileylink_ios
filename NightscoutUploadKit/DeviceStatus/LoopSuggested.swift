@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class LoopSuggested {
+public struct LoopSuggested {
     let timestamp: NSDate
     let rate: Double
     let duration: NSTimeInterval

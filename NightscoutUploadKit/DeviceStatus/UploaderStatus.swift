@@ -8,15 +8,16 @@
 
 import Foundation
 
-public class UploaderStatus {
-    public var batteryPct: Int? = nil
-    
+public struct UploaderStatus {
+
+    public let battery: Int?
     public let name: String
     public let timestamp: NSDate
     
-    public init(name: String, timestamp: NSDate) {
+    public init(name: String, timestamp: NSDate, battery: Int? = nil) {
         self.name = name
         self.timestamp = timestamp
+        self.battery = battery
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -25,7 +26,7 @@ public class UploaderStatus {
         rval["name"] = name
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         
-        if let battery = batteryPct {
+        if let battery = battery {
             rval["battery"] = battery
         }
 

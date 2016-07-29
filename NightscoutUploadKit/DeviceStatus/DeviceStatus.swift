@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class DeviceStatus {
+public struct DeviceStatus {
     let device: String
     let timestamp: NSDate
     let pumpStatus: PumpStatus?

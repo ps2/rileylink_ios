@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class BatteryStatus {
+public struct BatteryStatus {
     let percent: Int?
     let voltage: Double?
     let status: String

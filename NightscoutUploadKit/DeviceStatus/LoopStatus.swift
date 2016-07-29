@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class LoopStatus {
+public struct LoopStatus {
     let name: String
     let timestamp: NSDate
     

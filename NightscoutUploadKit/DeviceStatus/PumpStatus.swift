@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class PumpStatus {
+public struct PumpStatus {
     let clock: NSDate
     let iob: IOBStatus?
     let battery: BatteryStatus?

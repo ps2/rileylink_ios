@@ -167,11 +167,16 @@ class DeviceDataManager {
 
             // Gather UploaderStatus
             let uploaderDevice = UIDevice.currentDevice()
-            let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate())
+
+
+            let battery: Int?
             if uploaderDevice.batteryMonitoringEnabled {
-                uploaderStatus.batteryPct = Int(uploaderDevice.batteryLevel * 100)
+                battery = Int(uploaderDevice.batteryLevel * 100)
+            } else {
+                battery = nil
             }
-            
+            let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
+
             // Gather PumpStatus from MySentry packet
             let pumpStatus: PumpStatus?
             do {

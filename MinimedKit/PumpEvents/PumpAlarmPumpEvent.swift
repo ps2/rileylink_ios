@@ -8,14 +8,33 @@
 
 import Foundation
 
-public enum PumpAlarmType: Int {
-    case BatteryOutLimitExceeded = 3
-    case NoDelivery              = 4
-    case BatteryDepleted         = 5
-    case DeviceReset             = 16
-    case ReprogramError          = 61
-    case EmptyReservoir          = 62
-    case UnknownType             = -1
+public enum PumpAlarmType {
+    case BatteryOutLimitExceeded
+    case NoDelivery             
+    case BatteryDepleted        
+    case DeviceReset            
+    case ReprogramError         
+    case EmptyReservoir         
+    case UnknownType(rawType: UInt8)
+
+    init(rawType: UInt8) {
+        switch rawType {
+        case 3:
+            self = .BatteryOutLimitExceeded
+        case 4:
+            self = .NoDelivery
+        case 5:
+            self = .BatteryDepleted
+        case 16:
+            self = .DeviceReset
+        case 61:
+            self = .ReprogramError
+        case 62:
+            self = .EmptyReservoir
+        default:
+            self = .UnknownType(rawType: rawType)
+        }
+    }
 }
 
 public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
@@ -23,8 +42,7 @@ public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let rawData: NSData
     public let timestamp: NSDateComponents
     public let alarmType: PumpAlarmType
-    public let rawType: Int
-    
+
     public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9
         
@@ -34,30 +52,16 @@ public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
 
         rawData = availableData[0..<length]
         
-        rawType = Int(availableData[1] as UInt8)
-        
-        if let alarmType = PumpAlarmType(rawValue: rawType) {
-            self.alarmType = alarmType
-        } else {
-            self.alarmType = .UnknownType
-        }
+        alarmType = PumpAlarmType(rawType: availableData[1] as UInt8)
         
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
-        let typeDescription: String
-        
-        if self.alarmType == .UnknownType {
-            typeDescription = "Device Alarm(\(rawType))"
-        } else {
-            typeDescription = "\(self.alarmType)"
-        }
-        
+
         return [
             "_type": "AlarmPump",
-            "rawType": rawType,
-            "alarm": typeDescription,
+            "alarm": "\(self.alarmType)",
         ]
     }
 }

@@ -151,18 +151,54 @@ class DeviceDataManager {
         if status != latestPumpStatus {
             latestPumpStatus = status
             
-            if status.batteryRemainingPercent == 0 {
-                //NotificationManager.sendPumpBatteryLowNotification()
-            }
-            if Config.sharedInstance().uploadEnabled {
-                remoteDataManager.nightscoutUploader?.handlePumpStatus(status, device: device.deviceURI)
-            }
-            
             // Sentry packets are sent in groups of 3, 5s apart. Wait 11s to avoid conflicting comms.
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(11 * NSEC_PER_SEC))
             dispatch_after(delay, dispatch_get_main_queue()) {
                 self.getPumpHistory(device)
             }
+            
+            if status.batteryRemainingPercent == 0 {
+                //NotificationManager.sendPumpBatteryLowNotification()
+            }
+            
+            guard Config.sharedInstance().uploadEnabled else {
+                return
+            }
+
+            // Gather UploaderStatus
+            let uploaderDevice = UIDevice.currentDevice()
+
+
+            let battery: Int?
+            if uploaderDevice.batteryMonitoringEnabled {
+                battery = Int(uploaderDevice.batteryLevel * 100)
+            } else {
+                battery = nil
+            }
+            let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
+
+            // Gather PumpStatus from MySentry packet
+            let pumpStatus: PumpStatus?
+            do {
+                pumpStatus = try remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status)
+            } catch {
+                pumpStatus = nil
+                print("Could not get pump status: \(error)")
+            }
+            
+            // Mock out some loop data for testing
+//            let loopTime = NSDate()
+//            let iob = IOBStatus(iob: 3.0, basaliob: 1.2, timestamp: NSDate())
+//            let loopSuggested = LoopSuggested(timestamp: loopTime, rate: 1.2, duration: NSTimeInterval(30*60), correction: 0, eventualBG: 200, reason: "Test Reason", bg: 205, tick: 5)
+//            let loopEnacted = LoopEnacted(rate: 1.2, duration: NSTimeInterval(30*60), timestamp: loopTime, received: true)
+//            let loopStatus = LoopStatus(name: "TestLoopName", timestamp: NSDate(), iob: iob, suggested: loopSuggested, enacted: loopEnacted, failureReason: nil)
+            
+            // Build DeviceStatus
+            let deviceStatus = DeviceStatus(device: uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)
+            remoteDataManager.nightscoutUploader?.uploadDeviceStatus(deviceStatus)
+
+            // Send SGVs
+            remoteDataManager.nightscoutUploader?.uploadSGVFromMySentryPumpStatus(status, device: device.deviceURI)
         }
     }
     

@@ -98,6 +98,25 @@ public class NightscoutUploader {
         }
         self.flushAll()
     }
+
+    public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) throws -> PumpStatus {
+
+        guard let pumpDate = status.pumpDateComponents.date else {
+            throw UploadError.MissingTimezone
+        }
+        
+        let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
+        let iobStatus = IOBStatus(iob: status.iob, basaliob: 0, timestamp: pumpDate)
+
+        let pumpStatus = PumpStatus(clock: pumpDate, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
+        
+        return pumpStatus
+    }
+
+    public func uploadDeviceStatus(status: DeviceStatus) {
+        deviceStatuses.append(status.dictionaryRepresentation)
+        flushAll()
+    }
     
     //  Entries [ { sgv: 375,
     //    date: 1432421525000,
@@ -107,10 +126,9 @@ public class NightscoutUploader {
     //    device: 'share2',
     //    type: 'sgv' } ]
     
-    public func handlePumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
+    public func uploadSGVFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
         var recordSGV = true
-        
         let glucose: Int = {
             switch status.glucose {
             case .Active(glucose: let glucose):
@@ -127,52 +145,7 @@ public class NightscoutUploader {
             }
         }()
         
-        // Create deviceStatus record from this mysentry packet
-        
-        var nsStatus = [String: AnyObject]()
-        
-        nsStatus["device"] = device
-        nsStatus["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-        
-        // TODO: use battery monitoring to post updates if we're not hearing from pump?
-        
-        let uploaderDevice = UIDevice.currentDevice()
-        
-        if uploaderDevice.batteryMonitoringEnabled {
-            nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
-        }
-        
-        guard let pumpDate = status.pumpDateComponents.date else {
-            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
-            return
-        }
-        
-        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
-        
-        nsStatus["pump"] = [
-            "clock": pumpDateStr,
-            "iob": [
-                "timestamp": pumpDateStr,
-                "bolusiob": status.iob,
-            ],
-            "reservoir": status.reservoirRemainingUnits,
-            "battery": [
-                "percent": status.batteryRemainingPercent
-            ]
-        ]
-        
-        switch status.glucose {
-        case .Active(glucose: _):
-            nsStatus["sensor"] = [
-                "sensorAge": status.sensorAgeHours,
-                "sensorRemaining": status.sensorRemainingHours,
-            ]
-        default:
-            nsStatus["sensorNotActive"] = true
-        }
-        deviceStatuses.append(nsStatus)
-        
-        
+
         // Create SGV entry from this mysentry packet
         if (recordSGV) {
             var entry: [String: AnyObject] = [

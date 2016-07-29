@@ -205,8 +205,21 @@
 		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
 		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
 		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
+		C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492621D4A5A19008964FF /* IOBStatus.swift */; };
+		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
+		C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* LoopSuggested.swift */; };
+		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
 		C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */; };
 		C1AACC6B1CECD5F500C07049 /* RileyLinkListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */; };
+		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
+		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
+		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
+		C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E71D4866960088C41D /* PumpStatus.swift */; };
+		C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */; };
+		C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */; };
+		C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */; };
+		C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */; };
+		C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */; };
 		C1B3830E1CD0665D00CE7782 /* NightscoutUploadKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; };
 		C1B3831C1CD0665D00CE7782 /* NightscoutUploadKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B3831B1CD0665D00CE7782 /* NightscoutUploadKitTests.swift */; };
@@ -214,11 +227,6 @@
 		C1B383211CD0665D00CE7782 /* NightscoutUploadKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */; };
 		C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
-		C1B3832A1CD0668600CE7782 /* NightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */; };
-		C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */; };
-		C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */; };
-		C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */; };
-		C1B3832E1CD0668600CE7782 /* TempBasalNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */; };
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
@@ -473,7 +481,6 @@
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
-		C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
@@ -569,13 +576,22 @@
 		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
 		C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEvents.swift; sourceTree = "<group>"; };
-		C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutTreatment.swift; sourceTree = "<group>"; };
-		C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGCheckNightscoutTreatment.swift; sourceTree = "<group>"; };
-		C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1A492621D4A5A19008964FF /* IOBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOBStatus.swift; sourceTree = "<group>"; };
+		C1A492641D4A5DEB008964FF /* BatteryStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryStatus.swift; sourceTree = "<group>"; };
+		C1A492661D4A65D9008964FF /* LoopSuggested.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopSuggested.swift; sourceTree = "<group>"; };
+		C1A492681D4A66C0008964FF /* LoopEnacted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopEnacted.swift; sourceTree = "<group>"; };
 		C1AA39921AB6804000BC9E33 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		C1AA39931AB6804000BC9E33 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		C1AACC6A1CECD5F500C07049 /* RileyLinkListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkListTableViewController.swift; sourceTree = "<group>"; };
+		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
+		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
+		C1AF21E51D48667F0088C41D /* UploaderStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploaderStatus.swift; sourceTree = "<group>"; };
+		C1AF21E71D4866960088C41D /* PumpStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpStatus.swift; sourceTree = "<group>"; };
+		C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGCheckNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutUploadKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutUploadKit.h; sourceTree = "<group>"; };
 		C1B3830F1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1094,18 +1110,42 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		C1AF21E91D4900300088C41D /* DeviceStatus */ = {
+			isa = PBXGroup;
+			children = (
+				C1AF21E11D4838C90088C41D /* DeviceStatus.swift */,
+				C1AF21E51D48667F0088C41D /* UploaderStatus.swift */,
+				C1AF21E71D4866960088C41D /* PumpStatus.swift */,
+				C1A492621D4A5A19008964FF /* IOBStatus.swift */,
+				C1A492641D4A5DEB008964FF /* BatteryStatus.swift */,
+				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
+				C1A492661D4A65D9008964FF /* LoopSuggested.swift */,
+				C1A492681D4A66C0008964FF /* LoopEnacted.swift */,
+			);
+			path = DeviceStatus;
+			sourceTree = "<group>";
+		};
+		C1AF21EA1D4900880088C41D /* Treatments */ = {
+			isa = PBXGroup;
+			children = (
+				C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */,
+				C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */,
+				C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */,
+				C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */,
+				C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */,
+			);
+			path = Treatments;
+			sourceTree = "<group>";
+		};
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
+				C1AF21EA1D4900880088C41D /* Treatments */,
+				C1AF21E91D4900300088C41D /* DeviceStatus */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
-				C1842C301C91D56400DB42AC /* BGCheckNightscoutTreatment.swift */,
-				C19F94AA1C91DF6E00018F7D /* BolusNightscoutTreatment.swift */,
-				C1842C321C91DAFA00DB42AC /* MealBolusNightscoutTreatment.swift */,
-				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
-				C1842C2E1C90F6D900DB42AC /* NightscoutTreatment.swift */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
-				C12FB2751CC5893C00879B80 /* TempBasalNightscoutTreatment.swift */,
+				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
 				C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */,
 			);
@@ -1838,17 +1878,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1B3832E1CD0668600CE7782 /* TempBasalNightscoutTreatment.swift in Sources */,
-				C1B3832B1CD0668600CE7782 /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
+				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
 				C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */,
-				C1B3832D1CD0668600CE7782 /* BolusNightscoutTreatment.swift in Sources */,
+				C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */,
+				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
+				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
+				C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */,
+				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
+				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
+				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
-				C1B3832C1CD0668600CE7782 /* MealBolusNightscoutTreatment.swift in Sources */,
+				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
+				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
+				C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */,
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
+				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
-				C1B3832A1CD0668600CE7782 /* NightscoutTreatment.swift in Sources */,
+				C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

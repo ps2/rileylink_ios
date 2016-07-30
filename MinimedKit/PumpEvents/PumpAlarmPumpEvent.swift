@@ -8,12 +8,41 @@
 
 import Foundation
 
+public enum PumpAlarmType {
+    case BatteryOutLimitExceeded
+    case NoDelivery             
+    case BatteryDepleted        
+    case DeviceReset            
+    case ReprogramError         
+    case EmptyReservoir         
+    case UnknownType(rawType: UInt8)
+
+    init(rawType: UInt8) {
+        switch rawType {
+        case 3:
+            self = .BatteryOutLimitExceeded
+        case 4:
+            self = .NoDelivery
+        case 5:
+            self = .BatteryDepleted
+        case 16:
+            self = .DeviceReset
+        case 61:
+            self = .ReprogramError
+        case 62:
+            self = .EmptyReservoir
+        default:
+            self = .UnknownType(rawType: rawType)
+        }
+    }
+}
+
 public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: NSData
     public let timestamp: NSDateComponents
-    let rawType: Int
-    
+    public let alarmType: PumpAlarmType
+
     public init?(availableData: NSData, pumpModel: PumpModel) {
         length = 9
         
@@ -23,14 +52,16 @@ public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
 
         rawData = availableData[0..<length]
         
-        rawType = Int(availableData[1] as UInt8)
+        alarmType = PumpAlarmType(rawType: availableData[1] as UInt8)
+        
         timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
+
         return [
             "_type": "AlarmPump",
-            "rawType": rawType,
+            "alarm": "\(self.alarmType)",
         ]
     }
 }

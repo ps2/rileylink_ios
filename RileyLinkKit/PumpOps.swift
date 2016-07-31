@@ -105,7 +105,7 @@ public class PumpOps {
 
      - parameter startDate:  The earliest date of events to retrieve
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - Success(events): An array of fetched history entries
+        - Success(events): An array of fetched history entries, in ascending order of insertion
         - Failure(error):  An error describing why the command failed
 
      */

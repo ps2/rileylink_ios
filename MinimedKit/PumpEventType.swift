@@ -69,7 +69,7 @@ public enum PumpEventType: UInt8 {
     case DeleteOtherDeviceID = 0x82
     case ChangeCaptureEventEnable = 0x83
     
-    var eventType: PumpEvent.Type {
+    public var eventType: PumpEvent.Type {
         switch self {
         case .BolusNormal:
             return BolusNormalPumpEvent.self

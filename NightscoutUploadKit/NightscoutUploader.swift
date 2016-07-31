@@ -64,7 +64,14 @@ public class NightscoutUploader {
     }
     
     // MARK: - Processing data from pump
-    
+
+    /**
+     Enqueues pump history events for upload, with automatic retry management.
+     
+     - parameter events:    An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
+     - parameter source:    The device identifier to display in Nightscout
+     - parameter pumpModel: The pump model info associated with the events
+     */
     public func processPumpEvents(events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
         
         // Find valid event times
@@ -97,6 +104,22 @@ public class NightscoutUploader {
             treatmentsQueue.append(treatment)
         }
         self.flushAll()
+    }
+
+    /**
+     Attempts to upload pump history events.
+     
+     This method will not retry if the network task failed.
+     
+     - parameter pumpEvents: An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
+     - parameter source:     The device identifier to display in Nightscout
+     - parameter pumpModel:  The pump model info associated with the events
+     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
+     */
+    public func upload(pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: (ErrorType?) -> Void) {
+        let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
+
+        uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
     public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) throws -> PumpStatus {
@@ -225,18 +248,15 @@ public class NightscoutUploader {
         
         let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
         let request = NSMutableURLRequest(URL: uploadURL)
+        request.HTTPMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(APISecret.SHA1, forHTTPHeaderField: "api-secret")
+
         do {
-            
-            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
-            request.HTTPMethod = "POST"
-            
-            request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-            request.setValue("application/json", forHTTPHeaderField:"Accept")
-            request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
-            request.HTTPBody = sendData
-            
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                
+            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: [])
+
+            let task = NSURLSession.sharedSession().uploadTaskWithRequest(request, fromData: sendData) { (data, response, error) in
                 if let error = error {
                     completion(error)
                     return
@@ -248,7 +268,7 @@ public class NightscoutUploader {
                 } else {
                     completion(nil)
                 }
-            })
+            }
             task.resume()
         } catch let error as NSError {
             completion(error)

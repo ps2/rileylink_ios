@@ -153,7 +153,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case DumpHistory
         case GetPumpModel
         case PressDownButton
-        case ReadRemainingInsulin
+        case ReadPumpStatus
 
         static let count = 7
     }
@@ -288,8 +288,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
             case .PressDownButton:
                 cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
 
-            case .ReadRemainingInsulin:
-                cell.textLabel?.text = NSLocalizedString("Read Remaining Insulin", comment: "The title of the command to read remaining insulin")
+            case .ReadPumpStatus:
+                cell.textLabel?.text = NSLocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
             }
         }
 
@@ -477,21 +477,25 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
-            case .ReadRemainingInsulin:
+            case .ReadPumpStatus:
                 vc = CommandResponseViewController {
                     [unowned self] (completionHandler) -> String in
-                    self.device.ops?.readRemainingInsulin { (result) in
+                    self.device.ops?.readPumpStatus { (result) in
                         dispatch_async(dispatch_get_main_queue()) {
                             switch result {
-                            case .Success(let units):
-                                completionHandler(responseText: String(format: NSLocalizedString("%1$@ Units remaining", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.stringFromNumber(units)!))
+                            case .Success(let status):
+                                var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.stringFromNumber(status.reservoir)!)
+                                str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), self.decimalFormatter.stringFromNumber(status.batteryVolts)!)
+                                str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), status.suspended.description)
+                                str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), status.bolusing.description)
+                                completionHandler(responseText: str)
                             case .Failure(let error):
                                 completionHandler(responseText: String(error))
                             }
                         }
                     }
 
-                    return NSLocalizedString("Reading remaining insulin…", comment: "Progress message for reading pump insulin reservoir volume")
+                    return NSLocalizedString("Reading pump status…", comment: "Progress message for reading pump status")
                 }
             }
 

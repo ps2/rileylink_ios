@@ -178,7 +178,7 @@ class DeviceDataManager {
             let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
 
             // Gather PumpStatus from MySentry packet
-            let pumpStatus: PumpStatus?
+            let pumpStatus: NightscoutUploadKit.PumpStatus?
             do {
                 pumpStatus = try remoteDataManager.nightscoutUploader?.getPumpStatusFromMySentryPumpStatus(status)
             } catch {

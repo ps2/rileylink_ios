@@ -28,6 +28,7 @@ public enum MessageType: UInt8 {
     case GetPumpModel           = 0x8d
     case ReadTempBasal          = 0x98
     case ReadSettings           = 0xc0
+    case ReadPumpStatus         = 0xce
     
     var bodyType: MessageBody.Type {
         switch self {
@@ -59,6 +60,8 @@ public enum MessageType: UInt8 {
             return GetBatteryCarelinkMessageBody.self
         case .ReadRemainingInsulin:
             return ReadRemainingInsulinMessageBody.self
+        case .ReadPumpStatus:
+            return ReadPumpStatusMessageBody.self
         default:
             return UnknownMessageBody.self
         }

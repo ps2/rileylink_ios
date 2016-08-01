@@ -411,6 +411,41 @@ class PumpOpsSynchronous {
         }
         return frameData
     }
+
+    internal func readPumpStatus() throws -> PumpStatus {
+        let clockResp: ReadTimeCarelinkMessageBody = try getMessageBodyWithType(.ReadTime)
+
+        let pumpModel = try getPumpModel()
+
+        let resResp: ReadRemainingInsulinMessageBody = try getMessageBodyWithType(.ReadRemainingInsulin)
+
+        let reservoir = resResp.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)
+
+        let battResp: GetBatteryCarelinkMessageBody = try getMessageBodyWithType(.GetBattery)
+
+        let statusResp: ReadPumpStatusMessageBody = try getMessageBodyWithType(.ReadPumpStatus)
+
+        return PumpStatus(clock: clockResp.dateComponents, batteryVolts: battResp.volts, suspended: statusResp.suspended, bolusing: statusResp.bolusing, reservoir: reservoir, model: pumpModel)
+
+    }
+}
+
+public struct PumpStatus {
+    let clock: NSDateComponents
+    let batteryVolts: Double
+    let suspended: Bool
+    let bolusing: Bool
+    let reservoir: Double
+    let model: PumpModel
+
+    public init(clock: NSDateComponents, batteryVolts: Double, suspended: Bool, bolusing: Bool, reservoir: Double, model: PumpModel) {
+        self.clock = clock
+        self.batteryVolts = batteryVolts
+        self.suspended = suspended
+        self.bolusing = bolusing
+        self.reservoir = reservoir
+        self.model = model
+    }
 }
 
 public struct FrequencyTrial {

@@ -156,8 +156,8 @@ public class PumpOps {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-     - Success(status): A structure describing the current status of the pump
-     - Failure(error): An error describing why the command failed
+        - Success(status): A structure describing the current status of the pump
+        - Failure(error): An error describing why the command failed
      */
     public func readPumpStatus(completion: (Either<PumpStatus, ErrorType>) -> Void) {
         device.runSession { (session) in

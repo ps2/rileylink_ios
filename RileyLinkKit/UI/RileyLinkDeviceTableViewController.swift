@@ -486,8 +486,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                             case .Success(let status):
                                 var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.stringFromNumber(status.reservoir)!)
                                 str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), self.decimalFormatter.stringFromNumber(status.batteryVolts)!)
-                                str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), status.suspended.description)
-                                str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), status.bolusing.description)
+                                str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(status.suspended))
+                                str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(status.bolusing))
                                 completionHandler(responseText: str)
                             case .Failure(let error):
                                 completionHandler(responseText: String(error))

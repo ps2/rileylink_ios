@@ -89,10 +89,6 @@ class DeviceDataManager {
         }
     }
     
-    func receivedRileyLinkManagerNotification(note: NSNotification) {
-        NSNotificationCenter.defaultCenter().postNotificationName(note.name, object: self, userInfo: note.userInfo)
-    }
-    
     func preferredRileyLink() -> RileyLinkDevice? {
         if let device = lastRileyLinkHeardFrom {
             return device
@@ -100,7 +96,11 @@ class DeviceDataManager {
         return self.rileyLinkManager.firstConnectedDevice
     }
     
-    func receivedRileyLinkPacketNotification(note: NSNotification) {
+    @objc private func receivedRileyLinkManagerNotification(note: NSNotification) {
+        NSNotificationCenter.defaultCenter().postNotificationName(note.name, object: self, userInfo: note.userInfo)
+    }
+    
+    @objc private func receivedRileyLinkPacketNotification(note: NSNotification) {
         if let
             device = note.object as? RileyLinkDevice,
             data = note.userInfo?[RileyLinkDevice.IdleMessageDataKey] as? NSData,
@@ -131,6 +131,39 @@ class DeviceDataManager {
             }
         }
     }
+    
+    @objc private func receivedRileyLinkTimerTickNotification(note: NSNotification) {
+//        backfillGlucoseFromShareIfNeeded() {
+//            self.assertCurrentPumpData()
+//        }
+    }
+    
+    /**
+     Ensures pump data is current by either waking and polling, or ensuring we're listening to sentry packets.
+     */
+    private func assertCurrentPumpData() {
+        guard let device = rileyLinkManager.firstConnectedDevice else {
+            return
+        }
+        
+        device.assertIdleListening()
+        
+        // How long should we wait before we poll for new reservoir data?
+        let reservoirTolerance = rileyLinkManager.idleListeningEnabled ? NSTimeInterval(minutes: 11) : NSTimeInterval(minutes: 4)
+        
+        // If we don't yet have reservoir data, or it's old, poll for it.
+        if latestReservoirValue == nil || latestReservoirValue!.startDate.timeIntervalSinceNow <= -reservoirTolerance {
+            readReservoirVolume { (result) in
+                switch result {
+                case .Success(let (units, date)):
+                    self.updateReservoirVolume(units, atDate: date, withTimeLeft: nil)
+                case .Failure:
+                    self.troubleshootPumpCommsWithDevice(device)
+                }
+            }
+        }
+    }
+
     
     func connectToRileyLink(device: RileyLinkDevice) {
         connectedPeripheralIDs.insert(device.peripheral.identifier.UUIDString)
@@ -276,10 +309,10 @@ class DeviceDataManager {
             self?.receivedRileyLinkManagerNotification(note)
         }
         
-        // TODO: Use delegation instead.
-        rileyLinkDevicePacketObserver = NSNotificationCenter.defaultCenter().addObserverForName(RileyLinkDevice.DidReceiveIdleMessageNotification, object: nil, queue: nil) { [weak self] (note) -> Void in
-            self?.receivedRileyLinkPacketNotification(note)
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(receivedRileyLinkManagerNotification(_:)), name: nil, object: rileyLinkManager)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: RileyLinkDevice.DidReceiveIdleMessageNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(receivedRileyLinkTimerTickNotification(_:)), name: RileyLinkDevice.DidUpdateTimerTickNotification, object: nil)
+
 
 
     }

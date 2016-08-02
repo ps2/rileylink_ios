@@ -13,7 +13,7 @@ public struct IOBStatus {
     let basaliob: Double? // does not include bolus iob
     let timestamp: NSDate
     
-    public init(iob: Double, basaliob: Double?, timestamp: NSDate) {
+    public init(iob: Double?, basaliob: Double?, timestamp: NSDate) {
         self.iob = iob
         self.basaliob = basaliob
         self.timestamp = timestamp

@@ -54,7 +54,7 @@ public struct LoopSuggested {
         rval["eventualBG"] = eventualBG
 
         if let reason = reason {
-            rval["reaseon"] = reason
+            rval["reason"] = reason
         }
 
         return rval

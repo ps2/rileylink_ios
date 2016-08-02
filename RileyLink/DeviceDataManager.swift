@@ -235,7 +235,6 @@ class DeviceDataManager {
             return
         }
 
-        
         // Gather UploaderStatus
         let uploaderDevice = UIDevice.currentDevice()
         
@@ -354,7 +353,6 @@ class DeviceDataManager {
     
     private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel, device: RileyLinkDevice) {
         // TODO: get insulin doses from history
-        // TODO: upload events to Nightscout
         if Config.sharedInstance().uploadEnabled {
             remoteDataManager.nightscoutUploader?.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
         }

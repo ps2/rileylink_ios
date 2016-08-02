@@ -210,19 +210,15 @@ class DeviceDataManager {
             
             // Gather PumpStatus from MySentry packet
             let pumpStatus: NightscoutUploadKit.PumpStatus?
-            do {
-                guard let pumpDate = status.pumpDateComponents.date else {
-                    throw UploadError.MissingTimezone
-                }
-                
+            if let pumpDate = status.pumpDateComponents.date {
+
                 let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
                 let iobStatus = IOBStatus(iob: status.iob, basaliob: 0, timestamp: pumpDate)
                 
                 pumpStatus = NightscoutUploadKit.PumpStatus(clock: pumpDate, pumpID: pumpID, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
-                
-            } catch {
+            } else {
                 pumpStatus = nil
-                print("Could not get pump status: \(error)")
+                print("Could not interpret pump clock: \(status.pumpDateComponents)")
             }
 
             // Trigger device status upload, even if something is wrong with pumpStatus

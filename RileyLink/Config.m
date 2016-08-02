@@ -64,6 +64,15 @@
     return [_defaults stringForKey:@"pumpID"];
 }
 
+- (void) setPumpModelNumber:(NSString *)pumpModelNumber {
+    [_defaults setValue:pumpModelNumber forKey:@"pumpModelNumber"];
+}
+
+- (NSString*) pumpModelNumber {
+    return [_defaults stringForKey:@"pumpModelNumber"];
+}
+
+
 - (void) setPumpTimeZone:(NSTimeZone *)pumpTimeZone {
     
     if (pumpTimeZone) {

@@ -122,20 +122,6 @@ public class NightscoutUploader {
         uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
-    public func getPumpStatusFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody) throws -> PumpStatus {
-
-        guard let pumpDate = status.pumpDateComponents.date else {
-            throw UploadError.MissingTimezone
-        }
-        
-        let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
-        let iobStatus = IOBStatus(iob: status.iob, basaliob: 0, timestamp: pumpDate)
-
-        let pumpStatus = PumpStatus(clock: pumpDate, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
-        
-        return pumpStatus
-    }
-
     public func uploadDeviceStatus(status: DeviceStatus) {
         deviceStatuses.append(status.dictionaryRepresentation)
         flushAll()

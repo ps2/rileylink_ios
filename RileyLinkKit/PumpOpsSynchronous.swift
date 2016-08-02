@@ -435,19 +435,20 @@ class PumpOpsSynchronous {
 
         let statusResp: ReadPumpStatusMessageBody = try getMessageBodyWithType(.ReadPumpStatus)
 
-        return PumpStatus(clock: clockResp.dateComponents, batteryVolts: battResp.volts, batteryStatus: battResp.status, suspended: statusResp.suspended, bolusing: statusResp.bolusing, reservoir: reservoir, model: pumpModel)
+        return PumpStatus(clock: clockResp.dateComponents, batteryVolts: battResp.volts, batteryStatus: battResp.status, suspended: statusResp.suspended, bolusing: statusResp.bolusing, reservoir: reservoir, model: pumpModel, pumpID: pump.pumpID)
 
     }
 }
 
 public struct PumpStatus {
-    let clock: NSDateComponents
-    let batteryVolts: Double
-    let batteryStatus: BatteryStatus
-    let suspended: Bool
-    let bolusing: Bool
-    let reservoir: Double
-    let model: PumpModel
+    public let clock: NSDateComponents
+    public let batteryVolts: Double
+    public let batteryStatus: BatteryStatus
+    public let suspended: Bool
+    public let bolusing: Bool
+    public let reservoir: Double
+    public let model: PumpModel
+    public let pumpID: String
 }
 
 public struct FrequencyTrial {

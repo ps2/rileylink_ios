@@ -151,6 +151,7 @@
 		C1711A5C1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */; };
 		C1711A5E1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -520,6 +521,7 @@
 		C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetHistoryPageCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
 		C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ISO8601DateFormatter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadPumpStatusMessageBody.swift; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1222,6 +1224,7 @@
 				43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */,
 				43CA932D1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift */,
 				C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */,
+				C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -1730,6 +1733,7 @@
 				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
 				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
 				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
+				C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */,
 				43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */,
 				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,

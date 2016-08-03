@@ -11,9 +11,9 @@ import Foundation
 public struct BatteryStatus {
     let percent: Int?
     let voltage: Double?
-    let status: String
+    let status: String?
     
-    public init(percent: Int? = nil, voltage: Double? = nil, status: String = "normal") {
+    public init(percent: Int? = nil, voltage: Double? = nil, status: String? = nil) {
         self.percent = percent
         self.voltage = voltage
         self.status = status
@@ -28,7 +28,10 @@ public struct BatteryStatus {
         if let voltage = voltage {
             rval["voltage"] = voltage
         }
-        rval["status"] = status
+
+        if let status = status {
+            rval["status"] = status
+        }
         
         return rval
     }

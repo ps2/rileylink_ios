@@ -8,12 +8,17 @@
 
 import Foundation
 
+public enum BatteryIndicator: String {
+    case Low = "low"
+    case Normal = "normal"
+}
+
 public struct BatteryStatus {
     let percent: Int?
     let voltage: Double?
-    let status: String?
+    let status: BatteryIndicator?
     
-    public init(percent: Int? = nil, voltage: Double? = nil, status: String? = nil) {
+    public init(percent: Int? = nil, voltage: Double? = nil, status: BatteryIndicator? = nil) {
         self.percent = percent
         self.voltage = voltage
         self.status = status
@@ -30,7 +35,7 @@ public struct BatteryStatus {
         }
 
         if let status = status {
-            rval["status"] = status
+            rval["status"] = status.rawValue
         }
         
         return rval

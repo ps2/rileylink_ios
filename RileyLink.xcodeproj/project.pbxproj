@@ -153,6 +153,7 @@
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */; };
 		C178845F1D5166BE00405663 /* COBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178845E1D5166BE00405663 /* COBStatus.swift */; };
+		C17884611D519F1E00405663 /* BatteryIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17884601D519F1E00405663 /* BatteryIndicator.swift */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -524,6 +525,7 @@
 		C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ISO8601DateFormatter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadPumpStatusMessageBody.swift; sourceTree = "<group>"; };
 		C178845E1D5166BE00405663 /* COBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COBStatus.swift; sourceTree = "<group>"; };
+		C17884601D519F1E00405663 /* BatteryIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryIndicator.swift; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1110,6 +1112,7 @@
 				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
 				C14FFC601D3D75470049CF85 /* UIColor.swift */,
 				C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */,
+				C17884601D519F1E00405663 /* BatteryIndicator.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1874,6 +1877,7 @@
 				C14FFC551D3D72A50049CF85 /* UIViewController.swift in Sources */,
 				434FF1DE1CF268F3000DB779 /* RileyLinkDeviceTableViewCell.swift in Sources */,
 				C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */,
+				C17884611D519F1E00405663 /* BatteryIndicator.swift in Sources */,
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,

@@ -8,15 +8,20 @@
 
 import Foundation
 
+public enum BatteryIndicator: String {
+    case Absolute = "absolute"
+    case Percentage = "percentage"
+}
+
 public struct BatteryStatus {
     let percent: Int?
     let voltage: Double?
-    let status: String?
+    let indicator: BatteryIndicator?
     
-    public init(percent: Int? = nil, voltage: Double? = nil, status: String? = nil) {
+    public init(percent: Int? = nil, voltage: Double? = nil, indicator: BatteryIndicator? = nil) {
         self.percent = percent
         self.voltage = voltage
-        self.status = status
+        self.indicator = indicator
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -29,8 +34,8 @@ public struct BatteryStatus {
             rval["voltage"] = voltage
         }
 
-        if let status = status {
-            rval["status"] = status
+        if let indicator = indicator {
+            rval["status"] = indicator.rawValue
         }
         
         return rval

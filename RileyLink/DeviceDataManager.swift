@@ -213,7 +213,7 @@ class DeviceDataManager {
             if let pumpDate = status.pumpDateComponents.date {
 
                 let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
-                let iobStatus = IOBStatus(iob: status.iob, basaliob: 0, timestamp: pumpDate)
+                let iobStatus = IOBStatus(timestamp: pumpDate, iob: status.iob)
                 
                 pumpStatus = NightscoutUploadKit.PumpStatus(clock: pumpDate, pumpID: pumpID, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
             } else {

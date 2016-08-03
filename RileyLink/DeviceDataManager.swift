@@ -212,7 +212,7 @@ class DeviceDataManager {
             let pumpStatus: NightscoutUploadKit.PumpStatus?
             if let pumpDate = status.pumpDateComponents.date {
 
-                let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent, status: "normal")
+                let batteryStatus = BatteryStatus(percent: status.batteryRemainingPercent)
                 let iobStatus = IOBStatus(timestamp: pumpDate, iob: status.iob)
                 
                 pumpStatus = NightscoutUploadKit.PumpStatus(clock: pumpDate, pumpID: pumpID, iob: iobStatus, battery: batteryStatus, reservoir: status.reservoirRemainingUnits)
@@ -288,7 +288,7 @@ class DeviceDataManager {
                 switch result {
                 case .Success(let status):
                     self.latestPolledPumpStatus = status
-                    let battery = BatteryStatus(voltage: status.batteryVolts, status: String(status.batteryStatus).lowercaseString)
+                    let battery = BatteryStatus(voltage: status.batteryVolts, status: BatteryIndicator(batteryStatus: status.batteryStatus))
                     status.clock.timeZone = ops.pumpState.timeZone
                     guard let date = status.clock.date else {
                         print("Could not interpret clock")

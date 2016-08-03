@@ -152,6 +152,7 @@
 		C1711A5E1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */; };
+		C178845F1D5166BE00405663 /* COBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178845E1D5166BE00405663 /* COBStatus.swift */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -522,6 +523,7 @@
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
 		C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ISO8601DateFormatter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadPumpStatusMessageBody.swift; sourceTree = "<group>"; };
+		C178845E1D5166BE00405663 /* COBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COBStatus.swift; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1119,6 +1121,7 @@
 				C1AF21E51D48667F0088C41D /* UploaderStatus.swift */,
 				C1AF21E71D4866960088C41D /* PumpStatus.swift */,
 				C1A492621D4A5A19008964FF /* IOBStatus.swift */,
+				C178845E1D5166BE00405663 /* COBStatus.swift */,
 				C1A492641D4A5DEB008964FF /* BatteryStatus.swift */,
 				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
 				C1A492661D4A65D9008964FF /* LoopSuggested.swift */,
@@ -1915,6 +1918,7 @@
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
 				C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */,
+				C178845F1D5166BE00405663 /* COBStatus.swift in Sources */,
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
 				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,

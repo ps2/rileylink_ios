@@ -13,17 +13,19 @@ public struct LoopStatus {
     let timestamp: NSDate
     
     let iob: IOBStatus?
+    let cob: COBStatus?
     let suggested: LoopSuggested?
     let enacted: LoopEnacted?
     
     let failureReason: String?
     
-    public init(name: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: String? = nil) {
+    public init(name: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: String? = nil) {
         self.name = name
         self.timestamp = timestamp
         self.suggested = suggested
         self.enacted = enacted
         self.iob = iob
+        self.cob = cob
         self.failureReason = failureReason
     }
     
@@ -44,7 +46,11 @@ public struct LoopStatus {
         if let iob = iob {
             rval["iob"] = iob.dictionaryRepresentation
         }
-        
+
+        if let cob = cob {
+            rval["cob"] = cob.dictionaryRepresentation
+        }
+
         return rval
     }
 }

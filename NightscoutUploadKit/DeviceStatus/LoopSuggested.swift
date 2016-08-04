@@ -12,21 +12,21 @@ public struct LoopSuggested {
     let timestamp: NSDate
     let rate: Double
     let duration: NSTimeInterval
-    let correction: Double
     let eventualBG: Int
     let bg: Int
     let reason: String?
     let tick: Int?
-    
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, correction: Double = 0, eventualBG: Int, bg: Int, reason: String?, tick: Int?) {
+    let correction: Double?
+
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: Int, bg: Int, reason: String? = nil, tick: Int? = nil, correction: Double? = nil) {
         self.timestamp = timestamp
         self.rate = rate
         self.duration = duration
-        self.correction = correction
         self.eventualBG = eventualBG
         self.bg = bg
         self.reason = reason
         self.tick = tick
+        self.correction = correction
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -50,12 +50,16 @@ public struct LoopSuggested {
         rval["rate"] = rate
         rval["duration"] = duration / 60.0
         rval["bg"] = bg
-        rval["correction"] = correction
         rval["eventualBG"] = eventualBG
 
         if let reason = reason {
             rval["reason"] = reason
         }
+
+        if let correction = correction {
+            rval["correction"] = correction
+        }
+
 
         return rval
     }

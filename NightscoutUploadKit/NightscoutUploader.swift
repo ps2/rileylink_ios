@@ -64,7 +64,14 @@ public class NightscoutUploader {
     }
     
     // MARK: - Processing data from pump
-    
+
+    /**
+     Enqueues pump history events for upload, with automatic retry management.
+     
+     - parameter events:    An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
+     - parameter source:    The device identifier to display in Nightscout
+     - parameter pumpModel: The pump model info associated with the events
+     */
     public func processPumpEvents(events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
         
         // Find valid event times
@@ -98,6 +105,27 @@ public class NightscoutUploader {
         }
         self.flushAll()
     }
+
+    /**
+     Attempts to upload pump history events.
+     
+     This method will not retry if the network task failed.
+     
+     - parameter pumpEvents: An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
+     - parameter source:     The device identifier to display in Nightscout
+     - parameter pumpModel:  The pump model info associated with the events
+     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
+     */
+    public func upload(pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: (ErrorType?) -> Void) {
+        let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
+
+        uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+    }
+
+    public func uploadDeviceStatus(status: DeviceStatus) {
+        deviceStatuses.append(status.dictionaryRepresentation)
+        flushAll()
+    }
     
     //  Entries [ { sgv: 375,
     //    date: 1432421525000,
@@ -107,10 +135,9 @@ public class NightscoutUploader {
     //    device: 'share2',
     //    type: 'sgv' } ]
     
-    public func handlePumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
+    public func uploadSGVFromMySentryPumpStatus(status: MySentryPumpStatusMessageBody, device: String) {
         
         var recordSGV = true
-        
         let glucose: Int = {
             switch status.glucose {
             case .Active(glucose: let glucose):
@@ -127,52 +154,7 @@ public class NightscoutUploader {
             }
         }()
         
-        // Create deviceStatus record from this mysentry packet
-        
-        var nsStatus = [String: AnyObject]()
-        
-        nsStatus["device"] = device
-        nsStatus["created_at"] = TimeFormat.timestampStrFromDate(NSDate())
-        
-        // TODO: use battery monitoring to post updates if we're not hearing from pump?
-        
-        let uploaderDevice = UIDevice.currentDevice()
-        
-        if uploaderDevice.batteryMonitoringEnabled {
-            nsStatus["uploader"] = ["battery":uploaderDevice.batteryLevel * 100]
-        }
-        
-        guard let pumpDate = status.pumpDateComponents.date else {
-            self.errorHandler?(error: UploadError.MissingTimezone, context: "Unable to get status.pumpDateComponents.date")
-            return
-        }
-        
-        let pumpDateStr = TimeFormat.timestampStrFromDate(pumpDate)
-        
-        nsStatus["pump"] = [
-            "clock": pumpDateStr,
-            "iob": [
-                "timestamp": pumpDateStr,
-                "bolusiob": status.iob,
-            ],
-            "reservoir": status.reservoirRemainingUnits,
-            "battery": [
-                "percent": status.batteryRemainingPercent
-            ]
-        ]
-        
-        switch status.glucose {
-        case .Active(glucose: _):
-            nsStatus["sensor"] = [
-                "sensorAge": status.sensorAgeHours,
-                "sensorRemaining": status.sensorRemainingHours,
-            ]
-        default:
-            nsStatus["sensorNotActive"] = true
-        }
-        deviceStatuses.append(nsStatus)
-        
-        
+
         // Create SGV entry from this mysentry packet
         if (recordSGV) {
             var entry: [String: AnyObject] = [
@@ -252,18 +234,15 @@ public class NightscoutUploader {
         
         let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
         let request = NSMutableURLRequest(URL: uploadURL)
+        request.HTTPMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(APISecret.SHA1, forHTTPHeaderField: "api-secret")
+
         do {
-            
-            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
-            request.HTTPMethod = "POST"
-            
-            request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-            request.setValue("application/json", forHTTPHeaderField:"Accept")
-            request.setValue(APISecret.SHA1, forHTTPHeaderField:"api-secret")
-            request.HTTPBody = sendData
-            
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, error) in
-                
+            let sendData = try NSJSONSerialization.dataWithJSONObject(json, options: [])
+
+            let task = NSURLSession.sharedSession().uploadTaskWithRequest(request, fromData: sendData) { (data, response, error) in
                 if let error = error {
                     completion(error)
                     return
@@ -275,7 +254,7 @@ public class NightscoutUploader {
                 } else {
                     completion(nil)
                 }
-            })
+            }
             task.resume()
         } catch let error as NSError {
             completion(error)

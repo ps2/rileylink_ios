@@ -366,6 +366,16 @@ class PumpOpsSynchronous {
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
+                    
+                    if let alarm = event as? PumpAlarmPumpEvent {
+                        switch alarm.alarmType {
+                        case .BatteryDepleted, .BatteryOutLimitExceeded, .DeviceReset:
+                            print("Found clock loss in pump history.  Ending history fetch.")
+                            break pages
+                        default:
+                            break
+                        }
+                    }
                 }
 
                 if let event = event as? ChangeTimePumpEvent {
@@ -411,6 +421,34 @@ class PumpOpsSynchronous {
         }
         return frameData
     }
+
+    internal func readPumpStatus() throws -> PumpStatus {
+        let clockResp: ReadTimeCarelinkMessageBody = try getMessageBodyWithType(.ReadTime)
+
+        let pumpModel = try getPumpModel()
+
+        let resResp: ReadRemainingInsulinMessageBody = try getMessageBodyWithType(.ReadRemainingInsulin)
+
+        let reservoir = resResp.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)
+
+        let battResp: GetBatteryCarelinkMessageBody = try getMessageBodyWithType(.GetBattery)
+
+        let statusResp: ReadPumpStatusMessageBody = try getMessageBodyWithType(.ReadPumpStatus)
+
+        return PumpStatus(clock: clockResp.dateComponents, batteryVolts: battResp.volts, batteryStatus: battResp.status, suspended: statusResp.suspended, bolusing: statusResp.bolusing, reservoir: reservoir, model: pumpModel, pumpID: pump.pumpID)
+
+    }
+}
+
+public struct PumpStatus {
+    public let clock: NSDateComponents
+    public let batteryVolts: Double
+    public let batteryStatus: BatteryStatus
+    public let suspended: Bool
+    public let bolusing: Bool
+    public let reservoir: Double
+    public let model: PumpModel
+    public let pumpID: String
 }
 
 public struct FrequencyTrial {

@@ -246,7 +246,7 @@ class DeviceDataManager {
         let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
 
         // Build DeviceStatus
-        let deviceStatus = DeviceStatus(device: uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)
+        let deviceStatus = DeviceStatus(device: "rileylink://" + uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)
         
         uploader.uploadDeviceStatus(deviceStatus)
     }
@@ -292,8 +292,13 @@ class DeviceDataManager {
                 }
             })
         }
+
+        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) {
+            getPumpHistory(device)
+        }
+
     }
-    
+
     /**
      Attempts to fix an extended communication failure between a RileyLink device and the pump
      
@@ -408,16 +413,4 @@ class DeviceDataManager {
         }
     }
     
-    @objc func timerTriggered() {
-        logMemUsage()
-        
-        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) {
-            NSLog("No fetchHistory for over five minutes.  Triggering one")
-            if let device = preferredRileyLink() {
-                getPumpHistory(device)
-            } else {
-                NSLog("No RileyLink available to fetch history with!")
-            }
-        }
-    }
 }

@@ -293,7 +293,7 @@ class DeviceDataManager {
             })
         }
 
-        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) {
+        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < NSTimeInterval(minutes: -5) {
             getPumpHistory(device)
         }
 

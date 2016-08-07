@@ -51,6 +51,10 @@ public struct LoopStatus {
             rval["cob"] = cob.dictionaryRepresentation
         }
 
+        if let failureReason = failureReason {
+            rval["failureReason"] = failureReason
+        }
+
         return rval
     }
 }

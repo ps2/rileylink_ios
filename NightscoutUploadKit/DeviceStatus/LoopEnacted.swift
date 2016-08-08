@@ -13,14 +13,14 @@ public struct LoopEnacted {
     let duration: NSTimeInterval
     let timestamp: NSDate
     let received: Bool
-    let predictedBGValues: [Double]?
+    let predBGs: [Double]?
     
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predictedBGValues: [Double]?) {
+    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: [Double]?) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
         self.received = received
-        self.predictedBGValues = predictedBGValues
+        self.predBGs = predBGs
     }
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -32,10 +32,8 @@ public struct LoopEnacted {
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["recieved"] = received  // [sic]
 
-        if let predictedBGValues = predictedBGValues {
-            rval["predBGs"] = [
-                "values": predictedBGValues,
-            ]
+        if let predBGs = predBGs {
+            rval["predBGs"] = predBGs
         }
         return rval
     }

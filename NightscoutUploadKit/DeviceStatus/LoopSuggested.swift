@@ -17,10 +17,10 @@ public struct LoopSuggested {
     let reason: String?
     let tick: Int?
     let correction: Double?
-    let predBGs: [Double]?
+    let predBGs: PredictedBG?
 
 
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: Int, bg: Int, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: [Double]? = nil) {
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: Int, bg: Int, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: PredictedBG? = nil) {
         self.timestamp = timestamp
         self.rate = rate
         self.duration = duration
@@ -64,7 +64,7 @@ public struct LoopSuggested {
         }
 
         if let predBGs = predBGs {
-            rval["predBGs"] = predBGs
+            rval["predBGs"] = predBGs.dictionaryRepresentation
         }
 
         return rval

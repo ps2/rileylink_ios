@@ -113,6 +113,7 @@
 		C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA25C198B436900309FA4 /* InfoPlist.strings */; };
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
+		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
@@ -477,6 +478,7 @@
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
@@ -1118,6 +1120,7 @@
 				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
 				C1A492661D4A65D9008964FF /* LoopSuggested.swift */,
 				C1A492681D4A66C0008964FF /* LoopEnacted.swift */,
+				C133CF921D5943780034B82D /* PredictedBG.swift */,
 			);
 			path = DeviceStatus;
 			sourceTree = "<group>";
@@ -1901,6 +1904,7 @@
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
+				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
 				C1A492671D4A65D9008964FF /* LoopSuggested.swift in Sources */,

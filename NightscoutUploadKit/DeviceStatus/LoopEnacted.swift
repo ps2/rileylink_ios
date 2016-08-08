@@ -15,7 +15,7 @@ public struct LoopEnacted {
     let received: Bool
     let predBGs: [Double]?
     
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: [Double]?) {
+    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: [Double]? = nil) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp

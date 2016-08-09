@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HealthKit
 
 public struct LoopSuggested {
     let timestamp: NSDate
@@ -19,12 +20,16 @@ public struct LoopSuggested {
     let correction: Double?
     let predBGs: PredictedBG?
 
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: Int, bg: Int, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: PredictedBG? = nil) {
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: HKQuantity, bg: HKQuantity, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: PredictedBG? = nil) {
+
+        // BG values in nightscout are in mg/dL.
+        let unit = HKUnit.milligramsPerDeciliterUnit()
+
         self.timestamp = timestamp
         self.rate = rate
         self.duration = duration
-        self.eventualBG = eventualBG
-        self.bg = bg
+        self.eventualBG = Int(eventualBG.doubleValueForUnit(unit))
+        self.bg = Int(bg.doubleValueForUnit(unit))
         self.reason = reason
         self.tick = tick
         self.correction = correction

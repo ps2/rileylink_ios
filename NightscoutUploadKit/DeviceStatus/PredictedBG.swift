@@ -15,17 +15,11 @@ public struct PredictedBG {
     let iob: [Double]?
 
     public init(values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? = nil) {
-        // All nightscout data is in mg/dL.
+        // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
         self.values = values.map { $0.doubleValueForUnit(unit) }
         self.cob = cob?.map { $0.doubleValueForUnit(unit) }
         self.iob = iob?.map { $0.doubleValueForUnit(unit) }
-    }
-
-    public init(values: [Double], cob: [Double]? = nil, iob: [Double]? = nil) {
-        self.values = values
-        self.cob = cob
-        self.iob = iob
     }
 
     public var dictionaryRepresentation: [String: AnyObject] {

@@ -18,9 +18,9 @@ public struct LoopStatus {
     let suggested: LoopSuggested?
     let enacted: LoopEnacted?
     
-    let failureReason: String?
+    let failureReason: ErrorType?
     
-    public init(name: String, version: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: String? = nil) {
+    public init(name: String, version: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: ErrorType? = nil) {
         self.name = name
         self.version = version
         self.timestamp = timestamp
@@ -55,7 +55,7 @@ public struct LoopStatus {
         }
 
         if let failureReason = failureReason {
-            rval["failureReason"] = failureReason
+            rval["failureReason"] = String(failureReason)
         }
 
         return rval

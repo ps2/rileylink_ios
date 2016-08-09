@@ -7,29 +7,15 @@
 //
 
 import Foundation
-import HealthKit
 
 public struct LoopEnacted {
     let rate: Double
     let duration: NSTimeInterval
     let timestamp: NSDate
     let received: Bool
-    let predBGs: [Double]?
-
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: [HKQuantity]? = nil) {
-        // All nightscout data is in mg/dL.
-        let unit = HKUnit.milligramsPerDeciliterUnit()
-
-        self.init(
-            rate: rate,
-            duration: duration,
-            timestamp: timestamp,
-            received: received,
-            predBGs: predBGs?.map { $0.doubleValueForUnit(unit) }
-        )
-    }
-
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: [Double]? = nil) {
+    let predBGs: PredictedBG?
+    
+    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: PredictedBG? = nil) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
@@ -47,7 +33,7 @@ public struct LoopEnacted {
         rval["recieved"] = received  // [sic]
 
         if let predBGs = predBGs {
-            rval["predBGs"] = predBGs
+            rval["predBGs"] = predBGs.dictionaryRepresentation
         }
         return rval
     }

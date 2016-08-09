@@ -18,31 +18,18 @@ public struct LoopSuggested {
     let reason: String?
     let tick: Int?
     let correction: Double?
-    let predBGs: [Double]?
+    let predBGs: PredictedBG?
 
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: HKQuantity, bg: HKQuantity, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: [HKQuantity]? = nil) {
-        // All nightscout data is in mg/dL.
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: HKQuantity, bg: HKQuantity, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: PredictedBG? = nil) {
+
+        // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
-        self.init(
-            timestamp: timestamp,
-            rate: rate,
-            duration: duration,
-            eventualBG: Int(eventualBG.doubleValueForUnit(unit)),
-            bg: Int(bg.doubleValueForUnit(unit)),
-            reason: reason,
-            tick: tick,
-            correction: correction,
-            predBGs: predBGs?.map { $0.doubleValueForUnit(unit) }
-        )
-    }
-
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: Int, bg: Int, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: [Double]? = nil) {
         self.timestamp = timestamp
         self.rate = rate
         self.duration = duration
-        self.eventualBG = eventualBG
-        self.bg = bg
+        self.eventualBG = Int(eventualBG.doubleValueForUnit(unit))
+        self.bg = Int(bg.doubleValueForUnit(unit))
         self.reason = reason
         self.tick = tick
         self.correction = correction
@@ -81,7 +68,7 @@ public struct LoopSuggested {
         }
 
         if let predBGs = predBGs {
-            rval["predBGs"] = predBGs
+            rval["predBGs"] = predBGs.dictionaryRepresentation
         }
 
         return rval

@@ -236,14 +236,7 @@ class DeviceDataManager {
 
         // Gather UploaderStatus
         let uploaderDevice = UIDevice.currentDevice()
-        
-        let battery: Int?
-        if uploaderDevice.batteryMonitoringEnabled {
-            battery = Int(uploaderDevice.batteryLevel * 100)
-        } else {
-            battery = nil
-        }
-        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
+        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: uploaderDevice.batteryLevel)
 
         // Build DeviceStatus
         let deviceStatus = DeviceStatus(device: "rileylink://" + uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)

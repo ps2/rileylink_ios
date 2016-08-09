@@ -28,7 +28,12 @@ class GetBatteryCarelinkMessageBodyTests: XCTestCase {
             XCTAssertTrue(message.messageBody is GetBatteryCarelinkMessageBody)
             let body = message.messageBody as! GetBatteryCarelinkMessageBody
             XCTAssertEqual(body.volts, 1.4)
-            XCTAssertEqual(body.status, "Normal")
+
+            if case .Normal = body.status {
+                // OK
+            } else {
+                XCTFail()
+            }
         } else {
             XCTFail("\(message) is nil")
         }

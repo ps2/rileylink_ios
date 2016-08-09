@@ -76,6 +76,7 @@
 		43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
 		43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
+		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
 		C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
@@ -434,6 +435,7 @@
 		43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
@@ -1148,14 +1150,15 @@
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1AF21EA1D4900880088C41D /* Treatments */,
-				C1AF21E91D4900300088C41D /* DeviceStatus */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
-				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
+				43F348051D596270009933DC /* HKUnit.swift */,
 				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
-				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
+				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */,
+				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
+				C1AF21E91D4900300088C41D /* DeviceStatus */,
+				C1AF21EA1D4900880088C41D /* Treatments */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -1918,6 +1921,7 @@
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
+				43F348061D596270009933DC /* HKUnit.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,

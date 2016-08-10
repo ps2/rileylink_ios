@@ -29,11 +29,11 @@ public struct PredictedBG {
         rval["values"] = values
 
         if let cob = cob {
-            rval["cob"] = cob
+            rval["COB"] = cob
         }
 
         if let iob = iob {
-            rval["iob"] = iob
+            rval["IOB"] = iob
         }
 
         return rval

@@ -100,7 +100,6 @@ class DeviceDataManager {
         case "pumpModel"?:
             if let sentrySupported = pumpState?.pumpModel?.larger {
                 rileyLinkManager.idleListeningEnabled = sentrySupported
-                rileyLinkManager.timerTickEnabled = !sentrySupported
             }
             Config.sharedInstance().pumpModelNumber = pumpState?.pumpModel?.rawValue
         case "lastHistoryDump"?, "awakeUntil"?:
@@ -237,25 +236,10 @@ class DeviceDataManager {
 
         // Gather UploaderStatus
         let uploaderDevice = UIDevice.currentDevice()
-        
-        let battery: Int?
-        if uploaderDevice.batteryMonitoringEnabled {
-            battery = Int(uploaderDevice.batteryLevel * 100)
-        } else {
-            battery = nil
-        }
-        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: battery)
-        
-        
-        // Mock out some loop data for testing
-        //            let loopTime = NSDate()
-        //            let iob = IOBStatus(iob: 3.0, basaliob: 1.2, timestamp: NSDate())
-        //            let loopSuggested = LoopSuggested(timestamp: loopTime, rate: 1.2, duration: NSTimeInterval(30*60), correction: 0, eventualBG: 200, reason: "Test Reason", bg: 205, tick: 5)
-        //            let loopEnacted = LoopEnacted(rate: 1.2, duration: NSTimeInterval(30*60), timestamp: loopTime, received: true)
-        //            let loopStatus = LoopStatus(name: "TestLoopName", timestamp: NSDate(), iob: iob, suggested: loopSuggested, enacted: loopEnacted, failureReason: nil)
-        
+        let uploaderStatus = UploaderStatus(name: uploaderDevice.name, timestamp: NSDate(), battery: uploaderDevice.batteryLevel)
+
         // Build DeviceStatus
-        let deviceStatus = DeviceStatus(device: uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)
+        let deviceStatus = DeviceStatus(device: "rileylink://" + uploaderDevice.name, timestamp: NSDate(), pumpStatus: pumpStatus, uploaderStatus: uploaderStatus)
         
         uploader.uploadDeviceStatus(deviceStatus)
     }
@@ -301,8 +285,13 @@ class DeviceDataManager {
                 }
             })
         }
+
+        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < NSTimeInterval(minutes: -5) {
+            getPumpHistory(device)
+        }
+
     }
-    
+
     /**
      Attempts to fix an extended communication failure between a RileyLink device and the pump
      
@@ -365,7 +354,7 @@ class DeviceDataManager {
     init() {
         
         let pumpID = Config.sharedInstance().pumpID
-        
+
         var idleListeningEnabled = true
         
         if let pumpID = pumpID {
@@ -391,8 +380,7 @@ class DeviceDataManager {
             autoConnectIDs: connectedPeripheralIDs
         )
         rileyLinkManager.idleListeningEnabled = idleListeningEnabled
-        rileyLinkManager.timerTickEnabled = !idleListeningEnabled
-        
+
         UIDevice.currentDevice().batteryMonitoringEnabled = true
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(receivedRileyLinkManagerNotification(_:)), name: nil, object: rileyLinkManager)
@@ -418,16 +406,4 @@ class DeviceDataManager {
         }
     }
     
-    @objc func timerTriggered() {
-        logMemUsage()
-        
-        if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < (-5 * 60) {
-            NSLog("No fetchHistory for over five minutes.  Triggering one")
-            if let device = preferredRileyLink() {
-                getPumpHistory(device)
-            } else {
-                NSLog("No RileyLink available to fetch history with!")
-            }
-        }
-    }
 }

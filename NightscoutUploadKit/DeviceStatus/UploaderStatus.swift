@@ -13,7 +13,18 @@ public struct UploaderStatus {
     public let battery: Int?
     public let name: String
     public let timestamp: NSDate
-    
+
+    public init(name: String, timestamp: NSDate, battery: Float? = nil) {
+        let intBattery: Int?
+        if let battery = battery where battery >= 0 {
+            intBattery = Int(battery * 100)
+        } else {
+            intBattery = nil
+        }
+
+        self.init(name: name, timestamp: timestamp, battery: intBattery)
+    }
+
     public init(name: String, timestamp: NSDate, battery: Int? = nil) {
         self.name = name
         self.timestamp = timestamp

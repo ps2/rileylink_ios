@@ -10,17 +10,19 @@ import Foundation
 
 public struct LoopStatus {
     let name: String
+    let version: String
     let timestamp: NSDate
-    
+
     let iob: IOBStatus?
     let cob: COBStatus?
     let suggested: LoopSuggested?
     let enacted: LoopEnacted?
     
-    let failureReason: String?
+    let failureReason: ErrorType?
     
-    public init(name: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: String? = nil) {
+    public init(name: String, version: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: ErrorType? = nil) {
         self.name = name
+        self.version = version
         self.timestamp = timestamp
         self.suggested = suggested
         self.enacted = enacted
@@ -33,6 +35,7 @@ public struct LoopStatus {
         var rval = [String: AnyObject]()
         
         rval["name"] = name
+        rval["version"] = version
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         
         if let suggested = suggested {
@@ -49,6 +52,10 @@ public struct LoopStatus {
 
         if let cob = cob {
             rval["cob"] = cob.dictionaryRepresentation
+        }
+
+        if let failureReason = failureReason {
+            rval["failureReason"] = String(failureReason)
         }
 
         return rval

@@ -13,6 +13,12 @@ public struct RecommendedTempBasal {
     let rate: Double
     let duration: NSTimeInterval
 
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval) {
+        self.timestamp = timestamp
+        self.rate = rate
+        self.duration = duration
+    }
+
     public var dictionaryRepresentation: [String: AnyObject] {
 
         var rval = [String: AnyObject]()

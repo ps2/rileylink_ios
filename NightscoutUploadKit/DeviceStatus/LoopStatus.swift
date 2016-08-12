@@ -20,8 +20,21 @@ public struct LoopStatus {
     let recommendedBolus: Double?
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
-
     let failureReason: ErrorType?
+
+    public init(name: String, version: String, timestamp: NSDate, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: ErrorType? = nil) {
+        self.name = name
+        self.version = version
+        self.timestamp = timestamp
+        self.iob = iob
+        self.cob = cob
+        self.predicted = predicted
+        self.recommendedTempBasal = recommendedTempBasal
+        self.recommendedBolus = recommendedBolus
+        self.enacted = enacted
+        self.rileylinks = rileylinks
+        self.failureReason = failureReason
+    }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         var rval = [String: AnyObject]()

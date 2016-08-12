@@ -15,10 +15,11 @@ public struct LoopStatus {
 
     let iob: IOBStatus?
     let cob: COBStatus?
+    let predicted: PredictedBG?
     let suggested: LoopSuggested?
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
-    
+
     let failureReason: ErrorType?
     
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -27,7 +28,19 @@ public struct LoopStatus {
         rval["name"] = name
         rval["version"] = version
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
+
+        if let iob = iob {
+            rval["iob"] = iob.dictionaryRepresentation
+        }
+
+        if let cob = cob {
+            rval["cob"] = cob.dictionaryRepresentation
+        }
         
+        if let predicted = predicted {
+            rval["predicted"] = predicted.dictionaryRepresentation
+        }
+
         if let suggested = suggested {
             rval["suggested"] = suggested.dictionaryRepresentation
         }
@@ -36,14 +49,6 @@ public struct LoopStatus {
             rval["enacted"] = enacted.dictionaryRepresentation
         }
         
-        if let iob = iob {
-            rval["iob"] = iob.dictionaryRepresentation
-        }
-
-        if let cob = cob {
-            rval["cob"] = cob.dictionaryRepresentation
-        }
-
         if let failureReason = failureReason {
             rval["failureReason"] = String(failureReason)
         }

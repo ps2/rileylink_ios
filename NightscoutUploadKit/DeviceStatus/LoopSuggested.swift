@@ -18,9 +18,8 @@ public struct LoopSuggested {
     let reason: String?
     let tick: Int?
     let correction: Double?
-    let predBGs: PredictedBG?
 
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: HKQuantity, bg: HKQuantity, reason: String? = nil, tick: Int? = nil, correction: Double? = nil, predBGs: PredictedBG? = nil) {
+    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval, eventualBG: HKQuantity, bg: HKQuantity, reason: String? = nil, tick: Int? = nil, correction: Double? = nil) {
 
         // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
@@ -33,7 +32,6 @@ public struct LoopSuggested {
         self.reason = reason
         self.tick = tick
         self.correction = correction
-        self.predBGs = predBGs
     }
 
     public var dictionaryRepresentation: [String: AnyObject] {
@@ -65,10 +63,6 @@ public struct LoopSuggested {
 
         if let correction = correction {
             rval["correction"] = correction
-        }
-
-        if let predBGs = predBGs {
-            rval["predBGs"] = predBGs.dictionaryRepresentation
         }
 
         return rval

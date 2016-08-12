@@ -16,7 +16,8 @@ public struct LoopStatus {
     let iob: IOBStatus?
     let cob: COBStatus?
     let predicted: PredictedBG?
-    let suggested: LoopSuggested?
+    let recommendedTempBasal: RecommendedTempBasal?
+    let recommendedBolus: Double?
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
 
@@ -41,8 +42,12 @@ public struct LoopStatus {
             rval["predicted"] = predicted.dictionaryRepresentation
         }
 
-        if let suggested = suggested {
-            rval["suggested"] = suggested.dictionaryRepresentation
+        if let recommendedTempBasal = recommendedTempBasal {
+            rval["recommendedTempBasal"] = recommendedTempBasal.dictionaryRepresentation
+        }
+
+        if let recommendedBolus = recommendedBolus {
+            rval["recommendedBolus"] = recommendedBolus
         }
         
         if let enacted = enacted {

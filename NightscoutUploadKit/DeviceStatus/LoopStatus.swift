@@ -17,19 +17,9 @@ public struct LoopStatus {
     let cob: COBStatus?
     let suggested: LoopSuggested?
     let enacted: LoopEnacted?
+    let rileylinks: [RileyLinkStatus]?
     
     let failureReason: ErrorType?
-    
-    public init(name: String, version: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: ErrorType? = nil) {
-        self.name = name
-        self.version = version
-        self.timestamp = timestamp
-        self.suggested = suggested
-        self.enacted = enacted
-        self.iob = iob
-        self.cob = cob
-        self.failureReason = failureReason
-    }
     
     public var dictionaryRepresentation: [String: AnyObject] {
         var rval = [String: AnyObject]()
@@ -56,6 +46,10 @@ public struct LoopStatus {
 
         if let failureReason = failureReason {
             rval["failureReason"] = String(failureReason)
+        }
+
+        if let rileylinks = rileylinks {
+            rval["rileylinks"] = rileylinks.map { $0.dictionaryRepresentation }
         }
 
         return rval

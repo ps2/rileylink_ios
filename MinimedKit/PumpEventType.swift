@@ -29,6 +29,7 @@ public enum PumpEventType: UInt8 {
     case ChangeMaxBolus = 0x24
     case EnableDisableRemote = 0x26
     case ChangeMaxBasal = 0x2c
+    case EnableBolusWizard = 0x2d
     case ChangeBGReminderOffset = 0x31
     case ChangeAlarmClockTime = 0x32
     case TempBasal = 0x33
@@ -111,6 +112,8 @@ public enum PumpEventType: UInt8 {
             return EnableDisableRemotePumpEvent.self
         case .ChangeMaxBasal:
             return ChangeMaxBasalPumpEvent.self
+        case .EnableBolusWizard:
+            return EnableBolusWizardPumpEvent.self
         case .ChangeBGReminderOffset:
             return ChangeBGReminderOffsetPumpEvent.self
         case .ChangeAlarmClockTime:

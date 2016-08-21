@@ -26,7 +26,7 @@ public struct JournalEntryMealMarkerPumpEvent: TimestampedPumpEvent {
         let useExchangesBit = ((availableData[8] as UInt8) >> 1) & 0b1
         carbUnits = (useExchangesBit != 0) ? .Exchanges : .Grams
         
-        let carbHighBit = (availableData[8] as UInt8) & 0b1
+        let carbHighBit = (availableData[1] as UInt8) & 0b1
         let carbLowBits = availableData[7] as UInt8
         
         if carbUnits == .Exchanges {

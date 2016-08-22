@@ -15,19 +15,24 @@ public struct LoopStatus {
 
     let iob: IOBStatus?
     let cob: COBStatus?
-    let suggested: LoopSuggested?
+    let predicted: PredictedBG?
+    let recommendedTempBasal: RecommendedTempBasal?
+    let recommendedBolus: Double?
     let enacted: LoopEnacted?
-    
+    let rileylinks: [RileyLinkStatus]?
     let failureReason: ErrorType?
-    
-    public init(name: String, version: String, timestamp: NSDate, glucose: Int? = nil, iob: IOBStatus? = nil, cob: COBStatus? = nil, suggested: LoopSuggested? = nil, enacted: LoopEnacted?, failureReason: ErrorType? = nil) {
+
+    public init(name: String, version: String, timestamp: NSDate, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: ErrorType? = nil) {
         self.name = name
         self.version = version
         self.timestamp = timestamp
-        self.suggested = suggested
-        self.enacted = enacted
         self.iob = iob
         self.cob = cob
+        self.predicted = predicted
+        self.recommendedTempBasal = recommendedTempBasal
+        self.recommendedBolus = recommendedBolus
+        self.enacted = enacted
+        self.rileylinks = rileylinks
         self.failureReason = failureReason
     }
     
@@ -37,15 +42,7 @@ public struct LoopStatus {
         rval["name"] = name
         rval["version"] = version
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
-        
-        if let suggested = suggested {
-            rval["suggested"] = suggested.dictionaryRepresentation
-        }
-        
-        if let enacted = enacted {
-            rval["enacted"] = enacted.dictionaryRepresentation
-        }
-        
+
         if let iob = iob {
             rval["iob"] = iob.dictionaryRepresentation
         }
@@ -53,9 +50,29 @@ public struct LoopStatus {
         if let cob = cob {
             rval["cob"] = cob.dictionaryRepresentation
         }
+        
+        if let predicted = predicted {
+            rval["predicted"] = predicted.dictionaryRepresentation
+        }
 
+        if let recommendedTempBasal = recommendedTempBasal {
+            rval["recommendedTempBasal"] = recommendedTempBasal.dictionaryRepresentation
+        }
+
+        if let recommendedBolus = recommendedBolus {
+            rval["recommendedBolus"] = recommendedBolus
+        }
+        
+        if let enacted = enacted {
+            rval["enacted"] = enacted.dictionaryRepresentation
+        }
+        
         if let failureReason = failureReason {
             rval["failureReason"] = String(failureReason)
+        }
+
+        if let rileylinks = rileylinks {
+            rval["rileylinks"] = rileylinks.map { $0.dictionaryRepresentation }
         }
 
         return rval

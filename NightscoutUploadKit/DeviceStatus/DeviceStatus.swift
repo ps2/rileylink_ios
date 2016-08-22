@@ -38,8 +38,7 @@ public struct DeviceStatus {
         }
         
         if let loop = loopStatus {
-            // Would like to change this to avoid confusion about whether or not this was uploaded from Loop or openaps
-            rval["openaps"] = loop.dictionaryRepresentation
+            rval["loop"] = loop.dictionaryRepresentation
         }
         
         return rval

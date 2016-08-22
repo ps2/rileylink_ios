@@ -10,11 +10,14 @@ import Foundation
 import HealthKit
 
 public struct PredictedBG {
+    let startDate: NSDate
     let values: [Int]
     let cob: [Int]?
     let iob: [Int]?
 
-    public init(values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? = nil) {
+    public init(startDate: NSDate, values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? =
+        nil) {
+        self.startDate = startDate
         // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
         self.values = values.map { Int(round($0.doubleValueForUnit(unit))) }
@@ -26,6 +29,7 @@ public struct PredictedBG {
 
         var rval = [String: AnyObject]()
 
+        rval["startDate"] =  TimeFormat.timestampStrFromDate(startDate)
         rval["values"] = values
 
         if let cob = cob {

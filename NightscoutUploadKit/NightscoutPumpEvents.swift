@@ -14,6 +14,7 @@ class NightscoutPumpEvents: NSObject {
     class func translate(events: [TimestampedHistoryEvent], eventSource: String) -> [NightscoutTreatment] {
         var results = [NightscoutTreatment]()
         var lastBolusWizard: BolusWizardEstimatePumpEvent?
+        var lastBolusWizardDate: NSDate?
         var lastTempBasal: TempBasalPumpEvent?
         for event in events {
             switch event.pumpEvent {
@@ -29,7 +30,7 @@ class NightscoutPumpEvents: NSObject {
                 var carbs = 0
                 var ratio = 0.0
                 
-                if let wizard = lastBolusWizard where wizard.timestamp == bolusNormal.timestamp {
+                if let wizard = lastBolusWizard, bwDate = lastBolusWizardDate where event.date.timeIntervalSinceDate(bwDate) <= 2 {
                     carbs = wizard.carbohydrates
                     ratio = wizard.carbRatio
                 }
@@ -47,6 +48,7 @@ class NightscoutPumpEvents: NSObject {
                 results.append(entry)
             case let bolusWizard as BolusWizardEstimatePumpEvent:
                 lastBolusWizard = bolusWizard
+                lastBolusWizardDate = event.date
             case let tempBasal as TempBasalPumpEvent:
                 lastTempBasal = tempBasal
             case let tempBasalDuration as TempBasalDurationPumpEvent:

@@ -30,4 +30,8 @@ public struct AlarmSensorPumpEvent: TimestampedPumpEvent {
             "_type": "AlarmSensor",
         ]
     }
+
+    public var description: String {
+        return NSLocalizedString("AlarmSensor", comment: "The description of AlarmSensorPumpEvent")
+    }
 }

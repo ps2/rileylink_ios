@@ -138,7 +138,6 @@
 		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
 		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
 		C14FFC6D1D3D85A40049CF85 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */; };
-		C15AF2AB1D714ABD0031FC9D /* SaveSettingsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AA1D714ABD0031FC9D /* SaveSettingsPumpEvent.swift */; };
 		C16843741CF009E600D53CCD /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843721CF009E600D53CCD /* SettingsTableViewController.swift */; };
 		C16843751CF009E600D53CCD /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
@@ -509,7 +508,6 @@
 		C14FFC661D3D7E390049CF85 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainManager+RileyLink.swift"; sourceTree = "<group>"; };
 		C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
-		C15AF2AA1D714ABD0031FC9D /* SaveSettingsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveSettingsPumpEvent.swift; sourceTree = "<group>"; };
 		C16843721CF009E600D53CCD /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C16843731CF009E600D53CCD /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
@@ -1093,7 +1091,6 @@
 				C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */,
 				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
 				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
-				C15AF2AA1D714ABD0031FC9D /* SaveSettingsPumpEvent.swift */,
 				43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */,
 				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
 				C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */,
@@ -1800,7 +1797,6 @@
 				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
 				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,
-				C15AF2AB1D714ABD0031FC9D /* SaveSettingsPumpEvent.swift in Sources */,
 				C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */,
 				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,
 				43CA932E1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift in Sources */,

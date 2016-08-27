@@ -147,8 +147,6 @@ public enum PumpEventType: UInt8 {
             return BolusWizardEstimatePumpEvent.self
         case .UnabsorbedInsulin:
             return UnabsorbedInsulinPumpEvent.self
-        case .SaveSettings:
-            return SaveSettingsPumpEvent.self
         case .ChangeVariableBolus:
             return ChangeVariableBolusPumpEvent.self
         case .ChangeAudioBolus:

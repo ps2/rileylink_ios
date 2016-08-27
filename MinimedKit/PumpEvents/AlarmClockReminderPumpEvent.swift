@@ -27,7 +27,11 @@ public struct AlarmClockReminderPumpEvent: TimestampedPumpEvent {
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
-            "_type": "AlarmClockReminder",
+            "_type": String(self),
         ]
+    }
+
+    public var description: String {
+        return NSLocalizedString("AlarmClockReminder", comment: "The description of AlarmClockReminderPumpEvent")
     }
 }

@@ -335,6 +335,12 @@ class PumpOpsSynchronous {
 
         var events = [TimestampedHistoryEvent]()
         var timeAdjustmentInterval: NSTimeInterval = 0
+        
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing
+        // Start with some time in the future, to account for the condition when the pump's clock is ahead
+        // of ours by a small amount.
+        var timeCursor = NSDate(timeIntervalSinceNow: NSTimeInterval(minutes: 60))
+        let eventTimestampDeltaAllowance = NSTimeInterval(minutes: 60)
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
@@ -362,7 +368,11 @@ class PumpOpsSynchronous {
                         if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
                             break pages
+                        } else if date.timeIntervalSinceDate(timeCursor) > eventTimestampDeltaAllowance {
+                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date)
+                            break pages
                         } else {
+                            timeCursor = date
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }

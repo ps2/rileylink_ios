@@ -336,11 +336,15 @@ class PumpOpsSynchronous {
         var events = [TimestampedHistoryEvent]()
         var timeAdjustmentInterval: NSTimeInterval = 0
         
-        // Going to scan backwards in time through events, so event time should be monotonically decreasing
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
+        // One known exception is Square Wave boluses, which can be out of order in the pump history by up
+        // to 8 hours, since they are added at end of delivery, with a timestamp of beginning of delivery
+        let eventTimestampDeltaAllowance = NSTimeInterval(hours: 9)
+
         // Start with some time in the future, to account for the condition when the pump's clock is ahead
         // of ours by a small amount.
         var timeCursor = NSDate(timeIntervalSinceNow: NSTimeInterval(minutes: 60))
-        let eventTimestampDeltaAllowance = NSTimeInterval(hours: 9)
+        
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)

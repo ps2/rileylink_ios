@@ -48,6 +48,7 @@ public enum PumpEventType: UInt8 {
     case ChangeBolusWizardSetup = 0x5a
     case BolusWizardBolusEstimate = 0x5b
     case UnabsorbedInsulin = 0x5c
+    case SaveSettings = 0x5d
     case ChangeVariableBolus = 0x5e
     case ChangeAudioBolus = 0x5f
     case ChangeBGReminderEnable = 0x60

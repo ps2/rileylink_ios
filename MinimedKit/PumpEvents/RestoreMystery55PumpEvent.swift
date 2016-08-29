@@ -14,7 +14,7 @@ public struct RestoreMystery55PumpEvent: TimestampedPumpEvent {
     public let timestamp: NSDateComponents
     
     public init?(availableData: NSData, pumpModel: PumpModel) {
-        length = 64
+        length = 55
         
         guard length <= availableData.length else {
             return nil

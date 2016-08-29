@@ -48,6 +48,7 @@ public enum PumpEventType: UInt8 {
     case ChangeSensorSetup2 = 0x50
     case RestoreMystery51 = 0x51
     case RestoreMystery52 = 0x52
+    case RestoreMystery53 = 0x53
     case RestoreMystery54 = 0x54
     case RestoreMystery55 = 0x55
     case ChangeSensorRateOfChangeAlertSetup = 0x56

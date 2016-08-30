@@ -335,6 +335,21 @@ class PumpOpsSynchronous {
 
         var events = [TimestampedHistoryEvent]()
         var timeAdjustmentInterval: NSTimeInterval = 0
+        
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
+        // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
+        // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
+        let eventTimestampDeltaAllowance: NSTimeInterval
+        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
+            eventTimestampDeltaAllowance = NSTimeInterval(minutes: 10)
+        } else {
+            eventTimestampDeltaAllowance = NSTimeInterval(hours: 9)
+        }
+
+        // Start with some time in the future, to account for the condition when the pump's clock is ahead
+        // of ours by a small amount.
+        var timeCursor = NSDate(timeIntervalSinceNow: NSTimeInterval(minutes: 60))
+        
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
@@ -359,21 +374,15 @@ class PumpOpsSynchronous {
                     timestamp.timeZone = pump.timeZone
 
                     if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
-                        if date.compare(startDate) == .OrderedAscending  {
-                            NSLog("Found event (%@) before startDate(%@)", date, startDate);
+                        if date.timeIntervalSinceDate(startDate) < -eventTimestampDeltaAllowance {
+                            NSLog("Found event at (%@) to be %@s before startDate(%@)", date, timeAdjustmentInterval, startDate);
                             break pages
-                        } else {
+                        } else if date.timeIntervalSinceDate(timeCursor) > eventTimestampDeltaAllowance {
+                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date)
+                            break pages
+                        } else if date.compare(startDate) != .OrderedAscending {
+                            timeCursor = date
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
-                        }
-                    }
-                    
-                    if let alarm = event as? PumpAlarmPumpEvent {
-                        switch alarm.alarmType {
-                        case .BatteryDepleted, .BatteryOutLimitExceeded, .DeviceReset:
-                            print("Found clock loss in pump history.  Ending history fetch.")
-                            break pages
-                        default:
-                            break
                         }
                     }
                 }

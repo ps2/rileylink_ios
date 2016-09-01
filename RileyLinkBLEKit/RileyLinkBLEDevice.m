@@ -278,7 +278,7 @@
         NSString *foundVersion;
         BOOL versionOK = NO;
         // We run two commands here, to flush out responses to any old commands
-        [s doCmd:cmd withTimeoutMs:1000];
+        [s doCmd:cmd withTimeoutMs:5000];
         if ([s doCmd:cmd withTimeoutMs:1000]) {
             foundVersion = [[NSString alloc] initWithData:cmd.response encoding:NSUTF8StringEncoding];
             NSLog(@"Got version: %@", foundVersion);
@@ -464,7 +464,7 @@
 }
 
 - (void) onIdle {
-    if (idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected) {
+    if (!runningIdle && idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected && dataCharacteristic != nil) {
         runningIdle = YES;
         NSLog(@"Starting idle RX");
         GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
@@ -492,7 +492,7 @@
     if (idleListeningEnabled && !runningSession) {
         NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
         
-        if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+        if (([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
             [self onIdle];
         }
     }

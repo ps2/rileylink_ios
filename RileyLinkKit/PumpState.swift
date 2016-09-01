@@ -59,6 +59,8 @@ public class PumpState {
         return awakeUntil?.timeIntervalSinceNow > 0
     }
     
+    public var lastWakeAttempt: NSDate?
+    
     private func postChangeNotificationForKey(key: String, oldValue: AnyObject?)  {
         var userInfo: [String: AnyObject] = [
             self.dynamicType.PropertyKey: key

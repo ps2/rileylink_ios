@@ -22,7 +22,7 @@ public class PumpOps {
     }
     
     public func pressButton(completion: (Either<String, ErrorType>) -> Void) {
-        device.runSession { (session) -> Void in
+        device.runSession("Press button") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             let message = PumpMessage(packetType: .Carelink, address: self.pumpState.pumpID, messageType: .ButtonPress, messageBody: ButtonPressCarelinkMessageBody(buttonType: .Down))
             do {
@@ -37,7 +37,7 @@ public class PumpOps {
     }
     
     public func getPumpModel(completion: (Either<String, ErrorType>) -> Void)  {
-        device.runSession { (session) -> Void in
+        device.runSession("Get pump model") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let model = try ops.getPumpModelNumber()
@@ -56,7 +56,7 @@ public class PumpOps {
     }
     
     public func getBatteryVoltage(completion: (Either<GetBatteryCarelinkMessageBody, ErrorType>) -> Void)  {
-        device.runSession { (session) -> Void in
+        device.runSession("Get battery voltage") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response: GetBatteryCarelinkMessageBody = try ops.getMessageBodyWithType(.GetBattery)
@@ -81,7 +81,7 @@ public class PumpOps {
         - Failure(error): An error describing why the command failed
      */
     public func readRemainingInsulin(completion: (Either<Double, ErrorType>) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Read remaining insulin") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
@@ -110,7 +110,7 @@ public class PumpOps {
 
      */
     public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
-        device.runSession { (session) -> Void in
+        device.runSession("Get history events") { (session) -> Void in
             NSLog("History fetching task started.")
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
@@ -136,7 +136,7 @@ public class PumpOps {
         - Failure(error): An error describing why the command failed
      */
     public func readTime(completion: (Either<NSDateComponents, ErrorType>) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Read pump time") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
@@ -160,7 +160,7 @@ public class PumpOps {
         - Failure(error): An error describing why the command failed
      */
     public func readPumpStatus(completion: (Either<PumpStatus, ErrorType>) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Read pump status") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
@@ -185,7 +185,7 @@ public class PumpOps {
         - error: An error describing why the command failed
      */
     public func setNormalBolus(units: Double, completion: (error: ErrorType?) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
@@ -214,7 +214,7 @@ public class PumpOps {
         - Failure(error):       An error describing why the command failed
      */
     public func setTempBasal(unitsPerHour: Double, duration: NSTimeInterval, completion: (Either<ReadTempBasalCarelinkMessageBody, ErrorType>) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Set temp basal") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             
             do {
@@ -236,7 +236,7 @@ public class PumpOps {
         - error: An error describing why the command failed
      */
     public func setTime(generator: () -> NSDateComponents, completion: (error: ErrorType?) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Set time") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             
             do {
@@ -260,7 +260,7 @@ public class PumpOps {
         - error: An error describing why the command failed.
      */
     public func changeWatchdogMarriageProfile(watchdogID: NSData, completion: (error: ErrorType?) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Change watchdog marriage profile") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             var lastError: ErrorType?
@@ -281,7 +281,7 @@ public class PumpOps {
     }
 
     func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
-        device.runSession { (session) -> Void in
+        device.runSession("Tune pump") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response = try ops.scanForPump(self.pumpState.scanFrequencies)
@@ -297,7 +297,7 @@ public class PumpOps {
     }
     
     public func setRXFilterMode(mode: RXFilterMode, completion: (error: ErrorType?) -> Void) {
-        device.runSession { (session) in
+        device.runSession("Set RX filter mode") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             
             do {

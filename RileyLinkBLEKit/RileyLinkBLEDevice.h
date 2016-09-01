@@ -90,7 +90,7 @@ typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
 
 - (void) connectionStateDidChange:(nullable NSError *)error;
 
-- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc;
+- (void) runSession:(nonnull NSString*)name proc:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc;
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;

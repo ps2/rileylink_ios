@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PumpMessage {
+public struct PumpMessage : CustomStringConvertible {
     public let packetType: PacketType
     public let address: NSData
     public let messageType: MessageType
@@ -49,5 +49,10 @@ public struct PumpMessage {
 
         return NSData(data: data)
     }
+    
+    public var description: String {
+        return String(format: NSLocalizedString("PumpMessage(%1$@, %2$@, %3$@, %4$@)", comment: "The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data"), String(self.packetType), String(self.messageType), self.address.hexadecimalString, self.messageBody.txData.hexadecimalString)
+    }
+
 }
 

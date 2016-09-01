@@ -17,4 +17,16 @@
     return _receivedPacket;
 }
 
+- (BOOL) didReceiveResponse {
+    return self.response != nil && self.response.length > 2;
+}
+
+- (NSData*) rawReceivedData {
+    if (self.didReceiveResponse) {
+        return [self.response subdataWithRange:NSMakeRange(2, self.response.length - 2)];
+    } else {
+        return nil;
+    }
+}
+
 @end

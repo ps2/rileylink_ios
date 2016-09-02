@@ -11,7 +11,8 @@ import Foundation
 public enum PumpAlarmType {
     case BatteryOutLimitExceeded
     case NoDelivery             
-    case BatteryDepleted        
+    case BatteryDepleted
+    case AutoOff
     case DeviceReset            
     case ReprogramError         
     case EmptyReservoir         
@@ -25,6 +26,8 @@ public enum PumpAlarmType {
             self = .NoDelivery
         case 5:
             self = .BatteryDepleted
+        case 6:
+            self = .AutoOff 
         case 16:
             self = .DeviceReset
         case 61:

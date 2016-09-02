@@ -111,15 +111,15 @@
     }
 }
 
-- (void) runSession:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
+- (void) runSessionWithName:(nonnull NSString*)name usingBlock:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
     dispatch_group_enter(idleDetectDispatchGroup);
     RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
     session.device = self;
     dispatch_async(_serialDispatchQueue, ^{
         runningSession = YES;
-        NSLog(@"Running dispatched RL comms task");
+        NSLog(@"======================== %@ ===========================", name);
         proc(session);
-        NSLog(@"Finished running dispatched RL comms task");
+        NSLog(@"------------------------ %@ ---------------------------", name);
         runningSession = NO;
         dispatch_group_leave(idleDetectDispatchGroup);
     });
@@ -273,7 +273,7 @@
 }
 
 - (void)checkVersion {
-    [self runSession:^(RileyLinkCmdSession * _Nonnull s) {
+    [self runSessionWithName:@"Check version" usingBlock:^(RileyLinkCmdSession * _Nonnull s) {
         GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
         NSString *foundVersion;
         BOOL versionOK = NO;
@@ -349,7 +349,7 @@
         NSLog(@"Error updating %@: %@", characteristic, error);
         return;
     }
-    NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
+    //NSLog(@"didUpdateValueForCharacteristic: %@", characteristic);
     
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_DATA_UUID]]) {
         [self dataReceivedFromRL:characteristic.value];

@@ -15,8 +15,10 @@ public enum PumpCommsError: ErrorType {
     case RFCommsFailure(String)
     case UnknownPumpModel
     case RileyLinkTimeout
-    case UnknownResponse(rx: NSData?, during: String)
+    case UnknownResponse(rx: NSString, during: String)
+    case NoResponse(during: String)
     case UnexpectedResponse(PumpMessage, from: PumpMessage)
+    case Crosstalk(PumpMessage, during: String)
 }
 
 public enum RXFilterMode: UInt8 {
@@ -56,8 +58,20 @@ class PumpOpsSynchronous {
             throw PumpCommsError.RileyLinkTimeout
         }
         
-        guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) where message.address == msg.address else {
-            throw PumpCommsError.UnknownResponse(rx: cmd.receivedPacket.data, during: "Sent \(msg.txData)")
+        guard let data = cmd.receivedPacket.data else {
+            if cmd.didReceiveResponse {
+                throw PumpCommsError.UnknownResponse(rx: cmd.rawReceivedData.hexadecimalString, during: "Sent \(msg)")
+            } else {
+                throw PumpCommsError.NoResponse(during: "Sent \(msg)")
+            }
+        }
+        
+        guard let message = PumpMessage(rxData: data) else {
+            throw PumpCommsError.UnknownResponse(rx: data.hexadecimalString, during: "Sent \(msg)")
+        }
+        
+        guard message.address == msg.address else {
+            throw PumpCommsError.Crosstalk(message, during: "Sent \(msg)")
         }
         
         return message
@@ -226,11 +240,15 @@ class PumpOpsSynchronous {
         guard session.doCmd(listenForFindMessageCmd, withTimeoutMs: Int(commandTimeoutMS) + expectedMaxBLELatencyMS) else {
             throw PumpCommsError.RileyLinkTimeout
         }
-
-        guard let data = listenForFindMessageCmd.receivedPacket.data, findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
+        
+        guard let data = listenForFindMessageCmd.receivedPacket.data else {
+            throw PumpCommsError.NoResponse(during: "Watchdog listening")
+        }
+            
+        guard let findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
             let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
         else {
-            throw PumpCommsError.UnknownResponse(rx: listenForFindMessageCmd.receivedPacket.data, during: "Watchdog listening")
+            throw PumpCommsError.UnknownResponse(rx: data.hexadecimalString, during: "Watchdog listening")
         }
 
         // Identify as a MySentry device

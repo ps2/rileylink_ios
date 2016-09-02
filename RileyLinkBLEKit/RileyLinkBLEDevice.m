@@ -278,7 +278,7 @@
         NSString *foundVersion;
         BOOL versionOK = NO;
         // We run two commands here, to flush out responses to any old commands
-        [s doCmd:cmd withTimeoutMs:1000];
+        [s doCmd:cmd withTimeoutMs:5000];
         if ([s doCmd:cmd withTimeoutMs:1000]) {
             foundVersion = [[NSString alloc] initWithData:cmd.response encoding:NSUTF8StringEncoding];
             NSLog(@"Got version: %@", foundVersion);

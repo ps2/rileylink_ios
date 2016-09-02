@@ -31,6 +31,9 @@ class PumpOpsSynchronous {
     private static let standardPumpResponseWindow: UInt16 = 180
     private let expectedMaxBLELatencyMS = 1500
     
+    // After
+    private let minimumTimeBetweenWakeAttempts = NSTimeInterval(minutes: 1)
+    
     let pump: PumpState
     let session: RileyLinkCmdSession
     
@@ -52,7 +55,16 @@ class PumpOpsSynchronous {
         cmd.retryCount = retryCount
         cmd.listenChannel = 0
         
-        let totalTimeout = Int(retryCount) * Int(msBetweenPackets) + Int(timeoutMS) + expectedMaxBLELatencyMS
+        let minTimeBetweenPackets = 12 // At least 12 ms between packets for radio to stop/start
+        
+        let timeBetweenPackets = max(minTimeBetweenPackets, Int(msBetweenPackets))
+        
+        // 16384 = bitrate, 8 = bits per byte, 6/4 = 4b6 encoding, 1000 = ms in 1s
+        let singlePacketSendTime = (Double(msg.txData.length * 8) * 6 / 4 / 16384.0) * 1000
+        
+        let totalSendTime = Double(repeatCount) * (singlePacketSendTime + Double(timeBetweenPackets))
+        
+        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + expectedMaxBLELatencyMS
         
         guard session.doCmd(cmd, withTimeoutMs: totalTimeout) else {
             throw PumpCommsError.RileyLinkTimeout
@@ -80,30 +92,41 @@ class PumpOpsSynchronous {
     /**
      Attempts to send initial short wakeup message that kicks off the wakeup process.
 
-     Makes multiple attempts to send this message in order to work around issue w/
-     x22 pump/RileyLink combos not responding to the initial short wakeup message.
-
      If successful, still does not fully wake up the pump - only alerts it such that the
      longer wakeup message can be sent next.
      */
     private func attemptShortWakeUp(attempts: Int = 3) throws {
         var lastError: ErrorType?
-
-        for _ in 0..<attempts {
+        
+        if (pump.lastWakeAttempt != nil && pump.lastWakeAttempt!.timeIntervalSinceNow > -minimumTimeBetweenWakeAttempts) {
+            return
+        }
+        
+        
+        if pump.pumpModel == nil || !pump.pumpModel!.hasMySentry {
+            // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
                 let shortPowerMessage = makePumpMessage(.PowerOn)
-                let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
-
-                if shortResponse.messageType == .PumpAck {
-                    // Pump successfully received and responded to short wakeup message!
-                    return
-                } else {
-                    lastError = PumpCommsError.UnexpectedResponse(shortResponse, from: shortPowerMessage)
-                }
-            } catch let error {
-                lastError = error
+                try sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
             }
+            catch { }
         }
+
+        do {
+            let shortPowerMessage = makePumpMessage(.PowerOn)
+            let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+
+            if shortResponse.messageType == .PumpAck {
+                // Pump successfully received and responded to short wakeup message!
+                return
+            } else {
+                lastError = PumpCommsError.UnexpectedResponse(shortResponse, from: shortPowerMessage)
+            }
+        } catch let error {
+            lastError = error
+        }
+
+        pump.lastWakeAttempt = NSDate()
 
         if let lastError = lastError {
             // If all attempts failed, throw the final error

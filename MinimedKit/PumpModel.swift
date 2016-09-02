@@ -47,6 +47,10 @@ public enum PumpModel: String {
         return generation >= 23
     }
     
+    public var hasMySentry: Bool {
+        return generation >= 23
+    }
+    
     var hasLowSuspend: Bool {
         return generation >= 51
     }

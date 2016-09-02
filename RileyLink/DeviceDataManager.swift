@@ -98,7 +98,7 @@ class DeviceDataManager {
         case "timeZone"?:
             Config.sharedInstance().pumpTimeZone = pumpState?.timeZone
         case "pumpModel"?:
-            if let sentrySupported = pumpState?.pumpModel?.larger {
+            if let sentrySupported = pumpState?.pumpModel?.hasMySentry {
                 rileyLinkManager.idleListeningEnabled = sentrySupported
             }
             Config.sharedInstance().pumpModelNumber = pumpState?.pumpModel?.rawValue
@@ -368,7 +368,7 @@ class DeviceDataManager {
                 if let model = PumpModel(rawValue: pumpModelNumber) {
                     pumpState.pumpModel = model
                     
-                    idleListeningEnabled = model.larger
+                    idleListeningEnabled = model.hasMySentry
                 }
             }
             

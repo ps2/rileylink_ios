@@ -201,7 +201,7 @@ class HistoryPageTests: XCTestCase {
             
             let events = page.events
             
-            let bwsettings = events[0] as! ChangeBolusWizardSetupPumpEvent
+            let bwsettings = events[0] as! BolusWizardSetupPumpEvent
             var timestamp = NSDateComponents(gregorianYear: 2016, month: 5, day: 29, hour: 20, minute: 16, second: 48)
             XCTAssertEqual(bwsettings.timestamp, timestamp)
             

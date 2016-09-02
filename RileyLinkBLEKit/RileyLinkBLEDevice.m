@@ -464,7 +464,7 @@
 }
 
 - (void) onIdle {
-    if (!runningIdle && idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected && dataCharacteristic != nil) {
+    if (idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected) {
         runningIdle = YES;
         NSLog(@"Starting idle RX");
         GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
@@ -492,7 +492,7 @@
     if (idleListeningEnabled && !runningSession) {
         NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
         
-        if (([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+        if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
             [self onIdle];
         }
     }

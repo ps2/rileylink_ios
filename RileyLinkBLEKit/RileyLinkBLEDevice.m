@@ -111,7 +111,7 @@
     }
 }
 
-- (void) runSession:(nonnull NSString*)name proc:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
+- (void) runSessionWithName:(nonnull NSString*)name usingBlock:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
     dispatch_group_enter(idleDetectDispatchGroup);
     RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
     session.device = self;
@@ -273,7 +273,7 @@
 }
 
 - (void)checkVersion {
-    [self runSession:@"Check version" proc:^(RileyLinkCmdSession * _Nonnull s) {
+    [self runSessionWithName:@"Check version" usingBlock:^(RileyLinkCmdSession * _Nonnull s) {
         GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
         NSString *foundVersion;
         BOOL versionOK = NO;

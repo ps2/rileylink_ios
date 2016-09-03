@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public struct SelectBasalProfilePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: NSData

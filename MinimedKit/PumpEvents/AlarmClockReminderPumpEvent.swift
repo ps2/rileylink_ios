@@ -30,4 +30,8 @@ public struct AlarmClockReminderPumpEvent: TimestampedPumpEvent {
             "_type": "AlarmClockReminder",
         ]
     }
+
+    public var description: String {
+        return NSLocalizedString("AlarmClockReminder", comment: "The description of AlarmClockReminderPumpEvent")
+    }
 }

@@ -15,8 +15,10 @@ public enum PumpCommsError: ErrorType {
     case RFCommsFailure(String)
     case UnknownPumpModel
     case RileyLinkTimeout
-    case UnknownResponse(rx: NSData?, during: String)
+    case UnknownResponse(rx: NSString, during: String)
+    case NoResponse(during: String)
     case UnexpectedResponse(PumpMessage, from: PumpMessage)
+    case Crosstalk(PumpMessage, during: String)
 }
 
 public enum RXFilterMode: UInt8 {
@@ -28,6 +30,9 @@ class PumpOpsSynchronous {
     
     private static let standardPumpResponseWindow: UInt16 = 180
     private let expectedMaxBLELatencyMS = 1500
+    
+    // After
+    private let minimumTimeBetweenWakeAttempts = NSTimeInterval(minutes: 1)
     
     let pump: PumpState
     let session: RileyLinkCmdSession
@@ -50,14 +55,35 @@ class PumpOpsSynchronous {
         cmd.retryCount = retryCount
         cmd.listenChannel = 0
         
-        let totalTimeout = Int(retryCount) * Int(msBetweenPackets) + Int(timeoutMS) + expectedMaxBLELatencyMS
+        let minTimeBetweenPackets = 12 // At least 12 ms between packets for radio to stop/start
+        
+        let timeBetweenPackets = max(minTimeBetweenPackets, Int(msBetweenPackets))
+        
+        // 16384 = bitrate, 8 = bits per byte, 6/4 = 4b6 encoding, 1000 = ms in 1s
+        let singlePacketSendTime = (Double(msg.txData.length * 8) * 6 / 4 / 16384.0) * 1000
+        
+        let totalSendTime = Double(repeatCount) * (singlePacketSendTime + Double(timeBetweenPackets))
+        
+        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + expectedMaxBLELatencyMS
         
         guard session.doCmd(cmd, withTimeoutMs: totalTimeout) else {
             throw PumpCommsError.RileyLinkTimeout
         }
         
-        guard let data = cmd.receivedPacket.data, message = PumpMessage(rxData: data) where message.address == msg.address else {
-            throw PumpCommsError.UnknownResponse(rx: cmd.receivedPacket.data, during: "Sent \(msg.txData)")
+        guard let data = cmd.receivedPacket.data else {
+            if cmd.didReceiveResponse {
+                throw PumpCommsError.UnknownResponse(rx: cmd.rawReceivedData.hexadecimalString, during: "Sent \(msg)")
+            } else {
+                throw PumpCommsError.NoResponse(during: "Sent \(msg)")
+            }
+        }
+        
+        guard let message = PumpMessage(rxData: data) else {
+            throw PumpCommsError.UnknownResponse(rx: data.hexadecimalString, during: "Sent \(msg)")
+        }
+        
+        guard message.address == msg.address else {
+            throw PumpCommsError.Crosstalk(message, during: "Sent \(msg)")
         }
         
         return message
@@ -66,30 +92,41 @@ class PumpOpsSynchronous {
     /**
      Attempts to send initial short wakeup message that kicks off the wakeup process.
 
-     Makes multiple attempts to send this message in order to work around issue w/
-     x22 pump/RileyLink combos not responding to the initial short wakeup message.
-
      If successful, still does not fully wake up the pump - only alerts it such that the
      longer wakeup message can be sent next.
      */
     private func attemptShortWakeUp(attempts: Int = 3) throws {
         var lastError: ErrorType?
-
-        for _ in 0..<attempts {
+        
+        if (pump.lastWakeAttempt != nil && pump.lastWakeAttempt!.timeIntervalSinceNow > -minimumTimeBetweenWakeAttempts) {
+            return
+        }
+        
+        
+        if pump.pumpModel == nil || !pump.pumpModel!.hasMySentry {
+            // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
                 let shortPowerMessage = makePumpMessage(.PowerOn)
-                let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 15000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
-
-                if shortResponse.messageType == .PumpAck {
-                    // Pump successfully received and responded to short wakeup message!
-                    return
-                } else {
-                    lastError = PumpCommsError.UnexpectedResponse(shortResponse, from: shortPowerMessage)
-                }
-            } catch let error {
-                lastError = error
+                try sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
             }
+            catch { }
         }
+
+        do {
+            let shortPowerMessage = makePumpMessage(.PowerOn)
+            let shortResponse = try sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+
+            if shortResponse.messageType == .PumpAck {
+                // Pump successfully received and responded to short wakeup message!
+                return
+            } else {
+                lastError = PumpCommsError.UnexpectedResponse(shortResponse, from: shortPowerMessage)
+            }
+        } catch let error {
+            lastError = error
+        }
+
+        pump.lastWakeAttempt = NSDate()
 
         if let lastError = lastError {
             // If all attempts failed, throw the final error
@@ -226,11 +263,15 @@ class PumpOpsSynchronous {
         guard session.doCmd(listenForFindMessageCmd, withTimeoutMs: Int(commandTimeoutMS) + expectedMaxBLELatencyMS) else {
             throw PumpCommsError.RileyLinkTimeout
         }
-
-        guard let data = listenForFindMessageCmd.receivedPacket.data, findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
+        
+        guard let data = listenForFindMessageCmd.receivedPacket.data else {
+            throw PumpCommsError.NoResponse(during: "Watchdog listening")
+        }
+            
+        guard let findMessage = PumpMessage(rxData: data) where findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .MySentry,
             let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
         else {
-            throw PumpCommsError.UnknownResponse(rx: listenForFindMessageCmd.receivedPacket.data, during: "Watchdog listening")
+            throw PumpCommsError.UnknownResponse(rx: data.hexadecimalString, during: "Watchdog listening")
         }
 
         // Identify as a MySentry device
@@ -335,6 +376,21 @@ class PumpOpsSynchronous {
 
         var events = [TimestampedHistoryEvent]()
         var timeAdjustmentInterval: NSTimeInterval = 0
+        
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
+        // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
+        // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
+        let eventTimestampDeltaAllowance: NSTimeInterval
+        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
+            eventTimestampDeltaAllowance = NSTimeInterval(minutes: 10)
+        } else {
+            eventTimestampDeltaAllowance = NSTimeInterval(hours: 9)
+        }
+
+        // Start with some time in the future, to account for the condition when the pump's clock is ahead
+        // of ours by a small amount.
+        var timeCursor = NSDate(timeIntervalSinceNow: NSTimeInterval(minutes: 60))
+        
 
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
@@ -359,21 +415,15 @@ class PumpOpsSynchronous {
                     timestamp.timeZone = pump.timeZone
 
                     if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
-                        if date.compare(startDate) == .OrderedAscending  {
-                            NSLog("Found event (%@) before startDate(%@)", date, startDate);
+                        if date.timeIntervalSinceDate(startDate) < -eventTimestampDeltaAllowance {
+                            NSLog("Found event at (%@) to be %@s before startDate(%@)", date, timeAdjustmentInterval, startDate);
                             break pages
-                        } else {
+                        } else if date.timeIntervalSinceDate(timeCursor) > eventTimestampDeltaAllowance {
+                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date)
+                            break pages
+                        } else if date.compare(startDate) != .OrderedAscending {
+                            timeCursor = date
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
-                        }
-                    }
-                    
-                    if let alarm = event as? PumpAlarmPumpEvent {
-                        switch alarm.alarmType {
-                        case .BatteryDepleted, .BatteryOutLimitExceeded, .DeviceReset:
-                            print("Found clock loss in pump history.  Ending history fetch.")
-                            break pages
-                        default:
-                            break
                         }
                     }
                 }

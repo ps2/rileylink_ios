@@ -22,9 +22,11 @@ public enum PumpEventType: UInt8 {
     case ChangeTime = 0x17
     case JournalEntryPumpLowBattery = 0x19
     case Battery = 0x1a
+    case SetAutoOff = 0x1b
     case Suspend = 0x1e
     case Resume = 0x1f
     case Rewind = 0x21
+    case ClearSettings = 0x22
     case ChangeChildBlockEnable = 0x23
     case ChangeMaxBolus = 0x24
     case EnableDisableRemote = 0x26
@@ -42,12 +44,19 @@ public enum PumpEventType: UInt8 {
     case JournalEntryExerciseMarker = 0x41
     case JournalEntryInsulinMarker = 0x42
     case JournalEntryOtherMarker = 0x43
+    case ChangeBolusWizardSetup = 0x4f
     case ChangeSensorSetup2 = 0x50
+    case RestoreMystery51 = 0x51
+    case RestoreMystery52 = 0x52
+    case RestoreMystery53 = 0x53
+    case RestoreMystery54 = 0x54
+    case RestoreMystery55 = 0x55
     case ChangeSensorRateOfChangeAlertSetup = 0x56
     case ChangeBolusScrollStepSize = 0x57
-    case ChangeBolusWizardSetup = 0x5a
+    case BolusWizardSetup = 0x5a
     case BolusWizardBolusEstimate = 0x5b
     case UnabsorbedInsulin = 0x5c
+    case SaveSettings = 0x5d
     case ChangeVariableBolus = 0x5e
     case ChangeAudioBolus = 0x5f
     case ChangeBGReminderEnable = 0x60
@@ -59,6 +68,7 @@ public enum PumpEventType: UInt8 {
     case ChangeBolusReminderEnable = 0x66
     case ChangeBolusReminderTime = 0x67
     case DeleteBolusReminderTime = 0x68
+    case RestoreMystery69 = 0x69
     case DeleteAlarmClockTime = 0x6a
     case Model522ResultTotals = 0x6d
     case Sara6E = 0x6e
@@ -84,6 +94,8 @@ public enum PumpEventType: UInt8 {
             return ChangeBasalProfilePatternPumpEvent.self
         case .ChangeBasalProfile:
             return ChangeBasalProfilePumpEvent.self
+        case .ChangeBolusWizardSetup:
+            return ChangeBolusWizardSetupPumpEvent.self
         case .CalBGForPH:
             return CalBGForPHPumpEvent.self
         case .AlarmSensor:
@@ -140,8 +152,8 @@ public enum PumpEventType: UInt8 {
             return ChangeSensorRateOfChangeAlertSetupPumpEvent.self
         case .ChangeBolusScrollStepSize:
             return ChangeBolusScrollStepSizePumpEvent.self
-        case .ChangeBolusWizardSetup:
-            return ChangeBolusWizardSetupPumpEvent.self
+        case .BolusWizardSetup:
+            return BolusWizardSetupPumpEvent.self
         case .BolusWizardBolusEstimate:
             return BolusWizardEstimatePumpEvent.self
         case .UnabsorbedInsulin:
@@ -190,6 +202,10 @@ public enum PumpEventType: UInt8 {
             return ChangeCaptureEventEnablePumpEvent.self
         case .SelectBasalProfile:
             return SelectBasalProfilePumpEvent.self
+        case .RestoreMystery54:
+            return RestoreMystery54PumpEvent.self
+        case .RestoreMystery55:
+            return RestoreMystery55PumpEvent.self
         default:
             return PlaceholderPumpEvent.self
         }

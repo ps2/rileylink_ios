@@ -41,6 +41,16 @@ public enum PumpModel: String {
         return generation >= 23
     }
     
+    // On newer pumps, square wave boluses are added to history on start of delivery, and updated in place
+    // when delivery is finished
+    public var appendsSquareWaveToHistoryOnStartOfDelivery: Bool {
+        return generation >= 23
+    }
+    
+    public var hasMySentry: Bool {
+        return generation >= 23
+    }
+    
     var hasLowSuspend: Bool {
         return generation >= 51
     }

@@ -1,5 +1,5 @@
 //
-//  ChangeBolusWizardSetupPumpEvent.swift
+//  RestoreMystery54PumpEvent.swift
 //  RileyLink
 //
 //  Created by Pete Schwamb on 8/29/16.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
+public struct RestoreMystery54PumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: NSData
     public let timestamp: NSDateComponents
     
     public init?(availableData: NSData, pumpModel: PumpModel) {
-        length = 39
+        length = 64
         
         guard length <= availableData.length else {
             return nil
@@ -27,7 +27,7 @@ public struct ChangeBolusWizardSetupPumpEvent: TimestampedPumpEvent {
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
-            "_type": "ChangeBolusWizardSetup",
+            "_type": "RestoreMystery54",
         ]
     }
 }

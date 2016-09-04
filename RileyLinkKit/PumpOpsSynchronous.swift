@@ -416,7 +416,7 @@ class PumpOpsSynchronous {
 
                     if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
                         if date.timeIntervalSinceDate(startDate) < -eventTimestampDeltaAllowance {
-                            NSLog("Found event at (%@) to be %@s before startDate(%@)", date, timeAdjustmentInterval, startDate);
+                            NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date, String(eventTimestampDeltaAllowance), startDate);
                             break pages
                         } else if date.timeIntervalSinceDate(timeCursor) > eventTimestampDeltaAllowance {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date)

@@ -15,7 +15,10 @@ class NightscoutPumpEvents: NSObject {
         var results = [NightscoutTreatment]()
         var lastBolusWizard: BolusWizardEstimatePumpEvent?
         var lastBolusWizardDate: NSDate?
-        var lastTempBasal: TempBasalPumpEvent?
+        var lastBasalRate: TempBasalPumpEvent?
+        var lastBasalRateDate: NSDate?
+        var lastBasalDuration: TempBasalDurationPumpEvent?
+        var lastBasalDurationDate: NSDate?
         for event in events {
             switch event.pumpEvent {
             case let bgReceived as BGReceivedPumpEvent:
@@ -50,23 +53,37 @@ class NightscoutPumpEvents: NSObject {
                 lastBolusWizard = bolusWizard
                 lastBolusWizardDate = event.date
             case let tempBasal as TempBasalPumpEvent:
-                lastTempBasal = tempBasal
+                lastBasalRate = tempBasal
+                lastBasalRateDate = event.date
             case let tempBasalDuration as TempBasalDurationPumpEvent:
-                if let tempBasal = lastTempBasal {
-                    let absolute: Double? = tempBasal.rateType == .Absolute ? tempBasal.rate : nil
-                    let entry = TempBasalNightscoutTreatment(
-                        timestamp: event.date,
-                        enteredBy: eventSource,
-                        temp: tempBasal.rateType == .Absolute ? .Absolute : .Percentage,
-                        rate: tempBasal.rate, absolute: absolute, duration: tempBasalDuration.duration)
-                    
-                    results.append(entry)
-                }
+                lastBasalDuration = tempBasalDuration
+                lastBasalDurationDate = event.date
             default:
                 break
             }
+            
+            if let basalRate = lastBasalRate, basalDuration = lastBasalDuration, basalRateDate = lastBasalRateDate, basalDurationDate = lastBasalDurationDate
+                where fabs(basalRateDate.timeIntervalSinceDate(basalDurationDate)) <= 2 {
+                let entry = basalPairToNSTreatment(basalRate, basalDuration: basalDuration, eventSource: eventSource, timestamp: event.date)
+                results.append(entry)
+                lastBasalRate = nil
+                lastBasalRateDate = nil
+                lastBasalDuration = nil
+                lastBasalDurationDate = nil
+            }
         }
         return results
+    }
+    
+    private class func basalPairToNSTreatment(basalRate: TempBasalPumpEvent, basalDuration: TempBasalDurationPumpEvent, eventSource: String, timestamp: NSDate) -> TempBasalNightscoutTreatment {
+        let absolute: Double? = basalRate.rateType == .Absolute ? basalRate.rate : nil
+        return TempBasalNightscoutTreatment(
+            timestamp: timestamp,
+            enteredBy: eventSource,
+            temp: basalRate.rateType == .Absolute ? .Absolute : .Percentage,
+            rate: basalRate.rate,
+            absolute: absolute,
+            duration: basalDuration.duration)
     }
 }
 

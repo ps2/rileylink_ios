@@ -377,9 +377,11 @@ class PumpOpsSynchronous {
         
         var results = FrequencyScanResults()
         
+        let middleFreq = frequencies[frequencies.count / 2]
+        
         do {
             // Needed to put the pump in listen mode
-            try setBaseFrequency(frequencies[frequencies.count / 2])
+            try setBaseFrequency(middleFreq)
             try wakeup()
         } catch {
             // Continue anyway; the pump likely heard us, even if we didn't hear it.
@@ -420,6 +422,7 @@ class PumpOpsSynchronous {
             try setBaseFrequency(results.bestFrequency)
         } else {
             throw PumpCommsError.RFCommsFailure("No pump responses during scan")
+            try setBaseFrequency(middleFreq)
         }
         
         return results

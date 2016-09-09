@@ -95,13 +95,12 @@ class PumpOpsSynchronous {
      If successful, still does not fully wake up the pump - only alerts it such that the
      longer wakeup message can be sent next.
      */
-    private func attemptShortWakeUp(attempts: Int = 3) throws {
+    private func sendWakeUpBurst() throws {
         var lastError: ErrorType?
         
         if (pump.lastWakeAttempt != nil && pump.lastWakeAttempt!.timeIntervalSinceNow > -minimumTimeBetweenWakeAttempts) {
             return
         }
-        
         
         if pump.pumpModel == nil || !pump.pumpModel!.hasMySentry {
             // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
@@ -139,7 +138,7 @@ class PumpOpsSynchronous {
             return
         }
         
-        try attemptShortWakeUp()
+        try sendWakeUpBurst()
         
         let longPowerMessage = makePumpMessage(.PowerOn, body: PowerOnCarelinkMessageBody(duration: duration))
         let longResponse = try sendAndListen(longPowerMessage)
@@ -300,6 +299,25 @@ class PumpOpsSynchronous {
         try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: chanbw | drate_e)
     }
     
+    func configureRadioForRegion(region: PumpRegion) throws {
+        switch region {
+        case .WorldWide:
+            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x59)
+            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
+            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
+            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x62)
+            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x1A)
+            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x13)
+        case .NorthAmerica:
+            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x99)
+            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
+            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
+            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x61)
+            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x7E)
+            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x15)
+        }
+    }
+    
     private func updateRegister(addr: UInt8, value: UInt8) throws {
         let cmd = UpdateRegisterCmd()
         cmd.addr = addr;
@@ -316,6 +334,20 @@ class PumpOpsSynchronous {
         try updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
         try updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
         NSLog("Set frequency to %f", freqMHz)
+    }
+    
+    internal func tuneRadioForRegion(region: PumpRegion) throws -> FrequencyScanResults {
+        
+        let scanFrequencies: [Double]
+        
+        switch region {
+        case .WorldWide:
+            scanFrequencies = [868.25, 868.30, 868.35, 868.40, 868.45, 868.50, 868.55, 868.60, 868.65]
+        case .NorthAmerica:
+            scanFrequencies = [916.45, 916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
+        }
+        
+        return try scanForPump(scanFrequencies)
     }
     
     internal func scanForPump(frequencies: [Double]) throws -> FrequencyScanResults {

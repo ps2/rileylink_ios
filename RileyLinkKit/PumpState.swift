@@ -23,13 +23,17 @@ public class PumpState {
     /// If the value type does not conform to AnyObject, a raw representation will be provided instead.
     public static let ValueChangeOldKey = "com.rileylink.RileyLinkKit.PumpState.ValueChangeOldKey"
     
-    public var scanFrequencies = [916.45, 916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
-    
     public let pumpID: String
         
     public var timeZone: NSTimeZone = NSTimeZone.defaultTimeZone() {
         didSet {
             postChangeNotificationForKey("timeZone", oldValue: oldValue)
+        }
+    }
+    
+    public var pumpRegion: PumpRegion {
+        didSet {
+            postChangeNotificationForKey("pumpRegion", oldValue: oldValue.rawValue)
         }
     }
     
@@ -51,8 +55,9 @@ public class PumpState {
         }
     }
     
-    public init(pumpID: String) {
+    public init(pumpID: String, pumpRegion: PumpRegion) {
         self.pumpID = pumpID
+        self.pumpRegion = pumpRegion
     }
     
     public var isAwake: Bool {

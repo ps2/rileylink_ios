@@ -15,7 +15,7 @@ public enum PumpRegion: Int, CustomStringConvertible  {
     public var description: String {
         switch self {
         case .WorldWide:
-            return NSLocalizedString("World Wide", comment: "Describing the worldwide pump region")
+            return NSLocalizedString("World-Wide", comment: "Describing the worldwide pump region")
         case .NorthAmerica:
             return NSLocalizedString("North America", comment: "Describing the North America pump region")
         }

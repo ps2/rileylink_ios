@@ -62,7 +62,7 @@ class DeviceDataManager {
             }
             
             if let pumpID = newValue {
-                let pumpState = PumpState(pumpID: pumpID)
+                let pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
                 
                 if let timeZone = self.pumpState?.timeZone {
                     pumpState.timeZone = timeZone
@@ -78,6 +78,17 @@ class DeviceDataManager {
             Config.sharedInstance().pumpID = pumpID
         }
     }
+    
+    var pumpRegion: PumpRegion {
+        get {
+            return PumpRegion(rawValue: Config.sharedInstance().pumpRegion) ?? PumpRegion.NorthAmerica
+        }
+        set {
+            self.pumpState?.pumpRegion = newValue
+            Config.sharedInstance().pumpRegion = newValue.rawValue
+        }
+    }
+
     
     var pumpState: PumpState? {
         didSet {
@@ -357,8 +368,10 @@ class DeviceDataManager {
 
         var idleListeningEnabled = true
         
+        let pumpRegion = PumpRegion(rawValue: Config.sharedInstance().pumpRegion) ?? PumpRegion.NorthAmerica
+        
         if let pumpID = pumpID {
-            let pumpState = PumpState(pumpID: pumpID)
+            let pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
             
             if let timeZone = Config.sharedInstance().pumpTimeZone {
                 pumpState.timeZone = timeZone

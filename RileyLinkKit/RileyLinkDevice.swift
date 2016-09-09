@@ -88,7 +88,7 @@ public class RileyLinkDevice {
     
     public func tunePumpWithResultHandler(resultHandler: (Either<FrequencyScanResults, ErrorType>) -> Void) {
         if let ops = ops {
-            ops.tunePump { (result) in
+            ops.tuneRadioForRegion(ops.pumpState.pumpRegion) { (result) in
                 switch result {
                 case .Success(let scanResults):
                     self.lastTuned = NSDate()

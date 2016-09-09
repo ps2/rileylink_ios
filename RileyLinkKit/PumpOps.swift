@@ -280,11 +280,12 @@ public class PumpOps {
         }
     }
 
-    func tunePump(completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
+    func tuneRadioForRegion(region: PumpRegion = .NorthAmerica, completion: (Either<FrequencyScanResults, ErrorType>) -> Void)  {
         device.runSessionWithName("Tune pump") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
-                let response = try ops.scanForPump(self.pumpState.scanFrequencies)
+                try ops.configureRadioForRegion(region)
+                let response = try ops.tuneRadioForRegion(region)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completion(.Success(response))
                 })

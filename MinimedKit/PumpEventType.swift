@@ -37,6 +37,7 @@ public enum PumpEventType: UInt8 {
     case TempBasal = 0x33
     case JournalEntryPumpLowReservoir = 0x34
     case AlarmClockReminder = 0x35
+    case ChangeMeterId = 0x36
     case Questionable3b = 0x3b
     case ChangeParadigmLinkID = 0x3c
     case BGReceived = 0x3f
@@ -70,8 +71,9 @@ public enum PumpEventType: UInt8 {
     case DeleteBolusReminderTime = 0x68
     case RestoreMystery69 = 0x69
     case DeleteAlarmClockTime = 0x6a
-    case Model522ResultTotals = 0x6d
-    case Sara6E = 0x6e
+    case DailyTotal515 = 0x6c
+    case DailyTotal522 = 0x6d
+    case DailyTotal523 = 0x6e
     case ChangeCarbUnits = 0x6f
     case BasalProfileStart = 0x7b
     case ChangeWatchdogEnable = 0x7c
@@ -182,10 +184,12 @@ public enum PumpEventType: UInt8 {
             return DeleteBolusReminderTimePumpEvent.self
         case .DeleteAlarmClockTime:
             return DeleteAlarmClockTimePumpEvent.self
-        case .Model522ResultTotals:
-            return Model522ResultTotalsPumpEvent.self
-        case .Sara6E:
-            return Sara6EPumpEvent.self
+        case .DailyTotal515:
+            return DailyTotal515PumpEvent.self
+        case .DailyTotal522:
+            return DailyTotal522PumpEvent.self
+        case .DailyTotal523:
+            return DailyTotal523PumpEvent.self
         case .ChangeCarbUnits:
             return ChangeCarbUnitsPumpEvent.self
         case .BasalProfileStart:
@@ -206,6 +210,8 @@ public enum PumpEventType: UInt8 {
             return RestoreMystery54PumpEvent.self
         case .RestoreMystery55:
             return RestoreMystery55PumpEvent.self
+        case .ChangeMeterId:
+            return ChangeMeterIDPumpEvent.self
         default:
             return PlaceholderPumpEvent.self
         }

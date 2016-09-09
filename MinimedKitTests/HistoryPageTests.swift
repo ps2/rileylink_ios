@@ -142,19 +142,19 @@ class HistoryPageTests: XCTestCase {
             XCTAssertEqual(prime.programmedAmount, 0.0)
             XCTAssertEqual(prime.timestamp, NSDateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 20, minute: 5, second: 7))
             
-            let sara6e = events[50] as! Sara6EPumpEvent
+            let resultTotals = events[50] as! DailyTotal523PumpEvent
             // 2016-02-22T00:00:00
-            let sara6eDate = NSDateComponents()
-            sara6eDate.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-            sara6eDate.year = 2016
-            sara6eDate.month = 2
-            sara6eDate.day = 21
+            let resultTotalsDate = NSDateComponents()
+            resultTotalsDate.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+            resultTotalsDate.year = 2016
+            resultTotalsDate.month = 2
+            resultTotalsDate.day = 21
             
-            XCTAssertEqual(sara6e.timestamp, sara6eDate)
+            XCTAssertEqual(resultTotals.timestamp, resultTotalsDate)
             
-            sara6e.timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
+            resultTotals.timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
             
-            XCTAssertEqual(sara6e.dictionaryRepresentation["validDate"] as? String, "2016-02-21")
+            XCTAssertEqual(resultTotals.dictionaryRepresentation["validDate"] as? String, "2016-02-21")
             
         } catch HistoryPage.Error.InvalidCRC {
             XCTFail("page decoding threw invalid crc")

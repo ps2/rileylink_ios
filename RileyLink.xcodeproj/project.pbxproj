@@ -90,7 +90,7 @@
 		C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198621C8DF4C800BC374C /* HistoryPageTests.swift */; };
 		C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */; };
 		C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */; };
-		C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */; };
+		C12198A91C8F2AF200BC374C /* DailyTotal523PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */; };
 		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
 		C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */; };
 		C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12616431B685F0A001FAD87 /* CoreData.framework */; };
@@ -103,6 +103,8 @@
 		C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		C12618461CDB019C0064A849 /* Crypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
+		C1274F771D8232580002912B /* DailyTotal515PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */; };
+		C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
@@ -172,7 +174,7 @@
 		C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */; };
 		C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */; };
 		C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */; };
-		C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */; };
+		C1842BFF1C8FA45100DB42AC /* DailyTotal522PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD51C8FA45100DB42AC /* DailyTotal522PumpEvent.swift */; };
 		C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */; };
 		C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */; };
 		C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */; };
@@ -452,7 +454,7 @@
 		C12198621C8DF4C800BC374C /* HistoryPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTests.swift; sourceTree = "<group>"; };
 		C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
-		C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sara6EPumpEvent.swift; sourceTree = "<group>"; };
+		C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyTotal523PumpEvent.swift; sourceTree = "<group>"; };
 		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusWizardEstimatePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12616431B685F0A001FAD87 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -472,6 +474,8 @@
 		C12618451CDB019C0064A849 /* Crypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crypto.framework; path = Carthage/Build/iOS/Crypto.framework; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyTotal515PumpEvent.swift; sourceTree = "<group>"; };
+		C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMeterIDPumpEvent.swift; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA23A198B436800309FA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C12EA23C198B436800309FA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -546,7 +550,7 @@
 		C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SuspendPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ResumePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ResultDailyTotalPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Model522ResultTotalsPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C1842BD51C8FA45100DB42AC /* DailyTotal522PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DailyTotal522PumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = JournalEntryPumpLowReservoirPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = JournalEntryPumpLowBatteryPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BD81C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = JournalEntryExerciseMarkerPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1067,6 +1071,7 @@
 				C1842BEB1C8FA45100DB42AC /* ChangeChildBlockEnablePumpEvent.swift */,
 				C1842BEA1C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift */,
 				C1842BE91C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift */,
+				C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */,
 				C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */,
 				C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */,
 				C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */,
@@ -1079,6 +1084,9 @@
 				C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */,
 				C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */,
 				C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */,
+				C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */,
+				C1842BD51C8FA45100DB42AC /* DailyTotal522PumpEvent.swift */,
+				C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */,
 				C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */,
 				C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */,
 				C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */,
@@ -1089,7 +1097,6 @@
 				C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */,
 				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
 				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
-				C1842BD51C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift */,
 				438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */,
 				C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */,
 				C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */,
@@ -1099,7 +1106,6 @@
 				C1842BD41C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift */,
 				C1842BD31C8FA45100DB42AC /* ResumePumpEvent.swift */,
 				C1842BCA1C8F9A7200DB42AC /* RewindPumpEvent.swift */,
-				C12198A81C8F2AF200BC374C /* Sara6EPumpEvent.swift */,
 				43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */,
 				C1842BD21C8FA45100DB42AC /* SuspendPumpEvent.swift */,
 				C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */,
@@ -1724,7 +1730,7 @@
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
 				C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */,
 				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
-				C1842BFF1C8FA45100DB42AC /* Model522ResultTotalsPumpEvent.swift in Sources */,
+				C1842BFF1C8FA45100DB42AC /* DailyTotal522PumpEvent.swift in Sources */,
 				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,
 				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
 				C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */,
@@ -1737,6 +1743,7 @@
 				C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */,
 				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,
 				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
+				C1274F771D8232580002912B /* DailyTotal515PumpEvent.swift in Sources */,
 				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
 				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
 				C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */,
@@ -1748,6 +1755,7 @@
 				C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */,
 				C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */,
 				C1842C181C8FA45100DB42AC /* BolusWizardSetupPumpEvent.swift in Sources */,
+				C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */,
 				C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */,
 				C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */,
 				C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */,
@@ -1822,7 +1830,7 @@
 				C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */,
 				C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */,
 				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
-				C12198A91C8F2AF200BC374C /* Sara6EPumpEvent.swift in Sources */,
+				C12198A91C8F2AF200BC374C /* DailyTotal523PumpEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

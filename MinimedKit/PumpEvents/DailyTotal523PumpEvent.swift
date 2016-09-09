@@ -1,5 +1,5 @@
 //
-//  Sara6EPumpEvent.swift
+//  DailyTotal523PumpEvent.swift
 //  RileyLink
 //
 //  Created by Pete Schwamb on 3/8/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Sara6EPumpEvent: PumpEvent {
+public struct DailyTotal523PumpEvent: PumpEvent {
     
     public let length: Int
     public let rawData: NSData
@@ -33,7 +33,7 @@ public struct Sara6EPumpEvent: PumpEvent {
     
     public var dictionaryRepresentation: [String: AnyObject] {
         return [
-            "_type": "Sara6E",
+            "_type": "DailyTotal523",
             "validDate": validDateStr,
         ]
     }

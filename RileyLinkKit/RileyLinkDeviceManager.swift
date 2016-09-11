@@ -11,13 +11,6 @@ import RileyLinkBLEKit
 
 
 public class RileyLinkDeviceManager {
-    
-    public static let DidDiscoverDeviceNotification = "com.rileylink.RileyLinkKit.DidDiscoverDeviceNotification"
-    
-    public static let ConnectionStateDidChangeNotification = "com.rileylink.RileyLinkKit.ConnectionStateDidChangeNotification"
-
-    public static let RSSIDidChangeNotification = "com.rileylink.RileyLinkKit.RSSIDidChangeNotification"
-    public static let NameDidChangeNotification = "com.rileylink.RileyLinkKit.NameDidChangeNotification"
 
     public static let RileyLinkDeviceKey = "com.rileylink.RileyLinkKit.RileyLinkDevice"
     public static let RileyLinkRSSIKey = "com.rileylink.RileyLinkKit.RileyLinkRSSI"
@@ -34,25 +27,25 @@ public class RileyLinkDeviceManager {
     public init(pumpState: PumpState?, autoConnectIDs: Set<String>) {
         self.pumpState = pumpState
         
-        BLEManager.autoConnectIds = autoConnectIDs
+        bleManager.autoConnectIds = autoConnectIDs
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: RILEYLINK_EVENT_LIST_UPDATED, object: BLEManager)
+        NotificationCenter.default.addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_LIST_UPDATED), object: bleManager)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: RILEYLINK_EVENT_DEVICE_CONNECTED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_DEVICE_CONNECTED), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: RILEYLINK_EVENT_DEVICE_DISCONNECTED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_DEVICE_DISCONNECTED), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(rssiDidChange(_:)), name: RILEYLINK_EVENT_RSSI_CHANGED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rssiDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_RSSI_CHANGED), object: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(nameDidChange(_:)), name: RILEYLINK_EVENT_NAME_CHANGED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(nameDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_NAME_CHANGED), object: nil)
     }
 
     public var deviceScanningEnabled: Bool {
         get {
-            return BLEManager.scanningEnabled
+            return bleManager.isScanningEnabled
         }
         set {
-            BLEManager.scanningEnabled = newValue
+            bleManager.isScanningEnabled = newValue
         }
     }
 
@@ -71,7 +64,7 @@ public class RileyLinkDeviceManager {
         didSet {
             for device in _devices {
                 if idleListeningEnabled {
-                    device.device.enableIdleListeningOnChannel(0)
+                    device.device.enableIdleListening(onChannel: 0)
                 } else {
                     device.device.disableIdleListening()
                 }
@@ -86,67 +79,76 @@ public class RileyLinkDeviceManager {
     }
     
     public var firstConnectedDevice: RileyLinkDevice? {
-        if let index = _devices.indexOf({ $0.peripheral.state == .Connected }) {
+        if let index = _devices.index(where: { $0.peripheral.state == .connected }) {
             return _devices[index]
         } else {
             return nil
         }
     }
     
-    public func connectDevice(device: RileyLinkDevice) {
-        BLEManager.connectPeripheral(device.peripheral)
+    public func connectDevice(_ device: RileyLinkDevice) {
+        bleManager.connect(device.peripheral)
     }
     
-    public func disconnectDevice(device: RileyLinkDevice) {
-        BLEManager.disconnectPeripheral(device.peripheral)
+    public func disconnectDevice(_ device: RileyLinkDevice) {
+        bleManager.disconnectPeripheral(device.peripheral)
     }
     
-    private let BLEManager = RileyLinkBLEManager()
-    
+    private let bleManager = RileyLinkBLEManager()
+
     // MARK: - RileyLinkBLEManager
     
-    @objc private func discoveredBLEDevice(note: NSNotification) {
-        if let BLEDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
-            BLEDevice.timerTickEnabled = timerTickEnabled
+    @objc private func discoveredBLEDevice(_ note: Notification) {
+        if let bleDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
+            bleDevice.timerTickEnabled = timerTickEnabled
 
             if idleListeningEnabled {
-                BLEDevice.enableIdleListeningOnChannel(0)
+                bleDevice.enableIdleListening(onChannel: 0)
             }
 
-            let device = RileyLinkDevice(BLEDevice: BLEDevice, pumpState: pumpState)
+            let device = RileyLinkDevice(bleDevice: bleDevice, pumpState: pumpState)
             
             _devices.append(device)
             
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidDiscoverDeviceNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device])
+            NotificationCenter.default.post(name: .DeviceManagerDidDiscoverDevice, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device])
             
         }
     }
     
-    @objc private func connectionStateDidChange(note: NSNotification) {
-        if let BLEDevice = note.object as? RileyLinkBLEDevice,
-            index = _devices.indexOf({ $0.peripheral == BLEDevice.peripheral }) {
+    @objc private func connectionStateDidChange(_ note: Notification) {
+        if let bleDevice = note.object as? RileyLinkBLEDevice,
+            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
             let device = _devices[index]
             
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ConnectionStateDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device])            
+            NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device])
         }
     }
     
-    @objc private func rssiDidChange(note: NSNotification) {
-        if let BLEDevice = note.object as? RileyLinkBLEDevice,
-            index = _devices.indexOf({ $0.peripheral == BLEDevice.peripheral }) {
+    @objc private func rssiDidChange(_ note: Notification) {
+        if let bleDevice = note.object as? RileyLinkBLEDevice,
+            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
             let device = _devices[index]
             
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.RSSIDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device, self.dynamicType.RileyLinkRSSIKey: note.userInfo!["RSSI"]!])
+            NotificationCenter.default.post(name: .DeviceRSSIDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkRSSIKey: note.userInfo!["RSSI"]!])
         }
     }
 
-    @objc private func nameDidChange(note: NSNotification) {
-        if let BLEDevice = note.object as? RileyLinkBLEDevice,
-            index = _devices.indexOf({ $0.peripheral == BLEDevice.peripheral }) {
+    @objc private func nameDidChange(_ note: Notification) {
+        if let bleDevice = note.object as? RileyLinkBLEDevice,
+            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
             let device = _devices[index]
 
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.NameDidChangeNotification, object: self, userInfo: [self.dynamicType.RileyLinkDeviceKey: device, self.dynamicType.RileyLinkNameKey: note.userInfo!["Name"]!])
+            NotificationCenter.default.post(name: .DeviceNameDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkNameKey: note.userInfo!["Name"]!])
         }
     }
+}
 
+
+extension Notification.Name {
+    public static let DeviceManagerDidDiscoverDevice = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.DidDiscoverDeviceNotification")
+
+    public static let DeviceConnectionStateDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.ConnectionStateDidChangeNotification")
+
+    public static let DeviceRSSIDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.RSSIDidChangeNotification")
+    public static let DeviceNameDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.NameDidChangeNotification")
 }

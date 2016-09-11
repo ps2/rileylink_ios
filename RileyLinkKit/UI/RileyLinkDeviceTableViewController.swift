@@ -15,7 +15,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     public var device: RileyLinkDevice!
     
-    var rssiFetchTimer: NSTimer? {
+    var rssiFetchTimer: Timer? {
         willSet {
             rssiFetchTimer?.invalidate()
         }
@@ -24,7 +24,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     private var appeared = false
 
     convenience init() {
-        self.init(style: .Grouped)
+        self.init(style: .grouped)
     }
 
     public override func viewDidLoad() {
@@ -45,52 +45,52 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     
     deinit {
         for observer in notificationObservers {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 
     private var deviceObserver: AnyObject? {
         willSet {
             if let observer = deviceObserver {
-                NSNotificationCenter.defaultCenter().removeObserver(observer)
+                NotificationCenter.default.removeObserver(observer)
             }
         }
     }
 
     private func observe() {
-        let center = NSNotificationCenter.defaultCenter()
-        let mainQueue = NSOperationQueue.mainQueue()
+        let center = NotificationCenter.default
+        let mainQueue = OperationQueue.main
         
         notificationObservers = [
-            center.addObserverForName(RileyLinkDeviceManager.NameDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
-                let indexPath = NSIndexPath(forRow: DeviceRow.CustomName.rawValue, inSection: Section.Device.rawValue)
-                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            center.addObserver(forName: .DeviceNameDidChange, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
+                let indexPath = IndexPath(row: DeviceRow.customName.rawValue, section: Section.device.rawValue)
+                self?.tableView.reloadRows(at: [indexPath], with: .none)
                 self?.title = self?.device.name
             },
-            center.addObserverForName(RileyLinkDeviceManager.ConnectionStateDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
-                let indexPath = NSIndexPath(forRow: DeviceRow.Connection.rawValue, inSection: Section.Device.rawValue)
-                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            center.addObserver(forName: .DeviceConnectionStateDidChange, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
+                let indexPath = IndexPath(row: DeviceRow.connection.rawValue, section: Section.device.rawValue)
+                self?.tableView.reloadRows(at: [indexPath], with: .none)
             },
-            center.addObserverForName(RileyLinkDeviceManager.RSSIDidChangeNotification, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
-                let indexPath = NSIndexPath(forRow: DeviceRow.RSSI.rawValue, inSection: Section.Device.rawValue)
-                self?.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            center.addObserver(forName: .DeviceRSSIDidChange, object: nil, queue: mainQueue) { [weak self = self] (note) -> Void in
+                let indexPath = IndexPath(row: DeviceRow.rssi.rawValue, section: Section.device.rawValue)
+                self?.tableView.reloadRows(at: [indexPath], with: .none)
             }
         ]
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if appeared {
             tableView.reloadData()
         }
         
-        rssiFetchTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
+        rssiFetchTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
 
         appeared = true
     }
     
-    public override func viewWillDisappear(animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         rssiFetchTimer = nil
     }
@@ -98,19 +98,19 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     // MARK: - Formatters
 
-    private lazy var dateFormatter: NSDateFormatter = {
-        let dateFormatter = NSDateFormatter()
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
 
-        dateFormatter.dateStyle = .MediumStyle
-        dateFormatter.timeStyle = .MediumStyle
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
 
         return dateFormatter
     }()
 
-    private lazy var decimalFormatter: NSNumberFormatter = {
-        let decimalFormatter = NSNumberFormatter()
+    private lazy var decimalFormatter: NumberFormatter = {
+        let decimalFormatter = NumberFormatter()
 
-        decimalFormatter.numberStyle = .DecimalStyle
+        decimalFormatter.numberStyle = .decimal
         decimalFormatter.minimumSignificantDigits = 5
 
         return decimalFormatter
@@ -121,44 +121,44 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     // MARK: - Table view data source
 
     private enum Section: Int {
-        case Device
-        case Pump
-        case Commands
+        case device
+        case pump
+        case commands
 
         static let count = 3
     }
 
     private enum DeviceRow: Int {
-        case CustomName
-        case Version
-        case RSSI
-        case Connection
-        case IdleStatus
+        case customName
+        case version
+        case rssi
+        case connection
+        case idleStatus
 
         static let count = 5
     }
 
     private enum PumpRow: Int {
-        case ID
-        case Model
-        case Awake
+        case id
+        case model
+        case awake
 
         static let count = 3
     }
 
     private enum CommandRow: Int {
-        case Tune
-        case ChangeTime
-        case MySentryPair
-        case DumpHistory
-        case GetPumpModel
-        case PressDownButton
-        case ReadPumpStatus
+        case tune
+        case changeTime
+        case mySentryPair
+        case dumpHistory
+        case getPumpModel
+        case pressDownButton
+        case readPumpStatus
 
         static let count = 7
     }
 
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         if device.pumpState == nil {
             return Section.count - 1
         } else {
@@ -166,129 +166,129 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         }
     }
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .Device:
+        case .device:
             return DeviceRow.count
-        case .Pump:
+        case .pump:
             return PumpRow.count
-        case .Commands:
+        case .commands:
             return CommandRow.count
         }
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
 
-        if let reusableCell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) {
+        if let reusableCell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier) {
             cell = reusableCell
         } else {
-            cell = UITableViewCell(style: .Value1, reuseIdentifier: CellIdentifier)
+            cell = UITableViewCell(style: .value1, reuseIdentifier: CellIdentifier)
         }
 
-        cell.accessoryType = .None
+        cell.accessoryType = .none
 
         switch Section(rawValue: indexPath.section)! {
-        case .Device:
+        case .device:
             switch DeviceRow(rawValue: indexPath.row)! {
-            case .CustomName:
+            case .customName:
                 cell.textLabel?.text = NSLocalizedString("Name", comment: "The title of the cell showing device name")
                 cell.detailTextLabel?.text = device.name
-                cell.accessoryType = .DisclosureIndicator
-            case .Version:
+                cell.accessoryType = .disclosureIndicator
+            case .version:
                 cell.textLabel?.text = NSLocalizedString("Firmware Version", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = device.firmwareVersion
-            case .Connection:
+            case .connection:
                 cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
                 cell.detailTextLabel?.text = device.peripheral.state.description
-            case .RSSI:
+            case .rssi:
                 cell.textLabel?.text = NSLocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
                 if let RSSI = device.RSSI {
                     cell.detailTextLabel?.text = "\(RSSI) dB"
                 } else {
                     cell.detailTextLabel?.text = "–"
                 }
-            case .IdleStatus:
+            case .idleStatus:
                 cell.textLabel?.text = NSLocalizedString("On Idle", comment: "The title of the cell showing the last idle")
 
                 if let idleDate = device.lastIdle {
-                    cell.detailTextLabel?.text = dateFormatter.stringFromDate(idleDate)
+                    cell.detailTextLabel?.text = dateFormatter.string(from: idleDate as Date)
                 } else {
                     cell.detailTextLabel?.text = "–"
                 }
             }
-        case .Pump:
+        case .pump:
             switch PumpRow(rawValue: indexPath.row)! {
-            case .ID:
+            case .id:
                 cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title of the cell showing pump ID")
                 if let pumpID = device.pumpState?.pumpID {
                     cell.detailTextLabel?.text = pumpID
                 } else {
                     cell.detailTextLabel?.text = "–"
                 }
-            case .Model:
+            case .model:
                 cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 if let pumpModel = device.pumpState?.pumpModel {
-                    cell.detailTextLabel?.text = String(pumpModel)
+                    cell.detailTextLabel?.text = String(describing: pumpModel)
                 } else {
                     cell.detailTextLabel?.text = NSLocalizedString("Unknown", comment: "The detail text for an unknown pump model")
                 }
-            case .Awake:
+            case .awake:
                 switch device.pumpState?.awakeUntil {
                 case let until? where until.timeIntervalSinceNow < 0:
                     cell.textLabel?.text = NSLocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
-                    cell.detailTextLabel?.text = dateFormatter.stringFromDate(until)
+                    cell.detailTextLabel?.text = dateFormatter.string(from: until as Date)
                 case let until?:
                     cell.textLabel?.text = NSLocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
-                    cell.detailTextLabel?.text = dateFormatter.stringFromDate(until)
+                    cell.detailTextLabel?.text = dateFormatter.string(from: until as Date)
                 default:
                     cell.textLabel?.text = NSLocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
                     cell.detailTextLabel?.text = nil
                 }
             }
-        case .Commands:
-            cell.accessoryType = .DisclosureIndicator
+        case .commands:
+            cell.accessoryType = .disclosureIndicator
             cell.detailTextLabel?.text = nil
 
             switch CommandRow(rawValue: indexPath.row)! {
-            case .Tune:
+            case .tune:
                 switch (device.radioFrequency, device.lastTuned) {
                 case (let frequency?, let date?):
-                    cell.textLabel?.text = "\(decimalFormatter.stringFromNumber(frequency)!) MHz"
-                    cell.detailTextLabel?.text = dateFormatter.stringFromDate(date)
+                    cell.textLabel?.text = "\(decimalFormatter.string(from: NSNumber(value: frequency))!) MHz"
+                    cell.detailTextLabel?.text = dateFormatter.string(from: date as Date)
                 default:
                     cell.textLabel?.text = NSLocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
                 }
 
-            case .ChangeTime:
+            case .changeTime:
                 cell.textLabel?.text = NSLocalizedString("Change Time", comment: "The title of the command to change pump time")
 
-                let localTimeZone = NSTimeZone.defaultTimeZone()
-                let localTimeZoneName = localTimeZone.abbreviation ?? localTimeZone.name
+                let localTimeZone = TimeZone.current
+                let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
 
                 if let pumpTimeZone = device.pumpState?.timeZone {
-                    let timeZoneDiff = NSTimeInterval(pumpTimeZone.secondsFromGMT - localTimeZone.secondsFromGMT)
-                    let formatter = NSDateComponentsFormatter()
-                    formatter.allowedUnits = [.Hour, .Minute]
-                    let diffString = timeZoneDiff != 0 ? formatter.stringFromTimeInterval(abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
+                    let timeZoneDiff = TimeInterval(pumpTimeZone.secondsFromGMT() - localTimeZone.secondsFromGMT())
+                    let formatter = DateComponentsFormatter()
+                    formatter.allowedUnits = [.hour, .minute]
+                    let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
 
                     cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
                 } else {
                     cell.detailTextLabel?.text = localTimeZoneName
                 }
-            case .MySentryPair:
+            case .mySentryPair:
                 cell.textLabel?.text = NSLocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
 
-            case .DumpHistory:
+            case .dumpHistory:
                 cell.textLabel?.text = NSLocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
 
-            case .GetPumpModel:
+            case .getPumpModel:
                 cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
 
-            case .PressDownButton:
+            case .pressDownButton:
                 cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
 
-            case .ReadPumpStatus:
+            case .readPumpStatus:
                 cell.textLabel?.text = NSLocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
             }
         }
@@ -296,125 +296,125 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         return cell
     }
 
-    public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .Device:
+        case .device:
             return NSLocalizedString("Device", comment: "The title of the section describing the device")
-        case .Pump:
+        case .pump:
             return NSLocalizedString("Pump", comment: "The title of the section describing the pump")
-        case .Commands:
+        case .commands:
             return NSLocalizedString("Commands", comment: "The title of the section describing commands")
         }
     }
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
-        case .Device:
+        case .device:
             switch DeviceRow(rawValue: indexPath.row)! {
-            case .CustomName:
+            case .customName:
                 return true
             default:
                 return false
             }
-        case .Pump:
+        case .pump:
             return false
-        case .Commands:
-            return device.peripheral.state == .Connected
+        case .commands:
+            return device.peripheral.state == .connected
         }
     }
 
-    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch Section(rawValue: indexPath.section)! {
-        case .Device:
+        case .device:
             switch DeviceRow(rawValue: indexPath.row)! {
-            case .CustomName:
+            case .customName:
                 let vc = TextFieldTableViewController()
-                if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                if let cell = tableView.cellForRow(at: indexPath) {
                     vc.title = cell.textLabel?.text
                     vc.value = device.name
                     vc.delegate = self
-                    vc.keyboardType = .Default
+                    vc.keyboardType = .default
                 }
 
-                showViewController(vc, sender: indexPath)
+                show(vc, sender: indexPath)
             default:
                 break
             }
-        case .Commands:
+        case .commands:
             let vc: CommandResponseViewController
 
             switch CommandRow(rawValue: indexPath.row)! {
-            case .Tune:
+            case .tune:
                 vc = CommandResponseViewController(command: { [unowned self] (completionHandler) -> String in
-                    self.device.tunePumpWithResultHandler({ (response) -> Void in
+                    self.device.tunePump { (response) -> Void in
                         switch response {
-                        case .Success(let scanResult):
-                            var resultDict: [String: AnyObject] = [:]
+                        case .success(let scanResult):
+                            var resultDict: [String: Any] = [:]
 
-                            let intFormatter = NSNumberFormatter()
+                            let intFormatter = NumberFormatter()
 
                             let formatString = NSLocalizedString("%1$@ MHz  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
 
-                            resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = self.decimalFormatter.stringFromNumber(scanResult.bestFrequency)!
+                            resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = self.decimalFormatter.string(from: NSNumber(value: scanResult.bestFrequency))!
                             resultDict[NSLocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
 
                                 return String(format: formatString,
-                                    self.decimalFormatter.stringFromNumber(trial.frequencyMHz)!,
-                                    intFormatter.stringFromNumber(trial.successes)!,
-                                    intFormatter.stringFromNumber(trial.tries)!,
-                                    intFormatter.stringFromNumber(trial.avgRSSI)!
+                                    self.decimalFormatter.string(from: NSNumber(value: trial.frequencyMHz))!,
+                                    intFormatter.string(from: NSNumber(value: trial.successes))!,
+                                    intFormatter.string(from: NSNumber(value: trial.tries))!,
+                                    intFormatter.string(from: NSNumber(value: trial.avgRSSI))!
                                 )
                             })
 
                             var responseText: String
 
-                            if let data = try? NSJSONSerialization.dataWithJSONObject(resultDict, options: .PrettyPrinted), string = String(data: data, encoding: NSUTF8StringEncoding) {
+                            if let data = try? JSONSerialization.data(withJSONObject: resultDict, options: .prettyPrinted), let string = String(data: data, encoding: String.Encoding.utf8) {
                                 responseText = string
                             } else {
                                 responseText = NSLocalizedString("No response", comment: "Message display when no response from tuning pump")
                             }
 
-                            completionHandler(responseText: responseText)
-                        case .Failure(let error):
-                            completionHandler(responseText: String(error))
+                            completionHandler(responseText)
+                        case .failure(let error):
+                            completionHandler(String(describing: error))
                         }
-                    })
+                    }
 
                     return NSLocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
                 })
-            case .ChangeTime:
+            case .changeTime:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.syncPumpTime { (error) -> Void in
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             if let error = error {
-                                completionHandler(responseText: String(error))
+                                completionHandler(String(describing: error))
                             } else {
-                                completionHandler(responseText: self.successText)
+                                completionHandler(self.successText)
                             }
                         }
                     }
 
                     return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
                 }
-            case .MySentryPair:
+            case .mySentryPair:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
 
-                    self.device.ops?.setRXFilterMode(.Wide) { (error) in
+                    self.device.ops?.setRXFilterMode(.wide) { (error) in
                         if let error = error {
-                            completionHandler(responseText: String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(error)))
+                            completionHandler(String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(describing: error)))
                         } else {
-                            var byteArray = [UInt8](count: 16, repeatedValue: 0)
-                            self.device.peripheral.identifier.getUUIDBytes(&byteArray)
-                            let watchdogID = NSData(bytes: &byteArray, length: 3)
+                            var byteArray = [UInt8](repeating: 0, count: 16)
+                            (self.device.peripheral.identifier as NSUUID).getBytes(&byteArray)
+                            let watchdogID = Data(bytes: byteArray)
 
-                            self.device.ops?.changeWatchdogMarriageProfile(watchdogID, completion: { (error) in
-                                dispatch_async(dispatch_get_main_queue()) {
+                            self.device.ops?.changeWatchdogMarriageProfile(toWatchdogID: watchdogID, completion: { (error) in
+                                DispatchQueue.main.async {
                                     if let error = error {
-                                        completionHandler(responseText: String(error))
+                                        completionHandler(String(describing: error))
                                     } else {
-                                        completionHandler(responseText: self.successText)
+                                        completionHandler(self.successText)
                                     }
                                 }
                             })
@@ -433,64 +433,65 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                         comment: "Pump find device instruction"
                     )
                 }
-            case .DumpHistory:
+            case .dumpHistory:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    let calendar = NSCalendar(identifier: NSCalendarIdentifierGregorian)!
-                    let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
-                    self.device.ops?.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
+                    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+                    let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
+
+                    self.device.ops?.getHistoryEvents(since: oneDayAgo!) { (response) -> Void in
                         switch response {
-                        case .Success(let (events, _)):
-                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo!)
+                        case .success(let (events, _)):
+                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
                             for event in events {
                                 responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
                             }
-                            completionHandler(responseText: responseText)
-                        case .Failure(let error):
-                            completionHandler(responseText: String(error))
+                            completionHandler(responseText)
+                        case .failure(let error):
+                            completionHandler(String(describing: error))
                         }
                     }
                     return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
                 }
-            case .GetPumpModel:
+            case .getPumpModel:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.getPumpModel({ (response) in
                         switch response {
-                        case .Success(let model):
-                            completionHandler(responseText: "Pump Model: " + model)
-                        case .Failure(let error):
-                            completionHandler(responseText: String(error))
+                        case .success(let model):
+                            completionHandler("Pump Model: \(model)")
+                        case .failure(let error):
+                            completionHandler(String(describing: error))
                         }
                     })
                     return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
                 }
-            case .PressDownButton:
+            case .pressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.pressButton({ (response) in
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             switch response {
-                            case .Success(let msg):
-                                completionHandler(responseText: "Result: " + msg)
-                            case .Failure(let error):
-                                completionHandler(responseText: String(error))
+                            case .success(let msg):
+                                completionHandler("Result: \(msg)")
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
                             }
                         }
                     })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
-            case .ReadPumpStatus:
+            case .readPumpStatus:
                 vc = CommandResponseViewController {
                     [unowned self] (completionHandler) -> String in
                     self.device.ops?.readPumpStatus { (result) in
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             switch result {
-                            case .Success(let status):
-                                var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.stringFromNumber(status.reservoir)!)
-                                str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), self.decimalFormatter.stringFromNumber(status.batteryVolts)!)
-                                str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(status.suspended))
-                                str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(status.bolusing))
-                                completionHandler(responseText: str)
-                            case .Failure(let error):
-                                completionHandler(responseText: String(error))
+                            case .success(let status):
+                                var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), self.decimalFormatter.string(from: NSNumber(value: status.reservoir))!)
+                                str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), self.decimalFormatter.string(from: NSNumber(value: status.batteryVolts))!)
+                                str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
+                                str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
+                                completionHandler(str)
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
                             }
                         }
                     }
@@ -499,28 +500,28 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 }
             }
 
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            if let cell = tableView.cellForRow(at: indexPath) {
                 vc.title = cell.textLabel?.text
             }
 
-            showViewController(vc, sender: indexPath)
-        case .Pump:
+            show(vc, sender: indexPath)
+        case .pump:
             break
         }
     }
 
     // MARK: - TextFieldTableViewControllerDelegate
 
-    func textFieldTableViewControllerDidReturn(controller: TextFieldTableViewController) {
-        navigationController?.popViewControllerAnimated(true)
+    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
+        _ = navigationController?.popViewController(animated: true)
     }
 
-    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController) {
+    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
         if let indexPath = tableView.indexPathForSelectedRow {
             switch Section(rawValue: indexPath.section)! {
-            case .Device:
+            case .device:
                 switch DeviceRow(rawValue: indexPath.row)! {
-                case .CustomName:
+                case .customName:
                     device.setCustomName(controller.value!)
                 default:
                     break

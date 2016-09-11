@@ -13,7 +13,7 @@ class TextFieldTableViewCell: UITableViewCell {
     @IBOutlet var textField: UITextField!
 
     static func nib() -> UINib {
-        return UINib(nibName: className, bundle: NSBundle(forClass: self))
+        return UINib(nibName: className, bundle: Bundle(for: self))
     }
 
     override func prepareForReuse() {

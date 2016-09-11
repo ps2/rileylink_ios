@@ -10,7 +10,7 @@ import Foundation
 
 public class ReadRemainingInsulinMessageBody: CarelinkLongMessageBody {
 
-    open func getUnitsRemainingForStrokes(_ strokesPerUnit: Int) -> Double {
+    public func getUnitsRemainingForStrokes(_ strokesPerUnit: Int) -> Double {
 
         let strokes: Data
 

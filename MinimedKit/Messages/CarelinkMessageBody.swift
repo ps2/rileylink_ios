@@ -10,7 +10,7 @@ import Foundation
 
 
 public class CarelinkLongMessageBody: MessageBody {
-    open static var length: Int = 65
+    public static var length: Int = 65
 
     let rxData: Data
 
@@ -31,7 +31,7 @@ public class CarelinkLongMessageBody: MessageBody {
 
 
 public class CarelinkShortMessageBody: MessageBody {
-    open static var length: Int = 1
+    public static var length: Int = 1
 
     let data: Data
 

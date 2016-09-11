@@ -9,7 +9,7 @@
 import Foundation
 
 public class PumpAckMessageBody: MessageBody {
-    open static let length = 1
+    public static let length = 1
     
     let rxData: Data
     

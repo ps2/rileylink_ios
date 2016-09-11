@@ -14,13 +14,13 @@ public class MeterMessage {
     
     public let glucose: Int
     public let ackFlag: Bool
-    let rxData: NSData
+    let rxData: Data
     
-    public required init?(rxData: NSData) {
+    public required init?(rxData: Data) {
         self.rxData = rxData
         
-        if rxData.length == length,
-            let packetType = PacketType(rawValue: rxData[0]) where packetType == .Meter
+        if rxData.count == length,
+            let packetType = PacketType(rawValue: rxData[0]), packetType == .meter
         {
             let flags = ((rxData[4] as UInt8) & 0b110) >> 1
             ackFlag = flags == 0x03
@@ -32,11 +32,11 @@ public class MeterMessage {
         }
     }
     
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "glucose": glucose,
             "ackFlag": ackFlag,

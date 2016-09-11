@@ -9,12 +9,12 @@
 import Foundation
 
 
-extension NSDateFormatter {
+extension DateFormatter {
     class func ISO8601DateFormatter() -> Self {
         let formatter = self.init()
-        formatter.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierISO8601)
-        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        formatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        formatter.calendar = Calendar(identifier: Calendar.Identifier.iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssX"
 
         return formatter

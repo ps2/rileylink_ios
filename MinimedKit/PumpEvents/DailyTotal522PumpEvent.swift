@@ -10,22 +10,22 @@ import Foundation
 
 public struct DailyTotal522PumpEvent: PumpEvent {
     public let length: Int
-    public let rawData: NSData
-    public let timestamp: NSDateComponents
+    public let rawData: Data
+    public let timestamp: DateComponents
     
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = 44
         
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<length]
+        rawData = availableData.subdata(in: 0..<length)
         
-        timestamp = NSDateComponents(pumpEventBytes: availableData[1..<3])
+        timestamp = DateComponents(pumpEventBytes: availableData.subdata(in: 1..<3))
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "DailyTotal522",
         ]

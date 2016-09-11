@@ -22,31 +22,31 @@ class NSDataTests: XCTestCase {
     }
     
     func testInitWithHexadecimalStringEmpty() {
-        let data = NSData(hexadecimalString: "")
-        XCTAssertEqual(0, data!.length)
+        let data = Data(hexadecimalString: "")
+        XCTAssertEqual(0, data!.count)
     }
     
     func testInitWithHexadecimalStringOdd() {
-        let data = NSData(hexadecimalString: "a")
+        let data = Data(hexadecimalString: "a")
         XCTAssertNil(data)
     }
     
     func testInitWithHexadecimalStringZeros() {
-        let data = NSData(hexadecimalString: "00")
-        XCTAssertEqual(1, data!.length)
+        let data = Data(hexadecimalString: "00")
+        XCTAssertEqual(1, data!.count)
         
-        var bytes = [UInt8](count: 1, repeatedValue: 1)
-        data?.getBytes(&bytes, length: 1)
+        var bytes = [UInt8](repeating: 1, count: 1)
+        data?.copyBytes(to: &bytes, count: 1)
         XCTAssertEqual(0, bytes[0])
     }
     
     func testInitWithHexadecimalStringShortData() {
-        let data = NSData(hexadecimalString: "a2594040")
+        let data = Data(hexadecimalString: "a2594040")
         
-        XCTAssertEqual(4, data!.length)
+        XCTAssertEqual(4, data!.count)
         
-        var bytes = [UInt8](count: 4, repeatedValue: 0)
-        data?.getBytes(&bytes, length: 4)
+        var bytes = [UInt8](repeating: 0, count: 4)
+        data?.copyBytes(to: &bytes, count: 4)
         XCTAssertEqual([0xa2, 0x59, 0x40, 0x40], bytes)
     }
 }

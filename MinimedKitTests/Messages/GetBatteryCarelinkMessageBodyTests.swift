@@ -22,14 +22,14 @@ class GetBatteryCarelinkMessageBodyTests: XCTestCase {
     }
     
     func testValidGetBatteryResponse() {
-        let message = PumpMessage(rxData: NSData(hexadecimalString: "a7350535720300008c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7350535720300008c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is GetBatteryCarelinkMessageBody)
             let body = message.messageBody as! GetBatteryCarelinkMessageBody
             XCTAssertEqual(body.volts, 1.4)
 
-            if case .Normal = body.status {
+            if case .normal = body.status {
                 // OK
             } else {
                 XCTFail()

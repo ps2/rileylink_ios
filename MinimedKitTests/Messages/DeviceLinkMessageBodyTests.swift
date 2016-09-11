@@ -22,7 +22,7 @@ class DeviceLinkMessageBodyTests: XCTestCase {
     }
     
     func testValidDeviceLinkMessage() {
-        let message = PumpMessage(rxData: NSData(hexadecimalString: "a23505350a93ce8aa000ba")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a23505350a93ce8aa000ba")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is DeviceLinkMessageBody)
@@ -32,7 +32,7 @@ class DeviceLinkMessageBodyTests: XCTestCase {
     }
     
     func testMidnightSensor() {
-        let message = PumpMessage(rxData: NSData(hexadecimalString: "a23505350a93ce8aa000ba")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a23505350a93ce8aa000ba")!)!
         
         let body = message.messageBody as! DeviceLinkMessageBody
         

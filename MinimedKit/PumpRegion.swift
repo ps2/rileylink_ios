@@ -9,14 +9,14 @@
 import Foundation
 
 public enum PumpRegion: Int, CustomStringConvertible  {
-    case NorthAmerica = 0
-    case WorldWide
+    case northAmerica = 0
+    case worldWide
     
     public var description: String {
         switch self {
-        case .WorldWide:
+        case .worldWide:
             return NSLocalizedString("World-Wide", comment: "Describing the worldwide pump region")
-        case .NorthAmerica:
+        case .northAmerica:
             return NSLocalizedString("North America", comment: "Describing the North America pump region")
         }
     }

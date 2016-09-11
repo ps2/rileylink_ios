@@ -138,7 +138,7 @@ class PumpOpsSynchronous {
             let msg = makePumpMessage(.GetPumpModel)
             let response = try sendAndListen(msg, retryCount: 1)
             
-            if response.messageType == .GetPumpModel && (response.messageBody as? GetPumpModelCarelinkMessageBody) != nil {
+            if response.messageType == .GetPumpModel && response.messageBody is GetPumpModelCarelinkMessageBody {
                 return true
             }
         } catch {

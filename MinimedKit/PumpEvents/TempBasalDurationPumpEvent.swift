@@ -10,28 +10,28 @@ import Foundation
 
 public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    public let rawData: NSData
+    public let rawData: Data
     public let duration: Int
-    public let timestamp: NSDateComponents
+    public let timestamp: DateComponents
     
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
         
-        func d(idx:Int) -> Int {
+        func d(_ idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)
         }
         
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<length]
+        rawData = availableData.subdata(in: 0..<length)
         
         duration = d(1) * 30
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "TempBasalDuration",
             "duration": duration,

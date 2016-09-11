@@ -11,18 +11,18 @@ import Foundation
 
 public enum BasalProfile {
 
-    case Standard
-    case ProfileA
-    case ProfileB
+    case standard
+    case profileA
+    case profileB
 
     init(rawValue: UInt8) {
         switch rawValue {
         case 1:
-            self = .ProfileA
+            self = .profileA
         case 2:
-            self = .ProfileB
+            self = .profileB
         default:
-            self = .Standard
+            self = .standard
         }
     }
 }
@@ -48,16 +48,16 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
 
     public let selectedBasalProfile: BasalProfile
 
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
         let maxBolusTicks: UInt8 = rxData[7]
-        maxBolus = Double(maxBolusTicks) / self.dynamicType.maxBolusMultiplier
+        maxBolus = Double(maxBolusTicks) / type(of: self).maxBolusMultiplier
 
-        let maxBasalTicks: Int = Int(bigEndianBytes: rxData[8...9])
-        maxBasal = Double(maxBasalTicks) / self.dynamicType.maxBasalMultiplier
+        let maxBasalTicks: Int = Int(bigEndianBytes: rxData.subdata(in: 8..<10))
+        maxBasal = Double(maxBasalTicks) / type(of: self).maxBasalMultiplier
 
         let rawSelectedBasalProfile: UInt8 = rxData[12]
         selectedBasalProfile = BasalProfile(rawValue: rawSelectedBasalProfile)
@@ -67,11 +67,15 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
 
         super.init(rxData: rxData)
     }
+
+    public required init?(rxData: NSData) {
+        fatalError("init(rxData:) has not been implemented")
+    }
 }
 
 
 extension ReadSettingsCarelinkMessageBody: DictionaryRepresentable {
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [:]
     }
 }

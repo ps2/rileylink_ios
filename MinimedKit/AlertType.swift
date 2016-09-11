@@ -7,17 +7,17 @@
 //
 
 public enum AlertType: UInt8 {
-    case NoDelivery         = 0x04
-    case MaxHourlyBolus     = 0x33
-    case LowReservoir       = 0x52
-    case HighGlucose        = 0x65
-    case LowGlucose         = 0x66
-    case MeterBGNow         = 0x68
-    case MeterBGSoon        = 0x69
-    case CalibrationError   = 0x6a
-    case SensorEnd          = 0x6b
-    case WeakSignal         = 0x70
-    case LostSensor         = 0x71
-    case HighPredicted      = 0x72
-    case LowPredicted       = 0x73
+    case noDelivery         = 0x04
+    case maxHourlyBolus     = 0x33
+    case lowReservoir       = 0x52
+    case highGlucose        = 0x65
+    case lowGlucose         = 0x66
+    case meterBGNow         = 0x68
+    case meterBGSoon        = 0x69
+    case calibrationError   = 0x6a
+    case sensorEnd          = 0x6b
+    case weakSignal         = 0x70
+    case lostSensor         = 0x71
+    case highPredicted      = 0x72
+    case lowPredicted       = 0x73
 }

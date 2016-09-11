@@ -9,30 +9,26 @@
 import Foundation
 
 public class GetHistoryPageCarelinkMessageBody: CarelinkLongMessageBody {
-    public var lastFrame: Bool
-    public var frameNumber: Int
-    public var frame: NSData
+    public let lastFrame: Bool
+    public let frameNumber: Int
+    public let frame: Data
     
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
-            frameNumber = 0
-            frame = NSData()
-            lastFrame = false
-            super.init(rxData: rxData)
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
         frameNumber = Int(rxData[0] as UInt8) & 0b1111111
         lastFrame = (rxData[0] as UInt8) & 0b10000000 > 0
-        frame = rxData.subdataWithRange(NSMakeRange(1, 64))
+        frame = rxData.subdata(in: 1..<65)
         super.init(rxData: rxData)
     }
     
     public required init(pageNum: Int) {
         let numArgs = 1
         lastFrame = false
-        frame = NSData()
+        frame = Data()
         frameNumber = 0
-        let data = NSData(hexadecimalString: String(format: "%02x%02x", numArgs, UInt8(pageNum)))!
+        let data = Data(hexadecimalString: String(format: "%02x%02x", numArgs, UInt8(pageNum)))!
         super.init(rxData: data)!
     }
     

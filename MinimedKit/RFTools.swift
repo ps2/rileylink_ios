@@ -12,18 +12,17 @@ private let codesRev:Dictionary<Int, UInt8> = [21: 0, 49: 1, 50: 2, 35: 3, 52: 4
 
 private let codes = [21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28]
 
-public func decode4b6b(rawData: NSData) -> NSData? {
+public func decode4b6b(_ rawData: Data) -> Data? {
     var buffer = [UInt8]()
-    let bytes: [UInt8] = rawData[0..<rawData.length]
     var availBits = 0
     var x = 0
-    for byte in bytes {
+    for byte in rawData {
         x = (x << 8) + Int(byte)
         availBits += 8
         if availBits >= 12 {
             guard let
                 hiNibble = codesRev[x >> (availBits - 6)],
-                loNibble = codesRev[(x >> (availBits - 12)) & 0b111111]
+                let loNibble = codesRev[(x >> (availBits - 12)) & 0b111111]
                 else {
                     return nil
             }
@@ -33,15 +32,14 @@ public func decode4b6b(rawData: NSData) -> NSData? {
             x = x & (0xffff >> (16-availBits))
         }
     }
-    return NSData(bytes: &buffer, length: buffer.count)
+    return Data(bytes: buffer)
 }
 
-public func encode4b6b(rawData: NSData) -> NSData {
+public func encode4b6b(_ rawData: Data) -> Data {
     var buffer = [UInt8]()
-    let bytes: [UInt8] = rawData[0..<rawData.length]
     var acc = 0x0
     var bitcount = 0
-    for byte in bytes {
+    for byte in rawData {
         acc <<= 6
         acc |= codes[Int(byte >> 4)]
         bitcount += 6
@@ -60,6 +58,6 @@ public func encode4b6b(rawData: NSData) -> NSData {
         acc <<= (8-bitcount)
         buffer.append(UInt8(acc) & 0xff)
     }
-    return NSData(bytes: &buffer, length: buffer.count)
+    return Data(bytes: buffer)
 }
 

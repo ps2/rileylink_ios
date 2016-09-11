@@ -233,7 +233,7 @@ public class NightscoutUploader {
         }
         
         let uploadURL = siteURL.URLByAppendingPathComponent(endpoint)
-        let request = NSMutableURLRequest(URL: uploadURL)
+        let request = NSMutableURLRequest(URL: uploadURL!)
         request.HTTPMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -305,7 +305,7 @@ public class NightscoutUploader {
         
         let testURL = siteURL.URLByAppendingPathComponent(defaultNightscoutAuthTestPath)
         
-        let request = NSMutableURLRequest(URL: testURL)
+        let request = NSMutableURLRequest(URL: testURL!)
         
         request.setValue("application/json", forHTTPHeaderField:"Content-Type")
         request.setValue("application/json", forHTTPHeaderField:"Accept")

@@ -23,10 +23,10 @@ public struct MySentryAlertClearedMessageBody: MessageBody, DictionaryRepresenta
 
     public let alertType: AlertType?
 
-    private let rxData: NSData
+    private let rxData: Data
 
-    public init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
@@ -35,13 +35,13 @@ public struct MySentryAlertClearedMessageBody: MessageBody, DictionaryRepresenta
         alertType = AlertType(rawValue: rxData[1])
     }
 
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
-            "alertType": alertType != nil ? String(alertType!) : rxData.subdataWithRange(NSRange(1...1)).hexadecimalString,
+            "alertType": (alertType != nil ? String(describing: alertType!) : rxData.subdata(in: 1..<2).hexadecimalString),
             "cleared": true
         ]
     }

@@ -132,9 +132,32 @@ class PumpOpsSynchronous {
             throw lastError
         }
     }
+    
+    private func pumpResponding() -> Bool {
+        do {
+            let msg = makePumpMessage(.GetPumpModel)
+            let response = try sendAndListen(msg, retryCount: 1)
+            
+            if response.messageType == .GetPumpModel && response.messageBody is GetPumpModelCarelinkMessageBody {
+                return true
+            }
+        } catch {
+        }
+        return false
+    }
+    
+
 
     private func wakeup(duration: NSTimeInterval = NSTimeInterval(minutes: 1)) throws {
         guard !pump.isAwake else {
+            return
+        }
+        
+        if pumpResponding() {
+            NSLog("Pump responding despite our wake timer having expired. Extending timer")
+            // By my observations, the pump stays awake > 1 minute past last comms. Usually
+            // About 1.5 minutes, but we'll make it a minute to be safe.
+            pump.awakeUntil = NSDate(timeIntervalSinceNow: NSTimeInterval(minutes: 1))
             return
         }
         
@@ -354,8 +377,11 @@ class PumpOpsSynchronous {
         
         var results = FrequencyScanResults()
         
+        let middleFreq = frequencies[frequencies.count / 2]
+        
         do {
             // Needed to put the pump in listen mode
+            try setBaseFrequency(middleFreq)
             try wakeup()
         } catch {
             // Continue anyway; the pump likely heard us, even if we didn't hear it.
@@ -395,6 +421,7 @@ class PumpOpsSynchronous {
             results.bestFrequency = sortedTrials.first!.frequencyMHz
             try setBaseFrequency(results.bestFrequency)
         } else {
+            try setBaseFrequency(middleFreq)
             throw PumpCommsError.RFCommsFailure("No pump responses during scan")
         }
         

@@ -1,1 +1,2 @@
-github "loudnate/Crypto" "13fee45175b88629aeabe60b4b4fc3daf86fa0a3"
+github "soffes/CommonCrypto" "v1.0"
+github "soffes/Crypto" "30a2bb3972c2c843d5bc5565ac789c332a5a3bb6"

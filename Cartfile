@@ -1,1 +1,1 @@
-github "soffes/Crypto" "master"
+github "soffes/Crypto" ~> 0.4.0

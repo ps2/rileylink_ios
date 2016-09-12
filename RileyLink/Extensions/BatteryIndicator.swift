@@ -12,10 +12,10 @@ import MinimedKit
 extension BatteryIndicator {
     init?(batteryStatus: MinimedKit.BatteryStatus) {
         switch batteryStatus {
-        case .Low:
-            self = .Low
-        case .Normal:
-            self = .Normal
+        case .low:
+            self = .low
+        case .normal:
+            self = .normal
         default:
             return nil
         }

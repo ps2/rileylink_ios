@@ -24,11 +24,11 @@ class NightscoutPumpEventsTests: XCTestCase {
     
     func testBgCheckFromMeter() {
         let pumpEvent = BGReceivedPumpEvent(
-            availableData: NSData(hexadecimalString: "3f2122938d7510c527ad")!,
+            availableData: Data(hexadecimalString: "3f2122938d7510c527ad")!,
             pumpModel: PumpModel.Model523
         )!
-        let timestamp = pumpEvent.timestamp
-        timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
+        var timestamp = pumpEvent.timestamp
+        timestamp.timeZone = TimeZone(secondsFromGMT: -5 * 60 * 60)
 
         let events = [
             TimestampedHistoryEvent(pumpEvent: pumpEvent, date: timestamp.date!)
@@ -44,11 +44,11 @@ class NightscoutPumpEventsTests: XCTestCase {
     
     func testStandaloneBolus() {
         let pumpEvent = BolusNormalPumpEvent(
-            availableData: NSData(hexadecimalString: "010080008000240009a24a1510")!,
+            availableData: Data(hexadecimalString: "010080008000240009a24a1510")!,
             pumpModel: PumpModel.Model551
         )!
-        let timestamp = pumpEvent.timestamp
-        timestamp.timeZone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
+        var timestamp = pumpEvent.timestamp
+        timestamp.timeZone = TimeZone(secondsFromGMT: -5 * 60 * 60)
 
         let events = [
             TimestampedHistoryEvent(pumpEvent: pumpEvent, date: timestamp.date!)
@@ -65,20 +65,20 @@ class NightscoutPumpEventsTests: XCTestCase {
 
     func testBolusWizardAndBolusOffByOneSecond() {
         let bwEvent = BolusWizardEstimatePumpEvent(
-            availableData: NSData(hexadecimalString: "5b6489340b10102850006e3c64000090000058009064")!,
+            availableData: Data(hexadecimalString: "5b6489340b10102850006e3c64000090000058009064")!,
             pumpModel: PumpModel.Model523
             )!
 
         let bolus = BolusNormalPumpEvent(
-            availableData: NSData(hexadecimalString: "01009000900058008a344b1010")!,
+            availableData: Data(hexadecimalString: "01009000900058008a344b1010")!,
             pumpModel: PumpModel.Model523
             )!
 
         let events: [TimestampedPumpEvent] = [bwEvent, bolus]
-        let timezone = NSTimeZone(forSecondsFromGMT: -5 * 60 * 60)
+        let timezone = TimeZone(secondsFromGMT: -5 * 60 * 60)
 
         let timestampedEvents = events.map({ (e: TimestampedPumpEvent) -> TimestampedHistoryEvent in
-            let timestamp = e.timestamp
+            var timestamp = e.timestamp
             timestamp.timeZone = timezone
             return TimestampedHistoryEvent(pumpEvent: e, date: timestamp.date!)
         })

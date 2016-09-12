@@ -11,14 +11,14 @@ import MinimedKit
 
 class NightscoutPumpEvents: NSObject {
     
-    class func translate(events: [TimestampedHistoryEvent], eventSource: String) -> [NightscoutTreatment] {
+    class func translate(_ events: [TimestampedHistoryEvent], eventSource: String) -> [NightscoutTreatment] {
         var results = [NightscoutTreatment]()
         var lastBolusWizard: BolusWizardEstimatePumpEvent?
-        var lastBolusWizardDate: NSDate?
+        var lastBolusWizardDate: Date?
         var lastBasalRate: TempBasalPumpEvent?
-        var lastBasalRateDate: NSDate?
+        var lastBasalRateDate: Date?
         var lastBasalDuration: TempBasalDurationPumpEvent?
-        var lastBasalDurationDate: NSDate?
+        var lastBasalDurationDate: Date?
         for event in events {
             switch event.pumpEvent {
             case let bgReceived as BGReceivedPumpEvent:
@@ -33,7 +33,7 @@ class NightscoutPumpEvents: NSObject {
                 var carbs = 0
                 var ratio = 0.0
                 
-                if let wizard = lastBolusWizard, bwDate = lastBolusWizardDate where event.date.timeIntervalSinceDate(bwDate) <= 2 {
+                if let wizard = lastBolusWizard, let bwDate = lastBolusWizardDate , event.date.timeIntervalSince(bwDate) <= 2 {
                     carbs = wizard.carbohydrates
                     ratio = wizard.carbRatio
                 }
@@ -62,8 +62,8 @@ class NightscoutPumpEvents: NSObject {
                 break
             }
             
-            if let basalRate = lastBasalRate, basalDuration = lastBasalDuration, basalRateDate = lastBasalRateDate, basalDurationDate = lastBasalDurationDate
-                where fabs(basalRateDate.timeIntervalSinceDate(basalDurationDate)) <= 2 {
+            if let basalRate = lastBasalRate, let basalDuration = lastBasalDuration, let basalRateDate = lastBasalRateDate, let basalDurationDate = lastBasalDurationDate
+                , fabs(basalRateDate.timeIntervalSince(basalDurationDate)) <= 2 {
                 let entry = basalPairToNSTreatment(basalRate, basalDuration: basalDuration, eventSource: eventSource, timestamp: event.date)
                 results.append(entry)
                 lastBasalRate = nil
@@ -75,7 +75,7 @@ class NightscoutPumpEvents: NSObject {
         return results
     }
     
-    private class func basalPairToNSTreatment(basalRate: TempBasalPumpEvent, basalDuration: TempBasalDurationPumpEvent, eventSource: String, timestamp: NSDate) -> TempBasalNightscoutTreatment {
+    private class func basalPairToNSTreatment(_ basalRate: TempBasalPumpEvent, basalDuration: TempBasalDurationPumpEvent, eventSource: String, timestamp: Date) -> TempBasalNightscoutTreatment {
         let absolute: Double? = basalRate.rateType == .Absolute ? basalRate.rate : nil
         return TempBasalNightscoutTreatment(
             timestamp: timestamp,

@@ -10,7 +10,7 @@ import UIKit
 import RileyLinkKit
 
 protocol TextFieldTableViewControllerDelegate: class {
-    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController)
+    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController)
 }
 
 
@@ -18,7 +18,7 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
 
     @IBOutlet weak var textField: UITextField!
 
-    var indexPath: NSIndexPath?
+    var indexPath: IndexPath?
 
     var placeholder: String?
 
@@ -28,8 +28,8 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
         }
     }
 
-    var keyboardType = UIKeyboardType.Default
-    var autocapitalizationType = UITextAutocapitalizationType.None
+    var keyboardType = UIKeyboardType.default
+    var autocapitalizationType = UITextAutocapitalizationType.none
 
     weak var delegate: TextFieldTableViewControllerDelegate?
 
@@ -42,7 +42,7 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
         textField.autocapitalizationType = autocapitalizationType
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         textField.becomeFirstResponder()
@@ -50,18 +50,18 @@ class TextFieldTableViewController: UITableViewController, IdentifiableClass, UI
 
     // MARK: - UITextFieldDelegate
 
-    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         value = textField.text
 
         return true
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         value = textField.text
 
         textField.delegate = nil
 
-        navigationController?.popViewControllerAnimated(true)
+        _ = navigationController?.popViewController(animated: true)
 
         return false
     }

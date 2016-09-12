@@ -9,9 +9,9 @@
 import Foundation
 
 class TimeFormat: NSObject {
-    private static var formatterISO8601 = NSDateFormatter.ISO8601DateFormatter()
+    private static var formatterISO8601 = DateFormatter.ISO8601DateFormatter()
     
-    static func timestampStrFromDate(date: NSDate) -> String {
-        return formatterISO8601.stringFromDate(date)
+    static func timestampStrFromDate(_ date: Date) -> String {
+        return formatterISO8601.string(from: date)
     }
 }

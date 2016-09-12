@@ -20,15 +20,15 @@ public class NightscoutTreatment : DictionaryRepresentable {
         case MGDL = "mg/dL"
     }
     
-    let timestamp: NSDate
+    let timestamp: Date
     let enteredBy: String
     
-    init(timestamp: NSDate, enteredBy: String) {
+    init(timestamp: Date, enteredBy: String) {
         self.timestamp = timestamp
         self.enteredBy = enteredBy
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "created_at": TimeFormat.timestampStrFromDate(timestamp),
             "timestamp": TimeFormat.timestampStrFromDate(timestamp),

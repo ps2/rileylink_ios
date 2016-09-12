@@ -1,1 +1,3 @@
-github "loudnate/Crypto" "13fee45175b88629aeabe60b4b4fc3daf86fa0a3"
+github "soffes/CommonCrypto" "v1.0"
+github "LoopKit/CommonCrypto" "df9117fce2049c20e6e9d3e294c8348e54427d41"
+github "soffes/Crypto" "7e032ed745737d115f668837f8f541c34de753aa"

@@ -65,6 +65,13 @@
 		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
 		43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
 		43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43C907171D86361D002BAD29 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; };
+		43C907181D863714002BAD29 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; };
+		43C907191D863714002BAD29 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
+		43C9071A1D86375D002BAD29 /* CommonCrypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
+		43C9071C1D863782002BAD29 /* MinimedKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43C9071D1D8637DA002BAD29 /* CommonCrypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43CA93251CB8BB33000026B5 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */; };
 		43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */; };
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
@@ -358,7 +365,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43C9071C1D863782002BAD29 /* MinimedKit.framework in CopyFiles */,
 				43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */,
+				43C9071A1D86375D002BAD29 /* CommonCrypto.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +377,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43C9071D1D8637DA002BAD29 /* CommonCrypto.framework in Embed Frameworks */,
 				43722FC41CB9F7640038B7F2 /* RileyLinkKit.framework in Embed Frameworks */,
 				C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */,
 				C1B383211CD0665D00CE7782 /* NightscoutUploadKit.framework in Embed Frameworks */,
@@ -432,6 +442,7 @@
 		43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateFormatter.swift; sourceTree = "<group>"; };
 		43B0ADC81D1268B300AAD278 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
+		43C907161D86361D002BAD29 /* CommonCrypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CommonCrypto.framework; path = Carthage/Build/iOS/CommonCrypto.framework; sourceTree = "<group>"; };
 		43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinkMessageBody.swift; sourceTree = "<group>"; };
@@ -735,6 +746,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43C907171D86361D002BAD29 /* CommonCrypto.framework in Frameworks */,
 				C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */,
 				C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */,
 				C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */,
@@ -745,6 +757,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */,
+				43C907181D863714002BAD29 /* CommonCrypto.framework in Frameworks */,
+				43C907191D863714002BAD29 /* Crypto.framework in Frameworks */,
 				C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -970,6 +985,7 @@
 		C12EA239198B436800309FA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43C907161D86361D002BAD29 /* CommonCrypto.framework */,
 				C12618451CDB019C0064A849 /* Crypto.framework */,
 				43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */,
 				C12616431B685F0A001FAD87 /* CoreData.framework */,
@@ -1664,6 +1680,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Crypto.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CommonCrypto.framework",
 			);
 			outputPaths = (
 			);
@@ -2415,7 +2432,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2440,7 +2456,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

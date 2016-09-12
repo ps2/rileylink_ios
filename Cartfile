@@ -1,1 +1,2 @@
+github "LoopKit/CommonCrypto" "master"
 github "soffes/Crypto" "swift3"

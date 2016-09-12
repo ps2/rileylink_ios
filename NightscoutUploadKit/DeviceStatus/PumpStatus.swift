@@ -9,7 +9,7 @@
 import Foundation
 
 public struct PumpStatus {
-    let clock: NSDate
+    let clock: Date
     let pumpID: String
     let iob: IOBStatus?
     let battery: BatteryStatus?
@@ -17,7 +17,7 @@ public struct PumpStatus {
     let bolusing: Bool?
     let reservoir: Double?
     
-    public init(clock: NSDate, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil) {
+    public init(clock: Date, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil) {
         self.clock = clock
         self.pumpID = pumpID
         self.iob = iob
@@ -27,8 +27,8 @@ public struct PumpStatus {
         self.reservoir = reservoir
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
         
         rval["clock"] = TimeFormat.timestampStrFromDate(clock)
         rval["pumpID"] = pumpID

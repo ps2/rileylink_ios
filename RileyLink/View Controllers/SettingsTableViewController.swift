@@ -16,90 +16,90 @@ private let TapToSetString = NSLocalizedString("Tap to set", comment: "The empty
 
 class SettingsTableViewController: UITableViewController, TextFieldTableViewControllerDelegate {
 
-    private enum Section: Int {
-        case About = 0
-        case Upload
-        case Configuration
+    fileprivate enum Section: Int {
+        case about = 0
+        case upload
+        case configuration
 
         static let count = 3
     }
     
-    private enum AboutRow: Int {
-        case Version = 0
+    fileprivate enum AboutRow: Int {
+        case version = 0
         
         static let count = 1
     }
 
-    private enum UploadRow: Int {
-        case Upload = 0
+    fileprivate enum UploadRow: Int {
+        case upload = 0
 
         static let count = 1
     }
 
-    private enum ConfigurationRow: Int {
-        case PumpID = 0
-        case PumpRegion
-        case Nightscout
+    fileprivate enum ConfigurationRow: Int {
+        case pumpID = 0
+        case pumpRegion
+        case nightscout
         static let count = 3
     }
     
-    private var dataManager: DeviceDataManager {
+    fileprivate var dataManager: DeviceDataManager {
         return DeviceDataManager.sharedManager
     }
 
     // MARK: - UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .About:
+        case .about:
             return AboutRow.count
-        case .Upload:
+        case .upload:
             return UploadRow.count
-        case .Configuration:
+        case .configuration:
             return ConfigurationRow.count
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
 
         switch Section(rawValue: indexPath.section)! {
-        case .About:
+        case .about:
             switch AboutRow(rawValue: indexPath.row)! {
-            case .Version:
-                let versionCell = UITableViewCell(style: .Default, reuseIdentifier: "Version")
-                versionCell.selectionStyle = .None
-                let version = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!
+            case .version:
+                let versionCell = UITableViewCell(style: .default, reuseIdentifier: "Version")
+                versionCell.selectionStyle = .none
+                let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")!
                 versionCell.textLabel?.text = "RileyLink iOS v\(version)"
                 
                 return versionCell
             }
-        case .Upload:
+        case .upload:
             switch UploadRow(rawValue: indexPath.row)! {
-            case .Upload:
-                let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchTableViewCell.className, forIndexPath: indexPath) as! SwitchTableViewCell
+            case .upload:
+                let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
 
-                switchCell.`switch`?.on = Config.sharedInstance().uploadEnabled
+                switchCell.`switch`?.isOn = Config.sharedInstance().uploadEnabled
                 switchCell.titleLabel.text = NSLocalizedString("Upload To Nightscout", comment: "The title text for the nightscout upload enabled switch cell")
-                switchCell.`switch`?.addTarget(self, action: #selector(uploadEnabledChanged(_:)), forControlEvents: .ValueChanged)
+                switchCell.`switch`?.addTarget(self, action: #selector(uploadEnabledChanged(_:)), for: .valueChanged)
                 
                 return switchCell
             }
-        case .Configuration:
-            let configCell = tableView.dequeueReusableCellWithIdentifier(ConfigCellIdentifier, forIndexPath: indexPath)
+        case .configuration:
+            let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .PumpID:
+            case .pumpID:
                 configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
                 configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
-            case .PumpRegion:
+            case .pumpRegion:
                 configCell.textLabel?.text = NSLocalizedString("Pump Region", comment: "The title text for the pump Region config value")
-                configCell.detailTextLabel?.text = String(DeviceDataManager.sharedManager.pumpRegion)
-            case .Nightscout:
+                configCell.detailTextLabel?.text = String(describing: DeviceDataManager.sharedManager.pumpRegion)
+            case .nightscout:
                 let nightscoutService = dataManager.remoteDataManager.nightscoutService
                 
                 configCell.textLabel?.text = nightscoutService.title
@@ -110,67 +110,67 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         return cell
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .About:
+        case .about:
             return NSLocalizedString("About", comment: "The title of the about section")
-        case .Upload:
+        case .upload:
             return nil
-        case .Configuration:
+        case .configuration:
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
         }
     }
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch Section(rawValue: indexPath.section)! {
-        case .Configuration:
-            let sender = tableView.cellForRowAtIndexPath(indexPath)
+        case .configuration:
+            let sender = tableView.cellForRow(at: indexPath)
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .PumpID:
-                performSegueWithIdentifier(TextFieldTableViewController.className, sender: sender)
-            case .PumpRegion:
+            case .pumpID:
+                performSegue(withIdentifier: TextFieldTableViewController.className, sender: sender)
+            case .pumpRegion:
                 let vc = RadioSelectionTableViewController.pumpRegion(dataManager.pumpRegion)
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self
                 
-                showViewController(vc, sender: sender)
-            case .Nightscout:
+                show(vc, sender: sender)
+            case .nightscout:
                 let service = dataManager.remoteDataManager.nightscoutService
                 let vc = AuthenticationViewController(authentication: service)
                 vc.authenticationObserver = { [unowned self] (service) in
                     self.dataManager.remoteDataManager.nightscoutService = service
                     
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                    self.tableView.reloadRows(at: [indexPath], with: .none)
                 }
                 
-                showViewController(vc, sender: indexPath)
+                show(vc, sender: indexPath)
             }
-        case .Upload, .About:
+        case .upload, .about:
             break
         }
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch Section(rawValue: section)! {
-        case .Upload, .Configuration, .About:
+        case .upload, .configuration, .about:
             return nil
         }
     }
 
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let
             cell = sender as? UITableViewCell,
-            indexPath = tableView.indexPathForCell(cell)
+            let indexPath = tableView.indexPath(for: cell)
         {
-            switch segue.destinationViewController {
+            switch segue.destination {
             case let vc as TextFieldTableViewController:
                 switch ConfigurationRow(rawValue: indexPath.row)! {
-                case .PumpID:
+                case .pumpID:
                     vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
                     vc.value = DeviceDataManager.sharedManager.pumpID
                 default:
@@ -188,16 +188,16 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     // MARK: - Uploader mangement
 
-    func uploadEnabledChanged(sender: UISwitch) {
-        Config.sharedInstance().uploadEnabled = sender.on
+    func uploadEnabledChanged(_ sender: UISwitch) {
+        Config.sharedInstance().uploadEnabled = sender.isOn
     }
 
     // MARK: - TextFieldTableViewControllerDelegate
 
-    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController) {
+    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
         if let indexPath = controller.indexPath {
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .PumpID:
+            case .pumpID:
                 DeviceDataManager.sharedManager.pumpID = controller.value
             default:
                 break
@@ -210,11 +210,11 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
 
 extension SettingsTableViewController: RadioSelectionTableViewControllerDelegate {
-    func radioSelectionTableViewControllerDidChangeSelectedIndex(controller: RadioSelectionTableViewController) {
-        if let selectedIndex = controller.selectedIndex, pumpRegion = PumpRegion(rawValue: selectedIndex) {
+    func radioSelectionTableViewControllerDidChangeSelectedIndex(_ controller: RadioSelectionTableViewController) {
+        if let selectedIndex = controller.selectedIndex, let pumpRegion = PumpRegion(rawValue: selectedIndex) {
             dataManager.pumpRegion = pumpRegion
             
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: ConfigurationRow.PumpRegion.rawValue, inSection: Section.Configuration.rawValue)], withRowAnimation: .None)
+            tableView.reloadRows(at: [IndexPath(row: ConfigurationRow.pumpRegion.rawValue, section: Section.configuration.rawValue)], with: .none)
         }
     }
 }

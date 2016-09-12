@@ -9,17 +9,17 @@
 import Foundation
 
 
-extension NSUserDefaults {
+extension UserDefaults {
     private enum Key: String {
         case LastStoredTreatmentTimestamp = "com.rileylink.NightscoutUploadKit.LastStoredTreatmentTimestamp"
     }
     
-    var lastStoredTreatmentTimestamp: NSDate? {
+    var lastStoredTreatmentTimestamp: Date? {
         get {
-            return objectForKey(Key.LastStoredTreatmentTimestamp.rawValue) as? NSDate
+            return object(forKey: Key.LastStoredTreatmentTimestamp.rawValue) as? Date
         }
         set {
-            setObject(newValue, forKey: Key.LastStoredTreatmentTimestamp.rawValue)
+            set(newValue, forKey: Key.LastStoredTreatmentTimestamp.rawValue)
         }
     }
 }

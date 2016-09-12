@@ -9,19 +9,19 @@
 import Foundation
 
 public struct IOBStatus {
-    let timestamp: NSDate
+    let timestamp: Date
     let iob: Double? // basal iob + bolus iob: can be negative
     let basalIOB: Double? // does not include bolus iob
 
-    public init(timestamp: NSDate, iob: Double? = nil, basalIOB: Double? = nil) {
+    public init(timestamp: Date, iob: Double? = nil, basalIOB: Double? = nil) {
         self.timestamp = timestamp
         self.iob = iob
         self.basalIOB = basalIOB
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
-        var rval = [String: AnyObject]()
+        var rval = [String: Any]()
 
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
 

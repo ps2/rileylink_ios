@@ -30,7 +30,7 @@ extension UIColor {
 
     @nonobjc static let staleColor = UIColor.HIGRedColor()
 
-    @nonobjc static let unknownColor = UIColor.HIGGrayColor().colorWithAlphaComponent(0.5)
+    @nonobjc static let unknownColor = UIColor.HIGGrayColor().withAlphaComponent(0.5)
 
     @nonobjc static let deleteColor = UIColor.HIGRedColor()
 

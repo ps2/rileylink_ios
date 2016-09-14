@@ -19,7 +19,7 @@
 
     CC_SHA1(data.bytes, (CC_LONG)data.length, outbytes);
 
-    NSData *outdata = [[NSData alloc] initWithBytesNoCopy:outbytes length:CC_SHA1_DIGEST_LENGTH];
+    NSData *outdata = [[NSData alloc] initWithBytes:outbytes length:CC_SHA1_DIGEST_LENGTH];
 
     return outdata.hexadecimalString;
 }

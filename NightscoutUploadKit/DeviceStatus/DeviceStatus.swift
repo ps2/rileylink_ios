@@ -10,12 +10,12 @@ import Foundation
 
 public struct DeviceStatus {
     let device: String
-    let timestamp: NSDate
+    let timestamp: Date
     let pumpStatus: PumpStatus?
     let uploaderStatus: UploaderStatus?
     let loopStatus: LoopStatus?
     
-    public init(device: String, timestamp: NSDate, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil) {
+    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil) {
         self.device = device
         self.timestamp = timestamp
         self.pumpStatus = pumpStatus
@@ -23,8 +23,8 @@ public struct DeviceStatus {
         self.loopStatus = loopStatus
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
         
         rval["device"] = device
         rval["created_at"] = TimeFormat.timestampStrFromDate(timestamp)

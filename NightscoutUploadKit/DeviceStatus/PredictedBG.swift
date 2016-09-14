@@ -10,24 +10,24 @@ import Foundation
 import HealthKit
 
 public struct PredictedBG {
-    let startDate: NSDate
+    let startDate: Date
     let values: [Int]
     let cob: [Int]?
     let iob: [Int]?
 
-    public init(startDate: NSDate, values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? =
+    public init(startDate: Date, values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? =
         nil) {
         self.startDate = startDate
         // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
-        self.values = values.map { Int(round($0.doubleValueForUnit(unit))) }
-        self.cob = cob?.map { Int(round($0.doubleValueForUnit(unit))) }
-        self.iob = iob?.map { Int(round($0.doubleValueForUnit(unit))) }
+        self.values = values.map { Int(round($0.doubleValue(for: unit))) }
+        self.cob = cob?.map { Int(round($0.doubleValue(for: unit))) }
+        self.iob = iob?.map { Int(round($0.doubleValue(for: unit))) }
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
-        var rval = [String: AnyObject]()
+        var rval = [String: Any]()
 
         rval["startDate"] =  TimeFormat.timestampStrFromDate(startDate)
         rval["values"] = values

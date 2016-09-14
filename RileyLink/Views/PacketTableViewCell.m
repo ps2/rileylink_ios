@@ -35,6 +35,7 @@ static NSDateFormatter *timeFormatter;
 }
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

@@ -41,7 +41,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     }
 
     // References to registered notification center observers
-    private var notificationObservers: [AnyObject] = []
+    private var notificationObservers: [Any] = []
     
     deinit {
         for observer in notificationObservers {
@@ -49,7 +49,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         }
     }
 
-    private var deviceObserver: AnyObject? {
+    private var deviceObserver: Any? {
         willSet {
             if let observer = deviceObserver {
                 NotificationCenter.default.removeObserver(observer)

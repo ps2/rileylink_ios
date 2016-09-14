@@ -12,11 +12,11 @@ public struct UploaderStatus {
 
     public let battery: Int?
     public let name: String
-    public let timestamp: NSDate
+    public let timestamp: Date
 
-    public init(name: String, timestamp: NSDate, battery: Float? = nil) {
+    public init(name: String, timestamp: Date, battery: Float? = nil) {
         let intBattery: Int?
-        if let battery = battery where battery >= 0 {
+        if let battery = battery , battery >= 0 {
             intBattery = Int(battery * 100)
         } else {
             intBattery = nil
@@ -25,14 +25,14 @@ public struct UploaderStatus {
         self.init(name: name, timestamp: timestamp, battery: intBattery)
     }
 
-    public init(name: String, timestamp: NSDate, battery: Int? = nil) {
+    public init(name: String, timestamp: Date, battery: Int? = nil) {
         self.name = name
         self.timestamp = timestamp
         self.battery = battery
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
         
         rval["name"] = name
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)

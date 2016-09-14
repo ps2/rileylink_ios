@@ -20,11 +20,11 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     let amount: Double
     let programmed: Double
     let unabsorbed: Double
-    let duration: NSTimeInterval
+    let duration: TimeInterval
     let carbs: Int
     let ratio: Double
     
-    init(timestamp: NSDate, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: NSTimeInterval, carbs: Int, ratio: Double) {
+    init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, carbs: Int, ratio: Double) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
@@ -35,7 +35,7 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         super.init(timestamp: timestamp, enteredBy: enteredBy)
     }
     
-    override public var dictionaryRepresentation: [String: AnyObject] {
+    override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
         if carbs > 0 {
             rval["eventType"] = "Meal Bolus"

@@ -4,4 +4,4 @@ xcode_sdk: iphonesimulator10
 xcode_project: RileyLink.xcodeproj
 xcode_scheme: RileyLink
 script:
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator10 test | xcpretty
+    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test

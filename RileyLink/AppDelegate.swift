@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let logFileURL = applicationDocumentsDirectory().URLByAppendingPathComponent("logfile.txt")
         
         do {
-            try NSFileManager.defaultManager().removeItemAtURL(logFileURL)
+            try NSFileManager.defaultManager().removeItemAtURL(logFileURL!)
         } catch let error {
             NSLog("Could not remove file at path: \(logFileURL): \(error)")
         }

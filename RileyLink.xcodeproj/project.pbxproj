@@ -64,14 +64,13 @@
 		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
 		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
 		43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
-		43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43C907171D86361D002BAD29 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; };
-		43C907181D863714002BAD29 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; };
-		43C907191D863714002BAD29 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
-		43C9071A1D86375D002BAD29 /* CommonCrypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43C246971D8918AE0031F8D1 /* Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C246951D8918AE0031F8D1 /* Crypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43C2469A1D8918AE0031F8D1 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C246931D8918AE0031F8D1 /* Crypto.framework */; };
+		43C246A01D8919E20031F8D1 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C2469F1D8919E20031F8D1 /* Crypto.m */; };
+		43C246A11D891BA80031F8D1 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
+		43C246A61D891DBF0031F8D1 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C246931D8918AE0031F8D1 /* Crypto.framework */; };
 		43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		43C9071C1D863782002BAD29 /* MinimedKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43C9071D1D8637DA002BAD29 /* CommonCrypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43C907161D86361D002BAD29 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43CA93251CB8BB33000026B5 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */; };
 		43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */; };
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
@@ -85,7 +84,6 @@
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
-		C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,7 +106,6 @@
 		C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616621B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m */; };
 		C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */; };
 		C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
-		C12618461CDB019C0064A849 /* Crypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C12618451CDB019C0064A849 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C1274F771D8232580002912B /* DailyTotal515PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */; };
 		C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */; };
@@ -314,6 +311,20 @@
 			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
 			remoteInfo = RileyLinkKit;
 		};
+		43C246A21D891D6C0031F8D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C246921D8918AE0031F8D1;
+			remoteInfo = Crypto;
+		};
+		43C246A41D891DB80031F8D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C246921D8918AE0031F8D1;
+			remoteInfo = Crypto;
+		};
 		C10D9BCC1C8269D500378342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -366,8 +377,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				43C9071C1D863782002BAD29 /* MinimedKit.framework in CopyFiles */,
-				43B6E0161D24E4720022E6D7 /* Crypto.framework in CopyFiles */,
-				43C9071A1D86375D002BAD29 /* CommonCrypto.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,12 +386,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43C9071D1D8637DA002BAD29 /* CommonCrypto.framework in Embed Frameworks */,
 				43722FC41CB9F7640038B7F2 /* RileyLinkKit.framework in Embed Frameworks */,
 				C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */,
 				C1B383211CD0665D00CE7782 /* NightscoutUploadKit.framework in Embed Frameworks */,
 				430D64E11CB855AB00FCA750 /* RileyLinkBLEKit.framework in Embed Frameworks */,
-				C12618461CDB019C0064A849 /* Crypto.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,7 +449,10 @@
 		43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateFormatter.swift; sourceTree = "<group>"; };
 		43B0ADC81D1268B300AAD278 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
-		43C907161D86361D002BAD29 /* CommonCrypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CommonCrypto.framework; path = Carthage/Build/iOS/CommonCrypto.framework; sourceTree = "<group>"; };
+		43C246931D8918AE0031F8D1 /* Crypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Crypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43C246951D8918AE0031F8D1 /* Crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
+		43C246961D8918AE0031F8D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43C2469F1D8919E20031F8D1 /* Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crypto.m; sourceTree = "<group>"; };
 		43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinkMessageBody.swift; sourceTree = "<group>"; };
@@ -483,7 +493,6 @@
 		C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		C12616651B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
 		C12616661B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C12618451CDB019C0064A849 /* Crypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crypto.framework; path = Carthage/Build/iOS/Crypto.framework; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyTotal515PumpEvent.swift; sourceTree = "<group>"; };
@@ -702,6 +711,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43C2468F1D8918AE0031F8D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10D9BBD1C8269D500378342 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -726,6 +742,7 @@
 				C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */,
 				C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */,
 				43722FC31CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */,
+				43C2469A1D8918AE0031F8D1 /* Crypto.framework in Frameworks */,
 				C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */,
 				C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */,
 			);
@@ -746,8 +763,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C907171D86361D002BAD29 /* CommonCrypto.framework in Frameworks */,
-				C109DAFF1D0283ED0065F80A /* Crypto.framework in Frameworks */,
+				43C246A61D891DBF0031F8D1 /* Crypto.framework in Frameworks */,
 				C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */,
 				C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */,
 			);
@@ -758,8 +774,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */,
-				43C907181D863714002BAD29 /* CommonCrypto.framework in Frameworks */,
-				43C907191D863714002BAD29 /* Crypto.framework in Frameworks */,
 				C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -830,6 +844,16 @@
 				43722FC01CB9F7640038B7F2 /* Info.plist */,
 			);
 			path = RileyLinkKitTests;
+			sourceTree = "<group>";
+		};
+		43C246941D8918AE0031F8D1 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				43C246951D8918AE0031F8D1 /* Crypto.h */,
+				43C2469F1D8919E20031F8D1 /* Crypto.m */,
+				43C246961D8918AE0031F8D1 /* Info.plist */,
+			);
+			path = Crypto;
 			sourceTree = "<group>";
 		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
@@ -960,6 +984,7 @@
 				43722FBD1CB9F7640038B7F2 /* RileyLinkKitTests */,
 				C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */,
 				C1B3831A1CD0665D00CE7782 /* NightscoutUploadKitTests */,
+				43C246941D8918AE0031F8D1 /* Crypto */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 			);
@@ -978,6 +1003,7 @@
 				43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */,
 				C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */,
 				C1B383141CD0665D00CE7782 /* NightscoutUploadKitTests.xctest */,
+				43C246931D8918AE0031F8D1 /* Crypto.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -985,8 +1011,6 @@
 		C12EA239198B436800309FA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43C907161D86361D002BAD29 /* CommonCrypto.framework */,
-				C12618451CDB019C0064A849 /* Crypto.framework */,
 				43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */,
 				C12616431B685F0A001FAD87 /* CoreData.framework */,
 				C12EA23A198B436800309FA4 /* Foundation.framework */,
@@ -1310,6 +1334,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43C246901D8918AE0031F8D1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43C246971D8918AE0031F8D1 /* Crypto.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C10D9BBE1C8269D500378342 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1401,6 +1433,24 @@
 			productReference = 43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		43C246921D8918AE0031F8D1 /* Crypto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43C2469E1D8918AE0031F8D1 /* Build configuration list for PBXNativeTarget "Crypto" */;
+			buildPhases = (
+				43C2468E1D8918AE0031F8D1 /* Sources */,
+				43C2468F1D8918AE0031F8D1 /* Frameworks */,
+				43C246901D8918AE0031F8D1 /* Headers */,
+				43C246911D8918AE0031F8D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Crypto;
+			productName = Crypto;
+			productReference = 43C246931D8918AE0031F8D1 /* Crypto.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		C10D9BC01C8269D500378342 /* MinimedKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C10D9BD81C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKit" */;
@@ -1445,11 +1495,11 @@
 				C12EA234198B436800309FA4 /* Frameworks */,
 				C12EA235198B436800309FA4 /* Resources */,
 				C10D9BB81C82614F00378342 /* Embed Frameworks */,
-				C1AF21F51D4BC0C30088C41D /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				43C246A31D891D6C0031F8D1 /* PBXTargetDependency */,
 				C10D9BD51C8269D500378342 /* PBXTargetDependency */,
 				430D64DF1CB855AB00FCA750 /* PBXTargetDependency */,
 				43722FC21CB9F7640038B7F2 /* PBXTargetDependency */,
@@ -1490,6 +1540,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43C246A51D891DB80031F8D1 /* PBXTargetDependency */,
 			);
 			name = NightscoutUploadKit;
 			productName = NightscoutUploadKit;
@@ -1540,6 +1591,10 @@
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 0800;
 					};
+					43C246921D8918AE0031F8D1 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					C10D9BC01C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 0800;
@@ -1586,6 +1641,7 @@
 				43722FB61CB9F7640038B7F2 /* RileyLinkKitTests */,
 				C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */,
 				C1B383131CD0665D00CE7782 /* NightscoutUploadKitTests */,
+				43C246921D8918AE0031F8D1 /* Crypto */,
 			);
 		};
 /* End PBXProject section */
@@ -1615,6 +1671,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43722FB51CB9F7640038B7F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C246911D8918AE0031F8D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1672,24 +1735,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		C1AF21F51D4BC0C30088C41D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Crypto.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CommonCrypto.framework",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		430D64C61CB855AB00FCA750 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1745,6 +1790,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				43722FBF1CB9F7640038B7F2 /* RileyLinkKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C2468E1D8918AE0031F8D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43C246A11D891BA80031F8D1 /* NSData+Conversion.m in Sources */,
+				43C246A01D8919E20031F8D1 /* Crypto.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2003,6 +2057,16 @@
 			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
 			targetProxy = 43722FC11CB9F7640038B7F2 /* PBXContainerItemProxy */;
 		};
+		43C246A31D891D6C0031F8D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C246921D8918AE0031F8D1 /* Crypto */;
+			targetProxy = 43C246A21D891D6C0031F8D1 /* PBXContainerItemProxy */;
+		};
+		43C246A51D891DB80031F8D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C246921D8918AE0031F8D1 /* Crypto */;
+			targetProxy = 43C246A41D891DB80031F8D1 /* PBXContainerItemProxy */;
+		};
 		C10D9BCD1C8269D500378342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C10D9BC01C8269D500378342 /* MinimedKit */;
@@ -2240,6 +2304,59 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		43C2469C1D8918AE0031F8D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Crypto/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.Crypto;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		43C2469D1D8918AE0031F8D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Crypto/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.Crypto;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -2656,6 +2773,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		43C2469E1D8918AE0031F8D1 /* Build configuration list for PBXNativeTarget "Crypto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43C2469C1D8918AE0031F8D1 /* Debug */,
+				43C2469D1D8918AE0031F8D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		C10D9BD81C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKit" */ = {
 			isa = XCConfigurationList;

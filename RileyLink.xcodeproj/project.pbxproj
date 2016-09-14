@@ -1149,13 +1149,13 @@
 		C1AA398B1AB67F6A00BC9E33 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C17884601D519F1E00405663 /* BatteryIndicator.swift */,
+				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
 				C1E535E81991E36700C2AC49 /* NSData+Conversion.h */,
 				C1E535E91991E36700C2AC49 /* NSData+Conversion.m */,
-				C14FFC541D3D72A50049CF85 /* UIViewController.swift */,
-				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
-				C14FFC601D3D75470049CF85 /* UIColor.swift */,
 				C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */,
-				C17884601D519F1E00405663 /* BatteryIndicator.swift */,
+				C14FFC601D3D75470049CF85 /* UIColor.swift */,
+				C14FFC541D3D72A50049CF85 /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

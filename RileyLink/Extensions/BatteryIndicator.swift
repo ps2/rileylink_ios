@@ -9,8 +9,8 @@
 import NightscoutUploadKit
 import MinimedKit
 
-extension BatteryIndicator {
-    init?(batteryStatus: MinimedKit.BatteryStatus) {
+public extension BatteryIndicator {
+    public init?(batteryStatus: MinimedKit.BatteryStatus) {
         switch batteryStatus {
         case .low:
             self = .low

@@ -11,30 +11,27 @@ import Foundation
 public struct DailyTotal523PumpEvent: PumpEvent {
     
     public let length: Int
-    public let rawData: NSData
-    public let timestamp: NSDateComponents
-    let validDateStr: String
+    public let rawData: Data
+    public let timestamp: DateComponents
     
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = 52
         
         // Sometimes we encounter this at the end of a page, and it can be less characters???
         // need at least 16, I think.
-        guard 16 <= availableData.length else {
+        guard 16 <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<min(length, availableData.length)]
+        rawData = availableData.subdata(in: 0..<min(length, availableData.count))
 
-        let dateComponents = NSDateComponents(pumpEventBytes: availableData[1..<3])
-        validDateStr = String(format: "%04d-%02d-%02d", dateComponents.year, dateComponents.month, dateComponents.day)
-        timestamp = dateComponents
+        timestamp = DateComponents(pumpEventBytes: availableData.subdata(in: 1..<3))
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "DailyTotal523",
-            "validDate": validDateStr,
+            "validDate": String(format: "%04d-%02d-%02d", timestamp.year!, timestamp.month!, timestamp.day!),
         ]
     }
 }

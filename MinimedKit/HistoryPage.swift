@@ -8,25 +8,25 @@
 
 public class HistoryPage {
     
-    public enum Error: ErrorType {
-        case InvalidCRC
-        case UnknownEventType(eventType: UInt8)
+    public enum HistoryPageError: Error {
+        case invalidCRC
+        case unknownEventType(eventType: UInt8)
     }
     
     public let events: [PumpEvent]
     
-    public init(pageData: NSData, pumpModel: PumpModel) throws {
+    public init(pageData: Data, pumpModel: PumpModel) throws {
         
         guard checkCRC16(pageData) else {
             events = [PumpEvent]()
-            throw Error.InvalidCRC
+            throw HistoryPageError.invalidCRC
         }
         
-        let pageData = pageData.subdataWithRange(NSMakeRange(0, 1022))
+        let pageData = pageData.subdata(in: 0..<1022)
         
-        func matchEvent(offset: Int) -> PumpEvent? {
+        func matchEvent(_ offset: Int) -> PumpEvent? {
             if let eventType = PumpEventType(rawValue:(pageData[offset] as UInt8)) {
-                let remainingData = pageData.subdataWithRange(NSMakeRange(offset, pageData.length - offset))
+                let remainingData = pageData.subdata(in: offset..<pageData.count)
                 if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
                     return event
                 }
@@ -35,7 +35,7 @@ public class HistoryPage {
         }
         
         var offset = 0
-        let length = pageData.length
+        let length = pageData.count
         var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
         var tempEvents = [PumpEvent]()
         
@@ -47,7 +47,7 @@ public class HistoryPage {
             }
             guard var event = matchEvent(offset) else {
                 events = [PumpEvent]()
-                throw Error.UnknownEventType(eventType: pageData[offset] as UInt8)
+                throw HistoryPageError.unknownEventType(eventType: pageData[offset] as UInt8)
             }
 
             if unabsorbedInsulinRecord != nil, var bolus = event as? BolusNormalPumpEvent {

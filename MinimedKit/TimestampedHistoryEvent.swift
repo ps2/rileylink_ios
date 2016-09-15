@@ -12,20 +12,20 @@ import Foundation
 // Boxes a TimestampedPumpEvent, storing its reconciled date components
 public struct TimestampedHistoryEvent {
     public let pumpEvent: PumpEvent
-    public let date: NSDate
+    public let date: Date
 
-    public func isMutable(atDate date: NSDate = NSDate()) -> Bool {
+    public func isMutable(atDate date: Date = Date()) -> Bool {
         switch pumpEvent {
         case let bolus as BolusNormalPumpEvent:
             // Square boluses
-            let deliveryFinishDate = self.date.dateByAddingTimeInterval(bolus.deliveryTime)
-            return deliveryFinishDate.compare(date) == .OrderedDescending
+            let deliveryFinishDate = self.date.addingTimeInterval(bolus.deliveryTime)
+            return deliveryFinishDate.compare(date) == .orderedDescending
         default:
             return false
         }
     }
 
-    public init(pumpEvent: PumpEvent, date: NSDate) {
+    public init(pumpEvent: PumpEvent, date: Date) {
         self.pumpEvent = pumpEvent
         self.date = date
     }
@@ -33,10 +33,10 @@ public struct TimestampedHistoryEvent {
 
 
 extension TimestampedHistoryEvent: DictionaryRepresentable {
-    public var dictionaryRepresentation: [String : AnyObject] {
+    public var dictionaryRepresentation: [String : Any] {
         var dict = pumpEvent.dictionaryRepresentation
 
-        dict["timestamp"] = NSDateFormatter.ISO8601DateFormatter().stringFromDate(date)
+        dict["timestamp"] = DateFormatter.ISO8601DateFormatter().string(from: date)
 
         return dict
     }

@@ -11,13 +11,13 @@ import Foundation
 public class PumpAckMessageBody: MessageBody {
     public static let length = 1
     
-    let rxData: NSData
+    let rxData: Data
     
-    public required init?(rxData: NSData) {
+    public required init?(rxData: Data) {
         self.rxData = rxData
     }
     
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
 }

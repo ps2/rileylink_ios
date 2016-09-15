@@ -9,19 +9,19 @@
 import Foundation
 
 public struct RecommendedTempBasal {
-    let timestamp: NSDate
+    let timestamp: Date
     let rate: Double
-    let duration: NSTimeInterval
+    let duration: TimeInterval
 
-    public init(timestamp: NSDate, rate: Double, duration: NSTimeInterval) {
+    public init(timestamp: Date, rate: Double, duration: TimeInterval) {
         self.timestamp = timestamp
         self.rate = rate
         self.duration = duration
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
-        var rval = [String: AnyObject]()
+        var rval = [String: Any]()
 
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["rate"] = rate

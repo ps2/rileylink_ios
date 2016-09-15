@@ -12,27 +12,27 @@ public struct FindDeviceMessageBody: MessageBody {
     
     public static let length = 5
     
-    public let deviceAddress: NSData
+    public let deviceAddress: Data
     public let sequence: UInt8
-    let rxData: NSData
+    let rxData: Data
     
     
-    public init?(rxData: NSData) {
+    public init?(rxData: Data) {
         self.rxData = rxData
         
-        if rxData.length == self.dynamicType.length {
-            self.deviceAddress = rxData.subdataWithRange(NSRange(1...3))
+        if rxData.count == type(of: self).length {
+            self.deviceAddress = rxData.subdata(in: 1..<4)
             sequence = rxData[0] & 0b1111111
         } else {
             return nil
         }
     }
     
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "sequence": Int(sequence),
             "deviceAddress": deviceAddress.hexadecimalString,

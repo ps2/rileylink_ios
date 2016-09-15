@@ -22,13 +22,13 @@ public struct MySentryAlertMessageBody: MessageBody, DictionaryRepresentable {
     public static let length = 10
 
     public let alertType: AlertType?
-    public let alertDate: NSDate
+    public let alertDate: Date
 
-    private let rxData: NSData
+    private let rxData: Data
 
-    public init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length, let
-            alertDate = NSDateComponents(mySentryBytes: rxData[2...7]).date
+    public init?(rxData: Data) {
+        guard rxData.count == type(of: self).length, let
+            alertDate = DateComponents(mySentryBytes: rxData.subdata(in: 2..<8)).date
         else {
             return nil
         }
@@ -39,20 +39,20 @@ public struct MySentryAlertMessageBody: MessageBody, DictionaryRepresentable {
         self.alertDate = alertDate
     }
 
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
-        let dateFormatter = NSDateFormatter()
+    public var dictionaryRepresentation: [String: Any] {
+        let dateFormatter = DateFormatter()
 
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 
         return [
-            "alertDate": dateFormatter.stringFromDate(alertDate),
-            "alertType": alertType != nil ? String(alertType!) : rxData.subdataWithRange(NSRange(1...1)).hexadecimalString,
-            "byte89": rxData.subdataWithRange(NSRange(8...9)).hexadecimalString
+            "alertDate": dateFormatter.string(from: alertDate),
+            "alertType": (alertType != nil ? String(describing: alertType!) : rxData.subdata(in: 1..<2).hexadecimalString),
+            "byte89": rxData.subdata(in: 8..<10).hexadecimalString
         ]
 
     }

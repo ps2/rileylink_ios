@@ -10,7 +10,7 @@ import Foundation
 
 
 extension Int {
-    init(bigEndianBytes bytes: [UInt8]) {
+    init(bigEndianBytes bytes: Data) {
         assert(bytes.count <= 4)
         var result: UInt = 0
 

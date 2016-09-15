@@ -19,7 +19,7 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
             self.age = age
         }
         
-        public var dictionaryRepresentation: [String: AnyObject] {
+        public var dictionaryRepresentation: [String: Any] {
             return [
                 "amount": amount,
                 "age": age,
@@ -28,21 +28,21 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
     }
     
     public let length: Int
-    public let rawData: NSData
+    public let rawData: Data
     
     public let records: [Record]
     
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = Int(max(availableData[1] as UInt8, UInt8(2)))
         var records = [Record]()
         
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<length]
+        rawData = availableData.subdata(in: 0..<length)
         
-        func d(idx:Int) -> Int {
+        func d(_ idx:Int) -> Int {
             return Int(availableData[idx] as UInt8)
         }
         
@@ -58,10 +58,10 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
         self.records = records
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "UnabsorbedInsulin",
-            "data": records.map({ (r: Record) -> [String: AnyObject] in
+            "data": records.map({ (r: Record) -> [String: Any] in
                 return r.dictionaryRepresentation
             }),
         ]

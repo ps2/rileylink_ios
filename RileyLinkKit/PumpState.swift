@@ -11,21 +11,17 @@ import MinimedKit
 
 
 public class PumpState {
-    
-    /// Posted when values of the properties of the PumpState object have changed.
-    /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`
-    public static let ValuesDidChangeNotification = "com.rileylink.RileyLinkKit.PumpState.ValuesDidChangeNotification"
-    
+
     /// The key for a string value naming the object property whose value changed
     public static let PropertyKey = "com.rileylink.RileyLinkKit.PumpState.PropertyKey"
-    
+
     /// The key for the previous value of the object property whose value changed.
     /// If the value type does not conform to AnyObject, a raw representation will be provided instead.
     public static let ValueChangeOldKey = "com.rileylink.RileyLinkKit.PumpState.ValueChangeOldKey"
-    
+
     public let pumpID: String
         
-    public var timeZone: NSTimeZone = NSTimeZone.defaultTimeZone() {
+    public var timeZone: TimeZone = TimeZone.current {
         didSet {
             postChangeNotificationForKey("timeZone", oldValue: oldValue)
         }
@@ -43,13 +39,13 @@ public class PumpState {
         }
     }
     
-    public var lastHistoryDump: NSDate? {
+    public var lastHistoryDump: Date? {
         didSet {
             postChangeNotificationForKey("lastHistoryDump", oldValue: oldValue)
         }
     }
     
-    public var awakeUntil: NSDate? {
+    public var awakeUntil: Date? {
         didSet {
             postChangeNotificationForKey("awakeUntil", oldValue: awakeUntil)
         }
@@ -61,23 +57,34 @@ public class PumpState {
     }
     
     public var isAwake: Bool {
-        return awakeUntil?.timeIntervalSinceNow > 0
+        if let awakeUntil = awakeUntil {
+            return awakeUntil.timeIntervalSinceNow > 0
+        }
+
+        return false
     }
     
-    public var lastWakeAttempt: NSDate?
+    public var lastWakeAttempt: Date?
     
-    private func postChangeNotificationForKey(key: String, oldValue: AnyObject?)  {
-        var userInfo: [String: AnyObject] = [
-            self.dynamicType.PropertyKey: key
+    private func postChangeNotificationForKey(_ key: String, oldValue: Any?)  {
+        var userInfo: [String: Any] = [
+            type(of: self).PropertyKey: key
         ]
         
         if let oldValue = oldValue {
-            userInfo[self.dynamicType.ValueChangeOldKey] = oldValue
+            userInfo[type(of: self).ValueChangeOldKey] = oldValue
         }
         
-        NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification,
+        NotificationCenter.default.post(name: .PumpStateValuesDidChange,
                                                                   object: self,
                                                                   userInfo: userInfo
         )
     }
+}
+
+
+extension Notification.Name {
+    /// Posted when values of the properties of the PumpState object have changed.
+    /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`
+    public static let PumpStateValuesDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.PumpState.ValuesDidChangeNotification")
 }

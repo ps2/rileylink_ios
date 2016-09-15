@@ -16,7 +16,7 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
     let carbs: Int
     let insulin: Double
     
-    init(timestamp: NSDate, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, carbs: Int, insulin: Double) {
+    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, carbs: Int, insulin: Double) {
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
@@ -25,7 +25,7 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
         super.init(timestamp: timestamp, enteredBy: enteredBy)
     }
     
-    override public var dictionaryRepresentation: [String: AnyObject] {
+    override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
         rval["eventType"] = "Meal Bolus"
         rval["glucose"] = glucose

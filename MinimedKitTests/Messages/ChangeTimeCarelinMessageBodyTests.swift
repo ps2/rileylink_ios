@@ -13,8 +13,8 @@ import XCTest
 class ChangeTimeCarelinMessageBodyTests: XCTestCase {
     
     func testChangeTime() {
-        let components = NSDateComponents()
-        components.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        var components = DateComponents()
+        components.calendar = Calendar(identifier: Calendar.Identifier.gregorian)
 
         components.year = 2017
         components.month = 12
@@ -23,9 +23,9 @@ class ChangeTimeCarelinMessageBodyTests: XCTestCase {
         components.minute = 22
         components.second = 59
 
-        let message = PumpMessage(packetType: .Carelink, address: "123456", messageType: .ChangeTime, messageBody: ChangeTimeCarelinkMessageBody(dateComponents: components)!)
+        let message = PumpMessage(packetType: .carelink, address: "123456", messageType: .changeTime, messageBody: ChangeTimeCarelinkMessageBody(dateComponents: components)!)
 
-        XCTAssertEqual(NSData(hexadecimalString: "a7123456400709163B07E10C1D000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"), message.txData)
+        XCTAssertEqual(Data(hexadecimalString: "a7123456400709163B07E10C1D000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"), message.txData)
     }
     
 }

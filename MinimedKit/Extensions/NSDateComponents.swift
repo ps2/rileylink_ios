@@ -9,8 +9,8 @@
 import Foundation
 
 
-extension NSDateComponents {
-    convenience init(mySentryBytes: [UInt8]) {
+extension DateComponents {
+    init(mySentryBytes: Data) {
         self.init()
 
         hour   = Int(mySentryBytes[0] & 0b00011111)
@@ -20,14 +20,14 @@ extension NSDateComponents {
         month  = Int(mySentryBytes[4] & 0b00001111)
         day    = Int(mySentryBytes[5] & 0b00011111)
 
-        calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
     }
 
-    convenience init(pumpEventData: NSData, offset: Int, length: Int = 5) {
-        self.init(pumpEventBytes: pumpEventData[offset..<offset + length])
+    init(pumpEventData: Data, offset: Int, length: Int = 5) {
+        self.init(pumpEventBytes: pumpEventData.subdata(in: offset..<offset + length))
     }
 
-    convenience init(pumpEventBytes: [UInt8]) {
+    init(pumpEventBytes: Data) {
         self.init()
 
         if pumpEventBytes.count == 5 {
@@ -45,6 +45,6 @@ extension NSDateComponents {
             year   = Int(pumpEventBytes[1] & 0b01111111) + 2000
         }
 
-        calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
     }
 }

@@ -15,40 +15,44 @@ public class ReadTempBasalCarelinkMessageBody: CarelinkLongMessageBody {
     private static let strokesPerUnit = 40
 
     public enum RateType {
-        case Absolute
-        case Percent
+        case absolute
+        case percent
     }
 
-    public let timeRemaining: NSTimeInterval
+    public let timeRemaining: TimeInterval
     public let rate: Double
     public let rateType: RateType
 
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
         let rawRateType: UInt8 = rxData[1]
         switch rawRateType {
         case 0:
-            rateType = .Absolute
-            let strokes = Int(bigEndianBytes: rxData[3...4])
-            rate = Double(strokes) / Double(self.dynamicType.strokesPerUnit)
+            rateType = .absolute
+            let strokes = Int(bigEndianBytes: rxData.subdata(in: 3..<5))
+            rate = Double(strokes) / Double(type(of: self).strokesPerUnit)
         case 1:
-            rateType = .Percent
+            rateType = .percent
             let rawRate: UInt8 = rxData[2]
             rate = Double(rawRate)
         default:
             timeRemaining = 0
             rate = 0
-            rateType = .Absolute
+            rateType = .absolute
             super.init(rxData: rxData)
             return nil
         }
 
-        let minutesRemaining = Int(bigEndianBytes: rxData[5...6])
-        timeRemaining = NSTimeInterval(minutesRemaining * 60)
+        let minutesRemaining = Int(bigEndianBytes: rxData.subdata(in: 5..<7))
+        timeRemaining = TimeInterval(minutesRemaining * 60)
 
         super.init(rxData: rxData)
+    }
+
+    public required init?(rxData: NSData) {
+        fatalError("init(rxData:) has not been implemented")
     }
 }

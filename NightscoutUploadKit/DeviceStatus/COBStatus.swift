@@ -10,16 +10,15 @@ import Foundation
 
 public struct COBStatus {
     let cob: Double
-    let timestamp: NSDate
+    let timestamp: Date
 
-    public init(cob: Double, timestamp: NSDate) {
+    public init(cob: Double, timestamp: Date) {
         self.cob = cob // grams
         self.timestamp = timestamp
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
-
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
 
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["cob"] = cob

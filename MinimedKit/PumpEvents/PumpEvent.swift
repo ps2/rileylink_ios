@@ -10,9 +10,9 @@ import Foundation
 
 public protocol PumpEvent : DictionaryRepresentable {
     
-    init?(availableData: NSData, pumpModel: PumpModel)
+    init?(availableData: Data, pumpModel: PumpModel)
     
-    var rawData: NSData {
+    var rawData: Data {
         get
     }
 

@@ -11,22 +11,24 @@ import Foundation
 
 public class ReadTimeCarelinkMessageBody: CarelinkLongMessageBody {
 
-    public let dateComponents = NSDateComponents()
+    public let dateComponents: DateComponents
 
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
-        dateComponents.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        var dateComponents = DateComponents()
+        dateComponents.calendar = Calendar(identifier: Calendar.Identifier.gregorian)
         dateComponents.hour   = Int(rxData[1] as UInt8)
         dateComponents.minute = Int(rxData[2] as UInt8)
         dateComponents.second = Int(rxData[3] as UInt8)
-        dateComponents.year   = Int(bigEndianBytes: rxData[4...5])
+        dateComponents.year   = Int(bigEndianBytes: rxData.subdata(in: 4..<6))
         dateComponents.month  = Int(rxData[6] as UInt8)
         dateComponents.day    = Int(rxData[7] as UInt8)
 
+        self.dateComponents = dateComponents
+
         super.init(rxData: rxData)
     }
-
 }

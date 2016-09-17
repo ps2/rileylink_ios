@@ -15,11 +15,11 @@ public struct MySentryAckMessageBody: MessageBody {
     public static let length = 9
 
     let sequence: UInt8
-    let mySentryID: NSData
+    let mySentryID: Data
     let responseMessageTypes: [MessageType]
 
-    public init?(sequence: UInt8, watchdogID: NSData, responseMessageTypes: [MessageType]) {
-        guard responseMessageTypes.count <= 4 && watchdogID.length == 3 else {
+    public init?(sequence: UInt8, watchdogID: Data, responseMessageTypes: [MessageType]) {
+        guard responseMessageTypes.count <= 4 && watchdogID.count == 3 else {
             return nil
         }
 
@@ -28,24 +28,24 @@ public struct MySentryAckMessageBody: MessageBody {
         self.responseMessageTypes = responseMessageTypes
     }
 
-    public init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
         sequence = rxData[0]
-        mySentryID = rxData[1...3]
+        mySentryID = rxData.subdata(in: 1..<4)
         responseMessageTypes = rxData[5...8].flatMap({ MessageType(rawValue: $0) })
     }
 
-    public var txData: NSData {
-        var buffer = self.dynamicType.emptyBuffer
+    public var txData: Data {
+        var buffer = type(of: self).emptyBuffer
 
         buffer[0] = sequence
-        buffer.replaceRange(1...3, with: mySentryID[0...2])
+        buffer.replaceSubrange(1...3, with: mySentryID[0...2])
 
-        buffer.replaceRange(5..<5 + responseMessageTypes.count, with: responseMessageTypes.map({ $0.rawValue }))
+        buffer.replaceSubrange(5..<5 + responseMessageTypes.count, with: responseMessageTypes.map({ $0.rawValue }))
 
-        return NSData(bytes: &buffer, length: buffer.count)
+        return Data(bytes: buffer)
     }
 }

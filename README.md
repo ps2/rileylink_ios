@@ -8,8 +8,6 @@ The RileyLink iOS app connects to a [RileyLink](https://github.com/ps2/rileylink
 
 You'll need Xcode, which is available for free, but will only build apps that last a week.  To make your apps run longer, you'll have to sign up for a developer account. Or send a message to @ps2 on gitter with your email address, and I'll add you to the distribution list and you can receive builds via testflight.
 
-You'll also need to install [Carthage](https://github.com/Carthage/Carthage) and run `carthage bootstrap` in the checked out directory.
-
 You should not need to change bundle id, or sign the app.  Just clicking on the build and run button in Xcode should build and install the app to your connected phone.
 
 ### Configuration

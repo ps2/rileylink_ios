@@ -18,12 +18,12 @@ public struct RileyLinkStatus {
 
     let name: String
     let state: State
-    let lastIdle: NSDate?
+    let lastIdle: Date?
     let version: String?
     let rssi: Double?
 
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
 
         rval["name"] = name
         rval["state"] = state.rawValue

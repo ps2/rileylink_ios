@@ -13,12 +13,12 @@ private let NightscoutAccount = "NightscoutAPI"
 
 extension KeychainManager {
     
-    func setNightscoutURL(URL: NSURL?, secret: String?) {
+    func setNightscoutURL(_ url: URL?, secret: String?) {
         do {
             let credentials: InternetCredentials?
 
-            if let URL = URL, secret = secret {
-                credentials = InternetCredentials(username: NightscoutAccount, password: secret, URL: URL)
+            if let url = url, let secret = secret {
+                credentials = InternetCredentials(username: NightscoutAccount, password: secret, url: url)
             } else {
                 credentials = nil
             }
@@ -28,11 +28,11 @@ extension KeychainManager {
         }
     }
 
-    func getNightscoutCredentials() -> (URL: NSURL, secret: String)? {
+    func getNightscoutCredentials() -> (url: URL, secret: String)? {
         do {
             let credentials = try getInternetCredentials(account: NightscoutAccount)
 
-            return (URL: credentials.URL, secret: credentials.password)
+            return (url: credentials.url, secret: credentials.password)
         } catch {
             return nil
         }

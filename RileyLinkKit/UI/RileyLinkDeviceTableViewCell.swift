@@ -18,30 +18,30 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
     @IBOutlet weak var signalLabel: UILabel!
 
     public static func nib() -> UINib {
-        return UINib(nibName: className, bundle: NSBundle(forClass: self))
+        return UINib(nibName: className, bundle: Bundle(for: self))
     }
 
-    public func configureCellWithName(name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
+    public func configureCellWithName(_ name: String?, signal: Int?, peripheralState: CBPeripheralState?) {
         nameLabel.text = name
         signalLabel.text = signal != nil ? "\(signal!) dB" : nil
         
         if let state = peripheralState {
             switch state {
-            case .Connected:
-                connectSwitch.on = true
-                connectSwitch.enabled = true
-            case .Connecting:
-                connectSwitch.on = true
-                connectSwitch.enabled = true
-            case .Disconnected:
-                connectSwitch.on = false
-                connectSwitch.enabled = true
-            case .Disconnecting:
-                connectSwitch.on = false
-                connectSwitch.enabled = false
+            case .connected:
+                connectSwitch.isOn = true
+                connectSwitch.isEnabled = true
+            case .connecting:
+                connectSwitch.isOn = true
+                connectSwitch.isEnabled = true
+            case .disconnected:
+                connectSwitch.isOn = false
+                connectSwitch.isEnabled = true
+            case .disconnecting:
+                connectSwitch.isOn = false
+                connectSwitch.isEnabled = false
             }
         } else {
-            connectSwitch.hidden = true
+            connectSwitch.isHidden = true
         }
         
     }
@@ -49,7 +49,7 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         
-        connectSwitch?.removeTarget(nil, action: nil, forControlEvents: .ValueChanged)
+        connectSwitch?.removeTarget(nil, action: nil, for: .valueChanged)
     }
     
 }

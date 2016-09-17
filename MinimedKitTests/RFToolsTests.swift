@@ -22,12 +22,12 @@ class RFToolsTests: XCTestCase {
     }
     
     func testDecode4b6b() {
-        let input = NSData(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b100")!
+        let input = Data(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b100")!
         
         let result = decode4b6b(input)
         
         if let result = result {
-            let expectedOutput = NSData(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")
+            let expectedOutput = Data(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")
             XCTAssertTrue(result == expectedOutput)
         } else {
             XCTFail("\(result) is nil")
@@ -35,7 +35,7 @@ class RFToolsTests: XCTestCase {
     }
     
     func testDecode4b6bWithBadData() {
-        let input = NSData(hexadecimalString: "0102030405")!
+        let input = Data(hexadecimalString: "0102030405")!
         
         let result = decode4b6b(input)
         XCTAssertTrue(result == nil)
@@ -43,12 +43,11 @@ class RFToolsTests: XCTestCase {
     
     
     func testEncode4b6b() {
-        let input = NSData(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")!
+        let input = Data(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")!
         
         let result = encode4b6b(input)
         
-        NSLog("output = %@", result)
-        let expectedOutput = NSData(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b1")
+        let expectedOutput = Data(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b1")
         XCTAssertTrue(result == expectedOutput)
     }
     

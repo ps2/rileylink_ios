@@ -112,6 +112,13 @@
     [[NSUserDefaults standardUserDefaults] setBool:uploadEnabled forKey:@"uploadEnabled"];
 }
 
+- (NSInteger) pumpRegion {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:@"pumpRegion"];
+}
+
+- (void) setPumpRegion:(NSInteger)pumpRegion {
+    [[NSUserDefaults standardUserDefaults] setInteger:pumpRegion forKey:@"pumpRegion"];
+}
 
 
 @end

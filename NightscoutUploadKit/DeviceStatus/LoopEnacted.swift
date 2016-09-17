@@ -10,20 +10,20 @@ import Foundation
 
 public struct LoopEnacted {
     let rate: Double
-    let duration: NSTimeInterval
-    let timestamp: NSDate
+    let duration: TimeInterval
+    let timestamp: Date
     let received: Bool
 
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool) {
+    public init(rate: Double, duration: TimeInterval, timestamp: Date, received: Bool) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
         self.received = received
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
-        var rval = [String: AnyObject]()
+        var rval = [String: Any]()
 
         rval["rate"] = rate
         rval["duration"] = duration / 60.0

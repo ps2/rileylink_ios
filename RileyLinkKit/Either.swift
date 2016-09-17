@@ -9,6 +9,6 @@
 import Foundation
 
 public enum Either<T1, T2> {
-    case Success(T1)
-    case Failure(T2)
+    case success(T1)
+    case failure(T2)
 }

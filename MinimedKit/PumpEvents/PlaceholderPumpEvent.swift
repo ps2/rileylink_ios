@@ -11,24 +11,24 @@ import Foundation
 
 public struct PlaceholderPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    public let rawData: NSData
-    public let timestamp: NSDateComponents
+    public let rawData: Data
+    public let timestamp: DateComponents
 
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
 
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
         
-        rawData = availableData[0..<length]
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        rawData = availableData.subdata(in: 0..<length)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         let name: String
         if let type = PumpEventType(rawValue: rawData[0] as UInt8) {
-            name = String(type).componentsSeparatedByString(".").last!
+            name = String(describing: type).components(separatedBy: ".").last!
         } else {
             name = "UnknownPumpEvent(\(rawData[0] as UInt8))"
         }

@@ -21,7 +21,7 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
     let temp: RateType
     let duration: Int
     
-    init(timestamp: NSDate, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int) {
+    init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int) {
         self.rate = rate
         self.absolute = absolute
         self.temp = temp
@@ -30,7 +30,7 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
         super.init(timestamp: timestamp, enteredBy: enteredBy)
     }
     
-    override public var dictionaryRepresentation: [String: AnyObject] {
+    override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
         rval["eventType"] = "Temp Basal"
         rval["temp"] = temp.rawValue

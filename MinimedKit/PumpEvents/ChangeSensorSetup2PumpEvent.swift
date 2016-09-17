@@ -10,26 +10,26 @@ import Foundation
 
 public struct ChangeSensorSetup2PumpEvent: TimestampedPumpEvent {
     public let length: Int
-    public let rawData: NSData
-    public let timestamp: NSDateComponents
+    public let rawData: Data
+    public let timestamp: DateComponents
     
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         if pumpModel.hasLowSuspend {
             length = 41
         } else {
             length = 37
         }
 
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<length]
+        rawData = availableData.subdata(in: 0..<length)
         
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 2)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "ChangeSensorSetup2",
         ]

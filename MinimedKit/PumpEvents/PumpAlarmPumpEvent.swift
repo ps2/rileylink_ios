@@ -9,58 +9,58 @@
 import Foundation
 
 public enum PumpAlarmType {
-    case BatteryOutLimitExceeded
-    case NoDelivery             
-    case BatteryDepleted
-    case AutoOff
-    case DeviceReset            
-    case ReprogramError         
-    case EmptyReservoir         
-    case UnknownType(rawType: UInt8)
+    case batteryOutLimitExceeded
+    case noDelivery             
+    case batteryDepleted
+    case autoOff
+    case deviceReset            
+    case reprogramError         
+    case emptyReservoir         
+    case unknownType(rawType: UInt8)
 
     init(rawType: UInt8) {
         switch rawType {
         case 3:
-            self = .BatteryOutLimitExceeded
+            self = .batteryOutLimitExceeded
         case 4:
-            self = .NoDelivery
+            self = .noDelivery
         case 5:
-            self = .BatteryDepleted
+            self = .batteryDepleted
         case 6:
-            self = .AutoOff 
+            self = .autoOff 
         case 16:
-            self = .DeviceReset
+            self = .deviceReset
         case 61:
-            self = .ReprogramError
+            self = .reprogramError
         case 62:
-            self = .EmptyReservoir
+            self = .emptyReservoir
         default:
-            self = .UnknownType(rawType: rawType)
+            self = .unknownType(rawType: rawType)
         }
     }
 }
 
 public struct PumpAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
-    public let rawData: NSData
-    public let timestamp: NSDateComponents
+    public let rawData: Data
+    public let timestamp: DateComponents
     public let alarmType: PumpAlarmType
 
-    public init?(availableData: NSData, pumpModel: PumpModel) {
+    public init?(availableData: Data, pumpModel: PumpModel) {
         length = 9
         
-        guard length <= availableData.length else {
+        guard length <= availableData.count else {
             return nil
         }
 
-        rawData = availableData[0..<length]
+        rawData = availableData.subdata(in: 0..<length)
         
-        alarmType = PumpAlarmType(rawType: availableData[1] as UInt8)
+        alarmType = PumpAlarmType(rawType: availableData[1])
         
-        timestamp = NSDateComponents(pumpEventData: availableData, offset: 4)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 4)
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
         return [
             "_type": "AlarmPump",

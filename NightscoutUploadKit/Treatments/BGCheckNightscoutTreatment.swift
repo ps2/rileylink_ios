@@ -14,14 +14,14 @@ public class BGCheckNightscoutTreatment: NightscoutTreatment {
     let glucoseType: GlucoseType
     let units: Units
     
-    init(timestamp: NSDate, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units) {
+    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units) {
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
         super.init(timestamp: timestamp, enteredBy: enteredBy)
     }
     
-    override public var dictionaryRepresentation: [String: AnyObject] {
+    override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
         rval["eventType"] = "BG Check"
         rval["glucose"] = glucose
@@ -29,6 +29,4 @@ public class BGCheckNightscoutTreatment: NightscoutTreatment {
         rval["units"] = units.rawValue
         return rval
     }
-    
-    
 }

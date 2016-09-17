@@ -30,7 +30,7 @@ class RemoteDataManager {
         if let (siteURL, APISecret) = keychain.getNightscoutCredentials() {
             nightscoutService = NightscoutService(siteURL: siteURL, APISecret: APISecret)
         } else if let siteURL = Config.sharedInstance().nightscoutURL,
-            APISecret = Config.sharedInstance().nightscoutAPISecret
+            let APISecret = Config.sharedInstance().nightscoutAPISecret
         {
             keychain.setNightscoutURL(siteURL, secret: APISecret)
             nightscoutService = NightscoutService(siteURL: siteURL, APISecret: APISecret)

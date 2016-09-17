@@ -9,8 +9,8 @@
 import Foundation
 
 public enum BatteryIndicator: String {
-    case Low = "low"
-    case Normal = "normal"
+    case low = "low"
+    case normal = "normal"
 }
 
 public struct BatteryStatus {
@@ -24,8 +24,8 @@ public struct BatteryStatus {
         self.status = status
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
         
         if let percent = percent {
             rval["percent"] = percent

@@ -22,7 +22,7 @@ class MeterMessageTests: XCTestCase {
     }
     
     func testValidMeterMessage() {
-        let message = MeterMessage(rxData: NSData(hexadecimalString: "a5c527ad018e77")!)
+        let message = MeterMessage(rxData: Data(hexadecimalString: "a5c527ad018e77")!)
         
         if let message = message {
             XCTAssertEqual(message.glucose, 257)

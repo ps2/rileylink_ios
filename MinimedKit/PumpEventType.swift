@@ -113,8 +113,6 @@ public enum PumpEventType: UInt8 {
             return JournalEntryPumpLowBatteryPumpEvent.self
         case .battery:
             return BatteryPumpEvent.self
-        case .selftest:
-            return SelfTestPumpEvent.self
         case .suspend:
             return SuspendPumpEvent.self
         case .resume:

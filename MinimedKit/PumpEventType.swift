@@ -25,6 +25,7 @@ public enum PumpEventType: UInt8 {
     case setAutoOff = 0x1b
     case suspend = 0x1e
     case resume = 0x1f
+    case selftest = 0x20
     case rewind = 0x21
     case clearSettings = 0x22
     case changeChildBlockEnable = 0x23

@@ -407,7 +407,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                         } else {
                             var byteArray = [UInt8](repeating: 0, count: 16)
                             (self.device.peripheral.identifier as NSUUID).getBytes(&byteArray)
-                            let watchdogID = Data(bytes: byteArray)
+                            let watchdogID = Data(bytes: byteArray[0..<3])
 
                             self.device.ops?.changeWatchdogMarriageProfile(toWatchdogID: watchdogID, completion: { (error) in
                                 DispatchQueue.main.async {

@@ -480,7 +480,7 @@ class PumpOpsSynchronous {
                         } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             break pages
-                        } else if date.compare(startDate) != .orderedAscending {
+                        } else {
                             timeCursor = date
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
                         }

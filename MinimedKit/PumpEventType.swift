@@ -31,6 +31,7 @@ public enum PumpEventType: UInt8 {
     case changeChildBlockEnable = 0x23
     case changeMaxBolus = 0x24
     case enableDisableRemote = 0x26
+    case resetPump = 0x2b
     case changeMaxBasal = 0x2c
     case enableBolusWizard = 0x2d
     case changeBGReminderOffset = 0x31

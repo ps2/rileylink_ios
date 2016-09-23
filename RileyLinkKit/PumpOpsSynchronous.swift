@@ -481,7 +481,7 @@ class PumpOpsSynchronous {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             break pages
                         } else {
-                            if (date.compare(startDate) == .orderedAscending) {
+                            if (date.compare(startDate) != .orderedAscending) {
                                 timeCursor = date
                             }
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)

@@ -53,7 +53,7 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
             return nil
         }
         
-        let newer = rxData[7] == 25 // x23
+        let newer = rxData[0] == 25 // x23
 
         let maxBolusTicks: UInt8
         let maxBasalTicks: Int

@@ -466,16 +466,15 @@ class PumpOpsSynchronous {
                     throw error
                 }
             }
-            if true {
-                let logString = NSString(format: "Fetched page %d: %@", pageNum, pageData as NSData ) 
-                let sz = logString.length
-                var idx = 0 
-                while idx < sz {
-                    let jmp = sz - idx > 1023 ? 1023 : sz - idx 
-                    NSLog( logString.substring(with: NSRange( location:idx, length: jmp ))) 
-                    idx += jmp 
-                }   
-            }   
+            
+            var idx = 0
+            let chunkSize = 256;
+            while idx < pageData.count {
+                let top = min(idx + chunkSize, pageData.count)
+                let range = Range(uncheckedBounds: (lower: idx, upper: top))
+                NSLog(String(format: "HistoryPage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+                idx = top
+            }
 
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 

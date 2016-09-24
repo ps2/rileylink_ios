@@ -196,7 +196,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 cell.detailTextLabel?.text = device.name
                 cell.accessoryType = .disclosureIndicator
             case .version:
-                cell.textLabel?.text = NSLocalizedString("Firmware Version", comment: "The title of the cell showing firmware version")
+                cell.textLabel?.text = NSLocalizedString("Firmware", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = device.firmwareVersion
             case .connection:
                 cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")

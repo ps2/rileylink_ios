@@ -475,7 +475,6 @@ class PumpOpsSynchronous {
                 }   
             }   
 
-            NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 
             for event in page.events.reversed() {

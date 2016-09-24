@@ -32,7 +32,18 @@ public class RileyLinkDevice {
     public private(set) var radioFrequency: Double?
     
     public var firmwareVersion: String? {
-        return device.firmwareVersion
+        var versions = [String]()
+        if let fwVersion = device.firmwareVersion {
+            versions.append(fwVersion)
+        }
+        if let fwVersion = device.bleFirmwareVersion {
+            versions.append(fwVersion.replacingOccurrences(of: "RileyLink:", with: ""))
+        }
+        if versions.count > 0 {
+            return versions.joined(separator: " / ")
+        } else {
+            return "Unknown"
+        }
     }
     
     public var deviceURI: String {

@@ -26,6 +26,7 @@
     CBCharacteristic *responseCountCharacteristic;
     CBCharacteristic *customNameCharacteristic;
     CBCharacteristic *timerTickCharacteristic;
+    CBCharacteristic *firmwareVersionCharacteristic;
     NSMutableArray *incomingPackets;
     NSMutableData *inBuf;
     NSData *endOfResponseMarker;
@@ -53,6 +54,7 @@
 @synthesize peripheral = _peripheral;
 @synthesize lastIdle = _lastIdle;
 @synthesize firmwareVersion = _firmwareVersion;
+@synthesize bleFirmwareVersion = _bleFirmwareVersion;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
 {
@@ -222,6 +224,9 @@
         } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
             [self.peripheral setNotifyValue:_timerTickEnabled forCharacteristic:characteristic];
             timerTickCharacteristic = characteristic;
+        } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
+            firmwareVersionCharacteristic = characteristic;
+            [service.peripheral readValueForCharacteristic:firmwareVersionCharacteristic];
         }
     }
     
@@ -240,7 +245,8 @@
             [peripheral discoverCharacteristics:[RileyLinkBLEManager UUIDsFromUUIDStrings:@[RILEYLINK_RESPONSE_COUNT_UUID,
                                                                                             RILEYLINK_DATA_UUID,
                                                                                             RILEYLINK_CUSTOM_NAME_UUID,
-                                                                                            RILEYLINK_TIMER_TICK_UUID]
+                                                                                            RILEYLINK_TIMER_TICK_UUID,
+                                                                                            RILEYLINK_FIRMWARE_VERSION_UUID]
                                                                       excludingAttributes:service.characteristics]
                                      forService:service];
         }
@@ -326,7 +332,7 @@
             NSInteger major = [versionComponents[0] integerValue];
             NSInteger minor = [versionComponents[1] integerValue];
             
-            if (major <= 0 && minor < 7) {
+            if (major <= 0 && minor < 8) {
                 return SubgRfspyVersionStateOutOfDate;
             } else {
                 return SubgRfspyVersionStateUpToDate;
@@ -368,6 +374,8 @@
         [self assertIdleListening];
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_TIMER_TICK object:self];
         NSLog(@"Updated timer tick: %d", timerTick);
+    } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
+        _bleFirmwareVersion = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     }
 }
 
@@ -448,6 +456,7 @@
     dataCharacteristic = nil;
     responseCountCharacteristic = nil;
     customNameCharacteristic = nil;
+    firmwareVersionCharacteristic = nil;
 }
 
 - (NSString*) deviceURI {

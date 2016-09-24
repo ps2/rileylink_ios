@@ -52,11 +52,20 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
         guard rxData.count == type(of: self).length else {
             return nil
         }
+        
+        let newer = rxData[0] == 25 // x23
 
-        let maxBolusTicks: UInt8 = rxData[7]
+        let maxBolusTicks: UInt8
+        let maxBasalTicks: Int
+        
+        if newer {
+            maxBolusTicks = rxData[7]
+            maxBasalTicks = Int(bigEndianBytes: rxData.subdata(in: 8..<10))
+        } else {
+            maxBolusTicks = rxData[6]
+            maxBasalTicks = Int(bigEndianBytes: rxData.subdata(in: 7..<9))
+        }
         maxBolus = Double(maxBolusTicks) / type(of: self).maxBolusMultiplier
-
-        let maxBasalTicks: Int = Int(bigEndianBytes: rxData.subdata(in: 8..<10))
         maxBasal = Double(maxBasalTicks) / type(of: self).maxBasalMultiplier
 
         let rawSelectedBasalProfile: UInt8 = rxData[12]

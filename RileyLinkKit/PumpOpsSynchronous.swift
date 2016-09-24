@@ -468,8 +468,13 @@ class PumpOpsSynchronous {
             NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 
+            // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
+            var seenEventData = Set<Data>()
+
             for event in page.events.reversed() {
-                if let event = event as? TimestampedPumpEvent {
+                if let event = event as? TimestampedPumpEvent, !seenEventData.contains(event.rawData) {
+                    seenEventData.insert(event.rawData)
+
                     var timestamp = event.timestamp
                     timestamp.timeZone = pump.timeZone
 

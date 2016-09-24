@@ -467,7 +467,15 @@ class PumpOpsSynchronous {
                 }
             }
             
-            NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
+            var idx = 0
+            let chunkSize = 256;
+            while idx < pageData.count {
+                let top = min(idx + chunkSize, pageData.count)
+                let range = Range(uncheckedBounds: (lower: idx, upper: top))
+                NSLog(String(format: "HistoryPage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+                idx = top
+            }
+
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 
             for event in page.events.reversed() {

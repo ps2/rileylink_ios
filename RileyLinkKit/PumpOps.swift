@@ -55,13 +55,13 @@ public class PumpOps {
         }
     }
     
-    public func readSettings(_ completion: @escaping (Either<String, Error>) -> Void)  {
+    public func readSettings(_ completion: @escaping (Either<ReadSettingsCarelinkMessageBody, Error>) -> Void)  {
         device.runSession(withName: "Read pump settings") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response: ReadSettingsCarelinkMessageBody = try ops.messageBody(to: .readSettings)
                 DispatchQueue.main.async { () -> Void in
-                    completion(.success(String(describing: response)))
+                    completion(.success(response))
                 }
             } catch let error {
                 DispatchQueue.main.async { () -> Void in

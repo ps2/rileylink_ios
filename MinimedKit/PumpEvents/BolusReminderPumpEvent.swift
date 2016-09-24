@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Mystery69PumpEvent: TimestampedPumpEvent {
+public struct BolusReminderPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
@@ -17,7 +17,7 @@ public struct Mystery69PumpEvent: TimestampedPumpEvent {
         if pumpModel.larger {
             length = 9
         } else {
-            length = 7
+            length = 7 // This may not actually occur, as I don't think x22 and earlier pumps have missed bolus reminders.
         }
         
         guard length <= availableData.count else {
@@ -31,7 +31,7 @@ public struct Mystery69PumpEvent: TimestampedPumpEvent {
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "_type": "Mystery69",
+            "_type": "BolusReminder",
         ]
     }
 }

@@ -281,6 +281,7 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
+		C1FDFCA71D963BD800ADBC31 /* Mystery69PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA61D963BD800ADBC31 /* Mystery69PumpEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -677,6 +678,7 @@
 		C1EB955C1C887FE5002517DF /* HistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		C1EF58871B3F93FE001C8C80 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
+		C1FDFCA61D963BD800ADBC31 /* Mystery69PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mystery69PumpEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1153,6 +1155,7 @@
 				C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */,
 				C1842BD71C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift */,
 				C1842BD61C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift */,
+				C1FDFCA61D963BD800ADBC31 /* Mystery69PumpEvent.swift */,
 				438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */,
 				C1842BCC1C8F9BBD00DB42AC /* PrimePumpEvent.swift */,
 				C1842BCE1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift */,
@@ -1821,6 +1824,7 @@
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
 				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
 				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				C1FDFCA71D963BD800ADBC31 /* Mystery69PumpEvent.swift in Sources */,
 				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
 				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
 				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,

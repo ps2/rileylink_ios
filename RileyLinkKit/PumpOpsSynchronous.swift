@@ -450,7 +450,9 @@ class PumpOpsSynchronous {
         // of ours by a small amount.
         var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
         
-
+        // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
+        var seenEventData = Set<Data>()
+        
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
@@ -467,9 +469,6 @@ class PumpOpsSynchronous {
             
             NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
-
-            // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
-            var seenEventData = Set<Data>()
 
             for event in page.events.reversed() {
                 if let event = event as? TimestampedPumpEvent, !seenEventData.contains(event.rawData) {

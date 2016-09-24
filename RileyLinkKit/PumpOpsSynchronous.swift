@@ -464,7 +464,17 @@ class PumpOpsSynchronous {
                     throw error
                 }
             }
-            
+            if true {
+                let logString = NSString(format: "Fetched page %d: %@", pageNum, pageData as NSData ) 
+                let sz = logString.length
+                var idx = 0 
+                while idx < sz {
+                    let jmp = sz - idx > 1023 ? 1023 : sz - idx 
+                    NSLog( logString.substring(with: NSRange( location:idx, length: jmp ))) 
+                    idx += jmp 
+                }   
+            }   
+
             NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 

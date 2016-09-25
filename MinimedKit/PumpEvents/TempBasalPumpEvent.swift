@@ -37,7 +37,7 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
         
         rateType = (d(7) >> 3) == 0 ? .Absolute : .Percent
         if rateType == .Absolute {
-            rate = Double(d(1)) / 40.0
+            rate = Double(((d(7) & 0b111) << 8) + d(1)) / 40.0
         } else {
             rate = Double(d(1))
         }

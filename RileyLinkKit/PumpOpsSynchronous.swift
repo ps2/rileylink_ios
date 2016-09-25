@@ -450,7 +450,9 @@ class PumpOpsSynchronous {
         // of ours by a small amount.
         var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
         
-
+        // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
+        var seenEventData = Set<Data>()
+        
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
@@ -465,11 +467,21 @@ class PumpOpsSynchronous {
                 }
             }
             
-            NSLog("Fetched page %d: %@", pageNum, pageData as NSData)
+            var idx = 0
+            let chunkSize = 256;
+            while idx < pageData.count {
+                let top = min(idx + chunkSize, pageData.count)
+                let range = Range(uncheckedBounds: (lower: idx, upper: top))
+                NSLog(String(format: "HistoryPage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+                idx = top
+            }
+
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
 
             for event in page.events.reversed() {
-                if let event = event as? TimestampedPumpEvent {
+                if let event = event as? TimestampedPumpEvent, !seenEventData.contains(event.rawData) {
+                    seenEventData.insert(event.rawData)
+
                     var timestamp = event.timestamp
                     timestamp.timeZone = pump.timeZone
 
@@ -480,8 +492,10 @@ class PumpOpsSynchronous {
                         } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             break pages
-                        } else if date.compare(startDate) != .orderedAscending {
-                            timeCursor = date
+                        } else {
+                            if (date.compare(startDate) != .orderedAscending) {
+                                timeCursor = date
+                            }
                             events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
                         }
                     }

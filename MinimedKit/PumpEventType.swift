@@ -70,7 +70,7 @@ public enum PumpEventType: UInt8 {
     case changeBolusReminderEnable = 0x66
     case changeBolusReminderTime = 0x67
     case deleteBolusReminderTime = 0x68
-    case restoreMystery69 = 0x69
+    case bolusReminder = 0x69
     case deleteAlarmClockTime = 0x6a
     case dailyTotal515 = 0x6c
     case dailyTotal522 = 0x6d
@@ -213,6 +213,8 @@ public enum PumpEventType: UInt8 {
             return RestoreMystery55PumpEvent.self
         case .changeMeterId:
             return ChangeMeterIDPumpEvent.self
+        case .bolusReminder:
+            return BolusReminderPumpEvent.self
         default:
             return PlaceholderPumpEvent.self
         }

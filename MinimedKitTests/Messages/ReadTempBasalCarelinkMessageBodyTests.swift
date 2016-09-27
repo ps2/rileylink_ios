@@ -33,4 +33,14 @@ class ReadTempBasalCarelinkMessageBodyTests: XCTestCase {
         XCTAssertEqual(0, body.rate)
         XCTAssertEqual(ReadTempBasalCarelinkMessageBody.RateType.absolute, body.rateType)
     }
+    
+    func testReadHighTempBasalRate() {
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7754838980600000550001e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012")!)!
+        
+        let body = message.messageBody as! ReadTempBasalCarelinkMessageBody
+        
+        XCTAssertEqual(TimeInterval(30 * 60), body.timeRemaining)
+        XCTAssertEqual(34, body.rate)
+        XCTAssertEqual(ReadTempBasalCarelinkMessageBody.RateType.absolute, body.rateType)
+    }
 }

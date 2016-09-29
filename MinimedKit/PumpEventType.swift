@@ -20,6 +20,7 @@ public enum PumpEventType: UInt8 {
     case selectBasalProfile = 0x14
     case tempBasalDuration = 0x16
     case changeTime = 0x17
+    case newTime = 0x18
     case journalEntryPumpLowBattery = 0x19
     case battery = 0x1a
     case setAutoOff = 0x1b

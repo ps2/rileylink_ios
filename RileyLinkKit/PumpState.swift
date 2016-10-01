@@ -83,6 +83,21 @@ public class PumpState {
 }
 
 
+extension PumpState: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return [
+            "## PumpState",
+            "timeZone: \(timeZone)",
+            "pumpRegion: \(pumpRegion)",
+            "pumpModel: \(pumpModel?.rawValue ?? "")",
+            "lastHistoryDump: \(lastHistoryDump ?? .distantPast)",
+            "awakeUntil: \(awakeUntil ?? .distantPast)",
+            "lastWakeAttempt: \(lastWakeAttempt)",
+        ].joined(separator: "\n")
+    }
+}
+
+
 extension Notification.Name {
     /// Posted when values of the properties of the PumpState object have changed.
     /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`

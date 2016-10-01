@@ -144,6 +144,23 @@ public class RileyLinkDeviceManager {
 }
 
 
+extension RileyLinkDeviceManager: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        var report = [
+            "## RileyLinkDeviceManager",
+            "timerTickEnabled: \(timerTickEnabled)",
+            "idleListeningEnabled: \(idleListeningEnabled)"
+        ]
+
+        for device in devices {
+            report.append(device.debugDescription)
+        }
+
+        return report.joined(separator: "\n\n")
+    }
+}
+
+
 extension Notification.Name {
     public static let DeviceManagerDidDiscoverDevice = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.DidDiscoverDeviceNotification")
 

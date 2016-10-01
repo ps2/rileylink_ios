@@ -54,7 +54,7 @@ class CommandResponseViewController: UIViewController, UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
-        return textView.attributedText
+        return textView.attributedText ?? ""
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {

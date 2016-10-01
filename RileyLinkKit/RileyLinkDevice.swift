@@ -143,6 +143,22 @@ public class RileyLinkDevice {
 }
 
 
+extension RileyLinkDevice: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return [
+            "## RileyLinkDevice",
+            "name: \(name ?? "")",
+            "RSSI: \(RSSI ?? 0)",
+            "lastIdle: \(lastIdle ?? .distantPast)",
+            "lastTuned: \(lastTuned ?? .distantPast)",
+            "radioFrequency: \(radioFrequency ?? 0)",
+            "firmwareVersion: \(firmwareVersion ?? "")",
+            "state: \(peripheral.state.description)"
+        ].joined(separator: "\n")
+    }
+}
+
+
 extension Notification.Name {
     public static let RileyLinkDeviceDidReceiveIdleMessage = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.RileyLinkDeviceDidReceiveIdleMessageNotification")
 

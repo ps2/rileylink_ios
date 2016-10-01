@@ -50,7 +50,7 @@ class CommandResponseViewController: UIViewController, UIActivityItemSource {
     // MARK: - UIActivityItemSource
 
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return title ?? textView.text
+        return title ?? textView.text ?? ""
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
@@ -58,6 +58,6 @@ class CommandResponseViewController: UIViewController, UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
-        return title ?? textView.text
+        return title ?? textView.text ?? ""
     }
 }

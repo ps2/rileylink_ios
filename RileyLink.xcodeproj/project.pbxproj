@@ -35,6 +35,7 @@
 		431185AA1CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */; };
 		431185AF1CF25A590059ED98 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431185AE1CF25A590059ED98 /* IdentifiableClass.swift */; };
 		433568761CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */; };
+		4345D1CE1DA16AF300BAAD22 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
 		43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43462E8A1CCB06F500F958A8 /* AppDelegate.swift */; };
 		434AB0951CBA0DF600422F4A /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0911CBA0DF600422F4A /* Either.swift */; };
 		434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0921CBA0DF600422F4A /* PumpOps.swift */; };
@@ -429,6 +430,7 @@
 		431185A91CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RileyLinkDeviceTableViewCell.xib; sourceTree = "<group>"; };
 		431185AE1CF25A590059ED98 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadRemainingInsulinMessageBody.swift; sourceTree = "<group>"; };
+		4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeZone.swift; sourceTree = "<group>"; };
 		43462E8A1CCB06F500F958A8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		434AB0911CBA0DF600422F4A /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		434AB0921CBA0DF600422F4A /* PumpOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
@@ -1093,9 +1095,10 @@
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
 				431185AE1CF25A590059ED98 /* IdentifiableClass.swift */,
+				4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */,
+				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1785,6 +1788,7 @@
 				C170C99B1CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift in Sources */,
 				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
 				434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */,
+				4345D1CE1DA16AF300BAAD22 /* TimeZone.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
 				C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */,
 			);

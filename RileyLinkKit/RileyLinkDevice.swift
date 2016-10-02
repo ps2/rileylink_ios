@@ -83,7 +83,7 @@ public class RileyLinkDevice {
                 },
                 completion: { (error) in
                     if error == nil {
-                        ops.pumpState.timeZone = TimeZone.current
+                        ops.pumpState.timeZone = TimeZone.currentFixed
                     }
 
                     resultHandler(error)

@@ -21,7 +21,7 @@ public class PumpState {
 
     public let pumpID: String
         
-    public var timeZone: TimeZone = TimeZone.current {
+    public var timeZone: TimeZone = TimeZone.currentFixed {
         didSet {
             postChangeNotificationForKey("timeZone", oldValue: oldValue)
         }

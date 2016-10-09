@@ -10,13 +10,13 @@ import Foundation
 
 public class MealBolusNightscoutTreatment: NightscoutTreatment {
     
-    let glucose: Int
-    let glucoseType: GlucoseType
-    let units: Units
     let carbs: Int
-    let insulin: Double
-    
-    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, carbs: Int, insulin: Double) {
+    let insulin: Double?
+    let glucose: Int?
+    let units: Units? // of glucose entry
+    let glucoseType: GlucoseType?
+
+    public init(timestamp: Date, enteredBy: String, carbs: Int, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil) {
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
@@ -28,10 +28,13 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
         rval["eventType"] = "Meal Bolus"
-        rval["glucose"] = glucose
-        rval["glucoseType"] = glucoseType.rawValue
-        rval["units"] = units.rawValue
+        if let glucose = glucose {
+            rval["glucose"] = glucose
+            rval["glucoseType"] = glucoseType?.rawValue
+            rval["units"] = units?.rawValue
+        }
+        rval["carbs"] = carbs
+        rval["insulin"] = insulin
         return rval
     }
-    
 }

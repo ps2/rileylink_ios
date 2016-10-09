@@ -122,6 +122,19 @@ public class NightscoutUploader {
         uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
+    /**
+     Attempts to upload nightscout treatment objects.
+
+     This method will not retry if the network task failed.
+
+     - parameter nightscoutTreatments: An array of nightscout treatments.
+     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
+     */
+    public func upload(_ nightscoutTreatments: [NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
+        uploadToNS(nightscoutTreatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+    }
+
+
     public func uploadDeviceStatus(_ status: DeviceStatus) {
         deviceStatuses.append(status.dictionaryRepresentation)
         flushAll()

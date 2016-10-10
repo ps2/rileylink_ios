@@ -293,11 +293,16 @@ public class NightscoutUploader {
                         return
                     }
 
-                    let ids = try insertedEntries.map({ (entry: [String: Any]) -> String in
+                    let ids = insertedEntries.map({ (entry: [String: Any]) -> String in
                         if let id = entry["_id"] as? String {
                             return id
                         } else {
-                            throw UploadError.invalidResponse(reason: "Invalid/missing id in response.")
+                            // Upload still succeeded; likely that this is an old version of NS
+                            // Instead of failing (which would cause retries later, we just mark
+                            // This entry has having an id of 'NA', which will let us consider it
+                            // uploaded.
+                            //throw UploadError.invalidResponse(reason: "Invalid/missing id in response.")
+                            return "NA"
                         }
                     })
 

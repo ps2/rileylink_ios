@@ -130,6 +130,7 @@
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
+		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
@@ -524,6 +525,7 @@
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
+		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
 		C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -1227,6 +1229,7 @@
 			children = (
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
+				C13D15591DAACE8400ADC044 /* Either.swift */,
 				43F348051D596270009933DC /* HKUnit.swift */,
 				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
@@ -2025,6 +2028,7 @@
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
+				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
 				C1A492671D4A65D9008964FF /* RecommendedTempBasal.swift in Sources */,
 				C178845F1D5166BE00405663 /* COBStatus.swift in Sources */,

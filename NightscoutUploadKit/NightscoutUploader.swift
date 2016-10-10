@@ -13,6 +13,7 @@ import Crypto
 public enum UploadError: Error {
     case httpError(status: Int, body: String)
     case missingTimezone
+    case invalidResponse(reason: String)
     case unauthorized
 }
 
@@ -119,7 +120,14 @@ public class NightscoutUploader {
     public func upload(_ pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: @escaping (Error?) -> Void) {
         let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
 
-        uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+        uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath) { (result) in
+            switch result {
+            case .success( _):
+                completionHandler(nil)
+            case .failure(let error):
+                completionHandler(error)
+            }
+        }
     }
 
     /**
@@ -130,7 +138,7 @@ public class NightscoutUploader {
      - parameter nightscoutTreatments: An array of nightscout treatments.
      - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
      */
-    public func upload(_ nightscoutTreatments: [NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
+    public func upload(_ nightscoutTreatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
         uploadToNS(nightscoutTreatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
@@ -239,9 +247,9 @@ public class NightscoutUploader {
         flushTreatments()
     }
     
-    func uploadToNS(_ json: [Any], endpoint:String, completion: @escaping (Error?) -> Void) {
+    func uploadToNS(_ json: [Any], endpoint:String, completion: @escaping (Either<[String],Error>) -> Void) {
         if json.count == 0 {
-            completion(nil)
+            completion(.success([]))
             return
         }
         
@@ -257,31 +265,65 @@ public class NightscoutUploader {
 
             let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
                 if let error = error {
-                    completion(error)
+                    completion(.failure(error))
                     return
                 }
-                
-                if let httpResponse = response as? HTTPURLResponse ,
-                    httpResponse.statusCode != 200 {
-                    completion(UploadError.httpError(status: httpResponse.statusCode, body:String(data: data!, encoding: String.Encoding.utf8)!))
-                } else {
-                    completion(nil)
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Response is not HTTPURLResponse")))
+                    return
                 }
-            }) 
+
+                if httpResponse.statusCode != 200 {
+                    let error = UploadError.httpError(status: httpResponse.statusCode, body:String(data: data!, encoding: String.Encoding.utf8)!)
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let data = data else {
+                    completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
+                    return
+                }
+
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
+
+                    guard let insertedEntries = json as? [[String: Any]] else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of objects in JSON response")))
+                        return
+                    }
+
+                    let ids = try insertedEntries.map({ (entry: [String: Any]) -> String in
+                        if let id = entry["_id"] as? String {
+                            return id
+                        } else {
+                            throw UploadError.invalidResponse(reason: "Invalid/missing id in response.")
+                        }
+                    })
+
+                    completion(.success(ids))
+                } catch {
+                    completion(.failure(error))
+                    return
+                }
+            })
             task.resume()
         } catch let error {
-            completion(error)
+            completion(.failure(error))
         }
     }
     
     func flushDeviceStatuses() {
         let inFlight = deviceStatuses
         deviceStatuses = []
-        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (error) in
-            if let error = error {
+        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (result) in
+            switch result {
+            case .failure(let error):
                 self.errorHandler?(error, "Uploading device status")
                 // Requeue
                 self.deviceStatuses.append(contentsOf: inFlight)
+            case .success(_):
+                break
             }
         }
     }
@@ -289,11 +331,14 @@ public class NightscoutUploader {
     func flushEntries() {
         let inFlight = entries
         entries = []
-        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutEntriesPath) { (error) in
-            if let error = error {
+        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutEntriesPath) { (result) in
+            switch result {
+            case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout entries")
                 // Requeue
                 self.entries.append(contentsOf: inFlight)
+            case .success(_):
+                break
             }
         }
     }
@@ -301,12 +346,13 @@ public class NightscoutUploader {
     func flushTreatments() {
         let inFlight = treatmentsQueue
         treatmentsQueue = []
-        uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (error) in
-            if let error = error {
+        uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (result) in
+            switch result {
+            case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.append(contentsOf: inFlight)
-            } else {
+            case .success(_):
                 if let last = inFlight.last {
                     self.lastStoredTreatmentTimestamp = last.timestamp
                 }

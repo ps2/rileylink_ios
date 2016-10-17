@@ -6,6 +6,8 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
+import Foundation
+
 public class HistoryPage {
     
     public enum HistoryPageError: Error {

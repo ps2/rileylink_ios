@@ -89,6 +89,23 @@
 		54BC44731DB46A5200340EED /* GlucosePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44721DB46A5200340EED /* GlucosePageTests.swift */; };
 		54BC44751DB46B0A00340EED /* GlucosePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44741DB46B0A00340EED /* GlucosePage.swift */; };
 		54BC44781DB46C7D00340EED /* GlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44771DB46C7D00340EED /* GlucoseEvent.swift */; };
+		54BC447C1DB4742F00340EED /* GlucoseEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC447B1DB4742F00340EED /* GlucoseEventType.swift */; };
+		54BC447E1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC447D1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift */; };
+		54BC44801DB4762200340EED /* TenSomethingGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC447F1DB4762200340EED /* TenSomethingGlucoseEvent.swift */; };
+		54BC44821DB476BB00340EED /* CalBGForGHGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44811DB476BB00340EED /* CalBGForGHGlucoseEvent.swift */; };
+		54BC44841DB476F600340EED /* SensorCalFactorGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44831DB476F600340EED /* SensorCalFactorGlucoseEvent.swift */; };
+		54BC44881DB47B5F00340EED /* DataEndGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44871DB47B5F00340EED /* DataEndGlucoseEvent.swift */; };
+		54BC448A1DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44891DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift */; };
+		54BC448C1DB47BEA00340EED /* SensorCalGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC448B1DB47BEA00340EED /* SensorCalGlucoseEvent.swift */; };
+		54BC448E1DB47C1E00340EED /* Fokko7GlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC448D1DB47C1E00340EED /* Fokko7GlucoseEvent.swift */; };
+		54BC44901DB47C7400340EED /* SensorTimestampGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC448F1DB47C7400340EED /* SensorTimestampGlucoseEvent.swift */; };
+		54BC44921DB47CBA00340EED /* BatteryChangeGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44911DB47CBA00340EED /* BatteryChangeGlucoseEvent.swift */; };
+		54BC44941DB47CFB00340EED /* SensorStatusGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44931DB47CFB00340EED /* SensorStatusGlucoseEvent.swift */; };
+		54BC44961DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44951DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift */; };
+		54BC44981DB47D5300340EED /* SensorSyncGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44971DB47D5300340EED /* SensorSyncGlucoseEvent.swift */; };
+		54BC449A1DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44991DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift */; };
+		54BC449C1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC449B1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift */; };
+		54BC449E1DB484BD00340EED /* ReferenceTimestampedGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC449D1DB484BD00340EED /* ReferenceTimestampedGlucoseEvent.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -476,6 +493,23 @@
 		54BC44721DB46A5200340EED /* GlucosePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucosePageTests.swift; sourceTree = "<group>"; };
 		54BC44741DB46B0A00340EED /* GlucosePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucosePage.swift; sourceTree = "<group>"; };
 		54BC44771DB46C7D00340EED /* GlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC447B1DB4742F00340EED /* GlucoseEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEventType.swift; sourceTree = "<group>"; };
+		54BC447D1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSensorDataGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC447F1DB4762200340EED /* TenSomethingGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TenSomethingGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44811DB476BB00340EED /* CalBGForGHGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalBGForGHGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44831DB476F600340EED /* SensorCalFactorGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorCalFactorGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44871DB47B5F00340EED /* DataEndGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataEndGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44891DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorWeakSignalGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC448B1DB47BEA00340EED /* SensorCalGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorCalGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC448D1DB47C1E00340EED /* Fokko7GlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fokko7GlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC448F1DB47C7400340EED /* SensorTimestampGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorTimestampGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44911DB47CBA00340EED /* BatteryChangeGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChangeGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44931DB47CFB00340EED /* SensorStatusGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorStatusGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44951DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimeChangeGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44971DB47D5300340EED /* SensorSyncGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorSyncGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC44991DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NineteenSomethingGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC449B1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeTimestampedGlucoseEvent.swift; sourceTree = "<group>"; };
+		54BC449D1DB484BD00340EED /* ReferenceTimestampedGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceTimestampedGlucoseEvent.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -873,7 +907,23 @@
 		54BC44761DB46C3100340EED /* GlucoseEvents */ = {
 			isa = PBXGroup;
 			children = (
+				54BC44911DB47CBA00340EED /* BatteryChangeGlucoseEvent.swift */,
+				54BC44811DB476BB00340EED /* CalBGForGHGlucoseEvent.swift */,
+				54BC44871DB47B5F00340EED /* DataEndGlucoseEvent.swift */,
+				54BC44951DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift */,
+				54BC448D1DB47C1E00340EED /* Fokko7GlucoseEvent.swift */,
 				54BC44771DB46C7D00340EED /* GlucoseEvent.swift */,
+				54BC447D1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift */,
+				54BC44991DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift */,
+				54BC449D1DB484BD00340EED /* ReferenceTimestampedGlucoseEvent.swift */,
+				54BC449B1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift */,
+				54BC44831DB476F600340EED /* SensorCalFactorGlucoseEvent.swift */,
+				54BC448B1DB47BEA00340EED /* SensorCalGlucoseEvent.swift */,
+				54BC44931DB47CFB00340EED /* SensorStatusGlucoseEvent.swift */,
+				54BC44971DB47D5300340EED /* SensorSyncGlucoseEvent.swift */,
+				54BC448F1DB47C7400340EED /* SensorTimestampGlucoseEvent.swift */,
+				54BC44891DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift */,
+				54BC447F1DB4762200340EED /* TenSomethingGlucoseEvent.swift */,
 			);
 			path = GlucoseEvents;
 			sourceTree = "<group>";
@@ -888,6 +938,7 @@
 				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
 				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
+				54BC447B1DB4742F00340EED /* GlucoseEventType.swift */,
 				54BC44741DB46B0A00340EED /* GlucosePage.swift */,
 				C1EB955C1C887FE5002517DF /* HistoryPage.swift */,
 				C10D9BC51C8269D500378342 /* Info.plist */,
@@ -1839,6 +1890,7 @@
 				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
 				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
+				54BC448C1DB47BEA00340EED /* SensorCalGlucoseEvent.swift in Sources */,
 				C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */,
 				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
 				C1842BFF1C8FA45100DB42AC /* DailyTotal522PumpEvent.swift in Sources */,
@@ -1848,9 +1900,12 @@
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
 				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
 				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				54BC44981DB47D5300340EED /* SensorSyncGlucoseEvent.swift in Sources */,
+				54BC448A1DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift in Sources */,
 				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
 				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
 				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,
+				54BC44901DB47C7400340EED /* SensorTimestampGlucoseEvent.swift in Sources */,
 				C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */,
 				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,
 				C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */,
@@ -1858,24 +1913,31 @@
 				C1842C0B1C8FA45100DB42AC /* ChangeTimePumpEvent.swift in Sources */,
 				C1842C0D1C8FA45100DB42AC /* TempBasalPumpEvent.swift in Sources */,
 				C178845D1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift in Sources */,
+				54BC447C1DB4742F00340EED /* GlucoseEventType.swift in Sources */,
 				43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */,
 				C1842C0C1C8FA45100DB42AC /* ChangeTimeFormatPumpEvent.swift in Sources */,
 				C1274F861D8242BE0002912B /* PumpRegion.swift in Sources */,
 				C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */,
 				C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */,
+				54BC449E1DB484BD00340EED /* ReferenceTimestampedGlucoseEvent.swift in Sources */,
 				C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */,
 				C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */,
+				54BC44921DB47CBA00340EED /* BatteryChangeGlucoseEvent.swift in Sources */,
 				C1EAD6CA1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift in Sources */,
 				C1842C181C8FA45100DB42AC /* BolusWizardSetupPumpEvent.swift in Sources */,
 				C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */,
 				C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */,
+				54BC44881DB47B5F00340EED /* DataEndGlucoseEvent.swift in Sources */,
 				C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */,
 				C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */,
 				C1711A5C1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift in Sources */,
 				C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */,
+				54BC448E1DB47C1E00340EED /* Fokko7GlucoseEvent.swift in Sources */,
+				54BC44961DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift in Sources */,
 				C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */,
 				C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */,
 				C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */,
+				54BC449C1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift in Sources */,
 				C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */,
 				C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */,
 				C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */,
@@ -1886,7 +1948,9 @@
 				C1EAD6C81C826B92006DBA60 /* CarelinkMessageBody.swift in Sources */,
 				C1842C121C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift in Sources */,
 				433568761CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift in Sources */,
+				54BC44941DB47CFB00340EED /* SensorStatusGlucoseEvent.swift in Sources */,
 				C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */,
+				54BC44821DB476BB00340EED /* CalBGForGHGlucoseEvent.swift in Sources */,
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
@@ -1894,6 +1958,7 @@
 				C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */,
 				43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */,
 				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
+				54BC447E1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
 				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
@@ -1907,7 +1972,9 @@
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
 				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
+				54BC449A1DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift in Sources */,
 				C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,
+				54BC44801DB4762200340EED /* TenSomethingGlucoseEvent.swift in Sources */,
 				C1842BC71C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift in Sources */,
 				C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */,
 				C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */,
@@ -1946,6 +2013,7 @@
 				C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */,
 				C1EAD6B71C826B6D006DBA60 /* PumpMessage.swift in Sources */,
 				C12198A91C8F2AF200BC374C /* DailyTotal523PumpEvent.swift in Sources */,
+				54BC44841DB476F600340EED /* SensorCalFactorGlucoseEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

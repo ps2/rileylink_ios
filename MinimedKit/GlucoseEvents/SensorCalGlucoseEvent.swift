@@ -11,6 +11,7 @@ import Foundation
 public struct SensorCalGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
+    public let waiting: String
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 2
@@ -19,7 +20,12 @@ public struct SensorCalGlucoseEvent : RelativeTimestampedGlucoseEvent {
             return nil
         }
         
+        func d(_ idx:Int) -> Int {
+            return Int(availableData[idx] as UInt8)
+        }
+        
         rawData = availableData.subdata(in: 0..<length)
+        waiting = d(1) == 1 ? "waiting" : "meter_bg_now"
     }
     
     public var dictionaryRepresentation: [String: Any] {

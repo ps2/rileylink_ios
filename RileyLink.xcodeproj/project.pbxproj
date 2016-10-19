@@ -116,6 +116,7 @@
 		54BC44AF1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44AE1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift */; };
 		54BC44B11DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44B01DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift */; };
 		54BC44B31DB711BE00340EED /* SensorCalGlucoseEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44B21DB711BE00340EED /* SensorCalGlucoseEventTests.swift */; };
+		54BC44B51DB7184D00340EED /* NSStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44B41DB7184D00340EED /* NSStringExtensions.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -530,6 +531,7 @@
 		54BC44AE1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TenSomethingGlucoseEventTests.swift; sourceTree = "<group>"; };
 		54BC44B01DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSensorDataGlucoseEventTests.swift; sourceTree = "<group>"; };
 		54BC44B21DB711BE00340EED /* SensorCalGlucoseEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorCalGlucoseEventTests.swift; sourceTree = "<group>"; };
+		54BC44B41DB7184D00340EED /* NSStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStringExtensions.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -952,15 +954,15 @@
 			isa = PBXGroup;
 			children = (
 				54BC44A01DB6F74300340EED /* BatteryChangeGlucoseEventTests.swift */,
-				54BC44A21DB7021B00340EED /* SensorStatusGlucoseEventTests.swift */,
-				54BC44A41DB702C800340EED /* DateTimeChangeGlucoseEventTests.swift */,
-				54BC44A61DB703E900340EED /* SensorSyncGlucoseEventTests.swift */,
 				54BC44A81DB704A600340EED /* CalBGForGHGlucoseEventTests.swift */,
-				54BC44AA1DB7093700340EED /* SensorTimestampGlucoseEventTests.swift */,
-				54BC44AC1DB70A5E00340EED /* SensorCalFactorGlucoseEventTests.swift */,
-				54BC44AE1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift */,
+				54BC44A41DB702C800340EED /* DateTimeChangeGlucoseEventTests.swift */,
 				54BC44B01DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift */,
+				54BC44AC1DB70A5E00340EED /* SensorCalFactorGlucoseEventTests.swift */,
 				54BC44B21DB711BE00340EED /* SensorCalGlucoseEventTests.swift */,
+				54BC44A21DB7021B00340EED /* SensorStatusGlucoseEventTests.swift */,
+				54BC44A61DB703E900340EED /* SensorSyncGlucoseEventTests.swift */,
+				54BC44AA1DB7093700340EED /* SensorTimestampGlucoseEventTests.swift */,
+				54BC44AE1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift */,
 			);
 			path = GlucoseEvents;
 			sourceTree = "<group>";
@@ -1010,6 +1012,7 @@
 				43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */,
 				43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */,
 				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
+				54BC44B41DB7184D00340EED /* NSStringExtensions.swift */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -2086,6 +2089,7 @@
 				C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */,
 				43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
+				54BC44B51DB7184D00340EED /* NSStringExtensions.swift in Sources */,
 				54BC44AB1DB7093700340EED /* SensorTimestampGlucoseEventTests.swift in Sources */,
 				43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */,
 				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,

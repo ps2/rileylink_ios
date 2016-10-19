@@ -12,6 +12,7 @@ public struct SensorCalGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let waiting: String
+    public var timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 2
@@ -26,6 +27,7 @@ public struct SensorCalGlucoseEvent : RelativeTimestampedGlucoseEvent {
         
         rawData = availableData.subdata(in: 0..<length)
         waiting = d(1) == 1 ? "waiting" : "meter_bg_now"
+        timestamp = DateComponents()
     }
     
     public var dictionaryRepresentation: [String: Any] {

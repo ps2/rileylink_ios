@@ -11,6 +11,7 @@ import Foundation
 public struct NineteenSomethingGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
+    public var timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 1
@@ -20,6 +21,7 @@ public struct NineteenSomethingGlucoseEvent : RelativeTimestampedGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
+        timestamp = DateComponents()
     }
     
     public var dictionaryRepresentation: [String: Any] {

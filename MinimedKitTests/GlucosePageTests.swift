@@ -48,6 +48,29 @@ class GlucosePageTests: XCTestCase {
         }
     }
     
+    func testRelativeTimestamping() {
+        let pumpModel = PumpModel.Model551
+        do {
+            let pageData = Data(hexadecimalString: "1028B61408131313131341BB".leftPadding(toLength: 2048, withPad: "0"))!
+            let page = try GlucosePage(pageData: pageData, pumpModel: pumpModel)
+            let events = page.events
+            
+            // a sensor timestamp followed by 5 "19-Something" relative timestamp records
+            XCTAssertEqual(events.count, 6)
+            
+            // expected final timestamp is reference sensor timestamp of 2016-02-08 20:54:00 + 5 * (5 minutes)
+            let expectedTimestamp = DateComponents(calendar: Calendar.current,
+                                                   year: 2016, month: 2, day: 8, hour: 21, minute: 19)
+            XCTAssertEqual((events.first as! NineteenSomethingGlucoseEvent).timestamp, expectedTimestamp)
+            
+        } catch GlucosePage.GlucosePageError.invalidCRC {
+            XCTFail("page decoding threw invalid crc")
+        } catch GlucosePage.GlucosePageError.unknownEventType(let eventType) {
+            XCTFail("unknown event type" + String(eventType))
+        } catch {
+            XCTFail("Unexpected exception...")
+        }
+    }
     
     func testGlucosePageEventDecoding() {
         let pumpModel = PumpModel.Model551

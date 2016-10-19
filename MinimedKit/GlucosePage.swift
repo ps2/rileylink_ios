@@ -42,6 +42,19 @@ public class GlucosePage {
             return GlucoseEventType.glucoseSensorDataEvent.eventType.init(availableData: remainingData, pumpModel: pumpModel)!
         }
         
+        func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {
+            var eventsWithTimestamps = [GlucoseEvent]()
+            let calendar = Calendar.current
+            var date : Date = calendar.date(from: startTimestamp)!
+            for var event in eventsNeedingTimestamp {
+                date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!
+                event.timestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+                event.timestamp.calendar = calendar
+                eventsWithTimestamps.append(event)
+            }
+            return eventsWithTimestamps
+        }
+        
         while offset < length {
             // Slurp up 0's
             if pageData[offset] as UInt8 == 0 {
@@ -52,10 +65,10 @@ public class GlucosePage {
             let event = matchEvent(offset)
             
             if let event = event as? RelativeTimestampedGlucoseEvent {
-                eventsNeedingTimestamp.append(event)
+                eventsNeedingTimestamp.insert(event, at: 0)
             } else if let event = event as? ReferenceTimestampedGlucoseEvent {
-                let eventsWithTimestamps : [GlucoseEvent] = eventsNeedingTimestamp
-                tempEvents += eventsWithTimestamps
+                let eventsWithTimestamp = addTimestampsToEvents(startTimestamp: event.timestamp, eventsNeedingTimestamp: eventsNeedingTimestamp).reversed()
+                tempEvents.append(contentsOf: eventsWithTimestamp)
                 eventsNeedingTimestamp.removeAll()
                 tempEvents.append(event)
             } else {

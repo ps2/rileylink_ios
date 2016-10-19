@@ -20,4 +20,8 @@ public protocol GlucoseEvent : DictionaryRepresentable {
         get
     }
     
+    var timestamp: DateComponents {
+        get
+    }
+    
 }

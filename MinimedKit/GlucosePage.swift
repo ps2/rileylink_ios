@@ -25,7 +25,7 @@ public class GlucosePage {
         }
         
         //glucose page parsing happens in reverse byte order
-        let pageData = pageData.subdata(in: 0..<1022).reverseBytes()
+        let pageData = Data(pageData.subdata(in: 0..<1022).reversed())
         
         var offset = 0
         let length = pageData.count

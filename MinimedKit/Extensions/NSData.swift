@@ -72,15 +72,6 @@ extension Data {
 }
 
 extension Data {
-    func reverseBytes() -> Data {
-        let byteArray = self.withUnsafeBytes {
-            [UInt8](UnsafeBufferPointer(start: $0, count: self.count))
-        }
-        return Data(bytes: byteArray.reversed())
-    }
-}
-
-extension Data {
     init?(hexadecimalString: String) {
         guard let chars = hexadecimalString.cString(using: String.Encoding.utf8) else {
             return nil

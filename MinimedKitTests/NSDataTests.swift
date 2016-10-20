@@ -49,11 +49,4 @@ class NSDataTests: XCTestCase {
         data?.copyBytes(to: &bytes, count: 4)
         XCTAssertEqual([0xa2, 0x59, 0x40, 0x40], bytes)
     }
-    
-    func testReverseBytes() {
-        let data         = Data(hexadecimalString: "as594041")
-        let reversedData = Data(hexadecimalString: "414059as")
-        
-        XCTAssertEqual(reversedData, data?.reverseBytes())
-    }
 }

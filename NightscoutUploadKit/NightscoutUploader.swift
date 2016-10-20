@@ -120,7 +120,7 @@ public class NightscoutUploader {
     public func upload(_ pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: @escaping (Error?) -> Void) {
         let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
 
-        uploadToNS(treatments, endpoint: defaultNightscoutTreatmentPath) { (result) in
+        postToNS(treatments, endpoint: defaultNightscoutTreatmentPath) { (result) in
             switch result {
             case .success( _):
                 completionHandler(nil)
@@ -139,9 +139,32 @@ public class NightscoutUploader {
      - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
      */
     public func upload(_ nightscoutTreatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
-        uploadToNS(nightscoutTreatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+        postToNS(nightscoutTreatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
+    /**
+     Attempts to modify a nightscout treatment object.
+
+     This method will not retry if the network task failed.
+
+     - parameter treatment: A nightscout treatment.  The id attribute should be set, identifying the treatment to update.
+     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
+     */
+    public func modifyTreatment(_ treatment:NightscoutTreatment, completionHandler: @escaping (Error?) -> Void) {
+        putToNS([treatment.dictionaryRepresentation], endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+    }
+
+    /**
+     Attempts to delete a nightscout treatment object.
+
+     This method will not retry if the network task failed.
+
+     - parameter id: The _id of a nightscout treatment.
+     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
+     */
+    public func deleteTreatment(_ id:String, completionHandler: @escaping (Error?) -> Void) {
+        deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+    }
 
     public func uploadDeviceStatus(_ status: DeviceStatus) {
         deviceStatuses.append(status.dictionaryRepresentation)
@@ -246,22 +269,81 @@ public class NightscoutUploader {
         flushEntries()
         flushTreatments()
     }
-    
-    func uploadToNS(_ json: [Any], endpoint:String, completion: @escaping (Either<[String],Error>) -> Void) {
+
+    func deleteFromNS(_ id: String, endpoint:String, completion: @escaping (Error?) -> Void)  {
+        let resource = "\(endpoint)/\(id)"
+        callNS(nil, endpoint: resource, method: "DELETE") { (result) in
+            switch result {
+            case .success( _):
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+
+    }
+
+    func putToNS(_ json: Any, endpoint:String, completion: @escaping (Error?) -> Void) {
+        callNS(json, endpoint: endpoint, method: "PUT") { (result) in
+            switch result {
+            case .success( _):
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    func postToNS(_ json: [Any], endpoint:String, completion: @escaping (Either<[String],Error>) -> Void) {
         if json.count == 0 {
             completion(.success([]))
             return
         }
-        
+
+        callNS(json, endpoint: endpoint, method: "POST") { (result) in
+            switch result {
+            case .success(let json):
+                guard let insertedEntries = json as? [[String: Any]] else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Expected array of objects in JSON response")))
+                    return
+                }
+
+                let ids = insertedEntries.map({ (entry: [String: Any]) -> String in
+                    if let id = entry["_id"] as? String {
+                        return id
+                    } else {
+                        // Upload still succeeded; likely that this is an old version of NS
+                        // Instead of failing (which would cause retries later, we just mark
+                        // This entry has having an id of 'NA', which will let us consider it
+                        // uploaded.
+                        //throw UploadError.invalidResponse(reason: "Invalid/missing id in response.")
+                        return "NA"
+                    }
+                })
+                completion(.success(ids))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+
+        }
+    }
+
+    func callNS(_ json: Any?, endpoint:String, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
         let uploadURL = siteURL.appendingPathComponent(endpoint)
         var request = URLRequest(url: uploadURL)
-        request.httpMethod = "POST"
+        request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(apiSecret.sha1, forHTTPHeaderField: "api-secret")
 
         do {
-            let sendData = try JSONSerialization.data(withJSONObject: json, options: [])
+            let sendData: Data?
+
+            if let json = json {
+                sendData = try JSONSerialization.data(withJSONObject: json, options: [])
+            } else {
+                sendData = nil
+            }
 
             let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
                 if let error = error {
@@ -287,26 +369,7 @@ public class NightscoutUploader {
 
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
-
-                    guard let insertedEntries = json as? [[String: Any]] else {
-                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of objects in JSON response")))
-                        return
-                    }
-
-                    let ids = insertedEntries.map({ (entry: [String: Any]) -> String in
-                        if let id = entry["_id"] as? String {
-                            return id
-                        } else {
-                            // Upload still succeeded; likely that this is an old version of NS
-                            // Instead of failing (which would cause retries later, we just mark
-                            // This entry has having an id of 'NA', which will let us consider it
-                            // uploaded.
-                            //throw UploadError.invalidResponse(reason: "Invalid/missing id in response.")
-                            return "NA"
-                        }
-                    })
-
-                    completion(.success(ids))
+                    completion(.success(json))
                 } catch {
                     completion(.failure(error))
                     return
@@ -321,7 +384,7 @@ public class NightscoutUploader {
     func flushDeviceStatuses() {
         let inFlight = deviceStatuses
         deviceStatuses = []
-        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (result) in
+        postToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading device status")
@@ -336,7 +399,7 @@ public class NightscoutUploader {
     func flushEntries() {
         let inFlight = entries
         entries = []
-        uploadToNS(inFlight as [Any], endpoint: defaultNightscoutEntriesPath) { (result) in
+        postToNS(inFlight as [Any], endpoint: defaultNightscoutEntriesPath) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout entries")
@@ -351,7 +414,7 @@ public class NightscoutUploader {
     func flushTreatments() {
         let inFlight = treatmentsQueue
         treatmentsQueue = []
-        uploadToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout treatment records")

@@ -552,9 +552,6 @@ class PumpOpsSynchronous {
         
         var events = [TimestampedGlucoseEvent]()
         
-        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
-        let eventTimestampDeltaAllowance = TimeInterval(hours: 9)
-        
         let currentGlucosePage = try readCurrentGlucosePage()
         let startPage = Int(currentGlucosePage.pageNum)
         let endPage = max(startPage - 1, 0)
@@ -589,8 +586,8 @@ class PumpOpsSynchronous {
                 timestamp.timeZone = pump.timeZone
                 
                 if let date = timestamp.date {
-                    if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
-                        NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                    if date < startDate && event is ReferenceTimestampedGlucoseEvent {
+                        NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate);
                         break pages
                     } else {
                         events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: date), at: 0)

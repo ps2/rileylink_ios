@@ -39,7 +39,8 @@ public class GlucosePage {
                     return event
                 }
             }
-            return GlucoseEventType.glucoseSensorDataEvent.eventType.init(availableData: remainingData, pumpModel: pumpModel)!
+            
+            return UnknownGlucoseEvent(availableData: remainingData, pumpModel: pumpModel)!
         }
         
         func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {
@@ -77,6 +78,6 @@ public class GlucosePage {
             
             offset += event.length
         }
-        events = tempEvents
+        events = tempEvents.reversed()
     }
 }

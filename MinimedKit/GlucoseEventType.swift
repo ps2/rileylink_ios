@@ -22,6 +22,7 @@ public enum GlucoseEventType: UInt8 {
     case sensorCalFactor = 0x0f
     case tenSomething = 0x10
     case nineteenSomething = 0x13
+    case unknownDataEvent
     case glucoseSensorDataEvent
     
     public var eventType: GlucoseEvent.Type {
@@ -52,8 +53,12 @@ public enum GlucoseEventType: UInt8 {
             return TenSomethingGlucoseEvent.self
         case .nineteenSomething:
             return NineteenSomethingGlucoseEvent.self
-        case .glucoseSensorDataEvent:
-            return GlucoseSensorDataGlucoseEvent.self
+        default:
+            if rawValue < 20 {
+                return UnknownGlucoseEvent.self
+            } else {
+                return GlucoseSensorDataGlucoseEvent.self
+            }
         }
     }
 }

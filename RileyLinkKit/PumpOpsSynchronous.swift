@@ -585,6 +585,10 @@ class PumpOpsSynchronous {
                 var timestamp = event.timestamp
                 timestamp.timeZone = pump.timeZone
                 
+                if event is UnknownGlucoseEvent {
+                    continue pages
+                }
+                
                 if let date = timestamp.date {
                     if date < startDate && event is ReferenceTimestampedGlucoseEvent {
                         NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate);
@@ -592,8 +596,6 @@ class PumpOpsSynchronous {
                     } else {
                         events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: date), at: 0)
                     }
-                } else {
-                    events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: Date()), at: 0)
                 }
             }
         }

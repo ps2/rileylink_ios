@@ -33,6 +33,7 @@ public struct CalBGForGHGlucoseEvent : GlucoseEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "CalBGForGH",
+            "amount": amount
         ]
     }
 }

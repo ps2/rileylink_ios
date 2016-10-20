@@ -33,6 +33,7 @@ public struct SensorCalFactorGlucoseEvent : ReferenceTimestampedGlucoseEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "SensorCalFactor",
+            "factor": factor
         ]
     }
 }

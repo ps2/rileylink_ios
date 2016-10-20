@@ -33,6 +33,7 @@ public struct SensorCalGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "SensorCal",
+            "waiting": waiting
         ]
     }
 }

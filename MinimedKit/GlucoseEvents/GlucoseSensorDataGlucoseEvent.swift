@@ -29,6 +29,7 @@ public struct GlucoseSensorDataGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "GlucoseSensorData",
+            "sgv": sgv
         ]
     }
 }

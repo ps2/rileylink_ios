@@ -144,6 +144,34 @@ public class PumpOps {
     }
 
     /**
+     Fetches glucose history entries which occurred on or after the specified date.
+     
+     History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
+     
+     - parameter startDate:  The earliest date of events to retrieve
+     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
+     - success(events): An array of fetched history entries, in ascending order of insertion
+     - failure(error):  An error describing why the command failed
+     
+     */
+    public func getGlucoseHistoryEvents(since startDate: Date, completion: @escaping (Either<(events: [TimestampedGlucoseEvent], pumpModel: PumpModel), Error>) -> Void) {
+        device.runSession(withName: "Get glucose history events") { (session) -> Void in
+            NSLog("Glucose history fetching task started.")
+            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+            do {
+                let (events, pumpModel) = try ops.getGlucoseHistoryEvents(since: startDate)
+                DispatchQueue.main.async { () -> Void in
+                    completion(.success(events: events, pumpModel: pumpModel))
+                }
+            } catch let error {
+                DispatchQueue.main.async { () -> Void in
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+
+    /**
      Reads the pump's clock
  
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.

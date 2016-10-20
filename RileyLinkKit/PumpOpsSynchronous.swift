@@ -432,7 +432,7 @@ class PumpOpsSynchronous {
         try wakeup()
         
         let pumpModel = try getPumpModel()
-
+        
         var events = [TimestampedHistoryEvent]()
         var timeAdjustmentInterval: TimeInterval = 0
         
@@ -541,6 +541,106 @@ class PumpOpsSynchronous {
         
         guard frameData.count == 1024 else {
             throw PumpCommsError.rfCommsFailure("Short history page: \(frameData.count) bytes. Expected 1024")
+        }
+        return frameData as Data
+    }
+    
+    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> ([TimestampedGlucoseEvent], PumpModel) {
+        try wakeup()
+        
+        let pumpModel = try getPumpModel()
+        
+        var events = [TimestampedGlucoseEvent]()
+        
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
+        let eventTimestampDeltaAllowance = TimeInterval(hours: 9)
+        
+        let currentGlucosePage = try readCurrentGlucosePage()
+        let startPage = Int(currentGlucosePage.pageNum)
+        let endPage = max(startPage - 1, 0)
+        
+        pages: for pageNum in stride(from: startPage, to: endPage, by: -1) {
+            NSLog("Fetching page %d", pageNum)
+            let pageData: Data
+            
+            do {
+                pageData = try getGlucosePage(UInt32(pageNum))
+            } catch let error as PumpCommsError {
+                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
+                    break pages
+                } else {
+                    throw error
+                }
+            }
+            
+            var idx = 0
+            let chunkSize = 256;
+            while idx < pageData.count {
+                let top = min(idx + chunkSize, pageData.count)
+                let range = Range(uncheckedBounds: (lower: idx, upper: top))
+                NSLog(String(format: "GlucosePage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+                idx = top
+            }
+            
+            let page = try GlucosePage(pageData: pageData, pumpModel: pumpModel)
+            
+            for event in page.events.reversed() {
+                var timestamp = event.timestamp
+                timestamp.timeZone = pump.timeZone
+                
+                if let date = timestamp.date {
+                    if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
+                        NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                        break pages
+                    } else {
+                        events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: date), at: 0)
+                    }
+                } else {
+                    events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: Date()), at: 0)
+                }
+            }
+        }
+        return (events, pumpModel)
+    }
+
+    private func readCurrentGlucosePage() throws -> ReadCurrentGlucosePageMessageBody {
+        let readCurrentGlucosePageResponse: ReadCurrentGlucosePageMessageBody = try messageBody(to: .readCurrentGlucosePage)
+        
+        return readCurrentGlucosePageResponse
+    }
+
+    private func getGlucosePage(_ pageNum: UInt32) throws -> Data {
+        var frameData = Data()
+        
+        let msg = makePumpMessage(to: .getGlucosePage, using: GetGlucosePageMessageBody(pageNum: pageNum))
+        
+        let firstResponse = try runCommandWithArguments(msg, responseMessageType: .getGlucosePage)
+        
+        var expectedFrameNum = 1
+        var curResp = firstResponse.messageBody as! GetGlucosePageMessageBody
+        
+        while(expectedFrameNum == curResp.frameNumber) {
+            frameData.append(curResp.frame)
+            expectedFrameNum += 1
+            let msg = makePumpMessage(to: .pumpAck)
+            if !curResp.lastFrame {
+                guard let resp = try? sendAndListen(msg) else {
+                    throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
+                }
+                guard resp.packetType == .carelink && resp.messageType == .getGlucosePage else {
+                    throw PumpCommsError.rfCommsFailure("Bad packet type or message type. Possible interference.")
+                }
+                curResp = resp.messageBody as! GetGlucosePageMessageBody
+            } else {
+                let cmd = SendPacketCmd()
+                cmd.packet = RFPacket(data: msg.txData)
+                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                break
+            }
+        }
+        
+        guard frameData.count == 1024 else {
+            throw PumpCommsError.rfCommsFailure("Short glucose history page: \(frameData.count) bytes. Expected 1024")
         }
         return frameData as Data
     }

@@ -88,6 +88,7 @@
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
 		541688DB1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541688DA1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift */; };
 		541688DD1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541688DC1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift */; };
+		541688DF1DB82E72005B1891 /* TimestampedGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541688DE1DB82E72005B1891 /* TimestampedGlucoseEvent.swift */; };
 		54A840D11DB85D0600B1F202 /* UnknownGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A840D01DB85D0600B1F202 /* UnknownGlucoseEvent.swift */; };
 		54BC44731DB46A5200340EED /* GlucosePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44721DB46A5200340EED /* GlucosePageTests.swift */; };
 		54BC44751DB46B0A00340EED /* GlucosePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44741DB46B0A00340EED /* GlucosePage.swift */; };
@@ -508,6 +509,7 @@
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
 		541688DA1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadCurrentGlucosePageMessageBodyTests.swift; sourceTree = "<group>"; };
 		541688DC1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadCurrentGlucosePageMessageBody.swift; sourceTree = "<group>"; };
+		541688DE1DB82E72005B1891 /* TimestampedGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedGlucoseEvent.swift; sourceTree = "<group>"; };
 		54A840D01DB85D0600B1F202 /* UnknownGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnknownGlucoseEvent.swift; sourceTree = "<group>"; };
 		54BC44721DB46A5200340EED /* GlucosePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucosePageTests.swift; sourceTree = "<group>"; };
 		54BC44741DB46B0A00340EED /* GlucosePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucosePage.swift; sourceTree = "<group>"; };
@@ -1003,6 +1005,7 @@
 				C1274F851D8242BE0002912B /* PumpRegion.swift */,
 				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
 				43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */,
+				541688DE1DB82E72005B1891 /* TimestampedGlucoseEvent.swift */,
 			);
 			path = MinimedKit;
 			sourceTree = "<group>";
@@ -2027,6 +2030,7 @@
 				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
+				541688DF1DB82E72005B1891 /* TimestampedGlucoseEvent.swift in Sources */,
 				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
 				54BC449A1DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift in Sources */,
 				C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,

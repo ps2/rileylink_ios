@@ -34,10 +34,15 @@ public class GlucosePage {
         
         func matchEvent(_ offset: Int) -> GlucoseEvent {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
-            if let eventType = GlucoseEventType(rawValue:(pageData[offset] as UInt8)) {
+            let opcode = pageData[offset] as UInt8
+            if let eventType = GlucoseEventType(rawValue: opcode) {
                 if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
                     return event
                 }
+            }
+            
+            if opcode >= 20 {
+                return GlucoseSensorDataGlucoseEvent(availableData: remainingData, pumpModel: pumpModel)!
             }
             
             return UnknownGlucoseEvent(availableData: remainingData, pumpModel: pumpModel)!

@@ -14,7 +14,7 @@ public struct CalBGForGHGlucoseEvent : GlucoseEvent {
     public let timestamp: DateComponents
     public let amount: Int
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 6
         
         guard length <= availableData.count else {

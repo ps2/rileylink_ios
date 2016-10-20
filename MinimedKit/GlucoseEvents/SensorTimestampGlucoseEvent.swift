@@ -13,7 +13,7 @@ public struct SensorTimestampGlucoseEvent : ReferenceTimestampedGlucoseEvent {
     public let rawData: Data
     public let timestamp: DateComponents
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 5
         
         guard length <= availableData.count else {

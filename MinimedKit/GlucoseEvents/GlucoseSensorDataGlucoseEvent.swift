@@ -14,7 +14,7 @@ public struct GlucoseSensorDataGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public let sgv: Int
     public var timestamp: DateComponents
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 1
         
         guard length <= availableData.count else {

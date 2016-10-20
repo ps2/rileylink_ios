@@ -22,17 +22,15 @@ class SensorCalGlucoseEventTests: XCTestCase {
     }
     
     func testDecodingMeterBgNow() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0300")!
-        let subject = SensorCalGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = SensorCalGlucoseEvent(availableData: rawData)!
         
         XCTAssertEqual(subject.waiting, "meter_bg_now")
     }
     
     func testDecodingWaiting() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0301")!
-        let subject = SensorCalGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = SensorCalGlucoseEvent(availableData: rawData)!
         
         XCTAssertEqual(subject.waiting, "waiting")
     }

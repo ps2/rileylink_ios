@@ -17,7 +17,7 @@ public class GlucosePage {
     
     public let events: [GlucoseEvent]
     
-    public init(pageData: Data, pumpModel: PumpModel) throws {
+    public init(pageData: Data) throws {
         
         guard checkCRC16(pageData) else {
             events = [GlucoseEvent]()
@@ -36,16 +36,16 @@ public class GlucosePage {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
             let opcode = pageData[offset] as UInt8
             if let eventType = GlucoseEventType(rawValue: opcode) {
-                if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
+                if let event = eventType.eventType.init(availableData: remainingData) {
                     return event
                 }
             }
             
             if opcode >= 20 {
-                return GlucoseSensorDataGlucoseEvent(availableData: remainingData, pumpModel: pumpModel)!
+                return GlucoseSensorDataGlucoseEvent(availableData: remainingData)!
             }
             
-            return UnknownGlucoseEvent(availableData: remainingData, pumpModel: pumpModel)!
+            return UnknownGlucoseEvent(availableData: remainingData)!
         }
         
         func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {

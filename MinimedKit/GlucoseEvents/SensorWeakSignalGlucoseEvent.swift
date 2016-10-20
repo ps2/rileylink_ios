@@ -13,7 +13,7 @@ public struct SensorWeakSignalGlucoseEvent : RelativeTimestampedGlucoseEvent {
     public let rawData: Data
     public var timestamp: DateComponents
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 1
         
         guard length <= availableData.count else {

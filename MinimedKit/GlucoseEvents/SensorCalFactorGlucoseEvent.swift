@@ -14,7 +14,7 @@ public struct SensorCalFactorGlucoseEvent : ReferenceTimestampedGlucoseEvent {
     public let timestamp: DateComponents
     public let factor: Float
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 7
         
         guard length <= availableData.count else {

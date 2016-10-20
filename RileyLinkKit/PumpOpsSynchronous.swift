@@ -582,7 +582,7 @@ class PumpOpsSynchronous {
                 idx = top
             }
             
-            let page = try GlucosePage(pageData: pageData, pumpModel: pumpModel)
+            let page = try GlucosePage(pageData: pageData)
             
             for event in page.events.reversed() {
                 var timestamp = event.timestamp

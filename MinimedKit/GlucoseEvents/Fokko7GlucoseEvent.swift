@@ -13,7 +13,7 @@ public struct Fokko7GlucoseEvent : GlucoseEvent {
     public let rawData: Data
     public var timestamp: DateComponents
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 2
         
         guard length <= availableData.count else {

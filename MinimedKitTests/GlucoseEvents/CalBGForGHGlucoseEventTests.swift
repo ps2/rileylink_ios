@@ -22,9 +22,8 @@ class CalBGForGHGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0e4f5b138fa0")!
-        let subject = CalBGForGHGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = CalBGForGHGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2015, month: 5, day: 19, hour: 15, minute: 27)

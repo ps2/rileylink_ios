@@ -22,9 +22,8 @@ class TenSomethingGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "100bb40a0e")!
-        let subject = TenSomethingGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = TenSomethingGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 52)

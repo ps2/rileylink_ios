@@ -22,9 +22,8 @@ class DateTimeChangeGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0c0ad23e0e")!
-        let subject = DateTimeChangeGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = DateTimeChangeGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 3, day: 30, hour: 10, minute: 18)

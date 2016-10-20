@@ -10,7 +10,7 @@ import Foundation
 
 public protocol GlucoseEvent : DictionaryRepresentable {
     
-    init?(availableData: Data, pumpModel: PumpModel)
+    init?(availableData: Data)
     
     var rawData: Data {
         get

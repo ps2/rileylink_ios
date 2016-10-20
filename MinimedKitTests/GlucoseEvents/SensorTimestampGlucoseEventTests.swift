@@ -22,9 +22,8 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "088d9b5d0c")!
-        let subject = SensorTimestampGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = SensorTimestampGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2012, month: 10, day: 29, hour: 13, minute: 27)

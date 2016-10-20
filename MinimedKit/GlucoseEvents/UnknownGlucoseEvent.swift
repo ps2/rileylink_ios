@@ -14,7 +14,7 @@ public struct UnknownGlucoseEvent : GlucoseEvent {
     public var timestamp: DateComponents
     public let op: String
     
-    public init?(availableData: Data, pumpModel: PumpModel) {
+    public init?(availableData: Data) {
         length = 1
         
         guard length <= availableData.count else {

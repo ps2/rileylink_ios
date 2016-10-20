@@ -27,9 +27,8 @@ class SensorSyncGlucoseEventTests: XCTestCase {
     }
     
     func testPerformanceExample() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0d4d44330f")!
-        let subject = SensorSyncGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = SensorSyncGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)

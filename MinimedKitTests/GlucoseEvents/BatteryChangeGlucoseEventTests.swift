@@ -21,9 +21,8 @@ class BatteryChangeGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "0a0bae0a0e")!
-        let subject = BatteryChangeGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = BatteryChangeGlucoseEvent(availableData: rawData)!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 46)

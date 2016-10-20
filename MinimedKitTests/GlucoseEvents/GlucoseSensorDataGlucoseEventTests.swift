@@ -22,9 +22,8 @@ class GlucoseSensorDataGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let pumpModel = PumpModel.Model551
         let rawData = Data(hexadecimalString: "35")!
-        let subject = GlucoseSensorDataGlucoseEvent(availableData: rawData, pumpModel: pumpModel)!
+        let subject = GlucoseSensorDataGlucoseEvent(availableData: rawData)!
         
         XCTAssertEqual(subject.sgv, 106)
     }

@@ -462,7 +462,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
                     self.device.ops?.getGlucoseHistoryEvents(since: oneDayAgo!) { (response) -> Void in
                         switch response {
-                        case .success(let (events, _)):
+                        case .success(let events):
                             var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
                             for event in events {
                                 responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)

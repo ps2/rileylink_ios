@@ -545,10 +545,8 @@ class PumpOpsSynchronous {
         return frameData as Data
     }
     
-    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> ([TimestampedGlucoseEvent], PumpModel) {
+    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> [TimestampedGlucoseEvent] {
         try wakeup()
-        
-        let pumpModel = try getPumpModel()
         
         var events = [TimestampedGlucoseEvent]()
         
@@ -599,7 +597,7 @@ class PumpOpsSynchronous {
                 }
             }
         }
-        return (events, pumpModel)
+        return events
     }
 
     private func readCurrentGlucosePage() throws -> ReadCurrentGlucosePageMessageBody {

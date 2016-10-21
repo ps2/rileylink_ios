@@ -154,14 +154,14 @@ public class PumpOps {
      - failure(error):  An error describing why the command failed
      
      */
-    public func getGlucoseHistoryEvents(since startDate: Date, completion: @escaping (Either<(events: [TimestampedGlucoseEvent], pumpModel: PumpModel), Error>) -> Void) {
+    public func getGlucoseHistoryEvents(since startDate: Date, completion: @escaping (Either<[TimestampedGlucoseEvent], Error>) -> Void) {
         device.runSession(withName: "Get glucose history events") { (session) -> Void in
             NSLog("Glucose history fetching task started.")
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
-                let (events, pumpModel) = try ops.getGlucoseHistoryEvents(since: startDate)
+                let events = try ops.getGlucoseHistoryEvents(since: startDate)
                 DispatchQueue.main.async { () -> Void in
-                    completion(.success(events: events, pumpModel: pumpModel))
+                    completion(.success(events))
                 }
             } catch let error {
                 DispatchQueue.main.async { () -> Void in

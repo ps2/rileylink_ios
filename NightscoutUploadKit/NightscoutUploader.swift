@@ -40,6 +40,7 @@ public class NightscoutUploader {
     private(set) var lastMeterMessageRxTime: Date?
     
     public private(set) var observingPumpEventsSince: Date!
+    public private(set) var observingGlucoseEventsSince: Date!
     
     private(set) var lastStoredTreatmentTimestamp: Date? {
         get {
@@ -107,6 +108,53 @@ public class NightscoutUploader {
         for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
             treatmentsQueue.append(treatment)
         }
+        self.flushAll()
+    }
+
+    /**
+     Enqueues pump history events for upload, with automatic retry management.
+     
+     - parameter events:    An array of timestamped glucose events. Only types with known Nightscout mappings will be uploaded.
+     - parameter source:    The device identifier to display in Nightscout
+     */
+    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) {
+        
+        // Find valid event times
+        let newestEventTime = events.last?.date
+        
+        // Find the oldest event that might still be updated.
+        var oldestUpdatingEventDate: Date?
+        
+        for event in events {
+            switch event.glucoseEvent {
+            case let glucose as GlucoseSensorDataGlucoseEvent:
+                let sgvDate = event.date
+                if newestEventTime == nil || sgvDate.compare(newestEventTime!) == .orderedDescending {
+                    // This event might still be updated.
+                    oldestUpdatingEventDate = event.date
+                    break
+                }
+                
+                let entry: [String: Any] = [
+                    "sgv": glucose.sgv,
+                    "device": source,
+                    "type": "sgv",
+                    "date": sgvDate.timeIntervalSince1970 * 1000,
+                    "dateString": TimeFormat.timestampStrFromDate(sgvDate)
+                ]
+                entries.append(entry)
+                
+            default:
+                continue
+            }
+        }
+        
+        if oldestUpdatingEventDate != nil {
+            observingGlucoseEventsSince = oldestUpdatingEventDate!
+        } else if newestEventTime != nil {
+            observingGlucoseEventsSince = newestEventTime!
+        }
+        
         self.flushAll()
     }
 

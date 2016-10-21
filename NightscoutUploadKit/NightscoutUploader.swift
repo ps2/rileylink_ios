@@ -17,9 +17,9 @@ public enum UploadError: Error {
     case unauthorized
 }
 
-private let defaultNightscoutEntriesPath = "/api/v1/entries.json"
-private let defaultNightscoutTreatmentPath = "/api/v1/treatments.json"
-private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus.json"
+private let defaultNightscoutEntriesPath = "/api/v1/entries"
+private let defaultNightscoutTreatmentPath = "/api/v1/treatments"
+private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus"
 private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
 
 public class NightscoutUploader {
@@ -51,6 +51,9 @@ public class NightscoutUploader {
     }
 
     public var errorHandler: ((_ error: Error, _ context: String) -> Void)?
+
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.rileylink.NightscoutUploadKit.dataAccessQueue", attributes: [])
+
 
     public func reset() {
         observingPumpEventsSince = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
@@ -130,40 +133,62 @@ public class NightscoutUploader {
         }
     }
 
-    /**
-     Attempts to upload nightscout treatment objects.
-
-     This method will not retry if the network task failed.
-
-     - parameter nightscoutTreatments: An array of nightscout treatments.
-     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
-     */
-    public func upload(_ nightscoutTreatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
-        postToNS(nightscoutTreatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+    /// Attempts to upload nightscout treatment objects.
+    /// This method will not retry if the network task failed.
+    ///
+    /// - parameter treatments:           An array of nightscout treatments.
+    /// - parameter completionHandler:    A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
+    public func upload(_ treatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
+        postToNS(treatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
     }
 
-    /**
-     Attempts to modify a nightscout treatment object.
+    /// Attempts to modify nightscout treatments. This method will not retry if the network task failed.
+    ///
+    /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.
+    /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
+    public func modifyTreatments(_ treatments:[NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
+        dataAccessQueue.async {
+            let modifyGroup = DispatchGroup()
+            var errors = [Error]()
 
-     This method will not retry if the network task failed.
+            for treatment in treatments {
+                modifyGroup.enter()
+                self.putToNS( treatment.dictionaryRepresentation, endpoint: defaultNightscoutTreatmentPath ) { (error) in
+                    if let error = error {
+                        errors.append(error)
+                    }
+                    modifyGroup.leave()
+                }
+            }
 
-     - parameter treatment: A nightscout treatment.  The id attribute should be set, identifying the treatment to update.
-     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
-     */
-    public func modifyTreatment(_ treatment:NightscoutTreatment, completionHandler: @escaping (Error?) -> Void) {
-        putToNS([treatment.dictionaryRepresentation], endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+            _ = modifyGroup.wait(timeout: DispatchTime.distantFuture)
+            completionHandler(errors.first)
+        }
+
     }
 
-    /**
-     Attempts to delete a nightscout treatment object.
+    /// Attempts to delete treatments from nightscout. This method will not retry if the network task failed.
+    ///
+    /// - parameter id:                An array of nightscout treatment ids
+    /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
+    public func deleteTreatmentsById(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+        dataAccessQueue.async {
+            let deleteGroup = DispatchGroup()
+            var errors = [Error]()
 
-     This method will not retry if the network task failed.
+            for id in ids {
+                deleteGroup.enter()
+                self.deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath) { (error) in
+                    if let error = error {
+                        errors.append(error)
+                    }
+                    deleteGroup.leave()
+                }
+            }
 
-     - parameter id: The _id of a nightscout treatment.
-     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
-     */
-    public func deleteTreatment(_ id:String, completionHandler: @escaping (Error?) -> Void) {
-        deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+            _ = deleteGroup.wait(timeout: DispatchTime.distantFuture)
+            completionHandler(errors.first)
+        }
     }
 
     public func uploadDeviceStatus(_ status: DeviceStatus) {
@@ -337,45 +362,74 @@ public class NightscoutUploader {
         request.setValue(apiSecret.sha1, forHTTPHeaderField: "api-secret")
 
         do {
-            let sendData: Data?
 
             if let json = json {
-                sendData = try JSONSerialization.data(withJSONObject: json, options: [])
+                let sendData = try JSONSerialization.data(withJSONObject: json, options: [])
+                let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Response is not HTTPURLResponse")))
+                        return
+                    }
+
+                    if httpResponse.statusCode != 200 {
+                        let error = UploadError.httpError(status: httpResponse.statusCode, body:String(data: data!, encoding: String.Encoding.utf8)!)
+                        completion(.failure(error))
+                        return
+                    }
+
+                    guard let data = data else {
+                        completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
+                        return
+                    }
+
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
+                        completion(.success(json))
+                    } catch {
+                        completion(.failure(error))
+                        return
+                    }
+                })
+                task.resume()
             } else {
-                sendData = nil
+                let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                    if let error = error {
+                        completion(.failure(error))
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Response is not HTTPURLResponse")))
+                        return
+                    }
+
+                    if httpResponse.statusCode != 200 {
+                        let error = UploadError.httpError(status: httpResponse.statusCode, body:String(data: data!, encoding: String.Encoding.utf8)!)
+                        completion(.failure(error))
+                        return
+                    }
+
+                    guard let data = data else {
+                        completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
+                        return
+                    }
+
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
+                        completion(.success(json))
+                    } catch {
+                        completion(.failure(error))
+                        return
+                    }
+                })
+                task.resume()
             }
 
-            let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(.failure(UploadError.invalidResponse(reason: "Response is not HTTPURLResponse")))
-                    return
-                }
-
-                if httpResponse.statusCode != 200 {
-                    let error = UploadError.httpError(status: httpResponse.statusCode, body:String(data: data!, encoding: String.Encoding.utf8)!)
-                    completion(.failure(error))
-                    return
-                }
-
-                guard let data = data else {
-                    completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
-                    return
-                }
-
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
-                    completion(.success(json))
-                } catch {
-                    completion(.failure(error))
-                    return
-                }
-            })
-            task.resume()
         } catch let error {
             completion(.failure(error))
         }

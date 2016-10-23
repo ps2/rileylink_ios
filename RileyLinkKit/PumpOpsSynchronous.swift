@@ -552,9 +552,10 @@ class PumpOpsSynchronous {
         
         let currentGlucosePage = try readCurrentGlucosePage()
         let startPage = Int(currentGlucosePage.pageNum)
-        let endPage = max(startPage - 1, 0)
+        //max lookback of 15 pages or when page is 0
+        let endPage = max(startPage - 15, 0)
         
-        pages: for pageNum in stride(from: startPage, to: endPage, by: -1) {
+        pages: for pageNum in stride(from: startPage, to: endPage - 1, by: -1) {
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
             

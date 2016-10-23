@@ -12,8 +12,11 @@
 public enum PumpModel: String {
     case Model508 = "508"
     case Model511 = "511"
+    case Model711 = "711"
     case Model512 = "512"
+    case Model712 = "712"
     case Model515 = "515"
+    case Model715 = "715"
     case Model522 = "522"
     case Model722 = "722"
     case Model523 = "523"

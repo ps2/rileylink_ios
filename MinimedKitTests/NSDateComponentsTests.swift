@@ -30,4 +30,13 @@ class NSDateComponentsTests: XCTestCase {
         XCTAssertEqual(2, comps.month)
     }
     
+    func testInitWithGlucoseData() {
+        let input = Data(hexadecimalString: "0bae0a0e")!
+        let comps = DateComponents(glucoseEventBytes: input)
+        XCTAssertEqual(2014, comps.year)
+        XCTAssertEqual(2, comps.month)
+        XCTAssertEqual(10, comps.day)
+        XCTAssertEqual(11, comps.hour)
+        XCTAssertEqual(46, comps.minute)
+    }
 }

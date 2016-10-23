@@ -71,7 +71,6 @@ extension Data {
      */
 }
 
-
 extension Data {
     init?(hexadecimalString: String) {
         guard let chars = hexadecimalString.cString(using: String.Encoding.utf8) else {

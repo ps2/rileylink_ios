@@ -47,4 +47,17 @@ extension DateComponents {
 
         calendar = Calendar(identifier: Calendar.Identifier.gregorian)
     }
+    
+    init(glucoseEventBytes: Data) {
+        self.init()
+        
+        year   = Int(glucoseEventBytes[3] & 0b01111111) + 2000
+        month = Int((glucoseEventBytes[0] & 0b11000000) >> 4 +
+                    (glucoseEventBytes[1] & 0b11000000) >> 6)
+        day    = Int(glucoseEventBytes[2] & 0b00011111)
+        hour   = Int(glucoseEventBytes[0] & 0b00011111)
+        minute = Int(glucoseEventBytes[1] & 0b00111111)
+        
+        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+    }
 }

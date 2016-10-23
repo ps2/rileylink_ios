@@ -67,17 +67,27 @@ class GlucosePageTests: XCTestCase {
     
     func testRelativeTimestamping() {
         do {
-            let pageData = Data(hexadecimalString: "1028B61408131313131341BB".leftPadding(toLength: 2048, withPad: "0"))!
+            let calendar = Calendar.current
+            // a sensor timestamp, then "19-Something" and glucose relative timestamp records
+            let pageData = Data(hexadecimalString: "1028B6140813306BFB".leftPadding(toLength: 2048, withPad: "0"))!
             let page = try GlucosePage(pageData: pageData)
             let events = page.events
             
-            // a sensor timestamp followed by 5 "19-Something" relative timestamp records
-            XCTAssertEqual(events.count, 6)
+            XCTAssertEqual(events.count, 3)
+            //the initial timestamp comes from the sensor timestamp reference record
+            let expectedTimestamp = DateComponents(calendar: calendar,
+                                                   year: 2016, month: 2, day: 8,
+                                                   hour: 20, minute: 54)
+            XCTAssertEqual(events[0].timestamp, expectedTimestamp)
             
-            // expected final timestamp is reference sensor timestamp of 2016-02-08 20:54:00 + 5 * (5 minutes)
-            let expectedTimestamp = DateComponents(calendar: Calendar.current,
-                                                   year: 2016, month: 2, day: 8, hour: 21, minute: 19)
-            XCTAssertEqual((events.last as? NineteenSomethingGlucoseEvent)?.timestamp, expectedTimestamp)
+            //The 19-Something needs a timestamp, but doesn't increment the relative counter
+            XCTAssertEqual(events[1].timestamp, expectedTimestamp)
+            
+            //The GlucoseSensorData event needs a timestamp and does increment the relative counter by 5 minutes
+            let expectedGlucoseTimestamp = DateComponents(calendar: calendar,
+                                                         year: 2016, month: 2, day: 8,
+                                                         hour: 20, minute: 59)
+            XCTAssertEqual(events[2].timestamp, expectedGlucoseTimestamp)
             
         } catch GlucosePage.GlucosePageError.invalidCRC {
             XCTFail("page decoding threw invalid crc")

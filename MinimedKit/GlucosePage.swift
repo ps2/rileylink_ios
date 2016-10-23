@@ -53,7 +53,9 @@ public class GlucosePage {
             let calendar = Calendar.current
             var date : Date = calendar.date(from: startTimestamp)!
             for var event in eventsNeedingTimestamp {
-                date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!
+                if !(event is NineteenSomethingGlucoseEvent) {
+                    date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!
+                }
                 event.timestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
                 event.timestamp.calendar = calendar
                 eventsWithTimestamps.append(event)

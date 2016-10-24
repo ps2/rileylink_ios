@@ -165,6 +165,7 @@
 		C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA25C198B436900309FA4 /* InfoPlist.strings */; };
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
+		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -596,6 +597,7 @@
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
 		C139AC231BFD84B500B0518F /* RuntimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeUtils.m; sourceTree = "<group>"; };
@@ -1264,6 +1266,7 @@
 				C1842BE81C8FA45100DB42AC /* ChangeOtherDeviceIDPumpEvent.swift */,
 				C1842BE71C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift */,
 				C1842BE61C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift */,
+				C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */,
 				C1842BE51C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift */,
 				C1842BE41C8FA45100DB42AC /* ChangeSensorSetup2PumpEvent.swift */,
 				C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */,
@@ -1997,6 +2000,7 @@
 				C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */,
 				C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */,
 				54BC449C1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift in Sources */,
+				C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */,
 				C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */,
 				C1842BC91C8F968B00DB42AC /* BGReceivedPumpEvent.swift in Sources */,
 				C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */,

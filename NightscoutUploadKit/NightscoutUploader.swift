@@ -113,10 +113,10 @@ public class NightscoutUploader {
     /**
      Enqueues pump glucose events for upload, with automatic retry management.
      
-     - parameter events:    An array of timestamped glucose events. Only types with known Nightscout mappings will be uploaded.
+     - parameter events:    An array of timestamped glucose events. Only sensor glucose data will be uploaded.
      - parameter source:    The device identifier to display in Nightscout
      */
-    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) {
+    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) -> Date? {
         for event in events {
             if let entry = NightscoutEntry(event: event, device: source) {
                 entries.append(entry)
@@ -124,6 +124,11 @@ public class NightscoutUploader {
         }
         
         self.flushAll()
+        
+        if let lastEntry = entries.last {
+            return lastEntry.timestamp
+        }
+        return nil
     }
 
     /**

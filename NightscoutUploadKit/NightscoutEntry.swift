@@ -16,7 +16,7 @@ public class NightscoutEntry : DictionaryRepresentable {
         case Sensor
     }
     
-    let timestamp: Date
+    public let timestamp: Date
     let glucose: Int
     let previousSGV: Int?
     let previousSGVNotActive: Bool?

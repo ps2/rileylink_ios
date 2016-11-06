@@ -461,6 +461,5 @@ class DeviceDataManager {
 
 extension Notification.Name {
     static let PumpEventsUpdated = Notification.Name(rawValue: "com.rileylink.notification.PumpEventsUpdated")
-    static let GlucoseEventsUpdated = Notification.Name(rawValue: "com.rileylink.notification.GlucoseEventsUpdated")
 }
 

@@ -365,7 +365,7 @@ class PumpOpsSynchronous {
         
         switch region {
         case .worldWide:
-            scanFrequencies = [868.25, 868.30, 868.35, 868.40, 868.45, 868.50, 868.55, 868.60, 868.65]
+            scanFrequencies = [868.35, 868.30, 868.25, 868.40]
         case .northAmerica:
             scanFrequencies = [916.45, 916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
         }

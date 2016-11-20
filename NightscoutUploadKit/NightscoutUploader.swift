@@ -123,12 +123,15 @@ public class NightscoutUploader {
             }
         }
         
-        self.flushAll()
+        var timestamp : Date? = nil
         
         if let lastEntry = entries.last {
-            return lastEntry.timestamp
+            timestamp = lastEntry.timestamp
         }
-        return nil
+        
+        self.flushAll()
+        
+        return timestamp
     }
 
     /**

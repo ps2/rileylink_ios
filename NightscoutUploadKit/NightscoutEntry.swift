@@ -39,8 +39,9 @@ public class NightscoutEntry : DictionaryRepresentable {
     convenience init?(event: TimestampedGlucoseEvent, device: String) {
         if let glucoseSensorData = event.glucoseEvent as? GlucoseSensorDataGlucoseEvent {
             self.init(glucose: glucoseSensorData.sgv, timestamp: event.date, device: device, glucoseType: .Sensor)
+        } else {
+            return nil
         }
-        return nil
     }
     
     public var dictionaryRepresentation: [String: Any] {

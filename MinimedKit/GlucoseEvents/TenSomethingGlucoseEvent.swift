@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TenSomethingGlucoseEvent : ReferenceTimestampedGlucoseEvent {
+public struct TenSomethingGlucoseEvent: ReferenceTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents

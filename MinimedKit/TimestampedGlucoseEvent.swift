@@ -24,7 +24,7 @@ public struct TimestampedGlucoseEvent {
 
 
 extension TimestampedGlucoseEvent: DictionaryRepresentable {
-    public var dictionaryRepresentation: [String : Any] {
+    public var dictionaryRepresentation: [String: Any] {
         var dict = glucoseEvent.dictionaryRepresentation
         
         dict["timestamp"] = DateFormatter.ISO8601DateFormatter().string(from: date)

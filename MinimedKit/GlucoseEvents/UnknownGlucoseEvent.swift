@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct UnknownGlucoseEvent : GlucoseEvent {
+public struct UnknownGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public var timestamp: DateComponents

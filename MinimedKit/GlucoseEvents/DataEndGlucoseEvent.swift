@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct DataEndGlucoseEvent : RelativeTimestampedGlucoseEvent {
+public struct DataEndGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public var timestamp: DateComponents

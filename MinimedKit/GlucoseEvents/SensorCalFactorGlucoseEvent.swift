@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SensorCalFactorGlucoseEvent : ReferenceTimestampedGlucoseEvent {
+public struct SensorCalFactorGlucoseEvent: ReferenceTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents

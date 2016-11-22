@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SensorSyncGlucoseEvent : GlucoseEvent {
+public struct SensorSyncGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents

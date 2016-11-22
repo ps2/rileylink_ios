@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol GlucoseEvent : DictionaryRepresentable {
+public protocol GlucoseEvent: DictionaryRepresentable {
     
     init?(availableData: Data)
     

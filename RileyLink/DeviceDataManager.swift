@@ -377,7 +377,7 @@ class DeviceDataManager {
             switch response {
             case .success(let events):
                 NSLog("fetchGlucoseHistory succeeded.")
-                if let latestEntryDate : Date = self.handleNewGlucoseHistoryEvents(events, device: device) {
+                if let latestEntryDate: Date = self.handleNewGlucoseHistoryEvents(events, device: device) {
                     self.lastGlucoseEntry = latestEntryDate
                 }
                 

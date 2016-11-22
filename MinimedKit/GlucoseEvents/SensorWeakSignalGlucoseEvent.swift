@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SensorWeakSignalGlucoseEvent : RelativeTimestampedGlucoseEvent {
+public struct SensorWeakSignalGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public var timestamp: DateComponents

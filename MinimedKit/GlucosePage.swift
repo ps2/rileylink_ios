@@ -51,7 +51,7 @@ public class GlucosePage {
         func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {
             var eventsWithTimestamps = [GlucoseEvent]()
             let calendar = Calendar.current
-            var date : Date = calendar.date(from: startTimestamp)!
+            var date: Date = calendar.date(from: startTimestamp)!
             for var event in eventsNeedingTimestamp {
                 if !(event is NineteenSomethingGlucoseEvent) {
                     date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!

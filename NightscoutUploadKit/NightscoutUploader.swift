@@ -123,7 +123,7 @@ public class NightscoutUploader {
             }
         }
         
-        var timestamp : Date? = nil
+        var timestamp: Date? = nil
         
         if let lastEntry = entries.last {
             timestamp = lastEntry.timestamp
@@ -255,8 +255,8 @@ public class NightscoutUploader {
                 return
             }
             
-            let previousSGV : Int?
-            let previousSGVNotActive : Bool?
+            let previousSGV: Int?
+            let previousSGVNotActive: Bool?
             
             switch status.previousGlucose {
             case .active(glucose: let previousGlucose):
@@ -266,7 +266,7 @@ public class NightscoutUploader {
                 previousSGV = nil
                 previousSGVNotActive = true
             }
-            let direction : String = {
+            let direction: String = {
                 switch status.glucoseTrend {
                 case .up:
                     return "SingleUp"

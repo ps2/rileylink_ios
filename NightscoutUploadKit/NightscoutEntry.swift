@@ -9,7 +9,7 @@
 import Foundation
 import MinimedKit
 
-public class NightscoutEntry : DictionaryRepresentable {
+public class NightscoutEntry: DictionaryRepresentable {
     
     public enum GlucoseType: String {
         case Meter
@@ -20,9 +20,9 @@ public class NightscoutEntry : DictionaryRepresentable {
     let glucose: Int
     let previousSGV: Int?
     let previousSGVNotActive: Bool?
-    let direction : String?
+    let direction: String?
     let device: String
-    let glucoseType : GlucoseType
+    let glucoseType: GlucoseType
     
     init(glucose: Int, timestamp: Date, device: String, glucoseType: GlucoseType,
          previousSGV: Int? = nil, previousSGVNotActive: Bool? = nil, direction: String? = nil) {
@@ -45,7 +45,7 @@ public class NightscoutEntry : DictionaryRepresentable {
     }
     
     public var dictionaryRepresentation: [String: Any] {
-        var representation : [String : Any] = [
+        var representation: [String: Any] = [
             "device": device,
             "date": timestamp.timeIntervalSince1970 * 1000,
             "dateString": TimeFormat.timestampStrFromDate(timestamp)

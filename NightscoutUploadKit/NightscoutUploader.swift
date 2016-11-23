@@ -33,14 +33,14 @@ public class NightscoutUploader {
     public var siteURL: URL
     public var apiSecret: String
     
-    private(set) var entries = [[String: Any]]()
+    private(set) var entries = [NightscoutEntry]()
     private(set) var deviceStatuses = [[String: Any]]()
     private(set) var treatmentsQueue = [NightscoutTreatment]()
     
     private(set) var lastMeterMessageRxTime: Date?
     
     public private(set) var observingPumpEventsSince: Date!
-    
+
     private(set) var lastStoredTreatmentTimestamp: Date? {
         get {
             return UserDefaults.standard.lastStoredTreatmentTimestamp
@@ -108,6 +108,30 @@ public class NightscoutUploader {
             treatmentsQueue.append(treatment)
         }
         self.flushAll()
+    }
+
+    /**
+     Enqueues pump glucose events for upload, with automatic retry management.
+     
+     - parameter events:    An array of timestamped glucose events. Only sensor glucose data will be uploaded.
+     - parameter source:    The device identifier to display in Nightscout
+     */
+    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) -> Date? {
+        for event in events {
+            if let entry = NightscoutEntry(event: event, device: source) {
+                entries.append(entry)
+            }
+        }
+        
+        var timestamp: Date? = nil
+        
+        if let lastEntry = entries.last {
+            timestamp = lastEntry.timestamp
+        }
+        
+        self.flushAll()
+        
+        return timestamp
     }
 
     /**
@@ -226,23 +250,23 @@ public class NightscoutUploader {
 
         // Create SGV entry from this mysentry packet
         if (recordSGV) {
-            var entry: [String: Any] = [
-                "sgv": glucose,
-                "device": device,
-                "type": "sgv"
-            ]
-            if let sensorDateComponents = status.glucoseDateComponents,
-                let sensorDate = sensorDateComponents.date {
-                entry["date"] = sensorDate.timeIntervalSince1970 * 1000
-                entry["dateString"] = TimeFormat.timestampStrFromDate(sensorDate)
+            
+            guard let sensorDateComponents = status.glucoseDateComponents, let sensorDate = sensorDateComponents.date else {
+                return
             }
+            
+            let previousSGV: Int?
+            let previousSGVNotActive: Bool?
+            
             switch status.previousGlucose {
             case .active(glucose: let previousGlucose):
-                entry["previousSGV"] = previousGlucose
+                previousSGV = previousGlucose
+                previousSGVNotActive = nil
             default:
-                entry["previousSGVNotActive"] = true
+                previousSGV = nil
+                previousSGVNotActive = true
             }
-            entry["direction"] = {
+            let direction: String = {
                 switch status.glucoseTrend {
                 case .up:
                     return "SingleUp"
@@ -256,6 +280,8 @@ public class NightscoutUploader {
                     return "Flat"
                 }
                 }()
+            
+            let entry = NightscoutEntry(glucose: glucose, timestamp: sensorDate, device: device, glucoseType: .Sensor, previousSGV: previousSGV, previousSGVNotActive: previousSGVNotActive, direction: direction)
             entries.append(entry)
         }
         flushAll()
@@ -271,19 +297,12 @@ public class NightscoutUploader {
         }
         
         let date = Date()
-        let epochTime = date.timeIntervalSince1970 * 1000
-        let entry: [String: Any] = [
-            "date": epochTime,
-            "dateString": TimeFormat.timestampStrFromDate(date),
-            "mbg": msg.glucose,
-            "device": "Contour Next Link",
-            "type": "mbg"
-        ]
         
         // Skip duplicates
         if lastMeterMessageRxTime == nil || lastMeterMessageRxTime!.timeIntervalSinceNow.minutes < -3 {
+            let entry = NightscoutEntry(glucose: msg.glucose, timestamp: date, device: "Contour Next Link", glucoseType: .Meter)
             entries.append(entry)
-            lastMeterMessageRxTime = Date()
+            lastMeterMessageRxTime = date
         }
     }
     
@@ -453,7 +472,7 @@ public class NightscoutUploader {
     func flushEntries() {
         let inFlight = entries
         entries = []
-        postToNS(inFlight as [Any], endpoint: defaultNightscoutEntriesPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutEntriesPath) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout entries")

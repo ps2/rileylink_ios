@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Fokko7GlucoseEvent : GlucoseEvent {
+public struct Fokko7GlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public var timestamp: DateComponents

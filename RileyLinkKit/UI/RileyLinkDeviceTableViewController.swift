@@ -156,7 +156,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case pressDownButton
         case readPumpStatus
 
-        static let count = 7
+        static let count = 8
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {

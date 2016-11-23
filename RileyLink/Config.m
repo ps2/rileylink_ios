@@ -112,6 +112,14 @@
     [[NSUserDefaults standardUserDefaults] setBool:uploadEnabled forKey:@"uploadEnabled"];
 }
 
+- (BOOL) fetchCGMEnabled {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"fetchCGMEnabled"];
+}
+
+- (void) setFetchCGMEnabled:(BOOL)fetchCGMEnabled {
+    [[NSUserDefaults standardUserDefaults] setBool:fetchCGMEnabled forKey:@"fetchCGMEnabled"];
+}
+
 - (NSInteger) pumpRegion {
     return [[NSUserDefaults standardUserDefaults] integerForKey:@"pumpRegion"];
 }

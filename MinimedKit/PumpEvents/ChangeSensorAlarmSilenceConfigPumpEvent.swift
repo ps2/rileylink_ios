@@ -1,33 +1,33 @@
 //
-//  SensorSyncGlucoseEvent.swift
+//  ChangeSensorAlarmSilenceConfigPumpEvent.swift
 //  RileyLink
 //
-//  Created by Timothy Mecklem on 10/16/16.
+//  Created by Pete Schwamb on 10/23/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct SensorSyncGlucoseEvent: GlucoseEvent {
+public struct ChangeSensorAlarmSilenceConfigPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
-        length = 5
+    public init?(availableData: Data, pumpModel: PumpModel) {
+        length = 8
         
         guard length <= availableData.count else {
             return nil
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5))
+        
+        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "name": "SensorSync",
+            "_type": "ChangeSensorAlarmSilenceConfig",
         ]
     }
 }
-

@@ -9,7 +9,7 @@
 import Foundation
 
 /// An event that supplies timestamp information that can be used to calculate a RelativeTimestampedGlucoseEvent
-public protocol ReferenceTimestampedGlucoseEvent : GlucoseEvent {
+public protocol ReferenceTimestampedGlucoseEvent: GlucoseEvent {
     
 }
 

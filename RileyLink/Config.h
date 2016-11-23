@@ -22,5 +22,6 @@
 @property (nonatomic, nullable, strong) NSSet *autoConnectIds;
 @property (nonatomic, assign) NSInteger pumpRegion;
 @property (nonatomic, assign) BOOL uploadEnabled;
+@property (nonatomic, assign) BOOL fetchCGMEnabled;
 
 @end

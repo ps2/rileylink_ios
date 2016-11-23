@@ -40,7 +40,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         case pumpID = 0
         case pumpRegion
         case nightscout
-        static let count = 3
+        case fetchCGM
+        static let count = 4
     }
     
     fileprivate var dataManager: DeviceDataManager {
@@ -90,22 +91,33 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 return switchCell
             }
         case .configuration:
-            let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .pumpID:
+                let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
                 configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
                 configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
+                cell = configCell
             case .pumpRegion:
+                let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
                 configCell.textLabel?.text = NSLocalizedString("Pump Region", comment: "The title text for the pump Region config value")
                 configCell.detailTextLabel?.text = String(describing: DeviceDataManager.sharedManager.pumpRegion)
+                cell = configCell
             case .nightscout:
+                let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
                 let nightscoutService = dataManager.remoteDataManager.nightscoutService
                 
                 configCell.textLabel?.text = nightscoutService.title
                 configCell.detailTextLabel?.text = nightscoutService.siteURL?.absoluteString ?? TapToSetString
+                cell = configCell
+            case .fetchCGM:
+                let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
+            
+                switchCell.`switch`?.isOn = Config.sharedInstance().fetchCGMEnabled
+                switchCell.titleLabel.text = NSLocalizedString("Fetch CGM", comment: "The title text for the pull cgm Data cell")
+                switchCell.`switch`?.addTarget(self, action: #selector(fetchCGMEnabledChanged(_:)), for: .valueChanged)
+                cell = switchCell
             }
-            cell = configCell
         }
         return cell
     }
@@ -147,6 +159,8 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 }
                 
                 show(vc, sender: indexPath)
+            default:
+                break
             }
         case .upload, .about:
             break
@@ -186,10 +200,16 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         }
     }
 
-    // MARK: - Uploader mangement
+    // MARK: - Uploader management
 
     func uploadEnabledChanged(_ sender: UISwitch) {
         Config.sharedInstance().uploadEnabled = sender.isOn
+    }
+
+    // MARK: - CGM Page Fetching Management
+
+    func fetchCGMEnabledChanged(_ sender: UISwitch) {
+        Config.sharedInstance().fetchCGMEnabled = sender.isOn
     }
 
     // MARK: - TextFieldTableViewControllerDelegate

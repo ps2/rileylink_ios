@@ -8,7 +8,7 @@
 
 import MinimedKit
 
-public class NightscoutTreatment : DictionaryRepresentable {
+public class NightscoutTreatment: DictionaryRepresentable {
     
     public enum GlucoseType: String {
         case Meter

@@ -120,6 +120,8 @@ class DeviceDataManager {
     
     var lastHistoryAttempt: Date? = nil
     
+    var lastGlucoseEntry: Date = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
+    
     var lastRileyLinkHeardFrom: RileyLinkDevice? = nil
     
     
@@ -339,7 +341,7 @@ class DeviceDataManager {
         
         let oneDayAgo = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
         let observingPumpEventsSince = remoteDataManager.nightscoutUploader?.observingPumpEventsSince ?? oneDayAgo
-
+        
         
         ops.getHistoryEvents(since: observingPumpEventsSince) { (response) -> Void in
             switch response {
@@ -347,9 +349,12 @@ class DeviceDataManager {
                 NSLog("fetchHistory succeeded.")
                 self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
                 NotificationCenter.default.post(name: .PumpEventsUpdated, object: self)
-                
             case .failure(let error):
                 NSLog("History fetch failed: %@", String(describing: error))
+            }
+            
+            if Config.sharedInstance().fetchCGMEnabled, self.lastGlucoseEntry.timeIntervalSinceNow < TimeInterval(minutes: -5) {
+                self.getPumpGlucoseHistory(device)
             }
         }
     }
@@ -359,6 +364,34 @@ class DeviceDataManager {
         if Config.sharedInstance().uploadEnabled {
             remoteDataManager.nightscoutUploader?.processPumpEvents(events, source: device.deviceURI, pumpModel: pumpModel)
         }
+    }
+    
+    private func getPumpGlucoseHistory(_ device: RileyLinkDevice) {
+        
+        guard let ops = device.ops else {
+            print("Missing pumpOps; is your pumpId configured?")
+            return
+        }
+        
+        ops.getGlucoseHistoryEvents(since: lastGlucoseEntry) { (response) -> Void in
+            switch response {
+            case .success(let events):
+                NSLog("fetchGlucoseHistory succeeded.")
+                if let latestEntryDate: Date = self.handleNewGlucoseHistoryEvents(events, device: device) {
+                    self.lastGlucoseEntry = latestEntryDate
+                }
+                
+            case .failure(let error):
+                NSLog("Glucose History fetch failed: %@", String(describing: error))
+            }
+        }
+    }
+    
+    private func handleNewGlucoseHistoryEvents(_ events: [TimestampedGlucoseEvent], device: RileyLinkDevice) -> Date? {
+        if Config.sharedInstance().uploadEnabled {
+            return remoteDataManager.nightscoutUploader?.processGlucoseEvents(events, source: device.deviceURI)
+        }
+        return nil
     }
     
     // MARK: - Initialization

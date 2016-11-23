@@ -51,7 +51,7 @@ public enum PumpEventType: UInt8 {
     case changeSensorSetup2 = 0x50
     case restoreMystery51 = 0x51
     case restoreMystery52 = 0x52
-    case restoreMystery53 = 0x53
+    case changeSensorAlarmSilenceConfig = 0x53
     case restoreMystery54 = 0x54
     case restoreMystery55 = 0x55
     case changeSensorRateOfChangeAlertSetup = 0x56
@@ -208,6 +208,8 @@ public enum PumpEventType: UInt8 {
             return ChangeCaptureEventEnablePumpEvent.self
         case .selectBasalProfile:
             return SelectBasalProfilePumpEvent.self
+        case .changeSensorAlarmSilenceConfig:
+            return ChangeSensorAlarmSilenceConfigPumpEvent.self
         case .restoreMystery54:
             return RestoreMystery54PumpEvent.self
         case .restoreMystery55:

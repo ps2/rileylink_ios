@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CalBGForGHGlucoseEvent : GlucoseEvent {
+public struct CalBGForGHGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents

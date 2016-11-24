@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum BatteryChemistryType: Int, CustomStringConvertible {
+public enum BatteryChemistryType: Int, CustomStringConvertible {
     case alkaline = 0
     case lithium
 
-    var description: String {
+    public var description: String {
         switch self {
         case .alkaline:
             return NSLocalizedString("Alkaline", comment: "Describing the battery chemistry as Alkaline")
@@ -21,7 +21,7 @@ enum BatteryChemistryType: Int, CustomStringConvertible {
         }
     }
 
-    var maxVoltage: Double {
+    public var maxVoltage: Double {
         switch self {
         case .alkaline:
             return 1.58
@@ -30,7 +30,7 @@ enum BatteryChemistryType: Int, CustomStringConvertible {
         }
     }
 
-    var minVoltage: Double {
+    public var minVoltage: Double {
         switch self {
         case .alkaline:
             return 1.26
@@ -39,7 +39,7 @@ enum BatteryChemistryType: Int, CustomStringConvertible {
         }
     }
 
-    func chargeRemaining(voltage: Double) -> Double {
+    public func chargeRemaining(voltage: Double) -> Double {
         let computed = (voltage - self.minVoltage)/(self.maxVoltage - self.minVoltage)
         return max(min(computed, 1), 0)
     }

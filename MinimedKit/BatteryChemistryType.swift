@@ -24,7 +24,7 @@ public enum BatteryChemistryType: Int, CustomStringConvertible {
     public var maxVoltage: Double {
         switch self {
         case .alkaline:
-            return 1.58
+            return 1.47
         case .lithium:
             return 1.58
         }
@@ -33,7 +33,7 @@ public enum BatteryChemistryType: Int, CustomStringConvertible {
     public var minVoltage: Double {
         switch self {
         case .alkaline:
-            return 1.26
+            return 1.20
         case .lithium:
             return 1.32
         }

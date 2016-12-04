@@ -1,14 +1,15 @@
 //
-//  ChangeTimePumpEvent.swift
+//  NewTimePumpEvent.swift
 //  RileyLink
 //
-//  Created by Pete Schwamb on 3/8/16.
+//  Created by Darrell Wright on 2016-12-04.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct ChangeTimePumpEvent: TimestampedPumpEvent {
+
+public struct NewTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
@@ -26,9 +27,8 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
 
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "_type": "ChangeTime",
+            "_type": "NewTime",
         ]
     }
     
 }
-

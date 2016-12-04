@@ -110,6 +110,8 @@ public enum PumpEventType: UInt8 {
             return TempBasalDurationPumpEvent.self
         case .changeTime:
             return ChangeTimePumpEvent.self
+        case .newTime:
+            return NewTimePumpEvent.self
         case .journalEntryPumpLowBattery:
             return JournalEntryPumpLowBatteryPumpEvent.self
         case .battery:

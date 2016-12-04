@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B19B9881DF3EF68006AB65F /* NewTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */; };
 		430D64CE1CB855AB00FCA750 /* RileyLinkBLEKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64CD1CB855AB00FCA750 /* RileyLinkBLEKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D64D51CB855AB00FCA750 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		430D64DC1CB855AB00FCA750 /* RileyLinkBLEKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64DB1CB855AB00FCA750 /* RileyLinkBLEKitTests.m */; };
@@ -442,6 +443,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTimePumpEvent.swift; sourceTree = "<group>"; };
 		430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkBLEKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		430D64CD1CB855AB00FCA750 /* RileyLinkBLEKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEKit.h; sourceTree = "<group>"; };
 		430D64CF1CB855AB00FCA750 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1309,6 +1311,7 @@
 				C1842BE31C8FA45100DB42AC /* TempBasalPumpEvent.swift */,
 				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
 				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
+				2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -1973,6 +1976,7 @@
 				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
 				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
 				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,
+				2B19B9881DF3EF68006AB65F /* NewTimePumpEvent.swift in Sources */,
 				54BC44901DB47C7400340EED /* SensorTimestampGlucoseEvent.swift in Sources */,
 				C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */,
 				C1EAD6B61C826B6D006DBA60 /* PacketType.swift in Sources */,

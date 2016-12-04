@@ -552,6 +552,7 @@ class PumpOpsSynchronous {
         try wakeup()
         
         var events = [TimestampedGlucoseEvent]()
+        var unprocessedEvents = [GlucoseEvent]()
         
         let currentGlucosePage = try readCurrentGlucosePage()
         let startPage = Int(currentGlucosePage.pageNum)
@@ -583,7 +584,12 @@ class PumpOpsSynchronous {
             
             let page = try GlucosePage(pageData: pageData)
             
-            for event in page.events.reversed() {
+            let timestamperResult = GlucoseEventTimestamper.addTimestampsToEvents(events: page.events + unprocessedEvents)
+            
+            //keep any leftover events missing a timestamp for next page iteration
+            unprocessedEvents = timestamperResult.unprocessedEvents
+            
+            for event in timestamperResult.processedEvents.reversed() {
                 var timestamp = event.timestamp
                 timestamp.timeZone = pump.timeZone
                 

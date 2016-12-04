@@ -24,13 +24,13 @@ public class GlucosePage {
             throw GlucosePageError.invalidCRC
         }
         
-        //glucose page parsing happens in reverse byte order
+        //glucose page parsing happens in reverse byte order because
+        //opcodes are at the end of each event
         let pageData = Data(pageData.subdata(in: 0..<1022).reversed())
         
         var offset = 0
         let length = pageData.count
         var tempEvents = [GlucoseEvent]()
-        var eventsNeedingTimestamp = [RelativeTimestampedGlucoseEvent]()
         
         func matchEvent(_ offset: Int) -> GlucoseEvent {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
@@ -48,43 +48,18 @@ public class GlucosePage {
             return UnknownGlucoseEvent(availableData: remainingData)!
         }
         
-        func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {
-            var eventsWithTimestamps = [GlucoseEvent]()
-            let calendar = Calendar.current
-            var date: Date = calendar.date(from: startTimestamp)!
-            for var event in eventsNeedingTimestamp {
-                if !(event is NineteenSomethingGlucoseEvent) {
-                    date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!
-                }
-                event.timestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-                event.timestamp.calendar = calendar
-                eventsWithTimestamps.append(event)
-            }
-            return eventsWithTimestamps
-        }
-        
         while offset < length {
-            // Slurp up 0's
+            // ignore null bytes
             if pageData[offset] as UInt8 == 0 {
                 offset += 1
                 continue
             }
             
             let event = matchEvent(offset)
-            
-            if let event = event as? RelativeTimestampedGlucoseEvent {
-                eventsNeedingTimestamp.insert(event, at: 0)
-            } else if let event = event as? ReferenceTimestampedGlucoseEvent {
-                let eventsWithTimestamp = addTimestampsToEvents(startTimestamp: event.timestamp, eventsNeedingTimestamp: eventsNeedingTimestamp).reversed()
-                tempEvents.append(contentsOf: eventsWithTimestamp)
-                eventsNeedingTimestamp.removeAll()
-                tempEvents.append(event)
-            } else {
-                tempEvents.append(event)
-            }
+            tempEvents.insert(event, at: 0)
             
             offset += event.length
         }
-        events = tempEvents.reversed()
+        events = tempEvents
     }
 }

@@ -230,7 +230,6 @@
 		C1842C031C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */; };
 		C1842C041C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */; };
 		C1842C051C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */; };
-		C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */; };
 		C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */; };
 		C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */; };
 		C1842C091C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */; };
@@ -258,7 +257,6 @@
 		C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */; };
 		C1842C201C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */; };
 		C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */; };
-		C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */; };
 		C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */; };
 		C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */; };
 		C1842C251C8FA45100DB42AC /* AlarmSensorPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */; };
@@ -668,7 +666,6 @@
 		C1842BD91C8FA45100DB42AC /* EnableDisableRemotePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EnableDisableRemotePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DeleteOtherDeviceIDPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DeleteBolusReminderTimePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DeleteAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDD1C8FA45100DB42AC /* ClearAlarmPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ClearAlarmPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDE1C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeWatchdogMarriageProfilePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BDF1C8FA45100DB42AC /* ChangeWatchdogEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeWatchdogEnablePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -696,7 +693,6 @@
 		C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeBasalProfilePatternPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeAudioBolusPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeAlarmNotifyModePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeAlarmClockTimePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeAlarmClockEnablePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BatteryPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1253,7 +1249,6 @@
 				C1842BEE1C8FA45100DB42AC /* BolusWizardSetupPumpEvent.swift */,
 				C1842BC61C8F8DC200DB42AC /* CalBGForPHPumpEvent.swift */,
 				C1842BF91C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift */,
-				C1842BF81C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift */,
 				C1842BF71C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift */,
 				C1842BF61C8FA45100DB42AC /* ChangeAudioBolusPumpEvent.swift */,
 				C1842BF51C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift */,
@@ -1286,7 +1281,6 @@
 				C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */,
 				C1842BD51C8FA45100DB42AC /* DailyTotal522PumpEvent.swift */,
 				C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */,
-				C1842BDC1C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift */,
 				C1842BDB1C8FA45100DB42AC /* DeleteBolusReminderTimePumpEvent.swift */,
 				C1842BDA1C8FA45100DB42AC /* DeleteOtherDeviceIDPumpEvent.swift */,
 				C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */,
@@ -2006,7 +2000,6 @@
 				C1842C1D1C8FA45100DB42AC /* ChangeBGReminderEnablePumpEvent.swift in Sources */,
 				54BC448E1DB47C1E00340EED /* Fokko7GlucoseEvent.swift in Sources */,
 				54BC44961DB47D2A00340EED /* DateTimeChangeGlucoseEvent.swift in Sources */,
-				C1842C061C8FA45100DB42AC /* DeleteAlarmClockTimePumpEvent.swift in Sources */,
 				C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */,
 				C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */,
 				54BC449C1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift in Sources */,
@@ -2067,7 +2060,6 @@
 				541688DD1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift in Sources */,
 				43CA932F1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift in Sources */,
 				54BC44781DB46C7D00340EED /* GlucoseEvent.swift in Sources */,
-				C1842C221C8FA45100DB42AC /* ChangeAlarmClockTimePumpEvent.swift in Sources */,
 				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
 				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,

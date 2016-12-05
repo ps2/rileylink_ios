@@ -452,6 +452,7 @@ class PumpOpsSynchronous {
         
         // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
         var seenEventData = Set<Data>()
+        var lastEvent: PumpEvent?
         
         pages: for pageNum in 0..<16 {
             NSLog("Fetching page %d", pageNum)
@@ -501,9 +502,11 @@ class PumpOpsSynchronous {
                     }
                 }
 
-                if let event = event as? ChangeTimePumpEvent {
-                    timeAdjustmentInterval += event.adjustmentInterval
+                if let changeTimeEvent = event as? ChangeTimePumpEvent, let newTimeEvent = lastEvent as? NewTimePumpEvent {
+                    timeAdjustmentInterval += (newTimeEvent.timestamp.date?.timeIntervalSince(changeTimeEvent.timestamp.date!))!
                 }
+
+                lastEvent = event
             }
         }
         return (events, pumpModel)

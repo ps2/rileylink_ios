@@ -110,6 +110,8 @@ public enum PumpEventType: UInt8 {
             return TempBasalDurationPumpEvent.self
         case .changeTime:
             return ChangeTimePumpEvent.self
+        case .newTime:
+            return NewTimePumpEvent.self
         case .journalEntryPumpLowBattery:
             return JournalEntryPumpLowBatteryPumpEvent.self
         case .battery:
@@ -132,8 +134,6 @@ public enum PumpEventType: UInt8 {
             return EnableBolusWizardPumpEvent.self
         case .changeBGReminderOffset:
             return ChangeBGReminderOffsetPumpEvent.self
-        case .changeAlarmClockTime:
-            return ChangeAlarmClockTimePumpEvent.self
         case .tempBasal:
             return TempBasalPumpEvent.self
         case .journalEntryPumpLowReservoir:
@@ -184,8 +184,6 @@ public enum PumpEventType: UInt8 {
             return ChangeBolusReminderTimePumpEvent.self
         case .deleteBolusReminderTime:
             return DeleteBolusReminderTimePumpEvent.self
-        case .deleteAlarmClockTime:
-            return DeleteAlarmClockTimePumpEvent.self
         case .dailyTotal515:
             return DailyTotal515PumpEvent.self
         case .dailyTotal522:

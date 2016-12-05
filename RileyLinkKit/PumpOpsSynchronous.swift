@@ -502,9 +502,9 @@ class PumpOpsSynchronous {
                     }
                 }
 
-                if let event = event as? NewTimePumpEvent {
-                    if let ct_event = lastEvent as? ChangeTimePumpEvent {
-                        timeAdjustmentInterval += (event.timestamp.date?.timeIntervalSince(ct_event.timestamp.date!))!
+                if let ct_event = event as? ChangeTimePumpEvent {
+                    if let nt_event = lastEvent as? NewTimePumpEvent {
+                        timeAdjustmentInterval += (nt_event.timestamp.date?.timeIntervalSince(ct_event.timestamp.date!))!
                     }
                 }
                 lastEvent = event

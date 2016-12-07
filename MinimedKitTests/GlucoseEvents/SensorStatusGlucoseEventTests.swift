@@ -13,20 +13,39 @@ class SensorStatusGlucoseEventTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testDecoding() {
+    func testDecodingStatusTypeOff() {
         let rawData = Data(hexadecimalString: "0b0baf0a0e")!
-        let subject = SensorStatusGlucoseEvent(availableData: rawData)!
+        let subject = SensorStatusGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 47)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
+        XCTAssertEqual(subject.statusType, "off")
+    }
+    
+    func testDecodingStatusTypeOn() {
+        let rawData = Data(hexadecimalString: "0b0baf2a0e")!
+        let subject = SensorStatusGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
+        
+        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+                                               year: 2014, month: 2, day: 10, hour: 11, minute: 47)
+        XCTAssertEqual(subject.timestamp, expectedTimestamp)
+        XCTAssertEqual(subject.statusType, "on")
+    }
+    
+    func testDecodingStatusTypeLost() {
+        let rawData = Data(hexadecimalString: "0b0baf4a0e")!
+        let subject = SensorStatusGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
+        
+        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+                                               year: 2014, month: 2, day: 10, hour: 11, minute: 47)
+        XCTAssertEqual(subject.timestamp, expectedTimestamp)
+        XCTAssertEqual(subject.statusType, "lost")
     }
 }

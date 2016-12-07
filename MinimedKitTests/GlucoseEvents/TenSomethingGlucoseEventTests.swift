@@ -22,8 +22,8 @@ class TenSomethingGlucoseEventTests: XCTestCase {
     }
     
     func testDecoding() {
-        let rawData = Data(hexadecimalString: "100bb40a0e")!
-        let subject = TenSomethingGlucoseEvent(availableData: rawData)!
+        let rawData = Data(hexadecimalString: "100bb40a0e010000")!
+        let subject = TenSomethingGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 52)

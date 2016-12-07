@@ -10,7 +10,7 @@ import Foundation
 
 public protocol GlucoseEvent: DictionaryRepresentable {
     
-    init?(availableData: Data)
+    init?(availableData: Data, relativeTimestamp: DateComponents)
     
     var rawData: Data {
         get
@@ -23,5 +23,4 @@ public protocol GlucoseEvent: DictionaryRepresentable {
     var timestamp: DateComponents {
         get
     }
-    
 }

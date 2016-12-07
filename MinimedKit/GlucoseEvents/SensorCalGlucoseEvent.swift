@@ -11,10 +11,10 @@ import Foundation
 public struct SensorCalGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let waiting: String
-    public var timestamp: DateComponents
+    public let calibrationType: String
+    public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 2
         
         guard length <= availableData.count else {
@@ -26,14 +26,23 @@ public struct SensorCalGlucoseEvent: RelativeTimestampedGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        waiting = d(1) == 1 ? "waiting" : "meter_bg_now"
-        timestamp = DateComponents()
+        switch d(1) {
+        case 0x00:
+            calibrationType = "meter_bg_now"
+        case 0x01:
+            calibrationType = "waiting"
+        case 0x02:
+            calibrationType = "cal_error"
+        default:
+            calibrationType = "unknown"
+        }
+        timestamp = relativeTimestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "SensorCal",
-            "waiting": waiting
+            "calibrationType": calibrationType
         ]
     }
 }

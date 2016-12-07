@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct NineteenSomethingGlucoseEvent: RelativeTimestampedGlucoseEvent {
+public struct NineteenSomethingGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public var timestamp: DateComponents
+    public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 1
         
         guard length <= availableData.count else {
@@ -21,7 +21,7 @@ public struct NineteenSomethingGlucoseEvent: RelativeTimestampedGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        timestamp = DateComponents()
+        timestamp = relativeTimestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {

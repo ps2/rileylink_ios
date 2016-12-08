@@ -16,6 +16,7 @@ public class GlucosePage {
     }
     
     public let events: [GlucoseEvent]
+    public let needsTimestamp: Bool
     
     public init(pageData: Data) throws {
         
@@ -28,9 +29,11 @@ public class GlucosePage {
         //opcodes are at the end of each event
         let pageData = Data(pageData.subdata(in: 0..<1022).reversed())
         
+        var needsTimestamp = false
         var offset = 0
         let length = pageData.count
         var events = [GlucoseEvent]()
+        let calendar = Calendar.current
         
         func matchEvent(_ offset: Int, relativeTimestamp: DateComponents) -> GlucoseEvent {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
@@ -48,22 +51,65 @@ public class GlucosePage {
             return UnknownGlucoseEvent(availableData: remainingData, relativeTimestamp: relativeTimestamp)!
         }
         
-        let calendar = Calendar.current
-        var relativeTimestamp: DateComponents = DateComponents()
         
         while offset < length {
+            // ignore null bytes
+            if pageData[offset] as UInt8 == 0 {
+                offset += 1
+                continue
+            } else {
+                break
+            }
+        }
+        
+        func initialTimestamp() -> DateComponents? {
+            var tempOffset = offset
+            var relativeEventCount = 0
+            while tempOffset < length {
+                let event = matchEvent(tempOffset, relativeTimestamp: DateComponents())
+                if event is RelativeTimestampedGlucoseEvent {
+                    relativeEventCount += 1
+                } else if let event = event as? ReferenceTimestampedGlucoseEvent {
+                    let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: 5 * relativeEventCount, to: event.timestamp.date!)!
+                    var relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
+                    relativeTimestamp.calendar = calendar
+                    return relativeTimestamp
+                } else if !(event is NineteenSomethingGlucoseEvent /* seems to be a filler byte */) {
+                    return nil
+                }
+                tempOffset += event.length
+            }
+            return nil
+        }
+        
+        
+        guard var relativeTimestamp = initialTimestamp() else {
+            self.needsTimestamp = true
+            self.events = events
+            return
+        }
+        
+        while offset < length {
+            // ignore null bytes
+            if pageData[offset] as UInt8 == 0 {
+                offset += 1
+                continue
+            }
+            
             let event = matchEvent(offset, relativeTimestamp: relativeTimestamp)
             if let event = event as? ReferenceTimestampedGlucoseEvent {
                 relativeTimestamp = event.timestamp
-            } else if event is RelativeTimestampedGlucoseEvent && relativeTimestamp.date != nil {
+            } else if event is RelativeTimestampedGlucoseEvent {
                 let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: -5, to: relativeTimestamp.date!)!
                 relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
                 relativeTimestamp.calendar = calendar
             }
+            
             events.insert(event, at: 0)
             
             offset += event.length
         }
         self.events = events
+        self.needsTimestamp = needsTimestamp
     }
 }

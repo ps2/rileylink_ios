@@ -49,12 +49,12 @@ class GlucosePageTests: XCTestCase {
     func testUnknownRecords() {
         do {
             //11 is a currently unknown opcode
-            let pageData = Data(hexadecimalString: "01011053b3940810531111AE".leftPadding(toLength: 2048, withPad: "0"))!
+            let pageData = Data(hexadecimalString: "111028B6140813E2E2".leftPadding(toLength: 2048, withPad: "0"))!
             let page = try GlucosePage(pageData: pageData)
             let events = page.events
             
-            XCTAssertEqual((events.last as! UnknownGlucoseEvent).op, "11")
-            XCTAssertEqual(events.count, 1015)
+            XCTAssertEqual((events.first as! UnknownGlucoseEvent).op, "11")
+            XCTAssertEqual(events.count, 3)
             
         } catch GlucosePage.GlucosePageError.invalidCRC {
             XCTFail("page decoding threw invalid crc")
@@ -63,5 +63,38 @@ class GlucosePageTests: XCTestCase {
         } catch {
             XCTFail("Unexpected exception...")
         }
-    }    
+    }
+    
+    func testNeedsTimestamp() {
+        do {
+            //11 is a currently unknown opcode
+            let pageData = Data(hexadecimalString: "01011053b3940810531111AE".leftPadding(toLength: 2048, withPad: "0"))!
+            let page = try GlucosePage(pageData: pageData)
+            
+            XCTAssertTrue(page.needsTimestamp)
+            
+        } catch GlucosePage.GlucosePageError.invalidCRC {
+            XCTFail("page decoding threw invalid crc")
+        } catch GlucosePage.GlucosePageError.unknownEventType(let eventType) {
+            XCTFail("unknown event type" + String(eventType))
+        } catch {
+            XCTFail("Unexpected exception...")
+        }
+    }
+    
+    func testDoesNotNeedTimestamp() {
+        do {
+            let pageData = Data(hexadecimalString: "1053b3940853535A".leftPadding(toLength: 2048, withPad: "0"))!
+            let page = try GlucosePage(pageData: pageData)
+            
+            XCTAssertFalse(page.needsTimestamp)
+            
+        } catch GlucosePage.GlucosePageError.invalidCRC {
+            XCTFail("page decoding threw invalid crc")
+        } catch GlucosePage.GlucosePageError.unknownEventType(let eventType) {
+            XCTFail("unknown event type" + String(eventType))
+        } catch {
+            XCTFail("Unexpected exception...")
+        }
+    }
 }

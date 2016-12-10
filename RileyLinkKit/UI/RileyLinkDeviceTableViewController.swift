@@ -483,7 +483,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     self.device.ops?.writeGlucoseHistoryTimestamp() { (response) -> Void in
                         switch response {
                         case .success(_):
-                            completionHandler(String(describing: "Glucose History timestamp was successfully written to pump."))
+                            completionHandler("Glucose History timestamp was successfully written to pump.")
                         case .failure(let error):
                             completionHandler(String(describing: error))
                         }

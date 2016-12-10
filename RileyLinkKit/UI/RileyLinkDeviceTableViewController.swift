@@ -483,12 +483,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     self.device.ops?.writeGlucoseHistoryTimestamp() { (response) -> Void in
                         switch response {
                         case .success(_):
-                            completionHandler(String(describing: "Okay, thing worked"))
+                            completionHandler(String(describing: "Glucose History timestamp was successfully written to pump."))
                         case .failure(let error):
                             completionHandler(String(describing: error))
                         }
                     }
-                    return NSLocalizedString("Fetching glucose…", comment: "Progress message for fetching pump glucose.")
+                    return NSLocalizedString("Writing glucose history timestamp…", comment: "Progress message for writing glucose history timestamp.")
                 }
             case .getPumpModel:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in

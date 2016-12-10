@@ -26,7 +26,7 @@ class SensorStatusGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 47)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.statusType, "off")
+        XCTAssertEqual(subject.dictionaryRepresentation["statusType"] as! String, "off")
     }
     
     func testDecodingStatusTypeOn() {
@@ -36,7 +36,7 @@ class SensorStatusGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 47)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.statusType, "on")
+        XCTAssertEqual(subject.dictionaryRepresentation["statusType"] as! String, "on")
     }
     
     func testDecodingStatusTypeLost() {
@@ -46,6 +46,6 @@ class SensorStatusGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2014, month: 2, day: 10, hour: 11, minute: 47)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.statusType, "lost")
+        XCTAssertEqual(subject.dictionaryRepresentation["statusType"] as! String, "lost")
     }
 }

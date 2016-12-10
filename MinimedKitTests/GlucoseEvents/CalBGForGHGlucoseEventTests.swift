@@ -27,6 +27,6 @@ class CalBGForGHGlucoseEventTests: XCTestCase {
                                                year: 2015, month: 5, day: 19, hour: 15, minute: 27)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
         XCTAssertEqual(subject.amount, 160)
-        XCTAssertEqual(subject.originType, "rf")
+        XCTAssertEqual(subject.dictionaryRepresentation["originType"] as! String, "rf")
     }
 }

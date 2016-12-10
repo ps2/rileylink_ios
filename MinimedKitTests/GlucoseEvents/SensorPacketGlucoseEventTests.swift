@@ -23,6 +23,6 @@ class SensorPacketGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "0402")!
         let subject = SensorPacketGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        XCTAssertEqual(subject.packetType, "init")
+        XCTAssertEqual(subject.dictionaryRepresentation["packetType"] as! String, "init")
     }
 }

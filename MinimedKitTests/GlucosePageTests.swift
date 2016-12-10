@@ -53,7 +53,7 @@ class GlucosePageTests: XCTestCase {
             let page = try GlucosePage(pageData: pageData)
             let events = page.events
             
-            XCTAssertEqual((events.first as! UnknownGlucoseEvent).op, "11")
+            XCTAssertEqual((events.first as! UnknownGlucoseEvent).dictionaryRepresentation["op"] as! String, "11")
             XCTAssertEqual(events.count, 3)
             
         } catch GlucosePage.GlucosePageError.invalidCRC {

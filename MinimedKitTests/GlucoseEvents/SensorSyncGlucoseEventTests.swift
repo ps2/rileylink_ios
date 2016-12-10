@@ -26,7 +26,7 @@ class SensorSyncGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.syncType, "new")
+        XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "new")
     }
     
     func testSyncTypeOld() {
@@ -36,7 +36,7 @@ class SensorSyncGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.syncType, "old")
+        XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "old")
     }
     
     func testSyncTypeFind() {
@@ -46,7 +46,7 @@ class SensorSyncGlucoseEventTests: XCTestCase {
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
-        XCTAssertEqual(subject.syncType, "find")
+        XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "find")
     }
     
 }

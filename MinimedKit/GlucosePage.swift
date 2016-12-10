@@ -74,7 +74,7 @@ public class GlucosePage {
                     var relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
                     relativeTimestamp.calendar = calendar
                     return relativeTimestamp
-                } else if !(event is NineteenSomethingGlucoseEvent /* seems to be a filler byte */) {
+                } else if !(event is NineteenSomethingGlucoseEvent /* seems to be a filler byte */ || event is DataEndGlucoseEvent) {
                     return nil
                 }
                 tempOffset += event.length

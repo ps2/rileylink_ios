@@ -9,6 +9,7 @@
 import Foundation
 
 public enum GlucoseEventType: UInt8 {
+    case dataEnd           = 0x01
     case sensorWeakSignal  = 0x02
     case sensorCal         = 0x03
     case sensorPacket      = 0x04
@@ -27,6 +28,8 @@ public enum GlucoseEventType: UInt8 {
     
     public var eventType: GlucoseEvent.Type {
         switch self {
+        case .dataEnd:
+            return DataEndGlucoseEvent.self
         case .sensorWeakSignal:
             return SensorWeakSignalGlucoseEvent.self
         case .sensorCal:

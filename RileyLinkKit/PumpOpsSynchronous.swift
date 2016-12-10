@@ -548,6 +548,17 @@ class PumpOpsSynchronous {
         return frameData as Data
     }
     
+    internal func logGlucoseHistory(pageData: Data, pageNum: Int) {
+        var idx = 0
+        let chunkSize = 256;
+        while idx < pageData.count {
+            let top = min(idx + chunkSize, pageData.count)
+            let range = Range(uncheckedBounds: (lower: idx, upper: top))
+            NSLog(String(format: "GlucosePage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+            idx = top
+        }
+    }
+    
     internal func getGlucoseHistoryEvents(since startDate: Date) throws -> [TimestampedGlucoseEvent] {
         try wakeup()
         
@@ -560,10 +571,24 @@ class PumpOpsSynchronous {
         
         pages: for pageNum in stride(from: startPage, to: endPage - 1, by: -1) {
             NSLog("Fetching page %d", pageNum)
-            let pageData: Data
+            var pageData: Data
+            var page: GlucosePage
             
             do {
                 pageData = try getGlucosePage(UInt32(pageNum))
+                logGlucoseHistory(pageData: pageData, pageNum: pageNum)
+                page = try GlucosePage(pageData: pageData)
+                
+                if page.needsTimestamp {
+                    NSLog(String(format: "GlucosePage %02d needs a new sensor timestamp, writing...", pageNum))
+                    let _ = try writeGlucoseHistoryTimestamp()
+                    
+                    //fetch page again with new sensor timestamp
+                    pageData = try getGlucosePage(UInt32(pageNum))
+                    logGlucoseHistory(pageData: pageData, pageNum: pageNum)
+                    page = try GlucosePage(pageData: pageData)
+                }
+                
             } catch let error as PumpCommsError {
                 if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
                     break pages
@@ -572,17 +597,6 @@ class PumpOpsSynchronous {
                 }
             }
             
-            var idx = 0
-            let chunkSize = 256;
-            while idx < pageData.count {
-                let top = min(idx + chunkSize, pageData.count)
-                let range = Range(uncheckedBounds: (lower: idx, upper: top))
-                NSLog(String(format: "GlucosePage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
-                idx = top
-            }
-            
-            let page = try GlucosePage(pageData: pageData)
-
             for event in page.events.reversed() {
                 var timestamp = event.timestamp
                 timestamp.timeZone = pump.timeZone
@@ -644,6 +658,17 @@ class PumpOpsSynchronous {
             throw PumpCommsError.rfCommsFailure("Short glucose history page: \(frameData.count) bytes. Expected 1024")
         }
         return frameData as Data
+    }
+    
+    internal func writeGlucoseHistoryTimestamp() throws -> Void {
+        let shortWriteTimestamp = makePumpMessage(to: .writeGlucoseHistoryTimestamp)
+        let shortResponse = try sendAndListen(shortWriteTimestamp, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+        
+        if shortResponse.messageType == .pumpAck {
+            return
+        } else {
+            throw PumpCommsError.unexpectedResponse(shortResponse, from: shortWriteTimestamp)
+        }
     }
 
     internal func readPumpStatus() throws -> PumpStatus {

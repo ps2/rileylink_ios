@@ -11,8 +11,8 @@ import Foundation
 public struct SensorCalGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let calibrationType: String
     public let timestamp: DateComponents
+    private let calibrationType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 2

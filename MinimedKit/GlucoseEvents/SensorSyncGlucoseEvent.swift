@@ -12,7 +12,7 @@ public struct SensorSyncGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    public let syncType: String
+    private let syncType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 5

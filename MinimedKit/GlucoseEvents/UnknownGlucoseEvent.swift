@@ -11,8 +11,8 @@ import Foundation
 public struct UnknownGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let op: String
     public let timestamp: DateComponents
+    private let op: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 1

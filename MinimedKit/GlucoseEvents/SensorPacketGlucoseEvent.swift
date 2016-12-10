@@ -11,8 +11,8 @@ import Foundation
 public struct SensorPacketGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let packetType: String
     public let timestamp: DateComponents
+    private let packetType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 2

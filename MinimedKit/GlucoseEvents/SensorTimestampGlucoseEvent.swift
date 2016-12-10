@@ -11,8 +11,8 @@ import Foundation
 public struct SensorTimestampGlucoseEvent: ReferenceTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let timestampType: String
     public let timestamp: DateComponents
+    private let timestampType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 5

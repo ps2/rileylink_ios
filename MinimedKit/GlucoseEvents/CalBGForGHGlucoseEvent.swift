@@ -13,7 +13,7 @@ public struct CalBGForGHGlucoseEvent: GlucoseEvent {
     public let rawData: Data
     public let timestamp: DateComponents
     public let amount: Int
-    public let originType: String
+    private let originType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 6

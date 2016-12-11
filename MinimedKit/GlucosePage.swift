@@ -16,75 +16,100 @@ public class GlucosePage {
     }
     
     public let events: [GlucoseEvent]
+    public let needsTimestamp: Bool
     
     public init(pageData: Data) throws {
         
         guard checkCRC16(pageData) else {
-            events = [GlucoseEvent]()
+            self.events = [GlucoseEvent]()
             throw GlucosePageError.invalidCRC
         }
         
-        //glucose page parsing happens in reverse byte order
+        //glucose page parsing happens in reverse byte order because
+        //opcodes are at the end of each event
         let pageData = Data(pageData.subdata(in: 0..<1022).reversed())
         
+        var needsTimestamp = false
         var offset = 0
         let length = pageData.count
-        var tempEvents = [GlucoseEvent]()
-        var eventsNeedingTimestamp = [RelativeTimestampedGlucoseEvent]()
+        var events = [GlucoseEvent]()
+        let calendar = Calendar.current
         
-        func matchEvent(_ offset: Int) -> GlucoseEvent {
+        func matchEvent(_ offset: Int, relativeTimestamp: DateComponents) -> GlucoseEvent {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
             let opcode = pageData[offset] as UInt8
             if let eventType = GlucoseEventType(rawValue: opcode) {
-                if let event = eventType.eventType.init(availableData: remainingData) {
+                if let event = eventType.eventType.init(availableData: remainingData, relativeTimestamp: relativeTimestamp) {
                     return event
                 }
             }
             
             if opcode >= 20 {
-                return GlucoseSensorDataGlucoseEvent(availableData: remainingData)!
+                return GlucoseSensorDataGlucoseEvent(availableData: remainingData, relativeTimestamp: relativeTimestamp)!
             }
             
-            return UnknownGlucoseEvent(availableData: remainingData)!
+            return UnknownGlucoseEvent(availableData: remainingData, relativeTimestamp: relativeTimestamp)!
         }
         
-        func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [GlucoseEvent] {
-            var eventsWithTimestamps = [GlucoseEvent]()
-            let calendar = Calendar.current
-            var date: Date = calendar.date(from: startTimestamp)!
-            for var event in eventsNeedingTimestamp {
-                if !(event is NineteenSomethingGlucoseEvent) {
-                    date = calendar.date(byAdding: Calendar.Component.minute, value: 5, to: date)!
-                }
-                event.timestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-                event.timestamp.calendar = calendar
-                eventsWithTimestamps.append(event)
+        
+        while offset < length {
+            // ignore null bytes
+            if pageData[offset] as UInt8 == 0 {
+                offset += 1
+                continue
+            } else {
+                break
             }
-            return eventsWithTimestamps
+        }
+        
+        func initialTimestamp() -> DateComponents? {
+            var tempOffset = offset
+            var relativeEventCount = 0
+            while tempOffset < length {
+                let event = matchEvent(tempOffset, relativeTimestamp: DateComponents())
+                if event is RelativeTimestampedGlucoseEvent {
+                    relativeEventCount += 1
+                } else if let event = event as? ReferenceTimestampedGlucoseEvent {
+                    let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: 5 * relativeEventCount, to: event.timestamp.date!)!
+                    var relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
+                    relativeTimestamp.calendar = calendar
+                    return relativeTimestamp
+                } else if !(event is NineteenSomethingGlucoseEvent /* seems to be a filler byte */ || event is DataEndGlucoseEvent) {
+                    return nil
+                }
+                tempOffset += event.length
+            }
+            return nil
+        }
+        
+        
+        guard var relativeTimestamp = initialTimestamp() else {
+            self.needsTimestamp = true
+            self.events = events
+            return
         }
         
         while offset < length {
-            // Slurp up 0's
+            // ignore null bytes
             if pageData[offset] as UInt8 == 0 {
                 offset += 1
                 continue
             }
             
-            let event = matchEvent(offset)
-            
-            if let event = event as? RelativeTimestampedGlucoseEvent {
-                eventsNeedingTimestamp.insert(event, at: 0)
-            } else if let event = event as? ReferenceTimestampedGlucoseEvent {
-                let eventsWithTimestamp = addTimestampsToEvents(startTimestamp: event.timestamp, eventsNeedingTimestamp: eventsNeedingTimestamp).reversed()
-                tempEvents.append(contentsOf: eventsWithTimestamp)
-                eventsNeedingTimestamp.removeAll()
-                tempEvents.append(event)
-            } else {
-                tempEvents.append(event)
+            let event = matchEvent(offset, relativeTimestamp: relativeTimestamp)
+            if let event = event as? ReferenceTimestampedGlucoseEvent {
+                relativeTimestamp = event.timestamp
+            } else if event is RelativeTimestampedGlucoseEvent {
+                let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: -5, to: relativeTimestamp.date!)!
+                relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
+                relativeTimestamp.calendar = calendar
             }
+            
+            events.insert(event, at: 0)
             
             offset += event.length
         }
-        events = tempEvents.reversed()
+        self.events = events
+        self.needsTimestamp = needsTimestamp
     }
 }

@@ -13,7 +13,7 @@ public struct BatteryChangeGlucoseEvent : GlucoseEvent {
     public let rawData: Data
     public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 5
         
         guard length <= availableData.count else {

@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct TenSomethingGlucoseEvent: ReferenceTimestampedGlucoseEvent {
+public struct TenSomethingGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
-        length = 5
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
+        length = 8
         
         guard length <= availableData.count else {
             return nil
@@ -26,7 +26,7 @@ public struct TenSomethingGlucoseEvent: ReferenceTimestampedGlucoseEvent {
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "name": "10-Something",
+            "name": "10-Something"
         ]
     }
 }

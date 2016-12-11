@@ -606,7 +606,7 @@ class PumpOpsSynchronous {
                 }
                 
                 if let date = timestamp.date {
-                    if date < startDate && event is ReferenceTimestampedGlucoseEvent {
+                    if date < startDate && event is SensorTimestampGlucoseEvent {
                         NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate);
                         break pages
                     } else {

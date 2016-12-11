@@ -29,7 +29,6 @@ public class GlucosePage {
         //opcodes are at the end of each event
         let pageData = Data(pageData.subdata(in: 0..<1022).reversed())
         
-        var needsTimestamp = false
         var offset = 0
         let length = pageData.count
         var events = [GlucoseEvent]()
@@ -69,7 +68,7 @@ public class GlucosePage {
                 let event = matchEvent(tempOffset, relativeTimestamp: DateComponents())
                 if event is RelativeTimestampedGlucoseEvent {
                     relativeEventCount += 1
-                } else if let event = event as? ReferenceTimestampedGlucoseEvent {
+                } else if let event = event as? SensorTimestampGlucoseEvent {
                     let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: 5 * relativeEventCount, to: event.timestamp.date!)!
                     var relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
                     relativeTimestamp.calendar = calendar
@@ -97,7 +96,7 @@ public class GlucosePage {
             }
             
             let event = matchEvent(offset, relativeTimestamp: relativeTimestamp)
-            if let event = event as? ReferenceTimestampedGlucoseEvent {
+            if let event = event as? SensorTimestampGlucoseEvent {
                 relativeTimestamp = event.timestamp
             } else if event is RelativeTimestampedGlucoseEvent {
                 let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: -5, to: relativeTimestamp.date!)!
@@ -109,7 +108,7 @@ public class GlucosePage {
             
             offset += event.length
         }
+        self.needsTimestamp = false
         self.events = events
-        self.needsTimestamp = needsTimestamp
     }
 }

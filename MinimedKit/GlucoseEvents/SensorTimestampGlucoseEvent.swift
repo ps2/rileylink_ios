@@ -8,11 +8,32 @@
 
 import Foundation
 
+public enum SensorTimestampType: String {
+    case lastRf
+    case pageEnd
+    case gap
+    case unknown
+    
+    public static func eventType(code: UInt8) -> SensorTimestampType {
+        switch code {
+        case 0x00:
+            return .lastRf
+        case 0x01:
+            return .pageEnd
+        case 0x02:
+            return .gap
+        default:
+            return .unknown
+        }
+    }
+    
+}
+
 public struct SensorTimestampGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    private let timestampType: String
+    public let timestampType: SensorTimestampType
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 5
@@ -27,17 +48,7 @@ public struct SensorTimestampGlucoseEvent: GlucoseEvent {
         
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5))
-        
-        switch (d(3) >> 5 & 0b00000011) {
-        case 0x00:
-            timestampType = "last_rf"
-        case 0x01:
-            timestampType = "page_end"
-        case 0x02:
-            timestampType = "gap"
-        default:
-            timestampType = "unknown"
-        }
+        timestampType = SensorTimestampType.eventType(code: UInt8(d(3) >> 5) & 0b00000011)
 
     }
     

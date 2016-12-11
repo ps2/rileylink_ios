@@ -52,6 +52,10 @@ public struct SensorTimestampGlucoseEvent: GlucoseEvent {
 
     }
     
+    public func isForwardOffsetReference() -> Bool {
+        return timestampType == .lastRf || timestampType == .pageEnd
+    }
+    
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "SensorTimestamp",

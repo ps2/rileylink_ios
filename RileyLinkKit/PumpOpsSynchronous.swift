@@ -579,7 +579,7 @@ class PumpOpsSynchronous {
                 logGlucoseHistory(pageData: pageData, pageNum: pageNum)
                 page = try GlucosePage(pageData: pageData)
                 
-                if page.needsTimestamp {
+                if page.needsTimestamp && pageNum == startPage {
                     NSLog(String(format: "GlucosePage %02d needs a new sensor timestamp, writing...", pageNum))
                     let _ = try writeGlucoseHistoryTimestamp()
                     

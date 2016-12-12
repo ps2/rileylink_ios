@@ -99,9 +99,8 @@ public class GlucosePage {
             if let event = event as? SensorTimestampGlucoseEvent {
                 relativeTimestamp = event.timestamp
             } else if event is RelativeTimestampedGlucoseEvent {
-                let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: -5, to: relativeTimestamp.date!)!
-                relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
-                relativeTimestamp.calendar = calendar
+                let offsetDate = calendar.date(byAdding: .minute, value: -5, to: relativeTimestamp.date!)!
+                relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute, .calendar], from: offsetDate)
             }
             
             events.insert(event, at: 0)

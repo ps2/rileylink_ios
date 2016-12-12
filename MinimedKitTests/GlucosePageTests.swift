@@ -84,7 +84,7 @@ class GlucosePageTests: XCTestCase {
     
     func testDoesNotNeedTimestamp() {
         do {
-            let pageData = Data(hexadecimalString: "1053b3940853535A".leftPadding(toLength: 2048, withPad: "0"))!
+            let pageData = Data(hexadecimalString: "1013b39408534232".leftPadding(toLength: 2048, withPad: "0"))!
             let page = try GlucosePage(pageData: pageData)
             
             XCTAssertFalse(page.needsTimestamp)

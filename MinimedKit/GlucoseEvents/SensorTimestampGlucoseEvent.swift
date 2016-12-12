@@ -44,7 +44,7 @@ public struct SensorTimestampGlucoseEvent: GlucoseEvent {
         
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5))
-        timestampType = SensorTimestampType(code: UInt8(availableData[3] >> 5) & 0b00000011)
+        timestampType = SensorTimestampType(code: availableData[3] >> 5 & 0b00000011)
     }
     
     public func isForwardOffsetReference() -> Bool {

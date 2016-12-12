@@ -662,7 +662,7 @@ class PumpOpsSynchronous {
     
     internal func writeGlucoseHistoryTimestamp() throws -> Void {
         let shortWriteTimestamp = makePumpMessage(to: .writeGlucoseHistoryTimestamp)
-        let shortResponse = try sendAndListen(shortWriteTimestamp, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+        let shortResponse = try sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
         
         if shortResponse.messageType == .pumpAck {
             return

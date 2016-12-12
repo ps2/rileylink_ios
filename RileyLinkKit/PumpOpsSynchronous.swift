@@ -579,7 +579,7 @@ class PumpOpsSynchronous {
                 logGlucoseHistory(pageData: pageData, pageNum: pageNum)
                 page = try GlucosePage(pageData: pageData)
                 
-                if page.needsTimestamp {
+                if page.needsTimestamp && pageNum == startPage {
                     NSLog(String(format: "GlucosePage %02d needs a new sensor timestamp, writing...", pageNum))
                     let _ = try writeGlucoseHistoryTimestamp()
                     
@@ -606,7 +606,7 @@ class PumpOpsSynchronous {
                 }
                 
                 if let date = timestamp.date {
-                    if date < startDate && event is ReferenceTimestampedGlucoseEvent {
+                    if date < startDate && event is SensorTimestampGlucoseEvent {
                         NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate);
                         break pages
                     } else {
@@ -662,7 +662,7 @@ class PumpOpsSynchronous {
     
     internal func writeGlucoseHistoryTimestamp() throws -> Void {
         let shortWriteTimestamp = makePumpMessage(to: .writeGlucoseHistoryTimestamp)
-        let shortResponse = try sendAndListen(shortWriteTimestamp, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+        let shortResponse = try sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
         
         if shortResponse.messageType == .pumpAck {
             return

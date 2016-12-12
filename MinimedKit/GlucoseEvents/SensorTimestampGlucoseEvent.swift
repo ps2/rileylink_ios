@@ -8,11 +8,32 @@
 
 import Foundation
 
-public struct SensorTimestampGlucoseEvent: ReferenceTimestampedGlucoseEvent {
+public enum SensorTimestampType: String {
+    case lastRf
+    case pageEnd
+    case gap
+    case unknown
+    
+    init(code: UInt8) {
+        switch code {
+        case 0x00:
+            self = .lastRf
+        case 0x01:
+            self = .pageEnd
+        case 0x02:
+            self = .gap
+        default:
+            self = .unknown
+        }
+    }
+    
+}
+
+public struct SensorTimestampGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    private let timestampType: String
+    public let timestampType: SensorTimestampType
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 5
@@ -21,24 +42,13 @@ public struct SensorTimestampGlucoseEvent: ReferenceTimestampedGlucoseEvent {
             return nil
         }
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
-        }
-        
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5))
-        
-        switch (d(3) >> 5 & 0b00000011) {
-        case 0x00:
-            timestampType = "last_rf"
-        case 0x01:
-            timestampType = "page_end"
-        case 0x02:
-            timestampType = "gap"
-        default:
-            timestampType = "unknown"
-        }
-
+        timestampType = SensorTimestampType(code: availableData[3] >> 5 & 0b00000011)
+    }
+    
+    public func isForwardOffsetReference() -> Bool {
+        return timestampType == .lastRf || timestampType == .pageEnd
     }
     
     public var dictionaryRepresentation: [String: Any] {

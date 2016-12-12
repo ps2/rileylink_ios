@@ -25,7 +25,7 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "0814B62810")!
         let subject = SensorTimestampGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        XCTAssertEqual(subject.dictionaryRepresentation["timestampType"] as! String, "page_end")
+        XCTAssertEqual(subject.timestampType, .pageEnd)
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2016, month: 02, day: 08, hour: 20, minute: 54)
@@ -37,7 +37,7 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "088d9b5d0c")!
         let subject = SensorTimestampGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        XCTAssertEqual(subject.dictionaryRepresentation["timestampType"] as! String, "gap")
+        XCTAssertEqual(subject.timestampType, .gap)
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2012, month: 10, day: 29, hour: 13, minute: 27)
@@ -48,7 +48,7 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "088d9b1d0c")!
         let subject = SensorTimestampGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        XCTAssertEqual(subject.dictionaryRepresentation["timestampType"] as! String, "last_rf")
+        XCTAssertEqual(subject.timestampType, .lastRf)
         
         let expectedTimestamp = DateComponents(calendar: Calendar.current,
                                                year: 2012, month: 10, day: 29, hour: 13, minute: 27)

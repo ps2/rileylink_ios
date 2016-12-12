@@ -69,12 +69,10 @@ public class GlucosePage {
                 if event is RelativeTimestampedGlucoseEvent {
                     relativeEventCount += 1
                 } else if let sensorTimestampEvent = event as? SensorTimestampGlucoseEvent,
-                    relativeEventCount == 0 || (event as! SensorTimestampGlucoseEvent).isForwardOffsetReference() {
+                    relativeEventCount == 0 || sensorTimestampEvent.isForwardOffsetReference() {
                     
-                    let offsetDate = calendar.date(byAdding: Calendar.Component.minute, value: 5 * relativeEventCount, to: sensorTimestampEvent.timestamp.date!)!
-                    var relativeTimestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: offsetDate)
-                    relativeTimestamp.calendar = calendar
-                    return relativeTimestamp
+                    let offsetDate = calendar.date(byAdding: .minute, value: 5 * relativeEventCount, to: sensorTimestampEvent.timestamp.date!)!
+                    return calendar.dateComponents([.year, .month, .day, .hour, .minute, .calendar], from: offsetDate)
                 } else if !(event is NineteenSomethingGlucoseEvent /* seems to be a filler byte */ || event is DataEndGlucoseEvent) {
                     return nil
                 }

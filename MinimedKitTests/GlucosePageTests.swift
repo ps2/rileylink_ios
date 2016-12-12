@@ -84,10 +84,28 @@ class GlucosePageTests: XCTestCase {
     
     func testDoesNotNeedTimestamp() {
         do {
+            //sensor timestamp with timestampType of .lastRf
             let pageData = Data(hexadecimalString: "1013b39408534232".leftPadding(toLength: 2048, withPad: "0"))!
             let page = try GlucosePage(pageData: pageData)
             
             XCTAssertFalse(page.needsTimestamp)
+            
+        } catch GlucosePage.GlucosePageError.invalidCRC {
+            XCTFail("page decoding threw invalid crc")
+        } catch GlucosePage.GlucosePageError.unknownEventType(let eventType) {
+            XCTFail("unknown event type" + String(eventType))
+        } catch {
+            XCTFail("Unexpected exception...")
+        }
+    }
+    
+    func testLastSensorTimestampTypeGapNeedsTimestamp() {
+        do {
+            //sensor timestamp with timestampType of .gap
+            let pageData = Data(hexadecimalString: "1053b3940853535A".leftPadding(toLength: 2048, withPad: "0"))!
+            let page = try GlucosePage(pageData: pageData)
+            
+            XCTAssertTrue(page.needsTimestamp)
             
         } catch GlucosePage.GlucosePageError.invalidCRC {
             XCTFail("page decoding threw invalid crc")

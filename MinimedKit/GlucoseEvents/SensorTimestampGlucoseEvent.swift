@@ -14,16 +14,16 @@ public enum SensorTimestampType: String {
     case gap
     case unknown
     
-    public static func eventType(code: UInt8) -> SensorTimestampType {
+    init(code: UInt8) {
         switch code {
         case 0x00:
-            return .lastRf
+            self = .lastRf
         case 0x01:
-            return .pageEnd
+            self = .pageEnd
         case 0x02:
-            return .gap
+            self = .gap
         default:
-            return .unknown
+            self = .unknown
         }
     }
     
@@ -42,14 +42,9 @@ public struct SensorTimestampGlucoseEvent: GlucoseEvent {
             return nil
         }
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
-        }
-        
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5))
-        timestampType = SensorTimestampType.eventType(code: UInt8(d(3) >> 5) & 0b00000011)
-
+        timestampType = SensorTimestampType(code: UInt8(availableData[3] >> 5) & 0b00000011)
     }
     
     public func isForwardOffsetReference() -> Bool {

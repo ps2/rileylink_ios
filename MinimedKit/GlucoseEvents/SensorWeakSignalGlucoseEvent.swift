@@ -11,9 +11,9 @@ import Foundation
 public struct SensorWeakSignalGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public var timestamp: DateComponents
+    public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 1
         
         guard length <= availableData.count else {
@@ -21,7 +21,7 @@ public struct SensorWeakSignalGlucoseEvent: RelativeTimestampedGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        timestamp = DateComponents()
+        timestamp = relativeTimestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -30,4 +30,3 @@ public struct SensorWeakSignalGlucoseEvent: RelativeTimestampedGlucoseEvent {
         ]
     }
 }
-

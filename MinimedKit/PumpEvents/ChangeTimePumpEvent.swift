@@ -12,23 +12,16 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    public let oldTimestamp: DateComponents
-
-    public var adjustmentInterval: TimeInterval {
-        return timestamp.date!.timeIntervalSince(oldTimestamp.date!)
-    }
 
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = 14
-        
+        length = 7
+
         guard length <= availableData.count else {
             return nil
         }
 
         rawData = availableData.subdata(in: 0..<length)
-        
-        oldTimestamp = DateComponents(pumpEventData: availableData, offset: 2)
-        timestamp = DateComponents(pumpEventData: availableData, offset: 9)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
 
     public var dictionaryRepresentation: [String: Any] {
@@ -36,4 +29,6 @@ public struct ChangeTimePumpEvent: TimestampedPumpEvent {
             "_type": "ChangeTime",
         ]
     }
+    
 }
+

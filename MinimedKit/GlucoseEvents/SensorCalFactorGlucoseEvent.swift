@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct SensorCalFactorGlucoseEvent: ReferenceTimestampedGlucoseEvent {
+public struct SensorCalFactorGlucoseEvent: GlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
     public let factor: Float
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 7
         
         guard length <= availableData.count else {

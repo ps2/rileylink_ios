@@ -1,35 +1,45 @@
 //
-//  GlucoseSensorDataGlucoseEvent.swift
+//  SensorPacketGlucoseEvent.swift
 //  RileyLink
 //
-//  Created by Timothy Mecklem on 10/16/16.
+//  Created by Timothy Mecklem on 12/6/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct GlucoseSensorDataGlucoseEvent: SensorValueGlucoseEvent {
+public struct SensorPacketGlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public let sgv: Int
     public let timestamp: DateComponents
+    private let packetType: String
     
     public init?(availableData: Data, relativeTimestamp: DateComponents) {
-        length = 1
+        length = 2
         
         guard length <= availableData.count else {
             return nil
         }
         
+        func d(_ idx:Int) -> Int {
+            return Int(availableData[idx] as UInt8)
+        }
+        
         rawData = availableData.subdata(in: 0..<length)
-        sgv = Int(UInt16(availableData[0]) * UInt16(2))
+        switch d(1) {
+        case 0x02:
+            packetType = "init"
+        default:
+            packetType = "unknown"
+        }
+        
         timestamp = relativeTimestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "name": "GlucoseSensorData",
-            "sgv": sgv
+            "name": "SensorPacket",
+            "packetType": packetType
         ]
     }
 }

@@ -170,6 +170,26 @@ public class PumpOps {
             }
         }
     }
+    
+    /**
+ 
+ */
+    public func writeGlucoseHistoryTimestamp(completion: @escaping (Either<Bool, Error>) -> Void) {
+        device.runSession(withName: "Write glucose history timestamp") { (session) -> Void in
+            NSLog("Write glucose history timestamp started.")
+            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+            do {
+                _ = try ops.writeGlucoseHistoryTimestamp()
+                DispatchQueue.main.async { () -> Void in
+                    completion(.success(true))
+                }
+            } catch let error {
+                DispatchQueue.main.async { () -> Void in
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 
     /**
      Reads the pump's clock

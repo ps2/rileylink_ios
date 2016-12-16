@@ -1,19 +1,20 @@
 //
-//  Fokko7GlucoseEvent.swift
+//  SensorDataHighGlucoseEvent.swift
 //  RileyLink
 //
-//  Created by Timothy Mecklem on 10/16/16.
+//  Created by Timothy Mecklem on 12/6/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct Fokko7GlucoseEvent: GlucoseEvent {
+public struct SensorDataHighGlucoseEvent: SensorValueGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    public var timestamp: DateComponents
+    public let sgv: Int
+    public let timestamp: DateComponents
     
-    public init?(availableData: Data) {
+    public init?(availableData: Data, relativeTimestamp: DateComponents) {
         length = 2
         
         guard length <= availableData.count else {
@@ -21,12 +22,14 @@ public struct Fokko7GlucoseEvent: GlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        timestamp = DateComponents()
+        sgv = 400
+        timestamp = relativeTimestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "name": "Fokko-7",
+            "name": "SensorDataHigh",
+            "sgv": sgv
         ]
     }
 }

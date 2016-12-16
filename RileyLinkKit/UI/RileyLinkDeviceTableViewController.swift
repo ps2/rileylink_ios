@@ -152,6 +152,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case mySentryPair
         case dumpHistory
         case fetchGlucose
+        case writeGlucoseHistoryTimestamp
         case getPumpModel
         case pressDownButton
         case readPumpStatus
@@ -285,6 +286,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
             case .fetchGlucose:
                 cell.textLabel?.text = NSLocalizedString("Fetch Recent Glucose", comment: "The title of the command to fetch recent glucose")
+                
+            case .writeGlucoseHistoryTimestamp:
+                cell.textLabel?.text = NSLocalizedString("Write Glucose History Timestamp", comment: "The title of the command to write a glucose history timestamp")
                 
             case .getPumpModel:
                 cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
@@ -473,6 +477,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                         }
                     }
                     return NSLocalizedString("Fetching glucose…", comment: "Progress message for fetching pump glucose.")
+                }
+            case .writeGlucoseHistoryTimestamp:
+                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
+                    self.device.ops?.writeGlucoseHistoryTimestamp() { (response) -> Void in
+                        switch response {
+                        case .success(_):
+                            completionHandler("Glucose History timestamp was successfully written to pump.")
+                        case .failure(let error):
+                            completionHandler(String(describing: error))
+                        }
+                    }
+                    return NSLocalizedString("Writing glucose history timestamp…", comment: "Progress message for writing glucose history timestamp.")
                 }
             case .getPumpModel:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in

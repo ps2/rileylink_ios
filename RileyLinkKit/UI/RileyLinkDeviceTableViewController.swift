@@ -120,33 +120,27 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
     // MARK: - Table view data source
 
-    private enum Section: Int {
+    private enum Section: Int, CaseCountable {
         case device
         case pump
         case commands
-
-        static let count = 3
     }
 
-    private enum DeviceRow: Int {
+    private enum DeviceRow: Int, CaseCountable {
         case customName
         case version
         case rssi
         case connection
         case idleStatus
-
-        static let count = 5
     }
 
-    private enum PumpRow: Int {
+    private enum PumpRow: Int, CaseCountable {
         case id
         case model
         case awake
-
-        static let count = 3
     }
 
-    private enum CommandRow: Int {
+    private enum CommandRow: Int, CaseCountable {
         case tune
         case changeTime
         case mySentryPair
@@ -156,8 +150,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case getPumpModel
         case pressDownButton
         case readPumpStatus
-
-        static let count = 8
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {

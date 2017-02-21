@@ -8,15 +8,8 @@
 
 import Foundation
 
-public class ReadCurrentPageNumberMessageBody : MessageBody {
-    public static var length: Int = 64
+public class ReadCurrentPageNumberMessageBody : CarelinkLongMessageBody {
     public let pageNum: Int
-
-    let rxData: Data
-    
-    public var txData: Data {
-        return rxData
-    }
  
     // Partially implemented from https://github.com/bewest/decoding-carelink/blob/master/decocare/commands.py#L575
     public required init?(rxData: Data) {
@@ -32,6 +25,6 @@ public class ReadCurrentPageNumberMessageBody : MessageBody {
         }
         
         pageNum = page
-        self.rxData = rxData
+        super.init(rxData: rxData)
     }
 }

@@ -20,7 +20,7 @@ public class SuspendPumpTreatment: NightscoutTreatment {
 
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "PumpSuspend"
+        rval["eventType"] = "Pump Suspend"
         rval["suspended"] = suspended
         return rval
     }

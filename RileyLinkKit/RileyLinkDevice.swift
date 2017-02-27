@@ -30,7 +30,9 @@ public class RileyLinkDevice {
     public private(set) var lastTuned: Date?
     
     public private(set) var radioFrequency: Double?
-    
+
+    public private(set) var pumpRSSI: Int?
+
     public var firmwareVersion: String? {
         var versions = [String]()
         if let fwVersion = device.firmwareVersion {
@@ -57,6 +59,8 @@ public class RileyLinkDevice {
     public var RSSI: Int? {
         return device.rssi?.intValue
     }
+
+
     
     public var peripheral: CBPeripheral {
         return device.peripheral
@@ -97,9 +101,9 @@ public class RileyLinkDevice {
     public func tunePump(_ resultHandler: @escaping (Either<FrequencyScanResults, Error>) -> Void) {
         if let ops = ops {
             ops.tuneRadio(for: ops.pumpState.pumpRegion) { (result) in
+                self.lastTuned = Date()
                 switch result {
                 case .success(let scanResults):
-                    self.lastTuned = Date()
                     self.radioFrequency = scanResults.bestFrequency
                 case .failure:
                     break
@@ -133,6 +137,7 @@ public class RileyLinkDevice {
         case RILEYLINK_EVENT_PACKET_RECEIVED:
             if let packet = note.userInfo?["packet"] as? RFPacket, let pumpID = pumpState?.pumpID, let data = packet.data, let message = PumpMessage(rxData: data), message.address.hexadecimalString == pumpID {
                 NotificationCenter.default.post(name: .RileyLinkDeviceDidReceiveIdleMessage, object: self, userInfo: [type(of: self).IdleMessageDataKey: data])
+                pumpRSSI = packet.rssi
             }
         case RILEYLINK_EVENT_DEVICE_TIMER_TICK:
             NotificationCenter.default.post(name: .RileyLinkDeviceDidUpdateTimerTick, object: self)

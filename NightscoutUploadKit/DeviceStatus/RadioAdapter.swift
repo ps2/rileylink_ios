@@ -24,7 +24,7 @@ public struct RadioAdapter {
         self.lastTuned = lastTuned
         self.firmwareVersion = firmwareVersion
         self.RSSI = RSSI
-        self.pumpRSSI = RSSI
+        self.pumpRSSI = pumpRSSI
     }
 
     public var dictionaryRepresentation: [String: Any] {

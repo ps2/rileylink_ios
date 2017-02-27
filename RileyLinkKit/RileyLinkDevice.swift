@@ -137,7 +137,7 @@ public class RileyLinkDevice {
         case RILEYLINK_EVENT_PACKET_RECEIVED:
             if let packet = note.userInfo?["packet"] as? RFPacket, let pumpID = pumpState?.pumpID, let data = packet.data, let message = PumpMessage(rxData: data), message.address.hexadecimalString == pumpID {
                 NotificationCenter.default.post(name: .RileyLinkDeviceDidReceiveIdleMessage, object: self, userInfo: [type(of: self).IdleMessageDataKey: data])
-                pumpRSSI = packet.rssi
+                pumpRSSI = Int(packet.rssi)
             }
         case RILEYLINK_EVENT_DEVICE_TIMER_TICK:
             NotificationCenter.default.post(name: .RileyLinkDeviceDidUpdateTimerTick, object: self)

@@ -27,7 +27,9 @@ public enum RXFilterMode: UInt8 {
 }
 
 class PumpOpsSynchronous {
-    
+
+    public static let PacketKey = "com.rileylink.RileyLinkKit.PumpOpsSynchronousPacketKey"
+
     private static let standardPumpResponseWindow: UInt16 = 180
     private let expectedMaxBLELatencyMS = 1500
     
@@ -85,6 +87,8 @@ class PumpOpsSynchronous {
         guard message.address == msg.address else {
             throw PumpCommsError.crosstalk(message, during: "Sent \(msg)")
         }
+
+        NotificationCenter.default.post(name: .PumpOpsSynchronousDidReceivePacket, object: self, userInfo: [type(of: self).PacketKey: cmd.receivedPacket])
         
         return message
     }
@@ -711,3 +715,8 @@ public struct FrequencyScanResults {
     public var trials = [FrequencyTrial]()
     public var bestFrequency: Double = 0
 }
+
+extension Notification.Name {
+    public static let PumpOpsSynchronousDidReceivePacket = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.PumpOpsSynchronousDidReceivePacket")
+}
+

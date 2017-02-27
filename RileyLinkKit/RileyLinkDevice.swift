@@ -59,8 +59,6 @@ public class RileyLinkDevice {
     public var RSSI: Int? {
         return device.rssi?.intValue
     }
-
-
     
     public var peripheral: CBPeripheral {
         return device.peripheral
@@ -71,8 +69,11 @@ public class RileyLinkDevice {
         self.pumpState = pumpState
         
         NotificationCenter.default.addObserver(self, selector: #selector(receivedDeviceNotification(_:)), name: nil, object: bleDevice)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedPacketNotification(_:)), name: .PumpOpsSynchronousDidReceivePacket, object: nil)
+
     }
-    
+
     // MARK: - Device commands
     
     public func assertIdleListening() {
@@ -134,7 +135,7 @@ public class RileyLinkDevice {
     
     @objc private func receivedDeviceNotification(_ note: Notification) {
         switch note.name.rawValue {
-        case RILEYLINK_EVENT_PACKET_RECEIVED:
+        case RILEYLINK_IDLE_RESPONSE_RECEIVED:
             if let packet = note.userInfo?["packet"] as? RFPacket, let pumpID = pumpState?.pumpID, let data = packet.data, let message = PumpMessage(rxData: data), message.address.hexadecimalString == pumpID {
                 NotificationCenter.default.post(name: .RileyLinkDeviceDidReceiveIdleMessage, object: self, userInfo: [type(of: self).IdleMessageDataKey: data])
                 pumpRSSI = Int(packet.rssi)
@@ -143,6 +144,12 @@ public class RileyLinkDevice {
             NotificationCenter.default.post(name: .RileyLinkDeviceDidUpdateTimerTick, object: self)
         default:
             break
+        }
+    }
+
+    @objc private func receivedPacketNotification(_ note: Notification) {
+        if let packet = note.userInfo?[PumpOpsSynchronous.PacketKey] as? RFPacket {
+            pumpRSSI = Int(packet.rssi)
         }
     }
 }
@@ -168,5 +175,4 @@ extension Notification.Name {
     public static let RileyLinkDeviceDidReceiveIdleMessage = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.RileyLinkDeviceDidReceiveIdleMessageNotification")
 
     public static let RileyLinkDeviceDidUpdateTimerTick = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.RileyLinkDeviceDidUpdateTimerTickNotification")
-
 }

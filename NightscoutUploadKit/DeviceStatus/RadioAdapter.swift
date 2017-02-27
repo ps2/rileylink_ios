@@ -33,7 +33,7 @@ public struct RadioAdapter {
         rval["hardware"] = hardware
 
         if let frequency = frequency {
-            rval["freqeuncy"] = frequency
+            rval["frequency"] = frequency
         }
 
         if let name = name {

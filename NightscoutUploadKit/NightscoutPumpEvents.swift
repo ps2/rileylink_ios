@@ -19,6 +19,7 @@ class NightscoutPumpEvents: NSObject {
         var lastBasalRateDate: Date?
         var lastBasalDuration: TempBasalDurationPumpEvent?
         var lastBasalDurationDate: Date?
+
         for event in events {
             switch event.pumpEvent {
             case let bgReceived as BGReceivedPumpEvent:
@@ -58,10 +59,16 @@ class NightscoutPumpEvents: NSObject {
             case let tempBasalDuration as TempBasalDurationPumpEvent:
                 lastBasalDuration = tempBasalDuration
                 lastBasalDurationDate = event.date
+            case is SuspendPumpEvent:
+                let entry = SuspendPumpTreatment(timestamp: event.date, enteredBy: eventSource, suspended: true)
+                results.append(entry)
+            case is ResumePumpEvent:
+                let entry = SuspendPumpTreatment(timestamp: event.date, enteredBy: eventSource, suspended: false)
+                results.append(entry)
             default:
                 break
             }
-            
+
             if let basalRate = lastBasalRate, let basalDuration = lastBasalDuration, let basalRateDate = lastBasalRateDate, let basalDurationDate = lastBasalDurationDate
                 , fabs(basalRateDate.timeIntervalSince(basalDurationDate)) <= 2 {
                 let entry = basalPairToNSTreatment(basalRate, basalDuration: basalDuration, eventSource: eventSource, timestamp: event.date)

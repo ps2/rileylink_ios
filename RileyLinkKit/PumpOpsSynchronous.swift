@@ -424,8 +424,9 @@ class PumpOpsSynchronous {
         if sortedTrials.first!.successes > 0 {
             results.bestFrequency = sortedTrials.first!.frequencyMHz
             try setBaseFrequency(results.bestFrequency)
+            pump.lastValidFrequency = results.bestFrequency
         } else {
-            try setBaseFrequency(middleFreq)
+            try setBaseFrequency(pump.lastValidFrequency ?? middleFreq)
             throw PumpCommsError.rfCommsFailure("No pump responses during scan")
         }
         

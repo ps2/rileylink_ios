@@ -77,7 +77,16 @@ public class RileyLinkDeviceManager {
     public var devices: [RileyLinkDevice] {
         return _devices
     }
-    
+
+    // When multiple RL's are present, this moves the specified RL to the back of the list
+    // so a different RL will be selected by firstConnectedDevice()
+    public func deprioritizeDevice(device: RileyLinkDevice) {
+        if let index = _devices.index(where: { $0.peripheral == device.peripheral }) {
+            _devices.remove(at: index)
+            _devices.append(device)
+        }
+    }
+
     public var firstConnectedDevice: RileyLinkDevice? {
         if let index = _devices.index(where: { $0.peripheral.state == .connected }) {
             return _devices[index]

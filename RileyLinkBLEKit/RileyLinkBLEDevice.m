@@ -517,7 +517,7 @@
                                 @"packet": packet,
                                 @"peripheral": self.peripheral,
                                 };
-        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
     } else if (response.length > 0) {
         uint8_t errorCode = ((uint8_t*)response.bytes)[0];
         switch (errorCode) {

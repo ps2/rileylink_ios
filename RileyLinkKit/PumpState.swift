@@ -63,6 +63,8 @@ public class PumpState {
 
         return false
     }
+
+    public var lastValidFrequency: Double? 
     
     public var lastWakeAttempt: Date?
     

@@ -134,29 +134,6 @@ public class NightscoutUploader {
         return timestamp
     }
 
-    /**
-     Attempts to upload pump history events.
-     
-     This method will not retry if the network task failed.
-     
-     - parameter pumpEvents: An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
-     - parameter source:     The device identifier to display in Nightscout
-     - parameter pumpModel:  The pump model info associated with the events
-     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
-     */
-    public func upload(_ pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: @escaping (Error?) -> Void) {
-        let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
-
-        postToNS(treatments, endpoint: defaultNightscoutTreatmentPath) { (result) in
-            switch result {
-            case .success( _):
-                completionHandler(nil)
-            case .failure(let error):
-                completionHandler(error)
-            }
-        }
-    }
-
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
     ///

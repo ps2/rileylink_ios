@@ -9,9 +9,9 @@
 import Foundation
 import MinimedKit
 
-class NightscoutPumpEvents: NSObject {
+public class NightscoutPumpEvents: NSObject {
     
-    class func translate(_ events: [TimestampedHistoryEvent], eventSource: String) -> [NightscoutTreatment] {
+    public class func translate(_ events: [TimestampedHistoryEvent], eventSource: String, includeCarbs: Bool = true) -> [NightscoutTreatment] {
         var results = [NightscoutTreatment]()
         var lastBolusWizard: BolusWizardEstimatePumpEvent?
         var lastBolusWizardDate: Date?
@@ -34,7 +34,11 @@ class NightscoutPumpEvents: NSObject {
                 var carbs = 0
                 var ratio = 0.0
                 
-                if let wizard = lastBolusWizard, let bwDate = lastBolusWizardDate , event.date.timeIntervalSince(bwDate) <= 2 {
+                if let wizard = lastBolusWizard,
+                    let bwDate = lastBolusWizardDate,
+                    event.date.timeIntervalSince(bwDate) <= 2,
+                    includeCarbs
+                    {
                     carbs = wizard.carbohydrates
                     ratio = wizard.carbRatio
                 }

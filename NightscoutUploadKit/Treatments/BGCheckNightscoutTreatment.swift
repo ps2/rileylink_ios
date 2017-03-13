@@ -14,11 +14,11 @@ public class BGCheckNightscoutTreatment: NightscoutTreatment {
     let glucoseType: GlucoseType
     let units: Units
     
-    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units) {
+    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, notes: String? = nil) {
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
-        super.init(timestamp: timestamp, enteredBy: enteredBy)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes)
     }
     
     override public var dictionaryRepresentation: [String: Any] {

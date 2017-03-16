@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		2B19B9881DF3EF68006AB65F /* NewTimePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */; };
+		2F962EBF1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EBE1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift */; };
+		2F962EC11E6872170070EFBD /* TimestampedHistoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EC01E6872170070EFBD /* TimestampedHistoryEventTests.swift */; };
+		2F962EC31E6873A10070EFBD /* PumpOpsCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EC21E6873A10070EFBD /* PumpOpsCommunication.swift */; };
+		2F962EC51E705C6E0070EFBD /* PumpOpsSynchronousBuildFromFramesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EC41E705C6D0070EFBD /* PumpOpsSynchronousBuildFromFramesTests.swift */; };
+		2F962EC81E7074E60070EFBD /* BolusNormalPumpEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EC71E7074E60070EFBD /* BolusNormalPumpEventTests.swift */; };
+		2F962ECA1E70831F0070EFBD /* PumpModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F962EC91E70831F0070EFBD /* PumpModelTests.swift */; };
 		2FDE1A071E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE1A061E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift */; };
 		430D64CE1CB855AB00FCA750 /* RileyLinkBLEKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64CD1CB855AB00FCA750 /* RileyLinkBLEKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D64D51CB855AB00FCA750 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
@@ -453,6 +459,12 @@
 
 /* Begin PBXFileReference section */
 		2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTimePumpEvent.swift; sourceTree = "<group>"; };
+		2F962EBE1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpOpsSynchronousTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		2F962EC01E6872170070EFBD /* TimestampedHistoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedHistoryEventTests.swift; sourceTree = "<group>"; };
+		2F962EC21E6873A10070EFBD /* PumpOpsCommunication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsCommunication.swift; sourceTree = "<group>"; };
+		2F962EC41E705C6D0070EFBD /* PumpOpsSynchronousBuildFromFramesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsSynchronousBuildFromFramesTests.swift; sourceTree = "<group>"; };
+		2F962EC71E7074E60070EFBD /* BolusNormalPumpEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNormalPumpEventTests.swift; sourceTree = "<group>"; };
+		2F962EC91E70831F0070EFBD /* PumpModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModelTests.swift; sourceTree = "<group>"; };
 		2FDE1A061E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadCurrentPageNumberMessageBody.swift; sourceTree = "<group>"; };
 		430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkBLEKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		430D64CD1CB855AB00FCA750 /* RileyLinkBLEKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEKit.h; sourceTree = "<group>"; };
@@ -889,6 +901,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F962EC61E7074B70070EFBD /* PumpEvents */ = {
+			isa = PBXGroup;
+			children = (
+				2F962EC71E7074E60070EFBD /* BolusNormalPumpEventTests.swift */,
+			);
+			path = PumpEvents;
+			sourceTree = "<group>";
+		};
 		430D64CC1CB855AB00FCA750 /* RileyLinkBLEKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -941,6 +961,7 @@
 				434AB0941CBA0DF600422F4A /* PumpState.swift */,
 				434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */,
 				434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */,
+				2F962EC21E6873A10070EFBD /* PumpOpsCommunication.swift */,
 			);
 			path = RileyLinkKit;
 			sourceTree = "<group>";
@@ -948,8 +969,10 @@
 		43722FBD1CB9F7640038B7F2 /* RileyLinkKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				2F962EBE1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift */,
 				43722FBE1CB9F7640038B7F2 /* RileyLinkKitTests.swift */,
 				43722FC01CB9F7640038B7F2 /* Info.plist */,
+				2F962EC41E705C6D0070EFBD /* PumpOpsSynchronousBuildFromFramesTests.swift */,
 			);
 			path = RileyLinkKitTests;
 			sourceTree = "<group>";
@@ -1047,6 +1070,7 @@
 		C10D9BD01C8269D500378342 /* MinimedKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				2F962EC61E7074B70070EFBD /* PumpEvents */,
 				54BC449F1DB6F6C100340EED /* GlucoseEvents */,
 				C121985D1C8DE72500BC374C /* Messages */,
 				C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */,
@@ -1059,8 +1083,10 @@
 				C1EAD6D31C826C43006DBA60 /* NSDataTests.swift */,
 				43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */,
 				43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */,
+				2F962EC91E70831F0070EFBD /* PumpModelTests.swift */,
 				C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */,
 				54BC44B41DB7184D00340EED /* NSStringExtensions.swift */,
+				2F962EC01E6872170070EFBD /* TimestampedHistoryEventTests.swift */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -1954,6 +1980,7 @@
 				C170C9991CECD80000F3D8E5 /* CommandResponseViewController.swift in Sources */,
 				434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */,
 				C170C98E1CECD6F300F3D8E5 /* CBPeripheralState.swift in Sources */,
+				2F962EC31E6873A10070EFBD /* PumpOpsCommunication.swift in Sources */,
 				C1C659191E16BA9D0025CC58 /* CaseCountable.swift in Sources */,
 				C170C99B1CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift in Sources */,
 				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
@@ -1968,6 +1995,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F962EBF1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift in Sources */,
+				2F962EC51E705C6E0070EFBD /* PumpOpsSynchronousBuildFromFramesTests.swift in Sources */,
 				43722FBF1CB9F7640038B7F2 /* RileyLinkKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2136,6 +2165,7 @@
 				54BC44B31DB711BE00340EED /* SensorCalGlucoseEventTests.swift in Sources */,
 				54BC44B11DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift in Sources */,
 				43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */,
+				2F962EC81E7074E60070EFBD /* BolusNormalPumpEventTests.swift in Sources */,
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
 				43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */,
@@ -2146,6 +2176,7 @@
 				C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */,
 				54BC44A31DB7021B00340EED /* SensorStatusGlucoseEventTests.swift in Sources */,
 				C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */,
+				2F962ECA1E70831F0070EFBD /* PumpModelTests.swift in Sources */,
 				546A85CE1DF7B99D00733213 /* SensorPacketGlucoseEventTests.swift in Sources */,
 				43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				54BC44A91DB704A600340EED /* CalBGForGHGlucoseEventTests.swift in Sources */,
@@ -2160,6 +2191,7 @@
 				43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				54BC44B71DB81B5100340EED /* GetGlucosePageMessageBodyTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
+				2F962EC11E6872170070EFBD /* TimestampedHistoryEventTests.swift in Sources */,
 				54BC44B51DB7184D00340EED /* NSStringExtensions.swift in Sources */,
 				546A85D61DF7C7AA00733213 /* SensorDataHighGlucoseEventTests.swift in Sources */,
 				545AEFB21DF5D7DB00DF9433 /* SensorDataLowGlucoseEventTests.swift in Sources */,

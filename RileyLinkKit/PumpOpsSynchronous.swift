@@ -436,7 +436,7 @@ class PumpOpsSynchronous {
     /// Converts PumpEvents after startDate to TimestampedHistoryEvents
     /// hasMoreEvents indicates the caller should continue getting more PumpEvents from the device
     /// - Parameters:
-    ///   - pumpEvents: array of pump events
+    ///   - pumpEvents: array of pump events ordered from newest to oldest (reversed from normal page order)
     ///   - startDate: return events from past this date (adjusted for TimestampDeltaAllowance)
     ///   - pumpModel: pumpModel
     /// - Returns: tuple of Timestamped History Events and a Bool indicating if more events can be converted

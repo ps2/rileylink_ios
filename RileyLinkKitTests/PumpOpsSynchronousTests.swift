@@ -165,73 +165,22 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timeStampedEvents, containsPumpEvent: createBolusEvent2009())
     }
     
-    func testNonMutableBolusEventFor522() {
+    func testNonMutableSquareWaveBolusFor522() {
         // device that can have out of order events
         loadTestWithPumpModel(.Model522)
         // 2009-07-31 09:00:00 +0000
         // 120 minute duration
-        let regularBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080048000240009a24a1510")!, pumpModel: pumpModel)!
+        let squareWaveBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080048000240009a24a1510")!, pumpModel: pumpModel)!
         
-        let events:[PumpEvent] = [regularBolus]
+        let events:[PumpEvent] = [squareWaveBolus]
         
         let (timeStampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
-        // It should be counted for IoB (how to measure)
-        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: regularBolus))
-    }
-    
-    func testOutOfOrderEventFor522() {
-        loadTestWithPumpModel(.Model522)
-        
-        let tempEventBasal = createTempEventBasal()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), tempEventBasal]
-        let (timeStampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        // this triggers the out of order event cancellation
-        // It should not be counted for IoB (how to measure)
-        XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: tempEventBasal))
-    }
-    
-    func testOutOfOrderEventFor522CancelsOperation() {
-        loadTestWithPumpModel(.Model522)
-        
-        // 2016-05-30 01:21:00 +0000
-        let tempEventBasal = createTempEventBasal()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createBolusEvent2009(), tempEventBasal]
-        
-        let (_, hasMoreEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        // this triggers the out of order event cancellation
-        XCTAssertFalse(hasMoreEvents)
+        // It should be included
+        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
 
-    func testMutableEventIsCounted() {
-        // device that can have out of order events
-        loadTestWithPumpModel(.Model522)
-        
-        //2016-05-30 01:21:00 +0000
-        let data = Data(hexadecimalString:"338c4055145d1000")!
-        let tempEventBolus = TempBasalPumpEvent(availableData: data, pumpModel: pumpModel)!
-        
-        let events:[PumpEvent] = [tempEventBolus, createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        //bolus should be complete, but within the Insulin action time
-        let (timestampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        // It should be counted for IoB (how to measure)
-        XCTAssertTrue(array(timestampedEvents, containsPumpEvent: tempEventBolus))
-    }
-    
-    func testMultipleBolusEventsWith523() {
-        loadTestWithPumpModel(.Model523)
-        
-        let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        let (timestampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        assertArray(timestampedEvents, containsPumpEvent: createBolusEvent2009())
-    }
-    
+
     //shouldFinishIfTimestampBeforeStartDateEncounteredConsideringAdjustedTime()
     func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
         let event2010 = createSquareBolusEvent2010()

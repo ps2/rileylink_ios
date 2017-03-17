@@ -98,11 +98,10 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         
         let date = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2017, month: 2, day: 11, hour: 0, minute: 0, second: 0).date!
         do {
-            let eventsTuple = try sut.getHistoryEvents(since: date)
-            let historyEvent = eventsTuple.0
-            
-            // Ends because of out of order
-            XCTAssertEqual(historyEvent.count, 291)
+            let (historyEvents, _) = try sut.getHistoryEvents(since: date)
+
+            // Ends because we reached event sufficiently before date
+            XCTAssertEqual(historyEvents.count, 291)
         } catch {
             XCTFail()
         }
@@ -116,11 +115,10 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         
         let date = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2017, month: 2, day: 11, hour: 0, minute: 0, second: 0).date!
         do {
-            let eventsTuple = try sut.getHistoryEvents(since: date)
-            let historyEvent = eventsTuple.0
-            
-            // Ends because of out of order
-            XCTAssertEqual(historyEvent.count, 291)
+            let (historyEvents, _) = try sut.getHistoryEvents(since: date)
+
+            // Ends because we reached event sufficiently before date
+            XCTAssertEqual(historyEvents.count, 291)
         } catch {
             XCTFail()
         }
@@ -132,21 +130,19 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         //02/11/2017 @ 12:00am (UTC)
         let date = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2017, month: 2, day: 11, hour: 0, minute: 0, second: 0).date!
         do {
-            let eventsTuple = try sut.getHistoryEvents(since: date)
-            let historyEvent = eventsTuple.0
+             let (historyEvents, _) = try sut.getHistoryEvents(since: date)
+
+            var dateCursor = historyEvents[0].date
             
-            // Ends because of out of order
-            var lastDate = historyEvent[0].date
-            
-            historyEvent.forEach { event in
+            historyEvents.forEach { event in
                 
                 // Events can be slightly out of order
-                if ( lastDate.timeIntervalSince(event.date) > TimeInterval(minutes: 0.2)) {
+                if ( dateCursor.timeIntervalSince(event.date) > TimeInterval(minutes: 0.2)) {
                     // But shouldn't be this much
                     XCTFail("Found out of order event")
                 }
                 
-                lastDate = event.date
+                dateCursor = event.date
             }
             } catch {
             XCTFail()

@@ -36,7 +36,7 @@ public class NightscoutUploader {
     private(set) var entries = [NightscoutEntry]()
     private(set) var deviceStatuses = [[String: Any]]()
     private(set) var treatmentsQueue = [NightscoutTreatment]()
-    
+
     private(set) var lastMeterMessageRxTime: Date?
     
     public private(set) var observingPumpEventsSince: Date!
@@ -282,7 +282,7 @@ public class NightscoutUploader {
             lastMeterMessageRxTime = date
         }
     }
-    
+
     // MARK: - Uploading
     
     func flushAll() {

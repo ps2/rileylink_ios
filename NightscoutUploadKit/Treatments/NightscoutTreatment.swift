@@ -22,12 +22,15 @@ public class NightscoutTreatment: DictionaryRepresentable {
     
     let timestamp: Date
     let enteredBy: String
+    let notes: String?
     let id: String?
 
-    init(timestamp: Date, enteredBy: String, id: String? = nil) {
+
+    init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil) {
         self.timestamp = timestamp
         self.enteredBy = enteredBy
         self.id = id
+        self.notes = notes
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -38,6 +41,9 @@ public class NightscoutTreatment: DictionaryRepresentable {
         ]
         if let id = id {
             rval["_id"] = id
+        }
+        if let notes = notes {
+            rval["notes"] = notes
         }
         return rval
     }

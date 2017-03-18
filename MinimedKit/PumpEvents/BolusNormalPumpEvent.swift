@@ -39,8 +39,29 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             return TimeInterval(minutes: programmed / deliveryUnitsPerMinute)
         }
     }
+    
+    public init(length: Int, rawData: Data, timestamp: DateComponents, unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?, amount: Double, programmed: Double, unabsorbedInsulinTotal: Double, type: BolusType, duration: TimeInterval) {
+        self.length = length
+        self.rawData = rawData
+        self.timestamp = timestamp
+        self.unabsorbedInsulinRecord = unabsorbedInsulinRecord
+        self.amount = amount
+        self.programmed = programmed
+        self.unabsorbedInsulinTotal = unabsorbedInsulinTotal
+        self.type = type
+        self.duration = duration
+    }
 
     public init?(availableData: Data, pumpModel: PumpModel) {
+        let length: Int
+        let rawData: Data
+        let timestamp: DateComponents
+        var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
+        let amount: Double
+        let programmed: Double
+        let unabsorbedInsulinTotal: Double
+        let type: BolusType
+        let duration: TimeInterval
         
         func doubleValueFromData(at index: Int) -> Double {
             return Double(availableData[index] as UInt8)
@@ -50,11 +71,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.strokesPerUnit)
         }
         
-        if pumpModel.larger {
-            length = 13
-        } else {
-            length = 9
-        }
+        length = BolusNormalPumpEvent.calculateLength(pumpModel.larger)
         
         guard length <= availableData.count else {
             return nil
@@ -76,6 +93,8 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             unabsorbedInsulinTotal = 0
         }
         type = duration > 0 ? .Square : .Normal
+        
+        self.init(length: length, rawData: rawData, timestamp: timestamp, unabsorbedInsulinRecord: unabsorbedInsulinRecord, amount:amount, programmed: programmed, unabsorbedInsulinTotal: unabsorbedInsulinTotal, type: type, duration: duration)
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -101,4 +120,11 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         return dictionary
     }
     
+    public static func calculateLength(_ isLarger:Bool) -> Int {
+        if isLarger {
+            return 13
+        } else {
+            return  9
+        }
+    }
 }

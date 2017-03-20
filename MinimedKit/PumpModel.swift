@@ -50,6 +50,10 @@ public enum PumpModel: String {
         return generation >= 23
     }
     
+    public var mayHaveOutOfOrderEvents: Bool {
+        return !appendsSquareWaveToHistoryOnStartOfDelivery
+    }
+    
     public var hasMySentry: Bool {
         return generation >= 23
     }

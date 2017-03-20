@@ -19,7 +19,15 @@ class PumpModelTests: XCTestCase {
         XCTAssertTrue( PumpModel.Model523.appendsSquareWaveToHistoryOnStartOfDelivery)
     }
     
+    func test523DoesntHaveOutOfOrderEvent() {
+        XCTAssertFalse(PumpModel.Model523.mayHaveOutOfOrderEvents)
+    }
+    
     func test522DoesntAppendSquareWaveToHistory() {
         XCTAssertFalse(PumpModel.Model522.appendsSquareWaveToHistoryOnStartOfDelivery)
+    }
+    
+    func test522MayHaveOutOfOrderEvent() {
+        XCTAssertTrue(PumpModel.Model522.mayHaveOutOfOrderEvents)
     }
 }

@@ -344,10 +344,10 @@ func dataFromHexString(_ hexString: String) -> Data {
 
 class PumpOpsCommunicationStub : PumpOpsCommunication {
     
-    var responses: [MessageType : [PumpMessage]] = [MessageType : [PumpMessage]]()
+    var responses = [MessageType: [PumpMessage]]()
     
     // internal tracking of how many times a response type has been received
-    private var responsesHaveOccured: [MessageType: Int] = [MessageType : Int]()
+    private var responsesHaveOccured = [MessageType: Int]()
     
     override func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt16, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         

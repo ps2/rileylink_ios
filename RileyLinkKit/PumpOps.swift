@@ -11,6 +11,12 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
+public enum SetBolusError: Error {
+    case certain(PumpCommsError)
+    case uncertain(PumpCommsError)
+}
+
+
 public class PumpOps {
     
     public let pumpState: PumpState
@@ -249,7 +255,7 @@ public class PumpOps {
      - parameter completion: A closure called after the command is complete. This closure takes a single argument:
         - error: An error describing why the command failed
      */
-    public func setNormalBolus(units: Double, completion: @escaping (_ error: Error?) -> Void) {
+    public func setNormalBolus(units: Double, completion: @escaping (_ error: SetBolusError?) -> Void) {
         device.runSession(withName: "Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
@@ -261,8 +267,17 @@ public class PumpOps {
                 _ = try ops.runCommandWithArguments(message)
                 
                 completion(nil)
-            } catch let error {
-                completion(error)
+            } catch let error as PumpCommsError {
+                completion(.certain(error))
+            } catch let error as PumpCommandError {
+                switch error {
+                case .command(let error):
+                    completion(.certain(error))
+                case .arguments(let error):
+                    completion(.uncertain(error))
+                }
+            } catch {
+                assertionFailure()
             }
         }
     }

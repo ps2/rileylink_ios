@@ -199,7 +199,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     func testOutOfOrderEventFor522() {
         loadTestWithPumpModel(.Model522)
         
-        let tempEventBasal = createTempEventBasal()
+        let tempEventBasal = createTempEventBasal2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), tempEventBasal]
         let (timeStampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
@@ -266,7 +266,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         loadTestWithPumpModel(.Model522)
         
         // 2016-05-30 01:21:00 +0000
-        let tempEventBasal = createTempEventBasal()
+        let tempEventBasal = createTempEventBasal2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createBolusEvent2009(), tempEventBasal]
         
         let (_, hasMoreEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
@@ -445,7 +445,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Normal, duration: TimeInterval(minutes: 120))
     }
     
-    func createTempEventBasal() -> TempBasalPumpEvent {
+    func createTempEventBasal2016() -> TempBasalPumpEvent {
         // 2016-05-30 01:21:00 +0000
         let tempEventBasal = TempBasalPumpEvent(availableData: Data(hexadecimalString:"338c4055145d1000")!, pumpModel: pumpModel)!
         return tempEventBasal

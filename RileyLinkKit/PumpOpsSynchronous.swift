@@ -511,9 +511,9 @@ class PumpOpsSynchronous {
 
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
                     
-                    let dontCancelBecauseOfDate = pumpModel.mayHaveOutOfOrderEvents && event.canBeDelayedAppend()
+                    let possibleCancelBecauseOfDate = !event.canBeDelayedAppend(withPumpModel: pumpModel)
                     
-                    if !dontCancelBecauseOfDate {
+                    if possibleCancelBecauseOfDate {
                         if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
                             NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
                             return (events: events, hasMoreEvents: false)

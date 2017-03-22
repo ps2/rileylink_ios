@@ -23,7 +23,13 @@ public protocol PumpEvent : DictionaryRepresentable {
 }
 
 public extension PumpEvent {
-    public func canBeDelayedAppend() -> Bool {
+    public func canBeDelayedAppend(withPumpModel pumpModel: PumpModel) -> Bool {
+        
+        if !pumpModel.mayHaveOutOfOrderEvents {
+            return false
+        }
+        
+        
         switch self {
         case let bolus as BolusNormalPumpEvent:
             // Square bolus' for some devices are delayed append

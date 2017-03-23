@@ -50,6 +50,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         setUpSUT()
     }
     
+    /// Creates the System Under Test. This is needed because our SUT has dependencies injected through the constructor
     func setUpSUT() {
         pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
         pumpState.pumpModel = pumpModel
@@ -95,7 +96,6 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testMultipleBatteryEvent() {
-        
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
         let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
@@ -106,8 +106,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
 
     func testOldBatteryEventIsFiltered() {
-        
-        let datePast2007 = dateComponents2007.date!.addingTimeInterval(60*60)
+        let datePast2007 = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes: 60))
         
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
@@ -295,7 +294,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timestampedEvents, containsPumpEvent: tempEventBolus))
     }
     
-    //shouldFinishIfTimestampBeforeStartDateEncounteredConsideringAdjustedTime()
     func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
         let event2010 = createSquareBolusEvent2010()
         let events = [event2010]
@@ -390,6 +388,12 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(hasMoreEvents)
     }
 
+    /// Runs a test that simulates event retrieval for different start times
+    ///
+    /// - Parameters:
+    ///   - pumpEvent: The event to check
+    ///   - timeIntervalAdjustment: How to adjust the start time, relative to the event.timestamp
+    /// - Returns: Tuple
     func runDeltaAllowanceTimeTest(pumpEvent: BolusNormalPumpEvent, timeIntervalAdjustment:TimeInterval) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool) {
         
         let startDate = pumpEvent.timestamp.date!.addingTimeInterval(timeIntervalAdjustment)

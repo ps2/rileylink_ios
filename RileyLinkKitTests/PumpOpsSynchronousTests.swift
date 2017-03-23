@@ -47,16 +47,24 @@ class PumpOpsSynchronousTests: XCTestCase {
         rileyLinkCmdSession = RileyLinkCmdSession()
         pumpOpsCommunicationStub = PumpOpsCommunicationStub(session: rileyLinkCmdSession)
         
-        loadSUT()
+        setUpSUT()
     }
     
-    func loadSUT() {
+    func setUpSUT() {
         pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
         pumpState.pumpModel = pumpModel
         pumpState.awakeUntil = Date(timeIntervalSinceNow: 100) // pump is awake
         
         sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession)
         sut.communication = pumpOpsCommunicationStub
+    }
+    
+    /// Duplicates logic in setUp with a new PumpModel
+    ///
+    /// - Parameter newPumpModel: model of the pump to test
+    func setUpTestWithPumpModel(_ newPumpModel: PumpModel) {
+        pumpModel = newPumpModel
+        setUpSUT()
     }
     
     func testShouldContinueIfTimestampBeforeStartDateNotEncountered() {
@@ -136,13 +144,8 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertEqual(events.count, 1)
     }
     
-    func loadTestWithPumpModel(_ newPumpModel: PumpModel) {
-        pumpModel = newPumpModel
-        loadSUT()
-    }
-    
     func testMultipleBolusEvents() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
         
@@ -152,7 +155,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testMultipleBolusEventsContainsFirstBolus() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
         
@@ -162,7 +165,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testMultipleBolusEventsContainsSecondBolus() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
         
@@ -172,7 +175,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testMultipleBolusEventsWith523() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
         
@@ -183,7 +186,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     
     func testNonMutableSquareWaveBolusFor522() {
         // device that can have out of order events
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         // 2009-07-31 09:00:00 +0000
         // 120 minute duration
         let squareWaveBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080048000240009a24a1510")!, pumpModel: pumpModel)!
@@ -197,7 +200,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testOutOfOrderEventFor522() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let tempEventBasal = createTempEventBasal2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), tempEventBasal]
@@ -208,7 +211,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testDelayedAppendOutOfOrderEventFor522() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let squareBolus2016 = createSquareBolusEvent2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), squareBolus2016]
@@ -219,7 +222,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testDelayedAppendOutOfOrderEventFor523() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let squareBolus2016 = createSquareBolusEvent2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), squareBolus2016]
@@ -230,7 +233,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testDelayedAppendOutOfOrderEventFor523DoesntReturnEvent() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let nonDelayedAppendBolusEvent = createBolusEvent2011()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), nonDelayedAppendBolusEvent]
@@ -241,7 +244,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testNonDelayedAppendOutOfOrderEventFor523CancelsOperation() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let nonDelayedAppendBolusEvent = createBolusEvent2011()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), nonDelayedAppendBolusEvent]
@@ -252,7 +255,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testDelayedAppendOutOfOrderEventFor523CancelsOperation() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let squareBolus2016 = createSquareBolusEvent2016()
         let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
@@ -263,7 +266,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testOutOfOrderEventFor522CancelsOperation() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         // 2016-05-30 01:21:00 +0000
         let tempEventBasal = createTempEventBasal2016()
@@ -277,7 +280,7 @@ class PumpOpsSynchronousTests: XCTestCase {
 
     func testMutableEventIsCounted() {
         // device that can have out of order events
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         //2016-05-30 01:21:00 +0000
         let data = Data(hexadecimalString:"338c4055145d1000")!
@@ -305,26 +308,26 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func test2010EventSanityWith523() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         let bolusEvent = createSquareBolusEvent2010()
         XCTAssertEqual(bolusEvent.timestamp.year!, 2010)
         XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
     }
     
     func test2009EventSanityWith523() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         let bolusEvent = createBolusEvent2009()
         XCTAssertEqual(bolusEvent.timestamp.year!, 2009)
         XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
     }
     
     func test2009EventSavityWith522() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         XCTAssertEqual(createBolusEvent2009().timestamp.year!, 2009)
     }
     
     func test2010EventSanityWith522() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         XCTAssertEqual(createSquareBolusEvent2010().timestamp.year!, 2010)
     }
 
@@ -345,7 +348,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let bolusEvent = createBolusEvent2009()
         let (timestampedEvents, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:10))
@@ -354,7 +357,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testShouldContainEventWhen522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let bolusEvent = createBolusEvent2009()
         let (timestampedEvents, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:8))
@@ -363,7 +366,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testShouldNotContain522EventWhenEstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let bolusEvent = createBolusEvent2009()
         let (timestampedEvents, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:11))
@@ -372,7 +375,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testShouldCancelWhen523EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
-        loadTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.Model523)
         
         let (_, hasMoreEvents) = runDeltaAllowanceTimeTest(pumpEvent: createSquareBolusEvent2010(), timeIntervalAdjustment: TimeInterval(hours:11))
         
@@ -380,7 +383,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testShouldNotCancelWhen522EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
-        loadTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.Model522)
         
         let (_, hasMoreEvents) = runDeltaAllowanceTimeTest(pumpEvent: createSquareBolusEvent2010(), timeIntervalAdjustment: TimeInterval(hours:11))
         

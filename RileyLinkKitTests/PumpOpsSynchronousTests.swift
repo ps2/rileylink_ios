@@ -143,7 +143,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertEqual(events.count, 1)
     }
     
-    func testMultipleBolusEvents() {
+    func testMultipleBolusEventsAreCounted() {
         setUpTestWithPumpModel(.Model522)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
@@ -173,7 +173,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timeStampedEvents, containsPumpEvent: createBolusEvent2009())
     }
     
-    func testMultipleBolusEventsWith523() {
+    func testMultipleBolusEventsWith523ContainsLastEvent() {
         setUpTestWithPumpModel(.Model523)
         
         let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
@@ -183,7 +183,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timestampedEvents, containsPumpEvent: createBolusEvent2009())
     }
     
-    func testNonMutableSquareWaveBolusFor522() {
+    func testNonMutableSquareWaveBolusFor522IsReturned() {
         // device that can have out of order events
         setUpTestWithPumpModel(.Model522)
         // 2009-07-31 09:00:00 +0000
@@ -198,7 +198,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
     
-    func testOutOfOrderEventFor522() {
+    func testOutOfOrderEventFor522IsNotReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let tempEventBasal = createTempEventBasal2016()
@@ -209,7 +209,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: tempEventBasal))
     }
     
-    func testDelayedAppendOutOfOrderEventFor522() {
+    func testDelayedAppendOutOfOrderEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let squareBolus2016 = createSquareBolusEvent2016()
@@ -220,7 +220,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
     }
     
-    func testDelayedAppendOutOfOrderEventFor523() {
+    func testDelayedAppendOutOfOrderEventFor523IsNotReturned() {
         setUpTestWithPumpModel(.Model523)
         
         let squareBolus2016 = createSquareBolusEvent2016()
@@ -294,7 +294,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timestampedEvents, containsPumpEvent: tempEventBolus))
     }
     
-    func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
+    func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeContainsEvent() {
         let event2010 = createSquareBolusEvent2010()
         let events = [event2010]
         
@@ -345,7 +345,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timestampedEvents, containsPumpEvent: event2010)
     }
     
-    func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
+    func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeIgnoresEvent() {
         setUpTestWithPumpModel(.Model522)
         
         let bolusEvent = createBolusEvent2009()

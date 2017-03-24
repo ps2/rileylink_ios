@@ -464,7 +464,7 @@ class PumpOpsSynchronous {
 
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
             
-            let (timeStampedEvents, hasMoreEvents) = convertPumpEventToTimestampedEvents(pumpEvents: page.events.reversed(), startDate: startDate, pumpModel: pumpModel)
+            let (timeStampedEvents, hasMoreEvents, _) = convertPumpEventToTimestampedEvents(pumpEvents: page.events.reversed(), startDate: startDate, pumpModel: pumpModel)
             
             events = timeStampedEvents + events
             
@@ -482,7 +482,7 @@ class PumpOpsSynchronous {
     ///   - startDate: return events from past this date (adjusted for TimestampDeltaAllowance)
     ///   - pumpModel: pumpModel
     /// - Returns: tuple of Timestamped History Events and a Bool indicating if more events can be converted
-    internal func convertPumpEventToTimestampedEvents(pumpEvents: [PumpEvent], startDate: Date, pumpModel: PumpModel) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool) {
+    internal func convertPumpEventToTimestampedEvents(pumpEvents: [PumpEvent], startDate: Date, pumpModel: PumpModel) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool, cancelledEarly: Bool) {
         
         // Going to scan backwards in time through events, so event time should be monotonically decreasing.
         // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
@@ -516,10 +516,10 @@ class PumpOpsSynchronous {
                     if possibleCancelBecauseOfDate {
                         if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
                             NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
-                            return (events: events, hasMoreEvents: false)
+                            return (events: events, hasMoreEvents: false, cancelledEarly: false)
                         } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
-                            return (events: events, hasMoreEvents: false)
+                            return (events: events, hasMoreEvents: false, cancelledEarly: true)
                         }
                     }
                     
@@ -538,7 +538,7 @@ class PumpOpsSynchronous {
             lastEvent = event
         }
         
-        return (events: events, hasMoreEvents: true)
+        return (events: events, hasMoreEvents: true, cancelledEarly: false)
     }
     
     private func getHistoryPage(_ pageNum: Int) throws -> Data {

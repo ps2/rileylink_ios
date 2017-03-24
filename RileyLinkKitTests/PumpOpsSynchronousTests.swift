@@ -220,7 +220,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
     }
     
-    func testDelayedAppendOutOfOrderEventFor523IsNotReturned() {
+    func test523SquareBolusEventIsNotReturned() {
         setUpTestWithPumpModel(.Model523)
         
         let squareBolus2016 = createSquareBolusEvent2016()
@@ -231,29 +231,29 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
     }
     
-    func testDelayedAppendOutOfOrderEventFor523DoesntReturnEvent() {
+    func test523RegularBolusDoesReturnEvent() {
         setUpTestWithPumpModel(.Model523)
         
-        let nonDelayedAppendBolusEvent = createBolusEvent2011()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), nonDelayedAppendBolusEvent]
+        let regularBolusEvent = createBolusEvent2011()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), regularBolusEvent]
         let (timeStampedEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
-        //It should not be returned
-        XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: nonDelayedAppendBolusEvent))
+        //It should be returned
+        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: regularBolusEvent))
     }
     
-    func testNonDelayedAppendOutOfOrderEventFor523CancelsOperation() {
+    func test523RegularDoesntCancelsOperation() {
         setUpTestWithPumpModel(.Model523)
         
-        let nonDelayedAppendBolusEvent = createBolusEvent2011()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), nonDelayedAppendBolusEvent]
+        let regularBolusEvent = createBolusEvent2011()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), regularBolusEvent]
         let (_, hasMoreEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
-        // this triggers the out of order event cancellation
-        XCTAssertFalse(hasMoreEvents)
+        // this doesn't trigger the out of order event cancellation
+        XCTAssertTrue(hasMoreEvents)
     }
     
-    func testDelayedAppendOutOfOrderEventFor523CancelsOperation() {
+    func test523SquareBolusCancelsOperation() {
         setUpTestWithPumpModel(.Model523)
         
         let squareBolus2016 = createSquareBolusEvent2016()

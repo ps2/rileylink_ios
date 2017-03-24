@@ -51,7 +51,7 @@ public enum PumpModel: String {
     }
     
     public var mayHaveOutOfOrderEvents: Bool {
-        return !appendsSquareWaveToHistoryOnStartOfDelivery
+        return !appendsSquareWaveToHistoryOnStartOfDelivery || self == .Model523
     }
     
     public var hasMySentry: Bool {

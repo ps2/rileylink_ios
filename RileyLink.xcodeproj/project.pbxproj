@@ -182,7 +182,6 @@
 		C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA25C198B436900309FA4 /* InfoPlist.strings */; };
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
-		C130BF7A1E6290CA002EDB99 /* SuspendPumpTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C130BF791E6290CA002EDB99 /* SuspendPumpTreatment.swift */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C139AC231BFD84B500B0518F /* RuntimeUtils.m */; };
@@ -310,6 +309,8 @@
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1C659191E16BA9D0025CC58 /* CaseCountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C659181E16BA9D0025CC58 /* CaseCountable.swift */; };
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
+		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
+		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
 		C1E535EA1991E36700C2AC49 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E535E91991E36700C2AC49 /* NSData+Conversion.m */; };
 		C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */; };
 		C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */; };
@@ -633,7 +634,6 @@
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
-		C130BF791E6290CA002EDB99 /* SuspendPumpTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendPumpTreatment.swift; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C139AC221BFD84B500B0518F /* RuntimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeUtils.h; sourceTree = "<group>"; };
@@ -763,6 +763,8 @@
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
+		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
+		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
@@ -1408,9 +1410,10 @@
 				C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */,
 				C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */,
 				C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */,
-				C130BF791E6290CA002EDB99 /* SuspendPumpTreatment.swift */,
+				C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */,
 				C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */,
 				492526701E4521FB00ACBA5F /* NoteNightscoutTreatment.swift */,
+				C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */,
 			);
 			path = Treatments;
 			sourceTree = "<group>";
@@ -2266,6 +2269,7 @@
 				C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */,
 				C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */,
 				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
+				C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */,
 				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
 				C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */,
 				C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */,
@@ -2274,9 +2278,9 @@
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				43F348061D596270009933DC /* HKUnit.swift in Sources */,
-				C130BF7A1E6290CA002EDB99 /* SuspendPumpTreatment.swift in Sources */,
 				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
+				C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,

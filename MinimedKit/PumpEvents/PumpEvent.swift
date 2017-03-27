@@ -23,7 +23,7 @@ public protocol PumpEvent : DictionaryRepresentable {
 }
 
 public extension PumpEvent {
-    public func canBeDelayedAppend(withPumpModel pumpModel: PumpModel) -> Bool {
+    public func isDelayedAppend(withPumpModel pumpModel: PumpModel) -> Bool {
         
         if !pumpModel.mayHaveOutOfOrderEvents {
             return false

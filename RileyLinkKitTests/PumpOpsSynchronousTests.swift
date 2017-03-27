@@ -315,7 +315,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timestampedEvents, containsPumpEvent: tempEventBolus))
     }
     
-    func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeContainsEvent() {
+    func test523EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeDoesntContainsEvent() {
         let event2010 = createSquareBolusEvent2010()
         let events = [event2010]
         
@@ -323,7 +323,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         let (timestampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: startDate, pumpModel: pumpModel)
         
-        assertArray(timestampedEvents, containsPumpEvent: event2010)
+        assertArray(timestampedEvents, doesntContainPumpEvent: event2010)
     }
     
     func test2010EventSanityWith523() {
@@ -353,17 +353,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     func testShouldNotContainEventWhenEstimatedTimeDeltaAllowanceBefore523AdjustedStartTime() {
         let event2010 = createSquareBolusEvent2010()
         
-        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event2010, timeIntervalAdjustment: TimeInterval(minutes:11))
+        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event2010, timeIntervalAdjustment: TimeInterval(minutes:1))
         
         assertArray(timestampedEvents, doesntContainPumpEvent: event2010)
-    }
-    
-    func testShouldContainEventWhenEstimatedTimeDeltaAllowanceBefore523AdjustedStartTime() {
-        let event2010 = createSquareBolusEvent2010()
-
-        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event2010, timeIntervalAdjustment: TimeInterval(minutes:9))
-        
-        assertArray(timestampedEvents, containsPumpEvent: event2010)
     }
     
     func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeIgnoresEvent() {
@@ -379,7 +371,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         setUpTestWithPumpModel(.Model522)
         
         let bolusEvent = createBolusEvent2009()
-        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:8))
+        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: -1)
         
         assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
     }

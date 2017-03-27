@@ -484,16 +484,6 @@ class PumpOpsSynchronous {
     /// - Returns: tuple of Timestamped History Events and a Bool indicating if more events can be converted
     internal func convertPumpEventToTimestampedEvents(pumpEvents: [PumpEvent], startDate: Date, pumpModel: PumpModel) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool, cancelledEarly: Bool) {
         
-        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
-        // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
-        // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
-        let eventTimestampDeltaAllowance: TimeInterval
-        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
-            eventTimestampDeltaAllowance = TimeInterval(minutes: 10)
-        } else {
-            eventTimestampDeltaAllowance = TimeInterval(hours: 9)
-        }
-        
         // Start with some time in the future, to account for the condition when the pump's clock is ahead
         // of ours by a small amount.
         var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
@@ -511,17 +501,17 @@ class PumpOpsSynchronous {
 
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
                     
-                    let possibleCancelBecauseOfDate = !event.canBeDelayedAppend(withPumpModel: pumpModel)
+                    let possibleCancelBecauseOfDate = !event.isDelayedAppend(withPumpModel: pumpModel)
                     
                     if possibleCancelBecauseOfDate {
-                        if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
-                            NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                        if date <= startDate {
+                            // Success, we have all the events we need
+                            //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
                             return (events: events, hasMoreEvents: false, cancelledEarly: false)
-                        } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
+                        } else if date.timeIntervalSince(timeCursor) > TimeInterval(minutes: 60) {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             return (events: events, hasMoreEvents: false, cancelledEarly: true)
-                        }
-                    }
+                        }                    }
                     
                     if (date.compare(startDate) != .orderedAscending) {
                         timeCursor = date

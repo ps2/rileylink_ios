@@ -64,10 +64,10 @@ public class NightscoutPumpEvents: NSObject {
                 lastBasalDuration = tempBasalDuration
                 lastBasalDurationDate = event.date
             case is SuspendPumpEvent:
-                let entry = SuspendPumpTreatment(timestamp: event.date, enteredBy: eventSource, suspended: true)
+                let entry = PumpSuspendTreatment(timestamp: event.date, enteredBy: eventSource)
                 results.append(entry)
             case is ResumePumpEvent:
-                let entry = SuspendPumpTreatment(timestamp: event.date, enteredBy: eventSource, suspended: false)
+                let entry = PumpResumeTreatment(timestamp: event.date, enteredBy: eventSource)
                 results.append(entry)
             default:
                 break

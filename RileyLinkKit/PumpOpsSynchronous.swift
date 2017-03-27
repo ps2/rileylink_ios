@@ -501,9 +501,9 @@ class PumpOpsSynchronous {
 
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
                     
-                    let possibleCancelBecauseOfDate = !event.isDelayedAppend(withPumpModel: pumpModel)
+                    let shouldCheckDateForCompletion = !event.isDelayedAppend(withPumpModel: pumpModel)
                     
-                    if possibleCancelBecauseOfDate {
+                    if shouldCheckDateForCompletion {
                         if date <= startDate {
                             // Success, we have all the events we need
                             //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);

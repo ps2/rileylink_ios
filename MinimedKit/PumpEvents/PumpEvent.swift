@@ -27,13 +27,12 @@ public extension PumpEvent {
                 
         switch self {
         case let bolus as BolusNormalPumpEvent:
-            //Square boluses for 523's are appended as the beginning of the event
+            //Square boluses for 523's are appended at the beginning of the event
             if pumpModel == .Model523 {
                 return bolus.type != .Square
             }
             
-            // Square bolus' for some devices are delayed append
-            return bolus.type == .Square
+            return true
             
         default:
             return false

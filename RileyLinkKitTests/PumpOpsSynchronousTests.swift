@@ -300,7 +300,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         // 2016-05-30 01:21:00 +0000
         let tempEventBasal = createTempEventBasal2016()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createBolusEvent2009(), tempEventBasal]
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createNonDelayedEvent2009(), tempEventBasal]
         
         let (_, hasMoreEvents, cancelledEarly) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
@@ -375,7 +375,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let bolusEvent = createBolusEvent2009()
         let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:10))
         
-        assertArray(timestampedEvents, doesntContainPumpEvent: bolusEvent)
+        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
     }
     
     func testShouldContainEventWhen522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
@@ -393,7 +393,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let bolusEvent = createBolusEvent2009()
         let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:11))
         
-        assertArray(timestampedEvents, doesntContainPumpEvent: bolusEvent)
+        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
     }
     
     func testShouldNotHaveMoreEventsWhen523EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
@@ -497,6 +497,14 @@ class PumpOpsSynchronousTests: XCTestCase {
         let data = Data(hexadecimalString:"338c4055145d2000")!
         
         return BolusNormalPumpEvent(length: 13, rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 2.0, programmed: 1.0, unabsorbedInsulinTotal: 0.0, type: .Normal, duration: timeInterval)
+    }
+    
+    func createNonDelayedEvent2009() -> BolusReminderPumpEvent {
+        let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2009, month: 7, day: 31, hour: 9, minute: 0, second: 0)
+        let data = Data(hexadecimalString:"338c48FFF45d2000")!
+        let length = 7
+        
+        return BolusReminderPumpEvent(length: length, rawData: data, timestamp: dateComponents)
     }
 }
 

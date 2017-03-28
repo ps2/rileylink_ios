@@ -24,11 +24,7 @@ public protocol PumpEvent : DictionaryRepresentable {
 
 public extension PumpEvent {
     public func isDelayedAppend(withPumpModel pumpModel: PumpModel) -> Bool {
-        
-        if !pumpModel.mayHaveOutOfOrderEvents {
-            return false
-        }
-        
+                
         switch self {
         case let bolus as BolusNormalPumpEvent:
             //Square boluses for 523's are appended as the beginning of the event

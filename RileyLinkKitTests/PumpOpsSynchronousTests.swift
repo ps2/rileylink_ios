@@ -96,9 +96,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testMultipleBatteryEvent() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
+        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
+        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
+        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
         
         let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
         
@@ -108,9 +108,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     func testOldBatteryEventIsFiltered() {
         let datePast2007 = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes: 60))
         
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
+        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
+        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
+        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
         
         let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: datePast2007, pumpModel: pumpModel)
         
@@ -118,9 +118,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testPumpDateDiscontinuityHasMoreEvents() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
+        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
+        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
+        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
         
         let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
         
@@ -128,9 +128,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testPumpDateDiscontinuityReturnsCancel() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
+        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
+        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
+        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
         
         let (_, _, cancelledEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
         
@@ -138,9 +138,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testPumpDateDiscontinuityEventDoesntIncludeEvent() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
+        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
+        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
+        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
         
         let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
         
@@ -230,11 +230,11 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
     }
 
-    func testDelayedAppendOutOfOrderEventFor522IsReturned() {
+    func testDelayedAppendDiscontinuityEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let squareBolus2016 = createSquareBolusEvent2016()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), squareBolus2016]
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
         let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
         //It should be returned

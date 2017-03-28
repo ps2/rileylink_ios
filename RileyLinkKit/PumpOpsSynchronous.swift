@@ -511,11 +511,11 @@ class PumpOpsSynchronous {
                         } else if date.timeIntervalSince(timeCursor) > TimeInterval(minutes: 60) {
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             return (events: events, hasMoreEvents: false, cancelledEarly: true)
-                        }                    }
-                    
-                    if (date.compare(startDate) != .orderedAscending) {
+                        }
+                        
                         timeCursor = date
                     }
+                                        
                     events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
                     
                 }

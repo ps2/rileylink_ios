@@ -208,17 +208,28 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
     
-    func testOutOfOrderEventFor522IsNotReturned() {
+    func testEventAfterDelayedAppendEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let tempEventBasal = createTempEventBasal2016()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), tempEventBasal]
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
         let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
-        // It should not be returned
-        XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: tempEventBasal))
+        // It should be returned (can't tell if the time for the SquareBolus is valid
+        assertArray(timeStampedEvents, containsPumpEvent: tempEventBasal)
     }
     
+    func testEventAfterDelayedAppendEventFor523IsNotReturned() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let tempEventBasal = createTempEventBasal2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        // It should not be returned (timestamp from square bolus is valid)
+        assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
+    }
+
     func testDelayedAppendOutOfOrderEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         

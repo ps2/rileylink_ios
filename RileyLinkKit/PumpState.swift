@@ -95,7 +95,7 @@ extension PumpState: CustomDebugStringConvertible {
             "pumpModel: \(pumpModel?.rawValue ?? "")",
             "lastHistoryDump: \(lastHistoryDump ?? .distantPast)",
             "awakeUntil: \(awakeUntil ?? .distantPast)",
-            "lastWakeAttempt: \(lastWakeAttempt?.description ?? "None"))",
+            "lastWakeAttempt: \(String(describing: lastWakeAttempt))",
         ].joined(separator: "\n")
     }
 }

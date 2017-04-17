@@ -114,6 +114,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: datePast2007, pumpModel: pumpModel)
         
+        assertArray(events, doesntContainPumpEvent: batteryEvent2007)
         XCTAssertEqual(events.count, 1)
     }
     

@@ -123,28 +123,10 @@ class PumpOpsSynchronousTests: XCTestCase {
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
         let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
         
-        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
+        let (events, hasMoreEvents, cancelledEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
         
         XCTAssertFalse(hasMoreEvents)
-    }
-    
-    func testPumpDateDiscontinuityReturnsCancel() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
-        
-        let (_, _, cancelledEvents) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
-        
         XCTAssertTrue(cancelledEvents)
-    }
-    
-    func testPumpDateDiscontinuityEventDoesntIncludeEvent() {
-        let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
-        let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
-        
-        let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
-        
         XCTAssertEqual(events.count, 1)
         assertArray(events, doesntContainPumpEvent: batteryEvent2017)
     }

@@ -105,7 +105,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertEqual(events.count, 2)
     }
 
-    func testOldBatteryEventIsFiltered() {
+    func testEventBeforeStartDateIsFiltered() {
         let datePast2007 = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes: 60))
         
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)

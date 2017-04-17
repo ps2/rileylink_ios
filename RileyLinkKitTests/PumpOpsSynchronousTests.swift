@@ -131,50 +131,10 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(events, doesntContainPumpEvent: batteryEvent2017)
     }
     
-    func testEventWithSameDataArentAddedTwice() {
+    func testEventsWithSameDataArentAddedTwice() {
         let pumpEvents: [PumpEvent] = [createBolusEvent2009(), createBolusEvent2009()]
         let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
         XCTAssertEqual(events.count, 1)
-    }
-    
-    func testMultipleBolusEventsAreCounted() {
-        setUpTestWithPumpModel(.Model522)
-        
-        let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        XCTAssertEqual(timeStampedEvents.count, 2)
-    }
-    
-    func testMultipleBolusEventsContainsFirstBolus() {
-        setUpTestWithPumpModel(.Model522)
-        
-        let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        assertArray(timeStampedEvents, containsPumpEvent: createSquareBolusEvent2010())
-    }
-    
-    func testMultipleBolusEventsContainsSecondBolus() {
-        setUpTestWithPumpModel(.Model522)
-        
-        let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        assertArray(timeStampedEvents, containsPumpEvent: createBolusEvent2009())
-    }
-    
-    func testMultipleBolusEventsWith523ContainsLastEvent() {
-        setUpTestWithPumpModel(.Model523)
-        
-        let events = [createSquareBolusEvent2010(), createBolusEvent2009()]
-        
-        let (timestampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-        
-        assertArray(timestampedEvents, containsPumpEvent: createBolusEvent2009())
     }
     
     func testNonMutableSquareWaveBolusFor522IsReturned() {
@@ -192,7 +152,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
     
-
     /// Runs a test that simulates event retrieval for different start times
     ///
     /// - Parameters:

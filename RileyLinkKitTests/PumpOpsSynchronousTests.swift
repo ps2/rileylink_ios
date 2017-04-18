@@ -25,6 +25,8 @@ class PumpOpsSynchronousTests: XCTestCase {
     let dateComponents2007 = DateComponents(calendar: Calendar.current, year: 2007, month: 1, day: 1)
     let dateComponents2017 = DateComponents(calendar: Calendar.current, year: 2017, month: 1, day: 1)
     
+    let squareBolusDataLength = 26
+    
     lazy var datePast2007: Date = {
         return self.dateComponents2017.date!.addingTimeInterval(TimeInterval(minutes:60))
     }()
@@ -152,23 +154,29 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
     
-    // MARK: Discontinuity Event after a Square Bolus
-    func testDiscontinuityEventAfterDelayedAppendEventFor522IsReturned() {
+    // MARK: Out of order timestamp after a Square Bolus
+    func testEventAfterSquareBolusEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let tempEventBasal = createTempEventBasal2016()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
+        let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
+        let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
+        
+        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, tempEventBasal]
         let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
         // It should be returned (can't tell if the time for the SquareBolus is valid
         assertArray(timeStampedEvents, containsPumpEvent: tempEventBasal)
     }
     
-    func testDiscontinuityEventAfterDelayedAppendEventFor523IsNotReturned() {
+    func testEventAfterSquareBolusFor523IsNotReturned() {
         setUpTestWithPumpModel(.Model523)
         
         let tempEventBasal = createTempEventBasal2016()
-        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
+        let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
+        let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
+        
+        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, tempEventBasal]
         let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
         
         // It should not be returned (timestamp from square bolus is valid)
@@ -484,6 +492,11 @@ class PumpOpsSynchronousTests: XCTestCase {
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Square, duration: TimeInterval(minutes: 120))
     }
     
+    func createSquareBolusEvent(dateComponents: DateComponents) -> BolusNormalPumpEvent {
+        let data = dataFromHexString(randomDataString(length: squareBolusDataLength))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Square, duration: TimeInterval(hours: 8))
+    }
+    
     func createBolusEvent2011() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:11 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2011, month: 8, day: 1, hour: 5, minute: 0, second: 16)
@@ -527,6 +540,17 @@ func dataFromHexString(_ hexString: String) -> Data {
         data.append(&char, count: 1)
     }
     return data
+}
+
+// from comment at https://gist.github.com/szhernovoy/276e69eb90a0de84dd90
+func randomDataString(length:Int) -> String {
+    let charSet = "abcdef0123456789"
+    var c = charSet.characters.map { String($0) }
+    var s:String = ""
+    for _ in (1...length) {
+        s.append(c[Int(arc4random()) % c.count])
+    }
+    return s
 }
 
 class PumpOpsCommunicationStub : PumpOpsCommunication {
@@ -592,5 +616,13 @@ func assertNoThrow<T>(_ expression: @autoclosure  () throws -> T, _ message: Str
         let _ = try expression()
     } catch let error {
         XCTFail("Caught error: \(error) - \(message)", file: file, line: line)
+    }
+}
+
+extension DateComponents {
+    func addingTimeInterval(_ timeInterval: TimeInterval) -> DateComponents {
+        let newDate = self.date!.addingTimeInterval(timeInterval)
+        let newDateComponents = Calendar.current.dateComponents(in: TimeZone.currentFixed, from: newDate)
+        return newDateComponents
     }
 }

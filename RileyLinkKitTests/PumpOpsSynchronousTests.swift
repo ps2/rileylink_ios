@@ -186,8 +186,8 @@ class PumpOpsSynchronousTests: XCTestCase {
         assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
     }
     
-// MARK: Final Square Bolus Discontinuity Event (after Square Bolus)
-    func testSquareBolusDiscontinuityAfterDelayedAppendEventFor522IsReturned() {
+// MARK: Final Square Bolus Event (after Square Bolus)
+    func testSquareBolusAfterDelayedAppendEventFor522IsReturned() {
         setUpTestWithPumpModel(.Model522)
         
         let squareBolus2016 = createSquareBolusEvent2016()
@@ -286,9 +286,9 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(hasMoreEvents)
     }
     
-    // MARK: Test discontinuity over 1 hour
+    // MARK: Test out of order event over 1 hour
     
-    func testDiscontinuityOverAnHourCancels() {
+    func testOutOfOrderEventOverAnHourCancels() {
         setUpTestWithPumpModel(.Model523)
         
         let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:61))
@@ -303,7 +303,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(cancelled)
     }
     
-    func testDiscontinuityUnderAnHourDoesntCancel() {
+    func testOutOfOrderEventUnderAnHourDoesntCancel() {
         setUpTestWithPumpModel(.Model523)
         
         let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:59))

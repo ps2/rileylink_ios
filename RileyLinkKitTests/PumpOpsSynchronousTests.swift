@@ -327,25 +327,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         XCTAssertFalse(cancelled)
     }
-
-    
-//    func test523ShouldNotContainEventWhenEstimatedTimeDeltaAllowanceBefore523AdjustedStartTime() {
-//        setUpTestWithPumpModel(.Model523)
-//        let event2010 = createSquareBolusEvent2010()
-//        
-//        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event2010, timeIntervalAdjustment: TimeInterval(minutes:1))
-//        
-//        assertArray(timestampedEvents, containsPumpEvent: event2010)
-//    }
-//    
-//    func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeIgnoresEvent() {
-//        setUpTestWithPumpModel(.Model522)
-//        
-//        let bolusEvent = createBolusEvent2009()
-//        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:10))
-//        
-//        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
-//    }
     
     func testShouldContainEventWhen522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
         setUpTestWithPumpModel(.Model522)

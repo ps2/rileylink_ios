@@ -152,6 +152,300 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
     }
     
+    // MARK: Discontinuity Event after a Square Bolus
+    func testDiscontinuityEventAfterDelayedAppendEventFor522IsReturned() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let tempEventBasal = createTempEventBasal2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        // It should be returned (can't tell if the time for the SquareBolus is valid
+        assertArray(timeStampedEvents, containsPumpEvent: tempEventBasal)
+    }
+    
+    func testDiscontinuityEventAfterDelayedAppendEventFor523IsNotReturned() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let tempEventBasal = createTempEventBasal2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), tempEventBasal]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        // It should not be returned (timestamp from square bolus is valid)
+        assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
+    }
+    
+// MARK: Final Square Bolus Discontinuity Event (after Square Bolus)
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventFor522IsReturned() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        //It should be returned
+        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
+    }
+    
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventFor522HasMoreEvents() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        XCTAssertTrue(hasMoreEvents)
+    }
+    
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventFor522DoesntCancel() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        XCTAssertFalse(cancelled)
+    }
+    
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventFor523IsNotReturned() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        //It should not be returned
+        XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
+    }
+    
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventHasNoMoreEvents() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        XCTAssertFalse(hasMoreEvents)
+    }
+    
+    func testSquareBolusDiscontinuityAfterDelayedAppendEventCancels() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let squareBolus2016 = createSquareBolusEvent2016()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), squareBolus2016]
+        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        XCTAssertTrue(cancelled)
+    }
+
+// MARK: Final Regular Bolus Discontinuity Event (after Square Bolus)
+    func testFinalRegularDiscontinuityBolusDoesReturnEventFor523() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let regularBolusEvent = createBolusEvent2011()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), regularBolusEvent]
+        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        //It should be returned
+        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: regularBolusEvent))
+    }
+    
+    func test523FinalRegularDiscontinuityHasMoreEvents() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let regularBolusEvent = createBolusEvent2011()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), regularBolusEvent]
+        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        XCTAssertTrue(hasMoreEvents)
+    }
+    
+    func test523FinalRegularDiscontinuityDoesntCancelsOperation() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let regularBolusEvent = createBolusEvent2011()
+        let events:[PumpEvent] = [createSquareBolusEvent2010(), createSquareBolusEvent2010(), regularBolusEvent]
+        let (_, _, cancelledEarly) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        
+        // this doesn't trigger the out of order event cancellation
+        XCTAssertFalse(cancelledEarly)
+    }
+
+      
+// MARK: Square Bolus Event before starttime (offset 9 minutes)
+    func testSquareBolusEventBeforeStartTimeDoesntContainEvent() {
+        let event2010 = createSquareBolusEvent2010()
+        let events = [event2010]
+        
+        let startDate = event2010.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
+        
+        let (timestampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: startDate, pumpModel: pumpModel)
+        
+        assertArray(timestampedEvents, doesntContainPumpEvent: event2010)
+    }
+    
+    func testSquareBolusEventBeforeStartTimeDoesntHaveMoreEvents() {
+        let event = createSquareBolusEvent2010()
+        
+        let (_, _, hasMoreEvents) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        
+        XCTAssertFalse(hasMoreEvents)
+    }
+    
+    func testSquareBolusEventBeforeStartTimeShouldNotCancel() {
+        let event = createSquareBolusEvent2010()
+        
+        let (_, _, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        
+        XCTAssertFalse(cancelled)
+    }
+    
+    func test523SquareBolusEventBeforeStartTimeContainsEvent() {
+        setUpTestWithPumpModel(.Model523)
+        let event = createSquareBolusEvent2010()
+        
+        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        
+        assertArray(timestampedEvents, containsPumpEvent: event)
+    }
+    
+    func test523SquareBolusEventBeforeStartTimeShouldNotCancel() {
+        setUpTestWithPumpModel(.Model523)
+        let event = createSquareBolusEvent2010()
+        
+        let (_, _, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        
+        XCTAssertFalse(cancelled)
+    }
+  
+// MARK: Regular Bolus Event before starttime (offset 9 minutes)
+    func test522RegularBolusEventBeforeStartTimeShouldNotCancel() {
+        setUpTestWithPumpModel(.Model523)
+        let event = createBolusEvent2009()
+        
+        let (_, _, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        
+        XCTAssertFalse(cancelled)
+    }
+
+    
+//    func test523ShouldNotContainEventWhenEstimatedTimeDeltaAllowanceBefore523AdjustedStartTime() {
+//        setUpTestWithPumpModel(.Model523)
+//        let event2010 = createSquareBolusEvent2010()
+//        
+//        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: event2010, timeIntervalAdjustment: TimeInterval(minutes:1))
+//        
+//        assertArray(timestampedEvents, containsPumpEvent: event2010)
+//    }
+//    
+//    func test522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTimeIgnoresEvent() {
+//        setUpTestWithPumpModel(.Model522)
+//        
+//        let bolusEvent = createBolusEvent2009()
+//        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:10))
+//        
+//        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
+//    }
+    
+    func testShouldContainEventWhen522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let bolusEvent = createBolusEvent2009()
+        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: -1)
+        
+        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
+    }
+    
+    func testShouldNotContain522EventWhenEstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let bolusEvent = createBolusEvent2009()
+        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:11))
+        
+        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
+    }
+    
+    func testShouldNotHaveMoreEventsWhen523EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let (_, hasMoreEvents, _) = runDeltaAllowanceTimeTest(pumpEvent: createSquareBolusEvent2010(), timeIntervalAdjustment: TimeInterval(hours:11))
+        
+        XCTAssertFalse(hasMoreEvents)
+    }
+    
+    func testShouldNotCancelWhen523EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let (_, _, cancelledEarly) = runDeltaAllowanceTimeTest(pumpEvent: createSquareBolusEvent2010(), timeIntervalAdjustment: TimeInterval(hours:11))
+        
+        XCTAssertFalse(cancelledEarly)
+    }
+    
+    func testShouldNotCancelWhen522EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
+        setUpTestWithPumpModel(.Model522)
+        
+        let (_, hasMoreEvents, _) = runDeltaAllowanceTimeTest(pumpEvent: createSquareBolusEvent2010(), timeIntervalAdjustment: TimeInterval(hours:11))
+        
+        XCTAssertTrue(hasMoreEvents)
+    }
+    
+    // MARK: Test discontinuity over 1 hour
+    
+    func testDiscontinuityOverAnHourCancels() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:61))
+        
+        let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
+        let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
+        
+        let events = [batteryEvent, laterBatteryEvent]
+        
+        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
+        
+        XCTAssertTrue(cancelled)
+    }
+    
+    func testDiscontinuityUnderAnHourDoesntCancel() {
+        setUpTestWithPumpModel(.Model523)
+        
+        let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:59))
+        
+        let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
+        let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
+        
+        let events = [batteryEvent, laterBatteryEvent]
+        
+        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
+        
+        XCTAssertFalse(cancelled)
+    }
+    
+    // MARK: Test Sanity Checks
+    func test2010EventSanityWith523() {
+        setUpTestWithPumpModel(.Model523)
+        let bolusEvent = createSquareBolusEvent2010()
+        XCTAssertEqual(bolusEvent.timestamp.year!, 2010)
+        XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
+    }
+    
+    func test2009EventSanityWith523() {
+        setUpTestWithPumpModel(.Model523)
+        let bolusEvent = createBolusEvent2009()
+        XCTAssertEqual(bolusEvent.timestamp.year!, 2009)
+        XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
+    }
+    
+    func test2009EventSavityWith522() {
+        setUpTestWithPumpModel(.Model522)
+        XCTAssertEqual(createBolusEvent2009().timestamp.year!, 2009)
+    }
+    
+    func test2010EventSanityWith522() {
+        setUpTestWithPumpModel(.Model522)
+        XCTAssertEqual(createSquareBolusEvent2010().timestamp.year!, 2010)
+    }
+
     /// Runs a test that simulates event retrieval for different start times
     ///
     /// - Parameters:

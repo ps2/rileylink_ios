@@ -509,6 +509,7 @@ class PumpOpsSynchronous {
                             //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
                             return (events: events, hasMoreEvents: false, cancelledEarly: false)
                         } else if date.timeIntervalSince(timeCursor) > TimeInterval(minutes: 60) {
+                            // Appears that pump lost time; we can't build up a valid timeline from this point back.
                             NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
                             return (events: events, hasMoreEvents: false, cancelledEarly: true)
                         }

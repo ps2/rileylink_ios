@@ -280,19 +280,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertEqual(createSquareBolusEvent2010().timestamp.year!, 2010)
     }
 
-    /// Runs a test that simulates event retrieval for different start times
-    ///
-    /// - Parameters:
-    ///   - pumpEvent: The event to check
-    ///   - timeIntervalAdjustment: How to adjust the start time, relative to the event.timestamp
-    /// - Returns: Tuple
-    func runDeltaAllowanceTimeTest(pumpEvent: BolusNormalPumpEvent, timeIntervalAdjustment:TimeInterval) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool, cancelledEarly: Bool) {
-        
-        let startDate = pumpEvent.timestamp.date!.addingTimeInterval(timeIntervalAdjustment)
-        
-        return sut.convertPumpEventToTimestampedEvents(pumpEvents: [pumpEvent], startDate: startDate, pumpModel: self.pumpModel)
-    }
-
     func createBatteryEvent(withDateComponent dateComponents: DateComponents) -> BatteryPumpEvent {
         return createBatteryEvent(atTime: dateComponents.date!)
     }

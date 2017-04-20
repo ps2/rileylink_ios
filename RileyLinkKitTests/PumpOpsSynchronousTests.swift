@@ -188,16 +188,18 @@ class PumpOpsSynchronousTests: XCTestCase {
 //        assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
 //    }
 
-    // fixme: please inline runDeltaAllowanceTimeTest for readability
-    // fixme: event is actually *after* start time, since startTime is adjusted to be 9 minutes before event
-    func test523SquareBolusEventBeforeStartTimeContainsEvent() {
+    func test523SquareBolusEventBeforeStartTimeDoesntContainEvent() {
         setUpTestWithPumpModel(.Model523)
-        let event = createSquareBolusEvent2010()
+        let pumpEvent = createSquareBolusEvent2010()
         
-        let (timestampedEvents, hasMoreEvents, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
+        let startDate = pumpEvent.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
         
-        assertArray(timestampedEvents, containsPumpEvent: event)
-        XCTAssertTrue(hasMoreEvents)
+        let (timestampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: [pumpEvent], startDate: startDate, pumpModel: self.pumpModel)
+        
+        assertArray(timestampedEvents, doesntContainPumpEvent: pumpEvent)
+        // We found an event before the start time so we're exiting
+        XCTAssertFalse(hasMoreEvents)
+        // Normal exit and nor cancelled
         XCTAssertFalse(cancelled)
     }
 

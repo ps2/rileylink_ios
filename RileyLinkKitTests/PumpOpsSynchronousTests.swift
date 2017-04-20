@@ -106,10 +106,12 @@ class PumpOpsSynchronousTests: XCTestCase {
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
         let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
         
-        let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: datePast2007, pumpModel: pumpModel)
+        let (events, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: datePast2007, pumpModel: pumpModel)
         
         assertArray(events, doesntContainPumpEvent: batteryEvent2007)
         XCTAssertEqual(events.count, 1)
+        XCTAssertFalse(hasMoreEvents)
+        XCTAssertFalse(cancelled)
     }
 
     func testPumpLostTimeCancelsFetchEarly() {
@@ -170,6 +172,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(cancelled)
     }
 
+    //aiai commented in PR
     // Remove or fixme: on a 523 a square wave bolus followed by a another event will be in correct order. So I'm not sure what this is testing.
 //    func testEventAfterSquareBolusFor523IsNotReturned() {
 //        setUpTestWithPumpModel(.Model523)
@@ -183,58 +186,6 @@ class PumpOpsSynchronousTests: XCTestCase {
 //
 //        // It should not be returned (timestamp from square bolus is valid)
 //        assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
-//    }
-
-    // Remove or fixme: a bolus cannot be issued while another bolus is in progress
-    // MARK: Final Square Bolus Event (after Square Bolus)
-//    func testSquareBolusAfterDelayedAppendEventFor522IsReturned() {
-//        setUpTestWithPumpModel(.Model522)
-//
-//        let squareBolus2016 = createSquareBolusEvent2016()
-//        let dateComponents = squareBolus2016.timestamp.addingTimeInterval(TimeInterval(hours:-4))
-//        let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
-//
-//        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, squareBolus2016]
-//        let (timeStampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-//
-//        //It should be returned
-//        XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
-//        XCTAssertTrue(hasMoreEvents)
-//        XCTAssertFalse(cancelled)
-//    }
-
-    // Remove or fixme: a bolus cannot be issued while another bolus is in progress
-
-//    func testSquareBolusAfterDelayedAppendEventFor523IsNotReturned() {
-//        setUpTestWithPumpModel(.Model523)
-//
-//        let squareBolus2016 = createSquareBolusEvent2016()
-//        let dateComponents = squareBolus2016.timestamp.addingTimeInterval(TimeInterval(hours:-4))
-//        let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
-//
-//        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, squareBolus2016]
-//        let (timeStampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-//
-//        //It should not be returned
-//        XCTAssertFalse(array(timeStampedEvents, containsPumpEvent: squareBolus2016))
-//        XCTAssertFalse(hasMoreEvents)
-//        XCTAssertTrue(cancelled)
-//    }
-
-// MARK: Square Bolus Event before starttime (offset 9 minutes)
-    // Remove or fixme: This is testing the same behavior as testEventBeforeStartDateIsFiltered
-//    func testSquareBolusEventBeforeStartTimeDoesntContainEvent() {
-//        let event2010 = createSquareBolusEvent2010()
-//        let events = [event2010]
-//
-//        let startDate = event2010.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
-//
-//        let (timestampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: startDate, pumpModel: pumpModel)
-//
-//        assertArray(timestampedEvents, doesntContainPumpEvent: event2010)
-//        XCTAssertFalse(hasMoreEvents)
-//        XCTAssertFalse(cancelled)
-//
 //    }
 
     // fixme: please inline runDeltaAllowanceTimeTest for readability
@@ -284,20 +235,6 @@ class PumpOpsSynchronousTests: XCTestCase {
 //        XCTAssertTrue(hasMoreEvents)
 //        XCTAssertFalse(cancelled)
 //    }
-
-    // A bolus on 523 is not delayed append, so we do filter it out if it is before startTime, just like any other event,
-    // which is tested in testEventBeforeStartDateIsFiltered.  I think this is redundant
-//    func testShouldNotCancelWhen523EstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
-//        setUpTestWithPumpModel(.Model523)
-//
-//        let squareBolusEvent = createSquareBolusEvent2010()
-//        let (timestampedEvents, hasMoreEvents, cancelledEarly) = runDeltaAllowanceTimeTest(pumpEvent: squareBolusEvent, timeIntervalAdjustment: TimeInterval(hours:11))
-//
-//        assertArray(timestampedEvents, doesntContainPumpEvent: squareBolusEvent)
-//        XCTAssertFalse(cancelledEarly)
-//        XCTAssertFalse(hasMoreEvents)
-//    }
-
 
     // The following tests are testing the border conditionsof the pump lost time detection, the main behavior of which is covered
     // in testPumpLostTimeCancelsFetchEarly. The precise point at which we decide pump time is lost (the one hour mark) isn't something

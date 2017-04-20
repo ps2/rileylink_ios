@@ -219,19 +219,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(cancelled)
     }
 
-    // A normal bolus is skipped in the check for completion because it is a delayed append.  This reason for this behavior is tested
-    // in testDelayedAppendEventDoesNotCauseValidEventsToBeFilteredOut.  Recommend removing this
-//    func testShouldContain522EventWhenEstimateTimeDeltaAllowanceAfterAdjustedStartTime() {
-//        setUpTestWithPumpModel(.Model522)
-//
-//        let bolusEvent = createBolusEvent2009()
-//        let (timestampedEvents, hasMoreEvents, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: TimeInterval(hours:11))
-//
-//        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
-//        XCTAssertTrue(hasMoreEvents)
-//        XCTAssertFalse(cancelled)
-//    }
-
     // The following tests are testing the border conditionsof the pump lost time detection, the main behavior of which is covered
     // in testPumpLostTimeCancelsFetchEarly. The precise point at which we decide pump time is lost (the one hour mark) isn't something
     // I have a great reason for setting where it is.  It's possible that we could set it at 0 minutes, since any non-bolus event out

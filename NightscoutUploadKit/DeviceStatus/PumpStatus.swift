@@ -16,8 +16,9 @@ public struct PumpStatus {
     let suspended: Bool?
     let bolusing: Bool?
     let reservoir: Double?
-    
-    public init(clock: Date, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil) {
+    let secondsFromGMT: Int?
+
+    public init(clock: Date, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil) {
         self.clock = clock
         self.pumpID = pumpID
         self.iob = iob
@@ -25,6 +26,7 @@ public struct PumpStatus {
         self.suspended = suspended
         self.bolusing = bolusing
         self.reservoir = reservoir
+        self.secondsFromGMT = secondsFromGMT
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -32,17 +34,29 @@ public struct PumpStatus {
         
         rval["clock"] = TimeFormat.timestampStrFromDate(clock)
         rval["pumpID"] = pumpID
-        
+
+        if let iob = iob {
+            rval["iob"] = iob.dictionaryRepresentation
+        }
+
         if let battery = battery {
             rval["battery"] = battery.dictionaryRepresentation
         }
         
+        if let suspended = suspended {
+            rval["suspended"] = suspended
+        }
+
+        if let bolusing = bolusing {
+            rval["bolusing"] = bolusing
+        }
+
         if let reservoir = reservoir {
             rval["reservoir"] = reservoir
         }
-        
-        if let iob = iob {
-            rval["iob"] = iob.dictionaryRepresentation
+
+        if let secondsFromGMT = secondsFromGMT {
+            rval["secondsFromGMT"] = secondsFromGMT
         }
 
         return rval

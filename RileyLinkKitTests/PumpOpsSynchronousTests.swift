@@ -204,25 +204,19 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
 
     // MARK: Regular Bolus Event before starttime (offset 9 minutes)
-    // fixme: event is actually *after* start time, since startTime is adjusted to be 9 minutes before event
     func test522RegularBolusEventBeforeStartTimeShouldNotCancel() {
         setUpTestWithPumpModel(.Model522)
-        let event = createBolusEvent2009()
         
-        let (_, _, cancelled) = runDeltaAllowanceTimeTest(pumpEvent: event, timeIntervalAdjustment: TimeInterval(minutes:-9))
-
+        let pumpEvent = createSquareBolusEvent2010()
+        
+        let startDate = pumpEvent.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
+        
+        let (timestampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: [pumpEvent], startDate: startDate, pumpModel: self.pumpModel)
+        
+        assertArray(timestampedEvents, containsPumpEvent: pumpEvent)
+        //We found an event before the start time but we can't verify the timestamp from the Square Bolus so there could be more valid events
+        XCTAssertTrue(hasMoreEvents)
         XCTAssertFalse(cancelled)
-    }
-
-
-    // Remove or fixme: same idea as testEventsAfterStartDateAreReturned
-    func testShouldContainEventWhen522EstimatedTimeDeltaAllowanceBeforeAdjustedStartTime() {
-        setUpTestWithPumpModel(.Model522)
-
-        let bolusEvent = createBolusEvent2009()
-        let (timestampedEvents, _, _) = runDeltaAllowanceTimeTest(pumpEvent: bolusEvent, timeIntervalAdjustment: -1)
-        
-        assertArray(timestampedEvents, containsPumpEvent: bolusEvent)
     }
 
     // A normal bolus is skipped in the check for completion because it is a delayed append.  This reason for this behavior is tested

@@ -16,7 +16,7 @@ class PumpModelTests: XCTestCase {
     }
     
     func test523AppendsSquareWaveToHistory() {
-        XCTAssertTrue( PumpModel.Model523.appendsSquareWaveToHistoryOnStartOfDelivery)
+        XCTAssertTrue(PumpModel.Model523.appendsSquareWaveToHistoryOnStartOfDelivery)
     }
     
     func test522DoesntAppendSquareWaveToHistory() {

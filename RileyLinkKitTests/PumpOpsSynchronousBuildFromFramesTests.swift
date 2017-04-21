@@ -100,8 +100,8 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         do {
             let (historyEvents, _) = try sut.getHistoryEvents(since: date)
 
-            // Ends because we reached event sufficiently before date
-            XCTAssertEqual(historyEvents.count, 291)
+            // Ends because we reached event before or at date
+            XCTAssertEqual(historyEvents.count, 290)
         } catch {
             XCTFail()
         }
@@ -117,8 +117,8 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         do {
             let (historyEvents, _) = try sut.getHistoryEvents(since: date)
 
-            // Ends because we reached event sufficiently before date
-            XCTAssertEqual(historyEvents.count, 291)
+            // Ends because we reached event before or at date
+            XCTAssertEqual(historyEvents.count, 290)
         } catch {
             XCTFail()
         }

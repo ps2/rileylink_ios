@@ -464,7 +464,7 @@ class PumpOpsSynchronous {
 
             let page = try HistoryPage(pageData: pageData, pumpModel: pumpModel)
             
-            let (timeStampedEvents, hasMoreEvents) = convertPumpEventToTimestampedEvents(pumpEvents: page.events.reversed(), startDate: startDate, pumpModel: pumpModel)
+            let (timeStampedEvents, hasMoreEvents, _) = convertPumpEventToTimestampedEvents(pumpEvents: page.events.reversed(), startDate: startDate, pumpModel: pumpModel)
             
             events = timeStampedEvents + events
             
@@ -482,17 +482,7 @@ class PumpOpsSynchronous {
     ///   - startDate: return events from past this date (adjusted for TimestampDeltaAllowance)
     ///   - pumpModel: pumpModel
     /// - Returns: tuple of Timestamped History Events and a Bool indicating if more events can be converted
-    internal func convertPumpEventToTimestampedEvents(pumpEvents: [PumpEvent], startDate: Date, pumpModel: PumpModel) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool) {
-        
-        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
-        // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
-        // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
-        let eventTimestampDeltaAllowance: TimeInterval
-        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
-            eventTimestampDeltaAllowance = TimeInterval(minutes: 10)
-        } else {
-            eventTimestampDeltaAllowance = TimeInterval(hours: 9)
-        }
+    internal func convertPumpEventToTimestampedEvents(pumpEvents: [PumpEvent], startDate: Date, pumpModel: PumpModel) -> (events: [TimestampedHistoryEvent], hasMoreEvents: Bool, cancelledEarly: Bool) {
         
         // Start with some time in the future, to account for the condition when the pump's clock is ahead
         // of ours by a small amount.
@@ -510,18 +500,25 @@ class PumpOpsSynchronous {
                 timestamp.timeZone = pump.timeZone
 
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
-                    if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
-                        NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
-                        return (events: events, hasMoreEvents: false)
-                    } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
-                        NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
-                        return (events: events, hasMoreEvents: false)
-                    } else {
-                        if (date.compare(startDate) != .orderedAscending) {
-                            timeCursor = date
+                    
+                    let shouldCheckDateForCompletion = !event.isDelayedAppend(withPumpModel: pumpModel)
+                    
+                    if shouldCheckDateForCompletion {
+                        if date <= startDate {
+                            // Success, we have all the events we need
+                            //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                            return (events: events, hasMoreEvents: false, cancelledEarly: false)
+                        } else if date.timeIntervalSince(timeCursor) > TimeInterval(minutes: 60) {
+                            // Appears that pump lost time; we can't build up a valid timeline from this point back.
+                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
+                            return (events: events, hasMoreEvents: false, cancelledEarly: true)
                         }
-                        events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
+                        
+                        timeCursor = date
                     }
+                                        
+                    events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
+                    
                 }
             }
 
@@ -532,7 +529,7 @@ class PumpOpsSynchronous {
             lastEvent = event
         }
         
-        return (events: events, hasMoreEvents: true)
+        return (events: events, hasMoreEvents: true, cancelledEarly: false)
     }
     
     private func getHistoryPage(_ pageNum: Int) throws -> Data {

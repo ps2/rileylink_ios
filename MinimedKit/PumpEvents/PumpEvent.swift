@@ -21,3 +21,21 @@ public protocol PumpEvent : DictionaryRepresentable {
     }
     
 }
+
+public extension PumpEvent {
+    public func isDelayedAppend(withPumpModel pumpModel: PumpModel) -> Bool {
+                
+        switch self {
+        case let bolus as BolusNormalPumpEvent:
+            //Square boluses for 523's are appended at the beginning of the event
+            if pumpModel == .Model523 {
+                return bolus.type != .Square
+            }
+            
+            return true
+            
+        default:
+            return false
+        }
+    }
+}

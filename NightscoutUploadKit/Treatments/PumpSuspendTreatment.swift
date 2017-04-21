@@ -12,12 +12,7 @@ public class PumpSuspendTreatment: NightscoutTreatment {
 
     init(timestamp: Date, enteredBy: String) {
 
-        super.init(timestamp: timestamp, enteredBy: enteredBy)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Suspend Pump")
     }
-
-    override public var dictionaryRepresentation: [String: Any] {
-        var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Suspend Pump"
-        return rval
-    }
+    
 }

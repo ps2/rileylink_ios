@@ -14,16 +14,15 @@ public class BGCheckNightscoutTreatment: NightscoutTreatment {
     let glucoseType: GlucoseType
     let units: Units
     
-    init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, notes: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, notes: String? = nil) {
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, eventType: "BG Check")
     }
     
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "BG Check"
         rval["glucose"] = glucose
         rval["glucoseType"] = glucoseType.rawValue
         rval["units"] = units.rawValue

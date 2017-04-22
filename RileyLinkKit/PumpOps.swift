@@ -11,12 +11,6 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
-public enum SetBolusError: Error {
-    case certain(PumpCommsError)
-    case uncertain(PumpCommsError)
-}
-
-
 public class PumpOps {
     
     public let pumpState: PumpState

@@ -32,6 +32,11 @@ public enum PumpCommsError: Error {
     case pumpSuspended
 }
 
+public enum SetBolusError: Error {
+    case certain(PumpCommsError)
+    case uncertain(PumpCommsError)
+}
+
 public enum RXFilterMode: UInt8 {
     case wide   = 0x50  // 300KHz
     case narrow = 0x90  // 150KHz
@@ -744,18 +749,23 @@ class PumpOpsSynchronous {
             let statusResp: ReadPumpStatusMessageBody = try messageBody(to: .readPumpStatus)
 
             if statusResp.bolusing {
-                return .certain(PumpCommsError.bolusInProgress)
+                throw PumpCommsError.bolusInProgress
             }
 
             if statusResp.suspended {
-                return .certain(PumpCommsError.pumpSuspended)
+                throw PumpCommsError.pumpSuspended
             }
 
             if cancelExistingTemp {
                 do {
                     _ = try setTempBasal(0, duration: TimeInterval(0))
-                } catch let error as PumpCommsError {
-                    return .certain(error)
+                } catch let error as PumpCommandError {
+                    switch error {
+                    case .command(let error):
+                        return .certain(error)
+                    case .arguments(let error):
+                        return .uncertain(error)
+                    }
                 }
             }
 

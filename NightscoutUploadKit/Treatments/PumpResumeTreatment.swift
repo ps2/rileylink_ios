@@ -10,7 +10,7 @@ import Foundation
 
 public class PumpResumeTreatment: NightscoutTreatment {
 
-    init(timestamp: Date, enteredBy: String) {
+    public init(timestamp: Date, enteredBy: String) {
         super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Resume Pump")
     }
 

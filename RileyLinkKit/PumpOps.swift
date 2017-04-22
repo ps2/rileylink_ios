@@ -258,22 +258,7 @@ public class PumpOps {
     public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {
         device.runSession(withName: "Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                try ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp)
-                completion(nil)
-            } catch let error as PumpCommsError {
-                completion(.certain(error))
-            } catch let error as PumpCommandError {
-                switch error {
-                case .command(let error):
-                    completion(.certain(error))
-                case .arguments(let error):
-                    completion(.uncertain(error))
-                }
-            } catch {
-                assertionFailure()
-            }
+            completion(ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp))
         }
     }
     

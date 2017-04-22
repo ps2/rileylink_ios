@@ -737,26 +737,45 @@ class PumpOpsSynchronous {
 
     }
 
-    internal func setNormalBolus(units: Double, cancelExistingTemp: Bool) throws {
-        let pumpModel = try getPumpModel()
+    internal func setNormalBolus(units: Double, cancelExistingTemp: Bool) -> SetBolusError? {
+        do {
+            let pumpModel = try getPumpModel()
 
-        let statusResp: ReadPumpStatusMessageBody = try messageBody(to: .readPumpStatus)
+            let statusResp: ReadPumpStatusMessageBody = try messageBody(to: .readPumpStatus)
 
-        if statusResp.bolusing {
-            throw PumpCommsError.bolusInProgress
+            if statusResp.bolusing {
+                return .certain(PumpCommsError.bolusInProgress)
+            }
+
+            if statusResp.suspended {
+                return .certain(PumpCommsError.pumpSuspended)
+            }
+
+            if cancelExistingTemp {
+                do {
+                    _ = try setTempBasal(0, duration: TimeInterval(0))
+                } catch let error as PumpCommsError {
+                    return .certain(error)
+                }
+            }
+
+            let message = PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
+            
+            _ = try runCommandWithArguments(message)
+            
+        } catch let error as PumpCommsError {
+            return .certain(error)
+        } catch let error as PumpCommandError {
+            switch error {
+            case .command(let error):
+                return .certain(error)
+            case .arguments(let error):
+                return .uncertain(error)
+            }
+        } catch {
+            assertionFailure()
         }
-
-        if statusResp.suspended {
-            throw PumpCommsError.pumpSuspended
-        }
-
-        if cancelExistingTemp {
-            _ = try setTempBasal(0, duration: TimeInterval(0))
-        }
-
-        let message = PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
-
-        _ = try runCommandWithArguments(message)
+        return nil
     }
 }
 

@@ -10,15 +10,8 @@ import Foundation
 
 public class PumpResumeTreatment: NightscoutTreatment {
 
-
     init(timestamp: Date, enteredBy: String) {
-
-        super.init(timestamp: timestamp, enteredBy: enteredBy)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Resume Pump")
     }
 
-    override public var dictionaryRepresentation: [String: Any] {
-        var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Resume Pump"
-        return rval
-    }
 }

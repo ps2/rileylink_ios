@@ -10,9 +10,8 @@ import Foundation
 
 public class NoteNightscoutTreatment: NightscoutTreatment {
 
-    override public var dictionaryRepresentation: [String: Any] {
-        var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Note"
-        return rval;
+    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil) {
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Note")
     }
+    
 }

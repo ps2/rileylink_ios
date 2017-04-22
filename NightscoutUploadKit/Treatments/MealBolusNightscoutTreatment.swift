@@ -24,12 +24,11 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
         self.glucoseType = glucoseType
         self.units = units
         self.insulin = insulin
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Meal Bolus")
     }
     
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Meal Bolus"
         rval["carbs"] = carbs
         if let absorptionTime = absorptionTime {
             rval["absorptionTime"] = absorptionTime.minutes

@@ -764,7 +764,7 @@ class PumpOpsSynchronous {
                     case .command(let error):
                         return .certain(error)
                     case .arguments(let error):
-                        return .uncertain(error)
+                        return .certain(error)
                     }
                 }
             }

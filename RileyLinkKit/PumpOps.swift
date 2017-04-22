@@ -94,19 +94,21 @@ public class PumpOps {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(units): The reservoir volume, in units of insulin
+        - success(units, date): The reservoir volume, in units of insulin, and DateCompoments representing the pump's clock
         - failure(error): An error describing why the command failed
      */
-    public func readRemainingInsulin(_ completion: @escaping (Either<Double, Error>) -> Void) {
+    public func readRemainingInsulin(_ completion: @escaping (Either<(units: Double, date: DateComponents), Error>) -> Void) {
         device.runSession(withName: "Read remaining insulin") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
                 let pumpModel = try ops.getPumpModel()
 
+                let clockResp: ReadTimeCarelinkMessageBody = try ops.messageBody(to: .readTime)
+
                 let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
 
-                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)))
+                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), clockResp.dateComponents))
             } catch let error {
                 completion(.failure(error))
             }

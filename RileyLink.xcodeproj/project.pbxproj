@@ -1787,9 +1787,13 @@
 						LastSwiftMigration = 0800;
 					};
 					C12EA236198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					C12EA251198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
+						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C1B3830A1CD0665D00CE7782 = {
@@ -2792,12 +2796,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -2813,12 +2818,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = app;
@@ -2831,12 +2837,14 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -2849,11 +2857,13 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RileyLinkTests;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};

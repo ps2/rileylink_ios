@@ -255,17 +255,12 @@ public class PumpOps {
      - parameter completion: A closure called after the command is complete. This closure takes a single argument:
         - error: An error describing why the command failed
      */
-    public func setNormalBolus(units: Double, completion: @escaping (_ error: SetBolusError?) -> Void) {
+    public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {
         device.runSession(withName: "Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
-                let pumpModel = try ops.getPumpModel()
-                
-                let message = PumpMessage(packetType: .carelink, address: self.pumpState.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
-                
-                _ = try ops.runCommandWithArguments(message)
-                
+                try ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp)
                 completion(nil)
             } catch let error as PumpCommsError {
                 completion(.certain(error))

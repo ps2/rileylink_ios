@@ -28,6 +28,8 @@ public enum PumpCommsError: Error {
     case noResponse(during: String)
     case unexpectedResponse(PumpMessage, from: PumpMessage)
     case crosstalk(PumpMessage, during: String)
+    case bolusInProgress
+    case pumpSuspended
 }
 
 public enum RXFilterMode: UInt8 {
@@ -292,7 +294,7 @@ class PumpOpsSynchronous {
                 if response.timeRemaining == duration && response.rateType == .absolute {
                     return response
                 } else {
-                    lastError = PumpCommsError.rfCommsFailure("Could not verify TempBasal on attempt \(attempt)")
+                    lastError = PumpCommsError.rfCommsFailure("Could not verify TempBasal on attempt \(attempt). ")
                 }
             } catch let error {
                 lastError = error
@@ -733,6 +735,28 @@ class PumpOpsSynchronous {
 
         return PumpStatus(clock: clockResp.dateComponents, batteryVolts: battResp.volts, batteryStatus: battResp.status, suspended: statusResp.suspended, bolusing: statusResp.bolusing, reservoir: reservoir, model: pumpModel, pumpID: pump.pumpID)
 
+    }
+
+    internal func setNormalBolus(units: Double, cancelExistingTemp: Bool) throws {
+        let pumpModel = try getPumpModel()
+
+        let statusResp: ReadPumpStatusMessageBody = try messageBody(to: .readPumpStatus)
+
+        if statusResp.bolusing {
+            throw PumpCommsError.bolusInProgress
+        }
+
+        if statusResp.suspended {
+            throw PumpCommsError.pumpSuspended
+        }
+
+        if cancelExistingTemp {
+            _ = try setTempBasal(0, duration: TimeInterval(0))
+        }
+
+        let message = PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
+
+        _ = try runCommandWithArguments(message)
     }
 }
 

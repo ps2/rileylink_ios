@@ -496,16 +496,23 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 }
             case .pressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    self.device.ops?.pressButton({ (response) in
+                    self.device.ops?.setNormalBolus(units: 0.1, cancelExistingTemp: true, completion: { (error) in
                         DispatchQueue.main.async {
-                            switch response {
-                            case .success(let msg):
-                                completionHandler("Result: \(msg)")
-                            case .failure(let error):
-                                completionHandler(String(describing: error))
+                            if let error = error {
+                                print("Error sending bolus: \(error)")
                             }
                         }
                     })
+//                    self.device.ops?.pressButton({ (response) in
+//                        DispatchQueue.main.async {
+//                            switch response {
+//                            case .success(let msg):
+//                                completionHandler("Result: \(msg)")
+//                            case .failure(let error):
+//                                completionHandler(String(describing: error))
+//                            }
+//                        }
+//                    })
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
             case .readPumpStatus:

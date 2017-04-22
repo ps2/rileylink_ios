@@ -94,19 +94,21 @@ public class PumpOps {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(units): The reservoir volume, in units of insulin
+        - success(units, date): The reservoir volume, in units of insulin, and DateCompoments representing the pump's clock
         - failure(error): An error describing why the command failed
      */
-    public func readRemainingInsulin(_ completion: @escaping (Either<Double, Error>) -> Void) {
+    public func readRemainingInsulin(_ completion: @escaping (Either<(units: Double, date: DateComponents), Error>) -> Void) {
         device.runSession(withName: "Read remaining insulin") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
                 let pumpModel = try ops.getPumpModel()
 
+                let clockResp: ReadTimeCarelinkMessageBody = try ops.messageBody(to: .readTime)
+
                 let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
 
-                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)))
+                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), clockResp.dateComponents))
             } catch let error {
                 completion(.failure(error))
             }
@@ -245,25 +247,15 @@ public class PumpOps {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
      
-     - parameter units:      The number of units to deliver
-     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
+     - parameter units:              The number of units to deliver
+     - parameter cancelExistingTemp: If true, additional pump commands will be issued to clear any running temp basal. Defaults to false.
+     - parameter completion:         A closure called after the command is complete. This closure takes a single argument:
         - error: An error describing why the command failed
      */
-    public func setNormalBolus(units: Double, completion: @escaping (_ error: Error?) -> Void) {
+    public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {
         device.runSession(withName: "Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                let pumpModel = try ops.getPumpModel()
-                
-                let message = PumpMessage(packetType: .carelink, address: self.pumpState.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
-                
-                _ = try ops.runCommandWithArguments(message)
-                
-                completion(nil)
-            } catch let error {
-                completion(error)
-            }
+            completion(ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp))
         }
     }
     

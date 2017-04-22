@@ -1,7 +1,7 @@
 language: objective-c
-osx_image: xcode8
-xcode_sdk: iphonesimulator10
+osx_image: xcode8.3
+xcode_sdk: iphonesimulator10.3
 xcode_project: RileyLink.xcodeproj
 xcode_scheme: RileyLink
 script:
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test
+    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink -sdk iphonesimulator10.3 build -destination 'name=iPhone SE' test

@@ -247,8 +247,9 @@ public class PumpOps {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
      
-     - parameter units:      The number of units to deliver
-     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
+     - parameter units:              The number of units to deliver
+     - parameter cancelExistingTemp: If true, additional pump commands will be issued to clear any running temp basal. Defaults to false.
+     - parameter completion:         A closure called after the command is complete. This closure takes a single argument:
         - error: An error describing why the command failed
      */
     public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {

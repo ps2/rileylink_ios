@@ -159,47 +159,13 @@ class PumpOpsSynchronousTests: XCTestCase {
         let tempEventBasal = createTempEventBasal2016()
         let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
         let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
-        let startDate = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4)).date!
+        
         let events:[PumpEvent] = [squareBolusEventFourHoursBefore, tempEventBasal]
-        let (timeStampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: startDate, pumpModel: pumpModel)
+        let (timeStampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
 
-        // Temp basal should be returned
-        assertArray(timeStampedEvents, containsPumpEvent: tempEventBasal)
-
-        // Debatable whether this should be returned.
+        // Debatable (undefined) whether this should be returned. It is tested to avoid inadvertantly changing behavior
         assertArray(timeStampedEvents, containsPumpEvent: squareBolusEventFourHoursBefore)
         XCTAssertTrue(hasMoreEvents)
-        XCTAssertFalse(cancelled)
-    }
-
-    //aiai commented in PR
-    // Remove or fixme: on a 523 a square wave bolus followed by a another event will be in correct order. So I'm not sure what this is testing.
-//    func testEventAfterSquareBolusFor523IsNotReturned() {
-//        setUpTestWithPumpModel(.Model523)
-//
-//        let tempEventBasal = createTempEventBasal2016()
-//        let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
-//        let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
-//
-//        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, tempEventBasal]
-//        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
-//
-//        // It should not be returned (timestamp from square bolus is valid)
-//        assertArray(timeStampedEvents, doesntContainPumpEvent: tempEventBasal)
-//    }
-
-    func test523SquareBolusEventBeforeStartTimeDoesntContainEvent() {
-        setUpTestWithPumpModel(.Model523)
-        let pumpEvent = createSquareBolusEvent2010()
-        
-        let startDate = pumpEvent.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
-        
-        let (timestampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: [pumpEvent], startDate: startDate, pumpModel: self.pumpModel)
-        
-        assertArray(timestampedEvents, doesntContainPumpEvent: pumpEvent)
-        // We found an event before the start time so we're exiting
-        XCTAssertFalse(hasMoreEvents)
-        // Normal exit and nor cancelled
         XCTAssertFalse(cancelled)
     }
 
@@ -219,41 +185,23 @@ class PumpOpsSynchronousTests: XCTestCase {
         XCTAssertFalse(cancelled)
     }
 
-    // The following tests are testing the border conditionsof the pump lost time detection, the main behavior of which is covered
-    // in testPumpLostTimeCancelsFetchEarly. The precise point at which we decide pump time is lost (the one hour mark) isn't something
-    // I have a great reason for setting where it is.  It's possible that we could set it at 0 minutes, since any non-bolus event out
-    // of order is unexpected, though there may be events other than boluses that could be very slightly delayed, and I didn't want to
-    // trigger a cancel in that case.  The cases that we've actually seen are years difference.
-    // Having tests around this makes the decision look a lot more intentional than it really is.
-//    func testOutOfOrderEventOverAnHourCancels() {
-//        setUpTestWithPumpModel(.Model523)
-//
-//        let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:61))
-//
-//        let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
-//        let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
-//
-//        let events = [batteryEvent, laterBatteryEvent]
-//
-//        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
-//
-//        XCTAssertTrue(cancelled)
-//    }
-//
-//    func testOutOfOrderEventUnderAnHourDoesntCancel() {
-//        setUpTestWithPumpModel(.Model523)
-//
-//        let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:59))
-//
-//        let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
-//        let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
-//
-//        let events = [batteryEvent, laterBatteryEvent]
-//
-//        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
-//
-//        XCTAssertFalse(cancelled)
-//    }
+    // The test the border condition sof the pump lost time detection, the main behavior of which is covered
+    // in testPumpLostTimeCancelsFetchEarly. The precise point at which we decide pump time is lost (the one hour mark) is aribtrary.
+    
+    func testOutOfOrderEventUnderAnHourDoesntCancel() {
+        setUpTestWithPumpModel(.Model523)
+
+        let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:59))
+
+        let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
+        let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
+
+        let events = [batteryEvent, laterBatteryEvent]
+
+        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
+
+        XCTAssertFalse(cancelled)
+    }
 
     // MARK: Test Sanity Checks
     func test2010EventSanityWith523() {

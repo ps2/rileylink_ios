@@ -31,13 +31,12 @@ public class ReadProfileSettingsSTD512MessageBody : CarelinkLongMessageBody {
     }
     
     static private func decodePumpSettings(data: Data) -> [BasalScheduleData] {
-        var index = 0
         let beginPattern: [UInt8] = [0,0,0]
         let endPattern: [UInt8] = [0,0,0x3F]
         var basalSettings = [BasalScheduleData]()
 
-        while (index * 3 + 3 < data.count) {
-            let beginOfRange = index*3+1
+        for tuple in sequence(first: (index:0, offset:1), next: { (index: $0.index+1, $0.offset + 3) }) {
+            let beginOfRange = tuple.offset
             let endOfRange = beginOfRange+2
             
             if endOfRange >= data.count-1 {
@@ -47,7 +46,7 @@ public class ReadProfileSettingsSTD512MessageBody : CarelinkLongMessageBody {
             let section = Array(data[beginOfRange...endOfRange])
             
             // sanity check
-            if index > 0 && (section == beginPattern ||
+            if tuple.index > 0 && (section == beginPattern ||
                 section == endPattern) {
                 break
             }
@@ -58,10 +57,8 @@ public class ReadProfileSettingsSTD512MessageBody : CarelinkLongMessageBody {
             let rate = Double(rateValue) * 0.025
             let minutes = UInt(minutesValue) * 30
             
-            let newBasalScheduleData = BasalScheduleData(index: index, minutes: minutes, rate: rate)
+            let newBasalScheduleData = BasalScheduleData(index: tuple.index, minutes: minutes, rate: rate)
             basalSettings.append(newBasalScheduleData)
-            
-            index = index+1
         }
         
         return basalSettings

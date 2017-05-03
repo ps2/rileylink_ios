@@ -9,9 +9,9 @@
 import Foundation
 
 public struct BasalScheduleData {
-    let index: Int
-    let minutes: UInt
-    let rate: Double
+    public let index: Int
+    public let minutes: Int
+    public let rate: Double
 }
 
 public class ReadProfileSettingsSTD512MessageBody : CarelinkLongMessageBody {
@@ -55,7 +55,7 @@ public class ReadProfileSettingsSTD512MessageBody : CarelinkLongMessageBody {
             let minutesValue = section[2]
             
             let rate = Double(rateValue) * 0.025
-            let minutes = UInt(minutesValue) * 30
+            let minutes = Int(minutesValue) * 30
             
             let newBasalScheduleData = BasalScheduleData(index: tuple.index, minutes: minutes, rate: rate)
             basalSettings.append(newBasalScheduleData)

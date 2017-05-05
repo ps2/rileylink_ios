@@ -241,6 +241,17 @@ class PumpOpsSynchronous {
         return body.model
     }
 
+    
+    /// Reads Basal Schedule from the pump
+    ///
+    /// - Returns: Array of Basal Schedule Data
+    /// - Throws: PumpCommsError
+    internal func getBasalSchedule() throws -> [BasalScheduleData] {
+        let body: ReadProfileSettingsSTD512MessageBody = try messageBody(to: .readProfileSTD512)
+        return body.basalSchedule
+    }
+    
+
     /// Retrieves the pump model from either the state or from the 
     ///
     /// - Returns: The pump model

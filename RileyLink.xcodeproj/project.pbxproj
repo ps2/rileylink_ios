@@ -49,7 +49,6 @@
 		434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0921CBA0DF600422F4A /* PumpOps.swift */; };
 		434AB0971CBA0DF600422F4A /* PumpOpsSynchronous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */; };
 		434AB0981CBA0DF600422F4A /* PumpState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0941CBA0DF600422F4A /* PumpState.swift */; };
-		434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
 		434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */; };
 		434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */; };
 		434AB0C71CBCB76400422F4A /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
@@ -89,8 +88,10 @@
 		43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */; };
 		43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */; };
 		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
-		43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
-		43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */; };
+		43EBE4521EAD23C40073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
+		43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
+		43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
+		43EBE4551EAD24410073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
@@ -206,7 +207,6 @@
 		C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */; };
 		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
 		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
-		C14FFC6D1D3D85A40049CF85 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */; };
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
@@ -341,6 +341,7 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
+		C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
 /* End PBXBuildFile section */
 
@@ -503,7 +504,6 @@
 		434AB0921CBA0DF600422F4A /* PumpOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
 		434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsSynchronous.swift; sourceTree = "<group>"; };
 		434AB0941CBA0DF600422F4A /* PumpState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpState.swift; sourceTree = "<group>"; };
-		434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
 		434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceManager.swift; sourceTree = "<group>"; };
 		434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDevice.swift; sourceTree = "<group>"; };
 		434FF1DD1CF268F3000DB779 /* RileyLinkDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceTableViewCell.swift; sourceTree = "<group>"; };
@@ -533,6 +533,7 @@
 		43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
@@ -660,7 +661,6 @@
 		C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataManager.swift; sourceTree = "<group>"; };
 		C14FFC661D3D7E390049CF85 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainManager+RileyLink.swift"; sourceTree = "<group>"; };
-		C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
@@ -876,6 +876,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */,
 				C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */,
 				C12EA254198B436800309FA4 /* XCTest.framework in Frameworks */,
 				C12EA256198B436900309FA4 /* UIKit.framework in Frameworks */,
@@ -959,7 +960,6 @@
 				43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */,
 				43722FB21CB9F7640038B7F2 /* Info.plist */,
 				434AB0911CBA0DF600422F4A /* Either.swift */,
-				434AB09D1CBA28F100422F4A /* NSTimeInterval.swift */,
 				434AB0921CBA0DF600422F4A /* PumpOps.swift */,
 				434AB0931CBA0DF600422F4A /* PumpOpsSynchronous.swift */,
 				434AB0941CBA0DF600422F4A /* PumpState.swift */,
@@ -989,6 +989,14 @@
 				43C246961D8918AE0031F8D1 /* Info.plist */,
 			);
 			path = Crypto;
+			sourceTree = "<group>";
+		};
+		43EBE44F1EAD234F0073A0B5 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		54BC44761DB46C3100340EED /* GlucoseEvents */ = {
@@ -1181,6 +1189,7 @@
 				43722FBD1CB9F7640038B7F2 /* RileyLinkKitTests */,
 				C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */,
 				C1B3831A1CD0665D00CE7782 /* NightscoutUploadKitTests */,
+				43EBE44F1EAD234F0073A0B5 /* Common */,
 				43C246941D8918AE0031F8D1 /* Crypto */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
@@ -1377,7 +1386,6 @@
 				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
 				C1E535E81991E36700C2AC49 /* NSData+Conversion.h */,
 				C1E535E91991E36700C2AC49 /* NSData+Conversion.m */,
-				C14FFC6C1D3D85A40049CF85 /* NSTimeInterval.swift */,
 				C14FFC601D3D75470049CF85 /* UIColor.swift */,
 				C14FFC541D3D72A50049CF85 /* UIViewController.swift */,
 			);
@@ -1978,6 +1986,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				434AB0961CBA0DF600422F4A /* PumpOps.swift in Sources */,
+				43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */,
 				431185AF1CF25A590059ED98 /* IdentifiableClass.swift in Sources */,
 				C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */,
 				C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */,
@@ -1992,7 +2001,6 @@
 				C1C659191E16BA9D0025CC58 /* CaseCountable.swift in Sources */,
 				C170C99B1CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift in Sources */,
 				434AB0BE1CBB4E3200422F4A /* RileyLinkDeviceManager.swift in Sources */,
-				434AB09E1CBA28F100422F4A /* NSTimeInterval.swift in Sources */,
 				4345D1CE1DA16AF300BAAD22 /* TimeZone.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
 				C1B4A9591D1E6357003B8985 /* UITableViewCell.swift in Sources */,
@@ -2093,7 +2101,6 @@
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
 				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
 				C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */,
-				43D657451D0CF1D500216E20 /* NSTimeInterval.swift in Sources */,
 				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
 				54BC447E1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
@@ -2132,6 +2139,7 @@
 				541688DD1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift in Sources */,
 				43CA932F1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift in Sources */,
 				2FDE1A071E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift in Sources */,
+				43EBE4521EAD23C40073A0B5 /* TimeInterval.swift in Sources */,
 				54BC44781DB46C7D00340EED /* GlucoseEvent.swift in Sources */,
 				546A85D01DF7BB8B00733213 /* SensorPacketGlucoseEvent.swift in Sources */,
 				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
@@ -2215,6 +2223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C14FFC5E1D3D75200049CF85 /* ButtonTableViewCell.swift in Sources */,
+				43EBE4551EAD24410073A0B5 /* TimeInterval.swift in Sources */,
 				C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */,
 				C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */,
 				C14FFC511D3D6DEF0049CF85 /* ServiceCredential.swift in Sources */,
@@ -2223,7 +2232,6 @@
 				C1274F811D82411C0002912B /* SettingsTableViewController.swift in Sources */,
 				C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				C139AC241BFD84B500B0518F /* RuntimeUtils.m in Sources */,
-				C14FFC6D1D3D85A40049CF85 /* NSTimeInterval.swift in Sources */,
 				C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */,
 				C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */,
 				C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */,
@@ -2280,10 +2288,10 @@
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				43F348061D596270009933DC /* HKUnit.swift in Sources */,
-				43D657461D0CF38F00216E20 /* NSTimeInterval.swift in Sources */,
 				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
 				C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
+				43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */,
 				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
 				492526711E4521FB00ACBA5F /* NoteNightscoutTreatment.swift in Sources */,

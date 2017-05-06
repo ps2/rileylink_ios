@@ -18,6 +18,10 @@ extension TimeInterval {
         self.init(minutes: hours * 60)
     }
 
+    var milliseconds: Double {
+        return self * 1000
+    }
+
     var minutes: Double {
         return self / 60.0
     }
@@ -25,4 +29,5 @@ extension TimeInterval {
     var hours: Double {
         return minutes / 60.0
     }
+    
 }

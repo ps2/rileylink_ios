@@ -27,7 +27,7 @@ class DeviceLinkMessageBodyTests: XCTestCase {
         if let message = message {
             XCTAssertTrue(message.messageBody is DeviceLinkMessageBody)
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

@@ -11,7 +11,7 @@ import MinimedKit
 import RileyLinkBLEKit
 
 class PumpOpsCommunication {
-    private static let standardPumpResponseWindow: UInt16 = 180
+    private static let standardPumpResponseWindow: UInt32 = 180
     private let expectedMaxBLELatencyMS = 1500
     
     let session: RileyLinkCmdSession
@@ -20,7 +20,7 @@ class PumpOpsCommunication {
         self.session = session
     }
     
-    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt16 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         let cmd = SendAndListenCmd()
         cmd.packet = RFPacket(data: msg.txData)
         cmd.timeoutMS = timeoutMS

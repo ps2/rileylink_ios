@@ -27,7 +27,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
         if let message = message {
             XCTAssertTrue(message.messageBody is MySentryPumpStatusMessageBody)
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

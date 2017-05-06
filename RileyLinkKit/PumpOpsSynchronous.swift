@@ -213,8 +213,6 @@ class PumpOpsSynchronous {
         while (!finished) {
             let response = try communication.sendAndListen(msg)
             
-            print("Response = \(response)")
-            
             guard response.messageType == .readProfileSTD512,
                 let body = response.messageBody as? DataFrameMessageBody else {
                     throw PumpCommsError.unexpectedResponse(response, from: msg)

@@ -11,7 +11,7 @@ import MinimedKit
 import RileyLinkBLEKit
 
 class PumpOpsCommunication {
-    private static let standardPumpResponseWindow: UInt16 = 180
+    private static let standardPumpResponseWindow: UInt32 = 180
     private let expectedMaxBLELatencyMS = 1500
     
     let session: RileyLinkCmdSession

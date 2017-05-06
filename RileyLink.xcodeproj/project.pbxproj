@@ -341,6 +341,7 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
+		C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
 /* End PBXBuildFile section */
 
@@ -875,6 +876,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */,
 				C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */,
 				C12EA254198B436800309FA4 /* XCTest.framework in Frameworks */,
 				C12EA256198B436900309FA4 /* UIKit.framework in Frameworks */,

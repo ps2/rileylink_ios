@@ -340,7 +340,7 @@ class PumpOpsCommunicationStub : PumpOpsCommunication {
     // internal tracking of how many times a response type has been received
     private var responsesHaveOccured = [MessageType: Int]()
     
-    override func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt16, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+    override func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         
         if let responseArray = responses[msg.messageType] {
             let numberOfResponsesReceived: Int

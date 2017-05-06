@@ -29,7 +29,7 @@ class GetPumpModelCarelinkMessageBodyTests: XCTestCase {
             let body = message.messageBody as! GetPumpModelCarelinkMessageBody
             XCTAssertEqual(body.model, "523")
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

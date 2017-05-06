@@ -27,6 +27,7 @@ public enum MessageType: UInt8 {
     case readRemainingInsulin         = 0x73
     case getHistoryPage               = 0x80
     case getPumpModel                 = 0x8d
+    case readProfileSTD512            = 0x92
     case readTempBasal                = 0x98
     case getGlucosePage               = 0x9A
     case readCurrentPageNumber        = 0x9d
@@ -58,6 +59,8 @@ public enum MessageType: UInt8 {
             return ButtonPressCarelinkMessageBody.self
         case .getPumpModel:
             return GetPumpModelCarelinkMessageBody.self
+        case .readProfileSTD512:
+            return DataFrameMessageBody.self
         case .getHistoryPage:
             return GetHistoryPageCarelinkMessageBody.self
         case .getBattery:

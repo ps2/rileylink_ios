@@ -38,5 +38,4 @@ class GetBatteryCarelinkMessageBodyTests: XCTestCase {
             XCTFail("\(String(describing: message)) is nil")
         }
     }
-    
 }

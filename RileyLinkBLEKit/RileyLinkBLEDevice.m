@@ -32,7 +32,6 @@
     NSData *endOfResponseMarker;
     BOOL idleListeningEnabled;
     uint8_t idleListenChannel;
-    uint16_t _idleTimeout;
     BOOL fetchingResponse;
     CmdBase *currentCommand;
     BOOL runningIdle;
@@ -67,7 +66,7 @@
         cmdDispatchGroup = dispatch_group_create();
         idleDetectDispatchGroup = dispatch_group_create();
         
-        _idleTimeout = 60 * 1000;
+        _idleTimeoutMS = 60 * 1000;
         _timerTickEnabled = YES;
         
         incomingPackets = [NSMutableArray array];
@@ -478,7 +477,7 @@
         NSLog(@"Starting idle RX");
         GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
         cmd.listenChannel = idleListenChannel;
-        cmd.timeoutMS = _idleTimeout;
+        cmd.timeoutMS = _idleTimeoutMS;
         [self issueCommand:cmd];
         
         _lastIdle = [NSDate date];
@@ -499,7 +498,7 @@
 
 - (void) assertIdleListening {
     if (idleListeningEnabled && !runningSession) {
-        NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
+        NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeoutMS / 1000.0;
         
         if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
             [self onIdle];

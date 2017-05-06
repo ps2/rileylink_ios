@@ -30,7 +30,7 @@ class RFToolsTests: XCTestCase {
             let expectedOutput = Data(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")
             XCTAssertTrue(result == expectedOutput)
         } else {
-            XCTFail("\(String(describing:result)) is nil")
+            XCTFail("\(String(describing: result)) is nil")
         }
     }
     

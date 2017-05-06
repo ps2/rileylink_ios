@@ -28,7 +28,7 @@ class MeterMessageTests: XCTestCase {
             XCTAssertEqual(message.glucose, 257)
             XCTAssertEqual(message.ackFlag, false)
         } else {
-            XCTFail("\(String(describing:message)) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

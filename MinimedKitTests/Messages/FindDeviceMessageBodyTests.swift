@@ -27,7 +27,7 @@ class FindDeviceMessageBodyTests: XCTestCase {
         if let message = message {
             XCTAssertTrue(message.messageBody is FindDeviceMessageBody)
         } else {
-            XCTFail("\(String(describing:message)) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

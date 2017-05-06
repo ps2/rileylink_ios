@@ -46,7 +46,7 @@ class PumpOpsSynchronous {
 
     public static let PacketKey = "com.rileylink.RileyLinkKit.PumpOpsSynchronousPacketKey"
 
-    private static let standardPumpResponseWindow: UInt16 = 180
+    private static let standardPumpResponseWindow: UInt32 = 180
     private let expectedMaxBLELatencyMS = 1500
     
     // After
@@ -296,7 +296,7 @@ class PumpOpsSynchronous {
     }
 
     internal func changeWatchdogMarriageProfile(_ watchdogID: Data) throws {
-        let commandTimeoutMS: UInt16 = 30_000
+        let commandTimeoutMS: UInt32 = 30_000
 
         // Wait for the pump to start polling
         let listenForFindMessageCmd = GetPacketCmd()

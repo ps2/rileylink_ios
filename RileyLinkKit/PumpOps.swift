@@ -108,7 +108,7 @@ public class PumpOps {
 
                 let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
 
-                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), clockResp.dateComponents))
+                completion(.success((units: response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), date: clockResp.dateComponents)))
             } catch let error {
                 completion(.failure(error))
             }

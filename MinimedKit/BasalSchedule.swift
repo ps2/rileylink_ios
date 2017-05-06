@@ -10,7 +10,7 @@ import Foundation
 
 public struct BasalScheduleEntry {
     public let index: Int
-    public let minutes: Int
+    public let timeOffset: TimeInterval
     public let rate: Double
 }
 
@@ -38,13 +38,10 @@ public struct BasalSchedule {
                 break
             }
             
-            let rateValue = (Int(section[1]) << 8) + Int(section[0])
-            let minutesValue = section[2]
+            let rate = Double((Int(section[1]) << 8) + Int(section[0])) * 0.025
+            let timeOffset = TimeInterval(Int(section[2]) * 30 * 60)
             
-            let rate = Double(rateValue) * 0.025
-            let minutes = Int(minutesValue) * 30
-            
-            let newBasalScheduleEntry = BasalScheduleEntry(index: tuple.index, minutes: minutes, rate: rate)
+            let newBasalScheduleEntry = BasalScheduleEntry(index: tuple.index, timeOffset: timeOffset, rate: rate)
             acc.append(newBasalScheduleEntry)
         }
         self.entries = acc

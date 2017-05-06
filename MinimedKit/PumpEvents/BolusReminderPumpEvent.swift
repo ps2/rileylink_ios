@@ -14,6 +14,7 @@ public struct BolusReminderPumpEvent: TimestampedPumpEvent {
     public let timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
+        let length: Int
         if pumpModel.larger {
             length = 9
         } else {
@@ -24,9 +25,17 @@ public struct BolusReminderPumpEvent: TimestampedPumpEvent {
             return nil
         }
         
-        rawData = availableData.subdata(in: 0..<length)
+        let rawData = availableData.subdata(in: 0..<length)
         
-        timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        let timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        
+        self.init(length: length, rawData: rawData, timestamp: timestamp)
+    }
+    
+    public init(length: Int, rawData: Data, timestamp: DateComponents) {
+        self.length = length
+        self.rawData = rawData
+        self.timestamp = timestamp
     }
     
     public var dictionaryRepresentation: [String: Any] {

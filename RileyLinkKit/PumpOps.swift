@@ -36,7 +36,7 @@ public class PumpOps {
         }
     }
     
-    public func getBasalSettings(_ completion: @escaping (Either<[BasalScheduleData], Error>) -> Void) {
+    public func getBasalSettings(_ completion: @escaping (Either<BasalSchedule, Error>) -> Void) {
         device.runSession(withName: "Get Basal Settings") { (session) -> Void in
             
             do {

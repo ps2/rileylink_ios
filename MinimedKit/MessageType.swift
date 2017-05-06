@@ -60,7 +60,7 @@ public enum MessageType: UInt8 {
         case .getPumpModel:
             return GetPumpModelCarelinkMessageBody.self
         case .readProfileSTD512:
-            return ReadProfileSettingsSTD512MessageBody.self
+            return DataFrameMessageBody.self
         case .getHistoryPage:
             return GetHistoryPageCarelinkMessageBody.self
         case .getBattery:

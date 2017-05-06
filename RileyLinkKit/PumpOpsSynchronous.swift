@@ -203,9 +203,28 @@ class PumpOpsSynchronous {
     ///
     /// - Returns: Array of Basal Schedule Data
     /// - Throws: PumpCommsError
-    internal func getBasalSchedule() throws -> [BasalScheduleData] {
-        let body: ReadProfileSettingsSTD512MessageBody = try messageBody(to: .readProfileSTD512)
-        return body.basalSchedule
+    internal func getBasalSchedule() throws -> BasalSchedule {
+        
+        try wakeup()
+        
+        var finished = false
+        var msg = makePumpMessage(to: .readProfileSTD512)
+        var scheduleData = Data()
+        while (!finished) {
+            let response = try communication.sendAndListen(msg)
+            
+            print("Response = \(response)")
+            
+            guard response.messageType == .readProfileSTD512,
+                let body = response.messageBody as? DataFrameMessageBody else {
+                    throw PumpCommsError.unexpectedResponse(response, from: msg)
+            }
+            scheduleData.append(body.contents)
+            finished = body.lastFrameFlag
+            msg = makePumpMessage(to: .pumpAck)
+        }
+        
+        return BasalSchedule(data: scheduleData)
     }
     
 

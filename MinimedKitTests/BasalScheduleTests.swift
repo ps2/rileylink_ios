@@ -1,5 +1,5 @@
 //
-//  ReadProfileSettingsSTD512MessageBodyTests.swift
+//  BasalScheduleTests.swift
 //  RileyLink
 //
 //  Created by Jaim Zuber on 5/2/17.
@@ -9,20 +9,21 @@
 import XCTest
 @testable import MinimedKit
 
-class ReadProfileSettingsSTD512MessageBodyTests: XCTestCase {
+class BasalScheduleTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
     }
     
     func testBasicConversion() {
-        let sampleDataString = "011300001000030d000810000c0b00140a00180e002010002615002900000000000000000000000000000000000000000000000000000000000000000000000000"
+        let sampleDataString = "1300001000030d000810000c0b00140a00180e002010002615002900000000000000000000000000000000000000000000000000000000000000000000000000"
         
         let rxData = Data(hexadecimalString: sampleDataString)!
-        let messageBody = ReadProfileSettingsSTD512MessageBody(rxData: rxData)!
-        let basalSchedule = messageBody.basalSchedule
+        let profile = BasalSchedule(data: rxData)
         
-        XCTAssertEqual(basalSchedule.count, 9)
+        XCTAssertEqual(profile.entries.count, 9)
+        
+        let basalSchedule = profile.entries
         
         // Test each element
         XCTAssertEqual(basalSchedule[0].index, 0)
@@ -60,17 +61,5 @@ class ReadProfileSettingsSTD512MessageBodyTests: XCTestCase {
         XCTAssertEqual(basalSchedule[8].index, 8)
         XCTAssertEqual(basalSchedule[8].minutes, 1230)
         XCTAssertEqualWithAccuracy(basalSchedule[8].rate, 0.525, accuracy: 0.0001)
-    }
-    
-    func testTooLongString() {
-        let largerDataString = "011300001000030d000810000c0b00140a00180e00201000261500296150030615003161500326150033615003461500356150036615003761500386150039615003a0bc"
-        
-        let rxData = Data(hexadecimalString: largerDataString)
-        
-        let messageBody = ReadProfileSettingsSTD512MessageBody(rxData: rxData!)!
-        let basalSchedule = messageBody.basalSchedule
-        
-        // Just don't crash
-        XCTAssertTrue(basalSchedule.count > 0)
     }
 }

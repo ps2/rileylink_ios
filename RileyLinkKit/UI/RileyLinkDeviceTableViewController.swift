@@ -150,6 +150,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         case getPumpModel
         case pressDownButton
         case readPumpStatus
+        case readBasalSchedule
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
@@ -290,7 +291,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
             case .readPumpStatus:
                 cell.textLabel?.text = NSLocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
-            }
+
+            case .readBasalSchedule:
+                cell.textLabel?.text = NSLocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
+}
         }
 
         return cell
@@ -527,6 +531,26 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     }
 
                     return NSLocalizedString("Reading pump status…", comment: "Progress message for reading pump status")
+                }
+            case .readBasalSchedule:
+                vc = CommandResponseViewController {
+                    [unowned self] (completionHandler) -> String in
+                    self.device.ops?.getBasalSettings() { (result) in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let schedule):
+                                var str = String(format: NSLocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), self.decimalFormatter.string(from: NSNumber(value: schedule.entries.count))!)
+                                for entry in schedule.entries {
+                                    str += "\(String(describing: entry))\n"
+                                }
+                                completionHandler(str)
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
+                            }
+                        }
+                    }
+                    
+                    return NSLocalizedString("Reading basal schedule…", comment: "Progress message for reading basal schedule")
                 }
             }
 

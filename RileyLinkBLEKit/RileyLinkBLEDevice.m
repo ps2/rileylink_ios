@@ -510,13 +510,15 @@
     if (response.length > 3) {
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
-        packet.capturedAt = [NSDate date];
-        NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
-        NSDictionary *attrs = @{
-                                @"packet": packet,
-                                @"peripheral": self.peripheral,
-                                };
-        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
+        if (packet.data) {
+            packet.capturedAt = [NSDate date];
+            NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
+            NSDictionary *attrs = @{
+                                    @"packet": packet,
+                                    @"peripheral": self.peripheral,
+                                    };
+            [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
+        }
     } else if (response.length > 0) {
         uint8_t errorCode = ((uint8_t*)response.bytes)[0];
         switch (errorCode) {

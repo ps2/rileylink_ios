@@ -22,7 +22,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testValidPumpStatusMessage() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040042f511727070f09050184850000cd010105b03e0a0a1a009d030000711726000f09050000d0")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040042f511727070f09050184850000cd010105b03e0a0a1a009d030000711726000f09050000")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is MySentryPumpStatusMessageBody)
@@ -40,7 +40,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testMidnightSensor() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040049c510003310f090501393700025b0101068d262208150034000000700003000f0905000067")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040049c510003310f090501393700025b0101068d262208150034000000700003000f09050000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         
@@ -77,7 +77,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testActiveSensor() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040042f511727070f09050184850000cd010105b03e0a0a1a009d030000711726000f09050000d0")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a2594040042f511727070f09050184850000cd010105b03e0a0a1a009d030000711726000f09050000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         
@@ -115,7 +115,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testSensorEndEmptyReservoir() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a259404004fb511205000f090601050502000004000000ff00ffff0040000000711205000f090600002b")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a259404004fb511205000f090601050502000004000000ff00ffff0040000000711205000f09060000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         
@@ -149,7 +149,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testSensorOffEmptyReservoir() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a259404004ff501219000f09060100000000000400000000000000005e0000007200000000000000008b")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a259404004ff501219000f09060100000000000400000000000000005e000000720000000000000000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         
@@ -183,7 +183,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
     
     func testSensorOffEmptyReservoirSuspended() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a25940400401501223000f0906010000000000040000000000000000590000007200000000000000009f")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a25940400401501223000f090601000000000004000000000000000059000000720000000000000000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         
@@ -217,7 +217,7 @@ class MySentryPumpStatusMessageBodyTests: XCTestCase {
     }
  
     func testClockType24Hour() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a295099004b6d5971f1510070a013f3a0002dd020105bd08880825000502000755171e0010070a00008d")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a295099004b6d5971f1510070a013f3a0002dd020105bd08880825000502000755171e0010070a0000")!)!
         
         let body = message.messageBody as! MySentryPumpStatusMessageBody
         

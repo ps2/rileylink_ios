@@ -44,10 +44,6 @@ class PumpOpsCommunication {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        if let rawReceivedData = cmd.rawReceivedData {
-            NSLog("aiaidata:\(rawReceivedData)")
-        }
-        
         guard let data = cmd.receivedPacket.data else {
             if cmd.didReceiveResponse {
                 throw PumpCommsError.unknownResponse(rx: cmd.rawReceivedData.hexadecimalString, during: "Sent \(msg)")

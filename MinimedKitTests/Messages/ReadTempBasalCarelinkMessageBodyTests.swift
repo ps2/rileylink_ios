@@ -14,7 +14,7 @@ class ReadTempBasalCarelinkMessageBodyTests: XCTestCase {
     
     func testReadTempBasal() {
         // 06 00 00 00 37 00 17  -> 1.375 U @ 23 min remaining
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000037001700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000037001700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)!
         
         let body = message.messageBody as! ReadTempBasalCarelinkMessageBody
         
@@ -25,7 +25,7 @@ class ReadTempBasalCarelinkMessageBodyTests: XCTestCase {
     
     func testReadTempBasalZero() {
         // 06 00 00 00 00 00 1d  -> 0 U @ 29 min remaining
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000000001d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000000001d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)!
         
         let body = message.messageBody as! ReadTempBasalCarelinkMessageBody
         
@@ -35,7 +35,7 @@ class ReadTempBasalCarelinkMessageBodyTests: XCTestCase {
     }
     
     func testReadHighTempBasalRate() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a7754838980600000550001e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000012")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7754838980600000550001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)!
         
         let body = message.messageBody as! ReadTempBasalCarelinkMessageBody
         

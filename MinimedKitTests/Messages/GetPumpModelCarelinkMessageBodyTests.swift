@@ -22,7 +22,7 @@ class GetPumpModelCarelinkMessageBodyTests: XCTestCase {
     }
     
     func testValidGetModelResponse() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a73505358d09033532330000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a73505358d0903353233000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is GetPumpModelCarelinkMessageBody)

@@ -500,31 +500,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                 }
             case .pressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    self.device.ops?.setTempBasal(rate: 2.0, duration: TimeInterval(minutes: 30)) { (response) in
+                    self.device.ops?.pressButton({ (response) in
                         DispatchQueue.main.async {
                             switch response {
                             case .success(let msg):
                                 completionHandler("Result: \(msg)")
                             case .failure(let error):
-                                completionHandler(error.localizedDescription)
+                                completionHandler(String(describing: error))
                             }
                         }
-                    }
-                    return NSLocalizedString("Sending temp basal of 2.0U/hr…", comment: "Progress message for sending temp basal to pump.")
+                    })
+                    return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
-//                vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-//                    self.device.ops?.pressButton({ (response) in
-//                        DispatchQueue.main.async {
-//                            switch response {
-//                            case .success(let msg):
-//                                completionHandler("Result: \(msg)")
-//                            case .failure(let error):
-//                                completionHandler(String(describing: error))
-//                            }
-//                        }
-//                    })
-//                    return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
-//                }
             case .readPumpStatus:
                 vc = CommandResponseViewController {
                     [unowned self] (completionHandler) -> String in

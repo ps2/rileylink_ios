@@ -280,6 +280,7 @@
 		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
 		C1A492671D4A65D9008964FF /* RecommendedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */; };
 		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
+		C1A721601EC29C0B0080FAD7 /* PumpCommsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A7215F1EC29C0B0080FAD7 /* PumpCommsError.swift */; };
 		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
 		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
 		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
@@ -740,6 +741,7 @@
 		C1A492641D4A5DEB008964FF /* BatteryStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryStatus.swift; sourceTree = "<group>"; };
 		C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTempBasal.swift; sourceTree = "<group>"; };
 		C1A492681D4A66C0008964FF /* LoopEnacted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopEnacted.swift; sourceTree = "<group>"; };
+		C1A7215F1EC29C0B0080FAD7 /* PumpCommsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpCommsError.swift; sourceTree = "<group>"; };
 		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
 		C1AF21E51D48667F0088C41D /* UploaderStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploaderStatus.swift; sourceTree = "<group>"; };
@@ -972,6 +974,7 @@
 				434AB0C51CBCB41500422F4A /* RileyLinkDevice.swift */,
 				434AB0BD1CBB4E3200422F4A /* RileyLinkDeviceManager.swift */,
 				2F962EC21E6873A10070EFBD /* PumpOpsCommunication.swift */,
+				C1A7215F1EC29C0B0080FAD7 /* PumpCommsError.swift */,
 			);
 			path = RileyLinkKit;
 			sourceTree = "<group>";
@@ -2000,6 +2003,7 @@
 				C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */,
 				C1B4A9571D1E613A003B8985 /* TextFieldTableViewController.swift in Sources */,
 				434AB0C61CBCB41500422F4A /* RileyLinkDevice.swift in Sources */,
+				C1A721601EC29C0B0080FAD7 /* PumpCommsError.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* NSData.swift in Sources */,
 				439731271CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift in Sources */,
 				434AB0981CBA0DF600422F4A /* PumpState.swift in Sources */,

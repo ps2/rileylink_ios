@@ -11,32 +11,6 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
-/// An error that occurs during a command run
-///
-/// - command: The error took place during the command sequence
-/// - arguments: The error took place during the argument sequence
-public enum PumpCommandError: Error {
-    case command(PumpCommsError)
-    case arguments(PumpCommsError)
-}
-
-public enum PumpCommsError: Error {
-    case rfCommsFailure(String)
-    case unknownPumpModel
-    case rileyLinkTimeout
-    case unknownResponse(rx: String, during: String)
-    case noResponse(during: String)
-    case unexpectedResponse(PumpMessage, from: PumpMessage)
-    case crosstalk(PumpMessage, during: String)
-    case bolusInProgress
-    case pumpSuspended
-}
-
-public enum SetBolusError: Error {
-    case certain(PumpCommsError)
-    case uncertain(PumpCommsError)
-}
-
 public enum RXFilterMode: UInt8 {
     case wide   = 0x50  // 300KHz
     case narrow = 0x90  // 150KHz
@@ -274,9 +248,13 @@ class PumpOpsSynchronous {
                 _ = try communication.sendAndListen(makePumpMessage(to: changeMessage.messageType))
                 
                 do {
-                    _ = try communication.sendAndListen(changeMessage, retryCount: 0)
+                    let response = try communication.sendAndListen(changeMessage, retryCount: 0)
+                    if response.messageType == MessageType.errorResponse {
+                        lastError = PumpCommsError.tempBasalSettingsError
+                        break
+                    }
                 } catch {
-                    // The pump does not ACK a temp basal. We'll check manually below if it was successful.
+                    // The pump does not ACK a successful temp basal. We'll check manually below if it was successful.
                 }
                 
                 let response: ReadTempBasalCarelinkMessageBody = try messageBody(to: .readTempBasal)
@@ -481,7 +459,7 @@ class PumpOpsSynchronous {
             do {
                 pageData = try getHistoryPage(pageNum)
             } catch let error as PumpCommsError {
-                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
+                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .errorResponse {
                     break pages
                 } else {
                     throw error
@@ -645,7 +623,7 @@ class PumpOpsSynchronous {
                 }
                 
             } catch let error as PumpCommsError {
-                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
+                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .errorResponse {
                     break pages
                 } else {
                     throw error

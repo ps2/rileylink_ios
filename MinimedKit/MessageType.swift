@@ -15,7 +15,7 @@ public enum MessageType: UInt8 {
     case pumpBackfill                 = 0x08
     case findDevice                   = 0x09
     case deviceLink                   = 0x0A
-    case emptyHistoryPage             = 0x15
+    case errorResponse                = 0x15
     case writeGlucoseHistoryTimestamp = 0x28
     case changeTime                   = 0x40
     case bolus                        = 0x42

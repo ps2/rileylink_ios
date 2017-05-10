@@ -162,14 +162,14 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         
         let pumpAckMessage = sut.makePumpMessage(to: .pumpAck)
         
-        let emptyHistoryPageMessage = sut.makePumpMessage(to: .emptyHistoryPage)
+        let errorResponseMessage = sut.makePumpMessage(to: .errorResponse)
         
         var getHistoryPageArray = [pumpAckMessage, frameZeroMessages[0]]
         getHistoryPageArray.append(contentsOf: [pumpAckMessage, frameOneMessages[0]])
         getHistoryPageArray.append(contentsOf: [pumpAckMessage, frameTwoMessages[0]])
         getHistoryPageArray.append(contentsOf: [pumpAckMessage, frameThreeMessages[0]])
         getHistoryPageArray.append(contentsOf: [pumpAckMessage, frameFourMessages[0]])
-        getHistoryPageArray.append(emptyHistoryPageMessage)
+        getHistoryPageArray.append(errorResponseMessage)
         
         // pump will be called twice, normal operation will receive a pumpAck and getHistoryPageMessage
         dictionary[.getHistoryPage] = getHistoryPageArray

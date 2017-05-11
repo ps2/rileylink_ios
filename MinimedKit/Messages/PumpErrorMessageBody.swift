@@ -8,18 +8,19 @@
 
 import Foundation
 
-public enum PumpErrorCodeType: UInt8 {
-    case InvalidTempBasalType  = 0x08
-    case MaxSettingExceeded  = 0x09
-    case BolusInProgress  = 0x0c
+public enum PumpErrorCode: UInt8 {
+    // commandRefused can happen when temp basal type is set incorrectly, during suspended pump, or unfinished prime.
+    case commandRefused  = 0x08
+    case maxSettingExceeded  = 0x09
+    case bolusInProgress  = 0x0c
     
     public var description: String {
         switch self {
-        case .InvalidTempBasalType:
-            return NSLocalizedString("Invalid Temp Basal Type", comment: "Pump error code describing invalid temp basal type")
-        case .MaxSettingExceeded:
+        case .commandRefused:
+            return NSLocalizedString("Command Refused", comment: "Pump error code returned when command refused")
+        case .maxSettingExceeded:
             return NSLocalizedString("Max Setting Exceeded", comment: "Pump error code describing max setting exceeded")
-        case .BolusInProgress:
+        case .bolusInProgress:
             return NSLocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
         }
     }
@@ -29,14 +30,13 @@ public class PumpErrorMessageBody: MessageBody {
     public static let length = 1
     
     let rxData: Data
-    public let errorCode: PumpErrorCodeType
+    public let errorCode: PumpErrorCode?
+    public let rawErrorCode: UInt8
     
     public required init?(rxData: Data) {
-        guard let errorCode = PumpErrorCodeType(rawValue: rxData[0]) else {
-            return nil
-        }
         self.rxData = rxData
-        self.errorCode = errorCode
+        rawErrorCode = rxData[0]
+        errorCode = PumpErrorCode(rawValue: rawErrorCode)
     }
     
     public var txData: Data {

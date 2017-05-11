@@ -250,7 +250,11 @@ class PumpOpsSynchronous {
                 do {
                     let response = try communication.sendAndListen(changeMessage, retryCount: 0)
                     if let errorMsg = response.messageBody as? PumpErrorMessageBody {
-                        lastError = PumpCommsError.pumpError(errorMsg.errorCode)
+                        if let errorCode = errorMsg.errorCode {
+                            lastError = PumpCommsError.pumpError(errorCode)
+                        } else {
+                            lastError = PumpCommsError.unknownPumpErrorCode(errorMsg.rawErrorCode)
+                        }
                         break;
                     }
                 } catch {

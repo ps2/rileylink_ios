@@ -75,6 +75,8 @@ public enum MessageType: UInt8 {
             return ReadCurrentPageNumberMessageBody.self
         case .getGlucosePage:
             return GetGlucosePageMessageBody.self
+        case .errorResponse:
+            return PumpErrorMessageBody.self
         default:
             return UnknownMessageBody.self
         }

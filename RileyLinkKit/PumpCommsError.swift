@@ -21,7 +21,7 @@ public enum PumpCommandError: Error {
 
 public enum PumpCommsError: Error {
     case rfCommsFailure(String)
-    case tempBasalSettingsError
+    case pumpError(PumpErrorCodeType)
     case unknownPumpModel
     case rileyLinkTimeout
     case unknownResponse(rx: String, during: String)
@@ -93,8 +93,8 @@ extension PumpCommsError: LocalizedError {
             return NSLocalizedString("Unknown pump model.", comment: "")
         case .unknownResponse:
             return NSLocalizedString("Unknown response from pump.", comment: "")
-        case .tempBasalSettingsError:
-            return NSLocalizedString("Pump configuration prevents setting of temp basal.", comment: "")
+        case .pumpError(let errorCode):
+            return String(format: NSLocalizedString("Pump error: %1$@", comment: "The format string description of a Pump Error. (1: The specific error code)"),String(describing: errorCode))
         }
     }
 }

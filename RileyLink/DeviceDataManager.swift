@@ -180,7 +180,9 @@ class DeviceDataManager {
     }
     
     @objc private func receivedRileyLinkTimerTickNotification(_ note: Notification) {
-        self.assertCurrentPumpData()
+        if Config.sharedInstance().uploadEnabled {
+            self.assertCurrentPumpData()
+        }
     }
 
     

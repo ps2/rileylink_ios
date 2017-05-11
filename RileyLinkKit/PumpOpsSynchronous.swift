@@ -250,12 +250,13 @@ class PumpOpsSynchronous {
                 do {
                     let response = try communication.sendAndListen(changeMessage, retryCount: 0)
                     if let errorMsg = response.messageBody as? PumpErrorMessageBody {
-                        if let errorCode = errorMsg.errorCode {
+                        switch errorMsg.errorCode {
+                        case .known(let errorCode):
                             lastError = PumpCommsError.pumpError(errorCode)
-                        } else {
-                            lastError = PumpCommsError.unknownPumpErrorCode(errorMsg.rawErrorCode)
+                        case .unknown(let unknownErrorCode):
+                            lastError = PumpCommsError.unknownPumpErrorCode(unknownErrorCode)
                         }
-                        break;
+                        break
                     }
                 } catch {
                     // The pump does not ACK a successful temp basal. We'll check manually below if it was successful.

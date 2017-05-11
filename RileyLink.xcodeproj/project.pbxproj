@@ -282,6 +282,7 @@
 		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
 		C1A721601EC29C0B0080FAD7 /* PumpCommsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A7215F1EC29C0B0080FAD7 /* PumpCommsError.swift */; };
 		C1A721621EC3E0500080FAD7 /* PumpErrorMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */; };
+		C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */; };
 		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
 		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
 		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
@@ -744,6 +745,7 @@
 		C1A492681D4A66C0008964FF /* LoopEnacted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopEnacted.swift; sourceTree = "<group>"; };
 		C1A7215F1EC29C0B0080FAD7 /* PumpCommsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpCommsError.swift; sourceTree = "<group>"; };
 		C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpErrorMessageBody.swift; sourceTree = "<group>"; };
+		C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartialDecode.swift; sourceTree = "<group>"; };
 		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
 		C1AF21E51D48667F0088C41D /* UploaderStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploaderStatus.swift; sourceTree = "<group>"; };
@@ -1087,6 +1089,7 @@
 				C1EAD6D91C829104006DBA60 /* RFTools.swift */,
 				43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */,
 				541688DE1DB82E72005B1891 /* TimestampedGlucoseEvent.swift */,
+				C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */,
 			);
 			path = MinimedKit;
 			sourceTree = "<group>";
@@ -2125,6 +2128,7 @@
 				C1842BCB1C8F9A7200DB42AC /* RewindPumpEvent.swift in Sources */,
 				C1842BCD1C8F9BBD00DB42AC /* PrimePumpEvent.swift in Sources */,
 				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
+				C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */,
 				43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
 				C1F000521EBE73F400F65163 /* BasalSchedule.swift in Sources */,

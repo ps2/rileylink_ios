@@ -10,6 +10,14 @@ import Foundation
 
 
 extension TimeInterval {
+    static func minutes(_ minutes: Int) -> TimeInterval {
+        return self.init(minutes: Double(minutes))
+    }
+
+    static func minutes(_ minutes: Double) -> TimeInterval {
+        return self.init(minutes: minutes)
+    }
+
     init(minutes: Double) {
         self.init(minutes * 60)
     }

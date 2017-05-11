@@ -119,9 +119,10 @@ class HistoryPageTests: XCTestCase {
             XCTAssertEqual(unabsorbedInsulinRecords[2].age, 469)
             
             let basalProfileStart = events[2] as! BasalProfileStartPumpEvent
-            XCTAssertEqual(basalProfileStart.offset, 43200000)
-            XCTAssertEqual(basalProfileStart.rate, 0.25)
-            XCTAssertEqual(basalProfileStart.profileIndex, 5)
+            XCTAssertEqual(basalProfileStart.dictionaryRepresentation["offset"] as! Int, 43200000)
+            XCTAssertEqual(basalProfileStart.scheduleEntry.timeOffset, 43200)
+            XCTAssertEqual(basalProfileStart.scheduleEntry.rate, 0.25)
+            XCTAssertEqual(basalProfileStart.scheduleEntry.index, 5)
             XCTAssertEqual(basalProfileStart.timestamp, DateComponents(gregorianYear: 2016, month: 2, day: 21, hour: 12, minute: 0, second: 0))
             
             let calBGForPH = events[3] as! CalBGForPHPumpEvent

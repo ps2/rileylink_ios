@@ -20,16 +20,17 @@ public enum PumpCommandError: Error {
 }
 
 public enum PumpCommsError: Error {
-    case rfCommsFailure(String)
-    case tempBasalSettingsError
-    case unknownPumpModel
-    case rileyLinkTimeout
-    case unknownResponse(rx: String, during: String)
-    case noResponse(during: String)
-    case unexpectedResponse(PumpMessage, from: PumpMessage)
-    case crosstalk(PumpMessage, during: String)
     case bolusInProgress
+    case crosstalk(PumpMessage, during: String)
+    case noResponse(during: String)
+    case pumpError(PumpErrorCode)
     case pumpSuspended
+    case rfCommsFailure(String)
+    case rileyLinkTimeout
+    case unexpectedResponse(PumpMessage, from: PumpMessage)
+    case unknownPumpErrorCode(UInt8)
+    case unknownPumpModel
+    case unknownResponse(rx: String, during: String)
 }
 
 public enum SetBolusError: Error {
@@ -89,12 +90,14 @@ extension PumpCommsError: LocalizedError {
             return NSLocalizedString("RileyLink timed out.", comment: "")
         case .unexpectedResponse:
             return NSLocalizedString("Pump responded unexpectedly.", comment: "")
+        case .unknownPumpErrorCode(let code):
+            return String(format: NSLocalizedString("Unknown pump error code: %1$@", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"),String(describing: code))
         case .unknownPumpModel:
             return NSLocalizedString("Unknown pump model.", comment: "")
         case .unknownResponse:
             return NSLocalizedString("Unknown response from pump.", comment: "")
-        case .tempBasalSettingsError:
-            return NSLocalizedString("Pump configuration prevents setting of temp basal.", comment: "")
+        case .pumpError(let errorCode):
+            return String(format: NSLocalizedString("Pump error: %1$@", comment: "The format string description of a Pump Error. (1: The specific error code)"),String(describing: errorCode))
         }
     }
 }

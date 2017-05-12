@@ -21,8 +21,8 @@
 
 @implementation RileyLinkBLEManager
 
-+ (NSArray *)UUIDsFromUUIDStrings:(NSArray *)UUIDStrings
-              excludingAttributes:(NSArray *)attributes {
++ (NSArray<CBUUID *> *)UUIDsFromUUIDStrings:(NSArray<NSString *> *)UUIDStrings
+              excludingAttributes:(NSArray<CBAttribute *> *)attributes {
     NSMutableArray *unmatchedUUIDStrings = [UUIDStrings mutableCopy];
     
     for (CBAttribute *attribute in attributes) {
@@ -69,7 +69,7 @@
 
 #pragma mark -
 
-- (NSArray*)rileyLinkList {
+- (NSArray<RileyLinkBLEDevice *> *)rileyLinkList {
     return _devicesById.allValues;
 }
 

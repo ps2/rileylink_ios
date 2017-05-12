@@ -22,17 +22,17 @@ class FindDeviceMessageBodyTests: XCTestCase {
     }
     
     func testValidFindDeviceMessage() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf9999990062")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf99999900")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is FindDeviceMessageBody)
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     
     func testMidnightSensor() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf9999990062")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf99999900")!)!
         
         let body = message.messageBody as! FindDeviceMessageBody
         

@@ -36,6 +36,24 @@ public class PumpOps {
         }
     }
     
+    public func getBasalSettings(_ completion: @escaping (Either<BasalSchedule, Error>) -> Void) {
+        device.runSession(withName: "Get Basal Settings") { (session) -> Void in
+            
+            do {
+                let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+                
+                let basalSettings = try ops.getBasalSchedule()
+                completion(.success(basalSettings))
+            } catch let error {
+                DispatchQueue.main.async { () -> Void in
+                    completion(.failure(error))
+                }
+            }
+            
+            
+        }
+    }
+    
     public func getPumpModel(_ completion: @escaping (Either<String, Error>) -> Void)  {
         device.runSession(withName: "Get pump model") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
@@ -108,7 +126,7 @@ public class PumpOps {
 
                 let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
 
-                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), clockResp.dateComponents))
+                completion(.success((units: response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), date: clockResp.dateComponents)))
             } catch let error {
                 completion(.failure(error))
             }

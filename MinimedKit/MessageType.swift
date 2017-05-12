@@ -15,7 +15,7 @@ public enum MessageType: UInt8 {
     case pumpBackfill                 = 0x08
     case findDevice                   = 0x09
     case deviceLink                   = 0x0A
-    case emptyHistoryPage             = 0x15
+    case errorResponse                = 0x15
     case writeGlucoseHistoryTimestamp = 0x28
     case changeTime                   = 0x40
     case bolus                        = 0x42
@@ -27,6 +27,7 @@ public enum MessageType: UInt8 {
     case readRemainingInsulin         = 0x73
     case getHistoryPage               = 0x80
     case getPumpModel                 = 0x8d
+    case readProfileSTD512            = 0x92
     case readTempBasal                = 0x98
     case getGlucosePage               = 0x9A
     case readCurrentPageNumber        = 0x9d
@@ -58,6 +59,8 @@ public enum MessageType: UInt8 {
             return ButtonPressCarelinkMessageBody.self
         case .getPumpModel:
             return GetPumpModelCarelinkMessageBody.self
+        case .readProfileSTD512:
+            return DataFrameMessageBody.self
         case .getHistoryPage:
             return GetHistoryPageCarelinkMessageBody.self
         case .getBattery:
@@ -72,6 +75,8 @@ public enum MessageType: UInt8 {
             return ReadCurrentPageNumberMessageBody.self
         case .getGlucosePage:
             return GetGlucosePageMessageBody.self
+        case .errorResponse:
+            return PumpErrorMessageBody.self
         default:
             return UnknownMessageBody.self
         }

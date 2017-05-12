@@ -12,11 +12,9 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    let rate: Double
-    let profileIndex: Int
-    let offset: Int
-    
-    
+
+    public let scheduleEntry: BasalScheduleEntry
+
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 10
         
@@ -25,27 +23,28 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
         }
 
         rawData = availableData.subdata(in: 0..<length)
-        
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
-        }
-        
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
-        rate = Double(d(8)) / 40.0
-        profileIndex = d(1)
-        offset = d(7) * 30 * 1000 * 60
+        
+        let rate = Double(availableData.subdata(in: 8..<10).to(UInt16.self)) / 40.0
+        let offsetMinutes = Double(availableData[7]) * 30
+
+        scheduleEntry = BasalScheduleEntry(
+            index: Int(availableData[1]),
+            timeOffset: TimeInterval(minutes: offsetMinutes),
+            rate: rate
+        )
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "BasalProfileStart",
-            "offset": offset,
-            "rate": rate,
-            "profileIndex": profileIndex,
+            "offset": Int(scheduleEntry.timeOffset.milliseconds),
+            "rate": scheduleEntry.rate,
+            "profileIndex": scheduleEntry.index,
         ]
     }
 
     public var description: String {
-        return String(format: NSLocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"),profileIndex, rate)
+        return String(format: NSLocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"), scheduleEntry.index, scheduleEntry.rate)
     }
 }

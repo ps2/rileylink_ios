@@ -23,16 +23,6 @@
 
 @implementation RileyLinkBLEKitTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
 - (void)testVersionParsing {
     id peripheral = nil;
     
@@ -43,11 +33,26 @@
     XCTAssertEqual(SubgRfspyVersionStateUpToDate, state);
 }
 
-- (void)testDecodeRFString {
-    NSData *response = [NSData dataWithHexadecimalString:@"5655c56c55555c8e55554b5a35552e6d31d232d6c558e3c566b2d16563956c55555c665716b2d16563956c5558b5556a39a5563c56c55555c8e55554b999555695d23d342d6c5558b571695d15565c56c5556a8d555555555555555555555571c6729b15"];
+- (void)testDecodeRF {
+    NSData *response = [NSData dataWithHexadecimalString:@"4926a965a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35"];
     RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
-
-    XCTAssertEqualObjects(@"1710002e000b7300b64143b7103317824703571000160182470357107b008365031710002e000b6900804344b7107b0180400517100a3000000000000000ff9261", packet.data.hexadecimalString);
+    XCTAssertEqualObjects(@"a7754838ce0303000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", packet.data.hexadecimalString);
 }
+
+- (void)testEncodeData {
+    NSData *msg = [NSData dataWithHexadecimalString:@"a77548380600a2"];
+    RFPacket *packet = [[RFPacket alloc] initWithData:msg];
+    
+    XCTAssertEqualObjects(@"a965a5d1a8da566555ab2555", packet.encodedData.hexadecimalString);
+}
+
+- (void)testDecodeInvalidCRC {
+    // This data is corrupt in a special way; the data still decodes via tha 4b6b conversion without error,
+    // but produces a decoded message that doesn't match its CRC.
+    NSData *response = [NSData dataWithHexadecimalString:@"4926b165a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35"];
+    RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
+    XCTAssertNil(packet.data);
+}
+
 
 @end

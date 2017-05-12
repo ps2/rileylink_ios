@@ -18,7 +18,7 @@ public class RileyLinkDeviceManager {
 
     public var pumpState: PumpState? {
         didSet {
-            for device in _devices {
+            for device in devices {
                 device.pumpState = pumpState
             }
         }
@@ -53,8 +53,16 @@ public class RileyLinkDeviceManager {
     /// Provides a reliable, external heartbeat for executing periodic tasks.
     public var timerTickEnabled = true {
         didSet {
-            for device in _devices {
+            for device in devices {
                 device.device.timerTickEnabled = timerTickEnabled
+            }
+        }
+    }
+
+    public var idleTimeout = TimeInterval(minutes: 1) {
+        didSet {
+            for device in devices {
+                device.device.idleTimeoutMS = UInt32(idleTimeout.milliseconds)
             }
         }
     }
@@ -62,7 +70,7 @@ public class RileyLinkDeviceManager {
     /// Whether devices should listen for broadcast packets when not running commands
     public var idleListeningEnabled = true {
         didSet {
-            for device in _devices {
+            for device in devices {
                 if idleListeningEnabled {
                     device.device.enableIdleListening(onChannel: 0)
                 } else {
@@ -71,25 +79,21 @@ public class RileyLinkDeviceManager {
             }
         }
     }
-    
-    private var _devices: [RileyLinkDevice] = []
-    
-    public var devices: [RileyLinkDevice] {
-        return _devices
-    }
+
+    private(set) public var devices: [RileyLinkDevice] = []
 
     // When multiple RL's are present, this moves the specified RL to the back of the list
     // so a different RL will be selected by firstConnectedDevice()
     public func deprioritizeDevice(device: RileyLinkDevice) {
-        if let index = _devices.index(where: { $0.peripheral == device.peripheral }) {
-            _devices.remove(at: index)
-            _devices.append(device)
+        if let index = devices.index(where: { $0.peripheral == device.peripheral }) {
+            devices.remove(at: index)
+            devices.append(device)
         }
     }
 
     public var firstConnectedDevice: RileyLinkDevice? {
-        if let index = _devices.index(where: { $0.peripheral.state == .connected }) {
-            return _devices[index]
+        if let index = devices.index(where: { $0.peripheral.state == .connected }) {
+            return devices[index]
         } else {
             return nil
         }
@@ -110,6 +114,7 @@ public class RileyLinkDeviceManager {
     @objc private func discoveredBLEDevice(_ note: Notification) {
         if let bleDevice = note.userInfo?["device"] as? RileyLinkBLEDevice {
             bleDevice.timerTickEnabled = timerTickEnabled
+            bleDevice.idleTimeoutMS = UInt32(idleTimeout.milliseconds)
 
             if idleListeningEnabled {
                 bleDevice.enableIdleListening(onChannel: 0)
@@ -117,7 +122,7 @@ public class RileyLinkDeviceManager {
 
             let device = RileyLinkDevice(bleDevice: bleDevice, pumpState: pumpState)
             
-            _devices.append(device)
+            devices.append(device)
             
             NotificationCenter.default.post(name: .DeviceManagerDidDiscoverDevice, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device])
             
@@ -126,8 +131,8 @@ public class RileyLinkDeviceManager {
     
     @objc private func connectionStateDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
-            let device = _devices[index]
+            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let device = devices[index]
             
             NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device])
         }
@@ -135,8 +140,8 @@ public class RileyLinkDeviceManager {
     
     @objc private func rssiDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
-            let device = _devices[index]
+            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let device = devices[index]
             
             NotificationCenter.default.post(name: .DeviceRSSIDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkRSSIKey: note.userInfo!["RSSI"]!])
         }
@@ -144,8 +149,8 @@ public class RileyLinkDeviceManager {
 
     @objc private func nameDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = _devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
-            let device = _devices[index]
+            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let device = devices[index]
 
             NotificationCenter.default.post(name: .DeviceNameDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkNameKey: note.userInfo!["Name"]!])
         }
@@ -158,11 +163,12 @@ extension RileyLinkDeviceManager: CustomDebugStringConvertible {
         var report = [
             "## RileyLinkDeviceManager",
             "timerTickEnabled: \(timerTickEnabled)",
-            "idleListeningEnabled: \(idleListeningEnabled)"
+            "idleListeningEnabled: \(idleListeningEnabled)",
+            "idleTimeout: \(idleTimeout)"
         ]
 
         for device in devices {
-            report.append(device.debugDescription)
+            report.append(String(reflecting: device))
         }
 
         return report.joined(separator: "\n\n")

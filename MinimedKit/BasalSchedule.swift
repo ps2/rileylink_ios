@@ -13,10 +13,10 @@ public struct BasalScheduleEntry {
     public let timeOffset: TimeInterval
     public let rate: Double  // U/hour
 
-    internal init(index: Int, halfHourIntervalsSinceMidnight: UInt8, pumpTurns: UInt16) {
+    internal init(index: Int, timeOffset: TimeInterval, rate: Double) {
         self.index = index
-        self.timeOffset = .minutes(30 * Int(halfHourIntervalsSinceMidnight))
-        self.rate = Double(pumpTurns) / 40
+        self.timeOffset = timeOffset
+        self.rate = rate
     }
 }
 
@@ -44,13 +44,13 @@ public struct BasalSchedule {
                 break
             }
 
-            let pumpTurns = section[0..<2].withUnsafeBytes { $0.load(as: UInt16.self) }
-            let halfHours = section[2]
+            let rate = Double(section[0..<2].withUnsafeBytes { $0.load(as: UInt16.self) }) / 40.0
+            let offsetMinutes = Double(section[2]) * 30
             
             let newBasalScheduleEntry = BasalScheduleEntry(
                 index: tuple.index,
-                halfHourIntervalsSinceMidnight: halfHours,
-                pumpTurns: pumpTurns
+                timeOffset: TimeInterval(minutes: offsetMinutes),
+                rate: rate
             )
             acc.append(newBasalScheduleEntry)
         }

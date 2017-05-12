@@ -24,11 +24,14 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
 
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        
+        let rate = Double(availableData.subdata(in: 8..<10).to(UInt16.self)) / 40.0
+        let offsetMinutes = Double(availableData[7]) * 30
 
         scheduleEntry = BasalScheduleEntry(
             index: Int(availableData[1]),
-            halfHourIntervalsSinceMidnight: availableData[7],
-            pumpTurns: availableData.subdata(in: 8..<10).to(UInt16.self)
+            timeOffset: TimeInterval(minutes: offsetMinutes),
+            rate: rate
         )
     }
     

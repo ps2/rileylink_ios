@@ -11,7 +11,13 @@ import Foundation
 public struct BasalScheduleEntry {
     public let index: Int
     public let timeOffset: TimeInterval
-    public let rate: Double
+    public let rate: Double  // U/hour
+
+    internal init(index: Int, timeOffset: TimeInterval, rate: Double) {
+        self.index = index
+        self.timeOffset = timeOffset
+        self.rate = rate
+    }
 }
 
 
@@ -19,11 +25,11 @@ public struct BasalSchedule {
     public let entries: [BasalScheduleEntry]
  
     public init(data: Data) {
-        let beginPattern: [UInt8] = [0,0,0]
-        let endPattern: [UInt8] = [0,0,0x3F]
+        let beginPattern: [UInt8] = [0, 0, 0]
+        let endPattern: [UInt8] = [0, 0, 0x3F]
         var acc = [BasalScheduleEntry]()
         
-        for tuple in sequence(first: (index:0, offset:0), next: { (index: $0.index+1, $0.offset + 3) }) {
+        for tuple in sequence(first: (index: 0, offset: 0), next: { (index: $0.index + 1, $0.offset + 3) }) {
             let beginOfRange = tuple.offset
             let endOfRange = beginOfRange+2
             
@@ -37,11 +43,15 @@ public struct BasalSchedule {
             if (section == beginPattern || section == endPattern) {
                 break
             }
+
+            let rate = Double(section[0..<2].withUnsafeBytes { $0.load(as: UInt16.self) }) / 40.0
+            let offsetMinutes = Double(section[2]) * 30
             
-            let rate = Double((Int(section[1]) << 8) + Int(section[0])) * 0.025
-            let timeOffset = TimeInterval(Int(section[2]) * 30 * 60)
-            
-            let newBasalScheduleEntry = BasalScheduleEntry(index: tuple.index, timeOffset: timeOffset, rate: rate)
+            let newBasalScheduleEntry = BasalScheduleEntry(
+                index: tuple.index,
+                timeOffset: TimeInterval(minutes: offsetMinutes),
+                rate: rate
+            )
             acc.append(newBasalScheduleEntry)
         }
         self.entries = acc

@@ -755,7 +755,16 @@ class PumpOpsSynchronous {
 
             let message = PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
             
-            _ = try runCommandWithArguments(message)
+            let cmdResponse = try runCommandWithArguments(message)
+            
+            if let errorMsg = cmdResponse.messageBody as? PumpErrorMessageBody {
+                switch errorMsg.errorCode {
+                case .known(let errorCode):
+                    throw PumpCommsError.pumpError(errorCode)
+                case .unknown(let unknownErrorCode):
+                    throw PumpCommsError.unknownPumpErrorCode(unknownErrorCode)
+                }
+            }
             
         } catch let error as PumpCommsError {
             return .certain(error)

@@ -57,7 +57,7 @@ static const unsigned char crcTable[256] = { 0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 
         
         if (data.length > 2) {
             NSData *decoded = [self decodeRF:[data subdataWithRange:NSMakeRange(2, data.length - 2)]];
-            if (decoded) {
+            if (decoded && decoded.length > 2) {
                 NSData *msgData = [decoded subdataWithRange:NSMakeRange(0, decoded.length - 1)];
                 
                 unsigned char receivedCrc = ((const unsigned char*)[decoded bytes])[decoded.length-1];

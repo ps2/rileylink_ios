@@ -145,7 +145,7 @@ public class NightscoutUploader {
 
     /// Attempts to modify nightscout treatments. This method will not retry if the network task failed.
     ///
-    /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.
+    /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.  Treatments without id will be ignored.
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
     public func modifyTreatments(_ treatments:[NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
         dataAccessQueue.async {
@@ -153,6 +153,9 @@ public class NightscoutUploader {
             var errors = [Error]()
 
             for treatment in treatments {
+                guard treatment.id != nil, treatment.id != "NA" else {
+                    continue
+                }
                 modifyGroup.enter()
                 self.putToNS( treatment.dictionaryRepresentation, endpoint: defaultNightscoutTreatmentPath ) { (error) in
                     if let error = error {
@@ -178,6 +181,9 @@ public class NightscoutUploader {
             var errors = [Error]()
 
             for id in ids {
+                guard id != "NA" else {
+                    continue
+                }
                 deleteGroup.enter()
                 self.deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath) { (error) in
                     if let error = error {
@@ -323,9 +329,9 @@ public class NightscoutUploader {
 
         callNS(json, endpoint: endpoint, method: "POST") { (result) in
             switch result {
-            case .success(let json):
-                guard let insertedEntries = json as? [[String: Any]] else {
-                    completion(.failure(UploadError.invalidResponse(reason: "Expected array of objects in JSON response")))
+            case .success(let postResponse):
+                guard let insertedEntries = postResponse as? [[String: Any]], insertedEntries.count == json.count else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Expected array of \(json.count) objects in JSON response")))
                     return
                 }
 
@@ -377,9 +383,9 @@ public class NightscoutUploader {
                         completion(.failure(error))
                         return
                     }
-
-                    guard let data = data else {
-                        completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
+                    
+                    guard let data = data, !data.isEmpty else {
+                        completion(.success([]))
                         return
                     }
 

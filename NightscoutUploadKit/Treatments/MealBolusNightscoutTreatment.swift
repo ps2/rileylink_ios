@@ -16,14 +16,16 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
     let glucose: Int?
     let units: Units? // of glucose entry
     let glucoseType: GlucoseType?
+    let foodType: String?
 
-    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, notes: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
         self.carbs = carbs
         self.absorptionTime = absorptionTime
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
         self.insulin = insulin
+        self.foodType = foodType
         super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Meal Bolus")
     }
     
@@ -38,6 +40,9 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
             rval["glucose"] = glucose
             rval["glucoseType"] = glucoseType?.rawValue
             rval["units"] = units?.rawValue
+        }
+        if let foodType = foodType {
+            rval["foodType"] = foodType
         }
         return rval
     }

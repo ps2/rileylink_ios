@@ -42,7 +42,7 @@
     dispatch_group_t idleDetectDispatchGroup;
 }
 
-@property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, strong) CBPeripheral * peripheral;
 @property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end

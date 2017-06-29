@@ -87,38 +87,42 @@
         d = [[RileyLinkBLEDevice alloc] initWithPeripheral:peripheral];
         d.RSSI = RSSI;
         _devicesById[peripheral.identifier.UUIDString] = d;
-        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_ADDED object:d userInfo:nil];
-        
+        NSLog(@"RILEYLINK_EVENT_LIST_UPDATED");
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:self userInfo:@{@"device": d}];
     }
-    
+
     if ([self.autoConnectIds containsObject:d.peripheralId]) {
-        if (peripheral.state == CBPeripheralStateConnected) {
-            [self centralManager:_centralManager
-            didConnectPeripheral:peripheral];
-        } else {
-            [self connectPeripheral:d.peripheral];
-        }
+        [self connectPeripheral:d.peripheral];
     }
     
     return d;
 }
 
 - (void)setScanningEnabled:(BOOL)scanningEnabled {
-    if (scanningEnabled && _centralManager.state == CBCentralManagerStatePoweredOn) {
-        [self startScan];
-    } else if (!scanningEnabled || _centralManager.state == CBCentralManagerStatePoweredOff) {
-        [_centralManager stopScan];
-    }
-    
     _scanningEnabled = scanningEnabled;
+
+    if (_centralManager.state == CBManagerStatePoweredOn) {
+        if (scanningEnabled) {
+            [self startScan];
+        } else {
+            [_centralManager stopScan];
+        }
+    }
 }
 
 - (void)addPeripheralToAutoConnectList:(CBPeripheral *)peripheral {
+    if ([self.autoConnectIds containsObject:peripheral.identifier.UUIDString]) {
+        return;
+    }
+
     self.autoConnectIds = [self.autoConnectIds setByAddingObject:peripheral.identifier.UUIDString];
 }
 
 - (void)removePeripheralFromAutoConnectList:(CBPeripheral *)peripheral {
+    if (![self.autoConnectIds containsObject:peripheral.identifier.UUIDString]) {
+        return;
+    }
+
     NSMutableSet *mutableIDs = [self.autoConnectIds mutableCopy];
     [mutableIDs removeObject:peripheral.identifier.UUIDString];
     self.autoConnectIds = [NSSet setWithSet:mutableIDs];
@@ -139,13 +143,14 @@
 
 - (void)connectPeripheral:(CBPeripheral *)peripheral
 {
-    if (_centralManager.state == CBCentralManagerStatePoweredOn &&
-        (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateDisconnecting)) {
-        NSLog(@"Connecting to peripheral %zd:%@", _centralManager.state, peripheral);
-        [_centralManager connectPeripheral:peripheral options:nil];
-    } else {
-        NSLog(@"Skipped request to connect to %@:%@", _centralManager, peripheral);
-       [self centralManager:_centralManager didConnectPeripheral:peripheral];
+    if (_centralManager.state == CBManagerStatePoweredOn) {
+        if (peripheral.state == CBPeripheralStateDisconnected || peripheral.state == CBPeripheralStateDisconnecting) {
+            NSLog(@"Connecting to peripheral %zd:%@", _centralManager.state, peripheral);
+            [_centralManager connectPeripheral:peripheral options:nil];
+        } else {
+            NSLog(@"Skipped request to connect to %@:%@", _centralManager, peripheral);
+           [self centralManager:_centralManager didConnectPeripheral:peripheral];
+        }
     }
     
     [self addPeripheralToAutoConnectList:peripheral];
@@ -164,9 +169,7 @@
 
 - (void)attemptReconnectForDisconnectedDevices {
     for (RileyLinkBLEDevice *device in self.rileyLinkList) {
-        CBPeripheral *peripheral = device.peripheral;
-        if (peripheral.state == CBPeripheralStateDisconnected
-            && [self.autoConnectIds containsObject:device.peripheralId]) {
+        if ([self.autoConnectIds containsObject:device.peripheralId]) {
             NSLog(@"Attempting reconnect to %@", device);
             [self connectPeripheral:device.peripheral];
         }
@@ -185,14 +188,14 @@
 }
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
-    if (central.state == CBCentralManagerStatePoweredOn) {
+    if (central.state == CBManagerStatePoweredOn) {
         [self attemptReconnectForDisconnectedDevices];
         
         if (![self hasDiscoveredAllAutoConnectPeripherals] || self.scanningEnabled) {
             [self startScan];
+        } else {
+            [central stopScan];
         }
-    } else if (central.state == CBCentralManagerStatePoweredOff) {
-        [central stopScan];
     }
 }
 
@@ -222,20 +225,27 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-    
-    NSLog(@"Discovering services");
-    [peripheral discoverServices:[[self class] UUIDsFromUUIDStrings:@[RILEYLINK_SERVICE_UUID]
-                                                excludingAttributes:peripheral.services]];
-    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    NSArray *servicesToDiscover = [[self class] UUIDsFromUUIDStrings:@[RILEYLINK_SERVICE_UUID]
+                                                 excludingAttributes:peripheral.services];
+    if (servicesToDiscover.count) {
+        NSLog(@"Discovering services");
+        [peripheral discoverServices:servicesToDiscover];
+    }
+
     RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
     
     [device connectionStateDidChange:nil];
+
+    if (device == nil) {
+        return;
+    }
     
-    NSDictionary *attrs = @{@"peripheral": peripheral};
+    NSDictionary *attrs = @{@"peripheral": device.peripheral};
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
     
-    [peripheral readRSSI];
-    
+    [device.peripheral readRSSI];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -245,15 +255,21 @@
     }
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
     
-    attrs[@"peripheral"] = peripheral;
     RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
     
     [device connectionStateDidChange:error];
-    
+
+    if (device == nil) {
+        return;
+    }
+
+    attrs[@"peripheral"] = device.peripheral;
+
     if (error) {
         attrs[@"error"] = error;
     }
-    
+
+    NSLog(@"RILEYLINK_EVENT_DEVICE_DISCONNECTED");
     [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
     
     [self attemptReconnectForDisconnectedDevices];

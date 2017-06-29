@@ -128,7 +128,7 @@
     dispatch_group_notify(idleDetectDispatchGroup,
                           dispatch_get_main_queue(), ^{
                               NSLog(@"idleDetectDispatchGroup empty");
-                              [self assertIdleListening];
+                              [self assertIdleListeningForcingRestart:NO];
                           });
 }
 
@@ -198,7 +198,7 @@
 {
     switch (self.peripheral.state) {
         case CBPeripheralStateConnected:
-            [self assertIdleListening];
+            [self assertIdleListeningForcingRestart:NO];
             break;
         case CBPeripheralStateDisconnected:
             runningIdle = NO;
@@ -370,7 +370,7 @@
         }
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
         const unsigned char timerTick = ((const unsigned char*)(characteristic.value).bytes)[0];
-        [self assertIdleListening];
+        [self assertIdleListeningForcingRestart:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_TIMER_TICK object:self];
         NSLog(@"Updated timer tick: %d", timerTick);
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
@@ -488,7 +488,7 @@
     idleListeningEnabled = YES;
     idleListenChannel = channel;
     
-    [self assertIdleListening];
+    [self assertIdleListeningForcingRestart:NO];
 }
 
 - (void) disableIdleListening {
@@ -496,12 +496,14 @@
     runningIdle = NO;
 }
 
-- (void) assertIdleListening {
-    if (idleListeningEnabled && !runningSession) {
+- (void) assertIdleListeningForcingRestart:(BOOL)forceRestart {
+    if (idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected) {
         NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeoutMS / 1000.0;
         
-        if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
-            [self onIdle];
+        if (forceRestart || !runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+            [self runSessionWithName:@"Restarting idle" usingBlock:^(RileyLinkCmdSession * _Nonnull session) {
+                [self onIdle];
+            }];
         }
     }
 }

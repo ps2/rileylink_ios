@@ -99,6 +99,6 @@ typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
 - (void) setCustomName:(nonnull NSString*)customName;
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;
-- (void) assertIdleListening;
+- (void) assertIdleListeningForcingRestart:(BOOL)forceRestart;
 
 @end

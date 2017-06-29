@@ -76,8 +76,8 @@ public class RileyLinkDevice {
 
     // MARK: - Device commands
     
-    public func assertIdleListening() {
-        device.assertIdleListening()
+    public func assertIdleListening(force: Bool = false) {
+        device.assertIdleListeningForcingRestart(force)
     }
     
     public func syncPumpTime(_ resultHandler: @escaping (Error?) -> Void) {

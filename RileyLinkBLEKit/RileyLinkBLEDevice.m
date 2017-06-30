@@ -15,6 +15,9 @@
 #import "RFPacket.h"
 
 
+NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
+
+
 // See impl at bottom of file.
 @interface RileyLinkCmdSession ()
 @property (nonatomic, weak) RileyLinkBLEDevice *device;
@@ -404,8 +407,9 @@
             if (runningIdle) {
                 NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
                 runningIdle = NO;
-                [self handleIdleListenerResponse:fullResponse];
-                if (!runningSession) {
+                NSError *responseError = nil;
+                [self handleIdleListenerResponse:fullResponse error:&responseError];
+                if (!runningSession && responseError.code != SubgRfspyErrorCmdInterrupted) {
                     if (inBuf.length > 0) {
                         NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
                         inBuf = [NSMutableData data];
@@ -508,7 +512,7 @@
     }
 }
 
-- (void) handleIdleListenerResponse:(NSData *)response {
+- (BOOL) handleIdleListenerResponse:(NSData *)response error:(NSError **)errorOut {
     if (response.length > 3) {
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
@@ -521,6 +525,7 @@
                                     };
             [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
         }
+        return YES;
     } else if (response.length > 0) {
         uint8_t errorCode = ((uint8_t*)response.bytes)[0];
         switch (errorCode) {
@@ -537,8 +542,15 @@
                 NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
                 break;
         }
+
+        if (errorOut != NULL) {
+            *errorOut = [NSError errorWithDomain:SubgRfspyErrorDomain code:errorCode userInfo:nil];
+        }
+
+        return NO;
     } else {
         NSLog(@"Idle command got empty response!!");
+        return YES;
     }
 }
 

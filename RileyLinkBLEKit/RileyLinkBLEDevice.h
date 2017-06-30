@@ -16,6 +16,8 @@ typedef NS_ENUM(NSUInteger, RileyLinkState) {
   RileyLinkStateDisconnected
 };
 
+extern NSString * _Nonnull const SubgRfspyErrorDomain;
+
 typedef NS_ENUM(NSUInteger, SubgRfspyError) {
   SubgRfspyErrorRxTimeout = 0xaa,
   SubgRfspyErrorCmdInterrupted = 0xbb,

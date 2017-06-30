@@ -15,6 +15,9 @@
 #import "RFPacket.h"
 
 
+NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
+
+
 // See impl at bottom of file.
 @interface RileyLinkCmdSession ()
 @property (nonatomic, weak) RileyLinkBLEDevice *device;
@@ -42,7 +45,7 @@
     dispatch_group_t idleDetectDispatchGroup;
 }
 
-@property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
+@property (nonatomic, nonnull, strong) CBPeripheral * peripheral;
 @property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end
@@ -128,7 +131,7 @@
     dispatch_group_notify(idleDetectDispatchGroup,
                           dispatch_get_main_queue(), ^{
                               NSLog(@"idleDetectDispatchGroup empty");
-                              [self assertIdleListening];
+                              [self assertIdleListeningForcingRestart:NO];
                           });
 }
 
@@ -198,7 +201,7 @@
 {
     switch (self.peripheral.state) {
         case CBPeripheralStateConnected:
-            [self assertIdleListening];
+            [self assertIdleListeningForcingRestart:NO];
             break;
         case CBPeripheralStateDisconnected:
             runningIdle = NO;
@@ -370,7 +373,7 @@
         }
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
         const unsigned char timerTick = ((const unsigned char*)(characteristic.value).bytes)[0];
-        [self assertIdleListening];
+        [self assertIdleListeningForcingRestart:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_TIMER_TICK object:self];
         NSLog(@"Updated timer tick: %d", timerTick);
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
@@ -404,8 +407,9 @@
             if (runningIdle) {
                 NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
                 runningIdle = NO;
-                [self handleIdleListenerResponse:fullResponse];
-                if (!runningSession) {
+                NSError *responseError = nil;
+                [self handleIdleListenerResponse:fullResponse error:&responseError];
+                if (!runningSession && responseError.code != SubgRfspyErrorCmdInterrupted) {
                     if (inBuf.length > 0) {
                         NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
                         inBuf = [NSMutableData data];
@@ -488,7 +492,7 @@
     idleListeningEnabled = YES;
     idleListenChannel = channel;
     
-    [self assertIdleListening];
+    [self assertIdleListeningForcingRestart:NO];
 }
 
 - (void) disableIdleListening {
@@ -496,17 +500,19 @@
     runningIdle = NO;
 }
 
-- (void) assertIdleListening {
-    if (idleListeningEnabled && !runningSession) {
+- (void) assertIdleListeningForcingRestart:(BOOL)forceRestart {
+    if (idleListeningEnabled && _peripheral.state == CBPeripheralStateConnected) {
         NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeoutMS / 1000.0;
         
-        if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
-            [self onIdle];
+        if (forceRestart || !runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+            [self runSessionWithName:@"Restarting idle" usingBlock:^(RileyLinkCmdSession * _Nonnull session) {
+                [self onIdle];
+            }];
         }
     }
 }
 
-- (void) handleIdleListenerResponse:(NSData *)response {
+- (BOOL) handleIdleListenerResponse:(NSData *)response error:(NSError **)errorOut {
     if (response.length > 3) {
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
@@ -519,6 +525,7 @@
                                     };
             [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
         }
+        return YES;
     } else if (response.length > 0) {
         uint8_t errorCode = ((uint8_t*)response.bytes)[0];
         switch (errorCode) {
@@ -535,8 +542,15 @@
                 NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
                 break;
         }
+
+        if (errorOut != NULL) {
+            *errorOut = [NSError errorWithDomain:SubgRfspyErrorDomain code:errorCode userInfo:nil];
+        }
+
+        return NO;
     } else {
         NSLog(@"Idle command got empty response!!");
+        return YES;
     }
 }
 

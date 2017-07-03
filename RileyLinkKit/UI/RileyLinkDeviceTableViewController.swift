@@ -37,6 +37,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
     
     func updateRSSI()
     {
+        guard case .connected = device.peripheral.state else {
+            return
+        }
         device.peripheral.readRSSI()
     }
 

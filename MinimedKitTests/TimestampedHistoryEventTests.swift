@@ -21,12 +21,9 @@ class TimestampedHistoryEventTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        do {
-            historyPage523 = try HistoryPage(pageData: hexData523, pumpModel: PumpModel.Model523)
-            historyPage522 = try HistoryPage(pageData: hexData522, pumpModel: PumpModel.Model522)
-        } catch {
-            
-        }
+
+        historyPage523 = try! HistoryPage(pageData: hexData523, pumpModel: PumpModel.Model523)
+        historyPage522 = try! HistoryPage(pageData: hexData522, pumpModel: PumpModel.Model522)
     }
     
     func testEventIsntMutable() {

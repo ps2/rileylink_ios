@@ -20,7 +20,7 @@ extension DateComponents {
         month  = Int(mySentryBytes[4] & 0b00001111)
         day    = Int(mySentryBytes[5] & 0b00011111)
 
-        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+        calendar = Calendar(identifier: .gregorian)
     }
 
     init(pumpEventData: Data, offset: Int, length: Int = 5) {
@@ -45,7 +45,7 @@ extension DateComponents {
             year   = Int(pumpEventBytes[1] & 0b01111111) + 2000
         }
 
-        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+        calendar = Calendar(identifier: .gregorian)
     }
     
     init(glucoseEventBytes: Data) {
@@ -58,6 +58,6 @@ extension DateComponents {
         hour   = Int(glucoseEventBytes[0] & 0b00011111)
         minute = Int(glucoseEventBytes[1] & 0b00111111)
         
-        calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+        calendar = Calendar(identifier: .gregorian)
     }
 }

@@ -11,10 +11,6 @@ import XCTest
 
 class PumpModelTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
     func test523AppendsSquareWaveToHistory() {
         XCTAssertTrue(PumpModel.Model523.appendsSquareWaveToHistoryOnStartOfDelivery)
     }

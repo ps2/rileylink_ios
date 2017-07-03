@@ -11,14 +11,6 @@ import XCTest
 
 class SensorPacketGlucoseEventTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     func testDecoding() {
         let rawData = Data(hexadecimalString: "0402")!
         let subject = SensorPacketGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!

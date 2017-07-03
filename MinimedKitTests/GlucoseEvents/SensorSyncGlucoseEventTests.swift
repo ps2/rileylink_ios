@@ -11,19 +11,11 @@ import XCTest
 
 class SensorSyncGlucoseEventTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     func testSyncTypeNew() {
         let rawData = Data(hexadecimalString: "0d4d44330f")!
         let subject = SensorSyncGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
         XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "new")
@@ -33,7 +25,7 @@ class SensorSyncGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "0d4d44530f")!
         let subject = SensorSyncGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
         XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "old")
@@ -43,7 +35,7 @@ class SensorSyncGlucoseEventTests: XCTestCase {
         let rawData = Data(hexadecimalString: "0d4d44730f")!
         let subject = SensorSyncGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2015, month: 5, day: 19, hour: 13, minute: 04)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
         XCTAssertEqual(subject.dictionaryRepresentation["syncType"] as! String, "find")

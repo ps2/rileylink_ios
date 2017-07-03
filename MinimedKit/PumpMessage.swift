@@ -40,14 +40,11 @@ public struct PumpMessage : CustomStringConvertible {
         var buffer = [UInt8]()
 
         buffer.append(packetType.rawValue)
-        buffer += address[0...2]
+        buffer += address[0..<3]
         buffer.append(messageType.rawValue)
+        buffer.append(contentsOf: messageBody.txData)
 
-        var data = Data(bytes: buffer)
-
-        data.append(messageBody.txData)
-
-        return data
+        return Data(bytes: buffer)
     }
     
     public var description: String {

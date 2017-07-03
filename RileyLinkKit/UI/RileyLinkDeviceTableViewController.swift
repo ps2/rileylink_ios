@@ -35,7 +35,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
         self.observe()
     }
     
-    func updateRSSI()
+    @objc func updateRSSI()
     {
         guard case .connected = device.peripheral.state else {
             return

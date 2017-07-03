@@ -35,13 +35,13 @@ extension DateComponents {
             minute = Int(pumpEventBytes[1] & 0b00111111)
             hour   = Int(pumpEventBytes[2] & 0b00011111)
             day    = Int(pumpEventBytes[3] & 0b00011111)
-            month = Int((pumpEventBytes[0] & 0b11000000) >> 4 +
-                        (pumpEventBytes[1] & 0b11000000) >> 6)
+            month = Int((pumpEventBytes[0] & 0b11000000) >> 4) +
+                    Int((pumpEventBytes[1] & 0b11000000) >> 6)
             year   = Int(pumpEventBytes[4] & 0b01111111) + 2000
         } else {
             day    = Int(pumpEventBytes[0] & 0b00011111)
-            month = Int((pumpEventBytes[0] & 0b11100000) >> 4 +
-                        (pumpEventBytes[1] & 0b10000000) >> 7)
+            month = Int((pumpEventBytes[0] & 0b11100000) >> 4) +
+                    Int((pumpEventBytes[1] & 0b10000000) >> 7)
             year   = Int(pumpEventBytes[1] & 0b01111111) + 2000
         }
 
@@ -52,8 +52,8 @@ extension DateComponents {
         self.init()
         
         year   = Int(glucoseEventBytes[3] & 0b01111111) + 2000
-        month = Int((glucoseEventBytes[0] & 0b11000000) >> 4 +
-                    (glucoseEventBytes[1] & 0b11000000) >> 6)
+        month = Int((glucoseEventBytes[0] & 0b11000000) >> 4) +
+                Int((glucoseEventBytes[1] & 0b11000000) >> 6)
         day    = Int(glucoseEventBytes[2] & 0b00011111)
         hour   = Int(glucoseEventBytes[0] & 0b00011111)
         minute = Int(glucoseEventBytes[1] & 0b00111111)

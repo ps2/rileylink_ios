@@ -148,7 +148,7 @@ public class PumpOps {
             do {
                 let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
                 DispatchQueue.main.async { () -> Void in
-                    completion(.success(events: events, pumpModel: pumpModel))
+                    completion(.success((events: events, pumpModel: pumpModel)))
                 }
             } catch let error {
                 DispatchQueue.main.async { () -> Void in

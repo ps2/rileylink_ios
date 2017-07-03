@@ -95,7 +95,7 @@ class RileyLinkListTableViewController: UITableViewController {
         return cell
     }
     
-    func deviceConnectionChanged(_ connectSwitch: UISwitch) {
+    @objc func deviceConnectionChanged(_ connectSwitch: UISwitch) {
         let switchOrigin = connectSwitch.convert(CGPoint.zero, to: tableView)
         
         if let indexPath = tableView.indexPathForRow(at: switchOrigin)

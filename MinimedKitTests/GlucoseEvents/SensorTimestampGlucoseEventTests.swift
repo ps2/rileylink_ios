@@ -10,24 +10,14 @@ import XCTest
 @testable import MinimedKit
 
 class SensorTimestampGlucoseEventTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+        
     func testDecodingPageEnd() {
         let rawData = Data(hexadecimalString: "0814B62810")!
         let subject = SensorTimestampGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
         XCTAssertEqual(subject.timestampType, .pageEnd)
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2016, month: 02, day: 08, hour: 20, minute: 54)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
     }
@@ -39,7 +29,7 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
         
         XCTAssertEqual(subject.timestampType, .gap)
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2012, month: 10, day: 29, hour: 13, minute: 27)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
     }
@@ -50,7 +40,7 @@ class SensorTimestampGlucoseEventTests: XCTestCase {
         
         XCTAssertEqual(subject.timestampType, .lastRf)
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2012, month: 10, day: 29, hour: 13, minute: 27)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
     }

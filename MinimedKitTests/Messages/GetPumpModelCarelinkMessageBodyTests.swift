@@ -11,16 +11,6 @@ import XCTest
 
 class GetPumpModelCarelinkMessageBodyTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testValidGetModelResponse() {
         let message = PumpMessage(rxData: Data(hexadecimalString: "a73505358d0903353233000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)
         

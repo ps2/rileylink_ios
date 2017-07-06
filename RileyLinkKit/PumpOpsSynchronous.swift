@@ -364,8 +364,8 @@ class PumpOpsSynchronous {
     
     private func updateRegister(_ addr: UInt8, value: UInt8) throws {
         let cmd = UpdateRegisterCmd()
-        cmd.addr = addr;
-        cmd.value = value;
+        cmd.addr = addr
+        cmd.value = value
         if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
             throw PumpCommsError.rileyLinkTimeout
         }
@@ -472,7 +472,7 @@ class PumpOpsSynchronous {
             }
             
             var idx = 0
-            let chunkSize = 256;
+            let chunkSize = 256
             while idx < pageData.count {
                 let top = min(idx + chunkSize, pageData.count)
                 let range = Range(uncheckedBounds: (lower: idx, upper: top))
@@ -524,7 +524,7 @@ class PumpOpsSynchronous {
                     if shouldCheckDateForCompletion {
                         if date <= startDate {
                             // Success, we have all the events we need
-                            //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                            //NSLog("Found event at or before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate)
                             return (events: events, hasMoreEvents: false, cancelledEarly: false)
                         } else if date.timeIntervalSince(timeCursor) > TimeInterval(minutes: 60) {
                             // Appears that pump lost time; we can't build up a valid timeline from this point back.
@@ -588,7 +588,7 @@ class PumpOpsSynchronous {
     
     internal func logGlucoseHistory(pageData: Data, pageNum: Int) {
         var idx = 0
-        let chunkSize = 256;
+        let chunkSize = 256
         while idx < pageData.count {
             let top = min(idx + chunkSize, pageData.count)
             let range = Range(uncheckedBounds: (lower: idx, upper: top))
@@ -645,7 +645,7 @@ class PumpOpsSynchronous {
                 
                 if let date = timestamp.date {
                     if date < startDate && event is SensorTimestampGlucoseEvent {
-                        NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate);
+                        NSLog("Found reference event at (%@) to be before startDate(%@)", date as NSDate, startDate as NSDate)
                         break pages
                     } else {
                         events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: date), at: 0)

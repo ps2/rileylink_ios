@@ -25,26 +25,25 @@ public struct BasalSchedule {
     public let entries: [BasalScheduleEntry]
  
     public init(data: Data) {
-        let beginPattern: [UInt8] = [0, 0, 0]
-        let endPattern: [UInt8] = [0, 0, 0x3F]
+        let beginPattern = Data(bytes: [0, 0, 0])
+        let endPattern = Data(bytes: [0, 0, 0x3F])
         var acc = [BasalScheduleEntry]()
         
         for tuple in sequence(first: (index: 0, offset: 0), next: { (index: $0.index + 1, $0.offset + 3) }) {
             let beginOfRange = tuple.offset
-            let endOfRange = beginOfRange+2
+            let endOfRange = beginOfRange + 3
             
-            if endOfRange >= data.count-1 {
+            guard endOfRange < data.count else {
                 break
             }
             
-            let section = Array(data[beginOfRange...endOfRange])
-            
+            let section = data.subdata(in: beginOfRange..<endOfRange)
             // sanity check
             if (section == beginPattern || section == endPattern) {
                 break
             }
 
-            let rate = Double(section[0..<2].withUnsafeBytes { $0.load(as: UInt16.self) }) / 40.0
+            let rate = Double(section.subdata(in: 0..<2).to(UInt16.self)) / 40.0
             let offsetMinutes = Double(section[2]) * 30
             
             let newBasalScheduleEntry = BasalScheduleEntry(

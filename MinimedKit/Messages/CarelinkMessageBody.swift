@@ -36,7 +36,7 @@ public class CarelinkShortMessageBody: MessageBody {
     let data: Data
 
     public convenience init() {
-        self.init(rxData: Data(hexadecimalString: "00")!)!
+        self.init(rxData: Data(repeating: 0, count: 1))!
     }
 
     public required init?(rxData: Data) {

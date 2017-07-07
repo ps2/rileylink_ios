@@ -38,19 +38,14 @@ public class PumpOps {
     
     public func getBasalSettings(_ completion: @escaping (Either<BasalSchedule, Error>) -> Void) {
         device.runSession(withName: "Get Basal Settings") { (session) -> Void in
-            
             do {
                 let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
                 
                 let basalSettings = try ops.getBasalSchedule()
                 completion(.success(basalSettings))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
-            
-            
         }
     }
     
@@ -153,7 +148,7 @@ public class PumpOps {
             do {
                 let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
                 DispatchQueue.main.async { () -> Void in
-                    completion(.success(events: events, pumpModel: pumpModel))
+                    completion(.success((events: events, pumpModel: pumpModel)))
                 }
             } catch let error {
                 DispatchQueue.main.async { () -> Void in
@@ -190,10 +185,7 @@ public class PumpOps {
             }
         }
     }
-    
-    /**
- 
- */
+
     public func writeGlucoseHistoryTimestamp(completion: @escaping (Either<Bool, Error>) -> Void) {
         device.runSession(withName: "Write glucose history timestamp") { (session) -> Void in
             NSLog("Write glucose history timestamp started.")
@@ -256,7 +248,6 @@ public class PumpOps {
             }
         }
     }
-
 
     /**
      Sets a bolus

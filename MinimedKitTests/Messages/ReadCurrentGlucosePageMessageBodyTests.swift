@@ -11,16 +11,6 @@ import XCTest
 
 class ReadCurrentGlucosePageMessageBodyTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testResponseInitializer() {
         var responseData = Data(hexadecimalString: "0000000D6100100020")!
         responseData.append(contentsOf: [UInt8](repeating: 0, count: 65 - responseData.count))

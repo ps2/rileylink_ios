@@ -10,10 +10,10 @@ import Foundation
 
 public protocol CaseCountable: RawRepresentable {}
 
-public extension CaseCountable where RawValue: Integer {
+public extension CaseCountable where RawValue == Int {
     static var count: Int {
-        var i: RawValue = 0
+        var i: Int = 0
         while let new = Self(rawValue: i) { i = new.rawValue.advanced(by: 1) }
-        return Int(i.toIntMax())
+        return i
     }
 }

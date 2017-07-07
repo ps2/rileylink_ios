@@ -35,14 +35,14 @@ public struct MySentryAckMessageBody: MessageBody {
 
         sequence = rxData[0]
         mySentryID = rxData.subdata(in: 1..<4)
-        responseMessageTypes = rxData[5...8].flatMap({ MessageType(rawValue: $0) })
+        responseMessageTypes = rxData[5..<9].flatMap({ MessageType(rawValue: $0) })
     }
 
     public var txData: Data {
         var buffer = type(of: self).emptyBuffer
 
         buffer[0] = sequence
-        buffer.replaceSubrange(1...3, with: mySentryID[0...2])
+        buffer.replaceSubrange(1..<4, with: mySentryID[0..<3])
 
         buffer.replaceSubrange(5..<5 + responseMessageTypes.count, with: responseMessageTypes.map({ $0.rawValue }))
 

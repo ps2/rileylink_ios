@@ -202,13 +202,13 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
     // MARK: - Uploader management
 
-    func uploadEnabledChanged(_ sender: UISwitch) {
+    @objc func uploadEnabledChanged(_ sender: UISwitch) {
         Config.sharedInstance().uploadEnabled = sender.isOn
     }
 
     // MARK: - CGM Page Fetching Management
 
-    func fetchCGMEnabledChanged(_ sender: UISwitch) {
+    @objc func fetchCGMEnabledChanged(_ sender: UISwitch) {
         Config.sharedInstance().fetchCGMEnabled = sender.isOn
     }
 

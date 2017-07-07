@@ -48,7 +48,7 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
         
         let numRecords = (d(1) - 2) / 3
         
-        for idx in 0...(numRecords-1) {
+        for idx in 0..<numRecords {
             let record = Record(
                 amount:  Double(d(2 + idx * 3)) / 40,
                 age: d(3 + idx * 3) + ((d(4 + idx * 3) & 0b110000) << 4))

@@ -26,10 +26,10 @@ public class RileyLinkDeviceManager {
     
     public init(pumpState: PumpState?, autoConnectIDs: Set<String>) {
         self.pumpState = pumpState
+
+        bleManager = RileyLinkBLEManager(autoConnectIDs: autoConnectIDs)
         
-        bleManager.autoConnectIds = autoConnectIDs
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_LIST_UPDATED), object: bleManager)
+        NotificationCenter.default.addObserver(self, selector: #selector(discoveredBLEDevice(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_DEVICE_CREATED), object: bleManager)
         
         NotificationCenter.default.addObserver(self, selector: #selector(connectionStateDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_DEVICE_CONNECTED), object: nil)
         
@@ -40,13 +40,8 @@ public class RileyLinkDeviceManager {
         NotificationCenter.default.addObserver(self, selector: #selector(nameDidChange(_:)), name: NSNotification.Name(rawValue: RILEYLINK_EVENT_NAME_CHANGED), object: nil)
     }
 
-    public var deviceScanningEnabled: Bool {
-        get {
-            return bleManager.isScanningEnabled
-        }
-        set {
-            bleManager.isScanningEnabled = newValue
-        }
+    public func setDeviceScanningEnabled(_ enabled: Bool) {
+        bleManager.setScanningEnabled(enabled)
     }
 
     /// Whether to subscribe devices to a timer characteristic changing every ~60s.
@@ -85,7 +80,7 @@ public class RileyLinkDeviceManager {
     // When multiple RL's are present, this moves the specified RL to the back of the list
     // so a different RL will be selected by firstConnectedDevice()
     public func deprioritizeDevice(device: RileyLinkDevice) {
-        if let index = devices.index(where: { $0.peripheral == device.peripheral }) {
+        if let index = devices.index(where: { $0.peripheral.identifier == device.peripheral.identifier }) {
             devices.remove(at: index)
             devices.append(device)
         }
@@ -100,14 +95,14 @@ public class RileyLinkDeviceManager {
     }
     
     public func connectDevice(_ device: RileyLinkDevice) {
-        bleManager.connect(device.peripheral)
+        bleManager.connect(device.device)
     }
     
     public func disconnectDevice(_ device: RileyLinkDevice) {
-        bleManager.disconnectPeripheral(device.peripheral)
+        bleManager.disconnectDevice(device.device)
     }
     
-    private let bleManager = RileyLinkBLEManager()
+    private let bleManager: RileyLinkBLEManager
 
     // MARK: - RileyLinkBLEManager
     
@@ -131,7 +126,7 @@ public class RileyLinkDeviceManager {
     
     @objc private func connectionStateDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let index = devices.index(where: { $0.peripheral.identifier == bleDevice.peripheral.identifier }) {
             let device = devices[index]
             
             NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device])
@@ -140,7 +135,7 @@ public class RileyLinkDeviceManager {
     
     @objc private func rssiDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let index = devices.index(where: { $0.peripheral.identifier == bleDevice.peripheral.identifier }) {
             let device = devices[index]
             
             NotificationCenter.default.post(name: .DeviceRSSIDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkRSSIKey: note.userInfo!["RSSI"]!])
@@ -149,7 +144,7 @@ public class RileyLinkDeviceManager {
 
     @objc private func nameDidChange(_ note: Notification) {
         if let bleDevice = note.object as? RileyLinkBLEDevice,
-            let index = devices.index(where: { $0.peripheral == bleDevice.peripheral }) {
+            let index = devices.index(where: { $0.peripheral.identifier == bleDevice.peripheral.identifier }) {
             let device = devices[index]
 
             NotificationCenter.default.post(name: .DeviceNameDidChange, object: self, userInfo: [type(of: self).RileyLinkDeviceKey: device, type(of: self).RileyLinkNameKey: note.userInfo!["Name"]!])

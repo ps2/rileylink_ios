@@ -327,7 +327,7 @@ func randomDataString(length:Int) -> String {
     let charSet = "abcdef0123456789"
     var c = charSet.characters.map { String($0) }
     var s:String = ""
-    for _ in (1...length) {
+    for _ in 0..<length {
         s.append(c[Int(arc4random()) % c.count])
     }
     return s

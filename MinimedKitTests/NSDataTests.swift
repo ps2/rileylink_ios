@@ -10,17 +10,7 @@ import XCTest
 @testable import MinimedKit
 
 class NSDataTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+        
     func testInitWithHexadecimalStringEmpty() {
         let data = Data(hexadecimalString: "")
         XCTAssertEqual(0, data!.count)

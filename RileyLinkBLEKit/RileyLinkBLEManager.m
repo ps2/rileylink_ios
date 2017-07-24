@@ -61,16 +61,6 @@
     return _devicesById.allValues;
 }
 
-- (void) updateRSSI {
-    if (_centralManager.isScanning) {
-        for (RileyLinkBLEDevice *device in _devicesById.allValues) {
-            if (device.peripheral.state == CBPeripheralStateConnected) {
-                [device.peripheral readRSSI];
-            }
-        }
-    }
-}
-
 - (RileyLinkBLEDevice *)addPeripheralToDeviceList:(CBPeripheral *)peripheral RSSI:(NSNumber *)RSSI {
     RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
     if (device == nil) {

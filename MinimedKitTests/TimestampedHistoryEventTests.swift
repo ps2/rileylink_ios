@@ -22,13 +22,13 @@ class TimestampedHistoryEventTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        historyPage523 = try! HistoryPage(pageData: hexData523, pumpModel: PumpModel.Model523)
-        historyPage522 = try! HistoryPage(pageData: hexData522, pumpModel: PumpModel.Model522)
+        historyPage523 = try! HistoryPage(pageData: hexData523, pumpModel: PumpModel.model523)
+        historyPage522 = try! HistoryPage(pageData: hexData522, pumpModel: PumpModel.model522)
     }
     
     func testEventIsntMutable() {
         let data = Data(bytes: Array<UInt8>([7,6,5,4,3,2,1,0]))
-        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.Model523)!
+        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model523)!
         
         let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())
         
@@ -37,7 +37,7 @@ class TimestampedHistoryEventTests: XCTestCase {
     
     func testEventIsNotMutableFor522() {
         let data = Data(bytes: Array<UInt8>([7,6,5,4,3,2,1,0]))
-        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.Model522)!
+        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model522)!
         
         let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())
         

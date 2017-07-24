@@ -15,7 +15,7 @@ class NightscoutPumpEventsTests: XCTestCase {
     func testBgCheckFromMeter() {
         let pumpEvent = BGReceivedPumpEvent(
             availableData: Data(hexadecimalString: "3f2122938d7510c527ad")!,
-            pumpModel: PumpModel.Model523
+            pumpModel: PumpModel.model523
         )!
         var timestamp = pumpEvent.timestamp
         timestamp.timeZone = TimeZone(secondsFromGMT: -5 * 60 * 60)
@@ -35,7 +35,7 @@ class NightscoutPumpEventsTests: XCTestCase {
     func testStandaloneBolus() {
         let pumpEvent = BolusNormalPumpEvent(
             availableData: Data(hexadecimalString: "010080008000240009a24a1510")!,
-            pumpModel: PumpModel.Model551
+            pumpModel: PumpModel.model551
         )!
         var timestamp = pumpEvent.timestamp
         timestamp.timeZone = TimeZone(secondsFromGMT: -5 * 60 * 60)
@@ -56,12 +56,12 @@ class NightscoutPumpEventsTests: XCTestCase {
     func testBolusWizardAndBolusOffByOneSecond() {
         let bwEvent = BolusWizardEstimatePumpEvent(
             availableData: Data(hexadecimalString: "5b6489340b10102850006e3c64000090000058009064")!,
-            pumpModel: PumpModel.Model523
+            pumpModel: PumpModel.model523
             )!
 
         let bolus = BolusNormalPumpEvent(
             availableData: Data(hexadecimalString: "01009000900058008a344b1010")!,
-            pumpModel: PumpModel.Model523
+            pumpModel: PumpModel.model523
             )!
 
         let events: [TimestampedPumpEvent] = [bwEvent, bolus]

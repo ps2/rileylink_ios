@@ -7,11 +7,27 @@
 //
 
 import Foundation
+import MinimedKit
 
 public enum BatteryIndicator: String {
     case low = "low"
     case normal = "normal"
 }
+
+
+extension BatteryIndicator {
+    init?(batteryStatus: MinimedKit.BatteryStatus) {
+        switch batteryStatus {
+        case .low:
+            self = .low
+        case .normal:
+            self = .normal
+        default:
+            return nil
+        }
+    }
+}
+
 
 public struct BatteryStatus {
     let percent: Int?

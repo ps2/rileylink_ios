@@ -58,6 +58,11 @@ public enum PumpModel: String {
         return generation >= 51
     }
     
+    // On x15 models, a bolus in progress error is returned when bolusing, even though the bolus succeeds
+    public var returnsErrorOnBolus: Bool {
+        return generation == 15
+    }
+    
     /// The number of turns of the stepper motor required to deliver 1 U of U-100 insulin.
     /// This is a measure of motor precision.
     public var strokesPerUnit: Int {

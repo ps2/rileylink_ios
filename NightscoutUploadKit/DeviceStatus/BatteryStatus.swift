@@ -16,7 +16,7 @@ public enum BatteryIndicator: String {
 
 
 extension BatteryIndicator {
-    init?(batteryStatus: MinimedKit.BatteryStatus) {
+    public init?(batteryStatus: MinimedKit.BatteryStatus) {
         switch batteryStatus {
         case .low:
             self = .low

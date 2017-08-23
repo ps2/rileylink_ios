@@ -12,6 +12,7 @@ public struct ClearAlarmPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
+    public let alarmType: PumpAlarmType
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
@@ -21,6 +22,8 @@ public struct ClearAlarmPumpEvent: TimestampedPumpEvent {
         }
 
         rawData = availableData.subdata(in: 0..<length)
+
+        alarmType = PumpAlarmType(rawType: availableData[1])
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
@@ -28,6 +31,7 @@ public struct ClearAlarmPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "ClearAlarm",
+            "alarm": "\(self.alarmType)"
         ]
     }
 }

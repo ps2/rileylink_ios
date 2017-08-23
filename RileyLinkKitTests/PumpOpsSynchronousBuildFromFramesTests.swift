@@ -28,7 +28,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         
         pumpID = "350535"
         pumpRegion = .worldWide
-        pumpModel = PumpModel.Model523
+        pumpModel = PumpModel.model523
         
         rileyLinkCmdSession = RileyLinkCmdSession()
         pumpOpsCommunicationStub = PumpOpsCommunicationStub(session: rileyLinkCmdSession)

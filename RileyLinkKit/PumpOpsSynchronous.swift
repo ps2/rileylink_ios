@@ -519,7 +519,7 @@ class PumpOpsSynchronous {
 
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
                     
-                    let shouldCheckDateForCompletion = !event.isDelayedAppend(withPumpModel: pumpModel)
+                    let shouldCheckDateForCompletion = !event.isDelayedAppend(with: pumpModel)
                     
                     if shouldCheckDateForCompletion {
                         if date <= startDate {

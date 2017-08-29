@@ -18,7 +18,7 @@ class BolusNormalPumpEventTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        bolusPumpEvent523 = BolusNormalPumpEvent(availableData: data523, pumpModel: PumpModel.Model523)!
+        bolusPumpEvent523 = BolusNormalPumpEvent(availableData: data523, pumpModel: PumpModel.model523)!
     }
     
     func test523Year() {
@@ -42,7 +42,7 @@ class BolusNormalPumpEventTests: XCTestCase {
     }
     
     func test523Type() {
-        XCTAssertEqual(bolusPumpEvent523.type, .Normal)
+        XCTAssertEqual(bolusPumpEvent523.type, .normal)
     }
     
     func test523UnabsorbedInsulinTotal() {

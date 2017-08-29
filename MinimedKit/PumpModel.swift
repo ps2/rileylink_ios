@@ -10,25 +10,25 @@
 /// Represents a pump model and its defining characteristics.
 /// This class implements the `RawRepresentable` protocol
 public enum PumpModel: String {
-    case Model508 = "508"
-    case Model511 = "511"
-    case Model711 = "711"
-    case Model512 = "512"
-    case Model712 = "712"
-    case Model515 = "515"
-    case Model715 = "715"
-    case Model522 = "522"
-    case Model722 = "722"
-    case Model523 = "523"
-    case Model723 = "723"
-    case Model530 = "530"
-    case Model730 = "730"
-    case Model540 = "540"
-    case Model740 = "740"
-    case Model551 = "551"
-    case Model751 = "751"
-    case Model554 = "554"
-    case Model754 = "754"
+    case model508 = "508"
+    case model511 = "511"
+    case model711 = "711"
+    case model512 = "512"
+    case model712 = "712"
+    case model515 = "515"
+    case model715 = "715"
+    case model522 = "522"
+    case model722 = "722"
+    case model523 = "523"
+    case model723 = "723"
+    case model530 = "530"
+    case model730 = "730"
+    case model540 = "540"
+    case model740 = "740"
+    case model551 = "551"
+    case model751 = "751"
+    case model554 = "554"
+    case model754 = "754"
 
     private var size: Int {
         return Int(rawValue)! / 100
@@ -57,9 +57,17 @@ public enum PumpModel: String {
     var hasLowSuspend: Bool {
         return generation >= 51
     }
+
+    public var recordsBasalProfileStartEvents: Bool {
+        return generation >= 23
+    }
     
-    /// The number of turns of the stepper motor required to deliver 1 U of U-100 insulin.
-    /// This is a measure of motor precision.
+    // On x15 models, a bolus in progress error is returned when bolusing, even though the bolus succeeds
+    public var returnsErrorOnBolus: Bool {
+        return generation == 15
+    }
+    
+    /// Newer models allow higher precision delivery, and have bit packing to accomodate this.
     public var strokesPerUnit: Int {
         return (generation >= 23) ? 40 : 10
     }

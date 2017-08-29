@@ -44,7 +44,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         pumpID = "350535"
         pumpRegion = .worldWide
-        pumpModel = PumpModel.Model523
+        pumpModel = PumpModel.model523
         
         rileyLinkCmdSession = RileyLinkCmdSession()
         pumpOpsCommunicationStub = PumpOpsCommunicationStub(session: rileyLinkCmdSession)
@@ -135,7 +135,7 @@ class PumpOpsSynchronousTests: XCTestCase {
 
     func testNonMutableSquareWaveBolusFor522IsReturned() {
         // device that can have out of order events
-        setUpTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.model522)
         // 2009-07-31 09:00:00 +0000
         // 120 minute duration
         let squareWaveBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080048000240009a24a1510")!, pumpModel: pumpModel)!
@@ -154,7 +154,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     // Previously, convertPumpEventToTimestampedEvents was being called with startDate: Date.distantPast
     // Changing it to use a time in that important window to cover
     func testDelayedAppendEventDoesNotCauseValidEventsToBeFilteredOut() {
-        setUpTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.model522)
 
         let tempEventBasal = createTempEventBasal2016()
         let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
@@ -171,7 +171,7 @@ class PumpOpsSynchronousTests: XCTestCase {
 
     // MARK: Regular Bolus Event before starttime (offset 9 minutes)
     func test522RegularBolusEventBeforeStartTimeShouldNotCancel() {
-        setUpTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.model522)
         
         let pumpEvent = createSquareBolusEvent2010()
         
@@ -189,7 +189,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     // in testPumpLostTimeCancelsFetchEarly. The precise point at which we decide pump time is lost (the one hour mark) is aribtrary.
     
     func testOutOfOrderEventUnderAnHourDoesntCancel() {
-        setUpTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.model523)
 
         let after2007Date = dateComponents2007.date!.addingTimeInterval(TimeInterval(minutes:59))
 
@@ -205,26 +205,26 @@ class PumpOpsSynchronousTests: XCTestCase {
 
     // MARK: Test Sanity Checks
     func test2010EventSanityWith523() {
-        setUpTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.model523)
         let bolusEvent = createSquareBolusEvent2010()
         XCTAssertEqual(bolusEvent.timestamp.year!, 2010)
         XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
     }
     
     func test2009EventSanityWith523() {
-        setUpTestWithPumpModel(.Model523)
+        setUpTestWithPumpModel(.model523)
         let bolusEvent = createBolusEvent2009()
         XCTAssertEqual(bolusEvent.timestamp.year!, 2009)
         XCTAssertEqual(bolusEvent.timestamp.timeZone, pumpState.timeZone)
     }
     
     func test2009EventSavityWith522() {
-        setUpTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.model522)
         XCTAssertEqual(createBolusEvent2009().timestamp.year!, 2009)
     }
     
     func test2010EventSanityWith522() {
-        setUpTestWithPumpModel(.Model522)
+        setUpTestWithPumpModel(.model522)
         XCTAssertEqual(createSquareBolusEvent2010().timestamp.year!, 2010)
     }
 
@@ -254,7 +254,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let yearByte = UInt8(year) & 0b01111111
 
         let batteryData = Data(bytes: [0,0, secondMonthByte, minuteMonthByte, hourByte, dayByte, yearByte])
-        let batteryPumpEvent = BatteryPumpEvent(availableData: batteryData, pumpModel: PumpModel.Model523)!
+        let batteryPumpEvent = BatteryPumpEvent(availableData: batteryData, pumpModel: PumpModel.model523)!
         return batteryPumpEvent
     }
     
@@ -262,26 +262,26 @@ class PumpOpsSynchronousTests: XCTestCase {
         //2016-08-01 05:00:16 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2016, month: 8, day: 1, hour: 5, minute: 0, second: 16)
         let data = dataFromHexString("01009009600058008a344b1010")
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Square, duration: TimeInterval(minutes: 120))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
     }
     
     func createSquareBolusEvent2010() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:16 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2010, month: 8, day: 1, hour: 5, minute: 0, second: 16)
         let data = dataFromHexString("01009000900058008a344b1010")
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Square, duration: TimeInterval(minutes: 120))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
     }
     
     func createSquareBolusEvent(dateComponents: DateComponents) -> BolusNormalPumpEvent {
         let data = dataFromHexString(randomDataString(length: squareBolusDataLength))
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Square, duration: TimeInterval(hours: 8))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(hours: 8))
     }
     
     func createBolusEvent2011() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:11 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2011, month: 8, day: 1, hour: 5, minute: 0, second: 16)
         let data = dataFromHexString("01009000900058008a344b10FF")
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .Normal, duration: TimeInterval(minutes: 120))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: TimeInterval(minutes: 120))
     }
     
     func createTempEventBasal2016() -> TempBasalPumpEvent {
@@ -296,7 +296,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let timeInterval: TimeInterval = TimeInterval(minutes: 2)
         let data = Data(hexadecimalString:"338c4055145d2000")!
         
-        return BolusNormalPumpEvent(length: 13, rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 2.0, programmed: 1.0, unabsorbedInsulinTotal: 0.0, type: .Normal, duration: timeInterval)
+        return BolusNormalPumpEvent(length: 13, rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 2.0, programmed: 1.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: timeInterval)
     }
     
     func createNonDelayedEvent2009() -> BolusReminderPumpEvent {

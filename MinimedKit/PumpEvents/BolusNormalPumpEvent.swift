@@ -11,8 +11,8 @@ import Foundation
 public struct BolusNormalPumpEvent: TimestampedPumpEvent {
 
     public enum BolusType: String {
-        case Normal
-        case Square
+        case normal = "Normal"
+        case square = "Square"
     }
 
     public let length: Int
@@ -92,7 +92,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             duration = TimeInterval(minutes: 30 * doubleValueFromData(at: 3))
             unabsorbedInsulinTotal = 0
         }
-        type = duration > 0 ? .Square : .Normal
+        type = duration > 0 ? .square : .normal
         
         self.init(length: length, rawData: rawData, timestamp: timestamp, unabsorbedInsulinRecord: unabsorbedInsulinRecord, amount:amount, programmed: programmed, unabsorbedInsulinTotal: unabsorbedInsulinTotal, type: type, duration: duration)
     }

@@ -12,10 +12,10 @@ import XCTest
 class PumpModelTests: XCTestCase {
     
     func test523AppendsSquareWaveToHistory() {
-        XCTAssertTrue(PumpModel.Model523.appendsSquareWaveToHistoryOnStartOfDelivery)
+        XCTAssertTrue(PumpModel.model523.appendsSquareWaveToHistoryOnStartOfDelivery)
     }
     
     func test522DoesntAppendSquareWaveToHistory() {
-        XCTAssertFalse(PumpModel.Model522.appendsSquareWaveToHistoryOnStartOfDelivery)
+        XCTAssertFalse(PumpModel.model522.appendsSquareWaveToHistoryOnStartOfDelivery)
     }
 }

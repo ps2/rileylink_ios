@@ -191,7 +191,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     }
     
     func buildPumpMessageFromFrame(_ frame: String) -> PumpMessage {
-        let frameData: Data = dataFromHexString(frame)
+        let frameData = Data(hexadecimalString: frame)!
         let getHistoryPageMessageBody = GetHistoryPageCarelinkMessageBody(rxData: frameData)!
         let getHistoryPageMessage = PumpMessage(packetType: PacketType.carelink, address: self.pumpID, messageType: .getHistoryPage, messageBody: getHistoryPageMessageBody)
         return getHistoryPageMessage

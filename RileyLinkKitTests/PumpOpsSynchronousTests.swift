@@ -261,26 +261,26 @@ class PumpOpsSynchronousTests: XCTestCase {
     func createSquareBolusEvent2016() -> BolusNormalPumpEvent {
         //2016-08-01 05:00:16 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2016, month: 8, day: 1, hour: 5, minute: 0, second: 16)
-        let data = dataFromHexString("01009009600058008a344b1010")
+        let data = Data(hexadecimalString: "01009009600058008a344b1010")!
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
     }
     
     func createSquareBolusEvent2010() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:16 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2010, month: 8, day: 1, hour: 5, minute: 0, second: 16)
-        let data = dataFromHexString("01009000900058008a344b1010")
+        let data = Data(hexadecimalString: "01009000900058008a344b1010")!
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
     }
     
     func createSquareBolusEvent(dateComponents: DateComponents) -> BolusNormalPumpEvent {
-        let data = dataFromHexString(randomDataString(length: squareBolusDataLength))
+        let data = Data(hexadecimalString: randomDataString(length: squareBolusDataLength))!
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(hours: 8))
     }
     
     func createBolusEvent2011() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:11 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2011, month: 8, day: 1, hour: 5, minute: 0, second: 16)
-        let data = dataFromHexString("01009000900058008a344b10FF")
+        let data = Data(hexadecimalString: "01009000900058008a344b10FF")!
         return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: TimeInterval(minutes: 120))
     }
     
@@ -306,20 +306,6 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         return BolusReminderPumpEvent(length: length, rawData: data, timestamp: dateComponents)
     }
-}
-
-func dataFromHexString(_ hexString: String) -> Data {
-    var data = Data()
-    var hexString = hexString
-    while(hexString.characters.count > 0) {
-        let c: String = hexString.substring(to: hexString.index(hexString.startIndex, offsetBy: 2))
-        hexString = hexString.substring(from: hexString.index(hexString.startIndex, offsetBy: 2))
-        var ch: UInt32 = 0
-        Scanner(string: c).scanHexInt32(&ch)
-        var char = UInt8(ch)
-        data.append(&char, count: 1)
-    }
-    return data
 }
 
 // from comment at https://gist.github.com/szhernovoy/276e69eb90a0de84dd90

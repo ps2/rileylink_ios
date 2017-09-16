@@ -24,20 +24,20 @@ class BasalScheduleTests: XCTestCase {
         // Test each element
         XCTAssertEqual(basalSchedule[0].index, 0)
         XCTAssertEqual(basalSchedule[0].timeOffset, TimeInterval(minutes: 0))
-        XCTAssertEqualWithAccuracy(basalSchedule[0].rate, 0.15, accuracy: .ulpOfOne)
+        XCTAssertEqual(basalSchedule[0].rate, 0.15, accuracy: .ulpOfOne)
         
         XCTAssertEqual(basalSchedule[1].index, 1)
         XCTAssertEqual(basalSchedule[1].timeOffset, TimeInterval(minutes: 30))
-        XCTAssertEqualWithAccuracy(basalSchedule[1].rate, 2.05, accuracy: .ulpOfOne)
+        XCTAssertEqual(basalSchedule[1].rate, 2.05, accuracy: .ulpOfOne)
         
         // Tests parsing rates that take two bytes to encode
         XCTAssertEqual(basalSchedule[2].index, 2)
         XCTAssertEqual(basalSchedule[2].timeOffset, TimeInterval(minutes: 60))
-        XCTAssertEqualWithAccuracy(basalSchedule[2].rate, 35.00, accuracy: .ulpOfOne)
+        XCTAssertEqual(basalSchedule[2].rate, 35.00, accuracy: .ulpOfOne)
         
         // Tests parsing entry on the second page
         XCTAssertEqual(basalSchedule[25].index, 25)
         XCTAssertEqual(basalSchedule[25].timeOffset, TimeInterval(minutes: 750))
-        XCTAssertEqualWithAccuracy(basalSchedule[25].rate, 0.05, accuracy: .ulpOfOne)
+        XCTAssertEqual(basalSchedule[25].rate, 0.05, accuracy: .ulpOfOne)
     }
 }

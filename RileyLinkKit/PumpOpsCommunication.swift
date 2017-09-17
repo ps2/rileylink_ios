@@ -44,9 +44,9 @@ class PumpOpsCommunication {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        guard let data = cmd.receivedPacket.data else {
-            if cmd.didReceiveResponse {
-                throw PumpCommsError.unknownResponse(rx: cmd.rawReceivedData.hexadecimalString, during: "Sent \(msg)")
+        guard let data = cmd.receivedPacket?.data else {
+            if let rawData = cmd.rawReceivedData {
+                throw PumpCommsError.unknownResponse(rx: rawData.hexadecimalString, during: "Sent \(msg)")
             } else {
                 throw PumpCommsError.noResponse(during: "Sent \(msg)")
             }

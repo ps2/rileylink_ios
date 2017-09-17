@@ -14,8 +14,7 @@
 #import "SendAndListenCmd.h"
 #import "GetPacketCmd.h"
 #import "GetVersionCmd.h"
-#import "RFPacket.h"
-
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
 
@@ -526,9 +525,8 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
 - (BOOL) handleIdleListenerResponse:(NSData *)response error:(NSError **)errorOut {
     if (response.length > 3) {
         // This is a response to our idle listen command
-        RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
-        if (packet.data) {
-            packet.capturedAt = [NSDate date];
+        RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
+        if (packet) {
             NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
             NSDictionary *attrs = @{
                                     @"packet": packet,

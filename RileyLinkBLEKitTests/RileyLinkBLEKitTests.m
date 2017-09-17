@@ -8,7 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import "RileyLinkBLEDevice.h"
-#import "RFPacket.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
+#import "RileyLinkBLEDevice.h"
 #import "NSData+Conversion.h"
 
 @interface RileyLinkBLEDevice (_Private)
@@ -35,8 +36,9 @@
 
 - (void)testDecodeRF {
     NSData *response = [NSData dataWithHexadecimalString:@"4926a965a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35"];
-    RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
+    RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
     XCTAssertEqualObjects(@"a7754838ce0303000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", packet.data.hexadecimalString);
+    XCTAssertEqual(-37, packet.rssi);
 }
 
 - (void)testEncodeData {
@@ -50,7 +52,7 @@
     // This data is corrupt in a special way; the data still decodes via tha 4b6b conversion without error,
     // but produces a decoded message that doesn't match its CRC.
     NSData *response = [NSData dataWithHexadecimalString:@"4926b165a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35"];
-    RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
+    RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
     XCTAssertNil(packet.data);
 }
 

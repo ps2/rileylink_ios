@@ -307,7 +307,7 @@ class PumpOpsSynchronous {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        guard let data = listenForFindMessageCmd.receivedPacket.data else {
+        guard let data = listenForFindMessageCmd.receivedPacket?.data else {
             throw PumpCommsError.noResponse(during: "Watchdog listening")
         }
             
@@ -420,9 +420,9 @@ class PumpOpsSynchronous {
                 cmd.packet = RFPacket(data: msg.txData)
                 cmd.timeoutMS = type(of: self).standardPumpResponseWindow
                 if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
-                    if let data =  cmd.receivedPacket.data,
-                        let response = PumpMessage(rxData: data), response.messageType == .getPumpModel {
-                        sumRSSI += Int(cmd.receivedPacket.rssi)
+                    if let pkt = cmd.receivedPacket,
+                        let response = PumpMessage(rxData: pkt.data), response.messageType == .getPumpModel {
+                        sumRSSI += Int(pkt.rssi)
                         trial.successes += 1
                     }
                 } else {

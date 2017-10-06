@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 #import "RileyLinkBLEDevice.h"
 #import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
-#import "RileyLinkBLEDevice.h"
 #import "NSData+Conversion.h"
 
 @interface RileyLinkBLEDevice (_Private)
@@ -43,7 +42,7 @@
 
 - (void)testEncodeData {
     NSData *msg = [NSData dataWithHexadecimalString:@"a77548380600a2"];
-    RFPacket *packet = [[RFPacket alloc] initWithData:msg];
+    RFPacket *packet = [[RFPacket alloc] initWithOutgoingData:msg];
     
     XCTAssertEqualObjects(@"a965a5d1a8da566555ab2555", packet.encodedData.hexadecimalString);
 }

@@ -7,8 +7,8 @@
 //
 
 import XCTest
+@testable import RileyLinkBLEKit
 @testable import MinimedKit
-
 
 class CRC8Tests: XCTestCase {
        

@@ -410,7 +410,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
 
                     self.device.ops?.setRXFilterMode(.wide) { (error) in
                         if let error = error {
-                            completionHandler(String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(describing: error)))
+                            DispatchQueue.main.async {
+                                completionHandler(String(format: NSLocalizedString("Error setting filter bandwidth: %@", comment: "The error displayed during MySentry pairing when the RX filter could not be set"), String(describing: error)))
+                            }
                         } else {
                             var byteArray = [UInt8](repeating: 0, count: 16)
                             (self.device.peripheral.identifier as NSUUID).getBytes(&byteArray)
@@ -446,15 +448,17 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
 
                     self.device.ops?.getHistoryEvents(since: oneDayAgo!) { (response) -> Void in
-                        switch response {
-                        case .success(let (events, _)):
-                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
-                            for event in events {
-                                responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(let (events, _)):
+                                var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
+                                for event in events {
+                                    responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
+                                }
+                                completionHandler(responseText)
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
                             }
-                            completionHandler(responseText)
-                        case .failure(let error):
-                            completionHandler(String(describing: error))
                         }
                     }
                     return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
@@ -464,15 +468,17 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                     let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
                     let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
                     self.device.ops?.getGlucoseHistoryEvents(since: oneDayAgo!) { (response) -> Void in
-                        switch response {
-                        case .success(let events):
-                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
-                            for event in events {
-                                responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(let events):
+                                var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
+                                for event in events {
+                                    responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
+                                }
+                                completionHandler(responseText)
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
                             }
-                            completionHandler(responseText)
-                        case .failure(let error):
-                            completionHandler(String(describing: error))
                         }
                     }
                     return NSLocalizedString("Fetching glucose…", comment: "Progress message for fetching pump glucose.")
@@ -480,30 +486,34 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
             case .writeGlucoseHistoryTimestamp:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     self.device.ops?.writeGlucoseHistoryTimestamp() { (response) -> Void in
-                        switch response {
-                        case .success(_):
-                            completionHandler("Glucose History timestamp was successfully written to pump.")
-                        case .failure(let error):
-                            completionHandler(String(describing: error))
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(_):
+                                completionHandler("Glucose History timestamp was successfully written to pump.")
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
+                            }
                         }
                     }
                     return NSLocalizedString("Writing glucose history timestamp…", comment: "Progress message for writing glucose history timestamp.")
                 }
             case .getPumpModel:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    self.device.ops?.getPumpModel({ (response) in
-                        switch response {
-                        case .success(let model):
-                            completionHandler("Pump Model: \(model)")
-                        case .failure(let error):
-                            completionHandler(String(describing: error))
+                    self.device.ops?.getPumpModel { (response) in
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(let model):
+                                completionHandler("Pump Model: \(model)")
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
+                            }
                         }
-                    })
+                    }
                     return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
                 }
             case .pressDownButton:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
-                    self.device.ops?.pressButton({ (response) in
+                    self.device.ops?.pressButton { (response) in
                         DispatchQueue.main.async {
                             switch response {
                             case .success(let msg):
@@ -512,7 +522,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
                                 completionHandler(String(describing: error))
                             }
                         }
-                    })
+                    }
                     return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
                 }
             case .readPumpStatus:

@@ -141,7 +141,8 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         runningSession = NO;
         dispatch_group_leave(idleDetectDispatchGroup);
     });
-    
+
+    // TODO: Determine which queue to use. This currently blocks the main queue with a dispatch_group_wait.
     dispatch_group_notify(idleDetectDispatchGroup,
                           dispatch_get_main_queue(), ^{
                               NSLog(@"idleDetectDispatchGroup empty");

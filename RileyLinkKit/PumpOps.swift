@@ -29,9 +29,7 @@ public class PumpOps {
                 _ = try ops.runCommandWithArguments(message)
                 completion(.success("Success."))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -57,13 +55,9 @@ public class PumpOps {
 
                 self.pumpState.pumpModel = PumpModel(rawValue: model)
 
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(model))
-                }
+                completion(.success(model))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -73,13 +67,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response: ReadSettingsCarelinkMessageBody = try ops.messageBody(to: .readSettings)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
-                }
+                completion(.success(response))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -90,13 +80,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let response: GetBatteryCarelinkMessageBody = try ops.messageBody(to: .getBattery)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
-                }
+                completion(.success(response))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -147,13 +133,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success((events: events, pumpModel: pumpModel)))
-                }
+                completion(.success((events: events, pumpModel: pumpModel)))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -175,13 +157,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 let events = try ops.getGlucoseHistoryEvents(since: startDate)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(events))
-                }
+                completion(.success(events))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -192,13 +170,9 @@ public class PumpOps {
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
                 _ = try ops.writeGlucoseHistoryTimestamp()
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(true))
-                }
+                completion(.success(true))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }
@@ -352,13 +326,9 @@ public class PumpOps {
             do {
                 try ops.configureRadio(for: region)
                 let response = try ops.tuneRadio(for: region)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
-                }
+                completion(.success(response))
             } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+                completion(.failure(error))
             }
         }
     }

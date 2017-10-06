@@ -32,8 +32,6 @@
 		430D65051CB89FC000FCA750 /* GetVersionCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64F51CB89FC000FCA750 /* GetVersionCmd.m */; };
 		430D65061CB89FC000FCA750 /* ReceivingPacketCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64F61CB89FC000FCA750 /* ReceivingPacketCmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D65071CB89FC000FCA750 /* ReceivingPacketCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64F71CB89FC000FCA750 /* ReceivingPacketCmd.m */; };
-		430D65081CB89FC000FCA750 /* RFPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64F81CB89FC000FCA750 /* RFPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		430D65091CB89FC000FCA750 /* RFPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64F91CB89FC000FCA750 /* RFPacket.m */; };
 		430D650A1CB89FC000FCA750 /* SendAndListenCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64FA1CB89FC000FCA750 /* SendAndListenCmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		430D650B1CB89FC000FCA750 /* SendAndListenCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 430D64FB1CB89FC000FCA750 /* SendAndListenCmd.m */; };
 		430D650C1CB89FC000FCA750 /* SendPacketCmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 430D64FC1CB89FC000FCA750 /* SendPacketCmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -143,6 +141,7 @@
 		54DA4E851DFDC0A70007F489 /* SensorValueGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DA4E841DFDC0A70007F489 /* SensorValueGlucoseEvent.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
+		C10C883B1F87A9E700AF3E34 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C10D9BCB1C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
@@ -158,7 +157,6 @@
 		C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12616431B685F0A001FAD87 /* CoreData.framework */; };
 		C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C12616491B685F93001FAD87 /* RileyLink.xcdatamodeld */; };
 		C12616541B6892DB001FAD87 /* RileyLinkRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616531B6892DB001FAD87 /* RileyLinkRecord.m */; };
-		C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616591B6B2D20001FAD87 /* PacketTableViewCell.m */; };
 		C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616601B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m */; };
 		C12616681B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616621B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.m */; };
 		C12616691B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12616641B76E8DC001FAD87 /* TPKeyboardAvoidingTableView.m */; };
@@ -207,6 +205,7 @@
 		C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */; };
 		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
 		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
+		C151540C1F6DB9D0008A5190 /* RFPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C151540B1F6DB9D0008A5190 /* RFPacket.swift */; };
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
@@ -336,7 +335,6 @@
 		C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */; };
 		C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D91C829104006DBA60 /* RFTools.swift */; };
 		C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */; };
-		C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
 		C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */; };
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
@@ -491,8 +489,6 @@
 		430D64F51CB89FC000FCA750 /* GetVersionCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetVersionCmd.m; sourceTree = "<group>"; };
 		430D64F61CB89FC000FCA750 /* ReceivingPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceivingPacketCmd.h; sourceTree = "<group>"; };
 		430D64F71CB89FC000FCA750 /* ReceivingPacketCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReceivingPacketCmd.m; sourceTree = "<group>"; };
-		430D64F81CB89FC000FCA750 /* RFPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPacket.h; sourceTree = "<group>"; };
-		430D64F91CB89FC000FCA750 /* RFPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPacket.m; sourceTree = "<group>"; };
 		430D64FA1CB89FC000FCA750 /* SendAndListenCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendAndListenCmd.h; sourceTree = "<group>"; };
 		430D64FB1CB89FC000FCA750 /* SendAndListenCmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendAndListenCmd.m; sourceTree = "<group>"; };
 		430D64FC1CB89FC000FCA750 /* SendPacketCmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPacketCmd.h; sourceTree = "<group>"; };
@@ -605,8 +601,6 @@
 		C126164A1B685F93001FAD87 /* RileyLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RileyLink.xcdatamodel; sourceTree = "<group>"; };
 		C12616521B6892DB001FAD87 /* RileyLinkRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkRecord.h; sourceTree = "<group>"; };
 		C12616531B6892DB001FAD87 /* RileyLinkRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RileyLinkRecord.m; sourceTree = "<group>"; };
-		C12616581B6B2D20001FAD87 /* PacketTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketTableViewCell.h; sourceTree = "<group>"; };
-		C12616591B6B2D20001FAD87 /* PacketTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PacketTableViewCell.m; sourceTree = "<group>"; };
 		C126165F1B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
 		C12616601B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
 		C12616611B76E8DC001FAD87 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
@@ -664,6 +658,7 @@
 		C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataManager.swift; sourceTree = "<group>"; };
 		C14FFC661D3D7E390049CF85 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainManager+RileyLink.swift"; sourceTree = "<group>"; };
+		C151540B1F6DB9D0008A5190 /* RFPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFPacket.swift; sourceTree = "<group>"; };
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
@@ -926,6 +921,7 @@
 			children = (
 				430D64F01CB89FC000FCA750 /* CmdBase.h */,
 				430D64F11CB89FC000FCA750 /* CmdBase.m */,
+				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				430D64F21CB89FC000FCA750 /* GetPacketCmd.h */,
 				430D64F31CB89FC000FCA750 /* GetPacketCmd.m */,
 				430D64F41CB89FC000FCA750 /* GetVersionCmd.h */,
@@ -933,8 +929,6 @@
 				430D64CF1CB855AB00FCA750 /* Info.plist */,
 				430D64F61CB89FC000FCA750 /* ReceivingPacketCmd.h */,
 				430D64F71CB89FC000FCA750 /* ReceivingPacketCmd.m */,
-				430D64F81CB89FC000FCA750 /* RFPacket.h */,
-				430D64F91CB89FC000FCA750 /* RFPacket.m */,
 				430D64E81CB85A4300FCA750 /* RileyLinkBLEDevice.h */,
 				430D64E91CB85A4300FCA750 /* RileyLinkBLEDevice.m */,
 				430D64CD1CB855AB00FCA750 /* RileyLinkBLEKit.h */,
@@ -946,6 +940,7 @@
 				430D64FD1CB89FC000FCA750 /* SendPacketCmd.m */,
 				430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */,
 				430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */,
+				C151540B1F6DB9D0008A5190 /* RFPacket.swift */,
 			);
 			path = RileyLinkBLEKit;
 			sourceTree = "<group>";
@@ -1065,7 +1060,6 @@
 				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
 				C1F000511EBE73F400F65163 /* BasalSchedule.swift */,
 				C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */,
-				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
 				54BC447B1DB4742F00340EED /* GlucoseEventType.swift */,
 				54BC44741DB46B0A00340EED /* GlucosePage.swift */,
@@ -1140,8 +1134,6 @@
 				C14FFC521D3D70170049CF85 /* ValidatingIndicatorView.swift */,
 				C14FFC5C1D3D75200049CF85 /* ButtonTableViewCell.swift */,
 				C14FFC5D1D3D75200049CF85 /* ButtonTableViewCell.xib */,
-				C12616581B6B2D20001FAD87 /* PacketTableViewCell.h */,
-				C12616591B6B2D20001FAD87 /* PacketTableViewCell.m */,
 				434FF1DD1CF268F3000DB779 /* RileyLinkDeviceTableViewCell.swift */,
 				C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */,
 			);
@@ -1539,7 +1531,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				430D65081CB89FC000FCA750 /* RFPacket.h in Headers */,
 				430D650C1CB89FC000FCA750 /* SendPacketCmd.h in Headers */,
 				430D650E1CB89FC000FCA750 /* UpdateRegisterCmd.h in Headers */,
 				430D650A1CB89FC000FCA750 /* SendAndListenCmd.h in Headers */,
@@ -1806,6 +1797,7 @@
 				TargetAttributes = {
 					430D64CA1CB855AB00FCA750 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0900;
 					};
 					430D64D31CB855AB00FCA750 = {
 						CreatedOnToolsVersion = 7.3;
@@ -1972,13 +1964,14 @@
 				430D64ED1CB85A4300FCA750 /* RileyLinkBLEDevice.m in Sources */,
 				43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */,
 				430D65031CB89FC000FCA750 /* GetPacketCmd.m in Sources */,
-				430D65091CB89FC000FCA750 /* RFPacket.m in Sources */,
 				430D65011CB89FC000FCA750 /* CmdBase.m in Sources */,
 				430D64EF1CB85A4300FCA750 /* RileyLinkBLEManager.m in Sources */,
 				430D650B1CB89FC000FCA750 /* SendAndListenCmd.m in Sources */,
 				430D65051CB89FC000FCA750 /* GetVersionCmd.m in Sources */,
 				430D650D1CB89FC000FCA750 /* SendPacketCmd.m in Sources */,
 				430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */,
+				C10C883B1F87A9E700AF3E34 /* CRC8.swift in Sources */,
+				C151540C1F6DB9D0008A5190 /* RFPacket.swift in Sources */,
 				430D65071CB89FC000FCA750 /* ReceivingPacketCmd.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2128,7 +2121,6 @@
 				C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
 				54BC44751DB46B0A00340EED /* GlucosePage.swift in Sources */,
-				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
 				541688DF1DB82E72005B1891 /* TimestampedGlucoseEvent.swift in Sources */,
@@ -2252,7 +2244,6 @@
 				C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */,
 				C1274F7F1D82411C0002912B /* AuthenticationViewController.swift in Sources */,
 				C12616671B76E8DC001FAD87 /* TPKeyboardAvoidingCollectionView.m in Sources */,
-				C126165A1B6B2D20001FAD87 /* PacketTableViewCell.m in Sources */,
 				43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */,
 				C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */,
 				C126166A1B76E8DC001FAD87 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
@@ -2417,6 +2408,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2435,6 +2427,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2444,6 +2439,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -2463,6 +2459,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2471,6 +2469,7 @@
 		430D64E41CB855AB00FCA750 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2488,6 +2487,7 @@
 		430D64E51CB855AB00FCA750 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2791,6 +2791,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2837,6 +2838,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

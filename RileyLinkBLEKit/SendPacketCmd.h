@@ -8,7 +8,8 @@
 
 @import Foundation;
 #import "CmdBase.h"
-#import "RFPacket.h"
+
+@class RFPacket;
 
 @interface SendPacketCmd : CmdBase
 

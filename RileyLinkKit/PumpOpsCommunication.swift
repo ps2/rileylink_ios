@@ -22,7 +22,7 @@ class PumpOpsCommunication {
     
     func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         let cmd = SendAndListenCmd()
-        cmd.packet = RFPacket(data: msg.txData)
+        cmd.packet = RFPacket(outgoingData: msg.txData)
         cmd.timeoutMS = timeoutMS
         cmd.repeatCount = repeatCount
         cmd.msBetweenPackets = msBetweenPackets
@@ -44,9 +44,9 @@ class PumpOpsCommunication {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        guard let data = cmd.receivedPacket.data else {
-            if cmd.didReceiveResponse {
-                throw PumpCommsError.unknownResponse(rx: cmd.rawReceivedData.hexadecimalString, during: "Sent \(msg)")
+        guard let data = cmd.receivedPacket?.data else {
+            if let rawData = cmd.rawReceivedData {
+                throw PumpCommsError.unknownResponse(rx: rawData.hexadecimalString, during: "Sent \(msg)")
             } else {
                 throw PumpCommsError.noResponse(during: "Sent \(msg)")
             }

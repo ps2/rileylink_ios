@@ -8,8 +8,8 @@
 
 @import Foundation;
 #import "ReceivingPacketCmd.h"
-#import "RFPacket.h"
 
+@class RFPacket;
 @interface SendAndListenCmd : ReceivingPacketCmd
 
 @property (nonatomic, strong) RFPacket *packet;

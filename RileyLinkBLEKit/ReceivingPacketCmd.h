@@ -8,12 +8,13 @@
 
 @import Foundation;
 #import "CmdBase.h"
-#import "RFPacket.h"
+
+@class RFPacket;
 
 @interface ReceivingPacketCmd : CmdBase
 
-@property (nonatomic, strong) RFPacket *receivedPacket;
+@property (nonatomic, strong, nullable) RFPacket *receivedPacket;
 @property (nonatomic, readonly) BOOL didReceiveResponse;
-@property (nonatomic, readonly) NSData *rawReceivedData;
+@property (nonatomic, readonly, nullable) NSData *rawReceivedData;
 
 @end

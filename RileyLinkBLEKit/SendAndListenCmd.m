@@ -8,6 +8,7 @@
 
 #import "SendAndListenCmd.h"
 #import "RileyLinkBLEManager.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 @implementation SendAndListenCmd
 

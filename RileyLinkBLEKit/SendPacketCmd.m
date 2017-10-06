@@ -7,6 +7,7 @@
 //
 
 #import "SendPacketCmd.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 @implementation SendPacketCmd
 

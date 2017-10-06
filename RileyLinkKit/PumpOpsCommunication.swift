@@ -22,7 +22,7 @@ class PumpOpsCommunication {
     
     func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         let cmd = SendAndListenCmd()
-        cmd.packet = RFPacket(data: msg.txData)
+        cmd.packet = RFPacket(outgoingData: msg.txData)
         cmd.timeoutMS = timeoutMS
         cmd.repeatCount = repeatCount
         cmd.msBetweenPackets = msBetweenPackets

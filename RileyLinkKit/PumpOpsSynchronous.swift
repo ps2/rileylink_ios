@@ -333,7 +333,7 @@ class PumpOpsSynchronous {
         let linkMessageResponse = PumpMessage(packetType: .mySentry, address: pump.pumpID, messageType: .pumpAck, messageBody: linkMessageResponseBody)
 
         let cmd = SendPacketCmd()
-        cmd.packet = RFPacket(data: linkMessageResponse.txData)
+        cmd.packet = RFPacket(outgoingData: linkMessageResponse.txData)
         session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
     }
 
@@ -417,7 +417,7 @@ class PumpOpsSynchronous {
             for _ in 1...tries {
                 let msg = makePumpMessage(to: .getPumpModel)
                 let cmd = SendAndListenCmd()
-                cmd.packet = RFPacket(data: msg.txData)
+                cmd.packet = RFPacket(outgoingData: msg.txData)
                 cmd.timeoutMS = type(of: self).standardPumpResponseWindow
                 if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
                     if let pkt = cmd.receivedPacket,
@@ -574,7 +574,7 @@ class PumpOpsSynchronous {
                 curResp = resp.messageBody as! GetHistoryPageCarelinkMessageBody
             } else {
                 let cmd = SendPacketCmd()
-                cmd.packet = RFPacket(data: msg.txData)
+                cmd.packet = RFPacket(outgoingData: msg.txData)
                 session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
                 break
             }
@@ -686,7 +686,7 @@ class PumpOpsSynchronous {
                 curResp = resp.messageBody as! GetGlucosePageMessageBody
             } else {
                 let cmd = SendPacketCmd()
-                cmd.packet = RFPacket(data: msg.txData)
+                cmd.packet = RFPacket(outgoingData: msg.txData)
                 session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
                 break
             }

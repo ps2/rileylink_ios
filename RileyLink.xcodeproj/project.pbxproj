@@ -141,6 +141,7 @@
 		54DA4E851DFDC0A70007F489 /* SensorValueGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DA4E841DFDC0A70007F489 /* SensorValueGlucoseEvent.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
+		C10C883B1F87A9E700AF3E34 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C10D9BCB1C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
@@ -334,7 +335,6 @@
 		C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */; };
 		C1EAD6DA1C829104006DBA60 /* RFTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6D91C829104006DBA60 /* RFTools.swift */; };
 		C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DB1C82A4AB006DBA60 /* RFToolsTests.swift */; };
-		C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DF1C82B910006DBA60 /* CRC8Tests.swift */; };
 		C1EAD6E21C82BA7A006DBA60 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */; };
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
@@ -921,6 +921,7 @@
 			children = (
 				430D64F01CB89FC000FCA750 /* CmdBase.h */,
 				430D64F11CB89FC000FCA750 /* CmdBase.m */,
+				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				430D64F21CB89FC000FCA750 /* GetPacketCmd.h */,
 				430D64F31CB89FC000FCA750 /* GetPacketCmd.m */,
 				430D64F41CB89FC000FCA750 /* GetVersionCmd.h */,
@@ -1059,7 +1060,6 @@
 				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
 				C1F000511EBE73F400F65163 /* BasalSchedule.swift */,
 				C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */,
-				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
 				54BC447B1DB4742F00340EED /* GlucoseEventType.swift */,
 				54BC44741DB46B0A00340EED /* GlucosePage.swift */,
@@ -1970,6 +1970,7 @@
 				430D65051CB89FC000FCA750 /* GetVersionCmd.m in Sources */,
 				430D650D1CB89FC000FCA750 /* SendPacketCmd.m in Sources */,
 				430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */,
+				C10C883B1F87A9E700AF3E34 /* CRC8.swift in Sources */,
 				C151540C1F6DB9D0008A5190 /* RFPacket.swift in Sources */,
 				430D65071CB89FC000FCA750 /* ReceivingPacketCmd.m in Sources */,
 			);
@@ -2120,7 +2121,6 @@
 				C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
 				54BC44751DB46B0A00340EED /* GlucosePage.swift in Sources */,
-				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
 				541688DF1DB82E72005B1891 /* TimestampedGlucoseEvent.swift in Sources */,

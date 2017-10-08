@@ -307,14 +307,24 @@ class PumpOpsSynchronous {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        guard let data = listenForFindMessageCmd.receivedPacket?.data else {
+        guard let encodedData = listenForFindMessageCmd.receivedPacket?.data else {
             throw PumpCommsError.noResponse(during: "Watchdog listening")
         }
-            
-        guard let findMessage = PumpMessage(rxData: data), findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .mySentry,
+        
+        guard let packet = MinimedPacket(encodedData: encodedData) else {
+            // Encoding or CRC error
+            throw PumpCommsError.unknownResponse(rx: encodedData.hexadecimalString, during: "Sent \(listenForFindMessageCmd)")
+        }
+        
+        guard let findMessage = PumpMessage(rxData: packet.data) else {
+            // Unknown packet type or message type
+            throw PumpCommsError.unknownResponse(rx: packet.data.hexadecimalString, during: "Sent \(listenForFindMessageCmd)")
+        }
+
+        guard findMessage.address.hexadecimalString == pump.pumpID && findMessage.packetType == .mySentry,
             let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, let findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
         else {
-            throw PumpCommsError.unknownResponse(rx: data.hexadecimalString, during: "Watchdog listening")
+            throw PumpCommsError.unknownResponse(rx: packet.data.hexadecimalString, during: "Watchdog listening")
         }
 
         // Identify as a MySentry device
@@ -333,7 +343,7 @@ class PumpOpsSynchronous {
         let linkMessageResponse = PumpMessage(packetType: .mySentry, address: pump.pumpID, messageType: .pumpAck, messageBody: linkMessageResponseBody)
 
         let cmd = SendPacketCmd()
-        cmd.packet = RFPacket(outgoingData: linkMessageResponse.txData)
+        cmd.outgoingData = MinimedPacket(outgoingData: linkMessageResponse.txData).encodedData()
         session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
     }
 
@@ -417,12 +427,14 @@ class PumpOpsSynchronous {
             for _ in 1...tries {
                 let msg = makePumpMessage(to: .getPumpModel)
                 let cmd = SendAndListenCmd()
-                cmd.packet = RFPacket(outgoingData: msg.txData)
+                cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
                 cmd.timeoutMS = type(of: self).standardPumpResponseWindow
                 if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
-                    if let pkt = cmd.receivedPacket,
+                    
+                    if let rfPacket = cmd.receivedPacket,
+                        let pkt = MinimedPacket(encodedData: rfPacket.data),
                         let response = PumpMessage(rxData: pkt.data), response.messageType == .getPumpModel {
-                        sumRSSI += Int(pkt.rssi)
+                        sumRSSI += Int(rfPacket.rssi)
                         trial.successes += 1
                     }
                 } else {
@@ -574,7 +586,7 @@ class PumpOpsSynchronous {
                 curResp = resp.messageBody as! GetHistoryPageCarelinkMessageBody
             } else {
                 let cmd = SendPacketCmd()
-                cmd.packet = RFPacket(outgoingData: msg.txData)
+                cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
                 session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
                 break
             }
@@ -686,7 +698,7 @@ class PumpOpsSynchronous {
                 curResp = resp.messageBody as! GetGlucosePageMessageBody
             } else {
                 let cmd = SendPacketCmd()
-                cmd.packet = RFPacket(outgoingData: msg.txData)
+                cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
                 session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
                 break
             }

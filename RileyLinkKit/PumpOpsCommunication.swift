@@ -22,7 +22,7 @@ class PumpOpsCommunication {
     
     func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         let cmd = SendAndListenCmd()
-        cmd.packet = RFPacket(outgoingData: msg.txData)
+        cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
         cmd.timeoutMS = timeoutMS
         cmd.repeatCount = repeatCount
         cmd.msBetweenPackets = msBetweenPackets
@@ -44,16 +44,18 @@ class PumpOpsCommunication {
             throw PumpCommsError.rileyLinkTimeout
         }
         
-        guard let data = cmd.receivedPacket?.data else {
-            if let rawData = cmd.rawReceivedData {
-                throw PumpCommsError.unknownResponse(rx: rawData.hexadecimalString, during: "Sent \(msg)")
-            } else {
-                throw PumpCommsError.noResponse(during: "Sent \(msg)")
-            }
+        guard let encodedData = cmd.receivedPacket?.data else {
+            throw PumpCommsError.noResponse(during: "Sent \(msg)")
         }
         
-        guard let message = PumpMessage(rxData: data) else {
-            throw PumpCommsError.unknownResponse(rx: data.hexadecimalString, during: "Sent \(msg)")
+        guard let packet = MinimedPacket(encodedData: encodedData) else {
+            // Encoding or CRC error
+            throw PumpCommsError.unknownResponse(rx: encodedData.hexadecimalString, during: "Sent \(msg)")
+        }
+        
+        guard let message = PumpMessage(rxData: packet.data) else {
+            // Unknown packet type or message type
+            throw PumpCommsError.unknownResponse(rx: packet.data.hexadecimalString, during: "Sent \(msg)")
         }
         
         guard message.address == msg.address else {

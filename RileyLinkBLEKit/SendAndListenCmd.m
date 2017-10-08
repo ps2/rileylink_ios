@@ -26,7 +26,7 @@
     cmd[9] = _retryCount;
     
     NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:10];
-    [serialized appendData:[_packet encodedData]];
+    [serialized appendData:_outgoingData];
     uint8_t nullTerminator = 0;
     [serialized appendBytes:&nullTerminator length:1];
     return serialized;

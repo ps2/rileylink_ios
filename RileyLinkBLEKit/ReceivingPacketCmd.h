@@ -14,7 +14,5 @@
 @interface ReceivingPacketCmd : CmdBase
 
 @property (nonatomic, strong, nullable) RFPacket *receivedPacket;
-@property (nonatomic, readonly) BOOL didReceiveResponse;
-@property (nonatomic, readonly, nullable) NSData *rawReceivedData;
 
 @end

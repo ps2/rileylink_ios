@@ -19,7 +19,9 @@
     cmd[3] = _msBetweenPackets;
     
     NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:4];
-    [serialized appendData:[_packet encodedData]];
+    if (_outgoingData) {
+        [serialized appendData:_outgoingData];
+    }
     uint8_t nullTerminator = 0;
     [serialized appendBytes:&nullTerminator length:1];
     return serialized;

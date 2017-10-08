@@ -9,10 +9,9 @@
 @import Foundation;
 #import "ReceivingPacketCmd.h"
 
-@class RFPacket;
 @interface SendAndListenCmd : ReceivingPacketCmd
 
-@property (nonatomic, strong) RFPacket *packet;
+@property (nonatomic, strong, nullable) NSData *outgoingData;
 @property (nonatomic, assign) uint8_t sendChannel; // In general, 0 = meter, cgm. 2 = pump
 @property (nonatomic, assign) uint8_t repeatCount; // 0 = no repeat, i.e. only one packet.  1 repeat = 2 packets sent total.
 @property (nonatomic, assign) uint8_t msBetweenPackets;

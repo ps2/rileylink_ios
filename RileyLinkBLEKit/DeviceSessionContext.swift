@@ -13,6 +13,38 @@ public enum RXFilterMode: UInt8 {
     case narrow = 0x90  // 150KHz
 }
 
+public enum CC111XRegister: UInt8 {
+    case sync1    = 0x00
+    case sync0    = 0x01
+    case pktlen   = 0x02
+    case pktctrl1 = 0x03
+    case pktctrl0 = 0x04
+    case fsctrl1  = 0x07
+    case freq2    = 0x09
+    case freq1    = 0x0a
+    case freq0    = 0x0b
+    case mdmcfg4  = 0x0c
+    case mdmcfg3  = 0x0d
+    case mdmcfg2  = 0x0e
+    case mdmcfg1  = 0x0f
+    case mdmcfg0  = 0x10
+    case deviatn  = 0x11
+    case mcsm0    = 0x14
+    case foccfg   = 0x15
+    case agcctrl2 = 0x17
+    case agcctrl1 = 0x18
+    case agcctrl0 = 0x19
+    case frend1   = 0x1a
+    case frend0   = 0x1b
+    case fscal3   = 0x1c
+    case fscal2   = 0x1d
+    case fscal1   = 0x1e
+    case fscal0   = 0x1f
+    case test1    = 0x24
+    case text0    = 0x25
+    case paTable0 = 0x2e
+}
+
 public enum RileyLinkDeviceError: Error {
     case rileyLinkTimeout
 }
@@ -30,12 +62,12 @@ open class DeviceSessionContext {
     public func setRXFilterMode(_ mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue
-        try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: chanbw | drate_e)
+        try updateRegister(.mdmcfg4, value: chanbw | drate_e)
     }
     
-    public func updateRegister(_ addr: UInt8, value: UInt8) throws {
+    public func updateRegister(_ register: CC111XRegister, value: UInt8) throws {
         let cmd = UpdateRegisterCmd()
-        cmd.addr = addr
+        cmd.addr = register.rawValue
         cmd.value = value
         if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
             throw RileyLinkDeviceError.rileyLinkTimeout
@@ -45,9 +77,9 @@ open class DeviceSessionContext {
     public func setBaseFrequency(_ freqMHz: Double) throws {
         let val = Int((freqMHz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
         
-        try updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
+        try updateRegister(.freq0, value:UInt8(val & 0xff))
+        try updateRegister(.freq1, value:UInt8((val >> 8) & 0xff))
+        try updateRegister(.freq2, value:UInt8((val >> 16) & 0xff))
         print("Set frequency to \(freqMHz)")
     }
     

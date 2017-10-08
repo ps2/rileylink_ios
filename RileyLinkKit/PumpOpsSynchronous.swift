@@ -348,25 +348,25 @@ class PumpOpsSynchronous: DeviceSessionContext {
     internal func setRXFilterMode(_ mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue
-        try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: chanbw | drate_e)
+        try updateRegister(.mdmcfg4, value: chanbw | drate_e)
     }
     
     func configureRadio(for region: PumpRegion) throws {
         switch region {
         case .worldWide:
-            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x59)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x62)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x1A)
-            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x13)
+            try updateRegister(.mdmcfg4, value: 0x59)
+            //try updateRegister(.mdmcfg3, value: 0x66)
+            //try updateRegister(.mdmcfg2, value: 0x33)
+            try updateRegister(.mdmcfg1, value: 0x62)
+            try updateRegister(.mdmcfg0, value: 0x1A)
+            try updateRegister(.deviatn, value: 0x13)
         case .northAmerica:
-            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x99)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x61)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x7E)
-            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x15)
+            try updateRegister(.mdmcfg4, value: 0x99)
+            //try updateRegister(.mdmcfg3, value: 0x66)
+            //try updateRegister(.mdmcfg2, value: 0x33)
+            try updateRegister(.mdmcfg1, value: 0x61)
+            try updateRegister(.mdmcfg0, value: 0x7E)
+            try updateRegister(.deviatn, value: 0x15)
         }
     }
     

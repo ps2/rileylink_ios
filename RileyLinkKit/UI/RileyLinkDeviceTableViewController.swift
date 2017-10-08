@@ -356,36 +356,38 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
             case .tune:
                 vc = CommandResponseViewController(command: { [unowned self] (completionHandler) -> String in
                     self.device.tunePump { (response) -> Void in
-                        switch response {
-                        case .success(let scanResult):
-                            var resultDict: [String: Any] = [:]
+                        DispatchQueue.main.async {
+                            switch response {
+                            case .success(let scanResult):
+                                var resultDict: [String: Any] = [:]
 
-                            let intFormatter = NumberFormatter()
+                                let intFormatter = NumberFormatter()
 
-                            let formatString = NSLocalizedString("%1$@ MHz  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
+                                let formatString = NSLocalizedString("%1$@ MHz  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
 
-                            resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = self.decimalFormatter.string(from: NSNumber(value: scanResult.bestFrequency))!
-                            resultDict[NSLocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
+                                resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = self.decimalFormatter.string(from: NSNumber(value: scanResult.bestFrequency))!
+                                resultDict[NSLocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
 
-                                return String(format: formatString,
-                                    self.decimalFormatter.string(from: NSNumber(value: trial.frequencyMHz))!,
-                                    intFormatter.string(from: NSNumber(value: trial.successes))!,
-                                    intFormatter.string(from: NSNumber(value: trial.tries))!,
-                                    intFormatter.string(from: NSNumber(value: trial.avgRSSI))!
-                                )
-                            })
+                                    return String(format: formatString,
+                                        self.decimalFormatter.string(from: NSNumber(value: trial.frequencyMHz))!,
+                                        intFormatter.string(from: NSNumber(value: trial.successes))!,
+                                        intFormatter.string(from: NSNumber(value: trial.tries))!,
+                                        intFormatter.string(from: NSNumber(value: trial.avgRSSI))!
+                                    )
+                                })
 
-                            var responseText: String
+                                var responseText: String
 
-                            if let data = try? JSONSerialization.data(withJSONObject: resultDict, options: .prettyPrinted), let string = String(data: data, encoding: String.Encoding.utf8) {
-                                responseText = string
-                            } else {
-                                responseText = NSLocalizedString("No response", comment: "Message display when no response from tuning pump")
+                                if let data = try? JSONSerialization.data(withJSONObject: resultDict, options: .prettyPrinted), let string = String(data: data, encoding: String.Encoding.utf8) {
+                                    responseText = string
+                                } else {
+                                    responseText = NSLocalizedString("No response", comment: "Message display when no response from tuning pump")
+                                }
+
+                                completionHandler(responseText)
+                            case .failure(let error):
+                                completionHandler(String(describing: error))
                             }
-
-                            completionHandler(responseText)
-                        case .failure(let error):
-                            completionHandler(String(describing: error))
                         }
                     }
 

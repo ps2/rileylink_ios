@@ -66,6 +66,9 @@ import Foundation
         var availBits: UInt = 0
         var x: UInt = 0
         for byte in [UInt8](rawData) {
+            if byte == 0 {
+                break
+            }
             x = (x << 8) + UInt(byte)
             availBits += 8
             if (availBits >= 12) {

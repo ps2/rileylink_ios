@@ -42,6 +42,7 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
     BOOL runningSession;
     BOOL ready;
     BOOL haveResponseCount;
+    BOOL singleResponseReads;
     dispatch_group_t cmdDispatchGroup;
     dispatch_group_t idleDetectDispatchGroup;
 }
@@ -392,10 +393,22 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         NSLog(@"Updated timer tick: %d", timerTick);
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
         _bleFirmwareVersion = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
+        NSLog(@"BLE Firmware version: %@", _bleFirmwareVersion);
+        if ([_bleFirmwareVersion hasPrefix:@"ble_rfspy "]) {
+            NSString *numberPart = [_bleFirmwareVersion substringFromIndex:10];
+            NSArray *versionComponents = [numberPart componentsSeparatedByString:@"."];
+            if (versionComponents.count > 1) {
+                NSInteger major = [versionComponents[0] integerValue];
+                if (major >= 2) {
+                    NSLog(@"BLE Firmware uses single response attribute reads");
+                    singleResponseReads = YES;
+                }
+            }
+        }
     }
 }
 
-- (void)dataReceivedFromRL:(NSData*) data {
+- (void)delineateResponsesFromReceivedData:(NSData*) data {
     //NSLog(@"******* New Data: %@", [data hexadecimalString]);
     [inBuf appendData:data];
     
@@ -418,35 +431,48 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         }
         
         if (fullResponse) {
-            if (runningIdle) {
-                NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
-                runningIdle = NO;
-                [self handleIdleListenerResponse:fullResponse error:nil];
-                if (!runningSession) {
-                    if (inBuf.length > 0) {
-                        NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
-                        inBuf = [NSMutableData data];
-                    }
-                    [self onIdle];
-                }
-            } else if (currentCommand) {
-                NSLog(@"Response to command: %@", [fullResponse hexadecimalString]);
-                currentCommand.response = fullResponse;
-                if (inBuf.length > 0) {
-                    // This happens when connecting to a RL that is still running a command
-                    // from a previous connection.
-                    NSLog(@"Dropping extraneous data: %@", [inBuf hexadecimalString]);
-                    inBuf.length = 0;
-                }
-                currentCommand = nil;
-                dispatch_group_leave(cmdDispatchGroup);
-            } else {
-                NSLog(@"Received data but no outstanding command!");
-                inBuf.length = 0;
-            }
+            [self processResponse:fullResponse];
         } else {
             break;
         }
+    }
+
+}
+
+- (void)processResponse:(NSData*) response {
+    if (runningIdle) {
+        NSLog(@"Response to idle: %@", [response hexadecimalString]);
+        runningIdle = NO;
+        [self handleIdleListenerResponse:response error:nil];
+        if (!runningSession) {
+            if (inBuf.length > 0) {
+                NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
+                inBuf = [NSMutableData data];
+            }
+            [self onIdle];
+        }
+    } else if (currentCommand) {
+        NSLog(@"Response to command: %@", [response hexadecimalString]);
+        currentCommand.response = response;
+        if (inBuf.length > 0) {
+            // This happens when connecting to a RL that is still running a command
+            // from a previous connection.
+            NSLog(@"Dropping extraneous data: %@", [inBuf hexadecimalString]);
+            inBuf.length = 0;
+        }
+        currentCommand = nil;
+        dispatch_group_leave(cmdDispatchGroup);
+    } else {
+        NSLog(@"Received unexpected data: %@", [response hexadecimalString]);
+        inBuf.length = 0;
+    }
+}
+
+- (void)dataReceivedFromRL:(NSData*) data {
+    if (singleResponseReads) {
+        [self processResponse:data];
+    } else {
+        [self delineateResponsesFromReceivedData:data];
     }
 }
 

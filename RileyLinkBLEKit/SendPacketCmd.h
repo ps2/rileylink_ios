@@ -13,7 +13,7 @@
 
 @interface SendPacketCmd : CmdBase
 
-@property (nonatomic, strong) NSData *outgoingData;
+@property (nonatomic, strong, nonnull) NSData *outgoingData;
 @property (nonatomic, assign) uint8_t sendChannel; // In general, 0 = meter, cgm. 2 = pump
 @property (nonatomic, assign) uint8_t repeatCount; // 0 = no repeat, i.e. only one packet.  1 repeat = 2 packets sent total.
 @property (nonatomic, assign) uint8_t msBetweenPackets;

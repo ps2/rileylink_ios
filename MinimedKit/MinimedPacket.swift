@@ -8,14 +8,14 @@
 
 import Foundation
 
-@objc public class MinimedPacket: NSObject {
-    @objc public let data: Data
+public class MinimedPacket {
+    public let data: Data
     
-    @objc public init(outgoingData: Data) {
+    public init(outgoingData: Data) {
         self.data = outgoingData
     }
     
-    @objc public init?(encodedData: Data) {
+    public init?(encodedData: Data) {
         
         if let decoded = encodedData.decode4b6b() {
             let msg = decoded.prefix(upTo: (decoded.count - 1))
@@ -28,10 +28,9 @@ import Foundation
             // Could not decode message
             return nil
         }
-        super.init()
     }
     
-    @objc public func encodedData() -> Data {
+    public func encodedData() -> Data {
         var dataWithCRC = self.data
         dataWithCRC.append(data.crc8())
         return Data(dataWithCRC.encode4b6b())

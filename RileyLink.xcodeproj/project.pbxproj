@@ -345,6 +345,7 @@
 		C1F6EB891F89C3E200CFE393 /* FourByteSixByteEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */; };
 		C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */; };
 		C1F6EB8D1F89C45500CFE393 /* MinimedPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */; };
+		C1F6EB971F8A82D500CFE393 /* DeviceSessionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB961F8A82D500CFE393 /* DeviceSessionContext.swift */; };
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
 /* End PBXBuildFile section */
 
@@ -802,6 +803,7 @@
 		C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FourByteSixByteEncoding.swift; sourceTree = "<group>"; };
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
+		C1F6EB961F8A82D500CFE393 /* DeviceSessionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSessionContext.swift; sourceTree = "<group>"; };
 		C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusReminderPumpEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -942,6 +944,7 @@
 				430D64FE1CB89FC000FCA750 /* UpdateRegisterCmd.h */,
 				430D64FF1CB89FC000FCA750 /* UpdateRegisterCmd.m */,
 				C151540B1F6DB9D0008A5190 /* RFPacket.swift */,
+				C1F6EB961F8A82D500CFE393 /* DeviceSessionContext.swift */,
 			);
 			path = RileyLinkBLEKit;
 			sourceTree = "<group>";
@@ -1975,6 +1978,7 @@
 				430D650F1CB89FC000FCA750 /* UpdateRegisterCmd.m in Sources */,
 				C151540C1F6DB9D0008A5190 /* RFPacket.swift in Sources */,
 				430D65071CB89FC000FCA750 /* ReceivingPacketCmd.m in Sources */,
+				C1F6EB971F8A82D500CFE393 /* DeviceSessionContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

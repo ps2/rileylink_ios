@@ -10,13 +10,12 @@ import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
-
 public enum RXFilterMode: UInt8 {
     case wide   = 0x50  // 300KHz
     case narrow = 0x90  // 150KHz
 }
 
-class PumpOpsSynchronous {
+class PumpOpsSynchronous: DeviceSessionContext {
 
     public static let PacketKey = "com.rileylink.RileyLinkKit.PumpOpsSynchronousPacketKey"
 
@@ -28,12 +27,11 @@ class PumpOpsSynchronous {
     
     var communication: PumpOpsCommunication
     let pump: PumpState
-    let session: RileyLinkCmdSession
     
     init(pumpState: PumpState, session: RileyLinkCmdSession) {
         self.pump = pumpState
-        self.session = session
         self.communication = PumpOpsCommunication(session: session)
+        super.init(session: session)
     }
     
     internal func makePumpMessage(to messageType: MessageType, using body: MessageBody = CarelinkShortMessageBody()) -> PumpMessage {
@@ -370,24 +368,6 @@ class PumpOpsSynchronous {
             try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x7E)
             try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x15)
         }
-    }
-    
-    private func updateRegister(_ addr: UInt8, value: UInt8) throws {
-        let cmd = UpdateRegisterCmd()
-        cmd.addr = addr
-        cmd.value = value
-        if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
-            throw PumpCommsError.rileyLinkTimeout
-        }
-    }
-    
-    internal func setBaseFrequency(_ freqMHz: Double) throws {
-        let val = Int((freqMHz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
-        
-        try updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
-        NSLog("Set frequency to %f", freqMHz)
     }
     
     internal func tuneRadio(for region: PumpRegion) throws -> FrequencyScanResults {

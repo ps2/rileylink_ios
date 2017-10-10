@@ -15,23 +15,23 @@ public enum RXFilterMode: UInt8 {
     case narrow = 0x90  // 150KHz
 }
 
-class PumpOpsSynchronous: DeviceSessionContext {
+class PumpOpsSynchronous {
 
     public static let PacketKey = "com.rileylink.RileyLinkKit.PumpOpsSynchronousPacketKey"
 
     private static let standardPumpResponseWindow: UInt32 = 180
-    private let expectedMaxBLELatencyMS = 1500
     
     // After
     private let minimumTimeBetweenWakeAttempts = TimeInterval(minutes: 1)
     
-    var communication: PumpOpsCommunication
+    let communication: PumpOpsCommunication
     let pump: PumpState
+    let session: RileyLinkCmdSession
     
     init(pumpState: PumpState, session: RileyLinkCmdSession) {
         self.pump = pumpState
+        self.session = session
         self.communication = PumpOpsCommunication(session: session)
-        super.init(session: session)
     }
     
     internal func makePumpMessage(to messageType: MessageType, using body: MessageBody = CarelinkShortMessageBody()) -> PumpMessage {
@@ -301,7 +301,7 @@ class PumpOpsSynchronous: DeviceSessionContext {
         listenForFindMessageCmd.listenChannel = 0
         listenForFindMessageCmd.timeoutMS = commandTimeoutMS
 
-        guard session.doCmd(listenForFindMessageCmd, withTimeoutMs: Int(commandTimeoutMS) + expectedMaxBLELatencyMS) else {
+        guard session.doCmd(listenForFindMessageCmd, timeoutMs: Int(commandTimeoutMS) + Int(EXPECTED_MAX_BLE_LATENCY_MS)) else {
             throw PumpCommsError.rileyLinkTimeout
         }
         
@@ -342,31 +342,31 @@ class PumpOpsSynchronous: DeviceSessionContext {
 
         let cmd = SendPacketCmd()
         cmd.outgoingData = MinimedPacket(outgoingData: linkMessageResponse.txData).encodedData()
-        session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+        _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
     }
 
     internal func setRXFilterMode(_ mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue
-        try updateRegister(.mdmcfg4, value: chanbw | drate_e)
+        try session.updateRegister(.mdmcfg4, value: chanbw | drate_e)
     }
     
     func configureRadio(for region: PumpRegion) throws {
         switch region {
         case .worldWide:
-            try updateRegister(.mdmcfg4, value: 0x59)
-            //try updateRegister(.mdmcfg3, value: 0x66)
-            //try updateRegister(.mdmcfg2, value: 0x33)
-            try updateRegister(.mdmcfg1, value: 0x62)
-            try updateRegister(.mdmcfg0, value: 0x1A)
-            try updateRegister(.deviatn, value: 0x13)
+            try session.updateRegister(.mdmcfg4, value: 0x59)
+            //try session.updateRegister(.mdmcfg3, value: 0x66)
+            //try session.updateRegister(.mdmcfg2, value: 0x33)
+            try session.updateRegister(.mdmcfg1, value: 0x62)
+            try session.updateRegister(.mdmcfg0, value: 0x1A)
+            try session.updateRegister(.deviatn, value: 0x13)
         case .northAmerica:
-            try updateRegister(.mdmcfg4, value: 0x99)
-            //try updateRegister(.mdmcfg3, value: 0x66)
-            //try updateRegister(.mdmcfg2, value: 0x33)
-            try updateRegister(.mdmcfg1, value: 0x61)
-            try updateRegister(.mdmcfg0, value: 0x7E)
-            try updateRegister(.deviatn, value: 0x15)
+            try session.updateRegister(.mdmcfg4, value: 0x99)
+            //try session.updateRegister(.mdmcfg3, value: 0x66)
+            //try session.updateRegister(.mdmcfg2, value: 0x33)
+            try session.updateRegister(.mdmcfg1, value: 0x61)
+            try session.updateRegister(.mdmcfg0, value: 0x7E)
+            try session.updateRegister(.deviatn, value: 0x15)
         }
     }
     
@@ -392,7 +392,7 @@ class PumpOpsSynchronous: DeviceSessionContext {
         
         do {
             // Needed to put the pump in listen mode
-            try setBaseFrequency(middleFreq)
+            try session.setBaseFrequency(middleFreq)
             try wakeup()
         } catch {
             // Continue anyway; the pump likely heard us, even if we didn't hear it.
@@ -402,14 +402,14 @@ class PumpOpsSynchronous: DeviceSessionContext {
             let tries = 3
             var trial = FrequencyTrial()
             trial.frequencyMHz = freq
-            try setBaseFrequency(freq)
+            try session.setBaseFrequency(freq)
             var sumRSSI = 0
             for _ in 1...tries {
                 let msg = makePumpMessage(to: .getPumpModel)
                 let cmd = SendAndListenCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
                 cmd.timeoutMS = type(of: self).standardPumpResponseWindow
-                if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
+                if session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS)) {
                     
                     if let rfPacket = cmd.receivedPacket,
                         let pkt = MinimedPacket(encodedData: rfPacket.data),
@@ -432,10 +432,10 @@ class PumpOpsSynchronous: DeviceSessionContext {
         })
         if sortedTrials.first!.successes > 0 {
             results.bestFrequency = sortedTrials.first!.frequencyMHz
-            try setBaseFrequency(results.bestFrequency)
+            try session.setBaseFrequency(results.bestFrequency)
             pump.lastValidFrequency = results.bestFrequency
         } else {
-            try setBaseFrequency(pump.lastValidFrequency ?? middleFreq)
+            try session.setBaseFrequency(pump.lastValidFrequency ?? middleFreq)
             throw PumpCommsError.rfCommsFailure("No pump responses during scan")
         }
         
@@ -567,7 +567,7 @@ class PumpOpsSynchronous: DeviceSessionContext {
             } else {
                 let cmd = SendPacketCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
-                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
                 break
             }
         }
@@ -679,7 +679,7 @@ class PumpOpsSynchronous: DeviceSessionContext {
             } else {
                 let cmd = SendPacketCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
-                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
                 break
             }
         }

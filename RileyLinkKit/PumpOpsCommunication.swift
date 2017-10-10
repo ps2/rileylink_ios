@@ -12,7 +12,6 @@ import RileyLinkBLEKit
 
 class PumpOpsCommunication {
     private static let standardPumpResponseWindow: UInt32 = 180
-    private let expectedMaxBLELatencyMS = 1500
     
     let session: RileyLinkCmdSession
     
@@ -38,9 +37,9 @@ class PumpOpsCommunication {
         
         let totalSendTime = Double(repeatCount) * (singlePacketSendTime + Double(timeBetweenPackets))
         
-        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + expectedMaxBLELatencyMS
+        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + Int(EXPECTED_MAX_BLE_LATENCY_MS)
         
-        guard session.doCmd(cmd, withTimeoutMs: totalTimeout) else {
+        guard session.doCmd(cmd, timeoutMs: totalTimeout) else {
             throw PumpCommsError.rileyLinkTimeout
         }
         

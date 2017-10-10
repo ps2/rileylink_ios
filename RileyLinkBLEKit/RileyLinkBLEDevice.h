@@ -38,14 +38,9 @@ typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
 
 #define RILEYLINK_FREQ_XTAL 24000000
 
-@interface RileyLinkCmdSession : NSObject
-/**
- Runs a command synchronously. I.E. this method will not return until the command 
- finishes, or times out. Returns NO if the command timed out. The command's response
- is set if the command did not time out. 
- */
-- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
-@end
+#define EXPECTED_MAX_BLE_LATENCY_MS 1500
+
+@class RileyLinkCmdSession;
 
 @interface RileyLinkBLEDevice : NSObject
 
@@ -86,5 +81,8 @@ typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
 - (void) enableIdleListeningOnChannel:(uint8_t)channel;
 - (void) disableIdleListening;
 - (void) assertIdleListeningForcingRestart:(BOOL)forceRestart;
+
+- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
+
 
 @end

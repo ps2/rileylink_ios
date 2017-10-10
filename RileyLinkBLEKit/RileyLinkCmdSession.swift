@@ -1,5 +1,5 @@
 //
-//  DeviceSessionContext.swift
+//  RileyLinkCmdSession.swift
 //  RileyLinkBLEKit
 //
 //  Created by Pete Schwamb on 10/8/17.
@@ -49,14 +49,16 @@ public enum RileyLinkDeviceError: Error {
     case rileyLinkTimeout
 }
 
-open class DeviceSessionContext {
+@objc public class RileyLinkCmdSession : NSObject {
     
-    private let expectedMaxBLELatencyMS = 1500
+    let device: RileyLinkBLEDevice
     
-    public let session: RileyLinkCmdSession
-    
-    public init(session: RileyLinkCmdSession) {
-        self.session = session
+    @objc public init(device: RileyLinkBLEDevice) {
+        self.device = device
+    }
+
+    @objc public func doCmd(_ cmd: CmdBase, timeoutMs: Int) -> Bool {
+        return device.doCmd(cmd, withTimeoutMs: timeoutMs)
     }
     
     public func setRXFilterMode(_ mode: RXFilterMode) throws {
@@ -69,7 +71,7 @@ open class DeviceSessionContext {
         let cmd = UpdateRegisterCmd()
         cmd.addr = register.rawValue
         cmd.value = value
-        if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
+        if !doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS)) {
             throw RileyLinkDeviceError.rileyLinkTimeout
         }
     }

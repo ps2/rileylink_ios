@@ -10,7 +10,6 @@ import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
-
 public enum RXFilterMode: UInt8 {
     case wide   = 0x50  // 300KHz
     case narrow = 0x90  // 150KHz
@@ -21,21 +20,26 @@ class PumpOpsSynchronous {
     public static let PacketKey = "com.rileylink.RileyLinkKit.PumpOpsSynchronousPacketKey"
 
     private static let standardPumpResponseWindow: UInt32 = 180
-    private let expectedMaxBLELatencyMS = 1500
     
     // After
     private let minimumTimeBetweenWakeAttempts = TimeInterval(minutes: 1)
     
-    var communication: PumpOpsCommunication
+    let messageSender: PumpMessageSender
     let pump: PumpState
     let session: RileyLinkCmdSession
+    
+    init(pumpState: PumpState, session: RileyLinkCmdSession, pumpMessageSender: PumpMessageSender) {
+        self.pump = pumpState
+        self.session = session
+        self.messageSender = pumpMessageSender
+    }
     
     init(pumpState: PumpState, session: RileyLinkCmdSession) {
         self.pump = pumpState
         self.session = session
-        self.communication = PumpOpsCommunication(session: session)
+        self.messageSender = PumpOpsCommunication(session: session)
     }
-    
+
     internal func makePumpMessage(to messageType: MessageType, using body: MessageBody = CarelinkShortMessageBody()) -> PumpMessage {
         return PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
     }
@@ -61,14 +65,14 @@ class PumpOpsSynchronous {
             // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
                 let shortPowerMessage = makePumpMessage(to: .powerOn)
-                _ = try communication.sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+                _ = try messageSender.sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
             }
             catch { }
         }
 
         do {
             let shortPowerMessage = makePumpMessage(to: .powerOn)
-            let shortResponse = try communication.sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+            let shortResponse = try messageSender.sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
 
             if shortResponse.messageType == .pumpAck {
                 // Pump successfully received and responded to short wakeup message!
@@ -91,7 +95,7 @@ class PumpOpsSynchronous {
     private func pumpResponding() -> Bool {
         do {
             let msg = makePumpMessage(to: .getPumpModel)
-            let response = try communication.sendAndListen(msg, retryCount: 1)
+            let response = try messageSender.sendAndListen(msg, retryCount: 1)
             
             if response.messageType == .getPumpModel && response.messageBody is GetPumpModelCarelinkMessageBody {
                 return true
@@ -123,7 +127,7 @@ class PumpOpsSynchronous {
         try sendWakeUpBurst()
         
         let longPowerMessage = makePumpMessage(to: .powerOn, using: PowerOnCarelinkMessageBody(duration: duration))
-        let longResponse = try communication.sendAndListen(longPowerMessage)
+        let longResponse = try messageSender.sendAndListen(longPowerMessage)
         
         guard longResponse.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(longResponse, from: longPowerMessage)
@@ -139,7 +143,7 @@ class PumpOpsSynchronous {
             try wakeup()
         
             let shortMsg = makePumpMessage(to: msg.messageType)
-            let shortResponse = try communication.sendAndListen(shortMsg)
+            let shortResponse = try messageSender.sendAndListen(shortMsg)
         
             guard shortResponse.messageType == .pumpAck else {
                 throw PumpCommsError.unexpectedResponse(shortResponse, from: shortMsg)
@@ -149,7 +153,7 @@ class PumpOpsSynchronous {
         }
 
         do {
-            let response = try communication.sendAndListen(msg)
+            let response = try messageSender.sendAndListen(msg)
         
             guard response.messageType == responseMessageType else {
                 throw PumpCommsError.unexpectedResponse(response, from: msg)
@@ -185,7 +189,7 @@ class PumpOpsSynchronous {
         var msg = makePumpMessage(to: .readProfileSTD512)
         var scheduleData = Data()
         while (!finished) {
-            let response = try communication.sendAndListen(msg)
+            let response = try messageSender.sendAndListen(msg)
             
             guard response.messageType == .readProfileSTD512,
                 let body = response.messageBody as? DataFrameMessageBody else {
@@ -228,7 +232,7 @@ class PumpOpsSynchronous {
         try wakeup()
         
         let msg = makePumpMessage(to: messageType)
-        let response = try communication.sendAndListen(msg)
+        let response = try messageSender.sendAndListen(msg)
         
         guard response.messageType == messageType, let body = response.messageBody as? T else {
             throw PumpCommsError.unexpectedResponse(response, from: msg)
@@ -245,10 +249,10 @@ class PumpOpsSynchronous {
         
         for attempt in 0..<3 {
             do {
-                _ = try communication.sendAndListen(makePumpMessage(to: changeMessage.messageType))
+                _ = try messageSender.sendAndListen(makePumpMessage(to: changeMessage.messageType))
                 
                 do {
-                    let response = try communication.sendAndListen(changeMessage, retryCount: 0)
+                    let response = try messageSender.sendAndListen(changeMessage, retryCount: 0)
                     if let errorMsg = response.messageBody as? PumpErrorMessageBody {
                         switch errorMsg.errorCode {
                         case .known(let errorCode):
@@ -281,14 +285,14 @@ class PumpOpsSynchronous {
         try wakeup()
 
         let shortMessage = makePumpMessage(to: .changeTime)
-        let shortResponse = try communication.sendAndListen(shortMessage)
+        let shortResponse = try messageSender.sendAndListen(shortMessage)
         
         guard shortResponse.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(shortResponse, from: shortMessage)
         }
 
         let message = messageGenerator()
-        let response = try communication.sendAndListen(message)
+        let response = try messageSender.sendAndListen(message)
         
         guard response.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(response, from: message)
@@ -303,7 +307,7 @@ class PumpOpsSynchronous {
         listenForFindMessageCmd.listenChannel = 0
         listenForFindMessageCmd.timeoutMS = commandTimeoutMS
 
-        guard session.doCmd(listenForFindMessageCmd, withTimeoutMs: Int(commandTimeoutMS) + expectedMaxBLELatencyMS) else {
+        guard session.doCmd(listenForFindMessageCmd, timeoutMs: Int(commandTimeoutMS) + Int(EXPECTED_MAX_BLE_LATENCY_MS)) else {
             throw PumpCommsError.rileyLinkTimeout
         }
         
@@ -330,7 +334,7 @@ class PumpOpsSynchronous {
         // Identify as a MySentry device
         let findMessageResponse = PumpMessage(packetType: .mySentry, address: pump.pumpID, messageType: .pumpAck, messageBody: findMessageResponseBody)
 
-        let linkMessage = try communication.sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
+        let linkMessage = try messageSender.sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
 
         guard let
             linkMessageBody = linkMessage.messageBody as? DeviceLinkMessageBody,
@@ -344,50 +348,32 @@ class PumpOpsSynchronous {
 
         let cmd = SendPacketCmd()
         cmd.outgoingData = MinimedPacket(outgoingData: linkMessageResponse.txData).encodedData()
-        session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+        _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
     }
 
     internal func setRXFilterMode(_ mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue
-        try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: chanbw | drate_e)
+        try session.updateRegister(.mdmcfg4, value: chanbw | drate_e)
     }
     
     func configureRadio(for region: PumpRegion) throws {
         switch region {
         case .worldWide:
-            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x59)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x62)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x1A)
-            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x13)
+            try session.updateRegister(.mdmcfg4, value: 0x59)
+            //try session.updateRegister(.mdmcfg3, value: 0x66)
+            //try session.updateRegister(.mdmcfg2, value: 0x33)
+            try session.updateRegister(.mdmcfg1, value: 0x62)
+            try session.updateRegister(.mdmcfg0, value: 0x1A)
+            try session.updateRegister(.deviatn, value: 0x13)
         case .northAmerica:
-            try updateRegister(UInt8(CC111X_REG_MDMCFG4), value: 0x99)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG3), value: 0x66)
-            //try updateRegister(UInt8(CC111X_REG_MDMCFG2), value: 0x33)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG1), value: 0x61)
-            try updateRegister(UInt8(CC111X_REG_MDMCFG0), value: 0x7E)
-            try updateRegister(UInt8(CC111X_REG_DEVIATN), value: 0x15)
+            try session.updateRegister(.mdmcfg4, value: 0x99)
+            //try session.updateRegister(.mdmcfg3, value: 0x66)
+            //try session.updateRegister(.mdmcfg2, value: 0x33)
+            try session.updateRegister(.mdmcfg1, value: 0x61)
+            try session.updateRegister(.mdmcfg0, value: 0x7E)
+            try session.updateRegister(.deviatn, value: 0x15)
         }
-    }
-    
-    private func updateRegister(_ addr: UInt8, value: UInt8) throws {
-        let cmd = UpdateRegisterCmd()
-        cmd.addr = addr
-        cmd.value = value
-        if !session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
-            throw PumpCommsError.rileyLinkTimeout
-        }
-    }
-    
-    internal func setBaseFrequency(_ freqMHz: Double) throws {
-        let val = Int((freqMHz * 1000000)/(Double(RILEYLINK_FREQ_XTAL)/pow(2.0,16.0)))
-        
-        try updateRegister(UInt8(CC111X_REG_FREQ0), value:UInt8(val & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ1), value:UInt8((val >> 8) & 0xff))
-        try updateRegister(UInt8(CC111X_REG_FREQ2), value:UInt8((val >> 16) & 0xff))
-        NSLog("Set frequency to %f", freqMHz)
     }
     
     internal func tuneRadio(for region: PumpRegion) throws -> FrequencyScanResults {
@@ -412,7 +398,7 @@ class PumpOpsSynchronous {
         
         do {
             // Needed to put the pump in listen mode
-            try setBaseFrequency(middleFreq)
+            try session.setBaseFrequency(middleFreq)
             try wakeup()
         } catch {
             // Continue anyway; the pump likely heard us, even if we didn't hear it.
@@ -422,14 +408,14 @@ class PumpOpsSynchronous {
             let tries = 3
             var trial = FrequencyTrial()
             trial.frequencyMHz = freq
-            try setBaseFrequency(freq)
+            try session.setBaseFrequency(freq)
             var sumRSSI = 0
             for _ in 1...tries {
                 let msg = makePumpMessage(to: .getPumpModel)
                 let cmd = SendAndListenCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
                 cmd.timeoutMS = type(of: self).standardPumpResponseWindow
-                if session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS) {
+                if session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS)) {
                     
                     if let rfPacket = cmd.receivedPacket,
                         let pkt = MinimedPacket(encodedData: rfPacket.data),
@@ -452,10 +438,10 @@ class PumpOpsSynchronous {
         })
         if sortedTrials.first!.successes > 0 {
             results.bestFrequency = sortedTrials.first!.frequencyMHz
-            try setBaseFrequency(results.bestFrequency)
+            try session.setBaseFrequency(results.bestFrequency)
             pump.lastValidFrequency = results.bestFrequency
         } else {
-            try setBaseFrequency(pump.lastValidFrequency ?? middleFreq)
+            try session.setBaseFrequency(pump.lastValidFrequency ?? middleFreq)
             throw PumpCommsError.rfCommsFailure("No pump responses during scan")
         }
         
@@ -577,7 +563,7 @@ class PumpOpsSynchronous {
             expectedFrameNum += 1
             let msg = makePumpMessage(to: .pumpAck)
             if !curResp.lastFrame {
-                guard let resp = try? communication.sendAndListen(msg) else {
+                guard let resp = try? messageSender.sendAndListen(msg) else {
                     throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
                 }
                 guard resp.packetType == .carelink && resp.messageType == .getHistoryPage else {
@@ -587,7 +573,7 @@ class PumpOpsSynchronous {
             } else {
                 let cmd = SendPacketCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
-                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
                 break
             }
         }
@@ -689,7 +675,7 @@ class PumpOpsSynchronous {
             expectedFrameNum += 1
             let msg = makePumpMessage(to: .pumpAck)
             if !curResp.lastFrame {
-                guard let resp = try? communication.sendAndListen(msg) else {
+                guard let resp = try? messageSender.sendAndListen(msg) else {
                     throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
                 }
                 guard resp.packetType == .carelink && resp.messageType == .getGlucosePage else {
@@ -699,7 +685,7 @@ class PumpOpsSynchronous {
             } else {
                 let cmd = SendPacketCmd()
                 cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
-                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                _ = session.doCmd(cmd, timeoutMs: Int(EXPECTED_MAX_BLE_LATENCY_MS))
                 break
             }
         }
@@ -712,7 +698,7 @@ class PumpOpsSynchronous {
     
     internal func writeGlucoseHistoryTimestamp() throws -> Void {
         let shortWriteTimestamp = makePumpMessage(to: .writeGlucoseHistoryTimestamp)
-        let shortResponse = try communication.sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
+        let shortResponse = try messageSender.sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
         
         if shortResponse.messageType == .pumpAck {
             return

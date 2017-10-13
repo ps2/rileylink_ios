@@ -20,7 +20,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     var pumpRegion: PumpRegion!
     var rileyLinkCmdSession: RileyLinkCmdSession!
     var pumpModel: PumpModel!
-    var pumpOpsCommunicationStub: PumpOpsCommunicationStub!
+    var messageSenderStub: PumpMessageSenderStub!
 
     let dateComponents2007 = DateComponents(calendar: Calendar.current, year: 2007, month: 1, day: 1)
     let dateComponents2017 = DateComponents(calendar: Calendar.current, year: 2017, month: 1, day: 1)
@@ -47,7 +47,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         pumpModel = PumpModel.model523
         
         rileyLinkCmdSession = RileyLinkCmdSession()
-        pumpOpsCommunicationStub = PumpOpsCommunicationStub(session: rileyLinkCmdSession)
+        messageSenderStub = PumpMessageSenderStub()
         
         setUpSUT()
     }
@@ -58,8 +58,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         pumpState.pumpModel = pumpModel
         pumpState.awakeUntil = Date(timeIntervalSinceNow: 100) // pump is awake
         
-        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession)
-        sut.communication = pumpOpsCommunicationStub
+        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession, pumpMessageSender: messageSenderStub)
     }
     
     /// Duplicates logic in setUp with a new PumpModel
@@ -319,14 +318,14 @@ func randomDataString(length:Int) -> String {
     return s
 }
 
-class PumpOpsCommunicationStub : PumpOpsCommunication {
+class PumpMessageSenderStub : PumpMessageSender {
     
     var responses = [MessageType: [PumpMessage]]()
     
     // internal tracking of how many times a response type has been received
     private var responsesHaveOccured = [MessageType: Int]()
     
-    override func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
         
         if let responseArray = responses[msg.messageType] {
             let numberOfResponsesReceived: Int

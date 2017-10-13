@@ -24,16 +24,22 @@ class PumpOpsSynchronous {
     // After
     private let minimumTimeBetweenWakeAttempts = TimeInterval(minutes: 1)
     
-    let communication: PumpOpsCommunication
+    let messageSender: PumpMessageSender
     let pump: PumpState
     let session: RileyLinkCmdSession
+    
+    init(pumpState: PumpState, session: RileyLinkCmdSession, pumpMessageSender: PumpMessageSender) {
+        self.pump = pumpState
+        self.session = session
+        self.messageSender = pumpMessageSender
+    }
     
     init(pumpState: PumpState, session: RileyLinkCmdSession) {
         self.pump = pumpState
         self.session = session
-        self.communication = PumpOpsCommunication(session: session)
+        self.messageSender = PumpOpsCommunication(session: session)
     }
-    
+
     internal func makePumpMessage(to messageType: MessageType, using body: MessageBody = CarelinkShortMessageBody()) -> PumpMessage {
         return PumpMessage(packetType: .carelink, address: pump.pumpID, messageType: messageType, messageBody: body)
     }
@@ -59,14 +65,14 @@ class PumpOpsSynchronous {
             // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
                 let shortPowerMessage = makePumpMessage(to: .powerOn)
-                _ = try communication.sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+                _ = try messageSender.sendAndListen(shortPowerMessage, timeoutMS: 1, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
             }
             catch { }
         }
 
         do {
             let shortPowerMessage = makePumpMessage(to: .powerOn)
-            let shortResponse = try communication.sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
+            let shortResponse = try messageSender.sendAndListen(shortPowerMessage, timeoutMS: 12000, repeatCount: 255, msBetweenPackets: 0, retryCount: 0)
 
             if shortResponse.messageType == .pumpAck {
                 // Pump successfully received and responded to short wakeup message!
@@ -89,7 +95,7 @@ class PumpOpsSynchronous {
     private func pumpResponding() -> Bool {
         do {
             let msg = makePumpMessage(to: .getPumpModel)
-            let response = try communication.sendAndListen(msg, retryCount: 1)
+            let response = try messageSender.sendAndListen(msg, retryCount: 1)
             
             if response.messageType == .getPumpModel && response.messageBody is GetPumpModelCarelinkMessageBody {
                 return true
@@ -121,7 +127,7 @@ class PumpOpsSynchronous {
         try sendWakeUpBurst()
         
         let longPowerMessage = makePumpMessage(to: .powerOn, using: PowerOnCarelinkMessageBody(duration: duration))
-        let longResponse = try communication.sendAndListen(longPowerMessage)
+        let longResponse = try messageSender.sendAndListen(longPowerMessage)
         
         guard longResponse.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(longResponse, from: longPowerMessage)
@@ -137,7 +143,7 @@ class PumpOpsSynchronous {
             try wakeup()
         
             let shortMsg = makePumpMessage(to: msg.messageType)
-            let shortResponse = try communication.sendAndListen(shortMsg)
+            let shortResponse = try messageSender.sendAndListen(shortMsg)
         
             guard shortResponse.messageType == .pumpAck else {
                 throw PumpCommsError.unexpectedResponse(shortResponse, from: shortMsg)
@@ -147,7 +153,7 @@ class PumpOpsSynchronous {
         }
 
         do {
-            let response = try communication.sendAndListen(msg)
+            let response = try messageSender.sendAndListen(msg)
         
             guard response.messageType == responseMessageType else {
                 throw PumpCommsError.unexpectedResponse(response, from: msg)
@@ -183,7 +189,7 @@ class PumpOpsSynchronous {
         var msg = makePumpMessage(to: .readProfileSTD512)
         var scheduleData = Data()
         while (!finished) {
-            let response = try communication.sendAndListen(msg)
+            let response = try messageSender.sendAndListen(msg)
             
             guard response.messageType == .readProfileSTD512,
                 let body = response.messageBody as? DataFrameMessageBody else {
@@ -226,7 +232,7 @@ class PumpOpsSynchronous {
         try wakeup()
         
         let msg = makePumpMessage(to: messageType)
-        let response = try communication.sendAndListen(msg)
+        let response = try messageSender.sendAndListen(msg)
         
         guard response.messageType == messageType, let body = response.messageBody as? T else {
             throw PumpCommsError.unexpectedResponse(response, from: msg)
@@ -243,10 +249,10 @@ class PumpOpsSynchronous {
         
         for attempt in 0..<3 {
             do {
-                _ = try communication.sendAndListen(makePumpMessage(to: changeMessage.messageType))
+                _ = try messageSender.sendAndListen(makePumpMessage(to: changeMessage.messageType))
                 
                 do {
-                    let response = try communication.sendAndListen(changeMessage, retryCount: 0)
+                    let response = try messageSender.sendAndListen(changeMessage, retryCount: 0)
                     if let errorMsg = response.messageBody as? PumpErrorMessageBody {
                         switch errorMsg.errorCode {
                         case .known(let errorCode):
@@ -279,14 +285,14 @@ class PumpOpsSynchronous {
         try wakeup()
 
         let shortMessage = makePumpMessage(to: .changeTime)
-        let shortResponse = try communication.sendAndListen(shortMessage)
+        let shortResponse = try messageSender.sendAndListen(shortMessage)
         
         guard shortResponse.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(shortResponse, from: shortMessage)
         }
 
         let message = messageGenerator()
-        let response = try communication.sendAndListen(message)
+        let response = try messageSender.sendAndListen(message)
         
         guard response.messageType == .pumpAck else {
             throw PumpCommsError.unexpectedResponse(response, from: message)
@@ -328,7 +334,7 @@ class PumpOpsSynchronous {
         // Identify as a MySentry device
         let findMessageResponse = PumpMessage(packetType: .mySentry, address: pump.pumpID, messageType: .pumpAck, messageBody: findMessageResponseBody)
 
-        let linkMessage = try communication.sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
+        let linkMessage = try messageSender.sendAndListen(findMessageResponse, timeoutMS: commandTimeoutMS)
 
         guard let
             linkMessageBody = linkMessage.messageBody as? DeviceLinkMessageBody,
@@ -557,7 +563,7 @@ class PumpOpsSynchronous {
             expectedFrameNum += 1
             let msg = makePumpMessage(to: .pumpAck)
             if !curResp.lastFrame {
-                guard let resp = try? communication.sendAndListen(msg) else {
+                guard let resp = try? messageSender.sendAndListen(msg) else {
                     throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
                 }
                 guard resp.packetType == .carelink && resp.messageType == .getHistoryPage else {
@@ -669,7 +675,7 @@ class PumpOpsSynchronous {
             expectedFrameNum += 1
             let msg = makePumpMessage(to: .pumpAck)
             if !curResp.lastFrame {
-                guard let resp = try? communication.sendAndListen(msg) else {
+                guard let resp = try? messageSender.sendAndListen(msg) else {
                     throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
                 }
                 guard resp.packetType == .carelink && resp.messageType == .getGlucosePage else {
@@ -692,7 +698,7 @@ class PumpOpsSynchronous {
     
     internal func writeGlucoseHistoryTimestamp() throws -> Void {
         let shortWriteTimestamp = makePumpMessage(to: .writeGlucoseHistoryTimestamp)
-        let shortResponse = try communication.sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
+        let shortResponse = try messageSender.sendAndListen(shortWriteTimestamp, timeoutMS: 12000)
         
         if shortResponse.messageType == .pumpAck {
             return

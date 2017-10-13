@@ -82,6 +82,7 @@ typedef NS_ENUM(NSUInteger, SubgRfspyVersionState) {
 - (void) disableIdleListening;
 - (void) assertIdleListeningForcingRestart:(BOOL)forceRestart;
 
+// Returns true on success
 - (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS;
 
 

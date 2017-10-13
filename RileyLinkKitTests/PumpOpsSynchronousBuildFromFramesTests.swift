@@ -20,7 +20,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     var pumpRegion: PumpRegion!
     var rileyLinkCmdSession: RileyLinkCmdSession!
     var pumpModel: PumpModel!
-    var pumpOpsCommunicationStub: PumpOpsCommunicationStub!
+    var messageSenderStub: PumpMessageSenderStub!
     var timeZone: TimeZone!
     
     override func setUp() {
@@ -31,7 +31,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         pumpModel = PumpModel.model523
         
         rileyLinkCmdSession = RileyLinkCmdSession()
-        pumpOpsCommunicationStub = PumpOpsCommunicationStub(session: rileyLinkCmdSession)
+        messageSenderStub = PumpMessageSenderStub()
         timeZone = TimeZone(secondsFromGMT: 0)
         
         loadSUT()
@@ -42,12 +42,11 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         pumpState.pumpModel = pumpModel
         pumpState.awakeUntil = Date(timeIntervalSinceNow: 100) // pump is awake
         
-        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession)
-        sut.communication = pumpOpsCommunicationStub
+        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession, pumpMessageSender: messageSenderStub)
     }
     
     func testErrorIsntThrown() {
-        pumpOpsCommunicationStub.responses = buildResponsesDictionary()
+        messageSenderStub.responses = buildResponsesDictionary()
         
         assertNoThrow(try _ = sut.getHistoryEvents(since: Date()))
     }
@@ -58,7 +57,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         pumpAckArray.insert(sut.makePumpMessage(to: .buttonPress), at: 0)
         responseDictionary[.getHistoryPage]! = pumpAckArray
         
-        pumpOpsCommunicationStub.responses = responseDictionary
+        messageSenderStub.responses = responseDictionary
         
         // Didn't receive a .pumpAck short reponse so throw an error
         assertThrows(try _ = sut.getHistoryEvents(since: Date()))
@@ -70,14 +69,14 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         pumpAckArray.insert(sut.makePumpMessage(to: .buttonPress), at: 1)
         responseDictionary[.getHistoryPage]! = pumpAckArray
         
-        pumpOpsCommunicationStub.responses = responseDictionary
+        messageSenderStub.responses = responseDictionary
         
         // Didn't receive a .getHistoryPage as 2nd response so throw an error
         assertThrows(try _ = sut.getHistoryEvents(since: Date()))
     }
     
     func test332EventsReturnedUntilOutOrder() {
-        pumpOpsCommunicationStub.responses = buildResponsesDictionary()
+        messageSenderStub.responses = buildResponsesDictionary()
         
         let date = Date(timeIntervalSince1970: 0)
         do {
@@ -90,7 +89,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     }
     
     func testEventsReturnedAfterTime() {
-        pumpOpsCommunicationStub.responses = buildResponsesDictionary()
+        messageSenderStub.responses = buildResponsesDictionary()
         timeZone = TimeZone.current
         
         loadSUT()
@@ -108,7 +107,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     }
     
     func testGMTEventsAreTheSame() {
-        pumpOpsCommunicationStub.responses = buildResponsesDictionary()
+        messageSenderStub.responses = buildResponsesDictionary()
         timeZone = TimeZone(secondsFromGMT:0)
         
         loadSUT()
@@ -125,7 +124,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     }
     
     func testEventsReturnedAreAscendingOrder() {
-        pumpOpsCommunicationStub.responses = buildResponsesDictionary()
+        messageSenderStub.responses = buildResponsesDictionary()
         
         //02/11/2017 @ 12:00am (UTC)
         let date = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2017, month: 2, day: 11, hour: 0, minute: 0, second: 0).date!

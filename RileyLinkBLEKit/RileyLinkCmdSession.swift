@@ -51,14 +51,18 @@ public enum RileyLinkDeviceError: Error {
 
 @objc public class RileyLinkCmdSession : NSObject {
     
-    let device: RileyLinkBLEDevice
+    let device: RileyLinkBLEDevice?
     
-    @objc public init(device: RileyLinkBLEDevice) {
+    @objc public init(device: RileyLinkBLEDevice? = nil) {
         self.device = device
     }
 
     @objc public func doCmd(_ cmd: CmdBase, timeoutMs: Int) -> Bool {
-        return device.doCmd(cmd, withTimeoutMs: timeoutMs)
+        if let device = device {
+            return device.doCmd(cmd, withTimeoutMs: timeoutMs)
+        } else {
+            return false
+        }
     }
     
     public func setRXFilterMode(_ mode: RXFilterMode) throws {

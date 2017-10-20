@@ -33,7 +33,9 @@ public class MinimedPacket {
     public func encodedData() -> Data {
         var dataWithCRC = self.data
         dataWithCRC.append(data.crc8())
-        return Data(dataWithCRC.encode4b6b())
+        var encodedData = dataWithCRC.encode4b6b()
+        encodedData.append(0)
+        return Data(encodedData)
     }
 }
 

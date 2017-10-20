@@ -22,8 +22,6 @@
     if (_outgoingData) {
         [serialized appendData:_outgoingData];
     }
-    uint8_t nullTerminator = 0;
-    [serialized appendBytes:&nullTerminator length:1];
     return serialized;
 }
 

@@ -36,7 +36,7 @@ class MinimedPacketTests: XCTestCase {
     func testEncode4b6b() {
         let input = Data(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")!
         let packet = MinimedPacket(outgoingData: input)
-        let expectedOutput = Data(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b15550")
+        let expectedOutput = Data(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b1555000")
         print("encoded = \(packet.encodedData().hexadecimalString)")
         XCTAssertEqual(packet.encodedData(), expectedOutput)
     }

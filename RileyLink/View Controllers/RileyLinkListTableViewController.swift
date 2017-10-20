@@ -24,9 +24,7 @@ class RileyLinkListTableViewController: UITableViewController {
                 if let deviceManager = self?.dataManager.rileyLinkManager {
                     switch note.name {
                     case Notification.Name.DeviceManagerDidDiscoverDevice:
-                        if let tableView = self?.tableView, let dataManager = self?.dataManager {
-                            tableView.insertRows(at: [IndexPath(row: dataManager.rileyLinkManager.devices.count - 1, section: 0)], with: .automatic)
-                        }
+                        self?.tableView.insertRows(at: [IndexPath(row: deviceManager.devices.count - 1, section: 0)], with: .automatic)
                     case Notification.Name.DeviceConnectionStateDidChange,
                          Notification.Name.DeviceRSSIDidChange,
                          Notification.Name.DeviceNameDidChange:

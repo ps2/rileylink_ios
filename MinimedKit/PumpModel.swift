@@ -64,7 +64,9 @@ public enum PumpModel: String {
     
     // On x15 models, a bolus in progress error is returned when bolusing, even though the bolus succeeds
     public var returnsErrorOnBolus: Bool {
-        return generation == 15
+        // edit CJ to get pump working
+        // return generation == 15
+        return false
     }
     
     /// Newer models allow higher precision delivery, and have bit packing to accomodate this.

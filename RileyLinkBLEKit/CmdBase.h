@@ -21,8 +21,8 @@
 
 @interface CmdBase : NSObject
 
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData *data;
+@property (NS_NONATOMIC_IOSONLY, readonly, nonnull, copy) NSData *data;
 
-@property (nonatomic, strong) NSData *response;
+@property (nonatomic, nullable, strong) NSData *response;
 
 @end

@@ -545,7 +545,7 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
         if (packet) {
-            NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
+            NSLog(@"Read packet (%zd): %zd bytes", packet.rssi, packet.data.length);
             NSDictionary *attrs = @{
                                     @"packet": packet,
                                     @"peripheral": self.peripheral,

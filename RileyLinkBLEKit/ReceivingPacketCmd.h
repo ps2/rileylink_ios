@@ -13,6 +13,6 @@
 
 @interface ReceivingPacketCmd : CmdBase
 
-@property (nonatomic, strong, nullable) RFPacket *receivedPacket;
+@property (nonatomic, strong, readonly, nullable) RFPacket *receivedPacket;
 
 @end

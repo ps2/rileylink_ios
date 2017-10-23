@@ -420,7 +420,7 @@ class PumpOpsSynchronous {
                     if let rfPacket = cmd.receivedPacket,
                         let pkt = MinimedPacket(encodedData: rfPacket.data),
                         let response = PumpMessage(rxData: pkt.data), response.messageType == .getPumpModel {
-                        sumRSSI += Int(rfPacket.rssi)
+                        sumRSSI += rfPacket.rssi
                         trial.successes += 1
                     }
                 } else {

@@ -12,10 +12,12 @@
 @implementation ReceivingPacketCmd
 
 - (RFPacket*) receivedPacket {
-    if (_receivedPacket == nil && self.response != nil) {
-        _receivedPacket = [[RFPacket alloc] initWithRfspyResponse:self.response];
+    RFPacket *packet;
+
+    if (self.response != nil) {
+        packet = [[RFPacket alloc] initWithRfspyResponse:self.response];
     }
-    return _receivedPacket;
+    return packet;
 }
 
 - (BOOL) didReceiveResponse {

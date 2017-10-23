@@ -60,17 +60,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog(#function)
     }
     
-    // MARK: - Notifications
-    
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-        
-    }
-    
-    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, withResponseInfo responseInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
-        
-        completionHandler()
-    }
-    
     // MARK: - 3D Touch
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {

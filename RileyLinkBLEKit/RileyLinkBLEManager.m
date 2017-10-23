@@ -57,11 +57,7 @@
 
 #pragma mark -
 
-- (NSArray<RileyLinkBLEDevice *> *)rileyLinkList {
-    return _devicesById.allValues;
-}
-
-- (RileyLinkBLEDevice *)addPeripheralToDeviceList:(CBPeripheral *)peripheral RSSI:(NSNumber *)RSSI {
+- (void)addPeripheralToDeviceList:(CBPeripheral *)peripheral RSSI:(NSNumber *)RSSI {
     RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
     if (device == nil) {
         device = [[RileyLinkBLEDevice alloc] initWithPeripheral:peripheral];
@@ -79,8 +75,6 @@
     if ([_autoConnectIDs containsObject:device.peripheralId]) {
         [self connectPeripheral:device.peripheral];
     }
-    
-    return device;
 }
 
 - (void)setScanningEnabled:(BOOL)scanningEnabled {
@@ -93,14 +87,6 @@
             [_centralManager stopScan];
         }
     }
-}
-
-- (void)addPeripheralToAutoConnectList:(CBPeripheral *)peripheral {
-    [_autoConnectIDs addObject:peripheral.identifier.UUIDString];
-}
-
-- (void)removePeripheralFromAutoConnectList:(CBPeripheral *)peripheral {
-    [_autoConnectIDs removeObject:peripheral.identifier.UUIDString];
 }
 
 - (BOOL)hasDiscoveredAllAutoConnectPeripherals
@@ -139,7 +125,7 @@
         }
     }
     
-    [self addPeripheralToAutoConnectList:peripheral];
+    [_autoConnectIDs addObject:peripheral.identifier.UUIDString];
 }
 
 - (void)disconnectDevice:(RileyLinkBLEDevice *)device
@@ -149,23 +135,18 @@
     if (peripheral != nil) {
         device.peripheral = peripheral;
 
-        [self disconnectPeripheral:peripheral];
-    }
-}
-
-- (void)disconnectPeripheral:(CBPeripheral *)peripheral
-{
-    if (_centralManager.state == CBManagerStatePoweredOn) {
-        if (peripheral.state != CBPeripheralStateDisconnected) {
-            NSLog(@"Disconnecting from peripheral %@", peripheral);
-            [_centralManager cancelPeripheralConnection:peripheral];
-        } else {
-            NSLog(@"Skipped request to disconnect from %@:%@", _centralManager, peripheral);
-            [self centralManager:_centralManager didDisconnectPeripheral:peripheral error:nil];
+        if (_centralManager.state == CBManagerStatePoweredOn) {
+            if (peripheral.state != CBPeripheralStateDisconnected) {
+                NSLog(@"Disconnecting from peripheral %@", peripheral);
+                [_centralManager cancelPeripheralConnection:peripheral];
+            } else {
+                NSLog(@"Skipped request to disconnect from %@:%@", _centralManager, peripheral);
+                [self centralManager:_centralManager didDisconnectPeripheral:peripheral error:nil];
+            }
         }
-    }
 
-    [self removePeripheralFromAutoConnectList:peripheral];
+        [_autoConnectIDs removeObject:peripheral.identifier.UUIDString];
+    }
 }
 
 - (void)attemptReconnectForDisconnectedDevices {
@@ -242,9 +223,8 @@
     if (device == nil) {
         return;
     }
-    
-    NSDictionary *attrs = @{@"peripheral": device.peripheral};
-    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:attrs];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_CONNECTED object:device userInfo:nil];
     
     [device.peripheral readRSSI];
 }
@@ -254,8 +234,7 @@
     if (error) {
         NSLog(@"Disconnection: %@", error);
     }
-    NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
-    
+
     RileyLinkBLEDevice *device = _devicesById[peripheral.identifier.UUIDString];
     
     [device connectionStateDidChange:error];
@@ -264,14 +243,8 @@
         return;
     }
 
-    attrs[@"peripheral"] = device.peripheral;
-
-    if (error) {
-        attrs[@"error"] = error;
-    }
-
     NSLog(@"RILEYLINK_EVENT_DEVICE_DISCONNECTED");
-    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:attrs];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_DISCONNECTED object:device userInfo:nil];
     
     [self attemptReconnectForDisconnectedDevices];
 }

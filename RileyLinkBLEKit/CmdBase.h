@@ -8,13 +8,16 @@
 
 @import Foundation;
 
-#define RILEYLINK_CMD_GET_STATE       1
-#define RILEYLINK_CMD_GET_VERSION     2
-#define RILEYLINK_CMD_GET_PACKET      3
-#define RILEYLINK_CMD_SEND_PACKET     4
-#define RILEYLINK_CMD_SEND_AND_LISTEN 5
-#define RILEYLINK_CMD_UPDATE_REGISTER 6
-#define RILEYLINK_CMD_RESET           7
+#define RILEYLINK_CMD_GET_STATE           1
+#define RILEYLINK_CMD_GET_VERSION         2
+#define RILEYLINK_CMD_GET_PACKET          3
+#define RILEYLINK_CMD_SEND_PACKET         4
+#define RILEYLINK_CMD_SEND_AND_LISTEN     5
+#define RILEYLINK_CMD_UPDATE_REGISTER     6
+#define RILEYLINK_CMD_RESET               7
+#define RILEYLINK_CMD_LED                 8
+#define RILEYLINK_CMD_READ_REGISTER       9
+#define RILEYLINK_CMD_SET_MODE_REGISTERS 10
 
 @interface CmdBase : NSObject
 

@@ -299,6 +299,7 @@
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383311CD068C300CE7782 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 430D64CB1CB855AB00FCA750 /* RileyLinkBLEKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
+		C1B450861F9BA20A0014C557 /* SetModeRegistersCmd.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B450851F9BA20A0014C557 /* SetModeRegistersCmd.m */; };
 		C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */; };
 		C1B4A9551D1E613A003B8985 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */; };
 		C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */; };
@@ -755,6 +756,8 @@
 		C1B383141CD0665D00CE7782 /* NightscoutUploadKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightscoutUploadKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
+		C1B450851F9BA20A0014C557 /* SetModeRegistersCmd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SetModeRegistersCmd.m; sourceTree = "<group>"; };
+		C1B450871F9BA2550014C557 /* SetModeRegistersCmd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SetModeRegistersCmd.h; sourceTree = "<group>"; };
 		C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSUserDefaults.swift; path = NightscoutUploadKit/NSUserDefaults.swift; sourceTree = SOURCE_ROOT; };
 		C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
@@ -929,6 +932,8 @@
 				430D64F31CB89FC000FCA750 /* GetPacketCmd.m */,
 				430D64F41CB89FC000FCA750 /* GetVersionCmd.h */,
 				430D64F51CB89FC000FCA750 /* GetVersionCmd.m */,
+				C1B450871F9BA2550014C557 /* SetModeRegistersCmd.h */,
+				C1B450851F9BA20A0014C557 /* SetModeRegistersCmd.m */,
 				430D64CF1CB855AB00FCA750 /* Info.plist */,
 				430D64F61CB89FC000FCA750 /* ReceivingPacketCmd.h */,
 				430D64F71CB89FC000FCA750 /* ReceivingPacketCmd.m */,
@@ -1829,10 +1834,12 @@
 						LastSwiftMigration = 0900;
 					};
 					C12EA236198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					C12EA251198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
@@ -1969,6 +1976,7 @@
 			files = (
 				430D64ED1CB85A4300FCA750 /* RileyLinkBLEDevice.m in Sources */,
 				43523ED71CC2C558001850F1 /* NSData+Conversion.m in Sources */,
+				C1B450861F9BA20A0014C557 /* SetModeRegistersCmd.m in Sources */,
 				430D65031CB89FC000FCA750 /* GetPacketCmd.m in Sources */,
 				430D65011CB89FC000FCA750 /* CmdBase.m in Sources */,
 				430D64EF1CB85A4300FCA750 /* RileyLinkBLEManager.m in Sources */,
@@ -2865,7 +2873,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
@@ -2886,7 +2894,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
@@ -2905,7 +2913,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2925,7 +2933,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";

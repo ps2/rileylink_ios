@@ -16,20 +16,21 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
     let glucose: Int?
     let units: Units? // of glucose entry
     let glucoseType: GlucoseType?
+    let foodType: String?
 
-    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil) {
+    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
         self.carbs = carbs
         self.absorptionTime = absorptionTime
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
         self.insulin = insulin
-        super.init(timestamp: timestamp, enteredBy: enteredBy, id: id)
+        self.foodType = foodType
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Meal Bolus")
     }
     
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Meal Bolus"
         rval["carbs"] = carbs
         if let absorptionTime = absorptionTime {
             rval["absorptionTime"] = absorptionTime.minutes
@@ -39,6 +40,9 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
             rval["glucose"] = glucose
             rval["glucoseType"] = glucoseType?.rawValue
             rval["units"] = units?.rawValue
+        }
+        if let foodType = foodType {
+            rval["foodType"] = foodType
         }
         return rval
     }

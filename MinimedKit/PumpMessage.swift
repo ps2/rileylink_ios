@@ -22,10 +22,10 @@ public struct PumpMessage : CustomStringConvertible {
     }
 
     public init?(rxData: Data) {
-        guard rxData.count >= 7,
+        guard rxData.count >= 6,
             let packetType = PacketType(rawValue: rxData[0]), packetType != .meter,
             let messageType = MessageType(rawValue: rxData[4]),
-            let messageBody = messageType.bodyType.init(rxData: rxData.subdata(in: 5..<rxData.count - 1))
+            let messageBody = messageType.bodyType.init(rxData: rxData.subdata(in: 5..<rxData.count))
         else {
             return nil
         }
@@ -40,14 +40,11 @@ public struct PumpMessage : CustomStringConvertible {
         var buffer = [UInt8]()
 
         buffer.append(packetType.rawValue)
-        buffer += address[0...2]
+        buffer += address[0..<3]
         buffer.append(messageType.rawValue)
+        buffer.append(contentsOf: messageBody.txData)
 
-        var data = Data(bytes: buffer)
-
-        data.append(messageBody.txData)
-
-        return data
+        return Data(bytes: buffer)
     }
     
     public var description: String {

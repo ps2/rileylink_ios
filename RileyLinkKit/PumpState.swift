@@ -63,6 +63,8 @@ public class PumpState {
 
         return false
     }
+
+    public var lastValidFrequency: Double? 
     
     public var lastWakeAttempt: Date?
     
@@ -85,6 +87,7 @@ public class PumpState {
 
 extension PumpState: CustomDebugStringConvertible {
     public var debugDescription: String {
+
         return [
             "## PumpState",
             "timeZone: \(timeZone)",
@@ -92,7 +95,7 @@ extension PumpState: CustomDebugStringConvertible {
             "pumpModel: \(pumpModel?.rawValue ?? "")",
             "lastHistoryDump: \(lastHistoryDump ?? .distantPast)",
             "awakeUntil: \(awakeUntil ?? .distantPast)",
-            "lastWakeAttempt: \(lastWakeAttempt)",
+            "lastWakeAttempt: \(String(describing: lastWakeAttempt))",
         ].joined(separator: "\n")
     }
 }

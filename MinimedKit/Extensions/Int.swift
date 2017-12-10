@@ -10,13 +10,13 @@ import Foundation
 
 
 extension Int {
-    init(bigEndianBytes bytes: Data) {
+    init<T: Collection>(bigEndianBytes bytes: T) where T.Iterator.Element == UInt8, T.IndexDistance == Int {
         assert(bytes.count <= 4)
         var result: UInt = 0
 
-        for idx in 0..<(bytes.count) {
-            let shiftAmount = UInt((bytes.count) - idx - 1) * 8
-            result += UInt(bytes[idx]) << shiftAmount
+        for (index, byte) in bytes.enumerated() {
+            let shiftAmount = UInt((bytes.count) - index - 1) * 8
+            result += UInt(byte) << shiftAmount
         }
 
         self.init(result)

@@ -9,9 +9,9 @@
 import Foundation
 import MinimedKit
 
-class NightscoutPumpEvents: NSObject {
+public class NightscoutPumpEvents: NSObject {
     
-    class func translate(_ events: [TimestampedHistoryEvent], eventSource: String) -> [NightscoutTreatment] {
+    public class func translate(_ events: [TimestampedHistoryEvent], eventSource: String, includeCarbs: Bool = true) -> [NightscoutTreatment] {
         var results = [NightscoutTreatment]()
         var lastBolusWizard: BolusWizardEstimatePumpEvent?
         var lastBolusWizardDate: Date?
@@ -19,6 +19,7 @@ class NightscoutPumpEvents: NSObject {
         var lastBasalRateDate: Date?
         var lastBasalDuration: TempBasalDurationPumpEvent?
         var lastBasalDurationDate: Date?
+
         for event in events {
             switch event.pumpEvent {
             case let bgReceived as BGReceivedPumpEvent:
@@ -33,7 +34,11 @@ class NightscoutPumpEvents: NSObject {
                 var carbs = 0
                 var ratio = 0.0
                 
-                if let wizard = lastBolusWizard, let bwDate = lastBolusWizardDate , event.date.timeIntervalSince(bwDate) <= 2 {
+                if let wizard = lastBolusWizard,
+                    let bwDate = lastBolusWizardDate,
+                    event.date.timeIntervalSince(bwDate) <= 2,
+                    includeCarbs
+                    {
                     carbs = wizard.carbohydrates
                     ratio = wizard.carbRatio
                 }
@@ -58,10 +63,16 @@ class NightscoutPumpEvents: NSObject {
             case let tempBasalDuration as TempBasalDurationPumpEvent:
                 lastBasalDuration = tempBasalDuration
                 lastBasalDurationDate = event.date
+            case is SuspendPumpEvent:
+                let entry = PumpSuspendTreatment(timestamp: event.date, enteredBy: eventSource)
+                results.append(entry)
+            case is ResumePumpEvent:
+                let entry = PumpResumeTreatment(timestamp: event.date, enteredBy: eventSource)
+                results.append(entry)
             default:
                 break
             }
-            
+
             if let basalRate = lastBasalRate, let basalDuration = lastBasalDuration, let basalRateDate = lastBasalRateDate, let basalDurationDate = lastBasalDurationDate
                 , fabs(basalRateDate.timeIntervalSince(basalDurationDate)) <= 2 {
                 let entry = basalPairToNSTreatment(basalRate, basalDuration: basalDuration, eventSource: eventSource, timestamp: event.date)

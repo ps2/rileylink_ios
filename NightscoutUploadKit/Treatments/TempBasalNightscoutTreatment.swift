@@ -27,12 +27,11 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
         self.temp = temp
         self.duration = duration
         
-        super.init(timestamp: timestamp, enteredBy: enteredBy)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Temp Basal")
     }
     
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Temp Basal"
         rval["temp"] = temp.rawValue
         rval["rate"] = rate
         if let absolute = absolute {

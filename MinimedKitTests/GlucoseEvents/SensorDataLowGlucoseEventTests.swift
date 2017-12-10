@@ -11,14 +11,6 @@ import XCTest
 
 class SensorDataLowGlucoseEventTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     func testDecoding() {
         let rawData = Data(hexadecimalString: "06")!
         let subject = SensorDataLowGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!

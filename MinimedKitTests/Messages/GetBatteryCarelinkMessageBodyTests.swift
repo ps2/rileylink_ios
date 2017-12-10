@@ -11,18 +11,8 @@ import XCTest
 
 class GetBatteryCarelinkMessageBodyTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testValidGetBatteryResponse() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a7350535720300008c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7350535720300008c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is GetBatteryCarelinkMessageBody)
@@ -35,8 +25,7 @@ class GetBatteryCarelinkMessageBodyTests: XCTestCase {
                 XCTFail()
             }
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
-    
 }

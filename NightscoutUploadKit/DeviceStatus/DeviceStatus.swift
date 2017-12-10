@@ -14,13 +14,15 @@ public struct DeviceStatus {
     let pumpStatus: PumpStatus?
     let uploaderStatus: UploaderStatus?
     let loopStatus: LoopStatus?
-    
-    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil) {
+    let radioAdapter: RadioAdapter?
+
+    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil, radioAdapter: RadioAdapter? = nil) {
         self.device = device
         self.timestamp = timestamp
         self.pumpStatus = pumpStatus
         self.uploaderStatus = uploaderStatus
         self.loopStatus = loopStatus
+        self.radioAdapter = radioAdapter
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -40,7 +42,11 @@ public struct DeviceStatus {
         if let loop = loopStatus {
             rval["loop"] = loop.dictionaryRepresentation
         }
-        
+
+        if let radioAdapter = radioAdapter {
+            rval["radioAdapter"] = radioAdapter.dictionaryRepresentation
+        }
+
         return rval
     }
 }

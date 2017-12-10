@@ -11,21 +11,11 @@ import XCTest
 
 class DateTimeChangeGlucoseEventTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testDecoding() {
         let rawData = Data(hexadecimalString: "0c0ad23e0e")!
         let subject = DateTimeChangeGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!
         
-        let expectedTimestamp = DateComponents(calendar: Calendar.current,
+        let expectedTimestamp = DateComponents(calendar: Calendar(identifier: .gregorian),
                                                year: 2014, month: 3, day: 30, hour: 10, minute: 18)
         XCTAssertEqual(subject.timestamp, expectedTimestamp)
     }

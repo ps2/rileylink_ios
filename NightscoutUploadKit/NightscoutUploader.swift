@@ -36,7 +36,7 @@ public class NightscoutUploader {
     private(set) var entries = [NightscoutEntry]()
     private(set) var deviceStatuses = [[String: Any]]()
     private(set) var treatmentsQueue = [NightscoutTreatment]()
-    
+
     private(set) var lastMeterMessageRxTime: Date?
     
     public private(set) var observingPumpEventsSince: Date!
@@ -134,29 +134,6 @@ public class NightscoutUploader {
         return timestamp
     }
 
-    /**
-     Attempts to upload pump history events.
-     
-     This method will not retry if the network task failed.
-     
-     - parameter pumpEvents: An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
-     - parameter source:     The device identifier to display in Nightscout
-     - parameter pumpModel:  The pump model info associated with the events
-     - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
-     */
-    public func upload(_ pumpEvents: [TimestampedHistoryEvent], forSource source: String, from pumpModel: PumpModel, completionHandler: @escaping (Error?) -> Void) {
-        let treatments = NightscoutPumpEvents.translate(pumpEvents, eventSource: source).map { $0.dictionaryRepresentation }
-
-        postToNS(treatments, endpoint: defaultNightscoutTreatmentPath) { (result) in
-            switch result {
-            case .success( _):
-                completionHandler(nil)
-            case .failure(let error):
-                completionHandler(error)
-            }
-        }
-    }
-
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
     ///
@@ -168,7 +145,7 @@ public class NightscoutUploader {
 
     /// Attempts to modify nightscout treatments. This method will not retry if the network task failed.
     ///
-    /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.
+    /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.  Treatments without id will be ignored.
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
     public func modifyTreatments(_ treatments:[NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
         dataAccessQueue.async {
@@ -176,6 +153,9 @@ public class NightscoutUploader {
             var errors = [Error]()
 
             for treatment in treatments {
+                guard treatment.id != nil, treatment.id != "NA" else {
+                    continue
+                }
                 modifyGroup.enter()
                 self.putToNS( treatment.dictionaryRepresentation, endpoint: defaultNightscoutTreatmentPath ) { (error) in
                     if let error = error {
@@ -201,6 +181,9 @@ public class NightscoutUploader {
             var errors = [Error]()
 
             for id in ids {
+                guard id != "NA" else {
+                    continue
+                }
                 deleteGroup.enter()
                 self.deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath) { (error) in
                     if let error = error {
@@ -305,7 +288,7 @@ public class NightscoutUploader {
             lastMeterMessageRxTime = date
         }
     }
-    
+
     // MARK: - Uploading
     
     func flushAll() {
@@ -346,9 +329,9 @@ public class NightscoutUploader {
 
         callNS(json, endpoint: endpoint, method: "POST") { (result) in
             switch result {
-            case .success(let json):
-                guard let insertedEntries = json as? [[String: Any]] else {
-                    completion(.failure(UploadError.invalidResponse(reason: "Expected array of objects in JSON response")))
+            case .success(let postResponse):
+                guard let insertedEntries = postResponse as? [[String: Any]], insertedEntries.count == json.count else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Expected array of \(json.count) objects in JSON response")))
                     return
                 }
 
@@ -400,9 +383,9 @@ public class NightscoutUploader {
                         completion(.failure(error))
                         return
                     }
-
-                    guard let data = data else {
-                        completion(.failure(UploadError.invalidResponse(reason: "No data in response")))
+                    
+                    guard let data = data, !data.isEmpty else {
+                        completion(.success([]))
                         return
                     }
 

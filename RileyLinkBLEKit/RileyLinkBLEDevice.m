@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Pete Schwamb. All rights reserved.
 //
 
+@import os.log;
+
 #import "RileyLinkBLEDevice.h"
 #import "RileyLinkBLEManager.h"
 #import "NSData+Conversion.h"
@@ -13,6 +15,9 @@
 #import "GetPacketCmd.h"
 #import "GetVersionCmd.h"
 #import "RFPacket.h"
+
+
+NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
 
 
 // See impl at bottom of file.
@@ -32,7 +37,6 @@
     NSData *endOfResponseMarker;
     BOOL idleListeningEnabled;
     uint8_t idleListenChannel;
-    uint16_t _idleTimeout;
     BOOL fetchingResponse;
     CmdBase *currentCommand;
     BOOL runningIdle;
@@ -43,7 +47,6 @@
     dispatch_group_t idleDetectDispatchGroup;
 }
 
-@property (nonatomic, nonnull, retain) CBPeripheral * peripheral;
 @property (nonatomic, nonnull, strong) dispatch_queue_t serialDispatchQueue;
 
 @end
@@ -63,11 +66,11 @@
         // All processes that interact that run commands on this device should be serialized through
         // this queue.
         _serialDispatchQueue = dispatch_queue_create("com.rileylink.rlbledevice", DISPATCH_QUEUE_SERIAL);
-        
+
         cmdDispatchGroup = dispatch_group_create();
         idleDetectDispatchGroup = dispatch_group_create();
         
-        _idleTimeout = 60 * 1000;
+        _idleTimeoutMS = 60 * 1000;
         _timerTickEnabled = YES;
         
         incomingPackets = [NSMutableArray array];
@@ -75,12 +78,7 @@
         inBuf = [NSMutableData data];
         endOfResponseMarker = [NSData dataWithHexadecimalString:@"00"];
         
-        _peripheral = peripheral;
-        _peripheral.delegate = self;
-        
-        for (CBService *service in _peripheral.services) {
-            [self setCharacteristicsFromService:service];
-        }
+        [self setPeripheral:peripheral];
     }
     return self;
 }
@@ -88,6 +86,25 @@
 - (instancetype)init NS_UNAVAILABLE
 {
     return nil;
+}
+
+- (void)setPeripheral:(CBPeripheral *)peripheral {
+    if (peripheral == _peripheral) {
+        return;
+    }
+
+    if (_peripheral != nil) {
+        os_log_error(OS_LOG_DEFAULT, "RileyLinkBLEDevice: Replacing peripheral reference %{public}@ -> %{public}@", _peripheral.identifier.UUIDString, peripheral.identifier.UUIDString);
+    }
+
+    _peripheral.delegate = nil;
+
+    _peripheral = peripheral;
+    _peripheral.delegate = self;
+
+    for (CBService *service in _peripheral.services) {
+        [self setCharacteristicsFromService:service];
+    }
 }
 
 - (NSString *)name
@@ -103,7 +120,7 @@
 - (void)setTimerTickEnabled:(BOOL)timerTickEnabled
 {
     _timerTickEnabled = timerTickEnabled;
-    
+
     if (timerTickCharacteristic != nil &&
         timerTickCharacteristic.isNotifying != timerTickEnabled &&
         self.peripheral.state == CBPeripheralStateConnected)
@@ -129,7 +146,7 @@
     dispatch_group_notify(idleDetectDispatchGroup,
                           dispatch_get_main_queue(), ^{
                               NSLog(@"idleDetectDispatchGroup empty");
-                              [self assertIdleListening];
+                              [self assertIdleListeningForcingRestart:NO];
                           });
 }
 
@@ -174,7 +191,7 @@
         return;
     }
     if (characteristic == customNameCharacteristic) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_LIST_UPDATED object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_NAME_CHANGED object:nil];
     }
     //NSLog(@"Did write characteristic: %@", characteristic.UUID);
 }
@@ -199,7 +216,7 @@
 {
     switch (self.peripheral.state) {
         case CBPeripheralStateConnected:
-            [self assertIdleListening];
+            [self assertIdleListeningForcingRestart:NO];
             break;
         case CBPeripheralStateDisconnected:
             runningIdle = NO;
@@ -258,15 +275,16 @@
     if (error != nil) {
         NSLog(@"Error reading RSSI: %@", [error localizedDescription]);
     } else {
-        dispatch_async(dispatch_get_main_queue(),^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_RSSI_CHANGED object:self userInfo:@{@"RSSI": RSSI}];
-        });
+        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_RSSI_CHANGED object:self userInfo:@{@"RSSI": RSSI}];
         self.RSSI = RSSI;
     }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    os_log_debug(OS_LOG_DEFAULT, "%{public}s", __PRETTY_FUNCTION__);
+
     if (error) {
+        os_log_error(OS_LOG_DEFAULT, "Error discovering characteristics for service: %{public}@", error);
         [self cleanup];
         return;
     }
@@ -309,9 +327,7 @@
         
         if (versionOK) {
             ready = YES;
-            dispatch_async(dispatch_get_main_queue(),^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_READY object:self];
-            });
+            [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_READY object:self];
         }
     }];
 }
@@ -371,7 +387,7 @@
         }
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
         const unsigned char timerTick = ((const unsigned char*)(characteristic.value).bytes)[0];
-        [self assertIdleListening];
+        [self assertIdleListeningForcingRestart:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_DEVICE_TIMER_TICK object:self];
         NSLog(@"Updated timer tick: %d", timerTick);
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_FIRMWARE_VERSION_UUID]]) {
@@ -405,7 +421,7 @@
             if (runningIdle) {
                 NSLog(@"Response to idle: %@", [fullResponse hexadecimalString]);
                 runningIdle = NO;
-                [self handleIdleListenerResponse:fullResponse];
+                [self handleIdleListenerResponse:fullResponse error:nil];
                 if (!runningSession) {
                     if (inBuf.length > 0) {
                         NSLog(@"clearing unexpected buffer data: %@", [inBuf hexadecimalString]);
@@ -478,7 +494,7 @@
         NSLog(@"Starting idle RX");
         GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
         cmd.listenChannel = idleListenChannel;
-        cmd.timeoutMS = _idleTimeout;
+        cmd.timeoutMS = _idleTimeoutMS;
         [self issueCommand:cmd];
         
         _lastIdle = [NSDate date];
@@ -488,8 +504,8 @@
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
     idleListeningEnabled = YES;
     idleListenChannel = channel;
-    
-    [self assertIdleListening];
+
+    [self assertIdleListeningForcingRestart:NO];
 }
 
 - (void) disableIdleListening {
@@ -497,27 +513,30 @@
     runningIdle = NO;
 }
 
-- (void) assertIdleListening {
-    if (idleListeningEnabled && !runningSession) {
-        NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
+- (void) assertIdleListeningForcingRestart:(BOOL)forceRestart {
+    if (idleListeningEnabled && !runningSession && _peripheral.state == CBPeripheralStateConnected) {
+        NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeoutMS / 1000.0;
         
-        if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+        if (forceRestart || !runningIdle || ([[NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] compare:_lastIdle] == NSOrderedDescending)) {
             [self onIdle];
         }
     }
 }
 
-- (void) handleIdleListenerResponse:(NSData *)response {
+- (BOOL) handleIdleListenerResponse:(NSData *)response error:(NSError **)errorOut {
     if (response.length > 3) {
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRFSPYResponse:response];
-        packet.capturedAt = [NSDate date];
-        NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
-        NSDictionary *attrs = @{
-                                @"packet": packet,
-                                @"peripheral": self.peripheral,
-                                };
-        [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
+        if (packet.data) {
+            packet.capturedAt = [NSDate date];
+            NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
+            NSDictionary *attrs = @{
+                                    @"packet": packet,
+                                    @"peripheral": self.peripheral,
+                                    };
+            [[NSNotificationCenter defaultCenter] postNotificationName:RILEYLINK_IDLE_RESPONSE_RECEIVED object:self userInfo:attrs];
+        }
+        return YES;
     } else if (response.length > 0) {
         uint8_t errorCode = ((uint8_t*)response.bytes)[0];
         switch (errorCode) {
@@ -534,8 +553,15 @@
                 NSLog(@"Unexpected response to idle rx command: %@", [response hexadecimalString]);
                 break;
         }
+
+        if (errorOut != NULL) {
+            *errorOut = [NSError errorWithDomain:SubgRfspyErrorDomain code:errorCode userInfo:nil];
+        }
+
+        return NO;
     } else {
         NSLog(@"Idle command got empty response!!");
+        return YES;
     }
 }
 

@@ -21,3 +21,20 @@ public protocol PumpEvent : DictionaryRepresentable {
     }
     
 }
+
+public extension PumpEvent {
+    public func isDelayedAppend(with pumpModel: PumpModel) -> Bool {
+        // Delays only occur for bolus events
+        guard let bolus = self as? BolusNormalPumpEvent else {
+            return false
+        }
+
+        // All normal bolus events are delayed
+        guard bolus.type == .square else {
+            return true
+        }
+
+        // Square-wave bolus events are delayed for certain pump models
+        return !pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery
+    }
+}

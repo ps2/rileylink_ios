@@ -10,29 +10,19 @@ import XCTest
 @testable import MinimedKit
 
 class FindDeviceMessageBodyTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+        
     func testValidFindDeviceMessage() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf9999990062")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf99999900")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is FindDeviceMessageBody)
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     
     func testMidnightSensor() {
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf9999990062")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a235053509cf99999900")!)!
         
         let body = message.messageBody as! FindDeviceMessageBody
         

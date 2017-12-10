@@ -10,17 +10,7 @@ import XCTest
 @testable import MinimedKit
 
 class RFToolsTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+        
     func testDecode4b6b() {
         let input = Data(hexadecimalString: "ab2959595965574ab2d31c565748ea54e55a54b5558cd8cd55557194b56357156535ac5659956a55c55555556355555568bc5657255554e55a54b5555555b100")!
         
@@ -30,7 +20,7 @@ class RFToolsTests: XCTestCase {
             let expectedOutput = Data(hexadecimalString: "a259705504a24117043a0e080b003d3d00015b030105d817790a0f00000300008b1702000e080b000071")
             XCTAssertTrue(result == expectedOutput)
         } else {
-            XCTFail("\(result) is nil")
+            XCTFail("\(String(describing: result)) is nil")
         }
     }
     

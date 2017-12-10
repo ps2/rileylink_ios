@@ -14,7 +14,7 @@ extension String {
         if newLength < toLength {
             return String(repeatElement(character, count: toLength - newLength)) + self
         } else {
-            return self.substring(from: index(self.startIndex, offsetBy: newLength - toLength))
+            return String(self[index(startIndex, offsetBy: newLength - toLength)...])
         }
     }
 }

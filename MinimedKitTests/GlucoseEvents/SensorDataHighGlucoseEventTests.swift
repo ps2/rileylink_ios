@@ -10,15 +10,7 @@ import XCTest
 @testable import MinimedKit
 
 class SensorDataHighGlucoseEventTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
+        
     func testDecoding() {
         let rawData = Data(hexadecimalString: "07FF")!
         let subject = SensorDataHighGlucoseEvent(availableData: rawData, relativeTimestamp: DateComponents())!

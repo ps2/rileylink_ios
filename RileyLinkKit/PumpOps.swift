@@ -36,6 +36,19 @@ public class PumpOps {
         }
     }
     
+    public func getBasalSettings(_ completion: @escaping (Either<BasalSchedule, Error>) -> Void) {
+        device.runSession(withName: "Get Basal Settings") { (session) -> Void in
+            do {
+                let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
+                
+                let basalSettings = try ops.getBasalSchedule()
+                completion(.success(basalSettings))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+    
     public func getPumpModel(_ completion: @escaping (Either<String, Error>) -> Void)  {
         device.runSession(withName: "Get pump model") { (session) -> Void in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
@@ -94,19 +107,21 @@ public class PumpOps {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(units): The reservoir volume, in units of insulin
+        - success(units, date): The reservoir volume, in units of insulin, and DateCompoments representing the pump's clock
         - failure(error): An error describing why the command failed
      */
-    public func readRemainingInsulin(_ completion: @escaping (Either<Double, Error>) -> Void) {
+    public func readRemainingInsulin(_ completion: @escaping (Either<(units: Double, date: DateComponents), Error>) -> Void) {
         device.runSession(withName: "Read remaining insulin") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
 
             do {
                 let pumpModel = try ops.getPumpModel()
 
+                let clockResp: ReadTimeCarelinkMessageBody = try ops.messageBody(to: .readTime)
+
                 let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
 
-                completion(.success(response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit)))
+                completion(.success((units: response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), date: clockResp.dateComponents)))
             } catch let error {
                 completion(.failure(error))
             }
@@ -133,7 +148,7 @@ public class PumpOps {
             do {
                 let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
                 DispatchQueue.main.async { () -> Void in
-                    completion(.success(events: events, pumpModel: pumpModel))
+                    completion(.success((events: events, pumpModel: pumpModel)))
                 }
             } catch let error {
                 DispatchQueue.main.async { () -> Void in
@@ -170,10 +185,7 @@ public class PumpOps {
             }
         }
     }
-    
-    /**
- 
- */
+
     public func writeGlucoseHistoryTimestamp(completion: @escaping (Either<Bool, Error>) -> Void) {
         device.runSession(withName: "Write glucose history timestamp") { (session) -> Void in
             NSLog("Write glucose history timestamp started.")
@@ -237,7 +249,6 @@ public class PumpOps {
         }
     }
 
-
     /**
      Sets a bolus
      
@@ -245,25 +256,15 @@ public class PumpOps {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
      
-     - parameter units:      The number of units to deliver
-     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
+     - parameter units:              The number of units to deliver
+     - parameter cancelExistingTemp: If true, additional pump commands will be issued to clear any running temp basal. Defaults to false.
+     - parameter completion:         A closure called after the command is complete. This closure takes a single argument:
         - error: An error describing why the command failed
      */
-    public func setNormalBolus(units: Double, completion: @escaping (_ error: Error?) -> Void) {
+    public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {
         device.runSession(withName: "Set normal bolus") { (session) in
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                let pumpModel = try ops.getPumpModel()
-                
-                let message = PumpMessage(packetType: .carelink, address: self.pumpState.pumpID, messageType: .bolus, messageBody: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
-                
-                _ = try ops.runCommandWithArguments(message)
-                
-                completion(nil)
-            } catch let error {
-                completion(error)
-            }
+            completion(ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp))
         }
     }
     

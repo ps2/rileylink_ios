@@ -139,6 +139,15 @@
 		54BC44B71DB81B5100340EED /* GetGlucosePageMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44B61DB81B5100340EED /* GetGlucosePageMessageBodyTests.swift */; };
 		54BC44B91DB81D6100340EED /* GetGlucosePageMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BC44B81DB81D6100340EED /* GetGlucosePageMessageBody.swift */; };
 		54DA4E851DFDC0A70007F489 /* SensorValueGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DA4E841DFDC0A70007F489 /* SensorValueGlucoseEvent.swift */; };
+		7D68AA7E1FE0D1A400522C49 /* LoopKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA801FE0D1A400522C49 /* LoopKit.strings */; };
+		7D68AA831FE0D1A400522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA851FE0D1A400522C49 /* Localizable.strings */; };
+		7D68AA881FE0D1A500522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA8A1FE0D1A500522C49 /* InfoPlist.strings */; };
+		7D68AA8D1FE0D1A500522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA8F1FE0D1A500522C49 /* InfoPlist.strings */; };
+		7D68AA921FE0D1A600522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA941FE0D1A600522C49 /* InfoPlist.strings */; };
+		7D68AA971FE0D1A600522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA991FE0D1A600522C49 /* InfoPlist.strings */; };
+		7D68AA9C1FE0D1A700522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA9E1FE0D1A700522C49 /* Localizable.strings */; };
+		7D68AAA11FE0D1A700522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AAA31FE0D1A700522C49 /* InfoPlist.strings */; };
+		7D68AAA61FE0D1A800522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AAA81FE0D1A800522C49 /* Localizable.strings */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -585,6 +594,17 @@
 		54BC44B61DB81B5100340EED /* GetGlucosePageMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetGlucosePageMessageBodyTests.swift; sourceTree = "<group>"; };
 		54BC44B81DB81D6100340EED /* GetGlucosePageMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetGlucosePageMessageBody.swift; sourceTree = "<group>"; };
 		54DA4E841DFDC0A70007F489 /* SensorValueGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorValueGlucoseEvent.swift; sourceTree = "<group>"; };
+		7D68AA7A1FE0CAEB00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA7B1FE0CAEB00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA7F1FE0D1A400522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		7D68AA841FE0D1A400522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA891FE0D1A500522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA8E1FE0D1A500522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA931FE0D1A600522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA981FE0D1A600522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA9D1FE0D1A700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AAA21FE0D1A700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AAA71FE0D1A800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -926,6 +946,7 @@
 		430D64CC1CB855AB00FCA750 /* RileyLinkBLEKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA991FE0D1A600522C49 /* InfoPlist.strings */,
 				430D64F01CB89FC000FCA750 /* CmdBase.h */,
 				430D64F11CB89FC000FCA750 /* CmdBase.m */,
 				430D64F21CB89FC000FCA750 /* GetPacketCmd.h */,
@@ -966,6 +987,8 @@
 		43722FAF1CB9F7630038B7F2 /* RileyLinkKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AAA81FE0D1A800522C49 /* Localizable.strings */,
+				7D68AA941FE0D1A600522C49 /* InfoPlist.strings */,
 				C1B4A9511D1E610F003B8985 /* UI */,
 				C170C98C1CECD6CE00F3D8E5 /* Extensions */,
 				43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */,
@@ -995,6 +1018,7 @@
 		43C246941D8918AE0031F8D1 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA8A1FE0D1A500522C49 /* InfoPlist.strings */,
 				43C246951D8918AE0031F8D1 /* Crypto.h */,
 				43C2469F1D8919E20031F8D1 /* Crypto.m */,
 				43C246961D8918AE0031F8D1 /* Info.plist */,
@@ -1062,6 +1086,8 @@
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA9E1FE0D1A700522C49 /* Localizable.strings */,
+				7D68AA8F1FE0D1A500522C49 /* InfoPlist.strings */,
 				C1EAD6B81C826B92006DBA60 /* Extensions */,
 				C1EAD6BC1C826B92006DBA60 /* Messages */,
 				54BC44761DB46C3100340EED /* GlucoseEvents */,
@@ -1269,6 +1295,8 @@
 		C12EA241198B436800309FA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA851FE0D1A400522C49 /* Localizable.strings */,
+				7D68AA801FE0D1A400522C49 /* LoopKit.strings */,
 				C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */,
 				C12EA242198B436800309FA4 /* RileyLink-Info.plist */,
 				C12EA243198B436800309FA4 /* InfoPlist.strings */,
@@ -1441,6 +1469,7 @@
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AAA31FE0D1A700522C49 /* InfoPlist.strings */,
 				C1AF21E91D4900300088C41D /* DeviceStatus */,
 				C13D15591DAACE8400ADC044 /* Either.swift */,
 				43F348051D596270009933DC /* HKUnit.swift */,
@@ -1859,6 +1888,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ru,
 			);
 			mainGroup = C12EA22E198B436800309FA4;
 			productRefGroup = C12EA238198B436800309FA4 /* Products */;
@@ -1885,6 +1915,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA971FE0D1A600522C49 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1900,6 +1931,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				431185AA1CF257D10059ED98 /* RileyLinkDeviceTableViewCell.xib in Resources */,
+				7D68AAA61FE0D1A800522C49 /* Localizable.strings in Resources */,
+				7D68AA921FE0D1A600522C49 /* InfoPlist.strings in Resources */,
 				C1B4A9561D1E613A003B8985 /* TextFieldTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1915,6 +1948,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA881FE0D1A500522C49 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1922,6 +1956,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA8D1FE0D1A500522C49 /* InfoPlist.strings in Resources */,
+				7D68AA9C1FE0D1A700522C49 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1938,8 +1974,10 @@
 			files = (
 				43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */,
 				C14FFC5F1D3D75200049CF85 /* ButtonTableViewCell.xib in Resources */,
+				7D68AA7E1FE0D1A400522C49 /* LoopKit.strings in Resources */,
 				C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */,
 				C12EA24D198B436800309FA4 /* Images.xcassets in Resources */,
+				7D68AA831FE0D1A400522C49 /* Localizable.strings in Resources */,
 				C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */,
 				C14FFC591D3D72D30049CF85 /* AuthenticationTableViewCell.xib in Resources */,
 			);
@@ -1957,6 +1995,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AAA11FE0D1A700522C49 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2401,10 +2440,83 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7D68AA801FE0D1A400522C49 /* LoopKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA7F1FE0D1A400522C49 /* ru */,
+			);
+			name = LoopKit.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA851FE0D1A400522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA841FE0D1A400522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA8A1FE0D1A500522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA891FE0D1A500522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA8F1FE0D1A500522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA8E1FE0D1A500522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA941FE0D1A600522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA931FE0D1A600522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA991FE0D1A600522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA981FE0D1A600522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA9E1FE0D1A700522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA9D1FE0D1A700522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AAA31FE0D1A700522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AAA21FE0D1A700522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AAA81FE0D1A800522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AAA71FE0D1A800522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		C12EA243198B436800309FA4 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C12EA244198B436800309FA4 /* en */,
+				7D68AA7A1FE0CAEB00522C49 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2413,6 +2525,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C12EA25D198B436900309FA4 /* en */,
+				7D68AA7B1FE0CAEB00522C49 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2765,6 +2878,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2820,6 +2934,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

@@ -19,12 +19,6 @@
 NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
 
 
-// See impl at bottom of file.
-@interface RileyLinkCmdSession ()
-@property (nonatomic, weak) RileyLinkBLEDevice *device;
-@end
-
-
 @interface RileyLinkBLEDevice () <CBPeripheralDelegate> {
     CBCharacteristic *dataCharacteristic;
     CBCharacteristic *responseCountCharacteristic;
@@ -132,8 +126,7 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
 
 - (void) runSessionWithName:(nonnull NSString*)name usingBlock:(void (^ _Nonnull)(RileyLinkCmdSession* _Nonnull))proc {
     dispatch_group_enter(idleDetectDispatchGroup);
-    RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] init];
-    session.device = self;
+    RileyLinkCmdSession *session = [[RileyLinkCmdSession alloc] initWithDevice: self];
     dispatch_async(_serialDispatchQueue, ^{
         runningSession = YES;
         NSLog(@"======================== %@ ===========================", name);
@@ -302,9 +295,7 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         GetVersionCmd *cmd = [[GetVersionCmd alloc] init];
         NSString *foundVersion;
         BOOL versionOK = NO;
-        // We run two commands here, to flush out responses to any old commands
-        [s doCmd:cmd withTimeoutMs:5000];
-        if ([s doCmd:cmd withTimeoutMs:1000]) {
+        if ([s doCmd:cmd timeoutMs:1000]) {
             foundVersion = [[NSString alloc] initWithData:cmd.response encoding:NSUTF8StringEncoding];
             NSLog(@"Got version: %@", foundVersion);
             
@@ -554,7 +545,7 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
         // This is a response to our idle listen command
         RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
         if (packet) {
-            NSLog(@"Read packet (%d): %zd bytes", packet.rssi, packet.data.length);
+            NSLog(@"Read packet (%zd): %zd bytes", packet.rssi, packet.data.length);
             NSDictionary *attrs = @{
                                     @"packet": packet,
                                     @"peripheral": self.peripheral,
@@ -590,12 +581,6 @@ NSString * const SubgRfspyErrorDomain = @"SubgRfspyErrorDomain";
     }
 }
 
-@end
-
-@implementation RileyLinkCmdSession
-- (BOOL) doCmd:(nonnull CmdBase*)cmd withTimeoutMs:(NSInteger)timeoutMS {
-    return [_device doCmd:cmd withTimeoutMs:timeoutMS];
-}
 @end
 
 

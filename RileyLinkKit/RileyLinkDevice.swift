@@ -138,7 +138,7 @@ public class RileyLinkDevice {
         case RILEYLINK_IDLE_RESPONSE_RECEIVED:
             if let packet = note.userInfo?["packet"] as? RFPacket, let pumpID = pumpState?.pumpID, let message = PumpMessage(rxData: packet.data), message.address.hexadecimalString == pumpID {
                 NotificationCenter.default.post(name: .RileyLinkDeviceDidReceiveIdleMessage, object: self, userInfo: [type(of: self).IdleMessageDataKey: packet.data])
-                pumpRSSI = Int(packet.rssi)
+                pumpRSSI = packet.rssi
             }
         case RILEYLINK_EVENT_DEVICE_TIMER_TICK:
             NotificationCenter.default.post(name: .RileyLinkDeviceDidUpdateTimerTick, object: self)
@@ -149,7 +149,7 @@ public class RileyLinkDevice {
 
     @objc private func receivedPacketNotification(_ note: Notification) {
         if let packet = note.userInfo?[PumpOpsSynchronous.PacketKey] as? RFPacket {
-            pumpRSSI = Int(packet.rssi)
+            pumpRSSI = packet.rssi
         }
     }
 }

@@ -30,7 +30,6 @@
 
 @interface RileyLinkBLEManager : NSObject
 
-@property (nonatomic, nonnull, readonly, copy) NSArray<RileyLinkBLEDevice *> *rileyLinkList;
 
 - (void)connectDevice:(nonnull RileyLinkBLEDevice *)device;
 - (void)disconnectDevice:(nonnull RileyLinkBLEDevice *)device;

@@ -18,6 +18,9 @@ public class MinimedPacket {
     public init?(encodedData: Data) {
         
         if let decoded = encodedData.decode4b6b() {
+            if decoded.count == 0 {
+                return nil
+            }
             let msg = decoded.prefix(upTo: (decoded.count - 1))
             if decoded.last != msg.crc8() {
                 // CRC invalid
@@ -33,7 +36,9 @@ public class MinimedPacket {
     public func encodedData() -> Data {
         var dataWithCRC = self.data
         dataWithCRC.append(data.crc8())
-        return Data(dataWithCRC.encode4b6b())
+        var encodedData = dataWithCRC.encode4b6b()
+        encodedData.append(0)
+        return Data(encodedData)
     }
 }
 

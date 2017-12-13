@@ -10,9 +10,20 @@ import Foundation
 import MinimedKit
 import RileyLinkBLEKit
 
-class PumpOpsCommunication {
-    private static let standardPumpResponseWindow: UInt32 = 180
-    private let expectedMaxBLELatencyMS = 1500
+private let standardPumpResponseWindow: UInt32 = 180
+
+protocol PumpMessageSender {
+    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8, msBetweenPackets: UInt8, retryCount: UInt8) throws -> PumpMessage
+}
+
+extension PumpMessageSender {
+    
+    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+        return try sendAndListen(msg, timeoutMS: timeoutMS, repeatCount: repeatCount, msBetweenPackets: msBetweenPackets, retryCount: retryCount)
+    }
+}
+
+class PumpOpsCommunication : PumpMessageSender {
     
     let session: RileyLinkCmdSession
     
@@ -20,7 +31,7 @@ class PumpOpsCommunication {
         self.session = session
     }
     
-    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32 = standardPumpResponseWindow, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8, msBetweenPackets: UInt8, retryCount: UInt8) throws -> PumpMessage {
         let cmd = SendAndListenCmd()
         cmd.outgoingData = MinimedPacket(outgoingData: msg.txData).encodedData()
         cmd.timeoutMS = timeoutMS
@@ -38,9 +49,9 @@ class PumpOpsCommunication {
         
         let totalSendTime = Double(repeatCount) * (singlePacketSendTime + Double(timeBetweenPackets))
         
-        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + expectedMaxBLELatencyMS
+        let totalTimeout = Int(retryCount+1) * (Int(totalSendTime) + Int(timeoutMS)) + Int(EXPECTED_MAX_BLE_LATENCY_MS)
         
-        guard session.doCmd(cmd, withTimeoutMs: totalTimeout) else {
+        guard session.doCmd(cmd, timeoutMs: totalTimeout) else {
             throw PumpCommsError.rileyLinkTimeout
         }
         

@@ -1,0 +1,42 @@
+/* The description of AlarmClockReminderPumpEvent */
+"AlarmClockReminder" = "AlarmClockReminder";
+
+/* The description of AlarmSensorPumpEvent */
+"AlarmSensor" = "AlarmSensor";
+
+/* Describing the battery chemistry as Alkaline */
+"Alkaline" = "Alcalina";
+
+/* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
+"Basal Profile %1$@: %2$@ U/hour" = "Perfil Basal %1$@: %2$@ U/hora";
+
+/* Pump error code when bolus is in progress */
+"Bolus in progress" = "Bolo en progreso";
+
+/* Pump error code returned when command refused */
+"Command refused" = "Comando rechazado";
+
+/* Describing the battery chemistry as Lithium */
+"Lithium" = "Litio";
+
+/* Pump error code describing max setting exceeded */
+"Max setting exceeded" = "Ajuste máximo excedido";
+
+/* Describing the North America pump region */
+"North America" = "Norte America";
+
+/* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
+"PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "MensageMicroinfusadora(%1$@, %2$@, %3$@, %4$@)";
+
+/* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
+"Temporary Basal: %1$.3f U/hour" = "Basal Temporal: %1$.3f U/hora";
+
+/* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
+"Temporary Basal: %1$d min" = "Basal Temporal: %1$d min";
+
+/* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
+"Temporary Basal: %1$d%%" = "Basal Temporal: %1$d%%";
+
+/* Describing the worldwide pump region */
+"World-Wide" = "Mundial";
+

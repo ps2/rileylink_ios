@@ -1,0 +1,189 @@
+/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
+"%1$@ MHz  %2$@/%3$@  %4$@" = "%1$@ MHz  %2$@/%3$@  %4$@";
+
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ U Bolo Falló";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ U bolo posiblemente fallado";
+
+/* The format string describing units of insulin remaining: (1: number of units) */
+"%1$@ Units of insulin remaining\n" = "%1$@ Unidades de insulina restantes";
+
+/* The format string describing number of basal schedule entries: (1: number of entries) */
+"%1$@ basal schedule entries\n" = "%1$@ entradas de prefil basal";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Communications error for a bolus currently running */
+"A bolus is already in progress." = "Un bolo ya está en progreso...";
+
+/* The title of the cell describing an awake radio */
+"Awake Until" = "Despierto hasta";
+
+/* The format string describing pump battery voltage: (1: battery voltage) */
+"Battery: %1$@ volts\n" = "Pila: %1$@ voltios";
+
+/* The label indicating the best radio frequency */
+"Best Frequency" = "Mejor Frecuencia";
+
+/* The format string describing pump bolusing state: (1: bolusing) */
+"Bolusing: %1$@\n" = "Bolo en progreso: %1$@";
+
+/* The title of the command to change pump time */
+"Change Time" = "Cambio de Hora";
+
+/* Progress message for changing pump time. */
+"Changing time…" = "Cambio de Hora...";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying." = "Revisar su microinfusadora antes de intentarlo de nuevo";
+
+/* The title of the section describing commands */
+"Commands" = "Comandos";
+
+/* No comment provided by engineer. */
+"Comms with another pump detected." = "Comunicación con otra microinfusadora detectado.";
+
+/* The connected state */
+"Connected" = "Conectado";
+
+/* The in-progress connecting state */
+"Connecting" = "Conectando";
+
+/* The title of the cell showing BLE connection state */
+"Connection State" = "Estado de Conexión";
+
+/* The title of the section describing the device */
+"Device" = "Dispositivo";
+
+/* The disconnected state */
+"Disconnected" = "Desconectado";
+
+/* The in-progress disconnecting state */
+"Disconnecting" = "Desconectando";
+
+/* The error displayed during MySentry pairing when the RX filter could not be set */
+"Error setting filter bandwidth: %@" = "Error al establecer el ancho de banda del filtro: %@";
+
+/* The title of the command to fetch recent glucose */
+"Fetch Recent Glucose" = "Obtener Glucosa Reciente";
+
+/* The title of the command to fetch recent history */
+"Fetch Recent History" = "Obtener Historia Reciente";
+
+/* Progress message for fetching pump glucose. */
+"Fetching glucose…" = "Obteniendo glucosa…";
+
+/* Progress message for fetching pump history. */
+"Fetching history…" = "Obteniendo historia…";
+
+/* Progress message for fetching pump model. */
+"Fetching pump model…" = "Obteniendo modelo de microinfusadora…";
+
+/* The title of the cell showing firmware version */
+"Firmware" = "Firmware";
+
+/* The title of the command to get pump model */
+"Get Pump Model" = "Obtener Modelo de Microinfusadora";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry." = "Es seguro intentarlo de nuevo.";
+
+/* The title of the cell describing an awake radio */
+"Last Awake" = "último despierto";
+
+/* The title of the cell describing no radio awake data */
+"Listening Off" = "Escuchando apagado";
+
+/* The title of the command to pair with mysentry */
+"MySentry Pair" = "Junta de MySentry";
+
+/* The title of the cell showing device name */
+"Name" = "Nombre";
+
+/* Message display when no response from tuning pump */
+"No response" = "No respuesta";
+
+/* The title of the cell showing the last idle */
+"On Idle" = "En Inactivo";
+
+/* The title of the section describing the pump */
+"Pump" = "Microinfusadora";
+
+/* The title of the cell showing pump ID */
+"Pump ID" = "ID de Microinfusadora";
+
+/* The title of the cell showing the pump model number */
+"Pump Model" = "Modelo de Microinfusadora";
+
+/* No comment provided by engineer. */
+"Pump did not respond." = "Microinfusadora no respondió.";
+
+/* The format string description of a Pump Error. (1: The specific error code) */
+"Pump error: %1$@" = "Error de Microinfusadora: %1$@";
+
+/* No comment provided by engineer. */
+"Pump is suspended." = "Micorinfusadora está suspendida";
+
+/* No comment provided by engineer. */
+"Pump responded unexpectedly." = "Micorinfusadora respondió inesperadamente.";
+
+/* The title of the command to read basal schedule */
+"Read Basal Schedule" = "Obtener prefil basal";
+
+/* The title of the command to read pump status */
+"Read Pump Status" = "Obtener estada de microinfusadora";
+
+/* Progress message for reading basal schedule */
+"Reading basal schedule…" = "Obteniendo perfil basal…";
+
+/* Progress message for reading pump status */
+"Reading pump status…" = "Obteniendo estada de microinfusadora…";
+
+/* No comment provided by engineer. */
+"RileyLink timed out." = "RileyLink agotó el tiempo.";
+
+/* The title of the command to send a button press */
+"Send Button Press" = "Enviar presion de botón";
+
+/* Progress message for sending button press to pump. */
+"Sending button press…" = "Enviando presion de botón…";
+
+/* The title of the cell showing BLE signal strength (RSSI) */
+"Signal Strength" = "Intensidad de señal";
+
+/* A message indicating a command succeeded */
+"Succeeded" = "éxito";
+
+/* The format string describing pump suspended state: (1: suspended) */
+"Suspended: %1$@\n" = "Suspendida: %1$@";
+
+/* The label indicating the results of each frequency trial */
+"Trials" = "Pruebas";
+
+/* The title of the command to re-tune the radio */
+"Tune Radio Frequency" = "Sintonizar frecuencia de radio";
+
+/* Progress message for tuning radio */
+"Tuning radio…" = "Sintonizando frecuencia de radio…";
+
+/* The detail text for an unknown pump model */
+"Unknown" = "Desconocido";
+
+/* The format string description of an unknown pump error code. (1: The specific error code raw value) */
+"Unknown pump error code: %1$@" = "Codigo desconocido de microinfusadora: %1$@";
+
+/* No comment provided by engineer. */
+"Unknown pump model." = "Desconocido modelo de microinfusadora.";
+
+/* No comment provided by engineer. */
+"Unknown response from pump." = "Respuesta desconocida de microinfusora";
+
+/* The title of the command to write a glucose history timestamp */
+"Write Glucose History Timestamp" = "Recordar la hora de glucosa historia";
+
+/* Progress message for writing glucose history timestamp. */
+"Writing glucose history timestamp…" = "Recordando la hora de glucosa historia…";
+

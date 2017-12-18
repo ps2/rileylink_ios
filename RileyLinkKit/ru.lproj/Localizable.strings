@@ -1,0 +1,189 @@
+/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
+"%1$@ MHz  %2$@/%3$@  %4$@" = "%1$@ MHz  %2$@/%3$@  %4$@";
+
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "Болюс %1$@ не состоялся";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "Болюс %1$@ мог не состояться";
+
+/* The format string describing units of insulin remaining: (1: number of units) */
+"%1$@ Units of insulin remaining\n" = "Остается %1$@ ед инсулина";
+
+/* The format string describing number of basal schedule entries: (1: number of entries) */
+"%1$@ basal schedule entries\n" = "%1$@ записи графика базала";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Communications error for a bolus currently running */
+"A bolus is already in progress." = "Болюс уже подается";
+
+/* The title of the cell describing an awake radio */
+"Awake Until" = "Рабочее состояние до";
+
+/* The format string describing pump battery voltage: (1: battery voltage) */
+"Battery: %1$@ volts\n" = "Батарея: %1$@ вольт";
+
+/* The label indicating the best radio frequency */
+"Best Frequency" = "Лучшая частота";
+
+/* The format string describing pump bolusing state: (1: bolusing) */
+"Bolusing: %1$@\n" = "Болюс: %1$@";
+
+/* The title of the command to change pump time */
+"Change Time" = "Изменить время";
+
+/* Progress message for changing pump time. */
+"Changing time…" = "Изменяется время…";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying." = "Проверьте помпу прежде чем повторить попытку.";
+
+/* The title of the section describing commands */
+"Commands" = "Команды";
+
+/* No comment provided by engineer. */
+"Comms with another pump detected." = "Обнаружена коммуникация с другой помпой";
+
+/* The connected state */
+"Connected" = "Соединение установлено";
+
+/* The in-progress connecting state */
+"Connecting" = "Соединяется";
+
+/* The title of the cell showing BLE connection state */
+"Connection State" = "Состояние соединения";
+
+/* The title of the section describing the device */
+"Device" = "устройство";
+
+/* The disconnected state */
+"Disconnected" = "Разъединено";
+
+/* The in-progress disconnecting state */
+"Disconnecting" = "Разъединяется";
+
+/* The error displayed during MySentry pairing when the RX filter could not be set */
+"Error setting filter bandwidth: %@" = "Ошибка при установке частоты фильтра: %@";
+
+/* The title of the command to fetch recent glucose */
+"Fetch Recent Glucose" = "Получить недавние значения гликемии";
+
+/* The title of the command to fetch recent history */
+"Fetch Recent History" = "Получить логи недавней истории";
+
+/* Progress message for fetching pump glucose. */
+"Fetching glucose…" = "Получаю гликемию…";
+
+/* Progress message for fetching pump history. */
+"Fetching history…" = "Получаю логи…";
+
+/* Progress message for fetching pump model. */
+"Fetching pump model…" = "Получаю модель помпы…";
+
+/* The title of the cell showing firmware version */
+"Firmware" = "Прошивка";
+
+/* The title of the command to get pump model */
+"Get Pump Model" = "Получить модель помпы";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry." = "Можно повторить без опасений";
+
+/* The title of the cell describing an awake radio */
+"Last Awake" = "Недавнее состояние активности";
+
+/* The title of the cell describing no radio awake data */
+"Listening Off" = "Получаю данные от";
+
+/* The title of the command to pair with mysentry */
+"MySentry Pair" = "Сопряжение с MySentry";
+
+/* The title of the cell showing device name */
+"Name" = "Название";
+
+/* Message display when no response from tuning pump */
+"No response" = "Нет ответа";
+
+/* The title of the cell showing the last idle */
+"On Idle" = "Бездействие";
+
+/* The title of the section describing the pump */
+"Pump" = "помпы";
+
+/* The title of the cell showing pump ID */
+"Pump ID" = "Инд № помпы";
+
+/* The title of the cell showing the pump model number */
+"Pump Model" = "Модель помпы";
+
+/* No comment provided by engineer. */
+"Pump did not respond." = "Нет ответа от помпы";
+
+/* The format string description of a Pump Error. (1: The specific error code) */
+"Pump error: %1$@" = "Ошибка помпы: %1$@";
+
+/* No comment provided by engineer. */
+"Pump is suspended." = "Помпа приостановлена.";
+
+/* No comment provided by engineer. */
+"Pump responded unexpectedly." = "Неожиданный ответ помпы.";
+
+/* The title of the command to read basal schedule */
+"Read Basal Schedule" = "Прочитать график базала";
+
+/* The title of the command to read pump status */
+"Read Pump Status" = "Прочитать статус помпы";
+
+/* Progress message for reading basal schedule */
+"Reading basal schedule…" = "Чтение графика базала…";
+
+/* Progress message for reading pump status */
+"Reading pump status…" = "Чтение статуса помпы…";
+
+/* No comment provided by engineer. */
+"RileyLink timed out." = "Тайм-аут RileyLink";
+
+/* The title of the command to send a button press */
+"Send Button Press" = "Отправить команду нажать кнопку";
+
+/* Progress message for sending button press to pump. */
+"Sending button press…" = "Отправляется команда нажать кнопку…";
+
+/* The title of the cell showing BLE signal strength (RSSI) */
+"Signal Strength" = "Уровень сигнала";
+
+/* A message indicating a command succeeded */
+"Succeeded" = "Успешно";
+
+/* The format string describing pump suspended state: (1: suspended) */
+"Suspended: %1$@\n" = "Приостановлено: %1$@";
+
+/* The label indicating the results of each frequency trial */
+"Trials" = "Попытки";
+
+/* The title of the command to re-tune the radio */
+"Tune Radio Frequency" = "Настроить радиочастоту";
+
+/* Progress message for tuning radio */
+"Tuning radio…" = "Настраивается радиочастота…";
+
+/* The detail text for an unknown pump model */
+"Unknown" = "Неизвестно";
+
+/* The format string description of an unknown pump error code. (1: The specific error code raw value) */
+"Unknown pump error code: %1$@" = "Неизвестный код ошибки помпы: %1$@";
+
+/* No comment provided by engineer. */
+"Unknown pump model." = "Неизвестная модель помпы";
+
+/* No comment provided by engineer. */
+"Unknown response from pump." = "Неизвестный ответ помпы";
+
+/* The title of the command to write a glucose history timestamp */
+"Write Glucose History Timestamp" = "Проставить временной штамп истории гликемии";
+
+/* Progress message for writing glucose history timestamp. */
+"Writing glucose history timestamp…" = "Наносится временной штамп истории гликемии";
+

@@ -12,17 +12,17 @@ import Foundation
 public struct UnknownMessageBody: MessageBody, DictionaryRepresentable {
     public static var length = 0
 
-    let rxData: NSData
+    let rxData: Data
 
-    public init?(rxData: NSData) {
+    public init?(rxData: Data) {
         self.rxData = rxData
     }
 
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
 
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
         return ["rawData": rxData]
     }
 }

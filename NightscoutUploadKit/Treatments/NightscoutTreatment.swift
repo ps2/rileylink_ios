@@ -8,9 +8,9 @@
 
 import MinimedKit
 
-public class NightscoutTreatment : DictionaryRepresentable {
+public class NightscoutTreatment: DictionaryRepresentable {
     
-    enum GlucoseType: String {
+    public enum GlucoseType: String {
         case Meter
         case Sensor
     }
@@ -20,19 +20,36 @@ public class NightscoutTreatment : DictionaryRepresentable {
         case MGDL = "mg/dL"
     }
     
-    let timestamp: NSDate
+    let timestamp: Date
     let enteredBy: String
-    
-    init(timestamp: NSDate, enteredBy: String) {
+    let notes: String?
+    let id: String?
+    let eventType: String?
+
+
+    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: String? = nil) {
         self.timestamp = timestamp
         self.enteredBy = enteredBy
+        self.id = id
+        self.notes = notes
+        self.eventType = eventType
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        return [
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [
             "created_at": TimeFormat.timestampStrFromDate(timestamp),
             "timestamp": TimeFormat.timestampStrFromDate(timestamp),
             "enteredBy": enteredBy,
         ]
+        if let id = id {
+            rval["_id"] = id
+        }
+        if let notes = notes {
+            rval["notes"] = notes
+        }
+        if let eventType = eventType {
+            rval["eventType"] = eventType
+        }
+        return rval
     }
 }

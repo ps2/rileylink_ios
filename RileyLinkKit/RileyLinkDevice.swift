@@ -12,30 +12,40 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
+public enum RileyLinkDeviceError: Error {
+    case configurationError
+}
+
+
 public class RileyLinkDevice {
-    
-    enum Error: ErrorType {
-        case ConfigurationError
-    }
-    
-    public static let DidReceiveIdleMessageNotification = "com.rileylink.RileyLinkKit.RileyLinkDeviceDidReceiveIdleMessageNotification"
     
     public static let IdleMessageDataKey = "com.rileylink.RileyLinkKit.RileyLinkDeviceIdleMessageData"
 
-    public static let DidUpdateTimerTickNotification = "com.rileylink.RileyLinkKit.RileyLinkDeviceDidUpdateTimerTickNotification"
-    
     public internal(set) var pumpState: PumpState?
     
-    public var lastIdle: NSDate? {
+    public var lastIdle: Date? {
         return device.lastIdle
     }
     
-    public private(set) var lastTuned: NSDate?
+    public private(set) var lastTuned: Date?
     
     public private(set) var radioFrequency: Double?
-    
+
+    public private(set) var pumpRSSI: Int?
+
     public var firmwareVersion: String? {
-        return device.firmwareVersion
+        var versions = [String]()
+        if let fwVersion = device.firmwareVersion {
+            versions.append(fwVersion)
+        }
+        if let fwVersion = device.bleFirmwareVersion {
+            versions.append(fwVersion.replacingOccurrences(of: "RileyLink:", with: ""))
+        }
+        if versions.count > 0 {
+            return versions.joined(separator: " / ")
+        } else {
+            return "Unknown"
+        }
     }
     
     public var deviceURI: String {
@@ -47,64 +57,67 @@ public class RileyLinkDevice {
     }
     
     public var RSSI: Int? {
-        return device.RSSI?.integerValue
+        return device.rssi?.intValue
     }
     
     public var peripheral: CBPeripheral {
         return device.peripheral
     }
     
-    internal init(BLEDevice: RileyLinkBLEDevice, pumpState: PumpState?) {
-        self.device = BLEDevice
+    internal init(bleDevice: RileyLinkBLEDevice, pumpState: PumpState?) {
+        self.device = bleDevice
         self.pumpState = pumpState
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(receivedDeviceNotification(_:)), name: nil, object: BLEDevice)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedDeviceNotification(_:)), name: nil, object: bleDevice)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedPacketNotification(_:)), name: .PumpOpsSynchronousDidReceivePacket, object: nil)
+
     }
-    
+
     // MARK: - Device commands
     
-    public func assertIdleListening() {
-        device.assertIdleListening()
+    public func assertIdleListening(force: Bool = false) {
+        device.assertIdleListeningForcingRestart(force)
     }
     
-    public func syncPumpTime(resultHandler: (ErrorType?) -> Void) {
+    public func syncPumpTime(_ resultHandler: @escaping (Error?) -> Void) {
         if let ops = ops {
-            ops.setTime({ () -> NSDateComponents in
-                    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-                    return calendar.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: NSDate())
+            ops.setTime({ () -> DateComponents in
+                    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+                    return calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
                 },
                 completion: { (error) in
                     if error == nil {
-                        ops.pumpState.timeZone = NSTimeZone.defaultTimeZone()
+                        ops.pumpState.timeZone = TimeZone.currentFixed
                     }
 
                     resultHandler(error)
                 }
             )
         } else {
-            resultHandler(Error.ConfigurationError)
+            resultHandler(RileyLinkDeviceError.configurationError)
         }
     }
     
-    public func tunePumpWithResultHandler(resultHandler: (Either<FrequencyScanResults, ErrorType>) -> Void) {
+    public func tunePump(_ resultHandler: @escaping (Either<FrequencyScanResults, Error>) -> Void) {
         if let ops = ops {
-            ops.tunePump { (result) in
+            ops.tuneRadio(for: ops.pumpState.pumpRegion) { (result) in
+                self.lastTuned = Date()
                 switch result {
-                case .Success(let scanResults):
-                    self.lastTuned = NSDate()
+                case .success(let scanResults):
                     self.radioFrequency = scanResults.bestFrequency
-                case .Failure:
+                case .failure:
                     break
                 }
                 
                 resultHandler(result)
             }
         } else {
-            resultHandler(.Failure(Error.ConfigurationError))
+            resultHandler(.failure(RileyLinkDeviceError.configurationError))
         }
     }
 
-    public func setCustomName(name: String) {
+    public func setCustomName(_ name: String) {
         device.setCustomName(name)
     }
     
@@ -120,17 +133,46 @@ public class RileyLinkDevice {
     
     internal var device: RileyLinkBLEDevice
     
-    @objc private func receivedDeviceNotification(note: NSNotification) {
-        switch note.name {
-        case RILEYLINK_EVENT_PACKET_RECEIVED:
-            if let packet = note.userInfo?["packet"] as? RFPacket, pumpID = pumpState?.pumpID, data = packet.data, message = PumpMessage(rxData: data) where message.address.hexadecimalString == pumpID {
-                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidReceiveIdleMessageNotification, object: self, userInfo: [self.dynamicType.IdleMessageDataKey: data])
+    @objc private func receivedDeviceNotification(_ note: Notification) {
+        switch note.name.rawValue {
+        case RILEYLINK_IDLE_RESPONSE_RECEIVED:
+            if let packet = note.userInfo?["packet"] as? RFPacket, let pumpID = pumpState?.pumpID, let message = PumpMessage(rxData: packet.data), message.address.hexadecimalString == pumpID {
+                NotificationCenter.default.post(name: .RileyLinkDeviceDidReceiveIdleMessage, object: self, userInfo: [type(of: self).IdleMessageDataKey: packet.data])
+                pumpRSSI = packet.rssi
             }
         case RILEYLINK_EVENT_DEVICE_TIMER_TICK:
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.DidUpdateTimerTickNotification, object: self)
+            NotificationCenter.default.post(name: .RileyLinkDeviceDidUpdateTimerTick, object: self)
         default:
             break
         }
     }
-    
+
+    @objc private func receivedPacketNotification(_ note: Notification) {
+        if let packet = note.userInfo?[PumpOpsSynchronous.PacketKey] as? RFPacket {
+            pumpRSSI = packet.rssi
+        }
+    }
+}
+
+
+extension RileyLinkDevice: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return [
+            "## RileyLinkDevice",
+            "name: \(name ?? "")",
+            "RSSI: \(RSSI ?? 0)",
+            "lastIdle: \(lastIdle ?? .distantPast)",
+            "lastTuned: \(lastTuned ?? .distantPast)",
+            "radioFrequency: \(radioFrequency ?? 0)",
+            "firmwareVersion: \(firmwareVersion ?? "")",
+            "state: \(peripheral.state.description)"
+        ].joined(separator: "\n")
+    }
+}
+
+
+extension Notification.Name {
+    public static let RileyLinkDeviceDidReceiveIdleMessage = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.RileyLinkDeviceDidReceiveIdleMessageNotification")
+
+    public static let RileyLinkDeviceDidUpdateTimerTick = NSNotification.Name(rawValue: "com.rileylink.RileyLinkKit.RileyLinkDeviceDidUpdateTimerTickNotification")
 }

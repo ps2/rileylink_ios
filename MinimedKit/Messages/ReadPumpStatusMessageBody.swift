@@ -13,8 +13,8 @@ public class ReadPumpStatusMessageBody: CarelinkLongMessageBody {
     public let bolusing: Bool
     public let suspended: Bool
 
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             return nil
         }
 
@@ -22,6 +22,10 @@ public class ReadPumpStatusMessageBody: CarelinkLongMessageBody {
         suspended = (rxData[3] as UInt8) > 0
 
         super.init(rxData: rxData)
+    }
+
+    public required init?(rxData: NSData) {
+        fatalError("init(rxData:) has not been implemented")
     }
     
 }

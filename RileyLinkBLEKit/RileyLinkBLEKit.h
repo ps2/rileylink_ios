@@ -15,7 +15,6 @@ FOUNDATION_EXPORT double RileyLinkBLEKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char RileyLinkBLEKitVersionString[];
 
 #import <RileyLinkBLEKit/GetPacketCmd.h>
-#import <RileyLinkBLEKit/RFPacket.h>
 #import <RileyLinkBLEKit/RileyLinkBLEDevice.h>
 #import <RileyLinkBLEKit/RileyLinkBLEManager.h>
 #import <RileyLinkBLEKit/SendAndListenCmd.h>

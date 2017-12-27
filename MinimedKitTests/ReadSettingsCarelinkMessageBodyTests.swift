@@ -11,18 +11,8 @@ import XCTest
 
 class ReadSettingsCarelinkMessageBodyTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testValidSettings() {
-        let message = PumpMessage(rxData: NSData(hexadecimalString: "a7594040c01900010001010096008c00000000000064010400140019010101000000000000000000000000000000000000000000000000000000000000000000000000000000e9")!)
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7594040c01900010001010096008c00000000000064010400140019010101000000000000000000000000000000000000000000000000000000000000000000000000000000")!)
         
         if let message = message {
             XCTAssertTrue(message.messageBody is ReadSettingsCarelinkMessageBody)
@@ -30,7 +20,7 @@ class ReadSettingsCarelinkMessageBodyTests: XCTestCase {
             if let body = message.messageBody as? ReadSettingsCarelinkMessageBody {
                 XCTAssertEqual(3.5, body.maxBasal)
                 XCTAssertEqual(15, body.maxBolus)
-                XCTAssertEqual(BasalProfile.Standard, body.selectedBasalProfile)
+                XCTAssertEqual(BasalProfile.standard, body.selectedBasalProfile)
                 XCTAssertEqual(4, body.insulinActionCurveHours)
             }
             
@@ -38,5 +28,23 @@ class ReadSettingsCarelinkMessageBodyTests: XCTestCase {
             XCTFail("Message is nil")
         }
     }
-    
+
+    func testValidSettings523() {
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7754838c0150003010100e505500000000000000164000400140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)
+        
+        if let message = message {
+            XCTAssertTrue(message.messageBody is ReadSettingsCarelinkMessageBody)
+            
+            if let body = message.messageBody as? ReadSettingsCarelinkMessageBody {
+                XCTAssertEqual(34, body.maxBasal)
+                XCTAssertEqual(22.9, body.maxBolus)
+                XCTAssertEqual(BasalProfile.standard, body.selectedBasalProfile)
+                XCTAssertEqual(4, body.insulinActionCurveHours)
+            }
+            
+        } else {
+            XCTFail("Message is nil")
+        }
+    }
+
 }

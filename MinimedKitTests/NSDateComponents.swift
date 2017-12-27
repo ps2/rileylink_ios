@@ -9,12 +9,12 @@
 import Foundation
 
 
-extension NSDateComponents {
+extension DateComponents {
     
-    convenience init(gregorianYear year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
+    init(gregorianYear year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
         self.init()
         
-        self.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        self.calendar = Calendar(identifier: Calendar.Identifier.gregorian)
         
         self.year = year
         self.month = month

@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import "RileyLinkBLEDevice.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
+#import "NSData+Conversion.h"
 
 @interface RileyLinkBLEDevice (_Private)
 
@@ -21,16 +23,6 @@
 
 @implementation RileyLinkBLEKitTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
 - (void)testVersionParsing {
     id peripheral = nil;
     
@@ -40,5 +32,13 @@
     
     XCTAssertEqual(SubgRfspyVersionStateUpToDate, state);
 }
+
+- (void)testDecodeRF {
+    NSData *response = [NSData dataWithHexadecimalString:@"4926a965a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35"];
+    RFPacket *packet = [[RFPacket alloc] initWithRfspyResponse:response];
+    XCTAssertEqualObjects(@"a965a5d1a8dab0e5635635555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555559a35", packet.data.hexadecimalString);
+    XCTAssertEqual(-37, packet.rssi);
+}
+
 
 @end

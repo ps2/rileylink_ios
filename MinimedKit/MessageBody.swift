@@ -14,9 +14,9 @@ public protocol MessageBody {
         get
     }
 
-    init?(rxData: NSData)
+    init?(rxData: Data)
 
-    var txData: NSData {
+    var txData: Data {
         get
     }
 }
@@ -24,13 +24,13 @@ public protocol MessageBody {
 
 extension MessageBody {
     static var emptyBuffer: [UInt8] {
-        return [UInt8](count: self.length, repeatedValue: 0)
+        return [UInt8](repeating: 0, count: self.length)
     }
 }
 
 
 public protocol DictionaryRepresentable {
-    var dictionaryRepresentation: [String: AnyObject] {
+    var dictionaryRepresentation: [String: Any] {
         get
     }
 }

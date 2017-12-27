@@ -10,28 +10,40 @@ import Foundation
 
 public class MealBolusNightscoutTreatment: NightscoutTreatment {
     
-    let glucose: Int
-    let glucoseType: GlucoseType
-    let units: Units
     let carbs: Int
-    let insulin: Double
-    
-    init(timestamp: NSDate, enteredBy: String, glucose: Int, glucoseType: GlucoseType, units: Units, carbs: Int, insulin: Double) {
+    let absorptionTime: TimeInterval?
+    let insulin: Double?
+    let glucose: Int?
+    let units: Units? // of glucose entry
+    let glucoseType: GlucoseType?
+    let foodType: String?
+
+    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
+        self.carbs = carbs
+        self.absorptionTime = absorptionTime
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
         self.insulin = insulin
-        self.carbs = carbs
-        super.init(timestamp: timestamp, enteredBy: enteredBy)
+        self.foodType = foodType
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Meal Bolus")
     }
     
-    override public var dictionaryRepresentation: [String: AnyObject] {
+    override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        rval["eventType"] = "Meal Bolus"
-        rval["glucose"] = glucose
-        rval["glucoseType"] = glucoseType.rawValue
-        rval["units"] = units.rawValue
+        rval["carbs"] = carbs
+        if let absorptionTime = absorptionTime {
+            rval["absorptionTime"] = absorptionTime.minutes
+        }
+        rval["insulin"] = insulin
+        if let glucose = glucose {
+            rval["glucose"] = glucose
+            rval["glucoseType"] = glucoseType?.rawValue
+            rval["units"] = units?.rawValue
+        }
+        if let foodType = foodType {
+            rval["foodType"] = foodType
+        }
         return rval
     }
-    
 }

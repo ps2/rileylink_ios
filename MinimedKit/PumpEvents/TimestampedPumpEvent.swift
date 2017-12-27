@@ -10,8 +10,7 @@ import Foundation
 
 public protocol TimestampedPumpEvent: PumpEvent {
     
-    var timestamp: NSDateComponents {
+    var timestamp: DateComponents {
         get
     }
-    
 }

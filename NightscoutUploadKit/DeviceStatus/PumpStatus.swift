@@ -9,15 +9,16 @@
 import Foundation
 
 public struct PumpStatus {
-    let clock: NSDate
+    let clock: Date
     let pumpID: String
     let iob: IOBStatus?
     let battery: BatteryStatus?
     let suspended: Bool?
     let bolusing: Bool?
     let reservoir: Double?
-    
-    public init(clock: NSDate, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil) {
+    let secondsFromGMT: Int?
+
+    public init(clock: Date, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil) {
         self.clock = clock
         self.pumpID = pumpID
         self.iob = iob
@@ -25,24 +26,37 @@ public struct PumpStatus {
         self.suspended = suspended
         self.bolusing = bolusing
         self.reservoir = reservoir
+        self.secondsFromGMT = secondsFromGMT
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        var rval = [String: AnyObject]()
+    public var dictionaryRepresentation: [String: Any] {
+        var rval = [String: Any]()
         
         rval["clock"] = TimeFormat.timestampStrFromDate(clock)
         rval["pumpID"] = pumpID
-        
+
+        if let iob = iob {
+            rval["iob"] = iob.dictionaryRepresentation
+        }
+
         if let battery = battery {
             rval["battery"] = battery.dictionaryRepresentation
         }
         
+        if let suspended = suspended {
+            rval["suspended"] = suspended
+        }
+
+        if let bolusing = bolusing {
+            rval["bolusing"] = bolusing
+        }
+
         if let reservoir = reservoir {
             rval["reservoir"] = reservoir
         }
-        
-        if let iob = iob {
-            rval["iob"] = iob.dictionaryRepresentation
+
+        if let secondsFromGMT = secondsFromGMT {
+            rval["secondsFromGMT"] = secondsFromGMT
         }
 
         return rval

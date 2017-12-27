@@ -7,6 +7,7 @@
 //
 
 #import "SendPacketCmd.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 @implementation SendPacketCmd
 
@@ -18,9 +19,9 @@
     cmd[3] = _msBetweenPackets;
     
     NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:4];
-    [serialized appendData:[_packet encodedData]];
-    uint8_t nullTerminator = 0;
-    [serialized appendBytes:&nullTerminator length:1];
+    if (_outgoingData) {
+        [serialized appendData:_outgoingData];
+    }
     return serialized;
 }
 

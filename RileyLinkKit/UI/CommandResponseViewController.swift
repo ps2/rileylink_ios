@@ -9,9 +9,9 @@
 import UIKit
 
 class CommandResponseViewController: UIViewController, UIActivityItemSource {
-    typealias Command = (completionHandler: (responseText: String) -> Void) -> String
+    typealias Command = (_ completionHandler: @escaping (_ responseText: String) -> Void) -> String
 
-    init(command: Command) {
+    init(command: @escaping Command) {
         self.command = command
 
         super.init(nibName: nil, bundle: nil)
@@ -36,28 +36,28 @@ class CommandResponseViewController: UIViewController, UIActivityItemSource {
         textView.text = command { [weak self] (responseText) -> Void in
             self?.textView.text = responseText
         }
-        textView.editable = false
+        textView.isEditable = false
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(shareText(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareText(_:)))
     }
 
     @objc func shareText(_: AnyObject?) {
         let activityVC = UIActivityViewController(activityItems: [self], applicationActivities: nil)
 
-        presentViewController(activityVC, animated: true, completion: nil)
+        present(activityVC, animated: true, completion: nil)
     }
 
     // MARK: - UIActivityItemSource
 
-    func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
-        return title ?? textView.text
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return title ?? textView.text ?? ""
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
-        return textView.attributedText
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
+        return textView.attributedText ?? ""
     }
 
-    func activityViewController(activityViewController: UIActivityViewController, subjectForActivityType activityType: String?) -> String {
-        return title ?? textView.text
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
+        return title ?? textView.text ?? ""
     }
 }

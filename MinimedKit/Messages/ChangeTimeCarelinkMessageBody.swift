@@ -11,14 +11,14 @@ import Foundation
 
 public class ChangeTimeCarelinkMessageBody: CarelinkLongMessageBody {
 
-    public convenience init?(dateComponents: NSDateComponents) {
+    public convenience init?(dateComponents: DateComponents) {
 
-        guard dateComponents.isValidDateInCalendar(NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!) else {
+        guard dateComponents.isValidDate(in: Calendar(identifier: Calendar.Identifier.gregorian)) else {
             return nil
         }
 
         let length = 7
-        let data = NSData(hexadecimalString: String(format: "%02x%02x%02x%02x%04x%02x%02x", length, dateComponents.hour, dateComponents.minute, dateComponents.second, dateComponents.year, dateComponents.month, dateComponents.day))!
+        let data = Data(hexadecimalString: String(format: "%02x%02x%02x%02x%04x%02x%02x", length, dateComponents.hour!, dateComponents.minute!, dateComponents.second!, dateComponents.year!, dateComponents.month!, dateComponents.day!))!
 
         self.init(rxData: data)
     }

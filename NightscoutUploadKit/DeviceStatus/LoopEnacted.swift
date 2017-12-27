@@ -10,31 +10,25 @@ import Foundation
 
 public struct LoopEnacted {
     let rate: Double
-    let duration: NSTimeInterval
-    let timestamp: NSDate
+    let duration: TimeInterval
+    let timestamp: Date
     let received: Bool
-    let predBGs: PredictedBG?
-    
-    public init(rate: Double, duration: NSTimeInterval, timestamp: NSDate, received: Bool, predBGs: PredictedBG? = nil) {
+
+    public init(rate: Double, duration: TimeInterval, timestamp: Date, received: Bool) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
         self.received = received
-        self.predBGs = predBGs
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
+    public var dictionaryRepresentation: [String: Any] {
 
-        var rval = [String: AnyObject]()
+        var rval = [String: Any]()
 
         rval["rate"] = rate
         rval["duration"] = duration / 60.0
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
-        rval["recieved"] = received  // [sic]
-
-        if let predBGs = predBGs {
-            rval["predBGs"] = predBGs.dictionaryRepresentation
-        }
+        rval["received"] = received
         return rval
     }
 }

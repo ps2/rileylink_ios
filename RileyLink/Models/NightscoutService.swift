@@ -16,7 +16,7 @@ struct NightscoutService: ServiceAuthentication {
 
     let title: String = NSLocalizedString("Nightscout", comment: "The title of the Nightscout service")
 
-    init(siteURL: NSURL?, APISecret: String?) {
+    init(siteURL: URL?, APISecret: String?) {
         credentials = [
             ServiceCredential(
                 title: NSLocalizedString("Site URL", comment: "The title of the nightscout site URL credential"),
@@ -29,7 +29,7 @@ struct NightscoutService: ServiceAuthentication {
                 title: NSLocalizedString("API Secret", comment: "The title of the nightscout API secret credential"),
                 placeholder: nil,
                 isSecret: false,
-                keyboardType: .ASCIICapable,
+                keyboardType: .asciiCapable,
                 value: APISecret
             )
         ]
@@ -40,15 +40,15 @@ struct NightscoutService: ServiceAuthentication {
     // The uploader instance, if credentials are present
     private(set) var uploader: NightscoutUploader? {
         didSet {
-            uploader?.errorHandler = { (error: ErrorType, context: String) -> Void in
+            uploader?.errorHandler = { (error: Error, context: String) -> Void in
                 print("Error \(error), while \(context)")
             }
         }
     }
 
-    var siteURL: NSURL? {
+    var siteURL: URL? {
         if let URLString = credentials[0].value {
-            return NSURL(string: URLString)
+            return URL(string: URLString)
         }
 
         return nil
@@ -60,21 +60,21 @@ struct NightscoutService: ServiceAuthentication {
 
     private(set) var isAuthorized: Bool = false
 
-    mutating func verify(completion: (success: Bool, error: ErrorType?) -> Void) {
+    mutating func verify(_ completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         
-        guard let siteURL = siteURL, APISecret = APISecret else {
-            completion(success: false, error: nil)
+        guard let siteURL = siteURL, let APISecret = APISecret else {
+            completion(false, nil)
             return
         }
         self.uploader = NightscoutUploader(siteURL: siteURL, APISecret: APISecret)
         
         self.uploader?.checkAuth({ (error) in
             if let error = error {
-                self.isAuthorized = false
-                completion(success: false, error: error)
+                // self.isAuthorized = false
+                completion(false, error)
             } else {
-                self.isAuthorized = true
-                completion(success: true, error: nil)
+                // self.isAuthorized = true
+                completion(true, nil)
             }
         })
     }

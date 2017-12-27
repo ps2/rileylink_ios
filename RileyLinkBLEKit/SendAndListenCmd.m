@@ -8,6 +8,7 @@
 
 #import "SendAndListenCmd.h"
 #import "RileyLinkBLEManager.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 @implementation SendAndListenCmd
 
@@ -25,9 +26,9 @@
     cmd[9] = _retryCount;
     
     NSMutableData *serialized = [NSMutableData dataWithBytes:cmd length:10];
-    [serialized appendData:[_packet encodedData]];
-    uint8_t nullTerminator = 0;
-    [serialized appendBytes:&nullTerminator length:1];
+    if (_outgoingData) {
+        [serialized appendData:_outgoingData];
+    }
     return serialized;
 }
 

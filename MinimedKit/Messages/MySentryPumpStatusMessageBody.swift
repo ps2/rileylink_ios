@@ -10,24 +10,24 @@ import Foundation
 
 
 public enum GlucoseTrend {
-    case Flat
-    case Up
-    case UpUp
-    case Down
-    case DownDown
+    case flat
+    case up
+    case upUp
+    case down
+    case downDown
     
     init?(byte: UInt8) {
         switch byte & 0b1110 {
         case 0b0000:
-            self = .Flat
+            self = .flat
         case 0b0010:
-            self = .Up
+            self = .up
         case 0b0100:
-            self = .UpUp
+            self = .upUp
         case 0b0110:
-            self = .Down
+            self = .down
         case 0b1000:
-            self = .DownDown
+            self = .downDown
         default:
             return nil
         }
@@ -36,49 +36,49 @@ public enum GlucoseTrend {
 
 
 public enum SensorReading {
-    case Off
-    case Missing
-    case MeterBGNow
-    case WeakSignal
-    case CalError
-    case Warmup
-    case Ended
-    case HighBG  // Above 400 mg/dL
-    case Lost
-    case Unknown
-    case Active(glucose: Int)
+    case off
+    case missing
+    case meterBGNow
+    case weakSignal
+    case calError
+    case warmup
+    case ended
+    case highBG  // Above 400 mg/dL
+    case lost
+    case unknown
+    case active(glucose: Int)
     
     init(glucose: Int) {
         switch glucose {
         case 0:
-            self = .Off
+            self = .off
         case 1:
-            self = .Missing
+            self = .missing
         case 2:
-            self = .MeterBGNow
+            self = .meterBGNow
         case 4:
-            self = .WeakSignal
+            self = .weakSignal
         case 6:
-            self = .CalError
+            self = .calError
         case 8:
-            self = .Warmup
+            self = .warmup
         case 10:
-            self = .Ended
+            self = .ended
         case 14:
-            self = .HighBG
+            self = .highBG
         case 20:
-            self = .Lost
+            self = .lost
         case 0...20:
-            self = .Unknown
+            self = .unknown
         default:
-            self = .Active(glucose: glucose)
+            self = .active(glucose: glucose)
         }
     }
 }
 
 public enum ClockType {
-    case TwentyFourHour
-    case TwelveHour
+    case twentyFourHour
+    case twelveHour
 }
 
 
@@ -105,7 +105,7 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
 
     public let sequence: UInt8
 
-    public let pumpDateComponents: NSDateComponents
+    public let pumpDateComponents: DateComponents
     public let batteryRemainingPercent: Int
     public let iob: Double
     public let reservoirRemainingUnits: Double
@@ -113,19 +113,19 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
     public let reservoirRemainingMinutes: Int
     
     public let glucoseTrend: GlucoseTrend
-    public let glucoseDateComponents: NSDateComponents?
+    public let glucoseDateComponents: DateComponents?
     public let glucose: SensorReading
     public let previousGlucose: SensorReading
     public let sensorAgeHours: Int
     public let sensorRemainingHours: Int
     public let clockType: ClockType
     
-    public let nextSensorCalibrationDateComponents: NSDateComponents?
+    public let nextSensorCalibrationDateComponents: DateComponents?
     
-    private let rxData: NSData
+    private let rxData: Data
     
-    public init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length, let trend = GlucoseTrend(byte: rxData[1]) else {
+    public init?(rxData: Data) {
+        guard rxData.count == type(of: self).length, let trend = GlucoseTrend(byte: rxData[1]) else {
             return nil
         }
         
@@ -133,12 +133,12 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
 
         sequence = rxData[0]
 
-        let pumpDateComponents = NSDateComponents(mySentryBytes: rxData[2...7])
+        let pumpDateComponents = DateComponents(mySentryBytes: rxData.subdata(in: 2..<8))
         
         let hourByte: UInt8 = rxData[2]
-        clockType = ((hourByte & 0b10000000) > 0) ? .TwentyFourHour : .TwelveHour
+        clockType = ((hourByte & 0b10000000) > 0) ? .twentyFourHour : .twelveHour
         
-        guard let calendar = pumpDateComponents.calendar where pumpDateComponents.isValidDateInCalendar(calendar) else {
+        guard let calendar = pumpDateComponents.calendar, pumpDateComponents.isValidDate(in: calendar) else {
             return nil
         }
         
@@ -146,31 +146,31 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         
         self.glucoseTrend = trend
         
-        reservoirRemainingUnits = Double(Int(bigEndianBytes: rxData[12...13])) / self.dynamicType.reservoirMultiplier
+        reservoirRemainingUnits = Double(Int(bigEndianBytes: rxData.subdata(in: 12..<14))) / type(of: self).reservoirMultiplier
         
         let reservoirRemainingPercent: UInt8 = rxData[15]
         self.reservoirRemainingPercent = Int(round(Double(reservoirRemainingPercent) / 4.0 * 100))
         
-        reservoirRemainingMinutes = Int(bigEndianBytes: [rxData[16], rxData[17]])
+        reservoirRemainingMinutes = Int(bigEndianBytes: rxData.subdata(in: 16..<18))
         
-        iob = Double(Int(bigEndianBytes: rxData[22...23])) / self.dynamicType.iobMultiplier
+        iob = Double(Int(bigEndianBytes: rxData.subdata(in: 22..<24))) / type(of: self).iobMultiplier
         
         let batteryRemainingPercent: UInt8 = rxData[14]
         self.batteryRemainingPercent = Int(round(Double(batteryRemainingPercent) / 4.0 * 100))
         
-        let glucoseValue = Int(bigEndianBytes: [rxData[9], rxData[24] << 7]) >> 7
-        let previousGlucoseValue = Int(bigEndianBytes: [rxData[10], rxData[24] << 6]) >> 7
+        let glucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[9], rxData[24] << 7])) >> 7
+        let previousGlucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[10], rxData[24] << 6])) >> 7
         
         glucose = SensorReading(glucose: glucoseValue)
         previousGlucose = SensorReading(glucose: previousGlucoseValue)
         
         switch glucose {
-        case .Off:
+        case .off:
             glucoseDateComponents = nil
         default:
-            let glucoseDateComponents = NSDateComponents(mySentryBytes: rxData[28...33])
+            let glucoseDateComponents = DateComponents(mySentryBytes: rxData.subdata(in: 28..<34))
             
-            if glucoseDateComponents.isValidDateInCalendar(calendar) {
+            if glucoseDateComponents.isValidDate(in: calendar) {
                 self.glucoseDateComponents = glucoseDateComponents
             } else {
                 self.glucoseDateComponents = nil
@@ -184,27 +184,27 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         self.sensorRemainingHours = Int(sensorRemainingHours)
         
         let matchingHour: UInt8 = rxData[20]
-        nextSensorCalibrationDateComponents = NSDateComponents()
+        nextSensorCalibrationDateComponents = DateComponents()
         nextSensorCalibrationDateComponents?.hour = Int(matchingHour)
         nextSensorCalibrationDateComponents?.minute = Int(rxData[21] as UInt8)
         nextSensorCalibrationDateComponents?.calendar = calendar
     }
     
-    public var dictionaryRepresentation: [String: AnyObject] {
-        let dateComponentsString = { (components: NSDateComponents) -> String in
+    public var dictionaryRepresentation: [String: Any] {
+        let dateComponentsString = { (components: DateComponents) -> String in
             String(
                 format: "%04d-%02d-%02dT%02d:%02d:%02d",
-                components.year,
-                components.month,
-                components.day,
-                components.hour,
-                components.minute,
-                components.second
+                components.year!,
+                components.month!,
+                components.day!,
+                components.hour!,
+                components.minute!,
+                components.second!
             )
         }
         
-        var dict: [String: AnyObject] = [
-            "glucoseTrend": String(glucoseTrend),
+        var dict: [String: Any] = [
+            "glucoseTrend": String(describing: glucoseTrend),
             "pumpDate": dateComponentsString(pumpDateComponents),
             "reservoirRemaining": reservoirRemainingUnits,
             "reservoirRemainingPercent": reservoirRemainingPercent,
@@ -213,7 +213,7 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         ]
         
         switch glucose {
-        case .Active(glucose: let glucose):
+        case .active(glucose: let glucose):
             dict["glucose"] = glucose
         default:
             break
@@ -222,25 +222,25 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         if let glucoseDateComponents = glucoseDateComponents {
             dict["glucoseDate"] = dateComponentsString(glucoseDateComponents)
         }
-        dict["sensorStatus"] = String(glucose)
+        dict["sensorStatus"] = String(describing: glucose)
         
         switch previousGlucose {
-        case .Active(glucose: let glucose):
+        case .active(glucose: let glucose):
             dict["lastGlucose"] = glucose
         default:
             break
         }
-        dict["lastSensorStatus"] = String(previousGlucose)
+        dict["lastSensorStatus"] = String(describing: previousGlucose)
         
         dict["sensorAgeHours"] = sensorAgeHours
         dict["sensorRemainingHours"] = sensorRemainingHours
         if let components = nextSensorCalibrationDateComponents {
-            dict["nextSensorCalibration"] = String(format: "%02d:%02d", components.hour, components.minute)
+            dict["nextSensorCalibration"] = String(format: "%02d:%02d", components.hour!, components.minute!)
         }
         
         dict["batteryRemainingPercent"] = batteryRemainingPercent
         
-        dict["byte1"] = rxData.subdataWithRange(NSRange(1...1)).hexadecimalString
+        dict["byte1"] = rxData.subdata(in: 1..<2).hexadecimalString
         // {50}
         let byte1: UInt8 = rxData[1]
         dict["byte1High"] = String(format: "%02x", byte1 & 0b11110000)
@@ -248,18 +248,18 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         dict["byte1Low"] = Int(byte1 & 0b00000001)
         // Observed values: 00, 01, 02, 03
         // These seem to correspond with carb/bolus activity
-        dict["byte11"] = rxData.subdataWithRange(NSRange(11...11)).hexadecimalString
+        dict["byte11"] = rxData.subdata(in: 11..<12).hexadecimalString
         // Current alarms?
         // 25: {00,52,65} 4:49 AM - 4:59 AM
         // 26: 00
-        dict["byte2526"] = rxData.subdataWithRange(NSRange(25...26)).hexadecimalString
+        dict["byte2526"] = rxData.subdata(in: 25..<27).hexadecimalString
         // 27: {73}
-        dict["byte27"] = rxData.subdataWithRange(NSRange(27...27)).hexadecimalString
+        dict["byte27"] = rxData.subdata(in: 27..<28).hexadecimalString
         
         return dict
     }
     
-    public var txData: NSData {
+    public var txData: Data {
         return rxData
     }
 }

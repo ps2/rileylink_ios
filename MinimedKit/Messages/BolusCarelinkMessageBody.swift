@@ -35,7 +35,7 @@ public class BolusCarelinkMessageBody: CarelinkLongMessageBody {
         
         let strokes = Int(units * Double(strokesPerUnit / scrollRate)) * scrollRate
         
-        let data = NSData(hexadecimalString: String(format: "%02x%0\(2 * length)x", length, strokes))!
+        let data = Data(hexadecimalString: String(format: "%02x%0\(2 * length)x", length, strokes))!
         
         self.init(rxData: data)!
     }

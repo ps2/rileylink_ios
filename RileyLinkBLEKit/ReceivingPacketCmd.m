@@ -7,14 +7,21 @@
 //
 
 #import "ReceivingPacketCmd.h"
+#import "RileyLinkBLEKit/RileyLinkBLEKit-Swift.h"
 
 @implementation ReceivingPacketCmd
 
 - (RFPacket*) receivedPacket {
-    if (_receivedPacket == nil && self.response != nil) {
-        _receivedPacket = [[RFPacket alloc] initWithRFSPYResponse:self.response];
+    RFPacket *packet;
+
+    if (self.response != nil) {
+        packet = [[RFPacket alloc] initWithRfspyResponse:self.response];
     }
-    return _receivedPacket;
+    return packet;
+}
+
+- (BOOL) didReceiveResponse {
+    return self.response != nil && self.response.length > 2;
 }
 
 @end

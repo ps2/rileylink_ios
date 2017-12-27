@@ -10,9 +10,9 @@ import UIKit
 
 
 internal protocol TextFieldTableViewControllerDelegate: class {
-    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController)
+    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController)
 
-    func textFieldTableViewControllerDidReturn(controller: TextFieldTableViewController)
+    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController)
 }
 
 
@@ -20,7 +20,7 @@ internal class TextFieldTableViewController: UITableViewController, UITextFieldD
 
     private weak var textField: UITextField?
 
-    internal var indexPath: NSIndexPath?
+    internal var indexPath: IndexPath?
 
     internal var placeholder: String?
 
@@ -30,21 +30,21 @@ internal class TextFieldTableViewController: UITableViewController, UITextFieldD
         }
     }
 
-    internal var keyboardType = UIKeyboardType.Default
+    internal var keyboardType = UIKeyboardType.default
 
     internal weak var delegate: TextFieldTableViewControllerDelegate?
 
     internal convenience init() {
-        self.init(style: .Grouped)
+        self.init(style: .grouped)
     }
 
     internal override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerNib(TextFieldTableViewCell.nib(), forCellReuseIdentifier: TextFieldTableViewCell.className)
+        tableView.register(TextFieldTableViewCell.nib(), forCellReuseIdentifier: TextFieldTableViewCell.className)
     }
 
-    internal override func viewDidAppear(animated: Bool) {
+    internal override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         textField?.becomeFirstResponder()
@@ -52,12 +52,12 @@ internal class TextFieldTableViewController: UITableViewController, UITextFieldD
 
     // MARK: - UITableViewDataSource
 
-    internal override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    internal override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    internal override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(TextFieldTableViewCell.className, forIndexPath: indexPath) as! TextFieldTableViewCell
+    internal override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldTableViewCell.className, for: indexPath) as! TextFieldTableViewCell
 
         textField = cell.textField
 
@@ -65,20 +65,20 @@ internal class TextFieldTableViewController: UITableViewController, UITextFieldD
         cell.textField.text = value
         cell.textField.keyboardType = keyboardType
         cell.textField.placeholder = placeholder
-        cell.textField.autocapitalizationType = .Words
+        cell.textField.autocapitalizationType = .words
 
         return cell
     }
 
     // MARK: - UITextFieldDelegate
 
-    internal func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    internal func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         value = textField.text
 
         return true
     }
 
-    internal func textFieldShouldReturn(textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         value = textField.text
 
         textField.delegate = nil

@@ -8,10 +8,11 @@
 
 @import Foundation;
 #import "CmdBase.h"
-#import "RFPacket.h"
+
+@class RFPacket;
 
 @interface ReceivingPacketCmd : CmdBase
 
-@property (nonatomic, strong) RFPacket *receivedPacket;
+@property (nonatomic, strong, readonly, nullable) RFPacket *receivedPacket;
 
 @end

@@ -10,25 +10,15 @@ import XCTest
 @testable import MinimedKit
 
 class MeterMessageTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
+        
     func testValidMeterMessage() {
-        let message = MeterMessage(rxData: NSData(hexadecimalString: "a5c527ad018e77")!)
+        let message = MeterMessage(rxData: Data(hexadecimalString: "a5c527ad018e77")!)
         
         if let message = message {
             XCTAssertEqual(message.glucose, 257)
             XCTAssertEqual(message.ackFlag, false)
         } else {
-            XCTFail("\(message) is nil")
+            XCTFail("\(String(describing: message)) is nil")
         }
     }
     

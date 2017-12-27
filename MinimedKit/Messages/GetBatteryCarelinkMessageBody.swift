@@ -9,18 +9,18 @@
 import Foundation
 
 public enum BatteryStatus {
-    case Low
-    case Normal
-    case Unknown(rawVal: UInt8)
+    case low
+    case normal
+    case unknown(rawVal: UInt8)
     
     init(statusByte: UInt8) {
         switch statusByte {
         case 1:
-            self = .Low
+            self = .low
         case 0:
-            self = .Normal
+            self = .normal
         default:
-            self = .Unknown(rawVal: statusByte)
+            self = .unknown(rawVal: statusByte)
         }
     }
 }
@@ -29,10 +29,10 @@ public class GetBatteryCarelinkMessageBody: CarelinkLongMessageBody {
     public let status: BatteryStatus
     public let volts: Double
     
-    public required init?(rxData: NSData) {
-        guard rxData.length == self.dynamicType.length else {
+    public required init?(rxData: Data) {
+        guard rxData.count == type(of: self).length else {
             volts = 0
-            status = .Unknown(rawVal: 0)
+            status = .unknown(rawVal: 0)
             super.init(rxData: rxData)
             return nil
         }
@@ -41,5 +41,9 @@ public class GetBatteryCarelinkMessageBody: CarelinkLongMessageBody {
         status = BatteryStatus(statusByte: rxData[1] as UInt8)
         
         super.init(rxData: rxData)
+    }
+
+    public required init?(rxData: NSData) {
+        fatalError("init(rxData:) has not been implemented")
     }
 }

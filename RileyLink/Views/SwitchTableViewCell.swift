@@ -18,7 +18,7 @@ class SwitchTableViewCell: UITableViewCell, IdentifiableClass {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        `switch`?.removeTarget(nil, action: nil, forControlEvents: .ValueChanged)
+        `switch`?.removeTarget(nil, action: nil, for: .valueChanged)
     }
 
 }

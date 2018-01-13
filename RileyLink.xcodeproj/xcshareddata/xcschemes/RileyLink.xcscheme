@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0900"
+   LastUpgradeVersion = "0910"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -68,16 +68,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "430D64D31CB855AB00FCA750"
-               BuildableName = "RileyLinkBLEKitTests.xctest"
-               BlueprintName = "RileyLinkBLEKitTests"
-               ReferencedContainer = "container:RileyLink.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "43722FB61CB9F7640038B7F2"
                BuildableName = "RileyLinkKitTests.xctest"
                BlueprintName = "RileyLinkKitTests"
@@ -91,6 +81,16 @@
                BlueprintIdentifier = "C1B383131CD0665D00CE7782"
                BuildableName = "NightscoutUploadKitTests.xctest"
                BlueprintName = "NightscoutUploadKitTests"
+               ReferencedContainer = "container:RileyLink.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "431CE7761F98564200255374"
+               BuildableName = "RileyLinkBLEKitTests.xctest"
+               BlueprintName = "RileyLinkBLEKitTests"
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>
          </TestableReference>

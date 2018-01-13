@@ -9,16 +9,16 @@
 import XCTest
 
 @testable import RileyLinkKit
-import MinimedKit
+@testable import MinimedKit
 import RileyLinkBLEKit
 
 class PumpOpsSynchronousTests: XCTestCase {
     
-    var sut: PumpOpsSynchronous!
+    var sut: PumpOpsSession!
+    var pumpSettings: PumpSettings!
     var pumpState: PumpState!
     var pumpID: String!
     var pumpRegion: PumpRegion!
-    var rileyLinkCmdSession: RileyLinkCmdSession!
     var pumpModel: PumpModel!
     var messageSenderStub: PumpMessageSenderStub!
 
@@ -45,8 +45,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         pumpID = "350535"
         pumpRegion = .worldWide
         pumpModel = PumpModel.model523
-        
-        rileyLinkCmdSession = RileyLinkCmdSession()
+
         messageSenderStub = PumpMessageSenderStub()
         
         setUpSUT()
@@ -54,11 +53,12 @@ class PumpOpsSynchronousTests: XCTestCase {
     
     /// Creates the System Under Test. This is needed because our SUT has dependencies injected through the constructor
     func setUpSUT() {
-        pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
+        pumpSettings = PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
+        pumpState = PumpState()
         pumpState.pumpModel = pumpModel
         pumpState.awakeUntil = Date(timeIntervalSinceNow: 100) // pump is awake
         
-        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession, pumpMessageSender: messageSenderStub)
+        sut = PumpOpsSession(settings: pumpSettings, pumpState: pumpState, session: messageSenderStub, delegate: messageSenderStub)
     }
     
     /// Duplicates logic in setUp with a new PumpModel
@@ -70,20 +70,20 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testShouldContinueIfTimestampBeforeStartDateNotEncountered() {
-        let pumpEvents: [PumpEvent] = [createBatteryEvent()]
-        
-        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
+        let page = HistoryPage(events: [createBatteryEvent()])
+
+        let (_, hasMoreEvents, _) = page.timestampedEvents(after: .distantPast, timeZone: pumpState.timeZone, model: pumpModel)
         
         XCTAssertTrue(hasMoreEvents)
     }
     
     func testShouldFinishIfTimestampBeforeStartDateEncountered() {
         let batteryEvent = createBatteryEvent()
-        let pumpEvents: [PumpEvent] = [batteryEvent]
+        let page = HistoryPage(events: [batteryEvent])
         
         let afterBatteryEventDate = batteryEvent.timestamp.date!.addingTimeInterval(TimeInterval(hours: 10))
         
-        let (_, hasMoreEvents, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: afterBatteryEventDate, pumpModel: pumpModel)
+        let (_, hasMoreEvents, _) = page.timestampedEvents(after: afterBatteryEventDate, timeZone: pumpState.timeZone, model: pumpModel)
         
         XCTAssertFalse(hasMoreEvents)
     }
@@ -91,9 +91,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     func testEventsAfterStartDateAreReturned() {
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
+        let page = HistoryPage(events: [batteryEvent2007, batteryEvent2017])
         
-        let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
+        let (events, _, _) = page.timestampedEvents(after: .distantPast, timeZone: pumpState.timeZone, model: pumpModel)
         
         XCTAssertEqual(events.count, 2)
     }
@@ -103,9 +103,9 @@ class PumpOpsSynchronousTests: XCTestCase {
         
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let pumpEvents: [PumpEvent] = [batteryEvent2017, batteryEvent2007]
+        let page = HistoryPage(events: [batteryEvent2007, batteryEvent2017])
         
-        let (events, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: datePast2007, pumpModel: pumpModel)
+        let (events, hasMoreEvents, cancelled) = page.timestampedEvents(after: datePast2007, timeZone: pumpState.timeZone, model: pumpModel)
         
         assertArray(events, doesntContainPumpEvent: batteryEvent2007)
         XCTAssertEqual(events.count, 1)
@@ -116,9 +116,9 @@ class PumpOpsSynchronousTests: XCTestCase {
     func testPumpLostTimeCancelsFetchEarly() {
         let batteryEvent2007 = createBatteryEvent(withDateComponent: dateComponents2007)
         let batteryEvent2017 = createBatteryEvent(withDateComponent: dateComponents2017)
-        let pumpEvents: [PumpEvent] = [batteryEvent2007, batteryEvent2017]
+        let page = HistoryPage(events: [batteryEvent2017, batteryEvent2007])
 
-        let (events, hasMoreEvents, cancelledEarly) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast,  pumpModel: pumpModel)
+        let (events, hasMoreEvents, cancelledEarly) = page.timestampedEvents(after: Date.distantPast,  timeZone: pumpState.timeZone, model: pumpModel)
 
         XCTAssertTrue(cancelledEarly)
         XCTAssertFalse(hasMoreEvents)
@@ -127,8 +127,8 @@ class PumpOpsSynchronousTests: XCTestCase {
     }
     
     func testEventsWithSameDataArentAddedTwice() {
-        let pumpEvents: [PumpEvent] = [createBolusEvent2009(), createBolusEvent2009()]
-        let (events, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: pumpEvents, startDate: Date.distantPast, pumpModel: pumpModel)
+        let page = HistoryPage(events: [createBolusEvent2009(), createBolusEvent2009()])
+        let (events, _, _) = page.timestampedEvents(after: Date.distantPast, timeZone: pumpState.timeZone, model: pumpModel)
         XCTAssertEqual(events.count, 1)
     }
 
@@ -139,9 +139,9 @@ class PumpOpsSynchronousTests: XCTestCase {
         // 120 minute duration
         let squareWaveBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080048000240009a24a1510")!, pumpModel: pumpModel)!
         
-        let events:[PumpEvent] = [squareWaveBolus]
+        let page = HistoryPage(events: [squareWaveBolus])
         
-        let (timeStampedEvents, _, _) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        let (timeStampedEvents, _, _) = page.timestampedEvents(after: .distantPast, timeZone: pumpState.timeZone, model: pumpModel)
         
         // It should be included
         XCTAssertTrue(array(timeStampedEvents, containsPumpEvent: squareWaveBolus))
@@ -159,8 +159,8 @@ class PumpOpsSynchronousTests: XCTestCase {
         let dateComponents = tempEventBasal.timestamp.addingTimeInterval(TimeInterval(hours:-4))
         let squareBolusEventFourHoursBefore = createSquareBolusEvent(dateComponents: dateComponents)
         
-        let events:[PumpEvent] = [squareBolusEventFourHoursBefore, tempEventBasal]
-        let (timeStampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: Date.distantPast, pumpModel: pumpModel)
+        let page = HistoryPage(events: [tempEventBasal, squareBolusEventFourHoursBefore])
+        let (timeStampedEvents, hasMoreEvents, cancelled) = page.timestampedEvents(after: .distantPast, timeZone: pumpState.timeZone, model: pumpModel)
 
         // Debatable (undefined) whether this should be returned. It is tested to avoid inadvertantly changing behavior
         assertArray(timeStampedEvents, containsPumpEvent: squareBolusEventFourHoursBefore)
@@ -173,10 +173,11 @@ class PumpOpsSynchronousTests: XCTestCase {
         setUpTestWithPumpModel(.model522)
         
         let pumpEvent = createSquareBolusEvent2010()
+        let page = HistoryPage(events: [pumpEvent])
         
         let startDate = pumpEvent.timestamp.date!.addingTimeInterval(TimeInterval(minutes:9))
         
-        let (timestampedEvents, hasMoreEvents, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: [pumpEvent], startDate: startDate, pumpModel: self.pumpModel)
+        let (timestampedEvents, hasMoreEvents, cancelled) = page.timestampedEvents(after: startDate, timeZone: pumpState.timeZone, model: pumpModel)
         
         assertArray(timestampedEvents, containsPumpEvent: pumpEvent)
         //We found an event before the start time but we can't verify the timestamp from the Square Bolus so there could be more valid events
@@ -195,9 +196,9 @@ class PumpOpsSynchronousTests: XCTestCase {
         let batteryEvent = createBatteryEvent(withDateComponent: dateComponents2007)
         let laterBatteryEvent = createBatteryEvent(atTime: after2007Date)
 
-        let events = [batteryEvent, laterBatteryEvent]
+        let page = HistoryPage(events: [laterBatteryEvent, batteryEvent])
 
-        let (_, _, cancelled) = sut.convertPumpEventToTimestampedEvents(pumpEvents: events, startDate: .distantPast, pumpModel: pumpModel)
+        let (_, _, cancelled) = page.timestampedEvents(after: .distantPast, timeZone: pumpState.timeZone, model: pumpModel)
 
         XCTAssertFalse(cancelled)
     }
@@ -310,7 +311,7 @@ class PumpOpsSynchronousTests: XCTestCase {
 // from comment at https://gist.github.com/szhernovoy/276e69eb90a0de84dd90
 func randomDataString(length:Int) -> String {
     let charSet = "abcdef0123456789"
-    var c = charSet.characters.map { String($0) }
+    var c = charSet.map { String($0) }
     var s:String = ""
     for _ in 0..<length {
         s.append(c[Int(arc4random()) % c.count])
@@ -318,14 +319,25 @@ func randomDataString(length:Int) -> String {
     return s
 }
 
-class PumpMessageSenderStub : PumpMessageSender {
+class PumpMessageSenderStub: PumpMessageSender {
+    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> Data {
+        return Data()
+    }
+
+    func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
+
+    func setBaseFrequency(_ frequency: Measurement<UnitFrequency>) throws {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
     
     var responses = [MessageType: [PumpMessage]]()
     
     // internal tracking of how many times a response type has been received
     private var responsesHaveOccured = [MessageType: Int]()
-    
-    func sendAndListen(_ msg: PumpMessage, timeoutMS: UInt32, repeatCount: UInt8 = 0, msBetweenPackets: UInt8 = 0, retryCount: UInt8 = 3) throws -> PumpMessage {
+
+    func sendAndListen(_ msg: PumpMessage, repeatCount: UInt8,  timeout: TimeInterval, retryCount: UInt8) throws -> PumpMessage {
         
         if let responseArray = responses[msg.messageType] {
             let numberOfResponsesReceived: Int
@@ -346,6 +358,12 @@ class PumpMessageSenderStub : PumpMessageSender {
             return responseArray[numberOfResponsesReceived]
         }
         return PumpMessage(rxData: Data())!
+    }
+}
+
+extension PumpMessageSenderStub: PumpOpsSessionDelegate {
+    func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
+
     }
 }
 

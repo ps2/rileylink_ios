@@ -8,9 +8,9 @@
 
 import Foundation
 
-fileprivate let codesRev:Dictionary<Int, UInt8> = [21: 0, 49: 1, 50: 2, 35: 3, 52: 4, 37: 5, 38: 6, 22: 7, 26: 8, 25: 9, 42: 10, 11: 11, 44: 12, 13: 13, 14: 14, 28: 15]
+fileprivate let codes = [21, 49, 50, 35, 52, 37, 38, 22, 26, 25, 42, 11, 44, 13, 14, 28]
 
-fileprivate let codes = [21,49,50,35,52,37,38,22,26,25,42,11,44,13,14,28]
+fileprivate let codesRev = Dictionary<Int, UInt8>(uniqueKeysWithValues: codes.enumerated().map({ ($1, UInt8($0)) }))
 
 public extension Sequence where Element == UInt8 {
 
@@ -26,11 +26,10 @@ public extension Sequence where Element == UInt8 {
             bitAccumulator = (bitAccumulator << 8) + Int(byte)
             availBits += 8
             if availBits >= 12 {
-                guard let
-                    hiNibble = codesRev[bitAccumulator >> (availBits - 6)],
-                    let loNibble = codesRev[(bitAccumulator >> (availBits - 12)) & 0b111111]
-                    else {
-                        return nil
+                guard let hiNibble = codesRev[bitAccumulator >> (availBits - 6)],
+                      let loNibble = codesRev[(bitAccumulator >> (availBits - 12)) & 0b111111]
+                else {
+                    return nil
                 }
                 let decoded = UInt8((hiNibble << 4) + loNibble)
                 buffer.append(decoded)

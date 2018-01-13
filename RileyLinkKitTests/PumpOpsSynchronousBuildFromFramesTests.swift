@@ -14,11 +14,11 @@ import RileyLinkBLEKit
 
 class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     
-    var sut: PumpOpsSynchronous!
+    var sut: PumpOpsSession!
+    var pumpSettings: PumpSettings!
     var pumpState: PumpState!
     var pumpID: String!
     var pumpRegion: PumpRegion!
-    var rileyLinkCmdSession: RileyLinkCmdSession!
     var pumpModel: PumpModel!
     var messageSenderStub: PumpMessageSenderStub!
     var timeZone: TimeZone!
@@ -29,8 +29,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         pumpID = "350535"
         pumpRegion = .worldWide
         pumpModel = PumpModel.model523
-        
-        rileyLinkCmdSession = RileyLinkCmdSession()
+
         messageSenderStub = PumpMessageSenderStub()
         timeZone = TimeZone(secondsFromGMT: 0)
         
@@ -38,11 +37,12 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     }
     
     func loadSUT() {
-        pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
+        pumpSettings = PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
+        pumpState = PumpState()
         pumpState.pumpModel = pumpModel
         pumpState.awakeUntil = Date(timeIntervalSinceNow: 100) // pump is awake
         
-        sut = PumpOpsSynchronous(pumpState: pumpState, session: rileyLinkCmdSession, pumpMessageSender: messageSenderStub)
+        sut = PumpOpsSession(settings: pumpSettings, pumpState: pumpState, session: messageSenderStub, delegate: messageSenderStub)
     }
     
     func testErrorIsntThrown() {
@@ -54,7 +54,8 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     func testUnexpectedResponseThrowsError() {
         var responseDictionary = buildResponsesDictionary()
         var pumpAckArray = responseDictionary[.getHistoryPage]!
-        pumpAckArray.insert(sut.makePumpMessage(to: .buttonPress), at: 0)
+        let message = PumpMessage(settings: pumpSettings, type: .buttonPress)
+        pumpAckArray.insert(message, at: 0)
         responseDictionary[.getHistoryPage]! = pumpAckArray
         
         messageSenderStub.responses = responseDictionary
@@ -66,7 +67,8 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
     func testUnexpectedPumpAckResponseThrowsError() {
         var responseDictionary = buildResponsesDictionary()
         var pumpAckArray = responseDictionary[.getHistoryPage]!
-        pumpAckArray.insert(sut.makePumpMessage(to: .buttonPress), at: 1)
+        let message = PumpMessage(settings: pumpSettings, type: .buttonPress)
+        pumpAckArray.insert(message, at: 1)
         responseDictionary[.getHistoryPage]! = pumpAckArray
         
         messageSenderStub.responses = responseDictionary
@@ -159,9 +161,9 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         let frameThreeMessages = buildPumpMessagesFromFrameArray(fetchPageThreeFrames)
         let frameFourMessages = buildPumpMessagesFromFrameArray(fetchPageFourFrames)
         
-        let pumpAckMessage = sut.makePumpMessage(to: .pumpAck)
+        let pumpAckMessage = PumpMessage(settings: pumpSettings, type: .pumpAck, body: PumpAckMessageBody(rxData: Data(count: 1))!)
         
-        let errorResponseMessage = sut.makePumpMessage(to: .errorResponse)
+        let errorResponseMessage = PumpMessage(settings: pumpSettings, type: .errorResponse, body: PumpErrorMessageBody(rxData: Data(count: 1))!)
         
         var getHistoryPageArray = [pumpAckMessage, frameZeroMessages[0]]
         getHistoryPageArray.append(contentsOf: [pumpAckMessage, frameOneMessages[0]])

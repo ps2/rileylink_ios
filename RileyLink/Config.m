@@ -8,8 +8,6 @@
 
 @import CoreData;
 #import "Config.h"
-#import "RileyLinkRecord.h"
-#import "RileyLink-Swift.h"
 #import <UIKit/UIKit.h>
 
 @implementation Config
@@ -56,42 +54,6 @@
     return [_defaults stringForKey:@"nightscoutAPISecret"];
 }
 
-- (void) setPumpID:(NSString *)pumpID {
-    [_defaults setValue:pumpID forKey:@"pumpID"];
-}
-
-- (NSString*) pumpID {
-    return [_defaults stringForKey:@"pumpID"];
-}
-
-- (void) setPumpModelNumber:(NSString *)pumpModelNumber {
-    [_defaults setValue:pumpModelNumber forKey:@"pumpModelNumber"];
-}
-
-- (NSString*) pumpModelNumber {
-    return [_defaults stringForKey:@"pumpModelNumber"];
-}
-
-
-- (void) setPumpTimeZone:(NSTimeZone *)pumpTimeZone {
-    
-    if (pumpTimeZone) {
-        NSNumber *rawValue = [NSNumber numberWithInteger:pumpTimeZone.secondsFromGMT];
-        [_defaults setObject:rawValue forKey:@"pumpTimeZone"];
-    } else {
-        [_defaults removeObjectForKey:@"pumpTimeZone"];
-    }
-}
-
-- (NSTimeZone*) pumpTimeZone {
-    NSNumber *offset = (NSNumber*)[_defaults objectForKey:@"pumpTimeZone"];
-    if (offset) {
-        return [NSTimeZone timeZoneForSecondsFromGMT: offset.integerValue];
-    } else {
-        return nil;
-    }
-}
-
 - (NSSet*) autoConnectIds {
     NSSet *set = [[NSUserDefaults standardUserDefaults] objectForKey:@"autoConnectIds"];
     if (!set) {
@@ -118,14 +80,6 @@
 
 - (void) setFetchCGMEnabled:(BOOL)fetchCGMEnabled {
     [[NSUserDefaults standardUserDefaults] setBool:fetchCGMEnabled forKey:@"fetchCGMEnabled"];
-}
-
-- (NSInteger) pumpRegion {
-    return [[NSUserDefaults standardUserDefaults] integerForKey:@"pumpRegion"];
-}
-
-- (void) setPumpRegion:(NSInteger)pumpRegion {
-    [[NSUserDefaults standardUserDefaults] setInteger:pumpRegion forKey:@"pumpRegion"];
 }
 
 

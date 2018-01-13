@@ -10,77 +10,54 @@ import Foundation
 import MinimedKit
 
 
-public class PumpState {
+public struct PumpState: RawRepresentable {
+    public typealias RawValue = [String: Any]
 
-    /// The key for a string value naming the object property whose value changed
-    public static let PropertyKey = "com.rileylink.RileyLinkKit.PumpState.PropertyKey"
-
-    /// The key for the previous value of the object property whose value changed.
-    /// If the value type does not conform to AnyObject, a raw representation will be provided instead.
-    public static let ValueChangeOldKey = "com.rileylink.RileyLinkKit.PumpState.ValueChangeOldKey"
-
-    public let pumpID: String
-        
-    public var timeZone: TimeZone = TimeZone.currentFixed {
-        didSet {
-            postChangeNotificationForKey("timeZone", oldValue: oldValue)
-        }
-    }
+    public var timeZone: TimeZone
     
-    public var pumpRegion: PumpRegion {
-        didSet {
-            postChangeNotificationForKey("pumpRegion", oldValue: oldValue.rawValue)
-        }
-    }
+    public var pumpModel: PumpModel?
     
-    public var pumpModel: PumpModel? {
-        didSet {
-            postChangeNotificationForKey("pumpModel", oldValue: oldValue?.rawValue)
-        }
-    }
+    public var awakeUntil: Date?
     
-    public var lastHistoryDump: Date? {
-        didSet {
-            postChangeNotificationForKey("lastHistoryDump", oldValue: oldValue)
-        }
-    }
-    
-    public var awakeUntil: Date? {
-        didSet {
-            postChangeNotificationForKey("awakeUntil", oldValue: awakeUntil)
-        }
-    }
-    
-    public init(pumpID: String, pumpRegion: PumpRegion) {
-        self.pumpID = pumpID
-        self.pumpRegion = pumpRegion
-    }
-    
-    public var isAwake: Bool {
+    var isAwake: Bool {
         if let awakeUntil = awakeUntil {
             return awakeUntil.timeIntervalSinceNow > 0
         }
 
         return false
     }
+    
+    var lastWakeAttempt: Date?
 
-    public var lastValidFrequency: Double? 
-    
-    public var lastWakeAttempt: Date?
-    
-    private func postChangeNotificationForKey(_ key: String, oldValue: Any?)  {
-        var userInfo: [String: Any] = [
-            type(of: self).PropertyKey: key
-        ]
-        
-        if let oldValue = oldValue {
-            userInfo[type(of: self).ValueChangeOldKey] = oldValue
+    public init() {
+        self.timeZone = .currentFixed
+    }
+
+    public init?(rawValue: RawValue) {
+        guard
+            let timeZoneSeconds = rawValue["timeZone"] as? Int,
+            let timeZone = TimeZone(secondsFromGMT: timeZoneSeconds)
+        else {
+            return nil
         }
-        
-        NotificationCenter.default.post(name: .PumpStateValuesDidChange,
-                                                                  object: self,
-                                                                  userInfo: userInfo
-        )
+
+        self.timeZone = timeZone
+
+        if let pumpModelNumber = rawValue["pumpModel"] as? PumpModel.RawValue {
+            pumpModel = PumpModel(rawValue: pumpModelNumber)
+        }
+    }
+
+    public var rawValue: RawValue {
+        var rawValue: RawValue = [
+            "timeZone": timeZone.secondsFromGMT(),
+        ]
+
+        if let pumpModel = pumpModel {
+            rawValue["pumpModel"] = pumpModel.rawValue
+        }
+
+        return rawValue
     }
 }
 
@@ -91,18 +68,9 @@ extension PumpState: CustomDebugStringConvertible {
         return [
             "## PumpState",
             "timeZone: \(timeZone)",
-            "pumpRegion: \(pumpRegion)",
             "pumpModel: \(pumpModel?.rawValue ?? "")",
-            "lastHistoryDump: \(lastHistoryDump ?? .distantPast)",
             "awakeUntil: \(awakeUntil ?? .distantPast)",
-            "lastWakeAttempt: \(String(describing: lastWakeAttempt))",
+            "lastWakeAttempt: \(String(describing: lastWakeAttempt))"
         ].joined(separator: "\n")
     }
-}
-
-
-extension Notification.Name {
-    /// Posted when values of the properties of the PumpState object have changed.
-    /// The `userInfo` dictionary contains the following keys: `PropertyKey` and `ValueChangeOldKey`
-    public static let PumpStateValuesDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.PumpState.ValuesDidChangeNotification")
 }

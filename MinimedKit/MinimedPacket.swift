@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class MinimedPacket {
+public struct MinimedPacket {
     public let data: Data
     
     public init(outgoingData: Data) {

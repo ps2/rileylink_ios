@@ -7,12 +7,17 @@
 //
 
 import UIKit
-import RileyLinkKit
 import MinimedKit
+import RileyLinkKit
+import RileyLinkKitUI
 
 private let ConfigCellIdentifier = "ConfigTableViewCell"
 
 private let TapToSetString = NSLocalizedString("Tap to set", comment: "The empty-state text for a configuration value")
+
+
+extension TextFieldTableViewController: IdentifiableClass { }
+
 
 class SettingsTableViewController: UITableViewController, TextFieldTableViewControllerDelegate {
 
@@ -96,12 +101,18 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .pumpID:
                 let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
                 configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
-                configCell.detailTextLabel?.text = DeviceDataManager.sharedManager.pumpID ?? TapToSetString
+                configCell.detailTextLabel?.text = dataManager.pumpSettings?.pumpID ?? TapToSetString
                 cell = configCell
             case .pumpRegion:
                 let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
                 configCell.textLabel?.text = NSLocalizedString("Pump Region", comment: "The title text for the pump Region config value")
-                configCell.detailTextLabel?.text = String(describing: DeviceDataManager.sharedManager.pumpRegion)
+
+                if let pumpRegion = dataManager.pumpSettings?.pumpRegion {
+                    configCell.detailTextLabel?.text = String(describing: pumpRegion)
+                } else {
+                    configCell.detailTextLabel?.text = nil
+                }
+
                 cell = configCell
             case .nightscout:
                 let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
@@ -142,9 +153,20 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .pumpID:
-                performSegue(withIdentifier: TextFieldTableViewController.className, sender: sender)
+                let vc = TextFieldTableViewController()
+
+                vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
+                vc.value = dataManager.pumpSettings?.pumpID
+
+                if let cell = tableView.cellForRow(at: indexPath) {
+                    vc.title = cell.textLabel?.text
+                }
+                vc.indexPath = indexPath
+                vc.delegate = self
+
+                show(vc, sender: indexPath)
             case .pumpRegion:
-                let vc = RadioSelectionTableViewController.pumpRegion(dataManager.pumpRegion)
+                let vc = RadioSelectionTableViewController.pumpRegion(dataManager.pumpSettings?.pumpRegion)
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self
                 
@@ -174,32 +196,6 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         }
     }
 
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let
-            cell = sender as? UITableViewCell,
-            let indexPath = tableView.indexPath(for: cell)
-        {
-            switch segue.destination {
-            case let vc as TextFieldTableViewController:
-                switch ConfigurationRow(rawValue: indexPath.row)! {
-                case .pumpID:
-                    vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
-                    vc.value = DeviceDataManager.sharedManager.pumpID
-                default:
-                    break
-                }
-                
-                vc.title = cell.textLabel?.text
-                vc.indexPath = indexPath
-                vc.delegate = self
-            default:
-                break
-            }
-        }
-    }
-
     // MARK: - Uploader management
 
     @objc func uploadEnabledChanged(_ sender: UISwitch) {
@@ -218,7 +214,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
         if let indexPath = controller.indexPath {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .pumpID:
-                DeviceDataManager.sharedManager.pumpID = controller.value
+                dataManager.setPumpID(controller.value)
             default:
                 break
             }
@@ -226,13 +222,17 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
 
         tableView.reloadData()
     }
+
+    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
+
+    }
 }
 
 
 extension SettingsTableViewController: RadioSelectionTableViewControllerDelegate {
     func radioSelectionTableViewControllerDidChangeSelectedIndex(_ controller: RadioSelectionTableViewController) {
         if let selectedIndex = controller.selectedIndex, let pumpRegion = PumpRegion(rawValue: selectedIndex) {
-            dataManager.pumpRegion = pumpRegion
+            dataManager.setPumpRegion(pumpRegion)
             
             tableView.reloadRows(at: [IndexPath(row: ConfigurationRow.pumpRegion.rawValue, section: Section.configuration.rawValue)], with: .none)
         }

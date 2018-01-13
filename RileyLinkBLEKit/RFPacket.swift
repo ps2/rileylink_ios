@@ -8,16 +8,11 @@
 
 import Foundation
 
-@objc public class RFPacket: NSObject {
-    @objc public let data: Data
-    @objc public let rssi: Int
-    
-    @objc public init(outgoingData: Data) {
-        self.data = outgoingData
-        rssi = 0
-    }
-    
-    @objc public init?(rfspyResponse: Data) {
+public struct RFPacket {
+    public let data: Data
+    public let rssi: Int
+
+    public init?(rfspyResponse: Data) {
         guard rfspyResponse.count > 2 else {
             return nil
         }
@@ -31,9 +26,6 @@ import Foundation
         }
         
         self.data = rfspyResponse.subdata(in: 2..<rfspyResponse.count)
-        
-        super.init()
-
     }
 }
 

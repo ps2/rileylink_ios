@@ -10,9 +10,9 @@ import Foundation
 
 public enum PumpErrorCode: UInt8 {
     // commandRefused can happen when temp basal type is set incorrectly, during suspended pump, or unfinished prime.
-    case commandRefused  = 0x08
+    case commandRefused      = 0x08
     case maxSettingExceeded  = 0x09
-    case bolusInProgress  = 0x0c
+    case bolusInProgress     = 0x0c
     
     public var description: String {
         switch self {

@@ -39,7 +39,7 @@ public struct MySentryAckMessageBody: MessageBody {
     }
 
     public var txData: Data {
-        var buffer = type(of: self).emptyBuffer
+        var buffer = [UInt8](repeating: 0, count: type(of: self).length)
 
         buffer[0] = sequence
         buffer.replaceSubrange(1..<4, with: mySentryID[0..<3])

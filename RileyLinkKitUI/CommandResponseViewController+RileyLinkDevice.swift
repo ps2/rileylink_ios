@@ -7,6 +7,7 @@
 
 import RileyLinkBLEKit
 import RileyLinkKit
+import MinimedKit
 
 
 extension CommandResponseViewController {
@@ -173,7 +174,7 @@ extension CommandResponseViewController {
             ops?.runSession(withName: "Get Basal Settings", using: device) { (session) in
                 let response: String
                 do {
-                    let schedule = try session.getBasalSchedule()
+                    let schedule = try session.getBasalSchedule(for: .standard)
                     var str = String(format: NSLocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), integerFormatter.string(from: NSNumber(value: schedule.entries.count))!)
                     for entry in schedule.entries {
                         str += "\(String(describing: entry))\n"

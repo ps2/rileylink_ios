@@ -60,9 +60,6 @@
 		435535DC1FB8B37E00CE5A23 /* PumpMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435535DB1FB8B37E00CE5A23 /* PumpMessage.swift */; };
 		436CCEF21FB953E800A6822B /* CommandSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CCEF11FB953E800A6822B /* CommandSession.swift */; };
 		436CCEF41FB9541A00A6822B /* SendAndListen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CCEF31FB9541A00A6822B /* SendAndListen.swift */; };
-		4370A3781FAF8A3F00EC666A /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
-		4370A37A1FAF8A7400EC666A /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4370A3791FAF8A7400EC666A /* CoreBluetooth.framework */; };
-		4370A37B1FAF8A7E00EC666A /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		4370A37E1FAF8EF200EC666A /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
@@ -86,6 +83,9 @@
 		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
 		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
 		43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
+		43BF58B01FF594CB00499C46 /* SelectBasalProfileMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */; };
+		43BF58B21FF5A22200499C46 /* BasalProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF58B11FF5A22200499C46 /* BasalProfile.swift */; };
+		43BF58B31FF6079600499C46 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43C0196C1FA6B8AE007ABFA1 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CA93241CB8BB33000026B5 /* CoreBluetooth.framework */; };
 		43C246971D8918AE0031F8D1 /* Crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C246951D8918AE0031F8D1 /* Crypto.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43C246A01D8919E20031F8D1 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 43C2469F1D8919E20031F8D1 /* Crypto.m */; };
@@ -117,22 +117,6 @@
 		43D5E7A21FAF7CF2004ACDB7 /* CaseCountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C659181E16BA9D0025CC58 /* CaseCountable.swift */; };
 		43D5E7A31FAF7D05004ACDB7 /* CBPeripheralState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */; };
 		43D5E7A41FAF7D4D004ACDB7 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
-		43D5E7AE1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D5E7AC1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43D5E7BE1FAF8700004ACDB7 /* BLEFirmwareVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE79D1F9BE73900255374 /* BLEFirmwareVersion.swift */; };
-		43D5E7BF1FAF8700004ACDB7 /* CBCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A01F9D195600255374 /* CBCentralManager.swift */; };
-		43D5E7C01FAF8700004ACDB7 /* CBPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE78E1F985B6E00255374 /* CBPeripheral.swift */; };
-		43D5E7C11FAF8700004ACDB7 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A21F9D737F00255374 /* Command.swift */; };
-		43D5E7C21FAF8700004ACDB7 /* CommandSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A61F9D98F700255374 /* CommandSession.swift */; };
-		43D5E7C31FAF8700004ACDB7 /* PeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE78C1F985B5400255374 /* PeripheralManager.swift */; };
-		43D5E7C41FAF8700004ACDB7 /* PeripheralManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D5E7871FAEDAC4004ACDB7 /* PeripheralManagerError.swift */; };
-		43D5E7C51FAF8700004ACDB7 /* PeripheralManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7921F985DE700255374 /* PeripheralManager+RileyLink.swift */; };
-		43D5E7C61FAF8700004ACDB7 /* RFPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A41F9D78F500255374 /* RFPacket.swift */; };
-		43D5E7C71FAF8700004ACDB7 /* RadioFirmwareVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432847C21FA57C0F00CDE69C /* RadioFirmwareVersion.swift */; };
-		43D5E7C81FAF8700004ACDB7 /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE79B1F9B21BA00255374 /* RileyLinkDevice.swift */; };
-		43D5E7C91FAF8700004ACDB7 /* RileyLinkDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7901F985D8D00255374 /* RileyLinkDeviceManager.swift */; };
-		43D5E7CA1FAF8743004ACDB7 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
-		43D5E7CB1FAF8750004ACDB7 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
-		43D5E7CC1FAF877F004ACDB7 /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
 		43EBE4521EAD23C40073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
@@ -340,7 +324,6 @@
 		C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
-		C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
@@ -577,6 +560,8 @@
 		43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateFormatter.swift; sourceTree = "<group>"; };
 		43B0ADC81D1268B300AAD278 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
+		43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectBasalProfileMessageBody.swift; sourceTree = "<group>"; };
+		43BF58B11FF5A22200499C46 /* BasalProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalProfile.swift; sourceTree = "<group>"; };
 		43C246931D8918AE0031F8D1 /* Crypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Crypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C246951D8918AE0031F8D1 /* Crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
 		43C246961D8918AE0031F8D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -593,8 +578,6 @@
 		43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D5E7901FAF7BFB004ACDB7 /* RileyLinkKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkKitUI.h; sourceTree = "<group>"; };
 		43D5E7911FAF7BFB004ACDB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		43D5E7AA1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkBLEKit_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43D5E7AC1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkBLEKit_watchOS.h; sourceTree = "<group>"; };
 		43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
@@ -824,7 +807,6 @@
 		C1B383141CD0665D00CE7782 /* NightscoutUploadKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightscoutUploadKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
-		C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSUserDefaults.swift; path = NightscoutUploadKit/NSUserDefaults.swift; sourceTree = SOURCE_ROOT; };
 		C1B4A9521D1E613A003B8985 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		C1B4A9531D1E613A003B8985 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		C1B4A9541D1E613A003B8985 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
@@ -913,8 +895,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4370A37B1FAF8A7E00EC666A /* RileyLinkKit.framework in Frameworks */,
-				4370A3781FAF8A3F00EC666A /* MinimedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,14 +903,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				432CF9061FF74CCB003AB446 /* RileyLinkKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43D5E7A61FAF83CD004ACDB7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4370A37A1FAF8A7400EC666A /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1098,14 +1070,6 @@
 				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
 			);
 			path = RileyLinkKitUI;
-			sourceTree = "<group>";
-		};
-		43D5E7AB1FAF83CD004ACDB7 /* RileyLinkBLEKit-watchOS */ = {
-			isa = PBXGroup;
-			children = (
-				43D5E7AC1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.h */,
-			);
-			path = "RileyLinkBLEKit-watchOS";
 			sourceTree = "<group>";
 		};
 		43EBE44F1EAD234F0073A0B5 /* Common */ = {
@@ -1301,7 +1265,6 @@
 				431CE7701F98564100255374 /* RileyLinkBLEKit */,
 				431CE77D1F98564200255374 /* RileyLinkBLEKitTests */,
 				43D5E78F1FAF7BFB004ACDB7 /* RileyLinkKitUI */,
-				43D5E7AB1FAF83CD004ACDB7 /* RileyLinkBLEKit-watchOS */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 			);
@@ -1322,7 +1285,6 @@
 				431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */,
 				431CE7771F98564200255374 /* RileyLinkBLEKitTests.xctest */,
 				43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */,
-				43D5E7AA1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1406,6 +1368,7 @@
 		C170C98C1CECD6CE00F3D8E5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				43BF58B11FF5A22200499C46 /* BasalProfile.swift */,
 				436CCEF11FB953E800A6822B /* CommandSession.swift */,
 				4384C8C51FB92F8100D916E6 /* HistoryPage.swift */,
 				435535DB1FB8B37E00CE5A23 /* PumpMessage.swift */,
@@ -1551,7 +1514,6 @@
 				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
-				C1B4A94D1D1C423D003B8985 /* NSUserDefaults.swift */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
 				C1AF21EA1D4900880088C41D /* Treatments */,
 			);
@@ -1618,6 +1580,7 @@
 				2FDE1A061E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift */,
 				C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */,
 				C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */,
+				43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -1654,14 +1617,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D5E7921FAF7BFB004ACDB7 /* RileyLinkKitUI.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43D5E7A71FAF83CD004ACDB7 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43D5E7AE1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1791,24 +1746,6 @@
 			name = RileyLinkKitUI;
 			productName = RileyLinkKitUI;
 			productReference = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43D5E7A91FAF83CD004ACDB7 /* RileyLinkBLEKit-watchOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43D5E7AF1FAF83CD004ACDB7 /* Build configuration list for PBXNativeTarget "RileyLinkBLEKit-watchOS" */;
-			buildPhases = (
-				43D5E7A51FAF83CD004ACDB7 /* Sources */,
-				43D5E7A61FAF83CD004ACDB7 /* Frameworks */,
-				43D5E7A71FAF83CD004ACDB7 /* Headers */,
-				43D5E7A81FAF83CD004ACDB7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "RileyLinkBLEKit-watchOS";
-			productName = "RileyLinkBLEKit-watchOS";
-			productReference = 43D5E7AA1FAF83CD004ACDB7 /* RileyLinkBLEKit_watchOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C10D9BC01C8269D500378342 /* MinimedKit */ = {
@@ -1964,10 +1901,6 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
-					43D5E7A91FAF83CD004ACDB7 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-					};
 					C10D9BC01C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 0900;
@@ -2018,7 +1951,6 @@
 				C1B383131CD0665D00CE7782 /* NightscoutUploadKitTests */,
 				43C246921D8918AE0031F8D1 /* Crypto */,
 				431CE76E1F98564100255374 /* RileyLinkBLEKit */,
-				43D5E7A91FAF83CD004ACDB7 /* RileyLinkBLEKit-watchOS */,
 				431CE7761F98564200255374 /* RileyLinkBLEKitTests */,
 				43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */,
 			);
@@ -2069,13 +2001,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4370A37E1FAF8EF200EC666A /* TextFieldTableViewCell.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43D5E7A81FAF83CD004ACDB7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2187,6 +2112,7 @@
 				435535DC1FB8B37E00CE5A23 /* PumpMessage.swift in Sources */,
 				434AB0971CBA0DF600422F4A /* PumpOpsSession.swift in Sources */,
 				2F962EC31E6873A10070EFBD /* PumpMessageSender.swift in Sources */,
+				43BF58B21FF5A22200499C46 /* BasalProfile.swift in Sources */,
 				4345D1CE1DA16AF300BAAD22 /* TimeZone.swift in Sources */,
 				434AB0951CBA0DF600422F4A /* Either.swift in Sources */,
 			);
@@ -2217,6 +2143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D5E79E1FAF7C47004ACDB7 /* TextFieldTableViewController.swift in Sources */,
+				43BF58B31FF6079600499C46 /* TimeInterval.swift in Sources */,
 				437F54091FBF9E0A0070FF2C /* RileyLinkDevice.swift in Sources */,
 				435535DA1FB836CB00CE5A23 /* CommandResponseViewController+RileyLinkDevice.swift in Sources */,
 				43D5E7A11FAF7CE0004ACDB7 /* UITableViewCell.swift in Sources */,
@@ -2230,28 +2157,6 @@
 				43D5E79C1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewController.swift in Sources */,
 				43D5E7A01FAF7CCA004ACDB7 /* NumberFormatter.swift in Sources */,
 				43D5E79D1FAF7C47004ACDB7 /* TextFieldTableViewCell.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43D5E7A51FAF83CD004ACDB7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43D5E7BF1FAF8700004ACDB7 /* CBCentralManager.swift in Sources */,
-				43D5E7BE1FAF8700004ACDB7 /* BLEFirmwareVersion.swift in Sources */,
-				43D5E7C41FAF8700004ACDB7 /* PeripheralManagerError.swift in Sources */,
-				43D5E7C71FAF8700004ACDB7 /* RadioFirmwareVersion.swift in Sources */,
-				43D5E7CC1FAF877F004ACDB7 /* NSData.swift in Sources */,
-				43D5E7CB1FAF8750004ACDB7 /* OSLog.swift in Sources */,
-				43D5E7C31FAF8700004ACDB7 /* PeripheralManager.swift in Sources */,
-				43D5E7C51FAF8700004ACDB7 /* PeripheralManager+RileyLink.swift in Sources */,
-				43D5E7C01FAF8700004ACDB7 /* CBPeripheral.swift in Sources */,
-				43D5E7C61FAF8700004ACDB7 /* RFPacket.swift in Sources */,
-				43D5E7CA1FAF8743004ACDB7 /* TimeInterval.swift in Sources */,
-				43D5E7C81FAF8700004ACDB7 /* RileyLinkDevice.swift in Sources */,
-				43D5E7C91FAF8700004ACDB7 /* RileyLinkDeviceManager.swift in Sources */,
-				43D5E7C11FAF8700004ACDB7 /* Command.swift in Sources */,
-				43D5E7C21FAF8700004ACDB7 /* CommandSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2352,6 +2257,7 @@
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,
 				C1842C021C8FA45100DB42AC /* JournalEntryExerciseMarkerPumpEvent.swift in Sources */,
 				541688DF1DB82E72005B1891 /* TimestampedGlucoseEvent.swift in Sources */,
+				43BF58B01FF594CB00499C46 /* SelectBasalProfileMessageBody.swift in Sources */,
 				C1EAD6CB1C826B92006DBA60 /* MySentryAlertMessageBody.swift in Sources */,
 				54BC449A1DB47DFE00340EED /* NineteenSomethingGlucoseEvent.swift in Sources */,
 				C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */,
@@ -2505,7 +2411,6 @@
 				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
-				C1B4A94E1D1C423D003B8985 /* NSUserDefaults.swift in Sources */,
 				C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */,
 				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */,
@@ -2750,9 +2655,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
@@ -2785,7 +2691,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator";
+				TARGETED_DEVICE_FAMILY = "1,2,4";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
@@ -2802,6 +2709,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RileyLinkBLEKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2828,6 +2736,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RileyLinkBLEKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2906,6 +2815,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = RileyLinkKitTests/Info.plist;
@@ -2925,6 +2835,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = RileyLinkKitTests/Info.plist;
@@ -3059,75 +2970,6 @@
 			};
 			name = Release;
 		};
-		43D5E7B01FAF83CD004ACDB7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = RileyLinkBLEKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.RileyLinkBLEKit-watchOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
-			};
-			name = Debug;
-		};
-		43D5E7B11FAF83CD004ACDB7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = RileyLinkBLEKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.RileyLinkBLEKit-watchOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
-			};
-			name = Release;
-		};
 		C10D9BD91C8269D600378342 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3194,6 +3036,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = MinimedKitTests/Info.plist;
@@ -3213,6 +3056,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = MinimedKitTests/Info.plist;
@@ -3276,6 +3120,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				WARNING_CFLAGS = "-Wall";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -3326,6 +3171,7 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				WARNING_CFLAGS = "-Wall";
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -3473,6 +3319,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = NightscoutUploadKitTests/Info.plist;
@@ -3492,6 +3339,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = NightscoutUploadKitTests/Info.plist;
@@ -3555,15 +3403,6 @@
 			buildConfigurations = (
 				43D5E7981FAF7BFB004ACDB7 /* Debug */,
 				43D5E7991FAF7BFB004ACDB7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		43D5E7AF1FAF83CD004ACDB7 /* Build configuration list for PBXNativeTarget "RileyLinkBLEKit-watchOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43D5E7B01FAF83CD004ACDB7 /* Debug */,
-				43D5E7B11FAF83CD004ACDB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -319,11 +319,10 @@ class DeviceDataManager {
         }
 
         let oneDayAgo = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
-        let observingPumpEventsSince = remoteDataManager.nightscoutUploader?.observingPumpEventsSince ?? oneDayAgo
 
         pumpOps.runSession(withName: "Get pump history", using: device) { (session) in
             do {
-                let (events, pumpModel) = try session.getHistoryEvents(since: observingPumpEventsSince)
+                let (events, pumpModel) = try session.getHistoryEvents(since: oneDayAgo)
                 NSLog("fetchHistory succeeded.")
                 DispatchQueue.main.async {
                     self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
@@ -405,7 +404,6 @@ extension DeviceDataManager: PumpOpsDelegate {
         }
 
         UserDefaults.standard.pumpState = state
-        remoteDataManager.nightscoutUploader?.reset()
 
         NotificationCenter.default.post(
             name: .PumpOpsStateDidChange,

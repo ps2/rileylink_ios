@@ -10,6 +10,7 @@ import Foundation
 
 
 public enum BasalProfile {
+    typealias RawValue = UInt8
 
     case standard
     case profileA
@@ -23,6 +24,17 @@ public enum BasalProfile {
             self = .profileB
         default:
             self = .standard
+        }
+    }
+
+    var rawValue: RawValue {
+        switch self {
+        case .standard:
+            return 0
+        case .profileA:
+            return 1
+        case .profileB:
+            return 2
         }
     }
 }

@@ -310,6 +310,7 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
             "lastIdle: \(lastIdle ?? .distantPast)",
             "isIdleListeningPending: \(isIdleListeningPending)",
             "isTimerTickEnabled: \(isTimerTickEnabled)",
+            "isTimerTickNotifying: \(manager.timerTickEnabled)",
             "radioFirmware: \(String(describing: radioFirmwareVersion))",
             "bleFirmware: \(String(describing: bleFirmwareVersion))",
             "peripheral: \(manager.peripheral)",

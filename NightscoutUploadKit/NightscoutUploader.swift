@@ -37,33 +37,14 @@ public class NightscoutUploader {
     private(set) var treatmentsQueue = [NightscoutTreatment]()
 
     private(set) var lastMeterMessageRxTime: Date?
-    
-    public private(set) var observingPumpEventsSince: Date!
-
-    private(set) var lastStoredTreatmentTimestamp: Date? {
-        get {
-            return UserDefaults.standard.lastStoredTreatmentTimestamp
-        }
-        set {
-            UserDefaults.standard.lastStoredTreatmentTimestamp = newValue
-        }
-    }
 
     public var errorHandler: ((_ error: Error, _ context: String) -> Void)?
 
-    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.rileylink.NightscoutUploadKit.dataAccessQueue", attributes: [])
-
-
-    public func reset() {
-        observingPumpEventsSince = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
-        lastStoredTreatmentTimestamp = nil
-    }
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.rileylink.NightscoutUploadKit.dataAccessQueue", qos: .utility)
 
     public init(siteURL: URL, APISecret: String) {
         self.siteURL = siteURL
         self.apiSecret = APISecret
-        
-        observingPumpEventsSince = lastStoredTreatmentTimestamp ?? Date(timeIntervalSinceNow: TimeInterval(hours: -24))
     }
     
     // MARK: - Processing data from pump
@@ -76,33 +57,6 @@ public class NightscoutUploader {
      - parameter pumpModel: The pump model info associated with the events
      */
     public func processPumpEvents(_ events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
-        
-        // Find valid event times
-        let newestEventTime = events.last?.date
-        
-        // Find the oldest event that might still be updated.
-        var oldestUpdatingEventDate: Date?
-
-        for event in events {
-            switch event.pumpEvent {
-            case let bolus as BolusNormalPumpEvent:
-                let deliveryFinishDate = event.date.addingTimeInterval(bolus.duration)
-                if newestEventTime == nil || deliveryFinishDate.compare(newestEventTime!) == .orderedDescending {
-                    // This event might still be updated.
-                    oldestUpdatingEventDate = event.date
-                    break
-                }
-            default:
-                continue
-            }
-        }
-        
-        if oldestUpdatingEventDate != nil {
-            observingPumpEventsSince = oldestUpdatingEventDate!
-        } else if newestEventTime != nil {
-            observingPumpEventsSince = newestEventTime!
-        }
-        
         for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
             treatmentsQueue.append(treatment)
         }
@@ -475,10 +429,8 @@ public class NightscoutUploader {
                 self.errorHandler?(error, "Uploading nightscout treatment records")
                 // Requeue
                 self.treatmentsQueue.append(contentsOf: inFlight)
-            case .success(_):
-                if let last = inFlight.last {
-                    self.lastStoredTreatmentTimestamp = last.timestamp
-                }
+            case .success:
+                break
             }
         }
     }

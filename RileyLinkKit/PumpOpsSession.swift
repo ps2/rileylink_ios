@@ -204,21 +204,24 @@ extension PumpOpsSession {
     ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
-    public func getBasalSchedule() throws -> BasalSchedule {
+    public func getBasalSchedule(for profile: BasalProfile = .standard) throws -> BasalSchedule {
         try wakeup()
 
-        var finished = false
-        var message = PumpMessage(settings: settings, type: .readProfileSTD512)
+        var isFinished = false
+        var message = PumpMessage(settings: settings, type: profile.readMessageType)
         var scheduleData = Data()
-        while (!finished) {
-            let body: DataFrameMessageBody = try session.getResponse(to: message, responseType: .readProfileSTD512)
+        while (!isFinished) {
+            let body: DataFrameMessageBody = try session.getResponse(to: message, responseType: profile.readMessageType)
+
+            // TODO: Convert logging
+            NSLog(body.txData.hexadecimalString)
 
             scheduleData.append(body.contents)
-            finished = body.lastFrameFlag
+            isFinished = body.isLastFrame
             message = PumpMessage(settings: settings, type: .pumpAck)
         }
 
-        return BasalSchedule(data: scheduleData)
+        return BasalSchedule(rawValue: scheduleData)!
     }
 }
 
@@ -313,6 +316,13 @@ extension PumpOpsSession {
     /// - Throws: `PumpCommandError` specifying the failure sequence
     public func pressButton(_ type: ButtonPressCarelinkMessageBody.ButtonType) throws {
         let message = PumpMessage(settings: settings, type: .buttonPress, body: ButtonPressCarelinkMessageBody(buttonType: type))
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: PumpCommandError
+    public func selectBasalProfile(_ profile: BasalProfile) throws {
+        let message = PumpMessage(settings: settings, type: .selectBasalProfile, body: SelectBasalProfileMessageBody(newProfile: profile))
 
         let _: PumpAckMessageBody = try runCommandWithArguments(message)
     }
@@ -448,7 +458,7 @@ extension PumpOpsSession {
                     throw PumpOpsError.unknownPumpErrorCode(unknownErrorCode)
                 }
             } else {
-                let _: PumpAckMessageBody = try runCommandWithArguments(message, responseType: .pumpAck)
+                let _: PumpAckMessageBody = try runCommandWithArguments(message)
             }
         } catch let error as PumpOpsError {
             throw SetBolusError.certain(error)
@@ -463,6 +473,71 @@ extension PumpOpsSession {
             assertionFailure()
         }
         return
+    }
+
+    /// - Throws: `PumpCommandError` specifying the failure sequence
+    public func setBasalSchedule(_ basalSchedule: BasalSchedule, for profile: BasalProfile, type: MessageType) throws {
+
+
+        let frames = DataFrameMessageBody.dataFramesFromContents(basalSchedule.rawValue)
+
+        guard let firstFrame = frames.first else {
+            return
+        }
+
+        NSLog(firstFrame.txData.hexadecimalString)
+
+        let message = PumpMessage(settings: settings, type: type, body: firstFrame)
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+
+        for nextFrame in frames.dropFirst() {
+            let message = PumpMessage(settings: settings, type: type, body: nextFrame)
+            NSLog(nextFrame.txData.hexadecimalString)
+            do {
+                let _: PumpAckMessageBody = try session.getResponse(to: message)
+            } catch let error as PumpOpsError {
+                throw PumpCommandError.arguments(error)
+            }
+        }
+    }
+
+    public func discoverCommands(_ updateHandler: (_ messages: [String]) -> Void) {
+        let codes: [MessageType] = [
+            .PumpExperiment_O103,
+        ]
+
+        for code in codes {
+            var messages = [String]()
+
+            do {
+                messages.append(contentsOf: [
+                    "## Command \(code)",
+                ])
+
+                try wakeup()
+
+                // Try the short command message, without any arguments.
+                let shortMessage = PumpMessage(settings: settings, type: code)
+                let _: PumpAckMessageBody = try session.getResponse(to: shortMessage)
+
+                messages.append(contentsOf: [
+                    "Succeeded",
+                    ""
+                ])
+
+                // Check history?
+
+            } catch let error {
+                messages.append(contentsOf: [
+                    String(describing: error),
+                    "",
+                ])
+            }
+
+            updateHandler(messages)
+
+            Thread.sleep(until: Date(timeIntervalSinceNow: 2))
+        }
     }
 }
 

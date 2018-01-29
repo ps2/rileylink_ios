@@ -10,6 +10,7 @@ import Foundation
 
 public struct RFPacket {
     public let data: Data
+    let packetCounter: Int
     public let rssi: Int
 
     public init?(rfspyResponse: Data) {
@@ -24,6 +25,8 @@ public struct RFPacket {
         } else {
             self.rssi = rssiDec / 2 - rssiOffset
         }
+
+        self.packetCounter = Int(rfspyResponse[1])
         
         self.data = rfspyResponse.subdata(in: 2..<rfspyResponse.count)
     }

@@ -48,8 +48,8 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command containing:
     ///         - PumpOpsError.crosstalk
+    ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
-    ///         - PumpOpsError.peripheralError
     ///         - PumpOpsError.unexpectedResponse
     ///         - PumpOpsError.unknownResponse
     private func sendWakeUpBurst() throws {
@@ -66,8 +66,7 @@ extension PumpOpsSession {
         if pump.pumpModel == nil || !pump.pumpModel!.hasMySentry {
             // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
-                // TODO: Verify that it's OK not to listen here
-                try session.send(shortPowerMessage, repeatCount: 255)
+                let _: PumpAckMessageBody = try session.getResponse(to: shortPowerMessage, repeatCount: 255, timeout: .milliseconds(1), retryCount: 0)
             }
             catch { }
         }
@@ -92,8 +91,9 @@ extension PumpOpsSession {
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
     ///         - PumpOpsError.crosstalk
+    ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
-    ///         - PumpOpsError.peripheralError
+    ///         - PumpOpsError.unexpectedResponse
     ///         - PumpOpsError.unknownResponse
     private func wakeup(_ duration: TimeInterval = TimeInterval(minutes: 1)) throws {
         guard !pump.isAwake else {
@@ -139,8 +139,9 @@ extension PumpOpsSession {
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
+    ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     public func getPumpModel(usingCache: Bool = true) throws -> PumpModel {
         if usingCache, let pumpModel = pump.pumpModel {
@@ -159,16 +160,40 @@ extension PumpOpsSession {
         return pumpModel
     }
 
+    /// - Throws:
+    ///     - PumpCommandError.command
+    ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
     public func getBatteryStatus() throws -> GetBatteryCarelinkMessageBody {
         try wakeup()
         return try session.getResponse(to: PumpMessage(settings: settings, type: .getBattery), responseType: .getBattery)
     }
 
+    /// - Throws:
+    ///     - PumpCommandError.command
+    ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
     internal func getPumpStatus() throws -> ReadPumpStatusMessageBody {
         try wakeup()
         return try session.getResponse(to: PumpMessage(settings: settings, type: .readPumpStatus), responseType: .readPumpStatus)
     }
 
+    /// - Throws:
+    ///     - PumpCommandError.command
+    ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
     public func getSettings() throws -> ReadSettingsCarelinkMessageBody {
         try wakeup()
         return try session.getResponse(to: PumpMessage(settings: settings, type: .readSettings), responseType: .readSettings)
@@ -181,8 +206,8 @@ extension PumpOpsSession {
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     public func getTime() throws -> DateComponents {
@@ -200,8 +225,8 @@ extension PumpOpsSession {
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     public func getBasalSchedule(for profile: BasalProfile = .standard) throws -> BasalSchedule {
@@ -247,9 +272,11 @@ extension PumpOpsSession {
     ///     - The reservoir volume, in units of insulin
     ///     - DateCompoments representing the pump's clock
     /// - Throws:
+    ///     - PumpCommandError.command
+    ///     - PumpCommandError.arguments
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unknownResponse
     public func getRemainingInsulin() throws -> (units: Double, clock: DateComponents) {
 
@@ -549,8 +576,8 @@ extension PumpOpsSession {
     /// - Parameter watchdogID: A 3-byte address for the watchdog device.
     /// - Throws:
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     public func changeWatchdogMarriageProfile(_ watchdogID: Data) throws {
@@ -653,8 +680,8 @@ public struct FrequencyScanResults {
 
 extension PumpOpsSession {
     /// - Throws:
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.rfCommsFailure
     public func tuneRadio(current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
         let region = self.settings.pumpRegion
@@ -667,24 +694,24 @@ extension PumpOpsSession {
         } catch let error as PumpOpsError {
             throw error
         } catch let error as LocalizedError {
-            throw PumpOpsError.peripheralError(error)
+            throw PumpOpsError.deviceError(error)
         }
     }
 
-    /// - Throws: PumpOpsError.peripheralError
+    /// - Throws: PumpOpsError.deviceError
     private func setRXFilterMode(_ mode: RXFilterMode) throws {
         let drate_e = UInt8(0x9) // exponent of symbol rate (16kbps)
         let chanbw = mode.rawValue
         do {
             try session.updateRegister(.mdmcfg4, value: chanbw | drate_e)
         } catch let error as LocalizedError {
-            throw PumpOpsError.peripheralError(error)
+            throw PumpOpsError.deviceError(error)
         }
     }
 
     /// - Throws:
-    ///     - PumpOpsError.peripheralError
-    ///     - PeripheralManagerError
+    ///     - PumpOpsError.deviceError
+    ///     - RileyLinkDeviceError
     private func configureRadio(for region: PumpRegion) throws {
         switch region {
         case .worldWide:
@@ -707,8 +734,8 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.rfCommsFailure
     private func scanForPump(in frequencies: [Measurement<UnitFrequency>], current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
         
@@ -784,8 +811,8 @@ extension PumpOpsSession {
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unknownResponse
     public func getHistoryEvents(since startDate: Date) throws -> ([TimestampedHistoryEvent], PumpModel) {
         try wakeup()

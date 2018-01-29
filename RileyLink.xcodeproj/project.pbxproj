@@ -45,6 +45,7 @@
 		43323EA71FA81A0F003FB0FA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		43323EAA1FA81C1B003FB0FA /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA91FA81C1B003FB0FA /* RileyLinkDevice.swift */; };
 		433568761CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */; };
+		433ABFFC2016FDF700E6C1FF /* RileyLinkDeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433ABFFB2016FDF700E6C1FF /* RileyLinkDeviceError.swift */; };
 		4345D1CE1DA16AF300BAAD22 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
 		43462E8B1CCB06F500F958A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43462E8A1CCB06F500F958A8 /* AppDelegate.swift */; };
 		434AB0951CBA0DF600422F4A /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0911CBA0DF600422F4A /* Either.swift */; };
@@ -528,6 +529,7 @@
 		43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
 		43323EA91FA81C1B003FB0FA /* RileyLinkDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevice.swift; sourceTree = "<group>"; };
 		433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadRemainingInsulinMessageBody.swift; sourceTree = "<group>"; };
+		433ABFFB2016FDF700E6C1FF /* RileyLinkDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceError.swift; sourceTree = "<group>"; };
 		4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeZone.swift; sourceTree = "<group>"; };
 		43462E8A1CCB06F500F958A8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		434AB0911CBA0DF600422F4A /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
@@ -995,6 +997,7 @@
 				431CE7A41F9D78F500255374 /* RFPacket.swift */,
 				432847C21FA57C0F00CDE69C /* RadioFirmwareVersion.swift */,
 				431CE79B1F9B21BA00255374 /* RileyLinkDevice.swift */,
+				433ABFFB2016FDF700E6C1FF /* RileyLinkDeviceError.swift */,
 				431CE7901F985D8D00255374 /* RileyLinkDeviceManager.swift */,
 			);
 			path = RileyLinkBLEKit;
@@ -2067,6 +2070,7 @@
 			files = (
 				431CE78F1F985B6E00255374 /* CBPeripheral.swift in Sources */,
 				431CE79F1F9C670600255374 /* TimeInterval.swift in Sources */,
+				433ABFFC2016FDF700E6C1FF /* RileyLinkDeviceError.swift in Sources */,
 				43D5E7881FAEDAC4004ACDB7 /* PeripheralManagerError.swift in Sources */,
 				431CE79C1F9B21BA00255374 /* RileyLinkDevice.swift in Sources */,
 				431CE7A71F9D98F700255374 /* CommandSession.swift in Sources */,

@@ -23,8 +23,8 @@ public enum PumpCommandError: Error {
 public enum PumpOpsError: Error {
     case bolusInProgress
     case crosstalk(PumpMessage, during: CustomStringConvertible)
+    case deviceError(LocalizedError)
     case noResponse(during: CustomStringConvertible)
-    case peripheralError(LocalizedError)
     case pumpError(PumpErrorCode)
     case pumpSuspended
     case rfCommsFailure(String)
@@ -97,9 +97,20 @@ extension PumpOpsError: LocalizedError {
             return NSLocalizedString("Unknown response from pump.", comment: "")
         case .pumpError(let errorCode):
             return String(format: NSLocalizedString("Pump error: %1$@.", comment: "The format string description of a Pump Error. (1: The specific error code)"), String(describing: errorCode))
-        case .peripheralError(let error):
-            return String(format: NSLocalizedString("Peripheral communication failed: %@.", comment: "Pump comms failure reason for an underlying peripheral error"), error.failureReason ?? "")
+        case .deviceError(let error):
+            return String(format: NSLocalizedString("Device communication failed: %@.", comment: "Pump comms failure reason for an underlying peripheral error"), error.failureReason ?? "")
         }
     }
 }
 
+
+extension PumpCommandError: LocalizedError {
+    public var failureReason: String? {
+        switch self {
+        case .arguments(let error):
+            return error.failureReason
+        case .command(let error):
+            return error.failureReason
+        }
+    }
+}

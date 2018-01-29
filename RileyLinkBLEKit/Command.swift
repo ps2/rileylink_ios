@@ -150,6 +150,11 @@ struct RegisterSetting {
 }
 
 internal struct UpdateRegister: RespondingCommand {
+    enum Response: UInt8 {
+        case success = 1
+        case invalidRegister = 2
+    }
+
     let register: RegisterSetting
 
     let expectedResponseLength = 1

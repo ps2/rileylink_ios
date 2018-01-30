@@ -49,7 +49,7 @@ public struct CommandSession {
     let manager: PeripheralManager
     let responseType: PeripheralManager.ResponseType
 
-    /// - Throws: PeripheralManagerError
+    /// - Throws: RileyLinkDeviceError
     public func writeCommand(_ command: Command, timeout: TimeInterval) throws -> Data {
         return try manager.writeCommand(command,
             timeout: timeout + PeripheralManager.expectedMaxBLELatency,
@@ -57,15 +57,28 @@ public struct CommandSession {
         )
     }
 
-    /// - Throws: PeripheralManagerError
+    /// - Throws: RileyLinkDeviceError
     public func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
         let command = UpdateRegister(address, value: value)
-        _ = try writeCommand(command, timeout: 0)
+        let response = try writeCommand(command, timeout: 0)
+
+        guard let rawResponse = response.first else {
+            throw RileyLinkDeviceError.invalidResponse(response)
+        }
+
+        switch UpdateRegister.Response(rawValue: rawResponse) {
+        case .none:
+            throw RileyLinkDeviceError.invalidResponse(response)
+        case .invalidRegister?:
+            throw RileyLinkDeviceError.invalidInput(String(describing: command.register))
+        case .success?:
+            return
+        }
     }
 
     private static let xtalFrequency = Measurement<UnitFrequency>(value: 24, unit: .megahertz)
 
-    /// - Throws: PeripheralManagerError
+    /// - Throws: RileyLinkDeviceError
     public func setBaseFrequency(_ frequency: Measurement<UnitFrequency>) throws {
         let val = Int(
             frequency.converted(to: .hertz).value /

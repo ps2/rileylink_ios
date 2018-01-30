@@ -164,6 +164,7 @@ extension PeripheralManager {
 
 // MARK: - Synchronous Commands
 extension PeripheralManager {
+    /// - Throws: PeripheralManagerError
     func runCommand(timeout: TimeInterval, command: () -> Void) throws {
         // Prelude
         dispatchPrecondition(condition: .onQueue(queue))
@@ -242,6 +243,7 @@ extension PeripheralManager {
         }
     }
 
+    /// - Throws: PeripheralManagerError
     func setNotifyValue(_ enabled: Bool, for characteristic: CBCharacteristic, timeout: TimeInterval) throws {
         try runCommand(timeout: timeout) {
             addCondition(.notificationStateUpdate(characteristic: characteristic, enabled: enabled))
@@ -250,6 +252,7 @@ extension PeripheralManager {
         }
     }
 
+    /// - Throws: PeripheralManagerError
     func readValue(for characteristic: CBCharacteristic, timeout: TimeInterval) throws -> Data? {
         try runCommand(timeout: timeout) {
             addCondition(.valueUpdate(characteristic: characteristic, matching: nil))
@@ -260,6 +263,7 @@ extension PeripheralManager {
         return characteristic.value
     }
 
+    /// - Throws: PeripheralManagerError
     func wait(for characteristic: CBCharacteristic, timeout: TimeInterval) throws -> Data {
         try runCommand(timeout: timeout) {
             addCondition(.valueUpdate(characteristic: characteristic, matching: nil))
@@ -272,6 +276,7 @@ extension PeripheralManager {
         return value
     }
 
+    /// - Throws: PeripheralManagerError
     func writeValue(_ value: Data, for characteristic: CBCharacteristic, type: CBCharacteristicWriteType, timeout: TimeInterval) throws {
         try runCommand(timeout: timeout) {
             if case .withResponse = type {

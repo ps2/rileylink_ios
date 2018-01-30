@@ -30,7 +30,7 @@ protocol PumpMessageSender {
     /// - Throws: An error describing a failure in the sending or receiving of a message:
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.unknownResponse
     func sendAndListen(_ message: PumpMessage, repeatCount: UInt8, timeout: TimeInterval, retryCount: UInt8) throws -> PumpMessage
 }
@@ -46,7 +46,7 @@ extension PumpMessageSender {
     /// - Throws: An error describing a failure in the sending or receiving of a message:
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.unknownResponse
     func sendAndListen(_ message: PumpMessage, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> PumpMessage {
         return try sendAndListen(message, repeatCount: 0, timeout: timeout, retryCount: retryCount)
@@ -54,7 +54,7 @@ extension PumpMessageSender {
 }
 
 extension PumpMessageSender {
-    /// - Throws: PumpOpsError.peripheralError
+    /// - Throws: PumpOpsError.deviceError
     func send(_ msg: PumpMessage, repeatCount: UInt8 = 0) throws {
         let command = SendPacket(
             outgoing: MinimedPacket(outgoingData: msg.txData).encodedData(),
@@ -66,7 +66,7 @@ extension PumpMessageSender {
         do {
             _ = try writeCommand(command, timeout: 0)
         } catch let error as LocalizedError {
-            throw PumpOpsError.peripheralError(error)
+            throw PumpOpsError.deviceError(error)
         }
     }
 
@@ -81,8 +81,8 @@ extension PumpMessageSender {
     /// - Returns: The expected response message body
     /// - Throws:
     ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     func getResponse<T: MessageBody>(to message: PumpMessage, responseType: MessageType = .pumpAck, repeatCount: UInt8 = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> T {
@@ -125,7 +125,7 @@ extension PumpMessageSender {
 
     /// - Throws:
     ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.peripheralError
+    ///     - PumpOpsError.deviceError
     func sendAndListenForPacket(_ message: PumpMessage, repeatCount: UInt8 = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> RFPacket {
         let command = SendAndListen(
             message: message,
@@ -141,14 +141,14 @@ extension PumpMessageSender {
         return rfPacket
     }
 
-    /// - Throws: PumpOpsError.peripheralError
+    /// - Throws: PumpOpsError.deviceError
     func writeCommandExpectingPacket(_ command: Command, timeout: TimeInterval) throws -> RFPacket? {
         let response: Data
 
         do {
             response = try writeCommand(command, timeout: timeout)
         } catch let error as LocalizedError {
-            throw PumpOpsError.peripheralError(error)
+            throw PumpOpsError.deviceError(error)
         }
 
         return RFPacket(rfspyResponse: response)

@@ -30,3 +30,29 @@ extension RadioFirmwareVersion: CustomStringConvertible {
         return versionString
     }
 }
+
+// Version 2 changes
+extension RadioFirmwareVersion {
+    var supportsPreambleExtension: Bool {
+        guard let major = components.first, major >= 2 else {
+            return false
+        }
+        return true
+    }
+    
+    var supportsSoftwareEncoding: Bool {
+        guard let major = components.first, major >= 2 else {
+            return false
+        }
+        return true
+    }
+
+    var supports16SecondPacketDelay: Bool {
+        guard let major = components.first, major >= 2 else {
+            return false
+        }
+        return true
+    }
+
+}
+

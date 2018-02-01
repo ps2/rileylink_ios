@@ -157,45 +157,52 @@ extension PeripheralManager {
     }
 
     /// - Throws: RileyLinkDeviceError
-    func writeCommand(_ command: Command, timeout: TimeInterval, responseType: ResponseType) throws -> Data {
+    func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval, responseType: ResponseType) throws -> (RileyLinkResponseCode, Data) {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
             throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
         }
-
-        var value = command.data
-
+            
+        var value = commandData
+        
         // Data commands are encoded with their length as the first byte
         guard value.count <= 220 else {
             throw RileyLinkDeviceError.writeSizeLimitExceeded(maxLength: 220)
         }
-
+        
+        log.debug("RL Send: %{public}@", value.hexadecimalString)
+        
         value.insert(UInt8(value.count), at: 0)
-
+        
         do {
-            switch (command, responseType) {
-            case (let command as RespondingCommand, .single):
+            switch (responseType) {
+            case .single:
                 return try writeCommand(value,
-                    for: characteristic, timeout: timeout, awaitingUpdateWithMinimumLength: command.expectedResponseLength)
-            case (let command as RespondingCommand, .buffered):
+                                        for: characteristic, timeout: timeout)
+            case .buffered:
                 return try writeCommand(value,
-                    for: characteristic,
-                    timeout: timeout,
-                    awaitingUpdateWithMinimumLength: command.expectedResponseLength,
-                    endOfResponseMarker: 0x00
+                                        for: characteristic,
+                                        timeout: timeout,
+                                        awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
+                                        endOfResponseMarker: 0x00
                 )
             default:
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
-                return Data()
+                return (.success, Data())
             }
         } catch let error as PeripheralManagerError {
             throw RileyLinkDeviceError.peripheralManagerError(error)
         }
     }
+    
+    /// - Throws: RileyLinkDeviceError
+    func writeCommand(_ command: Command, timeout: TimeInterval, responseType: ResponseType) throws -> (RileyLinkResponseCode, Data) {
+        return try writeCommandData(command.data, awaitingUpdateWithMinimumLength:command.expectedResponseLength, timeout:timeout, responseType: responseType)
+    }
 
     /// - Throws: RileyLinkDeviceError
     func readRadioFirmwareVersion(timeout: TimeInterval, responseType: ResponseType) throws -> String {
-        let data = try writeCommand(GetVersion(), timeout: timeout, responseType: responseType)
-
+        let (_, data) = try writeCommand(GetVersion(), timeout: timeout, responseType: responseType)
+        
         guard let version = String(bytes: data, encoding: .utf8) else {
             throw RileyLinkDeviceError.invalidResponse(data)
         }
@@ -232,39 +239,37 @@ extension PeripheralManager {
     func writeCommand(_ value: Data,
         for characteristic: CBCharacteristic,
         type: CBCharacteristicWriteType = .withResponse,
-        timeout: TimeInterval,
-        awaitingUpdateWithMinimumLength minimumLength: Int) throws -> Data
+        timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data)
     {
+
         try runCommand(timeout: timeout) {
             if case .withResponse = type {
                 addCondition(.write(characteristic: characteristic))
             }
 
             addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                guard let value = value else {
+                guard let value = value, value.count > 0 else {
                     return false
                 }
 
-                switch value.count {
-                case 0:
+                log.debug("RL Recv(single): %{public}@", value.hexadecimalString)
+                
+                let responseCode = RileyLinkResponseCode(rawValue: value[0])
+                
+                switch responseCode {
+                case .none:
+                    // We don't recognize the error. Keep listening.
+                    log.error("RileyLink response unexpected: %{public}@", String(describing: value))
                     return false
-                case let x where x >= minimumLength:
+                case .commandInterrupted?:
+                    // This is expected in cases where an "Idle" GetPacket command is running
+                    log.debug("RileyLink response: commandInterrupted: %{public}@", String(describing: value))
+                    return false
+                case .rxTimeout?, .zeroData?:
+                    log.debug("RileyLink response: %{public}@: %{public}@", String(describing: responseCode!), String(describing: value))
                     return true
-                default: // count > 0, count < minimumLength
-                    let error = RileyLinkResponseError(rawValue: value[0])
-                    switch error {
-                    case .none:
-                        // We don't recognize the error. Keep listening.
-                        log.error("RileyLink response error unexpected: %{public}@", String(describing: value))
-                        return false
-                    case .commandInterrupted?:
-                        // This is expected in cases where an "Idle" GetPacket command is running
-                        log.debug("RileyLink response error: commandInterrupted: %{public}@", String(describing: value))
-                        return false
-                    case .rxTimeout?, .zeroData?:
-                        log.debug("RileyLink response error: %{public}@: %{public}@", String(describing: error!), String(describing: value))
-                        return true
-                    }
+                case .success?, .invalidParam?:
+                    return true
                 }
             }))
 
@@ -276,15 +281,17 @@ extension PeripheralManager {
             throw RileyLinkDeviceError.peripheralManagerError(.timeout)
         }
 
-        guard value.count >= minimumLength else {
-            if value.first == RileyLinkResponseError.rxTimeout.rawValue {
-                throw RileyLinkDeviceError.responseTimeout
-            }
+        guard value.count >= 0 else {
+            // TODO: This is a empty response issue, not a timeout
+            throw RileyLinkDeviceError.responseTimeout
+        }
 
+        guard let responseCode = RileyLinkResponseCode(rawValue: value[0]) else {
             throw RileyLinkDeviceError.invalidResponse(value)
         }
 
-        return value
+        return (responseCode, value.subdata(in: 1..<value.count))
+        
     }
 
     /// - Throws: PeripheralManagerError
@@ -293,9 +300,11 @@ extension PeripheralManager {
         type: CBCharacteristicWriteType = .withResponse,
         timeout: TimeInterval,
         awaitingUpdateWithMinimumLength minimumLength: Int,
-        endOfResponseMarker: UInt8) throws -> Data
+        endOfResponseMarker: UInt8) throws -> (RileyLinkResponseCode, Data)
     {
+        var response = Data()
         var buffer = Data()
+        var responseCode: RileyLinkResponseCode = .success
 
         try runCommand(timeout: timeout) {
             if case .withResponse = type {
@@ -303,25 +312,51 @@ extension PeripheralManager {
             }
 
             addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                // TODO: Look for RileyLinkResponseError. Ignore .commandInterrupted, but match .rxTimeout and .zeroData for quicker error handling?
-
-                guard let value = value, (buffer.count + value.count) >= minimumLength else {
+                
+                guard let value = value else {
                     return false
                 }
 
-                buffer.append(value)
+                log.debug("RL Recv(buffered): %{public}@", value.hexadecimalString)
+                
+                buffer = buffer + value
 
-                if let end = buffer.index(of: endOfResponseMarker) {
-                    buffer = buffer.prefix(upTo: end)
-                    return true
-                } else {
+                guard let end = buffer.index(of: endOfResponseMarker) else {
                     return false
                 }
+                
+                response = buffer.subdata(in: 0..<end)
+                buffer = buffer.subdata(in: end..<buffer.count)
+                
+                if response.count == 1 {
+                    let possibleResponseCode = RileyLinkResponseCode(rawValue: response[0])
+                    switch possibleResponseCode {
+                    case .none:
+                        break
+                    case .commandInterrupted?:
+                        // This is expected in cases where an "Idle" GetPacket command is running
+                        log.debug("RileyLink response error: commandInterrupted")
+                        guard buffer.count > 0, let endOfSecondResponse = buffer.index(of: endOfResponseMarker) else {
+                                return false
+                        }
+                        response = buffer.subdata(in: 0..<endOfSecondResponse)
+                        responseCode = possibleResponseCode!
+                    case .rxTimeout?, .zeroData?:
+                        responseCode = possibleResponseCode!
+                        log.debug("RileyLink response error: %{public}@: %{public}@", String(describing: responseCode), String(describing: response))
+                        return true
+                    default:
+                        break
+                    }
+                }
+
+                return response.count >= minimumLength
             }))
 
             peripheral.writeValue(value, for: characteristic, type: type)
         }
+        
+        return (responseCode, response)
 
-        return buffer
     }
 }

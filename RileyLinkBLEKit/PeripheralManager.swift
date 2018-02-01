@@ -282,7 +282,7 @@ extension PeripheralManager {
             if case .withResponse = type {
                 addCondition(.write(characteristic: characteristic))
             }
-
+            
             peripheral.writeValue(value, for: characteristic, type: type)
         }
     }
@@ -378,6 +378,8 @@ extension PeripheralManager: CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
+        
+        log.debug("BLE value update: %@", characteristic.value?.hexadecimalString ?? "None")
 
         if let index = commandConditions.index(where: { (condition) -> Bool in
             if case .valueUpdate(characteristic: characteristic, matching: let matching) = condition {

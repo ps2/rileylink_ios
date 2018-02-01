@@ -140,7 +140,7 @@ extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
             self?.log.debug("======================== %{public}@ ===========================", name)
-            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered))
+            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: self?.radioFirmwareVersion ?? RadioFirmwareVersion(versionString: "subg_rfspy 1.0")!))
             self?.log.debug("------------------------ %{public}@ ---------------------------", name)
         }))
     }
@@ -257,7 +257,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                 if let packet = RFPacket(rfspyResponse: response) {
                     self.log.debug("Idle packet received: %@", response.hexadecimalString)
                     NotificationCenter.default.post(name: .DevicePacketReceived, object: self, userInfo: [RileyLinkDevice.notificationPacketKey: packet])
-                } else if let error = RileyLinkResponseError(rawValue: response[0]) {
+                } else if let error = RileyLinkResponseCode(rawValue: response[0]) {
                     self.log.debug("Idle error received: %@", String(describing: error))
                 }
             }

@@ -9,11 +9,17 @@
 import Foundation
 import MinimedKit
 import RileyLinkBLEKit
+import os.log
 
 private let standardPumpResponseWindow: TimeInterval = .milliseconds(180)
 
+private let log = OSLog(category: "PumpMessageSender")
+
+
 protocol PumpMessageSender {
-    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> Data
+    var firmwareVersion: RadioFirmwareVersion { get }
+    
+    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data)
 
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws
 
@@ -60,7 +66,9 @@ extension PumpMessageSender {
             outgoing: MinimedPacket(outgoingData: msg.txData).encodedData(),
             sendChannel: 0,
             repeatCount: repeatCount,
-            delayBetweenPacketsMS: 0
+            delayBetweenPacketsMS: 0,
+            preambleExtendMS: 0,
+            firmwareVersion: firmwareVersion
         )
 
         do {
@@ -86,7 +94,11 @@ extension PumpMessageSender {
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     func getResponse<T: MessageBody>(to message: PumpMessage, responseType: MessageType = .pumpAck, repeatCount: UInt8 = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> T {
+        
+        log.debug("getResponse(%{public}@, %d, %f, %d)", String(describing: message), repeatCount, timeout, retryCount)
+        
         let response = try sendAndListen(message, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
+        
 
         guard response.messageType == responseType, let body = response.messageBody as? T else {
             if let body = response.messageBody as? PumpErrorMessageBody {
@@ -131,7 +143,8 @@ extension PumpMessageSender {
             message: message,
             repeatCount: repeatCount,
             timeout: timeout,
-            retryCount: retryCount
+            retryCount: retryCount,
+            firmwareVersion: firmwareVersion
         )
 
         guard let rfPacket = try writeCommandExpectingPacket(command, timeout: command.totalTimeout) else {
@@ -146,7 +159,7 @@ extension PumpMessageSender {
         let response: Data
 
         do {
-            response = try writeCommand(command, timeout: timeout)
+            (_, response) = try writeCommand(command, timeout: timeout)
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }

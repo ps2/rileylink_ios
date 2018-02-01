@@ -48,31 +48,63 @@ public enum CC111XRegister: UInt8 {
 public struct CommandSession {
     let manager: PeripheralManager
     let responseType: PeripheralManager.ResponseType
+    public let firmwareVersion: RadioFirmwareVersion
 
     /// - Throws: RileyLinkDeviceError
-    public func writeCommand(_ command: Command, timeout: TimeInterval) throws -> Data {
+    public func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
         return try manager.writeCommand(command,
             timeout: timeout + PeripheralManager.expectedMaxBLELatency,
             responseType: responseType
         )
     }
+    
+    /// - Throws: RileyLinkDeviceError
+    public func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
+        return try manager.writeCommandData(commandData,
+                                        awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
+                                        timeout: timeout + PeripheralManager.expectedMaxBLELatency,
+                                        responseType: responseType
+        )
+    }
+
 
     /// - Throws: RileyLinkDeviceError
     public func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
-        let command = UpdateRegister(address, value: value)
-        let response = try writeCommand(command, timeout: 0)
+        
+        let cmdData = Data(bytes: [
+            RileyLinkCommand.updateRegister.rawValue,
+            address.rawValue,
+            value
+            ])
 
-        guard let rawResponse = response.first else {
-            throw RileyLinkDeviceError.invalidResponse(response)
+        enum Response: UInt8 {
+            case success = 1
+            case invalidRegister = 2
         }
 
-        switch UpdateRegister.Response(rawValue: rawResponse) {
-        case .none:
-            throw RileyLinkDeviceError.invalidResponse(response)
-        case .invalidRegister?:
-            throw RileyLinkDeviceError.invalidInput(String(describing: command.register))
-        case .success?:
-            return
+        var responseCode: RileyLinkResponseCode
+        let response: Data
+        (responseCode, response) = try writeCommandData(cmdData, awaitingUpdateWithMinimumLength: 1, timeout: 0)
+        
+        if responseType == .buffered {
+            guard let rawResponse = response.first else {
+                throw RileyLinkDeviceError.invalidResponse(response)
+            }
+            switch Response(rawValue: rawResponse) {
+            case .none:
+                throw RileyLinkDeviceError.invalidResponse(response)
+            case .invalidRegister?:
+                throw RileyLinkDeviceError.invalidInput(String(describing: address))
+            case .success?:
+                return
+            }
+        } else {
+            switch responseCode {
+            case .invalidParam:
+                throw RileyLinkDeviceError.invalidInput(String(describing: address))
+            default:
+                return
+            }
         }
     }
 

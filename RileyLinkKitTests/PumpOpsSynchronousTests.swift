@@ -320,8 +320,12 @@ func randomDataString(length:Int) -> String {
 }
 
 class PumpMessageSenderStub: PumpMessageSender {
-    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> Data {
-        return Data()
+    var firmwareVersion: RadioFirmwareVersion {
+        return .unknown
+    }
+
+    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
+        return (.success, Data())
     }
 
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws {

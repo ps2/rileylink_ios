@@ -15,10 +15,10 @@ extension SendAndListen {
     init(message: PumpMessage, repeatCount: UInt8, delayBetweenPackets: TimeInterval = 0, timeout: TimeInterval, retryCount: UInt8, firmwareVersion: RadioFirmwareVersion) {
         self.init(
             outgoing: MinimedPacket(outgoingData: message.txData).encodedData(),
-            sendChannel: UInt8(0),
+            sendChannel: 0,
             repeatCount: repeatCount,
             delayBetweenPacketsMS: UInt16(clamping: Int(delayBetweenPackets.milliseconds)),
-            listenChannel: UInt8(0),
+            listenChannel: 0,
             timeoutMS: UInt32(clamping: Int(timeout.milliseconds)),
             retryCount: retryCount,
             preambleExtendMS: 0,
@@ -38,11 +38,10 @@ extension SendAndListen {
         // At least 17 ms between packets for radio to stop/start
         let radioTimeBetweenPackets: TimeInterval = .milliseconds(17)
         let timeBetweenPackets = delayBetweenPackets + radioTimeBetweenPackets
-        let maxBLEDelay: TimeInterval = .seconds(1)
 
         // 16384 = bitrate, 8 = bits per byte
         let singlePacketSendTime: TimeInterval = (Double(outgoing.count * 8) / 16_384)
         let totalRepeatSendTime: TimeInterval = (singlePacketSendTime + timeBetweenPackets) * Double(repeatCount)
-        return (totalRepeatSendTime + timeout) * Double(retryCount + 1) + maxBLEDelay
+        return (totalRepeatSendTime + timeout) * Double(retryCount + 1)
     }
 }

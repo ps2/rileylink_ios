@@ -22,6 +22,15 @@ public struct RadioFirmwareVersion {
         self.versionString = versionString
         components = versionString[versionIndex...].split(separator: ".").flatMap({ Int($0) })
     }
+
+    private init(components: [Int]) {
+        versionString = "Unknown"
+        self.components = components
+    }
+
+    public static var unknown: RadioFirmwareVersion {
+        return self.init(components: [1])
+    }
 }
 
 

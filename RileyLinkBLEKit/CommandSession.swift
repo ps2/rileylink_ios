@@ -59,11 +59,11 @@ public struct CommandSession {
     }
     
     /// - Throws: RileyLinkDeviceError
-    public func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
+    func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
         return try manager.writeCommandData(commandData,
-                                        awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
-                                        timeout: timeout + PeripheralManager.expectedMaxBLELatency,
-                                        responseType: responseType
+            awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
+            timeout: timeout + PeripheralManager.expectedMaxBLELatency,
+            responseType: responseType
         )
     }
 
@@ -75,7 +75,7 @@ public struct CommandSession {
             RileyLinkCommand.updateRegister.rawValue,
             address.rawValue,
             value
-            ])
+        ])
 
         enum Response: UInt8 {
             case success = 1

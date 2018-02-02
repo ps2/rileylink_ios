@@ -174,18 +174,17 @@ extension PeripheralManager {
         value.insert(UInt8(value.count), at: 0)
         
         do {
-            switch (responseType) {
+            switch responseType {
             case .single:
-                return try writeCommand(value,
-                                        for: characteristic, timeout: timeout)
+                return try writeCommand(value, for: characteristic, timeout: timeout)
             case .buffered:
                 return try writeCommand(value,
-                                        for: characteristic,
-                                        timeout: timeout,
-                                        awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
-                                        endOfResponseMarker: 0x00
+                    for: characteristic,
+                    timeout: timeout,
+                    awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
+                    endOfResponseMarker: 0x00
                 )
-            default:
+            case .none:
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
                 return (.success, Data())
             }
@@ -300,7 +299,8 @@ extension PeripheralManager {
         type: CBCharacteristicWriteType = .withResponse,
         timeout: TimeInterval,
         awaitingUpdateWithMinimumLength minimumLength: Int,
-        endOfResponseMarker: UInt8) throws -> (RileyLinkResponseCode, Data)
+        endOfResponseMarker: UInt8
+    ) throws -> (RileyLinkResponseCode, Data)
     {
         var response = Data()
         var buffer = Data()
@@ -312,7 +312,6 @@ extension PeripheralManager {
             }
 
             addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                
                 guard let value = value else {
                     return false
                 }
@@ -337,7 +336,7 @@ extension PeripheralManager {
                         // This is expected in cases where an "Idle" GetPacket command is running
                         log.debug("RileyLink response error: commandInterrupted")
                         guard buffer.count > 0, let endOfSecondResponse = buffer.index(of: endOfResponseMarker) else {
-                                return false
+                            return false
                         }
                         response = buffer.subdata(in: 0..<endOfSecondResponse)
                         responseCode = possibleResponseCode!

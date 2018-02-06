@@ -82,6 +82,24 @@ extension CBCentralManager {
 }
 
 
+extension Command {
+    /// Encodes a command's data by validating and prepending its length
+    ///
+    /// - Returns: Writable command data
+    /// - Throws: RileyLinkDeviceError.writeSizeLimitExceeded if the command data is too long
+    fileprivate func writableData() throws -> Data {
+        var data = self.data
+
+        guard data.count <= 220 else {
+            throw RileyLinkDeviceError.writeSizeLimitExceeded(maxLength: 220)
+        }
+
+        data.insert(UInt8(clamping: data.count), at: 0)
+        return data
+    }
+}
+
+
 private let log = OSLog(category: "PeripheralManager+RileyLink")
 
 
@@ -114,7 +132,7 @@ extension PeripheralManager {
             let command = GetPacket(listenChannel: channel, timeoutMS: UInt32(clamping: Int(idleTimeout.milliseconds)))
 
             do {
-                _ = try manager.writeCommand(command, timeout: timeout, responseType: .none)
+                try manager.writeCommandWithoutResponse(command, timeout: timeout)
                 completion(nil)
             } catch let error as RileyLinkDeviceError {
                 completion(error)
@@ -148,83 +166,100 @@ extension PeripheralManager {
 }
 
 
+
 // MARK: - Synchronous commands
 extension PeripheralManager {
     enum ResponseType {
         case single
         case buffered
-        case none
     }
 
-    /// - Throws: RileyLinkDeviceError
-    func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval, responseType: ResponseType) throws -> (RileyLinkResponseCode, Data) {
+    /// Invokes a command expecting a response
+    ///
+    /// - Parameters:
+    ///   - command: The command
+    ///   - timeout: The amount of time to wait for the peripheral to respond before throwing a timeout error
+    ///   - responseType: The BLE response value framing method
+    /// - Returns: The received response
+    /// - Throws:
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
+    ///     - RileyLinkDeviceError.writeSizeLimitExceeded
+    func writeCommand<C: Command>(_ command: C, timeout: TimeInterval, responseType: ResponseType) throws -> C.ResponseType {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
             throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
         }
-            
-        var value = commandData
-        
-        // Data commands are encoded with their length as the first byte
-        guard value.count <= 220 else {
-            throw RileyLinkDeviceError.writeSizeLimitExceeded(maxLength: 220)
+
+        let value = try command.writableData()
+
+        log.debug("RL Send: %@", value.hexadecimalString)
+
+        switch responseType {
+        case .single:
+            return try writeCommand(value,
+                for: characteristic,
+                timeout: timeout
+            )
+        case .buffered:
+            return try writeLegacyCommand(value,
+                for: characteristic,
+                timeout: timeout,
+                endOfResponseMarker: 0x00
+            )
         }
-        
-        log.debug("RL Send: %{public}@", value.hexadecimalString)
-        
-        value.insert(UInt8(value.count), at: 0)
-        
-        do {
-            switch responseType {
-            case .single:
-                return try writeCommand(value, for: characteristic, timeout: timeout)
-            case .buffered:
-                return try writeCommand(value,
-                    for: characteristic,
-                    timeout: timeout,
-                    awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
-                    endOfResponseMarker: 0x00
-                )
-            case .none:
-                try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
-                return (.success, Data())
-            }
-        } catch let error as PeripheralManagerError {
-            throw RileyLinkDeviceError.peripheralManagerError(error)
-        }
-    }
-    
-    /// - Throws: RileyLinkDeviceError
-    func writeCommand(_ command: Command, timeout: TimeInterval, responseType: ResponseType) throws -> (RileyLinkResponseCode, Data) {
-        return try writeCommandData(command.data, awaitingUpdateWithMinimumLength:command.expectedResponseLength, timeout:timeout, responseType: responseType)
     }
 
-    /// - Throws: RileyLinkDeviceError
+    /// Invokes a command without waiting for its response
+    ///
+    /// - Parameters:
+    ///   - command: The command
+    ///   - timeout: The amount of time to wait for the peripheral to confirm the write before throwing a timeout error
+    /// - Throws:
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
+    ///     - RileyLinkDeviceError.writeSizeLimitExceeded
+    fileprivate func writeCommandWithoutResponse<C: Command>(_ command: C, timeout: TimeInterval) throws {
+        guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
+            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+        }
+
+        let value = try command.writableData()
+
+        log.debug("RL Send: %@", value.hexadecimalString)
+
+        try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
+    }
+
+    /// - Throws:
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
     func readRadioFirmwareVersion(timeout: TimeInterval, responseType: ResponseType) throws -> String {
-        let (_, data) = try writeCommand(GetVersion(), timeout: timeout, responseType: responseType)
-        
-        guard let version = String(bytes: data, encoding: .utf8) else {
-            throw RileyLinkDeviceError.invalidResponse(data)
-        }
-
-        return version
+        let response = try writeCommand(GetVersion(), timeout: timeout, responseType: responseType)
+        return response.version
     }
 
-    /// - Throws: RileyLinkDeviceError
+    /// - Throws:
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
     func readBluetoothFirmwareVersion(timeout: TimeInterval) throws -> String {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.firmwareVersion) else {
             throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
         }
 
-        guard let data = try readValue(for: characteristic, timeout: timeout) else {
-            // TODO: This is an "unknown value" issue, not a timeout
-            throw RileyLinkDeviceError.peripheralManagerError(.timeout)
-        }
+        do {
+            guard let data = try readValue(for: characteristic, timeout: timeout) else {
+                // TODO: This is an "unknown value" issue, not a timeout
+                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+            }
 
-        guard let version = String(bytes: data, encoding: .utf8) else {
-            throw RileyLinkDeviceError.invalidResponse(data)
-        }
+            guard let version = String(bytes: data, encoding: .utf8) else {
+                throw RileyLinkDeviceError.invalidResponse(data)
+            }
 
-        return version
+            return version
+        } catch let error as PeripheralManagerError {
+            throw RileyLinkDeviceError.peripheralManagerError(error)
+        }
     }
 }
 
@@ -232,130 +267,135 @@ extension PeripheralManager {
 // MARK: - Lower-level helper operations
 extension PeripheralManager {
 
+    /// Writes command data expecting a single response
+    ///
+    /// - Parameters:
+    ///   - data: The command data
+    ///   - characteristic: The peripheral characteristic to write
+    ///   - type: The type of characteristic write
+    ///   - timeout: The amount of time to wait for the peripheral to respond before throwing a timeout error
+    /// - Returns: The recieved response
     /// - Throws:
-    ///     - PeripheralManagerError
-    ///     - RileyLinkResponseError
-    func writeCommand(_ value: Data,
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
+    private func writeCommand<R: Response>(_ data: Data,
         for characteristic: CBCharacteristic,
         type: CBCharacteristicWriteType = .withResponse,
-        timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data)
+        timeout: TimeInterval
+    ) throws -> R
     {
+        var capturedResponse: R?
 
-        try runCommand(timeout: timeout) {
-            if case .withResponse = type {
-                addCondition(.write(characteristic: characteristic))
+        do {
+            try runCommand(timeout: timeout) {
+                if case .withResponse = type {
+                    addCondition(.write(characteristic: characteristic))
+                }
+
+                addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
+                    guard let value = value else {
+                        return false
+                    }
+
+                    log.debug("RL Recv(single): %@", value.hexadecimalString)
+
+                    guard let response = R(data: value) else {
+                        // We don't recognize the contents. Keep listening.
+                        return false
+                    }
+
+                    switch response.code {
+                    case .rxTimeout, .zeroData, .invalidParam, .unknownCommand:
+                        log.debug("RileyLink response: %{public}@", String(describing: response))
+                        capturedResponse = response
+                        return true
+                    case .commandInterrupted:
+                        // This is expected in cases where an "Idle" GetPacket command is running
+                        log.debug("RileyLink response: %{public}@", String(describing: response))
+                        return false
+                    case .success:
+                        capturedResponse = response
+                        return true
+                    }
+                }))
+
+                peripheral.writeValue(data, for: characteristic, type: type)
             }
-
-            addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                guard let value = value, value.count > 0 else {
-                    return false
-                }
-
-                log.debug("RL Recv(single): %{public}@", value.hexadecimalString)
-                
-                let responseCode = RileyLinkResponseCode(rawValue: value[0])
-                
-                switch responseCode {
-                case .none:
-                    // We don't recognize the error. Keep listening.
-                    log.error("RileyLink response unexpected: %{public}@", String(describing: value))
-                    return false
-                case .commandInterrupted?:
-                    // This is expected in cases where an "Idle" GetPacket command is running
-                    log.debug("RileyLink response: commandInterrupted: %{public}@", String(describing: value))
-                    return false
-                case .rxTimeout?, .zeroData?:
-                    log.debug("RileyLink response: %{public}@: %{public}@", String(describing: responseCode!), String(describing: value))
-                    return true
-                case .success?, .invalidParam?:
-                    return true
-                }
-            }))
-
-            peripheral.writeValue(value, for: characteristic, type: type)
+        } catch let error as PeripheralManagerError {
+            throw RileyLinkDeviceError.peripheralManagerError(error)
         }
 
-        guard let value = characteristic.value else {
-            // TODO: This is an "unknown value" issue, not a timeout
-            throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+        guard let response = capturedResponse else {
+            throw RileyLinkDeviceError.invalidResponse(characteristic.value ?? Data())
         }
 
-        guard value.count >= 0 else {
-            // TODO: This is a empty response issue, not a timeout
-            throw RileyLinkDeviceError.responseTimeout
-        }
-
-        guard let responseCode = RileyLinkResponseCode(rawValue: value[0]) else {
-            throw RileyLinkDeviceError.invalidResponse(value)
-        }
-
-        return (responseCode, value.subdata(in: 1..<value.count))
-        
+        return response
     }
 
-    /// - Throws: PeripheralManagerError
-    func writeCommand(_ value: Data,
+    /// Writes command data expecting a bufferred response
+    ///
+    /// - Parameters:
+    ///   - data: The command data
+    ///   - characteristic: The peripheral characteristic to write
+    ///   - type: The type of characteristic write
+    ///   - timeout: The amount of time to wait for the peripheral to respond before throwing a timeout error
+    ///   - endOfResponseMarker: The marker delimiting the end of a response in the buffer
+    /// - Returns: The received response. In the event of multiple responses in the buffer, the first parsable response is returned.
+    /// - Throws:
+    ///     - RileyLinkDeviceError.invalidResponse
+    ///     - RileyLinkDeviceError.peripheralManagerError
+    private func writeLegacyCommand<R: Response>(_ data: Data,
         for characteristic: CBCharacteristic,
         type: CBCharacteristicWriteType = .withResponse,
         timeout: TimeInterval,
-        awaitingUpdateWithMinimumLength minimumLength: Int,
         endOfResponseMarker: UInt8
-    ) throws -> (RileyLinkResponseCode, Data)
+    ) throws -> R
     {
-        var response = Data()
-        var buffer = Data()
-        var responseCode: RileyLinkResponseCode = .success
+        var capturedResponse: R?
+        var buffer = ResponseBuffer<R>(endMarker: endOfResponseMarker)
 
-        try runCommand(timeout: timeout) {
-            if case .withResponse = type {
-                addCondition(.write(characteristic: characteristic))
-            }
-
-            addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                guard let value = value else {
-                    return false
+        do {
+            try runCommand(timeout: timeout) {
+                if case .withResponse = type {
+                    addCondition(.write(characteristic: characteristic))
                 }
 
-                log.debug("RL Recv(buffered): %{public}@", value.hexadecimalString)
-                
-                buffer = buffer + value
-
-                guard let end = buffer.index(of: endOfResponseMarker) else {
-                    return false
-                }
-                
-                response = buffer.subdata(in: 0..<end)
-                buffer = buffer.subdata(in: end..<buffer.count)
-                
-                if response.count == 1 {
-                    let possibleResponseCode = RileyLinkResponseCode(rawValue: response[0])
-                    switch possibleResponseCode {
-                    case .none:
-                        break
-                    case .commandInterrupted?:
-                        // This is expected in cases where an "Idle" GetPacket command is running
-                        log.debug("RileyLink response error: commandInterrupted")
-                        guard buffer.count > 0, let endOfSecondResponse = buffer.index(of: endOfResponseMarker) else {
-                            return false
-                        }
-                        response = buffer.subdata(in: 0..<endOfSecondResponse)
-                        responseCode = possibleResponseCode!
-                    case .rxTimeout?, .zeroData?:
-                        responseCode = possibleResponseCode!
-                        log.debug("RileyLink response error: %{public}@: %{public}@", String(describing: responseCode), String(describing: response))
-                        return true
-                    default:
-                        break
+                addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
+                    guard let value = value else {
+                        return false
                     }
-                }
 
-                return response.count >= minimumLength
-            }))
+                    log.debug("RL Recv(buffered): %@", value.hexadecimalString)
+                    buffer.append(value)
 
-            peripheral.writeValue(value, for: characteristic, type: type)
+                    for response in buffer.responses {
+                        switch response.code {
+                        case .rxTimeout, .zeroData, .invalidParam, .unknownCommand:
+                            log.debug("RileyLink response: %{public}@", String(describing: response))
+                            capturedResponse = response
+                            return true
+                        case .commandInterrupted:
+                            // This is expected in cases where an "Idle" GetPacket command is running
+                            log.debug("RileyLink response: %{public}@", String(describing: response))
+                        case .success:
+                            capturedResponse = response
+                            return true
+                        }
+                    }
+
+                    return false
+                }))
+
+                peripheral.writeValue(data, for: characteristic, type: type)
+            }
+        } catch let error as PeripheralManagerError {
+            throw RileyLinkDeviceError.peripheralManagerError(error)
         }
-        
-        return (responseCode, response)
 
+        guard let response = capturedResponse else {
+            throw RileyLinkDeviceError.invalidResponse(characteristic.value ?? Data())
+        }
+
+        return response
     }
 }

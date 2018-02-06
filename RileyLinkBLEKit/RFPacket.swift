@@ -13,12 +13,14 @@ public struct RFPacket {
     let packetCounter: Int
     public let rssi: Int
 
-    public init?(rfspyResponse: Data) {
+    init?(rfspyResponse: Data) {
         guard rfspyResponse.count > 2 else {
             return nil
         }
+
+        let startIndex = rfspyResponse.startIndex
         
-        let rssiDec = Int(rfspyResponse[0])
+        let rssiDec = Int(rfspyResponse[startIndex])
         let rssiOffset = 73
         if rssiDec >= 128 {
             self.rssi = (rssiDec - 256) / 2 - rssiOffset
@@ -26,9 +28,9 @@ public struct RFPacket {
             self.rssi = rssiDec / 2 - rssiOffset
         }
 
-        self.packetCounter = Int(rfspyResponse[1])
+        self.packetCounter = Int(rfspyResponse[startIndex.advanced(by: 1)])
         
-        self.data = rfspyResponse.subdata(in: 2..<rfspyResponse.count)
+        self.data = rfspyResponse.subdata(in: startIndex.advanced(by: 2)..<rfspyResponse.endIndex)
     }
 }
 

@@ -17,62 +17,35 @@ private let log = OSLog(category: "PumpMessageSender")
 
 
 protocol PumpMessageSender {
-    var firmwareVersion: RadioFirmwareVersion { get }
-    
-    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data)
-
+    /// - Throws: LocalizedError
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws
 
+    /// - Throws: LocalizedError
     func setBaseFrequency(_ frequency: Measurement<UnitFrequency>) throws
 
-    /// Sends a message to the pump, listening for message in reply
+    /// Sends data to the pump, listening for a reply
     ///
     /// - Parameters:
-    ///   - message: The message to send
+    ///   - data: The data to send
     ///   - repeatCount: The number of times to repeat the message before listening begins
-    ///   - timeout: The length of time to listen for a pump response
+    ///   - timeout: The length of time to listen for a response before timing out
     ///   - retryCount: The number of times to repeat the send & listen sequence
-    /// - Returns: The message reply
-    /// - Throws: An error describing a failure in the sending or receiving of a message:
-    ///     - PumpOpsError.crosstalk
-    ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.deviceError
-    ///     - PumpOpsError.unknownResponse
-    func sendAndListen(_ message: PumpMessage, repeatCount: UInt8, timeout: TimeInterval, retryCount: UInt8) throws -> PumpMessage
-}
+    /// - Returns: The packet reply
+    /// - Throws: LocalizedError
+    func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket?
 
-extension PumpMessageSender {
-    /// Sends a message to the pump, listening for message in reply
-    ///
-    /// - Parameters:
-    ///   - message: The message to send
-    ///   - timeout: The length of time to listen for a pump response
-    ///   - retryCount: The number of times to repeat the send & listen sequence
-    /// - Returns: The message reply
-    /// - Throws: An error describing a failure in the sending or receiving of a message:
-    ///     - PumpOpsError.crosstalk
-    ///     - PumpOpsError.noResponse
-    ///     - PumpOpsError.deviceError
-    ///     - PumpOpsError.unknownResponse
-    func sendAndListen(_ message: PumpMessage, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> PumpMessage {
-        return try sendAndListen(message, repeatCount: 0, timeout: timeout, retryCount: retryCount)
-    }
+    /// - Throws: LocalizedError
+    func listen(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket?
+
+    /// - Throws: LocalizedError
+    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws
 }
 
 extension PumpMessageSender {
     /// - Throws: PumpOpsError.deviceError
-    func send(_ msg: PumpMessage, repeatCount: UInt8 = 0) throws {
-        let command = SendPacket(
-            outgoing: MinimedPacket(outgoingData: msg.txData).encodedData(),
-            sendChannel: 0,
-            repeatCount: repeatCount,
-            delayBetweenPacketsMS: 0,
-            preambleExtendMS: 0,
-            firmwareVersion: firmwareVersion
-        )
-
+    func send(_ msg: PumpMessage) throws {
         do {
-            _ = try writeCommand(command, timeout: 0)
+            try send(MinimedPacket(outgoingData: msg.txData).encodedData(), onChannel: 0, timeout: 0)
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }
@@ -93,7 +66,7 @@ extension PumpMessageSender {
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
-    func getResponse<T: MessageBody>(to message: PumpMessage, responseType: MessageType = .pumpAck, repeatCount: UInt8 = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> T {
+    func getResponse<T: MessageBody>(to message: PumpMessage, responseType: MessageType = .pumpAck, repeatCount: Int = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: Int = 3) throws -> T {
         
         log.debug("getResponse(%{public}@, %d, %f, %d)", String(describing: message), repeatCount, timeout, retryCount)
         
@@ -114,20 +87,33 @@ extension PumpMessageSender {
         return body
     }
 
-    func sendAndListen(_ message: PumpMessage, repeatCount: UInt8, timeout: TimeInterval, retryCount: UInt8) throws -> PumpMessage {
+    /// Sends a message to the pump, listening for a message in reply
+    ///
+    /// - Parameters:
+    ///   - message: The message to send
+    ///   - repeatCount: The number of times to repeat the message before listening begins
+    ///   - timeout: The length of time to listen for a pump response
+    ///   - retryCount: The number of times to repeat the send & listen sequence
+    /// - Returns: The message reply
+    /// - Throws: An error describing a failure in the sending or receiving of a message:
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unknownResponse
+    func sendAndListen(_ message: PumpMessage, repeatCount: Int = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: Int = 3) throws -> PumpMessage {
         let rfPacket = try sendAndListenForPacket(message, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
 
         guard let packet = MinimedPacket(encodedData: rfPacket.data) else {
             // TODO: Change error to better reflect that this is an encoding or CRC error
-            throw PumpOpsError.unknownResponse(rx: rfPacket.data.hexadecimalString, during: message)
+            throw PumpOpsError.unknownResponse(rx: rfPacket.data, during: message)
         }
 
         guard let response = PumpMessage(rxData: packet.data) else {
             // Unknown packet type or message type
-            throw PumpOpsError.unknownResponse(rx: packet.data.hexadecimalString, during: message)
+            throw PumpOpsError.unknownResponse(rx: packet.data, during: message)
         }
 
-        guard response.address == response.address else {
+        guard response.address == message.address else {
             throw PumpOpsError.crosstalk(response, during: message)
         }
 
@@ -137,16 +123,16 @@ extension PumpMessageSender {
     /// - Throws:
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.deviceError
-    func sendAndListenForPacket(_ message: PumpMessage, repeatCount: UInt8 = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: UInt8 = 3) throws -> RFPacket {
-        let command = SendAndListen(
-            message: message,
-            repeatCount: repeatCount,
-            timeout: timeout,
-            retryCount: retryCount,
-            firmwareVersion: firmwareVersion
-        )
+    func sendAndListenForPacket(_ message: PumpMessage, repeatCount: Int = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: Int = 3) throws -> RFPacket {
+        let packet: RFPacket?
 
-        guard let rfPacket = try writeCommandExpectingPacket(command, timeout: command.totalTimeout) else {
+        do {
+            packet = try sendAndListen(MinimedPacket(outgoingData: message.txData).encodedData(), repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
+        } catch let error as LocalizedError {
+            throw PumpOpsError.deviceError(error)
+        }
+
+        guard let rfPacket = packet else {
             throw PumpOpsError.noResponse(during: message)
         }
 
@@ -154,17 +140,11 @@ extension PumpMessageSender {
     }
 
     /// - Throws: PumpOpsError.deviceError
-    func writeCommandExpectingPacket(_ command: Command, timeout: TimeInterval) throws -> RFPacket? {
-        let response: Data
-
+    func listenForPacket(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket? {
         do {
-            (_, response) = try writeCommand(command, timeout: timeout)
+            return try listen(onChannel: channel, timeout: timeout)
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }
-
-        return RFPacket(rfspyResponse: response)
-
-        // TODO: Record general RSSI values?
     }
 }

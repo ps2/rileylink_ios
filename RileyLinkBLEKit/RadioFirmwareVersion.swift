@@ -28,7 +28,7 @@ public struct RadioFirmwareVersion {
         self.components = components
     }
 
-    public static var unknown: RadioFirmwareVersion {
+    static var unknown: RadioFirmwareVersion {
         return self.init(components: [1])
     }
 }
@@ -56,11 +56,19 @@ extension RadioFirmwareVersion {
         return true
     }
 
-    var supports16SecondPacketDelay: Bool {
+    var supports16BitPacketDelay: Bool {
         guard let major = components.first, major >= 2 else {
             return false
         }
         return true
+    }
+    
+    var needsExtraByteForUpdateRegisterCommand: Bool {
+        guard let major = components.first, major >= 2 else {
+            return true
+        }
+        return false
+
     }
 
 }

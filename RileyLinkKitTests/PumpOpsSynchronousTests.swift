@@ -10,7 +10,7 @@ import XCTest
 
 @testable import RileyLinkKit
 @testable import MinimedKit
-import RileyLinkBLEKit
+@testable import RileyLinkBLEKit
 
 class PumpOpsSynchronousTests: XCTestCase {
     
@@ -320,12 +320,47 @@ func randomDataString(length:Int) -> String {
 }
 
 class PumpMessageSenderStub: PumpMessageSender {
-    var firmwareVersion: RadioFirmwareVersion {
-        return .unknown
+    func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket? {
+        guard let decoded = MinimedPacket(encodedData: data),
+              let messageType = MessageType(rawValue: decoded.data[4])
+        else {
+            throw PumpOpsError.noResponse(during: "Tests")
+        }
+
+        let response: PumpMessage
+
+        if let responseArray = responses[messageType] {
+            let numberOfResponsesReceived: Int
+
+            if let someValue = responsesHaveOccured[messageType] {
+                numberOfResponsesReceived = someValue
+            } else {
+                numberOfResponsesReceived = 0
+            }
+
+            let nextNumberOfResponsesReceived = numberOfResponsesReceived + 1
+            responsesHaveOccured[messageType] = nextNumberOfResponsesReceived
+
+            if numberOfResponsesReceived >= responseArray.count {
+                XCTFail()
+            }
+
+            response = responseArray[numberOfResponsesReceived]
+        } else {
+            response = PumpMessage(rxData: Data())!
+        }
+
+        var encoded = MinimedPacket(outgoingData: response.txData).encodedData()
+        encoded.insert(contentsOf: [0, 0], at: 0)
+        return RFPacket(rfspyResponse: encoded)
     }
 
-    func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
-        return (.success, Data())
+    func listen(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket? {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
+
+    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws {
+        // Do nothing
     }
 
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
@@ -340,29 +375,6 @@ class PumpMessageSenderStub: PumpMessageSender {
     
     // internal tracking of how many times a response type has been received
     private var responsesHaveOccured = [MessageType: Int]()
-
-    func sendAndListen(_ msg: PumpMessage, repeatCount: UInt8,  timeout: TimeInterval, retryCount: UInt8) throws -> PumpMessage {
-        
-        if let responseArray = responses[msg.messageType] {
-            let numberOfResponsesReceived: Int
-            
-            if let someValue = responsesHaveOccured[msg.messageType] {
-                numberOfResponsesReceived = someValue
-            } else {
-                numberOfResponsesReceived = 0
-            }
-            
-            let nextNumberOfResponsesReceived = numberOfResponsesReceived+1
-            responsesHaveOccured[msg.messageType] = nextNumberOfResponsesReceived
-            
-            if numberOfResponsesReceived >= responseArray.count {
-                XCTFail()
-            }
-            
-            return responseArray[numberOfResponsesReceived]
-        }
-        return PumpMessage(rxData: Data())!
-    }
 }
 
 extension PumpMessageSenderStub: PumpOpsSessionDelegate {

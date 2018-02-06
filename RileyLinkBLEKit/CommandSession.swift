@@ -48,64 +48,57 @@ public enum CC111XRegister: UInt8 {
 public struct CommandSession {
     let manager: PeripheralManager
     let responseType: PeripheralManager.ResponseType
-    public let firmwareVersion: RadioFirmwareVersion
+    let firmwareVersion: RadioFirmwareVersion
 
+    /// Invokes a command expecting a response
+    ///
+    /// Unsuccessful responses are thrown as errors.
+    ///
+    /// - Parameters:
+    ///   - command: The command
+    ///   - timeout: The amount of time to wait for the pump to respond before throwing a timeout error. This should not include any expected BLE latency.
+    /// - Returns: The successful response
     /// - Throws: RileyLinkDeviceError
-    public func writeCommand(_ command: Command, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
-        return try manager.writeCommand(command,
+    private func writeCommand<C: Command>(_ command: C, timeout: TimeInterval) throws -> C.ResponseType {
+        let response = try manager.writeCommand(command,
             timeout: timeout + PeripheralManager.expectedMaxBLELatency,
             responseType: responseType
         )
-    }
-    
-    /// - Throws: RileyLinkDeviceError
-    func writeCommandData(_ commandData: Data, awaitingUpdateWithMinimumLength: Int, timeout: TimeInterval) throws -> (RileyLinkResponseCode, Data) {
-        return try manager.writeCommandData(commandData,
-            awaitingUpdateWithMinimumLength: awaitingUpdateWithMinimumLength,
-            timeout: timeout + PeripheralManager.expectedMaxBLELatency,
-            responseType: responseType
-        )
+
+        switch response.code {
+        case .rxTimeout:
+            throw RileyLinkDeviceError.responseTimeout
+        case .commandInterrupted:
+            throw RileyLinkDeviceError.responseTimeout
+        case .zeroData:
+            throw RileyLinkDeviceError.invalidResponse(Data())
+        case .invalidParam, .unknownCommand:
+            throw RileyLinkDeviceError.invalidInput(String(describing: command.data))
+        case .success:
+            return response
+        }
     }
 
+    /// Invokes a command expecting an RF packet response
+    ///
+    /// - Parameters:
+    ///   - command: The command
+    ///   - timeout: The amount of time to wait for the pump to respond before throwing a timeout error. This should not include any expected BLE latency.
+    /// - Returns: The successful packet response
+    /// - Throws: RileyLinkDeviceError
+    private func writeCommand<C: Command>(_ command: C, timeout: TimeInterval) throws -> RFPacket where C.ResponseType == PacketResponse {
+        let response: C.ResponseType = try writeCommand(command, timeout: timeout)
+
+        guard let packet = response.packet else {
+            throw RileyLinkDeviceError.invalidResponse(Data())
+        }
+        return packet
+    }
 
     /// - Throws: RileyLinkDeviceError
     public func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
-        
-        let cmdData = Data(bytes: [
-            RileyLinkCommand.updateRegister.rawValue,
-            address.rawValue,
-            value
-        ])
-
-        enum Response: UInt8 {
-            case success = 1
-            case invalidRegister = 2
-        }
-
-        var responseCode: RileyLinkResponseCode
-        let response: Data
-        (responseCode, response) = try writeCommandData(cmdData, awaitingUpdateWithMinimumLength: 1, timeout: 0)
-        
-        if responseType == .buffered {
-            guard let rawResponse = response.first else {
-                throw RileyLinkDeviceError.invalidResponse(response)
-            }
-            switch Response(rawValue: rawResponse) {
-            case .none:
-                throw RileyLinkDeviceError.invalidResponse(response)
-            case .invalidRegister?:
-                throw RileyLinkDeviceError.invalidInput(String(describing: address))
-            case .success?:
-                return
-            }
-        } else {
-            switch responseCode {
-            case .invalidParam:
-                throw RileyLinkDeviceError.invalidInput(String(describing: address))
-            default:
-                return
-            }
-        }
+        let command = UpdateRegister(address, value: value, firmwareVersion: firmwareVersion)
+        _ = try writeCommand(command, timeout: 0)
     }
 
     private static let xtalFrequency = Measurement<UnitFrequency>(value: 24, unit: .megahertz)
@@ -120,5 +113,65 @@ public struct CommandSession {
         try updateRegister(.freq0, value: UInt8(val & 0xff))
         try updateRegister(.freq1, value: UInt8((val >> 8) & 0xff))
         try updateRegister(.freq2, value: UInt8((val >> 16) & 0xff))
+    }
+
+    /// Sends data to the pump, listening for a reply
+    ///
+    /// - Parameters:
+    ///   - data: The data to send
+    ///   - repeatCount: The number of times to repeat the message before listening begins
+    ///   - timeout: The length of time to listen for a response before timing out
+    ///   - retryCount: The number of times to repeat the send & listen sequence
+    /// - Returns: The packet reply
+    /// - Throws: RileyLinkDeviceError
+    public func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket? {
+        let delayBetweenPackets: TimeInterval = 0
+
+        let command = SendAndListen(
+            outgoing: data,
+            sendChannel: 0,
+            repeatCount: UInt8(clamping: repeatCount),
+            delayBetweenPacketsMS: UInt16(clamping: Int(delayBetweenPackets)),
+            listenChannel: 0,
+            timeoutMS: UInt32(clamping: Int(timeout.milliseconds)),
+            retryCount: UInt8(clamping: retryCount),
+            preambleExtendMS: 0,
+            firmwareVersion: firmwareVersion
+        )
+
+        // At least 17 ms between packets for radio to stop/start
+        let radioTimeBetweenPackets = TimeInterval(milliseconds: 17)
+        let timeBetweenPackets = delayBetweenPackets + radioTimeBetweenPackets
+
+        // 16384 = bitrate, 8 = bits per byte
+        let singlePacketSendTime: TimeInterval = (Double(data.count * 8) / 16_384)
+        let totalRepeatSendTime: TimeInterval = (singlePacketSendTime + timeBetweenPackets) * Double(repeatCount)
+        let totalTimeout = (totalRepeatSendTime + timeout) * Double(retryCount + 1)
+
+        return try writeCommand(command, timeout: totalTimeout)
+    }
+
+    /// - Throws: RileyLinkDeviceError
+    public func listen(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket? {
+        let command = GetPacket(
+            listenChannel: 0,
+            timeoutMS: UInt32(clamping: Int(timeout.milliseconds))
+        )
+
+        return try writeCommand(command, timeout: timeout)
+    }
+
+    /// - Throws: RileyLinkDeviceError
+    public func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws {
+        let command = SendPacket(
+            outgoing: data,
+            sendChannel: UInt8(clamping: channel),
+            repeatCount: 0,
+            delayBetweenPacketsMS: 0,
+            preambleExtendMS: 0,
+            firmwareVersion: firmwareVersion
+        )
+
+        _ = try writeCommand(command, timeout: timeout)
     }
 }

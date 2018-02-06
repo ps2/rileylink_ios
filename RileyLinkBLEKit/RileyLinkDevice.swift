@@ -66,8 +66,9 @@ public class RileyLinkDevice {
 
         peripheralManager.delegate = self
 
-        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount) { [unowned self] (queue, change) in
+        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [unowned self] (queue, change) in
             if let newValue = change.newValue, newValue == 0 {
+                self.log.debug("Session queue operation count is now empty")
                 self.assertIdleListening(forceRestart: true)
             }
         }
@@ -253,45 +254,43 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
         switch MainServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
         case .data?:
-            if let response = characteristic.value, response.count > 0 {
-                self.manager.queue.async {
-                    if let responseType = self.bleFirmwareVersion?.responseType {
-                        // TODO: Handle bufferred responses differently
-                        let code: RileyLinkResponseCode?
-                        let packet: RFPacket?
+            guard let value = characteristic.value, value.count > 0 else {
+                return
+            }
 
-                        switch responseType {
-                        case .buffered:
-                            packet = RFPacket(rfspyResponse: response)
-                            code = packet != nil ? .success : RileyLinkResponseCode(rawValue: response[0])
-                        case .single:
-                            code = RileyLinkResponseCode(rawValue: response[0])
+            self.manager.queue.async {
+                if let responseType = self.bleFirmwareVersion?.responseType {
+                    let response: PacketResponse?
 
-                            if case .success? = code {
-                                packet = RFPacket(rfspyResponse: response.subdata(in: Range(1..<response.count)))
-                            } else {
-                                packet = nil
-                            }
-                        case .none:
-                            code = nil
-                            packet = nil
-                        }
-
-                        switch code {
-                        case .none:
-                            self.log.debug("Unknown idle response: %@", String(describing: code))
-                        case .rxTimeout?, .commandInterrupted?, .zeroData?, .invalidParam?:
-                            self.log.debug("Idle error received: %@", String(describing: code))
-                        case .success?:
-                            if let packet = packet {
-                                self.log.debug("Idle packet received: %@", response.hexadecimalString)
-                                NotificationCenter.default.post(name: .DevicePacketReceived, object: self, userInfo: [RileyLinkDevice.notificationPacketKey: packet])
-                            }
-                        }
+                    switch responseType {
+                    case .buffered:
+                        var buffer =  ResponseBuffer<PacketResponse>(endMarker: 0x00)
+                        buffer.append(value)
+                        response = buffer.responses.last
+                    case .single:
+                        response = PacketResponse(data: value)
                     }
 
-                    self.assertIdleListening(forceRestart: true)
+                    if let response = response {
+                        switch response.code {
+                        case .rxTimeout, .commandInterrupted, .zeroData, .invalidParam, .unknownCommand:
+                            self.log.debug("Idle error received: %@", String(describing: response.code))
+                        case .success:
+                            if let packet = response.packet {
+                                self.log.debug("Idle packet received: %@", String(describing: value))
+                                NotificationCenter.default.post(
+                                    name: .DevicePacketReceived,
+                                    object: self,
+                                    userInfo: [RileyLinkDevice.notificationPacketKey: packet]
+                                )
+                            }
+                        }
+                    } else {
+                        self.log.debug("Unknown idle response: %@", value.hexadecimalString)
+                    }
                 }
+
+                self.assertIdleListening(forceRestart: true)
             }
         case .responseCount?:
             // PeripheralManager.Configuration.valueUpdateMacros is responsible for handling this response.

@@ -13,6 +13,12 @@ public enum RXFilterMode: UInt8 {
     case narrow = 0x90  // 150KHz
 }
 
+public enum SoftwareEncodingType: UInt8 {
+    case none       = 0x00
+    case manchester = 0x01
+    case fourbsixb  = 0x02
+}
+
 public enum CC111XRegister: UInt8 {
     case sync1    = 0x00
     case sync0    = 0x01
@@ -173,5 +179,20 @@ public struct CommandSession {
         )
 
         _ = try writeCommand(command, timeout: timeout)
+    }
+    
+    /// - Throws: RileyLinkDeviceError
+    public func setSoftwareEncoding(_ swEncodingType: SoftwareEncodingType) throws {
+        guard firmwareVersion.supportsSoftwareEncoding else {
+            throw RileyLinkDeviceError.unsupportedCommand(.setSWEncoding)
+        }
+        
+        let command = SetSoftwareEncoding(swEncodingType)
+        
+        let response = try writeCommand(command, timeout: 0)
+        
+        guard response.code == .success else {
+            throw RileyLinkDeviceError.invalidInput(String(describing: swEncodingType))
+        }
     }
 }

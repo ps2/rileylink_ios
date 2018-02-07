@@ -20,6 +20,7 @@ enum RileyLinkCommand: UInt8 {
     case led              = 8
     case readRegister     = 9
     case setModeRegisters = 10
+    case setSWEncoding    = 11
 }
 
 protocol Command {
@@ -221,6 +222,25 @@ struct SetModeRegisters: Command {
         return data
     }
 }
+
+struct SetSoftwareEncoding: Command {
+    typealias ResponseType = CodeResponse
+
+    let encodingType: SoftwareEncodingType
+    
+    
+    init(_ encodingType: SoftwareEncodingType) {
+        self.encodingType = encodingType
+    }
+    
+    var data: Data {
+        return Data(bytes: [
+            RileyLinkCommand.setSWEncoding.rawValue,
+            encodingType.rawValue
+            ])
+    }
+}
+
 
 
 // MARK: - Helpers

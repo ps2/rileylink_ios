@@ -12,6 +12,7 @@ enum RileyLinkDeviceError: Error {
     case writeSizeLimitExceeded(maxLength: Int)
     case invalidResponse(Data)
     case responseTimeout
+    case unsupportedCommand(RileyLinkCommand)
 }
 
 
@@ -28,6 +29,8 @@ extension RileyLinkDeviceError: LocalizedError {
             return String(format: NSLocalizedString("Data exceededs maximum size of %@ bytes", comment: "Write size limit exceeded error description (1: size limit)"), NumberFormatter.localizedString(from: NSNumber(value: maxLength), number: .none))
         case .responseTimeout:
             return NSLocalizedString("Pump did not respond in time", comment: "Response timeout error description")
+        case .unsupportedCommand(let command):
+            return String(format: NSLocalizedString("RileyLink firmware does not support the %@ command", comment: "Unsupported command error description"), String(describing: command))
         }
     }
 

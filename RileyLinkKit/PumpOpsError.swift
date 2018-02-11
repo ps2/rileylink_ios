@@ -31,7 +31,7 @@ public enum PumpOpsError: Error {
     case unexpectedResponse(PumpMessage, from: PumpMessage)
     case unknownPumpErrorCode(UInt8)
     case unknownPumpModel(String)
-    case unknownResponse(rx: String, during: CustomStringConvertible)
+    case unknownResponse(rx: Data, during: CustomStringConvertible)
 }
 
 public enum SetBolusError: Error {
@@ -93,8 +93,8 @@ extension PumpOpsError: LocalizedError {
             return String(format: NSLocalizedString("Unknown pump error code: %1$@.", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"),String(describing: code))
         case .unknownPumpModel(let model):
             return String(format: NSLocalizedString("Unknown pump model: %@.", comment: ""), model)
-        case .unknownResponse:
-            return NSLocalizedString("Unknown response from pump.", comment: "")
+        case .unknownResponse(rx: let data, during: let during):
+            return String(format: NSLocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), String(describing: data))
         case .pumpError(let errorCode):
             return String(format: NSLocalizedString("Pump error: %1$@.", comment: "The format string description of a Pump Error. (1: The specific error code)"), String(describing: errorCode))
         case .deviceError(let error):

@@ -42,6 +42,10 @@ extension TimeInterval {
         self.init(seconds)
     }
 
+    init(milliseconds: Double) {
+        self.init(milliseconds / 1000)
+    }
+
     var milliseconds: Double {
         return self * 1000
     }

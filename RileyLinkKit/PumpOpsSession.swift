@@ -238,9 +238,6 @@ extension PumpOpsSession {
         while (!isFinished) {
             let body: DataFrameMessageBody = try session.getResponse(to: message, responseType: profile.readMessageType)
 
-            // TODO: Convert logging
-            NSLog(body.txData.hexadecimalString)
-
             scheduleData.append(body.contents)
             isFinished = body.isLastFrame
             message = PumpMessage(settings: settings, type: .pumpAck)
@@ -591,32 +588,26 @@ extension PumpOpsSession {
         }
 
         let commandTimeout = TimeInterval(seconds: 30)
-        let commandTimeoutMS = UInt32(clamping: Int(commandTimeout.milliseconds))
 
         // Wait for the pump to start polling
-        let listenForFindMessage = GetPacket(
-            listenChannel: 0,
-            timeoutMS: commandTimeoutMS
-        )
-
-        guard let encodedData = try session.writeCommandExpectingPacket(listenForFindMessage, timeout: commandTimeout)?.data else {
+        guard let encodedData = try session.listenForPacket(onChannel: 0, timeout: commandTimeout)?.data else {
             throw PumpOpsError.noResponse(during: "Watchdog listening")
         }
 
         guard let packet = MinimedPacket(encodedData: encodedData) else {
             // TODO: Change error to better reflect that this is an encoding or CRC error
-            throw PumpOpsError.unknownResponse(rx: encodedData.hexadecimalString, during: "Watchdog listening")
+            throw PumpOpsError.unknownResponse(rx: encodedData, during: "Watchdog listening")
         }
         
         guard let findMessage = PumpMessage(rxData: packet.data) else {
             // Unknown packet type or message type
-            throw PumpOpsError.unknownResponse(rx: packet.data.hexadecimalString, during: "Watchdog listening")
+            throw PumpOpsError.unknownResponse(rx: packet.data, during: "Watchdog listening")
         }
 
         guard findMessage.address.hexadecimalString == settings.pumpID && findMessage.packetType == .mySentry,
             let findMessageBody = findMessage.messageBody as? FindDeviceMessageBody, let findMessageResponseBody = MySentryAckMessageBody(sequence: findMessageBody.sequence, watchdogID: watchdogID, responseMessageTypes: [findMessage.messageType])
         else {
-            throw PumpOpsError.unknownResponse(rx: packet.data.hexadecimalString, during: "Watchdog listening")
+            throw PumpOpsError.unknownResponse(rx: packet.data, during: "Watchdog listening")
         }
 
         // Identify as a MySentry device

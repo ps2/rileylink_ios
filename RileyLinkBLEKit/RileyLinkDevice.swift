@@ -66,8 +66,9 @@ public class RileyLinkDevice {
 
         peripheralManager.delegate = self
 
-        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount) { [unowned self] (queue, change) in
+        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [unowned self] (queue, change) in
             if let newValue = change.newValue, newValue == 0 {
+                self.log.debug("Session queue operation count is now empty")
                 self.assertIdleListening(forceRestart: true)
             }
         }
@@ -140,7 +141,7 @@ extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
             self?.log.debug("======================== %{public}@ ===========================", name)
-            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered))
+            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: self?.radioFirmwareVersion ?? .unknown))
             self?.log.debug("------------------------ %{public}@ ---------------------------", name)
         }))
     }
@@ -253,16 +254,44 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
         switch MainServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
         case .data?:
-            if let response = characteristic.value, response.count > 0 {
-                if let packet = RFPacket(rfspyResponse: response) {
-                    self.log.debug("Idle packet received: %@", response.hexadecimalString)
-                    NotificationCenter.default.post(name: .DevicePacketReceived, object: self, userInfo: [RileyLinkDevice.notificationPacketKey: packet])
-                } else if let error = RileyLinkResponseError(rawValue: response[0]) {
-                    self.log.debug("Idle error received: %@", String(describing: error))
-                }
+            guard let value = characteristic.value, value.count > 0 else {
+                return
             }
 
-            assertIdleListening(forceRestart: true)
+            self.manager.queue.async {
+                if let responseType = self.bleFirmwareVersion?.responseType {
+                    let response: PacketResponse?
+
+                    switch responseType {
+                    case .buffered:
+                        var buffer =  ResponseBuffer<PacketResponse>(endMarker: 0x00)
+                        buffer.append(value)
+                        response = buffer.responses.last
+                    case .single:
+                        response = PacketResponse(data: value)
+                    }
+
+                    if let response = response {
+                        switch response.code {
+                        case .rxTimeout, .commandInterrupted, .zeroData, .invalidParam, .unknownCommand:
+                            self.log.debug("Idle error received: %@", String(describing: response.code))
+                        case .success:
+                            if let packet = response.packet {
+                                self.log.debug("Idle packet received: %@", String(describing: value))
+                                NotificationCenter.default.post(
+                                    name: .DevicePacketReceived,
+                                    object: self,
+                                    userInfo: [RileyLinkDevice.notificationPacketKey: packet]
+                                )
+                            }
+                        }
+                    } else {
+                        self.log.debug("Unknown idle response: %@", value.hexadecimalString)
+                    }
+                }
+
+                self.assertIdleListening(forceRestart: true)
+            }
         case .responseCount?:
             // PeripheralManager.Configuration.valueUpdateMacros is responsible for handling this response.
             break

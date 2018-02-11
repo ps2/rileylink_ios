@@ -10,6 +10,7 @@ import UIKit
 import MinimedKit
 import RileyLinkBLEKit
 import RileyLinkKit
+import OmniKit
 
 let CellIdentifier = "Cell"
 
@@ -20,6 +21,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     private var deviceState: DeviceState
 
     private let ops: PumpOps?
+    
+    private let podComms: PodComms
 
     private var pumpState: PumpState? {
         didSet {
@@ -83,6 +86,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         self.pumpSettings = pumpSettings
         self.pumpState = pumpState
         self.ops = pumpOps
+        
+        let nonceState = NonceState(lot: 1, tid: 1)
+        let podState = PodState(address: 0x1f00ee86, nonceState: nonceState, packetNumber: 15, messageNumber: 10)
+        self.podComms = PodComms(podState: podState)
 
         super.init(style: .grouped)
 
@@ -241,6 +248,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readPumpStatus
         case readBasalSchedule
         case enableLED
+        case omniGetStatus
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -367,9 +375,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
             case .readBasalSchedule:
                 cell.textLabel?.text = NSLocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
-            
             case .enableLED:
                 cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+            case .omniGetStatus:
+                cell.textLabel?.text = NSLocalizedString("Get OmniPod Status", comment: "The title of the command to get omnipod status")
             }
         }
 
@@ -446,7 +455,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
             case .enableLED:
                 vc = .enableLEDs(ops: ops, device: device)
+            case .omniGetStatus:
+                vc = .omniGetStatus(podComms: podComms, device: device)
             }
+            
 
             if let cell = tableView.cellForRow(at: indexPath) {
                 vc.title = cell.textLabel?.text

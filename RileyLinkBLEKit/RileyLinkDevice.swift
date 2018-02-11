@@ -292,7 +292,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                             self.log.debug("Idle error received: %@", String(describing: response.code))
                         case .success:
                             if let packet = response.packet {
-                                self.log.debug("Idle packet received: %@", String(describing: value))
+                                self.log.debug("Idle packet received: %@", value.hexadecimalString)
                                 NotificationCenter.default.post(
                                     name: .DevicePacketReceived,
                                     object: self,

@@ -160,8 +160,8 @@ extension PeripheralManager {
                 completion(nil)
             } catch let error as RileyLinkDeviceError {
                 completion(error)
-            } catch {
-                assertionFailure()
+            } catch let error {
+                assertionFailure(String(describing: error))
             }
         }
     }

@@ -61,6 +61,14 @@ extension RadioFirmwareVersion {
     var supportsResetRadioConfig: Bool {
         return atLeastV2
     }
+    
+    var supportsCustomPreamble: Bool {
+        guard let major = components.first, major >= 2 else {
+            return false
+        }
+        return true
+    }
+
 
     var supports16BitPacketDelay: Bool {
         return atLeastV2

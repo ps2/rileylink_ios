@@ -68,7 +68,7 @@ public class PodCommsSession {
         // Send ACK
         let ack = Packet(address: podState.address, packetType: .ack, sequenceNum: podState.packetNumber, data:Data(hexadecimalString:"00000000")!)
         
-        try session.send(ack.encoded(), onChannel: 0, timeout: TimeInterval(0), repeatCount: 2, delayBetweenPackets: TimeInterval(milliseconds: 30))
+        try session.send(ack.encoded(), onChannel: 0, timeout: TimeInterval(0), repeatCount: 2, delayBetweenPackets: TimeInterval(milliseconds: 30), preambleExtension: TimeInterval(milliseconds: 20))
         
         return response
     }

@@ -69,7 +69,10 @@ public struct StatusResponse : MessageBlock {
         let minutes = ((Int(encodedData[7]) & 0x7f) << 6) + (Int(encodedData[8]) >> 2)
         self.timeActive = TimeInterval(minutes: Double(minutes))
         
-        self.insulin = 0.05 * Double((Int(encodedData[2] & 0xf) << 9) | (Int(encodedData[3]) << 1) | Int(encodedData[4] >> 7))
+        let highInsulinBits = Int(encodedData[2] & 0xf) << 9
+        let midInsulinBits = Int(encodedData[3]) << 1
+        let lowInsulinBits = Int(encodedData[4] >> 7)
+        self.insulin = 0.05 * Double(highInsulinBits | midInsulinBits | lowInsulinBits)
         
         self.podMessageCounter = (encodedData[4] >> 3) & 0xf
         

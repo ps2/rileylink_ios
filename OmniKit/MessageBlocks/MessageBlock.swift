@@ -12,8 +12,9 @@ public enum MessageBlockError: Error {
 }
 
 public enum MessageBlockType: UInt8 {
+    case configResponse     = 0x01
     case getConfig3         = 0x03
-    case pairing            = 0x07
+    case assignAddress      = 0x07
     case getStatus          = 0x0e
     case setInsulinSchedule = 0x1a
     case statusResponse     = 0x1d

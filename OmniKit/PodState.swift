@@ -8,24 +8,44 @@
 
 import Foundation
 
-public class PodState {
-    let address: UInt32
+public struct PodState: RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public let address: UInt32
+    public let isActive: Bool
     let nonceState: NonceState
-    var packetNumber: Int
-    var messageNumber: Int
     
-    public init(address: UInt32, nonceState: NonceState, packetNumber: Int, messageNumber: Int) {
+    public init(address: UInt32 = 0x1f0a000, nonceState: NonceState = NonceState(), isActive: Bool = false) {
         self.address = address
         self.nonceState = nonceState
-        self.packetNumber = packetNumber
-        self.messageNumber = messageNumber
+        self.isActive = isActive
+    }
+        
+    // RawRepresentable
+    public init?(rawValue: RawValue) {
+        guard
+            let address = rawValue["address"] as? UInt32,
+            let nonceStateRaw = rawValue["nonceState"] as? NonceState.RawValue,
+            let isActive = rawValue["isActive"] as? Bool,
+            let nonceState = NonceState(rawValue: nonceStateRaw)
+            else {
+                return nil
+            }
+        
+        self.address = address
+        self.nonceState = nonceState
+        self.isActive = isActive
     }
     
-    func incrementPacketNumber() {
-        packetNumber = (packetNumber + 1) & 0b11111
+    public var rawValue: RawValue {
+        let rawValue: RawValue = [
+            "address": address,
+            "nonceState": nonceState.rawValue,
+            "isActive": isActive
+            ]
+        
+        return rawValue
     }
-    
-    func incrementMessageNumber() {
-        messageNumber = (messageNumber + 1) & 0b1111
-    }
+
 }
+

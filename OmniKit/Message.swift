@@ -31,7 +31,7 @@ struct Message {
             throw MessageError.notEnoughData
         }
         
-        self.address = UInt32(bigEndian: encodedData.subdata(in: 0..<4).withUnsafeBytes { $0.pointee })
+        self.address = UInt32(bigEndian: encodedData.subdata(in: 0..<4))
         let b9 = encodedData[4]
         self.sequenceNum = Int((b9 >> 2) & 0b11111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
@@ -61,7 +61,7 @@ struct Message {
     }
     
     func encoded() -> Data {
-        var bytes = address.bigEndianBytes
+        var bytes = address.bigEndian
         
         var cmdData = Data()
         for cmd in messageBlocks {

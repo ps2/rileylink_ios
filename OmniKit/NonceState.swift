@@ -8,11 +8,13 @@
 
 import Foundation
 
-public class NonceState {
+public class NonceState: RawRepresentable {
+    public typealias RawValue = [String: Any]
+    
     var table: [UInt32]
     var idx: UInt8
     
-    public init(lot: UInt32, tid: UInt32) {
+    public init(lot: UInt32 = 0, tid: UInt32 = 0) {
         table = Array(repeating: UInt32(0), count: 21)
         table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
         table[0] = table[0] & 0xFFFFFFFF
@@ -40,4 +42,27 @@ public class NonceState {
         idx = UInt8(nonce & 0x0F)
         return nonce
     }
+    
+    // RawRepresentable
+    public required init?(rawValue: RawValue) {
+        guard
+            let table = rawValue["table"] as? [UInt32],
+            let idx = rawValue["idx"] as? UInt8
+            else {
+                return nil
+        }
+        self.table = table
+        self.idx = idx
+        
+    }
+    
+    public var rawValue: RawValue {
+        let rawValue: RawValue = [
+            "table": table,
+            "idx": idx,
+            ]
+        
+        return rawValue
+    }
+
 }

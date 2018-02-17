@@ -80,16 +80,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private var appeared = false
 
-    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpSettings: PumpSettings?, pumpState: PumpState?, pumpOps: PumpOps?) {
+    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpSettings: PumpSettings?, pumpState: PumpState?, pumpOps: PumpOps?, podComms: PodComms) {
+        
         self.device = device
         self.deviceState = deviceState
         self.pumpSettings = pumpSettings
         self.pumpState = pumpState
         self.ops = pumpOps
         
-        let nonceState = NonceState(lot: 1, tid: 1)
-        let podState = PodState(address: 0x1f00ee86, nonceState: nonceState, packetNumber: 15, messageNumber: 10)
-        self.podComms = PodComms(podState: podState)
+        self.podComms = podComms
 
         super.init(style: .grouped)
 
@@ -236,8 +235,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case model
         case awake
     }
-
-    private enum CommandRow: Int, CaseCountable {
+    
+    private enum Commands {
         case tune
         case changeTime
         case mySentryPair
@@ -249,6 +248,41 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readBasalSchedule
         case enableLED
         case omniGetStatus
+        case pairNewPod
+    }
+    
+    private let minimedCommands: [Commands] = [
+        .tune,
+        .changeTime,
+        .mySentryPair,
+        .dumpHistory,
+        .fetchGlucose,
+        .getPumpModel,
+        .pressDownButton,
+        .readPumpStatus,
+        .readBasalSchedule,
+    ]
+
+    private let omnipodCommands: [Commands] = [
+        .omniGetStatus
+    ]
+    
+    private let omnipodInactiveCommands: [Commands] = [
+        .pairNewPod
+    ]
+    
+    private var availableCommands: [Commands] {
+        var commands = [Commands]()
+        
+        if ops != nil {
+            commands.append(contentsOf: minimedCommands)
+        }
+        if podComms.podIsActive {
+            commands.append(contentsOf: omnipodCommands)
+        } else {
+            commands.append(contentsOf: omnipodInactiveCommands)
+        }
+        return commands
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -260,7 +294,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        if pumpState == nil {
+        if availableCommands.count == 0 {
             return Section.count - 1
         } else {
             return Section.count
@@ -274,7 +308,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .pump:
             return PumpRow.count
         case .commands:
-            return CommandRow.count
+            return availableCommands.count
         }
     }
 
@@ -329,7 +363,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             cell.accessoryType = .disclosureIndicator
             cell.detailTextLabel?.text = nil
 
-            switch CommandRow(rawValue: indexPath.row)! {
+            switch availableCommands[indexPath.row] {
             case .tune:
                 switch (deviceState.lastValidFrequency, deviceState.lastTuned) {
                 case (let frequency?, let date?):
@@ -379,6 +413,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
             case .omniGetStatus:
                 cell.textLabel?.text = NSLocalizedString("Get OmniPod Status", comment: "The title of the command to get omnipod status")
+                
+            case .pairNewPod:
+                cell.textLabel?.text = NSLocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
             }
         }
 
@@ -432,33 +469,34 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 break
             }
         case .commands:
-            let vc: CommandResponseViewController
+            let vc: UIViewController
 
-            switch CommandRow(rawValue: indexPath.row)! {
+            switch availableCommands[indexPath.row] {
             case .tune:
-                vc = .tuneRadio(ops: ops, device: device, current: deviceState.lastValidFrequency, measurementFormatter: measurementFormatter)
+                vc = CommandResponseViewController.tuneRadio(ops: ops, device: device, current: deviceState.lastValidFrequency, measurementFormatter: measurementFormatter)
             case .changeTime:
-                vc = .changeTime(ops: ops, device: device)
+                vc = CommandResponseViewController.changeTime(ops: ops, device: device)
             case .mySentryPair:
-                vc = .mySentryPair(ops: ops, device: device)
+                vc = CommandResponseViewController.mySentryPair(ops: ops, device: device)
             case .dumpHistory:
-                vc = .dumpHistory(ops: ops, device: device)
+                vc = CommandResponseViewController.dumpHistory(ops: ops, device: device)
             case .fetchGlucose:
-                vc = .fetchGlucose(ops: ops, device: device)
+                vc = CommandResponseViewController.fetchGlucose(ops: ops, device: device)
             case .getPumpModel:
-                vc = .getPumpModel(ops: ops, device: device)
+                vc = CommandResponseViewController.getPumpModel(ops: ops, device: device)
             case .pressDownButton:
-                vc = .pressDownButton(ops: ops, device: device)
+                vc = CommandResponseViewController.pressDownButton(ops: ops, device: device)
             case .readPumpStatus:
-                vc = .readPumpStatus(ops: ops, device: device, decimalFormatter: decimalFormatter)
+                vc = CommandResponseViewController.readPumpStatus(ops: ops, device: device, decimalFormatter: decimalFormatter)
             case .readBasalSchedule:
-                vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
+                vc = CommandResponseViewController.readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
             case .enableLED:
-                vc = .enableLEDs(ops: ops, device: device)
+                vc = CommandResponseViewController.enableLEDs(ops: ops, device: device)
             case .omniGetStatus:
-                vc = .omniGetStatus(podComms: podComms, device: device)
+                vc = CommandResponseViewController.omniGetStatus(podComms: podComms, device: device)
+            case .pairNewPod:
+                vc = OmnipodPairingViewController(podComms: podComms, device: device)
             }
-            
 
             if let cell = tableView.cellForRow(at: indexPath) {
                 vc.title = cell.textLabel?.text

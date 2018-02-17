@@ -18,23 +18,50 @@ public enum PodCommsError: Error {
     case unknownResponseType(rawType: UInt8)
 }
 
+public protocol PodCommsSessionDelegate: class {
+    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState)
+}
 
 public class PodCommsSession {
     
-    let podState: PodState
-    let session: CommandSession
+    var packetNumber = 0
+    var messageNumber = 0
     
-    init(podState: PodState, session: CommandSession) {
-        self.podState = podState
-        self.session = session
+    private var podState: PodState {
+        didSet {
+            delegate.podCommsSession(self, didChange: podState)
+        }
     }
     
+    private unowned let delegate: PodCommsSessionDelegate
+
+    let session: CommandSession
+    
+    init(podState: PodState, session: CommandSession, delegate: PodCommsSessionDelegate) {
+        self.podState = podState
+        self.session = session
+        self.delegate = delegate
+    }
+    
+    func incrementPacketNumber() {
+        packetNumber = (packetNumber + 1) & 0b11111
+    }
+    
+    func incrementMessageNumber() {
+        messageNumber = (messageNumber + 1) & 0b1111
+    }
+    
+    func ack(_ address: UInt32 = 0) throws {
+        let ack = Packet(address: podState.address, packetType: .ack, sequenceNum: packetNumber, data:address.bigEndian)
+        
+        try session.send(ack.encoded(), onChannel: 0, timeout: TimeInterval(0), repeatCount: 2, delayBetweenPackets: TimeInterval(milliseconds: 30), preambleExtension: TimeInterval(milliseconds: 20))
+    }
     
     func sendCommandsAndGetResponse(_ commands: [MessageBlock]) throws -> Message {
-        let msg = Message(address: podState.address, messageBlocks: commands, sequenceNum: podState.messageNumber)
+        let msg = Message(address: podState.address, messageBlocks: commands, sequenceNum: messageNumber)
         
         // TODO: breaking msgData up into multiple packets if needed
-        let sendPacket = Packet(address: podState.address, packetType: .pdm, sequenceNum: podState.packetNumber, data: msg.encoded())
+        let sendPacket = Packet(address: podState.address, packetType: .pdm, sequenceNum: packetNumber, data: msg.encoded())
         
         let retryCount = 2
         let timeout = TimeInterval(milliseconds: 165)
@@ -52,25 +79,43 @@ public class PodCommsSession {
             throw PodCommsError.badAddress
         }
         
-        guard packet.sequenceNum == ((podState.packetNumber + 1) & 0b11111) else {
+        guard packet.sequenceNum == ((packetNumber + 1) & 0b11111) else {
             throw PodCommsError.unexpectedSequence
         }
         
         // Once we have verification that the POD heard us, we can increment our counters
-        podState.incrementMessageNumber()
-        podState.incrementMessageNumber()
-        podState.incrementPacketNumber()
-        podState.incrementPacketNumber()
+        incrementMessageNumber()
+        incrementMessageNumber()
+        incrementPacketNumber()
+        incrementPacketNumber()
         
         // TODO: Assemble fragmented message from multiple packets
         let response = try Message(encodedData: packet.data)
         
         // Send ACK
-        let ack = Packet(address: podState.address, packetType: .ack, sequenceNum: podState.packetNumber, data:Data(hexadecimalString:"00000000")!)
-        
-        try session.send(ack.encoded(), onChannel: 0, timeout: TimeInterval(0), repeatCount: 2, delayBetweenPackets: TimeInterval(milliseconds: 30), preambleExtension: TimeInterval(milliseconds: 20))
+        try ack()
         
         return response
+    }
+    
+    public func setupNewPOD() throws {
+//        // PDM sometimes increments by more than one?
+//        let newAddress = podState.address + 1
+//        let cmd = AssignAddressCommand(address: newAddress)
+//        let response = try sendCommandsAndGetResponse([cmd])
+//
+//        guard response.messageBlocks.count > 0, let configResponse = response.messageBlocks[0] as? ConfigResponse else {
+//            throw PodCommsError.noResponse
+//        }
+//
+//        podState = PodState(
+//            address: configResponse.address,
+//            nonceState: NonceState(lot: configResponse.lotId, tid: configResponse.tid))
+        
+        // Testing
+        podState = PodState(
+            address: 0x1f001f01,
+            nonceState: NonceState(lot: 123, tid: 456))
     }
     
     public func getStatus() throws -> StatusResponse {

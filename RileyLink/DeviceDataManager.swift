@@ -12,6 +12,7 @@ import RileyLinkKitUI
 import RileyLinkBLEKit
 import MinimedKit
 import NightscoutUploadKit
+import OmniKit
 
 class DeviceDataManager {
 
@@ -35,7 +36,9 @@ class DeviceDataManager {
             }
         }
     }
-
+    
+    let podComms: PodComms
+    
     private(set) var pumpSettings: PumpSettings? {
         get {
             return UserDefaults.standard.pumpSettings
@@ -141,8 +144,8 @@ class DeviceDataManager {
     @objc private func receivedRileyLinkTimerTickNotification(_ note: Notification) {
         if Config.sharedInstance().uploadEnabled {
             rileyLinkManager.getDevices { (devices) in
-                if let device = devices.firstConnected {
-                    //self.assertCurrentPumpData(from: device)
+                if self.pumpOps != nil, let device = devices.firstConnected {
+                   self.assertCurrentPumpData(from: device)
                 }
             }
         }
@@ -378,13 +381,18 @@ class DeviceDataManager {
         rileyLinkManager = RileyLinkDeviceManager(autoConnectIDs: connectedPeripheralIDs)
 
         var idleListeningEnabled = true
-        
+
+        let podState = UserDefaults.standard.podState ?? PodState()
+        podComms = PodComms(podState: podState)
+        podComms.delegate = self
+
         if let pumpSettings = UserDefaults.standard.pumpSettings {
             idleListeningEnabled = self.pumpState?.pumpModel?.hasMySentry ?? true
 
             self.pumpOps = PumpOps(pumpSettings: pumpSettings, pumpState: self.pumpState, delegate: self)
         }
         
+
         rileyLinkManager.idleListeningState = idleListeningEnabled ? .enabledWithDefaults : .disabled
 
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -410,5 +418,11 @@ extension DeviceDataManager: PumpOpsDelegate {
             object: pumpOps,
             userInfo: [PumpOps.notificationPumpStateKey: state]
         )
+    }
+}
+
+extension DeviceDataManager: PodCommsDelegate {
+    func podComms(_ podComms: PodComms, didChange state: PodState) {
+        UserDefaults.standard.podState = state
     }
 }

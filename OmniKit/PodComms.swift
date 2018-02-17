@@ -9,13 +9,31 @@
 import Foundation
 import RileyLinkBLEKit
 
+public protocol PodCommsDelegate: class {
+    func podComms(_ podComms: PodComms, didChange state: PodState)
+}
+
 public class PodComms {
-    let podState: PodState
+   
+
+    public private(set) var podState: PodState {
+        didSet {
+            if let delegate = delegate {
+                delegate.podComms(self, didChange: podState)
+            }
+        }
+    }
     
+    public var podIsActive: Bool {
+        return podState.isActive
+    }
+    
+    public weak var delegate: PodCommsDelegate?
+
     private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
     
     public init(podState: PodState) {
-        self.podState = podState        
+        self.podState = podState
     }
     
     public func runSession(withName name: String, using device: RileyLinkDevice, _ block: @escaping (_ session: PodCommsSession) -> Void) {
@@ -23,12 +41,18 @@ public class PodComms {
             let semaphore = DispatchSemaphore(value: 0)
             
             device.runSession(withName: name) { (session) in
-                block(PodCommsSession(podState: self.podState, session: session))
+                block(PodCommsSession(podState: self.podState, session: session, delegate: self))
                 semaphore.signal()
             }
             
             semaphore.wait()
         }
     }
+}
 
+
+extension PodComms: PodCommsSessionDelegate {
+    public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
+        self.podState = state
+    }
 }

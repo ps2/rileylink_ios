@@ -34,7 +34,7 @@ struct Packet {
             return nil
         }
         
-        self.address = UInt32(bigEndianBytes: Array(encodedData[0..<4]))
+        self.address = UInt32(bigEndian: encodedData[0..<4])
         guard let packetType = PacketType(rawValue: encodedData[4] >> 5) else {
             // Unknown packet type
             return nil
@@ -61,11 +61,11 @@ struct Packet {
     }
     
     func encoded() -> Data {
-        var bytes = address.bigEndianBytes
-        bytes.append(UInt8(packetType.rawValue << 5) + UInt8(sequenceNum & 0b11111))
-        var encodedData = Data(bytes) + data
-        encodedData.append(encodedData.crc8())
-        return encodedData
+        var output = address.bigEndian
+        output.append(UInt8(packetType.rawValue << 5) + UInt8(sequenceNum & 0b11111))
+        output.append(data)
+        output.append(output.crc8())
+        return output
     }
 }
 

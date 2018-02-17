@@ -13,7 +13,7 @@ class MessageTests: XCTestCase {
     
     func testMessageData() {
         // 2016-06-26T20:33:28.412197 ID1:1f01482a PTYPE:PDM SEQ:13 ID2:1f01482a B9:10 BLEN:3 BODY:0e0100802c CRC:88
-
+        
         let msg = Message(address: 0x1f01482a, messageBlocks: [GetStatusCommand()], sequenceNum: 4)
         
         XCTAssertEqual("1f01482a10030e0100802c", msg.encoded().hexadecimalString)
@@ -56,5 +56,14 @@ class MessageTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
+    
+    func testAssignAddressCommand() {
+        
+        let msg = AssignAddressCommand(address: 0x1f01482a)
+        
+        XCTAssertEqual("07041f01482a", msg.data.hexadecimalString)
+    }
+    
+
 }
 

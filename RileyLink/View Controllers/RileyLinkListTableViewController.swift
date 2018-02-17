@@ -159,12 +159,14 @@ class RileyLinkListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let device = devices[indexPath.row]
+        let state = DeviceState()
         let vc = RileyLinkDeviceTableViewController(
             device: device,
-            deviceState: dataManager.deviceStates[device.peripheralIdentifier, default: DeviceState()],
+            deviceState: dataManager.deviceStates[device.peripheralIdentifier, default: state],
             pumpSettings: dataManager.pumpSettings,
             pumpState: dataManager.pumpState,
-            pumpOps: dataManager.pumpOps
+            pumpOps: dataManager.pumpOps,
+            podComms: dataManager.podComms
         )
 
         show(vc, sender: indexPath)

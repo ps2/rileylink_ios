@@ -57,6 +57,18 @@ class MessageTests: XCTestCase {
         }
     }
     
+    func testParsingConfigResponse() {
+        do {
+            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
+            XCTAssertEqual(23, config.length)
+            XCTAssertEqual(0x1f08ced2, config.address)
+            XCTAssertEqual(42560, config.lot)
+            XCTAssertEqual(621607, config.tid)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testAssignAddressCommand() {
         do {
             // Encode
@@ -73,23 +85,24 @@ class MessageTests: XCTestCase {
     
     func testSetPodTimeCommand() {
         do {
-            // Encode
             var components = DateComponents()
             components.day = 6
             components.month = 12
             components.year = 2016
             components.hour = 13
             components.minute = 47
-            let date = Calendar(identifier: .gregorian).date(from: components)!
-            let encoded = SetPodTimeCommand(address: 0x1f0218c3, date: date, lot: 0x0000a4be, tid: 0x0004e4a1)
-            XCTAssertEqual("03131f0218c31404060c100d2f0000a4be0004e4a1", encoded.data.hexadecimalString)
+
             
             // Decode
             let decoded = try SetPodTimeCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
             XCTAssertEqual(0x1f0218c3, decoded.address)
-            XCTAssertEqual(date, decoded.date)
+            XCTAssertEqual(components, decoded.dateComponents)
             XCTAssertEqual(0x0000a4be, decoded.lot)
             XCTAssertEqual(0x0004e4a1, decoded.tid)
+
+            // Encode
+            let encoded = SetPodTimeCommand(address: 0x1f0218c3, dateComponents: components, lot: 0x0000a4be, tid: 0x0004e4a1)
+            XCTAssertEqual("03131f0218c31404060c100d2f0000a4be0004e4a1", encoded.data.hexadecimalString)            
 
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")

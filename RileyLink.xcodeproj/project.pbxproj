@@ -181,6 +181,7 @@
 		7D7076901FE09311004AC8EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076921FE09311004AC8EA /* InfoPlist.strings */; };
 		7D7076951FE09311004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076971FE09311004AC8EA /* Localizable.strings */; };
 		C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */; };
+		C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
 		C106DF2C20328BFC00CBDFCA /* OmnipodPairingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C106DF2B20328BFC00CBDFCA /* OmnipodPairingViewController.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
@@ -2626,6 +2627,7 @@
 				C18454222031EBB400EAD422 /* ConfigResponse.swift in Sources */,
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
+				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
 				C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */,
 				C1130FC620159CD5007D13DB /* CRC16.swift in Sources */,
 				C1130FC920159CD5007D13DB /* Packet.swift in Sources */,

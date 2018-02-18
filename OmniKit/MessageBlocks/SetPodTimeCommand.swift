@@ -11,31 +11,41 @@ import Foundation
 public struct SetPodTimeCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .setPodTime
-    public let length: UInt8 = 19
+    public let length: UInt8 = 21
     
     let address: UInt32
-    let date: Date
     let lot: UInt32
     let tid: UInt32
-
+    let dateComponents: DateComponents
+    
+    public static func dateComponents(date: Date, timeZone: TimeZone) -> DateComponents {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = timeZone
+        return cal.dateComponents([.day, .month, .year, .hour, .minute], from: date)
+    }
+    
+    public static func date(from components: DateComponents, timeZone: TimeZone) -> Date? {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = timeZone
+        return cal.date(from: components)
+    }
+    
+    // 03 13 1f08ced2 14 04 09 0b 11 0b 08 0000a640 00097c27 83e4
     public var data: Data {
         var data = Data(bytes: [
             blockType.rawValue,
-            length
+            length - 2,
             ])
         data.append(contentsOf: self.address.bigEndian)
-        
-        let cal = Calendar(identifier: .gregorian)
-        let components = cal.dateComponents([.day, .month, .year, .hour, .minute], from: date)
         
         let data2 = Data(bytes: [
             UInt8(0x14), // Unknown
             UInt8(0x04), // Unknown
-            UInt8(components.day ?? 0),
-            UInt8(components.month ?? 0),
-            UInt8((components.year ?? 2000) - 2000),
-            UInt8(components.hour ?? 0),
-            UInt8(components.minute ?? 0)
+            UInt8(dateComponents.day ?? 0),
+            UInt8(dateComponents.month ?? 0),
+            UInt8((dateComponents.year ?? 2000) - 2000),
+            UInt8(dateComponents.hour ?? 0),
+            UInt8(dateComponents.minute ?? 0)
             ])
         data.append(data2)
         data.append(contentsOf: self.lot.bigEndian)
@@ -44,7 +54,7 @@ public struct SetPodTimeCommand : MessageBlock {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < length+2 {
+        if encodedData.count < length {
             throw MessageBlockError.notEnoughData
         }
         self.address = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
@@ -54,17 +64,14 @@ public struct SetPodTimeCommand : MessageBlock {
         components.year = Int(encodedData[10]) + 2000
         components.hour = Int(encodedData[11])
         components.minute = Int(encodedData[12])
-        guard let date = Calendar(identifier: .gregorian).date(from: components) else {
-            throw MessageBlockError.parseError
-        }
-        self.date = date
+        self.dateComponents = components
         self.lot = UInt32(bigEndian: encodedData.subdata(in: 13..<17))
         self.tid = UInt32(bigEndian: encodedData.subdata(in: 17..<21))
     }
     
-    public init(address: UInt32, date: Date, lot: UInt32, tid: UInt32) {
+    public init(address: UInt32, dateComponents: DateComponents, lot: UInt32, tid: UInt32) {
         self.address = address
-        self.date = date
+        self.dateComponents = dateComponents
         self.lot = lot
         self.tid = tid
     }

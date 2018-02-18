@@ -382,7 +382,7 @@ class DeviceDataManager {
 
         var idleListeningEnabled = true
 
-        let podState = UserDefaults.standard.podState ?? PodState()
+        let podState = UserDefaults.standard.podState ?? PodState.initialPodState()
         podComms = PodComms(podState: podState)
         podComms.delegate = self
 

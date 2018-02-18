@@ -12,9 +12,10 @@ import RileyLinkBLEKit
 public enum PodCommsError: Error {
     case invalidData
     case noResponse
+    case emptyResponse
     case badAddress
     case unexpectedSequence
-    case unexpectedResponseType(responseType: MessageBlockType)
+    case unexpectedResponse(response: MessageBlockType, to: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
 }
 
@@ -99,23 +100,48 @@ public class PodCommsSession {
     }
     
     public func setupNewPOD() throws {
-//        // PDM sometimes increments by more than one?
-//        let newAddress = podState.address + 1
-//        let cmd = AssignAddressCommand(address: newAddress)
-//        let response = try sendCommandsAndGetResponse([cmd])
-//
-//        guard response.messageBlocks.count > 0, let configResponse = response.messageBlocks[0] as? ConfigResponse else {
-//            throw PodCommsError.noResponse
-//        }
-//
-//        podState = PodState(
-//            address: configResponse.address,
-//            nonceState: NonceState(lot: configResponse.lotId, tid: configResponse.tid))
+        // PDM sometimes increments by more than one?
+        let newAddress = podState.address + 1
+        let assignAddressCommand = AssignAddressCommand(address: newAddress)
+        let assignAddressCommandResponse = try sendCommandsAndGetResponse([assignAddressCommand])
         
-        // Testing
+        guard assignAddressCommandResponse.messageBlocks.count > 0 else {
+            throw PodCommsError.emptyResponse
+        }
+
+        guard let config1 = assignAddressCommandResponse.messageBlocks[0] as? ConfigResponse else {
+            let responseType = assignAddressCommandResponse.messageBlocks[0].blockType
+            throw PodCommsError.unexpectedResponse(response: responseType, to: assignAddressCommand.blockType)
+        }
+        
         podState = PodState(
-            address: 0x1f001f01,
-            nonceState: NonceState(lot: 123, tid: 456))
+            address: newAddress,
+            nonceState: NonceState(lot: config1.lot, tid: config1.tid),
+            isActive: false,
+            timeZone: podState.timeZone)
+        
+        let dateComponents = SetPodTimeCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
+        let setPodTimeCommand = SetPodTimeCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
+        let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
+        
+        guard setPodTimeCommandResponse.messageBlocks.count > 0 else {
+            throw PodCommsError.emptyResponse
+        }
+        
+        guard let config2 = setPodTimeCommandResponse.messageBlocks[0] as? ConfigResponse else {
+            let responseType = setPodTimeCommandResponse.messageBlocks[0].blockType
+            throw PodCommsError.unexpectedResponse(response: responseType, to: setPodTimeCommand.blockType)
+        }
+
+        guard config2.pairingState == .paired else {
+            throw PodCommsError.invalidData
+        }
+        
+        podState = PodState(
+            address: newAddress,
+            nonceState: NonceState(lot: config1.lot, tid: config1.tid),
+            isActive: true,
+            timeZone: podState.timeZone)
     }
     
     public func getStatus() throws -> StatusResponse {
@@ -185,20 +211,5 @@ public class PodCommsSession {
         try session.updateRegister(.sync0, value: 0x5A)
     }
 }
-
-
-public extension Sequence where Element == UInt8 {
-    
-    public func flippedBytes() -> [UInt8] {
-        
-        var output = [UInt8]()
-        for byte in self {
-            output.append(byte ^ 0xff)
-        }
-        return output
-    }
-}
-
-
 
 

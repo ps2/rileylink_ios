@@ -12,6 +12,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OmnipodPairingViewController" customModule="RileyLinkKitUI">
             <connections>
+                <outlet property="cancelButton" destination="Ze3-RW-WNG" id="pBj-xf-PDV"/>
+                <outlet property="okButton" destination="STh-q6-ses" id="cNh-dP-fVm"/>
                 <outlet property="progress" destination="H5G-Er-M9g" id="Ggg-Fk-uKu"/>
                 <outlet property="stepInstructions" destination="FKs-8l-cro" id="X4f-YY-kbY"/>
                 <outlet property="titleLabel" destination="jfe-8b-K06" id="PPP-kh-fzD"/>

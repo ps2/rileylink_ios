@@ -14,10 +14,10 @@
             <connections>
                 <outlet property="cancelButton" destination="Ze3-RW-WNG" id="pBj-xf-PDV"/>
                 <outlet property="okButton" destination="STh-q6-ses" id="cNh-dP-fVm"/>
-                <outlet property="progress" destination="H5G-Er-M9g" id="Ggg-Fk-uKu"/>
+                <outlet property="progressView" destination="H5G-Er-M9g" id="TqL-i7-EBw"/>
                 <outlet property="stepInstructions" destination="FKs-8l-cro" id="X4f-YY-kbY"/>
                 <outlet property="titleLabel" destination="jfe-8b-K06" id="PPP-kh-fzD"/>
-                <outlet property="view" destination="Vkp-Ne-1JT" id="yVW-1Q-g4f"/>
+                <outlet property="view" destination="Vkp-Ne-1JT" id="a9l-pR-sWq"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -26,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="STh-q6-ses">
-                    <rect key="frame" x="254" y="598" width="105" height="60"/>
+                    <rect key="frame" x="254" y="579" width="105" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
                     <state key="normal" title="Next">
@@ -37,7 +37,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ze3-RW-WNG">
-                    <rect key="frame" x="16" y="598" width="113" height="60"/>
+                    <rect key="frame" x="16" y="579" width="113" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
                     <state key="normal" title="Cancel">
@@ -73,7 +73,7 @@ NOTE: Do not remove needle cap at this time.</string>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H5G-Er-M9g">
-                    <rect key="frame" x="38" y="588" width="295" height="2"/>
+                    <rect key="frame" x="38" y="528" width="295" height="2"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 </progressView>
             </subviews>

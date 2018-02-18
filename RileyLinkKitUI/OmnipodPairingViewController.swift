@@ -14,7 +14,7 @@ import RileyLinkBLEKit
 
 public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
     
-    private enum InteractionStates {
+    private enum InteractionState {
         case initial
         case currentPodActive
         case noActivePod
@@ -67,12 +67,33 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
                 return nil
             }
         }
+        
+        var progress: Float? {
+            switch self {
+            case .noActivePod:
+                return 0.1
+            case .fillNewPod:
+                return 0.2
+            case .priming:
+                return 0.4
+            case .prepareSite:
+                return 0.6
+            case .removeBacking:
+                return 0.8
+            case .insertCannula:
+                return 0.9
+            case .checkInfusionSite:
+                return 1
+            default:
+                return nil
+            }
+        }
     }
     
     public let podComms: PodComms
     public let device: RileyLinkDevice
     
-    private var interactionState: InteractionStates = .noActivePod {
+    private var interactionState: InteractionState = .noActivePod {
         didSet {
             stepInstructions.text = interactionState.instructions
             if let okText = interactionState.okButtonText {
@@ -87,10 +108,16 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             } else {
                 cancelButton.isHidden = true
             }
+            if let progress = interactionState.progress {
+                progressView.isHidden = false
+                progressView.progress = progress
+            } else {
+                progressView.isHidden = true
+            }
         }
     }
     
-    @IBOutlet var progress: UIProgressView!
+    @IBOutlet var progressView: UIProgressView!
     @IBOutlet var stepInstructions: UITextView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var okButton: UIButton!

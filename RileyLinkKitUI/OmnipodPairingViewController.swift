@@ -70,16 +70,14 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         var progress: Float? {
             switch self {
-            case .noActivePod:
-                return 0.1
             case .fillNewPod:
-                return 0.2
+                return 0.1
             case .priming:
-                return 0.4
+                return 0.3
             case .prepareSite:
-                return 0.6
+                return 0.5
             case .removeBacking:
-                return 0.8
+                return 0.7
             case .insertCannula:
                 return 0.9
             case .checkInfusionSite:

@@ -9,11 +9,12 @@
 public enum MessageBlockError: Error {
     case notEnoughData
     case unknownBlockType(rawVal: UInt8)
+    case parseError
 }
 
 public enum MessageBlockType: UInt8 {
     case configResponse     = 0x01
-    case getConfig3         = 0x03
+    case setPodTime         = 0x03
     case assignAddress      = 0x07
     case getStatus          = 0x0e
     case setInsulinSchedule = 0x1a

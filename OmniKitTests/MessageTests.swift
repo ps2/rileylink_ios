@@ -58,10 +58,43 @@ class MessageTests: XCTestCase {
     }
     
     func testAssignAddressCommand() {
-        
-        let msg = AssignAddressCommand(address: 0x1f01482a)
-        
-        XCTAssertEqual("07041f01482a", msg.data.hexadecimalString)
+        do {
+            // Encode
+            let encoded = AssignAddressCommand(address: 0x1f01482a)
+            XCTAssertEqual("07041f01482a", encoded.data.hexadecimalString)
+
+            // Decode
+            let decoded = try AssignAddressCommand(encodedData: Data(hexadecimalString: "07041f01482a")!)
+            XCTAssertEqual(0x1f01482a, decoded.address)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
+    func testSetPodTimeCommand() {
+        do {
+            // Encode
+            var components = DateComponents()
+            components.day = 6
+            components.month = 12
+            components.year = 2016
+            components.hour = 13
+            components.minute = 47
+            let date = Calendar(identifier: .gregorian).date(from: components)!
+            let encoded = SetPodTimeCommand(address: 0x1f0218c3, date: date, lot: 0x0000a4be, tid: 0x0004e4a1)
+            XCTAssertEqual("03131f0218c31404060c100d2f0000a4be0004e4a1", encoded.data.hexadecimalString)
+            
+            // Decode
+            let decoded = try SetPodTimeCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
+            XCTAssertEqual(0x1f0218c3, decoded.address)
+            XCTAssertEqual(date, decoded.date)
+            XCTAssertEqual(0x0000a4be, decoded.lot)
+            XCTAssertEqual(0x0004e4a1, decoded.tid)
+
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+
     }
     
 

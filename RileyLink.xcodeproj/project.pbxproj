@@ -180,6 +180,7 @@
 		7D70768B1FE09310004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D70768D1FE09310004AC8EA /* Localizable.strings */; };
 		7D7076901FE09311004AC8EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076921FE09311004AC8EA /* InfoPlist.strings */; };
 		7D7076951FE09311004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076971FE09311004AC8EA /* Localizable.strings */; };
+		C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */; };
 		C106DF2C20328BFC00CBDFCA /* OmnipodPairingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C106DF2B20328BFC00CBDFCA /* OmnipodPairingViewController.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
@@ -712,6 +713,7 @@
 		7D70768C1FE09310004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D7076911FE09311004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D7076961FE09311004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPodTimeCommand.swift; sourceTree = "<group>"; };
 		C106DF2B20328BFC00CBDFCA /* OmnipodPairingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmnipodPairingViewController.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
@@ -1356,6 +1358,7 @@
 				C1130FE620159EDC007D13DB /* StatusResponse.swift */,
 				C184541F2031DEA200EAD422 /* AssignAddressCommand.swift */,
 				C18454212031EBB400EAD422 /* ConfigResponse.swift */,
+				C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2628,6 +2631,7 @@
 				C1130FC920159CD5007D13DB /* Packet.swift in Sources */,
 				C1130FCC20159CD5007D13DB /* Message.swift in Sources */,
 				C1130FE820159EDC007D13DB /* PlaceholderMessageBlock.swift in Sources */,
+				C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */,
 				C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */,
 				C1130FCD20159CD5007D13DB /* NonceState.swift in Sources */,
 			);

@@ -11,7 +11,7 @@ import Foundation
 public struct AssignAddressCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .assignAddress
-    public let length: UInt8 = 10
+    public let length: UInt8 = 6
     
     let address: UInt32
 
@@ -29,7 +29,7 @@ public struct AssignAddressCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         
-        self.address = UInt32(bigEndian: encodedData.subdata(in: 0..<4))
+        self.address = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
     }
     
     public init(address: UInt32) {

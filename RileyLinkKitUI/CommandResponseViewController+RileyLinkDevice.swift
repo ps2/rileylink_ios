@@ -255,10 +255,27 @@ extension CommandResponseViewController {
                     completionHandler(response)
                 }
             })
-            return NSLocalizedString("Reading pump status…", comment: "Progress message for reading pump status")
+            return NSLocalizedString("Reading pump status…", comment: "Progress message for reading pod status")
         }
     }
 
+    static func omniSetPodTime(podComms: PodComms, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            podComms.runSession(withName: "Set Pod Time", using: device, { (session) in
+                let response: String
+                do {
+                    try session.setTime()
+                    response = "OK"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            })
+            return NSLocalizedString("Setting pod time…", comment: "Progress message for setting pod time")
+        }
+    }
 
     static func tuneRadio(ops: PumpOps?, device: RileyLinkDevice, current: Measurement<UnitFrequency>?, measurementFormatter: MeasurementFormatter) -> T {
         return T { (completionHandler) -> String in

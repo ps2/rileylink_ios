@@ -38,14 +38,20 @@ public struct SetPodTimeCommand : MessageBlock {
             ])
         data.append(contentsOf: self.address.bigEndian)
         
-        let data2 = Data(bytes: [
+        let year = UInt8((dateComponents.year ?? 2000) - 2000)
+        let month = UInt8(dateComponents.month ?? 0)
+        let day = UInt8(dateComponents.day ?? 0)
+        let hour = UInt8(dateComponents.hour ?? 0)
+        let minute = UInt8(dateComponents.minute ?? 0)
+        
+        let data2: Data = Data(bytes: [
             UInt8(0x14), // Unknown
             UInt8(0x04), // Unknown
-            UInt8(dateComponents.day ?? 0),
-            UInt8(dateComponents.month ?? 0),
-            UInt8((dateComponents.year ?? 2000) - 2000),
-            UInt8(dateComponents.hour ?? 0),
-            UInt8(dateComponents.minute ?? 0)
+            day,
+            month,
+            year,
+            hour,
+            minute
             ])
         data.append(data2)
         data.append(contentsOf: self.lot.bigEndian)

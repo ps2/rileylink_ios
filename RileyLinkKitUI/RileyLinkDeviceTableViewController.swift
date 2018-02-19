@@ -248,7 +248,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readBasalSchedule
         case enableLED
         case omniGetStatus
-        case pairNewPod
+        case omniSetPodTime
+        case omniPairNewPod
     }
     
     private let minimedCommands: [Commands] = [
@@ -264,11 +265,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     ]
 
     private let omnipodCommands: [Commands] = [
-        .omniGetStatus
+        .omniGetStatus,
+        .omniSetPodTime
     ]
     
     private let omnipodInactiveCommands: [Commands] = [
-        .pairNewPod
+        .omniPairNewPod
     ]
     
     private var availableCommands: [Commands] {
@@ -412,10 +414,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .enableLED:
                 cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
             case .omniGetStatus:
-                cell.textLabel?.text = NSLocalizedString("Get OmniPod Status", comment: "The title of the command to get omnipod status")
+                cell.textLabel?.text = NSLocalizedString("Get Pod Status", comment: "The title of the command to get omnipod status")
                 
-            case .pairNewPod:
+            case .omniPairNewPod:
                 cell.textLabel?.text = NSLocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
+                
+            case .omniSetPodTime:
+                cell.textLabel?.text = NSLocalizedString("Set Pod Time", comment: "The title of the command to set pod time")
+
             }
         }
 
@@ -494,7 +500,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = CommandResponseViewController.enableLEDs(ops: ops, device: device)
             case .omniGetStatus:
                 vc = CommandResponseViewController.omniGetStatus(podComms: podComms, device: device)
-            case .pairNewPod:
+            case .omniSetPodTime:
+                vc = CommandResponseViewController.omniSetPodTime(podComms: podComms, device: device)
+            case .omniPairNewPod:
                 vc = OmnipodPairingViewController(podComms: podComms, device: device)
             }
 

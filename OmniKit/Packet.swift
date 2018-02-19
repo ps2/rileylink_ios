@@ -8,14 +8,14 @@
 
 import RileyLinkBLEKit
 
-enum PacketType: UInt8 {
+public enum PacketType: UInt8 {
     case pod = 0b111
     case pdm = 0b101
     case con = 0b100
     case ack = 0b010
 }
 
-struct Packet {
+public struct Packet {
     let address: UInt32
     let packetType: PacketType
     let sequenceNum: Int
@@ -28,36 +28,29 @@ struct Packet {
         self.data = data
     }
     
-    init?(encodedData: Data) {
+    init(encodedData: Data) throws {
         guard encodedData.count >= 7 else {
             // Not enough data for packet
-            return nil
+            throw PodCommsError.invalidData
         }
         
         self.address = UInt32(bigEndian: encodedData[0..<4])
+        
         guard let packetType = PacketType(rawValue: encodedData[4] >> 5) else {
-            // Unknown packet type
-            return nil
+            throw PodCommsError.unknownPacketType(rawType: encodedData[4])
         }
         self.packetType = packetType
         self.sequenceNum = Int(encodedData[4] & 0b11111)
         
-        // Find packet length.
-        var candidateData: Data?
-        for len in 6..<encodedData.count {
-            let tryData = encodedData[0..<len]
-            if tryData.crc8() == encodedData[len] {
-                candidateData = tryData
-                break
-            }
+        let len = encodedData.count
+
+        // Check crc
+        guard encodedData[0..<len-1].crc8() == encodedData[len-1] else {
+            // Invalid CRC
+            throw PodCommsError.crcMismatch
         }
         
-        guard let data = candidateData else {
-            // No interpretation of packet length worked with valid crc
-            return nil
-        }
-        
-        self.data = data.subdata(in: 5..<data.count)
+        self.data = encodedData.subdata(in: 5..<len-1)
     }
     
     func encoded() -> Data {
@@ -71,7 +64,7 @@ struct Packet {
 
 // Extensions for RFPacket support
 extension Packet {
-    init?(rfPacket: RFPacket) {
-        self.init(encodedData: rfPacket.data)
+    init(rfPacket: RFPacket) throws {
+        try self.init(encodedData: rfPacket.data)
     }
 }

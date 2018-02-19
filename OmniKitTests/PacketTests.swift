@@ -25,12 +25,16 @@ class PacketTests: XCTestCase {
     }
 
     func testPacketDecoding() {
-        
-        let packet = Packet(encodedData: Data(hexadecimalString:"1f01482aad1f01482a10030e0100802c88")!)!
-        XCTAssertEqual(0x1f01482a, packet.address)
-        XCTAssertEqual(13, packet.sequenceNum)
-        XCTAssertEqual(.pdm, packet.packetType)
-        XCTAssertEqual("1f01482a10030e0100802c", packet.data.hexadecimalString)
+        do {
+            let packet = try Packet(encodedData: Data(hexadecimalString:"1f01482aad1f01482a10030e0100802c88")!)
+            XCTAssertEqual(0x1f01482a, packet.address)
+            XCTAssertEqual(13, packet.sequenceNum)
+            XCTAssertEqual(.pdm, packet.packetType)
+            XCTAssertEqual("1f01482a10030e0100802c", packet.data.hexadecimalString)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+
     }
 }
 

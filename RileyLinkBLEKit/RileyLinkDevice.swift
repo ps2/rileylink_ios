@@ -44,6 +44,9 @@ public class RileyLinkDevice {
 
     // Confined to `queue`
     private var isTimerTickEnabled = true
+    
+    // Confined to `queue`
+    private var radioConfigName: String?
 
     /// Serializes access to device state
     private let queue = DispatchQueue(label: "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.queue", qos: .userInitiated)
@@ -156,7 +159,7 @@ extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
             self?.log.debug("======================== %{public}@ ===========================", name)
-            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: self?.radioFirmwareVersion ?? .unknown))
+            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: self?.radioFirmwareVersion ?? .unknown, radioConfigName: self?.radioConfigName))
             self?.log.debug("------------------------ %{public}@ ---------------------------", name)
         }))
     }
@@ -227,6 +230,15 @@ extension RileyLinkDevice {
             if self.isTimerTickEnabled != self.manager.timerTickEnabled {
                 self.manager.setTimerTickEnabled(self.isTimerTickEnabled)
             }
+        }
+    }
+}
+
+// MARK: - Tuning configuration name management
+extension RileyLinkDevice {
+    public func setRadioConfigName(_ name: String) {
+        queue.async {
+            self.radioConfigName = name
         }
     }
 }
@@ -357,6 +369,7 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
             "isTimerTickNotifying: \(manager.timerTickEnabled)",
             "radioFirmware: \(String(describing: radioFirmwareVersion))",
             "bleFirmware: \(String(describing: bleFirmwareVersion))",
+            "radioConfigName: \(self.radioConfigName)",
             "peripheral: \(manager.peripheral)",
             "sessionQueue.operationCount: \(sessionQueue.operationCount)"
         ].joined(separator: "\n")

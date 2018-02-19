@@ -41,13 +41,13 @@ public class PodComms {
             let semaphore = DispatchSemaphore(value: 0)
             
             device.runSession(withName: name) { (session) in
-                block(PodCommsSession(podState: self.podState, session: session, delegate: self))
+                block(PodCommsSession(podState: self.podState, session: session, device: device, delegate: self))
                 semaphore.signal()
             }
             
             semaphore.wait()
         }
-    }
+    }    
 }
 
 

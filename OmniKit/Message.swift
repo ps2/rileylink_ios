@@ -33,6 +33,12 @@ struct Message {
         
         self.address = UInt32(bigEndian: encodedData.subdata(in: 0..<4))
         let b9 = encodedData[4]
+        let bodyLen = encodedData[5]
+        
+        if bodyLen > encodedData.count - 8 {
+            throw MessageError.notEnoughData
+        }
+        
         self.sequenceNum = Int((b9 >> 2) & 0b11111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
         let msgWithoutCrc = encodedData.prefix(encodedData.count - 2)

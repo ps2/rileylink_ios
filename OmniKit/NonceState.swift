@@ -13,8 +13,12 @@ public class NonceState: RawRepresentable {
     
     var table: [UInt32]
     var idx: UInt8
+    public let lot: UInt32
+    public let tid: UInt32
     
     public init(lot: UInt32 = 0, tid: UInt32 = 0) {
+        self.lot = lot
+        self.tid = tid
         table = Array(repeating: UInt32(0), count: 21)
         table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
         table[0] = table[0] & 0xFFFFFFFF
@@ -47,19 +51,24 @@ public class NonceState: RawRepresentable {
     public required init?(rawValue: RawValue) {
         guard
             let table = rawValue["table"] as? [UInt32],
-            let idx = rawValue["idx"] as? UInt8
+            let idx = rawValue["idx"] as? UInt8,
+            let lot = rawValue["lot"] as? UInt32,
+            let tid = rawValue["tid"] as? UInt32
             else {
                 return nil
         }
         self.table = table
         self.idx = idx
-        
+        self.lot = lot
+        self.tid = tid
     }
     
     public var rawValue: RawValue {
         let rawValue: RawValue = [
             "table": table,
             "idx": idx,
+            "lot": lot,
+            "tid": tid
             ]
         
         return rawValue

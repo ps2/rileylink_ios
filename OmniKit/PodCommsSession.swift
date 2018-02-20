@@ -172,7 +172,7 @@ public class PodCommsSession {
                 do {
                     return try Message(encodedData: responseData)
                 } catch MessageError.notEnoughData {
-                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket())
+                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(), retryCount: 3)
                     
                     guard conPacket.packetType == .con else {
                         throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
@@ -239,7 +239,8 @@ public class PodCommsSession {
     }
     
     public func setTime() throws {
-        
+        try configureRadio()
+
         let dateComponents = SetPodTimeCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
         let setPodTimeCommand = SetPodTimeCommand(address: podState.address, dateComponents: dateComponents, lot: 0, tid: 0)
         let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
@@ -260,6 +261,7 @@ public class PodCommsSession {
     
     public func getStatus() throws -> StatusResponse {
         try configureRadio()
+        
         let cmd = GetStatusCommand()
         let response = try sendCommandsAndGetResponse([cmd])
 
@@ -271,6 +273,11 @@ public class PodCommsSession {
             throw PodCommsError.unexpectedResponse(response: response.messageBlocks[0].blockType, to: cmd.blockType)
         }
         return statusResponse
+    }
+    
+    public func changePod() throws {
+        // TODO: actually stop pod
+        self.podState = PodState(address: podState.address, nonceState: podState.nonceState, isActive: false, timeZone: podState.timeZone)
     }
     
     

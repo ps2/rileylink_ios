@@ -369,7 +369,7 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
             "isTimerTickNotifying: \(manager.timerTickEnabled)",
             "radioFirmware: \(String(describing: radioFirmwareVersion))",
             "bleFirmware: \(String(describing: bleFirmwareVersion))",
-            "radioConfigName: \(self.radioConfigName)",
+            "radioConfigName: \(String(describing: self.radioConfigName))",
             "peripheral: \(manager.peripheral)",
             "sessionQueue.operationCount: \(sessionQueue.operationCount)"
         ].joined(separator: "\n")

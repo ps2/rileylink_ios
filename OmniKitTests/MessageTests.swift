@@ -21,14 +21,6 @@ class MessageTests: XCTestCase {
     
     func testMessageDecoding() {
         do {
-            //11 POD 1d(10)->Resp Status:
-            // Basal running
-            // PODState:Normal running
-            // Insulin(total):4.85u
-            // PODMsg#14
-            // Insulin not delivered:0.00u 0
-            // Alert:Normal
-            // POD Active for 1 days 19 hours 26 minutes
             let msg = try Message(encodedData: Data(hexadecimalString: "1f00ee84300a1d18003f1800004297ff8128")!)
             
             XCTAssertEqual(0x1f00ee84, msg.address)
@@ -57,6 +49,32 @@ class MessageTests: XCTestCase {
         }
     }
     
+    func testAssemblingMultiPacketMessage() {
+        do {
+            let packet1 = try Packet(encodedData: Data(hexadecimalString: "ffffffffe4ffffffff041d011b13881008340a5002070002070002030000a62b0004479420")!)
+            XCTAssertEqual(packet1.data.hexadecimalString, "ffffffff041d011b13881008340a5002070002070002030000a62b00044794")
+            XCTAssertEqual(packet1.packetType, .pod)
+
+            XCTAssertThrowsError(try Message(encodedData: packet1.data)) { error in
+                XCTAssertEqual(String(describing: error), "notEnoughData")
+            }
+            
+            let packet2 = try Packet(encodedData: Data(hexadecimalString: "ffffffff861f00ee878352ff")!)
+            XCTAssertEqual(packet2.address, 0xffffffff)
+            XCTAssertEqual(packet2.data.hexadecimalString, "1f00ee878352")
+            XCTAssertEqual(packet2.packetType, .con)
+            
+            let messageBody = packet1.data + packet2.data
+            XCTAssertEqual(messageBody.hexadecimalString, "ffffffff041d011b13881008340a5002070002070002030000a62b000447941f00ee878352")
+
+            let message = try Message(encodedData: messageBody)
+            XCTAssertEqual(message.messageBlocks.count, 1)
+
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testParsingConfigResponse() {
         do {
             let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
@@ -64,6 +82,21 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(0x1f08ced2, config.address)
             XCTAssertEqual(42560, config.lot)
             XCTAssertEqual(621607, config.tid)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
+    func testParsingLongConfigResponse() {
+        do {
+            let message = try Message(encodedData: Data(hexadecimalString: "ffffffff041d011b13881008340a5002070002070002030000a62b000447941f00ee878352")!)
+            let config = message.messageBlocks[0] as! ConfigResponse
+            XCTAssertEqual(29, config.length)
+            XCTAssertEqual(0x1f00ee87, config.address)
+            XCTAssertEqual(42539, config.lot)
+            XCTAssertEqual(280468, config.tid)
+            XCTAssertEqual("2.7.0", String(describing: config.piVersion))
+            XCTAssertEqual("2.7.0", String(describing: config.pmVersion))
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -92,7 +125,6 @@ class MessageTests: XCTestCase {
             components.hour = 13
             components.minute = 47
 
-            
             // Decode
             let decoded = try SetPodTimeCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
             XCTAssertEqual(0x1f0218c3, decoded.address)
@@ -107,9 +139,6 @@ class MessageTests: XCTestCase {
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-
     }
-    
-
 }
 

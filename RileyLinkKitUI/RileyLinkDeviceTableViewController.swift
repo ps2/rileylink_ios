@@ -250,6 +250,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case omniGetStatus
         case omniSetPodTime
         case omniPairNewPod
+        case omniChangePod
     }
     
     private let minimedCommands: [Commands] = [
@@ -266,7 +267,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private let omnipodCommands: [Commands] = [
         .omniGetStatus,
-        .omniSetPodTime
+        .omniSetPodTime,
+        .omniChangePod
     ]
     
     private let omnipodInactiveCommands: [Commands] = [
@@ -421,6 +423,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 
             case .omniSetPodTime:
                 cell.textLabel?.text = NSLocalizedString("Set Pod Time", comment: "The title of the command to set pod time")
+                
+            case .omniChangePod:
+                cell.textLabel?.text = NSLocalizedString("Change Pod", comment: "The title of the command to set change pod")
 
             }
         }
@@ -502,6 +507,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = CommandResponseViewController.omniGetStatus(podComms: podComms, device: device)
             case .omniSetPodTime:
                 vc = CommandResponseViewController.omniSetPodTime(podComms: podComms, device: device)
+            case .omniChangePod:
+                vc = CommandResponseViewController.omniChangePod(podComms: podComms, device: device)
             case .omniPairNewPod:
                 vc = OmnipodPairingViewController(podComms: podComms, device: device)
             }

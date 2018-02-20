@@ -10,6 +10,22 @@ import Foundation
 
 public struct ConfigResponse : MessageBlock {
     
+    public struct FirmwareVersion : CustomStringConvertible {
+        let major: UInt8
+        let minor: UInt8
+        let patch: UInt8
+        
+        public init(encodedData: Data) {
+            major = encodedData[0]
+            minor = encodedData[1]
+            patch = encodedData[2]
+        }
+        
+        public var description: String {
+            return "\(major).\(minor).\(patch)"
+        }
+    }
+    
     public enum PairingState: UInt8 {
         case sleeping = 0
         case readyToPair = 1
@@ -24,6 +40,8 @@ public struct ConfigResponse : MessageBlock {
     public let tid: UInt32
     public let address: UInt32?
     public let pairingState: PairingState
+    public let pmVersion: FirmwareVersion
+    public let piVersion: FirmwareVersion
     
     public let data: Data
     
@@ -35,19 +53,21 @@ public struct ConfigResponse : MessageBlock {
         switch length {
         case 0x17:
             // This is the response to the address assignment command
-            //01 15 02070002070002 02 0000a640 00097c27 9c 1f08ced2
-            //01 15 02070002070002 02 0000a377 0003ab37 9f 1f00ee87
-            //0  1  2              9  10       14       18 19
-            //AA BB CC             DD EE       FF       GG HH
+            //01 15 020700 020700 02 02 0000a640 00097c27 9c 1f08ced2
+            //01 15 020700 020700 02 02 0000a377 0003ab37 9f 1f00ee87
+            //0  1  2      5      8  9  10       14       18 19
+            //AA BB CC     DD     EE FF GG       HH       II JJ
             
             // AA = mtype (01)
             // BB = length (21)
-            // CC = ?
-            // DD = pairing state
-            // EE = lot id
-            // FF = tid
-            // GG = RLG/RSSI?
-            // HH = address
+            // CC = PM
+            // DD = PI
+            // EE = ?
+            // FF = pairing state
+            // GG = lot id
+            // HH = tid
+            // II = RLG/RSSI?
+            // JJ = address
             
             if let pairingState = PairingState(rawValue: encodedData[9]) {
                 self.pairingState = pairingState
@@ -55,23 +75,28 @@ public struct ConfigResponse : MessageBlock {
                 throw MessageBlockError.parseError
             }
             
+            pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 2..<5))
+            piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 5..<8))
             lot = UInt32(bigEndian: encodedData.subdata(in: 10..<14))
             tid = UInt32(bigEndian: encodedData.subdata(in: 14..<18))
             address = UInt32(bigEndian: encodedData.subdata(in: 19..<23))
             
         case 0x1d:
             // This is the response to the set time command
-            //01 1b 13881008340a50 02070002070002 03 0000a640 00097c27
-            //01 1b 13881008340a50 02070002070002 03 0000a377 0003ab37
-            //0  1  2              9              16 17       21
-            //AA BB CC             DD             EE FF       GG
+            //01 1b 13881008340a50 020700 020700 02 03 0000a62b 00044794 1f00ee87
+            //0  1  2              9      12     15 16 17       21       25
+            //AA BB CC             DD     EE     FF GG HH       II       JJ
+            
             // AA = mtype (01)
             // BB = length (27)
             // CC = ?
-            // DD = ?
-            // EE = pairing state
-            // FF = lot id
-            // GG = tid
+            // DD = PM
+            // EE = PI
+            // FF = ?
+            // GG = pairing state
+            // HH = lot id
+            // II = tid
+            // JJ = address
             
             if let pairingState = PairingState(rawValue: encodedData[16]) {
                 self.pairingState = pairingState
@@ -79,9 +104,11 @@ public struct ConfigResponse : MessageBlock {
                 throw MessageBlockError.parseError
             }
             
+            pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 9..<12))
+            piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 12..<15))
             lot = UInt32(bigEndian: encodedData.subdata(in: 17..<21))
             tid = UInt32(bigEndian: encodedData.subdata(in: 21..<25))
-            address = nil
+            address = UInt32(bigEndian: encodedData.subdata(in: 25..<29))
 
         default:
             throw MessageBlockError.parseError

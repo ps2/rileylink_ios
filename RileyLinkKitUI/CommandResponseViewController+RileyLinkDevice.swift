@@ -277,6 +277,24 @@ extension CommandResponseViewController {
         }
     }
 
+    static func omniChangePod(podComms: PodComms, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            podComms.runSession(withName: "Set Pod Time", using: device, { (session) in
+                let response: String
+                do {
+                    try session.changePod()
+                    response = "OK"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            })
+            return NSLocalizedString("Deactivating pod", comment: "Progress message for deactivating pod")
+        }
+    }
+
     static func tuneRadio(ops: PumpOps?, device: RileyLinkDevice, current: Measurement<UnitFrequency>?, measurementFormatter: MeasurementFormatter) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Tune pump", using: device) { (session) in

@@ -23,6 +23,12 @@ public enum MessageBlockType: UInt8 {
     
     public var blockType: MessageBlock.Type {
         switch self {
+        case .configResponse:
+            return ConfigResponse.self
+        case .setPodTime:
+            return SetPodTimeCommand.self
+        case .assignAddress:
+            return AssignAddressCommand.self
         case .getStatus:
             return GetStatusCommand.self
         case .statusResponse:

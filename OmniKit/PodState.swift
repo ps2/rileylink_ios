@@ -12,10 +12,10 @@ public struct PodState: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public let address: UInt32
-    public let isActive: Bool
     let nonceState: NonceState
+    public let isActive: Bool
     public let timeZone: TimeZone
-    
+
     public static func initialPodState() -> PodState {
         return PodState(address: 0x1f0a000, nonceState: NonceState(), isActive: false, timeZone: .currentFixed)
     }

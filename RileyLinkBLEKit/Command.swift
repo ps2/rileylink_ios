@@ -21,6 +21,8 @@ enum RileyLinkCommand: UInt8 {
     case readRegister     = 9
     case setModeRegisters = 10
     case setSWEncoding    = 11
+    case setPreamble      = 12
+    case resetRadioConfig = 13
 }
 
 protocol Command {
@@ -73,10 +75,10 @@ struct SendAndListen: Command {
     let listenChannel: UInt8
     let timeoutMS: UInt32
     let retryCount: UInt8
-    let preambleExtendMS: UInt16
+    let preambleExtensionMS: UInt16
     let firmwareVersion: RadioFirmwareVersion
 
-    init(outgoing: Data, sendChannel: UInt8, repeatCount: UInt8, delayBetweenPacketsMS: UInt16, listenChannel: UInt8, timeoutMS: UInt32, retryCount: UInt8, preambleExtendMS: UInt16, firmwareVersion: RadioFirmwareVersion) {
+    init(outgoing: Data, sendChannel: UInt8, repeatCount: UInt8, delayBetweenPacketsMS: UInt16, listenChannel: UInt8, timeoutMS: UInt32, retryCount: UInt8, preambleExtensionMS: UInt16, firmwareVersion: RadioFirmwareVersion) {
         self.outgoing = outgoing
         self.sendChannel = sendChannel
         self.repeatCount = repeatCount
@@ -84,7 +86,7 @@ struct SendAndListen: Command {
         self.listenChannel = listenChannel
         self.timeoutMS = timeoutMS
         self.retryCount = retryCount
-        self.preambleExtendMS = preambleExtendMS
+        self.preambleExtensionMS = preambleExtensionMS
         self.firmwareVersion = firmwareVersion
     }
 
@@ -105,7 +107,7 @@ struct SendAndListen: Command {
         data.appendBigEndian(timeoutMS)
         data.append(retryCount)
         if firmwareVersion.supportsPreambleExtension {
-            data.appendBigEndian(preambleExtendMS)
+            data.appendBigEndian(preambleExtensionMS)
         }
         data.append(outgoing)
 
@@ -124,15 +126,15 @@ struct SendPacket: Command {
     /// 0 = no repeat, i.e. only one packet.  1 repeat = 2 packets sent total.
     let repeatCount: UInt8
     let delayBetweenPacketsMS: UInt16
-    let preambleExtendMS: UInt16
+    let preambleExtensionMS: UInt16
     let firmwareVersion: RadioFirmwareVersion
 
-    init(outgoing: Data, sendChannel: UInt8, repeatCount: UInt8, delayBetweenPacketsMS: UInt16, preambleExtendMS: UInt16, firmwareVersion: RadioFirmwareVersion) {
+    init(outgoing: Data, sendChannel: UInt8, repeatCount: UInt8, delayBetweenPacketsMS: UInt16, preambleExtensionMS: UInt16, firmwareVersion: RadioFirmwareVersion) {
         self.outgoing = outgoing
         self.sendChannel = sendChannel
         self.repeatCount = repeatCount
         self.delayBetweenPacketsMS = delayBetweenPacketsMS
-        self.preambleExtendMS = preambleExtendMS
+        self.preambleExtensionMS = preambleExtensionMS
         self.firmwareVersion = firmwareVersion;
     }
 
@@ -149,7 +151,7 @@ struct SendPacket: Command {
         }
 
         if firmwareVersion.supportsPreambleExtension {
-            data.appendBigEndian(preambleExtendMS)
+            data.appendBigEndian(preambleExtensionMS)
         }
         data.append(outgoing)
 
@@ -241,6 +243,31 @@ struct SetSoftwareEncoding: Command {
     }
 }
 
+struct SetPreamble: Command {
+    typealias ResponseType = CodeResponse
+    
+    let preambleValue: UInt16
+    
+    
+    init(_ value: UInt16) {
+        self.preambleValue = value
+    }
+    
+    var data: Data {
+        var data = Data(bytes: [RileyLinkCommand.setPreamble.rawValue])
+        data.appendBigEndian(preambleValue)
+        return data
+        
+    }
+}
+
+struct ResetRadioConfig: Command {
+    typealias ResponseType = CodeResponse
+    
+    var data: Data {
+        return Data(bytes: [RileyLinkCommand.resetRadioConfig.rawValue])        
+    }
+}
 
 
 // MARK: - Helpers

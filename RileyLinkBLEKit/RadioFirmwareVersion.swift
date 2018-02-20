@@ -42,33 +42,32 @@ extension RadioFirmwareVersion: CustomStringConvertible {
 
 // Version 2 changes
 extension RadioFirmwareVersion {
-    var supportsPreambleExtension: Bool {
+    
+    private var atLeastV2: Bool {
         guard let major = components.first, major >= 2 else {
             return false
         }
         return true
+    }
+    
+    var supportsPreambleExtension: Bool {
+        return atLeastV2
     }
     
     var supportsSoftwareEncoding: Bool {
-        guard let major = components.first, major >= 2 else {
-            return false
-        }
-        return true
+        return atLeastV2
+    }
+    
+    var supportsResetRadioConfig: Bool {
+        return atLeastV2
     }
 
     var supports16BitPacketDelay: Bool {
-        guard let major = components.first, major >= 2 else {
-            return false
-        }
-        return true
+        return atLeastV2
     }
     
     var needsExtraByteForUpdateRegisterCommand: Bool {
-        guard let major = components.first, major >= 2 else {
-            return true
-        }
-        return false
-
+        return !atLeastV2
     }
 
 }

@@ -20,3 +20,8 @@ extension RileyLinkDevice.Status {
         return versions.joined(separator: " / ")
     }
 }
+
+
+extension Notification.Name {
+    static let DeviceRadioConfigDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.DeviceRadioConfigDidChange")
+}

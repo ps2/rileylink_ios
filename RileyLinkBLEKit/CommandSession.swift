@@ -141,7 +141,7 @@ public struct CommandSession {
             listenChannel: 0,
             timeoutMS: UInt32(clamping: Int(timeout.milliseconds)),
             retryCount: UInt8(clamping: retryCount),
-            preambleExtendMS: 0,
+            preambleExtensionMS: 0,
             firmwareVersion: firmwareVersion
         )
 
@@ -174,7 +174,7 @@ public struct CommandSession {
             sendChannel: UInt8(clamping: channel),
             repeatCount: 0,
             delayBetweenPacketsMS: 0,
-            preambleExtendMS: 0,
+            preambleExtensionMS: 0,
             firmwareVersion: firmwareVersion
         )
 
@@ -195,4 +195,14 @@ public struct CommandSession {
             throw RileyLinkDeviceError.invalidInput(String(describing: swEncodingType))
         }
     }
+    
+    public func resetRadioConfig() throws {
+        guard firmwareVersion.supportsResetRadioConfig else {
+            return
+        }
+        
+        let command = ResetRadioConfig()
+        _ = try writeCommand(command, timeout: 0)
+    }
+
 }

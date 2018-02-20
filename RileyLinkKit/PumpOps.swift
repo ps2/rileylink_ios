@@ -26,6 +26,8 @@ public class PumpOps {
         }
     }
 
+    private var configuredDevices: Set<RileyLinkDevice> = Set()
+
     private let sessionQueue = DispatchQueue(label: "com.rileylink.RileyLinkKit.PumpOps", qos: .utility)
 
     private unowned let delegate: PumpOpsDelegate
@@ -55,22 +57,14 @@ public class PumpOps {
 
     public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
         sessionQueue.async {
-            let semaphore = DispatchSemaphore(value: 0)
-
             deviceSelector { (device) in
                 guard let device = device else {
                     block(nil)
-                    semaphore.signal()
                     return
                 }
 
-                device.runSession(withName: name) { (session) in
-                    block(PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self))
-                    semaphore.signal()
-                }
+                self.runSession(withName: name, using: device, block)
             }
-
-            semaphore.wait()
         }
     }
 
@@ -79,12 +73,41 @@ public class PumpOps {
             let semaphore = DispatchSemaphore(value: 0)
 
             device.runSession(withName: name) { (session) in
-                block(PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self))
+                let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self)
+                self.configureDevice(device, with: session)
+                block(session)
                 semaphore.signal()
             }
 
             semaphore.wait()
         }
+    }
+
+    // Must be called from within the RileyLinkDevice sessionQueue
+    private func configureDevice(_ device: RileyLinkDevice, with session: PumpOpsSession) {
+        guard !self.configuredDevices.contains(device) else {
+            return
+        }
+
+        do {
+            _ = try session.configureRadio(for: pumpSettings.pumpRegion)
+        } catch {
+            // Ignore the error and let the block run anyway
+            return
+        }
+
+        NotificationCenter.default.post(name: .DeviceRadioConfigDidChange, object: device)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.insert(device)
+    }
+
+    @objc private func deviceRadioConfigDidChange(_ note: Notification) {
+        guard let device = note.object as? RileyLinkDevice else {
+            return
+        }
+
+        NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.remove(device)
     }
 }
 

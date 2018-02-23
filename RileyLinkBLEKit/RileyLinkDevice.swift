@@ -107,6 +107,17 @@ extension RileyLinkDevice {
 }
 
 
+extension RileyLinkDevice: Equatable, Hashable {
+    public static func ==(lhs: RileyLinkDevice, rhs: RileyLinkDevice) -> Bool {
+        return lhs === rhs
+    }
+
+    public var hashValue: Int {
+        return peripheralIdentifier.hashValue
+    }
+}
+
+
 // MARK: - Status management
 extension RileyLinkDevice {
     public struct Status {

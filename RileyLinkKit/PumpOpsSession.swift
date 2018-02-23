@@ -678,7 +678,6 @@ extension PumpOpsSession {
         let region = self.settings.pumpRegion
 
         do {
-            try configureRadio(for: region)
             let results = try scanForPump(in: region.scanFrequencies, current: current)
 
             return results
@@ -703,7 +702,9 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpOpsError.deviceError
     ///     - RileyLinkDeviceError
-    private func configureRadio(for region: PumpRegion) throws {
+    func configureRadio(for region: PumpRegion) throws {
+        try session.resetRadioConfig()
+        
         switch region {
         case .worldWide:
             //try session.updateRegister(.mdmcfg4, value: 0x59)

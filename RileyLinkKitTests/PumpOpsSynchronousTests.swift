@@ -366,6 +366,10 @@ class PumpMessageSenderStub: PumpMessageSender {
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws {
         throw PumpOpsError.noResponse(during: "Tests")
     }
+    
+    func resetRadioConfig() throws {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
 
     func setBaseFrequency(_ frequency: Measurement<UnitFrequency>) throws {
         throw PumpOpsError.noResponse(during: "Tests")

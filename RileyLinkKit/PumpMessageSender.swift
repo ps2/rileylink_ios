@@ -18,6 +18,9 @@ private let log = OSLog(category: "PumpMessageSender")
 
 protocol PumpMessageSender {
     /// - Throws: LocalizedError
+    func resetRadioConfig() throws
+
+    /// - Throws: LocalizedError
     func updateRegister(_ address: CC111XRegister, value: UInt8) throws
 
     /// - Throws: LocalizedError

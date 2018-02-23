@@ -120,26 +120,38 @@ public class PodCommsSession {
         messageNumber = (messageNumber + 1) & 0b1111
     }
     
-    func ackPacket(_ address: UInt32 = 0) -> Packet {
-        return Packet(address: podState.address, packetType: .ack, sequenceNum: packetNumber, data:address.bigEndian)
+    func ackPacket(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) -> Packet {
+        let addr1 = packetAddress ?? podState.address
+        let addr2 = messageAddress ?? podState.address
+        return Packet(address: addr1, packetType: .ack, sequenceNum: packetNumber, data:addr2.bigEndian)
     }
     
-    func ack(_ address: UInt32 = 0) throws {
-        let ack = ackPacket(address)
-        
-        try session.send(ack.encoded(), onChannel: 0, timeout: TimeInterval(0), repeatCount: 2, delayBetweenPackets: TimeInterval(milliseconds: 30), preambleExtension: TimeInterval(milliseconds: 20))
+    func ackUntilQuiet(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) throws {
+        let ack = ackPacket(packetAddress: packetAddress, messageAddress: messageAddress)
+        let packetData = ack.encoded()
+
+        var quiet = false
+        while !quiet {
+            do {
+                let _ = try session.sendAndListen(packetData, repeatCount: 3, timeout: TimeInterval(milliseconds: 300), retryCount: 0, preambleExtension: TimeInterval(milliseconds: 40))
+            } catch RileyLinkDeviceError.responseTimeout {
+                // Haven't heard anything in 300ms.  POD heard our ack.
+                quiet = true
+            }
+        }
+        incrementPacketNumber()
     }
     
-    func sendPacketAndGetResponse(packet: Packet, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
+    func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
         let packetData = packet.encoded()
         
-        guard let rfPacket = try session.sendAndListen(packetData, repeatCount: 0, timeout: timeout, retryCount: retryCount, preambleExtension: TimeInterval(milliseconds: 127)) else {
+        guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount, preambleExtension: TimeInterval(milliseconds: 127)) else {
             throw PodCommsError.noResponse
         }
         
         let responsePacket = try Packet(rfPacket: rfPacket)
         
-        guard responsePacket.address == podState.address else {
+        guard responsePacket.address == packet.address else {
             throw PodCommsError.badAddress
         }
         
@@ -154,11 +166,12 @@ public class PodCommsSession {
         return responsePacket
     }
 
-    func sendCommandsAndGetResponse(_ commands: [MessageBlock]) throws -> Message {
-        let msg = Message(address: podState.address, messageBlocks: commands, sequenceNum: messageNumber)
+    func sendCommandsAndGetResponse(_ commands: [MessageBlock], toDest: UInt32? = nil) throws -> Message {
+        let dest = toDest ?? podState.address
+        let msg = Message(address: dest, messageBlocks: commands, sequenceNum: messageNumber)
         
         // TODO: breaking msgData up into multiple packets if needed
-        let sendPacket = Packet(address: podState.address, packetType: .pdm, sequenceNum: packetNumber, data: msg.encoded())
+        let sendPacket = Packet(address: dest, packetType: .pdm, sequenceNum: packetNumber, data: msg.encoded())
         
         let responsePacket = try sendPacketAndGetResponse(packet: sendPacket, retryCount: 3)
         
@@ -169,7 +182,7 @@ public class PodCommsSession {
                 do {
                     return try Message(encodedData: responseData)
                 } catch MessageError.notEnoughData {
-                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(), retryCount: 3)
+                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(packetAddress: dest), retryCount: 3)
                     
                     guard conPacket.packetType == .con else {
                         throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
@@ -178,13 +191,10 @@ public class PodCommsSession {
                 }
             }
         }()
-
-        // Send ACK
-        try ack()
         
         incrementMessageNumber()
         incrementMessageNumber()
-
+        
         return response
     }
     
@@ -193,8 +203,11 @@ public class PodCommsSession {
         // PDM sometimes increments by more than one?
         let newAddress = podState.address + 1
         let assignAddressCommand = AssignAddressCommand(address: newAddress)
-        let assignAddressCommandResponse = try sendCommandsAndGetResponse([assignAddressCommand])
+        let assignAddressCommandResponse = try sendCommandsAndGetResponse([assignAddressCommand], toDest: 0xffffffff)
         
+        // Send ACK
+        try ackUntilQuiet(packetAddress: 0xffffffff, messageAddress: newAddress)
+
         guard assignAddressCommandResponse.messageBlocks.count > 0 else {
             throw PodCommsError.emptyResponse
         }
@@ -212,7 +225,10 @@ public class PodCommsSession {
         
         let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
         let setPodTimeCommand = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
-        let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
+        let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand], toDest: 0xffffffff)
+        
+        try ackUntilQuiet(packetAddress: 0xffffffff, messageAddress: newAddress)
+
         
         guard setPodTimeCommandResponse.messageBlocks.count > 0 else {
             throw PodCommsError.emptyResponse
@@ -235,29 +251,14 @@ public class PodCommsSession {
     }
     
     public func setTime() throws {
-
-        let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
-        let setPodTimeCommand = ConfirmPairingCommand(address: podState.address, dateComponents: dateComponents, lot: 0, tid: 0)
-        let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
-        
-        guard setPodTimeCommandResponse.messageBlocks.count > 0 else {
-            throw PodCommsError.emptyResponse
-        }
-        
-        guard let config2 = setPodTimeCommandResponse.messageBlocks[0] as? ConfigResponse else {
-            let responseType = setPodTimeCommandResponse.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType, to: setPodTimeCommand.blockType)
-        }
-        
-        guard config2.pairingState == .paired else {
-            throw PodCommsError.invalidData
-        }
     }
     
     public func getStatus() throws -> StatusResponse {
         
         let cmd = GetStatusCommand()
         let response = try sendCommandsAndGetResponse([cmd])
+        
+        try ackUntilQuiet()
 
         guard response.messageBlocks.count > 0 else {
             throw PodCommsError.emptyResponse

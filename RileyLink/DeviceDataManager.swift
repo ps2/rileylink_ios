@@ -383,7 +383,7 @@ class DeviceDataManager {
         var idleListeningEnabled = true
 
         let podState = UserDefaults.standard.podState ?? PodState.initialPodState()
-        //let podState = PodState(address: 0x1f00ee87, nonceState: NonceState(), isActive: true, timeZone: TimeZone.current)
+        //let podState = PodState(address: 0x1f00ee9b, nonceState: NonceState(), isActive: false, timeZone: TimeZone.current)
         podComms = PodComms(podState: podState)
         podComms.delegate = self
 
@@ -393,7 +393,6 @@ class DeviceDataManager {
             self.pumpOps = PumpOps(pumpSettings: pumpSettings, pumpState: self.pumpState, delegate: self)
         }
         
-
         rileyLinkManager.idleListeningState = idleListeningEnabled ? .enabledWithDefaults : .disabled
 
         UIDevice.current.isBatteryMonitoringEnabled = true

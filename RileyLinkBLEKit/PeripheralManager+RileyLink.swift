@@ -211,7 +211,7 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.writeSizeLimitExceeded
     func writeCommand<C: Command>(_ command: C, timeout: TimeInterval, responseType: ResponseType) throws -> C.ResponseType {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         let value = try command.writableData()
@@ -244,7 +244,7 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.writeSizeLimitExceeded
     fileprivate func writeCommandWithoutResponse<C: Command>(_ command: C, timeout: TimeInterval) throws {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         let value = try command.writableData()
@@ -271,13 +271,13 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.peripheralManagerError
     func readBluetoothFirmwareVersion(timeout: TimeInterval) throws -> String {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.firmwareVersion) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         do {
             guard let data = try readValue(for: characteristic, timeout: timeout) else {
                 // TODO: This is an "unknown value" issue, not a timeout
-                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+                throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.timeout)
             }
 
             guard let version = String(bytes: data, encoding: .utf8) else {

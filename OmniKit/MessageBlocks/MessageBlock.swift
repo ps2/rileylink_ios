@@ -17,6 +17,7 @@ public enum MessageBlockType: UInt8 {
     case confirmPairing     = 0x03
     case assignAddress      = 0x07
     case getStatus          = 0x0e
+    case cancelBasal        = 0x19
     case setInsulinSchedule = 0x1a
     case statusResponse     = 0x1d
     case cancelBolus        = 0x1f
@@ -31,6 +32,8 @@ public enum MessageBlockType: UInt8 {
             return AssignAddressCommand.self
         case .getStatus:
             return GetStatusCommand.self
+        case .cancelBasal:
+            return CancelBasalCommand.self
         case .statusResponse:
             return StatusResponse.self
         default:

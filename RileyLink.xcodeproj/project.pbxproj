@@ -250,6 +250,7 @@
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C14D8189203FD0C600184B72 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D8188203FD0C600184B72 /* Notification.swift */; };
+		C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D818A203FD23E00184B72 /* CancelBasalCommand.swift */; };
 		C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */; };
 		C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */; };
 		C14FFC511D3D6DEF0049CF85 /* ServiceCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */; };
@@ -792,6 +793,7 @@
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D8188203FD0C600184B72 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		C14D818A203FD23E00184B72 /* CancelBasalCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBasalCommand.swift; sourceTree = "<group>"; };
 		C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryInsulinMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceAuthentication.swift; sourceTree = "<group>"; };
 		C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCredential.swift; sourceTree = "<group>"; };
@@ -1363,6 +1365,7 @@
 				C184541F2031DEA200EAD422 /* AssignAddressCommand.swift */,
 				C18454212031EBB400EAD422 /* ConfigResponse.swift */,
 				C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */,
+				C14D818A203FD23E00184B72 /* CancelBasalCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2630,6 +2633,7 @@
 				C18454222031EBB400EAD422 /* ConfigResponse.swift in Sources */,
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
+				C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
 				C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */,
 				C1130FC620159CD5007D13DB /* CRC16.swift in Sources */,

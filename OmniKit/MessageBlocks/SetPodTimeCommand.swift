@@ -10,7 +10,7 @@ import Foundation
 
 public struct ConfirmPairingCommand : MessageBlock {
     
-    public let blockType: MessageBlockType = .setPodTime
+    public let blockType: MessageBlockType = .confirmPairing
     public let length: UInt8 = 21
     
     let address: UInt32

@@ -14,7 +14,7 @@ public enum MessageBlockError: Error {
 
 public enum MessageBlockType: UInt8 {
     case configResponse     = 0x01
-    case setPodTime         = 0x03
+    case confirmPairing     = 0x03
     case assignAddress      = 0x07
     case getStatus          = 0x0e
     case setInsulinSchedule = 0x1a
@@ -25,8 +25,8 @@ public enum MessageBlockType: UInt8 {
         switch self {
         case .configResponse:
             return ConfigResponse.self
-        case .setPodTime:
-            return SetPodTimeCommand.self
+        case .confirmPairing:
+            return ConfirmPairingCommand.self
         case .assignAddress:
             return AssignAddressCommand.self
         case .getStatus:

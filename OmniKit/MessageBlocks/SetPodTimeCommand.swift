@@ -1,5 +1,5 @@
 //
-//  SetPodTimeCommand.swift
+//  ConfirmPairingCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/17/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SetPodTimeCommand : MessageBlock {
+public struct ConfirmPairingCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .setPodTime
     public let length: UInt8 = 21

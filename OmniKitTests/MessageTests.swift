@@ -116,7 +116,7 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testSetPodTimeCommand() {
+    func testConfirmPairingCommand() {
         do {
             var components = DateComponents()
             components.day = 6
@@ -126,14 +126,14 @@ class MessageTests: XCTestCase {
             components.minute = 47
 
             // Decode
-            let decoded = try SetPodTimeCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
+            let decoded = try ConfirmPairingCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
             XCTAssertEqual(0x1f0218c3, decoded.address)
             XCTAssertEqual(components, decoded.dateComponents)
             XCTAssertEqual(0x0000a4be, decoded.lot)
             XCTAssertEqual(0x0004e4a1, decoded.tid)
 
             // Encode
-            let encoded = SetPodTimeCommand(address: 0x1f0218c3, dateComponents: components, lot: 0x0000a4be, tid: 0x0004e4a1)
+            let encoded = ConfirmPairingCommand(address: 0x1f0218c3, dateComponents: components, lot: 0x0000a4be, tid: 0x0004e4a1)
             XCTAssertEqual("03131f0218c31404060c100d2f0000a4be0004e4a1", encoded.data.hexadecimalString)            
 
         } catch (let error) {

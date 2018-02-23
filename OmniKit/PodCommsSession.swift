@@ -211,8 +211,8 @@ public class PodCommsSession {
             isActive: false,
             timeZone: podState.timeZone)
         
-        let dateComponents = SetPodTimeCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
-        let setPodTimeCommand = SetPodTimeCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
+        let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
+        let setPodTimeCommand = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
         let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
         
         guard setPodTimeCommandResponse.messageBlocks.count > 0 else {
@@ -238,8 +238,8 @@ public class PodCommsSession {
     public func setTime() throws {
         try configureRadio()
 
-        let dateComponents = SetPodTimeCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
-        let setPodTimeCommand = SetPodTimeCommand(address: podState.address, dateComponents: dateComponents, lot: 0, tid: 0)
+        let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
+        let setPodTimeCommand = ConfirmPairingCommand(address: podState.address, dateComponents: dateComponents, lot: 0, tid: 0)
         let setPodTimeCommandResponse = try sendCommandsAndGetResponse([setPodTimeCommand])
         
         guard setPodTimeCommandResponse.messageBlocks.count > 0 else {

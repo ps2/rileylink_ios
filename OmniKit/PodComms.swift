@@ -24,6 +24,8 @@ public class PodComms {
         }
     }
     
+    private var configuredDevices: Set<RileyLinkDevice> = Set()
+    
     public var podIsActive: Bool {
         return podState.isActive
     }
@@ -47,7 +49,35 @@ public class PodComms {
             
             semaphore.wait()
         }
-    }    
+    }
+    
+    // Must be called from within the RileyLinkDevice sessionQueue
+    private func configureDevice(_ device: RileyLinkDevice, with session: PodCommsSession) {
+        guard !self.configuredDevices.contains(device) else {
+            return
+        }
+        
+        do {
+            _ = try session.configureRadio()
+        } catch {
+            // Ignore the error and let the block run anyway
+            return
+        }
+        
+        NotificationCenter.default.post(name: .DeviceRadioConfigDidChange, object: device)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.insert(device)
+    }
+
+    @objc private func deviceRadioConfigDidChange(_ note: Notification) {
+        guard let device = note.object as? RileyLinkDevice else {
+            return
+        }
+        
+        NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.remove(device)
+    }
+
 }
 
 

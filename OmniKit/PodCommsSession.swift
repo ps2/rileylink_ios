@@ -53,9 +53,6 @@ public class PodCommsSession {
     }
     
     func configureRadio() throws {
-        if session.isRadioConfigured(for: RadioConfigurationName) {
-            return
-        }
         
         //        # ---------------------------------------------------
         //        # Packet sniffer settings for CC1110

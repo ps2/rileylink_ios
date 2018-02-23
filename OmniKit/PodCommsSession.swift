@@ -189,7 +189,6 @@ public class PodCommsSession {
     }
     
     public func setupNewPOD() throws {
-        try configureRadio()
         
         // PDM sometimes increments by more than one?
         let newAddress = podState.address + 1
@@ -236,7 +235,6 @@ public class PodCommsSession {
     }
     
     public func setTime() throws {
-        try configureRadio()
 
         let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
         let setPodTimeCommand = ConfirmPairingCommand(address: podState.address, dateComponents: dateComponents, lot: 0, tid: 0)
@@ -257,7 +255,6 @@ public class PodCommsSession {
     }
     
     public func getStatus() throws -> StatusResponse {
-        try configureRadio()
         
         let cmd = GetStatusCommand()
         let response = try sendCommandsAndGetResponse([cmd])

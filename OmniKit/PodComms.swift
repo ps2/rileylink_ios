@@ -42,8 +42,10 @@ public class PodComms {
         sessionQueue.async {
             let semaphore = DispatchSemaphore(value: 0)
             
-            device.runSession(withName: name) { (session) in
-                block(PodCommsSession(podState: self.podState, session: session, device: device, delegate: self))
+            device.runSession(withName: name) { (commandSession) in
+                let podSession = PodCommsSession(podState: self.podState, session: commandSession, device: device, delegate: self)
+                self.configureDevice(device, with: podSession)
+                block(podSession)
                 semaphore.signal()
             }
             

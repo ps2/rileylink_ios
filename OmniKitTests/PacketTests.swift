@@ -34,7 +34,6 @@ class PacketTests: XCTestCase {
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-
     }
 }
 

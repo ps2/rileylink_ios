@@ -366,6 +366,8 @@
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
 		C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */; };
+		C1E6DC1E2041121600C2DEEB /* CancelBolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */; };
+		C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E6DC1F2041176C00C2DEEB /* StatusError.swift */; };
 		C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */; };
 		C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */; };
 		C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B01C826B6D006DBA60 /* MessageType.swift */; };
@@ -919,6 +921,8 @@
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
+		C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBolusCommand.swift; sourceTree = "<group>"; };
+		C1E6DC1F2041176C00C2DEEB /* StatusError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusError.swift; sourceTree = "<group>"; };
 		C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
 		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
 		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1366,6 +1370,8 @@
 				C18454212031EBB400EAD422 /* ConfigResponse.swift */,
 				C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */,
 				C14D818A203FD23E00184B72 /* CancelBasalCommand.swift */,
+				C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */,
+				C1E6DC1F2041176C00C2DEEB /* StatusError.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2635,6 +2641,7 @@
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
 				C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
+				C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */,
 				C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */,
 				C1130FC620159CD5007D13DB /* CRC16.swift in Sources */,
 				C1130FC920159CD5007D13DB /* Packet.swift in Sources */,
@@ -2644,6 +2651,7 @@
 				C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */,
 				C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */,
 				C1130FCD20159CD5007D13DB /* NonceState.swift in Sources */,
+				C1E6DC1E2041121600C2DEEB /* CancelBolusCommand.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

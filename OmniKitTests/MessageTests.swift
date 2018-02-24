@@ -78,7 +78,7 @@ class MessageTests: XCTestCase {
     func testParsingConfigResponse() {
         do {
             let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
-            XCTAssertEqual(23, config.length)
+            XCTAssertEqual(23, config.data.count)
             XCTAssertEqual(0x1f08ced2, config.address)
             XCTAssertEqual(42560, config.lot)
             XCTAssertEqual(621607, config.tid)
@@ -91,7 +91,7 @@ class MessageTests: XCTestCase {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff041d011b13881008340a5002070002070002030000a62b000447941f00ee878352")!)
             let config = message.messageBlocks[0] as! ConfigResponse
-            XCTAssertEqual(29, config.length)
+            XCTAssertEqual(29, config.data.count)
             XCTAssertEqual(0x1f00ee87, config.address)
             XCTAssertEqual(42539, config.lot)
             XCTAssertEqual(280468, config.tid)

@@ -14,6 +14,7 @@ public enum MessageBlockError: Error {
 
 public enum MessageBlockType: UInt8 {
     case configResponse     = 0x01
+    case statusError        = 0x02
     case confirmPairing     = 0x03
     case assignAddress      = 0x07
     case getStatus          = 0x0e
@@ -26,6 +27,8 @@ public enum MessageBlockType: UInt8 {
         switch self {
         case .configResponse:
             return ConfigResponse.self
+        case .statusError:
+            return StatusError.self
         case .confirmPairing:
             return ConfirmPairingCommand.self
         case .assignAddress:
@@ -36,6 +39,8 @@ public enum MessageBlockType: UInt8 {
             return CancelBasalCommand.self
         case .statusResponse:
             return StatusResponse.self
+        case .cancelBolus:
+            return CancelBolusCommand.self
         default:
             return PlaceholderMessageBlock.self
         }
@@ -46,6 +51,5 @@ public protocol MessageBlock {
     init(encodedData: Data) throws
 
     var blockType: MessageBlockType { get }
-    var length: UInt8 { get }
     var data: Data { get  }
 }

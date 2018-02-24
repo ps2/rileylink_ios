@@ -34,7 +34,6 @@ public struct ConfigResponse : MessageBlock {
     }
 
     public let blockType: MessageBlockType = .configResponse
-    public let length: UInt8
 
     public let lot: UInt32
     public let tid: UInt32
@@ -47,7 +46,7 @@ public struct ConfigResponse : MessageBlock {
     
     public init(encodedData: Data) throws {
         
-        length = encodedData[1] + 2
+        let length = encodedData[1] + 2
         data = encodedData.subdata(in: 0..<Int(length))
 
         switch length {

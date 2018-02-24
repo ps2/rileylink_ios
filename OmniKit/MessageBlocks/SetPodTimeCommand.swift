@@ -11,7 +11,6 @@ import Foundation
 public struct ConfirmPairingCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .confirmPairing
-    public let length: UInt8 = 21
     
     let address: UInt32
     let lot: UInt32
@@ -34,7 +33,7 @@ public struct ConfirmPairingCommand : MessageBlock {
     public var data: Data {
         var data = Data(bytes: [
             blockType.rawValue,
-            length - 2,
+            19,
             ])
         data.append(contentsOf: self.address.bigEndian)
         
@@ -60,7 +59,7 @@ public struct ConfirmPairingCommand : MessageBlock {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < length {
+        if encodedData.count < 21 {
             throw MessageBlockError.notEnoughData
         }
         self.address = UInt32(bigEndian: encodedData.subdata(in: 2..<6))

@@ -54,9 +54,6 @@ public class PodCommsSession {
     
     func configureRadio() throws {
         
-        //        # ---------------------------------------------------
-        //        # Packet sniffer settings for CC1110
-        //        # ---------------------------------------------------
         //        SYNC1     |0xDF00|0x54|Sync Word, High Byte
         //        SYNC0     |0xDF01|0xC3|Sync Word, Low Byte
         //        PKTLEN    |0xDF02|0x32|Packet Length
@@ -144,26 +141,33 @@ public class PodCommsSession {
     
     func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
         let packetData = packet.encoded()
+        var attemptCount = 0
         
-        guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount, preambleExtension: TimeInterval(milliseconds: 127)) else {
-            throw PodCommsError.noResponse
+        while retryCount - attemptCount > 0 {
+            attemptCount += 1
+            
+            guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount-attemptCount, preambleExtension: TimeInterval(milliseconds: 127)) else {
+                throw PodCommsError.noResponse
+            }
+        
+            let candidatePacket = try Packet(rfPacket: rfPacket)
+        
+            guard candidatePacket.address == packet.address else {
+                continue
+            }
+            
+            guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
+                continue
+            }
+            
+            // Once we have verification that the POD heard us, we can increment our counters
+            incrementPacketNumber()
+            incrementPacketNumber()
+            
+            return candidatePacket
         }
         
-        let responsePacket = try Packet(rfPacket: rfPacket)
-        
-        guard responsePacket.address == packet.address else {
-            throw PodCommsError.badAddress
-        }
-        
-        guard responsePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
-            throw PodCommsError.unexpectedSequence
-        }
-        
-        // Once we have verification that the POD heard us, we can increment our counters
-        incrementPacketNumber()
-        incrementPacketNumber()
-        
-        return responsePacket
+        throw PodCommsError.noResponse
     }
 
     func sendCommandsAndGetResponse(_ commands: [MessageBlock], toDest: UInt32? = nil) throws -> Message {
@@ -173,7 +177,7 @@ public class PodCommsSession {
         // TODO: breaking msgData up into multiple packets if needed
         let sendPacket = Packet(address: dest, packetType: .pdm, sequenceNum: packetNumber, data: msg.encoded())
         
-        let responsePacket = try sendPacketAndGetResponse(packet: sendPacket, retryCount: 3)
+        let responsePacket = try sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
         
         // Assemble fragmented message from multiple packets
         let response =  try { () throws -> Message in
@@ -182,7 +186,7 @@ public class PodCommsSession {
                 do {
                     return try Message(encodedData: responseData)
                 } catch MessageError.notEnoughData {
-                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(packetAddress: dest), retryCount: 3)
+                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(packetAddress: dest), retryCount: 5)
                     
                     guard conPacket.packetType == .con else {
                         throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
@@ -271,8 +275,13 @@ public class PodCommsSession {
     }
     
     public func changePod() throws {
-        // TODO: actually stop pod
-        self.podState = PodState(address: podState.address, nonceState: podState.nonceState, isActive: false, timeZone: podState.timeZone)
+        let cmd = CancelBolusCommand(nonce: podState.nonceState.nextNonce())
+
+        let response = try sendCommandsAndGetResponse([cmd])
+        
+        print("response = \(response)")
+        
+        try ackUntilQuiet()
     }
     
     

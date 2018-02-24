@@ -14,7 +14,10 @@ public enum GetStatusCommandError: Error {
 }
 
 public enum StatusRequestType: UInt8 {
-    case normal = 0x00 // Other types seen: 1, 2, 3, 5, 6, 0x46, 0x50, or 0x51
+    case normal = 0x00
+    case bolusCancelResult = 0x01
+    // Other types seen: 2, 3, 5, 6, 0x46, 0x50, or 0x51
+    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
 }
 
 struct GetStatusCommand : MessageBlock {

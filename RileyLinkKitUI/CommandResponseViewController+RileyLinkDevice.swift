@@ -279,7 +279,7 @@ extension CommandResponseViewController {
 
     static func omniChangePod(podComms: PodComms, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
-            podComms.runSession(withName: "Set Pod Time", using: device, { (session) in
+            podComms.runSession(withName: "Change Pod", using: device, { (session) in
                 let response: String
                 do {
                     try session.changePod()

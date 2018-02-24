@@ -11,7 +11,7 @@ import Foundation
 public struct AssignAddressCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .assignAddress
-    public let length: UInt8 = 6
+    public let length: Int = 6
     
     let address: UInt32
 

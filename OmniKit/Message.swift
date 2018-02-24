@@ -58,7 +58,7 @@ struct Message {
             do {
                 let block = try blockType.blockType.init(encodedData: data.suffix(from: idx))
                 blocks.append(block)
-                idx += Int(block.length)
+                idx += Int(block.data.count)
             } catch (let error) {
                 throw MessageError.parsingError(offset: idx, data: data.suffix(from: idx), error: error)
             }

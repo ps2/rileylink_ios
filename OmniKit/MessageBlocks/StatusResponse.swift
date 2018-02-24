@@ -25,6 +25,7 @@ public struct StatusResponse : MessageBlock {
         case injectionDone = 6
         case aboveFiftyUnits = 8
         case belowFiftyUnits = 9
+        case delayedPrime = 14 // Saw this after delaying prime for a day
         case inactive = 15
     }
     

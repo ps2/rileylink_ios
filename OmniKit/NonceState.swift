@@ -40,11 +40,14 @@ public class NonceState: RawRepresentable {
         return UInt32((UInt64(table[1]) + (UInt64(table[0]) << 16)) & 0xFFFFFFFF)
     }
     
-    func nextNonce() -> UInt32 {
-        let nonce = table[Int(2 + idx)]
+    public func advanceToNextNonce() {
+        let nonce = currentNonce()
         table[Int(2 + idx)] = generateEntry()
         idx = UInt8(nonce & 0x0F)
-        return nonce
+    }
+    
+    public func currentNonce() -> UInt32 {
+        return table[Int(2 + idx)]
     }
     
     // RawRepresentable

@@ -13,10 +13,13 @@ class NonceStateTests: XCTestCase {
     
     func testInitialNonceValue() {
         let nonceState = NonceState(lot: 42560, tid: 661771)
-        XCTAssertEqual(nonceState.nextNonce(), 0x8c61ee59)
-        XCTAssertEqual(nonceState.nextNonce(), 0xc0256620)
-        XCTAssertEqual(nonceState.nextNonce(), 0x15022c8a)
-        XCTAssertEqual(nonceState.nextNonce(), 0xacf076ca)
+        XCTAssertEqual(nonceState.currentNonce(), 0x8c61ee59)
+        nonceState.advanceToNextNonce()
+        XCTAssertEqual(nonceState.currentNonce(), 0xc0256620)
+        nonceState.advanceToNextNonce()
+        XCTAssertEqual(nonceState.currentNonce(), 0x15022c8a)
+        nonceState.advanceToNextNonce()
+        XCTAssertEqual(nonceState.currentNonce(), 0xacf076ca)
     }
 }
 

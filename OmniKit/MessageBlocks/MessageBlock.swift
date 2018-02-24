@@ -20,6 +20,7 @@ public enum MessageBlockType: UInt8 {
     case getStatus          = 0x0e
     case cancelBasal        = 0x19
     case setInsulinSchedule = 0x1a
+    case deactivatePod      = 0x1c
     case statusResponse     = 0x1d
     case cancelBolus        = 0x1f
     
@@ -37,6 +38,8 @@ public enum MessageBlockType: UInt8 {
             return GetStatusCommand.self
         case .cancelBasal:
             return CancelBasalCommand.self
+        case .deactivatePod:
+            return DeactivatePodCommand.self
         case .statusResponse:
             return StatusResponse.self
         case .cancelBolus:

@@ -368,6 +368,7 @@
 		C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */; };
 		C1E6DC1E2041121600C2DEEB /* CancelBolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */; };
 		C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E6DC1F2041176C00C2DEEB /* StatusError.swift */; };
+		C1E6DC222041FA6D00C2DEEB /* DeactivatePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */; };
 		C1EAD6B31C826B6D006DBA60 /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */; };
 		C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */; };
 		C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6B01C826B6D006DBA60 /* MessageType.swift */; };
@@ -923,6 +924,7 @@
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
 		C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBolusCommand.swift; sourceTree = "<group>"; };
 		C1E6DC1F2041176C00C2DEEB /* StatusError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusError.swift; sourceTree = "<group>"; };
+		C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeactivatePodCommand.swift; sourceTree = "<group>"; };
 		C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
 		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
 		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1372,6 +1374,7 @@
 				C14D818A203FD23E00184B72 /* CancelBasalCommand.swift */,
 				C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */,
 				C1E6DC1F2041176C00C2DEEB /* StatusError.swift */,
+				C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2638,6 +2641,7 @@
 				C1130FC420159CD5007D13DB /* CRC8.swift in Sources */,
 				C18454222031EBB400EAD422 /* ConfigResponse.swift in Sources */,
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
+				C1E6DC222041FA6D00C2DEEB /* DeactivatePodCommand.swift in Sources */,
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
 				C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,

@@ -15,13 +15,13 @@ extension Data {
             return T(littleEndian: bytes.pointee)
         }
     }
-
+    
     func toBigEndian<T: FixedWidthInteger>(_: T.Type) -> T {
         return self.withUnsafeBytes {
             return T(bigEndian: $0.pointee)
         }
     }
-
+    
     mutating func append<T: FixedWidthInteger>(_ newElement: T) {
         var element = newElement.littleEndian
         append(UnsafeBufferPointer(start: &element, count: 1))
@@ -31,12 +31,18 @@ extension Data {
         var element = newElement.bigEndian
         append(UnsafeBufferPointer(start: &element, count: 1))
     }
-
+    
     init<T: FixedWidthInteger>(_ value: T) {
         var value = value.littleEndian
         self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
     }
+    
+    init<T: FixedWidthInteger>(bigEndian value: T) {
+        var value = value.bigEndian
+        self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
+    }
 }
+
 
 // String conversion methods, adapted from https://stackoverflow.com/questions/40276322/hex-binary-string-conversion-in-swift/40278391#40278391
 extension Data {

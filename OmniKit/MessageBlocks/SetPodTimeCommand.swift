@@ -35,7 +35,7 @@ public struct ConfirmPairingCommand : MessageBlock {
             blockType.rawValue,
             19,
             ])
-        data.append(contentsOf: self.address.bigEndian)
+        data.appendBigEndian(self.address)
         
         let year = UInt8((dateComponents.year ?? 2000) - 2000)
         let month = UInt8(dateComponents.month ?? 0)
@@ -53,8 +53,8 @@ public struct ConfirmPairingCommand : MessageBlock {
             minute
             ])
         data.append(data2)
-        data.append(contentsOf: self.lot.bigEndian)
-        data.append(contentsOf: self.tid.bigEndian)
+        data.appendBigEndian(self.lot)
+        data.appendBigEndian(self.tid)
         return data
     }
     
@@ -62,7 +62,7 @@ public struct ConfirmPairingCommand : MessageBlock {
         if encodedData.count < 21 {
             throw MessageBlockError.notEnoughData
         }
-        self.address = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        self.address = encodedData[2...].toBigEndian(UInt32.self)
         var components = DateComponents()
         components.day = Int(encodedData[8])
         components.month = Int(encodedData[9])
@@ -70,8 +70,8 @@ public struct ConfirmPairingCommand : MessageBlock {
         components.hour = Int(encodedData[11])
         components.minute = Int(encodedData[12])
         self.dateComponents = components
-        self.lot = UInt32(bigEndian: encodedData.subdata(in: 13..<17))
-        self.tid = UInt32(bigEndian: encodedData.subdata(in: 17..<21))
+        self.lot = encodedData[13...].toBigEndian(UInt32.self)
+        self.tid = encodedData[17...].toBigEndian(UInt32.self)
     }
     
     public init(address: UInt32, dateComponents: DateComponents, lot: UInt32, tid: UInt32) {

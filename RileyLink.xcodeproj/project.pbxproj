@@ -210,9 +210,8 @@
 		C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE520159EDC007D13DB /* GetStatusCommand.swift */; };
 		C1130FEA20159EDC007D13DB /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE620159EDC007D13DB /* StatusResponse.swift */; };
 		C1130FEB20159EDC007D13DB /* MessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE720159EDC007D13DB /* MessageBlock.swift */; };
-		C1130FED20159EE3007D13DB /* UInt32.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FEC20159EE2007D13DB /* UInt32.swift */; };
 		C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
-		C1130FEF2015AD41007D13DB /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* NSData.swift */; };
+		C1130FEF2015AD41007D13DB /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
 		C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198621C8DF4C800BC374C /* HistoryPageTests.swift */; };
@@ -271,7 +270,6 @@
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
 		C15FBB7B20422B8C00F31C1B /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */; };
-		C15FBB7D2042308E00F31C1B /* UInt16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FBB7C2042308E00F31C1B /* UInt16.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -754,7 +752,6 @@
 		C1130FE520159EDC007D13DB /* GetStatusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStatusCommand.swift; sourceTree = "<group>"; };
 		C1130FE620159EDC007D13DB /* StatusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponse.swift; sourceTree = "<group>"; };
 		C1130FE720159EDC007D13DB /* MessageBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBlock.swift; sourceTree = "<group>"; };
-		C1130FEC20159EE2007D13DB /* UInt32.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt32.swift; sourceTree = "<group>"; };
 		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198621C8DF4C800BC374C /* HistoryPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTests.swift; sourceTree = "<group>"; };
@@ -820,7 +817,6 @@
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
 		C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetInsulinScheduleCommand.swift; sourceTree = "<group>"; };
-		C15FBB7C2042308E00F31C1B /* UInt16.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt16.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
@@ -1361,9 +1357,7 @@
 		C1130FE220159EA2007D13DB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C1130FEC20159EE2007D13DB /* UInt32.swift */,
 				C14D8188203FD0C600184B72 /* Notification.swift */,
-				C15FBB7C2042308E00F31C1B /* UInt16.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2641,12 +2635,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1130FED20159EE3007D13DB /* UInt32.swift in Sources */,
 				C1130FEA20159EDC007D13DB /* StatusResponse.swift in Sources */,
-				C15FBB7D2042308E00F31C1B /* UInt16.swift in Sources */,
 				C1130FEB20159EDC007D13DB /* MessageBlock.swift in Sources */,
 				C1130FCA20159CD5007D13DB /* PodCommsSession.swift in Sources */,
-				C1130FEF2015AD41007D13DB /* NSData.swift in Sources */,
+				C1130FEF2015AD41007D13DB /* Data.swift in Sources */,
 				C18454202031DEA200EAD422 /* AssignAddressCommand.swift in Sources */,
 				C15FBB7B20422B8C00F31C1B /* SetInsulinScheduleCommand.swift in Sources */,
 				C1130FC420159CD5007D13DB /* CRC8.swift in Sources */,

@@ -22,7 +22,7 @@ public struct CancelBolusCommand : MessageBlock {
             blockType.rawValue,
             5,
             ])
-        data.append(contentsOf: nonce.bigEndian)
+        data.appendBigEndian(nonce)
         data.append(0x07) // Bolus type?
         return data
     }
@@ -31,7 +31,7 @@ public struct CancelBolusCommand : MessageBlock {
         if encodedData.count < 7 {
             throw MessageBlockError.notEnoughData
         }
-        self.nonce = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        self.nonce = encodedData[2...].toBigEndian(UInt32.self)
     }
     
     public init(nonce: UInt32) {

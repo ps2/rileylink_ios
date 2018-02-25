@@ -34,7 +34,7 @@ public struct Packet {
             throw PodCommsError.invalidData
         }
         
-        self.address = UInt32(bigEndian: encodedData[0..<4])
+        self.address = encodedData[0...].toBigEndian(UInt32.self)
         
         guard let packetType = PacketType(rawValue: encodedData[4] >> 5) else {
             throw PodCommsError.unknownPacketType(rawType: encodedData[4])
@@ -54,7 +54,7 @@ public struct Packet {
     }
     
     func encoded() -> Data {
-        var output = address.bigEndian
+        var output = Data(bigEndian: address)
         output.append(UInt8(packetType.rawValue << 5) + UInt8(sequenceNum & 0b11111))
         output.append(data)
         output.append(output.crc8())

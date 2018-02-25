@@ -118,7 +118,7 @@ public class PodCommsSession {
     func ackPacket(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) -> Packet {
         let addr1 = packetAddress ?? podState.address
         let addr2 = messageAddress ?? podState.address
-        return Packet(address: addr1, packetType: .ack, sequenceNum: packetNumber, data:addr2.bigEndian)
+        return Packet(address: addr1, packetType: .ack, sequenceNum: packetNumber, data:Data(bigEndian: addr2))
     }
     
     func ackUntilQuiet(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) throws {

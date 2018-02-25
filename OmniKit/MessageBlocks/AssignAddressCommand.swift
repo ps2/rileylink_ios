@@ -20,7 +20,7 @@ public struct AssignAddressCommand : MessageBlock {
             blockType.rawValue,
             4
         ])
-        data.append(contentsOf: self.address.bigEndian)
+        data.appendBigEndian(self.address)
         return data
     }
 
@@ -29,7 +29,7 @@ public struct AssignAddressCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         
-        self.address = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        self.address = encodedData[2...].toBigEndian(UInt32.self)
     }
     
     public init(address: UInt32) {

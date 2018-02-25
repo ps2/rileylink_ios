@@ -24,7 +24,7 @@ public struct RecordBolusCommand : MessageBlock {
             0x0d,
             byte2
             ])
-        data.append(contentsOf: UInt16(units * 200).bigEndian)
+        data.appendBigEndian(UInt16(units * 200))
         data.append(unknownSection)
         data.append(Data(hexadecimalString: "000000000000")!)
         return data
@@ -35,7 +35,7 @@ public struct RecordBolusCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         byte2 = encodedData[2]
-        units = Double(UInt16(bigEndian: encodedData.subdata(in: 3..<5))) / 200.0
+        units = Double(encodedData[3...].toBigEndian(UInt16.self)) / 200
         unknownSection = encodedData.subdata(in: 5..<9)
     }
     

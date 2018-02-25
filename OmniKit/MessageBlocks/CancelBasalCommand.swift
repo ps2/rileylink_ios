@@ -26,7 +26,7 @@ public struct CancelBasalCommand : MessageBlock {
             blockType.rawValue,
             length - 2,
             ])
-        data.append(contentsOf: nonce.bigEndian)
+        data.appendBigEndian(nonce)
         data.append(contentsOf: unknownSection)
         return data
     }
@@ -35,7 +35,7 @@ public struct CancelBasalCommand : MessageBlock {
         if encodedData.count < length {
             throw MessageBlockError.notEnoughData
         }
-        self.nonce = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        self.nonce = encodedData[2...].toBigEndian(UInt32.self)
         self.unknownSection = encodedData.subdata(in: 6..<(encodedData.count))
     }
     

@@ -31,8 +31,7 @@ struct Message {
         guard encodedData.count >= 10 else {
             throw MessageError.notEnoughData
         }
-        
-        self.address = UInt32(bigEndian: encodedData.subdata(in: 0..<4))
+        self.address = encodedData[0...].toBigEndian(UInt32.self)
         let b9 = encodedData[4]
         let bodyLen = encodedData[5]
         
@@ -68,7 +67,7 @@ struct Message {
     }
     
     func encoded() -> Data {
-        var bytes = address.bigEndian
+        var bytes = Data(bigEndian: address)
         
         var cmdData = Data()
         for cmd in messageBlocks {
@@ -86,10 +85,3 @@ struct Message {
     }
 }
 
-// MARK: - Helpers
-extension Data {
-    fileprivate mutating func appendBigEndian<T: FixedWidthInteger>(_ newElement: T) {
-        var element = newElement.byteSwapped
-        append(UnsafeBufferPointer(start: &element, count: 1))
-    }
-}

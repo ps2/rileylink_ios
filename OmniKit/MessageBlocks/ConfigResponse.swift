@@ -76,9 +76,9 @@ public struct ConfigResponse : MessageBlock {
             
             pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 2..<5))
             piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 5..<8))
-            lot = UInt32(bigEndian: encodedData.subdata(in: 10..<14))
-            tid = UInt32(bigEndian: encodedData.subdata(in: 14..<18))
-            address = UInt32(bigEndian: encodedData.subdata(in: 19..<23))
+            lot = encodedData[10...].toBigEndian(UInt32.self)
+            tid = encodedData[14...].toBigEndian(UInt32.self)
+            address = encodedData[19...].toBigEndian(UInt32.self)
             
         case 0x1d:
             // This is the response to the set time command
@@ -105,9 +105,9 @@ public struct ConfigResponse : MessageBlock {
             
             pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 9..<12))
             piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 12..<15))
-            lot = UInt32(bigEndian: encodedData.subdata(in: 17..<21))
-            tid = UInt32(bigEndian: encodedData.subdata(in: 21..<25))
-            address = UInt32(bigEndian: encodedData.subdata(in: 25..<29))
+            lot = encodedData[17...].toBigEndian(UInt32.self)
+            tid = encodedData[21...].toBigEndian(UInt32.self)
+            address = encodedData[25...].toBigEndian(UInt32.self)
 
         default:
             throw MessageBlockError.parseError

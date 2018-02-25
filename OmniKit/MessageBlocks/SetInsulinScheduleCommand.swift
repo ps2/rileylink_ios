@@ -51,7 +51,7 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             blockType.rawValue,
             0x0e,
             ])
-        data.append(contentsOf: nonce.bigEndian)
+        data.appendBigEndian(nonce)
         data.append(scheduleEntry.typeCode().rawValue)
         switch scheduleEntry {
         case .basal:
@@ -63,11 +63,11 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             let unitRate = UInt16(units / 0.1 / duration.hours)
             let fieldA = unitRate * multiplier
             var bolusData = Data(bytes: [01])
-            bolusData.append(contentsOf: fieldA.bigEndian)
-            bolusData.append(contentsOf: unitRate.bigEndian)
-            bolusData.append(contentsOf: unitRate.bigEndian)
+            bolusData.appendBigEndian(fieldA)
+            bolusData.appendBigEndian(unitRate)
+            bolusData.appendBigEndian(unitRate)
             let checksum = calculateChecksum(bolusData)
-            data.append(contentsOf: checksum.bigEndian)
+            data.appendBigEndian(checksum)
             data.append(contentsOf: bolusData)
         }
         return data
@@ -78,19 +78,19 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         //let length = encodedData[1]
-        nonce = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        nonce = encodedData[2...].toBigEndian(UInt32.self)
         
         guard let scheduleTypeCode = ScheduleTypeCode(rawValue: encodedData[6]) else {
             throw MessageError.unknownValue(value: encodedData[6], typeDescription: "ScheduleTypeCode")
         }
 
-        let checksum = UInt16(bigEndian: encodedData.subdata(in: 7..<9))
+        let checksum = encodedData[7...].toBigEndian(UInt16.self)
         let duration = TimeInterval(minutes: Double(encodedData[9] * 30))
 
         // These are placeholder names...
-        let fieldA = UInt16(bigEndian: encodedData.subdata(in: 10..<12))
-        let unitRate = UInt16(bigEndian: encodedData.subdata(in: 12..<14))
-        //let unitRateSchedule = UInt32(bigEndian: encodedData.subdata(in: 14..<16))
+        let fieldA = encodedData[10...].toBigEndian(UInt16.self)
+        let unitRate = encodedData[12...].toBigEndian(UInt16.self)
+        //let unitRateSchedule = encodedData[14...].toBigEndian(UInt16.self)
         
         let calculatedChecksum: UInt16
 

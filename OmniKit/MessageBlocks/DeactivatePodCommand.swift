@@ -22,7 +22,7 @@ public struct DeactivatePodCommand : MessageBlock {
             blockType.rawValue,
             4,
             ])
-        data.append(contentsOf: nonce.bigEndian)
+        data.appendBigEndian(nonce)
         return data
     }
     
@@ -30,7 +30,7 @@ public struct DeactivatePodCommand : MessageBlock {
         if encodedData.count < 6 {
             throw MessageBlockError.notEnoughData
         }
-        self.nonce = UInt32(bigEndian: encodedData.subdata(in: 2..<6))
+        self.nonce = encodedData[2...].toBigEndian(UInt32.self)
     }
     
     public init(nonce: UInt32) {

@@ -242,6 +242,7 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
+		C133C37820427F4100D85CC7 /* RecordBolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
@@ -269,6 +270,8 @@
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
+		C15FBB7B20422B8C00F31C1B /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */; };
+		C15FBB7D2042308E00F31C1B /* UInt16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FBB7C2042308E00F31C1B /* UInt16.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -787,6 +790,7 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
+		C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBolusCommand.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
@@ -815,6 +819,8 @@
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
+		C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetInsulinScheduleCommand.swift; sourceTree = "<group>"; };
+		C15FBB7C2042308E00F31C1B /* UInt16.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt16.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
@@ -1357,6 +1363,7 @@
 			children = (
 				C1130FEC20159EE2007D13DB /* UInt32.swift */,
 				C14D8188203FD0C600184B72 /* Notification.swift */,
+				C15FBB7C2042308E00F31C1B /* UInt16.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1375,6 +1382,8 @@
 				C1E6DC1D2041121600C2DEEB /* CancelBolusCommand.swift */,
 				C1E6DC1F2041176C00C2DEEB /* StatusError.swift */,
 				C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */,
+				C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */,
+				C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2634,10 +2643,12 @@
 			files = (
 				C1130FED20159EE3007D13DB /* UInt32.swift in Sources */,
 				C1130FEA20159EDC007D13DB /* StatusResponse.swift in Sources */,
+				C15FBB7D2042308E00F31C1B /* UInt16.swift in Sources */,
 				C1130FEB20159EDC007D13DB /* MessageBlock.swift in Sources */,
 				C1130FCA20159CD5007D13DB /* PodCommsSession.swift in Sources */,
 				C1130FEF2015AD41007D13DB /* NSData.swift in Sources */,
 				C18454202031DEA200EAD422 /* AssignAddressCommand.swift in Sources */,
+				C15FBB7B20422B8C00F31C1B /* SetInsulinScheduleCommand.swift in Sources */,
 				C1130FC420159CD5007D13DB /* CRC8.swift in Sources */,
 				C18454222031EBB400EAD422 /* ConfigResponse.swift in Sources */,
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
@@ -2653,6 +2664,7 @@
 				C1130FE820159EDC007D13DB /* PlaceholderMessageBlock.swift in Sources */,
 				C14D8189203FD0C600184B72 /* Notification.swift in Sources */,
 				C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */,
+				C133C37820427F4100D85CC7 /* RecordBolusCommand.swift in Sources */,
 				C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */,
 				C1130FCD20159CD5007D13DB /* NonceState.swift in Sources */,
 				C1E6DC1E2041121600C2DEEB /* CancelBolusCommand.swift in Sources */,

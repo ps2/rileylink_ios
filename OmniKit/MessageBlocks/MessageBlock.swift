@@ -18,6 +18,7 @@ public enum MessageBlockType: UInt8 {
     case confirmPairing     = 0x03
     case assignAddress      = 0x07
     case getStatus          = 0x0e
+    case recordBolus        = 0x17
     case cancelBasal        = 0x19
     case setInsulinSchedule = 0x1a
     case deactivatePod      = 0x1c
@@ -36,16 +37,18 @@ public enum MessageBlockType: UInt8 {
             return AssignAddressCommand.self
         case .getStatus:
             return GetStatusCommand.self
+        case .recordBolus:
+            return RecordBolusCommand.self
         case .cancelBasal:
             return CancelBasalCommand.self
+        case .setInsulinSchedule:
+            return SetInsulinScheduleCommand.self
         case .deactivatePod:
             return DeactivatePodCommand.self
         case .statusResponse:
             return StatusResponse.self
         case .cancelBolus:
             return CancelBolusCommand.self
-        default:
-            return PlaceholderMessageBlock.self
         }
     }
 }

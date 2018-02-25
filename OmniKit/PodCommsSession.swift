@@ -246,6 +246,28 @@ public class PodCommsSession {
     }
     
     public func setTime() throws {
+//        # Cancel Temp Delivery (#1)
+//        2017-09-11T11:07:55.989336 ID1:1f08ced2 PTYPE:PDM SEQ:12 ID2:1f08ced2 B9:08 BLEN:12 MTYPE:190a BODY:c8a1e9874c0000c8010201b3 CRC:80
+//        2017-09-11T11:07:56.064666 ID1:1f08ced2 PTYPE:POD SEQ:13 ID2:1f08ced2 B9:0c BLEN:10 MTYPE:1d03 BODY:00001000000003ff80e0 CRC:ce
+//        2017-09-11T11:07:56.074172 ID1:1f08ced2 PTYPE:ACK SEQ:14 ID2:1f08ced2 CRC:7e
+//        
+//        # Cancel Temp Delivery (#2)
+//        2017-09-11T11:07:56.732676 ID1:1f08ced2 PTYPE:PDM SEQ:15 ID2:1f08ced2 B9:10 BLEN:12 MTYPE:190a BODY:e3955e6078370005080282e1 CRC:29
+//        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
+//        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
+
+        let cancel1 = CancelBasalCommand(nonce: podState.nonceState.currentNonce(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1Response: StatusResponse = try sendCommand(cancel1)
+        print("cancel1Response = \(cancel1Response)")
+        try ackUntilQuiet()
+        podState.nonceState.advanceToNextNonce()
+        
+        let cancel2 = CancelBasalCommand(nonce: podState.nonceState.currentNonce(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel12Response: StatusResponse = try sendCommand(cancel2)
+        print("cancel1Response = \(cancel12Response)")
+        try ackUntilQuiet()
+        podState.nonceState.advanceToNextNonce()
+        
         
     }
     

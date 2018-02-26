@@ -117,6 +117,20 @@ public class PodCommsSession {
         messageNumber = (messageNumber + 1) & 0b1111
     }
     
+    func nonceValue() throws -> UInt32 {
+        guard let podState = self.podState else {
+            throw PodCommsError.noPairedPod
+        }
+        return podState.currentNonce
+    }
+    
+    func advanceToNextNonce() throws {
+        if podState == nil {
+            throw PodCommsError.noPairedPod
+        }
+        podState!.advanceToNextNonce()
+    }
+    
     func makeAckPacket(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) -> Packet {
         let addr1 = packetAddress ?? podState?.address ?? defaultAddress
         let addr2 = messageAddress ?? podState?.address ?? defaultAddress
@@ -202,17 +216,26 @@ public class PodCommsSession {
             }
         }()
         
-        incrementMessageNumber()
-        incrementMessageNumber()
-        
         guard response.messageBlocks.count > 0 else {
             throw PodCommsError.emptyResponse
         }
         
         guard let responseMessageBlock = response.messageBlocks[0] as? T else {
             let responseType = response.messageBlocks[0].blockType
+            
+            if responseType == .errorResponse, let errorResponse = response.messageBlocks[0] as? ErrorResponse, errorResponse.errorReponseType == .badNonce {
+                print("Pod returned bad nonce error.  Resyncing...")
+                self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
+            }
+            
+            
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
+        
+        incrementMessageNumber()
+        incrementMessageNumber()
+        
+        try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
 
         return responseMessageBlock
     }
@@ -233,7 +256,6 @@ public class PodCommsSession {
         let assignAddress = AssignAddressCommand(address: newAddress)
         let assignAddressMessage = Message(address: defaultAddress, messageBlocks: [assignAddress], sequenceNum: messageNumber)
         let config1: ConfigResponse = try sendMessage(assignAddressMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
-        try ackUntilQuiet(packetAddress: defaultAddress, messageAddress: newAddress)
         
         // Verify address is set
         let activationDate = Date()
@@ -241,7 +263,6 @@ public class PodCommsSession {
         let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
         let confirmPairingMessage = Message(address: defaultAddress, messageBlocks: [confirmPairing], sequenceNum: messageNumber)
         let config2: ConfigResponse = try sendMessage(confirmPairingMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
-        try ackUntilQuiet(packetAddress: defaultAddress, messageAddress: newAddress)
 
         guard config2.pairingState == .paired else {
             throw PodCommsError.invalidData
@@ -269,31 +290,29 @@ public class PodCommsSession {
 //        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
         
-        let cancel1 = CancelBasalCommand(nonce: newPodState.currentNonce, unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
         let cancel1Response: StatusResponse = try sendCommand(cancel1)
         print("cancel1Response = \(cancel1Response)")
-        try ackUntilQuiet()
-        self.podState?.advanceToNextNonce()
+        try advanceToNextNonce()
         
-        let cancel2 = CancelBasalCommand(nonce: newPodState.currentNonce, unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel2 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
         let cancel12Response: StatusResponse = try sendCommand(cancel2)
         print("cancel1Response = \(cancel12Response)")
-        try ackUntilQuiet()
-        self.podState?.advanceToNextNonce()
+        try advanceToNextNonce()
         
     }
     
     public func testingCommands() throws {
-        
+        let cancel2 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel12Response: StatusResponse = try sendCommand(cancel2)
+        print("cancel2Response = \(cancel12Response)")
+        try advanceToNextNonce()
     }
     
     public func getStatus() throws -> StatusResponse {
         
         let cmd = GetStatusCommand()
         let response: StatusResponse = try sendCommand(cmd)
-        
-        try ackUntilQuiet()
-
         return response
     }
     
@@ -310,8 +329,6 @@ public class PodCommsSession {
         
         print("cancelBolusResponse = \(cancelBolusResponse)")
         
-        try ackUntilQuiet()
-        
         self.podState?.advanceToNextNonce()
         
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
@@ -325,8 +342,5 @@ public class PodCommsSession {
 
         self.podState?.advanceToNextNonce()
     }
-    
-    
 }
-
 

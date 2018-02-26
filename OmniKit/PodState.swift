@@ -82,7 +82,12 @@ public struct PodState: RawRepresentable {
     public var currentNonce: UInt32 {
         return nonceState.currentNonce
     }
-
+    
+    public mutating func resyncNonce(syncWord: UInt16, sentNonce: UInt32, messageSequenceNum: Int) {
+        let sum = (sentNonce & 0xffff) + UInt32(crc16Table[messageSequenceNum]) + (lot & 0xffff) + (tid & 0xffff)
+        let seed = UInt16(sum & 0xffff) ^ syncWord
+        nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
+    }
 }
 
 fileprivate struct NonceState: RawRepresentable {
@@ -91,7 +96,7 @@ fileprivate struct NonceState: RawRepresentable {
     var table: [UInt32]
     var idx: UInt8
     
-    public init(lot: UInt32 = 0, tid: UInt32 = 0) {
+    public init(lot: UInt32 = 0, tid: UInt32 = 0, seed: UInt8 = 0) {
         table = Array(repeating: UInt32(0), count: 21)
         table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
         table[0] = table[0] & 0xFFFFFFFF
@@ -99,6 +104,8 @@ fileprivate struct NonceState: RawRepresentable {
         table[1] = table[1] & 0xFFFFFFFF
         
         idx = 0
+        
+        table[0] += UInt32(seed)
         
         for i in 0..<16 {
             table[2 + i] = generateEntry()

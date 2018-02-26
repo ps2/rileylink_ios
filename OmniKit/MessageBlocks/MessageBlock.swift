@@ -16,6 +16,7 @@ public enum MessageBlockType: UInt8 {
     case configResponse     = 0x01
     case statusError        = 0x02
     case confirmPairing     = 0x03
+    case errorResponse      = 0x06
     case assignAddress      = 0x07
     case getStatus          = 0x0e
     case recordBolus        = 0x17
@@ -33,6 +34,8 @@ public enum MessageBlockType: UInt8 {
             return StatusError.self
         case .confirmPairing:
             return ConfirmPairingCommand.self
+        case .errorResponse:
+            return ErrorResponse.self
         case .assignAddress:
             return AssignAddressCommand.self
         case .getStatus:

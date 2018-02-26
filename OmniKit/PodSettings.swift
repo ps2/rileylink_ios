@@ -44,7 +44,7 @@ public class PodSettings: RawRepresentable {
     
     public init(podAddress: UInt32? = nil) {
         self.podAddress = podAddress ?? 0x1f000000 | twentyBitsOfRandomness()
-        self.timeZone = .current
+        self.timeZone = .currentFixed
     }
     
     public var rawValue: RawValue {

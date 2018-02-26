@@ -216,6 +216,11 @@ public class PodCommsSession {
             }
         }()
         
+        incrementMessageNumber()
+        incrementMessageNumber()
+        
+        try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
+        
         guard response.messageBlocks.count > 0 else {
             throw PodCommsError.emptyResponse
         }
@@ -227,15 +232,9 @@ public class PodCommsSession {
                 print("Pod returned bad nonce error.  Resyncing...")
                 self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
             }
-            
-            
+            print("Unexpected response: \(responseType), \(response.messageBlocks[0]")
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
-        
-        incrementMessageNumber()
-        incrementMessageNumber()
-        
-        try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
 
         return responseMessageBlock
     }
@@ -321,7 +320,6 @@ public class PodCommsSession {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
-
         
         let cancelBolus = CancelBolusCommand(nonce: podState.currentNonce)
 

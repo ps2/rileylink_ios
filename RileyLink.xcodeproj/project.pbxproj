@@ -204,7 +204,7 @@
 		C1130FD920159D05007D13DB /* CRC8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FD320159D05007D13DB /* CRC8Tests.swift */; };
 		C1130FDA20159D05007D13DB /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FD420159D05007D13DB /* CRC16Tests.swift */; };
 		C1130FDB20159D05007D13DB /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FD520159D05007D13DB /* MessageTests.swift */; };
-		C1130FDC20159D05007D13DB /* NonceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FD620159D05007D13DB /* NonceStateTests.swift */; };
+		C1130FDC20159D05007D13DB /* PodStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FD620159D05007D13DB /* PodStateTests.swift */; };
 		C1130FE820159EDC007D13DB /* PlaceholderMessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE420159EDC007D13DB /* PlaceholderMessageBlock.swift */; };
 		C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE520159EDC007D13DB /* GetStatusCommand.swift */; };
 		C1130FEA20159EDC007D13DB /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE620159EDC007D13DB /* StatusResponse.swift */; };
@@ -746,7 +746,7 @@
 		C1130FD320159D05007D13DB /* CRC8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8Tests.swift; sourceTree = "<group>"; };
 		C1130FD420159D05007D13DB /* CRC16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16Tests.swift; sourceTree = "<group>"; };
 		C1130FD520159D05007D13DB /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
-		C1130FD620159D05007D13DB /* NonceStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonceStateTests.swift; sourceTree = "<group>"; };
+		C1130FD620159D05007D13DB /* PodStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodStateTests.swift; sourceTree = "<group>"; };
 		C1130FE420159EDC007D13DB /* PlaceholderMessageBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderMessageBlock.swift; sourceTree = "<group>"; };
 		C1130FE520159EDC007D13DB /* GetStatusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStatusCommand.swift; sourceTree = "<group>"; };
 		C1130FE620159EDC007D13DB /* StatusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponse.swift; sourceTree = "<group>"; };
@@ -1346,7 +1346,7 @@
 				C1130FD320159D05007D13DB /* CRC8Tests.swift */,
 				C1130FD420159D05007D13DB /* CRC16Tests.swift */,
 				C1130FD520159D05007D13DB /* MessageTests.swift */,
-				C1130FD620159D05007D13DB /* NonceStateTests.swift */,
+				C1130FD620159D05007D13DB /* PodStateTests.swift */,
 				C1130FD120159D05007D13DB /* PacketTests.swift */,
 				C1130FAC20159C29007D13DB /* Info.plist */,
 				C1130FD020159D04007D13DB /* OmniKitTests-Bridging-Header.h */,
@@ -2668,7 +2668,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1130FD920159D05007D13DB /* CRC8Tests.swift in Sources */,
-				C1130FDC20159D05007D13DB /* NonceStateTests.swift in Sources */,
+				C1130FDC20159D05007D13DB /* PodStateTests.swift in Sources */,
 				C1130FDA20159D05007D13DB /* CRC16Tests.swift in Sources */,
 				C1130FD720159D05007D13DB /* PacketTests.swift in Sources */,
 				C1130FDB20159D05007D13DB /* MessageTests.swift in Sources */,

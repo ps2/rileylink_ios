@@ -165,7 +165,8 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         podComms.runSession(withName: "Pairing new pod", using: device) { (session) in
             do {
-                try session.setupNewPOD()
+                // TODO: Let user choose between current and previously used timezone?
+                try session.setupNewPOD(timeZone: .currentFixed)
                 DispatchQueue.main.async {
                     self.interactionState = .priming
                 }

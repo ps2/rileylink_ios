@@ -234,15 +234,6 @@ extension RileyLinkDevice {
     }
 }
 
-// MARK: - Tuning configuration name management
-extension RileyLinkDevice {
-    public func setRadioConfigName(_ name: String) {
-        queue.async {
-            self.radioConfigName = name
-        }
-    }
-}
-
 
 // MARK: - CBCentralManagerDelegate Proxying
 extension RileyLinkDevice {

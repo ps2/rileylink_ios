@@ -38,6 +38,7 @@ class DeviceDataManager {
     }
     
     let podComms: PodComms
+    let podSettings: PodSettings
     
     private(set) var pumpSettings: PumpSettings? {
         get {
@@ -381,11 +382,14 @@ class DeviceDataManager {
         rileyLinkManager = RileyLinkDeviceManager(autoConnectIDs: connectedPeripheralIDs)
 
         var idleListeningEnabled = true
+        
+        podSettings = UserDefaults.standard.podSettings ?? PodSettings()
 
-        let podState = UserDefaults.standard.podState ?? PodState.initialPodState()
-        //let podState = PodState(address: 0x1f00ee9c, nonceState: NonceState(), isActive: false, timeZone: TimeZone.current)
-        podComms = PodComms(podState: podState)
+        let podState = UserDefaults.standard.podState
+        podComms = PodComms(podSettings: podSettings, podState: podState)
+        
         podComms.delegate = self
+        podSettings.delegate = self
 
         if let pumpSettings = UserDefaults.standard.pumpSettings {
             idleListeningEnabled = self.pumpState?.pumpModel?.hasMySentry ?? true
@@ -422,7 +426,13 @@ extension DeviceDataManager: PumpOpsDelegate {
 }
 
 extension DeviceDataManager: PodCommsDelegate {
-    func podComms(_ podComms: PodComms, didChange state: PodState) {
+    func podComms(_ podComms: PodComms, didChange state: PodState?) {
         UserDefaults.standard.podState = state
+    }
+}
+
+extension DeviceDataManager: PodSettingsDelegate {
+    func podSettingsChanged(_ podSettings: PodSettings) {
+        UserDefaults.standard.podSettings = podSettings
     }
 }

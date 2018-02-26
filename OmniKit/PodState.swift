@@ -12,19 +12,24 @@ public struct PodState: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public let address: UInt32
-    let nonceState: NonceState
-    public let isActive: Bool
+    fileprivate var nonceState: NonceState
+    public let activatedAt: Date
     public let timeZone: TimeZone
+    public let piVersion: String
+    public let pmVersion: String
+    public let lot: UInt32
+    public let tid: UInt32
 
-    public static func initialPodState() -> PodState {
-        return PodState(address: 0x1f0a000, nonceState: NonceState(), isActive: false, timeZone: .currentFixed)
-    }
-
-    public init(address: UInt32, nonceState: NonceState, isActive: Bool, timeZone: TimeZone) {
+    
+    public init(address: UInt32, activatedAt: Date, timeZone: TimeZone, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address
-        self.nonceState = nonceState
-        self.isActive = isActive
+        self.nonceState = NonceState(lot: lot, tid: tid)
+        self.activatedAt = activatedAt
         self.timeZone = timeZone
+        self.piVersion = piVersion
+        self.pmVersion = pmVersion
+        self.lot = lot
+        self.tid = tid
     }
 
     // RawRepresentable
@@ -33,30 +38,111 @@ public struct PodState: RawRepresentable {
         guard
             let address = rawValue["address"] as? UInt32,
             let nonceStateRaw = rawValue["nonceState"] as? NonceState.RawValue,
-            let isActive = rawValue["isActive"] as? Bool,
             let nonceState = NonceState(rawValue: nonceStateRaw),
+            let activatedAt = rawValue["activatedAt"] as? Date,
             let timeZoneSeconds = rawValue["timeZone"] as? Int,
-            let timeZone = TimeZone(secondsFromGMT: timeZoneSeconds)
+            let timeZone = TimeZone(secondsFromGMT: timeZoneSeconds),
+            let piVersion = rawValue["piVersion"] as? String,
+            let pmVersion = rawValue["pmVersion"] as? String,
+            let lot = rawValue["lot"] as? UInt32,
+            let tid = rawValue["tid"] as? UInt32
             else {
                 return nil
             }
         
         self.address = address
         self.nonceState = nonceState
-        self.isActive = isActive
+        self.activatedAt = activatedAt
         self.timeZone = timeZone
+        self.piVersion = piVersion
+        self.pmVersion = pmVersion
+        self.lot = lot
+        self.tid = tid
     }
     
     public var rawValue: RawValue {
         let rawValue: RawValue = [
             "address": address,
             "nonceState": nonceState.rawValue,
-            "isActive": isActive,
-            "timeZone": timeZone.secondsFromGMT()
+            "activatedAt": activatedAt,
+            "timeZone": timeZone.secondsFromGMT(),
+            "piVersion": piVersion,
+            "pmVersion": pmVersion,
+            "lot": lot,
+            "tid": tid
             ]
         
         return rawValue
     }
+    
+    public mutating func advanceToNextNonce() {
+        nonceState.advanceToNextNonce()
+    }
+    
+    public var currentNonce: UInt32 {
+        return nonceState.currentNonce
+    }
 
 }
+
+fileprivate struct NonceState: RawRepresentable {
+    public typealias RawValue = [String: Any]
+    
+    var table: [UInt32]
+    var idx: UInt8
+    
+    public init(lot: UInt32 = 0, tid: UInt32 = 0) {
+        table = Array(repeating: UInt32(0), count: 21)
+        table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
+        table[0] = table[0] & 0xFFFFFFFF
+        table[1] = (tid & 0xFFFF) + 0xAAAAE44E + (tid >> 16)
+        table[1] = table[1] & 0xFFFFFFFF
+        
+        idx = 0
+        
+        for i in 0..<16 {
+            table[2 + i] = generateEntry()
+        }
+        
+        idx = UInt8((table[0] + table[1]) & 0x0F)
+    }
+    
+    private mutating func generateEntry() -> UInt32 {
+        table[0] = ((table[0] >> 16) + (table[0] & 0xFFFF) * 0x5D7F) & 0xFFFFFFFF
+        table[1] = ((table[1] >> 16) + (table[1] & 0xFFFF) * 0x8CA0) & 0xFFFFFFFF
+        return UInt32((UInt64(table[1]) + (UInt64(table[0]) << 16)) & 0xFFFFFFFF)
+    }
+    
+    public mutating func advanceToNextNonce() {
+        let nonce = currentNonce
+        table[Int(2 + idx)] = generateEntry()
+        idx = UInt8(nonce & 0x0F)
+    }
+    
+    public var currentNonce: UInt32 {
+        return table[Int(2 + idx)]
+    }
+    
+    // RawRepresentable
+    public init?(rawValue: RawValue) {
+        guard
+            let table = rawValue["table"] as? [UInt32],
+            let idx = rawValue["idx"] as? UInt8
+            else {
+                return nil
+        }
+        self.table = table
+        self.idx = idx
+    }
+    
+    public var rawValue: RawValue {
+        let rawValue: RawValue = [
+            "table": table,
+            "idx": idx,
+        ]
+        
+        return rawValue
+    }
+}
+
 

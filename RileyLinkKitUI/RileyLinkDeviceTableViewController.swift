@@ -219,6 +219,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     private enum Section: Int, CaseCountable {
         case device
         case pump
+        case pod
         case commands
     }
 
@@ -235,6 +236,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case model
         case awake
     }
+    
+    private enum PodRow: Int, CaseCountable {
+        case address
+        case firmware
+        case activatedAt
+        case lot
+        case tid
+    }
+
     
     private enum Commands {
         case tune
@@ -311,6 +321,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return DeviceRow.count
         case .pump:
             return PumpRow.count
+        case .pod:
+            return PodRow.count
         case .commands:
             return availableCommands.count
         }
@@ -362,6 +374,44 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.setPumpModel(pumpState?.pumpModel)
             case .awake:
                 cell.setAwakeUntil(pumpState?.awakeUntil, formatter: dateFormatter)
+            }
+        case .pod:
+            switch PodRow(rawValue: indexPath.row)! {
+            case .address:
+                cell.textLabel?.text = NSLocalizedString("POD Address", comment: "The title of the cell showing POD address")
+                if let address = podComms.podState?.address {
+                    cell.detailTextLabel?.text = String(format: "0x%04x", address)
+                } else {
+                    cell.detailTextLabel?.text = "–"
+                }
+            case .firmware:
+                cell.textLabel?.text = NSLocalizedString("Firmware", comment: "The title of the cell showing POD firmware version")
+                if let podState = podComms.podState {
+                    cell.detailTextLabel?.text = "PM: \(String(describing: podState.pmVersion)) / PI: \(String(describing: podState.piVersion))"
+                } else {
+                    cell.detailTextLabel?.text = "–"
+                }
+            case .activatedAt:
+                cell.textLabel?.text = NSLocalizedString("Activated:", comment: "The title of the cell showing POD activated date")
+                if let podState = podComms.podState {
+                    cell.detailTextLabel?.text = dateFormatter.string(from: podState.activatedAt)
+                } else {
+                    cell.detailTextLabel?.text = "–"
+                }
+            case .lot:
+                cell.textLabel?.text = NSLocalizedString("Lot", comment: "The title of the cell showing POD lot id")
+                if let podState = podComms.podState {
+                    cell.detailTextLabel?.text = String(format: "L%d", podState.lot)
+                } else {
+                    cell.detailTextLabel?.text = "–"
+                }
+            case .tid:
+                cell.textLabel?.text = NSLocalizedString("TID", comment: "The title of the cell showing POD TID")
+                if let podState = podComms.podState {
+                    cell.detailTextLabel?.text = String(format: "T%d", podState.lot)
+                } else {
+                    cell.detailTextLabel?.text = "–"
+                }
             }
         case .commands:
             cell.accessoryType = .disclosureIndicator
@@ -439,6 +489,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return NSLocalizedString("Device", comment: "The title of the section describing the device")
         case .pump:
             return NSLocalizedString("Pump", comment: "The title of the section describing the pump")
+        case .pod:
+            return NSLocalizedString("POD", comment: "The title of the section describing the POD")
         case .commands:
             return NSLocalizedString("Commands", comment: "The title of the section describing commands")
         }
@@ -456,6 +508,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 return false
             }
         case .pump:
+            return false
+        case .pod:
             return false
         case .commands:
             return device.peripheralState == .connected
@@ -519,6 +573,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
             show(vc, sender: indexPath)
         case .pump:
+            break
+        case .pod:
             break
         }
     }

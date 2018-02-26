@@ -264,7 +264,7 @@ extension CommandResponseViewController {
             podComms.runSession(withName: "Set Pod Time", using: device, { (session) in
                 let response: String
                 do {
-                    try session.setTime()
+                    try session.testingCommands()
                     response = "OK"
                 } catch let error {
                     response = String(describing: error)

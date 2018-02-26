@@ -16,14 +16,16 @@ public enum PodCommsError: Error {
     case noResponse
     case emptyResponse
     case unexpectedPacketType(packetType: PacketType)
-    case unexpectedResponse(response: MessageBlockType, to: MessageBlockType)
+    case unexpectedResponse(response: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
+    case noPairedPod
 }
 
-fileprivate let RadioConfigurationName = "Omnipod433"
+fileprivate let defaultAddress: UInt32 = 0xffffffff
+
 
 public protocol PodCommsSessionDelegate: class {
-    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState)
+    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState?)
 }
 
 public class PodCommsSession {
@@ -31,8 +33,9 @@ public class PodCommsSession {
     var packetNumber = 0
     var messageNumber = 0
     
+    private let podSettings: PodSettings
     
-    private var podState: PodState {
+    private var podState: PodState? {
         didSet {
             delegate.podCommsSession(self, didChange: podState)
         }
@@ -43,7 +46,8 @@ public class PodCommsSession {
     let session: CommandSession
     let device: RileyLinkDevice
     
-    init(podState: PodState, session: CommandSession, device: RileyLinkDevice, delegate: PodCommsSessionDelegate) {
+    init(podSettings: PodSettings, podState: PodState?, session: CommandSession, device: RileyLinkDevice, delegate: PodCommsSessionDelegate) {
+        self.podSettings = podSettings
         self.podState = podState
         self.session = session
         self.device = device
@@ -102,8 +106,6 @@ public class PodCommsSession {
         try session.updateRegister(.paTable0, value: 0x84)
         try session.updateRegister(.sync1, value: 0xA5)
         try session.updateRegister(.sync0, value: 0x5A)
-        
-        device.setRadioConfigName(RadioConfigurationName)
     }
     
 
@@ -115,15 +117,15 @@ public class PodCommsSession {
         messageNumber = (messageNumber + 1) & 0b1111
     }
     
-    func ackPacket(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) -> Packet {
-        let addr1 = packetAddress ?? podState.address
-        let addr2 = messageAddress ?? podState.address
+    func makeAckPacket(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) -> Packet {
+        let addr1 = packetAddress ?? podState?.address ?? defaultAddress
+        let addr2 = messageAddress ?? podState?.address ?? defaultAddress
         return Packet(address: addr1, packetType: .ack, sequenceNum: packetNumber, data:Data(bigEndian: addr2))
     }
     
     func ackUntilQuiet(packetAddress: UInt32? = nil, messageAddress: UInt32? = nil) throws {
-        let ack = ackPacket(packetAddress: packetAddress, messageAddress: messageAddress)
-        let packetData = ack.encoded()
+        
+        let packetData = (makeAckPacket(packetAddress: packetAddress, messageAddress: messageAddress)).encoded()
 
         var quiet = false
         while !quiet {
@@ -137,18 +139,24 @@ public class PodCommsSession {
         incrementPacketNumber()
     }
     
-    func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
+    func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0, preambleExtention: TimeInterval = TimeInterval(milliseconds: 127)) throws -> Packet {
         let packetData = packet.encoded()
         var attemptCount = 0
         
         while retryCount - attemptCount > 0 {
             attemptCount += 1
             
-            guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount-attemptCount, preambleExtension: TimeInterval(milliseconds: 127)) else {
+            guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount-attemptCount, preambleExtension: preambleExtention) else {
                 throw PodCommsError.noResponse
             }
-        
-            let candidatePacket = try Packet(rfPacket: rfPacket)
+            
+            let candidatePacket: Packet
+            
+            do {
+                candidatePacket = try Packet(rfPacket: rfPacket)
+            } catch {
+                continue
+            }
         
             guard candidatePacket.address == packet.address else {
                 continue
@@ -168,12 +176,11 @@ public class PodCommsSession {
         throw PodCommsError.noResponse
     }
 
-    func sendCommand<T: MessageBlock>(_ command: MessageBlock, withDest: UInt32? = nil) throws -> T {
-        let dest = withDest ?? podState.address
-        let msg = Message(address: dest, messageBlocks: [command], sequenceNum: messageNumber)
-        
+    func sendMessage<T: MessageBlock>(_ message: Message, packetAddressOverride: UInt32? = nil, ackAddressOverride: UInt32? = nil) throws -> T {
+        let packetAddress = packetAddressOverride ?? podState?.address ?? defaultAddress
+
         // TODO: breaking msgData up into multiple packets if needed
-        let sendPacket = Packet(address: dest, packetType: .pdm, sequenceNum: packetNumber, data: msg.encoded())
+        let sendPacket = Packet(address: packetAddress, packetType: .pdm, sequenceNum: packetNumber, data: message.encoded())
         
         let responsePacket = try sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
         
@@ -184,7 +191,8 @@ public class PodCommsSession {
                 do {
                     return try Message(encodedData: responseData)
                 } catch MessageError.notEnoughData {
-                    let conPacket = try self.sendPacketAndGetResponse(packet: self.ackPacket(packetAddress: dest), retryCount: 5)
+                    let ackForCon = self.makeAckPacket(packetAddress: packetAddress, messageAddress: ackAddressOverride)
+                    let conPacket = try self.sendPacketAndGetResponse(packet: ackForCon, repeatCount: 3, retryCount: 5, preambleExtention:TimeInterval(milliseconds: 40))
                     
                     guard conPacket.packetType == .con else {
                         throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
@@ -203,71 +211,79 @@ public class PodCommsSession {
         
         guard let responseMessageBlock = response.messageBlocks[0] as? T else {
             let responseType = response.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType, to: command.blockType)
+            throw PodCommsError.unexpectedResponse(response: responseType)
         }
 
         return responseMessageBlock
     }
+
+    func sendCommand<T: MessageBlock>(_ command: MessageBlock) throws -> T {
+        let messageAddress = podState?.address ?? defaultAddress
+        let message = Message(address: messageAddress, messageBlocks: [command], sequenceNum: messageNumber)
+        return try sendMessage(message)
+    }
     
-    public func setupNewPOD() throws {
+
+    public func setupNewPOD(timeZone: TimeZone) throws {
         
-        // PDM sometimes increments by more than one?
-        let newAddress = podState.address + 1
+        podSettings.incrementAddress()
+        let newAddress = self.podSettings.podAddress
         
         // Assign Address
         let assignAddress = AssignAddressCommand(address: newAddress)
-        let config1: ConfigResponse = try sendCommand(assignAddress, withDest: 0xffffffff)
+        let assignAddressMessage = Message(address: defaultAddress, messageBlocks: [assignAddress], sequenceNum: messageNumber)
+        let config1: ConfigResponse = try sendMessage(assignAddressMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
+        try ackUntilQuiet(packetAddress: defaultAddress, messageAddress: newAddress)
         
-        try ackUntilQuiet(packetAddress: 0xffffffff, messageAddress: newAddress)
-        
-        podState = PodState(
-            address: newAddress,
-            nonceState: NonceState(lot: config1.lot, tid: config1.tid),
-            isActive: false,
-            timeZone: podState.timeZone)
-        
-
         // Verify address is set
-        let dateComponents = ConfirmPairingCommand.dateComponents(date: Date(), timeZone: podState.timeZone)
+        let activationDate = Date()
+        let dateComponents = ConfirmPairingCommand.dateComponents(date: activationDate, timeZone: timeZone)
         let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
-        let config2: ConfigResponse = try sendCommand(confirmPairing, withDest: 0xffffffff)
-    
-        try ackUntilQuiet(packetAddress: 0xffffffff, messageAddress: newAddress)
+        let confirmPairingMessage = Message(address: defaultAddress, messageBlocks: [confirmPairing], sequenceNum: messageNumber)
+        let config2: ConfigResponse = try sendMessage(confirmPairingMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
+        try ackUntilQuiet(packetAddress: defaultAddress, messageAddress: newAddress)
 
         guard config2.pairingState == .paired else {
             throw PodCommsError.invalidData
         }
         
-        podState = PodState(
+        let newPodState = PodState(
             address: newAddress,
-            nonceState: NonceState(lot: config1.lot, tid: config1.tid),
-            isActive: true,
-            timeZone: podState.timeZone)
-    }
-    
-    public func setTime() throws {
+            activatedAt: activationDate,
+            timeZone: timeZone,
+            piVersion: String(describing: config2.piVersion),
+            pmVersion: String(describing: config2.pmVersion),
+            lot: config2.lot,
+            tid: config2.tid
+        )
+        self.podState = newPodState
+        self.podSettings.timeZone = timeZone
+
 //        # Cancel Temp Delivery (#1)
 //        2017-09-11T11:07:55.989336 ID1:1f08ced2 PTYPE:PDM SEQ:12 ID2:1f08ced2 B9:08 BLEN:12 MTYPE:190a BODY:c8a1e9874c0000c8010201b3 CRC:80
 //        2017-09-11T11:07:56.064666 ID1:1f08ced2 PTYPE:POD SEQ:13 ID2:1f08ced2 B9:0c BLEN:10 MTYPE:1d03 BODY:00001000000003ff80e0 CRC:ce
 //        2017-09-11T11:07:56.074172 ID1:1f08ced2 PTYPE:ACK SEQ:14 ID2:1f08ced2 CRC:7e
-//        
+//
 //        # Cancel Temp Delivery (#2)
 //        2017-09-11T11:07:56.732676 ID1:1f08ced2 PTYPE:PDM SEQ:15 ID2:1f08ced2 B9:10 BLEN:12 MTYPE:190a BODY:e3955e6078370005080282e1 CRC:29
 //        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
-
-        let cancel1 = CancelBasalCommand(nonce: podState.nonceState.currentNonce(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        
+        let cancel1 = CancelBasalCommand(nonce: newPodState.currentNonce, unknownSection: Data(hexadecimalString: "4c0000c80102")!)
         let cancel1Response: StatusResponse = try sendCommand(cancel1)
         print("cancel1Response = \(cancel1Response)")
         try ackUntilQuiet()
-        podState.nonceState.advanceToNextNonce()
+        self.podState?.advanceToNextNonce()
         
-        let cancel2 = CancelBasalCommand(nonce: podState.nonceState.currentNonce(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel2 = CancelBasalCommand(nonce: newPodState.currentNonce, unknownSection: Data(hexadecimalString: "783700050802")!)
         let cancel12Response: StatusResponse = try sendCommand(cancel2)
         print("cancel1Response = \(cancel12Response)")
         try ackUntilQuiet()
-        podState.nonceState.advanceToNextNonce()
+        self.podState?.advanceToNextNonce()
         
+    }
+    
+    public func testingCommands() throws {
         
     }
     
@@ -282,7 +298,13 @@ public class PodCommsSession {
     }
     
     public func changePod() throws {
-        let cancelBolus = CancelBolusCommand(nonce: podState.nonceState.currentNonce())
+        
+        guard let podState = podState else {
+            throw PodCommsError.noPairedPod
+        }
+
+        
+        let cancelBolus = CancelBolusCommand(nonce: podState.currentNonce)
 
         let cancelBolusResponse: StatusResponse = try sendCommand(cancelBolus)
         
@@ -290,18 +312,18 @@ public class PodCommsSession {
         
         try ackUntilQuiet()
         
-        podState.nonceState.advanceToNextNonce()
+        self.podState?.advanceToNextNonce()
         
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
         // We don't know what to do with them, so skip for now.
         
-        let deactivatePod = DeactivatePodCommand(nonce: podState.nonceState.currentNonce())
+        let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         let deactivationResponse: StatusResponse = try sendCommand(deactivatePod)
         print("deactivationResponse = \(deactivationResponse)")
         
         try ackUntilQuiet()
 
-        podState.nonceState.advanceToNextNonce()
+        self.podState?.advanceToNextNonce()
     }
     
     

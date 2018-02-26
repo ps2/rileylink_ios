@@ -10,13 +10,12 @@ import Foundation
 import RileyLinkBLEKit
 
 public protocol PodCommsDelegate: class {
-    func podComms(_ podComms: PodComms, didChange state: PodState)
+    func podComms(_ podComms: PodComms, didChange state: PodState?)
 }
 
 public class PodComms {
-   
-
-    public private(set) var podState: PodState {
+    
+    public private(set) var podState: PodState? {
         didSet {
             if let delegate = delegate {
                 delegate.podComms(self, didChange: podState)
@@ -24,17 +23,20 @@ public class PodComms {
         }
     }
     
+    private let podSettings: PodSettings
+    
     private var configuredDevices: Set<RileyLinkDevice> = Set()
     
     public var podIsActive: Bool {
-        return podState.isActive
+        return podState != nil
     }
     
     public weak var delegate: PodCommsDelegate?
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
     
-    public init(podState: PodState) {
+    public init(podSettings: PodSettings, podState: PodState?) {
+        self.podSettings = podSettings
         self.podState = podState
     }
     
@@ -43,7 +45,7 @@ public class PodComms {
             let semaphore = DispatchSemaphore(value: 0)
             
             device.runSession(withName: name) { (commandSession) in
-                let podSession = PodCommsSession(podState: self.podState, session: commandSession, device: device, delegate: self)
+                let podSession = PodCommsSession(podSettings: self.podSettings, podState: self.podState, session: commandSession, device: device, delegate: self)
                 self.configureDevice(device, with: podSession)
                 block(podSession)
                 semaphore.signal()
@@ -84,7 +86,7 @@ public class PodComms {
 
 
 extension PodComms: PodCommsSessionDelegate {
-    public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
+    public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState?) {
         self.podState = state
     }
 }

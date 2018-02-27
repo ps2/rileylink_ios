@@ -23,8 +23,6 @@ public class PodComms {
         }
     }
     
-    private let podSettings: PodSettings
-    
     private var configuredDevices: Set<RileyLinkDevice> = Set()
     
     public var podIsActive: Bool {
@@ -35,8 +33,7 @@ public class PodComms {
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
     
-    public init(podSettings: PodSettings, podState: PodState?) {
-        self.podSettings = podSettings
+    public init(podState: PodState?) {
         self.podState = podState
     }
     
@@ -45,7 +42,7 @@ public class PodComms {
             let semaphore = DispatchSemaphore(value: 0)
             
             device.runSession(withName: name) { (commandSession) in
-                let podSession = PodCommsSession(podSettings: self.podSettings, podState: self.podState, session: commandSession, device: device, delegate: self)
+                let podSession = PodCommsSession(podState: self.podState, session: commandSession, device: device, delegate: self)
                 self.configureDevice(device, with: podSession)
                 block(podSession)
                 semaphore.signal()

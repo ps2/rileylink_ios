@@ -33,8 +33,6 @@ public class PodCommsSession {
     var packetNumber = 0
     var messageNumber = 0
     
-    private let podSettings: PodSettings
-    
     private var podState: PodState? {
         didSet {
             delegate.podCommsSession(self, didChange: podState)
@@ -46,8 +44,7 @@ public class PodCommsSession {
     let session: CommandSession
     let device: RileyLinkDevice
     
-    init(podSettings: PodSettings, podState: PodState?, session: CommandSession, device: RileyLinkDevice, delegate: PodCommsSessionDelegate) {
-        self.podSettings = podSettings
+    init(podState: PodState?, session: CommandSession, device: RileyLinkDevice, delegate: PodCommsSessionDelegate) {
         self.podState = podState
         self.session = session
         self.device = device
@@ -263,8 +260,8 @@ public class PodCommsSession {
 
     public func setupNewPOD(timeZone: TimeZone) throws {
         
-        podSettings.incrementAddress()
-        let newAddress = self.podSettings.podAddress
+        // Create random address with 20 bits.  Can we use all 24 bits?
+        let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
         
         // Assign Address
         let assignAddress = AssignAddressCommand(address: newAddress)
@@ -292,7 +289,6 @@ public class PodCommsSession {
             tid: config2.tid
         )
         self.podState = newPodState
-        self.podSettings.timeZone = timeZone
 
 //        # Cancel Temp Delivery (#1)
 //        2017-09-11T11:07:55.989336 ID1:1f08ced2 PTYPE:PDM SEQ:12 ID2:1f08ced2 B9:08 BLEN:12 MTYPE:190a BODY:c8a1e9874c0000c8010201b3 CRC:80

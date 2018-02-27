@@ -56,17 +56,4 @@ extension UserDefaults {
             set(newValue?.rawValue, forKey: Key.podState.rawValue)
         }
     }
-    
-    var podSettings: PodSettings? {
-        get {
-            guard let raw = dictionary(forKey: Key.podSettings.rawValue) else {
-                return nil
-            }
-            
-            return PodSettings(rawValue: raw)
-        }
-        set {
-            set(newValue?.rawValue, forKey: Key.podSettings.rawValue)
-        }
-    }
 }

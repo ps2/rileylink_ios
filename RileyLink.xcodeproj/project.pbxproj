@@ -269,7 +269,6 @@
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
 		C15FBB7B20422B8C00F31C1B /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */; };
-		C15FE5E72043136300DF9F0A /* PodSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FE5E62043136300DF9F0A /* PodSettings.swift */; };
 		C15FE5E92043A60100DF9F0A /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FE5E82043A60100DF9F0A /* ErrorResponse.swift */; };
 		C16843771CF00C0100D53CCD /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
@@ -817,7 +816,6 @@
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
 		C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetInsulinScheduleCommand.swift; sourceTree = "<group>"; };
-		C15FE5E62043136300DF9F0A /* PodSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodSettings.swift; sourceTree = "<group>"; };
 		C15FE5E82043A60100DF9F0A /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		C16843761CF00C0100D53CCD /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
@@ -1337,7 +1335,6 @@
 				C1130FBB20159CD4007D13DB /* PodComms.swift */,
 				C1130FBE20159CD4007D13DB /* PodCommsSession.swift */,
 				C1130FBF20159CD5007D13DB /* PodState.swift */,
-				C15FE5E62043136300DF9F0A /* PodSettings.swift */,
 			);
 			path = OmniKit;
 			sourceTree = "<group>";
@@ -2639,7 +2636,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1130FEA20159EDC007D13DB /* StatusResponse.swift in Sources */,
-				C15FE5E72043136300DF9F0A /* PodSettings.swift in Sources */,
 				C1130FEB20159EDC007D13DB /* MessageBlock.swift in Sources */,
 				C1130FCA20159CD5007D13DB /* PodCommsSession.swift in Sources */,
 				C1130FEF2015AD41007D13DB /* Data.swift in Sources */,

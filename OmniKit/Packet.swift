@@ -13,9 +13,19 @@ public enum PacketType: UInt8 {
     case pdm = 0b101
     case con = 0b100
     case ack = 0b010
+    
+    func maxBodyLen() -> Int {
+        switch self {
+        case .ack:
+            return 4
+        case .con, .pdm, .pod:
+            return 31
+        }
+    }
 }
 
 public struct Packet {
+
     let address: UInt32
     let packetType: PacketType
     let sequenceNum: Int
@@ -25,7 +35,13 @@ public struct Packet {
         self.address = address
         self.packetType = packetType
         self.sequenceNum = sequenceNum
-        self.data = data
+        
+        let bodyMaxLen = packetType.maxBodyLen()
+        if data.count > bodyMaxLen {
+            self.data = data.subdata(in: 0..<bodyMaxLen)
+        } else {
+            self.data = data
+        }
     }
     
     init(encodedData: Data) throws {

@@ -109,12 +109,12 @@ public class PodCommsSession {
     }
     
 
-    func incrementPacketNumber() {
-        packetNumber = (packetNumber + 1) & 0b11111
+    func incrementPacketNumber(_ count: Int = 1) {
+        packetNumber = (packetNumber + count) & 0b11111
     }
     
-    func incrementMessageNumber() {
-        messageNumber = (messageNumber + 1) & 0b1111
+    func incrementMessageNumber(_ count: Int = 1) {
+        messageNumber = (messageNumber + count) & 0b1111
     }
     
     func nonceValue() throws -> UInt32 {
@@ -181,8 +181,7 @@ public class PodCommsSession {
             }
             
             // Once we have verification that the POD heard us, we can increment our counters
-            incrementPacketNumber()
-            incrementPacketNumber()
+            incrementPacketNumber(2)
             
             return candidatePacket
         }
@@ -193,11 +192,28 @@ public class PodCommsSession {
     func sendMessage<T: MessageBlock>(_ message: Message, packetAddressOverride: UInt32? = nil, ackAddressOverride: UInt32? = nil) throws -> T {
         let packetAddress = packetAddressOverride ?? podState?.address ?? defaultAddress
 
-        // TODO: breaking msgData up into multiple packets if needed
-        let sendPacket = Packet(address: packetAddress, packetType: .pdm, sequenceNum: packetNumber, data: message.encoded())
         
-        let responsePacket = try sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
+        let responsePacket = try { () throws -> Packet in
+            var sentPacketsCount = 0
+            var dataRemaining = message.encoded()
+            while true {
+                let packetType: PacketType = sentPacketsCount > 0 ? .con : .pdm
+                let sendPacket = Packet(address: packetAddress, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
+                dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
+                if dataRemaining.count > 0 {
+                    let podAck = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
+                    print("Got podAck: \(podAck)")
+                    sentPacketsCount += 1
+                } else {
+                    let response = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
+                    sentPacketsCount += 1
+                    print("Got response: \(response)")
+                    return response
+                }
+            }
+        }()
         
+            
         // Assemble fragmented message from multiple packets
         let response =  try { () throws -> Message in
             var responseData = responsePacket.data
@@ -216,8 +232,7 @@ public class PodCommsSession {
             }
         }()
         
-        incrementMessageNumber()
-        incrementMessageNumber()
+        incrementMessageNumber(2)
         
         try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
         
@@ -232,7 +247,7 @@ public class PodCommsSession {
                 print("Pod returned bad nonce error.  Resyncing...")
                 self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
             }
-            print("Unexpected response: \(responseType), \(response.messageBlocks[0]")
+            print("Unexpected response: \(responseType), \(response.messageBlocks[0])")
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
 
@@ -299,13 +314,25 @@ public class PodCommsSession {
         print("cancel1Response = \(cancel12Response)")
         try advanceToNextNonce()
         
+        // Mark 2.6U delivery for prime
+        
+        // 1a0e bed2e16b 02 010a 01 01a0 0034 0034 170d 00 0208 000186a0
+        let primeUnits = 2.6
+        let scheduleEntry = SetInsulinScheduleCommand.ScheduleEntry.bolus(units: primeUnits, multiplier: 8)
+        let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), scheduleEntry: scheduleEntry)
+        let recordBolusCommand = RecordBolusCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let message = Message(address: newAddress, messageBlocks: [scheduleCommand, recordBolusCommand], sequenceNum: messageNumber)
+        let primeResponse: StatusResponse = try sendMessage(message)
+        print("primeResponse = \(primeResponse)")
+        try advanceToNextNonce()
     }
     
     public func testingCommands() throws {
-        let cancel2 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
-        let cancel12Response: StatusResponse = try sendCommand(cancel2)
-        print("cancel2Response = \(cancel12Response)")
-        try advanceToNextNonce()
+        
+    }
+    
+    public func insertCannula() throws {
+        
     }
     
     public func getStatus() throws -> StatusResponse {
@@ -320,25 +347,24 @@ public class PodCommsSession {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
-        
+
         let cancelBolus = CancelBolusCommand(nonce: podState.currentNonce)
 
         let cancelBolusResponse: StatusResponse = try sendCommand(cancelBolus)
-        
-        print("cancelBolusResponse = \(cancelBolusResponse)")
-        
         self.podState?.advanceToNextNonce()
-        
+
+        print("cancelBolusResponse = \(cancelBolusResponse)")
+
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
         // We don't know what to do with them, so skip for now.
-        
+
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         let deactivationResponse: StatusResponse = try sendCommand(deactivatePod)
         print("deactivationResponse = \(deactivationResponse)")
-        
+
         try ackUntilQuiet()
 
-        self.podState?.advanceToNextNonce()
+        self.podState = nil
     }
 }
 

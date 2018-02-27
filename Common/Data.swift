@@ -40,7 +40,7 @@ extension Data {
     init<T: FixedWidthInteger>(bigEndian value: T) {
         var value = value.bigEndian
         self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
-    }
+    }    
 }
 
 

@@ -35,5 +35,19 @@ class PacketTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
+
+    func testPacketFragmenting() {
+        let longMessageData = Data(hexadecimalString:"02cb5000c92162368024632d8029623f002c62320031623b003463320039633d003c63310041623e0044633200496340004c6333005163448101627c8104627c8109627c810c62198111627c811460198103fe")!
+        let packet = Packet(address: 0x1f01482a, packetType: .pdm, sequenceNum: 13, data: longMessageData)
+        XCTAssertEqual(31, packet.data.count)
+        XCTAssertEqual("02cb5000c92162368024632d8029623f002c62320031623b00346332003963", packet.data.hexadecimalString)
+        let con1 = Packet(address: 0x1f01482a, packetType: .con, sequenceNum: 14, data: longMessageData.subdata(in: 31..<longMessageData.count))
+        XCTAssertEqual(31, con1.data.count)
+        XCTAssertEqual("3d003c63310041623e0044633200496340004c6333005163448101627c8104", con1.data.hexadecimalString)
+        let con2 = Packet(address: 0x1f01482a, packetType: .con, sequenceNum: 14, data: longMessageData.subdata(in: (31+31)..<longMessageData.count))
+        XCTAssertEqual(21, con2.data.count)
+        XCTAssertEqual("627c8109627c810c62198111627c811460198103fe", con2.data.hexadecimalString)
+        XCTAssertEqual(longMessageData, packet.data + con1.data + con2.data)
+    }
 }
 

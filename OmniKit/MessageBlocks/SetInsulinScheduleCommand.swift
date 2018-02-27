@@ -23,6 +23,7 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     public enum ScheduleEntry {
         case basal
         case tempBasal
+        // During prime, multiplier is 8, otherwise 16 (0x10)
         case bolus(units: Double, multiplier: UInt16)
         
         fileprivate func typeCode() -> ScheduleTypeCode {

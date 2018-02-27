@@ -28,7 +28,6 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case pleaseWaitForDeactivation
         case removeBacking
         case insertCannula
-        case pleaseWaitForActivePod
         case checkInfusionSite
         
         var instructions: String {
@@ -41,6 +40,14 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
                 return String(format: NSLocalizedString("Error occurred while %1$@: %2$@", comment: "The format string description of a communication error. (1: the action during which the error occurred) (2: The error that occurred"), action, String(describing: error))
             case .priming:
                 return NSLocalizedString("Priming...", comment: "Message for priming screen")
+            case .prepareSite:
+                return NSLocalizedString("Prepare site. Remove pod's needle cap.  If cannula sticks out, press Discard", comment: "Message for prepare site screen")
+            case .removeBacking:
+                return NSLocalizedString("Remove pod's adhesive backing. If pod is wet or dirty, or adhesive is folded, press Discard. If pod OK, apply to site", comment: "Message for remove pod adhesive backing screen")
+            case .insertCannula:
+                return NSLocalizedString("Press Start to insert cannula and begin basal delivery.", comment: "Message for screen prepping user for cannula insertion")
+            case .checkInfusionSite:
+                return NSLocalizedString("Current basal is programmed. Check infusion site and cannula. Is cannula inserted properly?", comment: "Message for check infusion site screen")
             default:
                 return "Not implemented yet."
             }
@@ -48,9 +55,9 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         var okButtonText: String? {
             switch self {
-            case .noActivePod:
+            case .noActivePod, .checkInfusionSite:
                 return NSLocalizedString("Yes", comment: "Affirmatitve response to question")
-            case .fillNewPod:
+            case .fillNewPod, .prepareSite, .removeBacking:
                 return NSLocalizedString("Next", comment: "Button text for next action")
             default:
                 return nil
@@ -59,10 +66,12 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
 
         var cancelButtonText: String? {
             switch self {
-            case .noActivePod:
+            case .noActivePod, .checkInfusionSite:
                 return NSLocalizedString("No", comment: "Negative response to question")
             case .fillNewPod:
                 return NSLocalizedString("Cancel", comment: "Button text to cancel")
+            case .prepareSite, .removeBacking:
+                return NSLocalizedString("Discard", comment: "Button text to discard")
             default:
                 return nil
             }
@@ -138,7 +147,15 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case .noActivePod:
             interactionState = .fillNewPod
         case .fillNewPod:
-            initialPairing()
+            pair()
+        case .prepareSite:
+            interactionState = .removeBacking
+        case .removeBacking:
+            interactionState = .insertCannula
+        case .insertCannula:
+            insertCannula()
+        case .checkInfusionSite:
+            _ = navigationController?.popViewController(animated: true)
         default:
             stepInstructions.text = "\"\(String(describing: sender.title(for: .normal)))\" not handled for state \(String(describing: interactionState))"
         }
@@ -161,7 +178,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         }
     }
 
-    func initialPairing() {
+    func pair() {
         
         podComms.runSession(withName: "Pairing new pod", using: device) { (session) in
             do {
@@ -177,5 +194,23 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             }
         }
     }
+
+    func insertCannula() {
+        
+        podComms.runSession(withName: "Insert cannula", using: device) { (session) in
+            do {
+                try session.insertCannula()
+                DispatchQueue.main.async {
+                    self.interactionState = .checkInfusionSite
+                }
+            } catch let error {
+                DispatchQueue.main.async {
+                    self.interactionState = .communicationError(during: "Address assignment", error: error)
+                }
+            }
+        }
+    }
+
+    
 }
 

@@ -392,9 +392,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     cell.detailTextLabel?.text = "–"
                 }
             case .activatedAt:
-                cell.textLabel?.text = NSLocalizedString("Activated:", comment: "The title of the cell showing POD activated date")
+                cell.textLabel?.text = NSLocalizedString("Activated", comment: "The title of the cell showing POD activated date")
                 if let podState = podComms.podState {
-                    cell.detailTextLabel?.text = dateFormatter.string(from: podState.activatedAt)
+                    let dateStr = DateFormatter.localizedString(from: podState.activatedAt, dateStyle: .medium, timeStyle: .medium)
+                    cell.detailTextLabel?.text = dateStr
                 } else {
                     cell.detailTextLabel?.text = "–"
                 }
@@ -408,7 +409,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .tid:
                 cell.textLabel?.text = NSLocalizedString("TID", comment: "The title of the cell showing POD TID")
                 if let podState = podComms.podState {
-                    cell.detailTextLabel?.text = String(format: "T%d", podState.lot)
+                    cell.detailTextLabel?.text = String(format: "T%d", podState.tid)
                 } else {
                     cell.detailTextLabel?.text = "–"
                 }

@@ -17,7 +17,7 @@ public enum PumpErrorCode: UInt8 {
     public var description: String {
         switch self {
         case .commandRefused:
-            return NSLocalizedString("Command refused", comment: "Pump error code returned when command refused")
+            return NSLocalizedString("Command refused; check if pump suspended, prime menu unfinished, or temp basal set to %", comment: "Pump error code returned when command refused")
         case .maxSettingExceeded:
             return NSLocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
         case .bolusInProgress:

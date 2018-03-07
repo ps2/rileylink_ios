@@ -113,7 +113,7 @@ public class PumpOps {
 
 
 extension PumpOps: PumpOpsSessionDelegate {
-    func pumpOpsSession(_ pumpOpsSynchronous: PumpOpsSession, didChange state: PumpState) {
+    func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
         self.pumpState = state
     }
 }

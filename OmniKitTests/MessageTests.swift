@@ -141,7 +141,7 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testSetInsulinScheduleCommand() {
+    func testSetBolusCommand() {
         //    2017-09-11T11:07:57.476872 ID1:1f08ced2 PTYPE:PDM SEQ:18 ID2:1f08ced2 B9:18 BLEN:31 MTYPE:1a0e BODY:bed2e16b02010a0101a000340034170d000208000186a0 CRC:fd
         //    2017-09-11T11:07:57.552574 ID1:1f08ced2 PTYPE:ACK SEQ:19 ID2:1f08ced2 CRC:b8
         //    2017-09-11T11:07:57.734557 ID1:1f08ced2 PTYPE:CON SEQ:20 CON:00000000000003c0 CRC:a9
@@ -151,19 +151,19 @@ class MessageTests: XCTestCase {
             let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0ebed2e16b02010a0101a000340034170d000208000186a0000000000000")!)
             XCTAssertEqual(0xbed2e16b, cmd.nonce)
             
-            if case SetInsulinScheduleCommand.ScheduleEntry.bolus(let units, let multiplier) = cmd.scheduleEntry {
+            if case SetInsulinScheduleCommand.DeliverySchedule.bolus(let units, let multiplier) = cmd.deliverySchedule {
                 XCTAssertEqual(2.6, units)
                 XCTAssertEqual(0x8, multiplier)
             } else {
-                XCTFail("Expected ScheduleEntry.bolus")
+                XCTFail("Expected ScheduleEntry.bolus type")
             }
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
         
         // Encode
-        let scheduleEntry = SetInsulinScheduleCommand.ScheduleEntry.bolus(units: 2.6, multiplier: 0x8)
-        let cmd = SetInsulinScheduleCommand(nonce: 0xbed2e16b, scheduleEntry: scheduleEntry)
+        let scheduleEntry = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: 2.6, multiplier: 0x8)
+        let cmd = SetInsulinScheduleCommand(nonce: 0xbed2e16b, deliverySchedule: scheduleEntry)
         XCTAssertEqual("1a0ebed2e16b02010a0101a000340034", cmd.data.hexadecimalString)
     }
     
@@ -185,6 +185,37 @@ class MessageTests: XCTestCase {
         // Encode
         let cmd = RecordBolusCommand(units: 2.6, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         XCTAssertEqual("170d000208000186a0000000000000", cmd.data.hexadecimalString)
+    }
+    
+    func testSetBasalScheduleCommand() {
+        do {
+            // Decode 1a 12 77a05551 00 0062 2b 1708 0000 f800 f800 f800
+            let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a1277a055510000622b17080000f800f800f800")!)
+            
+            XCTAssertEqual(0x77a05551, cmd.nonce)
+            if case SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(let entries) = cmd.deliverySchedule {
+                XCTAssertEqual(3, entries.count)
+            } else {
+                XCTFail("Expected ScheduleEntry.basalSchedule type")
+            }
+
+            switch cmd.deliverySchedule {
+            case .basalSchedule(let entries):
+                XCTAssertEqual(3, entries.count)
+            default:
+                break
+            }
+//            XCTAssertEqual(0x7c, cmd.byte2)
+//            XCTAssertEqual(Data(hexadecimalString: "00030d40"), cmd.unknownSection)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+//        let cmd = RecordBolusCommand(units: 2.6, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+//        XCTAssertEqual("170d000208000186a0000000000000", cmd.data.hexadecimalString)
+
     }
 
 }

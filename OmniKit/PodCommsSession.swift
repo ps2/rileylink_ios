@@ -314,8 +314,8 @@ public class PodCommsSession {
         
         // 1a0e bed2e16b 02 010a 01 01a0 0034 0034 170d 00 0208 000186a0
         let primeUnits = 2.6
-        let scheduleEntry = SetInsulinScheduleCommand.ScheduleEntry.bolus(units: primeUnits, multiplier: 8)
-        let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), scheduleEntry: scheduleEntry)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, multiplier: 8)
+        let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
         let recordBolusCommand = RecordBolusCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let message = Message(address: newAddress, messageBlocks: [scheduleCommand, recordBolusCommand], sequenceNum: messageNumber)
         let primeResponse: StatusResponse = try sendMessage(message)
@@ -324,7 +324,24 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
+        // Currently testing insertCannula commands
         
+//        2017-09-10T22:25:51.862835 ID1:1f00ee87 PTYPE:PDM SEQ:21 ID2:1f00ee87 B9:20 BLEN:12 MTYPE:190a BODY:fddb8e5538000ff003028255 CRC:09
+//        2017-09-10T22:26:03.623302 ID1:1f00ee87 PTYPE:POD SEQ:22 ID2:1f00ee87 B9:24 BLEN:10 MTYPE:1d05 BODY:00174000000007ff0253 CRC:83
+//        2017-09-10T22:26:03.624277 ID1:1f00ee87 PTYPE:ACK SEQ:23 ID2:1f00ee87 CRC:38
+        let cancelCmd = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
+        let cancelResponse: StatusResponse = try sendCommand(cancelCmd)
+        print("cancelResponse = \(cancelResponse)")
+        try advanceToNextNonce()
+        
+//        2017-09-10T22:26:30.775704 ID1:1f00ee87 PTYPE:PDM SEQ:26 ID2:1f00ee87 B9:a8 BLEN:36 MTYPE:1a12 BODY:ca45039b0001002d0bb00000f800f800f800130e400000 CRC:41
+//        2017-09-10T22:26:30.903969 ID1:1f00ee87 PTYPE:ACK SEQ:27 ID2:1f00ee87 CRC:ae
+//        2017-09-10T22:26:31.032435 ID1:1f00ee87 PTYPE:CON SEQ:28 CON:0c00d59f8000f015752a000272 CRC:7a
+        
+        // 1a 12 ca45039b 00 0100 2d 0bb00000f800f800f800130e4000000c00d59f8000f015752a00 0272
+//        let scheduleEntry = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule()
+//        let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), scheduleEntry: scheduleEntry)
+
     }
     
     public func insertCannula() throws {

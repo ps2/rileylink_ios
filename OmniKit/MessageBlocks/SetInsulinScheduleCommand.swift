@@ -21,18 +21,36 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     }
     
     public struct BasalScheduleEntry {
-        // Should assert duration % 30 == 0 and rate % 0.05 == 0 ?
-        let duration: TimeInterval
-        let rate: Double
+        let segments: Int
+        let pulses: Int
+        let alternateSegmentPulse: Bool
         
         public init(encodedData: Data) {
-            duration = TimeInterval(minutes: Double(((encodedData[0] >> 4) + 1) * 30))
-            rate = Double(encodedData[1] + 1) * 0.5
+            segments = Int(encodedData[0] >> 4) + 1
+            pulses = Int(encodedData[1])
+            alternateSegmentPulse = (encodedData[0] >> 3) & 0x1 == 1
+        }
+        
+        public init(segments: Int, pulses: Int, alternateSegmentPulse: Bool) {
+            self.segments = segments
+            self.pulses = pulses
+            self.alternateSegmentPulse = alternateSegmentPulse
+        }
+        
+        public var data: Data {
+            return Data(bytes: [
+                UInt8((segments - 1) << 4) + UInt8((alternateSegmentPulse ? 1 : 0) << 3),
+                UInt8(pulses)
+                ])
+        }
+        
+        public func totalPulses() -> UInt16 {
+            return UInt16(pulses) * UInt16(segments) + UInt16(alternateSegmentPulse ? segments / 2 : 0)
         }
     }
 
     public enum DeliverySchedule {
-        case basalSchedule(entries: [BasalScheduleEntry])
+        case basalSchedule(currentSegment: UInt8, secondsRemaining: UInt16, pulsesRemaining: UInt16, entries: [BasalScheduleEntry])
         case tempBasal
         // During prime, multiplier is 8, otherwise 16 (0x10)
         case bolus(units: Double, multiplier: UInt16)
@@ -48,12 +66,25 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             }
         }
         
-        fileprivate func data() -> Data {
+        fileprivate var data: Data {
             switch self {
-            case .basalSchedule(let entries):
-                return Data()
+            case .basalSchedule(let currentSegment, let secondsRemaining, let pulsesRemaining, let entries):
+                var data = Data(bytes: [currentSegment])
+                data.appendBigEndian(secondsRemaining << 3)
+                data.appendBigEndian(pulsesRemaining)
+                for entry in entries {
+                    data.append(entry.data)
+                }
+                return data
             case .bolus(let units, let multiplier):
-                return Data()
+                let duration = TimeInterval(minutes: 30)
+                let unitRate = UInt16(units / 0.1 / duration.hours)
+                let fieldA = unitRate * multiplier
+                var data = Data()
+                data.appendBigEndian(fieldA)
+                data.appendBigEndian(unitRate)
+                data.appendBigEndian(unitRate)
+                return data
             case .tempBasal:
                 return Data()
             }
@@ -61,8 +92,9 @@ public struct SetInsulinScheduleCommand : MessageBlock {
         
         fileprivate func checksum() -> UInt16 {
             switch self {
-            case .basalSchedule(let entries):
-                return 0x0
+            case .basalSchedule(let currentSegment, let secondsRemaining, let pulsesRemaining, let entries):
+                return data[0..<5].reduce(0) { $0 + UInt16($1) } +
+                    entries.reduce(0) { $0 + $1.totalPulses() }
             case .bolus(let units, let multiplier):
                 return 0x0
             case .tempBasal:
@@ -83,27 +115,12 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     public var data: Data {
         var data = Data(bytes: [
             blockType.rawValue,
-            0x0e,
+            UInt8(7 + deliverySchedule.data.count),
             ])
         data.appendBigEndian(nonce)
         data.append(deliverySchedule.typeCode().rawValue)
-        switch deliverySchedule {
-        case .basalSchedule:
-            break // TODO
-        case .tempBasal:
-            break // TODO
-        case .bolus(units: let units, multiplier: let multiplier):
-            let duration = TimeInterval(minutes: 30)
-            let unitRate = UInt16(units / 0.1 / duration.hours)
-            let fieldA = unitRate * multiplier
-            var bolusData = Data(bytes: [01])
-            bolusData.appendBigEndian(fieldA)
-            bolusData.appendBigEndian(unitRate)
-            bolusData.appendBigEndian(unitRate)
-            let checksum = calculateChecksum(bolusData)
-            data.appendBigEndian(checksum)
-            data.append(contentsOf: bolusData)
-        }
+        data.appendBigEndian(deliverySchedule.checksum())
+        data.append(deliverySchedule.data)
         return data
     }
     
@@ -124,12 +141,16 @@ public struct SetInsulinScheduleCommand : MessageBlock {
         switch scheduleTypeCode {
         case .basalSchedule:
             var entries = [BasalScheduleEntry]()
-            let numEntries = (length - 14) / 2
+            let numEntries = (length - 12) / 2
             for i in 0..<numEntries {
-                let dataStart = i*2 + 14
-                entries.append(BasalScheduleEntry(encodedData: encodedData.subdata(in: dataStart..<(dataStart+2))))
+                let dataStart = Int(i*2 + 14)
+                let entryData = encodedData.subdata(in: dataStart..<(dataStart+2))
+                entries.append(BasalScheduleEntry(encodedData: entryData))
             }
-            deliverySchedule = .basalSchedule(entries: entries)
+            let currentTableIndex = encodedData[9]
+            let secondsRemaining = encodedData[10...].toBigEndian(UInt16.self) >> 3
+            let pulsesRemaining = encodedData[12...].toBigEndian(UInt16.self)
+            deliverySchedule = .basalSchedule(currentSegment: currentTableIndex, secondsRemaining: secondsRemaining, pulsesRemaining: pulsesRemaining, entries: entries)
         case .tempBasal:
             deliverySchedule = .tempBasal
         case .bolus:

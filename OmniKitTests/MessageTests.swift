@@ -193,28 +193,23 @@ class MessageTests: XCTestCase {
             let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a1277a055510000622b17080000f800f800f800")!)
             
             XCTAssertEqual(0x77a05551, cmd.nonce)
-            if case SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(let entries) = cmd.deliverySchedule {
+            if case SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(let currentSegment, let secondsRemaining, let pulsesRemaining, let entries) = cmd.deliverySchedule {
+                XCTAssertEqual(0x2b, currentSegment)
+                XCTAssertEqual(737, secondsRemaining)
+                XCTAssertEqual(0, pulsesRemaining)
                 XCTAssertEqual(3, entries.count)
             } else {
                 XCTFail("Expected ScheduleEntry.basalSchedule type")
             }
-
-            switch cmd.deliverySchedule {
-            case .basalSchedule(let entries):
-                XCTAssertEqual(3, entries.count)
-            default:
-                break
-            }
-//            XCTAssertEqual(0x7c, cmd.byte2)
-//            XCTAssertEqual(Data(hexadecimalString: "00030d40"), cmd.unknownSection)
-            
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
         
         // Encode
-//        let cmd = RecordBolusCommand(units: 2.6, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
-//        XCTAssertEqual("170d000208000186a0000000000000", cmd.data.hexadecimalString)
+        let scheduleEntry = SetInsulinScheduleCommand.BasalScheduleEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
+        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, entries: [scheduleEntry, scheduleEntry, scheduleEntry])
+        let cmd = SetInsulinScheduleCommand(nonce: 0x77a05551, deliverySchedule: deliverySchedule)
+        XCTAssertEqual("1a1277a055510000622b17080000f800f800f800", cmd.data.hexadecimalString)
 
     }
 

@@ -227,7 +227,11 @@ extension PeripheralManager {
 
         log.debug("RL Send: %@", value.hexadecimalString)
 
-        try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
+        do {
+            try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)
+        } catch let error as PeripheralManagerError {
+            throw RileyLinkDeviceError.peripheralManagerError(error)
+        }
     }
 
     /// - Throws:

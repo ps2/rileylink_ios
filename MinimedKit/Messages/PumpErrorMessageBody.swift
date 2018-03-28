@@ -19,7 +19,7 @@ public enum PumpErrorCode: UInt8 {
         case .commandRefused:
             return NSLocalizedString("Command refused; check if pump suspended, prime menu unfinished, or temp basal set to %", comment: "Pump error code returned when command refused")
         case .maxSettingExceeded:
-            return NSLocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
+            return NSLocalizedString("Pump setting exceeded; Loop's max basal rate is set higher than the pump's max basal rate", comment: "Pump error code describing max setting exceeded")
         case .bolusInProgress:
             return NSLocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
         }

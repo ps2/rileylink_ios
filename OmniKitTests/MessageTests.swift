@@ -210,7 +210,31 @@ class MessageTests: XCTestCase {
         let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, entries: [scheduleEntry, scheduleEntry, scheduleEntry])
         let cmd = SetInsulinScheduleCommand(nonce: 0x77a05551, deliverySchedule: deliverySchedule)
         XCTAssertEqual("1a1277a055510000622b17080000f800f800f800", cmd.data.hexadecimalString)
+    }
 
+    func testBasalScheduleExtraCommand() {
+        do {
+            // Decode 130e40 00 1aea 001e8480 3840005b8d80
+            
+            let cmd = try BasalScheduleExtraCommand(encodedData: Data(hexadecimalString: "130e40001aea001e84803840005b8d80")!)
+            
+            XCTAssertEqual(0, cmd.currentEntryIndex)
+            XCTAssertEqual(689, cmd.remainingPulses)
+            XCTAssertEqual(TimeInterval(seconds: 20), cmd.delayUntilNextPulse)
+            XCTAssertEqual(1, cmd.rateEntries.count)
+            let entry = cmd.rateEntries[0]
+            XCTAssertEqual(TimeInterval(seconds: 60), entry.delayBetweenPulses)
+            XCTAssertEqual(1440, entry.totalPulses)
+            XCTAssertEqual(3.0, entry.rate)
+            XCTAssertEqual(TimeInterval(hours: 24), entry.duration)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let scheduleEntry = BasalScheduleExtraCommand.RateEntry(rate: 3.0, duration: TimeInterval(hours: 24))
+        let cmd = BasalScheduleExtraCommand.init(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: [scheduleEntry])
+        XCTAssertEqual("130e40001aea001e84803840005b8d80", cmd.data.hexadecimalString)
     }
 
 }

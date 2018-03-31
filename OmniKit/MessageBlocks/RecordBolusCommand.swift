@@ -10,7 +10,7 @@ import Foundation
 
 public struct RecordBolusCommand : MessageBlock {
     
-    public let blockType: MessageBlockType = .recordBolus
+    public let blockType: MessageBlockType = .bolusExtra
     
     public let units: Double
     public let byte2: UInt8

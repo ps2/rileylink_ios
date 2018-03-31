@@ -10,10 +10,6 @@ import Foundation
 
 public struct SetInsulinScheduleCommand : MessageBlock {
     
-//    2017-09-11T11:07:57.476872 ID1:1f08ced2 PTYPE:PDM SEQ:18 ID2:1f08ced2 B9:18 BLEN:31 MTYPE:1a0e BODY:bed2e16b02010a0101a000340034170d000208000186a0 CRC:fd
-//    2017-09-11T11:07:57.552574 ID1:1f08ced2 PTYPE:ACK SEQ:19 ID2:1f08ced2 CRC:b8
-//    2017-09-11T11:07:57.734557 ID1:1f08ced2 PTYPE:CON SEQ:20 CON:00000000000003c0 CRC:a9
-
     fileprivate enum ScheduleTypeCode: UInt8 {
         case basalSchedule = 0
         case tempBasal = 1
@@ -108,10 +104,6 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     public let nonce: UInt32
     public let deliverySchedule: DeliverySchedule
     
-    // 7ca8134d0200c401019000190019170d7c00fa00030d40
-    
-    // 1a 0e bed2e16b 02 010a 01 01a0 0034 0034 170d000208000186a0000000000000 03c0
-    // 0  1  2        6  7    9  10   12   14
     public var data: Data {
         var data = Data(bytes: [
             blockType.rawValue,

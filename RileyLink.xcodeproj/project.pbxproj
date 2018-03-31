@@ -246,6 +246,7 @@
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
+		C14C2CCB206ED88B00FE368C /* BasalScheduleExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C2CCA206ED88B00FE368C /* BasalScheduleExtraCommand.swift */; };
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C14D8189203FD0C600184B72 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D8188203FD0C600184B72 /* Notification.swift */; };
@@ -792,6 +793,7 @@
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
 		C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		C14C2CCA206ED88B00FE368C /* BasalScheduleExtraCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalScheduleExtraCommand.swift; sourceTree = "<group>"; };
 		C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NightscoutPumpEventsTests.swift; path = ../RileyLinkTests/NightscoutPumpEventsTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1378,6 +1380,7 @@
 				C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */,
 				C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */,
 				C15FE5E82043A60100DF9F0A /* ErrorResponse.swift */,
+				C14C2CCA206ED88B00FE368C /* BasalScheduleExtraCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2646,6 +2649,7 @@
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
 				C1E6DC222041FA6D00C2DEEB /* DeactivatePodCommand.swift in Sources */,
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
+				C14C2CCB206ED88B00FE368C /* BasalScheduleExtraCommand.swift in Sources */,
 				C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
 				C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */,

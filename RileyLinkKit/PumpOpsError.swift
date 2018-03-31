@@ -90,7 +90,7 @@ extension PumpOpsError: LocalizedError {
         case .unexpectedResponse:
             return NSLocalizedString("Pump responded unexpectedly.", comment: "")
         case .unknownPumpErrorCode(let code):
-            return String(format: NSLocalizedString("Unknown pump error code: %1$@.", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"),String(describing: code))
+            return String(format: NSLocalizedString("Unknown pump error code: %1$@.", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
         case .unknownPumpModel(let model):
             return String(format: NSLocalizedString("Unknown pump model: %@.", comment: ""), model)
         case .unknownResponse(rx: let data, during: let during):
@@ -99,6 +99,15 @@ extension PumpOpsError: LocalizedError {
             return String(format: NSLocalizedString("Pump error: %1$@.", comment: "The format string description of a Pump Error. (1: The specific error code)"), String(describing: errorCode))
         case .deviceError(let error):
             return String(format: NSLocalizedString("Device communication failed: %@.", comment: "Pump comms failure reason for an underlying peripheral error"), error.failureReason ?? "")
+        }
+    }
+
+    public var recoverySuggestion: String? {
+        switch self {
+        case .pumpError(let errorCode):
+            return errorCode.recoverySuggestion
+        default:
+            return nil
         }
     }
 }

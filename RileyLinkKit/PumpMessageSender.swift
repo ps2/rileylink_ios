@@ -41,7 +41,7 @@ protocol PumpMessageSender {
     func listen(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket?
 
     /// - Throws: LocalizedError
-    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws
+    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval, repeatCount: Int, delayBetweenPackets: TimeInterval, preambleExtension: TimeInterval?) throws
     
     /// - Throws: LocalizedError
     func enableCCLEDs() throws
@@ -51,7 +51,7 @@ extension PumpMessageSender {
     /// - Throws: PumpOpsError.deviceError
     func send(_ msg: PumpMessage) throws {
         do {
-            try send(MinimedPacket(outgoingData: msg.txData).encodedData(), onChannel: 0, timeout: 0)
+            try send(MinimedPacket(outgoingData: msg.txData).encodedData(), onChannel: 0, timeout: 0, repeatCount: 0, delayBetweenPackets: TimeInterval(0), preambleExtension: nil)
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }

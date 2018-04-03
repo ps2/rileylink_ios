@@ -204,10 +204,6 @@ public struct CommandSession {
         _ = try writeCommand(command, timeout: timeout)
     }
     
-    public func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws {
-        try send(data, onChannel: channel, timeout: timeout)
-    }
-
     /// - Throws: RileyLinkDeviceError
     public func setSoftwareEncoding(_ swEncodingType: SoftwareEncodingType) throws {
         guard firmwareVersion.supportsSoftwareEncoding else {

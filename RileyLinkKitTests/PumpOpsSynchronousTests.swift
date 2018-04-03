@@ -359,7 +359,7 @@ class PumpMessageSenderStub: PumpMessageSender {
         throw PumpOpsError.noResponse(during: "Tests")
     }
 
-    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws {
+    func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval, repeatCount: Int = 0, delayBetweenPackets: TimeInterval = TimeInterval(0), preambleExtension: TimeInterval? = nil) throws {
         // Do nothing
     }
 

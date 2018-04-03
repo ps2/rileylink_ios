@@ -150,6 +150,79 @@ public class PodCommsSession {
         incrementPacketNumber()
     }
     
+    func listenForPacket(address: UInt32, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
+        var attemptCount = 0
+        
+        while retryCount - attemptCount > 0 {
+            attemptCount += 1
+            
+            guard let rfPacket = try session.listen(onChannel: 0, timeout: timeout) else {
+                throw PodCommsError.noResponse
+            }
+            
+            let candidatePacket: Packet
+            
+            do {
+                candidatePacket = try Packet(rfPacket: rfPacket)
+            } catch {
+                continue
+            }
+            
+            guard candidatePacket.address == address else {
+                continue
+            }
+            
+            guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
+                continue
+            }
+            
+            // Once we have verification that the POD heard us, we can increment our counters
+            incrementPacketNumber(2)
+            
+            return candidatePacket
+        }
+        
+        throw PodCommsError.noResponse
+    }
+    
+    func listenForMessage<T: MessageBlock>(address: UInt32) throws -> T {
+        
+        // Assemble fragmented message from multiple packets
+        let message =  try { () throws -> Message in
+            var responseData = Data()
+            while true {
+                do {
+                    return try Message(encodedData: responseData)
+                } catch MessageError.notEnoughData {
+                    let packet = try self.listenForPacket(address: address)
+                    responseData += packet.data
+                }
+            }
+            }()
+        
+        incrementMessageNumber()
+        
+        try ackUntilQuiet(packetAddress: address, messageAddress: address)
+        
+        guard message.messageBlocks.count > 0 else {
+            throw PodCommsError.emptyResponse
+        }
+        
+        guard let messageBlock = message.messageBlocks[0] as? T else {
+            let messageType = message.messageBlocks[0].blockType
+            
+            if messageType == .errorResponse, let errorResponse = message.messageBlocks[0] as? ErrorResponse, errorResponse.errorReponseType == .badNonce {
+                print("Pod returned bad nonce error.  Resyncing...")
+                self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
+            }
+            print("Unexpected response: \(messageType), \(message.messageBlocks[0])")
+            throw PodCommsError.unexpectedResponse(response: messageType)
+        }
+        
+        return messageBlock
+    }
+
+    
     func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0, preambleExtention: TimeInterval = TimeInterval(milliseconds: 127)) throws -> Packet {
         let packetData = packet.encoded()
         var attemptCount = 0
@@ -344,8 +417,27 @@ public class PodCommsSession {
 
     }
     
+    // This is reall set schedule; need to take schedule as arg.
     public func insertCannula() throws {
+        guard let podState = podState else {
+            throw PodCommsError.noPairedPod
+        }
         
+        // Hardcoded 0.05 U/hr for 24 hours
+        let scheduleEntry = SetInsulinScheduleCommand.BasalScheduleEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
+        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, entries: [scheduleEntry, scheduleEntry, scheduleEntry])
+        let basalScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: deliverySchedule)
+        
+        let rateEntry = BasalScheduleExtraCommand.RateEntry(rate: 0.05, duration: TimeInterval(hours: 24))
+        let basalExtraCommand = BasalScheduleExtraCommand.init(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: [rateEntry])
+        
+        let message = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
+        
+        let statusResponse: StatusResponse = try sendMessage(message)
+        print("statusResponse = \(statusResponse)")
+
+        let statusResponse2: StatusResponse = try listenForMessage(address: podState.address)
+        print("statusResponse2 = \(statusResponse2)")
     }
     
     public func getStatus() throws -> StatusResponse {

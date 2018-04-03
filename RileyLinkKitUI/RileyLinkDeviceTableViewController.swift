@@ -258,7 +258,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readBasalSchedule
         case enableLED
         case omniGetStatus
-        case omniSetPodTime
+        case omniTestCommands
         case omniPairNewPod
         case omniChangePod
     }
@@ -277,7 +277,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private let omnipodCommands: [Commands] = [
         .omniGetStatus,
-        .omniSetPodTime,
+        .omniTestCommands,
         .omniChangePod
     ]
     
@@ -472,8 +472,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .omniPairNewPod:
                 cell.textLabel?.text = NSLocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 
-            case .omniSetPodTime:
-                cell.textLabel?.text = NSLocalizedString("Set Pod Time", comment: "The title of the command to set pod time")
+            case .omniTestCommands:
+                cell.textLabel?.text = NSLocalizedString("Omnipod Testing", comment: "The title of the command to run omnipod testing")
                 
             case .omniChangePod:
                 cell.textLabel?.text = NSLocalizedString("Change Pod", comment: "The title of the command to set change pod")
@@ -560,8 +560,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = CommandResponseViewController.enableLEDs(ops: ops, device: device)
             case .omniGetStatus:
                 vc = CommandResponseViewController.omniGetStatus(podComms: podComms, device: device)
-            case .omniSetPodTime:
-                vc = CommandResponseViewController.omniSetPodTime(podComms: podComms, device: device)
+            case .omniTestCommands:
+                vc = CommandResponseViewController.omniTesting(podComms: podComms, device: device)
             case .omniChangePod:
                 vc = CommandResponseViewController.omniChangePod(podComms: podComms, device: device)
             case .omniPairNewPod:

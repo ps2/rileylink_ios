@@ -10,6 +10,9 @@ import Foundation
 
 public struct SetInsulinScheduleCommand : MessageBlock {
     
+    private static let pulseSize: Double = 0.05
+
+    
     fileprivate enum ScheduleTypeCode: UInt8 {
         case basalSchedule = 0
         case tempBasal = 1
@@ -73,13 +76,13 @@ public struct SetInsulinScheduleCommand : MessageBlock {
                 }
                 return data
             case .bolus(let units, let multiplier):
-                let duration = TimeInterval(minutes: 30)
-                let unitRate = UInt16(units / 0.1 / duration.hours)
-                let fieldA = unitRate * multiplier
-                var data = Data()
+                let pulseCount = UInt16(units / pulseSize)
+                let fieldA = pulseCount * multiplier
+                let numHalfHourSegments: UInt8 = 1
+                var data = Data(bytes: [numHalfHourSegments])
                 data.appendBigEndian(fieldA)
-                data.appendBigEndian(unitRate)
-                data.appendBigEndian(unitRate)
+                data.appendBigEndian(pulseCount)
+                data.appendBigEndian(pulseCount)
                 return data
             case .tempBasal:
                 return Data()
@@ -88,11 +91,11 @@ public struct SetInsulinScheduleCommand : MessageBlock {
         
         fileprivate func checksum() -> UInt16 {
             switch self {
-            case .basalSchedule(let currentSegment, let secondsRemaining, let pulsesRemaining, let entries):
+            case .basalSchedule( _, _, _, let entries):
                 return data[0..<5].reduce(0) { $0 + UInt16($1) } +
                     entries.reduce(0) { $0 + $1.totalPulses() }
-            case .bolus(let units, let multiplier):
-                return 0x0
+            case .bolus:
+                return data[0..<7].reduce(0) { $0 + UInt16($1) }
             case .tempBasal:
                 return 0x0
             }

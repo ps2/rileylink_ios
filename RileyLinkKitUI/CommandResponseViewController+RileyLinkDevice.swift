@@ -259,9 +259,9 @@ extension CommandResponseViewController {
         }
     }
 
-    static func omniSetPodTime(podComms: PodComms, device: RileyLinkDevice) -> T {
+    static func omniTesting(podComms: PodComms, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
-            podComms.runSession(withName: "Set Pod Time", using: device, { (session) in
+            podComms.runSession(withName: "Testing Commands", using: device, { (session) in
                 let response: String
                 do {
                     try session.testingCommands()
@@ -273,7 +273,7 @@ extension CommandResponseViewController {
                     completionHandler(response)
                 }
             })
-            return NSLocalizedString("Setting pod time…", comment: "Progress message for setting pod time")
+            return NSLocalizedString("Testing omnipod commands…", comment: "Progress message for testing omnipod commands")
         }
     }
 

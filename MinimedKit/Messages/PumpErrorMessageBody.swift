@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum PumpErrorCode: UInt8 {
+public enum PumpErrorCode: UInt8, CustomStringConvertible {
     // commandRefused can happen when temp basal type is set incorrectly, during suspended pump, or unfinished prime.
     case commandRefused      = 0x08
     case maxSettingExceeded  = 0x09
@@ -17,11 +17,20 @@ public enum PumpErrorCode: UInt8 {
     public var description: String {
         switch self {
         case .commandRefused:
-            return NSLocalizedString("Command refused; check if pump suspended, prime menu unfinished, or temp basal set to %", comment: "Pump error code returned when command refused")
+            return NSLocalizedString("Command refused", comment: "Pump error code returned when command refused")
         case .maxSettingExceeded:
             return NSLocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
         case .bolusInProgress:
             return NSLocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
+        }
+    }
+
+    public var recoverySuggestion: String? {
+        switch self {
+        case .commandRefused:
+            return NSLocalizedString("Pump may be suspended, priming, or have an incorrect temp basal type", comment: "Suggestions for diagnosing a command refused pump error")
+        default:
+            return nil
         }
     }
 }

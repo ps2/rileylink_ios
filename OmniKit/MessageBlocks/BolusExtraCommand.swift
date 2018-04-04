@@ -1,5 +1,5 @@
 //
-//  RecordBolusCommand.swift
+//  BolusExtraCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/24/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RecordBolusCommand : MessageBlock {
+public struct BolusExtraCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .bolusExtra
     

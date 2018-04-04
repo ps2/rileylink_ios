@@ -22,7 +22,8 @@ public struct StatusResponse : MessageBlock {
         case pairingSuccess = 3
         case purging = 4
         case readyForInjection = 5
-        case injectionDone = 6
+        case injectionStarted = 6
+        case injectionDone = 7
         case aboveFiftyUnits = 8
         case belowFiftyUnits = 9
         case delayedPrime = 14 // Saw this after delaying prime for a day

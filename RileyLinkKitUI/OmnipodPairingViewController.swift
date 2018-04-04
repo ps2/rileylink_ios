@@ -56,8 +56,8 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         var okButtonText: String? {
             switch self {
             case .noActivePod, .checkInfusionSite:
-                return NSLocalizedString("Yes", comment: "Affirmatitve response to question")
-            case .fillNewPod, .prepareSite, .removeBacking:
+                return NSLocalizedString("Yes", comment: "Affirmative response to question")
+            case .fillNewPod, .prepareSite, .removeBacking, .insertCannula:
                 return NSLocalizedString("Next", comment: "Button text for next action")
             default:
                 return nil
@@ -70,7 +70,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
                 return NSLocalizedString("No", comment: "Negative response to question")
             case .fillNewPod:
                 return NSLocalizedString("Cancel", comment: "Button text to cancel")
-            case .prepareSite, .removeBacking:
+            case .prepareSite, .removeBacking, .insertCannula:
                 return NSLocalizedString("Discard", comment: "Button text to discard")
             default:
                 return nil
@@ -149,7 +149,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case .fillNewPod:
             pair()
         case .prepareSite:
-            interactionState = .removeBacking
+            finishPrime()
         case .removeBacking:
             interactionState = .insertCannula
         case .insertCannula:
@@ -196,6 +196,21 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             } catch let error {
                 DispatchQueue.main.async {
                     self.interactionState = .communicationError(during: "Address assignment", error: error)
+                }
+            }
+        }
+    }
+    
+    func finishPrime() {
+        podComms.runSession(withName: "Finish Prime", using: device) { (session) in
+            do {
+                try session.finishPrime()
+                DispatchQueue.main.async {
+                    self.interactionState = .removeBacking
+                }
+            } catch let error {
+                DispatchQueue.main.async {
+                    self.interactionState = .communicationError(during: "Finish Prime", error: error)
                 }
             }
         }

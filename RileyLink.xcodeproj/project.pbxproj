@@ -240,7 +240,7 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C12EA26A198B442100309FA4 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12EA269198B442100309FA4 /* Storyboard.storyboard */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
-		C133C37820427F4100D85CC7 /* RecordBolusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */; };
+		C133C37820427F4100D85CC7 /* BolusExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133C37720427F4100D85CC7 /* BolusExtraCommand.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
@@ -787,7 +787,7 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C12EA269198B442100309FA4 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
-		C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBolusCommand.swift; sourceTree = "<group>"; };
+		C133C37720427F4100D85CC7 /* BolusExtraCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusExtraCommand.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
@@ -1378,7 +1378,7 @@
 				C1E6DC1F2041176C00C2DEEB /* StatusError.swift */,
 				C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */,
 				C15FBB7A20422B8C00F31C1B /* SetInsulinScheduleCommand.swift */,
-				C133C37720427F4100D85CC7 /* RecordBolusCommand.swift */,
+				C133C37720427F4100D85CC7 /* BolusExtraCommand.swift */,
 				C15FE5E82043A60100DF9F0A /* ErrorResponse.swift */,
 				C14C2CCA206ED88B00FE368C /* BasalScheduleExtraCommand.swift */,
 			);
@@ -2660,7 +2660,7 @@
 				C1130FE820159EDC007D13DB /* PlaceholderMessageBlock.swift in Sources */,
 				C14D8189203FD0C600184B72 /* Notification.swift in Sources */,
 				C101FBE7203939FA00045593 /* SetPodTimeCommand.swift in Sources */,
-				C133C37820427F4100D85CC7 /* RecordBolusCommand.swift in Sources */,
+				C133C37820427F4100D85CC7 /* BolusExtraCommand.swift in Sources */,
 				C1130FE920159EDC007D13DB /* GetStatusCommand.swift in Sources */,
 				C1E6DC1E2041121600C2DEEB /* CancelBolusCommand.swift in Sources */,
 				C15FE5E92043A60100DF9F0A /* ErrorResponse.swift in Sources */,

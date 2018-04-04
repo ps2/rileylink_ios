@@ -45,7 +45,7 @@ public enum MessageBlockType: UInt8 {
         case .basalScheduleExtra:
             return BasalScheduleExtraCommand.self
         case .bolusExtra:
-            return RecordBolusCommand.self
+            return BolusExtraCommand.self
         case .cancelBasal:
             return CancelBasalCommand.self
         case .setInsulinSchedule:

@@ -389,40 +389,83 @@ public class PodCommsSession {
         let primeUnits = 2.6
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, multiplier: 8)
         let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
-        let recordBolusCommand = RecordBolusCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
-        let message = Message(address: newAddress, messageBlocks: [scheduleCommand, recordBolusCommand], sequenceNum: messageNumber)
+        let bolusExtraCommand = BolusExtraCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let message = Message(address: newAddress, messageBlocks: [scheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
         let primeResponse: StatusResponse = try sendMessage(message)
         print("primeResponse = \(primeResponse)")
+        try advanceToNextNonce()
+    }
+    
+    public func finishPrime() throws {
+        // 19 0a 365deab7 38000ff00302 80b0
+        let finishPrimeCommand = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
+        let response: StatusResponse = try sendCommand(finishPrimeCommand)
+        print("finish prime response = \(response)")
         try advanceToNextNonce()
     }
     
     public func testingCommands() throws {
         // Currently testing insertCannula commands
         
-        try insertCannula()
+        //try finishPrime()
+        //try insertCannula()
+        
+        guard let podState = podState else {
+            throw PodCommsError.noPairedPod
+        }
+
+        // Insert Cannula
+        // 1a0e7e30bf16020065010050000a000a
+        let insertionBolusAmount = 0.5
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, multiplier: 8)
+        let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
+        
+        // 17 0d 00 0064 0001 86a0000000000000
+        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
+        let setBolusResponse: StatusResponse = try sendMessage(setBolusMessage)
+        print("setBolusResponse = \(setBolusResponse)")
+        try advanceToNextNonce()
+
     }
     
-    // This is reall set schedule; need to take schedule as arg.
+    // TODO: Need to take schedule as parameter
     public func insertCannula() throws {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
         
+        // Set basal schedule
         // Hardcoded 0.05 U/hr for 24 hours
         let scheduleEntry = SetInsulinScheduleCommand.BasalScheduleEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
         let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, entries: [scheduleEntry, scheduleEntry, scheduleEntry])
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: deliverySchedule)
-        
         let rateEntry = BasalScheduleExtraCommand.RateEntry(rate: 0.05, duration: TimeInterval(hours: 24))
         let basalExtraCommand = BasalScheduleExtraCommand.init(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: [rateEntry])
-        
-        let message = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
-        
-        let statusResponse: StatusResponse = try sendMessage(message)
+        let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
+        let statusResponse: StatusResponse = try sendMessage(setBasalMessage)
+        try advanceToNextNonce()
         print("statusResponse = \(statusResponse)")
+        
+        // Cancel basal
+        // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
+        let cancelBasalCommand = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
+        let cancelBasalResponse: StatusResponse = try sendCommand(cancelBasalCommand)
+        print("cancelBasalResponse = \(cancelBasalResponse)")
+        try advanceToNextNonce()
 
-        let statusResponse2: StatusResponse = try listenForMessage(address: podState.address)
-        print("statusResponse2 = \(statusResponse2)")
+        // Insert Cannula
+        // 1a0e7e30bf16020065010050000a000a
+        let insertionBolusAmount = 0.5
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, multiplier: 8)
+        let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
+
+        // 17 0d 00 0064 0001 86a0000000000000
+        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
+        let setBolusResponse: StatusResponse = try sendMessage(setBolusMessage)
+        print("setBolusResponse = \(setBolusResponse)")
+        try advanceToNextNonce()
     }
     
     public func getStatus() throws -> StatusResponse {

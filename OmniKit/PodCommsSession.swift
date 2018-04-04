@@ -404,29 +404,25 @@ public class PodCommsSession {
         try advanceToNextNonce()
     }
     
-    public func testingCommands() throws {
-        // Currently testing insertCannula commands
-        
-        //try finishPrime()
-        //try insertCannula()
-        
+    public func bolus(units: Double) throws {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
-
-        // Insert Cannula
-        // 1a0e7e30bf16020065010050000a000a
-        let insertionBolusAmount = 0.5
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, multiplier: 8)
+        
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, multiplier: 16)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
         
         // 17 0d 00 0064 0001 86a0000000000000
-        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
         let setBolusResponse: StatusResponse = try sendMessage(setBolusMessage)
         print("setBolusResponse = \(setBolusResponse)")
         try advanceToNextNonce()
+    }
 
+    
+    public func testingCommands() throws {
+        try bolus(units: 5.0)
     }
     
     // TODO: Need to take schedule as parameter

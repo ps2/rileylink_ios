@@ -15,6 +15,7 @@ public enum PodCommsError: Error {
     case unknownPacketType(rawType: UInt8)
     case noResponse
     case emptyResponse
+    case podAckedInsteadOfReturningResponse
     case unexpectedPacketType(packetType: PacketType)
     case unexpectedResponse(response: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
@@ -283,7 +284,11 @@ public class PodCommsSession {
             }
         }()
         
-            
+        guard responsePacket.packetType != .ack else {
+            incrementMessageNumber()
+            throw PodCommsError.podAckedInsteadOfReturningResponse
+        }
+        
         // Assemble fragmented message from multiple packets
         let response =  try { () throws -> Message in
             var responseData = responsePacket.data
@@ -292,6 +297,7 @@ public class PodCommsSession {
                     return try Message(encodedData: responseData)
                 } catch MessageError.notEnoughData {
                     let ackForCon = self.makeAckPacket(packetAddress: packetAddress, messageAddress: ackAddressOverride)
+                    print("Sending ACK for CON")
                     let conPacket = try self.sendPacketAndGetResponse(packet: ackForCon, repeatCount: 3, retryCount: 5, preambleExtention:TimeInterval(milliseconds: 40))
                     
                     guard conPacket.packetType == .con else {
@@ -422,7 +428,8 @@ public class PodCommsSession {
 
     
     public func testingCommands() throws {
-        try bolus(units: 5.0)
+        try bolus(units: 1.0)
+        //try insertCannula()
     }
     
     // TODO: Need to take schedule as parameter
@@ -446,8 +453,13 @@ public class PodCommsSession {
         // Cancel basal
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
         let cancelBasalCommand = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
-        let cancelBasalResponse: StatusResponse = try sendCommand(cancelBasalCommand)
-        print("cancelBasalResponse = \(cancelBasalResponse)")
+        do {
+            let cancelBasalResponse: StatusResponse = try sendCommand(cancelBasalCommand)
+            print("cancelBasalResponse = \(cancelBasalResponse)")
+        } catch PodCommsError.podAckedInsteadOfReturningResponse {
+            print("pod acked?")
+        }
+        
         try advanceToNextNonce()
 
         // Insert Cannula

@@ -77,6 +77,15 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             }
         }
         
+        var showActivity: Bool {
+            switch self {
+            case .priming:
+                return true
+            default:
+                return false
+            }
+        }
+        
         var progress: Float? {
             switch self {
             case .fillNewPod:
@@ -121,6 +130,11 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             } else {
                 progressView.isHidden = true
             }
+            if interactionState.showActivity {
+                self.activityIndicator.startAnimating()
+            } else {
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
     
@@ -129,6 +143,8 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var okButton: UIButton!
     @IBOutlet var cancelButton: UIButton!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+
 
     public init(podComms: PodComms, device: RileyLinkDevice) {
         self.podComms = podComms
@@ -149,7 +165,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case .fillNewPod:
             pair()
         case .prepareSite:
-            finishPrime()
+            interactionState = .removeBacking
         case .removeBacking:
             interactionState = .insertCannula
         case .insertCannula:
@@ -180,19 +196,18 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
 
     func pair() {
         
+        self.interactionState = .priming
+        
         podComms.runSession(withName: "Pairing new pod", using: device) { (session) in
             do {
-                DispatchQueue.main.async {
-                    self.interactionState = .priming
-                }
 
                 // TODO: Let user choose between current and previously used timezone?
                 try session.setupNewPOD(timeZone: .currentFixed)
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(55)) {
                     self.interactionState = .prepareSite
+                    self.finishPrime()
                 }
-
             } catch let error {
                 DispatchQueue.main.async {
                     self.interactionState = .communicationError(during: "Address assignment", error: error)
@@ -205,9 +220,6 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         podComms.runSession(withName: "Finish Prime", using: device) { (session) in
             do {
                 try session.finishPrime()
-                DispatchQueue.main.async {
-                    self.interactionState = .removeBacking
-                }
             } catch let error {
                 DispatchQueue.main.async {
                     self.interactionState = .communicationError(during: "Finish Prime", error: error)
@@ -226,7 +238,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
                 }
             } catch let error {
                 DispatchQueue.main.async {
-                    self.interactionState = .communicationError(during: "Address assignment", error: error)
+                    self.interactionState = .communicationError(during: "Cannula insertion", error: error)
                 }
             }
         }

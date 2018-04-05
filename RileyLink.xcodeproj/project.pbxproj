@@ -228,6 +228,10 @@
 		C1274F811D82411C0002912B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F7D1D82411C0002912B /* SettingsTableViewController.swift */; };
 		C1274F841D82420F0002912B /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F831D82420F0002912B /* RadioSelectionTableViewController.swift */; };
 		C1274F861D8242BE0002912B /* PumpRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F851D8242BE0002912B /* PumpRegion.swift */; };
+		C12B03EC207584AA00A65AE7 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12B03EB207584AA00A65AE7 /* BasalSchedule.swift */; };
+		C12B03EE207587C800A65AE7 /* BasalDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12B03ED207587C800A65AE7 /* BasalDeliveryTable.swift */; };
+		C12B03F02075951C00A65AE7 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12B03EF2075951C00A65AE7 /* Pod.swift */; };
+		C12B03F22075AAC900A65AE7 /* BasalScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12B03F12075AAC900A65AE7 /* BasalScheduleTests.swift */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
@@ -773,6 +777,10 @@
 		C1274F7D1D82411C0002912B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C1274F831D82420F0002912B /* RadioSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioSelectionTableViewController.swift; sourceTree = "<group>"; };
 		C1274F851D8242BE0002912B /* PumpRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpRegion.swift; sourceTree = "<group>"; };
+		C12B03EB207584AA00A65AE7 /* BasalSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalSchedule.swift; sourceTree = "<group>"; };
+		C12B03ED207587C800A65AE7 /* BasalDeliveryTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalDeliveryTable.swift; sourceTree = "<group>"; };
+		C12B03EF2075951C00A65AE7 /* Pod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pod.swift; sourceTree = "<group>"; };
+		C12B03F12075AAC900A65AE7 /* BasalScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalScheduleTests.swift; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA23A198B436800309FA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C12EA23C198B436800309FA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1337,6 +1345,9 @@
 				C1130FBB20159CD4007D13DB /* PodComms.swift */,
 				C1130FBE20159CD4007D13DB /* PodCommsSession.swift */,
 				C1130FBF20159CD5007D13DB /* PodState.swift */,
+				C12B03EB207584AA00A65AE7 /* BasalSchedule.swift */,
+				C12B03ED207587C800A65AE7 /* BasalDeliveryTable.swift */,
+				C12B03EF2075951C00A65AE7 /* Pod.swift */,
 			);
 			path = OmniKit;
 			sourceTree = "<group>";
@@ -1344,6 +1355,7 @@
 		C1130FA920159C28007D13DB /* OmniKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				C12B03F12075AAC900A65AE7 /* BasalScheduleTests.swift */,
 				C1130FD320159D05007D13DB /* CRC8Tests.swift */,
 				C1130FD420159D05007D13DB /* CRC16Tests.swift */,
 				C1130FD520159D05007D13DB /* MessageTests.swift */,
@@ -2647,10 +2659,13 @@
 				C1130FC420159CD5007D13DB /* CRC8.swift in Sources */,
 				C18454222031EBB400EAD422 /* ConfigResponse.swift in Sources */,
 				C1130FC720159CD5007D13DB /* PodComms.swift in Sources */,
+				C12B03F02075951C00A65AE7 /* Pod.swift in Sources */,
 				C1E6DC222041FA6D00C2DEEB /* DeactivatePodCommand.swift in Sources */,
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
+				C12B03EC207584AA00A65AE7 /* BasalSchedule.swift in Sources */,
 				C14C2CCB206ED88B00FE368C /* BasalScheduleExtraCommand.swift in Sources */,
 				C14D818B203FD23E00184B72 /* CancelBasalCommand.swift in Sources */,
+				C12B03EE207587C800A65AE7 /* BasalDeliveryTable.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
 				C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */,
 				C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */,
@@ -2675,6 +2690,7 @@
 				C1130FDC20159D05007D13DB /* PodStateTests.swift in Sources */,
 				C1130FDA20159D05007D13DB /* CRC16Tests.swift in Sources */,
 				C1130FD720159D05007D13DB /* PacketTests.swift in Sources */,
+				C12B03F22075AAC900A65AE7 /* BasalScheduleTests.swift in Sources */,
 				C1130FDB20159D05007D13DB /* MessageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

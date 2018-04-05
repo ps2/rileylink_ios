@@ -9,7 +9,6 @@
 import Foundation
 
 public struct BasalScheduleExtraCommand : MessageBlock {
-    private static let pulseSize: Double = 0.05
 
     public let blockType: MessageBlockType = .basalScheduleExtra
     
@@ -18,8 +17,8 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let delayBetweenPulses: TimeInterval
         
         public init(rate: Double, duration: TimeInterval) {
-            totalPulses = rate * duration.hours / pulseSize
-            delayBetweenPulses = TimeInterval(hours: 1) / rate * pulseSize
+            totalPulses = rate * duration.hours / podPulseSize
+            delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
         }
         
         public init(totalPulses: Double, delayBetweenPulses: TimeInterval) {
@@ -28,7 +27,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         }
 
         public var rate: Double {
-            return TimeInterval(hours: 1) / delayBetweenPulses * pulseSize
+            return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
         }
         
         public var duration: TimeInterval {
@@ -90,6 +89,18 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         self.remainingPulses = remainingPulses
         self.delayUntilNextPulse = delayUntilNextPulse
         self.rateEntries = rateEntries
+    }
+    
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval) {
+        self.rateEntries = schedule.entries.map { BasalScheduleExtraCommand.RateEntry(rate: $0.rate, duration: $0.duration) }
+        let (entryIndex, entry, entryStart) = schedule.lookup(offset: scheduleOffset)
+        self.currentEntryIndex = UInt8(entryIndex)
+        let timeRemainingInEntry = entry.duration - (scheduleOffset - entryStart)
+        let rate = schedule.rateAt(offset: scheduleOffset)
+        let pulsesPerHour = rate / podPulseSize
+        self.remainingPulses = ceil(timeRemainingInEntry * pulsesPerHour / TimeInterval(hours: 1))
+        let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
+        self.delayUntilNextPulse = timeBetweenPulses - scheduleOffset.truncatingRemainder(dividingBy: timeBetweenPulses)
     }
 }
 

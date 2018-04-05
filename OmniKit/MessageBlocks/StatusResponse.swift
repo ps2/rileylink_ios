@@ -74,11 +74,11 @@ public struct StatusResponse : MessageBlock {
         let highInsulinBits = Int(encodedData[2] & 0xf) << 9
         let midInsulinBits = Int(encodedData[3]) << 1
         let lowInsulinBits = Int(encodedData[4] >> 7)
-        self.insulin = 0.05 * Double(highInsulinBits | midInsulinBits | lowInsulinBits)
+        self.insulin = podPulseSize * Double(highInsulinBits | midInsulinBits | lowInsulinBits)
         
         self.podMessageCounter = (encodedData[4] >> 3) & 0xf
         
-        self.insulinNotDelivered = 0.05 * Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5]))
+        self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5]))
 
         let internalValue = ((encodedData[6] & 0x7f) << 1) | (encodedData[7] >> 7)
         

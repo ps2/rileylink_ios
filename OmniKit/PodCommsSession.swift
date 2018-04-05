@@ -432,23 +432,28 @@ public class PodCommsSession {
         //try insertCannula()
     }
     
+    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
+        guard let podState = podState else {
+            throw PodCommsError.noPairedPod
+        }
+
+        let basalScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), basalSchedule: schedule, scheduleOffset: scheduleOffset)
+        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset)
+        
+        let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
+        let statusResponse: StatusResponse = try sendMessage(setBasalMessage)
+        try advanceToNextNonce()
+        print("status after basal schedule set = \(statusResponse)")
+    }
+    
     // TODO: Need to take schedule as parameter
-    public func insertCannula() throws {
+    public func insertCannula(basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
         
         // Set basal schedule
-        // Hardcoded 0.05 U/hr for 24 hours
-        let scheduleEntry = SetInsulinScheduleCommand.BasalScheduleEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
-        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, entries: [scheduleEntry, scheduleEntry, scheduleEntry])
-        let basalScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: deliverySchedule)
-        let rateEntry = BasalScheduleExtraCommand.RateEntry(rate: 0.05, duration: TimeInterval(hours: 24))
-        let basalExtraCommand = BasalScheduleExtraCommand.init(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: [rateEntry])
-        let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
-        let statusResponse: StatusResponse = try sendMessage(setBasalMessage)
-        try advanceToNextNonce()
-        print("statusResponse = \(statusResponse)")
+        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset)
         
         // Cancel basal
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202

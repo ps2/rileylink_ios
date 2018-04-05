@@ -232,7 +232,20 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         podComms.runSession(withName: "Insert cannula", using: device) { (session) in
             do {
-                try session.insertCannula()
+                guard let podState = self.podComms.podState else {
+                    fatalError("insertCannula with no podState")
+                }
+                let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
+                let schedule = BasalSchedule(entries: [entry])
+                var calendar = Calendar.current
+                calendar.timeZone = podState.timeZone
+                let now = Date()
+                let components = calendar.dateComponents([.day , .month, .year], from: now)
+                guard let startOfSchedule = calendar.date(from: components) else {
+                    fatalError("invalid date")
+                }
+                let scheduleOffset = now.timeIntervalSince(startOfSchedule)
+                try session.insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
                 DispatchQueue.main.async {
                     self.interactionState = .checkInfusionSite
                 }

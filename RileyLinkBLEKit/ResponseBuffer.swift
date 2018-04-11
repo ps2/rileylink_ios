@@ -27,6 +27,6 @@ struct ResponseBuffer<R: Response> {
             return []
         }
 
-        return segments.flatMap { R(legacyData: $0) }
+        return segments.compactMap { R(legacyData: $0) }
     }
 }

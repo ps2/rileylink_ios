@@ -20,7 +20,7 @@ public struct RadioFirmwareVersion {
         }
 
         self.versionString = versionString
-        components = versionString[versionIndex...].split(separator: ".").flatMap({ Int($0) })
+        components = versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) })
     }
 
     private init(components: [Int]) {

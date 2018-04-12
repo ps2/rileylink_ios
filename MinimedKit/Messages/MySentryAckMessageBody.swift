@@ -35,7 +35,7 @@ public struct MySentryAckMessageBody: MessageBody {
 
         sequence = rxData[0]
         mySentryID = rxData.subdata(in: 1..<4)
-        responseMessageTypes = rxData[5..<9].flatMap({ MessageType(rawValue: $0) })
+        responseMessageTypes = rxData[5..<9].compactMap({ MessageType(rawValue: $0) })
     }
 
     public var txData: Data {

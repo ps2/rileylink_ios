@@ -9,7 +9,7 @@ import RileyLinkBLEKit
 
 extension RileyLinkDevice.Status {
     public var firmwareDescription: String {
-        let versions = [radioFirmwareVersion, bleFirmwareVersion].flatMap { (version: CustomStringConvertible?) -> String? in
+        let versions = [radioFirmwareVersion, bleFirmwareVersion].compactMap { (version: CustomStringConvertible?) -> String? in
             if let version = version {
                 return String(describing: version)
             } else {

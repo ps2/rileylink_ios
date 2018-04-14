@@ -11,368 +11,109 @@ import MinimedKit
 import RileyLinkBLEKit
 
 
+public protocol PumpOpsDelegate: class {
+    func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState)
+}
+
+
 public class PumpOps {
+
+    private var pumpSettings: PumpSettings
+
+    private var pumpState: PumpState {
+        didSet {
+            delegate.pumpOps(self, didChange: pumpState)
+        }
+    }
+
+    private var configuredDevices: Set<RileyLinkDevice> = Set()
+
+    private let sessionQueue = DispatchQueue(label: "com.rileylink.RileyLinkKit.PumpOps", qos: .utility)
+
+    private unowned let delegate: PumpOpsDelegate
     
-    public let pumpState: PumpState
-    public let device: RileyLinkBLEDevice
-    
-    public init(pumpState: PumpState, device: RileyLinkBLEDevice) {
-        self.pumpState = pumpState
-        self.device = device
-    }
-    
-    public func pressButton(_ completion: @escaping (Either<String, Error>) -> Void) {
-        device.runSession(withName: "Press button") { (session) -> Void in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            let message = PumpMessage(packetType: .carelink, address: self.pumpState.pumpID, messageType: .buttonPress, messageBody: ButtonPressCarelinkMessageBody(buttonType: .down))
-            do {
-                _ = try ops.runCommandWithArguments(message)
-                completion(.success("Success."))
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-    
-    public func getBasalSettings(_ completion: @escaping (Either<BasalSchedule, Error>) -> Void) {
-        device.runSession(withName: "Get Basal Settings") { (session) -> Void in
-            do {
-                let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-                
-                let basalSettings = try ops.getBasalSchedule()
-                completion(.success(basalSettings))
-            } catch let error {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    public func getPumpModel(_ completion: @escaping (Either<String, Error>) -> Void)  {
-        device.runSession(withName: "Get pump model") { (session) -> Void in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                let model = try ops.getPumpModelNumber()
+    public init(pumpSettings: PumpSettings, pumpState: PumpState?, delegate: PumpOpsDelegate) {
+        self.pumpSettings = pumpSettings
+        self.delegate = delegate
 
-                self.pumpState.pumpModel = PumpModel(rawValue: model)
-
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(model))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
+        if let pumpState = pumpState {
+            self.pumpState = pumpState
+        } else {
+            self.pumpState = PumpState()
+            self.delegate.pumpOps(self, didChange: self.pumpState)
         }
     }
-    
-    public func readSettings(_ completion: @escaping (Either<ReadSettingsCarelinkMessageBody, Error>) -> Void)  {
-        device.runSession(withName: "Read pump settings") { (session) -> Void in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                let response: ReadSettingsCarelinkMessageBody = try ops.messageBody(to: .readSettings)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+
+    public func updateSettings(_ settings: PumpSettings) {
+        sessionQueue.async {
+            let oldSettings = self.pumpSettings
+            self.pumpSettings = settings
+
+            if oldSettings.pumpID != settings.pumpID {
+                self.pumpState = PumpState()
             }
         }
     }
 
-    
-    public func getBatteryVoltage(_ completion: @escaping (Either<GetBatteryCarelinkMessageBody, Error>) -> Void)  {
-        device.runSession(withName: "Get battery voltage") { (session) -> Void in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                let response: GetBatteryCarelinkMessageBody = try ops.messageBody(to: .getBattery)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
+    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
+        sessionQueue.async {
+            deviceSelector { (device) in
+                guard let device = device else {
+                    block(nil)
+                    return
                 }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
+
+                self.runSession(withName: name, using: device, block)
             }
         }
     }
 
-    /**
-     Reads the current insulin reservoir volume.
-     
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    public func runSession(withName name: String, using device: RileyLinkDevice, _ block: @escaping (_ session: PumpOpsSession) -> Void) {
+        sessionQueue.async {
+            let semaphore = DispatchSemaphore(value: 0)
 
-     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(units, date): The reservoir volume, in units of insulin, and DateCompoments representing the pump's clock
-        - failure(error): An error describing why the command failed
-     */
-    public func readRemainingInsulin(_ completion: @escaping (Either<(units: Double, date: DateComponents), Error>) -> Void) {
-        device.runSession(withName: "Read remaining insulin") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                let pumpModel = try ops.getPumpModel()
-
-                let clockResp: ReadTimeCarelinkMessageBody = try ops.messageBody(to: .readTime)
-
-                let response: ReadRemainingInsulinMessageBody = try ops.messageBody(to: .readRemainingInsulin)
-
-                completion(.success((units: response.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit), date: clockResp.dateComponents)))
-            } catch let error {
-                completion(.failure(error))
+            device.runSession(withName: name) { (session) in
+                let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self)
+                self.configureDevice(device, with: session)
+                block(session)
+                semaphore.signal()
             }
+
+            semaphore.wait()
         }
     }
 
-    /**
-     Fetches history entries which occurred on or after the specified date.
- 
-     It is possible for Minimed Pumps to non-atomically append multiple history entries with the same timestamp, for example, `BolusWizardEstimatePumpEvent` may appear and be read before `BolusNormalPumpEvent` is written. Therefore, the `startDate` parameter is used as part of an inclusive range, leaving the client to manage the possibility of duplicates.
-
-     History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
-
-     - parameter startDate:  The earliest date of events to retrieve
-     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(events): An array of fetched history entries, in ascending order of insertion
-        - failure(error):  An error describing why the command failed
-
-     */
-    public func getHistoryEvents(since startDate: Date, completion: @escaping (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), Error>) -> Void) {
-        device.runSession(withName: "Get history events") { (session) -> Void in
-            NSLog("History fetching task started.")
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success((events: events, pumpModel: pumpModel)))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
+    // Must be called from within the RileyLinkDevice sessionQueue
+    private func configureDevice(_ device: RileyLinkDevice, with session: PumpOpsSession) {
+        guard !self.configuredDevices.contains(device) else {
+            return
         }
+
+        do {
+            _ = try session.configureRadio(for: pumpSettings.pumpRegion)
+        } catch {
+            // Ignore the error and let the block run anyway
+            return
+        }
+
+        NotificationCenter.default.post(name: .DeviceRadioConfigDidChange, object: device)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.insert(device)
     }
 
-    /**
-     Fetches glucose history entries which occurred on or after the specified date.
-     
-     History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
-     
-     - parameter startDate:  The earliest date of events to retrieve
-     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-     - success(events): An array of fetched history entries, in ascending order of insertion
-     - failure(error):  An error describing why the command failed
-     
-     */
-    public func getGlucoseHistoryEvents(since startDate: Date, completion: @escaping (Either<[TimestampedGlucoseEvent], Error>) -> Void) {
-        device.runSession(withName: "Get glucose history events") { (session) -> Void in
-            NSLog("Glucose history fetching task started.")
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                let events = try ops.getGlucoseHistoryEvents(since: startDate)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(events))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
+    @objc private func deviceRadioConfigDidChange(_ note: Notification) {
+        guard let device = note.object as? RileyLinkDevice else {
+            return
         }
+
+        NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
+        configuredDevices.remove(device)
     }
-
-    public func writeGlucoseHistoryTimestamp(completion: @escaping (Either<Bool, Error>) -> Void) {
-        device.runSession(withName: "Write glucose history timestamp") { (session) -> Void in
-            NSLog("Write glucose history timestamp started.")
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                _ = try ops.writeGlucoseHistoryTimestamp()
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(true))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-
-    /**
-     Reads the pump's clock
- 
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-
-     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(clock): The pump's clock
-        - failure(error): An error describing why the command failed
-     */
-    public func readTime(_ completion: @escaping (Either<DateComponents, Error>) -> Void) {
-        device.runSession(withName: "Read pump time") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                let response: ReadTimeCarelinkMessageBody = try ops.messageBody(to: .readTime)
-
-                completion(.success(response.dateComponents))
-            } catch let error {
-                completion(.failure(error))
-            }
-        }
-    }
+}
 
 
-    /**
-     Reads clock, reservoir, battery, bolusing, and suspended state from pump
-
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-
-     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
-        - success(status): A structure describing the current status of the pump
-        - failure(error): An error describing why the command failed
-     */
-    public func readPumpStatus(_ completion: @escaping (Either<PumpStatus, Error>) -> Void) {
-        device.runSession(withName: "Read pump status") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            do {
-                let response: PumpStatus = try ops.readPumpStatus()
-                completion(.success(response))
-            } catch let error {
-                completion(.failure(error))
-            }
-        }
-    }
-
-    /**
-     Sets a bolus
-     
-     *Note: Use at your own risk!*
-     
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-     
-     - parameter units:              The number of units to deliver
-     - parameter cancelExistingTemp: If true, additional pump commands will be issued to clear any running temp basal. Defaults to false.
-     - parameter completion:         A closure called after the command is complete. This closure takes a single argument:
-        - error: An error describing why the command failed
-     */
-    public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false, completion: @escaping (_ error: SetBolusError?) -> Void) {
-        device.runSession(withName: "Set normal bolus") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            completion(ops.setNormalBolus(units: units, cancelExistingTemp: cancelExistingTemp))
-        }
-    }
-    
-    /**
-     Changes the current temporary basal rate
-     
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-     
-     - parameter unitsPerHour: The new basal rate, in Units per hour
-     - parameter duration:     The duration of the rate
-     - parameter completion:   A closure called after the command is complete. This closure takes a single Result argument:
-        - success(messageBody): The pump message body describing the new basal rate
-        - failure(error):       An error describing why the command failed
-     */
-    public func setTempBasal(rate unitsPerHour: Double, duration: TimeInterval, completion: @escaping (Either<ReadTempBasalCarelinkMessageBody, Error>) -> Void) {
-        device.runSession(withName: "Set temp basal") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            
-            do {
-                let response = try ops.setTempBasal(unitsPerHour, duration: duration)
-                completion(.success(response))
-            } catch let error {
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    /**
-     Changes the pump's clock to the specified date components
-     
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-     
-     - parameter generator:  A closure which returns the desired date components. An exeception is raised if the date components are not valid.
-     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
-        - error: An error describing why the command failed
-     */
-    public func setTime(_ generator: @escaping () -> DateComponents, completion: @escaping (_ error: Error?) -> Void) {
-        device.runSession(withName: "Set time") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            
-            do {
-                try ops.changeTime {
-                    PumpMessage(packetType: .carelink, address: self.pumpState.pumpID, messageType: .changeTime, messageBody: ChangeTimeCarelinkMessageBody(dateComponents: generator())!)
-                }
-                completion(nil)
-            } catch let error {
-                completion(error)
-            }
-        }
-    }
-
-    /**
-     Pairs the pump with a virtual "watchdog" device to enable it to broadcast periodic status packets. Only pump models x23 and up are supported.
-     
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-
-     - parameter watchdogID: A 3-byte address for the watchdog device.
-     - parameter completion: A closure called after the command is complete. This closure takes a single argument:
-        - error: An error describing why the command failed.
-     */
-    public func changeWatchdogMarriageProfile(toWatchdogID watchdogID: Data, completion: @escaping (_ error: Error?) -> Void) {
-        device.runSession(withName: "Change watchdog marriage profile") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-
-            var lastError: Error?
-
-            for _ in 0..<3 {
-                do {
-                    try ops.changeWatchdogMarriageProfile(watchdogID)
-
-                    lastError = nil
-                    break
-                } catch let error {
-                    lastError = error
-                }
-            }
-
-            completion(lastError)
-        }
-    }
-
-    func tuneRadio(for region: PumpRegion = .northAmerica, completion: @escaping (Either<FrequencyScanResults, Error>) -> Void)  {
-        device.runSession(withName: "Tune pump") { (session) -> Void in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            do {
-                try ops.configureRadio(for: region)
-                let response = try ops.tuneRadio(for: region)
-                DispatchQueue.main.async { () -> Void in
-                    completion(.success(response))
-                }
-            } catch let error {
-                DispatchQueue.main.async { () -> Void in
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-    
-    public func setRXFilterMode(_ mode: RXFilterMode, completion: @escaping (_ error: Error?) -> Void) {
-        device.runSession(withName: "Set RX filter mode") { (session) in
-            let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
-            
-            do {
-                try ops.setRXFilterMode(mode)
-                completion(nil)
-            } catch let error {
-                completion(error)
-            }
-        }
+extension PumpOps: PumpOpsSessionDelegate {
+    func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
+        self.pumpState = state
     }
 }

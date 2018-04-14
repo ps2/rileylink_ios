@@ -10,7 +10,7 @@ import Foundation
 
 
 extension Int {
-    init<T: Collection>(bigEndianBytes bytes: T) where T.Iterator.Element == UInt8, T.IndexDistance == Int {
+    init<T: Collection>(bigEndianBytes bytes: T) where T.Element == UInt8 {
         assert(bytes.count <= 4)
         var result: UInt = 0
 

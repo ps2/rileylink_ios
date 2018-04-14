@@ -39,10 +39,6 @@ public class ReadTempBasalCarelinkMessageBody: CarelinkLongMessageBody {
             let rawRate: UInt8 = rxData[2]
             rate = Double(rawRate)
         default:
-            timeRemaining = 0
-            rate = 0
-            rateType = .absolute
-            super.init(rxData: rxData)
             return nil
         }
 

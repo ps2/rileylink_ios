@@ -7,64 +7,109 @@
 //
 
 import UIKit
+import RileyLinkBLEKit
 import RileyLinkKit
+import RileyLinkKitUI
+
 
 class RileyLinkListTableViewController: UITableViewController {
-    
-    // Retreive the managedObjectContext from AppDelegate
-    let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
+
+    private lazy var numberFormatter = NumberFormatter()
     
     override func viewDidLoad() {
-      super.viewDidLoad()
+        super.viewDidLoad()
 
-        tableView.register(RileyLinkDeviceTableViewCell.nib(), forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)
+        tableView.register(RileyLinkDeviceTableViewCell.self, forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)
 
-        dataManagerObserver = NotificationCenter.default.addObserver(forName: nil, object: dataManager, queue: nil) { [weak self = self] (note) -> Void in
+        // Register for manager notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadDevices), name: .ManagerDevicesDidChange, object: dataManager.rileyLinkManager)
+
+        // Register for device notifications
+        for name in [.DeviceConnectionStateDidChange, .DeviceRSSIDidChange, .DeviceNameDidChange] as [Notification.Name] {
+            NotificationCenter.default.addObserver(self, selector: #selector(deviceDidUpdate(_:)), name: name, object: nil)
+        }
+
+        reloadDevices()
+    }
+
+    @objc private func reloadDevices() {
+        self.dataManager.rileyLinkManager.getDevices { (devices) in
             DispatchQueue.main.async {
-                if let deviceManager = self?.dataManager.rileyLinkManager {
-                    switch note.name {
-                    case Notification.Name.DeviceManagerDidDiscoverDevice:
-                        self?.tableView.insertRows(at: [IndexPath(row: deviceManager.devices.count - 1, section: 0)], with: .automatic)
-                    case Notification.Name.DeviceConnectionStateDidChange,
-                         Notification.Name.DeviceRSSIDidChange,
-                         Notification.Name.DeviceNameDidChange:
-                        if let device = note.userInfo?[RileyLinkDeviceManager.RileyLinkDeviceKey] as? RileyLinkDevice, let index = deviceManager.devices.index(where: { $0 === device }) {
-                            self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
-                        }
-                    default:
-                        break
-                    }
+                self.devices = devices
+            }
+        }
+    }
+
+    @objc private func deviceDidUpdate(_ note: Notification) {
+        DispatchQueue.main.async {
+            if let device = note.object as? RileyLinkDevice, let index = self.devices.index(where: { $0 === device }) {
+                if let rssi = note.userInfo?[RileyLinkDevice.notificationRSSIKey] as? Int {
+                    self.deviceRSSI[device.peripheralIdentifier] = rssi
+                }
+
+                if let cell = self.tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? RileyLinkDeviceTableViewCell {
+                    cell.configureCellWithName(device.name,
+                        signal: self.numberFormatter.decibleString(from: self.deviceRSSI[device.peripheralIdentifier]),
+                        peripheralState: device.peripheralState
+                    )
                 }
             }
         }
     }
-    
-    deinit {
-        dataManagerObserver = nil
-    }
-    
-    private var dataManagerObserver: Any? {
-        willSet {
-            if let observer = dataManagerObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
-    }
-    
+
     private var dataManager: DeviceDataManager {
         return DeviceDataManager.sharedManager
     }
-    
+
+    private var devices: [RileyLinkDevice] = [] {
+        didSet {
+            // Assume only appends are possible when count changes for algorithmic simplicity
+            guard oldValue.count < devices.count else {
+                tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                return
+            }
+
+            tableView.beginUpdates()
+
+            let insertedPaths = (oldValue.count..<devices.count).map { (index) -> IndexPath in
+                return IndexPath(row: index, section: 0)
+            }
+            tableView.insertRows(at: insertedPaths, with: .automatic)
+
+            tableView.endUpdates()
+        }
+    }
+
+    private var deviceRSSI: [UUID: Int] = [:]
+
+    var rssiFetchTimer: Timer? {
+        willSet {
+            rssiFetchTimer?.invalidate()
+        }
+    }
+
+    @objc func updateRSSI() {
+        for device in devices {
+            device.readRSSI()
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        dataManager.rileyLinkManager.setDeviceScanningEnabled(true)
+        dataManager.rileyLinkManager.setScanningEnabled(true)
+
+        rssiFetchTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
+
+        updateRSSI()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        dataManager.rileyLinkManager.setDeviceScanningEnabled(false)
+        dataManager.rileyLinkManager.setScanningEnabled(false)
+
+        rssiFetchTimer = nil
     }
     
     // MARK: Table view data source
@@ -74,7 +119,7 @@ class RileyLinkListTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataManager.rileyLinkManager.devices.count
+        return devices.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,25 +127,25 @@ class RileyLinkListTableViewController: UITableViewController {
         
         let deviceCell = tableView.dequeueReusableCell(withIdentifier: RileyLinkDeviceTableViewCell.className) as! RileyLinkDeviceTableViewCell
         
-        let device = dataManager.rileyLinkManager.devices[indexPath.row]
+        let device = devices[indexPath.row]
         
-        deviceCell.configureCellWithName(device.name,
-                                         signal: device.RSSI,
-                                         peripheralState: device.peripheral.state
+        deviceCell.configureCellWithName(
+            device.name,
+            signal: numberFormatter.decibleString(from: deviceRSSI[device.peripheralIdentifier]),
+            peripheralState: device.peripheralState
         )
         
-        deviceCell.connectSwitch.addTarget(self, action: #selector(deviceConnectionChanged(_:)), for: .valueChanged)
+        deviceCell.connectSwitch?.addTarget(self, action: #selector(changeDeviceConnection(_:)), for: .valueChanged)
         
         cell = deviceCell
         return cell
     }
     
-    @objc func deviceConnectionChanged(_ connectSwitch: UISwitch) {
+    @objc func changeDeviceConnection(_ connectSwitch: UISwitch) {
         let switchOrigin = connectSwitch.convert(CGPoint.zero, to: tableView)
         
-        if let indexPath = tableView.indexPathForRow(at: switchOrigin)
-        {
-            let device = dataManager.rileyLinkManager.devices[indexPath.row]
+        if let indexPath = tableView.indexPathForRow(at: switchOrigin) {
+            let device = devices[indexPath.row]
             
             if connectSwitch.isOn {
                 dataManager.connectToRileyLink(device)
@@ -113,45 +158,15 @@ class RileyLinkListTableViewController: UITableViewController {
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = RileyLinkDeviceTableViewController()
-
-        vc.device = dataManager.rileyLinkManager.devices[indexPath.row]
+        let device = devices[indexPath.row]
+        let vc = RileyLinkDeviceTableViewController(
+            device: device,
+            deviceState: dataManager.deviceStates[device.peripheralIdentifier, default: DeviceState()],
+            pumpSettings: dataManager.pumpSettings,
+            pumpState: dataManager.pumpState,
+            pumpOps: dataManager.pumpOps
+        )
 
         show(vc, sender: indexPath)
     }
-    
-    /*
-     // Override to support conditional editing of the table view.
-     - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-     // Return NO if you do not want the specified item to be editable.
-     return YES;
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-     if (editingStyle == UITableViewCellEditingStyleDelete) {
-     // Delete the row from the data source
-     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-     // Return NO if you do not want the item to be re-orderable.
-     return YES;
-     }
-     */
-
 }

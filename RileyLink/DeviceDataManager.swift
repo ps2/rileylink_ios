@@ -8,27 +8,81 @@
 
 import Foundation
 import RileyLinkKit
+import RileyLinkKitUI
 import RileyLinkBLEKit
 import MinimedKit
 import NightscoutUploadKit
 
 class DeviceDataManager {
 
-    var getHistoryTimer: Timer?
-    
     let rileyLinkManager: RileyLinkDeviceManager
     
-    /// Manages remote data (TODO: the lazy initialization isn't thread-safe)
-    lazy var remoteDataManager = RemoteDataManager()
+    /// Manages remote data
+    let remoteDataManager = RemoteDataManager()
     
-    var connectedPeripheralIDs: Set<String> = Config.sharedInstance().autoConnectIds as! Set<String> {
+    private var connectedPeripheralIDs: Set<String> = Config.sharedInstance().autoConnectIds as! Set<String> {
         didSet {
             Config.sharedInstance().autoConnectIds = connectedPeripheralIDs
         }
     }
+
+    var deviceStates: [UUID: DeviceState] = [:]
+
+    private(set) var pumpOps: PumpOps? {
+        didSet {
+            if pumpOps == nil {
+                UserDefaults.standard.pumpState = nil
+            }
+        }
+    }
+
+    private(set) var pumpSettings: PumpSettings? {
+        get {
+            return UserDefaults.standard.pumpSettings
+        }
+        set {
+            if let settings = newValue {
+                if let pumpOps = pumpOps {
+                    pumpOps.updateSettings(settings)
+                } else {
+                    pumpOps = PumpOps(pumpSettings: settings, pumpState: nil, delegate: self)
+                }
+            } else {
+                pumpOps = nil
+            }
+
+            UserDefaults.standard.pumpSettings = newValue
+        }
+    }
+
+    func setPumpID(_ pumpID: String?) {
+        var newValue = pumpID
+
+        if newValue?.count != 6 {
+            newValue = nil
+        }
+
+        if let newValue = newValue {
+            if pumpSettings != nil {
+                pumpSettings?.pumpID = newValue
+            } else {
+                pumpSettings = PumpSettings(pumpID: newValue)
+            }
+        }
+    }
+
+    func setPumpRegion(_ pumpRegion: PumpRegion) {
+        pumpSettings?.pumpRegion = pumpRegion
+    }
     
+    var pumpState: PumpState? {
+        return UserDefaults.standard.pumpState
+    }
+
+    // MARK: - Operation helpers
+
     var latestPumpStatusDate: Date?
-    
+
     var latestPumpStatusFromMySentry: MySentryPumpStatusMessageBody? {
         didSet {
             if let update = latestPumpStatusFromMySentry, let timeZone = pumpState?.timeZone {
@@ -38,120 +92,20 @@ class DeviceDataManager {
             }
         }
     }
-    
-    
+
+
     var latestPolledPumpStatus: RileyLinkKit.PumpStatus? {
         didSet {
-            if let update = latestPolledPumpStatus, let timeZone = pumpState?.timeZone {
-                var pumpClock = update.clock
-                pumpClock.timeZone = timeZone
-                latestPumpStatusDate = pumpClock.date
+            if let update = latestPolledPumpStatus {
+                latestPumpStatusDate = update.clock.date
             }
-        }
-    }
-    
-    var pumpID: String? {
-        get {
-            return pumpState?.pumpID
-        }
-        set {
-            guard newValue?.characters.count == 6 && newValue != pumpState?.pumpID else {
-                return
-            }
-            
-            if let pumpID = newValue {
-                let pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
-                
-                if let timeZone = self.pumpState?.timeZone {
-                    pumpState.timeZone = timeZone
-                }
-                
-                self.pumpState = pumpState
-            } else {
-                self.pumpState = nil
-            }
-            
-            remoteDataManager.nightscoutUploader?.reset()
-            
-            Config.sharedInstance().pumpID = pumpID
-        }
-    }
-    
-    var pumpRegion: PumpRegion {
-        get {
-            return PumpRegion(rawValue: Config.sharedInstance().pumpRegion) ?? .northAmerica
-        }
-        set {
-            self.pumpState?.pumpRegion = newValue
-            Config.sharedInstance().pumpRegion = newValue.rawValue
         }
     }
 
-    
-    var pumpState: PumpState? {
-        didSet {
-            rileyLinkManager.pumpState = pumpState
-            
-            if let oldValue = oldValue {
-                NotificationCenter.default.removeObserver(self, name: .PumpStateValuesDidChange, object: oldValue)
-            }
-            
-            if let pumpState = pumpState {
-                NotificationCenter.default.addObserver(self, selector: #selector(pumpStateValuesDidChange(_:)), name: .PumpStateValuesDidChange, object: pumpState)
-            }
-        }
-    }
-    
-    @objc private func pumpStateValuesDidChange(_ note: Notification) {
-        switch note.userInfo?[PumpState.PropertyKey] as? String {
-        case "timeZone"?:
-            Config.sharedInstance().pumpTimeZone = pumpState?.timeZone
-        case "pumpModel"?:
-            if let sentrySupported = pumpState?.pumpModel?.hasMySentry {
-                rileyLinkManager.idleListeningEnabled = sentrySupported
-            }
-            Config.sharedInstance().pumpModelNumber = pumpState?.pumpModel?.rawValue
-        case "lastHistoryDump"?, "awakeUntil"?:
-            break
-        default:
-            break
-        }
-    }
-    
     var lastHistoryAttempt: Date? = nil
     
     var lastGlucoseEntry: Date = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
-    
-    var lastRileyLinkHeardFrom: RileyLinkDevice? = nil
-    
-    
-    var rileyLinkManagerObserver: Any? {
-        willSet {
-            if let observer = rileyLinkManagerObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
-    }
-    
-    var rileyLinkDevicePacketObserver: Any? {
-        willSet {
-            if let observer = rileyLinkDevicePacketObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
-    }
-    
-    @objc private func receivedRileyLinkManagerNotification(_ note: Notification) {
-        NotificationCenter.default.post(name: note.name, object: self, userInfo: note.userInfo)
-    }
-    
-    func preferredRileyLink() -> RileyLinkDevice? {
-        if let device = lastRileyLinkHeardFrom {
-            return device
-        }
-        return self.rileyLinkManager.firstConnectedDevice
-    }
-    
+
     /**
      Called when a new idle message is received by the RileyLink.
      
@@ -160,42 +114,61 @@ class DeviceDataManager {
      - parameter note: The notification object
      */
     @objc private func receivedRileyLinkPacketNotification(_ note: Notification) {
-        if  let
-            device = note.object as? RileyLinkDevice,
-            let data = note.userInfo?[RileyLinkDevice.IdleMessageDataKey] as? Data,
-            let message = PumpMessage(rxData: data)
-        {
-            switch message.packetType {
-            case .mySentry:
-                switch message.messageBody {
-                case let body as MySentryPumpStatusMessageBody:
-                    pumpStatusUpdateReceived(body, fromDevice: device)
-                default:
-                    break
-                }
+        guard
+            let device = note.object as? RileyLinkDevice,
+            let packet = note.userInfo?[RileyLinkDevice.notificationPacketKey] as? RFPacket,
+            let decoded = MinimedPacket(encodedData: packet.data),
+            let message = PumpMessage(rxData: decoded.data),
+            let address = pumpSettings?.pumpID,
+            message.address.hexadecimalString == address
+        else {
+            return
+        }
+
+        switch message.packetType {
+        case .mySentry:
+            switch message.messageBody {
+            case let body as MySentryPumpStatusMessageBody:
+                pumpStatusUpdateReceived(body, fromDevice: device)
             default:
                 break
             }
+        default:
+            break
         }
     }
     
     @objc private func receivedRileyLinkTimerTickNotification(_ note: Notification) {
         if Config.sharedInstance().uploadEnabled {
-            self.assertCurrentPumpData()
+            rileyLinkManager.getDevices { (devices) in
+                if let device = devices.firstConnected {
+                    self.assertCurrentPumpData(from: device)
+                }
+            }
         }
     }
 
+    @objc private func deviceStateDidChange(_ note: Notification) {
+        guard
+            let device = note.object as? RileyLinkDevice,
+            let deviceState = note.userInfo?[RileyLinkDevice.notificationDeviceStateKey] as? DeviceState
+        else {
+            return
+        }
+
+        deviceStates[device.peripheralIdentifier] = deviceState
+    }
     
     func connectToRileyLink(_ device: RileyLinkDevice) {
-        connectedPeripheralIDs.insert(device.peripheral.identifier.uuidString)
+        connectedPeripheralIDs.insert(device.peripheralIdentifier.uuidString)
         
-        rileyLinkManager.connectDevice(device)
+        rileyLinkManager.connect(device)
     }
     
     func disconnectFromRileyLink(_ device: RileyLinkDevice) {
-        connectedPeripheralIDs.remove(device.peripheral.identifier.uuidString)
+        connectedPeripheralIDs.remove(device.peripheralIdentifier.uuidString)
         
-        rileyLinkManager.disconnectDevice(device)
+        rileyLinkManager.disconnect(device)
     }
     
     private func pumpStatusUpdateReceived(_ status: MySentryPumpStatusMessageBody, fromDevice device: RileyLinkDevice) {
@@ -220,7 +193,7 @@ class DeviceDataManager {
                 //NotificationManager.sendPumpBatteryLowNotification()
             }
             
-            guard Config.sharedInstance().uploadEnabled, let pumpID = pumpID else {
+            guard Config.sharedInstance().uploadEnabled, let pumpID = pumpSettings?.pumpID else {
                 return
             }
             
@@ -264,11 +237,7 @@ class DeviceDataManager {
     /**
      Ensures pump data is current by either waking and polling, or ensuring we're listening to sentry packets.
      */
-    private func assertCurrentPumpData() {
-        guard let device = rileyLinkManager.firstConnectedDevice else {
-            return
-        }
-        
+    private func assertCurrentPumpData(from device: RileyLinkDevice) {
         device.assertIdleListening()
         
         // How long should we wait before we poll for new pump data?
@@ -276,38 +245,36 @@ class DeviceDataManager {
         
         // If we don't yet have pump status, or it's old, poll for it.
         if latestPumpStatusDate == nil || latestPumpStatusDate!.timeIntervalSinceNow <= -pumpStatusAgeTolerance {
-            guard let device = rileyLinkManager.firstConnectedDevice else {
-                return
-            }
             
-            guard let ops = device.ops else {
+            guard let pumpOps = pumpOps else {
                 self.troubleshootPumpCommsWithDevice(device)
                 return
             }
-            
-            ops.readPumpStatus({ (result) in
-                switch result {
-                case .success(let status):
-                    self.latestPolledPumpStatus = status
-                    let battery = BatteryStatus(voltage: status.batteryVolts, status: BatteryIndicator(batteryStatus: status.batteryStatus))
-                    var clock = status.clock
-                    clock.timeZone = ops.pumpState.timeZone
-                    guard let date = clock.date else {
-                        print("Could not interpret clock")
-                        return
+
+            pumpOps.runSession(withName: "Read pump status", using: device) { (session) in
+                do {
+                    let status = try session.getCurrentPumpStatus()
+                    DispatchQueue.main.async {
+                        self.latestPolledPumpStatus = status
+                        let battery = BatteryStatus(voltage: status.batteryVolts, status: BatteryIndicator(batteryStatus: status.batteryStatus))
+                        guard let date = status.clock.date else {
+                            print("Could not interpret clock")
+                            return
+                        }
+                        let nsPumpStatus = NightscoutUploadKit.PumpStatus(clock: date, pumpID: status.pumpID, iob: nil, battery: battery, suspended: status.suspended, bolusing: status.bolusing, reservoir: status.reservoir)
+                        self.uploadDeviceStatus(nsPumpStatus)
                     }
-                    let nsPumpStatus = NightscoutUploadKit.PumpStatus(clock: date, pumpID: ops.pumpState.pumpID, iob: nil, battery: battery, suspended: status.suspended, bolusing: status.bolusing, reservoir: status.reservoir)
-                    self.uploadDeviceStatus(nsPumpStatus)
-                case .failure:
-                    self.troubleshootPumpCommsWithDevice(device)
+                } catch {
+                    DispatchQueue.main.async {
+                        self.troubleshootPumpCommsWithDevice(device)
+                    }
                 }
-            })
+            }
         }
 
         if lastHistoryAttempt == nil || lastHistoryAttempt!.timeIntervalSinceNow < TimeInterval(minutes: -5) {
             getPumpHistory(device)
         }
-
     }
 
     /**
@@ -319,13 +286,24 @@ class DeviceDataManager {
         
         // How long we should wait before we re-tune the RileyLink
         let tuneTolerance = TimeInterval(minutes: 14)
-        
-        if device.lastTuned == nil || device.lastTuned!.timeIntervalSinceNow <= -tuneTolerance {
-            device.tunePump { (result) in
-                switch result {
-                case .success(let scanResult):
-                    print("Device auto-tuned to \(scanResult.bestFrequency) MHz")
-                case .failure(let error):
+
+        guard let pumpOps = pumpOps else {
+            return
+        }
+
+        let deviceState = deviceStates[device.peripheralIdentifier, default: DeviceState()]
+        let lastTuned = deviceState.lastTuned ?? .distantPast
+
+        if lastTuned.timeIntervalSinceNow <= -tuneTolerance {
+            pumpOps.runSession(withName: "Tune pump", using: device) { (session) in
+                do {
+                    let scanResult = try session.tuneRadio(current: deviceState.lastValidFrequency)
+                    print("Device auto-tuned to \(scanResult.bestFrequency)")
+
+                    DispatchQueue.main.async {
+                        self.deviceStates[device.peripheralIdentifier] = DeviceState(lastTuned: Date(), lastValidFrequency: scanResult.bestFrequency)
+                    }
+                } catch let error {
                     print("Device auto-tune failed with error: \(error)")
                 }
             }
@@ -334,27 +312,25 @@ class DeviceDataManager {
     
     private func getPumpHistory(_ device: RileyLinkDevice) {
         lastHistoryAttempt = Date()
-        
-        guard let ops = device.ops else {
+
+        guard let pumpOps = pumpOps else {
             print("Missing pumpOps; is your pumpId configured?")
             return
         }
-        
-        
+
         let oneDayAgo = Date(timeIntervalSinceNow: TimeInterval(hours: -24))
-        let observingPumpEventsSince = remoteDataManager.nightscoutUploader?.observingPumpEventsSince ?? oneDayAgo
-        
-        
-        ops.getHistoryEvents(since: observingPumpEventsSince) { (response) -> Void in
-            switch response {
-            case .success(let (events, pumpModel)):
+
+        pumpOps.runSession(withName: "Get pump history", using: device) { (session) in
+            do {
+                let (events, pumpModel) = try session.getHistoryEvents(since: oneDayAgo)
                 NSLog("fetchHistory succeeded.")
-                self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
-                NotificationCenter.default.post(name: .PumpEventsUpdated, object: self)
-            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.handleNewHistoryEvents(events, pumpModel: pumpModel, device: device)
+                }
+            } catch let error {
                 NSLog("History fetch failed: %@", String(describing: error))
             }
-            
+
             if Config.sharedInstance().fetchCGMEnabled, self.lastGlucoseEntry.timeIntervalSinceNow < TimeInterval(minutes: -5) {
                 self.getPumpGlucoseHistory(device)
             }
@@ -369,21 +345,19 @@ class DeviceDataManager {
     }
     
     private func getPumpGlucoseHistory(_ device: RileyLinkDevice) {
-        
-        guard let ops = device.ops else {
+        guard let pumpOps = pumpOps else {
             print("Missing pumpOps; is your pumpId configured?")
             return
         }
-        
-        ops.getGlucoseHistoryEvents(since: lastGlucoseEntry) { (response) -> Void in
-            switch response {
-            case .success(let events):
+
+        pumpOps.runSession(withName: "Get glucose history", using: device) { (session) in
+            do {
+                let events = try session.getGlucoseHistoryEvents(since: self.lastGlucoseEntry)
                 NSLog("fetchGlucoseHistory succeeded.")
                 if let latestEntryDate: Date = self.handleNewGlucoseHistoryEvents(events, device: device) {
                     self.lastGlucoseEntry = latestEntryDate
                 }
-                
-            case .failure(let error):
+            } catch let error {
                 NSLog("Glucose History fetch failed: %@", String(describing: error))
             }
         }
@@ -401,66 +375,40 @@ class DeviceDataManager {
     static let sharedManager = DeviceDataManager()
 
     init() {
-        
-        let pumpID = Config.sharedInstance().pumpID
+        rileyLinkManager = RileyLinkDeviceManager(autoConnectIDs: connectedPeripheralIDs)
 
         var idleListeningEnabled = true
         
-        let pumpRegion = PumpRegion(rawValue: Config.sharedInstance().pumpRegion) ?? .northAmerica
-        
-        if let pumpID = pumpID {
-            let pumpState = PumpState(pumpID: pumpID, pumpRegion: pumpRegion)
-            
-            if let timeZone = Config.sharedInstance().pumpTimeZone {
-                pumpState.timeZone = timeZone
-            }
-            
-            if let pumpModelNumber = Config.sharedInstance().pumpModelNumber {
-                if let model = PumpModel(rawValue: pumpModelNumber) {
-                    pumpState.pumpModel = model
-                    
-                    idleListeningEnabled = model.hasMySentry
-                }
-            }
-            
-            self.pumpState = pumpState
+        if let pumpSettings = UserDefaults.standard.pumpSettings {
+            idleListeningEnabled = self.pumpState?.pumpModel?.hasMySentry ?? true
+
+            self.pumpOps = PumpOps(pumpSettings: pumpSettings, pumpState: self.pumpState, delegate: self)
         }
         
-        rileyLinkManager = RileyLinkDeviceManager(
-            pumpState: self.pumpState,
-            autoConnectIDs: connectedPeripheralIDs
-        )
-        rileyLinkManager.idleListeningEnabled = idleListeningEnabled
+        rileyLinkManager.idleListeningState = idleListeningEnabled ? .enabledWithDefaults : .disabled
 
         UIDevice.current.isBatteryMonitoringEnabled = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkManagerNotification(_:)), name: nil, object: rileyLinkManager)
-        NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: .RileyLinkDeviceDidReceiveIdleMessage, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkTimerTickNotification(_:)), name: .RileyLinkDeviceDidUpdateTimerTick, object: nil)
-        
-        if let pumpState = pumpState {
-            NotificationCenter.default.addObserver(self, selector: #selector(pumpStateValuesDidChange(_:)), name: .PumpStateValuesDidChange, object: pumpState)
-        }
 
+        // Device observers
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: .DevicePacketReceived, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkTimerTickNotification(_:)), name: .DeviceTimerDidTick, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceStateDidChange(_:)), name: .DeviceStateDidChange, object: nil)
     }
-    
-    deinit {
-        rileyLinkManagerObserver = nil
-        rileyLinkDevicePacketObserver = nil
-    }
-    
-    // MARK: - Device updates
-    func rileyLinkAdded(_ note: Notification)
-    {
-        if let device = note.object as? RileyLinkBLEDevice  {
-            device.enableIdleListening(onChannel: 0)
-        }
-    }
-    
 }
 
 
-extension Notification.Name {
-    static let PumpEventsUpdated = Notification.Name(rawValue: "com.rileylink.notification.PumpEventsUpdated")
-}
+extension DeviceDataManager: PumpOpsDelegate {
+    func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
+        if let sentrySupported = state.pumpModel?.hasMySentry {
+            rileyLinkManager.idleListeningState = sentrySupported ? .enabledWithDefaults : .disabled
+        }
 
+        UserDefaults.standard.pumpState = state
+
+        NotificationCenter.default.post(
+            name: .PumpOpsStateDidChange,
+            object: pumpOps,
+            userInfo: [PumpOps.notificationPumpStateKey: state]
+        )
+    }
+}

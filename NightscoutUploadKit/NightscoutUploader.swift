@@ -20,6 +20,7 @@ private let defaultNightscoutEntriesPath = "/api/v1/entries"
 private let defaultNightscoutTreatmentPath = "/api/v1/treatments"
 private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus"
 private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
+private let defaultNightscoutProfilePath = "/api/v1/profile"
 
 public class NightscoutUploader {
 
@@ -240,6 +241,10 @@ public class NightscoutUploader {
             entries.append(entry)
             lastMeterMessageRxTime = date
         }
+    }
+    
+    public func uploadProfile(profile: NightscoutProfile, completion: @escaping (Either<[String],Error>) -> Void)  {
+        postToNS([profile.dictionaryRepresentation], endpoint:defaultNightscoutProfilePath, completion: completion)
     }
 
     // MARK: - Uploading

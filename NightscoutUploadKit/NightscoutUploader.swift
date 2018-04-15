@@ -242,9 +242,17 @@ public class NightscoutUploader {
             lastMeterMessageRxTime = date
         }
     }
+
+    // MARK: - Profiles
+
+    public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {
+        postToNS([profileSet.dictionaryRepresentation], endpoint:defaultNightscoutProfilePath, completion: completion)
+    }
     
-    public func uploadProfile(profile: NightscoutProfile, completion: @escaping (Either<[String],Error>) -> Void)  {
-        postToNS([profile.dictionaryRepresentation], endpoint:defaultNightscoutProfilePath, completion: completion)
+    public func updateProfile(profileSet: ProfileSet, id: String, completion: @escaping (Error?) -> Void) {
+        var rep = profileSet.dictionaryRepresentation
+        rep["_id"] = id
+        putToNS(rep, endpoint: defaultNightscoutProfilePath, completion: completion)
     }
 
     // MARK: - Uploading

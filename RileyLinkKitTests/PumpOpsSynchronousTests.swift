@@ -375,6 +375,10 @@ class PumpMessageSenderStub: PumpMessageSender {
         throw PumpOpsError.noResponse(during: "Tests")
     }
     
+    func enableCCLEDs() throws {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
+    
     var responses = [MessageType: [PumpMessage]]()
     
     // internal tracking of how many times a response type has been received

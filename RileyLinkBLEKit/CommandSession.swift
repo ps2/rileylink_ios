@@ -106,6 +106,14 @@ public struct CommandSession {
         let command = UpdateRegister(address, value: value, firmwareVersion: firmwareVersion)
         _ = try writeCommand(command, timeout: 0)
     }
+    
+    /// - Throws: RileyLinkDeviceError
+    public func enableCCLEDs() throws {
+        let enableBlue = SetLedMode(.blue, mode: .auto)
+        _ = try writeCommand(enableBlue, timeout: 0)
+        let enableGreen = SetLedMode(.green, mode: .auto)
+        _ = try writeCommand(enableGreen, timeout: 0)
+    }
 
     private static let xtalFrequency = Measurement<UnitFrequency>(value: 24, unit: .megahertz)
 

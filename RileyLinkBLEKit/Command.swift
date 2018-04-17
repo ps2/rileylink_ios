@@ -25,6 +25,11 @@ enum RileyLinkCommand: UInt8 {
     case resetRadioConfig = 13
 }
 
+enum RileyLinkLEDType: UInt8 {
+    case green = 0
+    case blue = 1
+}
+
 protocol Command {
     associatedtype ResponseType: Response
 
@@ -260,6 +265,24 @@ struct SetPreamble: Command {
         
     }
 }
+
+struct SetLedMode: Command {
+    typealias ResponseType = CodeResponse
+    
+    let led: RileyLinkLEDType
+    let mode: RileyLinkLEDMode
+    
+    
+    init(_ led: RileyLinkLEDType, mode: RileyLinkLEDMode) {
+        self.led = led
+        self.mode = mode
+    }
+    
+    var data: Data {
+        return Data(bytes: [RileyLinkCommand.led.rawValue, led.rawValue, mode.rawValue])
+    }
+}
+
 
 struct ResetRadioConfig: Command {
     typealias ResponseType = CodeResponse

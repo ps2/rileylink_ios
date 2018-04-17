@@ -104,6 +104,10 @@ extension RileyLinkDevice {
     public func setCustomName(_ name: String) {
         manager.setCustomName(name)
     }
+    
+    public func enableBLELEDs() {
+        manager.setLEDMode(mode: .on)
+    }
 }
 
 
@@ -310,7 +314,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
             NotificationCenter.default.post(name: .DeviceTimerDidTick, object: self)
 
             assertIdleListening(forceRestart: false)
-        case .customName?, .firmwareVersion?, .none:
+        case .customName?, .firmwareVersion?, .ledMode?, .none:
             break
         }
     }

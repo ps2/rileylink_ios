@@ -698,6 +698,10 @@ extension PumpOpsSession {
             throw PumpOpsError.deviceError(error)
         }
     }
+    
+    public func enableCCLEDs() throws {
+        try session.enableCCLEDs()
+    }
 
     /// - Throws:
     ///     - PumpOpsError.deviceError

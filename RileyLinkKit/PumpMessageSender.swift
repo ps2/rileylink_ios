@@ -42,6 +42,9 @@ protocol PumpMessageSender {
 
     /// - Throws: LocalizedError
     func send(_ data: Data, onChannel channel: Int, timeout: TimeInterval) throws
+    
+    /// - Throws: LocalizedError
+    func enableCCLEDs() throws
 }
 
 extension PumpMessageSender {

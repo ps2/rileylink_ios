@@ -22,13 +22,6 @@ public protocol MessageBody {
 }
 
 
-extension MessageBody {
-    static var emptyBuffer: [UInt8] {
-        return [UInt8](repeating: 0, count: self.length)
-    }
-}
-
-
 public protocol DictionaryRepresentable {
     var dictionaryRepresentation: [String: Any] {
         get

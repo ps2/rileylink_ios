@@ -75,11 +75,11 @@ class RadioSelectionTableViewController: UITableViewController, IdentifiableClas
 extension RadioSelectionTableViewController {
     typealias T = RadioSelectionTableViewController
 
-    static func pumpRegion(_ value: PumpRegion) -> T {
+    static func pumpRegion(_ value: PumpRegion?) -> T {
         let vc = T()
 
-        vc.selectedIndex = value.rawValue
-        vc.options = (0..<2).flatMap({ PumpRegion(rawValue: $0) }).map { String(describing: $0) }
+        vc.selectedIndex = value?.rawValue
+        vc.options = (0..<2).compactMap({ PumpRegion(rawValue: $0) }).map { String(describing: $0) }
         vc.contextHelp = NSLocalizedString("Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is NorthAmerica.  If your model has an \"WW\" in it, then the region is WorldWide.", comment: "Instructions on selecting the pump region")
         return vc
     }

@@ -10,6 +10,10 @@ import Foundation
 
 
 extension TimeInterval {
+    static func hours(_ hours: Double) -> TimeInterval {
+        return self.init(hours: hours)
+    }
+
     static func minutes(_ minutes: Int) -> TimeInterval {
         return self.init(minutes: Double(minutes))
     }
@@ -18,12 +22,28 @@ extension TimeInterval {
         return self.init(minutes: minutes)
     }
 
+    static func seconds(_ seconds: Double) -> TimeInterval {
+        return self.init(seconds)
+    }
+
+    static func milliseconds(_ milliseconds: Double) -> TimeInterval {
+        return self.init(milliseconds / 1000)
+    }
+
     init(minutes: Double) {
         self.init(minutes * 60)
     }
 
     init(hours: Double) {
         self.init(minutes: hours * 60)
+    }
+
+    init(seconds: Double) {
+        self.init(seconds)
+    }
+
+    init(milliseconds: Double) {
+        self.init(milliseconds / 1000)
     }
 
     var milliseconds: Double {

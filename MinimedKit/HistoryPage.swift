@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HistoryPage {
+public struct HistoryPage {
     
     public enum HistoryPageError: Error {
         case invalidCRC
@@ -16,7 +16,12 @@ public class HistoryPage {
     }
     
     public let events: [PumpEvent]
-    
+
+    // Useful interface for testing
+    init(events: [PumpEvent]) {
+        self.events = events
+    }
+
     public init(pageData: Data, pumpModel: PumpModel) throws {
         
         guard checkCRC16(pageData) else {

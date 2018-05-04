@@ -1,0 +1,42 @@
+/* The description of AlarmClockReminderPumpEvent */
+"AlarmClockReminder" = "Напоминание будильника";
+
+/* The description of AlarmSensorPumpEvent */
+"AlarmSensor" = "Предупреждение от сенсора";
+
+/* Describing the battery chemistry as Alkaline */
+"Alkaline" = "Щелочная";
+
+/* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
+"Basal Profile %1$@: %2$@ U/hour" = "Профиль базала %1$@: %2$@ ед/ч";
+
+/* Pump error code when bolus is in progress */
+"Bolus in progress" = "Подается болюс";
+
+/* Pump error code returned when command refused */
+"Command refused" = "Отказ в выполнении команды";
+
+/* Describing the battery chemistry as Lithium */
+"Lithium" = "Литиевая";
+
+/* Pump error code describing max setting exceeded */
+"Max setting exceeded" = "Максимальное значение превышено";
+
+/* Describing the North America pump region */
+"North America" = "Сев Америка";
+
+/* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
+"PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "Сообщение помпы(%1$@, %2$@, %3$@, %4$@)";
+
+/* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
+"Temporary Basal: %1$.3f U/hour" = "Временный базал: %1$.3f ед/ч";
+
+/* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
+"Temporary Basal: %1$d min" = "Временный базал: %1$d мин";
+
+/* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
+"Temporary Basal: %1$d%%" = "Временный базал: %1$d%%";
+
+/* Describing the worldwide pump region */
+"World-Wide" = "Глобальный";
+

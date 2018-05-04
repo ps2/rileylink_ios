@@ -18,10 +18,9 @@ public class ReadCurrentGlucosePageMessageBody: CarelinkLongMessageBody {
         guard rxData.count == type(of: self).length else {
             return nil
         }
-        
-        self.pageNum = rxData.subdata(in: 1..<5).withUnsafeBytes({ (bytes: UnsafePointer<UInt32>) -> UInt32 in
-            return UInt32(bigEndian: bytes.pointee)
-        })
+
+        self.pageNum = rxData[1..<5
+            ].withUnsafeBytes { UInt32(bigEndian: $0.pointee) }
         self.glucose = Int(rxData[6] as UInt8)
         self.isig = Int(rxData[8] as UInt8)
         

@@ -19,15 +19,48 @@ public enum MessageType: UInt8 {
     case writeGlucoseHistoryTimestamp = 0x28
     case changeTime                   = 0x40
     case bolus                        = 0x42
+
+    case PumpExperiment_OP67          = 0x43
+    case PumpExperiment_OP68          = 0x44
+    case PumpExperiment_OP69          = 0x45
+
+    case selectBasalProfile           = 0x4a
+
     case changeTempBasal              = 0x4c
+
+    case PumpExperiment_OP80          = 0x50
+    case PumpExperiment_OP81          = 0x51
+    case PumpExperiment_OP82          = 0x52
+    case PumpExperiment_OP83          = 0x53
+    case PumpExperiment_OP84          = 0x54
+    case PumpExperiment_OP85          = 0x55
+    case PumpExperiment_OP86          = 0x56
+    case PumpExperiment_OP87          = 0x57
+    case PumpExperiment_OP88          = 0x58
+    case PumpExperiment_OP89          = 0x59
+    case PumpExperiment_OP90          = 0x5a
+
     case buttonPress                  = 0x5b
+
+    case PumpExperiment_OP92          = 0x5c
+
     case powerOn                      = 0x5d
+
+    case PumpExperiment_OP97          = 0x61
+    case PumpExperiment_OP98          = 0x62
+    case PumpExperiment_OP99          = 0x63
+    case PumpExperiment_O100          = 0x64
+    case PumpExperiment_O101          = 0x65
+    case PumpExperiment_O103          = 0x67
+
     case readTime                     = 0x70
     case getBattery                   = 0x72
     case readRemainingInsulin         = 0x73
     case getHistoryPage               = 0x80
     case getPumpModel                 = 0x8d
     case readProfileSTD512            = 0x92
+    case readProfileA512              = 0x93
+    case readProfileB512              = 0x94
     case readTempBasal                = 0x98
     case getGlucosePage               = 0x9A
     case readCurrentPageNumber        = 0x9d
@@ -60,6 +93,10 @@ public enum MessageType: UInt8 {
         case .getPumpModel:
             return GetPumpModelCarelinkMessageBody.self
         case .readProfileSTD512:
+            return DataFrameMessageBody.self
+        case .readProfileA512:
+            return DataFrameMessageBody.self
+        case .readProfileB512:
             return DataFrameMessageBody.self
         case .getHistoryPage:
             return GetHistoryPageCarelinkMessageBody.self

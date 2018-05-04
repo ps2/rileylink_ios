@@ -17,6 +17,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 *.xcscmblueprint
+project.xcworkspace
 .DS_Store
 *.log
 

@@ -7,6 +7,6 @@
 //
 
 import UIKit
-import RileyLinkKit
+import RileyLinkKitUI
 
 extension RileyLinkDeviceTableViewCell: IdentifiableClass { }

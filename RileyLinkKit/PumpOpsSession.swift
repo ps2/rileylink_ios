@@ -18,7 +18,7 @@ protocol PumpOpsSessionDelegate: class {
 
 public class PumpOpsSession {
 
-    private var pump: PumpState {
+    private(set) public var pump: PumpState {
         didSet {
             delegate.pumpOpsSession(self, didChange: pump)
         }

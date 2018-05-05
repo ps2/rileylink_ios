@@ -174,10 +174,10 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .nightscout:
                 let service = dataManager.remoteDataManager.nightscoutService
                 let vc = AuthenticationViewController(authentication: service)
-                vc.authenticationObserver = { [unowned self] (service) in
-                    self.dataManager.remoteDataManager.nightscoutService = service
+                vc.authenticationObserver = { [weak self] (service) in
+                    self?.dataManager.remoteDataManager.nightscoutService = service
                     
-                    self.tableView.reloadRows(at: [indexPath], with: .none)
+                    self?.tableView.reloadRows(at: [indexPath], with: .none)
                 }
                 
                 show(vc, sender: indexPath)

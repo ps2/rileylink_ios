@@ -66,10 +66,10 @@ public class RileyLinkDevice {
 
         peripheralManager.delegate = self
 
-        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [unowned self] (queue, change) in
+        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [weak self] (queue, change) in
             if let newValue = change.newValue, newValue == 0 {
-                self.log.debug("Session queue operation count is now empty")
-                self.assertIdleListening(forceRestart: true)
+                self?.log.debug("Session queue operation count is now empty")
+                self?.assertIdleListening(forceRestart: true)
             }
         }
     }

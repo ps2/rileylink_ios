@@ -31,7 +31,7 @@ class AuthenticationViewController<T: ServiceAuthentication>: UITableViewControl
 
                 tableView.reloadSections(IndexSet(integersIn: 0...1), with: .automatic)
                 authentication.verify { [weak self] (success, error) in
-                    guard let strongSelf = self {
+                    guard let strongSelf = self else {
                         return
                     }
 

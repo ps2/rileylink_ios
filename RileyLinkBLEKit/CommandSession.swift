@@ -109,9 +109,9 @@ public struct CommandSession {
     
     /// - Throws: RileyLinkDeviceError
     public func enableCCLEDs() throws {
-        let enableBlue = SetLedMode(.blue, mode: .auto)
+        let enableBlue = SetLEDMode(.blue, mode: .auto)
         _ = try writeCommand(enableBlue, timeout: 0)
-        let enableGreen = SetLedMode(.green, mode: .auto)
+        let enableGreen = SetLEDMode(.green, mode: .auto)
         _ = try writeCommand(enableGreen, timeout: 0)
     }
 

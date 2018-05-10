@@ -72,10 +72,10 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
         
         if newer {
             maxBolusTicks = rxData[7]
-            maxBasalTicks = rxData[8..<10].to(UInt16.self)
+            maxBasalTicks = rxData[8..<10].toBigEndian(UInt16.self)
         } else {
             maxBolusTicks = rxData[6]
-            maxBasalTicks = rxData[7..<9].to(UInt16.self)
+            maxBasalTicks = rxData[7..<9].toBigEndian(UInt16.self)
         }
         maxBolus = Double(maxBolusTicks) / type(of: self).maxBolusMultiplier
         maxBasal = Double(maxBasalTicks) / type(of: self).maxBasalMultiplier

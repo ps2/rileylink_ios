@@ -99,7 +99,7 @@ protocol PeripheralManagerDelegate: class {
 // MARK: - Operation sequence management
 extension PeripheralManager {
     func configureAndRun(_ block: @escaping (_ manager: PeripheralManager) -> Void) -> (() -> Void) {
-        return { [unowned self] in
+        return {
             if !self.needsConfiguration && self.peripheral.services == nil {
                 self.log.error("Configured peripheral has no services. Reconfiguring…")
             }

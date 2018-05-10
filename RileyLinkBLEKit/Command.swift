@@ -244,7 +244,7 @@ struct SetSoftwareEncoding: Command {
         return Data(bytes: [
             RileyLinkCommand.setSWEncoding.rawValue,
             encodingType.rawValue
-            ])
+        ])
     }
 }
 
@@ -266,7 +266,7 @@ struct SetPreamble: Command {
     }
 }
 
-struct SetLedMode: Command {
+struct SetLEDMode: Command {
     typealias ResponseType = CodeResponse
     
     let led: RileyLinkLEDType
@@ -289,14 +289,5 @@ struct ResetRadioConfig: Command {
     
     var data: Data {
         return Data(bytes: [RileyLinkCommand.resetRadioConfig.rawValue])        
-    }
-}
-
-
-// MARK: - Helpers
-extension Data {
-    fileprivate mutating func appendBigEndian<T: FixedWidthInteger>(_ newElement: T) {
-        var element = newElement.byteSwapped
-        append(UnsafeBufferPointer(start: &element, count: 1))
     }
 }

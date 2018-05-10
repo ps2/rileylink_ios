@@ -123,14 +123,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
 
-    private var deviceObserver: Any? {
-        willSet {
-            if let observer = deviceObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
-    }
-
     private func observe() {
         let center = NotificationCenter.default
         let mainQueue = OperationQueue.main

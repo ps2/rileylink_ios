@@ -18,7 +18,7 @@ protocol PumpOpsSessionDelegate: class {
 
 public class PumpOpsSession {
 
-    private var pump: PumpState {
+    private(set) public var pump: PumpState {
         didSet {
             delegate.pumpOpsSession(self, didChange: pump)
         }
@@ -698,9 +698,14 @@ extension PumpOpsSession {
             throw PumpOpsError.deviceError(error)
         }
     }
-    
+
+    /// - Throws: PumpOpsError.deviceError
     public func enableCCLEDs() throws {
-        try session.enableCCLEDs()
+        do {
+            try session.enableCCLEDs()
+        } catch let error as LocalizedError {
+            throw PumpOpsError.deviceError(error)
+        }
     }
 
     /// - Throws:

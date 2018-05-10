@@ -10,7 +10,7 @@ import Foundation
 
 public class TempBasalNightscoutTreatment: NightscoutTreatment {
     
-    enum RateType: String {
+    public enum RateType: String {
         case Absolute = "absolute"
         case Percentage = "percentage"
     }
@@ -21,7 +21,7 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
     let temp: RateType
     let duration: Int
     
-    init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int) {
+    public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int) {
         self.rate = rate
         self.absolute = absolute
         self.temp = temp

@@ -16,10 +16,10 @@ public class RileyLinkDevice {
     private let log = OSLog(category: "RileyLinkDevice")
 
     // Confined to `manager.queue`
-    private(set) var bleFirmwareVersion: BLEFirmwareVersion?
+    private var bleFirmwareVersion: BLEFirmwareVersion?
 
     // Confined to `manager.queue`
-    private(set) var radioFirmwareVersion: RadioFirmwareVersion?
+    private var radioFirmwareVersion: RadioFirmwareVersion?
 
     // Confined to `queue`
     private var idleListeningState: IdleListeningState = .disabled {

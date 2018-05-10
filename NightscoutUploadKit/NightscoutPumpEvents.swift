@@ -93,6 +93,7 @@ public class NightscoutPumpEvents: NSObject {
             enteredBy: eventSource,
             temp: basalRate.rateType == .Absolute ? .Absolute : .Percentage,
             rate: basalRate.rate,
+            percent: basalRate.rate - 100,
             absolute: absolute,
             duration: basalDuration.duration)
     }

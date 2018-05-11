@@ -273,6 +273,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         .pressDownButton,
         .readPumpStatus,
         .readBasalSchedule,
+        .enableLED,
     ]
 
     private let omnipodCommands: [Commands] = [

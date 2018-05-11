@@ -713,7 +713,8 @@ extension PumpOpsSession {
     ///     - RileyLinkDeviceError
     func configureRadio(for region: PumpRegion) throws {
         try session.resetRadioConfig()
-        
+        print("configuring ******************************************************************")
+
         switch region {
         case .worldWide:
             //try session.updateRegister(.mdmcfg4, value: 0x59)

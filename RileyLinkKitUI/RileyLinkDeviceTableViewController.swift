@@ -536,7 +536,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 break
             }
         case .commands:
-            let vc: UIViewController
+            let vc: UIViewController?
 
             switch availableCommands[indexPath.row] {
             case .tune:
@@ -564,16 +564,32 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .omniTestCommands:
                 vc = CommandResponseViewController.omniTesting(podComms: podComms, device: device)
             case .omniChangePod:
-                vc = CommandResponseViewController.omniChangePod(podComms: podComms, device: device)
+                let alert = UIAlertController(title: "Discard Pod", message: "You will no longer be able to use the current POD.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Discard POD"), style: .default, handler: { _ in
+                    let vc = CommandResponseViewController.omniChangePod(podComms: self.podComms, device: self.device)
+                    if let cell = tableView.cellForRow(at: indexPath) {
+                        vc.title = cell.textLabel?.text
+                    }
+                    self.show(vc, sender: indexPath)
+                }))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Keep POD", comment: "Keep Pod"), style: .default, handler: { _ in
+                    NSLog("Keeping pod.")
+                }))
+                self.present(alert, animated: true, completion: nil)
+                vc = nil
             case .omniPairNewPod:
                 vc = OmnipodPairingViewController(podComms: podComms, device: device)
             }
-
-            if let cell = tableView.cellForRow(at: indexPath) {
-                vc.title = cell.textLabel?.text
+            
+            guard let vcToShow = vc else {
+                return
             }
 
-            show(vc, sender: indexPath)
+            if let cell = tableView.cellForRow(at: indexPath) {
+                vcToShow.title = cell.textLabel?.text
+            }
+
+            show(vcToShow, sender: indexPath)
         case .pump:
             break
         case .pod:

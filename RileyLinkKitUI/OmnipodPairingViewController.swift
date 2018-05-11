@@ -57,8 +57,10 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             switch self {
             case .noActivePod, .checkInfusionSite:
                 return NSLocalizedString("Yes", comment: "Affirmative response to question")
-            case .fillNewPod, .prepareSite, .removeBacking, .insertCannula:
+            case .fillNewPod, .prepareSite, .removeBacking:
                 return NSLocalizedString("Next", comment: "Button text for next action")
+            case .insertCannula:
+                return NSLocalizedString("Start", comment: "Button text for start action")
             default:
                 return nil
             }

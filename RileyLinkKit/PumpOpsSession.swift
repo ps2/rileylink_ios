@@ -23,7 +23,7 @@ public class PumpOpsSession {
             delegate.pumpOpsSession(self, didChange: pump)
         }
     }
-    private let settings: PumpSettings
+    public let settings: PumpSettings
     private let session: PumpMessageSender
 
     private unowned let delegate: PumpOpsSessionDelegate
@@ -252,7 +252,7 @@ extension PumpOpsSession {
 public struct PumpStatus {
     // Date components read from the pump, along with PumpState.timeZone
     public let clock: DateComponents
-    public let batteryVolts: Double
+    public let batteryVolts: Measurement<UnitElectricPotentialDifference>
     public let batteryStatus: BatteryStatus
     public let suspended: Bool
     public let bolusing: Bool
@@ -305,7 +305,7 @@ extension PumpOpsSession {
 
         return PumpStatus(
             clock: clock,
-            batteryVolts: battResp.volts,
+            batteryVolts: Measurement(value: battResp.volts, unit: UnitElectricPotentialDifference.volts),
             batteryStatus: battResp.status,
             suspended: status.suspended,
             bolusing: status.bolusing,

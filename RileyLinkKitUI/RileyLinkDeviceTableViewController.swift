@@ -441,7 +441,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .pressDownButton:
                 vc = .pressDownButton(ops: ops, device: device)
             case .readPumpStatus:
-                vc = .readPumpStatus(ops: ops, device: device, decimalFormatter: decimalFormatter)
+                vc = .readPumpStatus(ops: ops, device: device, measurementFormatter: measurementFormatter)
             case .readBasalSchedule:
                 vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
             case .enableLED:

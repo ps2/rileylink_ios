@@ -95,7 +95,7 @@ extension RileyLinkDevice {
     }
 
     public func readRSSI() {
-        guard case .connected = manager.peripheral.state, case .poweredOn = manager.central.state else {
+        guard case .connected = manager.peripheral.state, case .poweredOn? = manager.central?.state else {
             return
         }
         manager.peripheral.readRSSI()
@@ -182,7 +182,7 @@ extension RileyLinkDevice {
                 return
             }
 
-            guard case .connected = self.manager.peripheral.state, case .poweredOn = self.manager.central.state else {
+            guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
                 return
             }
 

@@ -17,6 +17,9 @@ public enum MessageType: UInt8 {
     case deviceLink                   = 0x0A
     case errorResponse                = 0x15
     case writeGlucoseHistoryTimestamp = 0x28
+
+    case readRemoteControlID          = 0x2e  // Refused by x23 pumps
+
     case changeTime                   = 0x40
     case bolus                        = 0x42
 
@@ -67,6 +70,15 @@ public enum MessageType: UInt8 {
     case readSettings                 = 0xc0
     case readCurrentGlucosePage       = 0xcd
     case readPumpStatus               = 0xce
+
+    case unknown_e2                   = 0xe2  // a7594040e214190226330000000000021f99011801e00103012c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    case unknown_e6                   = 0xe6  // a7594040e60200190000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    case settingsChangeCounter        = 0xec  // Body[3] increments by 1 after changing certain settings 0200af0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+    case readOtherDevicesIDs          = 0xf0
+    case readCaptureEventEnabled      = 0xf1  // Body[1] encodes the bool state 0101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    case changeCaptureEventEnable     = 0xf2
+    case readOtherDevicesStatus       = 0xf3
     
     var bodyType: MessageBody.Type {
         switch self {
@@ -114,6 +126,10 @@ public enum MessageType: UInt8 {
             return GetGlucosePageMessageBody.self
         case .errorResponse:
             return PumpErrorMessageBody.self
+        case .readOtherDevicesIDs:
+            return ReadOtherDevicesIDsMessageBody.self
+        case .readOtherDevicesStatus:
+            return ReadOtherDevicesStatusMessageBody.self
         default:
             return UnknownMessageBody.self
         }

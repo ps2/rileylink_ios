@@ -39,6 +39,20 @@ extension CommandResponseViewController {
         }
     }
 
+    static func discoverCommands(ops: PumpOps?, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            ops?.runSession(withName: "Discover Commands", using: device) { (session) in
+                session.discoverCommands(in: 0xf0...0xff, { (results) in
+                    DispatchQueue.main.async {
+                        completionHandler(results.joined(separator: "\n"))
+                    }
+                })
+            }
+
+            return NSLocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
+        }
+    }
+
     static func dumpHistory(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
@@ -213,7 +227,6 @@ extension CommandResponseViewController {
             return NSLocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
         }
     }
-
 
     static func readPumpStatus(ops: PumpOps?, device: RileyLinkDevice, measurementFormatter: MeasurementFormatter) -> T {
         return T { (completionHandler) -> String in

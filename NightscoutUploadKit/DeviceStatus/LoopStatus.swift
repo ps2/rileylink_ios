@@ -21,8 +21,10 @@ public struct LoopStatus {
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
     let failureReason: Error?
+    let currentCorrectionRange: CorrectionRange?
 
-    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil) {
+
+    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil, currentCorrectionRange: CorrectionRange? = nil) {
         self.name = name
         self.version = version
         self.timestamp = timestamp
@@ -34,6 +36,7 @@ public struct LoopStatus {
         self.enacted = enacted
         self.rileylinks = rileylinks
         self.failureReason = failureReason
+        self.currentCorrectionRange = currentCorrectionRange
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -73,6 +76,10 @@ public struct LoopStatus {
 
         if let rileylinks = rileylinks {
             rval["rileylinks"] = rileylinks.map { $0.dictionaryRepresentation }
+        }
+
+        if let currentCorrectionRange = currentCorrectionRange {
+            rval["currentCorrectionRange"] = currentCorrectionRange.dictionaryRepresentation
         }
 
         return rval

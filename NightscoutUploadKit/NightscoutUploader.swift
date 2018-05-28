@@ -216,12 +216,25 @@ public class NightscoutUploader {
                 case .flat:
                     return "Flat"
                 }
-                }()
+            }()
             
             let entry = NightscoutEntry(glucose: glucose, timestamp: sensorDate, device: device, glucoseType: .Sensor, previousSGV: previousSGV, previousSGVNotActive: previousSGVNotActive, direction: direction)
             entries.append(entry)
         }
         flushAll()
+    }
+
+    public func uploadSGV(glucoseMGDL: Int, at date: Date, direction: String?, device: String) {
+        let entry = NightscoutEntry(
+            glucose: glucoseMGDL,
+            timestamp: date,
+            device: device,
+            glucoseType: .Sensor,
+            previousSGV: nil,
+            previousSGVNotActive: nil,
+            direction: direction
+        )
+        entries.append(entry)
     }
     
     public func handleMeterMessage(_ msg: MeterMessage) {

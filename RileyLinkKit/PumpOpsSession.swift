@@ -245,6 +245,19 @@ extension PumpOpsSession {
 
         return BasalSchedule(rawValue: scheduleData)!
     }
+
+    public func getOtherDevicesIDs() throws -> ReadOtherDevicesIDsMessageBody {
+        try wakeup()
+
+        return try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesIDs), responseType: .readOtherDevicesIDs)
+    }
+
+    public func getOtherDevicesEnabled() throws -> Bool {
+        try wakeup()
+
+        let response: ReadOtherDevicesStatusMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesStatus), responseType: .readOtherDevicesStatus)
+        return response.isEnabled
+    }
 }
 
 
@@ -525,10 +538,9 @@ extension PumpOpsSession {
         }
     }
 
-    public func discoverCommands(_ updateHandler: (_ messages: [String]) -> Void) {
-        let codes: [MessageType] = [
-            .PumpExperiment_O103,
-        ]
+    public func discoverCommands(in range: CountableClosedRange<UInt8>, _ updateHandler: (_ messages: [String]) -> Void) {
+
+        let codes = range.compactMap { MessageType(rawValue: $0) }
 
         for code in codes {
             var messages = [String]()
@@ -551,6 +563,16 @@ extension PumpOpsSession {
 
                 // Check history?
 
+            } catch PumpOpsError.unexpectedResponse(let response, from: _) {
+                messages.append(contentsOf: [
+                    "Unexpected response:",
+                    response.txData.hexadecimalString,
+                ])
+            } catch PumpOpsError.unknownResponse(rx: let response, during: _) {
+                messages.append(contentsOf: [
+                    "Unknown response:",
+                    response.hexadecimalString,
+                    ])
             } catch let error {
                 messages.append(contentsOf: [
                     String(describing: error),

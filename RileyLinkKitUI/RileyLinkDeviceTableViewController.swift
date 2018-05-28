@@ -241,6 +241,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readPumpStatus
         case readBasalSchedule
         case enableLED
+        case discoverCommands
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -370,6 +371,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             
             case .enableLED:
                 cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+
+            case .discoverCommands:
+                cell.textLabel?.text = NSLocalizedString("Discover Commands", comment: "The title of the command to discover commands")
             }
         }
 
@@ -446,6 +450,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
             case .enableLED:
                 vc = .enableLEDs(ops: ops, device: device)
+            case .discoverCommands:
+                vc = .discoverCommands(ops: ops, device: device)
             }
 
             if let cell = tableView.cellForRow(at: indexPath) {

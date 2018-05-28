@@ -21,8 +21,8 @@ public struct SensorStatusGlucoseEvent: GlucoseEvent {
             return nil
         }
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         rawData = availableData.subdata(in: 0..<length)

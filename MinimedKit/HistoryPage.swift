@@ -32,7 +32,7 @@ public struct HistoryPage {
         let pageData = pageData.subdata(in: 0..<1022)
         
         func matchEvent(_ offset: Int) -> PumpEvent? {
-            if let eventType = PumpEventType(rawValue:(pageData[offset] as UInt8)) {
+            if let eventType = PumpEventType(rawValue: pageData[offset]) {
                 let remainingData = pageData.subdata(in: offset..<pageData.count)
                 if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
                     return event
@@ -48,13 +48,13 @@ public struct HistoryPage {
         
         while offset < length {
             // Slurp up 0's
-            if pageData[offset] as UInt8 == 0 {
+            if pageData[offset] == 0 {
                 offset += 1
                 continue
             }
             guard var event = matchEvent(offset) else {
                 events = [PumpEvent]()
-                throw HistoryPageError.unknownEventType(eventType: pageData[offset] as UInt8)
+                throw HistoryPageError.unknownEventType(eventType: pageData[offset])
             }
 
             if unabsorbedInsulinRecord != nil, var bolus = event as? BolusNormalPumpEvent {

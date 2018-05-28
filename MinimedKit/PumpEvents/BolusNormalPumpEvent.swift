@@ -64,7 +64,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         let duration: TimeInterval
         
         func doubleValueFromData(at index: Int) -> Double {
-            return Double(availableData[index] as UInt8)
+            return Double(availableData[index])
         }
         
         func decodeInsulin(from bytes: Data) -> Double {

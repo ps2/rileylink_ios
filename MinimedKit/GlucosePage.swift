@@ -36,7 +36,7 @@ public class GlucosePage {
         
         func matchEvent(_ offset: Int, relativeTimestamp: DateComponents) -> GlucoseEvent {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
-            let opcode = pageData[offset] as UInt8
+            let opcode = pageData[offset]
             if let eventType = GlucoseEventType(rawValue: opcode) {
                 if let event = eventType.eventType.init(availableData: remainingData, relativeTimestamp: relativeTimestamp) {
                     return event
@@ -53,7 +53,7 @@ public class GlucosePage {
         
         while offset < length {
             // ignore null bytes
-            if pageData[offset] as UInt8 == 0 {
+            if pageData[offset] == 0 {
                 offset += 1
                 continue
             } else {
@@ -90,7 +90,7 @@ public class GlucosePage {
         
         while offset < length {
             // ignore null bytes
-            if pageData[offset] as UInt8 == 0 {
+            if pageData[offset] == 0 {
                 offset += 1
                 continue
             }

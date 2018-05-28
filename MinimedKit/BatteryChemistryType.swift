@@ -39,8 +39,8 @@ public enum BatteryChemistryType: Int, CustomStringConvertible {
         }
     }
 
-    public func chargeRemaining(voltage: Double) -> Double {
-        let computed = (voltage - self.minVoltage)/(self.maxVoltage - self.minVoltage)
+    public func chargeRemaining(at voltage: Measurement<UnitElectricPotentialDifference>) -> Double {
+        let computed = (voltage.converted(to: .volts).value - self.minVoltage)/(self.maxVoltage - self.minVoltage)
         return max(min(computed, 1), 0)
     }
 }

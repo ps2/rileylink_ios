@@ -25,8 +25,8 @@ public struct BolusWizardEstimatePumpEvent: TimestampedPumpEvent {
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         func insulinDecode(_ a: Int, b: Int) -> Double {

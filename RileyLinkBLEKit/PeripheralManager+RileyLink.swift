@@ -27,6 +27,13 @@ enum MainServiceCharacteristicUUID: String, CBUUIDRawValue {
     case customName      = "D93B2AF0-1E28-11E4-8C21-0800200C9A66"
     case timerTick       = "6E6C7910-B89E-43A5-78AF-50C5E2B86F7E"
     case firmwareVersion = "30D99DC9-7C91-4295-A051-0A104D238CF2"
+    case ledMode         = "C6D84241-F1A7-4F9C-A25F-FCE16732F14E"
+}
+
+enum RileyLinkLEDMode: UInt8 {
+    case off  = 0x00
+    case on   = 0x01
+    case auto = 0x02
 }
 
 
@@ -39,7 +46,8 @@ extension PeripheralManager.Configuration {
                     MainServiceCharacteristicUUID.responseCount.cbUUID,
                     MainServiceCharacteristicUUID.customName.cbUUID,
                     MainServiceCharacteristicUUID.timerTick.cbUUID,
-                    MainServiceCharacteristicUUID.firmwareVersion.cbUUID
+                    MainServiceCharacteristicUUID.firmwareVersion.cbUUID,
+                    MainServiceCharacteristicUUID.ledMode.cbUUID
                 ]
             ],
             notifyingCharacteristics: [
@@ -126,6 +134,22 @@ extension PeripheralManager {
             }
         }
     }
+
+    func setLEDMode(mode: RileyLinkLEDMode) {
+        perform { (manager) in
+            do {
+                guard let characteristic = manager.peripheral.getCharacteristicWithUUID(.ledMode) else {
+                    throw PeripheralManagerError.unknownCharacteristic
+                }
+                let value = Data([mode.rawValue])
+                try manager.writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
+            } catch (let error) {
+                assertionFailure(String(describing: error))
+            }
+        }
+    }
+
+    
 
     func startIdleListening(idleTimeout: TimeInterval, channel: UInt8, timeout: TimeInterval = expectedMaxBLELatency, completion: @escaping (_ error: RileyLinkDeviceError?) -> Void) {
         perform { (manager) in
@@ -233,7 +257,7 @@ extension PeripheralManager {
             throw RileyLinkDeviceError.peripheralManagerError(error)
         }
     }
-
+    
     /// - Throws:
     ///     - RileyLinkDeviceError.invalidResponse
     ///     - RileyLinkDeviceError.peripheralManagerError

@@ -114,12 +114,30 @@ extension PumpOpsError: LocalizedError {
 
 
 extension PumpCommandError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .arguments(let error):
+            return error.errorDescription
+        case .command(let error):
+            return error.errorDescription
+        }
+    }
+
     public var failureReason: String? {
         switch self {
         case .arguments(let error):
             return error.failureReason
         case .command(let error):
             return error.failureReason
+        }
+    }
+
+    public var recoverySuggestion: String? {
+        switch self {
+        case .arguments(let error):
+            return error.recoverySuggestion
+        case .command(let error):
+            return error.recoverySuggestion
         }
     }
 }

@@ -39,6 +39,20 @@ extension CommandResponseViewController {
         }
     }
 
+    static func discoverCommands(ops: PumpOps?, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            ops?.runSession(withName: "Discover Commands", using: device) { (session) in
+                session.discoverCommands(in: 0xf0...0xff, { (results) in
+                    DispatchQueue.main.async {
+                        completionHandler(results.joined(separator: "\n"))
+                    }
+                })
+            }
+
+            return NSLocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
+        }
+    }
+
     static func dumpHistory(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
@@ -192,16 +206,37 @@ extension CommandResponseViewController {
             return NSLocalizedString("Reading basal schedule…", comment: "Progress message for reading basal schedule")
         }
     }
+    
+    static func enableLEDs(ops: PumpOps?, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            device.enableBLELEDs()
+            ops?.runSession(withName: "Read pump status", using: device) { (session) in
+                let response: String
+                do {
+                    try session.enableCCLEDs()
+                    response = "OK"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
 
-    static func readPumpStatus(ops: PumpOps?, device: RileyLinkDevice, decimalFormatter: NumberFormatter) -> T {
+            return NSLocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
+        }
+    }
+
+    static func readPumpStatus(ops: PumpOps?, device: RileyLinkDevice, measurementFormatter: MeasurementFormatter) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Read pump status", using: device) { (session) in
                 let response: String
                 do {
                     let status = try session.getCurrentPumpStatus()
 
-                    var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), decimalFormatter.string(from: NSNumber(value: status.reservoir))!)
-                    str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), decimalFormatter.string(from: NSNumber(value: status.batteryVolts))!)
+                    var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), measurementFormatter.numberFormatter.string(from: NSNumber(value: status.reservoir))!)
+                    str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), measurementFormatter.string(from: status.batteryVolts))
                     str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
                     str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
                     response = str

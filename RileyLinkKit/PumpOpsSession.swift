@@ -18,12 +18,12 @@ protocol PumpOpsSessionDelegate: class {
 
 public class PumpOpsSession {
 
-    private var pump: PumpState {
+    private(set) public var pump: PumpState {
         didSet {
             delegate.pumpOpsSession(self, didChange: pump)
         }
     }
-    private let settings: PumpSettings
+    public let settings: PumpSettings
     private let session: PumpMessageSender
 
     private unowned let delegate: PumpOpsSessionDelegate
@@ -245,6 +245,19 @@ extension PumpOpsSession {
 
         return BasalSchedule(rawValue: scheduleData)!
     }
+
+    public func getOtherDevicesIDs() throws -> ReadOtherDevicesIDsMessageBody {
+        try wakeup()
+
+        return try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesIDs), responseType: .readOtherDevicesIDs)
+    }
+
+    public func getOtherDevicesEnabled() throws -> Bool {
+        try wakeup()
+
+        let response: ReadOtherDevicesStatusMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesStatus), responseType: .readOtherDevicesStatus)
+        return response.isEnabled
+    }
 }
 
 
@@ -252,7 +265,7 @@ extension PumpOpsSession {
 public struct PumpStatus {
     // Date components read from the pump, along with PumpState.timeZone
     public let clock: DateComponents
-    public let batteryVolts: Double
+    public let batteryVolts: Measurement<UnitElectricPotentialDifference>
     public let batteryStatus: BatteryStatus
     public let suspended: Bool
     public let bolusing: Bool
@@ -305,7 +318,7 @@ extension PumpOpsSession {
 
         return PumpStatus(
             clock: clock,
-            batteryVolts: battResp.volts,
+            batteryVolts: Measurement(value: battResp.volts, unit: UnitElectricPotentialDifference.volts),
             batteryStatus: battResp.status,
             suspended: status.suspended,
             bolusing: status.bolusing,
@@ -525,10 +538,9 @@ extension PumpOpsSession {
         }
     }
 
-    public func discoverCommands(_ updateHandler: (_ messages: [String]) -> Void) {
-        let codes: [MessageType] = [
-            .PumpExperiment_O103,
-        ]
+    public func discoverCommands(in range: CountableClosedRange<UInt8>, _ updateHandler: (_ messages: [String]) -> Void) {
+
+        let codes = range.compactMap { MessageType(rawValue: $0) }
 
         for code in codes {
             var messages = [String]()
@@ -551,6 +563,16 @@ extension PumpOpsSession {
 
                 // Check history?
 
+            } catch PumpOpsError.unexpectedResponse(let response, from: _) {
+                messages.append(contentsOf: [
+                    "Unexpected response:",
+                    response.txData.hexadecimalString,
+                ])
+            } catch PumpOpsError.unknownResponse(rx: let response, during: _) {
+                messages.append(contentsOf: [
+                    "Unknown response:",
+                    response.hexadecimalString,
+                    ])
             } catch let error {
                 messages.append(contentsOf: [
                     String(describing: error),
@@ -694,6 +716,15 @@ extension PumpOpsSession {
         let chanbw = mode.rawValue
         do {
             try session.updateRegister(.mdmcfg4, value: chanbw | drate_e)
+        } catch let error as LocalizedError {
+            throw PumpOpsError.deviceError(error)
+        }
+    }
+
+    /// - Throws: PumpOpsError.deviceError
+    public func enableCCLEDs() throws {
+        do {
+            try session.enableCCLEDs()
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }

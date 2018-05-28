@@ -17,8 +17,8 @@ public struct ChangeTempBasalTypePumpEvent: TimestampedPumpEvent {
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         guard length <= availableData.count else {

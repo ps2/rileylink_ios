@@ -20,12 +20,12 @@ public class ReadTimeCarelinkMessageBody: CarelinkLongMessageBody {
 
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar(identifier: Calendar.Identifier.gregorian)
-        dateComponents.hour   = Int(rxData[1] as UInt8)
-        dateComponents.minute = Int(rxData[2] as UInt8)
-        dateComponents.second = Int(rxData[3] as UInt8)
+        dateComponents.hour   = Int(rxData[1])
+        dateComponents.minute = Int(rxData[2])
+        dateComponents.second = Int(rxData[3])
         dateComponents.year   = Int(bigEndianBytes: rxData.subdata(in: 4..<6))
-        dateComponents.month  = Int(rxData[6] as UInt8)
-        dateComponents.day    = Int(rxData[7] as UInt8)
+        dateComponents.month  = Int(rxData[6])
+        dateComponents.day    = Int(rxData[7])
 
         self.dateComponents = dateComponents
 

@@ -47,6 +47,7 @@ public enum PumpEventType: UInt8 {
     case journalEntryExerciseMarker = 0x41
     case journalEntryInsulinMarker = 0x42
     case journalEntryOtherMarker = 0x43
+    case changeSensorAutoCalEnable = 0x44
     case changeBolusWizardSetup = 0x4f
     case changeSensorSetup2 = 0x50
     case restoreMystery51 = 0x51

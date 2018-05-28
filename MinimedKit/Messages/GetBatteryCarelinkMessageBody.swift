@@ -37,8 +37,8 @@ public class GetBatteryCarelinkMessageBody: CarelinkLongMessageBody {
             return nil
         }
         
-        volts = Double(Int(rxData[2] as UInt8) << 8 + Int(rxData[3] as UInt8)) / 100.0
-        status = BatteryStatus(statusByte: rxData[1] as UInt8)
+        volts = Double(Int(rxData[2]) << 8 + Int(rxData[3])) / 100.0
+        status = BatteryStatus(statusByte: rxData[1])
         
         super.init(rxData: rxData)
     }

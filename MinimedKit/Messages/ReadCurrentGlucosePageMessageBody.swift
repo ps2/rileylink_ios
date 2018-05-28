@@ -21,8 +21,8 @@ public class ReadCurrentGlucosePageMessageBody: CarelinkLongMessageBody {
 
         self.pageNum = rxData[1..<5
             ].withUnsafeBytes { UInt32(bigEndian: $0.pointee) }
-        self.glucose = Int(rxData[6] as UInt8)
-        self.isig = Int(rxData[8] as UInt8)
+        self.glucose = Int(rxData[6])
+        self.isig = Int(rxData[8])
         
         super.init(rxData: rxData)
     }

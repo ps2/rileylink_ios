@@ -17,8 +17,8 @@ public class GetHistoryPageCarelinkMessageBody: CarelinkLongMessageBody {
         guard rxData.count == type(of: self).length else {
             return nil
         }
-        frameNumber = Int(rxData[0] as UInt8) & 0b1111111
-        lastFrame = (rxData[0] as UInt8) & 0b10000000 > 0
+        frameNumber = Int(rxData[0]) & 0b1111111
+        lastFrame = (rxData[0]) & 0b10000000 > 0
         frame = rxData.subdata(in: 1..<65)
         super.init(rxData: rxData)
     }

@@ -186,7 +186,7 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         let matchingHour: UInt8 = rxData[20]
         nextSensorCalibrationDateComponents = DateComponents()
         nextSensorCalibrationDateComponents?.hour = Int(matchingHour)
-        nextSensorCalibrationDateComponents?.minute = Int(rxData[21] as UInt8)
+        nextSensorCalibrationDateComponents?.minute = Int(rxData[21])
         nextSensorCalibrationDateComponents?.calendar = calendar
     }
     

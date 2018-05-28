@@ -33,7 +33,7 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
     public let records: [Record]
     
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = Int(max(availableData[1] as UInt8, UInt8(2)))
+        length = Int(max(availableData[1], 2))
         var records = [Record]()
         
         guard length <= availableData.count else {
@@ -42,8 +42,8 @@ public struct UnabsorbedInsulinPumpEvent: PumpEvent {
 
         rawData = availableData.subdata(in: 0..<length)
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         let numRecords = (d(1) - 2) / 3

@@ -429,23 +429,26 @@ public class PodCommsSession {
 
     
     public func testingCommands() throws {
-        //try bolus(units: 1.0)
-        //try insertCannula()
-        guard let podState = podState else {
-            throw PodCommsError.noPairedPod
-        }
-
-        let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
-        let schedule = BasalSchedule(entries: [entry])
-        var calendar = Calendar.current
-        calendar.timeZone = podState.timeZone
-        let now = Date()
-        let components = calendar.dateComponents([.day , .month, .year], from: now)
-        guard let startOfSchedule = calendar.date(from: components) else {
-            fatalError("invalid date")
-        }
-        let scheduleOffset = now.timeIntervalSince(startOfSchedule)
-        try insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
+        // Uncomment for testing bolusing
+        try bolus(units: 1.0)
+        
+        
+        // Uncomment for running insertCannula
+//        guard let podState = podState else {
+//            throw PodCommsError.noPairedPod
+//        }
+//
+//        let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
+//        let schedule = BasalSchedule(entries: [entry])
+//        var calendar = Calendar.current
+//        calendar.timeZone = podState.timeZone
+//        let now = Date()
+//        let components = calendar.dateComponents([.day , .month, .year], from: now)
+//        guard let startOfSchedule = calendar.date(from: components) else {
+//            fatalError("invalid date")
+//        }
+//        let scheduleOffset = now.timeIntervalSince(startOfSchedule)
+//        try insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
     }
     
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval) throws {

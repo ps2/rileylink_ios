@@ -68,15 +68,21 @@ public class PodComms {
         
         NotificationCenter.default.post(name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceConnectionStateDidChange, object: device)
+        
+        print("************ added device to configuredDevices ******************")
         configuredDevices.insert(device)
     }
-
+    
     @objc private func deviceRadioConfigDidChange(_ note: Notification) {
+        print("************ removing device from configuredDevices ******************")
         guard let device = note.object as? RileyLinkDevice else {
             return
         }
         
         NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
+        NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
+        print("************ removed device from configuredDevices ******************")
         configuredDevices.remove(device)
     }
 

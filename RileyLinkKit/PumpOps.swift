@@ -91,8 +91,8 @@ public class PumpOps {
 
         do {
             _ = try session.configureRadio(for: pumpSettings.pumpRegion)
-        } catch {
-            // Ignore the error and let the block run anyway
+        } catch let error {
+            print("configureRadio failed with: \(error)")
             return
         }
 

@@ -197,7 +197,7 @@ extension CommandResponseViewController {
     static func enableLEDs(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             device.enableBLELEDs()
-            ops?.runSession(withName: "Read pump status", using: device) { (session) in
+            ops?.runSession(withName: "Enable LEDs", using: device) { (session) in
                 let response: String
                 do {
                     try session.enableCCLEDs()

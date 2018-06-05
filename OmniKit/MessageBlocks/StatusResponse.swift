@@ -20,7 +20,7 @@ public struct StatusResponse : MessageBlock {
     
     public enum ReservoirStatus: UInt8 {
         case pairingSuccess = 3
-        case purging = 4
+        case priming = 4
         case readyForInjection = 5
         case injectionStarted = 6
         case injectionDone = 7

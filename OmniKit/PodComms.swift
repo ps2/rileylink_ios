@@ -60,7 +60,8 @@ public class PodComms {
         
         do {
             _ = try session.configureRadio()
-        } catch {
+        } catch let error {
+            print("configure Radio failed with error: \(error)")
             // Ignore the error and let the block run anyway
             return
         }

@@ -51,7 +51,7 @@ public struct BasalDeliveryTable {
         for entry in schedule.entries {
             let pulsesPerSegment = entry.rate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
             let alternateSegmentPulse = pulsesPerSegment - floor(pulsesPerSegment) > 0
-            var remaining = Int(entry.duration / .minutes(30))
+            var remaining = Int(entry.duration / BasalDeliveryTable.segmentDuration)
             while remaining > 0 {
                 let segments = min(remaining, 16)
                 let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: alternateSegmentPulse)
@@ -60,5 +60,13 @@ public struct BasalDeliveryTable {
             }
         }
         self.entries = tableEntries
+    }
+    
+    public init(tempBasalRate: Double, duration: TimeInterval) {
+        self.init(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: tempBasalRate, duration: duration)]))
+    }
+    
+    public func numSegments() -> Int {
+        return entries.reduce(0) { $0 + $1.segments }
     }
 }

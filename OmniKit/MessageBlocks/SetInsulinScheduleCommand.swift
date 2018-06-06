@@ -18,7 +18,7 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     
     public enum DeliverySchedule {
         case basalSchedule(currentSegment: UInt8, secondsRemaining: UInt16, pulsesRemaining: UInt16, table: BasalDeliveryTable)
-        case tempBasal
+        case tempBasal(secondsRemaining: UInt16, firstSegmentPulses: UInt16, table: BasalDeliveryTable)
         // During prime, multiplier is 8, otherwise 16 (0x10)
         case bolus(units: Double, multiplier: UInt16)
         
@@ -52,8 +52,15 @@ public struct SetInsulinScheduleCommand : MessageBlock {
                 data.appendBigEndian(pulseCount)
                 data.appendBigEndian(pulseCount)
                 return data
-            case .tempBasal:
-                return Data()
+            case .tempBasal(let secondsRemaining, let firstSegmentPulses, let table):
+                var data = Data(bytes: [UInt8(table.numSegments())])
+                data.appendBigEndian(secondsRemaining << 3)
+                data.appendBigEndian(firstSegmentPulses)
+                for entry in table.entries {
+                    data.append(entry.data)
+                }
+                return data
+
             }
         }
         
@@ -64,8 +71,9 @@ public struct SetInsulinScheduleCommand : MessageBlock {
                     table.entries.reduce(0) { $0 + $1.totalPulses() }
             case .bolus:
                 return data[0..<7].reduce(0) { $0 + UInt16($1) }
-            case .tempBasal:
-                return 0x0
+            case .tempBasal(_, _, let table):
+                return data[0..<5].reduce(0) { $0 + UInt16($1) } +
+                    table.entries.reduce(0) { $0 + $1.totalPulses() }
             }
         }
     }
@@ -116,7 +124,17 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             let table = BasalDeliveryTable(entries: entries)
             deliverySchedule = .basalSchedule(currentSegment: currentTableIndex, secondsRemaining: secondsRemaining, pulsesRemaining: pulsesRemaining, table: table)
         case .tempBasal:
-            deliverySchedule = .tempBasal
+            let secondsRemaining = encodedData[10...].toBigEndian(UInt16.self) >> 3
+            let firstSegmentPulses = encodedData[12...].toBigEndian(UInt16.self)
+            var entries = [BasalTableEntry]()
+            let numEntries = (length - 12) / 2
+            for i in 0..<numEntries {
+                let dataStart = Int(i*2 + 14)
+                let entryData = encodedData.subdata(in: dataStart..<(dataStart+2))
+                entries.append(BasalTableEntry(encodedData: entryData))
+            }
+            let table = BasalDeliveryTable(entries: entries)
+            deliverySchedule = .tempBasal(secondsRemaining: secondsRemaining, firstSegmentPulses: firstSegmentPulses, table: table)
         case .bolus:
             let duration = TimeInterval(minutes: Double(encodedData[9] * 30))
             let fieldA = encodedData[10...].toBigEndian(UInt16.self)

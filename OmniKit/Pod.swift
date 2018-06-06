@@ -9,5 +9,3 @@
 import Foundation
 
 let podPulseSize: Double = 0.05
-
-

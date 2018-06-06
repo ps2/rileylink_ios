@@ -368,6 +368,7 @@
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
+		C1CD0E4020C65EF00035E416 /* TempBasalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD0E3F20C65EF00035E416 /* TempBasalTests.swift */; };
 		C1CD8B082038D6B400A8F498 /* OmnipodPairingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1CD8B072038D6B400A8F498 /* OmnipodPairingViewController.xib */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
@@ -928,6 +929,7 @@
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
+		C1CD0E3F20C65EF00035E416 /* TempBasalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempBasalTests.swift; sourceTree = "<group>"; };
 		C1CD8B072038D6B400A8F498 /* OmnipodPairingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OmnipodPairingViewController.xib; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
@@ -1363,6 +1365,7 @@
 				C1130FD120159D05007D13DB /* PacketTests.swift */,
 				C1130FAC20159C29007D13DB /* Info.plist */,
 				C1130FD020159D04007D13DB /* OmniKitTests-Bridging-Header.h */,
+				C1CD0E3F20C65EF00035E416 /* TempBasalTests.swift */,
 			);
 			path = OmniKitTests;
 			sourceTree = "<group>";
@@ -2689,6 +2692,7 @@
 				C1130FD920159D05007D13DB /* CRC8Tests.swift in Sources */,
 				C1130FDC20159D05007D13DB /* PodStateTests.swift in Sources */,
 				C1130FDA20159D05007D13DB /* CRC16Tests.swift in Sources */,
+				C1CD0E4020C65EF00035E416 /* TempBasalTests.swift in Sources */,
 				C1130FD720159D05007D13DB /* PacketTests.swift in Sources */,
 				C12B03F22075AAC900A65AE7 /* BasalScheduleTests.swift in Sources */,
 				C1130FDB20159D05007D13DB /* MessageTests.swift in Sources */,

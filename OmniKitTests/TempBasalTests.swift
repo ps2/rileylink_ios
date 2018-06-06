@@ -25,7 +25,6 @@ class TempBasalTests: XCTestCase {
                 let entry = table.entries[0]
                 XCTAssertEqual(1, entry.segments)
                 XCTAssertEqual(2, entry.pulses)
-                XCTAssertEqual(2, entry.totalPulses())
             } else {
                 XCTFail("Expected ScheduleEntry.tempBasal type")
             }
@@ -54,7 +53,6 @@ class TempBasalTests: XCTestCase {
                 let entry = table.entries[0]
                 XCTAssertEqual(3, entry.segments)
                 XCTAssertEqual(20, entry.pulses)
-                XCTAssertEqual(60, entry.totalPulses())
             } else {
                 XCTFail("Expected ScheduleEntry.tempBasal type")
             }
@@ -67,6 +65,38 @@ class TempBasalTests: XCTestCase {
         let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 1800, firstSegmentPulses: 0x14, table: table)
         let cmd = SetInsulinScheduleCommand(nonce: 0x87e8d03a, deliverySchedule: deliverySchedule)
         XCTAssertEqual("1a0e87e8d03a0100cb03384000142014", cmd.data.hexadecimalString)
+    }
+    
+    func testMaxDuration() {
+        do {
+            // 30 U/h 12 hours
+            // Decode 1a 10 a958c5ad 01 04f5 18 3840 012c f12c 712c
+            let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a10a958c5ad0104f5183840012cf12c712c")!)
+            
+            XCTAssertEqual(0xa958c5ad, cmd.nonce)
+            if case SetInsulinScheduleCommand.DeliverySchedule.tempBasal(let secondsRemaining, let firstSegmentPulses, let table) = cmd.deliverySchedule {
+                
+                XCTAssertEqual(1800, secondsRemaining)
+                XCTAssertEqual(300, firstSegmentPulses)
+                XCTAssertEqual(2, table.entries.count)
+                let entry1 = table.entries[0]
+                XCTAssertEqual(16, entry1.segments)
+                XCTAssertEqual(300, entry1.pulses)
+                let entry2 = table.entries[1]
+                XCTAssertEqual(8, entry2.segments)
+                XCTAssertEqual(300, entry2.pulses)
+            } else {
+                XCTFail("Expected ScheduleEntry.tempBasal type")
+            }
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let table = BasalDeliveryTable(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: 30, duration: .hours(12))]))
+        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 1800, firstSegmentPulses: 300, table: table)
+        let cmd = SetInsulinScheduleCommand(nonce: 0xa958c5ad, deliverySchedule: deliverySchedule)
+        XCTAssertEqual("1a10a958c5ad0104f5183840012cf12c712c", cmd.data.hexadecimalString)
     }
 
 }

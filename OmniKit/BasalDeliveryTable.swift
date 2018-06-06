@@ -15,7 +15,7 @@ public struct BasalTableEntry {
     
     public init(encodedData: Data) {
         segments = Int(encodedData[0] >> 4) + 1
-        pulses = Int(encodedData[1])
+        pulses = (Int(encodedData[0] & 0b11) << 8) + Int(encodedData[1])
         alternateSegmentPulse = (encodedData[0] >> 3) & 0x1 == 1
     }
     
@@ -26,15 +26,19 @@ public struct BasalTableEntry {
     }
     
     public var data: Data {
+        let pulsesHighBits = UInt8((pulses >> 8) & 0b11)
+        let pulsesLowBits = UInt8(pulses & 0xff)
         return Data(bytes: [
-            UInt8((segments - 1) << 4) + UInt8((alternateSegmentPulse ? 1 : 0) << 3),
-            UInt8(pulses)
+            UInt8((segments - 1) << 4) + UInt8((alternateSegmentPulse ? 1 : 0) << 3) + pulsesHighBits,
+            UInt8(pulsesLowBits)
             ])
     }
     
-    public func totalPulses() -> UInt16 {
-        return UInt16(pulses) * UInt16(segments) + UInt16(alternateSegmentPulse ? segments / 2 : 0)
+    public func checksum() -> UInt16 {
+        let checksumPerSegment = (pulses & 0xff) + (pulses >> 8)
+        return UInt16(checksumPerSegment * segments + (alternateSegmentPulse ? segments / 2 : 0))
     }
+    
 }
 
 public struct BasalDeliveryTable {

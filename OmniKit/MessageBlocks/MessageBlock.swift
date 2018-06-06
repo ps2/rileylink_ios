@@ -20,7 +20,7 @@ public enum MessageBlockType: UInt8 {
     case assignAddress      = 0x07
     case getStatus          = 0x0e
     case basalScheduleExtra = 0x13
-    //case tempBasalExtra     = 0x16
+    case tempBasalExtra     = 0x16
     case bolusExtra        = 0x17
     case cancelBasal        = 0x19
     case setInsulinSchedule = 0x1a
@@ -54,6 +54,8 @@ public enum MessageBlockType: UInt8 {
             return DeactivatePodCommand.self
         case .statusResponse:
             return StatusResponse.self
+        case .tempBasalExtra:
+            return TempBasalExtra.self
         case .cancelBolus:
             return CancelBolusCommand.self
         }

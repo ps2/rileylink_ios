@@ -68,12 +68,12 @@ public struct SetInsulinScheduleCommand : MessageBlock {
             switch self {
             case .basalSchedule( _, _, _, let table):
                 return data[0..<5].reduce(0) { $0 + UInt16($1) } +
-                    table.entries.reduce(0) { $0 + $1.totalPulses() }
+                    table.entries.reduce(0) { $0 + $1.checksum() }
             case .bolus:
                 return data[0..<7].reduce(0) { $0 + UInt16($1) }
             case .tempBasal(_, _, let table):
                 return data[0..<5].reduce(0) { $0 + UInt16($1) } +
-                    table.entries.reduce(0) { $0 + $1.totalPulses() }
+                    table.entries.reduce(0) { $0 + $1.checksum() }
             }
         }
     }

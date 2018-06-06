@@ -10,6 +10,17 @@ import XCTest
 @testable import OmniKit
 
 class BasalScheduleTests: XCTestCase {
+    
+    func testBasalTableEntry() {
+        let entry = BasalTableEntry(segments: 2, pulses: 300, alternateSegmentPulse: false)
+        // $01 $2c $01 $2c = 1 + 44 + 1 + 44 = 90 = $5a
+        XCTAssertEqual(0x5a, entry.checksum())
+        
+        let entry2 = BasalTableEntry(segments: 2, pulses: 260, alternateSegmentPulse: true)
+        // $01 $04 $01 $04 = 1 + 4 + 1 + 5 = 1 = $0b
+        XCTAssertEqual(0x0b, entry2.checksum())
+    }
+    
     func testSetBasalScheduleCommand() {
         do {
             // Decode 1a 12 77a05551 00 0062 2b 1708 0000 f800 f800 f800

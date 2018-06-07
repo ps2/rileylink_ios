@@ -273,7 +273,7 @@ public class PodCommsSession {
                 let sendPacket = Packet(address: packetAddress, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
                 dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
                 if dataRemaining.count > 0 {
-                    let podAck = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 5)
+                    let podAck = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 30)
                     print("Got podAck: \(podAck)")
                     sentPacketsCount += 1
                 } else {

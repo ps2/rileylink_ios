@@ -37,6 +37,33 @@ class TempBasalTests: XCTestCase {
         XCTAssertEqual("1a0eea2d0a3b01007d01384000020002", cmd.data.hexadecimalString)
     }
     
+    func testSetTempBasalWithAlternatingPulse() {
+        do {
+            // 0.05U/hr for 2.5 hours
+            // Decode 1a 0e 4e2c2717 01 007f 05 3840 0000 4800
+            let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0e4e2c271701007f05384000004800")!)
+            
+            XCTAssertEqual(0x4e2c2717, cmd.nonce)
+            if case SetInsulinScheduleCommand.DeliverySchedule.tempBasal(let secondsRemaining, let firstSegmentPulses, let table) = cmd.deliverySchedule {
+                
+                XCTAssertEqual(1800, secondsRemaining)
+                XCTAssertEqual(0, firstSegmentPulses)
+                XCTAssertEqual(1, table.entries.count)
+                XCTAssertEqual(5, table.entries[0].segments)
+                XCTAssertEqual(0, table.entries[0].pulses)
+                XCTAssertEqual(true, table.entries[0].alternateSegmentPulse)
+            } else {
+                XCTFail("Expected ScheduleEntry.tempBasal type")
+            }
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = SetInsulinScheduleCommand(nonce: 0x4e2c2717, tempBasalRate: 0.05, duration: .hours(2.5))
+        XCTAssertEqual("1a0e4e2c271701007f05384000004800", cmd.data.hexadecimalString)
+    }
+
     func testLargerTempBasalCommand() {
         do {
             // 2.00 U/h for 1.5h

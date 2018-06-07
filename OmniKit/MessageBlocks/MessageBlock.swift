@@ -22,11 +22,11 @@ public enum MessageBlockType: UInt8 {
     case basalScheduleExtra = 0x13
     case tempBasalExtra     = 0x16
     case bolusExtra        = 0x17
-    case cancelBasal        = 0x19
+    case configurePod        = 0x19
     case setInsulinSchedule = 0x1a
     case deactivatePod      = 0x1c
     case statusResponse     = 0x1d
-    case cancelBolus        = 0x1f
+    case cancelDelivery        = 0x1f
     
     public var blockType: MessageBlock.Type {
         switch self {
@@ -46,8 +46,8 @@ public enum MessageBlockType: UInt8 {
             return BasalScheduleExtraCommand.self
         case .bolusExtra:
             return BolusExtraCommand.self
-        case .cancelBasal:
-            return CancelBasalCommand.self
+        case .configurePod:
+            return ConfigurePodCommand.self
         case .setInsulinSchedule:
             return SetInsulinScheduleCommand.self
         case .deactivatePod:
@@ -56,8 +56,8 @@ public enum MessageBlockType: UInt8 {
             return StatusResponse.self
         case .tempBasalExtra:
             return TempBasalExtraCommand.self
-        case .cancelBolus:
-            return CancelBolusCommand.self
+        case .cancelDelivery:
+            return CancelDeliveryCommand.self
         }
     }
 }

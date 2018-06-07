@@ -67,7 +67,7 @@ class PodStateTests: XCTestCase {
             // ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a
             let sentPacket = try Packet(encodedData: Data(hexadecimalString: "1f07b1eea31f07b1ee04071f05851072aa6200170a")!)
             let sentMessage = try Message(encodedData: sentPacket.data)
-            let sentCommand = sentMessage.messageBlocks[0] as! CancelBolusCommand
+            let sentCommand = sentMessage.messageBlocks[0] as! CancelDeliveryCommand
             
             let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "0603142ffa83cd")!)
             

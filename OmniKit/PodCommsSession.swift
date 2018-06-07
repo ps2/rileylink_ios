@@ -336,7 +336,6 @@ public class PodCommsSession {
         let message = Message(address: messageAddress, messageBlocks: [command], sequenceNum: messageNumber)
         return try sendMessage(message)
     }
-    
 
     public func setupNewPOD(timeZone: TimeZone) throws {
         
@@ -380,12 +379,12 @@ public class PodCommsSession {
 //        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
         
-        let cancel1 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
         let cancel1Response: StatusResponse = try sendCommand(cancel1)
         print("cancel1Response = \(cancel1Response)")
         try advanceToNextNonce()
         
-        let cancel2 = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel2 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
         let cancel12Response: StatusResponse = try sendCommand(cancel2)
         print("cancel1Response = \(cancel12Response)")
         try advanceToNextNonce()
@@ -405,7 +404,7 @@ public class PodCommsSession {
     
     public func finishPrime() throws {
         // 19 0a 365deab7 38000ff00302 80b0
-        let finishPrimeCommand = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
+        let finishPrimeCommand = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
         let response: StatusResponse = try sendCommand(finishPrimeCommand)
         print("finish prime response = \(response)")
         try advanceToNextNonce()
@@ -440,6 +439,29 @@ public class PodCommsSession {
         try advanceToNextNonce()
         print("status after set temp basal set = \(statusResponse)")
     }
+    
+    public func cancelTempBasal() throws {
+        
+        guard let podState = podState else {
+            throw PodCommsError.noPairedPod
+        }
+        
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce)
+        
+        let _: StatusResponse = try sendCommand(cancelDelivery)
+        self.podState?.advanceToNextNonce()
+
+        let cancel1 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1Response: StatusResponse = try sendCommand(cancel1)
+        print("cancel1Response = \(cancel1Response)")
+        try advanceToNextNonce()
+        
+        let cancel2 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel12Response: StatusResponse = try sendCommand(cancel2)
+        print("cancel1Response = \(cancel12Response)")
+        try advanceToNextNonce()
+    }
+
 
     
     public func testingCommands() throws {
@@ -447,7 +469,10 @@ public class PodCommsSession {
 //        try bolus(units: 1.0)
         
         // Uncomment for testing temp basal
-        try setTempBasal(rate: 30.0, duration: .hours(12), confidenceReminder: true, programReminderCounter: 30)
+//        try setTempBasal(rate: 30.0, duration: .hours(12), confidenceReminder: true, programReminderCounter: 30)
+        
+        // Uncomment for testing cancel temp basal
+        try cancelTempBasal()
         
         // Uncomment for running insertCannula
 //        guard let podState = podState else {
@@ -492,10 +517,10 @@ public class PodCommsSession {
         
         // Cancel basal
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
-        let cancelBasalCommand = CancelBasalCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
+        let configurePodCommand = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
         do {
-            let cancelBasalResponse: StatusResponse = try sendCommand(cancelBasalCommand)
-            print("cancelBasalResponse = \(cancelBasalResponse)")
+            let configurePodResponse: StatusResponse = try sendCommand(configurePodCommand)
+            print("configurePodResponse = \(configurePodResponse)")
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             print("pod acked?")
         }
@@ -533,12 +558,12 @@ public class PodCommsSession {
             self.podState = nil
         }
 
-        let cancelBolus = CancelBolusCommand(nonce: podState.currentNonce)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce)
 
-        let cancelBolusResponse: StatusResponse = try sendCommand(cancelBolus)
+        let cancelDeliveryResponse: StatusResponse = try sendCommand(cancelDelivery)
         self.podState?.advanceToNextNonce()
 
-        print("cancelBolusResponse = \(cancelBolusResponse)")
+        print("cancelDeliveryResponse = \(cancelDeliveryResponse)")
 
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
         // We don't know what to do with them, so skip for now.

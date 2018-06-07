@@ -1,5 +1,5 @@
 //
-//  CancelBolusCommand.swift
+//  CancelDeliveryCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/23/18.
@@ -8,11 +8,11 @@
 
 import Foundation
 
-public struct CancelBolusCommand : MessageBlock {
+public struct CancelDeliveryCommand : MessageBlock {
     
     // ID1:1f00ee84 PTYPE:PDM SEQ:26 ID2:1f00ee84 B9:ac BLEN:7 MTYPE:1f05 BODY:e1f78752078196 CRC:03
     
-    public let blockType: MessageBlockType = .cancelBolus
+    public let blockType: MessageBlockType = .cancelDelivery
     
     let nonce: UInt32
     

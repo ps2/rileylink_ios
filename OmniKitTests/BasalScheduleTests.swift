@@ -77,6 +77,8 @@ class BasalScheduleTests: XCTestCase {
             
             let cmd = try BasalScheduleExtraCommand(encodedData: Data(hexadecimalString: "130e40001aea001e84803840005b8d80")!)
             
+            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(0, cmd.programReminderCounter)
             XCTAssertEqual(0, cmd.currentEntryIndex)
             XCTAssertEqual(689, cmd.remainingPulses)
             XCTAssertEqual(TimeInterval(seconds: 20), cmd.delayUntilNextPulse)
@@ -91,8 +93,10 @@ class BasalScheduleTests: XCTestCase {
         }
         
         // Encode
-        let scheduleEntry = BasalScheduleExtraCommand.RateEntry(rate: 3.0, duration: TimeInterval(hours: 24))
-        let cmd = BasalScheduleExtraCommand.init(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: [scheduleEntry])
+        let rateEntries = RateEntry.makeEntries(rate: 3.0, duration: TimeInterval(hours: 24))
+        let cmd = BasalScheduleExtraCommand(confidenceReminder: true, programReminderCounter: 0, currentEntryIndex: 0, remainingPulses: 689, delayUntilNextPulse: TimeInterval(seconds: 20), rateEntries: rateEntries)
+
+
         XCTAssertEqual("130e40001aea001e84803840005b8d80", cmd.data.hexadecimalString)
     }
     
@@ -101,8 +105,10 @@ class BasalScheduleTests: XCTestCase {
         let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
         let schedule = BasalSchedule(entries: [entry])
         
-        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: .hours(8.25))
+        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: .hours(8.25), confidenceReminder: true, programReminderCounter: 60)
         
+        XCTAssertEqual(true, cmd.confidenceReminder)
+        XCTAssertEqual(60, cmd.programReminderCounter)
         XCTAssertEqual(0, cmd.currentEntryIndex)
         XCTAssertEqual(16, cmd.remainingPulses)
         XCTAssertEqual(TimeInterval(minutes: 45), cmd.delayUntilNextPulse)

@@ -12,46 +12,19 @@ public struct BasalScheduleExtraCommand : MessageBlock {
 
     public let blockType: MessageBlockType = .basalScheduleExtra
     
-    public struct RateEntry {
-        let totalPulses: Double
-        let delayBetweenPulses: TimeInterval
-        
-        public init(rate: Double, duration: TimeInterval) {
-            totalPulses = rate * duration.hours / podPulseSize
-            delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
-        }
-        
-        public init(totalPulses: Double, delayBetweenPulses: TimeInterval) {
-            self.totalPulses = totalPulses
-            self.delayBetweenPulses = delayBetweenPulses
-        }
-
-        public var rate: Double {
-            return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
-        }
-        
-        public var duration: TimeInterval {
-            return delayBetweenPulses * Double(totalPulses)
-        }
-        
-        public var data: Data {
-            var data = Data()
-            data.appendBigEndian(UInt16(totalPulses * 10))
-            data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds))
-            return data
-        }
-    }
-
+    public let confidenceReminder: Bool
+    public let programReminderCounter: UInt8
     public let currentEntryIndex: UInt8
     public let remainingPulses: Double
     public let delayUntilNextPulse: TimeInterval
     public let rateEntries: [RateEntry]
 
     public var data: Data {
+        let reminders = programReminderCounter + (confidenceReminder ? (1<<6) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
-            0x40,
+            reminders,
             currentEntryIndex
             ])
         data.appendBigEndian(UInt16(remainingPulses * 10))
@@ -69,6 +42,9 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let length = encodedData[1]
         let numEntries = (length - 8) / 6
         
+        confidenceReminder = encodedData[2] & (1<<6) != 0
+        programReminderCounter = encodedData[2] & 0b111111
+        
         currentEntryIndex = encodedData[3]
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
@@ -84,15 +60,23 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
+    public init(confidenceReminder: Bool, programReminderCounter: UInt8, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
+        self.confidenceReminder = confidenceReminder
+        self.programReminderCounter = programReminderCounter
         self.currentEntryIndex = currentEntryIndex
         self.remainingPulses = remainingPulses
         self.delayUntilNextPulse = delayUntilNextPulse
         self.rateEntries = rateEntries
     }
     
-    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval) {
-        self.rateEntries = schedule.entries.map { BasalScheduleExtraCommand.RateEntry(rate: $0.rate, duration: $0.duration) }
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderCounter: UInt8) {
+        self.confidenceReminder = confidenceReminder
+        self.programReminderCounter = programReminderCounter
+        var rateEntries = [RateEntry]()
+        for entry in schedule.entries {
+            rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
+        }
+        self.rateEntries = rateEntries
         let (entryIndex, entry, entryStart) = schedule.lookup(offset: scheduleOffset)
         self.currentEntryIndex = UInt8(entryIndex)
         let timeRemainingInEntry = entry.duration - (scheduleOffset - entryStart)

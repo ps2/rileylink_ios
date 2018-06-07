@@ -33,9 +33,7 @@ class TempBasalTests: XCTestCase {
         }
 
         // Encode
-        let table = BasalDeliveryTable(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: 0.2, duration: .hours(0.5))]))
-        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 1800, firstSegmentPulses: 2, table: table)
-        let cmd = SetInsulinScheduleCommand(nonce: 0xea2d0a3b, deliverySchedule: deliverySchedule)
+        let cmd = SetInsulinScheduleCommand(nonce: 0xea2d0a3b, tempBasalRate: 0.20, duration: .hours(0.5))
         XCTAssertEqual("1a0eea2d0a3b01007d01384000020002", cmd.data.hexadecimalString)
     }
     
@@ -61,15 +59,13 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let table = BasalDeliveryTable(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: 2.0, duration: .hours(1.5))]))
-        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 1800, firstSegmentPulses: 0x14, table: table)
-        let cmd = SetInsulinScheduleCommand(nonce: 0x87e8d03a, deliverySchedule: deliverySchedule)
+        let cmd = SetInsulinScheduleCommand(nonce: 0x87e8d03a, tempBasalRate: 2, duration: .hours(1.5))
         XCTAssertEqual("1a0e87e8d03a0100cb03384000142014", cmd.data.hexadecimalString)
     }
     
-    func testMaxDuration() {
+    func testTempBasalExtremeValues() {
         do {
-            // 30 U/h 12 hours
+            // 30 U/h for 12 hours
             // Decode 1a 10 a958c5ad 01 04f5 18 3840 012c f12c 712c
             let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a10a958c5ad0104f5183840012cf12c712c")!)
             
@@ -93,10 +89,106 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let table = BasalDeliveryTable(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: 30, duration: .hours(12))]))
-        let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 1800, firstSegmentPulses: 300, table: table)
-        let cmd = SetInsulinScheduleCommand(nonce: 0xa958c5ad, deliverySchedule: deliverySchedule)
+        let cmd = SetInsulinScheduleCommand(nonce: 0xa958c5ad, tempBasalRate: 30, duration: .hours(12))
         XCTAssertEqual("1a10a958c5ad0104f5183840012cf12c712c", cmd.data.hexadecimalString)
     }
+
+    func testTempBasalExtraCommand() {
+        do {
+            // 30 U/h for 0.5 hours
+            // Decode 16 0e 7c 00 0bb8 000927c0 0bb8 000927c0
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c000bb8000927c00bb8000927c0")!)
+            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(60, cmd.programReminderCounter)
+            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
+            XCTAssertEqual(300, cmd.remainingPulses)
+            XCTAssertEqual(1, cmd.rateEntries.count)
+            let entry = cmd.rateEntries[0]
+            XCTAssertEqual(TimeInterval(seconds: 6), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(minutes: 30), entry.duration)
+            XCTAssertEqual(30, entry.rate)
+
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(0.5), confidenceReminder: true, programReminderCounter: 60)
+        XCTAssertEqual("160e7c000bb8000927c00bb8000927c0", cmd.data.hexadecimalString)
+    }
+
+    func testTempBasalExtraCommandExtremeValues() {
+        do {
+            // 30 U/h for 12 hours
+            // Decode 16 14 3c 00 f618 000927c0 f618 000927c0 2328 000927c0
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f618000927c0f618000927c02328000927c0")!)
+            XCTAssertEqual(false, cmd.confidenceReminder)
+            XCTAssertEqual(60, cmd.programReminderCounter)
+            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
+            XCTAssertEqual(6300, cmd.remainingPulses)
+            XCTAssertEqual(2, cmd.rateEntries.count)
+            let entry = cmd.rateEntries[0]
+            XCTAssertEqual(TimeInterval(seconds: 6), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(hours: 10.5), entry.duration)
+            XCTAssertEqual(30, entry.rate)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(12), confidenceReminder: false, programReminderCounter: 60)
+        XCTAssertEqual("16143c00f618000927c0f618000927c02328000927c0", cmd.data.hexadecimalString)
+    }
+    
+    func testTempBasalExtraCommandExtremeValues2() {
+        do {
+            // 29.95 U/h for 12 hours
+            // Decode  16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
+            XCTAssertEqual(false, cmd.confidenceReminder)
+            XCTAssertEqual(0, cmd.programReminderCounter)
+            XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
+            XCTAssertEqual(6289.5, cmd.remainingPulses)
+            XCTAssertEqual(2, cmd.rateEntries.count)
+            let entry1 = cmd.rateEntries[0]
+            let entry2 = cmd.rateEntries[1]
+            XCTAssertEqual(TimeInterval(seconds: 6.01001), entry1.delayBetweenPulses, accuracy: .ulpOfOne)
+            XCTAssertEqual(TimeInterval(hours: 12), entry1.duration + entry2.duration, accuracy: 1)
+            XCTAssertEqual(29.95, entry1.rate, accuracy: 0.025)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode (note, this produces a different encoding than we saw above, as we split at a different point; we'll test
+        //         that the difference ends up with the same result below.
+        let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), confidenceReminder: false, programReminderCounter: 60)
+        XCTAssertEqual("16143c00f61800092ba9f61800092ba922af00092ba9", cmd.data.hexadecimalString)
+        
+        // Test that our variation on splitting up delivery produces the same overall rate and duration
+        do {
+            // 29.95 U/h for 12 hours
+            // Decode  16 14 3c 00 f618 00092ba9 f618 00092ba9 22af 00092ba9
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
+            XCTAssertEqual(false, cmd.confidenceReminder)
+            XCTAssertEqual(0, cmd.programReminderCounter)
+            XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
+            XCTAssertEqual(6289.5, cmd.remainingPulses)
+            XCTAssertEqual(2, cmd.rateEntries.count)
+            let entry1 = cmd.rateEntries[0]
+            let entry2 = cmd.rateEntries[1]
+            XCTAssertEqual(TimeInterval(seconds: 6.01001), entry1.delayBetweenPulses, accuracy: .ulpOfOne)
+            XCTAssertEqual(TimeInterval(hours: 12), entry1.duration + entry2.duration, accuracy: 1)
+            XCTAssertEqual(29.95, entry1.rate, accuracy: 0.025)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
+    
+    //    16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
+
 
 }

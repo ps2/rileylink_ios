@@ -74,3 +74,48 @@ public struct BasalDeliveryTable {
         return entries.reduce(0) { $0 + $1.segments }
     }
 }
+
+public struct RateEntry {
+    let totalPulses: Double
+    let delayBetweenPulses: TimeInterval
+    
+    public init(totalPulses: Double, delayBetweenPulses: TimeInterval) {
+        self.totalPulses = totalPulses
+        self.delayBetweenPulses = delayBetweenPulses
+    }
+    
+    public var rate: Double {
+        return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
+    }
+    
+    public var duration: TimeInterval {
+        return delayBetweenPulses * Double(totalPulses)
+    }
+    
+    public var data: Data {
+        var data = Data()
+        data.appendBigEndian(UInt16(totalPulses * 10))
+        data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds))
+        return data
+    }
+    
+    public static func makeEntries(rate: Double, duration: TimeInterval) -> [RateEntry] {
+        let maxPulses: Double = 6300
+        var entries = [RateEntry]()
+        
+        var remainingPulses = rate * duration.hours / podPulseSize
+        let delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
+
+        while (remainingPulses > 0) {
+            let pulseCount = min(maxPulses, remainingPulses)
+            entries.append(RateEntry(totalPulses: pulseCount, delayBetweenPulses: delayBetweenPulses))
+            remainingPulses -= pulseCount
+        }
+        return entries
+    }
+}
+
+
+
+
+

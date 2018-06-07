@@ -55,7 +55,7 @@ public enum MessageBlockType: UInt8 {
         case .statusResponse:
             return StatusResponse.self
         case .tempBasalExtra:
-            return TempBasalExtra.self
+            return TempBasalExtraCommand.self
         case .cancelBolus:
             return CancelBolusCommand.self
         }

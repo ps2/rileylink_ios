@@ -187,44 +187,6 @@ public class PodCommsSession {
         throw PodCommsError.noResponse
     }
     
-    func listenForMessage<T: MessageBlock>(address: UInt32) throws -> T {
-        
-        // Assemble fragmented message from multiple packets
-        let message =  try { () throws -> Message in
-            var responseData = Data()
-            while true {
-                do {
-                    return try Message(encodedData: responseData)
-                } catch MessageError.notEnoughData {
-                    let packet = try self.listenForPacket(address: address)
-                    responseData += packet.data
-                }
-            }
-            }()
-        
-        incrementMessageNumber()
-        
-        try ackUntilQuiet(packetAddress: address, messageAddress: address)
-        
-        guard message.messageBlocks.count > 0 else {
-            throw PodCommsError.emptyResponse
-        }
-        
-        guard let messageBlock = message.messageBlocks[0] as? T else {
-            let messageType = message.messageBlocks[0].blockType
-            
-            if messageType == .errorResponse, let errorResponse = message.messageBlocks[0] as? ErrorResponse, errorResponse.errorReponseType == .badNonce {
-                print("Pod returned bad nonce error.  Resyncing...")
-                self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
-            }
-            print("Unexpected response: \(messageType), \(message.messageBlocks[0])")
-            throw PodCommsError.unexpectedResponse(response: messageType)
-        }
-        
-        return messageBlock
-    }
-
-    
     func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0, preambleExtention: TimeInterval = TimeInterval(milliseconds: 127)) throws -> Packet {
         let packetData = packet.encoded()
         var attemptCount = 0

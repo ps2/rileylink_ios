@@ -36,6 +36,7 @@ public class PodCommsSession {
     
     private var podState: PodState? {
         didSet {
+            print("PodCommsSession.didChange podState: \(String(describing: podState))")
             delegate.podCommsSession(self, didChange: podState)
         }
     }
@@ -187,6 +188,7 @@ public class PodCommsSession {
                 
                 return candidatePacket
             } catch RileyLinkDeviceError.responseTimeout {
+                print("exchangePackets responseTimeout for individual try")
                 continue
             }
         }

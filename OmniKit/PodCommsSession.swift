@@ -143,7 +143,7 @@ public class PodCommsSession {
         var quiet = false
         while !quiet {
             do {
-                let _ = try session.sendAndListen(packetData, repeatCount: 3, timeout: TimeInterval(milliseconds: 300), retryCount: 0, preambleExtension: TimeInterval(milliseconds: 40))
+                let _ = try session.sendAndListen(packetData, repeatCount: 5, timeout: TimeInterval(milliseconds: 600), retryCount: 0, preambleExtension: TimeInterval(milliseconds: 40))
             } catch RileyLinkDeviceError.responseTimeout {
                 // Haven't heard anything in 300ms.  POD heard our ack.
                 quiet = true
@@ -152,96 +152,61 @@ public class PodCommsSession {
         incrementPacketNumber()
     }
     
-    func listenForPacket(address: UInt32, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0) throws -> Packet {
-        var attemptCount = 0
-        
-        while retryCount - attemptCount > 0 {
-            attemptCount += 1
-            
-            guard let rfPacket = try session.listen(onChannel: 0, timeout: timeout) else {
-                throw PodCommsError.noResponse
-            }
-            
-            let candidatePacket: Packet
-            
-            do {
-                candidatePacket = try Packet(rfPacket: rfPacket)
-            } catch {
-                continue
-            }
-            
-            guard candidatePacket.address == address else {
-                continue
-            }
-            
-            guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
-                continue
-            }
-            
-            // Once we have verification that the POD heard us, we can increment our counters
-            incrementPacketNumber(2)
-            
-            return candidatePacket
-        }
-        
-        throw PodCommsError.noResponse
-    }
     
-    func sendPacketAndGetResponse(packet: Packet, repeatCount: Int = 0, timeout: TimeInterval = TimeInterval(milliseconds: 165), retryCount: Int = 0, preambleExtention: TimeInterval = TimeInterval(milliseconds: 127)) throws -> Packet {
+    func exchangePackets(packet: Packet, repeatCount: Int = 0, packetResponseTimeout: TimeInterval = .milliseconds(165), exchangeTimeout:TimeInterval = .seconds(20), preambleExtension: TimeInterval = .milliseconds(127)) throws -> Packet {
         let packetData = packet.encoded()
-        var attemptCount = 0
+        let radioRetryCount = 20
         
-        while retryCount - attemptCount > 0 {
-            attemptCount += 1
-            
-            guard let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount-attemptCount, preambleExtension: preambleExtention) else {
-                throw PodCommsError.noResponse
-            }
-            
-            let candidatePacket: Packet
+        let start = Date()
+        
+        while (-start.timeIntervalSinceNow < exchangeTimeout)  {
             
             do {
-                candidatePacket = try Packet(rfPacket: rfPacket)
-            } catch {
+                let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: packetResponseTimeout, retryCount: radioRetryCount, preambleExtension: preambleExtension)
+                
+                let candidatePacket: Packet
+                
+                do {
+                    candidatePacket = try Packet(rfPacket: rfPacket)
+                } catch {
+                    continue
+                }
+            
+                guard candidatePacket.address == packet.address else {
+                    continue
+                }
+                
+                guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
+                    continue
+                }
+                
+                // Once we have verification that the POD heard us, we can increment our counters
+                incrementPacketNumber(2)
+                
+                print("Got response \(candidatePacket)")
+                
+                return candidatePacket
+            } catch RileyLinkDeviceError.responseTimeout {
                 continue
             }
-        
-            guard candidatePacket.address == packet.address else {
-                continue
-            }
-            
-            guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
-                continue
-            }
-            
-            // Once we have verification that the POD heard us, we can increment our counters
-            incrementPacketNumber(2)
-            
-            return candidatePacket
         }
         
         throw PodCommsError.noResponse
     }
 
-    func sendMessage<T: MessageBlock>(_ message: Message, packetAddressOverride: UInt32? = nil, ackAddressOverride: UInt32? = nil) throws -> T {
+    func exchangeMessages<T: MessageBlock>(_ message: Message, packetAddressOverride: UInt32? = nil, ackAddressOverride: UInt32? = nil) throws -> T {
         let packetAddress = packetAddressOverride ?? podState?.address ?? defaultAddress
 
-        
         let responsePacket = try { () throws -> Packet in
-            var sentPacketsCount = 0
+            var firstPacket = true
             var dataRemaining = message.encoded()
             while true {
-                let packetType: PacketType = sentPacketsCount > 0 ? .con : .pdm
+                let packetType: PacketType = firstPacket ? .pdm : .con
                 let sendPacket = Packet(address: packetAddress, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
                 dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
-                if dataRemaining.count > 0 {
-                    let podAck = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 20)
-                    print("Got podAck: \(podAck)")
-                    sentPacketsCount += 1
-                } else {
-                    let response = try self.sendPacketAndGetResponse(packet: sendPacket, retryCount: 20)
-                    sentPacketsCount += 1
-                    print("Got response: \(response)")
+                firstPacket = false
+                let response = try self.exchangePackets(packet: sendPacket)
+                if dataRemaining.count == 0 {
                     return response
                 }
             }
@@ -261,7 +226,7 @@ public class PodCommsSession {
                 } catch MessageError.notEnoughData {
                     let ackForCon = self.makeAckPacket(packetAddress: packetAddress, messageAddress: ackAddressOverride)
                     print("Sending ACK for CON")
-                    let conPacket = try self.sendPacketAndGetResponse(packet: ackForCon, repeatCount: 3, retryCount: 5, preambleExtention:TimeInterval(milliseconds: 40))
+                    let conPacket = try self.exchangePackets(packet: ackForCon, repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))
                     
                     guard conPacket.packetType == .con else {
                         throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
@@ -296,7 +261,7 @@ public class PodCommsSession {
     func sendCommand<T: MessageBlock>(_ command: MessageBlock) throws -> T {
         let messageAddress = podState?.address ?? defaultAddress
         let message = Message(address: messageAddress, messageBlocks: [command], sequenceNum: messageNumber)
-        return try sendMessage(message)
+        return try exchangeMessages(message)
     }
 
     public func setupNewPOD(timeZone: TimeZone) throws {
@@ -307,14 +272,14 @@ public class PodCommsSession {
         // Assign Address
         let assignAddress = AssignAddressCommand(address: newAddress)
         let assignAddressMessage = Message(address: defaultAddress, messageBlocks: [assignAddress], sequenceNum: messageNumber)
-        let config1: ConfigResponse = try sendMessage(assignAddressMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
+        let config1: ConfigResponse = try exchangeMessages(assignAddressMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
         
         // Verify address is set
         let activationDate = Date()
         let dateComponents = ConfirmPairingCommand.dateComponents(date: activationDate, timeZone: timeZone)
         let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
         let confirmPairingMessage = Message(address: defaultAddress, messageBlocks: [confirmPairing], sequenceNum: messageNumber)
-        let config2: ConfigResponse = try sendMessage(confirmPairingMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
+        let config2: ConfigResponse = try exchangeMessages(confirmPairingMessage, packetAddressOverride: defaultAddress, ackAddressOverride: newAddress)
 
         guard config2.pairingState == .paired else {
             throw PodCommsError.invalidData
@@ -359,7 +324,7 @@ public class PodCommsSession {
         let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
         let bolusExtraCommand = BolusExtraCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let message = Message(address: newAddress, messageBlocks: [scheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let primeResponse: StatusResponse = try sendMessage(message)
+        let primeResponse: StatusResponse = try exchangeMessages(message)
         print("primeResponse = \(primeResponse)")
         try advanceToNextNonce()
     }
@@ -383,7 +348,7 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let setBolusResponse: StatusResponse = try sendMessage(setBolusMessage)
+        let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
         print("setBolusResponse = \(setBolusResponse)")
         try advanceToNextNonce()
     }
@@ -397,7 +362,7 @@ public class PodCommsSession {
         let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
         
         let setTempBasalMessage = Message(address: podState.address, messageBlocks: [tempBasalCommand, tempBasalExtraCommand], sequenceNum: messageNumber)
-        let statusResponse: StatusResponse = try sendMessage(setTempBasalMessage)
+        let statusResponse: StatusResponse = try exchangeMessages(setTempBasalMessage)
         try advanceToNextNonce()
         print("status after set temp basal set = \(statusResponse)")
     }
@@ -463,7 +428,7 @@ public class PodCommsSession {
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
         
         let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
-        let statusResponse: StatusResponse = try sendMessage(setBasalMessage)
+        let statusResponse: StatusResponse = try exchangeMessages(setBasalMessage)
         try advanceToNextNonce()
         print("status after basal schedule set = \(statusResponse)")
     }
@@ -498,7 +463,7 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let setBolusResponse: StatusResponse = try sendMessage(setBolusMessage)
+        let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
         print("setBolusResponse = \(setBolusResponse)")
         try advanceToNextNonce()
     }
@@ -533,9 +498,6 @@ public class PodCommsSession {
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         let deactivationResponse: StatusResponse = try sendCommand(deactivatePod)
         print("deactivationResponse = \(deactivationResponse)")
-
-        try ackUntilQuiet()
-
     }
 }
 

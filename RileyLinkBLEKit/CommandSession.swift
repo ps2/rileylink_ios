@@ -97,7 +97,7 @@ public struct CommandSession {
         let response: C.ResponseType = try writeCommand(command, timeout: timeout)
 
         guard let packet = response.packet else {
-            throw RileyLinkDeviceError.invalidResponse(Data())
+            throw RileyLinkDeviceError.invalidResponse(Data([response.code.rawValue]))
         }
         return packet
     }
@@ -140,7 +140,7 @@ public struct CommandSession {
     ///   - preambleExtension: If set, the length of time to continuously send preamble data. Overrides the register based preamble settings.
     /// - Returns: The packet reply
     /// - Throws: RileyLinkDeviceError
-    public func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int, preambleExtension: TimeInterval?) throws -> RFPacket? {
+    public func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int, preambleExtension: TimeInterval?) throws -> RFPacket {
         let delayBetweenPackets: TimeInterval = 0
         
         let command = SendAndListen(

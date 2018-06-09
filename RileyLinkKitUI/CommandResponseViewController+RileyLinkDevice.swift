@@ -259,6 +259,64 @@ extension CommandResponseViewController {
         }
     }
 
+    static func omniTestSetTempBasal(podComms: PodComms, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            podComms.runSession(withName: "Test Set Temp Basal", using: device, { (session) in
+                let response: String
+                do {
+                    let rate = 30.0
+                    let duration = TimeInterval(minutes: 30)
+                    try session.setTempBasal(rate: rate, duration: duration, confidenceReminder: true, programReminderCounter: 60)
+                    response = "Set Temp Basal of \(rate)U/hr for \(duration.minutes) minutes"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            })
+            return NSLocalizedString("Testing Set Temp Basal…", comment: "Progress message for testing omnipod commands")
+        }
+    }
+
+    static func omniTestBolus(podComms: PodComms, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            podComms.runSession(withName: "Test Bolus", using: device, { (session) in
+                let response: String
+                do {
+                    let amount = 1.0
+                    try session.bolus(units: amount)
+                    response = "Started bolus of \(amount)U"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            })
+            return NSLocalizedString("Testing Bolus...", comment: "Progress message for testing omnipod commands")
+        }
+    }
+    
+    static func omniTestCancelTempBasal(podComms: PodComms, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            podComms.runSession(withName: "Test Cancel Temp Basal", using: device, { (session) in
+                let response: String
+                do {
+                    try session.cancelTempBasal()
+                    response = "Canceled Temp Basal"
+                } catch let error {
+                    response = String(describing: error)
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            })
+            return NSLocalizedString("Testing Cancel Temp Basal...", comment: "Progress message for testing omnipod commands")
+        }
+    }
+
+
     static func omniTesting(podComms: PodComms, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             podComms.runSession(withName: "Testing Commands", using: device, { (session) in

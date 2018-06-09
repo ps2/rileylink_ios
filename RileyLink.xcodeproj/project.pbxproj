@@ -254,7 +254,7 @@
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C14D8189203FD0C600184B72 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D8188203FD0C600184B72 /* Notification.swift */; };
-		C14D818B203FD23E00184B72 /* ConfigurePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D818A203FD23E00184B72 /* ConfigurePodCommand.swift */; };
+		C14D818B203FD23E00184B72 /* SuspendCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D818A203FD23E00184B72 /* SuspendCommand.swift */; };
 		C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */; };
 		C14FFC501D3D6DEF0049CF85 /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */; };
 		C14FFC511D3D6DEF0049CF85 /* ServiceCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */; };
@@ -808,7 +808,7 @@
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D8188203FD0C600184B72 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		C14D818A203FD23E00184B72 /* ConfigurePodCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurePodCommand.swift; sourceTree = "<group>"; };
+		C14D818A203FD23E00184B72 /* SuspendCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendCommand.swift; sourceTree = "<group>"; };
 		C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryInsulinMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C14FFC4E1D3D6DEF0049CF85 /* ServiceAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceAuthentication.swift; sourceTree = "<group>"; };
 		C14FFC4F1D3D6DEF0049CF85 /* ServiceCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCredential.swift; sourceTree = "<group>"; };
@@ -1390,7 +1390,7 @@
 				C184541F2031DEA200EAD422 /* AssignAddressCommand.swift */,
 				C18454212031EBB400EAD422 /* ConfigResponse.swift */,
 				C101FBE6203939FA00045593 /* SetPodTimeCommand.swift */,
-				C14D818A203FD23E00184B72 /* ConfigurePodCommand.swift */,
+				C14D818A203FD23E00184B72 /* SuspendCommand.swift */,
 				C1E6DC1D2041121600C2DEEB /* CancelDeliveryCommand.swift */,
 				C1E6DC1F2041176C00C2DEEB /* StatusError.swift */,
 				C1E6DC212041FA6D00C2DEEB /* DeactivatePodCommand.swift */,
@@ -2671,7 +2671,7 @@
 				C1130FCB20159CD5007D13DB /* PodState.swift in Sources */,
 				C12B03EC207584AA00A65AE7 /* BasalSchedule.swift in Sources */,
 				C14C2CCB206ED88B00FE368C /* BasalScheduleExtraCommand.swift in Sources */,
-				C14D818B203FD23E00184B72 /* ConfigurePodCommand.swift in Sources */,
+				C14D818B203FD23E00184B72 /* SuspendCommand.swift in Sources */,
 				C12B03EE207587C800A65AE7 /* BasalDeliveryTable.swift in Sources */,
 				C101FBE82039FDCD00045593 /* TimeZone.swift in Sources */,
 				C1E6DC202041176C00C2DEEB /* StatusError.swift in Sources */,

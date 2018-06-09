@@ -1,5 +1,5 @@
 //
-//  ConfigurePodCommand.swift
+//  SuspendCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/22/18.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct ConfigurePodCommand : MessageBlock {
+public struct SuspendCommand : MessageBlock {
     
     // ID1:1f08ced2 PTYPE:PDM SEQ:12 ID2:1f08ced2 B9:08 BLEN:12 MTYPE:190a BODY:c8a1e9874c0000c8010201b3 CRC:80
     // ID1:1f08ced2 PTYPE:PDM SEQ:15 ID2:1f08ced2 B9:10 BLEN:12 MTYPE:190a BODY:e3955e6078370005080282e1 CRC:29
     
-    public let blockType: MessageBlockType = .configurePod
+    public let blockType: MessageBlockType = .suspend
     public let length: UInt8 = 12
     
     let nonce: UInt32

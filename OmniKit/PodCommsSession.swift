@@ -308,12 +308,12 @@ public class PodCommsSession {
 //        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
         
-        let cancel1 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
         let cancel1Response: StatusResponse = try sendCommand(cancel1)
         print("cancel1Response = \(cancel1Response)")
         try advanceToNextNonce()
         
-        let cancel2 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel2 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
         let cancel12Response: StatusResponse = try sendCommand(cancel2)
         print("cancel1Response = \(cancel12Response)")
         try advanceToNextNonce()
@@ -333,7 +333,7 @@ public class PodCommsSession {
     
     public func finishPrime() throws {
         // 19 0a 365deab7 38000ff00302 80b0
-        let finishPrimeCommand = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
+        let finishPrimeCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
         let response: StatusResponse = try sendCommand(finishPrimeCommand)
         print("finish prime response = \(response)")
         try advanceToNextNonce()
@@ -375,50 +375,15 @@ public class PodCommsSession {
             throw PodCommsError.noPairedPod
         }
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .tempBasal)
         
         let _: StatusResponse = try sendCommand(cancelDelivery)
-        self.podState?.advanceToNextNonce()
-
-        let cancel1 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
-        let cancel1Response: StatusResponse = try sendCommand(cancel1)
-        print("cancel1Response = \(cancel1Response)")
-        try advanceToNextNonce()
         
-        let cancel2 = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
-        let cancel12Response: StatusResponse = try sendCommand(cancel2)
-        print("cancel1Response = \(cancel12Response)")
-        try advanceToNextNonce()
+        self.podState?.advanceToNextNonce()
     }
-
-
     
     public func testingCommands() throws {
-        // Uncomment for testing bolusing
-//        try bolus(units: 1.0)
-        
-        // Uncomment for testing temp basal
-//        try setTempBasal(rate: 30.0, duration: .hours(12), confidenceReminder: true, programReminderCounter: 30)
-        
-        // Uncomment for testing cancel temp basal
-        try cancelTempBasal()
-        
-        // Uncomment for running insertCannula
-//        guard let podState = podState else {
-//            throw PodCommsError.noPairedPod
-//        }
-//
-//        let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
-//        let schedule = BasalSchedule(entries: [entry])
-//        var calendar = Calendar.current
-//        calendar.timeZone = podState.timeZone
-//        let now = Date()
-//        let components = calendar.dateComponents([.day , .month, .year], from: now)
-//        guard let startOfSchedule = calendar.date(from: components) else {
-//            fatalError("invalid date")
-//        }
-//        let scheduleOffset = now.timeIntervalSince(startOfSchedule)
-//        try insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
+        try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderCounter: 0)
     }
     
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderCounter: UInt8) throws {
@@ -444,12 +409,12 @@ public class PodCommsSession {
         // Set basal schedule
         try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderCounter: 0)
         
-        // Cancel basal
+        // Cancel basal (suspend)
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
-        let configurePodCommand = ConfigurePodCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
+        let suspendCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
         do {
-            let configurePodResponse: StatusResponse = try sendCommand(configurePodCommand)
-            print("configurePodResponse = \(configurePodResponse)")
+            let suspendResponse: StatusResponse = try sendCommand(suspendCommand)
+            print("suspendResponse = \(suspendResponse)")
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             print("pod acked?")
         }
@@ -487,7 +452,7 @@ public class PodCommsSession {
             self.podState = nil
         }
 
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, cancelType: .suspend)
 
         let cancelDeliveryResponse: StatusResponse = try sendCommand(cancelDelivery)
         self.podState?.advanceToNextNonce()

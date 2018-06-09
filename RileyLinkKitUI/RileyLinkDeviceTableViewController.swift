@@ -258,7 +258,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case readBasalSchedule
         case enableLED
         case omniGetStatus
-        case omniTestCommands
+        case omniTestSetBasal
+        case omniTestBolus
+        case omniTestCancelTempBasal
+        case omniTestPlaceholder
         case omniPairNewPod
         case omniChangePod
     }
@@ -278,7 +281,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private let omnipodCommands: [Commands] = [
         .omniGetStatus,
-        .omniTestCommands,
+        .omniTestSetBasal,
+        .omniTestBolus,
+        .omniTestCancelTempBasal,
+        .omniTestPlaceholder,
         .omniChangePod
     ]
     
@@ -355,7 +361,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.detailTextLabel?.text = device.peripheralState.description
             case .rssi:
                 cell.textLabel?.text = NSLocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
-
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
             case .idleStatus:
                 cell.textLabel?.text = NSLocalizedString("On Idle", comment: "The title of the cell showing the last idle")
@@ -473,9 +478,14 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .omniPairNewPod:
                 cell.textLabel?.text = NSLocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 
-            case .omniTestCommands:
+            case .omniTestSetBasal:
+                cell.textLabel?.text = NSLocalizedString("Test Set Temp Basal", comment: "The title of the command to run a test of setting temp basal")
+            case .omniTestBolus:
+                cell.textLabel?.text = NSLocalizedString("Test Bolus", comment: "The title of the command to run a test of bolusing")
+            case .omniTestCancelTempBasal:
+                cell.textLabel?.text = NSLocalizedString("Test Cancel Temp Basal", comment: "The title of the command to run a test of cancelling temp basal")
+            case .omniTestPlaceholder:
                 cell.textLabel?.text = NSLocalizedString("Omnipod Testing", comment: "The title of the command to run omnipod testing")
-                
             case .omniChangePod:
                 cell.textLabel?.text = NSLocalizedString("Change Pod", comment: "The title of the command to set change pod")
 
@@ -561,7 +571,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 vc = CommandResponseViewController.enableLEDs(ops: ops, device: device)
             case .omniGetStatus:
                 vc = CommandResponseViewController.omniGetStatus(podComms: podComms, device: device)
-            case .omniTestCommands:
+            case .omniTestSetBasal:
+                vc = CommandResponseViewController.omniTestSetTempBasal(podComms: podComms, device: device)
+            case .omniTestBolus:
+                vc = CommandResponseViewController.omniTestBolus(podComms: podComms, device: device)
+            case .omniTestCancelTempBasal:
+                vc = CommandResponseViewController.omniTestCancelTempBasal(podComms: podComms, device: device)
+            case .omniTestPlaceholder:
                 vc = CommandResponseViewController.omniTesting(podComms: podComms, device: device)
             case .omniChangePod:
                 let alert = UIAlertController(title: "Discard Pod", message: "You will no longer be able to use the current POD.", preferredStyle: .alert)

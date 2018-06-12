@@ -161,7 +161,6 @@ public class PodCommsSession {
         let start = Date()
         
         while (-start.timeIntervalSinceNow < exchangeTimeout)  {
-            
             do {
                 let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: packetResponseTimeout, retryCount: radioRetryCount, preambleExtension: preambleExtension)
                 
@@ -184,11 +183,8 @@ public class PodCommsSession {
                 // Once we have verification that the POD heard us, we can increment our counters
                 incrementPacketNumber(2)
                 
-                print("Got response \(candidatePacket)")
-                
                 return candidatePacket
             } catch RileyLinkDeviceError.responseTimeout {
-                print("exchangePackets responseTimeout for individual try")
                 continue
             }
         }
@@ -199,65 +195,73 @@ public class PodCommsSession {
     func exchangeMessages<T: MessageBlock>(_ message: Message, packetAddressOverride: UInt32? = nil, ackAddressOverride: UInt32? = nil) throws -> T {
         let packetAddress = packetAddressOverride ?? podState?.address ?? defaultAddress
 
-        let responsePacket = try { () throws -> Packet in
-            var firstPacket = true
-            var dataRemaining = message.encoded()
-            while true {
-                let packetType: PacketType = firstPacket ? .pdm : .con
-                let sendPacket = Packet(address: packetAddress, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
-                dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
-                firstPacket = false
-                let response = try self.exchangePackets(packet: sendPacket)
-                if dataRemaining.count == 0 {
-                    return response
-                }
-            }
-        }()
-        
-        guard responsePacket.packetType != .ack else {
-            incrementMessageNumber()
-            throw PodCommsError.podAckedInsteadOfReturningResponse
-        }
-        
-        // Assemble fragmented message from multiple packets
-        let response =  try { () throws -> Message in
-            var responseData = responsePacket.data
-            while true {
-                do {
-                    return try Message(encodedData: responseData)
-                } catch MessageError.notEnoughData {
-                    let ackForCon = self.makeAckPacket(packetAddress: packetAddress, messageAddress: ackAddressOverride)
-                    print("Sending ACK for CON")
-                    let conPacket = try self.exchangePackets(packet: ackForCon, repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))
-                    
-                    guard conPacket.packetType == .con else {
-                        throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
+        do {
+            let responsePacket = try { () throws -> Packet in
+                var firstPacket = true
+                print("Send to POD: \(message)")
+                var dataRemaining = message.encoded()
+                while true {
+                    let packetType: PacketType = firstPacket ? .pdm : .con
+                    let sendPacket = Packet(address: packetAddress, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
+                    dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
+                    firstPacket = false
+                    let response = try self.exchangePackets(packet: sendPacket)
+                    if dataRemaining.count == 0 {
+                        return response
                     }
-                    responseData += conPacket.data
                 }
+            }()
+        
+            guard responsePacket.packetType != .ack else {
+                incrementMessageNumber()
+                throw PodCommsError.podAckedInsteadOfReturningResponse
             }
-        }()
-        
-        incrementMessageNumber(2)
-        
-        try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
-        
-        guard response.messageBlocks.count > 0 else {
-            throw PodCommsError.emptyResponse
-        }
-        
-        guard let responseMessageBlock = response.messageBlocks[0] as? T else {
-            let responseType = response.messageBlocks[0].blockType
             
-            if responseType == .errorResponse, let errorResponse = response.messageBlocks[0] as? ErrorResponse, errorResponse.errorReponseType == .badNonce {
-                print("Pod returned bad nonce error.  Resyncing...")
-                self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
+            // Assemble fragmented message from multiple packets
+            let response =  try { () throws -> Message in
+                var responseData = responsePacket.data
+                while true {
+                    do {
+                        return try Message(encodedData: responseData)
+                    } catch MessageError.notEnoughData {
+                        let ackForCon = self.makeAckPacket(packetAddress: packetAddress, messageAddress: ackAddressOverride)
+                        print("Sending ACK for CON")
+                        let conPacket = try self.exchangePackets(packet: ackForCon, repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))
+                        
+                        guard conPacket.packetType == .con else {
+                            throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
+                        }
+                        responseData += conPacket.data
+                    }
+                }
+            }()
+        
+            incrementMessageNumber(2)
+            
+            try ackUntilQuiet(packetAddress: packetAddress, messageAddress: ackAddressOverride)
+            
+            guard response.messageBlocks.count > 0 else {
+                throw PodCommsError.emptyResponse
             }
-            print("Unexpected response: \(responseType), \(response.messageBlocks[0])")
-            throw PodCommsError.unexpectedResponse(response: responseType)
-        }
+            
+            guard let responseMessageBlock = response.messageBlocks[0] as? T else {
+                let responseType = response.messageBlocks[0].blockType
+                
+                if responseType == .errorResponse, let errorResponse = response.messageBlocks[0] as? ErrorResponse, errorResponse.errorReponseType == .badNonce {
+                    print("Pod returned bad nonce error.  Resyncing...")
+                    self.podState?.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: try nonceValue(), messageSequenceNum: message.sequenceNum)
+                }
+                print("Unexpected response: \(responseType), \(response.messageBlocks[0])")
+                throw PodCommsError.unexpectedResponse(response: responseType)
+            }
 
-        return responseMessageBlock
+            print("POD Response: \(responseMessageBlock)")
+            return responseMessageBlock
+            
+        } catch let error {
+            print("Error during communication with POD: \(error)")
+            throw error
+        }
     }
 
     func sendCommand<T: MessageBlock>(_ command: MessageBlock) throws -> T {

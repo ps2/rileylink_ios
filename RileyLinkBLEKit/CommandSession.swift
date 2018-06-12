@@ -160,8 +160,8 @@ public struct CommandSession {
         let timeBetweenPackets = delayBetweenPackets + radioTimeBetweenPackets
 
         // 16384 = bitrate, 8 = bits per byte
-        let singlePacketSendTime: TimeInterval = (Double(data.count * 8) / 16_384)
-        let totalRepeatSendTime: TimeInterval = (singlePacketSendTime + timeBetweenPackets) * Double(repeatCount)
+        let singlePacketSendTime: TimeInterval = (Double(data.count * 8) / 16_384) + (preambleExtension ?? 0)
+        let totalRepeatSendTime: TimeInterval = (singlePacketSendTime + timeBetweenPackets) * Double(repeatCount + 1)
         let totalTimeout = (totalRepeatSendTime + timeout) * Double(retryCount + 1)
 
         return try writeCommand(command, timeout: totalTimeout)

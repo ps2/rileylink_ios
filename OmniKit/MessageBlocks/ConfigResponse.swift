@@ -31,6 +31,7 @@ public struct ConfigResponse : MessageBlock {
         case readyToPair = 1
         case addressAssigned = 2
         case paired = 3
+        case pairingExpired = 14
     }
 
     public let blockType: MessageBlockType = .configResponse

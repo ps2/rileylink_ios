@@ -335,7 +335,7 @@ public class PodCommsSession {
     public func finishPrime() throws {
         // 19 0a 365deab7 38000ff00302 80b0
         let finishPrimeCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
-        let response: StatusResponse = try sendCommand(finishPrimeCommand)
+        let _: StatusResponse = try sendCommand(finishPrimeCommand)
         try advanceToNextNonce()
     }
     
@@ -350,7 +350,7 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
+        let _: StatusResponse = try exchangeMessages(setBolusMessage)
         try advanceToNextNonce()
     }
     
@@ -363,7 +363,7 @@ public class PodCommsSession {
         let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
         
         let setTempBasalMessage = Message(address: podState.address, messageBlocks: [tempBasalCommand, tempBasalExtraCommand], sequenceNum: messageNumber)
-        let statusResponse: StatusResponse = try exchangeMessages(setTempBasalMessage)
+        let _: StatusResponse = try exchangeMessages(setTempBasalMessage)
         try advanceToNextNonce()
     }
     
@@ -393,7 +393,7 @@ public class PodCommsSession {
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
         
         let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
-        let statusResponse: StatusResponse = try exchangeMessages(setBasalMessage)
+        let _: StatusResponse = try exchangeMessages(setBasalMessage)
         try advanceToNextNonce()
     }
     
@@ -410,7 +410,7 @@ public class PodCommsSession {
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
         let suspendCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
         do {
-            let suspendResponse: StatusResponse = try sendCommand(suspendCommand)
+            let _: StatusResponse = try sendCommand(suspendCommand)
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             print("pod acked?")
         }
@@ -426,7 +426,7 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
+        let _: StatusResponse = try exchangeMessages(setBolusMessage)
         try advanceToNextNonce()
     }
     
@@ -449,14 +449,14 @@ public class PodCommsSession {
 
         let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, cancelType: .suspend)
 
-        let cancelDeliveryResponse: StatusResponse = try sendCommand(cancelDelivery)
+        let _: StatusResponse = try sendCommand(cancelDelivery)
         self.podState?.advanceToNextNonce()
 
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
         // We don't know what to do with them, so skip for now.
 
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
-        let deactivationResponse: StatusResponse = try sendCommand(deactivatePod)
+        let _: StatusResponse = try sendCommand(deactivatePod)
     }
 }
 

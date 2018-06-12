@@ -61,11 +61,8 @@ extension PeripheralManager.Configuration {
                 MainServiceCharacteristicUUID.responseCount.cbUUID: { (manager: PeripheralManager) in
                     guard let dataCharacteristic = manager.peripheral.getCharacteristicWithUUID(.data)
                     else {
-                        print("********** Skipping read of data characteristic, as it is missing")
                         return
                     }
-
-                    print("********** Reading data characteristic after responseCount notification")
                     manager.peripheral.readValue(for: dataCharacteristic)
                 }
             ]

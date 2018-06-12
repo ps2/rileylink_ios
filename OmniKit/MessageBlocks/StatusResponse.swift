@@ -16,6 +16,7 @@ public struct StatusResponse : MessageBlock {
         case tempBasalRunning = 2
         case purging = 4
         case bolusInProgress = 5
+        case bolusAndTempBasal = 6
     }
     
     public enum ReservoirStatus: UInt8 {

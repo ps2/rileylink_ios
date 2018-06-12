@@ -313,13 +313,11 @@ public class PodCommsSession {
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
         
         let cancel1 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
-        let cancel1Response: StatusResponse = try sendCommand(cancel1)
-        print("cancel1Response = \(cancel1Response)")
+        let _: StatusResponse = try sendCommand(cancel1)
         try advanceToNextNonce()
         
         let cancel2 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
-        let cancel12Response: StatusResponse = try sendCommand(cancel2)
-        print("cancel1Response = \(cancel12Response)")
+        let _: StatusResponse = try sendCommand(cancel2)
         try advanceToNextNonce()
         
         // Mark 2.6U delivery for prime
@@ -330,8 +328,7 @@ public class PodCommsSession {
         let scheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), deliverySchedule: bolusSchedule)
         let bolusExtraCommand = BolusExtraCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let message = Message(address: newAddress, messageBlocks: [scheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
-        let primeResponse: StatusResponse = try exchangeMessages(message)
-        print("primeResponse = \(primeResponse)")
+        let _: StatusResponse = try exchangeMessages(message)
         try advanceToNextNonce()
     }
     
@@ -339,7 +336,6 @@ public class PodCommsSession {
         // 19 0a 365deab7 38000ff00302 80b0
         let finishPrimeCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
         let response: StatusResponse = try sendCommand(finishPrimeCommand)
-        print("finish prime response = \(response)")
         try advanceToNextNonce()
     }
     
@@ -355,7 +351,6 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
         let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
-        print("setBolusResponse = \(setBolusResponse)")
         try advanceToNextNonce()
     }
     
@@ -370,7 +365,6 @@ public class PodCommsSession {
         let setTempBasalMessage = Message(address: podState.address, messageBlocks: [tempBasalCommand, tempBasalExtraCommand], sequenceNum: messageNumber)
         let statusResponse: StatusResponse = try exchangeMessages(setTempBasalMessage)
         try advanceToNextNonce()
-        print("status after set temp basal set = \(statusResponse)")
     }
     
     public func cancelTempBasal() throws {
@@ -401,7 +395,6 @@ public class PodCommsSession {
         let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
         let statusResponse: StatusResponse = try exchangeMessages(setBasalMessage)
         try advanceToNextNonce()
-        print("status after basal schedule set = \(statusResponse)")
     }
     
     // TODO: Need to take schedule as parameter
@@ -418,7 +411,6 @@ public class PodCommsSession {
         let suspendCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
         do {
             let suspendResponse: StatusResponse = try sendCommand(suspendCommand)
-            print("suspendResponse = \(suspendResponse)")
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             print("pod acked?")
         }
@@ -435,7 +427,6 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
         let setBolusMessage = Message(address: podState.address, messageBlocks: [bolusScheduleCommand, bolusExtraCommand], sequenceNum: messageNumber)
         let setBolusResponse: StatusResponse = try exchangeMessages(setBolusMessage)
-        print("setBolusResponse = \(setBolusResponse)")
         try advanceToNextNonce()
     }
     
@@ -461,14 +452,11 @@ public class PodCommsSession {
         let cancelDeliveryResponse: StatusResponse = try sendCommand(cancelDelivery)
         self.podState?.advanceToNextNonce()
 
-        print("cancelDeliveryResponse = \(cancelDeliveryResponse)")
-
         // PDM at this point makes a few get status requests, for logs and other details, presumably.
         // We don't know what to do with them, so skip for now.
 
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         let deactivationResponse: StatusResponse = try sendCommand(deactivatePod)
-        print("deactivationResponse = \(deactivationResponse)")
     }
 }
 

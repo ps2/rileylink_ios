@@ -126,7 +126,7 @@ class TempBasalTests: XCTestCase {
             // Decode 16 0e 7c 00 0bb8 000927c0 0bb8 000927c0
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c000bb8000927c00bb8000927c0")!)
             XCTAssertEqual(true, cmd.confidenceReminder)
-            XCTAssertEqual(60, cmd.programReminderCounter)
+            XCTAssertEqual(60, cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
             XCTAssertEqual(300, cmd.remainingPulses)
             XCTAssertEqual(1, cmd.rateEntries.count)
@@ -140,7 +140,7 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(0.5), confidenceReminder: true, programReminderCounter: 60)
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(0.5), confidenceReminder: true, programReminderInterval: 60)
         XCTAssertEqual("160e7c000bb8000927c00bb8000927c0", cmd.data.hexadecimalString)
     }
 
@@ -150,7 +150,7 @@ class TempBasalTests: XCTestCase {
             // Decode 16 14 3c 00 f618 000927c0 f618 000927c0 2328 000927c0
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f618000927c0f618000927c02328000927c0")!)
             XCTAssertEqual(false, cmd.confidenceReminder)
-            XCTAssertEqual(60, cmd.programReminderCounter)
+            XCTAssertEqual(60, cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
             XCTAssertEqual(6300, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)
@@ -164,7 +164,7 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(12), confidenceReminder: false, programReminderCounter: 60)
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(12), confidenceReminder: false, programReminderInterval: 60)
         XCTAssertEqual("16143c00f618000927c0f618000927c02328000927c0", cmd.data.hexadecimalString)
     }
     
@@ -174,7 +174,7 @@ class TempBasalTests: XCTestCase {
             // Decode  16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
             XCTAssertEqual(false, cmd.confidenceReminder)
-            XCTAssertEqual(0, cmd.programReminderCounter)
+            XCTAssertEqual(0, cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
             XCTAssertEqual(6289.5, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)
@@ -190,7 +190,7 @@ class TempBasalTests: XCTestCase {
         
         // Encode (note, this produces a different encoding than we saw above, as we split at a different point; we'll test
         //         that the difference ends up with the same result below.
-        let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), confidenceReminder: false, programReminderCounter: 60)
+        let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), confidenceReminder: false, programReminderInterval: 60)
         XCTAssertEqual("16143c00f61800092ba9f61800092ba922af00092ba9", cmd.data.hexadecimalString)
         
         // Test that our variation on splitting up delivery produces the same overall rate and duration
@@ -199,7 +199,7 @@ class TempBasalTests: XCTestCase {
             // Decode  16 14 3c 00 f618 00092ba9 f618 00092ba9 22af 00092ba9
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
             XCTAssertEqual(false, cmd.confidenceReminder)
-            XCTAssertEqual(0, cmd.programReminderCounter)
+            XCTAssertEqual(0, cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
             XCTAssertEqual(6289.5, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)

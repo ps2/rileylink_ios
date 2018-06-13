@@ -266,7 +266,7 @@ extension CommandResponseViewController {
                 do {
                     let rate = 30.0
                     let duration = TimeInterval(minutes: 30)
-                    try session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderCounter: 0)
+                    try session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: .minutes(0))
                     response = "Set Temp Basal of \(rate)U/hr for \(duration.minutes) minutes"
                 } catch let error {
                     response = String(describing: error)

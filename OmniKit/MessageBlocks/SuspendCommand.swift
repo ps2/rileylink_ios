@@ -19,8 +19,8 @@ public struct SuspendCommand : MessageBlock {
     let nonce: UInt32
     let unknownSection: Data
     
-    // c8a1e987 4c0000c80102 01b3
-    // e3955e60 783700050802 82e1
+    // c8a1e987 4c00 00c80102 01b3
+    // e3955e60 7837 00050802 82e1
     public var data: Data {
         var data = Data(bytes: [
             blockType.rawValue,

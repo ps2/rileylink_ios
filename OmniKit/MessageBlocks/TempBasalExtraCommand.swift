@@ -11,7 +11,7 @@ import Foundation
 public struct TempBasalExtraCommand : MessageBlock {
     
     public let confidenceReminder: Bool
-    public let programReminderCounter: UInt8
+    public let programReminderInterval: TimeInterval
     public let remainingPulses: Double
     public let delayUntilNextPulse: TimeInterval
     public let rateEntries: [RateEntry]
@@ -19,7 +19,7 @@ public struct TempBasalExtraCommand : MessageBlock {
     public let blockType: MessageBlockType = .tempBasalExtra
     
     public var data: Data {
-        let reminders = programReminderCounter + (confidenceReminder ? (1<<6) : 0)
+        let reminders = (UInt8(programReminderInterval.minutes) & 0x1f) + (confidenceReminder ? (1<<6) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
@@ -40,7 +40,7 @@ public struct TempBasalExtraCommand : MessageBlock {
         let numEntries = (length - 8) / 6
         
         confidenceReminder = encodedData[2] & (1<<6) != 0
-        programReminderCounter = encodedData[2] & 0b111111
+        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x1f))
         
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
@@ -56,19 +56,19 @@ public struct TempBasalExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(confidenceReminder: Bool, programReminderCounter: UInt8, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
+    public init(confidenceReminder: Bool, programReminderInterval: TimeInterval, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
         self.confidenceReminder = confidenceReminder
-        self.programReminderCounter = programReminderCounter
+        self.programReminderInterval = programReminderInterval
         self.remainingPulses = remainingPulses
         self.delayUntilNextPulse = delayUntilNextPulse
         self.rateEntries = rateEntries
     }
     
-    public init(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderCounter: UInt8) {
+    public init(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) {
         rateEntries = RateEntry.makeEntries(rate: rate, duration: duration)
         remainingPulses = rateEntries[0].totalPulses
         delayUntilNextPulse = rateEntries[0].delayBetweenPulses
         self.confidenceReminder = confidenceReminder
-        self.programReminderCounter = programReminderCounter
+        self.programReminderInterval = programReminderInterval
     }
 }

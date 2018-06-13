@@ -354,13 +354,13 @@ public class PodCommsSession {
         try advanceToNextNonce()
     }
     
-    public func setTempBasal(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderCounter: UInt8) throws {
+    public func setTempBasal(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
         
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), tempBasalRate: rate, duration: duration)
-        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
+        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
         let setTempBasalMessage = Message(address: podState.address, messageBlocks: [tempBasalCommand, tempBasalExtraCommand], sequenceNum: messageNumber)
         let _: StatusResponse = try exchangeMessages(setTempBasalMessage)
@@ -381,16 +381,16 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
-        try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderCounter: 0)
+        try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
     }
     
-    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderCounter: UInt8) throws {
+    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {
         guard let podState = podState else {
             throw PodCommsError.noPairedPod
         }
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: try nonceValue(), basalSchedule: schedule, scheduleOffset: scheduleOffset)
-        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderCounter: programReminderCounter)
+        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
         let setBasalMessage = Message(address: podState.address, messageBlocks: [basalScheduleCommand, basalExtraCommand], sequenceNum: messageNumber)
         let _: StatusResponse = try exchangeMessages(setBasalMessage)
@@ -404,7 +404,7 @@ public class PodCommsSession {
         }
         
         // Set basal schedule
-        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderCounter: 0)
+        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         
         // Cancel basal (suspend)
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202

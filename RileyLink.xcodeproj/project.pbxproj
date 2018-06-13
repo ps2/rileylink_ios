@@ -211,6 +211,7 @@
 		C1130FEB20159EDC007D13DB /* MessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1130FE720159EDC007D13DB /* MessageBlock.swift */; };
 		C1130FEE20159FD5007D13DB /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		C1130FEF2015AD41007D13DB /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
+		C11D259120D0784700EB938A /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1130F9B20159C28007D13DB /* OmniKit.framework */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
 		C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198621C8DF4C800BC374C /* HistoryPageTests.swift */; };
@@ -1022,6 +1023,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C11D259120D0784700EB938A /* OmniKit.framework in Frameworks */,
 				432CF9061FF74CCB003AB446 /* RileyLinkKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -302,21 +302,21 @@ public class PodCommsSession {
         )
         self.podState = newPodState
 
-//        # Cancel Temp Delivery (#1)
+//        # Configure Alerts (#1)
 //        2017-09-11T11:07:55.989336 ID1:1f08ced2 PTYPE:PDM SEQ:12 ID2:1f08ced2 B9:08 BLEN:12 MTYPE:190a BODY:c8a1e9874c0000c8010201b3 CRC:80
 //        2017-09-11T11:07:56.064666 ID1:1f08ced2 PTYPE:POD SEQ:13 ID2:1f08ced2 B9:0c BLEN:10 MTYPE:1d03 BODY:00001000000003ff80e0 CRC:ce
 //        2017-09-11T11:07:56.074172 ID1:1f08ced2 PTYPE:ACK SEQ:14 ID2:1f08ced2 CRC:7e
 //
-//        # Cancel Temp Delivery (#2)
+//        # Configure Alerts (#2)
 //        2017-09-11T11:07:56.732676 ID1:1f08ced2 PTYPE:PDM SEQ:15 ID2:1f08ced2 B9:10 BLEN:12 MTYPE:190a BODY:e3955e6078370005080282e1 CRC:29
 //        2017-09-11T11:07:56.808941 ID1:1f08ced2 PTYPE:POD SEQ:16 ID2:1f08ced2 B9:14 BLEN:10 MTYPE:1d03 BODY:00002000000003ff8171 CRC:5d
 //        2017-09-11T11:07:56.825231 ID1:1f08ced2 PTYPE:ACK SEQ:17 ID2:1f08ced2 CRC:7c
         
-        let cancel1 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
+        let cancel1 = ConfigureAlertsCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "4c0000c80102")!)
         let _: StatusResponse = try sendCommand(cancel1)
         try advanceToNextNonce()
         
-        let cancel2 = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
+        let cancel2 = ConfigureAlertsCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "783700050802")!)
         let _: StatusResponse = try sendCommand(cancel2)
         try advanceToNextNonce()
         
@@ -334,7 +334,7 @@ public class PodCommsSession {
     
     public func finishPrime() throws {
         // 19 0a 365deab7 38000ff00302 80b0
-        let finishPrimeCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
+        let finishPrimeCommand = ConfigureAlertsCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "38000ff00302")!)
         let _: StatusResponse = try sendCommand(finishPrimeCommand)
         try advanceToNextNonce()
     }
@@ -406,11 +406,11 @@ public class PodCommsSession {
         // Set basal schedule
         try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         
-        // Cancel basal (suspend)
+        // Configure Alerts
         // 19 16 ba952b8b 79a4 10df 0502 280012830602020f00000202
-        let suspendCommand = SuspendCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
+        let configureAlertsCommand = ConfigureAlertsCommand(nonce: try nonceValue(), unknownSection: Data(hexadecimalString: "79a410df0502280012830602020f00000202")!)
         do {
-            let _: StatusResponse = try sendCommand(suspendCommand)
+            let _: StatusResponse = try sendCommand(configureAlertsCommand)
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             print("pod acked?")
         }

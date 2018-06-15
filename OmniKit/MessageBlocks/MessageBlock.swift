@@ -22,7 +22,7 @@ public enum MessageBlockType: UInt8 {
     case basalScheduleExtra = 0x13
     case tempBasalExtra     = 0x16
     case bolusExtra         = 0x17
-    case suspend            = 0x19
+    case configureAlerts    = 0x19
     case setInsulinSchedule = 0x1a
     case deactivatePod      = 0x1c
     case statusResponse     = 0x1d
@@ -46,8 +46,8 @@ public enum MessageBlockType: UInt8 {
             return BasalScheduleExtraCommand.self
         case .bolusExtra:
             return BolusExtraCommand.self
-        case .suspend:
-            return SuspendCommand.self
+        case .configureAlerts:
+            return ConfigureAlertsCommand.self
         case .setInsulinSchedule:
             return SetInsulinScheduleCommand.self
         case .deactivatePod:

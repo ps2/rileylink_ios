@@ -53,7 +53,7 @@ public struct CancelDeliveryCommand : MessageBlock {
     // 1f 05 62723698 62 - 0%
     // 1f 05 2933db73 62 - 03ea
     
-    // Suspend is a Cancel delivery, followed by a suspend basal schedule (0x19)
+    // Suspend is a Cancel delivery, followed by a configure alerts command (0x19)
     // 1f 05 50f02312 03 191050f02312580f000f06046800001e0302
     
     // Deactivate pod:

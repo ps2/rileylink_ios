@@ -104,6 +104,9 @@
 		43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */; };
 		43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */; };
 		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
+		43CEC07420D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */; };
+		43CEC07620D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */; };
+		43CEC07820D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07720D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift */; };
 		43D5E7881FAEDAC4004ACDB7 /* PeripheralManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D5E7871FAEDAC4004ACDB7 /* PeripheralManagerError.swift */; };
 		43D5E7921FAF7BFB004ACDB7 /* RileyLinkKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D5E7901FAF7BFB004ACDB7 /* RileyLinkKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D5E7951FAF7BFB004ACDB7 /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
@@ -122,6 +125,12 @@
 		43DAD00220A6A470000F8529 /* ReadOtherDevicesStatusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DAD00120A6A470000F8529 /* ReadOtherDevicesStatusMessageBody.swift */; };
 		43DAD00420A6A677000F8529 /* ReadOtherDevicesIDsMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DAD00320A6A677000F8529 /* ReadOtherDevicesIDsMessageBody.swift */; };
 		43DAD00620A6B10A000F8529 /* ReadOtherDevicesIDsMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DAD00520A6B10A000F8529 /* ReadOtherDevicesIDsMessageBodyTests.swift */; };
+		43DFB60B20D229CC008A7BAE /* ChangeRemoteControlIDMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB60A20D229CC008A7BAE /* ChangeRemoteControlIDMessageBody.swift */; };
+		43DFB60D20D22CCB008A7BAE /* ChangeRemoteControlIDMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB60C20D22CCB008A7BAE /* ChangeRemoteControlIDMessageBodyTests.swift */; };
+		43DFB60F20D3744A008A7BAE /* ChangeMaxBolusMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB60E20D3744A008A7BAE /* ChangeMaxBolusMessageBody.swift */; };
+		43DFB61120D37748008A7BAE /* ChangeMaxBolusMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB61020D37748008A7BAE /* ChangeMaxBolusMessageBodyTests.swift */; };
+		43DFB61320D37800008A7BAE /* ChangeMaxBasalRateMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB61220D37800008A7BAE /* ChangeMaxBasalRateMessageBodyTests.swift */; };
+		43DFB61520D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFB61420D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift */; };
 		43EBE4521EAD23C40073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
@@ -584,6 +593,9 @@
 		43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRemoteControlIDsMessageBody.swift; sourceTree = "<group>"; };
+		43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRemoteControlEnabledMessageBody.swift; sourceTree = "<group>"; };
+		43CEC07720D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRemoteControlIDsMessageBodyTests.swift; sourceTree = "<group>"; };
 		43D5E7871FAEDAC4004ACDB7 /* PeripheralManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralManagerError.swift; sourceTree = "<group>"; };
 		43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D5E7901FAF7BFB004ACDB7 /* RileyLinkKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkKitUI.h; sourceTree = "<group>"; };
@@ -591,6 +603,12 @@
 		43DAD00120A6A470000F8529 /* ReadOtherDevicesStatusMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOtherDevicesStatusMessageBody.swift; sourceTree = "<group>"; };
 		43DAD00320A6A677000F8529 /* ReadOtherDevicesIDsMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOtherDevicesIDsMessageBody.swift; sourceTree = "<group>"; };
 		43DAD00520A6B10A000F8529 /* ReadOtherDevicesIDsMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadOtherDevicesIDsMessageBodyTests.swift; sourceTree = "<group>"; };
+		43DFB60A20D229CC008A7BAE /* ChangeRemoteControlIDMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRemoteControlIDMessageBody.swift; sourceTree = "<group>"; };
+		43DFB60C20D22CCB008A7BAE /* ChangeRemoteControlIDMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeRemoteControlIDMessageBodyTests.swift; sourceTree = "<group>"; };
+		43DFB60E20D3744A008A7BAE /* ChangeMaxBolusMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMaxBolusMessageBody.swift; sourceTree = "<group>"; };
+		43DFB61020D37748008A7BAE /* ChangeMaxBolusMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMaxBolusMessageBodyTests.swift; sourceTree = "<group>"; };
+		43DFB61220D37800008A7BAE /* ChangeMaxBasalRateMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMaxBasalRateMessageBodyTests.swift; sourceTree = "<group>"; };
+		43DFB61420D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMaxBasalRateMessageBody.swift; sourceTree = "<group>"; };
 		43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
@@ -1217,6 +1235,9 @@
 			isa = PBXGroup;
 			children = (
 				C12198A21C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift */,
+				43DFB61220D37800008A7BAE /* ChangeMaxBasalRateMessageBodyTests.swift */,
+				43DFB61020D37748008A7BAE /* ChangeMaxBolusMessageBodyTests.swift */,
+				43DFB60C20D22CCB008A7BAE /* ChangeRemoteControlIDMessageBodyTests.swift */,
 				43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */,
 				43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */,
 				C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */,
@@ -1228,6 +1249,7 @@
 				541688DA1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift */,
 				43DAD00520A6B10A000F8529 /* ReadOtherDevicesIDsMessageBodyTests.swift */,
 				43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */,
+				43CEC07720D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift */,
 				C1EAD6D41C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift */,
 				43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */,
 			);
@@ -1578,6 +1600,9 @@
 				C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */,
 				C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */,
 				C1EAD6BD1C826B92006DBA60 /* CarelinkMessageBody.swift */,
+				43DFB61420D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift */,
+				43DFB60E20D3744A008A7BAE /* ChangeMaxBolusMessageBody.swift */,
+				43DFB60A20D229CC008A7BAE /* ChangeRemoteControlIDMessageBody.swift */,
 				43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */,
 				43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */,
 				C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */,
@@ -1603,7 +1628,9 @@
 				C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */,
 				43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */,
 				43CA932D1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift */,
+				43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */,
 				43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */,
+				43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */,
 				C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */,
 			);
 			path = Messages;
@@ -1934,12 +1961,10 @@
 						LastSwiftMigration = 0900;
 					};
 					C12EA236198B436800309FA4 = {
-						DevelopmentTeam = 57NRR26737;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					C12EA251198B436800309FA4 = {
-						DevelopmentTeam = 57NRR26737;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
@@ -2196,10 +2221,12 @@
 				C1842BD11C8FA3D200DB42AC /* AlarmClockReminderPumpEvent.swift in Sources */,
 				43DAD00220A6A470000F8529 /* ReadOtherDevicesStatusMessageBody.swift in Sources */,
 				C1842C1B1C8FA45100DB42AC /* ChangeBolusReminderEnablePumpEvent.swift in Sources */,
+				43DFB60B20D229CC008A7BAE /* ChangeRemoteControlIDMessageBody.swift in Sources */,
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
 				54BC448C1DB47BEA00340EED /* SensorCalGlucoseEvent.swift in Sources */,
 				C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */,
 				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
+				43DFB61520D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift in Sources */,
 				C1842BFF1C8FA45100DB42AC /* DailyTotal522PumpEvent.swift in Sources */,
 				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,
 				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
@@ -2207,6 +2234,7 @@
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
 				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
 				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				43DFB60F20D3744A008A7BAE /* ChangeMaxBolusMessageBody.swift in Sources */,
 				54BC44981DB47D5300340EED /* SensorSyncGlucoseEvent.swift in Sources */,
 				54BC448A1DB47BA500340EED /* SensorWeakSignalGlucoseEvent.swift in Sources */,
 				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
@@ -2254,6 +2282,7 @@
 				C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */,
 				43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */,
 				C1EAD6CD1C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift in Sources */,
+				43CEC07620D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift in Sources */,
 				C1EAD6C81C826B92006DBA60 /* CarelinkMessageBody.swift in Sources */,
 				C1A721621EC3E0500080FAD7 /* PumpErrorMessageBody.swift in Sources */,
 				546A85D41DF7BE1400733213 /* SensorErrorGlucoseEvent.swift in Sources */,
@@ -2309,6 +2338,7 @@
 				C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */,
 				541688DD1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift in Sources */,
 				43CA932F1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift in Sources */,
+				43CEC07420D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift in Sources */,
 				431CE7971F9B0F0200255374 /* OSLog.swift in Sources */,
 				2FDE1A071E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift in Sources */,
 				43EBE4521EAD23C40073A0B5 /* TimeInterval.swift in Sources */,
@@ -2353,6 +2383,7 @@
 				54BC44B11DB70F4A00340EED /* GlucoseSensorDataGlucoseEventTests.swift in Sources */,
 				43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */,
 				2F962EC81E7074E60070EFBD /* BolusNormalPumpEventTests.swift in Sources */,
+				43DFB61320D37800008A7BAE /* ChangeMaxBasalRateMessageBodyTests.swift in Sources */,
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
 				43DAD00620A6B10A000F8529 /* ReadOtherDevicesIDsMessageBodyTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
@@ -2369,6 +2400,7 @@
 				43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				54BC44A91DB704A600340EED /* CalBGForGHGlucoseEventTests.swift in Sources */,
 				C1F000501EBE727C00F65163 /* BasalScheduleTests.swift in Sources */,
+				43CEC07820D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift in Sources */,
 				43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */,
 				C12198A31C8DFC3600BC374C /* BolusCarelinkMessageBodyTests.swift in Sources */,
 				C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */,
@@ -2377,9 +2409,11 @@
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
 				54BC44731DB46A5200340EED /* GlucosePageTests.swift in Sources */,
 				54BC44AF1DB70C3E00340EED /* TenSomethingGlucoseEventTests.swift in Sources */,
+				43DFB61120D37748008A7BAE /* ChangeMaxBolusMessageBodyTests.swift in Sources */,
 				C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */,
 				43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */,
 				54BC44B71DB81B5100340EED /* GetGlucosePageMessageBodyTests.swift in Sources */,
+				43DFB60D20D22CCB008A7BAE /* ChangeRemoteControlIDMessageBodyTests.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
 				2F962EC11E6872170070EFBD /* TimestampedHistoryEventTests.swift in Sources */,
 				54BC44B51DB7184D00340EED /* NSStringExtensions.swift in Sources */,
@@ -3221,7 +3255,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 57NRR26737;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
@@ -3242,7 +3276,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 57NRR26737;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
@@ -3261,7 +3295,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 57NRR26737;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -3281,7 +3315,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 57NRR26737;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";

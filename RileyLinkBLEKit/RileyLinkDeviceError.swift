@@ -39,7 +39,7 @@ extension RileyLinkDeviceError: LocalizedError {
         case .peripheralManagerError(let error):
             return error.failureReason
         default:
-            return errorDescription
+            return nil
         }
     }
 }

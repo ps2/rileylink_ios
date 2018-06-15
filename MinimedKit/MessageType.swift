@@ -18,28 +18,30 @@ public enum MessageType: UInt8 {
     case errorResponse                = 0x15
     case writeGlucoseHistoryTimestamp = 0x28
 
-    case readRemoteControlID          = 0x2e  // Refused by x23 pumps
+    case setBasalProfileA             = 0x30  // CMD_SET_A_PROFILE
+    case setBasalProfileB             = 0x31  // CMD_SET_B_PROFILE
 
     case changeTime                   = 0x40
+    case setMaxBolus                  = 0x41  // CMD_SET_MAX_BOLUS
     case bolus                        = 0x42
 
     case PumpExperiment_OP67          = 0x43
     case PumpExperiment_OP68          = 0x44
-    case PumpExperiment_OP69          = 0x45
+    case PumpExperiment_OP69          = 0x45  // CMD_SET_VAR_BOLUS_ENABLE
 
     case selectBasalProfile           = 0x4a
 
     case changeTempBasal              = 0x4c
 
     case PumpExperiment_OP80          = 0x50
-    case PumpExperiment_OP81          = 0x51
-    case PumpExperiment_OP82          = 0x52
-    case PumpExperiment_OP83          = 0x53
-    case PumpExperiment_OP84          = 0x54
-    case PumpExperiment_OP85          = 0x55
+    case setRemoteControlID           = 0x51  // CMD_SET_RF_REMOTE_ID
+    case PumpExperiment_OP82          = 0x52  // CMD_SET_BLOCK_ENABLE
+    case setLanguage                  = 0x53
+    case PumpExperiment_OP84          = 0x54  // CMD_SET_ALERT_TYPE
+    case PumpExperiment_OP85          = 0x55  // CMD_SET_PATTERNS_ENABLE
     case PumpExperiment_OP86          = 0x56
-    case PumpExperiment_OP87          = 0x57
-    case PumpExperiment_OP88          = 0x58
+    case setRemoteControlEnabled      = 0x57  // CMD_SET_RF_ENABLE
+    case PumpExperiment_OP88          = 0x58  // CMD_SET_INSULIN_ACTION_TYPE
     case PumpExperiment_OP89          = 0x59
     case PumpExperiment_OP90          = 0x5a
 
@@ -49,16 +51,23 @@ public enum MessageType: UInt8 {
 
     case powerOn                      = 0x5d
 
-    case PumpExperiment_OP97          = 0x61
-    case PumpExperiment_OP98          = 0x62
-    case PumpExperiment_OP99          = 0x63
-    case PumpExperiment_O100          = 0x64
-    case PumpExperiment_O101          = 0x65
-    case PumpExperiment_O103          = 0x67
+    case setBolusWizardEnabled1       = 0x61
+    case setBolusWizardEnabled2       = 0x62
+    case setBolusWizardEnabled3       = 0x63
+    case setBolusWizardEnabled4       = 0x64
+    case setBolusWizardEnabled5       = 0x65
+    case setAlarmClockEnable          = 0x67
+
+    case setMaxBasalRate              = 0x6e  // CMD_SET_MAX_BASAL
+    case setBasalProfileStandard      = 0x6f  // CMD_SET_STD_PROFILE
 
     case readTime                     = 0x70
     case getBattery                   = 0x72
     case readRemainingInsulin         = 0x73
+    case readFirmwareVersion          = 0x74
+    case readErrorStatus              = 0x75
+    case readRemoteControlIDs         = 0x76  // CMD_READ_REMOTE_CTRL_IDS
+
     case getHistoryPage               = 0x80
     case getPumpModel                 = 0x8d
     case readProfileSTD512            = 0x92
@@ -130,6 +139,8 @@ public enum MessageType: UInt8 {
             return ReadOtherDevicesIDsMessageBody.self
         case .readOtherDevicesStatus:
             return ReadOtherDevicesStatusMessageBody.self
+        case .readRemoteControlIDs:
+            return ReadRemoteControlIDsMessageBody.self
         default:
             return UnknownMessageBody.self
         }

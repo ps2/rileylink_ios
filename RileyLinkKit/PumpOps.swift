@@ -22,7 +22,7 @@ public class PumpOps {
 
     private var pumpState: PumpState {
         didSet {
-            delegate.pumpOps(self, didChange: pumpState)
+            delegate?.pumpOps(self, didChange: pumpState)
         }
     }
 
@@ -30,9 +30,9 @@ public class PumpOps {
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.RileyLinkKit.PumpOps", qos: .utility)
 
-    private unowned let delegate: PumpOpsDelegate
+    private weak var delegate: PumpOpsDelegate?
     
-    public init(pumpSettings: PumpSettings, pumpState: PumpState?, delegate: PumpOpsDelegate) {
+    public init(pumpSettings: PumpSettings, pumpState: PumpState?, delegate: PumpOpsDelegate?) {
         self.pumpSettings = pumpSettings
         self.delegate = delegate
 
@@ -40,7 +40,7 @@ public class PumpOps {
             self.pumpState = pumpState
         } else {
             self.pumpState = PumpState()
-            self.delegate.pumpOps(self, didChange: self.pumpState)
+            self.delegate?.pumpOps(self, didChange: self.pumpState)
         }
     }
 

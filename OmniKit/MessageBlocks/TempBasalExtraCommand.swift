@@ -19,7 +19,7 @@ public struct TempBasalExtraCommand : MessageBlock {
     public let blockType: MessageBlockType = .tempBasalExtra
     
     public var data: Data {
-        let reminders = (UInt8(programReminderInterval.minutes) & 0x1f) + (confidenceReminder ? (1<<6) : 0)
+        let reminders = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
@@ -40,7 +40,7 @@ public struct TempBasalExtraCommand : MessageBlock {
         let numEntries = (length - 8) / 6
         
         confidenceReminder = encodedData[2] & (1<<6) != 0
-        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x1f))
+        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
         
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)

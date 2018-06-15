@@ -20,7 +20,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
     public let rateEntries: [RateEntry]
 
     public var data: Data {
-        let reminders = (UInt8(programReminderInterval.minutes) & 0x1f) + (confidenceReminder ? (1<<6) : 0)
+        let reminders = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
@@ -43,7 +43,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let numEntries = (length - 8) / 6
         
         confidenceReminder = encodedData[2] & (1<<6) != 0
-        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x1f))
+        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
 
         currentEntryIndex = encodedData[3]
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0

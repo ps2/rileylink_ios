@@ -28,6 +28,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case pleaseWaitForDeactivation
         case removeBacking
         case insertCannula
+        case insertingCannula
         case checkInfusionSite
         
         var instructions: String {
@@ -46,6 +47,8 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
                 return NSLocalizedString("Remove pod's adhesive backing. If pod is wet or dirty, or adhesive is folded, press Discard. If pod OK, apply to site", comment: "Message for remove pod adhesive backing screen")
             case .insertCannula:
                 return NSLocalizedString("Press Start to insert cannula and begin basal delivery.", comment: "Message for screen prepping user for cannula insertion")
+            case .insertingCannula:
+                return NSLocalizedString("Inserting cannula...", comment: "Message for priming screen")
             case .checkInfusionSite:
                 return NSLocalizedString("Current basal is programmed. Check infusion site and cannula. Is cannula inserted properly?", comment: "Message for check infusion site screen")
             default:
@@ -81,7 +84,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         var showActivity: Bool {
             switch self {
-            case .priming:
+            case .priming, .insertingCannula:
                 return true
             default:
                 return false
@@ -171,6 +174,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         case .removeBacking:
             interactionState = .insertCannula
         case .insertCannula:
+            interactionState = .insertingCannula
             insertCannula()
         case .checkInfusionSite:
             _ = navigationController?.popViewController(animated: true)

@@ -40,7 +40,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             case .communicationError(let action, let error):
                 return String(format: NSLocalizedString("Error occurred while %1$@: %2$@", comment: "The format string description of a communication error. (1: the action during which the error occurred) (2: The error that occurred"), action, String(describing: error))
             case .priming:
-                return NSLocalizedString("Priming...", comment: "Message for priming screen")
+                return NSLocalizedString("Priming...", comment: "Message shown while priming pod")
             case .prepareSite:
                 return NSLocalizedString("Prepare site. Remove pod's needle cap.  If cannula sticks out, press Discard", comment: "Message for prepare site screen")
             case .removeBacking:
@@ -48,7 +48,7 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             case .insertCannula:
                 return NSLocalizedString("Press Start to insert cannula and begin basal delivery.", comment: "Message for screen prepping user for cannula insertion")
             case .insertingCannula:
-                return NSLocalizedString("Inserting cannula...", comment: "Message for priming screen")
+                return NSLocalizedString("Inserting cannula...", comment: "Message shown during cannula insertion")
             case .checkInfusionSite:
                 return NSLocalizedString("Current basal is programmed. Check infusion site and cannula. Is cannula inserted properly?", comment: "Message for check infusion site screen")
             default:

@@ -51,7 +51,7 @@ extension PumpSettings: CustomDebugStringConvertible {
             "## PumpSettings",
             "pumpID: ✔︎",
             "pumpRegion: \(pumpRegion)",
-            ].joined(separator: "\n")
+        ].joined(separator: "\n")
     }
 }
 

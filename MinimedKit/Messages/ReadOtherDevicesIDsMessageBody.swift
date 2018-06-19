@@ -10,7 +10,7 @@ import Foundation
 
 public class ReadOtherDevicesIDsMessageBody: CarelinkLongMessageBody {
 
-    let ids: [Data]
+    public let ids: [Data]
 
     public required init?(rxData: Data) {
         guard rxData.count == type(of: self).length else {

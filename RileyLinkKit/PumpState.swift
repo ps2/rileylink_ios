@@ -10,7 +10,7 @@ import Foundation
 import MinimedKit
 
 
-public struct PumpState: RawRepresentable {
+public struct PumpState: RawRepresentable, Equatable {
     public typealias RawValue = [String: Any]
 
     public var timeZone: TimeZone

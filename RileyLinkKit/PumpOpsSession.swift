@@ -229,7 +229,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
-    public func getBasalSchedule(for profile: BasalProfile = .standard) throws -> BasalSchedule {
+    public func getBasalSchedule(for profile: BasalProfile = .standard) throws -> BasalSchedule? {
         try wakeup()
 
         var isFinished = false
@@ -243,20 +243,44 @@ extension PumpOpsSession {
             message = PumpMessage(settings: settings, type: .pumpAck)
         }
 
-        return BasalSchedule(rawValue: scheduleData)!
+        return BasalSchedule(rawValue: scheduleData)
     }
 
+    /// - Throws:
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
     public func getOtherDevicesIDs() throws -> ReadOtherDevicesIDsMessageBody {
         try wakeup()
 
         return try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesIDs), responseType: .readOtherDevicesIDs)
     }
 
+    /// - Throws:
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
     public func getOtherDevicesEnabled() throws -> Bool {
         try wakeup()
 
         let response: ReadOtherDevicesStatusMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readOtherDevicesStatus), responseType: .readOtherDevicesStatus)
         return response.isEnabled
+    }
+
+    /// - Throws:
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
+    public func getRemoteControlIDs() throws -> ReadRemoteControlIDsMessageBody {
+        try wakeup()
+
+        return try session.getResponse(to: PumpMessage(settings: settings, type: .readRemoteControlIDs), responseType: .readRemoteControlIDs)
     }
 }
 
@@ -360,6 +384,28 @@ extension PumpOpsSession {
     /// - Throws: PumpCommandError
     public func selectBasalProfile(_ profile: BasalProfile) throws {
         let message = PumpMessage(settings: settings, type: .selectBasalProfile, body: SelectBasalProfileMessageBody(newProfile: profile))
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: PumpCommandError
+    public func setMaxBasalRate(unitsPerHour: Double) throws {
+        guard let body = ChangeMaxBasalRateMessageBody(maxBasalUnitsPerHour: unitsPerHour) else {
+            throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
+        }
+
+        let message = PumpMessage(settings: settings, type: .setMaxBasalRate, body: body)
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: PumpCommandError
+    public func setMaxBolus(units: Double) throws {
+        guard let body = ChangeMaxBolusMessageBody(maxBolusUnits: units) else {
+            throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
+        }
+
+        let message = PumpMessage(settings: settings, type: .setMaxBolus, body: body)
 
         let _: PumpAckMessageBody = try runCommandWithArguments(message)
     }
@@ -512,9 +558,37 @@ extension PumpOpsSession {
         return
     }
 
-    /// - Throws: `PumpCommandError` specifying the failure sequence
-    public func setBasalSchedule(_ basalSchedule: BasalSchedule, for profile: BasalProfile, type: MessageType) throws {
+    /// - Throws: PumpCommandError
+    public func setRemoteControlEnabled(_ enabled: Bool) throws {
+        let message = PumpMessage(settings: settings, type: .setRemoteControlEnabled, body: SetRemoteControlEnabledMessageBody(enabled: enabled))
 
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: PumpCommandError
+    public func setRemoteControlID(_ id: Data, atIndex index: Int) throws {
+        guard let body = ChangeRemoteControlIDMessageBody(id: id, index: index) else {
+            throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
+        }
+
+        let message = PumpMessage(settings: settings, type: .setRemoteControlID, body: body)
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: PumpCommandError
+    public func removeRemoteControlID(atIndex index: Int) throws {
+        guard let body = ChangeRemoteControlIDMessageBody(id: nil, index: index) else {
+            throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
+        }
+
+        let message = PumpMessage(settings: settings, type: .setRemoteControlID, body: body)
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+
+    /// - Throws: `PumpCommandError` specifying the failure sequence
+    public func setBasalSchedule(_ basalSchedule: BasalSchedule, for profile: BasalProfile) throws {
 
         let frames = DataFrameMessageBody.dataFramesFromContents(basalSchedule.rawValue)
 
@@ -522,14 +596,21 @@ extension PumpOpsSession {
             return
         }
 
-        NSLog(firstFrame.txData.hexadecimalString)
+        let type: MessageType
+        switch profile {
+        case .standard:
+            type = .setBasalProfileStandard
+        case .profileA:
+            type = .setBasalProfileA
+        case .profileB:
+            type = .setBasalProfileB
+        }
 
         let message = PumpMessage(settings: settings, type: type, body: firstFrame)
         let _: PumpAckMessageBody = try runCommandWithArguments(message)
 
         for nextFrame in frames.dropFirst() {
             let message = PumpMessage(settings: settings, type: type, body: nextFrame)
-            NSLog(nextFrame.txData.hexadecimalString)
             do {
                 let _: PumpAckMessageBody = try session.getResponse(to: message)
             } catch let error as PumpOpsError {

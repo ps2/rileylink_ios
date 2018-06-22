@@ -77,6 +77,9 @@ public class NightscoutPumpEvents: NSObject {
                                                 primeType: prime.primeType, amount: prime.amount,
                                                 programmedAmount: prime.programmedAmount)
                 results.append(entry)
+            case is BatteryPumpEvent:
+                let entry = BatteryChangeTreatment(timestamp: event.date, enteredBy: eventSource)
+                results.append(entry)
             default:
                 break
             }

@@ -12,9 +12,9 @@ public struct PrimePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    let amount: Double
-    let primeType: String
-    let programmedAmount: Double
+    public let amount: Double
+    public let primeType: String
+    public let programmedAmount: Double
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 10

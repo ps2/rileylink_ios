@@ -69,6 +69,14 @@ public class NightscoutPumpEvents: NSObject {
             case is ResumePumpEvent:
                 let entry = PumpResumeTreatment(timestamp: event.date, enteredBy: eventSource)
                 results.append(entry)
+            case is RewindPumpEvent:
+                let entry = InsulinChangeTreatment(timestamp: event.date, enteredBy: eventSource)
+                results.append(entry)
+            case let prime as PrimePumpEvent:
+                let entry = SiteChangeTreatment(timestamp: event.date, enteredBy: eventSource,
+                                                primeType: prime.primeType, amount: prime.amount,
+                                                programmedAmount: prime.programmedAmount)
+                results.append(entry)
             default:
                 break
             }

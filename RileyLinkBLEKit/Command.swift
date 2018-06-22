@@ -23,6 +23,7 @@ enum RileyLinkCommand: UInt8 {
     case setSWEncoding    = 11
     case setPreamble      = 12
     case resetRadioConfig = 13
+    case getStatistics    = 14
 }
 
 enum RileyLinkLEDType: UInt8 {
@@ -289,5 +290,13 @@ struct ResetRadioConfig: Command {
     
     var data: Data {
         return Data(bytes: [RileyLinkCommand.resetRadioConfig.rawValue])        
+    }
+}
+
+struct GetStatistics: Command {
+    typealias ResponseType = GetStatisticsResponse
+    
+    var data: Data {
+        return Data(bytes: [RileyLinkCommand.getStatistics.rawValue])
     }
 }

@@ -123,6 +123,10 @@ struct GetStatisticsResponse: Response {
     private init?(code: ResponseCode, data: Data) {
         self.code = code
         
+        guard data.count >= 16 else {
+            return nil
+        }
+        
         let uptime = TimeInterval(milliseconds: Double(data[data.startIndex...].toBigEndian(UInt32.self)))
         let radioRxOverflowCount = data[data.startIndex.advanced(by: 4)...].toBigEndian(UInt16.self)
         let radioRxFifoOverflowCount = data[data.startIndex.advanced(by: 6)...].toBigEndian(UInt16.self)

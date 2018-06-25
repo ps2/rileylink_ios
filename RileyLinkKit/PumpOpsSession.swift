@@ -618,6 +618,10 @@ extension PumpOpsSession {
             }
         }
     }
+    
+    public func getStatistics() throws -> RileyLinkStatistics {
+        return try session.getRileyLinkStatistics()
+    }
 
     public func discoverCommands(in range: CountableClosedRange<UInt8>, _ updateHandler: (_ messages: [String]) -> Void) {
 

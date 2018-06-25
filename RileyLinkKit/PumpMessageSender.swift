@@ -45,6 +45,9 @@ protocol PumpMessageSender {
     
     /// - Throws: LocalizedError
     func enableCCLEDs() throws
+    
+    /// - Throws: LocalizedError
+    func getRileyLinkStatistics() throws -> RileyLinkStatistics
 }
 
 extension PumpMessageSender {

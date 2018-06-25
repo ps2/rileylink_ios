@@ -106,13 +106,7 @@ struct GetVersionResponse: Response {
 struct GetStatisticsResponse: Response {
     let code: ResponseCode
     
-    let uptime: TimeInterval
-    let radioRxOverflowCount: UInt16
-    let radioRxFifoOverflowCount: UInt16
-    let packetRxCount: UInt16
-    let packetTxCount: UInt16
-    let crcFailureCount: UInt16
-    let spiSyncFailureCount: UInt16
+    let statistics: RileyLinkStatistics
 
     init?(data: Data) {
         guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
@@ -129,13 +123,15 @@ struct GetStatisticsResponse: Response {
     private init?(code: ResponseCode, data: Data) {
         self.code = code
         
-        self.uptime = TimeInterval(milliseconds: Double(data[data.startIndex...].toBigEndian(UInt32.self)))
-        self.radioRxOverflowCount = data[data.startIndex.advanced(by: 4)...].toBigEndian(UInt16.self)
-        self.radioRxFifoOverflowCount = data[data.startIndex.advanced(by: 6)...].toBigEndian(UInt16.self)
-        self.packetRxCount = data[data.startIndex.advanced(by: 8)...].toBigEndian(UInt16.self)
-        self.packetTxCount = data[data.startIndex.advanced(by: 10)...].toBigEndian(UInt16.self)
-        self.crcFailureCount = data[data.startIndex.advanced(by: 12)...].toBigEndian(UInt16.self)
-        self.spiSyncFailureCount = data[data.startIndex.advanced(by: 14)...].toBigEndian(UInt16.self)
+        let uptime = TimeInterval(milliseconds: Double(data[data.startIndex...].toBigEndian(UInt32.self)))
+        let radioRxOverflowCount = data[data.startIndex.advanced(by: 4)...].toBigEndian(UInt16.self)
+        let radioRxFifoOverflowCount = data[data.startIndex.advanced(by: 6)...].toBigEndian(UInt16.self)
+        let packetRxCount = data[data.startIndex.advanced(by: 8)...].toBigEndian(UInt16.self)
+        let packetTxCount = data[data.startIndex.advanced(by: 10)...].toBigEndian(UInt16.self)
+        let crcFailureCount = data[data.startIndex.advanced(by: 12)...].toBigEndian(UInt16.self)
+        let spiSyncFailureCount = data[data.startIndex.advanced(by: 14)...].toBigEndian(UInt16.self)
+        
+        self.statistics = RileyLinkStatistics(uptime: uptime, radioRxOverflowCount: radioRxOverflowCount, radioRxFifoOverflowCount: radioRxFifoOverflowCount, packetRxCount: packetRxCount, packetTxCount: packetTxCount, crcFailureCount: crcFailureCount, spiSyncFailureCount: spiSyncFailureCount)
     }
 }
 

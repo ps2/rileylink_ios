@@ -31,3 +31,4 @@ project.xcworkspace
 # Pods/
 
 Carthage/
+.gitmodules

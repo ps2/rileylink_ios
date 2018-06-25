@@ -18,7 +18,9 @@ public class ChangeMaxBasalRateMessageBody: CarelinkLongMessageBody {
         }
 
         let ticks = UInt16(maxBasalUnitsPerHour * type(of: self).multiplier)
-        var data = Data(bytes: [UInt8(clamping: ticks.bitWidth / 8)])
+        let length = UInt8(clamping: ticks.bitWidth / 8)
+        var data = Data(bytes: [length])
+
         data.appendBigEndian(ticks)
 
         self.init(rxData: data)

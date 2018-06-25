@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MinimedKitUI
 import RileyLinkBLEKit
 import RileyLinkKit
 import RileyLinkKitUI
@@ -159,7 +160,7 @@ class RileyLinkListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let device = devices[indexPath.row]
-        let vc = RileyLinkDeviceTableViewController(
+        let vc = RileyLinkMinimedDeviceTableViewController(
             device: device,
             deviceState: dataManager.deviceStates[device.peripheralIdentifier, default: DeviceState()],
             pumpSettings: dataManager.pumpSettings,

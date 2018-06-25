@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RileyLinkKit
+import MinimedKit
 
 
 extension UserDefaults {

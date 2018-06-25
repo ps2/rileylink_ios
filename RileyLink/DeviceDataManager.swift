@@ -11,6 +11,7 @@ import RileyLinkKit
 import RileyLinkKitUI
 import RileyLinkBLEKit
 import MinimedKit
+import MinimedKitUI
 import NightscoutUploadKit
 
 class DeviceDataManager {
@@ -94,7 +95,7 @@ class DeviceDataManager {
     }
 
 
-    var latestPolledPumpStatus: RileyLinkKit.PumpStatus? {
+    var latestPolledPumpStatus: MinimedKit.PumpStatus? {
         didSet {
             if let update = latestPolledPumpStatus {
                 latestPumpStatusDate = update.clock.date

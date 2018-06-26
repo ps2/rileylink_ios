@@ -321,27 +321,31 @@ extension PeripheralManager {
                 }
 
                 addCondition(.valueUpdate(characteristic: characteristic, matching: { value in
-                    guard let value = value else {
+                    guard let value = value, value.count > 0 else {
+                        log.debug("Empty response from RileyLink. Continuing to listen for command response.")
                         return false
                     }
-
+                    
                     log.debug("RL Recv(single): %@", value.hexadecimalString)
 
-                    guard let response = R(data: value) else {
-                        // We don't recognize the contents. Keep listening.
+                    guard let code = ResponseCode(rawValue: value[0]) else {
+                        let unknownCode = value[0..<1].hexadecimalString
+                        log.debug("Unknown response code from RileyLink: %{public}@. Continuing to listen for command response.", unknownCode)
                         return false
                     }
 
-                    switch response.code {
-                    case .rxTimeout, .zeroData, .invalidParam, .unknownCommand:
-                        log.debug("RileyLink response: %{public}@", String(describing: response))
-                        capturedResponse = response
-                        return true
+                    switch code {
                     case .commandInterrupted:
                         // This is expected in cases where an "Idle" GetPacket command is running
-                        log.debug("RileyLink response: %{public}@", String(describing: response))
+                        log.debug("Idle command interrupted. Continuing to listen for command response.")
                         return false
-                    case .success:
+                    default:
+                        guard let response = R(data: value) else {
+                            log.debug("Unable to parse response.")
+                            // We don't recognize the contents. Keep listening.
+                            return false
+                        }
+                        log.debug("RileyLink response: %{public}@", String(describing: response))
                         capturedResponse = response
                         return true
                     }

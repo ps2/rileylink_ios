@@ -50,6 +50,16 @@ extension RadioFirmwareVersion {
         return true
     }
     
+    private var atLeastV2_2: Bool {
+        guard components.count >= 2 else {
+            return false;
+        }
+        let major = components[0]
+        let minor = components[1]
+        return major > 2 || (major == 2 && minor >= 2)
+    }
+
+    
     var supportsPreambleExtension: Bool {
         return atLeastV2
     }
@@ -69,6 +79,11 @@ extension RadioFirmwareVersion {
     var needsExtraByteForUpdateRegisterCommand: Bool {
         return !atLeastV2
     }
+    
+    var supportsRileyLinkStatistics: Bool {
+        return atLeastV2_2
+    }
+
 
 }
 

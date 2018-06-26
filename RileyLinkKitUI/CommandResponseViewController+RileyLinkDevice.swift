@@ -52,6 +52,27 @@ extension CommandResponseViewController {
             return NSLocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
         }
     }
+    
+    static func getStatistics(ops: PumpOps?, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            ops?.runSession(withName: "Get Statistics", using: device) { (session) in
+                let response: String
+                do {
+                    let stats = try session.getStatistics()
+                    response = String(describing: stats)
+                } catch let error {
+                    response = String(describing: error)
+                }
+
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            
+            return NSLocalizedString("Get Statistics…", comment: "Progress message for getting statistics.")
+        }
+    }
+
 
     static func dumpHistory(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
@@ -210,7 +231,7 @@ extension CommandResponseViewController {
     static func enableLEDs(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             device.enableBLELEDs()
-            ops?.runSession(withName: "Read pump status", using: device) { (session) in
+            ops?.runSession(withName: "Enable LEDs", using: device) { (session) in
                 let response: String
                 do {
                     try session.enableCCLEDs()

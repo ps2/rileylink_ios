@@ -320,6 +320,10 @@ func randomDataString(length:Int) -> String {
 }
 
 class PumpMessageSenderStub: PumpMessageSender {
+    func getRileyLinkStatistics() throws -> RileyLinkStatistics {
+        throw PumpOpsError.noResponse(during: "Tests")
+    }
+    
     func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket? {
         guard let decoded = MinimedPacket(encodedData: data),
               let messageType = MessageType(rawValue: decoded.data[4])

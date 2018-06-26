@@ -481,6 +481,20 @@
 			remoteGlobalIDString = 431CE76E1F98564100255374;
 			remoteInfo = RileyLinkBLEKit;
 		};
+		4327EEB820E1E55D002598CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
+		4327EEBA20E1E562002598CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
 		4352A71020DEC67300CAC200 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -2051,6 +2065,7 @@
 			);
 			dependencies = (
 				43722FBA1CB9F7640038B7F2 /* PBXTargetDependency */,
+				4327EEBB20E1E562002598CB /* PBXTargetDependency */,
 			);
 			name = RileyLinkKitTests;
 			productName = RileyLinkKitTests;
@@ -2125,6 +2140,7 @@
 			);
 			dependencies = (
 				C10D9BCD1C8269D500378342 /* PBXTargetDependency */,
+				4327EEB920E1E55D002598CB /* PBXTargetDependency */,
 			);
 			name = MinimedKitTests;
 			productName = MinimedKitTests;
@@ -2247,6 +2263,7 @@
 					43722FB61CB9F7640038B7F2 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 0900;
+						TestTargetID = C12EA236198B436800309FA4;
 					};
 					43C246921D8918AE0031F8D1 = {
 						CreatedOnToolsVersion = 8.0;
@@ -2267,6 +2284,7 @@
 					C10D9BC91C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 0900;
+						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C12EA236198B436800309FA4 = {
 						LastSwiftMigration = 0900;
@@ -2938,6 +2956,16 @@
 			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
 			targetProxy = 431CE7821F98564200255374 /* PBXContainerItemProxy */;
 		};
+		4327EEB920E1E55D002598CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = 4327EEB820E1E55D002598CB /* PBXContainerItemProxy */;
+		};
+		4327EEBB20E1E562002598CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = 4327EEBA20E1E562002598CB /* PBXContainerItemProxy */;
+		};
 		4352A71120DEC67300CAC200 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43FB610120DDEF26002B996B /* Cartfile */;
@@ -3421,6 +3449,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -3444,6 +3473,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};
@@ -3678,6 +3708,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -3701,6 +3732,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};

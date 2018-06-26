@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HealthKit
 
 public struct LoopStatus {
     let name: String
@@ -21,8 +22,11 @@ public struct LoopStatus {
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
     let failureReason: Error?
+    let currentCorrectionRange: CorrectionRange?
+    let forecastError: ForecastError?
+    let testingDetails: [String: Any]?
 
-    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil) {
+    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil, currentCorrectionRange: CorrectionRange? = nil, forecastError: ForecastError? = nil, testingDetails: [String: Any]? = nil) {
         self.name = name
         self.version = version
         self.timestamp = timestamp
@@ -34,6 +38,9 @@ public struct LoopStatus {
         self.enacted = enacted
         self.rileylinks = rileylinks
         self.failureReason = failureReason
+        self.currentCorrectionRange = currentCorrectionRange
+        self.forecastError = forecastError
+        self.testingDetails = testingDetails
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -73,6 +80,18 @@ public struct LoopStatus {
 
         if let rileylinks = rileylinks {
             rval["rileylinks"] = rileylinks.map { $0.dictionaryRepresentation }
+        }
+
+        if let currentCorrectionRange = currentCorrectionRange {
+            rval["currentCorrectionRange"] = currentCorrectionRange.dictionaryRepresentation
+        }
+        
+        if let forecastError = forecastError {
+            rval["forecastError"] = forecastError
+        }
+        
+        if let testingDetails = testingDetails {
+            rval["testingDetails"] = testingDetails
         }
 
         return rval

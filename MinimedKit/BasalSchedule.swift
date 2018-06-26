@@ -48,7 +48,7 @@ extension BasalSchedule {
             if let entry = BasalScheduleEntry(
                 index: tuple.index,
                 rawValue: rawValue[beginOfRange..<endOfRange]
-                ) {
+            ) {
                 if let last = entries.last, last.timeOffset >= entry.timeOffset {
                     // Stop if the new timeOffset isn't greater than the last one
                     break
@@ -77,6 +77,11 @@ extension BasalSchedule {
             byteIndex += rawEntry.count
         }
 
+        // Send the special "empty" code to clear a schedule
+        if entries.count == 0 {
+            buffer[2] = 0x3f
+        }
+
         return buffer
     }
 }
@@ -97,6 +102,7 @@ private extension BasalScheduleEntry {
         let offsetMinutes = Double(rawValue.last!) * 30
         let timeOffset = TimeInterval(minutes: offsetMinutes)
 
+        // 0x3f *30*60 denotes a stop value
         guard timeOffset < .hours(24) else {
             return nil
         }

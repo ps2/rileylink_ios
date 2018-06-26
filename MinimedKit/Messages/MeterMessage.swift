@@ -22,9 +22,9 @@ public class MeterMessage {
         if rxData.count == length,
             let packetType = PacketType(rawValue: rxData[0]), packetType == .meter
         {
-            let flags = ((rxData[4] as UInt8) & 0b110) >> 1
+            let flags = ((rxData[4]) & 0b110) >> 1
             ackFlag = flags == 0x03
-            glucose = Int((rxData[4] as UInt8) & 0b1) << 8 + Int(rxData[4] as UInt8)
+            glucose = Int((rxData[4]) & 0b1) << 8 + Int(rxData[4])
         } else {
             ackFlag = false
             glucose = 0

@@ -25,8 +25,8 @@ public struct PrimePumpEvent: TimestampedPumpEvent {
 
         rawData = availableData.subdata(in: 0..<length)
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 5)

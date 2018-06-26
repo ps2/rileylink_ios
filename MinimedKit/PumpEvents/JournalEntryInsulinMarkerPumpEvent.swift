@@ -25,8 +25,8 @@ public struct JournalEntryInsulinMarkerPumpEvent: TimestampedPumpEvent {
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
         
-        let lowBits = rawData[1] as UInt8
-        let highBits = rawData[4] as UInt8
+        let lowBits = rawData[1]
+        let highBits = rawData[4]
         amount = Double((Int(highBits & 0b1100000) << 3) + Int(lowBits)) / 10.0
     }
     

@@ -23,11 +23,11 @@ public struct JournalEntryMealMarkerPumpEvent: TimestampedPumpEvent {
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 9
         
-        let useExchangesBit = ((availableData[8] as UInt8) >> 1) & 0b1
+        let useExchangesBit = ((availableData[8]) >> 1) & 0b1
         carbUnits = (useExchangesBit != 0) ? .Exchanges : .Grams
         
-        let carbHighBit = (availableData[1] as UInt8) & 0b1
-        let carbLowBits = availableData[7] as UInt8
+        let carbHighBit = (availableData[1]) & 0b1
+        let carbLowBits = availableData[7]
         
         if carbUnits == .Exchanges {
             carbohydrates = Double(carbLowBits) / 10.0

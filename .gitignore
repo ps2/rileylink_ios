@@ -20,6 +20,7 @@ DerivedData
 project.xcworkspace
 .DS_Store
 *.log
+project.xcworkspace
 
 # CocoaPods
 #

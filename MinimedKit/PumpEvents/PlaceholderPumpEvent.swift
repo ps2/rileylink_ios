@@ -27,10 +27,10 @@ public struct PlaceholderPumpEvent: TimestampedPumpEvent {
 
     public var dictionaryRepresentation: [String: Any] {
         let name: String
-        if let type = PumpEventType(rawValue: rawData[0] as UInt8) {
+        if let type = PumpEventType(rawValue: rawData[0]) {
             name = String(describing: type).components(separatedBy: ".").last!
         } else {
-            name = "UnknownPumpEvent(\(rawData[0] as UInt8))"
+            name = "UnknownPumpEvent(\(rawData[0]))"
         }
         
         return [

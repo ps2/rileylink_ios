@@ -123,14 +123,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
 
-    private var deviceObserver: Any? {
-        willSet {
-            if let observer = deviceObserver {
-                NotificationCenter.default.removeObserver(observer)
-            }
-        }
-    }
-
     private func observe() {
         let center = NotificationCenter.default
         let mainQueue = OperationQueue.main
@@ -248,6 +240,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case pressDownButton
         case readPumpStatus
         case readBasalSchedule
+        case enableLED
+        case discoverCommands
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -374,7 +368,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
             case .readBasalSchedule:
                 cell.textLabel?.text = NSLocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
-}
+            
+            case .enableLED:
+                cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+
+            case .discoverCommands:
+                cell.textLabel?.text = NSLocalizedString("Discover Commands", comment: "The title of the command to discover commands")
+            }
         }
 
         return cell
@@ -445,9 +445,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .pressDownButton:
                 vc = .pressDownButton(ops: ops, device: device)
             case .readPumpStatus:
-                vc = .readPumpStatus(ops: ops, device: device, decimalFormatter: decimalFormatter)
+                vc = .readPumpStatus(ops: ops, device: device, measurementFormatter: measurementFormatter)
             case .readBasalSchedule:
                 vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
+            case .enableLED:
+                vc = .enableLEDs(ops: ops, device: device)
+            case .discoverCommands:
+                vc = .discoverCommands(ops: ops, device: device)
             }
 
             if let cell = tableView.cellForRow(at: indexPath) {

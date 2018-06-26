@@ -18,8 +18,8 @@ public class ReadPumpStatusMessageBody: CarelinkLongMessageBody {
             return nil
         }
 
-        bolusing = (rxData[2] as UInt8) > 0
-        suspended = (rxData[3] as UInt8) > 0
+        bolusing = rxData[2] > 0
+        suspended = rxData[3] > 0
 
         super.init(rxData: rxData)
     }

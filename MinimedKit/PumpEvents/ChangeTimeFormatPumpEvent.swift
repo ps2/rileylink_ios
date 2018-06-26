@@ -25,8 +25,8 @@ public struct ChangeTimeFormatPumpEvent: TimestampedPumpEvent {
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
 
         timeFormat = d(1) == 1 ? "24hr" : "am_pm"

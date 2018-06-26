@@ -30,21 +30,25 @@ class AuthenticationViewController<T: ServiceAuthentication>: UITableViewControl
                 }) 
 
                 tableView.reloadSections(IndexSet(integersIn: 0...1), with: .automatic)
-                authentication.verify { [unowned self] (success, error) in
+                authentication.verify { [weak self] (success, error) in
+                    guard let strongSelf = self else {
+                        return
+                    }
+
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.25, animations: {
-                            self.navigationItem.titleView = nil
-                            self.navigationItem.hidesBackButton = false
+                            strongSelf.navigationItem.titleView = nil
+                            strongSelf.navigationItem.hidesBackButton = false
                         }) 
 
                         if success {
-                            self.state = .authorized
+                            strongSelf.state = .authorized
                         } else {
                             if let error = error {
-                                self.presentAlertControllerWithError(error)
+                                strongSelf.presentAlertControllerWithError(error)
                             }
 
-                            self.state = .unauthorized
+                            strongSelf.state = .unauthorized
                         }
                     }
                 }

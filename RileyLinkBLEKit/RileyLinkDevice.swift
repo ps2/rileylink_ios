@@ -16,10 +16,10 @@ public class RileyLinkDevice {
     private let log = OSLog(category: "RileyLinkDevice")
 
     // Confined to `manager.queue`
-    private(set) var bleFirmwareVersion: BLEFirmwareVersion?
+    private var bleFirmwareVersion: BLEFirmwareVersion?
 
     // Confined to `manager.queue`
-    private(set) var radioFirmwareVersion: RadioFirmwareVersion?
+    private var radioFirmwareVersion: RadioFirmwareVersion?
 
     // Confined to `queue`
     private var idleListeningState: IdleListeningState = .disabled {
@@ -66,10 +66,10 @@ public class RileyLinkDevice {
 
         peripheralManager.delegate = self
 
-        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [unowned self] (queue, change) in
+        sessionQueueOperationCountObserver = sessionQueue.observe(\.operationCount, options: [.new]) { [weak self] (queue, change) in
             if let newValue = change.newValue, newValue == 0 {
-                self.log.debug("Session queue operation count is now empty")
-                self.assertIdleListening(forceRestart: true)
+                self?.log.debug("Session queue operation count is now empty")
+                self?.assertIdleListening(forceRestart: true)
             }
         }
     }
@@ -95,7 +95,7 @@ extension RileyLinkDevice {
     }
 
     public func readRSSI() {
-        guard case .connected = manager.peripheral.state, case .poweredOn = manager.central.state else {
+        guard case .connected = manager.peripheral.state, case .poweredOn? = manager.central?.state else {
             return
         }
         manager.peripheral.readRSSI()
@@ -103,6 +103,10 @@ extension RileyLinkDevice {
 
     public func setCustomName(_ name: String) {
         manager.setCustomName(name)
+    }
+    
+    public func enableBLELEDs() {
+        manager.setLEDMode(mode: .on)
     }
 }
 
@@ -178,7 +182,7 @@ extension RileyLinkDevice {
                 return
             }
 
-            guard case .connected = self.manager.peripheral.state, case .poweredOn = self.manager.central.state else {
+            guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
                 return
             }
 
@@ -310,7 +314,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
             NotificationCenter.default.post(name: .DeviceTimerDidTick, object: self)
 
             assertIdleListening(forceRestart: false)
-        case .customName?, .firmwareVersion?, .none:
+        case .customName?, .firmwareVersion?, .ledMode?, .none:
             break
         }
     }

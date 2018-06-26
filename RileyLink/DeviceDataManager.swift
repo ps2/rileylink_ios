@@ -256,7 +256,7 @@ class DeviceDataManager {
                     let status = try session.getCurrentPumpStatus()
                     DispatchQueue.main.async {
                         self.latestPolledPumpStatus = status
-                        let battery = BatteryStatus(voltage: status.batteryVolts, status: BatteryIndicator(batteryStatus: status.batteryStatus))
+                        let battery = BatteryStatus(voltage: status.batteryVolts.converted(to: .volts).value, status: BatteryIndicator(batteryStatus: status.batteryStatus))
                         guard let date = status.clock.date else {
                             print("Could not interpret clock")
                             return

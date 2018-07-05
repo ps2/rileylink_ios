@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MinimedKit
 import RileyLinkBLEKit
 
 
@@ -401,7 +400,7 @@ extension PumpOpsSession {
 
     /// - Throws: PumpCommandError
     public func setMaxBolus(units: Double) throws {
-        guard let body = ChangeMaxBolusMessageBody(maxBolusUnits: units) else {
+        guard let body = ChangeMaxBolusMessageBody(pumpModel: try getPumpModel(), maxBolusUnits: units) else {
             throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
         }
 
@@ -475,11 +474,22 @@ extension PumpOpsSession {
         }
 
         do {
-            let message = PumpMessage(settings: settings, type: .changeTime, body: ChangeTimeCarelinkMessageBody(dateComponents: generator())!)
+            let components = generator()
+            let message = PumpMessage(settings: settings, type: .changeTime, body: ChangeTimeCarelinkMessageBody(dateComponents: components)!)
             let _: PumpAckMessageBody = try session.getResponse(to: message)
-            self.pump.timeZone = .currentFixed
+            self.pump.timeZone = components.timeZone?.fixed ?? .currentFixed
         } catch let error as PumpOpsError {
             throw PumpCommandError.arguments(error)
+        }
+    }
+
+    public func setTimeToNow(in timeZone: TimeZone? = nil) throws {
+        let timeZone = timeZone ?? pump.timeZone
+
+        try setTime { () -> DateComponents in
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = timeZone
+            return calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
         }
     }
 

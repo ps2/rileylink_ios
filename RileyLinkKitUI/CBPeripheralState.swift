@@ -13,7 +13,7 @@ extension CBPeripheralState {
 
     // MARK: - CustomStringConvertible
 
-    var description: String {
+    public var description: String {
         switch self {
         case .connected:
             return NSLocalizedString("Connected", comment: "The connected state")

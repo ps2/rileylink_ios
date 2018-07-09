@@ -330,7 +330,7 @@ extension PeripheralManager {
 
                     guard let code = ResponseCode(rawValue: value[0]) else {
                         let unknownCode = value[0..<1].hexadecimalString
-                        log.debug("Unknown response code from RileyLink: %{public}@. Continuing to listen for command response.", unknownCode)
+                        log.error("Unknown response code from RileyLink: %{public}@. Continuing to listen for command response.", unknownCode)
                         return false
                     }
 
@@ -341,7 +341,7 @@ extension PeripheralManager {
                         return false
                     default:
                         guard let response = R(data: value) else {
-                            log.debug("Unable to parse response.")
+                            log.error("Unable to parse response.")
                             // We don't recognize the contents. Keep listening.
                             return false
                         }

@@ -44,7 +44,7 @@ extension CommandResponseViewController {
                 let response: String
                 do {
                     guard let session = session else {
-                        throw PumpManagerError.connection(nil)
+                        throw PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
                     }
 
                     try session.setTimeToNow(in: .current)

@@ -489,7 +489,9 @@ extension PumpOpsSession {
         try setTime { () -> DateComponents in
             var calendar = Calendar(identifier: .gregorian)
             calendar.timeZone = timeZone
-            return calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+            var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+            components.timeZone = timeZone
+            return components
         }
     }
 

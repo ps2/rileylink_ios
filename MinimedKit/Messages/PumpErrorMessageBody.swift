@@ -28,7 +28,7 @@ public enum PumpErrorCode: UInt8, CustomStringConvertible {
     public var recoverySuggestion: String? {
         switch self {
         case .commandRefused:
-            return NSLocalizedString("Pump may be suspended, priming, or have an incorrect temp basal type", comment: "Suggestions for diagnosing a command refused pump error")
+            return NSLocalizedString("Check that the pump is not suspended or priming, or has a percent temp basal type", comment: "Suggestions for diagnosing a command refused pump error")
         default:
             return nil
         }

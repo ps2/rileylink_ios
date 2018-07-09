@@ -236,7 +236,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
         pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkManager.firstConnectedDevice, { (session) in
             guard let session = session else {
                 DispatchQueue.main.async {
-                    self.lastError = PumpManagerError.connection(nil)
+                    self.lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
                 }
                 return
             }
@@ -283,7 +283,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                     if self.pumpState != nil {
                         self.continueState = .completed
                     } else {
-                        self.lastError = PumpManagerError.connection(nil)
+                        self.lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
                     }
                 }
             } catch let error {

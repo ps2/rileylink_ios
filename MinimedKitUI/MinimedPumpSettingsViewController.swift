@@ -44,6 +44,17 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         tableView.tableHeaderView = imageView
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if clearsSelectionOnViewWillAppear {
+            // Manually invoke the delegate for rows deselecting on appear
+            for indexPath in tableView.indexPathsForSelectedRows ?? [] {
+                _ = tableView(tableView, willDeselectRowAt: indexPath)
+            }
+        }
+
+        super.viewWillAppear(animated)
+    }
+
     // MARK: - Data Source
 
     private enum Section: Int {
@@ -203,13 +214,11 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
 
-            pumpManager.getStateForDevice(device) { (deviceState, pumpState, pumpSettings, pumpOps) in
+            pumpManager.getStateForDevice(device) { (deviceState, pumpOps) in
                 DispatchQueue.main.async {
                     let vc = RileyLinkMinimedDeviceTableViewController(
                         device: device,
                         deviceState: deviceState,
-                        pumpSettings: pumpSettings,
-                        pumpState: pumpState,
                         pumpOps: pumpOps
                     )
 
@@ -226,6 +235,28 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         }
+    }
+
+    override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        switch Section(rawValue: indexPath.section)! {
+        case .info:
+            break
+        case .settings:
+            switch SettingsRow(rawValue: indexPath.row)! {
+            case .timeZoneOffset:
+                tableView.reloadRows(at: [indexPath], with: .fade)
+            case .batteryChemistry:
+                break
+            case .preferredInsulinDataSource:
+                break
+            }
+        case .rileyLinks:
+            break
+        case .delete:
+            break
+        }
+
+        return indexPath
     }
 }
 

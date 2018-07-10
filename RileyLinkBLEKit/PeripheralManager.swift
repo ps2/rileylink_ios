@@ -107,10 +107,16 @@ extension PeripheralManager {
             if self.needsConfiguration || self.peripheral.services == nil {
                 do {
                     try self.applyConfiguration()
+                } catch let error {
+                    self.log.error("Error applying peripheral configuration: %@", String(describing: error))
+                    // Will retry
+                }
+
+                do {
                     try self.delegate?.completeConfiguration(for: self)
                     self.needsConfiguration = false
                 } catch let error {
-                    self.log.debug("Error applying configuration: %@", String(describing: error))
+                    self.log.error("Error applying delegate configuration: %@", String(describing: error))
                     // Will retry
                 }
             }

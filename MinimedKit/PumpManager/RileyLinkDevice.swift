@@ -10,15 +10,15 @@ import RileyLinkBLEKit
 
 
 extension RileyLinkDevice.Status {
-    func device(settings: PumpSettings?, pumpState: PumpState?) -> HKDevice {
+    func device(pumpID: String, pumpModel: PumpModel) -> HKDevice {
         return HKDevice(
             name: name,
             manufacturer: "Medtronic",
-            model: pumpState?.pumpModel?.rawValue,
+            model: pumpModel.rawValue,
             hardwareVersion: nil,
             firmwareVersion: radioFirmwareVersion?.description,
             softwareVersion: String(MinimedKitVersionNumber),
-            localIdentifier: settings?.pumpID,
+            localIdentifier: pumpID,
             udiDeviceIdentifier: nil
         )
     }

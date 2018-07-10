@@ -78,7 +78,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
     private func listenForPairing() {
         guard let pumpManager = pumpManager else {
             continueState = .notStarted
-            lastError = PumpManagerError.connection(nil)
+            lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
             return
         }
 
@@ -88,7 +88,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
             guard let session = session else {
                 DispatchQueue.main.async {
                     self.continueState = .notStarted
-                    self.lastError = PumpManagerError.connection(nil)
+                    self.lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
                 }
                 return
             }

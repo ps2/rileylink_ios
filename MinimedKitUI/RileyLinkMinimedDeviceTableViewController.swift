@@ -22,33 +22,22 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
     private var deviceState: DeviceState
 
-    private let ops: PumpOps?
+    private let ops: PumpOps
 
     private var pumpState: PumpState? {
         didSet {
             // Update the UI if its visible
             guard rssiFetchTimer != nil else { return }
 
-            switch (oldValue, pumpState) {
-            case (.none, .some):
-                tableView.insertSections(IndexSet(integer: Section.commands.rawValue), with: .automatic)
-            case (.some, .none):
-                tableView.deleteSections(IndexSet(integer: Section.commands.rawValue), with: .automatic)
-            case (_, let state?):
-                if let cell = cellForRow(.awake) {
-                    cell.setAwakeUntil(state.awakeUntil, formatter: dateFormatter)
-                }
+            if let cell = cellForRow(.awake) {
+                cell.setAwakeUntil(pumpState?.awakeUntil, formatter: dateFormatter)
+            }
 
-                if let cell = cellForRow(.model) {
-                    cell.setPumpModel(state.pumpModel)
-                }
-            default:
-                break
+            if let cell = cellForRow(.model) {
+                cell.setPumpModel(pumpState?.pumpModel)
             }
         }
     }
-
-    private let pumpSettings: PumpSettings?
 
     private var bleRSSI: Int?
 
@@ -72,7 +61,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         }
     }
     
-    var rssiFetchTimer: Timer? {
+    private var rssiFetchTimer: Timer? {
         willSet {
             rssiFetchTimer?.invalidate()
         }
@@ -80,16 +69,19 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
     private var appeared = false
 
-    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpSettings: PumpSettings?, pumpState: PumpState?, pumpOps: PumpOps?) {
+    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpOps: PumpOps) {
         self.device = device
         self.deviceState = deviceState
-        self.pumpSettings = pumpSettings
-        self.pumpState = pumpState
         self.ops = pumpOps
 
         super.init(style: .grouped)
 
         updateDeviceStatus()
+        pumpOps.getPumpState { (state) in
+            DispatchQueue.main.async {
+                self.pumpState = state
+            }
+        }
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -108,7 +100,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         device.readRSSI()
     }
 
-    func updateDeviceStatus() {
+    private func updateDeviceStatus() {
         device.getStatus { (status) in
             DispatchQueue.main.async {
                 self.lastIdle = status.lastIdle
@@ -257,11 +249,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        if pumpState == nil {
-            return Section.count - 1
-        } else {
-            return Section.count
-        }
+        return Section.count
     }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -311,11 +299,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
             switch PumpRow(rawValue: indexPath.row)! {
             case .id:
                 cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title of the cell showing pump ID")
-                if let pumpID = pumpSettings?.pumpID {
-                    cell.detailTextLabel?.text = pumpID
-                } else {
-                    cell.detailTextLabel?.text = "–"
-                }
+                cell.detailTextLabel?.text = ops.pumpSettings.pumpID
             case .model:
                 cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.setPumpModel(pumpState?.pumpModel)

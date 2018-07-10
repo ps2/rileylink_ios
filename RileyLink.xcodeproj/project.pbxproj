@@ -80,7 +80,6 @@
 		4352A73220DEC9D600CAC200 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73120DEC9D600CAC200 /* CommandResponseViewController.swift */; };
 		4352A73320DEC9FC00CAC200 /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
 		4352A73420DECAE000CAC200 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
-		4352A73720DECB7300CAC200 /* PumpOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435535D71FB7987000CE5A23 /* PumpOps.swift */; };
 		4352A73920DECBAA00CAC200 /* RileyLinkMinimedDeviceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73820DECBAA00CAC200 /* RileyLinkMinimedDeviceTableViewController.swift */; };
 		4352A73A20DECDB300CAC200 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		4352A73F20DED02C00CAC200 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73D20DED01700CAC200 /* HKUnit.swift */; };
@@ -695,7 +694,6 @@
 		4352A73D20DED01700CAC200 /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		4352A74020DED23000CAC200 /* RileyLinkDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceManager.swift; sourceTree = "<group>"; };
 		435535D51FB6D98400CE5A23 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
-		435535D71FB7987000CE5A23 /* PumpOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpOps.swift; sourceTree = "<group>"; };
 		435535DB1FB8B37E00CE5A23 /* PumpMessage+PumpOpsSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PumpMessage+PumpOpsSession.swift"; sourceTree = "<group>"; };
 		435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManager.swift; sourceTree = "<group>"; };
 		435D26B120DA091B00891C17 /* RileyLinkPumpManagerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManagerState.swift; sourceTree = "<group>"; };
@@ -1289,7 +1287,6 @@
 				43709AE020DF1D5400F941B3 /* MinimedPumpManager.storyboard */,
 				43709ACC20DF1CC900F941B3 /* Setup */,
 				4352A73120DEC9D600CAC200 /* CommandResponseViewController.swift */,
-				435535D71FB7987000CE5A23 /* PumpOps.swift */,
 				4352A73820DECBAA00CAC200 /* RileyLinkMinimedDeviceTableViewController.swift */,
 				43709AC320DF1C8B00F941B3 /* MinimedPumpManager+UI.swift */,
 				43709AC220DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift */,
@@ -2526,7 +2523,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4352A73720DECB7300CAC200 /* PumpOps.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,

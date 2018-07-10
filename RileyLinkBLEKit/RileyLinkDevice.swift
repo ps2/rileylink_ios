@@ -301,7 +301,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                             }
                         }
                     } else {
-                        self.log.debug("Unknown idle response: %@", value.hexadecimalString)
+                        self.log.error("Unknown idle response: %@", value.hexadecimalString)
                     }
                 }
 

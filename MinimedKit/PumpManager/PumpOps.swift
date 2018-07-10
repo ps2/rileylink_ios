@@ -18,11 +18,17 @@ public protocol PumpOpsDelegate: class {
 
 public class PumpOps {
 
-    private var pumpSettings: PumpSettings
+    public let pumpSettings: PumpSettings
 
     private var pumpState: PumpState {
         didSet {
             delegate?.pumpOps(self, didChange: pumpState)
+
+            NotificationCenter.default.post(
+                name: .PumpOpsStateDidChange,
+                object: self,
+                userInfo: [PumpOps.notificationPumpStateKey: pumpState]
+            )
         }
     }
 
@@ -41,17 +47,6 @@ public class PumpOps {
         } else {
             self.pumpState = PumpState()
             self.delegate?.pumpOps(self, didChange: self.pumpState)
-        }
-    }
-
-    public func updateSettings(_ settings: PumpSettings) {
-        sessionQueue.async {
-            let oldSettings = self.pumpSettings
-            self.pumpSettings = settings
-
-            if oldSettings.pumpID != settings.pumpID {
-                self.pumpState = PumpState()
-            }
         }
     }
 
@@ -111,6 +106,12 @@ public class PumpOps {
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
         configuredDevices.remove(device)
     }
+
+    public func getPumpState(_ completion: @escaping (_ state: PumpState) -> Void) {
+        sessionQueue.async {
+            completion(self.pumpState)
+        }
+    }
 }
 
 
@@ -118,4 +119,27 @@ extension PumpOps: PumpOpsSessionDelegate {
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
         self.pumpState = state
     }
+}
+
+
+extension PumpOps: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return [
+            "### PumpOps",
+            "pumpSettings: \(String(reflecting: pumpSettings))",
+            "pumpState: \(String(reflecting: pumpState))",
+            "configuredDevices: \(configuredDevices.map({ $0.peripheralIdentifier.uuidString }))",
+        ].joined(separator: "\n")
+    }
+}
+
+
+/// Provide a notification contract that clients can use to inform RileyLink UI of changes to PumpOps.PumpState
+extension PumpOps {
+    public static let notificationPumpStateKey = "com.rileylink.RileyLinkKit.PumpOps.PumpState"
+}
+
+
+extension Notification.Name {
+    public static let PumpOpsStateDidChange = Notification.Name(rawValue: "com.rileylink.RileyLinkKit.PumpOpsStateDidChange")
 }

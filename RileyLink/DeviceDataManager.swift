@@ -43,11 +43,7 @@ class DeviceDataManager {
         }
         set {
             if let settings = newValue {
-                if let pumpOps = pumpOps {
-                    pumpOps.updateSettings(settings)
-                } else {
-                    pumpOps = PumpOps(pumpSettings: settings, pumpState: nil, delegate: self)
-                }
+                pumpOps = PumpOps(pumpSettings: settings, pumpState: nil, delegate: self)
             } else {
                 pumpOps = nil
             }
@@ -405,11 +401,5 @@ extension DeviceDataManager: PumpOpsDelegate {
         }
 
         UserDefaults.standard.pumpState = state
-
-        NotificationCenter.default.post(
-            name: .PumpOpsStateDidChange,
-            object: pumpOps,
-            userInfo: [PumpOps.notificationPumpStateKey: state]
-        )
     }
 }

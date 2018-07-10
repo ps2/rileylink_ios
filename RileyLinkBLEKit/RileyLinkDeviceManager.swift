@@ -219,7 +219,7 @@ extension RileyLinkDeviceManager {
 // MARK: - Delegate methods called on `centralQueue`
 extension RileyLinkDeviceManager: CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
-        log.info("%@", #function)
+        log.default("%@", #function)
 
         guard let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] else {
             return
@@ -231,7 +231,7 @@ extension RileyLinkDeviceManager: CBCentralManagerDelegate {
     }
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        log.info("%@: %@", #function, central.state.description)
+        log.default("%@: %@", #function, central.state.description)
         if case .poweredOn = central.state {
             autoConnectDevices()
 
@@ -248,13 +248,13 @@ extension RileyLinkDeviceManager: CBCentralManagerDelegate {
     }
 
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        log.info("Discovered %@ at %@", peripheral, RSSI)
+        log.default("Discovered %@ at %@", peripheral, RSSI)
 
         addPeripheral(peripheral)
 
         // TODO: Should we keep scanning? There's no UI to remove a lost RileyLink, which could result in a battery drain due to indefinite scanning.
         if !isScanningEnabled && central.isScanning && hasDiscoveredAllAutoConnectDevices {
-            log.info("All peripherals discovered")
+            log.default("All peripherals discovered")
             central.stopScan()
         }
     }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MinimedKit
+import LoopKitUI
 import RileyLinkBLEKit
 import RileyLinkKit
 
@@ -18,34 +18,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     public let device: RileyLinkDevice
 
     private var deviceState: DeviceState
-
-    private let ops: PumpOps?
-
-    private var pumpState: PumpState? {
-        didSet {
-            // Update the UI if its visible
-            guard rssiFetchTimer != nil else { return }
-
-            switch (oldValue, pumpState) {
-            case (.none, .some):
-                tableView.insertSections(IndexSet(integer: Section.commands.rawValue), with: .automatic)
-            case (.some, .none):
-                tableView.deleteSections(IndexSet(integer: Section.commands.rawValue), with: .automatic)
-            case (_, let state?):
-                if let cell = cellForRow(.awake) {
-                    cell.setAwakeUntil(state.awakeUntil, formatter: dateFormatter)
-                }
-
-                if let cell = cellForRow(.model) {
-                    cell.setPumpModel(state.pumpModel)
-                }
-            default:
-                break
-            }
-        }
-    }
-
-    private let pumpSettings: PumpSettings?
 
     private var bleRSSI: Int?
 
@@ -77,12 +49,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private var appeared = false
 
-    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpSettings: PumpSettings?, pumpState: PumpState?, pumpOps: PumpOps?) {
+    public init(device: RileyLinkDevice) {
         self.device = device
-        self.deviceState = deviceState
-        self.pumpSettings = pumpSettings
-        self.pumpState = pumpState
-        self.ops = pumpOps
+        self.deviceState = DeviceState(lastTuned: nil, lastValidFrequency: nil)
 
         super.init(style: .grouped)
 
@@ -150,11 +119,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             center.addObserver(forName: .DeviceDidStartIdle, object: device, queue: mainQueue) { [weak self] (note) in
                 self?.updateDeviceStatus()
             },
-            center.addObserver(forName: .PumpOpsStateDidChange, object: ops, queue: mainQueue) { [weak self] (note) in
-                if let state = note.userInfo?[PumpOps.notificationPumpStateKey] as? PumpState {
-                    self?.pumpState = state
-                }
-            }
         ]
     }
     
@@ -212,7 +176,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     private enum Section: Int, CaseCountable {
         case device
-        case pump
         case commands
     }
 
@@ -224,50 +187,20 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case idleStatus
     }
 
-    private enum PumpRow: Int, CaseCountable {
-        case id
-        case model
-        case awake
-    }
-
-    private enum CommandRow: Int, CaseCountable {
-        case tune
-        case changeTime
-        case mySentryPair
-        case dumpHistory
-        case fetchGlucose
-        case getPumpModel
-        case pressDownButton
-        case readPumpStatus
-        case readBasalSchedule
-        case enableLED
-        case discoverCommands
-    }
-
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
         return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.device.rawValue))
     }
 
-    private func cellForRow(_ row: PumpRow) -> UITableViewCell? {
-        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.pump.rawValue))
-    }
-
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        if pumpState == nil {
-            return Section.count - 1
-        } else {
-            return Section.count
-        }
+        return Section.count
     }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .device:
             return DeviceRow.count
-        case .pump:
-            return PumpRow.count
         case .commands:
-            return CommandRow.count
+            return 0
         }
     }
 
@@ -303,78 +236,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("On Idle", comment: "The title of the cell showing the last idle")
                 cell.setDetailDate(lastIdle, formatter: dateFormatter)
             }
-        case .pump:
-            switch PumpRow(rawValue: indexPath.row)! {
-            case .id:
-                cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title of the cell showing pump ID")
-                if let pumpID = pumpSettings?.pumpID {
-                    cell.detailTextLabel?.text = pumpID
-                } else {
-                    cell.detailTextLabel?.text = "–"
-                }
-            case .model:
-                cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
-                cell.setPumpModel(pumpState?.pumpModel)
-            case .awake:
-                cell.setAwakeUntil(pumpState?.awakeUntil, formatter: dateFormatter)
-            }
         case .commands:
             cell.accessoryType = .disclosureIndicator
             cell.detailTextLabel?.text = nil
-
-            switch CommandRow(rawValue: indexPath.row)! {
-            case .tune:
-                switch (deviceState.lastValidFrequency, deviceState.lastTuned) {
-                case (let frequency?, let date?):
-                    cell.textLabel?.text = measurementFormatter.string(from: frequency)
-                    cell.setDetailDate(date, formatter: dateFormatter)
-                default:
-                    cell.textLabel?.text = NSLocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
-                }
-
-            case .changeTime:
-                cell.textLabel?.text = NSLocalizedString("Change Time", comment: "The title of the command to change pump time")
-
-                let localTimeZone = TimeZone.current
-                let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
-
-                if let pumpTimeZone = pumpState?.timeZone {
-                    let timeZoneDiff = TimeInterval(pumpTimeZone.secondsFromGMT() - localTimeZone.secondsFromGMT())
-                    let formatter = DateComponentsFormatter()
-                    formatter.allowedUnits = [.hour, .minute]
-                    let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
-
-                    cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
-                } else {
-                    cell.detailTextLabel?.text = localTimeZoneName
-                }
-            case .mySentryPair:
-                cell.textLabel?.text = NSLocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
-
-            case .dumpHistory:
-                cell.textLabel?.text = NSLocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
-
-            case .fetchGlucose:
-                cell.textLabel?.text = NSLocalizedString("Fetch Enlite Glucose", comment: "The title of the command to fetch recent glucose")
-                
-            case .getPumpModel:
-                cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
-
-            case .pressDownButton:
-                cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
-
-            case .readPumpStatus:
-                cell.textLabel?.text = NSLocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
-
-            case .readBasalSchedule:
-                cell.textLabel?.text = NSLocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
-            
-            case .enableLED:
-                cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
-
-            case .discoverCommands:
-                cell.textLabel?.text = NSLocalizedString("Discover Commands", comment: "The title of the command to discover commands")
-            }
         }
 
         return cell
@@ -384,8 +248,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         switch Section(rawValue: section)! {
         case .device:
             return NSLocalizedString("Device", comment: "The title of the section describing the device")
-        case .pump:
-            return NSLocalizedString("Pump", comment: "The title of the section describing the pump")
         case .commands:
             return NSLocalizedString("Commands", comment: "The title of the section describing commands")
         }
@@ -402,8 +264,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             default:
                 return false
             }
-        case .pump:
-            return false
         case .commands:
             return device.peripheralState == .connected
         }
@@ -427,39 +287,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 break
             }
         case .commands:
-            let vc: CommandResponseViewController
-
-            switch CommandRow(rawValue: indexPath.row)! {
-            case .tune:
-                vc = .tuneRadio(ops: ops, device: device, current: deviceState.lastValidFrequency, measurementFormatter: measurementFormatter)
-            case .changeTime:
-                vc = .changeTime(ops: ops, device: device)
-            case .mySentryPair:
-                vc = .mySentryPair(ops: ops, device: device)
-            case .dumpHistory:
-                vc = .dumpHistory(ops: ops, device: device)
-            case .fetchGlucose:
-                vc = .fetchGlucose(ops: ops, device: device)
-            case .getPumpModel:
-                vc = .getPumpModel(ops: ops, device: device)
-            case .pressDownButton:
-                vc = .pressDownButton(ops: ops, device: device)
-            case .readPumpStatus:
-                vc = .readPumpStatus(ops: ops, device: device, measurementFormatter: measurementFormatter)
-            case .readBasalSchedule:
-                vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
-            case .enableLED:
-                vc = .enableLEDs(ops: ops, device: device)
-            case .discoverCommands:
-                vc = .discoverCommands(ops: ops, device: device)
-            }
-
-            if let cell = tableView.cellForRow(at: indexPath) {
-                vc.title = cell.textLabel?.text
-            }
-
-            show(vc, sender: indexPath)
-        case .pump:
             break
         }
     }
@@ -483,7 +310,6 @@ extension RileyLinkDeviceTableViewController: TextFieldTableViewControllerDelega
                 }
             default:
                 break
-
             }
         }
     }
@@ -514,14 +340,6 @@ private extension UITableViewCell {
         default:
             textLabel?.text = NSLocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
             detailTextLabel?.text = nil
-        }
-    }
-
-    func setPumpModel(_ pumpModel: PumpModel?) {
-        if let pumpModel = pumpModel {
-            detailTextLabel?.text = String(describing: pumpModel)
-        } else {
-            detailTextLabel?.text = NSLocalizedString("Unknown", comment: "The detail text for an unknown pump model")
         }
     }
 }

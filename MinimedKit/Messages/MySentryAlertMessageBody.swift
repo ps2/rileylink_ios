@@ -21,7 +21,7 @@ a2 594040 01 7c 65 0727070f0906 0175 4c
 public struct MySentryAlertMessageBody: MessageBody, DictionaryRepresentable {
     public static let length = 10
 
-    public let alertType: AlertType?
+    public let alertType: MySentryAlertType?
     public let alertDate: Date
 
     private let rxData: Data
@@ -35,7 +35,7 @@ public struct MySentryAlertMessageBody: MessageBody, DictionaryRepresentable {
 
         self.rxData = rxData
 
-        alertType = AlertType(rawValue: rxData[1])
+        alertType = MySentryAlertType(rawValue: rxData[1])
         self.alertDate = alertDate
     }
 

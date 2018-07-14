@@ -35,7 +35,7 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error as NSError):
             return error.localizedFailureReason
         default:
-            return errorDescription
+            return nil
         }
     }
 }

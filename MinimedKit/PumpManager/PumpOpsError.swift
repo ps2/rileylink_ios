@@ -33,47 +33,34 @@ public enum PumpOpsError: Error {
     case unknownResponse(rx: Data, during: CustomStringConvertible)
 }
 
-public enum SetBolusError: Error {
-    case certain(PumpOpsError)
-    case uncertain(PumpOpsError)
-}
-
-
-extension SetBolusError: LocalizedError {
-    public func errorDescriptionWithUnits(_ units: Double) -> String {
-        let format: String
-        
-        switch self {
-        case .certain:
-            format = NSLocalizedString("%1$@ U bolus failed", comment: "Describes a certain bolus failure (1: size of the bolus in units)")
-        case .uncertain:
-            format = NSLocalizedString("%1$@ U bolus may not have succeeded", comment: "Describes an uncertain bolus failure (1: size of the bolus in units)")
-        }
-        
-        return String(format: format, NumberFormatter.localizedString(from: NSNumber(value: units), number: .decimal))
-    }
-    
-    public var failureReason: String? {
-        switch self {
-        case .certain(let error):
-            return error.failureReason
-        case .uncertain(let error):
-            return error.failureReason
-        }
-    }
-    
-    public var recoverySuggestion: String? {
-        switch self {
-        case .certain:
-            return NSLocalizedString("It is safe to retry.", comment: "Recovery instruction for a certain bolus failure")
-        case .uncertain:
-            return NSLocalizedString("Check your pump before retrying.", comment: "Recovery instruction for an uncertain bolus failure")
-        }
-    }
-}
-
-
 extension PumpOpsError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .bolusInProgress:
+            return nil
+        case .crosstalk:
+            return nil
+        case .deviceError:
+            return NSLocalizedString("Device Error", comment: "Error description")
+        case .noResponse:
+            return nil
+        case .pumpError:
+            return NSLocalizedString("Pump Error", comment: "Error description")
+        case .pumpSuspended:
+            return nil
+        case .rfCommsFailure:
+            return nil
+        case .unexpectedResponse:
+            return nil
+        case .unknownPumpErrorCode:
+            return nil
+        case .unknownPumpModel:
+            return nil
+        case .unknownResponse:
+            return nil
+        }
+    }
+
     public var failureReason: String? {
         switch self {
         case .bolusInProgress:
@@ -93,11 +80,11 @@ extension PumpOpsError: LocalizedError {
         case .unknownPumpModel(let model):
             return String(format: NSLocalizedString("Unknown pump model: %@.", comment: ""), model)
         case .unknownResponse(rx: let data, during: let during):
-            return String(format: NSLocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), String(describing: data))
+            return String(format: NSLocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
         case .pumpError(let errorCode):
-            return String(format: NSLocalizedString("Pump error: %1$@.", comment: "The format string description of a Pump Error. (1: The specific error code)"), String(describing: errorCode))
+            return String(describing: errorCode)
         case .deviceError(let error):
-            return String(format: NSLocalizedString("Device communication failed: %@.", comment: "Pump comms failure reason for an underlying peripheral error"), error.failureReason ?? "")
+            return [error.errorDescription, error.failureReason].compactMap({ $0 }).joined(separator: ". ")
         }
     }
 
@@ -105,6 +92,17 @@ extension PumpOpsError: LocalizedError {
         switch self {
         case .pumpError(let errorCode):
             return errorCode.recoverySuggestion
+        case .deviceError(let error):
+            return error.recoverySuggestion
+        default:
+            return nil
+        }
+    }
+
+    public var helpAnchor: String? {
+        switch self {
+        case .deviceError(let error):
+            return error.helpAnchor
         default:
             return nil
         }
@@ -137,6 +135,15 @@ extension PumpCommandError: LocalizedError {
             return error.recoverySuggestion
         case .command(let error):
             return error.recoverySuggestion
+        }
+    }
+
+    public var helpAnchor: String? {
+        switch self {
+        case .arguments(let error):
+            return error.helpAnchor
+        case .command(let error):
+            return error.helpAnchor
         }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopKit
 import RileyLinkBLEKit
 
 
@@ -857,6 +858,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
+    ///     - LocalizedError
     private func scanForPump(in frequencies: [Measurement<UnitFrequency>], current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
         
         var trials = [FrequencyTrial]()

@@ -33,6 +33,10 @@ extension HistoryPage {
                 var timestamp = event.timestamp
                 timestamp.timeZone = timeZone
 
+                if let changeTimeEvent = event as? ChangeTimePumpEvent, let newTimeEvent = lastEvent as? NewTimePumpEvent {
+                    timeAdjustmentInterval += (newTimeEvent.timestamp.date?.timeIntervalSince(changeTimeEvent.timestamp.date!))!
+                }
+
                 if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
 
                     let shouldCheckDateForCompletion = !event.isDelayedAppend(with: model)
@@ -54,10 +58,6 @@ extension HistoryPage {
 
                     events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
                 }
-            }
-
-            if let changeTimeEvent = event as? ChangeTimePumpEvent, let newTimeEvent = lastEvent as? NewTimePumpEvent {
-                timeAdjustmentInterval += (newTimeEvent.timestamp.date?.timeIntervalSince(changeTimeEvent.timestamp.date!))!
             }
 
             lastEvent = event

@@ -84,7 +84,7 @@ class PumpOpsSynchronousBuildFromFramesTests: XCTestCase {
         do {
             let (historyEvents, _) = try sut.getHistoryEvents(since: date)
             
-            XCTAssertEqual(historyEvents.count, 332)
+            XCTAssertEqual(historyEvents.count, 334)
         } catch {
             XCTFail()
         }

@@ -47,6 +47,7 @@ extension PumpOpsSession {
     ///
     /// - Throws:
     ///     - PumpCommandError.command containing:
+    ///         - PumpOpsError.couldNotDecode
     ///         - PumpOpsError.crosstalk
     ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
@@ -90,6 +91,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///         - PumpOpsError.couldNotDecode
     ///         - PumpOpsError.crosstalk
     ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
@@ -138,6 +140,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -163,6 +166,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -176,6 +180,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -189,6 +194,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -205,6 +211,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -224,6 +231,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -247,6 +255,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -259,6 +268,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -272,6 +282,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -308,6 +319,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -692,6 +704,7 @@ extension PumpOpsSession {
     ///
     /// - Parameter watchdogID: A 3-byte address for the watchdog device.
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -715,8 +728,7 @@ extension PumpOpsSession {
         }
 
         guard let packet = MinimedPacket(encodedData: encodedData) else {
-            // TODO: Change error to better reflect that this is an encoding or CRC error
-            throw PumpOpsError.unknownResponse(rx: encodedData, during: "Watchdog listening")
+            throw PumpOpsError.couldNotDecode(rx: encodedData, during: "Watchdog listening")
         }
         
         guard let findMessage = PumpMessage(rxData: packet.data) else {
@@ -932,6 +944,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse

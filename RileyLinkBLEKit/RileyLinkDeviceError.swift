@@ -42,4 +42,13 @@ extension RileyLinkDeviceError: LocalizedError {
             return nil
         }
     }
+
+    var recoverySuggestion: String? {
+        switch self {
+        case .peripheralManagerError(let error):
+            return error.recoverySuggestion
+        default:
+            return nil
+        }
+    }
 }

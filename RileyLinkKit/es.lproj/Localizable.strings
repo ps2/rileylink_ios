@@ -17,7 +17,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Communications error for a bolus currently running */
-"A bolus is already in progress." = "Un bolo ya está en progreso...";
+"A bolus is already in progress" = "Un bolo ya está en progreso";
 
 /* The title of the cell describing an awake radio */
 "Awake Until" = "Despierto hasta";
@@ -89,7 +89,7 @@
 "Get Pump Model" = "Obtener Modelo de Microinfusadora";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry." = "Es seguro intentarlo de nuevo.";
+"It is safe to retry" = "Es seguro intentarlo de nuevo.";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "último despierto";

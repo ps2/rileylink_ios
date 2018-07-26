@@ -34,6 +34,19 @@ extension PeripheralManagerError: LocalizedError {
         switch self {
         case .cbPeripheralError(let error as NSError):
             return error.localizedFailureReason
+        case .unknownCharacteristic:
+            return NSLocalizedString("The RileyLink was temporarily disconnected", comment: "Failure reason: unknown peripheral characteristic")
+        default:
+            return nil
+        }
+    }
+
+    var recoverySuggestion: String? {
+        switch self {
+        case .cbPeripheralError(let error as NSError):
+            return error.localizedRecoverySuggestion
+        case .unknownCharacteristic:
+            return NSLocalizedString("Make sure the device is nearby, and the issue should resolve automatically", comment: "Recovery suggestion for unknown peripheral characteristic")
         default:
             return nil
         }

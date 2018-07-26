@@ -17,7 +17,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Communications error for a bolus currently running */
-"A bolus is already in progress." = "Болюс уже подается";
+"A bolus is already in progress" = "Болюс уже подается";
 
 /* The title of the cell describing an awake radio */
 "Awake Until" = "Рабочее состояние до";
@@ -89,7 +89,7 @@
 "Get Pump Model" = "Получить модель помпы";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry." = "Можно повторить без опасений";
+"It is safe to retry" = "Можно повторить без опасений";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Недавнее состояние активности";

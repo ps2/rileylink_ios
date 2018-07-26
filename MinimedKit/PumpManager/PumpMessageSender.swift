@@ -69,6 +69,7 @@ extension PumpMessageSender {
     ///   - retryCount: The number of times to repeat the send & listen sequence
     /// - Returns: The expected response message body
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -104,6 +105,7 @@ extension PumpMessageSender {
     ///   - retryCount: The number of times to repeat the send & listen sequence
     /// - Returns: The message reply
     /// - Throws: An error describing a failure in the sending or receiving of a message:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -112,8 +114,7 @@ extension PumpMessageSender {
         let rfPacket = try sendAndListenForPacket(message, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
 
         guard let packet = MinimedPacket(encodedData: rfPacket.data) else {
-            // TODO: Change error to better reflect that this is an encoding or CRC error
-            throw PumpOpsError.unknownResponse(rx: rfPacket.data, during: message)
+            throw PumpOpsError.couldNotDecode(rx: rfPacket.data, during: message)
         }
 
         guard let response = PumpMessage(rxData: packet.data) else {

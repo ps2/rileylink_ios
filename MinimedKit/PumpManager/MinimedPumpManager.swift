@@ -350,14 +350,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             self.pumpOps.runSession(withName: "Fetch Pump History", using: device) { (session) in
                 do {
                     guard let startDate = self.pumpManagerDelegate?.startDateToFilterNewPumpEvents(for: self) else {
-                        assertionFailure("pumpManagerDelegate cannot be nil")
-                        throw PumpManagerError.configuration(MinimedPumpManagerError.noDelegate)
+                        preconditionFailure("pumpManagerDelegate cannot be nil")
                     }
 
                     let (events, model) = try session.getHistoryEvents(since: startDate)
 
                     self.pumpManagerDelegate?.pumpManager(self, didReadPumpEvents: events.pumpEvents(from: model), completion: { (error) in
-                        if error != nil {
+                        if error == nil {
                             self.lastAddedPumpEvents = Date()
                         }
 
@@ -420,7 +419,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     let status = try session.getCurrentPumpStatus()
                     guard var date = status.clock.date else {
                         assertionFailure("Could not interpret a valid date from \(status.clock) in the system calendar")
-                        return
+                        throw PumpManagerError.configuration(MinimedPumpManagerError.noDate)
                     }
 
                     // Check if the clock should be reset

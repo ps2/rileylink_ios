@@ -21,6 +21,7 @@ public enum PumpCommandError: Error {
 
 public enum PumpOpsError: Error {
     case bolusInProgress
+    case couldNotDecode(rx: Data, during: CustomStringConvertible)
     case crosstalk(PumpMessage, during: CustomStringConvertible)
     case deviceError(LocalizedError)
     case noResponse(during: CustomStringConvertible)
@@ -38,6 +39,8 @@ extension PumpOpsError: LocalizedError {
         switch self {
         case .bolusInProgress:
             return nil
+        case .couldNotDecode:
+            return NSLocalizedString("Decoding Error", comment: "Error description")
         case .crosstalk:
             return nil
         case .deviceError:
@@ -64,27 +67,29 @@ extension PumpOpsError: LocalizedError {
     public var failureReason: String? {
         switch self {
         case .bolusInProgress:
-            return NSLocalizedString("A bolus is already in progress.", comment: "Communications error for a bolus currently running")
+            return NSLocalizedString("A bolus is already in progress", comment: "Communications error for a bolus currently running")
+        case .couldNotDecode(rx: let data, during: let during):
+            return String(format: NSLocalizedString("Invalid response during %1$@: %2$@", comment: "Format string for failure reason. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
         case .crosstalk:
-            return NSLocalizedString("Comms with another pump detected.", comment: "")
+            return NSLocalizedString("Comms with another pump detected", comment: "")
         case .noResponse:
-            return NSLocalizedString("Pump did not respond.", comment: "")
+            return NSLocalizedString("Pump did not respond", comment: "")
         case .pumpSuspended:
-            return NSLocalizedString("Pump is suspended.", comment: "")
+            return NSLocalizedString("Pump is suspended", comment: "")
         case .rfCommsFailure(let msg):
             return msg
         case .unexpectedResponse:
-            return NSLocalizedString("Pump responded unexpectedly.", comment: "")
+            return NSLocalizedString("Pump responded unexpectedly", comment: "")
         case .unknownPumpErrorCode(let code):
-            return String(format: NSLocalizedString("Unknown pump error code: %1$@.", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
+            return String(format: NSLocalizedString("Unknown pump error code: %1$@", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
         case .unknownPumpModel(let model):
-            return String(format: NSLocalizedString("Unknown pump model: %@.", comment: ""), model)
+            return String(format: NSLocalizedString("Unknown pump model: %@", comment: ""), model)
         case .unknownResponse(rx: let data, during: let during):
             return String(format: NSLocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
         case .pumpError(let errorCode):
             return String(describing: errorCode)
         case .deviceError(let error):
-            return [error.errorDescription, error.failureReason].compactMap({ $0 }).joined(separator: ". ")
+            return [error.errorDescription, error.failureReason].compactMap({ $0 }).joined(separator: ": ")
         }
     }
 

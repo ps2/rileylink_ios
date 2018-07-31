@@ -122,6 +122,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return state.timeZone
     }
 
+    public static let localizedTitle = NSLocalizedString("Minimed 500/700 Series", comment: "Generic title of the minimed pump manager")
+
     public var localizedTitle: String {
         return String(format: NSLocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
     }

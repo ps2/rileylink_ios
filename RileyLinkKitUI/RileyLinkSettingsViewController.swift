@@ -13,7 +13,7 @@ import RileyLinkKit
 
 open class RileyLinkSettingsViewController: UITableViewController {
 
-    open let devicesDataSource: RileyLinkDevicesTableViewDataSource
+    public let devicesDataSource: RileyLinkDevicesTableViewDataSource
 
     public init(rileyLinkPumpManager: RileyLinkPumpManager, devicesSectionIndex: Int, style: UITableViewStyle) {
         devicesDataSource = RileyLinkDevicesTableViewDataSource(rileyLinkPumpManager: rileyLinkPumpManager, devicesSectionIndex: devicesSectionIndex)

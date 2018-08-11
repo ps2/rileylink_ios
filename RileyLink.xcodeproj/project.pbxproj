@@ -282,6 +282,7 @@
 		C12198A91C8F2AF200BC374C /* DailyTotal523PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */; };
 		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
 		C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */; };
+		C125728B211F7E6C0061BA2F /* UnknownPumpEvent57.swift in Sources */ = {isa = PBXBuildFile; fileRef = C125728A211F7E6C0061BA2F /* UnknownPumpEvent57.swift */; };
 		C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12616431B685F0A001FAD87 /* CoreData.framework */; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C1274F771D8232580002912B /* DailyTotal515PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */; };
@@ -869,6 +870,7 @@
 		C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyTotal523PumpEvent.swift; sourceTree = "<group>"; };
 		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusWizardEstimatePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C125728A211F7E6C0061BA2F /* UnknownPumpEvent57.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownPumpEvent57.swift; sourceTree = "<group>"; };
 		C12616431B685F0A001FAD87 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C126164A1B685F93001FAD87 /* RileyLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RileyLink.xcdatamodel; sourceTree = "<group>"; };
 		C12616521B6892DB001FAD87 /* RileyLinkRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RileyLinkRecord.h; sourceTree = "<group>"; };
@@ -1763,6 +1765,7 @@
 				C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */,
 				C1842BC01C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift */,
 				2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */,
+				C125728A211F7E6C0061BA2F /* UnknownPumpEvent57.swift */,
 			);
 			path = PumpEvents;
 			sourceTree = "<group>";
@@ -2665,6 +2668,7 @@
 				C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */,
 				54BC449C1DB483F700340EED /* RelativeTimestampedGlucoseEvent.swift in Sources */,
 				C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */,
+				C125728B211F7E6C0061BA2F /* UnknownPumpEvent57.swift in Sources */,
 				C1F6EB871F89C3B100CFE393 /* CRC8.swift in Sources */,
 				43DAD00420A6A677000F8529 /* ReadOtherDevicesIDsMessageBody.swift in Sources */,
 				546A85D81DF7C83A00733213 /* SensorDataHighGlucoseEvent.swift in Sources */,

@@ -21,7 +21,7 @@ open class RileyLinkPumpManager {
     }
 
     /// Manages all the RileyLinks
-    open let rileyLinkManager: RileyLinkDeviceManager
+    public let rileyLinkManager: RileyLinkDeviceManager
 
     open var rileyLinkPumpManagerState: RileyLinkPumpManagerState {
         get {
@@ -34,7 +34,7 @@ open class RileyLinkPumpManager {
     private let lockedRileyLinkPumpManagerState: Locked<RileyLinkPumpManagerState>
 
     // TODO: Eveluate if this is necessary
-    open let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .utility)
+    public let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .utility)
 
     /// Isolated to queue
     // TODO: Put this on each RileyLinkDevice?

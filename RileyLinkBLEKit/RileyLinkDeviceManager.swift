@@ -290,7 +290,7 @@ extension RileyLinkDeviceManager {
     public override var debugDescription: String {
         var report = [
             "## RileyLinkDeviceManager",
-            "central: \(central)",
+            "central: \(central!)",
             "autoConnectIDs: \(autoConnectIDs)",
             "timerTickEnabled: \(timerTickEnabled)",
             "idleListeningState: \(idleListeningState)"

@@ -52,6 +52,8 @@ public class PumpOps {
 
     public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
         sessionQueue.async {
+            let semaphore = DispatchSemaphore(value: 0)
+
             deviceSelector { (device) in
                 guard let device = device else {
                     block(nil)
@@ -59,7 +61,9 @@ public class PumpOps {
                 }
 
                 self.runSession(withName: name, using: device, block)
+                semaphore.signal()
             }
+            semaphore.wait()
         }
     }
 

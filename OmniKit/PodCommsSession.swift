@@ -373,7 +373,7 @@ public class PodCommsSession {
             throw PodCommsError.noPairedPod
         }
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .tempBasal)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .tempBasal, soundType: .noSound)
         
         let _: StatusResponse = try sendCommand(cancelDelivery)
         
@@ -447,7 +447,7 @@ public class PodCommsSession {
             self.podState = nil
         }
 
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, cancelType: .suspend)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, soundType: .beeeeeep)
 
         let _: StatusResponse = try sendCommand(cancelDelivery)
         self.podState?.advanceToNextNonce()

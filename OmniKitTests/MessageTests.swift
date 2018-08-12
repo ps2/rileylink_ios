@@ -176,6 +176,21 @@ class MessageTests: XCTestCase {
         let cmd = SetInsulinScheduleCommand(nonce: 0xbed2e16b, deliverySchedule: scheduleEntry)
         XCTAssertEqual("1a0ebed2e16b02010a0101a000340034", cmd.data.hexadecimalString)
     }
+
+    func testCancelBolusCommand() {
+        do {
+            // Decode 1f 05 3b9a7028 64
+            let cmd = try CancelDeliveryCommand(encodedData: Data(hexadecimalString: "1f053b9a702864")!)
+            XCTAssertEqual(0x3b9a7028, cmd.nonce)
+            XCTAssertEqual(.beeeeeep, cmd.soundType)
+            XCTAssertEqual(.bolus, cmd.deliveryType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        // Encode
+        let cmd = CancelDeliveryCommand(nonce: 0x3b9a7028, deliveryType: .bolus, soundType: .beeeeeep)
+        XCTAssertEqual("1f053b9a702864", cmd.data.hexadecimalString)
+    }
     
     func testInsertCannula() {
 //        2018-04-03T19:23:14.3d ID1:1f00ee85 PTYPE:PDM SEQ:17 ID2:1f00ee85 B9:38 BLEN:31 BODY:1a0e7e30bf16020065010050000a000a170d000064000186a0 CRC:33

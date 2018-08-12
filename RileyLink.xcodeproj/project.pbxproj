@@ -411,6 +411,7 @@
 		C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */; };
 		C1F6EB8D1F89C45500CFE393 /* MinimedPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */; };
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
+		E9DD7BB721207D9000E345E8 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DD7BB621207D9000E345E8 /* BolusTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -976,6 +977,7 @@
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
 		C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusReminderPumpEvent.swift; sourceTree = "<group>"; };
+		E9DD7BB621207D9000E345E8 /* BolusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1361,6 +1363,7 @@
 		C1130FA920159C28007D13DB /* OmniKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E9DD7BB621207D9000E345E8 /* BolusTests.swift */,
 				C12B03F12075AAC900A65AE7 /* BasalScheduleTests.swift */,
 				C1130FD320159D05007D13DB /* CRC8Tests.swift */,
 				C1130FD420159D05007D13DB /* CRC16Tests.swift */,
@@ -2698,6 +2701,7 @@
 				C1130FD920159D05007D13DB /* CRC8Tests.swift in Sources */,
 				C1130FDC20159D05007D13DB /* PodStateTests.swift in Sources */,
 				C1130FDA20159D05007D13DB /* CRC16Tests.swift in Sources */,
+				E9DD7BB721207D9000E345E8 /* BolusTests.swift in Sources */,
 				C1CD0E4020C65EF00035E416 /* TempBasalTests.swift in Sources */,
 				C1130FD720159D05007D13DB /* PacketTests.swift in Sources */,
 				C12B03F22075AAC900A65AE7 /* BasalScheduleTests.swift in Sources */,

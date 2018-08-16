@@ -45,6 +45,6 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     }
 
     public var description: String {
-        return String(format: NSLocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"), scheduleEntry.index, scheduleEntry.rate)
+        return String(format: LocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"), scheduleEntry.index, scheduleEntry.rate)
     }
 }

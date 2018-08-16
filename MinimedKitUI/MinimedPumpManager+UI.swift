@@ -54,7 +54,7 @@ extension MinimedPumpManager {
     }
 
     public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {
-        return NSLocalizedString("Save to Pump…", comment: "Title of button to save delivery limit settings to pump")
+        return LocalizedString("Save to Pump…", comment: "Title of button to save delivery limit settings to pump")
     }
 
     public func syncButtonDetailText(for viewController: DeliveryLimitSettingsTableViewController) -> String? {
@@ -89,7 +89,7 @@ extension MinimedPumpManager {
     }
 
     public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
-        return NSLocalizedString("Save to Pump…", comment: "Title of button to save basal profile to pump")
+        return LocalizedString("Save to Pump…", comment: "Title of button to save basal profile to pump")
     }
 
     public func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {

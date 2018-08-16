@@ -16,7 +16,7 @@ import RileyLinkBLEKit
 extension CommandResponseViewController {
     typealias T = CommandResponseViewController
 
-    private static let successText = NSLocalizedString("Succeeded", comment: "A message indicating a command succeeded")
+    private static let successText = LocalizedString("Succeeded", comment: "A message indicating a command succeeded")
 
     static func changeTime(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
@@ -34,7 +34,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
+            return LocalizedString("Changing time…", comment: "Progress message for changing pump time.")
         }
     }
 
@@ -58,7 +58,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Changing time…", comment: "Progress message for changing pump time.")
+            return LocalizedString("Changing time…", comment: "Progress message for changing pump time.")
         }
     }
 
@@ -72,7 +72,7 @@ extension CommandResponseViewController {
                 })
             }
 
-            return NSLocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
+            return LocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
         }
     }
     
@@ -92,7 +92,7 @@ extension CommandResponseViewController {
                 }
             }
             
-            return NSLocalizedString("Get Statistics…", comment: "Progress message for getting statistics.")
+            return LocalizedString("Get Statistics…", comment: "Progress message for getting statistics.")
         }
     }
 
@@ -121,7 +121,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
+            return LocalizedString("Fetching history…", comment: "Progress message for fetching pump history.")
         }
     }
 
@@ -149,7 +149,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Fetching glucose…", comment: "Progress message for fetching pump glucose.")
+            return LocalizedString("Fetching glucose…", comment: "Progress message for fetching pump glucose.")
         }
     }
 
@@ -169,7 +169,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
+            return LocalizedString("Fetching pump model…", comment: "Progress message for fetching pump model.")
         }
     }
 
@@ -193,7 +193,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString(
+            return LocalizedString(
                 "On your pump, go to the Find Device screen and select \"Find Device\"." +
                     "\n" +
                     "\nMain Menu >" +
@@ -223,7 +223,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
+            return LocalizedString("Sending button press…", comment: "Progress message for sending button press to pump.")
         }
     }
 
@@ -233,7 +233,7 @@ extension CommandResponseViewController {
                 let response: String
                 do {
                     let schedule = try session.getBasalSchedule(for: .profileB)
-                    var str = String(format: NSLocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), integerFormatter.string(from: NSNumber(value: schedule?.entries.count ?? 0))!)
+                    var str = String(format: LocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), integerFormatter.string(from: NSNumber(value: schedule?.entries.count ?? 0))!)
                     for entry in schedule?.entries ?? [] {
                         str += "\(String(describing: entry))\n"
                     }
@@ -247,7 +247,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Reading basal schedule…", comment: "Progress message for reading basal schedule")
+            return LocalizedString("Reading basal schedule…", comment: "Progress message for reading basal schedule")
         }
     }
 
@@ -268,7 +268,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
+            return LocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
         }
     }
 
@@ -279,10 +279,10 @@ extension CommandResponseViewController {
                 do {
                     let status = try session.getCurrentPumpStatus()
 
-                    var str = String(format: NSLocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), measurementFormatter.numberFormatter.string(from: NSNumber(value: status.reservoir))!)
-                    str += String(format: NSLocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), measurementFormatter.string(from: status.batteryVolts))
-                    str += String(format: NSLocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
-                    str += String(format: NSLocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
+                    var str = String(format: LocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), measurementFormatter.numberFormatter.string(from: NSNumber(value: status.reservoir))!)
+                    str += String(format: LocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), measurementFormatter.string(from: status.batteryVolts))
+                    str += String(format: LocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
+                    str += String(format: LocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
                     response = str
                 } catch let error {
                     response = String(describing: error)
@@ -293,7 +293,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Reading pump status…", comment: "Progress message for reading pump status")
+            return LocalizedString("Reading pump status…", comment: "Progress message for reading pump status")
         }
     }
 
@@ -318,10 +318,10 @@ extension CommandResponseViewController {
                     var resultDict: [String: Any] = [:]
 
                     let intFormatter = NumberFormatter()
-                    let formatString = NSLocalizedString("%1$@  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
+                    let formatString = LocalizedString("%1$@  %2$@/%3$@  %4$@", comment: "The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI)")
 
-                    resultDict[NSLocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = measurementFormatter.string(from: scanResult.bestFrequency)
-                    resultDict[NSLocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
+                    resultDict[LocalizedString("Best Frequency", comment: "The label indicating the best radio frequency")] = measurementFormatter.string(from: scanResult.bestFrequency)
+                    resultDict[LocalizedString("Trials", comment: "The label indicating the results of each frequency trial")] = scanResult.trials.map({ (trial) -> String in
 
                         return String(
                             format: formatString,
@@ -337,7 +337,7 @@ extension CommandResponseViewController {
                     if let data = try? JSONSerialization.data(withJSONObject: resultDict, options: .prettyPrinted), let string = String(data: data, encoding: .utf8) {
                         responseText = string
                     } else {
-                        responseText = NSLocalizedString("No response", comment: "Message display when no response from tuning pump")
+                        responseText = LocalizedString("No response", comment: "Message display when no response from tuning pump")
                     }
 
                     response = responseText
@@ -350,7 +350,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return NSLocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
+            return LocalizedString("Tuning radio…", comment: "Progress message for tuning radio")
         }
     }
 }

@@ -16,9 +16,9 @@ public enum InsulinDataSource: Int, CustomStringConvertible {
     public var description: String {
         switch self {
         case .pumpHistory:
-            return NSLocalizedString("Event History", comment: "Describing the pump history insulin data source")
+            return LocalizedString("Event History", comment: "Describing the pump history insulin data source")
         case .reservoir:
-            return NSLocalizedString("Reservoir", comment: "Describing the reservoir insulin data source")
+            return LocalizedString("Reservoir", comment: "Describing the reservoir insulin data source")
         }
     }
 }

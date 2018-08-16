@@ -219,21 +219,21 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .device:
             switch DeviceRow(rawValue: indexPath.row)! {
             case .customName:
-                cell.textLabel?.text = NSLocalizedString("Name", comment: "The title of the cell showing device name")
+                cell.textLabel?.text = LocalizedString("Name", comment: "The title of the cell showing device name")
                 cell.detailTextLabel?.text = device.name
                 cell.accessoryType = .disclosureIndicator
             case .version:
-                cell.textLabel?.text = NSLocalizedString("Firmware", comment: "The title of the cell showing firmware version")
+                cell.textLabel?.text = LocalizedString("Firmware", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = firmwareVersion
             case .connection:
-                cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
+                cell.textLabel?.text = LocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
                 cell.detailTextLabel?.text = device.peripheralState.description
             case .rssi:
-                cell.textLabel?.text = NSLocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
+                cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
 
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
             case .idleStatus:
-                cell.textLabel?.text = NSLocalizedString("On Idle", comment: "The title of the cell showing the last idle")
+                cell.textLabel?.text = LocalizedString("On Idle", comment: "The title of the cell showing the last idle")
                 cell.setDetailDate(lastIdle, formatter: dateFormatter)
             }
         case .commands:
@@ -247,9 +247,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .device:
-            return NSLocalizedString("Device", comment: "The title of the section describing the device")
+            return LocalizedString("Device", comment: "The title of the section describing the device")
         case .commands:
-            return NSLocalizedString("Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Commands", comment: "The title of the section describing commands")
         }
     }
 
@@ -332,13 +332,13 @@ private extension UITableViewCell {
     func setAwakeUntil(_ awakeUntil: Date?, formatter: DateFormatter) {
         switch awakeUntil {
         case let until? where until.timeIntervalSinceNow < 0:
-            textLabel?.text = NSLocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
+            textLabel?.text = LocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
             setDetailDate(until, formatter: formatter)
         case let until?:
-            textLabel?.text = NSLocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
+            textLabel?.text = LocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
             setDetailDate(until, formatter: formatter)
         default:
-            textLabel?.text = NSLocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
+            textLabel?.text = LocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
             detailTextLabel?.text = nil
         }
     }

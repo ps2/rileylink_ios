@@ -22,7 +22,7 @@ extension MinimedPumpManagerError: LocalizedError {
         case .noDate:
             return nil
         case .tuneFailed(let error):
-            return [NSLocalizedString("RileyLink radio tune failed", comment: "Error description"), error.errorDescription].compactMap({ $0 }).joined(separator: ": ")
+            return [LocalizedString("RileyLink radio tune failed", comment: "Error description"), error.errorDescription].compactMap({ $0 }).joined(separator: ": ")
         }
     }
 
@@ -40,7 +40,7 @@ extension MinimedPumpManagerError: LocalizedError {
     public var recoverySuggestion: String? {
         switch self {
         case .noRileyLink:
-            return NSLocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion")
+            return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion")
         case .noDate:
             return nil
         case .tuneFailed(let error):

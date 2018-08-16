@@ -17,18 +17,18 @@ public enum PumpErrorCode: UInt8, CustomStringConvertible {
     public var description: String {
         switch self {
         case .commandRefused:
-            return NSLocalizedString("Command refused", comment: "Pump error code returned when command refused")
+            return LocalizedString("Command refused", comment: "Pump error code returned when command refused")
         case .maxSettingExceeded:
-            return NSLocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
+            return LocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
         case .bolusInProgress:
-            return NSLocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
+            return LocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
         }
     }
 
     public var recoverySuggestion: String? {
         switch self {
         case .commandRefused:
-            return NSLocalizedString("Check that the pump is not suspended or priming, or has a percent temp basal type", comment: "Suggestions for diagnosing a command refused pump error")
+            return LocalizedString("Check that the pump is not suspended or priming, or has a percent temp basal type", comment: "Suggestions for diagnosing a command refused pump error")
         default:
             return nil
         }

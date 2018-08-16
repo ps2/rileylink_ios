@@ -1,11 +1,14 @@
-/* The title of the nightscout API secret credential */
-"API Secret" = "Secreto API";
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
 
 /* The title of the about section */
 "About" = "Respecto a";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Agregar Cuenta";
+
+/* The title of the nightscout API secret credential */
+"API Secret" = "Secreto API";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Configuración";
@@ -19,6 +22,9 @@
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Obtener de CGM";
 
+/* The placeholder text for the nightscout site URL credential */
+"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
 
@@ -29,7 +35,7 @@
 "Pump Region" = "Región de Microinfusora";
 
 /* Instructions on selecting the pump region */
-"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is NorthAmerica.  If your model has an \"WW\" in it, then the region is WorldWide." = "La región de la microinfusora puede ser encontrada impresa en la parte trasera como parte del código de modelo ( REF ), por ejemplo MMT-551AB o MMT-515LWWS. Si el código de modelo contiene \"NA\" o \"CA\", la región es Norte América. Si contiene \"WW\" la región es Mundial.";
+"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "La región de la microinfusora puede ser encontrada impresa en la parte trasera como parte del código de modelo (REF), por ejemplo MMT-551AB o MMT-515LWWS. Si el código de modelo contiene \"NA\" o \"CA\", la región es Norte América. Si contiene \"WW\" la región es Mundial.";
 
 /* The default placeholder string for a credential */
 "Required" = "Requerido";
@@ -44,8 +50,5 @@
 "Upload To Nightscout" = "Subir a Nightscout";
 
 /* Label indicating validation is occurring */
-"Verifying" = "verificando";
-
-/* The placeholder text for the nightscout site URL credential */
-"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+"Verifying" = "Verificando";
 

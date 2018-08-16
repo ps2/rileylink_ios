@@ -14,19 +14,19 @@ import NightscoutUploadKit
 struct NightscoutService: ServiceAuthentication {
     var credentials: [ServiceCredential]
 
-    let title: String = NSLocalizedString("Nightscout", comment: "The title of the Nightscout service")
+    let title: String = LocalizedString("Nightscout", comment: "The title of the Nightscout service")
 
     init(siteURL: URL?, APISecret: String?) {
         credentials = [
             ServiceCredential(
-                title: NSLocalizedString("Site URL", comment: "The title of the nightscout site URL credential"),
-                placeholder: NSLocalizedString("http://mysite.azurewebsites.net", comment: "The placeholder text for the nightscout site URL credential"),
+                title: LocalizedString("Site URL", comment: "The title of the nightscout site URL credential"),
+                placeholder: LocalizedString("http://mysite.azurewebsites.net", comment: "The placeholder text for the nightscout site URL credential"),
                 isSecret: false,
                 keyboardType: .URL,
                 value: siteURL?.absoluteString
             ),
             ServiceCredential(
-                title: NSLocalizedString("API Secret", comment: "The title of the nightscout API secret credential"),
+                title: LocalizedString("API Secret", comment: "The title of the nightscout API secret credential"),
                 placeholder: nil,
                 isSecret: false,
                 keyboardType: .asciiCapable,

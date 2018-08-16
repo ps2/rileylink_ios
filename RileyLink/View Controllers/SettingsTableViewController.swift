@@ -14,7 +14,7 @@ import RileyLinkKitUI
 
 private let ConfigCellIdentifier = "ConfigTableViewCell"
 
-private let TapToSetString = NSLocalizedString("Tap to set", comment: "The empty-state text for a configuration value")
+private let TapToSetString = LocalizedString("Tap to set", comment: "The empty-state text for a configuration value")
 
 
 extension TextFieldTableViewController: IdentifiableClass { }
@@ -91,7 +91,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
 
                 switchCell.`switch`?.isOn = Config.sharedInstance().uploadEnabled
-                switchCell.titleLabel.text = NSLocalizedString("Upload To Nightscout", comment: "The title text for the nightscout upload enabled switch cell")
+                switchCell.titleLabel.text = LocalizedString("Upload To Nightscout", comment: "The title text for the nightscout upload enabled switch cell")
                 switchCell.`switch`?.addTarget(self, action: #selector(uploadEnabledChanged(_:)), for: .valueChanged)
                 
                 return switchCell
@@ -101,12 +101,12 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .pumpID:
                 let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
-                configCell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
+                configCell.textLabel?.text = LocalizedString("Pump ID", comment: "The title text for the pump ID config value")
                 configCell.detailTextLabel?.text = dataManager.pumpSettings?.pumpID ?? TapToSetString
                 cell = configCell
             case .pumpRegion:
                 let configCell = tableView.dequeueReusableCell(withIdentifier: ConfigCellIdentifier, for: indexPath)
-                configCell.textLabel?.text = NSLocalizedString("Pump Region", comment: "The title text for the pump Region config value")
+                configCell.textLabel?.text = LocalizedString("Pump Region", comment: "The title text for the pump Region config value")
 
                 if let pumpRegion = dataManager.pumpSettings?.pumpRegion {
                     configCell.detailTextLabel?.text = String(describing: pumpRegion)
@@ -126,7 +126,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
                 let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
             
                 switchCell.`switch`?.isOn = Config.sharedInstance().fetchCGMEnabled
-                switchCell.titleLabel.text = NSLocalizedString("Fetch CGM", comment: "The title text for the pull cgm Data cell")
+                switchCell.titleLabel.text = LocalizedString("Fetch CGM", comment: "The title text for the pull cgm Data cell")
                 switchCell.`switch`?.addTarget(self, action: #selector(fetchCGMEnabledChanged(_:)), for: .valueChanged)
                 cell = switchCell
             }
@@ -137,11 +137,11 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .about:
-            return NSLocalizedString("About", comment: "The title of the about section")
+            return LocalizedString("About", comment: "The title of the about section")
         case .upload:
             return nil
         case .configuration:
-            return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
+            return LocalizedString("Configuration", comment: "The title of the configuration section in settings")
         }
     }
 
@@ -156,7 +156,7 @@ class SettingsTableViewController: UITableViewController, TextFieldTableViewCont
             case .pumpID:
                 let vc = TextFieldTableViewController()
 
-                vc.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
+                vc.placeholder = LocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
                 vc.value = dataManager.pumpSettings?.pumpID
 
                 if let cell = tableView.cellForRow(at: indexPath) {

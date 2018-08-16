@@ -22,11 +22,11 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error):
             return error.localizedDescription
         case .notReady:
-            return NSLocalizedString("Peripheral isnʼt connected", comment: "Not ready error description")
+            return LocalizedString("Peripheral isnʼt connected", comment: "Not ready error description")
         case .timeout:
-            return NSLocalizedString("Peripheral did not respond in time", comment: "Timeout error description")
+            return LocalizedString("Peripheral did not respond in time", comment: "Timeout error description")
         case .unknownCharacteristic:
-            return NSLocalizedString("Unknown characteristic", comment: "Error description")
+            return LocalizedString("Unknown characteristic", comment: "Error description")
         }
     }
 
@@ -35,7 +35,7 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error as NSError):
             return error.localizedFailureReason
         case .unknownCharacteristic:
-            return NSLocalizedString("The RileyLink was temporarily disconnected", comment: "Failure reason: unknown peripheral characteristic")
+            return LocalizedString("The RileyLink was temporarily disconnected", comment: "Failure reason: unknown peripheral characteristic")
         default:
             return nil
         }
@@ -46,7 +46,7 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error as NSError):
             return error.localizedRecoverySuggestion
         case .unknownCharacteristic:
-            return NSLocalizedString("Make sure the device is nearby, and the issue should resolve automatically", comment: "Recovery suggestion for unknown peripheral characteristic")
+            return LocalizedString("Make sure the device is nearby, and the issue should resolve automatically", comment: "Recovery suggestion for unknown peripheral characteristic")
         default:
             return nil
         }

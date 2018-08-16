@@ -40,15 +40,15 @@ extension PumpOpsError: LocalizedError {
         case .bolusInProgress:
             return nil
         case .couldNotDecode:
-            return NSLocalizedString("Decoding Error", comment: "Error description")
+            return LocalizedString("Decoding Error", comment: "Error description")
         case .crosstalk:
             return nil
         case .deviceError:
-            return NSLocalizedString("Device Error", comment: "Error description")
+            return LocalizedString("Device Error", comment: "Error description")
         case .noResponse:
             return nil
         case .pumpError:
-            return NSLocalizedString("Pump Error", comment: "Error description")
+            return LocalizedString("Pump Error", comment: "Error description")
         case .pumpSuspended:
             return nil
         case .rfCommsFailure:
@@ -67,25 +67,25 @@ extension PumpOpsError: LocalizedError {
     public var failureReason: String? {
         switch self {
         case .bolusInProgress:
-            return NSLocalizedString("A bolus is already in progress", comment: "Communications error for a bolus currently running")
+            return LocalizedString("A bolus is already in progress", comment: "Communications error for a bolus currently running")
         case .couldNotDecode(rx: let data, during: let during):
-            return String(format: NSLocalizedString("Invalid response during %1$@: %2$@", comment: "Format string for failure reason. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
+            return String(format: LocalizedString("Invalid response during %1$@: %2$@", comment: "Format string for failure reason. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
         case .crosstalk:
-            return NSLocalizedString("Comms with another pump detected", comment: "")
+            return LocalizedString("Comms with another pump detected", comment: "")
         case .noResponse:
-            return NSLocalizedString("Pump did not respond", comment: "")
+            return LocalizedString("Pump did not respond", comment: "")
         case .pumpSuspended:
-            return NSLocalizedString("Pump is suspended", comment: "")
+            return LocalizedString("Pump is suspended", comment: "")
         case .rfCommsFailure(let msg):
             return msg
         case .unexpectedResponse:
-            return NSLocalizedString("Pump responded unexpectedly", comment: "")
+            return LocalizedString("Pump responded unexpectedly", comment: "")
         case .unknownPumpErrorCode(let code):
-            return String(format: NSLocalizedString("Unknown pump error code: %1$@", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
+            return String(format: LocalizedString("Unknown pump error code: %1$@", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
         case .unknownPumpModel(let model):
-            return String(format: NSLocalizedString("Unknown pump model: %@", comment: ""), model)
+            return String(format: LocalizedString("Unknown pump model: %@", comment: ""), model)
         case .unknownResponse(rx: let data, during: let during):
-            return String(format: NSLocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
+            return String(format: LocalizedString("Unknown response during %1$@: %2$@", comment: "Format string for an unknown response. (1: The operation being performed) (2: The response data)"), String(describing: during), data.hexadecimalString)
         case .pumpError(let errorCode):
             return String(describing: errorCode)
         case .deviceError(let error):

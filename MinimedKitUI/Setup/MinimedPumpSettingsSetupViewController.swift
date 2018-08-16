@@ -79,7 +79,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRates:
-                cell.textLabel?.text = NSLocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
+                cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
 
                 if let basalRateSchedule = setupViewController?.basalSchedule {
                     let unit = HKUnit.internationalUnit()
@@ -89,7 +89,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString
                 }
             case .deliveryLimits:
-                cell.textLabel?.text = NSLocalizedString("Delivery Limits", comment: "Title text for delivery limits")
+                cell.textLabel?.text = LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
 
                 if setupViewController?.maxBolusUnits == nil || setupViewController?.maxBasalRateUnitsPerHour == nil {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString

@@ -27,7 +27,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = NSLocalizedString("Pump Settings", comment: "Title of the pump settings view controller")
+        title = LocalizedString("Pump Settings", comment: "Title of the pump settings view controller")
 
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
@@ -105,7 +105,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .info:
             return nil
         case .settings:
-            return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
+            return LocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
         case .delete:
@@ -128,12 +128,12 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             switch InfoRow(rawValue: indexPath.row)! {
             case .pumpID:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID config value")
+                cell.textLabel?.text = LocalizedString("Pump ID", comment: "The title text for the pump ID config value")
                 cell.detailTextLabel?.text = pumpManager.state.pumpID
                 return cell
             case .pumpModel:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
+                cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
                 return cell
             }
@@ -142,13 +142,13 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
             switch SettingsRow(rawValue: indexPath.row)! {
             case .batteryChemistry:
-                cell.textLabel?.text = NSLocalizedString("Pump Battery Type", comment: "The title text for the battery type value")
+                cell.textLabel?.text = LocalizedString("Pump Battery Type", comment: "The title text for the battery type value")
                 cell.detailTextLabel?.text = String(describing: pumpManager.batteryChemistry)
             case .preferredInsulinDataSource:
-                cell.textLabel?.text = NSLocalizedString("Preferred Data Source", comment: "The title text for the preferred insulin data source config")
+                cell.textLabel?.text = LocalizedString("Preferred Data Source", comment: "The title text for the preferred insulin data source config")
                 cell.detailTextLabel?.text = String(describing: pumpManager.preferredInsulinDataSource)
             case .timeZoneOffset:
-                cell.textLabel?.text = NSLocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone")
+                cell.textLabel?.text = LocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone")
 
                 let localTimeZone = TimeZone.current
                 let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
@@ -158,7 +158,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 formatter.allowedUnits = [.hour, .minute]
                 let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
 
-                cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
+                cell.detailTextLabel?.text = String(format: LocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
             }
 
             cell.accessoryType = .disclosureIndicator
@@ -168,7 +168,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .delete:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
 
-            cell.textLabel?.text = NSLocalizedString("Delete Pump", comment: "Title text for the button to remove a pump from Loop")
+            cell.textLabel?.text = LocalizedString("Delete Pump", comment: "Title text for the button to remove a pump from Loop")
             cell.textLabel?.textAlignment = .center
             cell.tintColor = .deleteColor
             cell.isEnabled = true
@@ -294,19 +294,19 @@ private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: NSLocalizedString("Are you sure you want to delete this pump?", comment: "Confirmation message for deleting a pump"),
+            message: LocalizedString("Are you sure you want to delete this pump?", comment: "Confirmation message for deleting a pump"),
             preferredStyle: .actionSheet
         )
 
         addAction(UIAlertAction(
-            title: NSLocalizedString("Delete Pump", comment: "Button title to delete pump"),
+            title: LocalizedString("Delete Pump", comment: "Button title to delete pump"),
             style: .destructive,
             handler: { (_) in
                 handler()
             }
         ))
 
-        let cancel = NSLocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
+        let cancel = LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
     }
 }

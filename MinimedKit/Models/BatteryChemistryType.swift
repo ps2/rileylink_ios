@@ -15,9 +15,9 @@ public enum BatteryChemistryType: Int, CustomStringConvertible {
     public var description: String {
         switch self {
         case .alkaline:
-            return NSLocalizedString("Alkaline", comment: "Describing the battery chemistry as Alkaline")
+            return LocalizedString("Alkaline", comment: "Describing the battery chemistry as Alkaline")
         case .lithium:
-            return NSLocalizedString("Lithium", comment: "Describing the battery chemistry as Lithium")
+            return LocalizedString("Lithium", comment: "Describing the battery chemistry as Lithium")
         }
     }
 

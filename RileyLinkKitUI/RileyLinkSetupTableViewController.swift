@@ -91,7 +91,7 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
                 if cell == nil {
                     cell = UITableViewCell(style: .default, reuseIdentifier: "DescriptionCell")
                     cell?.selectionStyle = .none
-                    cell?.textLabel?.text = NSLocalizedString("RileyLink allows for communication with the pump over Bluetooth Low Energy.", comment: "RileyLink setup description")
+                    cell?.textLabel?.text = LocalizedString("RileyLink allows for communication with the pump over Bluetooth Low Energy.", comment: "RileyLink setup description")
                     cell?.textLabel?.numberOfLines = 0
                 }
                 return cell!

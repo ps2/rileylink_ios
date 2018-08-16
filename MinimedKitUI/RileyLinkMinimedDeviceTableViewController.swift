@@ -278,30 +278,30 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         case .device:
             switch DeviceRow(rawValue: indexPath.row)! {
             case .customName:
-                cell.textLabel?.text = NSLocalizedString("Name", comment: "The title of the cell showing device name")
+                cell.textLabel?.text = LocalizedString("Name", comment: "The title of the cell showing device name")
                 cell.detailTextLabel?.text = device.name
                 cell.accessoryType = .disclosureIndicator
             case .version:
-                cell.textLabel?.text = NSLocalizedString("Firmware", comment: "The title of the cell showing firmware version")
+                cell.textLabel?.text = LocalizedString("Firmware", comment: "The title of the cell showing firmware version")
                 cell.detailTextLabel?.text = firmwareVersion
             case .connection:
-                cell.textLabel?.text = NSLocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
+                cell.textLabel?.text = LocalizedString("Connection State", comment: "The title of the cell showing BLE connection state")
                 cell.detailTextLabel?.text = device.peripheralState.description
             case .rssi:
-                cell.textLabel?.text = NSLocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
+                cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
 
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
             case .idleStatus:
-                cell.textLabel?.text = NSLocalizedString("On Idle", comment: "The title of the cell showing the last idle")
+                cell.textLabel?.text = LocalizedString("On Idle", comment: "The title of the cell showing the last idle")
                 cell.setDetailDate(lastIdle, formatter: dateFormatter)
             }
         case .pump:
             switch PumpRow(rawValue: indexPath.row)! {
             case .id:
-                cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title of the cell showing pump ID")
+                cell.textLabel?.text = LocalizedString("Pump ID", comment: "The title of the cell showing pump ID")
                 cell.detailTextLabel?.text = ops.pumpSettings.pumpID
             case .model:
-                cell.textLabel?.text = NSLocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
+                cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.setPumpModel(pumpState?.pumpModel)
             case .awake:
                 cell.setAwakeUntil(pumpState?.awakeUntil, formatter: dateFormatter)
@@ -317,11 +317,11 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
                     cell.textLabel?.text = measurementFormatter.string(from: frequency)
                     cell.setDetailDate(date, formatter: dateFormatter)
                 default:
-                    cell.textLabel?.text = NSLocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
+                    cell.textLabel?.text = LocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
                 }
 
             case .changeTime:
-                cell.textLabel?.text = NSLocalizedString("Change Time", comment: "The title of the command to change pump time")
+                cell.textLabel?.text = LocalizedString("Change Time", comment: "The title of the command to change pump time")
 
                 let localTimeZone = TimeZone.current
                 let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
@@ -332,39 +332,39 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
                     formatter.allowedUnits = [.hour, .minute]
                     let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
 
-                    cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
+                    cell.detailTextLabel?.text = String(format: LocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
                 } else {
                     cell.detailTextLabel?.text = localTimeZoneName
                 }
             case .mySentryPair:
-                cell.textLabel?.text = NSLocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
+                cell.textLabel?.text = LocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
 
             case .dumpHistory:
-                cell.textLabel?.text = NSLocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
+                cell.textLabel?.text = LocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
 
             case .fetchGlucose:
-                cell.textLabel?.text = NSLocalizedString("Fetch Enlite Glucose", comment: "The title of the command to fetch recent glucose")
+                cell.textLabel?.text = LocalizedString("Fetch Enlite Glucose", comment: "The title of the command to fetch recent glucose")
                 
             case .getPumpModel:
-                cell.textLabel?.text = NSLocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
+                cell.textLabel?.text = LocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
 
             case .pressDownButton:
-                cell.textLabel?.text = NSLocalizedString("Send Button Press", comment: "The title of the command to send a button press")
+                cell.textLabel?.text = LocalizedString("Send Button Press", comment: "The title of the command to send a button press")
 
             case .readPumpStatus:
-                cell.textLabel?.text = NSLocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
+                cell.textLabel?.text = LocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
 
             case .readBasalSchedule:
-                cell.textLabel?.text = NSLocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
+                cell.textLabel?.text = LocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
             
             case .enableLED:
-                cell.textLabel?.text = NSLocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+                cell.textLabel?.text = LocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
 
             case .discoverCommands:
-                cell.textLabel?.text = NSLocalizedString("Discover Commands", comment: "The title of the command to discover commands")
+                cell.textLabel?.text = LocalizedString("Discover Commands", comment: "The title of the command to discover commands")
                 
             case .getStatistics:
-                cell.textLabel?.text = NSLocalizedString("RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
+                cell.textLabel?.text = LocalizedString("RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
             }
         }
 
@@ -374,11 +374,11 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .device:
-            return NSLocalizedString("Device", comment: "The title of the section describing the device")
+            return LocalizedString("Device", comment: "The title of the section describing the device")
         case .pump:
-            return NSLocalizedString("Pump", comment: "The title of the section describing the pump")
+            return LocalizedString("Pump", comment: "The title of the section describing the pump")
         case .commands:
-            return NSLocalizedString("Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Commands", comment: "The title of the section describing commands")
         }
     }
 
@@ -499,13 +499,13 @@ private extension UITableViewCell {
     func setAwakeUntil(_ awakeUntil: Date?, formatter: DateFormatter) {
         switch awakeUntil {
         case let until? where until.timeIntervalSinceNow < 0:
-            textLabel?.text = NSLocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
+            textLabel?.text = LocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
             setDetailDate(until, formatter: formatter)
         case let until?:
-            textLabel?.text = NSLocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
+            textLabel?.text = LocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
             setDetailDate(until, formatter: formatter)
         default:
-            textLabel?.text = NSLocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
+            textLabel?.text = LocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
             detailTextLabel?.text = nil
         }
     }
@@ -514,7 +514,7 @@ private extension UITableViewCell {
         if let pumpModel = pumpModel {
             detailTextLabel?.text = String(describing: pumpModel)
         } else {
-            detailTextLabel?.text = NSLocalizedString("Unknown", comment: "The detail text for an unknown pump model")
+            detailTextLabel?.text = LocalizedString("Unknown", comment: "The detail text for an unknown pump model")
         }
     }
 }

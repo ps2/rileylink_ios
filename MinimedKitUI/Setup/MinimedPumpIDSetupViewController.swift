@@ -434,6 +434,6 @@ class RegionAndColorPickerTableViewCell: UITableViewCell {
 
 private extension SetupButton {
     func setConnectTitle() {
-        setTitle(NSLocalizedString("Connect", comment: "Button title to connect to pump during setup"), for: .normal)
+        setTitle(LocalizedString("Connect", comment: "Button title to connect to pump during setup"), for: .normal)
     }
 }

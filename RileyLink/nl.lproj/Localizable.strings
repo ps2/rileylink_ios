@@ -17,7 +17,7 @@
 "Delete Account" = "Delete Account";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+"Enter the 6-digit pump ID" = "Voer het 6-cijferige ID van de pomp in";
 
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Fetch CGM";

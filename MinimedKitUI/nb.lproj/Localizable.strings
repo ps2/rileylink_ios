@@ -60,7 +60,7 @@
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
-"Delete Pump" = "Slette Pumpe";
+"Delete Pump" = "Slette pumpe";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Dosegrense";
@@ -75,34 +75,34 @@
 "Discovering commands…" = "Oppdager kommandoer…";
 
 /* The title of the command to enable diagnostic LEDs */
-"Enable Diagnostic LEDs" = "Tilgjengeligjør Diagnostiske LEDs";
+"Enable Diagnostic LEDs" = "Tilgjengeligjør diagnostiske LEDs";
 
 /* Progress message for enabling diagnostic LEDs */
-"Enabled Diagnostic LEDs" = "Tilgjengeligjort Diagnostiske LEDs";
+"Enabled Diagnostic LEDs" = "Tilgjengeligjort diagnostiske LEDs";
 
 /* The title of the command to fetch recent glucose */
-"Fetch Enlite Glucose" = "Hent Enlite Blodsukker";
+"Fetch Enlite Glucose" = "Hent enlite blodsukker";
 
 /* The title of the command to fetch recent history */
-"Fetch Recent History" = "Hent Nylig Historikk";
+"Fetch Recent History" = "Hent nylig historikk";
 
 /* Progress message for fetching pump glucose. */
-"Fetching glucose…" = "Henter Glukose…";
+"Fetching glucose…" = "Henter glukose…";
 
 /* Progress message for fetching pump history. */
-"Fetching history…" = "Henter Historikk…";
+"Fetching history…" = "Henter historikk…";
 
 /* Progress message for fetching pump model. */
-"Fetching pump model…" = "Henter Pumpemodell…";
+"Fetching pump model…" = "Henter pumpemodell…";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
 
 /* The title of the command to get pump model */
-"Get Pump Model" = "Hent Pumpemodell";
+"Get Pump Model" = "Hent pumpemodell";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Hent Statistikk…";
+"Get Statistics…" = "Hent statistikk…";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Insulintilførsel kan hentes fra pumpa, enten ved å tolke hendelsehistorikken, eller ved å sammenligne reservoarvolumet over tid. Ved å lese hendelsehistorikken får man mer nøyaktig statuskurve og kan laste opp oppdaterte hendelser til Nightscout. Ulempen er høyere batteriforbruk i pumpa, og muligheten for større antall feil ved radiokommunikasjon - sammenlignet med å bare lese reservoarvolumet. Hvis den valgte kilden av noen grunn ikke kan brukes, vill systemet prøve den andre måten.";
@@ -111,10 +111,10 @@
 "Last Awake" = "Sist aktiv";
 
 /* The title of the cell describing no radio awake data */
-"Listening Off" = "Radio Inaktiv";
+"Listening Off" = "Radio inaktiv";
 
 /* The title of the command to pair with mysentry */
-"MySentry Pair" = "MySentry Pair";
+"MySentry Pair" = "MySentry pair";
 
 /* The title of the cell showing device name */
 "Name" = "Navn";
@@ -126,13 +126,13 @@
 "On Idle" = "På Vent";
 
 /* The title text for the preferred insulin data source config */
-"Preferred Data Source" = "Foretrukken Datakilde";
+"Preferred Data Source" = "Foretrukken datakilde";
 
 /* The title of the section describing the pump */
 "Pump" = "Pumpe";
 
 /* The title text for the battery type value */
-"Pump Battery Type" = "Type Pumpebatteri";
+"Pump Battery Type" = "Type pumpebatteri";
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
@@ -145,32 +145,32 @@
 "Pump Settings" = "Pumpeinnstillinger";
 
 /* The title of the command to read basal schedule */
-"Read Basal Schedule" = "Les Basalplan";
+"Read Basal Schedule" = "Les basalplan";
 
 /* The title of the command to read pump status */
-"Read Pump Status" = "Les Pumpestatus";
+"Read Pump Status" = "Les pumpestatus";
 
 /* Progress message for reading basal schedule */
-"Reading basal schedule…" = "Leser Basalplan…";
+"Reading basal schedule…" = "Leser basalplan…";
 
 /* Progress message for reading pump status */
-"Reading pump status…" = "Leser Pumpestatus…";
+"Reading pump status…" = "Leser pumpestatus…";
 
 /* Button title to retry sentry setup */
 "Retry" = "Prøv igjen";
 
 /* The title of the command to fetch RileyLink statistics */
-"RileyLink Statistics" = "RileyLink Statistikk";
+"RileyLink Statistics" = "RileyLink statistikk";
 
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Lagre til pumpe…";
 
 /* The title of the command to send a button press */
-"Send Button Press" = "Send Tastetrykk";
+"Send Button Press" = "Send tastetrykk";
 
 /* Progress message for sending button press to pump. */
-"Sending button press…" = "Sender Tastetrykk…";
+"Sending button press…" = "Sender tastetrykk…";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signalstyrke";
@@ -185,10 +185,10 @@
 "Trials" = "Forsøk";
 
 /* The title of the command to re-tune the radio */
-"Tune Radio Frequency" = "Still Radiofrekvens";
+"Tune Radio Frequency" = "Still radiofrekvens";
 
 /* Progress message for tuning radio */
-"Tuning radio…" = "Stiller Radiofrekvens…";
+"Tuning radio…" = "Stiller radiofrekvens…";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Ukjent";

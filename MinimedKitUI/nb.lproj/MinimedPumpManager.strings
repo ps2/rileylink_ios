@@ -2,10 +2,10 @@
 "0MV-2k-Dty.title" = "RileyLink-innstillinger";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Finn Enhet";
+"1fp-45-qWK.text" = "Finn enhet";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
-"A6i-Cb-baR.text" = "Andre Enheter";
+"A6i-Cb-baR.text" = "Andre enheter";
 
 /* Class = "UILabel"; text = "Do not change the time using your pumpʼs menu."; ObjectID = "Bdb-j4-WcR"; */
 "Bdb-j4-WcR.text" = "Ikke endre tiden via pumpemenyen.";
@@ -14,7 +14,7 @@
 "c7t-pZ-WqY.text" = "Tilbehør";
 
 /* Class = "UILabel"; text = "Connect Devices"; ObjectID = "erq-yb-anx"; */
-"erq-yb-anx.text" = "Tilkoble Enheter";
+"erq-yb-anx.text" = "Tilkoble enheter";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
 "Fps-h3-V4K.title" = "Pumpeklokke";
@@ -47,13 +47,13 @@
 "lGI-LD-xR7.footerTitle" = "Pumperegionen og farge er angitt som de 3 siste bokstavene i modellnummeret (merket som REF).";
 
 /* Class = "UITableViewSection"; headerTitle = "Region and Color"; ObjectID = "lGI-LD-xR7"; */
-"lGI-LD-xR7.headerTitle" = "Region og Farge";
+"lGI-LD-xR7.headerTitle" = "Region og farge";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
 "Nwf-TJ-KmJ.title" = "Innstillinger ferdige";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Pumpe Sender";
+"oBL-lh-SHI.title" = "Pumpe sender";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "På";

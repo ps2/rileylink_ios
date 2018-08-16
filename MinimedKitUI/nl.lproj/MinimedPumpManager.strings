@@ -1,11 +1,11 @@
 /* Class = "UITableViewController"; title = "RileyLink Setup"; ObjectID = "0MV-2k-Dty"; */
-"0MV-2k-Dty.title" = "RileyLink Instellingen";
+"0MV-2k-Dty.title" = "RileyLink instellingen";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Zoek Apparaat";
+"1fp-45-qWK.text" = "Zoek apparaat";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
-"A6i-Cb-baR.text" = "Andere Apparaten";
+"A6i-Cb-baR.text" = "Andere apparaten";
 
 /* Class = "UILabel"; text = "Do not change the time using your pumpʼs menu."; ObjectID = "Bdb-j4-WcR"; */
 "Bdb-j4-WcR.text" = "Verander de tijd niet via het menu van de pomp.";
@@ -17,7 +17,7 @@
 "erq-yb-anx.text" = "Koppel apparaten";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
-"Fps-h3-V4K.title" = "Pomp Klok";
+"Fps-h3-V4K.title" = "Pomp klok";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N)."; ObjectID = "fVG-pl-jT9"; */
 "fVG-pl-jT9.footerTitle" = "Het ID van de pomp is het 6-cijferige gedeelte van het serienummer (aangegeven als SN of S/N).";
@@ -41,25 +41,25 @@
 "IQ5-53-x9s.text" = "Loop zorgt ervoor dat de klok van uw pomp gesynchroniseerd blijft met uw telefoon in de tijdzone waarin u zich nu bevindt.";
 
 /* Class = "UITableViewController"; title = "Pump Settings"; ObjectID = "iQZ-kT-QUm"; */
-"iQZ-kT-QUm.title" = "Pomp Instellingen";
+"iQZ-kT-QUm.title" = "Pomp instellingen";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "De regio en kleur van de pomp worden aangeduid in de laatste 3 letters van het modelnummer (gelabeld als REF)";
 
 /* Class = "UITableViewSection"; headerTitle = "Region and Color"; ObjectID = "lGI-LD-xR7"; */
-"lGI-LD-xR7.headerTitle" = "Regio en Kleur";
+"lGI-LD-xR7.headerTitle" = "Regio en kleur";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
 "Nwf-TJ-KmJ.title" = "Configuratie voltooid";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Pomp Connectiviteit";
+"oBL-lh-SHI.title" = "Pomp connectiviteit";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "Aan";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
-"OZk-Db-KCs.title" = "Pomp Configuratie";
+"OZk-Db-KCs.title" = "Pomp configuratie";
 
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Voer regio van de pomp in";

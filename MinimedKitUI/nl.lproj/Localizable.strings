@@ -23,13 +23,13 @@
 "Awake Until" = "Actief tot";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basaal Waardes";
+"Basal Rates" = "Basaal waardes";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batterij: %1$@ Volt\n";
 
 /* The label indicating the best radio frequency */
-"Best Frequency" = "Beste Frequentie";
+"Best Frequency" = "Beste frequentie";
 
 /* The format string describing pump bolusing state: (1: bolusing) */
 "Bolusing: %1$@\n" = "Bolussen: %1$@\n";
@@ -81,7 +81,7 @@
 "Enabled Diagnostic LEDs" = "Diagnostische LEDs aangezet";
 
 /* The title of the command to fetch recent glucose */
-"Fetch Enlite Glucose" = "Ophalen Enlite Glucose";
+"Fetch Enlite Glucose" = "Ophalen enlite glucose";
 
 /* The title of the command to fetch recent history */
 "Fetch Recent History" = "Lees recente pompgeschiedenis";
@@ -108,7 +108,7 @@
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "De toediening van insuline kan worden vastgesteld aan de hand van de pomp door de pomp historie te interpreteren of door het reservoir volume in de loop van de tijd te vergelijken. Het lezen van de pomp historie zorgt voor een meer accurate statusgrafiek en het uploaden van up-to-date behandelingsgegevens naar Nightscout. Dit gaat ten koste van de batterij en de mogelijkheid van een hogere radiofout snelheid vergeleken met het alleen lezen van het reservoir volume. Als de geselecteerde bron om welke reden dan ook niet kan worden gebruikt, probeert het systeem terug te vallen op de andere optie.";
 
 /* The title of the cell describing an awake radio */
-"Last Awake" = "Laatst Actief";
+"Last Awake" = "Laatst actief";
 
 /* The title of the cell describing no radio awake data */
 "Listening Off" = "Luisteren Uit";
@@ -120,7 +120,7 @@
 "Name" = "Naam";
 
 /* Message display when no response from tuning pump */
-"No response" = "Geen Reactie";
+"No response" = "Geen reactie";
 
 /* The title of the cell showing the last idle */
 "On Idle" = "Inactief";
@@ -142,7 +142,7 @@
 "Pump Model" = "Pompmodel";
 
 /* Title of the pump settings view controller */
-"Pump Settings" = "Pomp Instellingen";
+"Pump Settings" = "Pomp instellingen";
 
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Lees basaal schema";
@@ -160,11 +160,11 @@
 "Retry" = "Opnieuw proberen";
 
 /* The title of the command to fetch RileyLink statistics */
-"RileyLink Statistics" = "RileyLink Statistieken";
+"RileyLink Statistics" = "RileyLink statistieken";
 
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
-"Save to Pump…" = "Opslaan in Pomp…";
+"Save to Pump…" = "Opslaan in pomp…";
 
 /* The title of the command to send a button press */
 "Send Button Press" = "Verstuur signaal induwen knop";
@@ -185,7 +185,7 @@
 "Trials" = "Pogingen";
 
 /* The title of the command to re-tune the radio */
-"Tune Radio Frequency" = "Stel Radiofrequentie in";
+"Tune Radio Frequency" = "Stel radiofrequentie in";
 
 /* Progress message for tuning radio */
 "Tuning radio…" = "Radio instellen…";

@@ -50,7 +50,7 @@
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
-"Minimed 500/700 Series" = "Minimed 500/700 Series";
+"Minimed 500/700 Series" = "Minimed 500/700 series";
 
 /* Describing the North America pump region */
 "North America" = "Noord-Amerika";
@@ -59,7 +59,7 @@
 "Pump did not respond" = "Pomp reageert niet";
 
 /* Error description */
-"Pump Error" = "Pomp Foutmelding";
+"Pump Error" = "Pomp foutmelding";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pomp is onderbroken";
@@ -77,13 +77,13 @@
 "RileyLink radio tune failed" = "Afstemmen van de RileyLink Radio mislukt";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Tijdelijk Basaal: %1$.3f E/uur";
+"Temporary Basal: %1$.3f U/hour" = "Tijdelijk basaal: %1$.3f E/uur";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
-"Temporary Basal: %1$d min" = "Tijdelijk Basaal: %1$d min";
+"Temporary Basal: %1$d min" = "Tijdelijk basaal: %1$d min";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
-"Temporary Basal: %1$d%%" = "Tijdelijk Basaal: %1$d%%";
+"Temporary Basal: %1$d%%" = "Tijdelijk basaal: %1$d%%";
 
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Onbekende foutmelding pomp: %1$@";

@@ -118,10 +118,7 @@ extension RileyLinkPumpManager {
     }
 
     open func disconnectFromRileyLink(_ device: RileyLinkDevice) {
-        _ = lockedRileyLinkPumpManagerState.mutate { (state) in
-            state.connectedPeripheralIDs.remove(device.peripheralIdentifier.uuidString)
-        }
-
+        rileyLinkPumpManagerState.connectedPeripheralIDs.remove(device.peripheralIdentifier.uuidString)
         rileyLinkManager.disconnect(device)
     }
 }

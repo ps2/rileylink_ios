@@ -7,29 +7,32 @@
 
 import Foundation
 import LoopKit
+import RileyLinkBLEKit
 
 
-public struct RileyLinkPumpManagerState: RawRepresentable, Equatable {
+public struct RileyLinkPumpManagerState: RawRepresentable {
     public typealias RawValue = PumpManager.RawStateValue
 
-    public var connectedPeripheralIDs: Set<String>
+    public var rileyLinkConnectionManagerState: RileyLinkConnectionManager.RawStateValue?
 
-    public init(connectedPeripheralIDs: Set<String>) {
-        self.connectedPeripheralIDs = connectedPeripheralIDs
+    public init(rileyLinkConnectionManagerState: RileyLinkConnectionManager.RawStateValue?) {
+        self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
     }
 
     public init?(rawValue: RawValue) {
-        guard let connectedPeripheralIDs = rawValue["connectedPeripheralIDs"] as? [String] else {
+        guard let rileyLinkConnectionManagerState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionManager.RawStateValue else {
             return nil
         }
 
-        self.init(connectedPeripheralIDs: Set(connectedPeripheralIDs))
+        self.init(rileyLinkConnectionManagerState: rileyLinkConnectionManagerState)
     }
 
     public var rawValue: RawValue {
-        return [
-            "connectedPeripheralIDs": Array(connectedPeripheralIDs)
-        ]
+        var value = [String : Any]()
+        if let connectionManagerState = rileyLinkConnectionManagerState {
+            value["rileyLinkConnectionManagerState"] = connectionManagerState
+        }
+        return value
     }
 }
 
@@ -38,7 +41,7 @@ extension RileyLinkPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return [
             "## RileyLinkPumpManagerState",
-            "connectedPeripheralIDs: \(connectedPeripheralIDs)",
+            "rileyLinkConnectionManagerState: \(String(describing: rileyLinkConnectionManagerState))",
         ].joined(separator: "\n")
     }
 }

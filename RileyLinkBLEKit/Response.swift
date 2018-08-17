@@ -42,6 +42,28 @@ struct CodeResponse: Response {
     }
 }
 
+struct ReadRegisterResponse: Response {
+    let code: ResponseCode
+    let value: UInt8
+    
+    init?(data: Data) {
+        guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
+            return nil
+        }
+        
+        self.init(code: code, value: data[data.startIndex.advanced(by: 1)])
+    }
+    
+    init?(legacyData data: Data) {
+        self.init(code: .success, value: data[0])
+    }
+    
+    private init?(code: ResponseCode, value: UInt8) {
+        self.code = code
+        self.value = value
+    }
+}
+
 struct UpdateRegisterResponse: Response {
     let code: ResponseCode
 

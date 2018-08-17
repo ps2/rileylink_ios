@@ -38,9 +38,9 @@ extension CommandResponseViewController {
         }
     }
 
-    static func changeTime(ops: PumpOps?, rileyLinkManager: RileyLinkDeviceManager) -> T {
+    static func changeTime(ops: PumpOps?, rileyLinkDeviceProvider: RileyLinkDeviceProvider) -> T {
         return T { (completionHandler) -> String in
-            ops?.runSession(withName: "Set time", using: rileyLinkManager.firstConnectedDevice) { (session) in
+            ops?.runSession(withName: "Set time", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
                 let response: String
                 do {
                     guard let session = session else {

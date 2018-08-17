@@ -10,7 +10,7 @@ import RileyLinkKit
 import RileyLinkBLEKit
 
 
-public struct MinimedPumpManagerState: RawRepresentable, Equatable {
+public struct MinimedPumpManagerState: RawRepresentable {
     public typealias RawValue = PumpManager.RawStateValue
 
     public static let version = 1

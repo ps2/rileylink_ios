@@ -77,13 +77,31 @@ extension RadioFirmwareVersion {
     }
     
     var needsExtraByteForUpdateRegisterCommand: Bool {
+        // Fixed in 2.2
         return !atLeastV2
     }
-    
+
+    var needsExtraByteForReadRegisterCommand: Bool {
+        // Fixed in 2.3
+        guard components.count >= 2 else {
+            return true;
+        }
+        let major = components[0]
+        let minor = components[1]
+        return major < 2 || (major == 2 && minor <= 2)
+    }
+
     var supportsRileyLinkStatistics: Bool {
         return atLeastV2_2
     }
 
+    var supportsCustomPreamble: Bool {
+        return atLeastV2
+    }
+    
+    var supportsReadRegister: Bool {
+        return atLeastV2
+    }
 
 }
 

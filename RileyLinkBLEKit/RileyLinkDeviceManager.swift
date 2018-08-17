@@ -81,6 +81,12 @@ public class RileyLinkDeviceManager: NSObject {
 
 // MARK: - Connecting
 extension RileyLinkDeviceManager {
+    public func getAutoConnectIDs(_ completion: @escaping (_ autoConnectIDs: Set<String>) -> Void) {
+        centralQueue.async {
+            completion(self.autoConnectIDs)
+        }
+    }
+    
     public func connect(_ device: RileyLinkDevice) {
         centralQueue.async {
             self.autoConnectIDs.insert(device.manager.peripheral.identifier.uuidString)
@@ -309,3 +315,8 @@ extension RileyLinkDeviceManager {
 extension Notification.Name {
     public static let ManagerDevicesDidChange = Notification.Name("com.rileylink.RileyLinkBLEKit.DevicesDidChange")
 }
+
+extension RileyLinkDeviceManager {
+    public static let autoConnectIDsStateKey = "com.rileylink.RileyLinkBLEKit.AutoConnectIDs"
+}
+

@@ -185,6 +185,7 @@
                             <outlet property="delegate" destination="OZk-Db-KCs" id="S0J-FV-33U"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Pump Setup" id="V47-Nq-7ew"/>
                     <connections>
                         <outlet property="activityIndicator" destination="DC6-f5-WBd" id="lpU-bd-hJO"/>
                         <outlet property="loadingLabel" destination="Q3d-Fp-MRY" id="55q-B6-IB6"/>
@@ -573,6 +574,22 @@
             </objects>
             <point key="canvasLocation" x="5506" y="81"/>
         </scene>
+        <!--Minimed Pump Manager Setup View Controller-->
+        <scene sceneID="axV-KT-VMd">
+            <objects>
+                <navigationController storyboardIdentifier="DevelopmentPumpSetup" id="fUU-S6-XKY" customClass="MinimedPumpManagerSetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="grC-ov-Qu6">
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="OZk-Db-KCs" kind="relationship" relationship="rootViewController" id="J82-Zy-jta"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wDj-LR-6V2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="441" y="-932"/>
+        </scene>
     </scenes>
     <resources>
         <image name="5xx Outline" width="204" height="126"/>
@@ -581,5 +598,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="7vf-at-3Tu"/>
+        <segue reference="J82-Zy-jta"/>
     </inferredMetricsTieBreakers>
 </document>

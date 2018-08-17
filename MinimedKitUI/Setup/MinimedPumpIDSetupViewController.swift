@@ -96,7 +96,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             return nil
         }
 
-        return MinimedPumpManager(state: pumpManagerState, rileyLinkManager: rileyLinkPumpManager.rileyLinkManager)
+        return MinimedPumpManager(
+            state: pumpManagerState,
+            rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
+            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager)
     }
 
     // MARK: -
@@ -233,7 +236,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         let pumpOps = PumpOps(pumpSettings: settings, pumpState: pumpState, delegate: self)
         self.pumpOps = pumpOps
-        pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkManager.firstConnectedDevice, { (session) in
+        pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice, { (session) in
             guard let session = session else {
                 DispatchQueue.main.async {
                     self.lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)

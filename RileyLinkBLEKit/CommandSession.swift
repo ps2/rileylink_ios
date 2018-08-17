@@ -129,6 +129,23 @@ public struct CommandSession {
     }
     
     /// - Throws: RileyLinkDeviceError
+    public func readRegister(_ address: CC111XRegister) throws -> UInt8 {
+        guard firmwareVersion.supportsReadRegister else {
+            throw RileyLinkDeviceError.unsupportedCommand(RileyLinkCommand.readRegister)
+        }
+        
+        let command = ReadRegister(address, firmwareVersion: firmwareVersion)
+        let response: ReadRegisterResponse = try writeCommand(command, timeout: 0)
+        
+        guard response.code == .success else {
+            throw RileyLinkDeviceError.invalidInput("Unsupported register: \(String(describing: address))")
+        }
+
+        return response.value
+    }
+
+    
+    /// - Throws: RileyLinkDeviceError
     public func enableCCLEDs() throws {
         let enableBlue = SetLEDMode(.blue, mode: .auto)
         _ = try writeCommand(enableBlue, timeout: 0)
@@ -142,12 +159,23 @@ public struct CommandSession {
     public func setBaseFrequency(_ frequency: Measurement<UnitFrequency>) throws {
         let val = Int(
             frequency.converted(to: .hertz).value /
-            (CommandSession.xtalFrequency / pow(2, 16)).converted(to: .hertz
-        ).value)
+            (CommandSession.xtalFrequency / pow(2, 16)).converted(to: .hertz).value)
 
         try updateRegister(.freq0, value: UInt8(val & 0xff))
         try updateRegister(.freq1, value: UInt8((val >> 8) & 0xff))
         try updateRegister(.freq2, value: UInt8((val >> 16) & 0xff))
+    }
+    
+    public func readBaseFrequency() throws -> Measurement<UnitFrequency> {
+        let freq0 = try readRegister(.freq0)
+        let freq1 = try readRegister(.freq1)
+        let freq2 = try readRegister(.freq2)
+
+        let value = Double(UInt32(freq0) + (UInt32(freq1) << 8) + (UInt32(freq2) << 16))
+
+        let frequency = value * (CommandSession.xtalFrequency / pow(2, 16)).converted(to: .hertz).value
+
+        return Measurement<UnitFrequency>(value: frequency, unit: .hertz).converted(to: .megahertz)
     }
 
     /// Sends data to the pump, listening for a reply

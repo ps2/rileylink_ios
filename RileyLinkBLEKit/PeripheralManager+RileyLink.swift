@@ -216,15 +216,16 @@ extension PeripheralManager {
 
         let value = try command.writableData()
 
-        log.debug("RL Send: %@", value.hexadecimalString)
 
         switch responseType {
         case .single:
+            log.debug("RL Send (single): %@", value.hexadecimalString)
             return try writeCommand(value,
                 for: characteristic,
                 timeout: timeout
             )
         case .buffered:
+            log.debug("RL Send (buffered): %@", value.hexadecimalString)
             return try writeLegacyCommand(value,
                 for: characteristic,
                 timeout: timeout,
@@ -249,7 +250,7 @@ extension PeripheralManager {
 
         let value = try command.writableData()
 
-        log.debug("RL Send: %@", value.hexadecimalString)
+        log.debug("RL Send (no response expected): %@", value.hexadecimalString)
 
         do {
             try writeValue(value, for: characteristic, type: .withResponse, timeout: timeout)

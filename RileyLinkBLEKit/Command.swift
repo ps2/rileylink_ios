@@ -200,6 +200,35 @@ struct UpdateRegister: Command {
     }
 }
 
+struct ReadRegister: Command {
+    typealias ResponseType = ReadRegisterResponse
+    
+    enum Response: UInt8 {
+        case success = 1
+        case invalidRegister = 2
+    }
+    
+    let address: CC111XRegister
+    let firmwareVersion: RadioFirmwareVersion
+    
+    init(_ address: CC111XRegister, firmwareVersion: RadioFirmwareVersion) {
+        self.address = address
+        self.firmwareVersion = firmwareVersion
+    }
+    
+    var data: Data {
+        var data = Data(bytes: [
+            RileyLinkCommand.readRegister.rawValue,
+            address.rawValue,
+            ])
+        if firmwareVersion.needsExtraByteForReadRegisterCommand {
+            data.append(address.rawValue)
+        }
+        return data
+    }
+}
+
+
 struct SetModeRegisters: Command {
     typealias ResponseType = UpdateRegisterResponse
 

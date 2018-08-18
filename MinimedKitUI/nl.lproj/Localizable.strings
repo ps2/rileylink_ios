@@ -111,7 +111,7 @@
 "Last Awake" = "Laatst actief";
 
 /* The title of the cell describing no radio awake data */
-"Listening Off" = "Luisteren Uit";
+"Listening Off" = "Luisteren uit";
 
 /* The title of the command to pair with mysentry */
 "MySentry Pair" = "MySentry verbinden";

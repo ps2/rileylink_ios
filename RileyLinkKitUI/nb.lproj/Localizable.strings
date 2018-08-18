@@ -11,7 +11,7 @@
 "Connected" = "Tilkoblet";
 
 /* The in-progress connecting state */
-"Connecting" = "Kobler Til";
+"Connecting" = "Kobler til";
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Tilkoblingsstatus";
@@ -26,13 +26,13 @@
 "Disconnected" = "Frakoblet";
 
 /* The in-progress disconnecting state */
-"Disconnecting" = "Kobler Fra";
+"Disconnecting" = "Kobler fra";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
 
 /* The title of the cell describing an awake radio */
-"Last Awake" = "Sist Våken";
+"Last Awake" = "Sist våken";
 
 /* The title of the cell describing no radio awake data */
 "Listening Off" = "Lytting skrudd av skrudd av";

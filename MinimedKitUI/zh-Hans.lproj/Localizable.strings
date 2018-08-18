@@ -8,7 +8,7 @@
 "%1$@ basal schedule entries\n" = "%1$@ 基础率\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
-"%1$@ Units of insulin remaining\n" = "胰岛素剩余量 %1$@ U \n";
+"%1$@ Units of insulin remaining\n" = "胰岛素剩余量 %1$@ 单位 \n";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";

@@ -40,7 +40,7 @@ public enum PumpEventType: UInt8 {
     case journalEntryPumpLowReservoir = 0x34
     case alarmClockReminder = 0x35
     case changeMeterId = 0x36
-    case unknown515Event = 0x39
+    case meterBGx15 = 0x39
     case questionable3b = 0x3b
     case changeParadigmLinkID = 0x3c
     case bgReceived = 0x3f
@@ -218,8 +218,8 @@ public enum PumpEventType: UInt8 {
             return ChangeMeterIDPumpEvent.self
         case .bolusReminder:
             return BolusReminderPumpEvent.self
-        case .unknown515Event:
-            return UnknownPumpEvent57.self
+        case .meterBGx15:
+            return BGReceivedPumpEvent.self
         default:
             return PlaceholderPumpEvent.self
         }

@@ -13,16 +13,16 @@ extension CBPeripheralState {
 
     // MARK: - CustomStringConvertible
 
-    var description: String {
+    public var description: String {
         switch self {
         case .connected:
-            return NSLocalizedString("Connected", comment: "The connected state")
+            return LocalizedString("Connected", comment: "The connected state")
         case .connecting:
-            return NSLocalizedString("Connecting", comment: "The in-progress connecting state")
+            return LocalizedString("Connecting", comment: "The in-progress connecting state")
         case .disconnected:
-            return NSLocalizedString("Disconnected", comment: "The disconnected state")
+            return LocalizedString("Disconnected", comment: "The disconnected state")
         case .disconnecting:
-            return NSLocalizedString("Disconnecting", comment: "The in-progress disconnecting state")
+            return LocalizedString("Disconnecting", comment: "The in-progress disconnecting state")
         }
     }
 }

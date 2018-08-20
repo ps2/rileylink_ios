@@ -56,9 +56,9 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
     public var description: String {
         switch rateType {
         case .Absolute:
-            return String(format: NSLocalizedString("Temporary Basal: %1$.3f U/hour", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes)"), rate)
+            return String(format: LocalizedString("Temporary Basal: %1$.3f U/hour", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes)"), rate)
         case .Percent:
-            return String(format: NSLocalizedString("Temporary Basal: %1$d%%", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent)"), Int(rate))
+            return String(format: LocalizedString("Temporary Basal: %1$d%%", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent)"), Int(rate))
         }
     }
 }

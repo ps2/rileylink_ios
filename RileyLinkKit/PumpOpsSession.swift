@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import MinimedKit
+import LoopKit
 import RileyLinkBLEKit
 
 
@@ -47,6 +47,7 @@ extension PumpOpsSession {
     ///
     /// - Throws:
     ///     - PumpCommandError.command containing:
+    ///         - PumpOpsError.couldNotDecode
     ///         - PumpOpsError.crosstalk
     ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
@@ -90,6 +91,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///         - PumpOpsError.couldNotDecode
     ///         - PumpOpsError.crosstalk
     ///         - PumpOpsError.deviceError
     ///         - PumpOpsError.noResponse
@@ -138,6 +140,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -163,6 +166,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -176,6 +180,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -189,6 +194,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -205,6 +211,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -224,6 +231,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -247,6 +255,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -259,6 +268,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -272,6 +282,7 @@ extension PumpOpsSession {
     }
 
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -308,6 +319,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -401,7 +413,7 @@ extension PumpOpsSession {
 
     /// - Throws: PumpCommandError
     public func setMaxBolus(units: Double) throws {
-        guard let body = ChangeMaxBolusMessageBody(maxBolusUnits: units) else {
+        guard let body = ChangeMaxBolusMessageBody(pumpModel: try getPumpModel(), maxBolusUnits: units) else {
             throw PumpCommandError.command(PumpOpsError.pumpError(PumpErrorCode.maxSettingExceeded))
         }
 
@@ -475,11 +487,24 @@ extension PumpOpsSession {
         }
 
         do {
-            let message = PumpMessage(settings: settings, type: .changeTime, body: ChangeTimeCarelinkMessageBody(dateComponents: generator())!)
+            let components = generator()
+            let message = PumpMessage(settings: settings, type: .changeTime, body: ChangeTimeCarelinkMessageBody(dateComponents: components)!)
             let _: PumpAckMessageBody = try session.getResponse(to: message)
-            self.pump.timeZone = .currentFixed
+            self.pump.timeZone = components.timeZone?.fixed ?? .currentFixed
         } catch let error as PumpOpsError {
             throw PumpCommandError.arguments(error)
+        }
+    }
+
+    public func setTimeToNow(in timeZone: TimeZone? = nil) throws {
+        let timeZone = timeZone ?? pump.timeZone
+
+        try setTime { () -> DateComponents in
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = timeZone
+            var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+            components.timeZone = timeZone
+            return components
         }
     }
 
@@ -618,6 +643,10 @@ extension PumpOpsSession {
             }
         }
     }
+    
+    public func getStatistics() throws -> RileyLinkStatistics {
+        return try session.getRileyLinkStatistics()
+    }
 
     public func discoverCommands(in range: CountableClosedRange<UInt8>, _ updateHandler: (_ messages: [String]) -> Void) {
 
@@ -675,6 +704,7 @@ extension PumpOpsSession {
     ///
     /// - Parameter watchdogID: A 3-byte address for the watchdog device.
     /// - Throws:
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
@@ -698,8 +728,7 @@ extension PumpOpsSession {
         }
 
         guard let packet = MinimedPacket(encodedData: encodedData) else {
-            // TODO: Change error to better reflect that this is an encoding or CRC error
-            throw PumpOpsError.unknownResponse(rx: encodedData, during: "Watchdog listening")
+            throw PumpOpsError.couldNotDecode(rx: encodedData, during: "Watchdog listening")
         }
         
         guard let findMessage = PumpMessage(rxData: packet.data) else {
@@ -841,6 +870,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
+    ///     - LocalizedError
     private func scanForPump(in frequencies: [Measurement<UnitFrequency>], current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
         
         var trials = [FrequencyTrial]()
@@ -863,7 +893,7 @@ extension PumpOpsSession {
             var sumRSSI = 0
             for _ in 1...tries {
                 // Ignore failures here
-                let rfPacket = try? session.sendAndListenForPacket(PumpMessage(settings: settings, type: .getPumpModel))
+                let rfPacket = try? session.sendAndListenForPacket(PumpMessage(settings: settings, type: .getPumpModel), timeout: .milliseconds(130))
                 if  let rfPacket = rfPacket,
                     let pkt = MinimedPacket(encodedData: rfPacket.data),
                     let response = PumpMessage(rxData: pkt.data), response.messageType == .getPumpModel
@@ -914,6 +944,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpCommandError.command
     ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse

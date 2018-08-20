@@ -39,6 +39,6 @@ public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     }
 
     public var description: String {
-        return String(format: NSLocalizedString("Temporary Basal: %1$d min", comment: "The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes)"), duration)
+        return String(format: LocalizedString("Temporary Basal: %1$d min", comment: "The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes)"), duration)
     }
 }

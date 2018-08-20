@@ -1,11 +1,14 @@
-/* The title of the nightscout API secret credential */
-"API Secret" = "API secret";
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
 
 /* The title of the about section */
 "About" = "Про";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Добавить учетную запись";
+
+/* The title of the nightscout API secret credential */
+"API Secret" = "API secret";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Конфигурация";
@@ -19,6 +22,9 @@
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Получить данные мониторинга";
 
+/* The placeholder text for the nightscout site URL credential */
+"http://mysite.azurewebsites.net" = "http://мойсайт. azurewebsites.net";
+
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
 
@@ -29,7 +35,7 @@
 "Pump Region" = "Регион помпы";
 
 /* Instructions on selecting the pump region */
-"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is NorthAmerica.  If your model has an \"WW\" in it, then the region is WorldWide." = "Регион помпы находится на задней стенке помпы в виде двух из последних трех знаков вида MMT-551NAB или MMT-515LWWS. Если ваша модель имеет \"NA\" то это Северная Америка.  Если \"WW\", то это остальной мир.";
+"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "Регион помпы находится на задней стенке помпы в виде двух из последних трех знаков вида MMT-551NAB или MMT-515LWWS. Если ваша модель имеет \"NA\" то это Северная Америка.  Если \"WW\", то это остальной мир.";
 
 /* The default placeholder string for a credential */
 "Required" = "Обязательное значение";
@@ -45,7 +51,4 @@
 
 /* Label indicating validation is occurring */
 "Verifying" = "Верифицируется";
-
-/* The placeholder text for the nightscout site URL credential */
-"http://mysite.azurewebsites.net" = "https://мойсайт. azurewebsites.net";
 

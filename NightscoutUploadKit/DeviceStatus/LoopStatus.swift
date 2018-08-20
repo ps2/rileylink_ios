@@ -87,7 +87,7 @@ public struct LoopStatus {
         }
         
         if let forecastError = forecastError {
-            rval["forecastError"] = forecastError
+            rval["forecastError"] = forecastError.dictionaryRepresentation
         }
         
         if let testingDetails = testingDetails {

@@ -10,21 +10,34 @@ import XCTest
 
 class ChangeMaxBolusMessageBodyTests: XCTestCase {
 
-    func testMaxBolus() {
-        let body = ChangeMaxBolusMessageBody(maxBolusUnits: 6.4)!
+    func testMaxBolus522() {
+        let body = ChangeMaxBolusMessageBody(pumpModel: .model522, maxBolusUnits: 6.4)!
 
         XCTAssertEqual(Data(hexadecimalString: "0140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!, body.txData, body.txData.hexadecimalString)
     }
 
-    func testMaxBolusRounded() {
-        let body = ChangeMaxBolusMessageBody(maxBolusUnits: 2.25)!
+    func testMaxBolus523() {
+        let body = ChangeMaxBolusMessageBody(pumpModel: .model523, maxBolusUnits: 6.4)!
+
+        XCTAssertEqual(Data(hexadecimalString: "0200400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!, body.txData, body.txData.hexadecimalString)
+    }
+
+    func testMaxBolusRounded522() {
+        let body = ChangeMaxBolusMessageBody(pumpModel: .model522, maxBolusUnits: 2.25)!
 
         XCTAssertEqual(Data(hexadecimalString: "0116000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!, body.txData, body.txData.hexadecimalString)
     }
 
+
+    func testMaxBolusRounded523() {
+        let body = ChangeMaxBolusMessageBody(pumpModel: .model523, maxBolusUnits: 2.25)!
+
+        XCTAssertEqual(Data(hexadecimalString: "0200160000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!, body.txData, body.txData.hexadecimalString)
+    }
+
     func testMaxBolusOutOfRange() {
-        XCTAssertNil(ChangeMaxBolusMessageBody(maxBolusUnits: -1))
-        XCTAssertNil(ChangeMaxBolusMessageBody(maxBolusUnits: 26))
+        XCTAssertNil(ChangeMaxBolusMessageBody(pumpModel: .model522, maxBolusUnits: -1))
+        XCTAssertNil(ChangeMaxBolusMessageBody(pumpModel: .model523, maxBolusUnits: 26))
     }
     
 }

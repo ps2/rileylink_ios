@@ -25,7 +25,7 @@ extension UIViewController {
         )
         
         let action = UIAlertAction(
-            title: NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", tableName: "LoopKit", value: "OK", comment: "The title of the action used to dismiss an error alert"),
+            title: LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", tableName: "LoopKit", value: "OK", comment: "The title of the action used to dismiss an error alert"),
             style: .default,
             handler: nil
         )

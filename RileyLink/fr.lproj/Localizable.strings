@@ -1,0 +1,54 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* The title of the about section */
+"About" = "À propos";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Ajouter Compte";
+
+/* The title of the nightscout API secret credential */
+"API Secret" = "API Secret";
+
+/* The title of the configuration section in settings */
+"Configuration" = "Configuration";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Effacer Compte";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Entrée l’ID de pompe de 6 chiffres";
+
+/* The title text for the pull cgm Data cell */
+"Fetch CGM" = "Obtenir CGM";
+
+/* The placeholder text for the nightscout site URL credential */
+"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+
+/* The title of the Nightscout service */
+"Nightscout" = "Nightscout";
+
+/* The title text for the pump ID config value */
+"Pump ID" = "ID de la Pompe";
+
+/* The title text for the pump Region config value */
+"Pump Region" = "Région de Pompe";
+
+/* Instructions on selecting the pump region */
+"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "La région de la pompe est indiquée au dos de votre pompe par deux des trois derniers caractères de la chaîne du modèle, qui se lit comme suit: MMT-551NAB ou MMT-515LWWS. Si votre modèle contient un \"NA\" ou \"CA\", la région est l’Amérique du Nord. Si votre modèle contient un \"WW\", alors la région est Monde Entier.";
+
+/* The default placeholder string for a credential */
+"Required" = "Requis";
+
+/* The title of the nightscout site URL credential */
+"Site URL" = "URL du Site";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Appuyez pour définir";
+
+/* The title text for the nightscout upload enabled switch cell */
+"Upload To Nightscout" = "Télécharger vers Nightscout";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Validation en cours";
+

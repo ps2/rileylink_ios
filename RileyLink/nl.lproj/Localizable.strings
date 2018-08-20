@@ -1,0 +1,54 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* The title of the about section */
+"About" = "Over";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Voeg account toe";
+
+/* The title of the nightscout API secret credential */
+"API Secret" = "API Secret";
+
+/* The title of the configuration section in settings */
+"Configuration" = "Configuratie";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Verwijder account";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Voer het 6-cijferige ID van de pomp in";
+
+/* The title text for the pull cgm Data cell */
+"Fetch CGM" = "Haal CGM op";
+
+/* The placeholder text for the nightscout site URL credential */
+"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+
+/* The title of the Nightscout service */
+"Nightscout" = "Nightscout";
+
+/* The title text for the pump ID config value */
+"Pump ID" = "Pomp ID";
+
+/* The title text for the pump Region config value */
+"Pump Region" = "Pomp regio";
+
+/* Instructions on selecting the pump region */
+"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "Pump Regio staat op de achterkant van uw pomp als twee van de laatste drie tekens van de modeltekenreeks, die er als volgt uitziet: MMT-551NAB of MMT-515LWWS. Als uw model een \"NA\" bevat, dan is de regio Noord Amerika. Als uw model een \"WW\" bevat, is de regio Wereldwijd.";
+
+/* The default placeholder string for a credential */
+"Required" = "Vereist";
+
+/* The title of the nightscout site URL credential */
+"Site URL" = "Webpagina URL";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Instellen…";
+
+/* The title text for the nightscout upload enabled switch cell */
+"Upload To Nightscout" = "Uploaden naar Nightscout";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Verifiëren";
+

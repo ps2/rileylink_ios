@@ -103,6 +103,43 @@ struct GetVersionResponse: Response {
     }
 }
 
+struct GetStatisticsResponse: Response {
+    let code: ResponseCode
+    
+    let statistics: RileyLinkStatistics
+
+    init?(data: Data) {
+        guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
+            return nil
+        }
+        
+        self.init(code: code, data: data[data.startIndex.advanced(by: 1)...])
+    }
+    
+    init?(legacyData data: Data) {
+        self.init(code: .success, data: data)
+    }
+
+    private init?(code: ResponseCode, data: Data) {
+        self.code = code
+        
+        guard data.count >= 16 else {
+            return nil
+        }
+        
+        let uptime = TimeInterval(milliseconds: Double(data[data.startIndex...].toBigEndian(UInt32.self)))
+        let radioRxOverflowCount = data[data.startIndex.advanced(by: 4)...].toBigEndian(UInt16.self)
+        let radioRxFifoOverflowCount = data[data.startIndex.advanced(by: 6)...].toBigEndian(UInt16.self)
+        let packetRxCount = data[data.startIndex.advanced(by: 8)...].toBigEndian(UInt16.self)
+        let packetTxCount = data[data.startIndex.advanced(by: 10)...].toBigEndian(UInt16.self)
+        let crcFailureCount = data[data.startIndex.advanced(by: 12)...].toBigEndian(UInt16.self)
+        let spiSyncFailureCount = data[data.startIndex.advanced(by: 14)...].toBigEndian(UInt16.self)
+        
+        self.statistics = RileyLinkStatistics(uptime: uptime, radioRxOverflowCount: radioRxOverflowCount, radioRxFifoOverflowCount: radioRxFifoOverflowCount, packetRxCount: packetRxCount, packetTxCount: packetTxCount, crcFailureCount: crcFailureCount, spiSyncFailureCount: spiSyncFailureCount)
+    }
+}
+
+
 struct PacketResponse: Response {
     let code: ResponseCode
     let packet: RFPacket?

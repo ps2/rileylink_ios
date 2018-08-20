@@ -1,0 +1,52 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* The title of the cell describing an awake radio */
+"Awake Until" = "Aktywny od";
+
+/* The title of the section describing commands */
+"Commands" = "Komendy";
+
+/* The connected state */
+"Connected" = "Połączony";
+
+/* The in-progress connecting state */
+"Connecting" = "Łączenie";
+
+/* The title of the cell showing BLE connection state */
+"Connection State" = "Status połączenia";
+
+/* The title of the section describing the device */
+"Device" = "Urządzenie";
+
+/* The title of the devices table section in RileyLink settings */
+"Devices" = "Urządzenia";
+
+/* The disconnected state */
+"Disconnected" = "Rozłączony";
+
+/* The in-progress disconnecting state */
+"Disconnecting" = "Rozłączanie";
+
+/* The title of the cell showing firmware version */
+"Firmware" = "Oprogramowanie";
+
+/* The title of the cell describing an awake radio */
+"Last Awake" = "Ostatnio aktywny";
+
+/* The title of the cell describing no radio awake data */
+"Listening Off" = "Brak danych o aktywności";
+
+/* The title of the cell showing device name */
+"Name" = "Nazwa";
+
+/* The title of the cell showing the last idle */
+"On Idle" = "Bezczynny od";
+
+/* RileyLink setup description */
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink będzie łączył się z pompą poprzez Bluetooth Low Energy.";
+
+/* The title of the cell showing BLE signal strength (RSSI) */
+"Signal Strength" = "Siła sygnału";
+
+

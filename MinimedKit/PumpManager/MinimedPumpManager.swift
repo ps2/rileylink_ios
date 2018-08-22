@@ -28,18 +28,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public required convenience init?(rawState: PumpManager.RawStateValue) {
-        guard let state = MinimedPumpManagerState(rawValue: rawState) else {
+        guard let state = MinimedPumpManagerState(rawValue: rawState),
+            let connectionManagerState = state.rileyLinkConnectionManagerState else
+        {
             return nil
         }
         
-        let rileyLinkConnectionManager: RileyLinkConnectionManager
-        
-        if let connectionManagerState = state.rileyLinkPumpManagerState.rileyLinkConnectionManagerState,
-            let connectionManager = RileyLinkConnectionManager(rawValue: connectionManagerState) {
-            rileyLinkConnectionManager = connectionManager
-        } else {
-            rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
-        }
+        let rileyLinkConnectionManager = RileyLinkConnectionManager(state: connectionManagerState)
         
         self.init(state: state, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
         
@@ -50,16 +45,19 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return state.rawValue
     }
 
-    override public var rileyLinkPumpManagerState: RileyLinkPumpManagerState {
-        didSet {
-            state.rileyLinkPumpManagerState = rileyLinkPumpManagerState
-        }
-    }
-
     // TODO: apply lock
     public private(set) var state: MinimedPumpManagerState {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+        }
+    }
+    
+    override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
+        get {
+            return state.rileyLinkConnectionManagerState
+        }
+        set {
+            state.rileyLinkConnectionManagerState = newValue
         }
     }
 
@@ -696,3 +694,4 @@ extension MinimedPumpManager: CGMManager {
         }
     }
 }
+

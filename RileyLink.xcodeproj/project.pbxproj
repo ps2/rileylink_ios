@@ -98,7 +98,6 @@
 		4352A75120DEDE9B00CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		435535D61FB6D98400CE5A23 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435535D51FB6D98400CE5A23 /* UserDefaults.swift */; };
 		435D26B020DA08CE00891C17 /* RileyLinkPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */; };
-		435D26B220DA091C00891C17 /* RileyLinkPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B120DA091B00891C17 /* RileyLinkPumpManagerState.swift */; };
 		435D26B420DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */; };
 		435D26B620DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B520DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift */; };
 		435D26B920DC83F300891C17 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
@@ -472,6 +471,7 @@
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
 		C1FFAF4D212944F600C50C1D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1FFAF4B212944F600C50C1D /* Localizable.strings */; };
 		C1FFAF64212B126E00C50C1D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1FFAF62212B126E00C50C1D /* InfoPlist.strings */; };
+		C1FFAF6F212CB4F100C50C1D /* RileyLinkConnectionManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF6E212CB4F100C50C1D /* RileyLinkConnectionManagerState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -711,7 +711,6 @@
 		435535D51FB6D98400CE5A23 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		435535DB1FB8B37E00CE5A23 /* PumpMessage+PumpOpsSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PumpMessage+PumpOpsSession.swift"; sourceTree = "<group>"; };
 		435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManager.swift; sourceTree = "<group>"; };
-		435D26B120DA091B00891C17 /* RileyLinkPumpManagerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManagerState.swift; sourceTree = "<group>"; };
 		435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesHeaderView.swift; sourceTree = "<group>"; };
 		435D26B520DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesTableViewDataSource.swift; sourceTree = "<group>"; };
 		435D26B720DC83E400891C17 /* Locked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
@@ -1222,6 +1221,7 @@
 		C1FFAF6B212B128800C50C1D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1FFAF6C212B128A00C50C1D /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1FFAF6D212B128C00C50C1D /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C1FFAF6E212CB4F100C50C1D /* RileyLinkConnectionManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkConnectionManagerState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1390,6 +1390,7 @@
 				433ABFFB2016FDF700E6C1FF /* RileyLinkDeviceError.swift */,
 				431CE7901F985D8D00255374 /* RileyLinkDeviceManager.swift */,
 				C12572972125FA390061BA2F /* RileyLinkConnectionManager.swift */,
+				C1FFAF6E212CB4F100C50C1D /* RileyLinkConnectionManagerState.swift */,
 			);
 			path = RileyLinkBLEKit;
 			sourceTree = "<group>";
@@ -1486,7 +1487,6 @@
 				43323EA91FA81C1B003FB0FA /* RileyLinkDevice.swift */,
 				4352A74020DED23000CAC200 /* RileyLinkDeviceManager.swift */,
 				435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */,
-				435D26B120DA091B00891C17 /* RileyLinkPumpManagerState.swift */,
 			);
 			path = RileyLinkKit;
 			sourceTree = "<group>";
@@ -2440,10 +2440,12 @@
 						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C12EA236198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					C12EA251198B436800309FA4 = {
+						DevelopmentTeam = UY678SP37Q;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
@@ -2661,6 +2663,7 @@
 			files = (
 				7D2366F5212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43BA719D2026C9B00058961E /* ResponseBuffer.swift in Sources */,
+				C1FFAF6F212CB4F100C50C1D /* RileyLinkConnectionManagerState.swift in Sources */,
 				431CE78F1F985B6E00255374 /* CBPeripheral.swift in Sources */,
 				431CE79F1F9C670600255374 /* TimeInterval.swift in Sources */,
 				433ABFFC2016FDF700E6C1FF /* RileyLinkDeviceError.swift in Sources */,
@@ -2728,7 +2731,6 @@
 				43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* Data.swift in Sources */,
 				4352A74120DED23100CAC200 /* RileyLinkDeviceManager.swift in Sources */,
-				435D26B220DA091C00891C17 /* RileyLinkPumpManagerState.swift in Sources */,
 				431CE7961F9B0F0200255374 /* OSLog.swift in Sources */,
 				437F54071FBD52120070FF2C /* DeviceState.swift in Sources */,
 				435D26B020DA08CE00891C17 /* RileyLinkPumpManager.swift in Sources */,
@@ -4267,7 +4269,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -4292,7 +4294,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -4315,7 +4317,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -4335,7 +4337,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UY678SP37Q;
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";

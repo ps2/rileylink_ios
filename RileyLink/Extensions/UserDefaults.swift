@@ -13,7 +13,7 @@ import RileyLinkBLEKit
 extension UserDefaults {
     private enum Key: String {
         case pumpManagerRawValue = "com.rileylink.PumpManagerRawValue"
-        case rileyLinkConnectionManagerRawValue = "com.rileylink.RileyLinkConnectionManager"
+        case rileyLinkConnectionManagerState = "com.rileylink.RileyLinkConnectionManagerState"
     }
     
     var pumpManagerRawValue: PumpManager.RawStateValue? {
@@ -25,16 +25,16 @@ extension UserDefaults {
         }
     }
     
-    var rileyLinkConnectionManager: RileyLinkConnectionManager? {
+    var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
-            guard let rawValue = dictionary(forKey: Key.rileyLinkConnectionManagerRawValue.rawValue) else
+            guard let rawValue = dictionary(forKey: Key.rileyLinkConnectionManagerState.rawValue) else
             {
                 return nil
             }
-            return RileyLinkConnectionManager(rawValue: rawValue)
+            return RileyLinkConnectionManagerState(rawValue: rawValue)
         }
         set {
-            set(newValue?.rawState, forKey: Key.rileyLinkConnectionManagerRawValue.rawValue)
+            set(newValue?.rawValue, forKey: Key.rileyLinkConnectionManagerState.rawValue)
         }
     }
 

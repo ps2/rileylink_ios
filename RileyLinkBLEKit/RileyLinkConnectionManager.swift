@@ -8,44 +8,58 @@
 
 import Foundation
 
-public protocol RileyLinkConnectionManagerDelegate {
-    func rileyLinkConnectionManagerDidUpdateState(_ rileyLinkConnectionManager: RileyLinkConnectionManager)
+public protocol RileyLinkConnectionManagerDelegate : class {
+    func rileyLinkConnectionManager(_ rileyLinkConnectionManager: RileyLinkConnectionManager, didChange state: RileyLinkConnectionManagerState)
 }
 
 public class RileyLinkConnectionManager {
     
     public typealias RawStateValue = [String : Any]
-    
+
     /// The current, serializable state of the manager
     public var rawState: RawStateValue {
-        return [
-            "autoConnectIDs": Array(autoConnectIDs)
-        ]
+        return state.rawValue
     }
     
+    public private(set) var state: RileyLinkConnectionManagerState {
+        didSet {
+            delegate?.rileyLinkConnectionManager(self, didChange: state)
+        }
+    }
+
     public var deviceProvider: RileyLinkDeviceProvider {
         return rileyLinkDeviceManager
     }
     
-    public var delegate: RileyLinkConnectionManagerDelegate?
+    public weak var delegate: RileyLinkConnectionManagerDelegate?
     
     private let rileyLinkDeviceManager: RileyLinkDeviceManager
-    private var autoConnectIDs: Set<String> {
-        didSet {
-            delegate?.rileyLinkConnectionManagerDidUpdateState(self)
+    
+    public var autoConnectIDs: Set<String> {
+        get {
+            return state.autoConnectIDs
         }
+        set {
+            state.autoConnectIDs = newValue
+        }
+    }
+    
+    public init(state: RileyLinkConnectionManagerState) {
+        self.rileyLinkDeviceManager = RileyLinkDeviceManager(autoConnectIDs: state.autoConnectIDs)
+        self.state = state
     }
     
     public init(autoConnectIDs: Set<String>) {
         self.rileyLinkDeviceManager = RileyLinkDeviceManager(autoConnectIDs: autoConnectIDs)
-        self.autoConnectIDs = autoConnectIDs
+        self.state = RileyLinkConnectionManagerState(autoConnectIDs: autoConnectIDs)
     }
     
     public convenience init?(rawValue: RawStateValue) {
-        guard let autoConnectIDs = rawValue["autoConnectIDs"] as? [String] else {
+        if let state = RileyLinkConnectionManagerState(rawValue: rawValue) {
+            self.init(state: state)
+        } else {
             return nil
         }
-        self.init(autoConnectIDs: Set(autoConnectIDs))
     }
     
     public var connectingCount: Int {

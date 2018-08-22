@@ -19,12 +19,7 @@ import os.log
 
 class DeviceDataManager {
 
-    var rileyLinkConnectionManager: RileyLinkConnectionManager {
-        didSet {
-            rileyLinkConnectionManager.delegate = self
-            UserDefaults.standard.rileyLinkConnectionManager = rileyLinkConnectionManager
-        }
-    }
+    let rileyLinkConnectionManager: RileyLinkConnectionManager
     
     var pumpManager: PumpManagerUI? {
         didSet {
@@ -38,8 +33,8 @@ class DeviceDataManager {
     
     init() {
         
-        if let connectionManager = UserDefaults.standard.rileyLinkConnectionManager {
-            rileyLinkConnectionManager = connectionManager
+        if let connectionManagerState = UserDefaults.standard.rileyLinkConnectionManagerState {
+            rileyLinkConnectionManager = RileyLinkConnectionManager(state: connectionManagerState)
         } else {
             rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
         }
@@ -54,9 +49,10 @@ class DeviceDataManager {
 }
 
 extension DeviceDataManager: RileyLinkConnectionManagerDelegate {
-    func rileyLinkConnectionManagerDidUpdateState(_ rileyLinkConnectionManager: RileyLinkConnectionManager) {
-        self.rileyLinkConnectionManager = rileyLinkConnectionManager
-    }
+    func rileyLinkConnectionManager(_ rileyLinkConnectionManager: RileyLinkConnectionManager, didChange state: RileyLinkConnectionManagerState)
+    {
+        UserDefaults.standard.rileyLinkConnectionManagerState = state
+    }    
 }
 
 extension DeviceDataManager: PumpManagerDelegate {

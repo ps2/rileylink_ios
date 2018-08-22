@@ -12,8 +12,6 @@ open class RileyLinkPumpManager {
     public init(rileyLinkDeviceProvider: RileyLinkDeviceProvider,
                 rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         
-        let rileyLinkPumpManagerState = RileyLinkPumpManagerState(rileyLinkConnectionManagerState: rileyLinkConnectionManager?.rawState)
-        lockedRileyLinkPumpManagerState = Locked(rileyLinkPumpManagerState)
         self.rileyLinkDeviceProvider = rileyLinkDeviceProvider
         self.rileyLinkConnectionManager = rileyLinkConnectionManager
         
@@ -26,18 +24,10 @@ open class RileyLinkPumpManager {
     /// Manages all the RileyLinks - access to management is optional
     public let rileyLinkConnectionManager: RileyLinkConnectionManager?
     
+    open var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
+    
     /// Access to rileylink devices
     public let rileyLinkDeviceProvider: RileyLinkDeviceProvider
-
-    open var rileyLinkPumpManagerState: RileyLinkPumpManagerState {
-        get {
-            return lockedRileyLinkPumpManagerState.value
-        }
-        set {
-            lockedRileyLinkPumpManagerState.value = newValue
-        }
-    }
-    private let lockedRileyLinkPumpManagerState: Locked<RileyLinkPumpManagerState>
     
     // TODO: Evaluate if this is necessary
     public let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .utility)
@@ -63,19 +53,12 @@ open class RileyLinkPumpManager {
     open var debugDescription: String {
         return [
             "## RileyLinkPumpManager",
-            "rileyLinkPumpManagerState: \(String(reflecting: rileyLinkPumpManagerState))",
+            "rileyLinkConnectionManager: \(String(reflecting: rileyLinkConnectionManager))",
             "lastTimerTick: \(String(describing: lastTimerTick))",
             "deviceStates: \(String(reflecting: deviceStates))",
             "",
             String(reflecting: rileyLinkDeviceProvider),
         ].joined(separator: "\n")
-    }
-}
-
-// MARK: - RileyLinkConnectionManagerDelegate
-extension RileyLinkPumpManager: RileyLinkConnectionManagerDelegate {
-    public func rileyLinkConnectionManagerDidUpdateState(_ rileyLinkConnectionManager: RileyLinkConnectionManager) {
-        rileyLinkPumpManagerState.rileyLinkConnectionManagerState = rileyLinkConnectionManager.rawState
     }
 }
 
@@ -131,4 +114,14 @@ extension RileyLinkPumpManager {
     open func disconnectFromRileyLink(_ device: RileyLinkDevice) {
         rileyLinkConnectionManager?.disconnect(device)
     }
+    
 }
+
+// MARK: - RileyLinkConnectionManagerDelegate
+extension RileyLinkPumpManager: RileyLinkConnectionManagerDelegate {
+    public func rileyLinkConnectionManager(_ rileyLinkConnectionManager: RileyLinkConnectionManager, didChange state: RileyLinkConnectionManagerState) {
+        self.rileyLinkConnectionManagerState = state
+    }
+}
+
+

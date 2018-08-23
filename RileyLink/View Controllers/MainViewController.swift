@@ -45,11 +45,11 @@ class MainViewController: RileyLinkSettingsViewController {
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(SettingsImageTableViewCell.self, forCellReuseIdentifier: SettingsImageTableViewCell.className)
         
-        let imageView = UIImageView(image: VisualDesign.rileyLinkImage(compatibleWith: tableView.traitCollection))
+        let imageView = UIImageView(image: RileyLinkKitUI.FrameworkBundle.rileyLinkImage(compatibleWith: tableView.traitCollection))
         imageView.tintColor = UIColor.white
         imageView.contentMode = .center
         imageView.frame.size.height += 30  // feels right
-        imageView.backgroundColor = VisualDesign.rileyLinkTint(compatibleWith: tableView.traitCollection)
+        imageView.backgroundColor = RileyLinkKitUI.FrameworkBundle.rileyLinkTint(compatibleWith: tableView.traitCollection)
         tableView.tableHeaderView = imageView
 
         tableView.register(RileyLinkDeviceTableViewCell.self, forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)

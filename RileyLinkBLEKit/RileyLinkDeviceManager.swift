@@ -173,7 +173,7 @@ extension RileyLinkDeviceManager {
         }
     }
 
-    public func deprioritize(_ device: RileyLinkDevice, _ completion: (() -> Void)? = nil) {
+    public func deprioritize(_ device: RileyLinkDevice, completion: (() -> Void)? = nil) {
         centralQueue.async {
             self.devices.deprioritize(device)
             completion?()

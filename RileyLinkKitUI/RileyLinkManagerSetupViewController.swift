@@ -33,10 +33,8 @@ open class RileyLinkManagerSetupViewController: UINavigationController, PumpMana
         let viewControllers = navigationController.viewControllers
         let count = navigationController.viewControllers.count
         
-        if rileyLinkPumpManager == nil {
-            if count >= 2, let setupViewController = viewControllers[count - 2] as? RileyLinkSetupTableViewController {
-                rileyLinkPumpManager = setupViewController.rileyLinkPumpManager
-            }
+        if count >= 2, let setupViewController = viewControllers[count - 2] as? RileyLinkSetupTableViewController {
+            rileyLinkPumpManager = setupViewController.rileyLinkPumpManager
         }
     }
 }

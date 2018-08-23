@@ -35,7 +35,7 @@ public class RileyLinkConnectionManager {
     
     private let rileyLinkDeviceManager: RileyLinkDeviceManager
     
-    public var autoConnectIDs: Set<String> {
+    private var autoConnectIDs: Set<String> {
         get {
             return state.autoConnectIDs
         }
@@ -66,7 +66,7 @@ public class RileyLinkConnectionManager {
         return self.autoConnectIDs.count
     }
     
-    public func shouldConnectTo(_ deviceID: String) -> Bool {
+    public func shouldConnect(to deviceID: String) -> Bool {
         return self.autoConnectIDs.contains(deviceID)
     }
     
@@ -89,7 +89,7 @@ public protocol RileyLinkDeviceProvider: class {
     func getDevices(_ completion: @escaping (_ devices: [RileyLinkDevice]) -> Void)
     var idleListeningEnabled: Bool { get }
     var timerTickEnabled: Bool { get set }
-    func deprioritize(_ device: RileyLinkDevice, _ completion: (() -> Void)?)
+    func deprioritize(_ device: RileyLinkDevice, completion: (() -> Void)?)
     func assertIdleListening(forcingRestart: Bool)
     var idleListeningState: RileyLinkDevice.IdleListeningState { get set }
 

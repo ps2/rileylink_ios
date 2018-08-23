@@ -93,7 +93,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
         guard let connectionManager = rileyLinkPumpManager.rileyLinkConnectionManager else {
             return nil
         }
-        let isAutoConnectDevice = connectionManager.shouldConnectTo(device.peripheralIdentifier.uuidString)
+        let isAutoConnectDevice = connectionManager.shouldConnect(to: device.peripheralIdentifier.uuidString)
         var state = device.peripheralState
 
         switch state {

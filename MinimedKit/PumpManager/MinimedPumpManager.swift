@@ -213,14 +213,14 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 } catch let error {
                     self.log.error("Device %{public}@ auto-tune failed with error: %{public}@", device.name ?? "", String(describing: error))
-                    self.rileyLinkDeviceProvider.deprioritize(device, nil)
+                    self.rileyLinkDeviceProvider.deprioritize(device, completion: nil)
                     if let error = error as? LocalizedError {
                         self.pumpManagerDelegate?.pumpManager(self, didError: PumpManagerError.communication(MinimedPumpManagerError.tuneFailed(error)))
                     }
                 }
             }
         } else {
-            rileyLinkDeviceProvider.deprioritize(device, nil)
+            rileyLinkDeviceProvider.deprioritize(device, completion: nil)
         }
     }
 

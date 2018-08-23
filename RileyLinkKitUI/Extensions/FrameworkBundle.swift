@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class VisualDesign {
+extension FrameworkBundle {
     public class func rileyLinkImage(compatibleWith traitCollection: UITraitCollection) -> UIImage? {
         let bundle = Bundle(for: self)
         return UIImage(named: "RileyLink", in: bundle, compatibleWith: traitCollection)
@@ -18,6 +18,5 @@ public class VisualDesign {
         let bundle = Bundle(for: self)
         return UIColor(named: "RileyLink Tint", in: bundle, compatibleWith: traitCollection)
     }
-
 }
 

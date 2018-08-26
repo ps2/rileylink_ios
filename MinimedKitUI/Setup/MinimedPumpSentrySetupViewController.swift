@@ -84,7 +84,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
 
         continueState = .listening
 
-        pumpManager.pumpOps.runSession(withName: "MySentry Pairing", using: pumpManager.rileyLinkManager.firstConnectedDevice) { (session) in
+        pumpManager.pumpOps.runSession(withName: "MySentry Pairing", using: pumpManager.rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 DispatchQueue.main.async {
                     self.continueState = .notStarted

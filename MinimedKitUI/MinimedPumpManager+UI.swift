@@ -29,7 +29,7 @@ extension MinimedPumpManager: PumpManagerUI {
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MinimedPumpManager {
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
-        pumpOps.runSession(withName: "Save Settings", using: rileyLinkManager.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
@@ -70,7 +70,7 @@ extension MinimedPumpManager {
 // MARK: - SingleValueScheduleTableViewControllerSyncSource
 extension MinimedPumpManager {
     public func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
-        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkManager.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return

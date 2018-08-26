@@ -30,22 +30,41 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             cellForRow(.version)?.detailTextLabel?.text = firmwareVersion
         }
     }
-
-    private var lastIdle: Date? {
+    
+    private var uptime: TimeInterval? {
         didSet {
             guard isViewLoaded else {
                 return
             }
-
-            cellForRow(.idleStatus)?.setDetailDate(lastIdle, formatter: dateFormatter)
+            
+            cellForRow(.uptime)?.setDetailAge(uptime)
         }
     }
     
+    private var frequency: Measurement<UnitFrequency>? {
+        didSet {
+            guard isViewLoaded else {
+                return
+            }
+            
+            cellForRow(.frequency)?.setDetailFrequency(frequency, formatter: frequencyFormatter)
+        }
+    }
+
     var rssiFetchTimer: Timer? {
         willSet {
             rssiFetchTimer?.invalidate()
         }
     }
+    
+    private lazy var frequencyFormatter: MeasurementFormatter = {
+        let formatter = MeasurementFormatter()
+        
+        formatter.numberFormatter = decimalFormatter
+        
+        return formatter
+    }()
+
 
     private var appeared = false
 
@@ -77,10 +96,35 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     func updateDeviceStatus() {
         device.getStatus { (status) in
             DispatchQueue.main.async {
-                self.lastIdle = status.lastIdle
                 self.firmwareVersion = status.firmwareDescription
             }
         }
+    }
+    
+    func updateUptime() {
+        device.runSession(withName: "Get stats for uptime") { (session) in
+            do {
+                let statistics = try session.getRileyLinkStatistics()
+                DispatchQueue.main.async {
+                    self.uptime = statistics.uptime
+                }
+            } catch { }
+        }
+    }
+    
+    func updateFrequency() {
+
+        device.runSession(withName: "Get base frequency") { (session) in
+            do {
+                let frequency = try session.readBaseFrequency()
+                DispatchQueue.main.async {
+                    self.frequency = frequency
+                }
+            } catch let error {
+                print("Error: \(error)")
+            }
+        }
+        
     }
 
     // References to registered notification center observers
@@ -134,6 +178,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         appeared = true
         
         updateRSSI()
+        
+        updateFrequency()
+
+        updateUptime()
+        
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -184,7 +233,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case version
         case rssi
         case connection
-        case idleStatus
+        case uptime
+        case frequency
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -230,11 +280,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.detailTextLabel?.text = device.peripheralState.description
             case .rssi:
                 cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
-
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
-            case .idleStatus:
-                cell.textLabel?.text = LocalizedString("On Idle", comment: "The title of the cell showing the last idle")
-                cell.setDetailDate(lastIdle, formatter: dateFormatter)
+            case .uptime:
+                cell.textLabel?.text = NSLocalizedString("Uptime", comment: "The title of the cell showing uptime")
+                cell.setDetailAge(uptime)
+            case .frequency:
+                cell.textLabel?.text = NSLocalizedString("Frequency", comment: "The title of the cell showing current rileylink frequency")
+                cell.setDetailFrequency(frequency, formatter: frequencyFormatter)
             }
         case .commands:
             cell.accessoryType = .disclosureIndicator
@@ -315,6 +367,17 @@ extension RileyLinkDeviceTableViewController: TextFieldTableViewControllerDelega
     }
 }
 
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .full
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+        
+        return formatter.string(from: self)
+    }
+}
 
 private extension UITableViewCell {
     func setDetailDate(_ date: Date?, formatter: DateFormatter) {
@@ -328,18 +391,21 @@ private extension UITableViewCell {
     func setDetailRSSI(_ decibles: Int?, formatter: NumberFormatter) {
         detailTextLabel?.text = formatter.decibleString(from: decibles) ?? "-"
     }
-
-    func setAwakeUntil(_ awakeUntil: Date?, formatter: DateFormatter) {
-        switch awakeUntil {
-        case let until? where until.timeIntervalSinceNow < 0:
-            textLabel?.text = LocalizedString("Last Awake", comment: "The title of the cell describing an awake radio")
-            setDetailDate(until, formatter: formatter)
-        case let until?:
-            textLabel?.text = LocalizedString("Awake Until", comment: "The title of the cell describing an awake radio")
-            setDetailDate(until, formatter: formatter)
-        default:
-            textLabel?.text = LocalizedString("Listening Off", comment: "The title of the cell describing no radio awake data")
-            detailTextLabel?.text = nil
+    
+    func setDetailAge(_ age: TimeInterval?) {
+        if let age = age {
+            detailTextLabel?.text = age.format(using: [.day, .hour, .minute])
+        } else {
+            detailTextLabel?.text = ""
         }
     }
+    
+    func setDetailFrequency(_ frequency: Measurement<UnitFrequency>?, formatter: MeasurementFormatter) {
+        if let frequency = frequency {
+            detailTextLabel?.text = formatter.string(from: frequency)
+        } else {
+            detailTextLabel?.text = ""
+        }
+    }
+
 }

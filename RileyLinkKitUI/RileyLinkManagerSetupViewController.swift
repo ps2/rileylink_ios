@@ -21,18 +21,18 @@ open class RileyLinkManagerSetupViewController: UINavigationController, PumpMana
 
     open weak var setupDelegate: PumpManagerSetupViewControllerDelegate?
 
-    open private(set) var rileyLinkPumpManager: RileyLinkPumpManager?
+    open var rileyLinkPumpManager: RileyLinkPumpManager?
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         delegate = self
     }
-
+    
     open func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         let viewControllers = navigationController.viewControllers
         let count = navigationController.viewControllers.count
-
+        
         if count >= 2, let setupViewController = viewControllers[count - 2] as? RileyLinkSetupTableViewController {
             rileyLinkPumpManager = setupViewController.rileyLinkPumpManager
         }

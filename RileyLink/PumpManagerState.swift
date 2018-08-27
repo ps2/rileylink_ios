@@ -9,6 +9,7 @@ import Foundation
 import LoopKit
 import MinimedKit
 import RileyLinkBLEKit
+import OmniKit
 
 
 let allPumpManagers: [String: PumpManager.Type] = [
@@ -28,6 +29,11 @@ func PumpManagerFromRawValue(_ rawValue: [String: Any], rileyLinkDeviceProvider:
             return nil
         }
         return MinimedPumpManager(state: state, rileyLinkDeviceProvider: rileyLinkDeviceProvider)
+    case OmnipodPumpManager.managerIdentifier:
+        guard let state = OmnipodPumpManagerState(rawValue: rawState) else {
+            return nil
+        }
+        return OmnipodPumpManager(state: state, rileyLinkDeviceProvider: rileyLinkDeviceProvider)
     default:
         return nil
     }

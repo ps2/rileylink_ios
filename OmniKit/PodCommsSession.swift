@@ -32,7 +32,6 @@ public class PodCommsSession {
     
     private var podState: PodState {
         didSet {
-            print("PodCommsSession.didChange podState: \(String(describing: podState))")
             delegate.podCommsSession(self, didChange: podState)
         }
     }
@@ -110,6 +109,7 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
         let _: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
+        podState.advanceToNextNonce()
     }
     
     public func setTempBasal(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {
@@ -131,7 +131,14 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
-        try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
+        //try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
+        try bolus(units: 1)
+    }
+    
+    public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws {
+        let scheduleOffset = timeZone.scheduleOffset(forDate: date)
+        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        self.podState.timeZone = timeZone
     }
     
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {

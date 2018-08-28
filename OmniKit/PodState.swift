@@ -14,7 +14,7 @@ public struct PodState: RawRepresentable, Equatable {
     public let address: UInt32
     fileprivate var nonceState: NonceState
     public let activatedAt: Date
-    public let timeZone: TimeZone
+    public var timeZone: TimeZone
     public let piVersion: String
     public let pmVersion: String
     public let lot: UInt32

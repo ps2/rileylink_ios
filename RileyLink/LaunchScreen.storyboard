@@ -50,43 +50,6 @@
             </objects>
             <point key="canvasLocation" x="767" y="203"/>
         </scene>
-        <!--Table View Controller-->
-        <scene sceneID="jZQ-HN-BgP">
-            <objects>
-                <tableViewController id="IKn-fL-WmM" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="189" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="18" id="Rl6-GP-hTc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="E2N-pJ-Cwc">
-                                <rect key="frame" x="0.0" y="55.333333333333343" width="414" height="189"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E2N-pJ-Cwc" id="agY-Oj-vGP">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="188.66666666666666"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="RileyLink" translatesAutoresizingMaskIntoConstraints="NO" id="gKA-vZ-rR3">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="189"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.33725490200000002" green="0.33333333329999998" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </imageView>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="IKn-fL-WmM" id="pZn-6s-wzy"/>
-                            <outlet property="delegate" destination="IKn-fL-WmM" id="DzA-IC-kLA"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="rO0-xP-eeY"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rnj-7u-7gl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="617" y="726"/>
-        </scene>
     </scenes>
     <resources>
         <image name="RileyLink" width="276" height="159"/>

@@ -227,16 +227,15 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             return
         }
         
-        podComms = PodComms(delegate: self)
-    
         let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
         
         // TODO: Let user choose between current and previously used timezone?
-        podComms?.pair(using: deviceSelector, timeZone: .currentFixed, completion: { (result) in
+        PodComms.pair(using: deviceSelector, timeZone: .currentFixed, completion: { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let podState):
                     self.podState = podState
+                    self.podComms = PodComms(podState: podState, delegate: self)
                     self.configurePod()
                 case .failure(let error):
                     self.interactionState = .communicationError(during: "Pairing", error: error)
@@ -247,14 +246,13 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
     }
     
     func configurePod() {
-        
-        guard let podState = podState, let podComms = podComms else {
+        guard let podComms = podComms else {
             return
         }
 
         let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
 
-        podComms.runSession(withName: "Configure pod", using: deviceSelector, podState: podState) { (result) in
+        podComms.runSession(withName: "Configure pod", using: deviceSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
@@ -278,13 +276,13 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
     }
     
     func finishPrime() {
-        guard let podState = podState, let podComms = podComms else {
+        guard let podComms = podComms else {
             return
         }
         
         let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
 
-        podComms.runSession(withName: "Finish Prime", using: deviceSelector, podState: podState) { (result) in
+        podComms.runSession(withName: "Finish Prime", using: deviceSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
@@ -310,20 +308,13 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
         
         let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
 
-        podComms.runSession(withName: "Insert cannula", using: deviceSelector, podState: podState) { (result) in
+        podComms.runSession(withName: "Insert cannula", using: deviceSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
-                    let schedule = BasalSchedule(entries: [entry])
-                    var calendar = Calendar.current
-                    calendar.timeZone = podState.timeZone
-                    let now = Date()
-                    let components = calendar.dateComponents([.day , .month, .year], from: now)
-                    guard let startOfSchedule = calendar.date(from: components) else {
-                        fatalError("invalid date")
-                    }
-                    let scheduleOffset = now.timeIntervalSince(startOfSchedule)
+                    // TODO: Need to get schedule from PumpManagerDelegate
+                    let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, duration: .hours(24))])
+                    let scheduleOffset = podState.timeZone.scheduleOffset(forDate: Date())
                     try session.insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
                     DispatchQueue.main.async {
                         self.interactionState = .checkInfusionSite

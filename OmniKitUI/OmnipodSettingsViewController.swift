@@ -79,7 +79,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case info = 0
         case settings
         case rileyLinks
-        case delete
+        case deactivate
         
         static let count = 4
     }
@@ -97,8 +97,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum SettingsRow: Int {
         case timeZoneOffset = 0
+        case testCommand
         
-        static let count = 1
+        static let count = 2
     }
     
     // MARK: UITableViewDataSource
@@ -115,7 +116,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             return SettingsRow.count
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
-        case .delete:
+        case .deactivate:
             return 1
         }
     }
@@ -128,7 +129,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
-        case .delete:
+        case .deactivate:
             return " "  // Use an empty string for more dramatic spacing
         }
     }
@@ -137,7 +138,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .delete:
+        case .info, .settings, .deactivate:
             return nil
         }
     }
@@ -193,16 +194,18 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
                 
                 cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
+            case .testCommand:
+                cell.textLabel?.text = NSLocalizedString("Test Command", comment: "The title of the command to run the test command")
             }
             
             cell.accessoryType = .disclosureIndicator
             return cell
         case .rileyLinks:
             return super.tableView(tableView, cellForRowAt: indexPath)
-        case .delete:
+        case .deactivate:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             
-            cell.textLabel?.text = NSLocalizedString("Shutdown Pod", comment: "Title text for the button to remove a pod from Loop")
+            cell.textLabel?.text = NSLocalizedString("Deactivate Pod", comment: "Title text for the button to remove a pod from Loop")
             cell.textLabel?.textAlignment = .center
             cell.tintColor = .deleteColor
             cell.isEnabled = true
@@ -214,13 +217,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             return false
-        case .settings, .rileyLinks, .delete:
+        case .settings, .rileyLinks, .deactivate:
             return true
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let sender = tableView.cellForRow(at: indexPath)
+        let sender = tableView.cellForRow(at: indexPath)
         
         switch Section(rawValue: indexPath.section)! {
         case .info:
@@ -228,11 +231,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
-                break
-//                let vc = CommandResponseViewController.changeTime(ops: pumpManager.pumpOps, rileyLinkManager: pumpManager.rileyLinkManager)
-//                vc.title = sender?.textLabel?.text
-//
-//                show(vc, sender: indexPath)
+                let vc = CommandResponseViewController.changeTime(podComms: pumpManager.podComms, rileyLinkDeviceProvider: pumpManager.rileyLinkDeviceProvider)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
+            case .testCommand:
+                let vc = CommandResponseViewController.testCommand(podComms: pumpManager.podComms, rileyLinkDeviceProvider: pumpManager.rileyLinkDeviceProvider)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
             }
         case .rileyLinks:
             break
@@ -249,7 +254,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 //                    self.show(vc, sender: sender)
 //                }
 //            }
-        case .delete:
+        case .deactivate:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
                 self.navigationController?.popViewController(animated: true)
@@ -267,12 +272,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             break
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
-            case .timeZoneOffset:
+            case .timeZoneOffset, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .rileyLinks:
             break
-        case .delete:
+        case .deactivate:
             break
         }
         
@@ -310,7 +315,7 @@ private extension UIAlertController {
         )
         
         addAction(UIAlertAction(
-            title: NSLocalizedString("Shutdown Pod", comment: "Button title to shutdown pod"),
+            title: NSLocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
             style: .destructive,
             handler: { (_) in
                 handler()

@@ -8,6 +8,7 @@
 
 import Foundation
 import RileyLinkBLEKit
+import os.log
 
 public protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange state: PodState)
@@ -20,8 +21,17 @@ public class PodComms {
     private weak var delegate: PodCommsDelegate?
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
+
+    public let log = OSLog(category: "PodComms")
     
-    public init(delegate: PodCommsDelegate?) {
+    private var podState: PodState {
+        didSet {
+            self.delegate?.podComms(self, didChange: podState)
+        }
+    }
+
+    public init(podState: PodState, delegate: PodCommsDelegate?) {
+        self.podState = podState
         self.delegate = delegate
     }
     
@@ -30,70 +40,59 @@ public class PodComms {
         case failure(Error)
     }
     
-    public func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, completion: @escaping (PairResults) -> Void)
+    public class func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, completion: @escaping (PairResults) -> Void)
     {
-        sessionQueue.async {
-            
-            deviceSelector { (device) in
-                guard let device = device else {
-                    completion(.failure(PodCommsError.noRileyLinkAvailable))
-                    return
-                }
+        deviceSelector { (device) in
+            guard let device = device else {
+                completion(.failure(PodCommsError.noRileyLinkAvailable))
+                return
+            }
 
-                self.sessionQueue.async {
-
-                    let semaphore = DispatchSemaphore(value: 0)
+            device.runSession(withName: "Pair Pod") { (commandSession) in
+                
+                do {
+                    try commandSession.configureRadio()
                     
-                    device.runSession(withName: "Pair Pod") { (commandSession) in
-                        
-                        self.configureDevice(device, with: commandSession)
-                        
-                        // Create random address with 20 bits.  Can we use all 24 bits?
-                        let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
-                        
-                        let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress)
-                        
-                        do {
-                            // Assign Address
-                            let assignAddress = AssignAddressCommand(address: newAddress)
-                            
-                            let response = try transport.send([assignAddress])
-                            guard let config1 = response.messageBlocks[0] as? ConfigResponse else {
-                                let responseType = response.messageBlocks[0].blockType
-                                throw PodCommsError.unexpectedResponse(response: responseType)
-                            }
-                            
-                            // Verify address is set
-                            let activationDate = Date()
-                            let dateComponents = ConfirmPairingCommand.dateComponents(date: activationDate, timeZone: timeZone)
-                            let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
-                            
-                            let response2 = try transport.send([confirmPairing])
-                            guard let config2 = response2.messageBlocks[0] as? ConfigResponse else {
-                                let responseType = response.messageBlocks[0].blockType
-                                throw PodCommsError.unexpectedResponse(response: responseType)
-                            }
-                            
-                            guard config2.pairingState == .paired else {
-                                throw PodCommsError.invalidData
-                            }
-                            let newPodState = PodState(
-                                address: newAddress,
-                                activatedAt: activationDate,
-                                timeZone: timeZone,
-                                piVersion: String(describing: config2.piVersion),
-                                pmVersion: String(describing: config2.pmVersion),
-                                lot: config2.lot,
-                                tid: config2.tid
-                            )
-                            self.delegate?.podComms(self, didChange: newPodState)
-                            completion(.success(podState: newPodState))
-                        } catch let error {
-                            completion(.failure(error))
-                        }
-                        semaphore.signal()
+                    // Create random address with 20 bits.  Can we use all 24 bits?
+                    let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
+                    
+                    let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress)
+                
+                    // Assign Address
+                    let assignAddress = AssignAddressCommand(address: newAddress)
+                    
+                    let response = try transport.send([assignAddress])
+                    guard let config1 = response.messageBlocks[0] as? ConfigResponse else {
+                        let responseType = response.messageBlocks[0].blockType
+                        throw PodCommsError.unexpectedResponse(response: responseType)
                     }
-                    semaphore.wait()
+                    
+                    // Verify address is set
+                    let activationDate = Date()
+                    let dateComponents = ConfirmPairingCommand.dateComponents(date: activationDate, timeZone: timeZone)
+                    let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
+                    
+                    let response2 = try transport.send([confirmPairing])
+                    guard let config2 = response2.messageBlocks[0] as? ConfigResponse else {
+                        let responseType = response.messageBlocks[0].blockType
+                        throw PodCommsError.unexpectedResponse(response: responseType)
+                    }
+                    
+                    guard config2.pairingState == .paired else {
+                        throw PodCommsError.invalidData
+                    }
+                    let newPodState = PodState(
+                        address: newAddress,
+                        activatedAt: activationDate,
+                        timeZone: timeZone,
+                        piVersion: String(describing: config2.piVersion),
+                        pmVersion: String(describing: config2.pmVersion),
+                        lot: config2.lot,
+                        tid: config2.tid
+                    )
+                    completion(.success(podState: newPodState))
+                } catch let error {
+                    completion(.failure(error))
                 }
             }
         }
@@ -105,7 +104,7 @@ public class PodComms {
     }
 
     
-    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, podState: PodState, _ block: @escaping (_ result: SessionRunResult) -> Void) {
+    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
         sessionQueue.async {
             let semaphore = DispatchSemaphore(value: 0)
             
@@ -118,8 +117,8 @@ public class PodComms {
             
                 device.runSession(withName: name) { (commandSession) in
                     self.configureDevice(device, with: commandSession)
-                    let transport = MessageTransport(session: commandSession, address: podState.address)
-                    let podSession = PodCommsSession(podState: podState, transport: transport, delegate: self)
+                    let transport = MessageTransport(session: commandSession, address: self.podState.address)
+                    let podSession = PodCommsSession(podState: self.podState, transport: transport, delegate: self)
                     block(.success(session: podSession))
                     semaphore.signal()
                 }
@@ -136,9 +135,10 @@ public class PodComms {
         }
         
         do {
-            _ = try configureRadio(session: session)
+            log.debug("configureRadio (omnipod)")
+            _ = try session.configureRadio()
         } catch let error {
-            print("configure Radio failed with error: \(error)")
+            log.error("configure Radio failed with error: %{public}@", String(describing: error))
             // Ignore the error and let the block run anyway
             return
         }
@@ -147,24 +147,25 @@ public class PodComms {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceConnectionStateDidChange, object: device)
         
-        print("************ added device to configuredDevices ******************")
+        log.debug("added device %{public}@ to configuredDevices", device.name ?? "unknown")
         configuredDevices.insert(device)
     }
     
     @objc private func deviceRadioConfigDidChange(_ note: Notification) {
-        print("************ removing device from configuredDevices ******************")
         guard let device = note.object as? RileyLinkDevice else {
             return
         }
-        
+        log.debug("removing device %{public}@ from configuredDevices", device.name ?? "unknown")
+
         NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
-        print("************ removed device from configuredDevices ******************")
         configuredDevices.remove(device)
     }
+}
+
+private extension CommandSession {
     
-    private func configureRadio(session: CommandSession) throws {
-        print("************ configureRadio(Omnipod) ******************")
+    func configureRadio() throws {
         
         //        SYNC1     |0xDF00|0x54|Sync Word, High Byte
         //        SYNC0     |0xDF01|0xC3|Sync Word, Low Byte
@@ -192,35 +193,35 @@ public class PodComms {
         //        PA_TABLE0 |0xDF2E|0x60|PA Power Setting 0
         //        VERSION   |0xDF37|0x04|Chip ID[7:0]
         
-        try session.setSoftwareEncoding(.manchester)
-        try session.setPreamble(0x6665)
-        try session.setBaseFrequency(Measurement(value: 433.91, unit: .megahertz))
-        try session.updateRegister(.pktctrl1, value: 0x20)
-        try session.updateRegister(.pktctrl0, value: 0x00)
-        try session.updateRegister(.fsctrl1, value: 0x06)
-        try session.updateRegister(.mdmcfg4, value: 0xCA)
-        try session.updateRegister(.mdmcfg3, value: 0xBC)  // 0xBB for next lower bitrate
-        try session.updateRegister(.mdmcfg2, value: 0x06)
-        try session.updateRegister(.mdmcfg1, value: 0x70)
-        try session.updateRegister(.mdmcfg0, value: 0x11)
-        try session.updateRegister(.deviatn, value: 0x44)
-        try session.updateRegister(.mcsm0, value: 0x18)
-        try session.updateRegister(.foccfg, value: 0x17)
-        try session.updateRegister(.fscal3, value: 0xE9)
-        try session.updateRegister(.fscal2, value: 0x2A)
-        try session.updateRegister(.fscal1, value: 0x00)
-        try session.updateRegister(.fscal0, value: 0x1F)
+        try setSoftwareEncoding(.manchester)
+        try setPreamble(0x6665)
+        try setBaseFrequency(Measurement(value: 433.91, unit: .megahertz))
+        try updateRegister(.pktctrl1, value: 0x20)
+        try updateRegister(.pktctrl0, value: 0x00)
+        try updateRegister(.fsctrl1, value: 0x06)
+        try updateRegister(.mdmcfg4, value: 0xCA)
+        try updateRegister(.mdmcfg3, value: 0xBC)  // 0xBB for next lower bitrate
+        try updateRegister(.mdmcfg2, value: 0x06)
+        try updateRegister(.mdmcfg1, value: 0x70)
+        try updateRegister(.mdmcfg0, value: 0x11)
+        try updateRegister(.deviatn, value: 0x44)
+        try updateRegister(.mcsm0, value: 0x18)
+        try updateRegister(.foccfg, value: 0x17)
+        try updateRegister(.fscal3, value: 0xE9)
+        try updateRegister(.fscal2, value: 0x2A)
+        try updateRegister(.fscal1, value: 0x00)
+        try updateRegister(.fscal0, value: 0x1F)
         
-        try session.updateRegister(.test1, value: 0x31)
-        try session.updateRegister(.test0, value: 0x09)
-        try session.updateRegister(.paTable0, value: 0x84)
-        try session.updateRegister(.sync1, value: 0xA5)
-        try session.updateRegister(.sync0, value: 0x5A)
+        try updateRegister(.test1, value: 0x31)
+        try updateRegister(.test0, value: 0x09)
+        try updateRegister(.paTable0, value: 0x84)
+        try updateRegister(.sync1, value: 0xA5)
+        try updateRegister(.sync0, value: 0x5A)
     }
 }
 
 extension PodComms: PodCommsSessionDelegate {
     public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
-        self.delegate?.podComms(self, didChange: state)
+        self.podState = state
     }
 }

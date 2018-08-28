@@ -61,6 +61,18 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         super.viewWillAppear(animated)
     }
     
+    // MARK: - Formatters
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .medium
+        dateFormatter.doesRelativeDateFormatting = true
+        //dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE 'at' hm", options: 0, locale: nil)
+        return dateFormatter
+    }()
+
+    
     // MARK: - Data Source
     
     private enum Section: Int {
@@ -73,10 +85,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private enum InfoRow: Int {
-        case pumpID = 0
-        case pumpModel
+        case activatedAt = 0
+        case expiresAt
+        case podAddress
+        case podLot
+        case piVersion
+        case pmVersion
         
-        static let count = 2
+        static let count = 6
     }
     
     private enum SettingsRow: Int {
@@ -130,15 +146,35 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             switch InfoRow(rawValue: indexPath.row)! {
-            case .pumpID:
+            case .activatedAt:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = NSLocalizedString("Pod Address", comment: "The title text for the address assigned to the pod")
+                cell.textLabel?.text = NSLocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
+                cell.setDetailAge(-pumpManager.state.podState.activatedAt.timeIntervalSinceNow)
+                return cell
+            case .expiresAt:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = NSLocalizedString("Expires", comment: "The title of the cell showing the pod expiration")
+                cell.setDetailDate(pumpManager.state.podState.expiresAt, formatter: dateFormatter)
+                return cell
+            case .podAddress:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = NSLocalizedString("Assigned Address", comment: "The title text for the address assigned to the pod")
                 cell.detailTextLabel?.text = String(format:"0x%04X", pumpManager.state.podState.address)
                 return cell
-            case .pumpModel:
+            case .podLot:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = NSLocalizedString("Pod Lot", comment: "The title of the cell showing the pod lot id")
-                cell.detailTextLabel?.text = String(format:"0x%04X", pumpManager.state.podState.lot)
+                cell.textLabel?.text = NSLocalizedString("Lot", comment: "The title of the cell showing the pod lot id")
+                cell.detailTextLabel?.text = String(format:"L%d", pumpManager.state.podState.lot)
+                return cell
+            case .piVersion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = NSLocalizedString("PI Version", comment: "The title of the cell showing the pod pi version")
+                cell.detailTextLabel?.text = pumpManager.state.podState.piVersion
+                return cell
+            case .pmVersion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = NSLocalizedString("PM Version", comment: "The title of the cell showing the pod pm version")
+                cell.detailTextLabel?.text = pumpManager.state.podState.pmVersion
                 return cell
             }
         case .settings:
@@ -166,7 +202,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .delete:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             
-            cell.textLabel?.text = NSLocalizedString("Delete Pump", comment: "Title text for the button to remove a pump from Loop")
+            cell.textLabel?.text = NSLocalizedString("Shutdown Pod", comment: "Title text for the button to remove a pod from Loop")
             cell.textLabel?.textAlignment = .center
             cell.tintColor = .deleteColor
             cell.isEnabled = true
@@ -265,17 +301,16 @@ extension OmnipodSettingsViewController: RadioSelectionTableViewControllerDelega
     }
 }
 
-
 private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: NSLocalizedString("Are you sure you want to delete this pump?", comment: "Confirmation message for deleting a pump"),
+            message: NSLocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
             preferredStyle: .actionSheet
         )
         
         addAction(UIAlertAction(
-            title: NSLocalizedString("Delete Pump", comment: "Button title to delete pump"),
+            title: NSLocalizedString("Shutdown Pod", comment: "Button title to shutdown pod"),
             style: .destructive,
             handler: { (_) in
                 handler()
@@ -286,3 +321,35 @@ private extension UIAlertController {
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
     }
 }
+
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .full
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+        
+        return formatter.string(from: self)
+    }
+}
+
+
+private extension UITableViewCell {
+    func setDetailDate(_ date: Date?, formatter: DateFormatter) {
+        if let date = date {
+            detailTextLabel?.text = formatter.string(from: date)
+        } else {
+            detailTextLabel?.text = "-"
+        }
+    }
+    
+    func setDetailAge(_ age: TimeInterval?) {
+        if let age = age {
+            detailTextLabel?.text = age.format(using: [.day, .hour, .minute])
+        } else {
+            detailTextLabel?.text = ""
+        }
+    }
+}
+

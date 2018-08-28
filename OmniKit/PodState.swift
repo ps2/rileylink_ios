@@ -19,7 +19,10 @@ public struct PodState: RawRepresentable, Equatable {
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
-
+    
+    public var expiresAt: Date {
+        return activatedAt + .days(3)
+    }
     
     public init(address: UInt32, activatedAt: Date, timeZone: TimeZone, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address

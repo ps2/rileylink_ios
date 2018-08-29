@@ -121,9 +121,9 @@ public class PodCommsSession {
         podState.advanceToNextNonce()
     }
     
-    public func cancelTempBasal() throws {
+    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType:CancelDeliveryCommand.BeepType) throws {
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .tempBasal)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
         
         let _: StatusResponse = try send([cancelDelivery])
         
@@ -131,8 +131,10 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
-        //try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
-        try bolus(units: 1)
+        //try setTempBasal(rate: 2.5, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
+        //try cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+        //try bolus(units: 20)
+        //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
     }
     
     public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws {
@@ -198,7 +200,7 @@ public class PodCommsSession {
     
     public func changePod() throws {
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, cancelType: .suspend)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .beeepBeeep)
         let _: StatusResponse = try send([cancelDelivery])
         podState.advanceToNextNonce()
 

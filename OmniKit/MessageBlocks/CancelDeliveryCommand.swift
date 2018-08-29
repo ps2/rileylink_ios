@@ -26,17 +26,33 @@ public struct CancelDeliveryCommand : MessageBlock {
         }
     }
     
-    public enum CancelType {
-        case normal
-        case suspend
+    public struct BeepType: OptionSet {
+        public let rawValue: UInt8
         
-        var rawValue: UInt8 {
-            switch self {
-            case .normal:
-                return 0x6
-            case .suspend:
-                return 0x0
-            }
+        static let noBeep = BeepType(rawValue: 0)
+        static let beepBeepBeepBeep = BeepType(rawValue: 1)
+        static let bipBeepBipBeepBipBeepBipBeep = BeepType(rawValue: 2)
+        static let bipBip = BeepType(rawValue: 3)
+        static let beep = BeepType(rawValue: 4)
+        static let beepBeepBeep = BeepType(rawValue: 5)
+        static let beeeeeep = BeepType(rawValue: 6)
+        static let bipBipBipbipBipBip = BeepType(rawValue: 7)
+        static let beeepBeeep = BeepType(rawValue: 8)
+        
+        static let all: BeepType = [
+            .noBeep,
+            .beepBeepBeepBeep,
+            .bipBeepBipBeepBipBeepBipBeep,
+            .bipBip,
+            .beep,
+            .beepBeepBeep,
+            .beeeeeep,
+            .bipBipBipbipBipBip,
+            .beeepBeeep
+        ]
+        
+        public init(rawValue: UInt8) {
+            self.rawValue = rawValue
         }
     }
     
@@ -61,7 +77,7 @@ public struct CancelDeliveryCommand : MessageBlock {
     
     public let deliveryType: DeliveryType
     
-    public let cancelType: CancelType
+    public let beepType: BeepType
     
     let nonce: UInt32
     
@@ -71,7 +87,7 @@ public struct CancelDeliveryCommand : MessageBlock {
             5,
             ])
         data.appendBigEndian(nonce)
-        data.append((cancelType.rawValue << 4) + deliveryType.rawValue)
+        data.append((beepType.rawValue << 4) + deliveryType.rawValue)
         return data
     }
     
@@ -81,14 +97,12 @@ public struct CancelDeliveryCommand : MessageBlock {
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
         self.deliveryType = DeliveryType(rawValue: encodedData[6] & 0xf)
-        
-        let unknownHighBits = encodedData[6] >> 4
-        cancelType = unknownHighBits == 0 ? .suspend : .normal
+        self.beepType = BeepType(rawValue: encodedData[6] >> 4)
     }
     
-    public init(nonce: UInt32, deliveryType: DeliveryType, cancelType: CancelType = .normal) {
+    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: BeepType) {
         self.nonce = nonce
         self.deliveryType = deliveryType
-        self.cancelType = cancelType
+        self.beepType = beepType
     }
 }

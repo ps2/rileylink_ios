@@ -313,9 +313,8 @@ public class OmnipodPairingViewController: UIViewController, IdentifiableClass {
             case .success(let session):
                 do {
                     // TODO: Need to get schedule from PumpManagerDelegate
-                    let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, duration: .hours(24))])
                     let scheduleOffset = podState.timeZone.scheduleOffset(forDate: Date())
-                    try session.insertCannula(basalSchedule: schedule, scheduleOffset: scheduleOffset)
+                    try session.insertCannula(basalSchedule: temporaryBasalSchedule, scheduleOffset: scheduleOffset)
                     DispatchQueue.main.async {
                         self.interactionState = .checkInfusionSite
                     }

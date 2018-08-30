@@ -13,6 +13,11 @@ import LoopKit
 import LoopKitUI
 import OmniKit
 
+// TEMPORARY solution to providing basal schedule; will eventually provided by PumpManagerDelegate
+// Used during pairing, and during timezone change.
+let temporaryBasalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, duration: .hours(24))])
+
+
 extension OmnipodPumpManager: PumpManagerUI {
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()

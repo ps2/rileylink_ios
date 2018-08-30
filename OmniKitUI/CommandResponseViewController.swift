@@ -22,9 +22,8 @@ extension CommandResponseViewController {
                 let response: String
                 switch result {
                 case .success(let session):
-                    let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, duration: .hours(24))])
                     do {
-                        try session.setTime(basalSchedule: schedule, timeZone: .currentFixed, date: Date())
+                        try session.setTime(basalSchedule: temporaryBasalSchedule, timeZone: .currentFixed, date: Date())
                         response = self.successText
                     } catch let error {
                         response = String(describing: error)

@@ -10,16 +10,33 @@ import Foundation
 
 public struct StatusResponse : MessageBlock {
     
-    public enum DeliveryStatus: UInt8 {
+    public enum DeliveryStatus: UInt8, CustomStringConvertible {
         case deliveryInterrupted = 0
-        case basalRunning = 1
+        case normal = 1
         case tempBasalRunning = 2
-        case purging = 4
+        case priming = 4
         case bolusInProgress = 5
         case bolusAndTempBasal = 6
+        
+        public var description: String {
+            switch self {
+            case .deliveryInterrupted:
+                return LocalizedString("Interrupted", comment: "Delivery status when delivery is interrupted")
+            case .normal:
+                return LocalizedString("Normal", comment: "Delivery status when basal is running")
+            case .tempBasalRunning:
+                return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
+            case .priming:
+                return LocalizedString("Priming", comment: "Delivery status when pod is priming")
+            case .bolusInProgress:
+                return LocalizedString("Bolusing", comment: "Delivery status when bolusing")
+            case .bolusAndTempBasal:
+                return LocalizedString("Bolusing with temp basal", comment: "Delivery status when bolusing and temp basal is running")
+            }
+        }
     }
     
-    public enum ReservoirStatus: UInt8 {
+    public enum ReservoirStatus: UInt8, CustomStringConvertible {
         case pairingSuccess = 3
         case priming = 4
         case readyForInjection = 5
@@ -29,7 +46,32 @@ public struct StatusResponse : MessageBlock {
         case belowFiftyUnits = 9
         case delayedPrime = 14 // Saw this after delaying prime for a day
         case inactive = 15
+
+        public var description: String {
+            switch self {
+            case .pairingSuccess:
+                return LocalizedString("Paired", comment: "Pod status after pairing")
+            case .priming:
+                return LocalizedString("Priming", comment: "Pod status when priming")
+            case .readyForInjection:
+                return LocalizedString("Ready to insert cannula", comment: "Pod status when ready for cannula insertion")
+            case .injectionStarted:
+                return LocalizedString("Cannula inserting", comment: "Pod status when inserting cannula")
+            case .injectionDone:
+                return LocalizedString("Cannula inserted", comment: "Pod status when cannula insertion finished")
+            case .aboveFiftyUnits:
+                return LocalizedString("Normal", comment: "Pod status when running above fifty units")
+            case .belowFiftyUnits:
+                return LocalizedString("Below 50 units", comment: "Pod status when running below fifty units")
+            case .delayedPrime:
+                return LocalizedString("Prime not completed", comment: "Pod status when prime has not completed")
+            case .inactive:
+                return LocalizedString("Deactivated", comment: "Pod status when pod has been deactivated")
+            }
+        }
     }
+    
+    public static var maximumReservoirReading: Double = 50.0
     
     public enum PodAlarm: UInt8 {
         case podExpired      = 0b10000000
@@ -48,7 +90,7 @@ public struct StatusResponse : MessageBlock {
         }
     }
     
-    public struct PodAlarmState: RawRepresentable, Collection {
+    public struct PodAlarmState: RawRepresentable, Collection, CustomStringConvertible {
         
         public typealias RawValue = UInt8
         public typealias Index = Int
@@ -76,7 +118,15 @@ public struct StatusResponse : MessageBlock {
             return i+1
         }
         
-
+        public var description: String {
+            if elements.count == 0 {
+                return LocalizedString("No alarms", comment: "Pod alarm state when no alarms are activated")
+            } else {
+                let alarmDescriptions = elements.map { String(describing: $0) }
+                return alarmDescriptions.joined(separator: ", ")
+            }
+        }
+        
     }
 
     public let blockType: MessageBlockType = .statusResponse

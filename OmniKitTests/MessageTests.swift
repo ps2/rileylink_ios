@@ -35,7 +35,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(50, statusResponse.reservoirLevel)
             XCTAssertEqual(TimeInterval(minutes: 4261), statusResponse.timeActive)
 
-            XCTAssertEqual(.basalRunning, statusResponse.deliveryStatus)
+            XCTAssertEqual(.normal, statusResponse.deliveryStatus)
             XCTAssertEqual(.aboveFiftyUnits, statusResponse.reservoirStatus)
             XCTAssertEqual(6.3, statusResponse.insulin, accuracy: 0.01)
             XCTAssertEqual(0, statusResponse.insulinNotDelivered)

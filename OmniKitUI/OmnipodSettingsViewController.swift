@@ -15,6 +15,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
     let pumpManager: OmnipodPumpManager
     
+    var statusError: Error?
+    
+    var podStatus: StatusResponse?
+    
     init(pumpManager: OmnipodPumpManager) {
         self.pumpManager = pumpManager
         super.init(rileyLinkPumpManager: pumpManager, devicesSectionIndex: Section.rileyLinks.rawValue, style: .grouped)
@@ -48,6 +52,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
         tableView.tableHeaderView?.backgroundColor = UIColor.white
+        
+        updateStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +65,25 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         }
         
         super.viewWillAppear(animated)
+    }
+    
+    private func updateStatus() {
+        let deviceSelector = pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
+        pumpManager.podComms.runSession(withName: "Update Status", using: deviceSelector) { (result) in
+            do {
+                switch result {
+                case .success(let session):
+                    self.podStatus = try session.getStatus()
+                case.failure(let error):
+                    throw error
+                }
+            } catch let error {
+                self.statusError = error
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadSections([Section.status.rawValue], with: .none)
+            }
+        }
     }
     
     // MARK: - Formatters
@@ -77,7 +102,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum Section: Int {
         case info = 0
-        case settings
+        case configuration
+        case status
         case rileyLinks
         case deactivate
         
@@ -95,11 +121,22 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         static let count = 6
     }
     
-    private enum SettingsRow: Int {
+    private enum ConfigurationRow: Int {
         case timeZoneOffset = 0
         case testCommand
         
         static let count = 2
+    }
+    
+    fileprivate enum StatusRow: Int {
+        case deliveryStatus = 0
+        case podStatus
+        case alarms
+        case reservoirLevel
+        case deliveredInsulin
+        case insulinNotDelivered
+        
+        static let count = 6
     }
     
     // MARK: UITableViewDataSource
@@ -112,8 +149,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .info:
             return InfoRow.count
-        case .settings:
-            return SettingsRow.count
+        case .configuration:
+            return ConfigurationRow.count
+        case .status:
+            return StatusRow.count
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
         case .deactivate:
@@ -124,9 +163,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .info:
-            return nil
-        case .settings:
+            return NSLocalizedString("Device Information", comment: "The title of the device information section in settings")
+        case .configuration:
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
+        case .status:
+            return NSLocalizedString("Status", comment: "The title of the status section in settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
         case .deactivate:
@@ -138,7 +179,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .deactivate:
+        case .info, .configuration, .status, .deactivate:
             return nil
         }
     }
@@ -178,10 +219,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.detailTextLabel?.text = pumpManager.state.podState.pmVersion
                 return cell
             }
-        case .settings:
+        case .configuration:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             
-            switch SettingsRow(rawValue: indexPath.row)! {
+            switch ConfigurationRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
                 cell.textLabel?.text = NSLocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone")
                 
@@ -200,6 +241,25 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             
             cell.accessoryType = .disclosureIndicator
             return cell
+        case .status:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            
+            switch StatusRow(rawValue: indexPath.row)! {
+            case .deliveryStatus:
+                cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivery status")
+            case .podStatus:
+                cell.textLabel?.text = NSLocalizedString("Pod Status", comment: "The title of the cell showing pod status")
+            case .alarms:
+                cell.textLabel?.text = NSLocalizedString("Alarms", comment: "The title of the cell showing alarm status")
+            case .reservoirLevel:
+                cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title of the cell showing reservoir status")
+            case .deliveredInsulin:
+                cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivered insulin")
+            case .insulinNotDelivered:
+                cell.textLabel?.text = NSLocalizedString("Insulin Not Delivered", comment: "The title of the cell showing insulin not delivered")
+            }
+            cell.setStatusDetail(podStatus: podStatus, statusRow: StatusRow(rawValue: indexPath.row)!)
+            return cell
         case .rileyLinks:
             return super.tableView(tableView, cellForRowAt: indexPath)
         case .deactivate:
@@ -215,9 +275,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
-        case .info:
+        case .info, .status:
             return false
-        case .settings, .rileyLinks, .deactivate:
+        case .configuration, .rileyLinks, .deactivate:
             return true
         }
     }
@@ -226,10 +286,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let sender = tableView.cellForRow(at: indexPath)
         
         switch Section(rawValue: indexPath.section)! {
-        case .info:
+        case .info, .status:
             break
-        case .settings:
-            switch SettingsRow(rawValue: indexPath.row)! {
+        case .configuration:
+            switch ConfigurationRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
                 let vc = CommandResponseViewController.changeTime(podComms: pumpManager.podComms, rileyLinkDeviceProvider: pumpManager.rileyLinkDeviceProvider)
                 vc.title = sender?.textLabel?.text
@@ -240,20 +300,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 show(vc, sender: indexPath)
             }
         case .rileyLinks:
-            break
-//            let device = devicesDataSource.devices[indexPath.row]
-//
-//            pumpManager.getStateForDevice(device) { (deviceState, pumpOps) in
-//                DispatchQueue.main.async {
-//                    let vc = RileyLinkMinimedDeviceTableViewController(
-//                        device: device,
-//                        deviceState: deviceState,
-//                        pumpOps: pumpOps
-//                    )
-//
-//                    self.show(vc, sender: sender)
-//                }
-//            }
+            let device = devicesDataSource.devices[indexPath.row]
+            let vc = RileyLinkDeviceTableViewController(device: device)
+            self.show(vc, sender: sender)
         case .deactivate:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
@@ -268,10 +317,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
-        case .info:
+        case .info, .status:
             break
-        case .settings:
-            switch SettingsRow(rawValue: indexPath.row)! {
+        case .configuration:
+            switch ConfigurationRow(rawValue: indexPath.row)! {
             case .timeZoneOffset, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
@@ -293,8 +342,8 @@ extension OmnipodSettingsViewController: RadioSelectionTableViewControllerDelega
         }
         
         switch Section(rawValue: indexPath.section)! {
-        case .settings:
-            switch SettingsRow(rawValue: indexPath.row)! {
+        case .configuration:
+            switch ConfigurationRow(rawValue: indexPath.row)! {
             default:
                 assertionFailure()
             }
@@ -356,5 +405,47 @@ private extension UITableViewCell {
             detailTextLabel?.text = ""
         }
     }
+    
+    private var insulinFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        
+        return formatter
+    }
+    
+    func setStatusDetail(podStatus: StatusResponse?, statusRow: OmnipodSettingsViewController.StatusRow) {
+        if let podStatus = podStatus {
+            switch statusRow {
+            case .deliveryStatus:
+                detailTextLabel?.text = String(describing: podStatus.deliveryStatus)
+            case .podStatus:
+                detailTextLabel?.text = String(describing: podStatus.reservoirStatus)
+            case .alarms:
+                detailTextLabel?.text = String(describing: podStatus.alarms)
+            case .reservoirLevel:
+                if podStatus.reservoirLevel == StatusResponse.maximumReservoirReading {
+                    if let units = insulinFormatter.string(from: StatusResponse.maximumReservoirReading) {
+                        detailTextLabel?.text = String(format: LocalizedString(">= %@U", comment: "Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount)"), units)
+                    }
+                } else {
+                    if let units = insulinFormatter.string(from: podStatus.reservoirLevel) {
+                        detailTextLabel?.text = String(format: LocalizedString("%@U", comment: "Format string for insulin remaining in reservoir. (1: The localized amount)"), units)
+                    }
+                }
+            case .deliveredInsulin:
+                if let units = insulinFormatter.string(from: podStatus.insulin) {
+                    detailTextLabel?.text = String(format: LocalizedString("%@U", comment: "Format string for delivered insulin. (1: The localized amount)"), units)
+                }
+            case .insulinNotDelivered:
+                if let units = insulinFormatter.string(from: podStatus.insulinNotDelivered) {
+                    detailTextLabel?.text = String(format: LocalizedString("%@U", comment: "Format string for insulin not delivered. (1: The localized amount)"), units)
+                }
+            }
+        } else {
+            detailTextLabel?.text = ""
+        }
+    }
+
 }
 

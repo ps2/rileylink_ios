@@ -431,6 +431,8 @@
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
+		C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
+		C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
 		C1E163D52135EC0100EB89AE /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
@@ -3565,6 +3567,7 @@
 				C1FFAFC1213323E900C50C1D /* Notification.swift in Sources */,
 				C1FFAFC0213323E900C50C1D /* CRC8.swift in Sources */,
 				C1FFAFCB213323E900C50C1D /* BasalScheduleExtraCommand.swift in Sources */,
+				C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */,
 				C1FFAFBF213323E900C50C1D /* BasalSchedule.swift in Sources */,
 				C1FFAFC9213323E900C50C1D /* StatusResponse.swift in Sources */,
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
@@ -3597,6 +3600,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1FFB01B21332DD900C50C1D /* TimeZone.swift in Sources */,
+				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
 				C1FFB02121343E6D00C50C1D /* TimeInterval.swift in Sources */,
 				C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */,
 				C1FFB0122133242C00C50C1D /* OmnipodPairingViewController.swift in Sources */,

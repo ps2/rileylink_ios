@@ -711,15 +711,6 @@ extension PumpOpsSession {
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     public func changeWatchdogMarriageProfile(_ watchdogID: Data) throws {
-        try setRXFilterMode(.wide)
-        defer {
-            do {
-                try configureRadio(for: settings.pumpRegion)
-            } catch {
-                // Best effort resetting radio filter mode
-            }
-        }
-
         let commandTimeout = TimeInterval(seconds: 30)
 
         // Wait for the pump to start polling

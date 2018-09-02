@@ -954,8 +954,11 @@ extension PumpOpsSession {
 
             do {
                 pageData = try getHistoryPage(pageNum)
-            } catch PumpOpsError.pumpError {
-                break pages
+            } catch PumpCommandError.arguments(let error) {
+                if case PumpOpsError.pumpError(.pageDoesNotExist) = error {
+                    return (events, pumpModel)
+                }
+                throw PumpCommandError.arguments(error)
             }
             
             var idx = 0

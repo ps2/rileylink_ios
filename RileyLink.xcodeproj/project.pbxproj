@@ -270,10 +270,6 @@
 		7D23674D21252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674B21252A5E0028B67D /* InfoPlist.strings */; };
 		7D23675021252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674E21252A5E0028B67D /* InfoPlist.strings */; };
 		7D23675321252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23675121252A5E0028B67D /* InfoPlist.strings */; };
-		7D23676121252A9D0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674821252A5E0028B67D /* InfoPlist.strings */; };
-		7D23676721252A9D0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674521252A5E0028B67D /* InfoPlist.strings */; };
-		7D23676921252A9D0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674B21252A5E0028B67D /* InfoPlist.strings */; };
-		7D23676B21252A9D0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23675121252A5E0028B67D /* InfoPlist.strings */; };
 		7D23679421252EBC0028B67D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23679221252EBC0028B67D /* Localizable.strings */; };
 		7D23679721252EBC0028B67D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23679521252EBC0028B67D /* Localizable.strings */; };
 		7D70766D1FE092D4004AC8EA /* LoopKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D70766F1FE092D4004AC8EA /* LoopKit.strings */; };
@@ -2505,7 +2501,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D23674A21252A5E0028B67D /* InfoPlist.strings in Resources */,
-				7D23676121252A9D0028B67D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2532,7 +2527,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D23674721252A5E0028B67D /* InfoPlist.strings in Resources */,
-				7D23676721252A9D0028B67D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2569,7 +2563,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D23674D21252A5E0028B67D /* InfoPlist.strings in Resources */,
-				7D23676921252A9D0028B67D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2606,7 +2599,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D23675321252A5E0028B67D /* InfoPlist.strings in Resources */,
-				7D23676B21252A9D0028B67D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3666,7 +3658,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3705,7 +3697,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;

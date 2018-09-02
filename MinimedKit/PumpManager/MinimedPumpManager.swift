@@ -15,14 +15,14 @@ import os.log
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public static let managerIdentifier: String = "Minimed500"
 
-    public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
+    public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
 
         super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
 
         // Pump communication
         let idleListeningEnabled = state.pumpModel.hasMySentry
-        self.pumpOps = PumpOps(pumpSettings: state.pumpSettings, pumpState: state.pumpState, delegate: self)
+        self.pumpOps = pumpOps ?? PumpOps(pumpSettings: state.pumpSettings, pumpState: state.pumpState, delegate: self)
 
         self.rileyLinkDeviceProvider.idleListeningState = idleListeningEnabled ? MinimedPumpManagerState.idleListeningEnabledDefaults : .disabled
     }

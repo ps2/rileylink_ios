@@ -99,7 +99,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
         return MinimedPumpManager(
             state: pumpManagerState,
             rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
-            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager)
+            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager,
+            pumpOps: self.pumpOps)
     }
 
     // MARK: -
@@ -182,7 +183,6 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 footerView.primaryButton.setConnectTitle()
                 lastError = nil
             case .completed:
-                pumpOps = nil
                 pumpIDTextField.isEnabled = true
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true

@@ -23,7 +23,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
             tableView.register(RileyLinkDevicesHeaderView.self, forHeaderFooterViewReuseIdentifier: RileyLinkDevicesHeaderView.className)
 
             // Register for manager notifications
-            NotificationCenter.default.addObserver(self, selector: #selector(reloadDevices), name: .ManagerDevicesDidChange, object: rileyLinkPumpManager.rileyLinkManager)
+            NotificationCenter.default.addObserver(self, selector: #selector(reloadDevices), name: .ManagerDevicesDidChange, object: rileyLinkPumpManager.rileyLinkDeviceProvider)
 
             // Register for device notifications
             for name in [.DeviceConnectionStateDidChange, .DeviceRSSIDidChange, .DeviceNameDidChange] as [Notification.Name] {
@@ -54,7 +54,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
 
     public var isScanningEnabled: Bool = false {
         didSet {
-            rileyLinkPumpManager.rileyLinkManager.setScanningEnabled(isScanningEnabled)
+            rileyLinkPumpManager.rileyLinkConnectionManager?.setScanningEnabled(isScanningEnabled)
 
             if isScanningEnabled {
                 rssiFetchTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
@@ -89,8 +89,11 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
     ///
     /// - Parameter device: The peripheral
     /// - Returns: The adjusted connection state
-    private func preferenceStateForDevice(_ device: RileyLinkDevice) -> CBPeripheralState {
-        let isAutoConnectDevice = self.rileyLinkPumpManager.rileyLinkPumpManagerState.connectedPeripheralIDs.contains(device.peripheralIdentifier.uuidString)
+    private func preferenceStateForDevice(_ device: RileyLinkDevice) -> CBPeripheralState? {
+        guard let connectionManager = rileyLinkPumpManager.rileyLinkConnectionManager else {
+            return nil
+        }
+        let isAutoConnectDevice = connectionManager.shouldConnect(to: device.peripheralIdentifier.uuidString)
         var state = device.peripheralState
 
         switch state {
@@ -114,7 +117,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
     }
 
     @objc private func reloadDevices() {
-        rileyLinkPumpManager.rileyLinkManager.getDevices { (devices) in
+        rileyLinkPumpManager.rileyLinkDeviceProvider.getDevices { (devices) in
             DispatchQueue.main.async {
                 self.devices = devices
             }
@@ -169,7 +172,7 @@ extension RileyLinkDevicesTableViewDataSource: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let deviceCell = tableView.dequeueReusableCell(withIdentifier: RileyLinkDeviceTableViewCell.className) as! RileyLinkDeviceTableViewCell
         let device = devices[indexPath.row]
-
+        
         deviceCell.configureCellWithName(
             device.name,
             signal: decimalFormatter.decibleString(from: deviceRSSI[device.peripheralIdentifier]),

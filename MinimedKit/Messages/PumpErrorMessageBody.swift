@@ -13,6 +13,7 @@ public enum PumpErrorCode: UInt8, CustomStringConvertible {
     case commandRefused      = 0x08
     case maxSettingExceeded  = 0x09
     case bolusInProgress     = 0x0c
+    case pageDoesNotExist    = 0x0d
     
     public var description: String {
         switch self {
@@ -22,6 +23,8 @@ public enum PumpErrorCode: UInt8, CustomStringConvertible {
             return LocalizedString("Max setting exceeded", comment: "Pump error code describing max setting exceeded")
         case .bolusInProgress:
             return LocalizedString("Bolus in progress", comment: "Pump error code when bolus is in progress")
+        case .pageDoesNotExist:
+            return LocalizedString("History page does not exist", comment: "Pump error code when invalid history page is requested")
         }
     }
 

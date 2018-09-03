@@ -7,7 +7,7 @@
 
 import RileyLinkBLEKit
 
-extension RileyLinkDeviceManager {
+extension RileyLinkDeviceProvider {
     public func firstConnectedDevice(_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) {
         getDevices { (devices) in
             completion(devices.firstConnected)

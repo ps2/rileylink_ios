@@ -50,6 +50,16 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
             cellForRow(.version)?.detailTextLabel?.text = firmwareVersion
         }
     }
+    
+    private var uptime: TimeInterval? {
+        didSet {
+            guard isViewLoaded else {
+                return
+            }
+            
+            cellForRow(.uptime)?.setDetailAge(uptime)
+        }
+    }
 
     private var lastIdle: Date? {
         didSet {
@@ -98,6 +108,17 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
     
     @objc func updateRSSI() {
         device.readRSSI()
+    }
+    
+    func updateUptime() {
+        device.runSession(withName: "Get stats for uptime") { (session) in
+            do {
+                let statistics = try session.getRileyLinkStatistics()
+                DispatchQueue.main.async {
+                    self.uptime = statistics.uptime
+                }
+            } catch { }
+        }
     }
 
     private func updateDeviceStatus() {
@@ -165,6 +186,8 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         appeared = true
         
         updateRSSI()
+        
+        updateUptime()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -216,6 +239,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         case version
         case rssi
         case connection
+        case uptime
         case idleStatus
     }
 
@@ -289,8 +313,10 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
                 cell.detailTextLabel?.text = device.peripheralState.description
             case .rssi:
                 cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
-
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
+            case .uptime:
+                cell.textLabel?.text = NSLocalizedString("Uptime", comment: "The title of the cell showing uptime")
+                cell.setDetailAge(uptime)
             case .idleStatus:
                 cell.textLabel?.text = LocalizedString("On Idle", comment: "The title of the cell showing the last idle")
                 cell.setDetailDate(lastIdle, formatter: dateFormatter)
@@ -482,6 +508,18 @@ extension RileyLinkMinimedDeviceTableViewController: TextFieldTableViewControlle
     }
 }
 
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .full
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+        
+        return formatter.string(from: self)
+    }
+}
+
 
 private extension UITableViewCell {
     func setDetailDate(_ date: Date?, formatter: DateFormatter) {
@@ -496,6 +534,14 @@ private extension UITableViewCell {
         detailTextLabel?.text = formatter.decibleString(from: decibles) ?? "-"
     }
 
+    func setDetailAge(_ age: TimeInterval?) {
+        if let age = age {
+            detailTextLabel?.text = age.format(using: [.day, .hour, .minute])
+        } else {
+            detailTextLabel?.text = ""
+        }
+    }
+    
     func setAwakeUntil(_ awakeUntil: Date?, formatter: DateFormatter) {
         switch awakeUntil {
         case let until? where until.timeIntervalSinceNow < 0:

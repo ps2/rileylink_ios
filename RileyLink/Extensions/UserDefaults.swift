@@ -6,39 +6,37 @@
 //
 
 import Foundation
-import MinimedKit
-
+import LoopKit
+import RileyLinkKit
+import RileyLinkBLEKit
 
 extension UserDefaults {
     private enum Key: String {
-        case pumpSettings = "com.rileylink.pumpSettings"
-        case pumpState = "com.rileylink.pumpState"
+        case pumpManagerRawValue = "com.rileylink.PumpManagerRawValue"
+        case rileyLinkConnectionManagerState = "com.rileylink.RileyLinkConnectionManagerState"
     }
-
-    var pumpSettings: PumpSettings? {
+    
+    var pumpManagerRawValue: PumpManager.RawStateValue? {
         get {
-            guard let raw = dictionary(forKey: Key.pumpSettings.rawValue) else {
-                return nil
-            }
-
-            return PumpSettings(rawValue: raw)
+            return dictionary(forKey: Key.pumpManagerRawValue.rawValue)
         }
         set {
-            set(newValue?.rawValue
-                , forKey: Key.pumpSettings.rawValue)
+            set(newValue, forKey: Key.pumpManagerRawValue.rawValue)
         }
     }
-
-    var pumpState: PumpState? {
+    
+    var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
-            guard let raw = dictionary(forKey: Key.pumpState.rawValue) else {
+            guard let rawValue = dictionary(forKey: Key.rileyLinkConnectionManagerState.rawValue) else
+            {
                 return nil
             }
-
-            return PumpState(rawValue: raw)
+            return RileyLinkConnectionManagerState(rawValue: rawValue)
         }
         set {
-            set(newValue?.rawValue, forKey: Key.pumpState.rawValue)
+            set(newValue?.rawValue, forKey: Key.rileyLinkConnectionManagerState.rawValue)
         }
     }
+
 }
+

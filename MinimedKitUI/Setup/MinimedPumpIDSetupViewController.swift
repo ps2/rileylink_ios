@@ -85,7 +85,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpID: pumpID,
                 pumpModel: pumpModel,
                 pumpRegion: pumpRegion,
-                rileyLinkPumpManagerState: self.rileyLinkPumpManager.rileyLinkPumpManagerState,
+                rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone
             )
         }
@@ -96,7 +96,11 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             return nil
         }
 
-        return MinimedPumpManager(state: pumpManagerState, rileyLinkManager: rileyLinkPumpManager.rileyLinkManager)
+        return MinimedPumpManager(
+            state: pumpManagerState,
+            rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
+            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager,
+            pumpOps: self.pumpOps)
     }
 
     // MARK: -
@@ -179,7 +183,6 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 footerView.primaryButton.setConnectTitle()
                 lastError = nil
             case .completed:
-                pumpOps = nil
                 pumpIDTextField.isEnabled = true
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
@@ -233,7 +236,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         let pumpOps = PumpOps(pumpSettings: settings, pumpState: pumpState, delegate: self)
         self.pumpOps = pumpOps
-        pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkManager.firstConnectedDevice, { (session) in
+        pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice, { (session) in
             guard let session = session else {
                 DispatchQueue.main.async {
                     self.lastError = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)

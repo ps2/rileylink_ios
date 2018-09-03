@@ -25,6 +25,11 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
 
         view.backgroundColor = .white
         navigationBar.shadowImage = UIImage()
+        
+        if let pumpIDSetupVC = topViewController as? MinimedPumpIDSetupViewController, let rileyLinkPumpManager = rileyLinkPumpManager {
+            pumpIDSetupVC.rileyLinkPumpManager = rileyLinkPumpManager
+        }
+
     }
 
     private(set) var pumpManager: MinimedPumpManager?

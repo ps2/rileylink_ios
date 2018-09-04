@@ -95,7 +95,8 @@ public struct ConfigureAlertsCommand : MessageBlock {
                 let minutes = UInt16(duration.minutes)
                 data.appendBigEndian(minutes)
             }
-            data.appendBigEndian(UInt16(beepType.rawValue) << 8 + UInt16(beepRepeat))
+            data.append(UInt8(beepType.rawValue))
+            data.append(UInt8(beepRepeat))
 
             return data
         }
@@ -135,8 +136,11 @@ public struct ConfigureAlertsCommand : MessageBlock {
             } else {
                 self.expirationType = .time(TimeInterval(minutes: Double(yyyy)))
             }
-            
-            self.beepType = BeepType(rawValue: encodedData[4])!
+            let beepTypeBits = encodedData[4]
+            guard let beepType = BeepType(rawValue: beepTypeBits) else {
+                throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "beepType")
+            }
+            self.beepType = beepType
             
             self.beepRepeat = Int(encodedData[5])
  

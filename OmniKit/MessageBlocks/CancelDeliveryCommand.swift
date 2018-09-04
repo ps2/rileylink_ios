@@ -26,18 +26,6 @@ public struct CancelDeliveryCommand : MessageBlock {
         }
     }
     
-    public enum BeepType: UInt8 {
-        case noBeep = 0
-        case beepBeepBeepBeep = 1
-        case bipBeepBipBeepBipBeepBipBeep = 2
-        case bipBip = 3
-        case beep = 4
-        case beepBeepBeep = 5
-        case beeeeeep = 6
-        case bipBipBipbipBipBip = 7
-        case beeepBeeep = 8
-    }
-    
     // ID1:1f00ee84 PTYPE:PDM SEQ:26 ID2:1f00ee84 B9:ac BLEN:7 MTYPE:1f05 BODY:e1f78752078196 CRC:03
     
     // Cancel bolus
@@ -59,7 +47,7 @@ public struct CancelDeliveryCommand : MessageBlock {
     
     public let deliveryType: DeliveryType
     
-    public let beepType: BeepType
+    public let beepType: ConfigureAlertsCommand.BeepType
     
     let nonce: UInt32
     
@@ -79,10 +67,10 @@ public struct CancelDeliveryCommand : MessageBlock {
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
         self.deliveryType = DeliveryType(rawValue: encodedData[6] & 0xf)
-        self.beepType = BeepType(rawValue: encodedData[6] >> 4)!
+        self.beepType = ConfigureAlertsCommand.BeepType(rawValue: encodedData[6] >> 4)!
     }
     
-    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: BeepType) {
+    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: ConfigureAlertsCommand.BeepType) {
         self.nonce = nonce
         self.deliveryType = deliveryType
         self.beepType = beepType

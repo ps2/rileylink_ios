@@ -10,26 +10,26 @@ import Foundation
 
 public struct ConfigureAlertsCommand : MessageBlock {
     
-        // Pairing ConfigureAlerts #1
-        // 4c00 0190 0102
-        // 4c00 00c8 0102
-        // 4c00 00c8 0102
-        // 4c00 0096 0102
-        // 4c00 0064 0102
+    // Pairing ConfigureAlerts #1
+    // 4c00 0190 0102
+    // 4c00 00c8 0102
+    // 4c00 00c8 0102
+    // 4c00 0096 0102
+    // 4c00 0064 0102
     
-        // Pairing ConfigureAlerts #2
-        // 7837 0005 0802
-        // 7837 0005 0802
-        // 7837 0005 0802
-        // 7837 0005 0802
-        // 7837 0005 0802
-
-        // Pairing ConfigureAlerts #3
-        // 3800 0ff0 0302
-        // 3800 10a4 0302
-        // 3800 10a4 0302
-        // 3800 10a4 0302
-        // 3800 0ff0 0302
+    // Pairing ConfigureAlerts #2
+    // 7837 0005 0802
+    // 7837 0005 0802
+    // 7837 0005 0802
+    // 7837 0005 0802
+    // 7837 0005 0802
+    
+    // Pairing ConfigureAlerts #3
+    // 3800 0ff0 0302
+    // 3800 10a4 0302
+    // 3800 10a4 0302
+    // 3800 10a4 0302
+    // 3800 0ff0 0302
     
     public enum AlertType: UInt8 {
         case autoOff            = 0x00
@@ -46,12 +46,25 @@ public struct ConfigureAlertsCommand : MessageBlock {
         case time(TimeInterval)
     }
     
+    public enum BeepType: UInt8 {
+        case noBeep = 0
+        case beepBeepBeepBeep = 1
+        case bipBeepBipBeepBipBeepBipBeep = 2
+        case bipBip = 3
+        case beep = 4
+        case beepBeepBeep = 5
+        case beeeeeep = 6
+        case bipBipBipbipBipBip = 7
+        case beeepBeeep = 8
+    } // Reused in CancelDeliveryCommand
+    
     public struct AlertConfiguration {
         let alertType: AlertType
         let expirationType: ExpirationType
         let audible: Bool
         let duration: TimeInterval
-        let beepType: UInt16
+        let beepType: BeepType
+        let beepRepeat: Int
         let autoOffModifier: Bool
         
         static let length = 6
@@ -82,18 +95,19 @@ public struct ConfigureAlertsCommand : MessageBlock {
                 let minutes = UInt16(duration.minutes)
                 data.appendBigEndian(minutes)
             }
-            data.appendBigEndian(beepType)
-            
+            data.appendBigEndian(UInt16(beepType.rawValue) << 8 + UInt16(beepRepeat))
+
             return data
         }
         
-        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: UInt16) {
+        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: BeepType, beepRepeat: Int) {
             self.alertType = alertType
             self.audible = audible
             self.autoOffModifier = autoOffModifier
             self.duration = duration
             self.expirationType = expirationType
             self.beepType = beepType
+            self.beepRepeat = beepRepeat
         }
         
         public init(encodedData: Data) throws {
@@ -108,13 +122,13 @@ public struct ConfigureAlertsCommand : MessageBlock {
             self.alertType = alertType
             
             self.audible = encodedData[0] & 0b1000 != 0
-
+            
             self.autoOffModifier = encodedData[0] & 0b10 != 0
-
+            
             self.duration = TimeInterval(minutes: Double((Int(encodedData[0] & 0b1) << 8) + Int(encodedData[1])))
-
+            
             let yyyy = (Int(encodedData[2]) << 8) + (Int(encodedData[3])) & 0x3fff
-
+            
             if encodedData[0] & 0b100 != 0 {
                 let volume = Double(yyyy * 2) * podPulseSize
                 self.expirationType = .reservoir(volume: volume)
@@ -122,7 +136,10 @@ public struct ConfigureAlertsCommand : MessageBlock {
                 self.expirationType = .time(TimeInterval(minutes: Double(yyyy)))
             }
             
-            self.beepType = (UInt16(encodedData[4]) << 8) + UInt16(encodedData[5])
+            self.beepType = BeepType(rawValue: encodedData[4])!
+            
+            self.beepRepeat = Int(encodedData[5])
+ 
         }
     }
     

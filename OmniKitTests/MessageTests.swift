@@ -190,16 +190,16 @@ class MessageTests: XCTestCase {
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
         let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .hours(7), expirationType: .time(podSoftExpirationTime), beepType: 0x0502)
+        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .hours(7), expirationType: .time(podSoftExpirationTime), beepType: .beepBeepBeep, beepRepeat: 2)
         XCTAssertEqual("79a410df0502", alertConfig1.data.hexadecimalString)
 
         // 2800 1283 0602
         let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: 0x0602)
+        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: .beeeeeep, beepRepeat: 2)
         XCTAssertEqual("280012830602", alertConfig2.data.hexadecimalString)
 
         // 020f 0000 0202
-        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepType: 0x0202)
+        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepType: .bipBeepBipBeepBipBeepBipBeep, beepRepeat: 2)
         XCTAssertEqual("020f00000202", alertConfig3.data.hexadecimalString)
         
         let configureAlerts = ConfigureAlertsCommand(nonce: 0xfeb6268b, configurations:[alertConfig1, alertConfig2, alertConfig3])
@@ -217,7 +217,7 @@ class MessageTests: XCTestCase {
             if case ConfigureAlertsCommand.ExpirationType.time(let duration) = config1.expirationType {
                 XCTAssertEqual(podSoftExpirationTime, duration)
             }
-            XCTAssertEqual(0x0502, config1.beepType)
+            XCTAssertEqual(.beepBeepBeep, config1.beepType)
             
             let cfg = try ConfigureAlertsCommand.AlertConfiguration(encodedData: Data(hexadecimalString: "4c0000640102")!)
             XCTAssertEqual(.lowReservoir, cfg.alertType)
@@ -227,7 +227,7 @@ class MessageTests: XCTestCase {
             if case ConfigureAlertsCommand.ExpirationType.reservoir(let volume) = cfg.expirationType {
                 XCTAssertEqual(10, volume)
             }
-            XCTAssertEqual(0x0102, cfg.beepType)
+            XCTAssertEqual(.beepBeepBeepBeep, cfg.beepType)
 
 
         } catch (let error) {

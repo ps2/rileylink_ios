@@ -64,7 +64,7 @@ public struct ConfigureAlertsCommand : MessageBlock {
         let audible: Bool
         let duration: TimeInterval
         let beepType: BeepType
-        let beepRepeat: Int
+        let beepRepeat: UInt8
         let autoOffModifier: Bool
         
         static let length = 6
@@ -95,13 +95,13 @@ public struct ConfigureAlertsCommand : MessageBlock {
                 let minutes = UInt16(duration.minutes)
                 data.appendBigEndian(minutes)
             }
-            data.append(UInt8(beepType.rawValue))
-            data.append(UInt8(beepRepeat))
+            data.append(beepType.rawValue)
+            data.append(beepRepeat)
 
             return data
         }
         
-        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: BeepType, beepRepeat: Int) {
+        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: BeepType, beepRepeat: UInt8) {
             self.alertType = alertType
             self.audible = audible
             self.autoOffModifier = autoOffModifier
@@ -142,7 +142,7 @@ public struct ConfigureAlertsCommand : MessageBlock {
             }
             self.beepType = beepType
             
-            self.beepRepeat = Int(encodedData[5])
+            self.beepRepeat = encodedData[5]
  
         }
     }

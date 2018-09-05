@@ -136,9 +136,10 @@ public struct ConfigureAlertsCommand : MessageBlock {
             } else {
                 self.expirationType = .time(TimeInterval(minutes: Double(yyyy)))
             }
+            
             let beepTypeBits = encodedData[4]
             guard let beepType = BeepType(rawValue: beepTypeBits) else {
-                throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "beepType")
+                throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "BeepType")
             }
             self.beepType = beepType
             

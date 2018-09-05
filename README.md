@@ -27,7 +27,8 @@ You can also add your test as a unit test if there is no similiar test written y
 https://github.com/ps2/rileylink_ios/tree/omnikit/OmniKitTests
 
 #### PR new communication commands or refactored code
-And create a new [PR](https://help.github.com/articles/creating-a-pull-request-from-a-fork/) to the omnikit branch if you have created a new part in the communication commands.
+Always run all Omnikit tests before making a PR request and also solve any errors which the travis build can find.
+Create a new [PR](https://help.github.com/articles/creating-a-pull-request-from-a-fork/) to the omnikit branch if you have created a new part in the communication commands.
 
 
 **WARNING the PODs used will fail rapidly, so testing will require a lot of PODs.**

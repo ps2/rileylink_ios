@@ -89,6 +89,37 @@ class TempBasalTests: XCTestCase {
         let cmd = SetInsulinScheduleCommand(nonce: 0x87e8d03a, tempBasalRate: 2, duration: .hours(1.5))
         XCTAssertEqual("1a0e87e8d03a0100cb03384000142014", cmd.data.hexadecimalString)
     }
+
+    func testCancelTempBasalCommand() {
+        do {
+            // Decode 1f 05 f76d34c4 62
+            let cmd = try CancelDeliveryCommand(encodedData: Data(hexadecimalString: "1f05f76d34c462")!)
+            XCTAssertEqual(0xf76d34c4, cmd.nonce)
+            XCTAssertEqual(.beeeeeep, cmd.beepType)
+            XCTAssertEqual(.tempBasal, cmd.deliveryType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = CancelDeliveryCommand(nonce: 0xf76d34c4, deliveryType: .tempBasal, beepType: .beeeeeep)
+        XCTAssertEqual("1f05f76d34c462", cmd.data.hexadecimalString)
+    }
+    
+    func testCancelTempBasalnoBeepCommand() {
+        do {
+            let cmd = try CancelDeliveryCommand(encodedData: Data(hexadecimalString: "1f05f76d34c402")!)
+            XCTAssertEqual(0xf76d34c4, cmd.nonce)
+            XCTAssertEqual(.noBeep, cmd.beepType)
+            XCTAssertEqual(.tempBasal, cmd.deliveryType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = CancelDeliveryCommand(nonce: 0xf76d34c4, deliveryType: .tempBasal, beepType: .noBeep)
+        XCTAssertEqual("1f05f76d34c402", cmd.data.hexadecimalString)
+    }
     
     func testTempBasalExtremeValues() {
         do {

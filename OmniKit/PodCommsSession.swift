@@ -70,14 +70,14 @@ public class PodCommsSession {
 
     public func configurePod() throws {
         //4c00 00c8 0102
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepType: 0x0102)
+        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepType: .beepBeepBeepBeep, beepRepeat: 2)
         
         let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
         let _: StatusResponse = try send([configureAlerts1])
         podState.advanceToNextNonce()
         
         //7837 0005 0802
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepType: 0x0802)
+        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepType: .beeepBeeep, beepRepeat: 2)
         let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
         let _: StatusResponse = try send([configureAlerts2])
         podState.advanceToNextNonce()
@@ -95,7 +95,7 @@ public class PodCommsSession {
     
     public func finishPrime() throws {
         // 3800 0ff0 0302
-        let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepType: 0x0302)
+        let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepType: .bipBip, beepRepeat: 2)
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
         let _: StatusResponse = try send([configureAlerts])
         podState.advanceToNextNonce()
@@ -121,9 +121,9 @@ public class PodCommsSession {
         podState.advanceToNextNonce()
     }
     
-    public func cancelTempBasal() throws {
+    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType:ConfigureAlertsCommand.BeepType) throws {
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .tempBasal)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
         
         let _: StatusResponse = try send([cancelDelivery])
         
@@ -131,8 +131,10 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
-        //try setTempBasal(rate: 1.0, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
-        try bolus(units: 1)
+        //try setTempBasal(rate: 2.5, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
+        //try cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+        //try bolus(units: 20)
+        //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
     }
     
     public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws {
@@ -159,14 +161,14 @@ public class PodCommsSession {
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
         let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepType: 0x0502)
+        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepType: .beepBeepBeep, beepRepeat: 2)
         
         // 2800 1283 0602
         let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: 0x0602)
+        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: .beeeeeep, beepRepeat: 2)
         
         // 020f 0000 0202
-        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepType: 0x0202)
+        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepType: .bipBeepBipBeepBipBeepBipBeep, beepRepeat: 2) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
 
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1, alertConfig2, alertConfig3])
 
@@ -198,7 +200,7 @@ public class PodCommsSession {
     
     public func changePod() throws {
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, cancelType: .suspend)
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .beeepBeeep)
         let _: StatusResponse = try send([cancelDelivery])
         podState.advanceToNextNonce()
 

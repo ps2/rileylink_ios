@@ -64,11 +64,10 @@ To use the Rileylink, it has to connect to a Rileylink device first. If you don'
 
 ![turn on rileylink in command section](Images/rileylink_ios_setup.PNG)
 
-#### Setup an Omnipod
+## Setup an Omnipod
 
 Click on *Setup POD*.
 Follow the same steps as with the PDM, but only push once to insert canula, else the Pod wil fail.
-
 If all went well you should see something like this:
 
 ![turn on rileylink in command section](Images/rileylink_ios_paired_omnipod.png)
@@ -76,9 +75,11 @@ If all went well you should see something like this:
 #### Test commands
 
 To start testing commands you can edit the test command setting in xCode here and issue the command after rebuilding the app on your phone and push the test command button:
+
 ![turn on rileylink in command section](Images/rileylink_ios_omnipod_status.png)
 
-#### Setup a Medtronic pump
+
+## Setup a Medtronic pump
 
 * Pump ID - Enter in your six digit pump ID
 

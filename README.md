@@ -12,7 +12,7 @@ The main purpose of the RileyLink iOS App is for developpers to test and build t
 ## How to contibute
 #### Test edge cases
 Try to test as many use cases as possible by using the test command to send the command to the Pod. 
-The test command line can be added here:
+The test command line can be inserted here. It will send the command by using the test command button in the app:
 https://github.com/ps2/rileylink_ios/blob/omnikit/OmniKit/PodCommsSession.swift#L133
 
 #### Create issues for failing test cases
@@ -50,7 +50,7 @@ git checkout omnikit // To switch the branch or do it Xcode using the branch but
 #### Install the Rileylink iOS app to your phone
 
 ##### Install Xcode
-You'll need Xcode, which is available for free, but will only build apps that last a week.  To make your apps run longer, you'll have to sign up for a developer account. Or send a message to @ps2 on gitter with your email address, and I'll add you to the distribution list and you can receive builds via testflight.
+You'll need Xcode, which is available for free, but will only build apps that last a week.  To make your apps run longer, you'll have to sign up for a developer account. Read this tutorial how to sign up: https://loopkit.github.io/loopdocs/setup/build/installing/
 
 * Connect your iphone with a usb lightning connector to your laptop
 * Select your iphone name at the top page pull down menu (it usually shows generic device)

@@ -18,6 +18,15 @@ public struct StatusResponse : MessageBlock {
         case bolusInProgress = 5
         case bolusAndTempBasal = 6
         
+        public var bolusing: Bool {
+            return self == .bolusInProgress || self == .bolusAndTempBasal
+        }
+        
+        public var tempBasalRunning: Bool {
+            return self == .tempBasalRunning || self == .bolusAndTempBasal
+        }
+
+        
         public var description: String {
             switch self {
             case .deliveryInterrupted:

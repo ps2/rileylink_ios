@@ -8,6 +8,7 @@
 
 import Foundation
 import RileyLinkBLEKit
+import LoopKit
 import os.log
 
 public protocol PodCommsDelegate: class {
@@ -100,9 +101,33 @@ public class PodComms {
     
     public enum SessionRunResult {
         case success(session: PodCommsSession)
-        case failure(Error)
+        case failure(PodCommsError)
     }
+    
+    // If handler returns false, doses will not be finalized.
+    func finalizeDoses(storageHandler: @escaping (_ dose: [NewPumpEvent]) -> Bool, completion: @escaping () -> Void) {
+        sessionQueue.async {
+            var finalizedDoses = [(dose: UnfinalizedDose, finalizer: () -> Void)]()
+            let now = Date()
+            
+            if let unfinalizedBolus = self.podState.unfinalizedBolus,
+                unfinalizedBolus.finishTime.compare(now) == .orderedAscending {
+                finalizedDoses.append((dose: unfinalizedBolus, { self.podState.unfinalizedBolus = nil }))
+            }
+            
+            if let unfinalizedTempBasal = self.podState.unfinalizedTempBasal,
+                unfinalizedTempBasal.finishTime.compare(now) == .orderedAscending {
+                finalizedDoses.append((dose: unfinalizedTempBasal, { self.podState.unfinalizedTempBasal = nil }))
+            }
 
+            if (storageHandler(finalizedDoses.map { NewPumpEvent($0.dose) })) {
+                for dose in finalizedDoses {
+                    dose.finalizer()
+                }
+            }
+            completion()
+        }
+    }
     
     public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
         sessionQueue.async {

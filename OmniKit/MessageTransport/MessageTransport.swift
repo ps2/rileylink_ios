@@ -152,7 +152,7 @@ class MessageTransport {
             log.debug("Recv: %@", String(describing: response))
             return response            
         } catch let error {
-            print("Error during communication with POD: \(error)")
+            log.error("Error during communication with POD: %@", String(describing: error))
             throw error
         }
     }

@@ -13,6 +13,7 @@ import RileyLinkBLEKit
 import os.log
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
+    
     public var pumpBatteryChargeRemaining: Double?
     
     public var pumpRecordsBasalProfileStartEvents = false
@@ -24,15 +25,97 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public func assertCurrentPumpData() {
-        return
+        queue.async {
+            let semaphore = DispatchSemaphore(value: 0)
+            let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+            self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
+                do {
+                    switch result {
+                    case .success(let session):
+                        let status = try session.getStatus()
+                        self.podStatusReceived(status: status)
+                    case .failure(let error):
+                        throw error
+                    }
+                } catch let error {
+                    self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
+                }
+                semaphore.signal()
+            }
+            semaphore.wait()
+            self.finalizeDoses {
+                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
+            }
+
+        }
     }
     
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (Double, Date) -> Void, completion: @escaping (Error?) -> Void) {
-        return
+        
+        finalizeDoses()
+        
+        let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
+            
+            let session: PodCommsSession
+            switch result {
+            case .success(let s):
+                session = s
+            case .failure(let error):
+                completion(SetBolusError.certain(error))
+                return
+            }
+            
+            let podStatus: StatusResponse
+            
+            do {
+                podStatus = try session.getStatus()
+            } catch let error {
+                completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
+                return
+            }
+            
+            guard !podStatus.deliveryStatus.bolusing else {
+                completion(SetBolusError.certain(PodCommsError.unfinalizedBolus))
+                return
+            }
+            
+            willRequest(units, Date())
+            
+            let result = session.bolus(units: units)
+            
+            switch result {
+            case .success(let status):
+                self.podStatusReceived(status: status)
+                completion(nil)
+            case .certainFailure(let error):
+                completion(SetBolusError.certain(error))
+            case .uncertainFailure(let error):
+                completion(SetBolusError.uncertain(error))
+            }
+        }
     }
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
-        return
+        finalizeDoses()
+        
+        let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
+            do {
+                switch result {
+                case .success(let session):
+                    try session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
+                    let basalStart = Date()
+                    let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
+                    completion(PumpManagerResult.success(dose))
+                case .failure(let error):
+                    self.log.error("Failed to set temp basal: %{public}@", String(describing: error))
+                    throw error
+                }
+            } catch (let error) {
+                completion(PumpManagerResult.failure(error))
+            }
+        }
     }
     
     public func updateBLEHeartbeatPreference() {
@@ -88,7 +171,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public let log = OSLog(category: "OmnipodPumpManager")
     
-    // MARK: - Pump data
     public static let localizedTitle = NSLocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
     
     public var localizedTitle: String {
@@ -99,13 +181,35 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         self.pumpManagerDelegate?.pumpManagerBLEHeartbeatDidFire(self)
     }
     
+    private func finalizeDoses(_ completion: (() -> Void)? = nil) {
+        let storageHandler = { (pumpEvents: [NewPumpEvent]) -> Bool in
+            let semaphore = DispatchSemaphore(value: 0)
+            var success = false
+            self.pumpManagerDelegate?.pumpManager(self, didReadPumpEvents: pumpEvents, completion: { (error) in
+                success = error == nil
+                semaphore.signal()
+            })
+            semaphore.wait()
+            return success
+        }
+        podComms.finalizeDoses(storageHandler: storageHandler) {
+            completion?()
+        }
+    }
+    
+    private func podStatusReceived(status: StatusResponse) {
+        pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel, at: Date()) { _ in
+            // Ignore result
+        }
+    }
+    
     // MARK: - CustomDebugStringConvertible
     
     override public var debugDescription: String {
         return [
             "## OmnipodPumpManager",
             "pumpBatteryChargeRemaining: \(String(reflecting: pumpBatteryChargeRemaining))",
-            "state: \(String(reflecting: state))",
+            "state: \(state.debugDescription)",
             "",
             "podComms: \(String(reflecting: podComms))",
             "",

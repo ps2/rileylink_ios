@@ -8,6 +8,7 @@
 
 import Foundation
 import RileyLinkBLEKit
+import LoopKit
 
 public enum PodCommsError: Error {
     case invalidData
@@ -19,9 +20,107 @@ public enum PodCommsError: Error {
     case unexpectedPacketType(packetType: PacketType)
     case unexpectedResponse(response: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
-    case noPairedPod
     case noRileyLinkAvailable
+    case unfinalizedBolus
+    case unfinalizedTempBasal
+    case commsError(error: Error)
 }
+
+extension PodCommsError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidData:
+            return nil
+        case .crcMismatch:
+            return nil
+        case .unknownPacketType:
+            return nil
+        case .noResponse:
+            return nil
+        case .emptyResponse:
+            return nil
+        case .podAckedInsteadOfReturningResponse:
+            return nil
+        case .unexpectedPacketType:
+            return nil
+        case .unexpectedResponse:
+            return nil
+        case .unknownResponseType:
+            return nil
+        case .noRileyLinkAvailable:
+            return nil
+        case .unfinalizedBolus:
+            return LocalizedString("Bolus in progress", comment: "Error message shown when bolus could not be completed due to exiting bolus in progress")
+        case .unfinalizedTempBasal:
+            return LocalizedString("Bolus in progress", comment: "Error message shown when temp basal could not be set due to exiting temp basal in progress")
+        case .commsError:
+            return nil
+        }
+    }
+    
+    public var failureReason: String? {
+        switch self {
+        case .invalidData:
+            return nil
+        case .crcMismatch:
+            return nil
+        case .unknownPacketType:
+            return nil
+        case .noResponse:
+            return nil
+        case .emptyResponse:
+            return nil
+        case .podAckedInsteadOfReturningResponse:
+            return nil
+        case .unexpectedPacketType:
+            return nil
+        case .unexpectedResponse:
+            return nil
+        case .unknownResponseType:
+            return nil
+        case .noRileyLinkAvailable:
+            return nil
+        case .unfinalizedBolus:
+            return nil
+        case .unfinalizedTempBasal:
+            return LocalizedString("Unable to issue concurrent boluses", comment: "Failure reason when bolus could not be completed due to exiting bolus in progress")
+        case .commsError:
+            return nil
+        }
+    }
+    
+    public var recoverySuggestion: String? {
+        switch self {
+        case .invalidData:
+            return nil
+        case .crcMismatch:
+            return nil
+        case .unknownPacketType:
+            return nil
+        case .noResponse:
+            return nil
+        case .emptyResponse:
+            return nil
+        case .podAckedInsteadOfReturningResponse:
+            return nil
+        case .unexpectedPacketType:
+            return nil
+        case .unexpectedResponse:
+            return nil
+        case .unknownResponseType:
+            return nil
+        case .noRileyLinkAvailable:
+            return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion")
+        case .unfinalizedBolus:
+            return LocalizedString("Wait for existing bolus to finish, or suspend to cancel", comment: "Recovery suggestion when bolus could not be completed due to exiting bolus in progress")
+        case .unfinalizedTempBasal:
+            return nil
+        case .commsError:
+            return nil
+        }
+    }
+}
+
 
 
 public protocol PodCommsSessionDelegate: class {
@@ -101,15 +200,33 @@ public class PodCommsSession {
         podState.advanceToNextNonce()
     }
     
-    public func bolus(units: Double) throws {
+    // Throws SetBolusError
+    public enum PodBolusResult {
+        case success(statusResponse: StatusResponse)
+        case certainFailure(error: PodCommsError)
+        case uncertainFailure(error: PodCommsError)
+    }
+    
+    public func bolus(units: Double) -> PodBolusResult {
         
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, multiplier: 16)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
+        guard podState.unfinalizedBolus == nil else {
+            return PodBolusResult.certainFailure(error: .unfinalizedBolus)
+        }
+        
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
-        let _: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
-        podState.advanceToNextNonce()
+        do {
+            let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
+            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain)
+            podState.advanceToNextNonce()
+            return PodBolusResult.success(statusResponse: statusResponse)
+        } catch let error {
+            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
+            return PodBolusResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+        }
     }
     
     public func setTempBasal(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {

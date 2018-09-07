@@ -320,6 +320,8 @@
 		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
+		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
+		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
@@ -1159,6 +1161,8 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
+		C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInsulinMeasurements.swift; sourceTree = "<group>"; };
+		C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		C14303151C97C98000A40450 /* PumpAckMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpAckMessageBody.swift; sourceTree = "<group>"; };
 		C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -2037,6 +2041,30 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C13BD64021403362006D7F19 /* MessageTransport */ = {
+			isa = PBXGroup;
+			children = (
+				C1FFAFA0213323E800C50C1D /* CRC8.swift */,
+				C1FFAF9E213323E700C50C1D /* CRC16.swift */,
+				C1FFAFB5213323E900C50C1D /* Packet.swift */,
+				C1FFAF9B213323E700C50C1D /* MessageTransport.swift */,
+				C1FFAF9C213323E700C50C1D /* Message.swift */,
+				C1FFAFA3213323E800C50C1D /* MessageBlocks */,
+			);
+			path = MessageTransport;
+			sourceTree = "<group>";
+		};
+		C13BD641214033B0006D7F19 /* Delivery */ = {
+			isa = PBXGroup;
+			children = (
+				C1FFAF98213323E600C50C1D /* Pod.swift */,
+				C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */,
+				C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */,
+				C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */,
+			);
+			path = Delivery;
+			sourceTree = "<group>";
+		};
 		C14FFC4D1D3D6D8E0049CF85 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -2274,19 +2302,9 @@
 		C1FFAF79213323CC00C50C1D /* OmniKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */,
-				C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */,
-				C1FFAFA0213323E800C50C1D /* CRC8.swift */,
-				C1FFAF9E213323E700C50C1D /* CRC16.swift */,
+				C13BD641214033B0006D7F19 /* Delivery */,
+				C13BD64021403362006D7F19 /* MessageTransport */,
 				C1FFAFA1213323E800C50C1D /* Extensions */,
-				C1FFAF9C213323E700C50C1D /* Message.swift */,
-				C1FFAFA3213323E800C50C1D /* MessageBlocks */,
-				C1FFAF9B213323E700C50C1D /* MessageTransport.swift */,
-				C1FFAFB5213323E900C50C1D /* Packet.swift */,
-				C1FFAF98213323E600C50C1D /* Pod.swift */,
-				C1FFAFB4213323E800C50C1D /* PodComms.swift */,
-				C1FFAF99213323E600C50C1D /* PodCommsSession.swift */,
-				C1FFAF9D213323E700C50C1D /* PodState.swift */,
 				C1FFAF95213323E600C50C1D /* PumpManager */,
 				C1FFAF7A213323CC00C50C1D /* OmniKit.h */,
 				C1FFAF7B213323CC00C50C1D /* Info.plist */,
@@ -2313,8 +2331,12 @@
 		C1FFAF95213323E600C50C1D /* PumpManager */ = {
 			isa = PBXGroup;
 			children = (
+				C1FFAFB4213323E800C50C1D /* PodComms.swift */,
+				C1FFAF99213323E600C50C1D /* PodCommsSession.swift */,
 				C1FFAF96213323E600C50C1D /* OmnipodPumpManagerState.swift */,
 				C1FFAF97213323E600C50C1D /* OmnipodPumpManager.swift */,
+				C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */,
+				C1FFAF9D213323E700C50C1D /* PodState.swift */,
 			);
 			path = PumpManager;
 			sourceTree = "<group>";
@@ -3559,6 +3581,7 @@
 				C1FFAFB6213323E900C50C1D /* OmnipodPumpManagerState.swift in Sources */,
 				C1FFAFC3213323E900C50C1D /* StatusError.swift in Sources */,
 				C1E163D72135FF9A00EB89AE /* TimeZone.swift in Sources */,
+				C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */,
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,
 				C1FFAFCD213323E900C50C1D /* SetPodTimeCommand.swift in Sources */,
@@ -3573,6 +3596,7 @@
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
 				C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */,
 				C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */,
+				C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */,
 				C1FFAFD3213323E900C50C1D /* Packet.swift in Sources */,
 				C1FFAFBC213323E900C50C1D /* Message.swift in Sources */,
 				C1FFAFCF213323E900C50C1D /* ErrorResponse.swift in Sources */,

@@ -201,7 +201,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .podAddress:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = NSLocalizedString("Assigned Address", comment: "The title text for the address assigned to the pod")
-                cell.detailTextLabel?.text = String(format:"0x%04X", pumpManager.state.podState.address)
+                cell.detailTextLabel?.text = String(format:"%04X", pumpManager.state.podState.address)
                 return cell
             case .podLot:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)

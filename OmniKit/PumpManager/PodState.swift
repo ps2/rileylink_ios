@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct PodState: RawRepresentable, Equatable {
+public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertible {
+    
     public typealias RawValue = [String: Any]
-
+    
     public let address: UInt32
     fileprivate var nonceState: NonceState
     public let activatedAt: Date
@@ -19,9 +20,16 @@ public struct PodState: RawRepresentable, Equatable {
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
+    public let lastInsulinMeasurements: PodInsulinMeasurements?
+    var unfinalizedBolus: UnfinalizedDose?
+    var unfinalizedTempBasal: UnfinalizedDose?
     
     public var expiresAt: Date {
         return activatedAt + .days(3)
+    }
+    
+    public var deliveryScheduleUncertain: Bool {
+        return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
     }
     
     public init(address: UInt32, activatedAt: Date, timeZone: TimeZone, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
@@ -33,9 +41,26 @@ public struct PodState: RawRepresentable, Equatable {
         self.pmVersion = pmVersion
         self.lot = lot
         self.tid = tid
+        self.lastInsulinMeasurements = nil
+        self.unfinalizedBolus = nil
+        self.unfinalizedTempBasal = nil
+    }
+    
+    public mutating func advanceToNextNonce() {
+        nonceState.advanceToNextNonce()
+    }
+    
+    public var currentNonce: UInt32 {
+        return nonceState.currentNonce
+    }
+    
+    public mutating func resyncNonce(syncWord: UInt16, sentNonce: UInt32, messageSequenceNum: Int) {
+        let sum = (sentNonce & 0xffff) + UInt32(crc16Table[messageSequenceNum]) + (lot & 0xffff) + (tid & 0xffff)
+        let seed = UInt16(sum & 0xffff) ^ syncWord
+        nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
 
-    // RawRepresentable
+    // MARK: - RawRepresentable
     public init?(rawValue: RawValue) {
 
         guard
@@ -61,10 +86,33 @@ public struct PodState: RawRepresentable, Equatable {
         self.pmVersion = pmVersion
         self.lot = lot
         self.tid = tid
+
+        if let rawUnfinalizedBolus = rawValue["rawUnfinalizedBolus"] as? UnfinalizedDose.RawValue,
+            let unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
+        {
+            self.unfinalizedBolus = unfinalizedBolus
+        } else {
+            self.unfinalizedBolus = nil
+        }
+
+        if let rawUnfinalizedTempBasal = rawValue["rawUnfinalizedTempBasal"] as? UnfinalizedDose.RawValue,
+            let unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
+        {
+            self.unfinalizedTempBasal = unfinalizedTempBasal
+        } else {
+            self.unfinalizedTempBasal = nil
+        }
+        
+        if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue
+        {
+            self.lastInsulinMeasurements = PodInsulinMeasurements(rawValue: rawLastInsulinMeasurements)
+        } else {
+            self.lastInsulinMeasurements = nil
+        }
     }
     
     public var rawValue: RawValue {
-        let rawValue: RawValue = [
+        var rawValue: RawValue = [
             "address": address,
             "nonceState": nonceState.rawValue,
             "activatedAt": activatedAt,
@@ -72,24 +120,40 @@ public struct PodState: RawRepresentable, Equatable {
             "piVersion": piVersion,
             "pmVersion": pmVersion,
             "lot": lot,
-            "tid": tid
+            "tid": tid,
             ]
+        
+        if let unfinalizedBolus = self.unfinalizedBolus {
+            rawValue["unfinalizedBolus"] = unfinalizedBolus.rawValue
+        }
+        
+        if let unfinalizedTempBasal = self.unfinalizedTempBasal {
+            rawValue["unfinalizedTempBasal"] = unfinalizedTempBasal.rawValue
+        }
+        
+        if let lastInsulinMeasurements = self.lastInsulinMeasurements {
+            rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements
+        }
         
         return rawValue
     }
     
-    public mutating func advanceToNextNonce() {
-        nonceState.advanceToNextNonce()
-    }
+    // MARK: - CustomDebugStringConvertible
     
-    public var currentNonce: UInt32 {
-        return nonceState.currentNonce
-    }
-    
-    public mutating func resyncNonce(syncWord: UInt16, sentNonce: UInt32, messageSequenceNum: Int) {
-        let sum = (sentNonce & 0xffff) + UInt32(crc16Table[messageSequenceNum]) + (lot & 0xffff) + (tid & 0xffff)
-        let seed = UInt16(sum & 0xffff) ^ syncWord
-        nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
+    public var debugDescription: String {
+        return [
+            "## PodState",
+            "address: \(String(format: "%04X", address))",
+            "activatedAt: \(String(reflecting: activatedAt))",
+            "timeZone: \(timeZone)",
+            "piVersion: \(piVersion)",
+            "pmVersion: \(pmVersion)",
+            "lot: \(lot)",
+            "tid: \(tid)",
+            "unfinalizedBolus: \(String(describing: unfinalizedBolus))",
+            "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
+            "",
+            ].joined(separator: "\n")
     }
 }
 

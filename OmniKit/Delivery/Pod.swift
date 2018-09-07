@@ -8,4 +8,8 @@
 
 import Foundation
 
+// Units
 let podPulseSize: Double = 0.05
+
+// Units per second
+let bolusDeliveryRate: Double = 0.025

@@ -85,17 +85,29 @@ public struct RateEntry {
     }
     
     public var rate: Double {
-        return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
+        if totalPulses == 0 {
+            return 0
+        } else {
+            return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
+        }
     }
     
     public var duration: TimeInterval {
-        return delayBetweenPulses * Double(totalPulses)
+        if totalPulses == 0 {
+            return delayBetweenPulses / 10
+        } else {
+            return delayBetweenPulses * Double(totalPulses)
+        }
     }
     
     public var data: Data {
         var data = Data()
         data.appendBigEndian(UInt16(totalPulses * 10))
-        data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds))
+        if totalPulses == 0 {
+            data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds) * 10)
+        } else {
+            data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds))
+        }
         return data
     }
     
@@ -105,11 +117,20 @@ public struct RateEntry {
         
         var remainingPulses = rate * duration.hours / podPulseSize
         let delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
+        
+        var timeRemaining = duration
 
-        while (remainingPulses > 0) {
-            let pulseCount = min(maxPulses, remainingPulses)
-            entries.append(RateEntry(totalPulses: pulseCount, delayBetweenPulses: delayBetweenPulses))
-            remainingPulses -= pulseCount
+        while (remainingPulses > 0 || timeRemaining > 0) {
+            if rate == 0 {
+                entries.append(RateEntry(totalPulses: 0, delayBetweenPulses: .minutes(30)))
+                timeRemaining -= .minutes(30)
+            } else {
+                let pulseCount = min(maxPulses, remainingPulses)
+                let entry = RateEntry(totalPulses: pulseCount, delayBetweenPulses: delayBetweenPulses)
+                entries.append(entry)
+                remainingPulses -= pulseCount
+                timeRemaining -= entry.duration
+            }
         }
         return entries
     }

@@ -121,6 +121,54 @@ class TempBasalTests: XCTestCase {
         XCTAssertEqual("1f05f76d34c402", cmd.data.hexadecimalString)
     }
     
+    func testZeroTempExtraCommand() {
+        do {
+            // 0 U/h for 0.5 hours
+            // Decode 16 0e 7c 00 0000 6b49d200 0000 6b49d200
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c0000006b49d20000006b49d200")!)
+            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
+            XCTAssertEqual(TimeInterval(seconds: 18000), cmd.delayUntilNextPulse)
+            XCTAssertEqual(0, cmd.remainingPulses)
+            XCTAssertEqual(1, cmd.rateEntries.count)
+            let entry = cmd.rateEntries[0]
+            XCTAssertEqual(TimeInterval(seconds: 18000), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(minutes: 30), entry.duration)
+            XCTAssertEqual(0, entry.rate)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(0.5), confidenceReminder: true, programReminderInterval: .minutes(60))
+        XCTAssertEqual("160e7c0000006b49d20000006b49d200", cmd.data.hexadecimalString)
+    }
+    
+    func testZeroTempThreeHoursExtraCommand() {
+        do {
+            // 0 U/h for 3 hours
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "162c7c0000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d200")!)
+            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
+            XCTAssertEqual(TimeInterval(seconds: 18000), cmd.delayUntilNextPulse)
+            XCTAssertEqual(0, cmd.remainingPulses)
+            XCTAssertEqual(6, cmd.rateEntries.count)
+            let entry = cmd.rateEntries[0]
+            XCTAssertEqual(TimeInterval(seconds: 18000), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(minutes: 30), entry.duration)
+            XCTAssertEqual(0, entry.rate)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+        // Encode
+        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(3), confidenceReminder: true, programReminderInterval: .minutes(60))
+        XCTAssertEqual("162c7c0000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d200", cmd.data.hexadecimalString)
+    }
+
+
     func testTempBasalExtremeValues() {
         do {
             // 30 U/h for 12 hours

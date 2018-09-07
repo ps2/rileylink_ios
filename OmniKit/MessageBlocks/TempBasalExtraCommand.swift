@@ -27,7 +27,11 @@ public struct TempBasalExtraCommand : MessageBlock {
             0
             ])
         data.appendBigEndian(UInt16(remainingPulses * 10))
-        data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+        if remainingPulses == 0 {
+            data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds) * 10)
+        } else {
+            data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+        }
         for entry in rateEntries {
             data.append(entry.data)
         }

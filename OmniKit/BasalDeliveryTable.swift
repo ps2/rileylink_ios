@@ -120,7 +120,7 @@ public struct RateEntry {
         
         var timeRemaining = duration
 
-        while (remainingPulses > 0 || timeRemaining > 0) {
+        while (remainingPulses > 0 || (rate == 0 && timeRemaining > 0)) {
             if rate == 0 {
                 entries.append(RateEntry(totalPulses: 0, delayBetweenPulses: .minutes(30)))
                 timeRemaining -= .minutes(30)

@@ -5,32 +5,26 @@
 //  Created by Eelke Jager on 08/09/2018.
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
+import Foundation
 
 import XCTest
+@testable import OmniKit
 
 class StatusTests: XCTestCase {
+    func testStatusRequestCommand() {
+        // 0e 01 00
+        do {
+            // Encode
+            let encoded = GetStatusCommand(requestType: .normal)
+            XCTAssertEqual("0e0100", encoded.data.hexadecimalString)
+            
+            // Decode
+            let decoded = try GetStatusCommand(encodedData: Data(hexadecimalString: "0e0100")!)
+            XCTAssertEqual(.normal, decoded.requestType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
         
-    override func setUp() {
-        super.setUp()
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
 }

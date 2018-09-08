@@ -28,7 +28,7 @@ public struct GetStatusCommand : MessageBlock {
     }
     
     public let blockType: MessageBlockType = .getStatus
-    public let length: UInt8 = 3
+    public let length: UInt8 = 1
     public let requestType: StatusType
     
     public init(requestType: StatusType = .normal) {

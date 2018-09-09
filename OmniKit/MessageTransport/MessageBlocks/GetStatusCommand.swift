@@ -9,10 +9,6 @@
 import Foundation
 
 public struct GetStatusCommand : MessageBlock {
-
-    public enum GetStatusCommandError: Error {
-        case unknownRequestType(rawVal: UInt8)
-    }
     
     public enum StatusType: UInt8 {
         case normal = 0x00

@@ -18,7 +18,7 @@ class MessageTransport {
     private let log = OSLog(category: "PodMessageTransport")
     
     private var packetNumber = 0
-    private var messageNumber = 0
+    private(set) var messageNumber = 0
     private let address: UInt32
     private var ackAddress: UInt32 // During pairing, PDM acks with address it is assigning to channel
 
@@ -141,14 +141,17 @@ class MessageTransport {
                 }
                 }()
             
-            incrementMessageNumber(2)
-            
             try ackUntilQuiet()
             
             guard response.messageBlocks.count > 0 else {
                 log.debug("Empty response")
                 throw PodCommsError.emptyResponse
             }
+            
+            if response.messageBlocks[0].blockType != .errorResponse {
+                incrementMessageNumber(2)
+            }
+            
             log.debug("Recv: %@", String(describing: response))
             return response            
         } catch let error {

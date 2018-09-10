@@ -68,3 +68,7 @@ public protocol MessageBlock {
     var blockType: MessageBlockType { get }
     var data: Data { get  }
 }
+
+public protocol NonceResyncableMessageBlock : MessageBlock {
+    var nonce: UInt32 { get set }
+}

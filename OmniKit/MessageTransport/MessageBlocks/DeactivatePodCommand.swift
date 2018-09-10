@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct DeactivatePodCommand : MessageBlock {
+public struct DeactivatePodCommand : NonceResyncableMessageBlock {
     
     // ID1:1f00ee84 PTYPE:PDM SEQ:09 ID2:1f00ee84 B9:34 BLEN:6 MTYPE:1c04 BODY:0f7dc4058344 CRC:f1
     
     public let blockType: MessageBlockType = .deactivatePod
     
-    let nonce: UInt32
+    public var nonce: UInt32
     
     // e1f78752 07 8196
     public var data: Data {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CancelDeliveryCommand : MessageBlock {
+public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     
     public let blockType: MessageBlockType = .cancelDelivery
     
@@ -49,7 +49,7 @@ public struct CancelDeliveryCommand : MessageBlock {
     
     public let beepType: ConfigureAlertsCommand.BeepType
     
-    let nonce: UInt32
+    public var nonce: UInt32
     
     public var data: Data {
         var data = Data(bytes: [

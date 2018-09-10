@@ -11,6 +11,36 @@ import XCTest
 @testable import OmniKit
 
 class StatusTests: XCTestCase {
+    func testStatusErrorConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
+        do {
+            // Decode
+            let decoded = try StatusError(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
+            XCTAssertEqual(.configuredAlerts, decoded.requestedType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+ 
+    }
+    func testStatusErrorFaultAlerts() {
+    // 02 16 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff00   //recorded an extra 0081
+        do {
+            // Decode
+            let decoded = try StatusError(encodedData: Data(hexadecimalString: "021602080100000a003800000003ff008700000095ff000081")!)
+            XCTAssertEqual(.faultEvents, decoded.requestedType)
+            XCTAssertEqual(22, decoded.length)
+            XCTAssertEqual(.runningNormal, decoded.progressType)
+            XCTAssertEqual(.runningNormal, decoded.progressType)
+            XCTAssertEqual(.basal, decoded.deliveryInProgressType)
+            XCTAssertEqual(0000, decoded.insulinNotDelivered)
+            XCTAssertEqual(0x0a, decoded.podMessageCounter)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+        
+    }
+        
+        
     func testStatusRequestCommand() {
         // 0e 01 00
         do {

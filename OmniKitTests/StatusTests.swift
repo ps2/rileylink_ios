@@ -34,6 +34,8 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(.basal, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
+            XCTAssertEqual(00, decoded.origionalLoggedFaultEvent)
+            XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

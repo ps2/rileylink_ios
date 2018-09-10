@@ -58,6 +58,9 @@ public struct StatusError : MessageBlock {
     public let deliveryInProgressType: DeliveryInProgressType
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
+    public let unknownPageCode: Double
+    public let origionalLoggedFaultEvent: UInt8
+    public let faultEventTimeSinceActivation: Double
     public let data: Data
     
     public init(encodedData: Data) throws {
@@ -83,7 +86,15 @@ public struct StatusError : MessageBlock {
         }
         self.deliveryInProgressType = deliveryInProgressType
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[5] & 0x3) << 8) | Int(encodedData[6]))
+        
         self.podMessageCounter = encodedData[7]
+        self.unknownPageCode = Double(Int(encodedData[8]) | Int(encodedData[9]))
+        
+        self.origionalLoggedFaultEvent = encodedData[10]
+        
+        let minutes = ((Int(encodedData[11]) & 0x7f) << 6) + (Int(encodedData[12]) >> 2)
+        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(minutes))
+        
         self.data = encodedData[8...Int(self.length)]
         
     }

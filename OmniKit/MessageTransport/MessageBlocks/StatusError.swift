@@ -45,8 +45,9 @@ public struct StatusError : MessageBlock {
     }
 
     public enum DeliveryInProgressType: UInt8 {
+        case none = 0
         case basal = 1
-        case tembasal = 2
+        case tempbasal = 2
         case bolus = 4
         case extendedbolus = 8
     }
@@ -54,13 +55,17 @@ public struct StatusError : MessageBlock {
     public let requestedType: GetStatusCommand.StatusType
     public let length: UInt8
     public let blockType: MessageBlockType = .statusError
-    public let progressType: ProgressType
     public let deliveryInProgressType: DeliveryInProgressType
+    public let progressType: ProgressType
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let unknownPageCode: Double
     public let origionalLoggedFaultEvent: UInt8
     public let faultEventTimeSinceActivation: Double
+    public let insulinRemaining: Double
+    public let timeActive: TimeInterval
+    public let secondaryLoggedFaultEvent: UInt8
+    public let logEventError: Bool
     public let data: Data
     
     public init(encodedData: Data) throws {
@@ -82,9 +87,10 @@ public struct StatusError : MessageBlock {
         self.progressType = progressType
 
         guard let deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4]) else {
-            throw MessageError.unknownValue(value: encodedData[3], typeDescription: "DeliveryInProgressType")
+            throw MessageError.unknownValue(value: encodedData[4], typeDescription: "DeliveryInProgressType")
         }
         self.deliveryInProgressType = deliveryInProgressType
+
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[5] & 0x3) << 8) | Int(encodedData[6]))
         
         self.podMessageCounter = encodedData[7]
@@ -92,8 +98,15 @@ public struct StatusError : MessageBlock {
         
         self.origionalLoggedFaultEvent = encodedData[10]
         
-        let minutes = ((Int(encodedData[11]) & 0x7f) << 6) + (Int(encodedData[12]) >> 2)
-        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(minutes))
+        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[11] & 0b1) << 8) + Int(encodedData[12])))
+        
+        self.insulinRemaining = podPulseSize * Double((Int(encodedData[13] & 0x3) << 8) | Int(encodedData[14]))
+        
+        self.timeActive = TimeInterval(minutes: Double((Int(encodedData[15] & 0b1) << 8) + Int(encodedData[16])))
+        
+        self.secondaryLoggedFaultEvent = encodedData[17]
+        
+        self.logEventError = encodedData[17] == 2
         
         self.data = encodedData[8...Int(self.length)]
         

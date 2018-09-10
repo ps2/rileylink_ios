@@ -20,13 +20,13 @@ public struct StatusError : MessageBlock {
 //        case hardcodedValues  = 0x5
 //        case resetStatus = numberOfBytes & 0x03
 //        case dumpRecentFlashLog = 0x13
-//        case dumpOlderFlashlog = 0x13
+//        case dumpOlderFlashlog = 0x14
 //
     // public let numberOfWords: UInt8 = 60
     // public let numberOfBytes: UInt8 = 10
 
     public enum ProgressType: UInt8 {
-        case intitialized = 0
+        case initialized = 0
         case tankPowerActivated = 1
         case tankFillCompleted = 2
         case pairingSuccess = 3
@@ -52,6 +52,12 @@ public struct StatusError : MessageBlock {
         case extendedbolus = 8
     }
     
+    public enum InfoLoggedFaultEventType: UInt8 {
+        case insulinStateCorruptionDuringErrorLogging = 0
+        case immediateBolusInProgressDuringError = 1
+        // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
+    }
+    
     public let requestedType: GetStatusCommand.StatusType
     public let length: UInt8
     public let blockType: MessageBlockType = .statusError
@@ -66,6 +72,12 @@ public struct StatusError : MessageBlock {
     public let timeActive: TimeInterval
     public let secondaryLoggedFaultEvent: UInt8
     public let logEventError: Bool
+    public let infoLoggedFaultEvent: InfoLoggedFaultEventType
+    public let progressAtFirstLoggedFaultEvent: ProgressType
+    public let recieverLowGain: UInt8
+    public let radioRSSI: UInt8
+    public let progressAtFirstLoggedFaultEventCheck: ProgressType
+
     public let data: Data
     
     public init(encodedData: Data) throws {
@@ -105,10 +117,29 @@ public struct StatusError : MessageBlock {
         self.timeActive = TimeInterval(minutes: Double((Int(encodedData[15] & 0b1) << 8) + Int(encodedData[16])))
         
         self.secondaryLoggedFaultEvent = encodedData[17]
+
+        self.logEventError = encodedData[18] == 2
+
+        guard let infoLoggedFaultEventType = InfoLoggedFaultEventType(rawValue: encodedData[19] >> 4) else {
+            throw MessageError.unknownValue(value: encodedData[19] >> 4, typeDescription: "InfoLoggedFaultEventType")
+        }
+        self.infoLoggedFaultEvent = infoLoggedFaultEventType
         
-        self.logEventError = encodedData[17] == 2
+        guard let progressAtFirstLoggedFaultEventType = ProgressType(rawValue: encodedData[19] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ProgressType")
+        }
+        self.progressAtFirstLoggedFaultEvent = progressAtFirstLoggedFaultEventType
         
-        self.data = encodedData[8...Int(self.length)]
+        self.recieverLowGain = encodedData[20] >> 4
         
+        self.radioRSSI =  encodedData[20] & 0xF
+        
+        guard let progressAtFirstLoggedFaultEventCheckType = ProgressType(rawValue: encodedData[21] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[21] & 0xF, typeDescription: "ProgressType")
+        }
+        self.progressAtFirstLoggedFaultEventCheck = progressAtFirstLoggedFaultEventCheckType
+        
+        // Unknown value:
+        self.data = Data(encodedData[22])
     }
 }

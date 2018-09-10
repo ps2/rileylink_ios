@@ -11,17 +11,17 @@ import XCTest
 @testable import OmniKit
 
 class StatusTests: XCTestCase {
-    func testStatusErrorConfiguredAlerts() {
-        // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
-        do {
-            // Decode
-            let decoded = try StatusError(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
-            XCTAssertEqual(.configuredAlerts, decoded.requestedType)
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
- 
-    }
+    //func testStatusErrorConfiguredAlerts() {
+    //    // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
+    //    do {
+    //        // Decode
+    //        let decoded = try StatusError(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
+    //        XCTAssertEqual(.configuredAlerts, decoded.requestedType)
+    //    } catch (let error) {
+    //        XCTFail("message decoding threw error: \(error)")
+    //    }
+    //}
+
     func testStatusErrorNoFaultAlerts() {
     // 02 16 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000 //recorded an extra 81
     
@@ -40,6 +40,11 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(135*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
+            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(.initialized, decoded.progressAtFirstLoggedFaultEvent)
+            XCTAssertEqual(9, decoded.recieverLowGain)
+            XCTAssertEqual(5, decoded.radioRSSI)
+            XCTAssertEqual(.podInactive, decoded.progressAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -64,6 +69,11 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
+            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(.readyForInjection, decoded.progressAtFirstLoggedFaultEvent)
+            XCTAssertEqual(10, decoded.recieverLowGain)
+            XCTAssertEqual(1, decoded.radioRSSI)
+            XCTAssertEqual(.readyForInjection, decoded.progressAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

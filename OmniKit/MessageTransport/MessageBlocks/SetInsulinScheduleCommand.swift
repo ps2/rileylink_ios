@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SetInsulinScheduleCommand : MessageBlock {
+public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     
     fileprivate enum ScheduleTypeCode: UInt8 {
         case basalSchedule = 0
@@ -80,7 +80,7 @@ public struct SetInsulinScheduleCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .setInsulinSchedule
     
-    public let nonce: UInt32
+    public var nonce: UInt32
     public let deliverySchedule: DeliverySchedule
     
     public var data: Data {

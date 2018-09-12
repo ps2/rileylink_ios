@@ -55,27 +55,30 @@ class PodStateTests: XCTestCase {
     
     func testNonceSync2() {
         do {
-            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a48d000298bfa01f07b1ee000b")!)
-            var podState = PodState(address: 0x1f07b1ee, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
+            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a7420007f050961f0b35570264")!)
+            var podState = PodState(address: 0x1f0b3557, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
             
-            XCTAssertEqual(42125, config.lot)
-            XCTAssertEqual(170175,  config.tid)
+//            XCTAssertEqual(42125, config.lot)
+//            XCTAssertEqual(170175,  config.tid)
+//
+//            XCTAssertEqual(0x8d27868e,  podState.currentNonce)
 
-            XCTAssertEqual(0x8d27868e,  podState.currentNonce)
-
+            let sentCommand = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0e8ecd89d702002501002000020002")!)
             
-            // ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a
-            let sentPacket = try Packet(encodedData: Data(hexadecimalString: "1f07b1eea31f07b1ee04071f05851072aa6200170a")!)
-            let sentMessage = try Message(encodedData: sentPacket.data)
-            let sentCommand = sentMessage.messageBlocks[0] as! CancelDeliveryCommand
+//            // ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a
+//            let sentPacket = try Packet(encodedData: Data(hexadecimalString: "1f07b1eea31f07b1ee04071f05851072aa6200170a")!)
+//            let sentMessage = try Message(encodedData: sentPacket.data)
+//            let sentCommand = sentMessage.messageBlocks[0] as! CancelDeliveryCommand
             
-            let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "0603142ffa83cd")!)
+            let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "060314a197820c")!)
             
-            XCTAssertEqual(1, sentMessage.sequenceNum)
-
-            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
+            let sequenceNum = 13
             
-            XCTAssertEqual(0xf1488fc3, podState.currentNonce)
+            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sequenceNum)
+            
+            // 1a0eda1289d702002501002000020002
+            
+            XCTAssertEqual(0xda1289d7, podState.currentNonce)
 
             
 //            2016-10-10T11:23:05.433141 ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a

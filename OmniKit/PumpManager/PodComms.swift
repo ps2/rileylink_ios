@@ -104,28 +104,12 @@ public class PodComms {
         case failure(PodCommsError)
     }
     
-    // If handler returns false, doses will not be finalized.
-    func finalizeDoses(storageHandler: @escaping (_ dose: [NewPumpEvent]) -> Bool, completion: @escaping () -> Void) {
+    func finalizeDoses(storageHandler: @escaping ([UnfinalizedDose]) -> Bool, completion: (() -> Void)? = nil) {
         sessionQueue.async {
-            var finalizedDoses = [(dose: UnfinalizedDose, finalizer: () -> Void)]()
-            let now = Date()
-            
-            if let unfinalizedBolus = self.podState.unfinalizedBolus,
-                unfinalizedBolus.finishTime.compare(now) == .orderedAscending {
-                finalizedDoses.append((dose: unfinalizedBolus, { self.podState.unfinalizedBolus = nil }))
-            }
-            
-            if let unfinalizedTempBasal = self.podState.unfinalizedTempBasal,
-                unfinalizedTempBasal.finishTime.compare(now) == .orderedAscending {
-                finalizedDoses.append((dose: unfinalizedTempBasal, { self.podState.unfinalizedTempBasal = nil }))
-            }
-
-            if (storageHandler(finalizedDoses.map { NewPumpEvent($0.dose) })) {
-                for dose in finalizedDoses {
-                    dose.finalizer()
-                }
-            }
-            completion()
+            self.podState.finalizeDoses(storageHandler: { (doses) -> Bool in
+                return storageHandler(doses)
+            })
+            completion?()
         }
     }
     

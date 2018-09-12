@@ -107,7 +107,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case rileyLinks
         case deactivate
         
-        static let count = 4
+        static let count = 5
     }
     
     private enum InfoRow: Int {
@@ -409,7 +409,7 @@ private extension UITableViewCell {
     private var insulinFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
+        formatter.maximumFractionDigits = 1
         
         return formatter
     }

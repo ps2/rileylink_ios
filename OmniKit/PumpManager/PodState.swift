@@ -59,6 +59,32 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         let seed = UInt16(sum & 0xffff) ^ syncWord
         nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
+    
+    public mutating func finalizeDoses(storageHandler: ([UnfinalizedDose]) -> Bool) {
+        var finalizedDoses = [UnfinalizedDose?]()
+        let now = Date()
+        
+        let bolusFinished = unfinalizedBolus != nil && unfinalizedBolus?.finishTime.compare(now) != .orderedDescending
+        if bolusFinished {
+            finalizedDoses.append(unfinalizedBolus)
+        }
+        
+        let tempBasalFinished = unfinalizedTempBasal != nil && unfinalizedTempBasal?.finishTime.compare(now) != .orderedDescending
+        if tempBasalFinished {
+            finalizedDoses.append(unfinalizedTempBasal)
+        }
+
+        if storageHandler(finalizedDoses.compactMap({$0})) {
+            if bolusFinished {
+                print("Finalizing \(String(describing: unfinalizedBolus))")
+                unfinalizedBolus = nil
+            }
+            if tempBasalFinished {
+                print("Finalizing \(String(describing: unfinalizedTempBasal))")
+                unfinalizedTempBasal = nil
+            }
+        }
+    }
 
     // MARK: - RawRepresentable
     public init?(rawValue: RawValue) {
@@ -87,7 +113,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.lot = lot
         self.tid = tid
 
-        if let rawUnfinalizedBolus = rawValue["rawUnfinalizedBolus"] as? UnfinalizedDose.RawValue,
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue,
             let unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         {
             self.unfinalizedBolus = unfinalizedBolus
@@ -95,7 +121,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.unfinalizedBolus = nil
         }
 
-        if let rawUnfinalizedTempBasal = rawValue["rawUnfinalizedTempBasal"] as? UnfinalizedDose.RawValue,
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue,
             let unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
         {
             self.unfinalizedTempBasal = unfinalizedTempBasal

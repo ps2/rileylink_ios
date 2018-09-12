@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ConfigureAlertsCommand : MessageBlock {
+public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
     
     // Pairing ConfigureAlerts #1
     // 4c00 0190 0102
@@ -150,7 +150,7 @@ public struct ConfigureAlertsCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .configureAlerts
     
-    let nonce: UInt32
+    public var nonce: UInt32
     let configurations: [AlertConfiguration]
     
     public var data: Data {

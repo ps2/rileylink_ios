@@ -9,7 +9,7 @@
 import Foundation
 import LoopKit
 
-struct UnfinalizedDose: RawRepresentable, Equatable {
+public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConvertible {
     public typealias RawValue = [String: Any]
 
     enum DoseType: Int {
@@ -20,18 +20,50 @@ struct UnfinalizedDose: RawRepresentable, Equatable {
     enum ScheduledCertainty: Int {
         case certain = 0
         case uncertain
+        
+        public var localizedDescription: String {
+            switch self {
+            case .certain:
+                return LocalizedString("Certain", comment: "String describing a dose that was certainly scheduled")
+            case .uncertain:
+                return LocalizedString("Uncertain", comment: "String describing a dose that was possibly scheduled")
+            }
+        }
     }
     
+    private var insulinFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 1
+        
+        return formatter
+    }
+    
+    private var dateFormatter: DateFormatter {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateStyle = .none
+        timeFormatter.timeStyle = .short
+        return timeFormatter
+    }
+
+    
     let doseType: DoseType
-    let units: Double
+    var units: Double
+    var scheduledUnits: Double?
     let startTime: Date
-    let duration: TimeInterval
+    var duration: TimeInterval
     let scheduledCertainty: ScheduledCertainty
     
     var finishTime: Date {
-        return startTime.addingTimeInterval(duration)
+        get {
+            return startTime.addingTimeInterval(duration)
+        }
+        set {
+            duration = newValue.timeIntervalSince(startTime)
+        }
     }
     
+    // Units per hour
     var rate: Double {
         return units / duration.hours
     }
@@ -42,6 +74,7 @@ struct UnfinalizedDose: RawRepresentable, Equatable {
         self.startTime = startTime
         self.duration = TimeInterval(bolusAmount / bolusDeliveryRate)
         self.scheduledCertainty = scheduledCertainty
+        self.scheduledUnits = nil
     }
     
     init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, scheduledCertainty: ScheduledCertainty) {
@@ -50,6 +83,32 @@ struct UnfinalizedDose: RawRepresentable, Equatable {
         self.startTime = startTime
         self.duration = duration
         self.scheduledCertainty = scheduledCertainty
+        self.scheduledUnits = nil
+    }
+    
+    public mutating func cancel(at date: Date) {
+        scheduledUnits = units
+        let oldRate = rate
+        duration = date.timeIntervalSince(startTime)
+        units = oldRate * duration.hours
+    }
+    
+    public var description: String {
+        let unitsStr = insulinFormatter.string(from: units) ?? "?"
+        let startTimeStr = dateFormatter.string(from: startTime)
+        let durationStr = duration.format(using: [.minute, .second]) ?? "?"
+        switch doseType {
+        case .bolus:
+            if let scheduledUnits = scheduledUnits {
+                let scheduledUnitsStr = insulinFormatter.string(from: scheduledUnits) ?? "?"
+                return String(format: LocalizedString("InterruptedBolus(%1$@U (%2$@U scheduled), %3$@, %4$@, %5$@)", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+            } else {
+                return String(format: LocalizedString("Bolus(%1$@U, %2$@, %3$@, %4$@)", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+            }
+        case .tempBasal:
+            let rateStr = NumberFormatter.localizedString(from: NSNumber(value: rate), number: .decimal)
+            return String(format: LocalizedString("TempBasal(%1$@ U/hour, %2$@, %3$@, %4$@)", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+        }
     }
     
     // RawRepresentable
@@ -82,6 +141,18 @@ struct UnfinalizedDose: RawRepresentable, Equatable {
             ]
         
         return rawValue
+    }
+}
+
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .full
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+        
+        return formatter.string(from: self)
     }
 }
 

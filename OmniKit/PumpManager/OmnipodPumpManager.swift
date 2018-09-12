@@ -23,36 +23,58 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public var pumpTimeZone: TimeZone {
         return state.podState.timeZone
     }
+    
+    private func isReservoirDataOlderThan(timeIntervalSinceNow: TimeInterval) -> Bool {
+        let lastReservoirDate = pumpManagerDelegate?.startDateToFilterNewReservoirEvents(for: self) ?? .distantPast
+        return lastReservoirDate.timeIntervalSinceNow <= timeIntervalSinceNow
+    }
+
+    private var isPumpDataStale: Bool {
+        let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
+        
+        // TODO: this should check *delivery* data, instead of reservoir data, which is only valid < 50U
+        return isReservoirDataOlderThan(timeIntervalSinceNow: -pumpStatusAgeTolerance)
+    }
+
 
     public func assertCurrentPumpData() {
-        queue.async {
-            let semaphore = DispatchSemaphore(value: 0)
-            let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
-                do {
-                    switch result {
-                    case .success(let session):
-                        let status = try session.getStatus()
-                        self.podStatusReceived(status: status)
-                    case .failure(let error):
-                        throw error
-                    }
-                } catch let error {
-                    self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
-                }
-                semaphore.signal()
-            }
-            semaphore.wait()
-            self.finalizeDoses {
-                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
-            }
+        
+//        guard isPumpDataStale else {
+//            return
+//        }
 
+        queue.async {
+            // Finalize doses even if we don't have a RL connection
+            self.podComms.finalizeDoses(storageHandler: { (doses) -> Bool in
+                return self.store(doses: doses)
+            }, completion: {
+                let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+                self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
+                    do {
+                        switch result {
+                        case .success(let session):
+                            let status = try session.getStatus()
+                            self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel, at: Date()) { (result) in
+                                switch result {
+                                case .failure:
+                                    break
+                                case .success:
+                                    self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
+                                }
+                            }
+                        case .failure(let error):
+                            throw error
+                        }
+                    } catch let error {
+                        self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
+                    }
+                }
+            })
         }
     }
+
     
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (Double, Date) -> Void, completion: @escaping (Error?) -> Void) {
-        
-        finalizeDoses()
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
@@ -65,6 +87,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(SetBolusError.certain(error))
                 return
             }
+            
+            session.finalizeDoses(storageHandler: { (doses) -> Bool in
+                return self.store(doses: doses)
+            })
+
             
             let podStatus: StatusResponse
             
@@ -85,8 +112,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             let result = session.bolus(units: units)
             
             switch result {
-            case .success(let status):
-                self.podStatusReceived(status: status)
+            case .success:
                 completion(nil)
             case .certainFailure(let error):
                 completion(SetBolusError.certain(error))
@@ -97,22 +123,53 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
-        finalizeDoses()
+        //completion(PumpManagerResult.failure(PodCommsError.emptyResponse))
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
+            self.log.info("Enact temp basal %.03fU/hr for %ds", unitsPerHour, Int(duration))
+            let session: PodCommsSession
+            switch result {
+            case .success(let s):
+                session = s
+            case .failure(let error):
+                completion(PumpManagerResult.failure(error))
+                return
+            }
+            
+            // Finalize any doses that have already ended
+            session.finalizeDoses(storageHandler: { (doses) -> Bool in
+                return self.store(doses: doses)
+            })
+            
             do {
-                switch result {
-                case .success(let session):
-                    try session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
-                    let basalStart = Date()
-                    let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
-                    completion(PumpManagerResult.success(dose))
-                case .failure(let error):
-                    self.log.error("Failed to set temp basal: %{public}@", String(describing: error))
-                    throw error
+                let podStatus = try session.getStatus()
+                if podStatus.deliveryStatus.tempBasalRunning {
+                    let cancelStatus = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+
+                    guard !cancelStatus.deliveryStatus.tempBasalRunning else {
+                        throw PodCommsError.unfinalizedTempBasal
+                    }
                 }
-            } catch (let error) {
+                
+                // Finalize any temp basal that was cancelled
+                session.finalizeDoses(storageHandler: { (doses) -> Bool in
+                    return self.store(doses: doses)
+                })
+
+                let result = session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
+                let basalStart = Date()
+                let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
+                switch result {
+                case .success:
+                    completion(PumpManagerResult.success(dose))
+                case .uncertainFailure(let error):
+                    self.log.error("Temp basal uncertain error: %@", String(describing: error))
+                    completion(PumpManagerResult.success(dose))
+                case .certainFailure(let error):
+                    completion(PumpManagerResult.failure(error))
+                }
+            } catch let error {
                 completion(PumpManagerResult.failure(error))
             }
         }
@@ -181,27 +238,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         self.pumpManagerDelegate?.pumpManagerBLEHeartbeatDidFire(self)
     }
     
-    private func finalizeDoses(_ completion: (() -> Void)? = nil) {
-        let storageHandler = { (pumpEvents: [NewPumpEvent]) -> Bool in
-            let semaphore = DispatchSemaphore(value: 0)
-            var success = false
-            self.pumpManagerDelegate?.pumpManager(self, didReadPumpEvents: pumpEvents, completion: { (error) in
-                success = error == nil
-                semaphore.signal()
-            })
-            semaphore.wait()
-            return success
-        }
-        podComms.finalizeDoses(storageHandler: storageHandler) {
-            completion?()
-        }
-    }
-    
-    private func podStatusReceived(status: StatusResponse) {
-        pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel, at: Date()) { _ in
-            // Ignore result
-        }
-    }
     
     // MARK: - CustomDebugStringConvertible
     
@@ -231,9 +267,19 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
 }
 
-
-
 extension OmnipodPumpManager: PodCommsDelegate {
+    
+    public func store(doses: [UnfinalizedDose]) -> Bool {
+        let semaphore = DispatchSemaphore(value: 0)
+        var success = false
+        self.pumpManagerDelegate?.pumpManager(self, didReadPumpEvents: doses.map { NewPumpEvent($0) }, completion: { (error) in
+            success = error == nil
+            semaphore.signal()
+        })
+        semaphore.wait()
+        return success
+    }
+    
     public func podComms(_ podComms: PodComms, didChange state: PodState) {
         self.state.podState = state
     }

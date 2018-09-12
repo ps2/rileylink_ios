@@ -332,7 +332,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 extension MinimedPumpIDSetupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     private static let regionRows: [RegionCode] = [.northAmerica, .canada, .worldWide]
 
-    private static let colorRows: [PumpColor] = [.blue, .clear, .purple, .smoke]
+    private static let colorRows: [PumpColor] = [.blue, .clear, .purple, .smoke, .pink]
 
     private enum PickerViewComponent: Int {
         case region

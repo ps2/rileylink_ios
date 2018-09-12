@@ -207,13 +207,14 @@ extension CommandResponseViewController {
         }
     }
 
-    static func pressDownButton(ops: PumpOps?, device: RileyLinkDevice) -> T {
+    static func setTempBasal(ops: PumpOps?, device: RileyLinkDevice, rate: Double) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Press down button", using: device) { (session) in
                 let response: String
                 do {
-                    try session.pressButton(.down)
-                    response = self.successText
+                    //try session.pressButton(.down)
+                    let result = try session.setTempBasal(rate, duration: .minutes(30))
+                    response = String(describing: result)
                 } catch let error {
                     response = String(describing: error)
                 }
@@ -227,17 +228,39 @@ extension CommandResponseViewController {
         }
     }
 
-    static func readBasalSchedule(ops: PumpOps?, device: RileyLinkDevice, integerFormatter: NumberFormatter) -> T {
+    static func readTempBasal(ops: PumpOps?, device: RileyLinkDevice) -> T {
+        return T { (completionHandler) -> String in
+            ops?.runSession(withName: "Read temp basal", using: device) { (session) in
+                let response: String
+                do {
+                    let rate = try session.readTempBasal()
+                    response = String(describing: rate)
+                } catch let error {
+                    response = String(describing: error)
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            
+            return LocalizedString("Read temp basal…", comment: "Progress message for Read temp basal.")
+        }
+    }
+
+    static func sendBolus(ops: PumpOps?, device: RileyLinkDevice, integerFormatter: NumberFormatter, units: Double) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Get Basal Settings", using: device) { (session) in
                 let response: String
                 do {
-                    let schedule = try session.getBasalSchedule(for: .profileB)
-                    var str = String(format: LocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), integerFormatter.string(from: NSNumber(value: schedule?.entries.count ?? 0))!)
-                    for entry in schedule?.entries ?? [] {
-                        str += "\(String(describing: entry))\n"
-                    }
-                    response = str
+                    try session.setNormalBolus(units: units, cancelExistingTemp: true)
+                    response = self.successText
+//                    let schedule = try session.getBasalSchedule(for: .profileB)
+//                    var str = String(format: LocalizedString("%1$@ basal schedule entries\n", comment: "The format string describing number of basal schedule entries: (1: number of entries)"), integerFormatter.string(from: NSNumber(value: schedule?.entries.count ?? 0))!)
+//                    for entry in schedule?.entries ?? [] {
+//                        str += "\(String(describing: entry))\n"
+//                    }
+//                    response = str
                 } catch let error {
                     response = String(describing: error)
                 }
@@ -283,6 +306,8 @@ extension CommandResponseViewController {
                     str += String(format: LocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), measurementFormatter.string(from: status.batteryVolts))
                     str += String(format: LocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
                     str += String(format: LocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
+                    str += String(format: LocalizedString("Date: %1$@\n", comment: "The format string describing pump date: (1: date)"), String(describing: status.clock.date))
+                    
                     response = str
                 } catch let error {
                     response = String(describing: error)

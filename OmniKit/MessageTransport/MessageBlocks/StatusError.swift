@@ -57,6 +57,7 @@ public struct StatusError : MessageBlock {
         public init(rawValue: UInt8) {
             self.rawValue = rawValue
         }
+    }
     
     public enum InfoLoggedFaultEventType: UInt8 {
         case insulinStateCorruptionDuringErrorLogging = 0

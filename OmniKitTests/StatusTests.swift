@@ -34,7 +34,7 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(.basal, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
-            XCTAssertEqual(00, decoded.origionalLoggedFaultEvent)
+            XCTAssertEqual(00, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(135*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
@@ -63,7 +63,7 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(92, decoded.origionalLoggedFaultEvent)
+            XCTAssertEqual(92, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0001*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds

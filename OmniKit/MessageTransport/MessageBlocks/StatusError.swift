@@ -25,24 +25,6 @@ public struct StatusError : MessageBlock {
     // public let numberOfWords: UInt8 = 60
     // public let numberOfBytes: UInt8 = 10
 
-    public enum ProgressType: UInt8 {
-        case initialized = 0
-        case tankPowerActivated = 1
-        case tankFillCompleted = 2
-        case pairingSuccess = 3
-        case purging = 4
-        case readyForInjection = 5
-        case injectionDone = 6
-        case primingCannula = 7
-        case runningNormal = 8
-        case runningLessThen50ULeftInReservoir = 9
-        case oneNotUsedButin33 = 10
-        case twoNotUsedButin33 = 11
-        case threeNotUsedButin33 = 12
-        case errorEventLoggedShuttingDown = 13
-        case alertExpiredDuringInitializationShuttingDown = 14
-        case podInactive = 15  // ($1C Deactivate Pod or packet header mismatch)
-    }
 
     public struct DeliveryInProgressType: OptionSet {
         public let rawValue: UInt8
@@ -70,7 +52,7 @@ public struct StatusError : MessageBlock {
     public let length: UInt8
     public let blockType: MessageBlockType = .statusError
     public let deliveryInProgressType: DeliveryInProgressType
-    public let progressType: ProgressType
+    public let reservoirStatus: StatusResponse.ReservoirStatus  // Reused from StatusResponse
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let unknownPageCode: Double
@@ -81,10 +63,10 @@ public struct StatusError : MessageBlock {
     public let secondaryLoggedFaultEvent: UInt8
     public let logEventError: Bool
     public let infoLoggedFaultEvent: InfoLoggedFaultEventType
-    public let progressAtFirstLoggedFaultEvent: ProgressType
+    public let reservoirStatusAtFirstLoggedFaultEvent: StatusResponse.ReservoirStatus
     public let recieverLowGain: UInt8
     public let radioRSSI: UInt8
-    public let progressAtFirstLoggedFaultEventCheck: ProgressType
+    public let reservoirStatusAtFirstLoggedFaultEventCheck: StatusResponse.ReservoirStatus
 
     public let data: Data
     
@@ -101,10 +83,10 @@ public struct StatusError : MessageBlock {
         }
         self.requestedType = requestedType
 
-        guard let progressType = ProgressType(rawValue: encodedData[3]) else {
-            throw MessageError.unknownValue(value: encodedData[3], typeDescription: "ProgressType")
+        guard let reservoirStatus = StatusResponse.ReservoirStatus(rawValue: encodedData[3]) else {
+            throw MessageError.unknownValue(value: encodedData[3], typeDescription: "StatusResponse.ReservoirStatus")
         }
-        self.progressType = progressType
+        self.reservoirStatus = reservoirStatus
 
         self.deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4] & 0xf)
 
@@ -130,19 +112,19 @@ public struct StatusError : MessageBlock {
         }
         self.infoLoggedFaultEvent = infoLoggedFaultEventType
         
-        guard let progressAtFirstLoggedFaultEventType = ProgressType(rawValue: encodedData[19] & 0xF) else {
+        guard let reservoirStatusAtFirstLoggedFaultEventType = StatusResponse.ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ProgressType")
         }
-        self.progressAtFirstLoggedFaultEvent = progressAtFirstLoggedFaultEventType
+        self.reservoirStatusAtFirstLoggedFaultEvent = reservoirStatusAtFirstLoggedFaultEventType
         
         self.recieverLowGain = encodedData[20] >> 4
         
         self.radioRSSI =  encodedData[20] & 0xF
         
-        guard let progressAtFirstLoggedFaultEventCheckType = ProgressType(rawValue: encodedData[21] & 0xF) else {
+        guard let reservoirStatusAtFirstLoggedFaultEventCheckType = StatusResponse.ReservoirStatus(rawValue: encodedData[21] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[21] & 0xF, typeDescription: "ProgressType")
         }
-        self.progressAtFirstLoggedFaultEventCheck = progressAtFirstLoggedFaultEventCheckType
+        self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         
         // Unknown value:
         self.data = Data(encodedData[22])

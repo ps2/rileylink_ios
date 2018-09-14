@@ -30,27 +30,33 @@ public struct StatusError : MessageBlock {
         case tankPowerActivated = 1
         case tankFillCompleted = 2
         case pairingSuccess = 3
-        case Purging = 4
+        case purging = 4
         case readyForInjection = 5
         case injectionDone = 6
         case primingCannula = 7
         case runningNormal = 8
         case runningLessThen50ULeftInReservoir = 9
-        case OnenotUsedButin33 = 10
-        case TwonotUsedButin33 = 11
-        case TheenotUsedButin33 = 12
+        case oneNotUsedButin33 = 10
+        case twoNotUsedButin33 = 11
+        case threeNotUsedButin33 = 12
         case errorEventLoggedShuttingDown = 13
         case alertExpiredDuringInitializationShuttingDown = 14
         case podInactive = 15  // ($1C Deactivate Pod or packet header mismatch)
     }
 
-    public enum DeliveryInProgressType: UInt8 {
-        case none = 0
-        case basal = 1
-        case tempbasal = 2
-        case bolus = 4
-        case extendedbolus = 8
-    }
+    public struct DeliveryInProgressType: OptionSet {
+        public let rawValue: UInt8
+        
+        static let basal         = DeliveryInProgressType(rawValue: 1 << 0)
+        static let tempBasal     = DeliveryInProgressType(rawValue: 1 << 1)
+        static let bolus         = DeliveryInProgressType(rawValue: 1 << 2)
+        static let extendedBolus = DeliveryInProgressType(rawValue: 1 << 3)
+        
+        static let all: DeliveryInProgressType = [.basal, .tempBasal, .bolus, .extendedBolus]
+        
+        public init(rawValue: UInt8) {
+            self.rawValue = rawValue
+        }
     
     public enum InfoLoggedFaultEventType: UInt8 {
         case insulinStateCorruptionDuringErrorLogging = 0
@@ -66,7 +72,7 @@ public struct StatusError : MessageBlock {
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let unknownPageCode: Double
-    public let origionalLoggedFaultEvent: UInt8
+    public let originalLoggedFaultEvent: UInt8
     public let faultEventTimeSinceActivation: Double
     public let insulinRemaining: Double
     public let timeActive: TimeInterval

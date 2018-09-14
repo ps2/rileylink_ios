@@ -47,12 +47,13 @@ public struct StatusError : MessageBlock {
     public struct DeliveryInProgressType: OptionSet {
         public let rawValue: UInt8
         
+        static let none          = DeliveryInProgressType(rawValue: 0)
         static let basal         = DeliveryInProgressType(rawValue: 1 << 0)
         static let tempBasal     = DeliveryInProgressType(rawValue: 1 << 1)
         static let bolus         = DeliveryInProgressType(rawValue: 1 << 2)
         static let extendedBolus = DeliveryInProgressType(rawValue: 1 << 3)
         
-        static let all: DeliveryInProgressType = [.basal, .tempBasal, .bolus, .extendedBolus]
+        static let all: DeliveryInProgressType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
         
         public init(rawValue: UInt8) {
             self.rawValue = rawValue
@@ -105,17 +106,14 @@ public struct StatusError : MessageBlock {
         }
         self.progressType = progressType
 
-        guard let deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4]) else {
-            throw MessageError.unknownValue(value: encodedData[4], typeDescription: "DeliveryInProgressType")
-        }
-        self.deliveryInProgressType = deliveryInProgressType
+        self.deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4] & 0xf)
 
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[5] & 0x3) << 8) | Int(encodedData[6]))
         
         self.podMessageCounter = encodedData[7]
         self.unknownPageCode = Double(Int(encodedData[8]) | Int(encodedData[9]))
         
-        self.origionalLoggedFaultEvent = encodedData[10]
+        self.originalLoggedFaultEvent = encodedData[10]
         
         self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[11] & 0b1) << 8) + Int(encodedData[12])))
         

@@ -52,7 +52,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var scheduledUnits: Double?
     let startTime: Date
     var duration: TimeInterval
-    let scheduledCertainty: ScheduledCertainty
+    var scheduledCertainty: ScheduledCertainty
     
     var finishTime: Date {
         get {

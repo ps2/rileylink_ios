@@ -104,15 +104,6 @@ public class PodComms {
         case failure(PodCommsError)
     }
     
-    func finalizeDoses(storageHandler: @escaping ([UnfinalizedDose]) -> Bool, completion: (() -> Void)? = nil) {
-        sessionQueue.async {
-            self.podState.finalizeDoses(storageHandler: { (doses) -> Bool in
-                return storageHandler(doses)
-            })
-            completion?()
-        }
-    }
-    
     public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
         sessionQueue.async {
             let semaphore = DispatchSemaphore(value: 0)

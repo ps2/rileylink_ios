@@ -34,34 +34,29 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
 
         queue.async {
-            // Finalize doses even if we don't have a RL connection
-            self.podComms.finalizeDoses(storageHandler: { (doses) -> Bool in
-                return self.store(doses: doses)
-            }, completion: {
-                let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-                self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
-                    do {
-                        switch result {
-                        case .success(let session):
-                            let status = try session.getStatus()
-                            // A 0 indicates an invalid value, and we send it if level is >= 50;
-                            // Even when reservoir is > 50, we still call this to communicate pump status freshness
-                            self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel ?? 0, at: Date()) { (result) in
-                                switch result {
-                                case .failure:
-                                    break
-                                case .success:
-                                    self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
-                                }
+            let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+            self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
+                do {
+                    switch result {
+                    case .success(let session):
+                        let status = try session.getStatus()
+                        // A 0 indicates an invalid value, and we send it if level is >= 50;
+                        // Even when reservoir is > 50, we still call this to communicate pump status freshness
+                        self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel ?? 0, at: Date()) { (result) in
+                            switch result {
+                            case .failure:
+                                break
+                            case .success:
+                                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
                             }
-                        case .failure(let error):
-                            throw error
                         }
-                    } catch let error {
-                        self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
+                    case .failure(let error):
+                        throw error
                     }
+                } catch let error {
+                    self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
                 }
-            })
+            }
         }
     }
 
@@ -80,11 +75,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            session.finalizeDoses(storageHandler: { (doses) -> Bool in
-                return self.store(doses: doses)
-            })
-
-            
             let podStatus: StatusResponse
             
             do {
@@ -98,6 +88,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(SetBolusError.certain(PodCommsError.unfinalizedBolus))
                 return
             }
+            
+            session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { (doses) -> Bool in
+                return self.store(doses: doses)
+            })
             
             willRequest(units, Date())
             
@@ -129,11 +123,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            // Finalize any doses that have already ended
-            session.finalizeDoses(storageHandler: { (doses) -> Bool in
-                return self.store(doses: doses)
-            })
-            
             do {
                 let podStatus = try session.getStatus()
                 if podStatus.deliveryStatus.tempBasalRunning {
@@ -144,8 +133,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 }
                 
-                // Finalize any temp basal that was cancelled
-                session.finalizeDoses(storageHandler: { (doses) -> Bool in
+                session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { (doses) -> Bool in
                     return self.store(doses: doses)
                 })
                 

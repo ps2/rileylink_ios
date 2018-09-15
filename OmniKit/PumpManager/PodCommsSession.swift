@@ -394,10 +394,12 @@ public class PodCommsSession {
         let _: StatusResponse = try send([deactivatePod])
     }
     
-    func finalizeDoses(storageHandler: ([UnfinalizedDose]) -> Bool) {
-        self.podState.finalizeDoses(storageHandler: { (doses) -> Bool in
-            return storageHandler(doses)
-        })
+    func finalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
+        self.podState.finalizeDoses(deliveryStatus: deliveryStatus)
+        if storageHandler(podState.finalizedDoses) {
+            log.info("Finalized %@", String(describing: podState.finalizedDoses))
+            self.podState.finalizedDoses.removeAll()
+        }
     }
     
     func podStatusUpdated(_ status: StatusResponse) {

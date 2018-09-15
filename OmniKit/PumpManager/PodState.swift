@@ -23,6 +23,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     var unfinalizedBolus: UnfinalizedDose?
     var unfinalizedTempBasal: UnfinalizedDose?
+    var finalizedDoses: [UnfinalizedDose]
     
     public var expiresAt: Date {
         return activatedAt + .days(3)
@@ -44,6 +45,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.lastInsulinMeasurements = nil
         self.unfinalizedBolus = nil
         self.unfinalizedTempBasal = nil
+        self.finalizedDoses = []
     }
     
     public mutating func advanceToNextNonce() {
@@ -60,28 +62,36 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
     
-    public mutating func finalizeDoses(storageHandler: ([UnfinalizedDose]) -> Bool) {
-        var finalizedDoses = [UnfinalizedDose?]()
+    public mutating func finalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus) {
         let now = Date()
         
-        let bolusFinished = unfinalizedBolus != nil && unfinalizedBolus?.finishTime.compare(now) != .orderedDescending
-        if bolusFinished {
-            finalizedDoses.append(unfinalizedBolus)
-        }
-        
-        let tempBasalFinished = unfinalizedTempBasal != nil && unfinalizedTempBasal?.finishTime.compare(now) != .orderedDescending
-        if tempBasalFinished {
-            finalizedDoses.append(unfinalizedTempBasal)
+        if let bolus = unfinalizedBolus {
+            if bolus.finishTime > now {
+                finalizedDoses.append(bolus)
+                unfinalizedBolus = nil
+            } else if bolus.scheduledCertainty == .uncertain {
+                if deliveryStatus.bolusing {
+                    // Bolus did schedule
+                    unfinalizedBolus?.scheduledCertainty = .certain
+                } else {
+                    // Bolus didn't happen
+                    unfinalizedBolus = nil
+                }
+            }
         }
 
-        if storageHandler(finalizedDoses.compactMap({$0})) {
-            if bolusFinished {
-                print("Finalizing \(String(describing: unfinalizedBolus))")
-                unfinalizedBolus = nil
-            }
-            if tempBasalFinished {
-                print("Finalizing \(String(describing: unfinalizedTempBasal))")
+        if let tempBasal = unfinalizedTempBasal {
+            if tempBasal.finishTime > now {
+                finalizedDoses.append(tempBasal)
                 unfinalizedTempBasal = nil
+            } else if tempBasal.scheduledCertainty == .uncertain {
+                if deliveryStatus.tempBasalRunning {
+                    // Temp basal did schedule
+                    unfinalizedTempBasal?.scheduledCertainty = .certain
+                } else {
+                    // Temp basal didn't happen
+                    unfinalizedTempBasal = nil
+                }
             }
         }
     }
@@ -135,6 +145,14 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.lastInsulinMeasurements = nil
         }
+        
+        if let rawFinalizedDoses = rawValue["finalizedDoses"] as? [UnfinalizedDose.RawValue]
+        {
+            self.finalizedDoses = rawFinalizedDoses.compactMap( { UnfinalizedDose(rawValue: $0) } )
+        } else {
+            self.finalizedDoses = []
+        }
+
     }
     
     public var rawValue: RawValue {
@@ -147,6 +165,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion": pmVersion,
             "lot": lot,
             "tid": tid,
+            "finalizedDoses": finalizedDoses.map( { $0.rawValue })
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -160,7 +179,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let lastInsulinMeasurements = self.lastInsulinMeasurements {
             rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements.rawValue
         }
-        
+
         return rawValue
     }
     

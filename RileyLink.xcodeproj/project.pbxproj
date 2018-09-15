@@ -338,6 +338,7 @@
 		C14FFC651D3D7E250049CF85 /* RemoteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */; };
 		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
 		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
+		C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
@@ -3147,6 +3148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D2366F7212527DA0028B67D /* LocalizedString.swift in Sources */,
+				C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,

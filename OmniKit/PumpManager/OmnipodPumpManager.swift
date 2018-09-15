@@ -92,8 +92,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { (doses) -> Bool in
-                return self.store(doses: doses)
+            session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
+                return false
             })
             
             willRequest(units, Date())
@@ -136,8 +136,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 }
                 
-                session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { (doses) -> Bool in
-                    return self.store(doses: doses)
+                session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
+                    return false
                 })
                 
                 if duration < .ulpOfOne {

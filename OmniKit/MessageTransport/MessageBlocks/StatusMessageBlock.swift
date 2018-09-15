@@ -9,7 +9,7 @@
 import Foundation
 
 public enum StatusMessageBlockType: UInt8 {
-    //case normal                      = 0x00
+    case normal                      = 0x00
     case configuredAlerts            = 0x01
     case faultEvents                 = 0x02
     //case dataLog                     = 0x03
@@ -22,8 +22,8 @@ public enum StatusMessageBlockType: UInt8 {
     
     public var statusType: StatusMessageBlock.Type {
         switch self {
-        //case .normal:
-        //    print("1")
+        case .normal:
+            return StatusResponse.self as! StatusMessageBlock.Type
         case .configuredAlerts:
             return StatusResponseConfiguredAlerts.self
         case .faultEvents:

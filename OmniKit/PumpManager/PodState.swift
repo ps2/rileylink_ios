@@ -66,7 +66,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         let now = Date()
         
         if let bolus = unfinalizedBolus {
-            if bolus.finishTime > now {
+            if bolus.finishTime <= now {
                 finalizedDoses.append(bolus)
                 unfinalizedBolus = nil
             } else if bolus.scheduledCertainty == .uncertain {
@@ -81,7 +81,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
 
         if let tempBasal = unfinalizedTempBasal {
-            if tempBasal.finishTime > now {
+            if tempBasal.finishTime <= now {
                 finalizedDoses.append(tempBasal)
                 unfinalizedTempBasal = nil
             } else if tempBasal.scheduledCertainty == .uncertain {

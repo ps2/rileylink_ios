@@ -551,6 +551,7 @@
 		E9EE335E214D9EDE00888876 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE335C214D9EDE00888876 /* BolusTests.swift */; };
 		E9EE3361214D9EEE00888876 /* StatusMessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */; };
 		E9EE3362214D9EEE00888876 /* StatusResponseFaultEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */; };
+		E9EE3366214DC4B300888876 /* StatusResponseConfiguredAlarms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3365214DC4B200888876 /* StatusResponseConfiguredAlarms.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1403,6 +1404,7 @@
 		E9EE335C214D9EDE00888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 		E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusMessageBlock.swift; sourceTree = "<group>"; };
 		E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponseFaultEvent.swift; sourceTree = "<group>"; };
+		E9EE3365214DC4B200888876 /* StatusResponseConfiguredAlarms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponseConfiguredAlarms.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2364,24 +2366,25 @@
 		C1FFAFA3213323E800C50C1D /* MessageBlocks */ = {
 			isa = PBXGroup;
 			children = (
-				E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */,
-				E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */,
+				E9EE3365214DC4B200888876 /* StatusResponseConfiguredAlarms.swift */,
+				C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */,
+				C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */,
+				C1FFAFAA213323E800C50C1D /* BolusExtraCommand.swift */,
+				C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */,
 				C1FFAFA4213323E800C50C1D /* ConfigResponse.swift */,
-				C1FFAFA5213323E800C50C1D /* StatusError.swift */,
-				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
+				C1FFAFB3213323E800C50C1D /* ConfigureAlertsCommand.swift */,
 				C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */,
+				C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */,
+				C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */,
 				C1FFAFA8213323E800C50C1D /* MessageBlock.swift */,
 				C1FFAFA9213323E800C50C1D /* PlaceholderMessageBlock.swift */,
-				C1FFAFAA213323E800C50C1D /* BolusExtraCommand.swift */,
-				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
-				C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */,
-				C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */,
-				C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */,
-				C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */,
-				C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */,
-				C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */,
 				C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */,
-				C1FFAFB3213323E800C50C1D /* ConfigureAlertsCommand.swift */,
+				C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */,
+				C1FFAFA5213323E800C50C1D /* StatusError.swift */,
+				E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */,
+				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
+				E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */,
+				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -3598,6 +3601,7 @@
 				C1FFAFB6213323E900C50C1D /* OmnipodPumpManagerState.swift in Sources */,
 				C1FFAFC3213323E900C50C1D /* StatusError.swift in Sources */,
 				C1E163D72135FF9A00EB89AE /* TimeZone.swift in Sources */,
+				E9EE3366214DC4B300888876 /* StatusResponseConfiguredAlarms.swift in Sources */,
 				C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */,
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,

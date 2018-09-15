@@ -24,12 +24,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         return state.podState.timeZone
     }
     
+    private var lastPumpDataReportDate: Date?
+    
     public func assertCurrentPumpData() {
         
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
         
         
-        guard (state.podState.lastInsulinMeasurements?.validTime ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
+        guard (lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
             return
         }
 
@@ -234,7 +236,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     override public var debugDescription: String {
         return [
             "## OmnipodPumpManager",
-            "pumpBatteryChargeRemaining: \(String(reflecting: pumpBatteryChargeRemaining))",
             "state: \(state.debugDescription)",
             "",
             "podComms: \(String(reflecting: podComms))",
@@ -263,10 +264,19 @@ extension OmnipodPumpManager: PodCommsDelegate {
         let semaphore = DispatchSemaphore(value: 0)
         var success = false
         self.pumpManagerDelegate?.pumpManager(self, didReadPumpEvents: doses.map { NewPumpEvent($0) }, completion: { (error) in
+            if let error = error {
+                self.log.error("Error storing pod events: %@", String(describing: error))
+            } else {
+                self.log.error("Stored pod events: %@", String(describing: doses))
+            }
             success = error == nil
             semaphore.signal()
         })
         semaphore.wait()
+        
+        if success {
+            self.lastPumpDataReportDate = Date()
+        }
         return success
     }
     

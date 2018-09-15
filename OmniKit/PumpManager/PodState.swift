@@ -197,6 +197,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "tid: \(tid)",
             "unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
+            "finalizedDoses: \(String(describing: finalizedDoses))",
             "",
             ].joined(separator: "\n")
     }

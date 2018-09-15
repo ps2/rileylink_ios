@@ -34,15 +34,15 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     private var insulinFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 1
+        formatter.maximumFractionDigits = 3
         
         return formatter
     }
     
     private var dateFormatter: DateFormatter {
         let timeFormatter = DateFormatter()
-        timeFormatter.dateStyle = .none
-        timeFormatter.timeStyle = .short
+        timeFormatter.dateStyle = .short
+        timeFormatter.timeStyle = .medium
         return timeFormatter
     }
 
@@ -101,13 +101,13 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         case .bolus:
             if let scheduledUnits = scheduledUnits {
                 let scheduledUnitsStr = insulinFormatter.string(from: scheduledUnits) ?? "?"
-                return String(format: LocalizedString("InterruptedBolus(%1$@U (%2$@U scheduled), %3$@, %4$@, %5$@)", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
             } else {
-                return String(format: LocalizedString("Bolus(%1$@U, %2$@, %3$@, %4$@)", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("Bolus: %1$@U %2$@ %3$@ %4$@", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
             }
         case .tempBasal:
             let rateStr = NumberFormatter.localizedString(from: NSNumber(value: rate), number: .decimal)
-            return String(format: LocalizedString("TempBasal(%1$@ U/hour, %2$@, %3$@, %4$@)", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+            return String(format: LocalizedString("TempBasal: %1$@ U/hour %2$@ for %3$@ %4$@", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
         }
     }
     
@@ -158,6 +158,7 @@ private extension TimeInterval {
 
 extension NewPumpEvent {
     init(_ unfinalizedDose: UnfinalizedDose) {
+        let title = String(describing: unfinalizedDose)
         let entry: DoseEntry
         switch unfinalizedDose.doseType {
         case .bolus:
@@ -165,6 +166,6 @@ extension NewPumpEvent {
         case .tempBasal:
             entry = DoseEntry(type: .tempBasal, startDate: unfinalizedDose.startTime, endDate: unfinalizedDose.finishTime, value: unfinalizedDose.rate, unit: .unitsPerHour)
         }
-        self.init(date: unfinalizedDose.startTime, dose: entry, isMutable: false, raw: Data(), title: String(describing: unfinalizedDose))
+        self.init(date: unfinalizedDose.startTime, dose: entry, isMutable: false, raw: title.data(using: .utf8)!, title: title)
     }
 }

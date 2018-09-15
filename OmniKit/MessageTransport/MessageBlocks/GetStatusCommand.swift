@@ -8,44 +8,45 @@
 
 import Foundation
 
-
-public enum GetStatusCommandError: Error {
-    case unknownRequestType(rawVal: UInt8)
-}
-
-public enum StatusRequestType: UInt8 {
-    case normal = 0x00
-    case bolusCancelResult = 0x01
-    // Other types seen: 2, 3, 5, 6, 0x46, 0x50, or 0x51
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-}
-
-struct GetStatusCommand : MessageBlock {
+public struct GetStatusCommand : MessageBlock {
     
-    let blockType: MessageBlockType = .getStatus
-    public let length: UInt8 = 3
-    let requestType: StatusRequestType
+    public enum StatusType: UInt8 {
+        case normal = 0x00
+        case configuredAlerts = 0x01
+        case faultEvents = 0x02
+        case dataLog = 0x03
+        case faultDataInitializationTime = 0x04
+        case hardcodedValues = 0x06
+        case resetStatus = 0x46 // including state, initialization time, any faults
+        case dumpRecentFlashLog = 0x50
+        case dumpOlderFlashlog  = 0x51 // but dumps entries before the last 50
+        // https://github.com/openaps/openomni/wiki/Command-0E-Status-Request
+    }
     
-    init(_ requestType: StatusRequestType = .normal) {
+    public let blockType: MessageBlockType = .getStatus
+    public let length: UInt8 = 1
+    public let requestType: StatusType
+    
+    public init(requestType: StatusType = .normal) {
         self.requestType = requestType
     }
     
-    init(encodedData: Data) throws {
+     public init(encodedData: Data) throws {
         if encodedData.count < 3 {
             throw MessageBlockError.notEnoughData
         }
-        guard let requestType = StatusRequestType(rawValue: encodedData[2]) else {
-            throw GetStatusCommandError.unknownRequestType(rawVal: encodedData[2])
+        guard let requestType = StatusType(rawValue: encodedData[2]) else {
+            throw MessageError.unknownValue(value: encodedData[2], typeDescription: "StatusType")
         }
         self.requestType = requestType
     }
         
-    var data: Data {
-        let bytes: [UInt8] = [
+    public var data:  Data {
+        var data = Data(bytes: [
             blockType.rawValue,
-            1,
-            requestType.rawValue
-        ]
-        return Data(bytes)
+            length
+            ])
+        data.append(requestType.rawValue)
+        return data
     }
 }

@@ -6,12 +6,13 @@
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
 
+import Foundation
+
 import XCTest
 @testable import OmniKit
 
 class BolusTests: XCTestCase {
-    
-    func testSetBolusCommand() {
+        func testSetBolusCommand() {
         //    2017-09-11T11:07:57.476872 ID1:1f08ced2 PTYPE:PDM SEQ:18 ID2:1f08ced2 B9:18 BLEN:31 MTYPE:1a0e BODY:bed2e16b02010a0101a000340034170d000208000186a0 CRC:fd
         //    2017-09-11T11:07:57.552574 ID1:1f08ced2 PTYPE:ACK SEQ:19 ID2:1f08ced2 CRC:b8
         //    2017-09-11T11:07:57.734557 ID1:1f08ced2 PTYPE:CON SEQ:20 CON:00000000000003c0 CRC:a9

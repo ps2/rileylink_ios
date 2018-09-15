@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum StatusType: UInt8 {
+public enum StatusMessageBlockType: UInt8 {
     //case normal                      = 0x00
     //case configuredAlerts            = 0x01
     case faultEvents                 = 0x02
@@ -20,7 +20,7 @@ public enum StatusType: UInt8 {
     //case dumpOlderFlashlog           = 0x51 // but dumps entries before the last 50
     // https://github.com/openaps/openomni/wiki/Command-0E-Status-Request
     
-    public var statusBlockType: StatusMessageBlock.Type {
+    public var statusType: StatusMessageBlock.Type {
         switch self {
         //case .normal:
         //    print("1")
@@ -47,7 +47,7 @@ public enum StatusType: UInt8 {
 
 public protocol StatusMessageBlock {
     init(encodedData: Data) throws
-    var statusBlockType: StatusType { get }
+    var statusType: StatusMessageBlockType { get }
     var data: Data { get }
 }
 

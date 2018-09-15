@@ -547,6 +547,10 @@
 		C1FFB02421343EC200C50C1D /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; };
 		C1FFB02521343F0300C50C1D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C1FFB02621343F0600C50C1D /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
+		E9EE335D214D9EDE00888876 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE335B214D9EDE00888876 /* StatusTests.swift */; };
+		E9EE335E214D9EDE00888876 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE335C214D9EDE00888876 /* BolusTests.swift */; };
+		E9EE3361214D9EEE00888876 /* StatusMessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */; };
+		E9EE3362214D9EEE00888876 /* StatusResponseFaultEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1395,6 +1399,10 @@
 		C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodSettingsViewController.swift; sourceTree = "<group>"; };
 		C1FFB00B2133242C00C50C1D /* OmnipodPairingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPairingViewController.swift; sourceTree = "<group>"; };
 		C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
+		E9EE335B214D9EDE00888876 /* StatusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
+		E9EE335C214D9EDE00888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
+		E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusMessageBlock.swift; sourceTree = "<group>"; };
+		E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponseFaultEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2317,6 +2325,8 @@
 		C1FFAF86213323CC00C50C1D /* OmniKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E9EE335C214D9EDE00888876 /* BolusTests.swift */,
+				E9EE335B214D9EDE00888876 /* StatusTests.swift */,
 				C1FFAFFB2133241600C50C1D /* BasalScheduleTests.swift */,
 				C1FFAFF92133241600C50C1D /* CRC8Tests.swift */,
 				C1FFAFFC2133241600C50C1D /* CRC16Tests.swift */,
@@ -2354,6 +2364,8 @@
 		C1FFAFA3213323E800C50C1D /* MessageBlocks */ = {
 			isa = PBXGroup;
 			children = (
+				E9EE335F214D9EEE00888876 /* StatusMessageBlock.swift */,
+				E9EE3360214D9EEE00888876 /* StatusResponseFaultEvent.swift */,
 				C1FFAFA4213323E800C50C1D /* ConfigResponse.swift */,
 				C1FFAFA5213323E800C50C1D /* StatusError.swift */,
 				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
@@ -3579,6 +3591,7 @@
 				C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */,
 				C1FFB01821332A2A00C50C1D /* OSLog.swift in Sources */,
 				C1FFAFC6213323E900C50C1D /* MessageBlock.swift in Sources */,
+				E9EE3362214D9EEE00888876 /* StatusResponseFaultEvent.swift in Sources */,
 				C1FFAFC2213323E900C50C1D /* ConfigResponse.swift in Sources */,
 				C1FFB01D21332E1700C50C1D /* Data.swift in Sources */,
 				C1FFAFBD213323E900C50C1D /* PodState.swift in Sources */,
@@ -3589,6 +3602,7 @@
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,
 				C1FFAFCD213323E900C50C1D /* SetPodTimeCommand.swift in Sources */,
+				E9EE3361214D9EEE00888876 /* StatusMessageBlock.swift in Sources */,
 				C1FFAFD2213323E900C50C1D /* PodComms.swift in Sources */,
 				C1FFB01921332A7100C50C1D /* IdentifiableClass.swift in Sources */,
 				C1FFAFC1213323E900C50C1D /* Notification.swift in Sources */,
@@ -3619,7 +3633,9 @@
 				C17EDC4F2134D0CC0031D9F0 /* TimeZone.swift in Sources */,
 				C1FFB0042133241700C50C1D /* CRC16Tests.swift in Sources */,
 				C1FFB0012133241700C50C1D /* CRC8Tests.swift in Sources */,
+				E9EE335D214D9EDE00888876 /* StatusTests.swift in Sources */,
 				C1FFB0002133241700C50C1D /* TempBasalTests.swift in Sources */,
+				E9EE335E214D9EDE00888876 /* BolusTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

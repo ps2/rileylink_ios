@@ -27,17 +27,18 @@ public struct StatusError : MessageBlock {
     
     public let length: UInt8
     public let blockType: MessageBlockType = .statusError
-    public let statusMessageBlock: StatusMessageBlock
+    public let statusErrorType: UInt8
     public let data: Data
-    
-    self.statusMessageBlock = statusMessageBlock
     
     public init(encodedData: Data) throws {
         if encodedData.count < Int(16) {
             throw MessageBlockError.notEnoughData
         }
         self.length = encodedData[1]
-        self.statusMessageBlock = encodedData[2..16]
+        self.data = encodedData
+        
+        // TODO evaluate the status type with the statusMessageBlock:
+        self.statusErrorType = encodedData[2]
     }
 }
 

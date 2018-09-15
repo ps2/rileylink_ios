@@ -20,7 +20,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
-    public let lastInsulinMeasurements: PodInsulinMeasurements?
+    public var lastInsulinMeasurements: PodInsulinMeasurements?
     var unfinalizedBolus: UnfinalizedDose?
     var unfinalizedTempBasal: UnfinalizedDose?
     
@@ -158,7 +158,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
         
         if let lastInsulinMeasurements = self.lastInsulinMeasurements {
-            rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements
+            rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements.rawValue
         }
         
         return rawValue

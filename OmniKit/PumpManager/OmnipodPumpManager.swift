@@ -24,24 +24,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         return state.podState.timeZone
     }
     
-    private func isReservoirDataOlderThan(timeIntervalSinceNow: TimeInterval) -> Bool {
-        let lastReservoirDate = pumpManagerDelegate?.startDateToFilterNewReservoirEvents(for: self) ?? .distantPast
-        return lastReservoirDate.timeIntervalSinceNow <= timeIntervalSinceNow
-    }
-
-    private var isPumpDataStale: Bool {
-        let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
-        
-        // TODO: this should check *delivery* data, instead of reservoir data, which is only valid < 50U
-        return isReservoirDataOlderThan(timeIntervalSinceNow: -pumpStatusAgeTolerance)
-    }
-
-
     public func assertCurrentPumpData() {
         
-//        guard isPumpDataStale else {
-//            return
-//        }
+        let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
+        
+        
+        guard (state.podState.lastInsulinMeasurements?.validTime ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
+            return
+        }
 
         queue.async {
             // Finalize doses even if we don't have a RL connection
@@ -54,7 +44,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         switch result {
                         case .success(let session):
                             let status = try session.getStatus()
-                            self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel, at: Date()) { (result) in
+                            // A 0 indicates an invalid value, and we send it if level is >= 50;
+                            // Even when reservoir is > 50, we still call this to communicate pump status freshness
+                            self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel ?? 0, at: Date()) { (result) in
                                 switch result {
                                 case .failure:
                                     break
@@ -156,18 +148,25 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 session.finalizeDoses(storageHandler: { (doses) -> Bool in
                     return self.store(doses: doses)
                 })
-
-                let result = session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
-                let basalStart = Date()
-                let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
-                switch result {
-                case .success:
+                
+                if duration < .ulpOfOne {
+                    // 0 duration temp basals are used to cancel any existing temp basal
+                    let cancelTime = Date()
+                    let dose = DoseEntry(type: .basal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
                     completion(PumpManagerResult.success(dose))
-                case .uncertainFailure(let error):
-                    self.log.error("Temp basal uncertain error: %@", String(describing: error))
-                    completion(PumpManagerResult.success(dose))
-                case .certainFailure(let error):
-                    completion(PumpManagerResult.failure(error))
+                } else {
+                    let result = session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
+                    let basalStart = Date()
+                    let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
+                    switch result {
+                    case .success:
+                        completion(PumpManagerResult.success(dose))
+                    case .uncertainFailure(let error):
+                        self.log.error("Temp basal uncertain error: %@", String(describing: error))
+                        completion(PumpManagerResult.success(dose))
+                    case .certainFailure(let error):
+                        completion(PumpManagerResult.failure(error))
+                    }
                 }
             } catch let error {
                 completion(PumpManagerResult.failure(error))

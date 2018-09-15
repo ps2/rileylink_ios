@@ -143,7 +143,7 @@ public struct StatusResponse : MessageBlock {
     public let deliveryStatus: DeliveryStatus
     public let reservoirStatus: ReservoirStatus
     public let timeActive: TimeInterval
-    public let reservoirLevel: Double
+    public let reservoirLevel: Double?
     public let insulin: Double
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
@@ -185,6 +185,11 @@ public struct StatusResponse : MessageBlock {
         
         let resHighBits = Int(encodedData[8] & 0x03) << 6
         let resLowBits = Int(encodedData[9] >> 2)
-        self.reservoirLevel = round((Double((resHighBits + resLowBits))*50)/255)
+        let reservoirValue = round((Double((resHighBits + resLowBits))*50)/255)
+        if reservoirValue < StatusResponse.maximumReservoirReading {
+            self.reservoirLevel = reservoirValue
+        } else {
+            self.reservoirLevel = nil
+        }
     }
 }

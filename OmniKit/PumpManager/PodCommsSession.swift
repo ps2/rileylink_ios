@@ -373,6 +373,7 @@ public class PodCommsSession {
         
         do {
             let response: StatusResponse = try send([GetStatusCommand()])
+            podStatusUpdated(response)
             return response
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             let response: StatusResponse = try send([GetStatusCommand()])
@@ -397,6 +398,10 @@ public class PodCommsSession {
         self.podState.finalizeDoses(storageHandler: { (doses) -> Bool in
             return storageHandler(doses)
         })
+    }
+    
+    func podStatusUpdated(_ status: StatusResponse) {
+        podState.lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: status, validTime: Date())
     }
 }
 

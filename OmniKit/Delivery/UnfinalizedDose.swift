@@ -163,7 +163,7 @@ extension NewPumpEvent {
         case .bolus:
             entry = DoseEntry(type: .bolus, startDate: unfinalizedDose.startTime, value: unfinalizedDose.units, unit: .units)
         case .tempBasal:
-            entry = DoseEntry(type: .tempBasal, startDate: unfinalizedDose.startTime, value: unfinalizedDose.rate, unit: .unitsPerHour)
+            entry = DoseEntry(type: .tempBasal, startDate: unfinalizedDose.startTime, endDate: unfinalizedDose.finishTime, value: unfinalizedDose.rate, unit: .unitsPerHour)
         }
         self.init(date: unfinalizedDose.startTime, dose: entry, isMutable: false, raw: Data(), title: String(describing: unfinalizedDose))
     }

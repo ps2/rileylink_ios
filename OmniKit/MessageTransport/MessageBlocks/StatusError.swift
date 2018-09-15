@@ -9,20 +9,14 @@
 import Foundation
 
 public struct StatusError : MessageBlock {
-    
-    public let blockType: MessageBlockType = .statusError
-    public let statusType: StatusMessageBlockType
-    public let data: Data
+
+    public let blockType   : MessageBlockType = .statusError
+    public let statusType  : StatusMessageBlockType
+    public let data        : Data
     
     public init(encodedData: Data) throws {
-        if encodedData.count < Int(16) {
-            throw MessageBlockError.notEnoughData
-        }
-        //self.length = encodedData[1]
-        //self.data = encodedData
-        
         // TODO test to evaluate if this works:
         self.statusType = StatusMessageBlockType(rawValue: encodedData[2])!
-        self.data = encodedData
+        self.data = Data(encodedData)
     }
 }

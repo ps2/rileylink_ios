@@ -9,7 +9,6 @@
 import Foundation
 
 public struct StatusResponseFaultEvent : StatusMessageBlock {
-    
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
 //    public enum lengthType: UInt8{
@@ -48,31 +47,31 @@ public struct StatusResponseFaultEvent : StatusMessageBlock {
         case immediateBolusInProgressDuringError = 1
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
-    
-    public var statusType: StatusMessageBlockType = .faultEvents
-    public let length: UInt8
-    public let deliveryInProgressType: DeliveryInProgressType
-    public let reservoirStatus: StatusResponse.ReservoirStatus  // Reused from StatusResponse
-    public let insulinNotDelivered: Double
-    public let podMessageCounter: UInt8
-    public let unknownPageCode: Double
-    public let originalLoggedFaultEvent: UInt8
+
+    public var statusType               : StatusMessageBlockType = .faultEvents
+    public let length                   : UInt8
+    public let deliveryInProgressType   : DeliveryInProgressType
+    public let reservoirStatus          : StatusResponse.ReservoirStatus
+    public let insulinNotDelivered      : Double
+    public let podMessageCounter        : UInt8
+    public let unknownPageCode          : Double
+    public let originalLoggedFaultEvent : UInt8
     public let faultEventTimeSinceActivation: Double
-    public let insulinRemaining: Double
-    public let timeActive: TimeInterval
+    public let insulinRemaining         : Double
+    public let timeActive               : TimeInterval
     public let secondaryLoggedFaultEvent: UInt8
-    public let logEventError: Bool
-    public let infoLoggedFaultEvent: InfoLoggedFaultEventType
+    public let logEventError            : Bool
+    public let infoLoggedFaultEvent     : InfoLoggedFaultEventType
     public let reservoirStatusAtFirstLoggedFaultEvent: StatusResponse.ReservoirStatus
-    public let recieverLowGain: UInt8
-    public let radioRSSI: UInt8
+    public let recieverLowGain          : UInt8
+    public let radioRSSI                : UInt8
     public let reservoirStatusAtFirstLoggedFaultEventCheck: StatusResponse.ReservoirStatus
 
-    public let data: Data
+    public let data                     : Data
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(13) {
+        if encodedData.count < Int(16) {
             throw MessageBlockError.notEnoughData
         }
         
@@ -121,7 +120,6 @@ public struct StatusResponseFaultEvent : StatusMessageBlock {
         }
         self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         
-        // Unknown value:
         self.data = Data(encodedData[22])
     }
 }

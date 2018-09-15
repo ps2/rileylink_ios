@@ -429,8 +429,12 @@ private extension UITableViewCell {
                         detailTextLabel?.text = String(format: LocalizedString(">= %@U", comment: "Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount)"), units)
                     }
                 } else {
-                    if let units = insulinFormatter.string(from: podStatus.reservoirLevel) {
-                        detailTextLabel?.text = String(format: LocalizedString("%@U", comment: "Format string for insulin remaining in reservoir. (1: The localized amount)"), units)
+                    if let reservoirValue = podStatus.reservoirLevel,
+                        let units = insulinFormatter.string(from: reservoirValue)
+                    {
+                        detailTextLabel?.text = String(format: LocalizedString("%@ U", comment: "Format string for insulin remaining in reservoir. (1: The localized amount)"), units)
+                    } else {
+                        detailTextLabel?.text = String(format: LocalizedString(">50 U", comment: "String shown when reservoir is above its max measurement capacity"))
                     }
                 }
             case .deliveredInsulin:

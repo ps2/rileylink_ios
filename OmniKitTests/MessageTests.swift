@@ -32,7 +32,7 @@ class MessageTests: XCTestCase {
             
             let statusResponse = messageBlocks[0] as! StatusResponse
             
-            XCTAssertEqual(50, statusResponse.reservoirLevel)
+            XCTAssertEqual(nil, statusResponse.reservoirLevel)
             XCTAssertEqual(TimeInterval(minutes: 4261), statusResponse.timeActive)
 
             XCTAssertEqual(.normal, statusResponse.deliveryStatus)

@@ -473,7 +473,6 @@ extension PumpOpsSession {
     }
 
     public func readTempBasal() throws -> Double {
-        var lastError: Error?
         
         try wakeup()
         

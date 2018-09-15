@@ -40,16 +40,19 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     switch result {
                     case .success(let session):
                         let status = try session.getStatus()
-                        // A 0 indicates an invalid value, and we send it if level is >= 50;
-                        // Even when reservoir is > 50, we still call this to communicate pump status freshness
-                        self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: status.reservoirLevel ?? 0, at: Date()) { (result) in
-                            switch result {
-                            case .failure:
-                                break
-                            case .success:
-                                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
+                        
+                        session.finalizeDoses(deliveryStatus: status.deliveryStatus, storageHandler: { (doses) -> Bool in
+                            return self.store(doses: doses)
+                        })
+
+                        if let reservoirLevel = status.reservoirLevel {
+                            let semaphore = DispatchSemaphore(value: 0)
+                            self.pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: reservoirLevel, at: Date()) { (_) in
+                                semaphore.signal()
                             }
+                            semaphore.wait()
                         }
+                        self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
                     case .failure(let error):
                         throw error
                     }

@@ -49,7 +49,7 @@ public struct StatusResponseFaultEvent : StatusMessageBlock {
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
     
-    public var statusBlockType: StatusType = .faultEvents
+    public var statusType: StatusMessageBlockType = .faultEvents
     public let length: UInt8
     public let deliveryInProgressType: DeliveryInProgressType
     public let reservoirStatus: StatusResponse.ReservoirStatus  // Reused from StatusResponse

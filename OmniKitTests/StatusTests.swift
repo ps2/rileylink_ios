@@ -11,16 +11,16 @@ import XCTest
 @testable import OmniKit
 
 class StatusTests: XCTestCase {
-    //func testStatusErrorConfiguredAlerts() {
-    //    // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
-    //    do {
-    //        // Decode
-    //        let decoded = try StatusError(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
-    //        XCTAssertEqual(.configuredAlerts, decoded.requestedType)
-    //    } catch (let error) {
-    //        XCTFail("message decoding threw error: \(error)")
-    //    }
-    //}
+    func testStatusErrorConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
+        do {
+            // Decode
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
 
     // end of suspend
     // 0213010000000000000000000000000bd70c400000828c
@@ -30,8 +30,8 @@ class StatusTests: XCTestCase {
     
         do {
             // Decode
-            let decoded = try StatusError(encodedData: Data(hexadecimalString: "021602080100000a003800000003ff008700000095ff0000")!)
-            XCTAssertEqual(.faultEvents, decoded.requestedType)
+            let decoded = try StatusResponseFaultEvent(encodedData: Data(hexadecimalString: "021602080100000a003800000003ff008700000095ff0000")!)
+            XCTAssertEqual(.faultEvents, decoded.statusType)
             XCTAssertEqual(22, decoded.length)
             XCTAssertEqual(.aboveFiftyUnits, decoded.reservoirStatus)
             XCTAssertEqual(.basal, decoded.deliveryInProgressType)
@@ -58,8 +58,8 @@ class StatusTests: XCTestCase {
         // 02 16 02 0d 00 0000 06 0034 5c 0001 03ff 0001 00 00 05 a1 05 0186
         do {
             // Decode
-            let decoded = try StatusError(encodedData: Data(hexadecimalString: "0216020d0000000600345c000103ff0001000005a1050186")!)
-            XCTAssertEqual(.faultEvents, decoded.requestedType)
+            let decoded = try StatusResponseFaultEvent(encodedData: Data(hexadecimalString: "0216020d0000000600345c000103ff0001000005a1050186")!)
+            XCTAssertEqual(.faultEvents, decoded.statusType)
             XCTAssertEqual(22, decoded.length)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.reservoirStatus)
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
@@ -85,8 +85,8 @@ class StatusTests: XCTestCase {
         //0216 BODY:020f0000000900345c000103ff0001000005ae05602903
         do {
             // Decode
-            let decoded = try StatusError(encodedData: Data(hexadecimalString: "0216020f0000000900345c000103ff0001000005ae05602903")!)
-            XCTAssertEqual(.faultEvents, decoded.requestedType)
+            let decoded = try StatusResponseFaultEvent(encodedData: Data(hexadecimalString: "0216020f0000000900345c000103ff0001000005ae05602903")!)
+            XCTAssertEqual(.faultEvents, decoded.statusType)
             XCTAssertEqual(22, decoded.length)
             XCTAssertEqual(.inactive, decoded.reservoirStatus)
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
@@ -112,8 +112,8 @@ class StatusTests: XCTestCase {
         // 0216020d0000000600008f000003ff0000000003a20386a002
         do {
             // Decode
-            let decoded = try StatusError(encodedData: Data(hexadecimalString: "0216020d0000000600008f000003ff0000000003a20386a002")!)
-            XCTAssertEqual(.faultEvents, decoded.requestedType)
+            let decoded = try StatusResponseFaultEvent(encodedData: Data(hexadecimalString: "0216020d0000000600008f000003ff0000000003a20386a002")!)
+            XCTAssertEqual(.faultEvents, decoded.statusType)
             XCTAssertEqual(22, decoded.length)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.reservoirStatus)
             XCTAssertEqual(.none, decoded.deliveryInProgressType)

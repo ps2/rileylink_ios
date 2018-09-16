@@ -7,9 +7,9 @@
 
 
 public enum PumpColor: String {
-    case blue   = "Blue"
-    case clear  = "Clear"
-    case purple = "Purple"
-    case smoke  = "Grey"
-    case pink   = "Pink"
+    case blue   = "B"
+    case clear  = "L"
+    case purple = "P"
+    case smoke  = "S"
+    case pink   = "H"
 }

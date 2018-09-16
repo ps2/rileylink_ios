@@ -11,20 +11,28 @@ import XCTest
 @testable import OmniKit
 
 class StatusTests: XCTestCase {
-    //func testStatusErrorConfiguredAlerts() {
-    //    // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
-    //    do {
-    //        // Decode
-    //        let decoded = try StatusError(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
-    //        XCTAssertEqual(.configuredAlerts, decoded.requestedType)
-    //    } catch (let error) {
-    //        XCTFail("message decoding threw error: \(error)")
-    //    }
-    //}
-
-    // end of suspend
-    // 0213010000000000000000000000000bd70c400000828c
+    func testStatusErrorConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
+        do {
+            // Decode
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
     
+    func testStatusEndSuspendConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 828c
+        do {
+            // Decode
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000bd70c400000828c")!)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+        
     func testStatusErrorNoFaultAlerts() {
     // 02 16 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000 //recorded an extra 81
     

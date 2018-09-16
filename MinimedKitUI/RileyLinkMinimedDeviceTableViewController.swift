@@ -375,16 +375,16 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = LocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
 
             case .pressDownButton:
-                cell.textLabel?.text = LocalizedString("Send Temp Basal (0.6U/hr)", comment: "The title of the command to send a button press")
+                cell.textLabel?.text = LocalizedString("Send Button Press", comment: "The title of the command to send a button press")
 
             case .readPumpStatus:
                 cell.textLabel?.text = LocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
 
             case .readBasalSchedule:
-                cell.textLabel?.text = LocalizedString("Bolus (1U)", comment: "The title of the command to read basal schedule")
+                cell.textLabel?.text = LocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
             
             case .enableLED:
-                cell.textLabel?.text = LocalizedString("Read Temp Basal", comment: "The title of the command to read temp basal")
+                cell.textLabel?.text = LocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
 
             case .discoverCommands:
                 cell.textLabel?.text = LocalizedString("Discover Commands", comment: "The title of the command to discover commands")
@@ -460,13 +460,13 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
             case .getPumpModel:
                 vc = .getPumpModel(ops: ops, device: device)
             case .pressDownButton:
-                vc = .setTempBasal(ops: ops, device: device, rate: 0.6)
+                vc = .pressDownButton(ops: ops, device: device)
             case .readPumpStatus:
                 vc = .readPumpStatus(ops: ops, device: device, measurementFormatter: measurementFormatter)
             case .readBasalSchedule:
-                vc = .sendBolus(ops: ops, device: device, integerFormatter: integerFormatter, units: 1.0)
+                vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
             case .enableLED:
-                vc = .readTempBasal(ops: ops, device: device)
+                vc = .enableLEDs(ops: ops, device: device)
             case .discoverCommands:
                 vc = .discoverCommands(ops: ops, device: device)
             case .getStatistics:

@@ -58,6 +58,14 @@ extension TimeInterval {
     var milliseconds: Double {
         return self * 1000
     }
+    
+    init(hundredthsOfMilliseconds: Double) {
+        self.init(hundredthsOfMilliseconds / 100000)
+    }
+
+    var hundredthsOfMilliseconds: Double {
+        return self * 100000
+    }
 
     var minutes: Double {
         return self / 60.0

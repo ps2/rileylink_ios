@@ -36,6 +36,11 @@ extension Data {
         var value = value.littleEndian
         self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
     }
+    
+    init<T: FixedWidthInteger>(bigEndian value: T) {
+        var value = value.bigEndian
+        self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
+    }
 }
 
 // String conversion methods, adapted from https://stackoverflow.com/questions/40276322/hex-binary-string-conversion-in-swift/40278391#40278391

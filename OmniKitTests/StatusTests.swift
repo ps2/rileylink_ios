@@ -11,7 +11,7 @@ import XCTest
 @testable import OmniKit
 
 class StatusTests: XCTestCase {
-    func testStatusErrorConfiguredAlerts() {
+    func testStatusErrorNoConfiguredAlerts() {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
         do {
             // Decode
@@ -23,9 +23,9 @@ class StatusTests: XCTestCase {
         }
     }
     
-    func testStatusEndSuspendConfiguredAlerts() {
-        // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 828c
-        // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 828c
+    func testStatusSuspendStillActiveConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 828c // real alert value after 2 hour suspend
+        // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 828c // used as a tester to find each alarm
         // AlarmTyoe     1    2    3    4    5    6    7    8
   // alertActivation nr  0    1    2    3    4    5    6    7
         do {

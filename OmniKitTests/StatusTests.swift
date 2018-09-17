@@ -16,6 +16,7 @@ class StatusTests: XCTestCase {
         do {
             // Decode
             let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
+            XCTAssertEqual(.statusError, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.statusType)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -24,10 +25,20 @@ class StatusTests: XCTestCase {
     
     func testStatusEndSuspendConfiguredAlerts() {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 828c
+        // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 828c
+        // AlarmTyoe     1    2    3    4    5    6    7    8
+  // alertActivation nr  0    1    2    3    4    5    6    7
         do {
             // Decode
             let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000bd70c400000828c")!)
+            XCTAssertEqual(.statusError, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.statusType)
+            XCTAssertEqual(.beepBeepBeep, decoded.alertsActivations[5].beepType)
+            XCTAssertEqual(11, decoded.alertsActivations[5].timeFromPodStart) // in minutes
+            XCTAssertEqual(10.75, decoded.alertsActivations[5].pulsesLeft) //, accuracy: 1)
+            XCTAssertEqual(.beeeeeep, decoded.alertsActivations[6].beepType)
+            XCTAssertEqual(12, decoded.alertsActivations[6].timeFromPodStart) // in minutes
+            XCTAssertEqual(3.2, decoded.alertsActivations[6].pulsesLeft) //, accuracy: 1)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

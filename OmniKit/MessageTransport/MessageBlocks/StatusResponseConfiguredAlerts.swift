@@ -20,13 +20,13 @@ public struct StatusResponseConfiguredAlerts : StatusMessageBlock {
 
     public struct AlertActivation {
         let beepType: ConfigureAlertsCommand.BeepType
-        let pulsesLeft: Double
+        let unitsLeft: Double
         let timeFromPodStart: UInt8
         
-        public init(beepType: ConfigureAlertsCommand.BeepType, timeFromPodStart: UInt8, pulsesLeft: Double) {
+        public init(beepType: ConfigureAlertsCommand.BeepType, timeFromPodStart: UInt8, unitsLeft: Double) {
             self.beepType = beepType
             self.timeFromPodStart = timeFromPodStart
-            self.pulsesLeft = pulsesLeft
+            self.unitsLeft = unitsLeft
         }
     }
     
@@ -47,8 +47,8 @@ public struct StatusResponseConfiguredAlerts : StatusMessageBlock {
         for alarmType in (0..<numAlertTypes) {
             let beepType = beepType.init(rawValue: UInt8(alarmType))
             let timeFromPodStart = encodedData[(5 + alarmType * 2)] // Double(encodedData[(5 + alarmType)] & 0x3f)
-            let pulsesLeft = Double(encodedData[(6 + alarmType * 2)]) * podPulseSize
-            activations.append(AlertActivation(beepType: beepType!, timeFromPodStart: timeFromPodStart, pulsesLeft: pulsesLeft))
+            let unitsLeft = Double(encodedData[(6 + alarmType * 2)]) * podPulseSize
+            activations.append(AlertActivation(beepType: beepType!, timeFromPodStart: timeFromPodStart, unitsLeft: unitsLeft))
         }
         alertsActivations = activations
         self.data         = encodedData

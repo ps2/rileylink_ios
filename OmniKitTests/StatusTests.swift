@@ -35,10 +35,10 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(.configuredAlerts, decoded.statusType)
             XCTAssertEqual(.beepBeepBeep, decoded.alertsActivations[5].beepType)
             XCTAssertEqual(11, decoded.alertsActivations[5].timeFromPodStart) // in minutes
-            XCTAssertEqual(10.75, decoded.alertsActivations[5].pulsesLeft) //, accuracy: 1)
+            XCTAssertEqual(10.75, decoded.alertsActivations[5].unitsLeft) //, accuracy: 1)
             XCTAssertEqual(.beeeeeep, decoded.alertsActivations[6].beepType)
             XCTAssertEqual(12, decoded.alertsActivations[6].timeFromPodStart) // in minutes
-            XCTAssertEqual(3.2, decoded.alertsActivations[6].pulsesLeft) //, accuracy: 1)
+            XCTAssertEqual(3.2, decoded.alertsActivations[6].unitsLeft) //, accuracy: 1)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

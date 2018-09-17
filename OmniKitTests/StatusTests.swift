@@ -24,8 +24,8 @@ class StatusTests: XCTestCase {
     }
     
     func testStatusSuspendStillActiveConfiguredAlerts() {
-        // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 828c // real alert value after 2 hour suspend
-        // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 828c // used as a tester to find each alarm
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 // real alert value after 2 hour suspend
+        // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 // used as a tester to find each alarm
         // AlarmTyoe     1    2    3    4    5    6    7    8
   // alertActivation nr  0    1    2    3    4    5    6    7
         do {
@@ -43,7 +43,58 @@ class StatusTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-        
+    
+     func testStatusReplacePodAfter3DaysAnd8HoursConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 1160
+        do {
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000000000010e10208")!)
+            XCTAssertEqual(.statusError, decoded.blockType)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+            XCTAssertEqual(.bipBipBipbipBipBip, decoded.alertsActivations[7].beepType)
+            XCTAssertEqual(16, decoded.alertsActivations[7].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(11.25, decoded.alertsActivations[7].unitsLeft, accuracy: 1)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
+    func testStatusReplacePodAfterReservoirEmptyConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 1285 0000 11c7 0000 0000 119c 82b8
+        do {
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001285000011c700000000119c82b8")!)
+            XCTAssertEqual(.statusError, decoded.blockType)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+            XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
+            XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(6.6, decoded.alertsActivations[2].unitsLeft, accuracy: 1)
+            XCTAssertEqual(.beep, decoded.alertsActivations[4].beepType)
+            XCTAssertEqual(17, decoded.alertsActivations[4].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(9.95, decoded.alertsActivations[4].unitsLeft, accuracy: 2)
+            XCTAssertEqual(.bipBipBipbipBipBip, decoded.alertsActivations[7].beepType)
+            XCTAssertEqual(17, decoded.alertsActivations[7].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(7.8, decoded.alertsActivations[7].unitsLeft, accuracy: 1)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
+    func testStatusReplacePodConfiguredAlerts() {
+        // 02 13 01 0000 0000 0000 1284 0000 0000 0000 0000 10e0 0191
+        do {
+            let decoded = try StatusResponseConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001284000000000000000010e00191")!)
+            XCTAssertEqual(.statusError, decoded.blockType)
+            XCTAssertEqual(.configuredAlerts, decoded.statusType)
+            XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
+            XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(6.6, decoded.alertsActivations[2].unitsLeft, accuracy: 1)
+            XCTAssertEqual(.bipBipBipbipBipBip, decoded.alertsActivations[7].beepType)
+            XCTAssertEqual(16, decoded.alertsActivations[7].timeFromPodStart) // in 2 hours steps
+            XCTAssertEqual(11.2, decoded.alertsActivations[7].unitsLeft, accuracy: 1)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testStatusErrorNoFaultAlerts() {
     // 02 16 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000 //recorded an extra 81
     

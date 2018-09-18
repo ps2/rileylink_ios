@@ -1,5 +1,5 @@
 //
-//  StatusMessageBlock.swift
+//  PodInfoResponseSubType.swift
 //  OmniKit
 //
 //  Created by Eelke Jager on 15/09/2018.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum PodInfoType: UInt8 {
+public enum PodInfoResponseSubType: UInt8 {
     case normal                      = 0x00
     case configuredAlerts            = 0x01
     case faultEvents                 = 0x02
@@ -47,9 +47,16 @@ public enum PodInfoType: UInt8 {
 
 public protocol PodInfo {
     init(encodedData: Data) throws
-    var podInfoType: PodInfoType { get }
+    var podInfoType: PodInfoResponseSubType { get }
     var data: Data { get }
+
 }
+
+//public struct PodInfo {
+//    let podInfoType = PodInfoType(rawValue: encodedData[2])!
+//    let len = encodedData.count
+//    self.podInfo = podInfoType(encodedData: encodedData.subdata(in: 2..<len-2)
+//}
 
 //extension Data {
 //    func statusData(encodedData: Data) -> Data {

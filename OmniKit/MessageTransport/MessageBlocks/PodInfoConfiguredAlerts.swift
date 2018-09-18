@@ -1,5 +1,5 @@
 //
-//  StatusResponseConfiguredAlarms.swift
+//  PodInfoConfiguredAlerts.swift
 //  OmniKit
 //
 //  Created by Eelke Jager on 16/09/2018.
@@ -12,7 +12,7 @@ public struct PodInfoConfiguredAlerts : PodInfo {
 
     public let blockType   : MessageBlockType = .podInfoResponse
     public let length      : UInt8
-    public var podInfoType : PodInfoType = .configuredAlerts
+    public var podInfoType : PodInfoResponseSubType = .configuredAlerts
     public let word_278    : Data
     public let alertsActivations : [AlertActivation]
 
@@ -36,7 +36,7 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         }
         
         self.length                       = encodedData[1]
-        self.podInfoType                  = PodInfoType(rawValue: encodedData[2])!
+        self.podInfoType                  = PodInfoResponseSubType.init(rawValue: encodedData[2])!
         self.word_278                     = encodedData[3...4]
         
         let numAlertTypes = 8

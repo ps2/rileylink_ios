@@ -1,5 +1,5 @@
 //
-//  ErrorResponseFaultError.swift
+//  PodInfoFaultEvent.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/23/18.
@@ -48,7 +48,7 @@ public struct PodInfoFaultEvent : PodInfo {
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
 
-    public var podInfoType              : PodInfoType = .faultEvents
+    public var podInfoType              : PodInfoResponseSubType = .faultEvents
     public let length                   : UInt8
     public let deliveryInProgressType   : DeliveryInProgressType
     public let reservoirStatus          : StatusResponse.ReservoirStatus

@@ -494,7 +494,7 @@
 		C1FFAFBF213323E900C50C1D /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */; };
 		C1FFAFC0213323E900C50C1D /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA0213323E800C50C1D /* CRC8.swift */; };
 		C1FFAFC1213323E900C50C1D /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA2213323E800C50C1D /* Notification.swift */; };
-		C1FFAFC2213323E900C50C1D /* ConfigResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA4213323E800C50C1D /* ConfigResponse.swift */; };
+		C1FFAFC2213323E900C50C1D /* VersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA4213323E800C50C1D /* VersionResponse.swift */; };
 		C1FFAFC3213323E900C50C1D /* StatusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA5213323E800C50C1D /* StatusError.swift */; };
 		C1FFAFC4213323E900C50C1D /* TempBasalExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */; };
 		C1FFAFC5213323E900C50C1D /* DeactivatePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */; };
@@ -1356,7 +1356,7 @@
 		C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalSchedule.swift; sourceTree = "<group>"; };
 		C1FFAFA0213323E800C50C1D /* CRC8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC8.swift; sourceTree = "<group>"; };
 		C1FFAFA2213323E800C50C1D /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		C1FFAFA4213323E800C50C1D /* ConfigResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigResponse.swift; sourceTree = "<group>"; };
+		C1FFAFA4213323E800C50C1D /* VersionResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionResponse.swift; sourceTree = "<group>"; };
 		C1FFAFA5213323E800C50C1D /* StatusError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusError.swift; sourceTree = "<group>"; };
 		C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalExtraCommand.swift; sourceTree = "<group>"; };
 		C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeactivatePodCommand.swift; sourceTree = "<group>"; };
@@ -2350,7 +2350,7 @@
 		C1FFAFA3213323E800C50C1D /* MessageBlocks */ = {
 			isa = PBXGroup;
 			children = (
-				C1FFAFA4213323E800C50C1D /* ConfigResponse.swift */,
+				C1FFAFA4213323E800C50C1D /* VersionResponse.swift */,
 				C1FFAFA5213323E800C50C1D /* StatusError.swift */,
 				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
 				C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */,
@@ -3571,7 +3571,7 @@
 				C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */,
 				C1FFB01821332A2A00C50C1D /* OSLog.swift in Sources */,
 				C1FFAFC6213323E900C50C1D /* MessageBlock.swift in Sources */,
-				C1FFAFC2213323E900C50C1D /* ConfigResponse.swift in Sources */,
+				C1FFAFC2213323E900C50C1D /* VersionResponse.swift in Sources */,
 				C1FFB01D21332E1700C50C1D /* Data.swift in Sources */,
 				C1FFAFBD213323E900C50C1D /* PodState.swift in Sources */,
 				C1FFAFB6213323E900C50C1D /* OmnipodPumpManagerState.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  ConfigResponse.swift
+//  VersionResponse.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/12/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ConfigResponse : MessageBlock {
+public struct VersionResponse : MessageBlock {
     
     public struct FirmwareVersion : CustomStringConvertible {
         let major: UInt8
@@ -34,7 +34,7 @@ public struct ConfigResponse : MessageBlock {
         case pairingExpired = 14
     }
 
-    public let blockType: MessageBlockType = .configResponse
+    public let blockType: MessageBlockType = .versionResponse
 
     public let lot: UInt32
     public let tid: UInt32

@@ -26,7 +26,7 @@ class PodStateTests: XCTestCase {
     
     func testNonceSync() {
         do {
-            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a62b0002249da11f00ee860318")!)
+            let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a62b0002249da11f00ee860318")!)
             var podState = PodState(address: 0x1f00ee86, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
 
             XCTAssertEqual(42539, config.lot)
@@ -55,7 +55,7 @@ class PodStateTests: XCTestCase {
     
     func testNonceSync2() {
         do {
-            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a7420007f050961f0b35570264")!)
+            let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a7420007f050961f0b35570264")!)
             var podState = PodState(address: 0x1f0b3557, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
             
 //            XCTAssertEqual(42125, config.lot)

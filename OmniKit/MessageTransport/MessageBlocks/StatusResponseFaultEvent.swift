@@ -1,5 +1,5 @@
 //
-//  StatusError.swift
+//  ErrorResponseFaultError.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/23/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct StatusError : MessageBlock {
+public struct StatusResponseFaultEvent : StatusMessageBlock {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
 //    public enum lengthType: UInt8{
@@ -47,42 +47,36 @@ public struct StatusError : MessageBlock {
         case immediateBolusInProgressDuringError = 1
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
-    
-    public let requestedType: GetStatusCommand.StatusType
-    public let length: UInt8
-    public let blockType: MessageBlockType = .statusError
-    public let deliveryInProgressType: DeliveryInProgressType
-    public let reservoirStatus: StatusResponse.ReservoirStatus  // Reused from StatusResponse
-    public let insulinNotDelivered: Double
-    public let podMessageCounter: UInt8
-    public let unknownPageCode: Double
-    public let originalLoggedFaultEvent: UInt8
+
+    public var statusType               : StatusMessageBlockType = .faultEvents
+    public let length                   : UInt8
+    public let deliveryInProgressType   : DeliveryInProgressType
+    public let reservoirStatus          : StatusResponse.ReservoirStatus
+    public let insulinNotDelivered      : Double
+    public let podMessageCounter        : UInt8
+    public let unknownPageCode          : Double
+    public let originalLoggedFaultEvent : UInt8
     public let faultEventTimeSinceActivation: Double
-    public let insulinRemaining: Double
-    public let timeActive: TimeInterval
+    public let insulinRemaining         : Double
+    public let timeActive               : TimeInterval
     public let secondaryLoggedFaultEvent: UInt8
-    public let logEventError: Bool
-    public let infoLoggedFaultEvent: InfoLoggedFaultEventType
+    public let logEventError            : Bool
+    public let infoLoggedFaultEvent     : InfoLoggedFaultEventType
     public let reservoirStatusAtFirstLoggedFaultEvent: StatusResponse.ReservoirStatus
-    public let recieverLowGain: UInt8
-    public let radioRSSI: UInt8
+    public let recieverLowGain          : UInt8
+    public let radioRSSI                : UInt8
     public let reservoirStatusAtFirstLoggedFaultEventCheck: StatusResponse.ReservoirStatus
 
-    public let data: Data
+    public let data                     : Data
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(13) {
+        if encodedData.count < Int(16) {
             throw MessageBlockError.notEnoughData
         }
         
         self.length = encodedData[1]
  
-        guard let requestedType = GetStatusCommand.StatusType(rawValue: encodedData[2]) else {
-            throw MessageError.unknownValue(value: encodedData[2], typeDescription: "StatusType")
-        }
-        self.requestedType = requestedType
-
         guard let reservoirStatus = StatusResponse.ReservoirStatus(rawValue: encodedData[3]) else {
             throw MessageError.unknownValue(value: encodedData[3], typeDescription: "StatusResponse.ReservoirStatus")
         }
@@ -126,7 +120,6 @@ public struct StatusError : MessageBlock {
         }
         self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         
-        // Unknown value:
         self.data = Data(encodedData[22])
     }
 }

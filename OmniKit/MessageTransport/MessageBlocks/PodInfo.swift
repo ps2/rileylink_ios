@@ -26,12 +26,12 @@ public struct PodInfo : MessageBlock {
     //    public let numberOfBytes: UInt8 = 10
         
     public let blockType   : MessageBlockType = .podInfo
-    public let podInfoType : PodInfoMessageBlockType
+    public let podInfoType : PodInfoBlockType
     public let data        : Data
     
     public init(encodedData: Data) throws {
         // TODO test to evaluate if this works:
-        self.podInfoType = PodInfoMessageBlockType(rawValue: encodedData[2])!
+        self.podInfoType = PodInfoBlockType(rawValue: encodedData[2])!
         self.data = Data(encodedData)
     }
 }

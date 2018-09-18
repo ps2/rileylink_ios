@@ -8,11 +8,11 @@
 
 import Foundation
 
-public struct PodInfoConfiguredAlerts : PodInfoMessageBlock {
+public struct PodInfoConfiguredAlerts : PodInfoBlock {
 
     public let blockType   : MessageBlockType = .podInfo
     public let length      : UInt8
-    public var podInfoType : PodInfoMessageBlockType = .configuredAlerts
+    public var podInfoType : PodInfoBlockType = .configuredAlerts
     public let word_278    : Data
     public let alertsActivations : [AlertActivation]
 
@@ -36,7 +36,7 @@ public struct PodInfoConfiguredAlerts : PodInfoMessageBlock {
         }
         
         self.length                       = encodedData[1]
-        self.podInfoType                  = PodInfoMessageBlockType(rawValue: encodedData[2])!
+        self.podInfoType                  = PodInfoBlockType(rawValue: encodedData[2])!
         self.word_278                     = encodedData[3...4]
         
         let numAlertTypes = 8

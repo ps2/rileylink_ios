@@ -17,7 +17,7 @@ class PodInfoTests: XCTestCase {
         do {
             // Decode
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "021301000000000000000000000000000000000000")!)
-            XCTAssertEqual(.podInfo, decoded.blockType)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -32,7 +32,7 @@ class PodInfoTests: XCTestCase {
         do {
             // Decode
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000bd70c400000828c")!)
-            XCTAssertEqual(.podInfo, decoded.blockType)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.beepBeepBeep, decoded.alertsActivations[5].beepType)
             XCTAssertEqual(11, decoded.alertsActivations[5].timeFromPodStart) // in minutes
@@ -49,7 +49,7 @@ class PodInfoTests: XCTestCase {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 1160
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000000000010e10208")!)
-            XCTAssertEqual(.podInfo, decoded.blockType)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBipBipbipBipBip, decoded.alertsActivations[7].beepType)
             XCTAssertEqual(16, decoded.alertsActivations[7].timeFromPodStart) // in 2 hours steps
@@ -63,7 +63,7 @@ class PodInfoTests: XCTestCase {
         // 02 13 01 0000 0000 0000 1285 0000 11c7 0000 0000 119c 82b8
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001285000011c700000000119c82b8")!)
-            XCTAssertEqual(.podInfo, decoded.blockType)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
             XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps
@@ -83,7 +83,7 @@ class PodInfoTests: XCTestCase {
         // 02 13 01 0000 0000 0000 1284 0000 0000 0000 0000 10e0 0191
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001284000000000000000010e00191")!)
-            XCTAssertEqual(.podInfo, decoded.blockType)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
             XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps

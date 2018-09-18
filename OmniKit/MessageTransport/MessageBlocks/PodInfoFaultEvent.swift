@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PodInfoFaultEvent : PodInfoBlock {
+public struct PodInfoFaultEvent : PodInfo {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
 //    public enum lengthType: UInt8{
@@ -48,7 +48,7 @@ public struct PodInfoFaultEvent : PodInfoBlock {
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
 
-    public var podInfoType              : PodInfoBlockType = .faultEvents
+    public var podInfoType              : PodInfoType = .faultEvents
     public let length                   : UInt8
     public let deliveryInProgressType   : DeliveryInProgressType
     public let reservoirStatus          : StatusResponse.ReservoirStatus

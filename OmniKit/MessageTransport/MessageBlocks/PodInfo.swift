@@ -1,37 +1,58 @@
 //
-//  StatusError.swift
+//  StatusMessageBlock.swift
 //  OmniKit
 //
-//  Created by Pete Schwamb on 2/23/18.
+//  Created by Eelke Jager on 15/09/2018.
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct PodInfo : MessageBlock {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+public enum PodInfoType: UInt8 {
+    case normal                      = 0x00
+    case configuredAlerts            = 0x01
+    case faultEvents                 = 0x02
+    //case dataLog                     = 0x03
+    //case faultDataInitializationTime = 0x04
+    //case hardcodedValues             = 0x06
+    //case resetStatus                 = 0x46 // including state, initialization time, any faults
+    //case dumpRecentFlashLog          = 0x50
+    //case dumpOlderFlashlog           = 0x51 // but dumps entries before the last 50
+    // https://github.com/openaps/openomni/wiki/Command-0E-Status-Request
     
-    // TODO evaluate length:
-    //    public enum lengthType: UInt8{
-    //        case normal = 0x10
-    //        case configuredAlerts = 0x13
-    //        case faultEvents = 0x16
-    //        case dataLog = 0x04*numberOfWords+0x08
-    //        case faultDataInitializationTime = 0x11
-    //        case hardcodedValues  = 0x5
-    //        case resetStatus = numberOfBytes & 0x03
-    //        case dumpRecentFlashLog = 0x13
-    //        case dumpOlderFlashlog = 0x14
-    //    public let numberOfWords: UInt8 = 60
-    //    public let numberOfBytes: UInt8 = 10
-        
-    public let blockType   : MessageBlockType = .podInfo
-    public let podInfoType : PodInfoBlockType
-    public let data        : Data
-    
-    public init(encodedData: Data) throws {
-        // TODO test to evaluate if this works:
-        self.podInfoType = PodInfoBlockType(rawValue: encodedData[2])!
-        self.data = Data(encodedData)
+    public var podInfoType: PodInfo.Type {
+        switch self {
+        case .normal:
+            return StatusResponse.self as! PodInfo.Type
+        case .configuredAlerts:
+            return PodInfoConfiguredAlerts.self
+        case .faultEvents:
+            return PodInfoFaultEvent.self
+        //case .dataLog:
+        //    print("1")
+        //case .faultDataInitializationTime:
+        //    print("1")
+        //case .hardcodedValues:
+        //    print("1")
+        //case .resetStatus:
+        //    print("1")
+        //case .dumpRecentFlashLog:
+        //    print("1")
+        //case .dumpOlderFlashlog:
+        //    print("1")
+        }
     }
+
 }
+
+public protocol PodInfo {
+    init(encodedData: Data) throws
+    var podInfoType: PodInfoType { get }
+    var data: Data { get }
+}
+
+//extension Data {
+//    func statusData(encodedData: Data) -> Data {
+//        return encodedData[2...16]
+//    }
+//}

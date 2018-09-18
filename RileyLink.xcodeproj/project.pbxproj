@@ -544,6 +544,8 @@
 		C1FFB02521343F0300C50C1D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C1FFB02621343F0600C50C1D /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
 		E9C06B262150371700B602AD /* StatusResponseConfiguredAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B252150371700B602AD /* StatusResponseConfiguredAlerts.swift */; };
+		E9C06B2821506A9200B602AD /* AcknowledgeAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */; };
+		E9C06B2A21506BF300B602AD /* AcknowledgeAlertCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */; };
 		E9EE3368214ECFF900888876 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3367214ECFF900888876 /* StatusTests.swift */; };
 		E9EE336A214ED00400888876 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3369214ED00400888876 /* BolusTests.swift */; };
 		E9EE336E214ED01200888876 /* StatusMessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336B214ED01200888876 /* StatusMessageBlock.swift */; };
@@ -1397,6 +1399,8 @@
 		C1FFB00B2133242C00C50C1D /* OmnipodPairingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPairingViewController.swift; sourceTree = "<group>"; };
 		C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
 		E9C06B252150371700B602AD /* StatusResponseConfiguredAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResponseConfiguredAlerts.swift; sourceTree = "<group>"; };
+		E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgeAlertsTests.swift; sourceTree = "<group>"; };
+		E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgeAlertCommand.swift; sourceTree = "<group>"; };
 		E9EE3367214ECFF900888876 /* StatusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		E9EE3369214ED00400888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 		E9EE336B214ED01200888876 /* StatusMessageBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusMessageBlock.swift; sourceTree = "<group>"; };
@@ -2323,6 +2327,7 @@
 		C1FFAF86213323CC00C50C1D /* OmniKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */,
 				E9EE3369214ED00400888876 /* BolusTests.swift */,
 				E9EE3367214ECFF900888876 /* StatusTests.swift */,
 				C1FFAFFB2133241600C50C1D /* BasalScheduleTests.swift */,
@@ -2374,6 +2379,7 @@
 				C1FFAFAA213323E800C50C1D /* BolusExtraCommand.swift */,
 				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
 				C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */,
+				E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */,
 				C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */,
 				C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */,
 				C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */,
@@ -3606,6 +3612,7 @@
 				C1FFAFCB213323E900C50C1D /* BasalScheduleExtraCommand.swift in Sources */,
 				C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */,
 				C1FFAFBF213323E900C50C1D /* BasalSchedule.swift in Sources */,
+				E9C06B2A21506BF300B602AD /* AcknowledgeAlertCommand.swift in Sources */,
 				C1FFAFC9213323E900C50C1D /* StatusResponse.swift in Sources */,
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
 				C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */,
@@ -3623,6 +3630,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1FFB0032133241700C50C1D /* BasalScheduleTests.swift in Sources */,
+				E9C06B2821506A9200B602AD /* AcknowledgeAlertsTests.swift in Sources */,
 				C1FFAFFE2133241700C50C1D /* MessageTests.swift in Sources */,
 				C1FFAFFF2133241700C50C1D /* PodStateTests.swift in Sources */,
 				C1FFB0022133241700C50C1D /* PacketTests.swift in Sources */,

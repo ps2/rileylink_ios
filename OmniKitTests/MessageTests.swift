@@ -74,9 +74,9 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testParsingConfigResponse() {
+    func testParsingVersionResponse() {
         do {
-            let config = try ConfigResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
+            let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
             XCTAssertEqual(23, config.data.count)
             XCTAssertEqual(0x1f08ced2, config.address)
             XCTAssertEqual(42560, config.lot)
@@ -86,10 +86,10 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testParsingLongConfigResponse() {
+    func testParsingLongVersionResponse() {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff041d011b13881008340a5002070002070002030000a62b000447941f00ee878352")!)
-            let config = message.messageBlocks[0] as! ConfigResponse
+            let config = message.messageBlocks[0] as! VersionResponse
             XCTAssertEqual(29, config.data.count)
             XCTAssertEqual(0x1f00ee87, config.address)
             XCTAssertEqual(42539, config.lot)
@@ -104,7 +104,7 @@ class MessageTests: XCTestCase {
     func testParsingConfigWithPairingExpired() {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff04170115020700020700020e0000a5ad00053030971f08686301fd")!)
-            let config = message.messageBlocks[0] as! ConfigResponse
+            let config = message.messageBlocks[0] as! VersionResponse
             XCTAssertEqual(.pairingExpired, config.pairingState)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -125,7 +125,7 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testConfirmPairingCommand() {
+    func testSetupPodCommand() {
         do {
             var components = DateComponents()
             components.day = 6
@@ -135,14 +135,14 @@ class MessageTests: XCTestCase {
             components.minute = 47
 
             // Decode
-            let decoded = try ConfirmPairingCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
+            let decoded = try SetupPodCommand(encodedData: Data(hexadecimalString: "03131f0218c31404060c100d2f0000a4be0004e4a1")!)
             XCTAssertEqual(0x1f0218c3, decoded.address)
             XCTAssertEqual(components, decoded.dateComponents)
             XCTAssertEqual(0x0000a4be, decoded.lot)
             XCTAssertEqual(0x0004e4a1, decoded.tid)
 
             // Encode
-            let encoded = ConfirmPairingCommand(address: 0x1f0218c3, dateComponents: components, lot: 0x0000a4be, tid: 0x0004e4a1)
+            let encoded = SetupPodCommand(address: 0x1f0218c3, dateComponents: components, lot: 0x0000a4be, tid: 0x0004e4a1)
             XCTAssertEqual("03131f0218c31404060c100d2f0000a4be0004e4a1", encoded.data.hexadecimalString)            
 
         } catch (let error) {

@@ -1,5 +1,5 @@
 //
-//  ConfirmPairingCommand.swift
+//  SetupPodCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/17/18.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct ConfirmPairingCommand : MessageBlock {
+public struct SetupPodCommand : MessageBlock {
     
-    public let blockType: MessageBlockType = .confirmPairing
+    public let blockType: MessageBlockType = .setupPod
     
     let address: UInt32
     let lot: UInt32

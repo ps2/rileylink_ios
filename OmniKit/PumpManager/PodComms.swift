@@ -63,18 +63,18 @@ public class PodComms {
                     let assignAddress = AssignAddressCommand(address: newAddress)
                     
                     let response = try transport.send([assignAddress])
-                    guard let config1 = response.messageBlocks[0] as? ConfigResponse else {
+                    guard let config1 = response.messageBlocks[0] as? VersionResponse else {
                         let responseType = response.messageBlocks[0].blockType
                         throw PodCommsError.unexpectedResponse(response: responseType)
                     }
                     
                     // Verify address is set
                     let activationDate = Date()
-                    let dateComponents = ConfirmPairingCommand.dateComponents(date: activationDate, timeZone: timeZone)
-                    let confirmPairing = ConfirmPairingCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
+                    let dateComponents = SetupPodCommand.dateComponents(date: activationDate, timeZone: timeZone)
+                    let setupPod = SetupPodCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
                     
-                    let response2 = try transport.send([confirmPairing])
-                    guard let config2 = response2.messageBlocks[0] as? ConfigResponse else {
+                    let response2 = try transport.send([setupPod])
+                    guard let config2 = response2.messageBlocks[0] as? VersionResponse else {
                         let responseType = response.messageBlocks[0].blockType
                         throw PodCommsError.unexpectedResponse(response: responseType)
                     }

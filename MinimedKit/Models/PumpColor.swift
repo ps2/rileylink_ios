@@ -11,4 +11,5 @@ public enum PumpColor: String {
     case clear  = "L"
     case purple = "P"
     case smoke  = "S"
+    case pink   = "H"
 }

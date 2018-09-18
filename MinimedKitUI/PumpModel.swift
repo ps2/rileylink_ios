@@ -29,6 +29,8 @@ extension UIImage {
                 return "Purple"
             case .smoke?:
                 return "Smoke"
+            case .pink?:
+                return "Pink"
             case .none:
                 return "Outline"
             }

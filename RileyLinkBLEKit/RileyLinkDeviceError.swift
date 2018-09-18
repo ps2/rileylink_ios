@@ -6,18 +6,18 @@
 //
 
 
-enum RileyLinkDeviceError: Error {
+public enum RileyLinkDeviceError: Error {
     case peripheralManagerError(PeripheralManagerError)
     case invalidInput(String)
     case writeSizeLimitExceeded(maxLength: Int)
     case invalidResponse(Data)
     case responseTimeout
-    case unsupportedCommand(RileyLinkCommand)
+    case unsupportedCommand(String)
 }
 
 
 extension RileyLinkDeviceError: LocalizedError {
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .peripheralManagerError(let error):
             return error.errorDescription
@@ -34,7 +34,7 @@ extension RileyLinkDeviceError: LocalizedError {
         }
     }
 
-    var failureReason: String? {
+    public var failureReason: String? {
         switch self {
         case .peripheralManagerError(let error):
             return error.failureReason
@@ -43,7 +43,7 @@ extension RileyLinkDeviceError: LocalizedError {
         }
     }
 
-    var recoverySuggestion: String? {
+    public var recoverySuggestion: String? {
         switch self {
         case .peripheralManagerError(let error):
             return error.recoverySuggestion

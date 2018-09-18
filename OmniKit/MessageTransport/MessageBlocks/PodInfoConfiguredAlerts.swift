@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct StatusResponseConfiguredAlerts : StatusMessageBlock {
+public struct PodInfoConfiguredAlerts : PodInfoMessageBlock {
 
-    public let blockType  : MessageBlockType = .statusError
-    public let length     : UInt8
-    public var statusType : StatusMessageBlockType = .configuredAlerts
-    public let word_278   : Data
+    public let blockType   : MessageBlockType = .podInfo
+    public let length      : UInt8
+    public var podInfoType : PodInfoMessageBlockType = .configuredAlerts
+    public let word_278    : Data
     public let alertsActivations : [AlertActivation]
 
     public let data       : Data
@@ -36,7 +36,7 @@ public struct StatusResponseConfiguredAlerts : StatusMessageBlock {
         }
         
         self.length                       = encodedData[1]
-        self.statusType                   = StatusMessageBlockType(rawValue: encodedData[2])!
+        self.podInfoType                  = PodInfoMessageBlockType(rawValue: encodedData[2])!
         self.word_278                     = encodedData[3...4]
         
         let numAlertTypes = 8

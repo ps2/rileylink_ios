@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum StatusMessageBlockType: UInt8 {
+public enum PodInfoMessageBlockType: UInt8 {
     case normal                      = 0x00
     case configuredAlerts            = 0x01
     case faultEvents                 = 0x02
@@ -20,14 +20,14 @@ public enum StatusMessageBlockType: UInt8 {
     //case dumpOlderFlashlog           = 0x51 // but dumps entries before the last 50
     // https://github.com/openaps/openomni/wiki/Command-0E-Status-Request
     
-    public var statusType: StatusMessageBlock.Type {
+    public var podInfoType: PodInfoMessageBlock.Type {
         switch self {
         case .normal:
-            return StatusResponse.self as! StatusMessageBlock.Type
+            return StatusResponse.self as! PodInfoMessageBlock.Type
         case .configuredAlerts:
-            return StatusResponseConfiguredAlerts.self
+            return PodInfoConfiguredAlerts.self
         case .faultEvents:
-            return StatusResponseFaultEvent.self
+            return PodInfoFaultEvent.self
         //case .dataLog:
         //    print("1")
         //case .faultDataInitializationTime:
@@ -45,9 +45,9 @@ public enum StatusMessageBlockType: UInt8 {
 
 }
 
-public protocol StatusMessageBlock {
+public protocol PodInfoMessageBlock {
     init(encodedData: Data) throws
-    var statusType: StatusMessageBlockType { get }
+    var podInfoType: PodInfoMessageBlockType { get }
     var data: Data { get }
 }
 

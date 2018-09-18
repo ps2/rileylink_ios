@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct StatusError : MessageBlock {
+public struct PodInfo : MessageBlock {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
     // TODO evaluate length:
@@ -25,13 +25,13 @@ public struct StatusError : MessageBlock {
     //    public let numberOfWords: UInt8 = 60
     //    public let numberOfBytes: UInt8 = 10
         
-    public let blockType   : MessageBlockType = .statusError
-    public let statusType  : StatusMessageBlockType
+    public let blockType   : MessageBlockType = .podInfo
+    public let podInfoType : PodInfoMessageBlockType
     public let data        : Data
     
     public init(encodedData: Data) throws {
         // TODO test to evaluate if this works:
-        self.statusType = StatusMessageBlockType(rawValue: encodedData[2])!
+        self.podInfoType = PodInfoMessageBlockType(rawValue: encodedData[2])!
         self.data = Data(encodedData)
     }
 }

@@ -15,7 +15,7 @@ public enum MessageBlockError: Error {
 public enum MessageBlockType: UInt8 {
     case configResponse     = 0x01
     case acknowledgeAlert   = 0x11
-    case statusError        = 0x02
+    case podInfo            = 0x02
     case confirmPairing     = 0x03
     case errorResponse      = 0x06
     case assignAddress      = 0x07
@@ -33,8 +33,8 @@ public enum MessageBlockType: UInt8 {
         switch self {
         case .configResponse:
             return ConfigResponse.self
-        case .statusError:
-            return StatusError.self
+        case .podInfo:
+            return PodInfo.self
         case .acknowledgeAlert:
             return AcknowledgeAlertCommand.self
         case .confirmPairing:

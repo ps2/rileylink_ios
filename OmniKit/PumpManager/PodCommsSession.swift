@@ -38,9 +38,9 @@ extension PodCommsError: LocalizedError {
         case .unknownPacketType:
             return nil
         case .noResponse:
-            return nil
+            return LocalizedString("No response from pod", comment: "Error message shown when no response from pod was received")
         case .emptyResponse:
-            return nil
+            return LocalizedString("Empty response from pod", comment: "Error message shown when empty response from pod was received")
         case .podAckedInsteadOfReturningResponse:
             return nil
         case .unexpectedPacketType:
@@ -50,7 +50,7 @@ extension PodCommsError: LocalizedError {
         case .unknownResponseType:
             return nil
         case .noRileyLinkAvailable:
-            return nil
+            return LocalizedString("No RileyLink available", comment: "Error message shown when no response from pod was received")
         case .unfinalizedBolus:
             return LocalizedString("Bolus in progress", comment: "Error message shown when bolus could not be completed due to exiting bolus in progress")
         case .unfinalizedTempBasal:
@@ -104,7 +104,7 @@ extension PodCommsError: LocalizedError {
         case .unknownPacketType:
             return nil
         case .noResponse:
-            return nil
+            return LocalizedString("Please bring your pod closer to the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
         case .emptyResponse:
             return nil
         case .podAckedInsteadOfReturningResponse:
@@ -116,7 +116,7 @@ extension PodCommsError: LocalizedError {
         case .unknownResponseType:
             return nil
         case .noRileyLinkAvailable:
-            return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion")
+            return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion when no RileyLink is available")
         case .unfinalizedBolus:
             return LocalizedString("Wait for existing bolus to finish, or suspend to cancel", comment: "Recovery suggestion when bolus could not be completed due to existing bolus in progress")
         case .unfinalizedTempBasal:

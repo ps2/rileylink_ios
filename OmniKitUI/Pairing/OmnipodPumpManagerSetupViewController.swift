@@ -29,7 +29,7 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         view.backgroundColor = .white
         navigationBar.shadowImage = UIImage()
         
-        if let omnipodPairingViewController = topViewController as? OmnipodPairingViewController, let rileyLinkPumpManager = rileyLinkPumpManager {
+        if let omnipodPairingViewController = topViewController as? PairPodSetupViewController, let rileyLinkPumpManager = rileyLinkPumpManager {
             omnipodPairingViewController.rileyLinkPumpManager = rileyLinkPumpManager
         }
     }
@@ -40,22 +40,37 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
      1. RileyLink
      - RileyLinkPumpManagerState
      
-     2. Pod Pairing/Priming
+     2. Basal Rates & Delivery Limits
      
-     3. Basal Rates & Delivery Limits
+     3. Pod Pairing/Priming
      
      4. Cannula Insertion
      
-     5. Pump Setup Complete
+     5. Pod Setup Complete
      */
     
     override public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         super.navigationController(navigationController, willShow: viewController, animated: animated)
+
+        // Read state values
+        let viewControllers = navigationController.viewControllers
+        let count = navigationController.viewControllers.count
         
+        if count >= 2 {
+            switch viewControllers[count - 2] {
+            case let vc as PairPodSetupViewController:
+                pumpManager = vc.pumpManager
+            default:
+                break
+            }
+        }
+
         // Set state values
         switch viewController {
-        case let vc as OmnipodPairingViewController:
+        case let vc as PairPodSetupViewController:
             vc.rileyLinkPumpManager = rileyLinkPumpManager
+        case let vc as InsertCannulaSetupViewController:
+            vc.pumpManager = pumpManager
         default:
             break
         }        
@@ -63,17 +78,6 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
 
     
     func completeSetup() {
-        let count = viewControllers.count
-        
-        if count >= 1 {
-            switch viewControllers[count - 1] {
-            case let vc as OmnipodPairingViewController:
-                pumpManager = vc.pumpManager
-            default:
-                break
-            }
-        }
-        
         if let pumpManager = pumpManager {
             setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
         }

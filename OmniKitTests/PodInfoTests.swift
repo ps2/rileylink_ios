@@ -206,6 +206,21 @@ class PodInfoTests: XCTestCase {
         }
     }
 
+    func testPodInfoResetStatus() {
+        //027c4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
+        do {
+            // Decode
+            let decoded = try PodInfoResetStatus(encodedData: Data(hexadecimalString: "027c4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065")!)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
+            XCTAssertEqual(124, decoded.length)
+            XCTAssertEqual(.resetStatus, decoded.podInfoType)
+            XCTAssertEqual(0, decoded.zero)
+            XCTAssertEqual(121, decoded.numberOfBytes)
+            XCTAssertEqual(0x1f00ee84, decoded.address)
 
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
     
 }

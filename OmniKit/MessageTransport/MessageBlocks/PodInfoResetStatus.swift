@@ -44,7 +44,7 @@ public struct PodInfoResetStatus : PodInfo {
         self.podInfoType         = PodInfoResponseSubType(rawValue: encodedData[2])!
         self.zero                = encodedData[3]
         self.numberOfBytes       = encodedData[4]
-        self.address             = encodedData[4...7].toBigEndian(UInt32.self)
+        self.address             = encodedData[5...8].toBigEndian(UInt32.self)
         self.dataFromFlashMemory = Data(encodedData[22...124])
         self.data                = Data() // Dummy value, else error PodInfo type
     }

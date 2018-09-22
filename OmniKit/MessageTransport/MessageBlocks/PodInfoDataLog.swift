@@ -18,7 +18,7 @@ public struct PodInfoDataLog : PodInfo {
     public var blockType                : MessageBlockType = .podInfoResponse
     public var podInfoType              : PodInfoResponseSubType = .dataLog
     public let length                   : UInt8
-    public let loggedFaultEvent         : FaultEventType
+    public let loggedFaultEvent         : PodInfoResponseSubType.FaultEventType
     public let data                     : Data
     
     public init(encodedData: Data) throws {
@@ -29,7 +29,7 @@ public struct PodInfoDataLog : PodInfo {
         self.blockType           = MessageBlockType(rawValue: encodedData[0])!
         self.length              = encodedData[1]
         self.podInfoType         = PodInfoResponseSubType(rawValue: encodedData[2])!
-        self.loggedFaultEvent    = FaultEventType(rawValue: encodedData[3])!
+        self.loggedFaultEvent    = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[3])!
         // self.dataFromFlashMemory = Data(encodedData[22...124])
         self.data                = Data() // Dummy value, else error PodInfo type
     }

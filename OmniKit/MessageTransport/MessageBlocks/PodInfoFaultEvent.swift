@@ -48,18 +48,18 @@ public struct PodInfoFaultEvent : PodInfo {
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
 
-    public var podInfoType              : PodInfoResponseSubType = .faultEvents
     public let length                   : UInt8
-    public let deliveryInProgressType   : DeliveryInProgressType
+    public var podInfoType              : PodInfoResponseSubType = .faultEvents
     public let reservoirStatus          : StatusResponse.ReservoirStatus
+    public let deliveryInProgressType   : DeliveryInProgressType
     public let insulinNotDelivered      : Double
     public let podMessageCounter        : UInt8
     public let unknownPageCode          : Double
-    public let originalLoggedFaultEvent : FaultEventType
+    public let originalLoggedFaultEvent : PodInfoResponseSubType.FaultEventType
     public let faultEventTimeSinceActivation: Double
     public let insulinRemaining         : Double
     public let timeActive               : TimeInterval
-    public let secondaryLoggedFaultEvent: FaultEventType
+    public let secondaryLoggedFaultEvent: PodInfoResponseSubType.FaultEventType
     public let logEventError            : Bool
     public let infoLoggedFaultEvent     : InfoLoggedFaultEventType
     public let reservoirStatusAtFirstLoggedFaultEvent: StatusResponse.ReservoirStatus
@@ -89,7 +89,7 @@ public struct PodInfoFaultEvent : PodInfo {
         self.podMessageCounter = encodedData[7]
         self.unknownPageCode = Double(Int(encodedData[8]) | Int(encodedData[9]))
         
-        self.originalLoggedFaultEvent = FaultEventType(rawValue: encodedData[10])!
+        self.originalLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[10])!
         
         self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[11] & 0b1) << 8) + Int(encodedData[12])))
         
@@ -97,7 +97,7 @@ public struct PodInfoFaultEvent : PodInfo {
         
         self.timeActive = TimeInterval(minutes: Double((Int(encodedData[15] & 0b1) << 8) + Int(encodedData[16])))
         
-        self.secondaryLoggedFaultEvent = FaultEventType(rawValue: encodedData[17])!
+        self.secondaryLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[17])!
         
         self.logEventError = encodedData[18] == 2
 
@@ -120,6 +120,6 @@ public struct PodInfoFaultEvent : PodInfo {
         }
         self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         
-        self.data = Data(encodedData[22])
+        self.data = Data(encodedData)
     }
 }

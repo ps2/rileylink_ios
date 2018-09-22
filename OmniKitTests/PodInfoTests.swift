@@ -190,7 +190,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(.badValueVerifyAndStartPumpType8F, decoded.originalLoggedFaultEvent)
+            XCTAssertEqual(.faultEventSetupPodType8F, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0000*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(0000*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds

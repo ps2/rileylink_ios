@@ -84,7 +84,7 @@ public enum PodInfoResponseSubType: UInt8 {
         case unKnownError25                       = 0x25
         case rtcInterruptHandlerCalledByte358     = 0x26
         case missing2hourAlertToFillTank          = 0x27
-        case problemVerifyAndStartPump            = 0x28
+        case faultEventSetupPod                   = 0x28
         case errorMainLoopHelper0                 = 0x29
         case errorMainLoopHelper1                 = 0x2A
         case errorMainLoopHelper2                 = 0x2B
@@ -149,20 +149,20 @@ public enum PodInfoResponseSubType: UInt8 {
         case problemTempBasalUpdateType83         = 0x83
         case problemBolusUpdateType84             = 0x84
         case problemBolusUpdateType85             = 0x85
-        case problemVerifyAndStartPumpType86      = 0x86
-        case problemVerifyAndStartPumpType87      = 0x87
-        case problemVerifyAndStartPumpType88      = 0x88
-        case badValueVerifyAndStartPumpType89     = 0x89
-        case badValueVerifyAndStartPumpType8A     = 0x8A
+        case faultEventSetupPodType86             = 0x86
+        case faultEventSetupPodType87             = 0x87
+        case faultEventSetupPodType88             = 0x88
+        case faultEventSetupPodType89             = 0x89
+        case faultEventSetupPodType8A             = 0x8A
         case corruptionOfTables                   = 0x8B
         case unKnownError8C                       = 0x8C
-        case badValueVerifyAndStartPumpType8D     = 0x8D
-        case problemVerifyAndStartPumpType8E      = 0x8E
-        case badValueVerifyAndStartPumpType8F     = 0x8F
+        case faultEventSetupPodType8D             = 0x8D
+        case faultEventSetupPodType8E             = 0x8E
+        case faultEventSetupPodType8F             = 0x8F
         case badValueForTables                    = 0x90
-        case problemVerifyAndStartPumpType91      = 0x91
-        case problemVerifyAndStartPumpType92      = 0x92
-        case problemVerifyAndStartPumpType93      = 0x93
+        case faultEventSetupPodType91             = 0x91
+        case faultEventSetupPodType92             = 0x92
+        case faultEventSetupPodType93             = 0x93
         case unKnownError94                       = 0x94
         case badValueField6in0x1A                 = 0x95
         case unKnownError96                       = 0x96
@@ -250,7 +250,7 @@ public enum PodInfoResponseSubType: UInt8 {
                 return LocalizedString("Fault Event Type 0x26: RTC interrupt handler called when byte_358 is 1r.", comment: "Fault Event Type 0x26: RTC interrupt handler called when byte_358 is 1.")
             case .missing2hourAlertToFillTank:
                 return LocalizedString("Fault Event Type 0x27: Failed to set up 2 hour alert for tank fill operation.", comment: "Fault Event Type 0x27: Failed to set up 2 hour alert for tank fill operation.")
-            case .problemVerifyAndStartPump:
+            case .faultEventSetupPod:
                 return LocalizedString("Fault Event Type 0x28: Bad arg to update_insulin_variables(), problem inside verify_and_start_pump, bad state in main_loop_control_pump().", comment: "Fault Event Type 0x28: Bad arg to update_insulin_variables(), problem inside verify_and_start_pump, bad state in main_loop_control_pump().")
             case .errorMainLoopHelper0:
                 return LocalizedString("Fault Event Type 0x29: Error in big routine used by main_loop_helper_2($29+i[0]).", comment: "Fault Event Type 0x29: Error in big routine used by main_loop_helper_2($29+i[0]).")
@@ -378,33 +378,33 @@ public enum PodInfoResponseSubType: UInt8 {
                 return LocalizedString("Fault Event Type 0x84: Bolus variable state problem #1 inside update_insulin_variables.", comment: "Fault Event Type 0x84: Bolus variable state problem #1 inside update_insulin_variables.")
             case .problemBolusUpdateType85:
                 return LocalizedString("Fault Event Type 0x84: Bolus variable state problem #2 inside update_insulin_variables.", comment: "Fault Event Type 0x84: Bolus variable state problem #2 inside update_insulin_variables.")
-            case .problemVerifyAndStartPumpType86:
+            case .faultEventSetupPodType86:
                 return LocalizedString("Fault Event Type 0x86: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x86: Problem inside verify_and_start_pump.")
-            case .problemVerifyAndStartPumpType87:
+            case .faultEventSetupPodType87:
                 return LocalizedString("Fault Event Type 0x87: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x87: Problem inside verify_and_start_pump.")
-            case .problemVerifyAndStartPumpType88:
+            case .faultEventSetupPodType88:
                 return LocalizedString("Fault Event Type 0x88: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x88: Problem inside verify_and_start_pump.")
-            case .badValueVerifyAndStartPumpType89:
+            case .faultEventSetupPodType89:
                 return LocalizedString("Fault Event Type 0x89: Bad value problem #1 to verify_and_start_pump.", comment: "Fault Event Type 0x89: Bad value problem #1 to verify_and_start_pump.")
-            case .badValueVerifyAndStartPumpType8A:
+            case .faultEventSetupPodType8A:
                 return LocalizedString("Fault Event Type 0x8A: Bad value problem #2 to verify_and_start_pump.", comment: "Fault Event Type 0x8A: Bad value problem #2 to verify_and_start_pump.")
             case .corruptionOfTables:
                 return LocalizedString("Fault Event Type 0x8B: Corruption of $283, $2E3, $315 table.", comment: "Fault Event Type 0x8B: Corruption of $283, $2E3, $315 table.")
             case .unKnownError8C:
                 return LocalizedString("Fault Event Type 0x8C: Unknown Error.", comment: "Fault Event Type 0x8C: Unknown Error.")
-            case .badValueVerifyAndStartPumpType8D:
+            case .faultEventSetupPodType8D:
                 return LocalizedString("Fault Event Type 0x8D: Bad value problem #3 to verify_and_start_pump.", comment: "Fault Event Type 0x8D: Bad value problem #3 to verify_and_start_pump.")
-            case .problemVerifyAndStartPumpType8E:
+            case .faultEventSetupPodType8E:
                 return LocalizedString("Fault Event Type 0x8E: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x8E: Problem inside verify_and_start_pump.")
-            case .badValueVerifyAndStartPumpType8F:
+            case .faultEventSetupPodType8F:
                 return LocalizedString("Fault Event Type 0x8F: Bad value during verify_and_start_pump because of sub_ACE3 is stated as bad value.", comment: "Fault Event Type 0x8F: Bad value during verify_and_start_pump because of sub_ACE3 is stated as bad value.")
             case .badValueForTables:
                 return LocalizedString("Fault Event Type 0x90: Bad value for $283/$2E3/$315 table specification.", comment: "Fault Event Type 0x90: Bad value for $283/$2E3/$315 table specification.")
-            case .problemVerifyAndStartPumpType91:
+            case .faultEventSetupPodType91:
                 return LocalizedString("Fault Event Type 0x91: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x91: Problem inside verify_and_start_pump.")
-            case .problemVerifyAndStartPumpType92:
+            case .faultEventSetupPodType92:
                 return LocalizedString("Fault Event Type 0x92: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x92: Problem inside verify_and_start_pump.")
-            case .problemVerifyAndStartPumpType93:
+            case .faultEventSetupPodType93:
                 return LocalizedString("Fault Event Type 0x93: Problem inside verify_and_start_pump.", comment: "Fault Event Type 0x93: Problem inside verify_and_start_pump.")
             case .unKnownError94:
                 return LocalizedString("Fault Event Type 0x94: Unknown Error.", comment: "Fault Event Type 0x94: Unknown Error.")

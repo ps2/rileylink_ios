@@ -55,18 +55,18 @@ public struct PodInfoFaultEvent : PodInfo {
     public let insulinNotDelivered      : Double
     public let podMessageCounter        : UInt8
     public let unknownPageCode          : Double
-    public let originalLoggedFaultEvent : UInt8
+    public let originalLoggedFaultEvent : FaultEventType
     public let faultEventTimeSinceActivation: Double
     public let insulinRemaining         : Double
     public let timeActive               : TimeInterval
-    public let secondaryLoggedFaultEvent: UInt8
+    public let secondaryLoggedFaultEvent: FaultEventType
     public let logEventError            : Bool
     public let infoLoggedFaultEvent     : InfoLoggedFaultEventType
     public let reservoirStatusAtFirstLoggedFaultEvent: StatusResponse.ReservoirStatus
     public let recieverLowGain          : UInt8
     public let radioRSSI                : UInt8
     public let reservoirStatusAtFirstLoggedFaultEventCheck: StatusResponse.ReservoirStatus
-
+    
     public let data                     : Data
     
     public init(encodedData: Data) throws {
@@ -76,20 +76,20 @@ public struct PodInfoFaultEvent : PodInfo {
         }
         
         self.length = encodedData[1]
- 
+        
         guard let reservoirStatus = StatusResponse.ReservoirStatus(rawValue: encodedData[3]) else {
             throw MessageError.unknownValue(value: encodedData[3], typeDescription: "StatusResponse.ReservoirStatus")
         }
         self.reservoirStatus = reservoirStatus
-
+        
         self.deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4] & 0xf)
-
+        
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[5] & 0x3) << 8) | Int(encodedData[6]))
         
         self.podMessageCounter = encodedData[7]
         self.unknownPageCode = Double(Int(encodedData[8]) | Int(encodedData[9]))
         
-        self.originalLoggedFaultEvent = encodedData[10]
+        self.originalLoggedFaultEvent = FaultEventType(rawValue: encodedData[10])!
         
         self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[11] & 0b1) << 8) + Int(encodedData[12])))
         
@@ -97,8 +97,8 @@ public struct PodInfoFaultEvent : PodInfo {
         
         self.timeActive = TimeInterval(minutes: Double((Int(encodedData[15] & 0b1) << 8) + Int(encodedData[16])))
         
-        self.secondaryLoggedFaultEvent = encodedData[17]
-
+        self.secondaryLoggedFaultEvent = FaultEventType(rawValue: encodedData[17])!
+        
         self.logEventError = encodedData[18] == 2
 
         guard let infoLoggedFaultEventType = InfoLoggedFaultEventType(rawValue: encodedData[19] >> 4) else {

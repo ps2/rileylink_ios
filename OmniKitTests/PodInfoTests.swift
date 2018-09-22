@@ -12,7 +12,7 @@ import XCTest
 @testable import OmniKit
 
 class PodInfoTests: XCTestCase {
-    func testPodInfoNoConfiguredAlerts() {
+    func testPodInfoConfiguredAlertsNoAlerts() {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
         do {
             // Decode
@@ -24,7 +24,7 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testStatusSuspendStillActiveConfiguredAlerts() {
+    func testPodInfoConfiguredAlertsSuspendStillActive() {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 // real alert value after 2 hour suspend
         // 02 13 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 // used as a tester to find each alarm
         // AlarmTyoe     1    2    3    4    5    6    7    8
@@ -45,7 +45,7 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testStatusReplacePodAfter3DaysAnd8HoursConfiguredAlerts() {
+    func testPodInfoConfiguredAlertsReplacePodAfter3DaysAnd8Hours() {
         // 02 13 01 0000 0000 0000 0000 0000 0000 0000 0000 1160
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000000000000000000000000010e10208")!)
@@ -59,7 +59,7 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testStatusReplacePodAfterReservoirEmptyConfiguredAlerts() {
+    func testPodInfoConfiguredAlertsReplacePodAfterReservoirEmpty() {
         // 02 13 01 0000 0000 0000 1285 0000 11c7 0000 0000 119c 82b8
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001285000011c700000000119c82b8")!)
@@ -79,7 +79,7 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testStatusReplacePodConfiguredAlerts() {
+    func testPodInfoConfiguredAlertsReplacePod() {
         // 02 13 01 0000 0000 0000 1284 0000 0000 0000 0000 10e0 0191
         do {
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "0213010000000000001284000000000000000010e00191")!)
@@ -108,11 +108,11 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.basal, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
-            XCTAssertEqual(00, decoded.originalLoggedFaultEvent)
+            XCTAssertEqual(.noFaults, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(135*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
-            XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
+            XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
             XCTAssertEqual(.initialized, decoded.reservoirStatusAtFirstLoggedFaultEvent)
@@ -136,11 +136,11 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(92, decoded.originalLoggedFaultEvent)
+            XCTAssertEqual(.deliveryErrorDuringPriming, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0001*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
-            XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
+            XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
@@ -163,11 +163,11 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
-            XCTAssertEqual(92, decoded.originalLoggedFaultEvent)
+            XCTAssertEqual(.deliveryErrorDuringPriming, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0001*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
-            XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
+            XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
@@ -190,11 +190,11 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.none, decoded.deliveryInProgressType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(143, decoded.originalLoggedFaultEvent)
+            XCTAssertEqual(.badValueVerifyAndStartPumpType8F, decoded.originalLoggedFaultEvent)
             XCTAssertEqual(0000*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
             XCTAssertEqual(0000*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
-            XCTAssertEqual(00, decoded.secondaryLoggedFaultEvent)
+            XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEvent)
@@ -206,6 +206,19 @@ class PodInfoTests: XCTestCase {
         }
     }
 
+    func testPodInfoDataLog() {
+        // 027c0301
+        do {
+            let decoded = try PodInfoDataLog(encodedData: Data(hexadecimalString: "027c0301")!)
+            XCTAssertEqual(.podInfoResponse, decoded.blockType)
+            XCTAssertEqual(124, decoded.length)
+            XCTAssertEqual(.dataLog, decoded.podInfoType)
+            XCTAssertEqual(.failedFlashErase, decoded.loggedFaultEvent)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testPodInfoResetStatus() {
         //027c4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
         do {

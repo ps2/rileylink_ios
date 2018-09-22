@@ -548,6 +548,7 @@
 		E9C06B2A21506BF300B602AD /* AcknowledgeAlertCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */; };
 		E9C06B2C21513B2600B602AD /* PodInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2B21513B2600B602AD /* PodInfoTests.swift */; };
 		E9E54AB421542E8A00E319B8 /* PodInfoResetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */; };
+		E9E54AB62156B2D500E319B8 /* PodInfoDataLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */; };
 		E9EE3368214ECFF900888876 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3367214ECFF900888876 /* StatusTests.swift */; };
 		E9EE336A214ED00400888876 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3369214ED00400888876 /* BolusTests.swift */; };
 		E9EE336E214ED01200888876 /* PodInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336B214ED01200888876 /* PodInfo.swift */; };
@@ -1405,6 +1406,7 @@
 		E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgeAlertCommand.swift; sourceTree = "<group>"; };
 		E9C06B2B21513B2600B602AD /* PodInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoTests.swift; sourceTree = "<group>"; };
 		E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoResetStatus.swift; sourceTree = "<group>"; };
+		E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoDataLog.swift; sourceTree = "<group>"; };
 		E9EE3367214ECFF900888876 /* StatusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		E9EE3369214ED00400888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 		E9EE336B214ED01200888876 /* PodInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfo.swift; sourceTree = "<group>"; };
@@ -2393,6 +2395,7 @@
 				C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */,
 				C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */,
 				C1FFAFB3213323E800C50C1D /* ConfigureAlertsCommand.swift */,
+				E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -3605,6 +3608,7 @@
 				C1FFAFB6213323E900C50C1D /* OmnipodPumpManagerState.swift in Sources */,
 				C1FFAFC3213323E900C50C1D /* PodInfoResponse.swift in Sources */,
 				C1E163D72135FF9A00EB89AE /* TimeZone.swift in Sources */,
+				E9E54AB62156B2D500E319B8 /* PodInfoDataLog.swift in Sources */,
 				C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */,
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,

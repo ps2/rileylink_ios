@@ -209,11 +209,16 @@ class PodInfoTests: XCTestCase {
     func testPodInfoDataLog() {
         // 027c0301
         do {
-            let decoded = try PodInfoDataLog(encodedData: Data(hexadecimalString: "027c0301")!)
+            let decoded = try PodInfoDataLog(encodedData: Data(hexadecimalString: "027c030100010001043c")!)
             XCTAssertEqual(.podInfoResponse, decoded.blockType)
             XCTAssertEqual(124, decoded.length)
             XCTAssertEqual(.dataLog, decoded.podInfoType)
             XCTAssertEqual(.failedFlashErase, decoded.loggedFaultEvent)
+            XCTAssertEqual(0001*60, decoded.timeFaultEvent)
+            XCTAssertEqual(0001*60, decoded.timeActivation)
+            XCTAssertEqual(04, decoded.dataChunkSize)
+            XCTAssertEqual(60, decoded.dataChunkWords)
+
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

@@ -24,7 +24,7 @@ public struct PodInfoDataLog : PodInfo {
     public let timeActivation           : TimeInterval
     public let dataChunkSize            : UInt8
     public let dataChunkWords           : UInt8
-    public let loggedData               : Data
+    // public let loggedData               : Data
     public init(encodedData: Data) throws {
         
         if encodedData.count < Int(6) {
@@ -39,7 +39,7 @@ public struct PodInfoDataLog : PodInfo {
         self.dataChunkSize       = encodedData[8]
         self.dataChunkWords      = encodedData[9]
         
-        self.loggedData          = encodedData[10...encodedData.count]
+        // self.loggedData          = encodedData[10...encodedData.count]
         // self.dataFromFlashMemory = Data(encodedData[22...124])
         self.data                = Data() // Dummy value, else error PodInfo type
     }

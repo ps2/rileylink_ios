@@ -18,6 +18,10 @@ public struct PumpState: RawRepresentable, Equatable {
     
     public var awakeUntil: Date?
     
+    public var lastValidFrequency: Measurement<UnitFrequency>?
+    
+    public var lastTuned: Date?
+
     var isAwake: Bool {
         if let awakeUntil = awakeUntil {
             return awakeUntil.timeIntervalSinceNow > 0
@@ -41,9 +45,13 @@ public struct PumpState: RawRepresentable, Equatable {
         }
 
         self.timeZone = timeZone
-
+        
         if let pumpModelNumber = rawValue["pumpModel"] as? PumpModel.RawValue {
             pumpModel = PumpModel(rawValue: pumpModelNumber)
+        }
+        
+        if let frequencyRaw = rawValue["lastValidFrequency"] as? Double {
+            lastValidFrequency = Measurement<UnitFrequency>(value: frequencyRaw, unit: .megahertz)
         }
     }
 
@@ -54,6 +62,10 @@ public struct PumpState: RawRepresentable, Equatable {
 
         if let pumpModel = pumpModel {
             rawValue["pumpModel"] = pumpModel.rawValue
+        }
+        
+        if let frequency = lastValidFrequency?.converted(to: .megahertz) {
+            rawValue["lastValidFrequency"] = frequency.value
         }
 
         return rawValue
@@ -69,6 +81,8 @@ extension PumpState: CustomDebugStringConvertible {
             "timeZone: \(timeZone)",
             "pumpModel: \(pumpModel?.rawValue ?? "")",
             "awakeUntil: \(awakeUntil ?? .distantPast)",
+            "lastValidFrequency: \(String(describing: lastValidFrequency))",
+            "lastTuned: \(awakeUntil ?? .distantPast))",
             "lastWakeAttempt: \(String(describing: lastWakeAttempt))"
         ].joined(separator: "\n")
     }

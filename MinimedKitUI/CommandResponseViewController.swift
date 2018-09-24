@@ -297,23 +297,12 @@ extension CommandResponseViewController {
         }
     }
 
-    static func tuneRadio(ops: PumpOps?, device: RileyLinkDevice, current: Measurement<UnitFrequency>?, measurementFormatter: MeasurementFormatter) -> T {
+    static func tuneRadio(ops: PumpOps?, device: RileyLinkDevice, measurementFormatter: MeasurementFormatter) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Tune pump", using: device) { (session) in
                 let response: String
                 do {
-                    let scanResult = try session.tuneRadio(current: nil)
-
-                    NotificationCenter.default.post(
-                        name: .DeviceStateDidChange,
-                        object: device,
-                        userInfo: [
-                            RileyLinkDevice.notificationDeviceStateKey: DeviceState(
-                                lastTuned: Date(),
-                                lastValidFrequency: scanResult.bestFrequency
-                            )
-                        ]
-                    )
+                    let scanResult = try session.tuneRadio()
 
                     var resultDict: [String: Any] = [:]
 

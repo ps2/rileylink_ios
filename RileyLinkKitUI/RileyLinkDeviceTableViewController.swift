@@ -17,8 +17,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public let device: RileyLinkDevice
 
-    private var deviceState: DeviceState
-
     private var bleRSSI: Int?
 
     private var firmwareVersion: String? {
@@ -70,7 +68,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     public init(device: RileyLinkDevice) {
         self.device = device
-        self.deviceState = DeviceState(lastTuned: nil, lastValidFrequency: nil)
 
         super.init(style: .grouped)
 

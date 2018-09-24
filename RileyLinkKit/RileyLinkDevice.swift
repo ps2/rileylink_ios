@@ -8,12 +8,6 @@
 import RileyLinkBLEKit
 
 
-/// Provide a notification contract that clients can use to inform RileyLink UI of changes to DeviceState
-extension RileyLinkDevice {
-    public static let notificationDeviceStateKey = "com.rileylink.RileyLinkKit.RileyLinkDevice.DeviceState"
-}
-
-
 extension RileyLinkDevice.Status {
     public var firmwareDescription: String {
         let versions = [radioFirmwareVersion, bleFirmwareVersion].compactMap { (version: CustomStringConvertible?) -> String? in

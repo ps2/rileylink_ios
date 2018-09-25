@@ -20,6 +20,8 @@ class PairPodSetupViewController: SetupTableViewController {
     
     private var podState: PodState?
     
+    private var cancelErrorCount = 0
+    
     var pumpManagerState: OmnipodPumpManagerState? {
         get {
             guard let podState = podState else {
@@ -85,11 +87,11 @@ class PairPodSetupViewController: SetupTableViewController {
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.setConnectTitle()
-                break
             case .pairing:
                 activityIndicator.state = .loading
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setConnectTitle()
+                lastError = nil
             case .paired:
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
@@ -148,7 +150,35 @@ class PairPodSetupViewController: SetupTableViewController {
     }
     
     override func cancelButtonPressed(_ sender: Any) {
-        super.cancelButtonPressed(sender)
+        if case .paired = continueState, let pumpManager = self.pumpManager {
+            let confirmVC = UIAlertController(pumpDeletionHandler: {
+                let deviceSelector = pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
+                pumpManager.podComms.runSession(withName: "Deactivate Pod", using: deviceSelector, { (result) in
+                    do {
+                        switch result {
+                        case .success(let session):
+                            let _ = try session.changePod()
+                            DispatchQueue.main.async {
+                                super.cancelButtonPressed(sender)
+                            }
+                        case.failure(let error):
+                            throw error
+                        }
+                    } catch let error {
+                        DispatchQueue.main.async {
+                            self.cancelErrorCount += 1
+                            self.lastError = error
+                            if self.cancelErrorCount >= 2 {
+                                super.cancelButtonPressed(sender)
+                            }
+                        }
+                    }
+                })
+            })
+            present(confirmVC, animated: true) {}
+        } else {
+            super.cancelButtonPressed(sender)
+        }
     }
     
     func pair() {
@@ -243,5 +273,26 @@ extension PairPodSetupViewController: PodCommsDelegate {
 private extension SetupButton {
     func setConnectTitle() {
         setTitle(LocalizedString("Pair", comment: "Button title to pair with pod during setup"), for: .normal)
+    }
+}
+
+private extension UIAlertController {
+    convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
+        self.init(
+            title: nil,
+            message: NSLocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
+            preferredStyle: .actionSheet
+        )
+        
+        addAction(UIAlertAction(
+            title: NSLocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
+            style: .destructive,
+            handler: { (_) in
+                handler()
+        }
+        ))
+        
+        let exit = NSLocalizedString("Continue", comment: "The title of the continue action in an action sheet")
+        addAction(UIAlertAction(title: exit, style: .default, handler: nil))
     }
 }

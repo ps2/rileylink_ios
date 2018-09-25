@@ -22,6 +22,8 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     @IBOutlet weak var loadingLabel: UILabel!
     
+    private var cancelErrorCount = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,11 +59,11 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.setConnectTitle()
-                break
             case .inserting:
                 activityIndicator.state = .loading
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setConnectTitle()
+                lastError = nil
             case .ready:
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
@@ -116,7 +118,31 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     }
     
     override func cancelButtonPressed(_ sender: Any) {
-        super.cancelButtonPressed(sender)
+        let confirmVC = UIAlertController(pumpDeletionHandler: {
+            let deviceSelector = self.pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
+            self.pumpManager.podComms.runSession(withName: "Deactivate Pod", using: deviceSelector, { (result) in
+                do {
+                    switch result {
+                    case .success(let session):
+                        let _ = try session.changePod()
+                        DispatchQueue.main.async {
+                            super.cancelButtonPressed(sender)
+                        }
+                    case.failure(let error):
+                        throw error
+                    }
+                } catch let error {
+                    DispatchQueue.main.async {
+                        self.cancelErrorCount += 1
+                        self.lastError = error
+                        if self.cancelErrorCount >= 2 {
+                            super.cancelButtonPressed(sender)
+                        }
+                    }
+                }
+            })
+        })
+        present(confirmVC, animated: true) {}
     }
     
     func insertCannula() {
@@ -156,3 +182,25 @@ private extension SetupButton {
         setTitle(LocalizedString("Insert Cannula", comment: "Button title to insert cannula during setup"), for: .normal)
     }
 }
+
+private extension UIAlertController {
+    convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
+        self.init(
+            title: nil,
+            message: NSLocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
+            preferredStyle: .actionSheet
+        )
+        
+        addAction(UIAlertAction(
+            title: NSLocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
+            style: .destructive,
+            handler: { (_) in
+                handler()
+        }
+        ))
+        
+        let exit = NSLocalizedString("Continue", comment: "The title of the continue action in an action sheet")
+        addAction(UIAlertAction(title: exit, style: .default, handler: nil))
+    }
+}
+

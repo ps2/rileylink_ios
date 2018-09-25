@@ -549,6 +549,7 @@
 		E9C06B2C21513B2600B602AD /* PodInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2B21513B2600B602AD /* PodInfoTests.swift */; };
 		E9E54AB421542E8A00E319B8 /* PodInfoResetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */; };
 		E9E54AB62156B2D500E319B8 /* PodInfoDataLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */; };
+		E9EDD475215AFFF300A103D1 /* PodInfoFault.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */; };
 		E9EE3368214ECFF900888876 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3367214ECFF900888876 /* StatusTests.swift */; };
 		E9EE336A214ED00400888876 /* BolusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE3369214ED00400888876 /* BolusTests.swift */; };
 		E9EE336E214ED01200888876 /* PodInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336B214ED01200888876 /* PodInfo.swift */; };
@@ -1407,6 +1408,7 @@
 		E9C06B2B21513B2600B602AD /* PodInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoTests.swift; sourceTree = "<group>"; };
 		E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoResetStatus.swift; sourceTree = "<group>"; };
 		E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfoDataLog.swift; sourceTree = "<group>"; };
+		E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoFault.swift; sourceTree = "<group>"; };
 		E9EE3367214ECFF900888876 /* StatusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		E9EE3369214ED00400888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 		E9EE336B214ED01200888876 /* PodInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfo.swift; sourceTree = "<group>"; };
@@ -2374,6 +2376,7 @@
 		C1FFAFA3213323E800C50C1D /* MessageBlocks */ = {
 			isa = PBXGroup;
 			children = (
+				E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */,
 				E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */,
 				E9EE336B214ED01200888876 /* PodInfo.swift */,
 				E9EE336D214ED01200888876 /* PodInfoFaultEvent.swift */,
@@ -3628,6 +3631,7 @@
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
 				C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */,
 				C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */,
+				E9EDD475215AFFF300A103D1 /* PodInfoFault.swift in Sources */,
 				C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */,
 				C1FFAFD3213323E900C50C1D /* Packet.swift in Sources */,
 				C1FFAFBC213323E900C50C1D /* Message.swift in Sources */,

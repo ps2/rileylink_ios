@@ -115,10 +115,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case expiresAt
         case podAddress
         case podLot
+        case podTid
         case piVersion
         case pmVersion
         
-        static let count = 6
+        static let count = 7
     }
     
     private enum ConfigurationRow: Int {
@@ -207,6 +208,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = NSLocalizedString("Lot", comment: "The title of the cell showing the pod lot id")
                 cell.detailTextLabel?.text = String(format:"L%d", pumpManager.state.podState.lot)
+                return cell
+            case .podTid:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = NSLocalizedString("TID", comment: "The title of the cell showing the pod TID")
+                cell.detailTextLabel?.text = String(format:"%07d", pumpManager.state.podState.tid)
                 return cell
             case .piVersion:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -305,8 +311,26 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             self.show(vc, sender: sender)
         case .deactivate:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.navigationController?.popViewController(animated: true)
+                let deviceSelector = self.pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
+                self.pumpManager.podComms.runSession(withName: "Deactivate Pod", using: deviceSelector, { (result) in
+                    do {
+                        switch result {
+                        case .success(let session):
+                            let _ = try session.changePod()
+                            DispatchQueue.main.async {
+                                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        case.failure(let error):
+                            throw error
+                        }
+                    } catch let error {
+                        self.statusError = error
+                        DispatchQueue.main.async {
+                            self.tableView.reloadSections([Section.status.rawValue], with: .none)
+                        }
+                    }
+                })
             })
             
             present(confirmVC, animated: true) {
@@ -409,7 +433,7 @@ private extension UITableViewCell {
     private var insulinFormatter: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 1
+        formatter.maximumFractionDigits = 3
         
         return formatter
     }

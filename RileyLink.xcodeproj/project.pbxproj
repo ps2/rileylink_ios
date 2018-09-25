@@ -467,6 +467,9 @@
 		C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */; };
 		C1F000501EBE727C00F65163 /* BasalScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004F1EBE727C00F65163 /* BasalScheduleTests.swift */; };
 		C1F000521EBE73F400F65163 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F000511EBE73F400F65163 /* BasalSchedule.swift */; };
+		C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */; };
+		C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */; };
+		C1F1A5EE2151FBA700F0B820 /* PodSetupCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */; };
 		C1F6EB871F89C3B100CFE393 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */; };
 		C1F6EB891F89C3E200CFE393 /* FourByteSixByteEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */; };
 		C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */; };
@@ -526,7 +529,6 @@
 		C1FFB00E2133242C00C50C1D /* OmniPodPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */; };
 		C1FFB00F2133242C00C50C1D /* OmniKitUI.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */; };
 		C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */; };
-		C1FFB0122133242C00C50C1D /* OmnipodPairingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB00B2133242C00C50C1D /* OmnipodPairingViewController.swift */; };
 		C1FFB0132133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */; };
 		C1FFB0142133249300C50C1D /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		C1FFB0152133249900C50C1D /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
@@ -1313,6 +1315,9 @@
 		C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataFrameMessageBody.swift; sourceTree = "<group>"; };
 		C1F0004F1EBE727C00F65163 /* BasalScheduleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTests.swift; sourceTree = "<group>"; };
 		C1F000511EBE73F400F65163 /* BasalSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalSchedule.swift; sourceTree = "<group>"; };
+		C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairPodSetupViewController.swift; sourceTree = "<group>"; };
+		C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertCannulaSetupViewController.swift; sourceTree = "<group>"; };
+		C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodSetupCompleteViewController.swift; sourceTree = "<group>"; };
 		C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FourByteSixByteEncoding.swift; sourceTree = "<group>"; };
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
@@ -1389,7 +1394,6 @@
 		C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OmniPodPumpManager+UI.swift"; sourceTree = "<group>"; };
 		C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OmniKitUI.xcassets; sourceTree = "<group>"; };
 		C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodSettingsViewController.swift; sourceTree = "<group>"; };
-		C1FFB00B2133242C00C50C1D /* OmnipodPairingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPairingViewController.swift; sourceTree = "<group>"; };
 		C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2388,8 +2392,10 @@
 		C1FFB0092133242C00C50C1D /* Pairing */ = {
 			isa = PBXGroup;
 			children = (
-				C1FFB00B2133242C00C50C1D /* OmnipodPairingViewController.swift */,
 				C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */,
+				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
+				C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */,
+				C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */,
 			);
 			path = Pairing;
 			sourceTree = "<group>";
@@ -2841,12 +2847,10 @@
 						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C12EA236198B436800309FA4 = {
-						DevelopmentTeam = UY678SP37Q;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					C12EA251198B436800309FA4 = {
-						DevelopmentTeam = UY678SP37Q;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
@@ -3619,14 +3623,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1F1A5EE2151FBA700F0B820 /* PodSetupCompleteViewController.swift in Sources */,
 				C1FFB01B21332DD900C50C1D /* TimeZone.swift in Sources */,
 				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
 				C1FFB02121343E6D00C50C1D /* TimeInterval.swift in Sources */,
 				C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */,
-				C1FFB0122133242C00C50C1D /* OmnipodPairingViewController.swift in Sources */,
 				C1FFB0132133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift in Sources */,
+				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
+				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
 				C1FFB01C21332E0900C50C1D /* UITableViewCell.swift in Sources */,
 				C1FFB00E2133242C00C50C1D /* OmniPodPumpManager+UI.swift in Sources */,
@@ -4818,7 +4824,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UY678SP37Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -4844,7 +4850,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UY678SP37Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -4868,7 +4874,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UY678SP37Q;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -4888,7 +4894,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UY678SP37Q;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";

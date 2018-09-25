@@ -10,8 +10,6 @@ import Foundation
 
 public struct PodInfoConfiguredAlerts : PodInfo {
 
-    public let blockType   : MessageBlockType = .podInfoResponse
-    public let length      : UInt8
     public var podInfoType : PodInfoResponseSubType = .configuredAlerts
     public let word_278    : Data
     public let alertsActivations : [AlertActivation]
@@ -31,13 +29,11 @@ public struct PodInfoConfiguredAlerts : PodInfo {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < Int(13) {
+        if encodedData.count < Int(11) {
             throw MessageBlockError.notEnoughData
         }
-        
-        self.length                       = encodedData[1]
-        self.podInfoType                  = PodInfoResponseSubType.init(rawValue: encodedData[2])!
-        self.word_278                     = encodedData[3...4]
+        self.podInfoType                  = PodInfoResponseSubType.init(rawValue: encodedData[0])!
+        self.word_278                     = encodedData[1...2]
         
         let numAlertTypes = 8
         let beepType = ConfigureAlertsCommand.BeepType.self
@@ -46,8 +42,8 @@ public struct PodInfoConfiguredAlerts : PodInfo {
 
         for alarmType in (0..<numAlertTypes) {
             let beepType = beepType.init(rawValue: UInt8(alarmType))
-            let timeFromPodStart = encodedData[(5 + alarmType * 2)] // Double(encodedData[(5 + alarmType)] & 0x3f)
-            let unitsLeft = Double(encodedData[(6 + alarmType * 2)]) * podPulseSize
+            let timeFromPodStart = encodedData[(3 + alarmType * 2)] // Double(encodedData[(5 + alarmType)] & 0x3f)
+            let unitsLeft = Double(encodedData[(4 + alarmType * 2)]) * podPulseSize
             activations.append(AlertActivation(beepType: beepType!, timeFromPodStart: timeFromPodStart, unitsLeft: unitsLeft))
         }
         alertsActivations = activations

@@ -48,7 +48,6 @@ public struct PodInfoFaultEvent : PodInfo {
         // TODO: bb: internal boolean variable initialized to Tab5[$D] != 0
     }
 
-    public let length                   : UInt8
     public var podInfoType              : PodInfoResponseSubType = .faultEvents
     public let reservoirStatus          : StatusResponse.ReservoirStatus
     public let deliveryInProgressType   : DeliveryInProgressType
@@ -71,52 +70,50 @@ public struct PodInfoFaultEvent : PodInfo {
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(16) {
+        if encodedData.count < Int(19) {
             throw MessageBlockError.notEnoughData
         }
         
-        self.length = encodedData[1]
-        
-        guard let reservoirStatus = StatusResponse.ReservoirStatus(rawValue: encodedData[3]) else {
-            throw MessageError.unknownValue(value: encodedData[3], typeDescription: "StatusResponse.ReservoirStatus")
+        guard let reservoirStatus = StatusResponse.ReservoirStatus(rawValue: encodedData[1]) else {
+            throw MessageError.unknownValue(value: encodedData[1], typeDescription: "StatusResponse.ReservoirStatus")
         }
         self.reservoirStatus = reservoirStatus
         
-        self.deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[4] & 0xf)
+        self.deliveryInProgressType = DeliveryInProgressType(rawValue: encodedData[2] & 0xf)
         
-        self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[5] & 0x3) << 8) | Int(encodedData[6]))
+        self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         
-        self.podMessageCounter = encodedData[7]
-        self.unknownPageCode = Double(Int(encodedData[8]) | Int(encodedData[9]))
+        self.podMessageCounter = encodedData[5]
+        self.unknownPageCode = Double(Int(encodedData[6]) | Int(encodedData[7]))
         
-        self.originalLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[10])!
+        self.originalLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[8])!
         
-        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[11] & 0b1) << 8) + Int(encodedData[12])))
+        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[9] & 0b1) << 8) + Int(encodedData[10])))
         
-        self.insulinRemaining = podPulseSize * Double((Int(encodedData[13] & 0x3) << 8) | Int(encodedData[14]))
+        self.insulinRemaining = podPulseSize * Double((Int(encodedData[11] & 0x3) << 8) | Int(encodedData[12]))
         
-        self.timeActive = TimeInterval(minutes: Double((Int(encodedData[15] & 0b1) << 8) + Int(encodedData[16])))
+        self.timeActive = TimeInterval(minutes: Double((Int(encodedData[13] & 0b1) << 8) + Int(encodedData[14])))
         
-        self.secondaryLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[17])!
+        self.secondaryLoggedFaultEvent = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[15])!
         
-        self.logEventError = encodedData[18] == 2
+        self.logEventError = encodedData[16] == 2
 
-        guard let infoLoggedFaultEventType = InfoLoggedFaultEventType(rawValue: encodedData[19] >> 4) else {
-            throw MessageError.unknownValue(value: encodedData[19] >> 4, typeDescription: "InfoLoggedFaultEventType")
+        guard let infoLoggedFaultEventType = InfoLoggedFaultEventType(rawValue: encodedData[17] >> 4) else {
+            throw MessageError.unknownValue(value: encodedData[17] >> 4, typeDescription: "InfoLoggedFaultEventType")
         }
         self.infoLoggedFaultEvent = infoLoggedFaultEventType
         
-        guard let reservoirStatusAtFirstLoggedFaultEventType = StatusResponse.ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
-            throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ProgressType")
+        guard let reservoirStatusAtFirstLoggedFaultEventType = StatusResponse.ReservoirStatus(rawValue: encodedData[17] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[17] & 0xF, typeDescription: "ProgressType")
         }
         self.reservoirStatusAtFirstLoggedFaultEvent = reservoirStatusAtFirstLoggedFaultEventType
         
-        self.recieverLowGain = encodedData[20] >> 4
+        self.recieverLowGain = encodedData[18] >> 4
         
-        self.radioRSSI =  encodedData[20] & 0xF
+        self.radioRSSI =  encodedData[18] & 0xF
         
-        guard let reservoirStatusAtFirstLoggedFaultEventCheckType = StatusResponse.ReservoirStatus(rawValue: encodedData[21] & 0xF) else {
-            throw MessageError.unknownValue(value: encodedData[21] & 0xF, typeDescription: "ProgressType")
+        guard let reservoirStatusAtFirstLoggedFaultEventCheckType = StatusResponse.ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ProgressType")
         }
         self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         

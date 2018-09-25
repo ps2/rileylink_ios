@@ -15,9 +15,7 @@ public struct PodInfoDataLog : PodInfo {
     // public let numberOfWords: UInt8 = 60
     // public let numberOfBytes: UInt8 = 10
     
-    public var blockType                : MessageBlockType = .podInfoResponse
     public var podInfoType              : PodInfoResponseSubType = .dataLog
-    public let length                   : UInt8
     public let faultEventType           : PodInfoResponseSubType.FaultEventType
     public let data                     : Data
     public let timeFaultEvent           : TimeInterval
@@ -32,14 +30,12 @@ public struct PodInfoDataLog : PodInfo {
         if encodedData.count < Int(6) {
             throw MessageBlockError.notEnoughData
         }
-        self.blockType           = MessageBlockType(rawValue: encodedData[0])!
-        self.length              = encodedData[1]
-        self.podInfoType         = PodInfoResponseSubType(rawValue: encodedData[2])!
-        self.faultEventType      = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[3])!
-        self.timeFaultEvent      = TimeInterval(minutes: Double((Int(encodedData[4] & 0b1) << 8) + Int(encodedData[5])))
-        self.timeActivation      = TimeInterval(minutes: Double((Int(encodedData[6] & 0b1) << 8) + Int(encodedData[7])))
-        self.dataChunkSize       = encodedData[8]
-        self.dataChunkWords      = encodedData[9]
+        self.podInfoType         = PodInfoResponseSubType(rawValue: encodedData[0])!
+        self.faultEventType      = PodInfoResponseSubType.FaultEventType(rawValue: encodedData[1])!
+        self.timeFaultEvent      = TimeInterval(minutes: Double((Int(encodedData[2] & 0b1) << 8) + Int(encodedData[3])))
+        self.timeActivation      = TimeInterval(minutes: Double((Int(encodedData[4] & 0b1) << 8) + Int(encodedData[5])))
+        self.dataChunkSize       = encodedData[6]
+        self.dataChunkWords      = encodedData[7]
         
         // self.loggedData          = encodedData[10...encodedData.count]
         // self.dataFromFlashMemory = Data(encodedData[22...124])

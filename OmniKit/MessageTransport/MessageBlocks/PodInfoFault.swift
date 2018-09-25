@@ -28,3 +28,17 @@ public struct PodInfoFault : PodInfo {
         self.data            = Data(encodedData)
     }
 }
+
+extension DateComponents {
+    init(encodedDateTime: Data) {
+        self.init()
+        
+        year   = Int(encodedDateTime[2]) + 2000
+        month  = Int(encodedDateTime[0])
+        day    = Int(encodedDateTime[1])
+        hour   = Int(encodedDateTime[3])
+        minute = Int(encodedDateTime[4])
+        
+        calendar = Calendar(identifier: .gregorian)
+    }
+}

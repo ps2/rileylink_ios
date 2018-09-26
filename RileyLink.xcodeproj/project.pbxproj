@@ -305,6 +305,9 @@
 		C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */; };
 		C1274F801D82411C0002912B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F7C1D82411C0002912B /* MainViewController.swift */; };
 		C1274F861D8242BE0002912B /* PumpRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F851D8242BE0002912B /* PumpRegion.swift */; };
+		C127D924215C002B0031799D /* PodSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */; };
+		C127D925215C00320031799D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
+		C127D927215C00420031799D /* PodCommsSession+LoopKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C127D926215C00420031799D /* PodCommsSession+LoopKit.swift */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
@@ -1148,6 +1151,8 @@
 		C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMeterIDPumpEvent.swift; sourceTree = "<group>"; };
 		C1274F7C1D82411C0002912B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C1274F851D8242BE0002912B /* PumpRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpRegion.swift; sourceTree = "<group>"; };
+		C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodSettingsSetupViewController.swift; sourceTree = "<group>"; };
+		C127D926215C00420031799D /* PodCommsSession+LoopKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PodCommsSession+LoopKit.swift"; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA23A198B436800309FA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C12EA23C198B436800309FA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2333,6 +2338,7 @@
 		C1FFAF95213323E600C50C1D /* PumpManager */ = {
 			isa = PBXGroup;
 			children = (
+				C127D926215C00420031799D /* PodCommsSession+LoopKit.swift */,
 				C1FFAFB4213323E800C50C1D /* PodComms.swift */,
 				C1FFAF99213323E600C50C1D /* PodCommsSession.swift */,
 				C1FFAF96213323E600C50C1D /* OmnipodPumpManagerState.swift */,
@@ -2392,6 +2398,7 @@
 		C1FFB0092133242C00C50C1D /* Pairing */ = {
 			isa = PBXGroup;
 			children = (
+				C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */,
 				C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */,
 				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
 				C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */,
@@ -3573,6 +3580,7 @@
 				C1FFAFC8213323E900C50C1D /* BolusExtraCommand.swift in Sources */,
 				C1FFAFC7213323E900C50C1D /* PlaceholderMessageBlock.swift in Sources */,
 				C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */,
+				C127D927215C00420031799D /* PodCommsSession+LoopKit.swift in Sources */,
 				C1FFB01821332A2A00C50C1D /* OSLog.swift in Sources */,
 				C1FFAFC6213323E900C50C1D /* MessageBlock.swift in Sources */,
 				C1FFAFC2213323E900C50C1D /* VersionResponse.swift in Sources */,
@@ -3624,6 +3632,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1F1A5EE2151FBA700F0B820 /* PodSetupCompleteViewController.swift in Sources */,
+				C127D924215C002B0031799D /* PodSettingsSetupViewController.swift in Sources */,
 				C1FFB01B21332DD900C50C1D /* TimeZone.swift in Sources */,
 				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
 				C1FFB02121343E6D00C50C1D /* TimeInterval.swift in Sources */,
@@ -3632,6 +3641,7 @@
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
+				C127D925215C00320031799D /* OSLog.swift in Sources */,
 				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
 				C1FFB01C21332E0900C50C1D /* UITableViewCell.swift in Sources */,

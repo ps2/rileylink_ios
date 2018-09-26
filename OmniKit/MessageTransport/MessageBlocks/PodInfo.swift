@@ -14,7 +14,7 @@ public enum PodInfoResponseSubType: UInt8 {
     case faultEvents                 = 0x02
     case dataLog                     = 0x03
     case fault                       = 0x05
-    //case hardcodedValues             = 0x06
+    case hardcodedTestValues         = 0x06
     case resetStatus                 = 0x46 // including state, initialization time, any faults
     //case dumpRecentFlashLog          = 0x50
     //case dumpOlderFlashlog           = 0x51 // but dumps entries before the last 50
@@ -30,6 +30,8 @@ public enum PodInfoResponseSubType: UInt8 {
             return PodInfoFaultEvent.self
         case .dataLog:
             return PodInfoDataLog.self
+        case .hardcodedTestValues:
+            return PodInfoTester.self
         case .fault:
             return PodInfoFault.self
         //case .hardcodedValues:

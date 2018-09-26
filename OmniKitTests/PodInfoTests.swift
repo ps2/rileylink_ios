@@ -233,6 +233,21 @@ class PodInfoTests: XCTestCase {
         }
     }
     
+    func testPodInfoTester() {
+        //02 05 // 06 01 00 3F A8
+        do {
+            // Decode
+            let decoded = try PodInfoTester(encodedData: Data(hexadecimalString: "0601003FA8")!)
+            XCTAssertEqual(.hardcodedTestValues, decoded.podInfoType)
+            XCTAssertEqual(0x01, decoded.byte1)
+            XCTAssertEqual(0x00, decoded.byte2)
+            XCTAssertEqual(0x3F, decoded.byte3)
+            XCTAssertEqual(0xA8, decoded.byte4)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
     func testPodInfoResetStatus() {
         //02 7c (omitted)// 4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
         do {

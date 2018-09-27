@@ -325,8 +325,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                             throw error
                         }
                     } catch let error {
-                        self.statusError = error
                         DispatchQueue.main.async {
+                            self.statusError = error
+                            self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
+                            self.navigationController?.popViewController(animated: true)
                             self.tableView.reloadSections([Section.status.rawValue], with: .none)
                         }
                     }

@@ -13,7 +13,6 @@ import RileyLinkBLEKit
 import os.log
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
-    
     public var pumpBatteryChargeRemaining: Double?
     
     public var pumpRecordsBasalProfileStartEvents = false
@@ -64,7 +63,54 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
         }
     }
-
+    
+    public var isDeliverySuspended: Bool {
+        return state.podState.suspended
+    }
+    
+    public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+        let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Resume", using: rileyLinkSelector) { (result) in
+            
+            let session: PodCommsSession
+            switch result {
+            case .success(let s):
+                session = s
+            case .failure(let error):
+                completion(PumpManagerResult.failure(error))
+                return
+            }
+            
+            do {
+                let status = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                completion(PumpManagerResult.success(status.deliveryStatus == .deliveryInterrupted))
+            } catch (let error) {
+                completion(PumpManagerResult.failure(error))
+            }
+        }
+    }
+    
+    public func resumeDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+        let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Resume", using: rileyLinkSelector) { (result) in
+            
+            let session: PodCommsSession
+            switch result {
+            case .success(let s):
+                session = s
+            case .failure(let error):
+                completion(PumpManagerResult.failure(error))
+                return
+            }
+            
+            do {
+                let status = try session.resumeBasal()
+                completion(PumpManagerResult.success(status.deliveryStatus != .deliveryInterrupted))
+            } catch (let error) {
+                completion(PumpManagerResult.failure(error))
+            }
+        }
+    }
     
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (Double, Date) -> Void, completion: @escaping (Error?) -> Void) {
         

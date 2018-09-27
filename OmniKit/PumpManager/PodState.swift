@@ -20,10 +20,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
+    public var basalSchedule: BasalSchedule?
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     var unfinalizedBolus: UnfinalizedDose?
     var unfinalizedTempBasal: UnfinalizedDose?
     var finalizedDoses: [UnfinalizedDose]
+    private(set) var suspended: Bool
     
     public var expiresAt: Date {
         return activatedAt + .days(3)
@@ -46,6 +48,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.unfinalizedBolus = nil
         self.unfinalizedTempBasal = nil
         self.finalizedDoses = []
+        self.suspended = false
+        self.basalSchedule = nil
     }
     
     public mutating func advanceToNextNonce() {
@@ -62,7 +66,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
     
-    public mutating func finalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus) {
+    public mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
         let now = Date()
         
         if let bolus = unfinalizedBolus {
@@ -94,6 +98,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 }
             }
         }
+        
+        suspended = deliveryStatus == .deliveryInterrupted
     }
 
     // MARK: - RawRepresentable
@@ -122,6 +128,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.pmVersion = pmVersion
         self.lot = lot
         self.tid = tid
+        
+        if let suspended = rawValue["suspended"] as? Bool {
+            self.suspended = suspended
+        } else {
+            self.suspended = false
+        }
 
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue,
             let unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
@@ -139,20 +151,23 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.unfinalizedTempBasal = nil
         }
         
-        if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue
-        {
+        if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue {
             self.lastInsulinMeasurements = PodInsulinMeasurements(rawValue: rawLastInsulinMeasurements)
         } else {
             self.lastInsulinMeasurements = nil
         }
         
-        if let rawFinalizedDoses = rawValue["finalizedDoses"] as? [UnfinalizedDose.RawValue]
-        {
+        if let rawFinalizedDoses = rawValue["finalizedDoses"] as? [UnfinalizedDose.RawValue] {
             self.finalizedDoses = rawFinalizedDoses.compactMap( { UnfinalizedDose(rawValue: $0) } )
         } else {
             self.finalizedDoses = []
         }
-
+        
+        if let rawBasalSchedule = rawValue["basalSchedule"] as? BasalSchedule.RawValue {
+            self.basalSchedule = BasalSchedule(rawValue: rawBasalSchedule)
+        } else {
+            self.basalSchedule = nil
+        }
     }
     
     public var rawValue: RawValue {
@@ -165,6 +180,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion": pmVersion,
             "lot": lot,
             "tid": tid,
+            "suspended": suspended,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue })
             ]
         
@@ -178,6 +194,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         
         if let lastInsulinMeasurements = self.lastInsulinMeasurements {
             rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements.rawValue
+        }
+        
+        if let basalSchedule = self.basalSchedule {
+            rawValue["basalSchedule"] = basalSchedule.rawValue
         }
 
         return rawValue
@@ -195,9 +215,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion: \(pmVersion)",
             "lot: \(lot)",
             "tid: \(tid)",
+            "suspended: \(suspended)",
             "unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "finalizedDoses: \(String(describing: finalizedDoses))",
+            "basalSchedule: \(String(describing: basalSchedule))",
             "",
             ].joined(separator: "\n")
     }

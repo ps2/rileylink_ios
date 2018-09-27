@@ -73,13 +73,13 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         self.confidenceReminder = confidenceReminder
         self.programReminderInterval = programReminderInterval
         var rateEntries = [RateEntry]()
-        for entry in schedule.entries {
+        for entry in schedule.durations() {
             rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
         }
         self.rateEntries = rateEntries
-        let (entryIndex, entry, entryStart) = schedule.lookup(offset: scheduleOffset)
+        let (entryIndex, entry, duration) = schedule.lookup(offset: scheduleOffset)
         self.currentEntryIndex = UInt8(entryIndex)
-        let timeRemainingInEntry = entry.duration - (scheduleOffset - entryStart)
+        let timeRemainingInEntry = duration - (scheduleOffset - entry.startTime)
         let rate = schedule.rateAt(offset: scheduleOffset)
         let pulsesPerHour = rate / podPulseSize
         self.remainingPulses = ceil(timeRemainingInEntry * pulsesPerHour / TimeInterval(hours: 1))

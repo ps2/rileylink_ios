@@ -15,7 +15,7 @@ import OmniKit
 
 // TEMPORARY solution to providing basal schedule; will eventually provided by PumpManagerDelegate
 // Used during pairing, and during timezone change.
-let temporaryBasalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, duration: .hours(24))])
+let temporaryBasalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.05, startTime: 0)])
 
 
 extension OmnipodPumpManager: PumpManagerUI {

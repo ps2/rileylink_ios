@@ -25,6 +25,7 @@ public enum PodCommsError: Error {
     case unfinalizedBolus
     case unfinalizedTempBasal
     case nonceResyncFailed
+    case missingBasalSchedule
     case commsError(error: Error)
 }
 
@@ -56,6 +57,8 @@ extension PodCommsError: LocalizedError {
         case .unfinalizedTempBasal:
             return LocalizedString("Temp basal in progress", comment: "Error message shown when temp basal could not be set due to existing temp basal in progress")
         case .nonceResyncFailed:
+            return nil
+        case .missingBasalSchedule:
             return nil
         case .commsError:
             return nil
@@ -90,6 +93,8 @@ extension PodCommsError: LocalizedError {
             return LocalizedString("Unable to issue concurrent temp basals", comment: "Failure reason when temp basal could not be set due to existing temp basal in progress")
         case .nonceResyncFailed:
             return nil
+        case .missingBasalSchedule:
+            return nil
         case .commsError:
             return nil
         }
@@ -122,6 +127,8 @@ extension PodCommsError: LocalizedError {
         case .unfinalizedTempBasal:
             return LocalizedString("Wait for existing temp basal to finish, or suspend to cancel", comment: "Recovery suggestion when temp basal could not be completed due to existing temp basal in progress")
         case .nonceResyncFailed:
+            return nil
+        case .missingBasalSchedule:
             return nil
         case .commsError:
             return nil
@@ -316,17 +323,27 @@ public class PodCommsSession {
     
     public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws {
         let scheduleOffset = timeZone.scheduleOffset(forDate: date)
-        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         self.podState.timeZone = timeZone
     }
     
-    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws {
+    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws -> StatusResponse {
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
-        let _: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
+        let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
         podState.advanceToNextNonce()
+        return status
+    }
+    
+    public func resumeBasal(confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
+        guard let basalSchedule = podState.basalSchedule else {
+            throw PodCommsError.missingBasalSchedule
+        }
+        
+        let scheduleOffset = podState.timeZone.scheduleOffset(forDate: Date())
+        return try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
     }
     
     public func insertCannula(basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
@@ -395,7 +412,7 @@ public class PodCommsSession {
     }
     
     func finalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
-        self.podState.finalizeDoses(deliveryStatus: deliveryStatus)
+        self.podState.updateDeliveryStatus(deliveryStatus: deliveryStatus)
         if storageHandler(podState.finalizedDoses) {
             log.info("Finalized %@", String(describing: podState.finalizedDoses))
             self.podState.finalizedDoses.removeAll()

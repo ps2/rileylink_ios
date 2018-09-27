@@ -136,6 +136,21 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var localizedTitle: String {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
     }
+    
+    // TODO
+    public var isDeliverySuspended = false
+    
+    public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+        // TODO
+        completion(PumpManagerResult.success(true))
+    }
+    
+    public func resumeDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+        // TODO
+        completion(PumpManagerResult.success(true))
+    }
+    
+
 
     // MARK: - RileyLink Updates
 

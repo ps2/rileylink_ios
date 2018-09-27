@@ -156,8 +156,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     public init(nonce: UInt32, tempBasalRate: Double, duration: TimeInterval) {
         self.nonce = nonce
         let pulsesPerSegment = tempBasalRate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
-        let basalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: tempBasalRate, duration: duration)])
-        let table = BasalDeliveryTable(schedule: basalSchedule)
+        let table = BasalDeliveryTable(tempBasalRate: tempBasalRate, duration: duration)
         self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 30*60, firstSegmentPulses: UInt16(pulsesPerSegment), table: table)
     }
     

@@ -32,6 +32,7 @@ public enum MessageType: UInt8 {
     case selectBasalProfile           = 0x4a
 
     case changeTempBasal              = 0x4c
+    case suspendResume                = 0x4d
 
     case PumpExperiment_OP80          = 0x50
     case setRemoteControlID           = 0x51  // CMD_SET_RF_REMOTE_ID

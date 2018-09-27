@@ -52,22 +52,32 @@ public struct BasalDeliveryTable {
     
     public init(schedule: BasalSchedule) {
         var tableEntries = [BasalTableEntry]()
-        for entry in schedule.entries {
-            let pulsesPerSegment = entry.rate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
-            let alternateSegmentPulse = pulsesPerSegment - floor(pulsesPerSegment) > 0
-            var remaining = Int(entry.duration / BasalDeliveryTable.segmentDuration)
-            while remaining > 0 {
-                let segments = min(remaining, 16)
-                let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: alternateSegmentPulse)
-                tableEntries.append(tableEntry)
-                remaining -= segments
-            }
+        
+        let durations = schedule.durations()
+        
+        for entry in durations {
+            tableEntries.append(contentsOf: BasalDeliveryTable.rateToTableEntries(rate: entry.rate, duration: entry.duration))
         }
         self.entries = tableEntries
     }
     
     public init(tempBasalRate: Double, duration: TimeInterval) {
-        self.init(schedule: BasalSchedule(entries: [BasalScheduleEntry(rate: tempBasalRate, duration: duration)]))
+        self.entries = BasalDeliveryTable.rateToTableEntries(rate: tempBasalRate, duration: duration)
+    }
+    
+    private static func rateToTableEntries(rate: Double, duration: TimeInterval) -> [BasalTableEntry] {
+        var tableEntries = [BasalTableEntry]()
+
+        let pulsesPerSegment = rate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
+        let alternateSegmentPulse = pulsesPerSegment - floor(pulsesPerSegment) > 0
+        var remaining = Int(duration / BasalDeliveryTable.segmentDuration)
+        while remaining > 0 {
+            let segments = min(remaining, 16)
+            let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: alternateSegmentPulse)
+            tableEntries.append(tableEntry)
+            remaining -= segments
+        }
+        return tableEntries
     }
     
     public func numSegments() -> Int {

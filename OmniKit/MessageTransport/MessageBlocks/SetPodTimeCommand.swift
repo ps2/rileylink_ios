@@ -16,6 +16,7 @@ public struct SetupPodCommand : MessageBlock {
     let lot: UInt32
     let tid: UInt32
     let dateComponents: DateComponents
+    let packetTimeoutLimit: UInt8
     
     public static func dateComponents(date: Date, timeZone: TimeZone) -> DateComponents {
         var cal = Calendar(identifier: .gregorian)
@@ -45,9 +46,9 @@ public struct SetupPodCommand : MessageBlock {
         
         let data2: Data = Data(bytes: [
             UInt8(0x14), // Unknown
-            UInt8(0x04), // Unknown
-            day,
+            packetTimeoutLimit,
             month,
+            day,
             year,
             hour,
             minute
@@ -63,9 +64,10 @@ public struct SetupPodCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         self.address = encodedData[2...].toBigEndian(UInt32.self)
+        packetTimeoutLimit = encodedData[7]
         var components = DateComponents()
-        components.day = Int(encodedData[8])
-        components.month = Int(encodedData[9])
+        components.month = Int(encodedData[8])
+        components.day = Int(encodedData[9])
         components.year = Int(encodedData[10]) + 2000
         components.hour = Int(encodedData[11])
         components.minute = Int(encodedData[12])
@@ -74,10 +76,11 @@ public struct SetupPodCommand : MessageBlock {
         self.tid = encodedData[17...].toBigEndian(UInt32.self)
     }
     
-    public init(address: UInt32, dateComponents: DateComponents, lot: UInt32, tid: UInt32) {
+    public init(address: UInt32, dateComponents: DateComponents, lot: UInt32, tid: UInt32, packetTimeoutLimit: UInt8 = 4) {
         self.address = address
         self.dateComponents = dateComponents
         self.lot = lot
         self.tid = tid
+        self.packetTimeoutLimit = packetTimeoutLimit
     }
 }

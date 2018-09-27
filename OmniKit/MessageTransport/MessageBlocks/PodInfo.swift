@@ -16,7 +16,7 @@ public enum PodInfoResponseSubType: UInt8 {
     case fault                       = 0x05
     case hardcodedTestValues         = 0x06
     case resetStatus                 = 0x46 // including state, initialization time, any faults
-    //case dumpRecentFlashLog          = 0x50
+    case flashLogRecent              = 0x50
     //case dumpOlderFlashlog           = 0x51 // but dumps entries before the last 50
     // https://github.com/openaps/openomni/wiki/Command-0E-Status-Request
     
@@ -30,16 +30,14 @@ public enum PodInfoResponseSubType: UInt8 {
             return PodInfoFaultEvent.self
         case .dataLog:
             return PodInfoDataLog.self
-        case .hardcodedTestValues:
-            return PodInfoTester.self
         case .fault:
             return PodInfoFault.self
-        //case .hardcodedValues:
-        //    print("1")
+        case .hardcodedTestValues:
+            return PodInfoTester.self
         case .resetStatus:
             return PodInfoResetStatus.self
-        //case .dumpRecentFlashLog:
-        //    print("1")
+        case .flashLogRecent:
+            return PodInfoFlashLogRecent.self
         //case .dumpOlderFlashlog:
         //    print("1")
         }

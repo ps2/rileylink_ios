@@ -35,7 +35,14 @@ extension OmnipodPumpManager: PumpManagerUI {
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension OmnipodPumpManager {
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
-        return
+        guard let maxBasalRate = viewController.maximumBasalRatePerHour,
+            let maxBolus = viewController.maximumBolus else
+        {
+            completion(.failure(PodCommsError.invalidData))
+            return
+        }
+        
+        completion(.success(maximumBasalRatePerHour: maxBasalRate, maximumBolus: maxBolus))
     }
     
     public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {
@@ -46,7 +53,7 @@ extension OmnipodPumpManager {
     }
     
     public func deliveryLimitSettingsTableViewControllerIsReadOnly(_ viewController: DeliveryLimitSettingsTableViewController) -> Bool {
-        return true
+        return false
     }
 }
 

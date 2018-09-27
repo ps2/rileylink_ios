@@ -123,7 +123,7 @@
 "No response" = "Brak odpowiedzi";
 
 /* The title of the cell showing the last idle */
-"On Idle" = "Wsrzymany";
+"On Idle" = "Wstrzymany";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Preferowane źródło danych";

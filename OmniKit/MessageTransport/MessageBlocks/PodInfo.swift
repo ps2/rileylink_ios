@@ -8,6 +8,13 @@
 
 import Foundation
 
+public protocol PodInfo {
+    init(encodedData: Data) throws
+    var podInfoType: PodInfoResponseSubType { get }
+    var data: Data { get }
+    
+}
+
 public enum PodInfoResponseSubType: UInt8 {
     case normal                      = 0x00
     case configuredAlerts            = 0x01
@@ -419,11 +426,3 @@ public enum PodInfoResponseSubType: UInt8 {
     }
 
 }
-
-public protocol PodInfo {
-    init(encodedData: Data) throws
-    var podInfoType: PodInfoResponseSubType { get }
-    var data: Data { get }
-
-}
-

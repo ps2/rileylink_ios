@@ -29,12 +29,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
         
-        
-        guard (lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
-            return
-        }
-
         queue.async {
+            
+            guard (self.lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
+                return
+            }
+            
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             self.podComms.runSession(withName: "Get status for currentPumpData assertion", using: rileyLinkSelector) { (result) in
                 do {

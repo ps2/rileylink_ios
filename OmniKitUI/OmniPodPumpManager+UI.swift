@@ -60,7 +60,24 @@ extension OmnipodPumpManager {
 // MARK: - SingleValueScheduleTableViewControllerSyncSource
 extension OmnipodPumpManager {
     public func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
-        return // TODO: store basal schedule
+        let timeZone = state.podState.timeZone
+        podComms.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
+            do {
+                switch result {
+                case .success(let session):
+                    let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
+                    let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
+                    let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                    try session.setBasalSchedule(schedule: newSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
+                    completion(.success(scheduleItems: viewController.scheduleItems, timeZone: timeZone))
+                case .failure(let error):
+                    throw error
+                }
+            } catch let error {
+                self.log.error("Save basal profile failed: %{public}@", String(describing: error))
+                completion(.failure(error))
+            }
+        }
     }
     
     public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {

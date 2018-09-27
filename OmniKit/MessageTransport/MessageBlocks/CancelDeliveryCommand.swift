@@ -15,13 +15,13 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     public struct DeliveryType: OptionSet {
         public let rawValue: UInt8
         
-        static let none          = DeliveryType(rawValue: 0)
-        static let basal         = DeliveryType(rawValue: 1 << 0)
-        static let tempBasal     = DeliveryType(rawValue: 1 << 1)
-        static let bolus         = DeliveryType(rawValue: 1 << 2)
-        static let extendedBolus = DeliveryType(rawValue: 1 << 3)
+        public static let none          = DeliveryType(rawValue: 0)
+        public static let basal         = DeliveryType(rawValue: 1 << 0)
+        public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
+        public static let bolus         = DeliveryType(rawValue: 1 << 2)
+        public static let extendedBolus = DeliveryType(rawValue: 1 << 3)
         
-        static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
+        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
         
         public init(rawValue: UInt8) {
             self.rawValue = rawValue

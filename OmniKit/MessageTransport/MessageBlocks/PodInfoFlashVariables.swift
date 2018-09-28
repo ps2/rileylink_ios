@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PodInfoResetStatus : PodInfo {
+public struct PodInfoFlashVariables : PodInfo {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
     //    public enum lengthType: UInt8{
@@ -26,7 +26,7 @@ public struct PodInfoResetStatus : PodInfo {
     // public let numberOfBytes: UInt8 = 10
     // 027c4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
     
-    public var podInfoType              : PodInfoResponseSubType = .resetStatus
+    public var podInfoType              : PodInfoResponseSubType = .flashVariables
     public let zero                     : UInt8
     public let numberOfBytes            : UInt8
     public let address                  : UInt32
@@ -42,7 +42,7 @@ public struct PodInfoResetStatus : PodInfo {
         self.zero                = encodedData[1]
         self.numberOfBytes       = encodedData[2]
         self.address             = encodedData[3...6].toBigEndian(UInt32.self)
-        self.dataFromFlashMemory = Data(encodedData[20...122])
+        self.dataFromFlashMemory = encodedData[20...122]
         self.data                = Data() // Dummy value, else error PodInfo type
     }
 }

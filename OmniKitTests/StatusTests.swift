@@ -60,16 +60,16 @@ class StatusTests: XCTestCase {
         
     }
  
-    func testStatusRequestCommandResetStatus() {
+    func testStatusRequestCommandFlashVariables() {
         // 0e 01 46
         do {
             // Encode
-            let encoded = GetStatusCommand(podInfoType: .resetStatus)
+            let encoded = GetStatusCommand(podInfoType: .flashVariables)
             XCTAssertEqual("0e0146", encoded.data.hexadecimalString)
             
             // Decode
             let decoded = try GetStatusCommand(encodedData: Data(hexadecimalString: "0e0146")!)
-            XCTAssertEqual(.resetStatus, decoded.podInfoType)
+            XCTAssertEqual(.flashVariables, decoded.podInfoType)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

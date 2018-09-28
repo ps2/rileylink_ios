@@ -10,11 +10,11 @@ import Foundation
 
 public struct PodInfoConfiguredAlerts : PodInfo {
 
-    public var podInfoType : PodInfoResponseSubType = .configuredAlerts
-    public let word_278    : Data
-    public let alertsActivations : [AlertActivation]
+    public var podInfoType: PodInfoResponseSubType = .configuredAlerts
+    public let word_278: Data
+    public let alertsActivations: [AlertActivation]
 
-    public let data       : Data
+    public let data: Data
 
     public struct AlertActivation {
         let beepType: ConfigureAlertsCommand.BeepType
@@ -32,8 +32,8 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         if encodedData.count < Int(11) {
             throw MessageBlockError.notEnoughData
         }
-        self.podInfoType                  = PodInfoResponseSubType.init(rawValue: encodedData[0])!
-        self.word_278                     = encodedData[1...2]
+        self.podInfoType = PodInfoResponseSubType.init(rawValue: encodedData[0])!
+        self.word_278 = encodedData[1...2]
         
         let numAlertTypes = 8
         let beepType = ConfigureAlertsCommand.BeepType.self
@@ -47,7 +47,6 @@ public struct PodInfoConfiguredAlerts : PodInfo {
             activations.append(AlertActivation(beepType: beepType!, timeFromPodStart: timeFromPodStart, unitsLeft: unitsLeft))
         }
         alertsActivations = activations
-        self.data         = encodedData
+        self.data = encodedData
     }
 }
-

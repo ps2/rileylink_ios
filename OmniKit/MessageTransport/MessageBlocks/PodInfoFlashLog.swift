@@ -12,23 +12,23 @@ import Foundation
 public struct PodInfoFlashLog : PodInfo {
     
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-    public var podInfoType     : PodInfoResponseSubType
-    public let numberOfEntries : UInt16
-    public let totalBytes      : Int
-    public let logEntries      : Data
-    public let data            : Data
+    public var podInfoType: PodInfoResponseSubType
+    public let numberOfEntries: UInt16
+    public let totalBytes: Int
+    public let logEntries: Data
+    public let data: Data
 
     public init(encodedData: Data) throws {
         
         self.numberOfEntries = encodedData[1...2].toBigEndian(UInt16.self)
-        self.totalBytes      = Int(numberOfEntries << 2) + 3
+        self.totalBytes = Int(numberOfEntries << 2) + 3
         
         if encodedData.count < Int(totalBytes) {
             throw MessageBlockError.notEnoughData
         }
        
-        self.podInfoType     = PodInfoResponseSubType(rawValue: encodedData[0])!
-        self.logEntries      = encodedData.subdata(in: 3..<totalBytes)
-        self.data            = encodedData
+        self.podInfoType = PodInfoResponseSubType(rawValue: encodedData[0])!
+        self.logEntries = encodedData.subdata(in: 3..<totalBytes)
+        self.data = encodedData
     }
 }

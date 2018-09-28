@@ -99,7 +99,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             }
         }
         
-        suspended = deliveryStatus == .deliveryInterrupted
+        suspended = deliveryStatus == .suspended
     }
 
     // MARK: - RawRepresentable

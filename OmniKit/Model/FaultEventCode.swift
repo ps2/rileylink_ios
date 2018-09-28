@@ -12,7 +12,7 @@ import Foundation
 public struct FaultEventCode: CustomStringConvertible {
     let rawValue: UInt8
     
-    enum FaultEventType: UInt8 {
+    public enum FaultEventType: UInt8 {
         case noFaults                             = 0x00
         case failedFlashErase                     = 0x01
         case failedFlashStore                     = 0x02
@@ -108,13 +108,17 @@ public struct FaultEventCode: CustomStringConvertible {
         case badValueField6in0x1A                 = 0x95
     }
     
+    public var faultType: FaultEventType? {
+        return FaultEventType(rawValue: rawValue)
+    }
+    
     init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
     
     public var description: String {
-        if let knownCode = FaultEventType(rawValue: rawValue) {
-            switch knownCode {
+        if let faultType = faultType {
+            switch faultType {
             case .noFaults:
                 return LocalizedString("Fault Event Type 0x00: No faults, system running normally.", comment: "Fault Event Type 0x00: No faults, system running normally.")
             case .failedFlashErase:

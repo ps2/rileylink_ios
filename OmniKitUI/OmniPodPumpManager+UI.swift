@@ -68,7 +68,7 @@ extension OmnipodPumpManager {
                     let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
                     let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
                     let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
-                    try session.setBasalSchedule(schedule: newSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
+                    let _ = try session.setBasalSchedule(schedule: newSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
                     completion(.success(scheduleItems: viewController.scheduleItems, timeZone: timeZone))
                 case .failure(let error):
                     throw error

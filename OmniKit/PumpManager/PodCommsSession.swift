@@ -333,6 +333,7 @@ public class PodCommsSession {
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
         let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
+        podState.basalSchedule = schedule
         podState.advanceToNextNonce()
         return status
     }
@@ -349,7 +350,7 @@ public class PodCommsSession {
     public func insertCannula(basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
         
         // Set basal schedule
-        try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         
         // Configure Alerts
         // 79a4 10df 0502

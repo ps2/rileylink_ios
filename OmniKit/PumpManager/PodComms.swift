@@ -15,7 +15,7 @@ public protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange state: PodState)
 }
 
-public class PodComms {
+public class PodComms : CustomDebugStringConvertible {
     
     private var configuredDevices: Set<RileyLinkDevice> = Set()
     
@@ -161,6 +161,17 @@ public class PodComms {
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
         configuredDevices.remove(device)
     }
+    
+    // MARK: - CustomDebugStringConvertible
+    
+    public var debugDescription: String {
+        return [
+            "## PodComms",
+            "configuredDevices: \(configuredDevices.map { $0.peripheralIdentifier })",
+            ""
+            ].joined(separator: "\n")
+    }
+
 }
 
 private extension CommandSession {

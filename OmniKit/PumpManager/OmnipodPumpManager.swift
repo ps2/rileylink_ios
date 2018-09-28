@@ -70,7 +70,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
-        podComms.runSession(withName: "Resume", using: rileyLinkSelector) { (result) in
+        podComms.runSession(withName: "Suspend", using: rileyLinkSelector) { (result) in
             
             let session: PodCommsSession
             switch result {
@@ -284,9 +284,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             "## OmnipodPumpManager",
             "state: \(state.debugDescription)",
             "",
-            "podComms: \(String(reflecting: podComms))",
-            "",
+            String(describing: podComms!),
             super.debugDescription,
+            "",
             ].joined(separator: "\n")
     }
     

@@ -70,7 +70,7 @@ extension OmnipodPumpManagerState {
 extension OmnipodPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return [
-            "## MinimedPumpManagerState",
+            "## OmnipodPumpManagerState",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
             ].joined(separator: "\n")

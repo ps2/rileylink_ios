@@ -37,8 +37,8 @@ public struct PodInfoDataLog : PodInfo {
         self.dataChunkSize = encodedData[6]
         self.dataChunkWords = encodedData[7]
         
-        // self.loggedData          = encodedData[10...encodedData.count]
+        // self.loggedData = encodedData[10...encodedData.count]
         // self.dataFromFlashMemory = Data(encodedData[22...124])
-        self.data                = Data() // Dummy value, else error PodInfo type
+        self.data = Data() // Dummy value, else error PodInfo type
     }
 }

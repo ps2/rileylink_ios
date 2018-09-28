@@ -10,10 +10,10 @@ import Foundation
 
 public struct PodInfoResponse : MessageBlock {
 
-    public let blockType              : MessageBlockType = .podInfoResponse
-    public let podInfoResponseSubType : PodInfoResponseSubType
-    public let podInfo                : PodInfo
-    public var data                   : Data
+    public let blockType: MessageBlockType = .podInfoResponse
+    public let podInfoResponseSubType: PodInfoResponseSubType
+    public let podInfo: PodInfo
+    public var data: Data
 
     public init(encodedData: Data) throws {
         // TODO test to evaluate if this works:

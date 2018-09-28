@@ -126,13 +126,23 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            let podStatus: StatusResponse
+            var podStatus: StatusResponse
             
             do {
                 podStatus = try session.getStatus()
             } catch let error {
                 completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
                 return
+            }
+            
+            // If pod suspended, resume basal before bolusing
+            if podStatus.deliveryStatus == .deliveryInterrupted {
+                do {
+                    podStatus = try session.resumeBasal()
+                } catch let error {
+                    completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
+                    return
+                }
             }
             
             guard !podStatus.deliveryStatus.bolusing else {

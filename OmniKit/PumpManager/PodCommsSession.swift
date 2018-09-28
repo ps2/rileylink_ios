@@ -47,7 +47,7 @@ extension PodCommsError: LocalizedError {
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:
-            return nil
+            return LocalizedString("Unexpected response from pod", comment: "Error message shown when empty response from pod was received")
         case .unknownResponseType:
             return nil
         case .noRileyLinkAvailable:
@@ -308,6 +308,8 @@ public class PodCommsSession {
             podState.unfinalizedBolus?.cancel(at: now)
             log.info("Interrupted bolus: %@", String(describing: unfinalizedBolus))
         }
+        
+        podState.updateDeliveryStatus(deliveryStatus: status.deliveryStatus)
 
         podState.advanceToNextNonce()
         
@@ -344,7 +346,12 @@ public class PodCommsSession {
         }
         
         let scheduleOffset = podState.timeZone.scheduleOffset(forDate: Date())
-        return try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
+        
+        let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
+        
+        podState.updateDeliveryStatus(deliveryStatus: status.deliveryStatus)
+        
+        return status
     }
     
     public func insertCannula(basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {

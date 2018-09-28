@@ -83,7 +83,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             
             do {
                 let status = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
-                completion(PumpManagerResult.success(status.deliveryStatus == .deliveryInterrupted))
+                completion(PumpManagerResult.success(status.deliveryStatus == .suspended))
             } catch (let error) {
                 completion(PumpManagerResult.failure(error))
             }
@@ -105,7 +105,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             
             do {
                 let status = try session.resumeBasal()
-                completion(PumpManagerResult.success(status.deliveryStatus != .deliveryInterrupted))
+                completion(PumpManagerResult.success(status.deliveryStatus != .suspended))
             } catch (let error) {
                 completion(PumpManagerResult.failure(error))
             }
@@ -136,7 +136,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
             
             // If pod suspended, resume basal before bolusing
-            if podStatus.deliveryStatus == .deliveryInterrupted {
+            if podStatus.deliveryStatus == .suspended {
                 do {
                     podStatus = try session.resumeBasal()
                 } catch let error {

@@ -128,8 +128,8 @@ class MessageTests: XCTestCase {
     func testSetupPodCommand() {
         do {
             var components = DateComponents()
-            components.day = 6
-            components.month = 12
+            components.day = 12
+            components.month = 6
             components.year = 2016
             components.hour = 13
             components.minute = 47

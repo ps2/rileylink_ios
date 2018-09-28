@@ -8,25 +8,11 @@
 
 import Foundation
 
+
+
 public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     
     public let blockType: MessageBlockType = .cancelDelivery
-    
-    public struct DeliveryType: OptionSet {
-        public let rawValue: UInt8
-        
-        public static let none          = DeliveryType(rawValue: 0)
-        public static let basal         = DeliveryType(rawValue: 1 << 0)
-        public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
-        public static let bolus         = DeliveryType(rawValue: 1 << 2)
-        public static let extendedBolus = DeliveryType(rawValue: 1 << 3)
-        
-        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
-        
-        public init(rawValue: UInt8) {
-            self.rawValue = rawValue
-        }
-    }
     
     // ID1:1f00ee84 PTYPE:PDM SEQ:26 ID2:1f00ee84 B9:ac BLEN:7 MTYPE:1f05 BODY:e1f78752078196 CRC:03
     

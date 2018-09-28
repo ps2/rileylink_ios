@@ -49,7 +49,7 @@ class BasalScheduleTests: XCTestCase {
     
     func testBasalScheduleCommandFromSchedule() {
         // Encode from schedule
-        let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
+        let entry = BasalScheduleEntry(rate: 0.05, startTime: 0)
         let schedule = BasalSchedule(entries: [entry])
         
         let cmd = SetInsulinScheduleCommand(nonce: 0x01020304, basalSchedule: schedule, scheduleOffset: .hours(8.25))
@@ -102,7 +102,7 @@ class BasalScheduleTests: XCTestCase {
     
     func testBasalScheduleExtraCommandFromSchedule() {
         // Encode from schedule
-        let entry = BasalScheduleEntry(rate: 0.05, duration: .hours(24))
+        let entry = BasalScheduleEntry(rate: 0.05, startTime: 0)
         let schedule = BasalSchedule(entries: [entry])
         
         let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: .hours(8.25), confidenceReminder: true, programReminderInterval: 60)

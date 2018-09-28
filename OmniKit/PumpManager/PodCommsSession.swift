@@ -285,7 +285,7 @@ public class PodCommsSession {
         }
     }
     
-    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType:ConfigureAlertsCommand.BeepType) throws -> StatusResponse {
+    public func cancelDelivery(deliveryType: DeliveryType, beepType:ConfigureAlertsCommand.BeepType) throws -> StatusResponse {
         
         let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
         

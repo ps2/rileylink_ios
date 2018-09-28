@@ -12,6 +12,19 @@ import XCTest
 @testable import OmniKit
 
 class PodInfoTests: XCTestCase {
+    func testFullMessage() {
+        do {
+            // Decode
+            let infoResponse = try PodInfoResponse(encodedData: Data(hexadecimalString: "0216020d0000000000ab6a038403ff03860000285708030d")!)
+            XCTAssertEqual(infoResponse.podInfoResponseSubType, .faultEvents)
+            let faultEvent = infoResponse.podInfo as! PodInfoFaultEvent
+            XCTAssertEqual(faultEvent.immediateBolusInProgress, false)
+            XCTAssertEqual(faultEvent.insulinStateTableCorruption, false)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testPodInfoConfiguredAlertsNoAlerts() {
         // 02 13 first 2 bytes are omitted: 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
         do {
@@ -99,7 +112,7 @@ class PodInfoTests: XCTestCase {
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.aboveFiftyUnits, decoded.reservoirStatus)
-            XCTAssertEqual(.basal, decoded.deliveryInProgressType)
+            XCTAssertEqual(.basal, decoded.deliveryType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
             XCTAssertEqual(.noFaults, decoded.originalLoggedFaultEvent)
@@ -108,7 +121,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(135*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
-            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.initialized, decoded.reservoirStatusAtFirstLoggedFaultEvent)
             XCTAssertEqual(9, decoded.recieverLowGain)
             XCTAssertEqual(5, decoded.radioRSSI)
@@ -126,7 +139,7 @@ class PodInfoTests: XCTestCase {
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600345c000103ff0001000005a1050186")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.reservoirStatus)
-            XCTAssertEqual(.none, decoded.deliveryInProgressType)
+            XCTAssertEqual(.none, decoded.deliveryType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
             XCTAssertEqual(.deliveryErrorDuringPriming, decoded.originalLoggedFaultEvent)
@@ -135,7 +148,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
-            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
             XCTAssertEqual(10, decoded.recieverLowGain)
             XCTAssertEqual(1, decoded.radioRSSI)
@@ -152,7 +165,7 @@ class PodInfoTests: XCTestCase {
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae05602903")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.inactive, decoded.reservoirStatus)
-            XCTAssertEqual(.none, decoded.deliveryInProgressType)
+            XCTAssertEqual(.none, decoded.deliveryType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
             XCTAssertEqual(.deliveryErrorDuringPriming, decoded.originalLoggedFaultEvent)
@@ -161,7 +174,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
-            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
             XCTAssertEqual(10, decoded.recieverLowGain)
             XCTAssertEqual(14, decoded.radioRSSI)
@@ -178,7 +191,7 @@ class PodInfoTests: XCTestCase {
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a002")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.reservoirStatus)
-            XCTAssertEqual(.none, decoded.deliveryInProgressType)
+            XCTAssertEqual(.none, decoded.deliveryType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(6, decoded.podMessageCounter)
             XCTAssertEqual(.faultEventSetupPodType8F, decoded.originalLoggedFaultEvent)
@@ -187,7 +200,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0000*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent)
             XCTAssertEqual(false, decoded.logEventError)
-            XCTAssertEqual(.insulinStateCorruptionDuringErrorLogging, decoded.infoLoggedFaultEvent)
+            XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEvent)
             XCTAssertEqual(10, decoded.recieverLowGain)
             XCTAssertEqual(2, decoded.radioRSSI)

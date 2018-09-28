@@ -145,6 +145,7 @@ public enum PodInfoResponseSubType: UInt8 {
         case unKnownError60                       = 0x60
         case unKnownError61                       = 0x61
         // skipped 62-7f for now
+        case unKnownError6a                       = 0x6a
         case problemBasalUpdateType80             = 0x80
         case problemBasalUpdateType81             = 0x81
         case problemTempBasalUpdateType82         = 0x82
@@ -367,7 +368,9 @@ public enum PodInfoResponseSubType: UInt8 {
             case .unKnownError60:
                 return LocalizedString("Fault Event Type 0x60: Unknown Error.", comment: "Fault Event Type 0x60: Unknown Error.")
             case .unKnownError61:
-                return LocalizedString("Fault Event Type 0x60: Unknown Error.", comment: "Fault Event Type 0x61: Unknown Error.")
+                return LocalizedString("Fault Event Type 0x61: Unknown Error.", comment: "Fault Event Type 0x61: Unknown Error.")
+            case .unKnownError6a:
+                return LocalizedString("Fault Event Type 0x6a: Unknown Error.", comment: "Fault Event Type 0x6a: Unknown Error.")
             case .problemBasalUpdateType80:
                 return LocalizedString("Fault Event Type 0x80: Basal variable state problem #1 inside update_insulin_variables.", comment: "Fault Event Type 0x80: Basal variable state problem #1 inside update_insulin_variables.")
             case .problemBasalUpdateType81:

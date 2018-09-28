@@ -317,9 +317,22 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
+        let response: StatusResponse = try send([GetStatusCommand()])
+        finalizeDoses(deliveryStatus: response.deliveryStatus) { (_) -> Bool in
+            return true
+        }
         //try setTempBasal(rate: 2.5, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
         //try cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
-        let _ = bolus(units: 20)
+        
+        let result = bolus(units: 20)
+        switch result {
+        case .certainFailure(let error):
+            throw error
+        case .uncertainFailure(let error):
+            throw error
+        case .success:
+            return
+        }
         //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
     }
     

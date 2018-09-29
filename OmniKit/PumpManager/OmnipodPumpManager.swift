@@ -42,7 +42,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     case .success(let session):
                         let status = try session.getStatus()
                         
-                        session.finalizeDoses(deliveryStatus: status.deliveryStatus, storageHandler: { (doses) -> Bool in
+                        session.storeFinalizeDoses(deliveryStatus: status.deliveryStatus, storageHandler: { (doses) -> Bool in
                             return self.store(doses: doses)
                         })
 
@@ -153,7 +153,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
+            session.storeFinalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
                 return false
             })
             
@@ -197,7 +197,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 }
                 
-                session.finalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
+                session.storeFinalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
                     return false
                 })
                 

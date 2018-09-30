@@ -318,7 +318,7 @@ public class PodCommsSession {
     
     public func testingCommands() throws {
         let response: StatusResponse = try send([GetStatusCommand()])
-        finalizeDoses(deliveryStatus: response.deliveryStatus) { (_) -> Bool in
+        storeFinalizeDoses(deliveryStatus: response.deliveryStatus) { (_) -> Bool in
             return true
         }
         //try setTempBasal(rate: 2.5, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
@@ -432,7 +432,7 @@ public class PodCommsSession {
         return try send([deactivatePod])
     }
     
-    func finalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
+    func storeFinalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
         self.podState.updateDeliveryStatus(deliveryStatus: deliveryStatus)
         if storageHandler(podState.finalizedDoses) {
             log.info("Finalized %@", String(describing: podState.finalizedDoses))

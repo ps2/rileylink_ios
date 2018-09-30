@@ -104,4 +104,7 @@ extension DeviceDataManager: PumpManagerDelegate {
     func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.minutes(-15))
     }
+    
+    func pumpManager(_ pumpManager: PumpManager, didUpdateSuspendState suspendState: Bool) {
+    }
 }

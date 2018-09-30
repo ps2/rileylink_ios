@@ -53,6 +53,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                             }
                             semaphore.wait()
                         }
+                        self.log.info("Recommending Loop")
                         self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
                     case .failure(let error):
                         throw error
@@ -189,6 +190,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             
             do {
                 let podStatus = try session.getStatus()
+                
+                if self.isDeliverySuspended {
+                    throw PodCommsError.podSuspended
+                }
+                
                 if podStatus.deliveryStatus.tempBasalRunning {
                     let cancelStatus = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
 
@@ -221,6 +227,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 }
             } catch let error {
+                self.log.error("Error during temp basal: %@", String(describing: error))
                 completion(PumpManagerResult.failure(error))
             }
         }

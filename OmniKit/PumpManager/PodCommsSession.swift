@@ -26,6 +26,7 @@ public enum PodCommsError: Error {
     case unfinalizedTempBasal
     case nonceResyncFailed
     case missingBasalSchedule
+    case podSuspended
     case commsError(error: Error)
 }
 
@@ -60,6 +61,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .missingBasalSchedule:
             return nil
+        case .podSuspended:
+            return LocalizedString("Pod is suspended", comment: "Error message action could not be performed because pod is suspended")
         case .commsError:
             return nil
         }
@@ -95,6 +98,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .missingBasalSchedule:
             return nil
+        case .podSuspended:
+            return nil
         case .commsError:
             return nil
         }
@@ -129,6 +134,8 @@ extension PodCommsError: LocalizedError {
         case .nonceResyncFailed:
             return nil
         case .missingBasalSchedule:
+            return nil
+        case .podSuspended:
             return nil
         case .commsError:
             return nil
@@ -336,10 +343,12 @@ public class PodCommsSession {
         //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
     }
     
-    public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws {
+    public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws -> StatusResponse {
+        let _ = try cancelDelivery(deliveryType: .all, beepType: .noBeep)
         let scheduleOffset = timeZone.scheduleOffset(forDate: date)
-        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         self.podState.timeZone = timeZone
+        return status
     }
     
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws -> StatusResponse {
@@ -411,7 +420,8 @@ public class PodCommsSession {
         
         do {
             let response: StatusResponse = try send([GetStatusCommand()])
-            podStatusUpdated(response)
+            podState.updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+            podState.lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
             return response
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             let response: StatusResponse = try send([GetStatusCommand()])
@@ -433,15 +443,11 @@ public class PodCommsSession {
     }
     
     func storeFinalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
-        self.podState.updateDeliveryStatus(deliveryStatus: deliveryStatus)
         if storageHandler(podState.finalizedDoses) {
             log.info("Finalized %@", String(describing: podState.finalizedDoses))
             self.podState.finalizedDoses.removeAll()
         }
     }
     
-    func podStatusUpdated(_ status: StatusResponse) {
-        podState.lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: status, validTime: Date())
-    }
 }
 

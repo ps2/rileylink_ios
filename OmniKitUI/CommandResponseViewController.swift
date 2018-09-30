@@ -23,7 +23,7 @@ extension CommandResponseViewController {
                 switch result {
                 case .success(let session):
                     do {
-                        try session.setTime(basalSchedule: temporaryBasalSchedule, timeZone: .currentFixed, date: Date())
+                        let _ = try session.setTime(basalSchedule: temporaryBasalSchedule, timeZone: .currentFixed, date: Date())
                         response = self.successText
                     } catch let error {
                         response = String(describing: error)

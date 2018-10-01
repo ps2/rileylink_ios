@@ -142,6 +142,8 @@ public enum MessageType: UInt8 {
             return ReadOtherDevicesStatusMessageBody.self
         case .readRemoteControlIDs:
             return ReadRemoteControlIDsMessageBody.self
+        case .suspendResume:
+            return SuspendResumeMessageBody.self
         default:
             return UnknownMessageBody.self
         }

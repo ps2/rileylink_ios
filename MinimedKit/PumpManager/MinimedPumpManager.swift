@@ -83,7 +83,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     // TODO: Isolate to queue
-    private var latestPumpStatus: PumpStatus?
+    private var latestPumpStatus: PumpStatus? {
+        didSet {
+            if let suspended = latestPumpStatus?.suspended {
+                isDeliverySuspended = suspended
+            }
+        }
+    }
 
     // TODO: Isolate to queue
     private var lastAddedPumpEvents: Date = .distantPast
@@ -137,17 +143,55 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
     }
     
-    // TODO
-    public var isDeliverySuspended = false
+    public var isDeliverySuspended: Bool {
+        set {
+            let notify = state.isPumpSuspended != newValue
+            state.isPumpSuspended = newValue
+            if notify {
+                self.pumpManagerDelegate?.pumpManager(self, didUpdateSuspendState: newValue)
+            }
+        }
+        
+        get {
+            return state.isPumpSuspended
+        }
+    }
     
     public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
-        // TODO
-        completion(PumpManagerResult.success(true))
+        setSuspendResumeState(state: .suspend, completion: completion)
     }
     
     public func resumeDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
-        // TODO
-        completion(PumpManagerResult.success(true))
+        setSuspendResumeState(state: .resume, completion: completion)
+    }
+    
+    private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+        rileyLinkDeviceProvider.getDevices { (devices) in
+            guard let device = devices.firstConnected else {
+                completion(PumpManagerResult.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                return
+            }
+            
+            let sessionName: String = {
+                switch state {
+                case .suspend:
+                    return "Suspend Delivery"
+                case .resume:
+                    return "Resume Delivery"
+                }
+            }()
+            
+            self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
+                do {
+                    try session.setSuspendResumeState(state)
+                    self.isDeliverySuspended = (state == .suspend)
+                    completion(PumpManagerResult.success(true))
+                } catch let error {
+                    self.troubleshootPumpComms(using: device)
+                    completion(PumpManagerResult.failure(PumpManagerError.communication(error as? LocalizedError)))
+                }
+            }
+        }
     }
     
 
@@ -549,7 +593,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             }
 
             do {
+                if self.isDeliverySuspended {
+                    try session.setSuspendResumeState(.resume)
+                    self.isDeliverySuspended = false
+                }
+                
                 willRequest(units, Date())
+
                 try session.setNormalBolus(units: units)
                 completion(nil)
             } catch let error {

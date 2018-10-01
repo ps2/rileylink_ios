@@ -409,6 +409,7 @@
 		C184875E20BCDB0000ABE9E7 /* ForecastError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184875D20BCDB0000ABE9E7 /* ForecastError.swift */; };
 		C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */; };
 		C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18EB741207EE20100EA002B /* NightscoutProfile.swift */; };
+		C19EC4A021626DBA002A8274 /* SuspendResumeMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19EC49F21626DBA002A8274 /* SuspendResumeMessageBody.swift */; };
 		C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492621D4A5A19008964FF /* IOBStatus.swift */; };
 		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
 		C1A492671D4A65D9008964FF /* RecommendedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */; };
@@ -1274,6 +1275,7 @@
 		C184875D20BCDB0000ABE9E7 /* ForecastError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastError.swift; sourceTree = "<group>"; };
 		C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableBolusWizardPumpEvent.swift; sourceTree = "<group>"; };
 		C18EB741207EE20100EA002B /* NightscoutProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfile.swift; sourceTree = "<group>"; };
+		C19EC49F21626DBA002A8274 /* SuspendResumeMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendResumeMessageBody.swift; sourceTree = "<group>"; };
 		C1A492621D4A5A19008964FF /* IOBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOBStatus.swift; sourceTree = "<group>"; };
 		C1A492641D4A5DEB008964FF /* BatteryStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryStatus.swift; sourceTree = "<group>"; };
 		C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTempBasal.swift; sourceTree = "<group>"; };
@@ -2293,10 +2295,6 @@
 		C1EAD6BC1C826B92006DBA60 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
-				C1EAD6B11C826B6D006DBA60 /* PacketType.swift */,
-				C1EAD6B01C826B6D006DBA60 /* MessageType.swift */,
-				4352A70E20DEC47800CAC200 /* Models */,
 				C121989E1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift */,
 				C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */,
 				C1EAD6BD1C826B92006DBA60 /* CarelinkMessageBody.swift */,
@@ -2313,26 +2311,31 @@
 				C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */,
 				C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */,
 				C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */,
+				C1EAD6B01C826B6D006DBA60 /* MessageType.swift */,
 				C1C3578E1C927303009BDD4F /* MeterMessage.swift */,
+				4352A70E20DEC47800CAC200 /* Models */,
 				C1EAD6BE1C826B92006DBA60 /* MySentryAckMessageBody.swift */,
 				C1EAD6BF1C826B92006DBA60 /* MySentryAlertClearedMessageBody.swift */,
 				C1EAD6C01C826B92006DBA60 /* MySentryAlertMessageBody.swift */,
 				C1EAD6C11C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift */,
+				C1EAD6B11C826B6D006DBA60 /* PacketType.swift */,
 				C1EAD6C21C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift */,
 				C14303151C97C98000A40450 /* PumpAckMessageBody.swift */,
 				C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */,
+				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
 				541688DC1DB82213005B1891 /* ReadCurrentGlucosePageMessageBody.swift */,
 				2FDE1A061E57B12D00B56A27 /* ReadCurrentPageNumberMessageBody.swift */,
 				43DAD00320A6A677000F8529 /* ReadOtherDevicesIDsMessageBody.swift */,
 				43DAD00120A6A470000F8529 /* ReadOtherDevicesStatusMessageBody.swift */,
 				C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */,
 				433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */,
+				43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */,
 				C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */,
 				43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */,
 				43CA932D1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift */,
-				43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */,
 				43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */,
 				43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */,
+				C19EC49F21626DBA002A8274 /* SuspendResumeMessageBody.swift */,
 				C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */,
 			);
 			path = Messages;
@@ -3352,6 +3355,7 @@
 				C1842C0F1C8FA45100DB42AC /* ChangeSensorRateOfChangeAlertSetupPumpEvent.swift in Sources */,
 				C1842BFE1C8FA45100DB42AC /* ResultDailyTotalPumpEvent.swift in Sources */,
 				C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */,
+				C19EC4A021626DBA002A8274 /* SuspendResumeMessageBody.swift in Sources */,
 				43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */,
 				C1EAD6CD1C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift in Sources */,
 				43CEC07620D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift in Sources */,

@@ -392,6 +392,13 @@ extension PumpOpsSession {
 
         let _: PumpAckMessageBody = try runCommandWithArguments(message)
     }
+    
+    /// - Throws: `PumpCommandError` specifying the failure sequence
+    public func setSuspendResumeState(_ state: SuspendResumeMessageBody.SuspendResumeState) throws {
+        let message = PumpMessage(settings: settings, type: .suspendResume, body: SuspendResumeMessageBody(state: state))
+        
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
 
     /// - Throws: PumpCommandError
     public func selectBasalProfile(_ profile: BasalProfile) throws {

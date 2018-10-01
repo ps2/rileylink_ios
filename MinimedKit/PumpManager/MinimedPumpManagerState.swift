@@ -26,6 +26,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var pumpID: String
 
     public var pumpRegion: PumpRegion
+    
+    public var isPumpSuspended: Bool
 
     public var pumpSettings: PumpSettings {
         get {
@@ -56,7 +58,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var timeZone: TimeZone
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, isPumpSuspended: Bool = false) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
@@ -65,6 +67,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.pumpRegion = pumpRegion
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
+        self.isPumpSuspended = isPumpSuspended
     }
 
     public init?(rawValue: RawValue) {
@@ -103,7 +106,9 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
                 rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
             }
         }
-        
+
+        let isPumpSuspended = (rawValue["isPumpSuspended"] as? Bool) ?? false
+
         self.init(
             batteryChemistry: batteryChemistry,
             preferredInsulinDataSource: insulinDataSource,
@@ -112,7 +117,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             pumpModel: pumpModel,
             pumpRegion: pumpRegion,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
-            timeZone: timeZone
+            timeZone: timeZone,
+            isPumpSuspended: isPumpSuspended
         )
     }
 
@@ -125,6 +131,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "pumpModel": pumpModel.rawValue,
             "pumpRegion": pumpRegion.rawValue,
             "timeZone": timeZone.secondsFromGMT(),
+            "isPumpSuspended": isPumpSuspended,
 
             "version": MinimedPumpManagerState.version,
             ]
@@ -153,6 +160,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pumpModel: \(pumpModel.rawValue)",
             "pumpRegion: \(pumpRegion)",
             "timeZone: \(timeZone)",
+            "isPumpSuspended: \(isPumpSuspended)",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

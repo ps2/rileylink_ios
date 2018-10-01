@@ -33,6 +33,8 @@ public class PumpOps {
     }
 
     private var configuredDevices: Set<RileyLinkDevice> = Set()
+    
+    private var sessionDevice: RileyLinkDevice?
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.RileyLinkKit.PumpOps", qos: .utility)
 
@@ -69,8 +71,10 @@ public class PumpOps {
 
             device.runSession(withName: name) { (session) in
                 let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self)
+                self.sessionDevice = device
                 self.configureDevice(device, with: session)
                 block(session)
+                self.sessionDevice = nil
                 semaphore.signal()
             }
 
@@ -85,7 +89,7 @@ public class PumpOps {
         }
 
         do {
-            _ = try session.configureRadio(for: pumpSettings.pumpRegion)
+            _ = try session.configureRadio(for: pumpSettings.pumpRegion, frequency: pumpState.lastValidFrequency)
         } catch {
             // Ignore the error and let the block run anyway
             return
@@ -116,6 +120,15 @@ public class PumpOps {
 
 
 extension PumpOps: PumpOpsSessionDelegate {
+    
+    func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession) {
+        sessionQueue.async {
+            if let sessionDevice = self.sessionDevice {
+                self.configuredDevices = [sessionDevice]
+            }
+        }
+    }
+    
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
         self.pumpState = state
     }

@@ -393,6 +393,11 @@ extension PumpMessageSenderStub: PumpOpsSessionDelegate {
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
 
     }
+    
+    func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession) {
+        
+    }
+
 }
 
 func array(_ timestampedEvents: [TimestampedHistoryEvent], containsPumpEvent pumpEvent: PumpEvent) -> Bool {

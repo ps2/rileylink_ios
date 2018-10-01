@@ -18,7 +18,6 @@ open class RileyLinkPumpManager {
         // Listen for device notifications
         NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: .DevicePacketReceived, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkTimerTickNotification(_:)), name: .DeviceTimerDidTick, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceStateDidChange(_:)), name: .DeviceStateDidChange, object: nil)
     }
     
     /// Manages all the RileyLinks - access to management is optional
@@ -36,9 +35,6 @@ open class RileyLinkPumpManager {
     // TODO: Put this on each RileyLinkDevice?
     private var lastTimerTick: Date = .distantPast
 
-    // TODO: Isolate to queue
-    open var deviceStates: [UUID: DeviceState] = [:]
-
     /// Called when one of the connected devices receives a packet outside of a session
     ///
     /// - Parameters:
@@ -55,7 +51,6 @@ open class RileyLinkPumpManager {
             "## RileyLinkPumpManager",
             "rileyLinkConnectionManager: \(String(reflecting: rileyLinkConnectionManager))",
             "lastTimerTick: \(String(describing: lastTimerTick))",
-            "deviceStates: \(String(reflecting: deviceStates))",
             "",
             String(reflecting: rileyLinkDeviceProvider),
         ].joined(separator: "\n")
@@ -64,18 +59,6 @@ open class RileyLinkPumpManager {
 
 // MARK: - RileyLink Updates
 extension RileyLinkPumpManager {
-    @objc private func deviceStateDidChange(_ note: Notification) {
-        guard
-            let device = note.object as? RileyLinkDevice,
-            let deviceState = note.userInfo?[RileyLinkDevice.notificationDeviceStateKey] as? RileyLinkKit.DeviceState
-        else {
-            return
-        }
-
-        queue.async {
-            self.deviceStates[device.peripheralIdentifier] = deviceState
-        }
-    }
 
     /**
      Called when a new idle message is received by the RileyLink.

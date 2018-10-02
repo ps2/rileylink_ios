@@ -203,10 +203,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 }
                 
-                session.storeFinalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
-                    return false
-                })
-                
                 if duration < .ulpOfOne {
                     // 0 duration temp basals are used to cancel any existing temp basal
                     let cancelTime = Date()

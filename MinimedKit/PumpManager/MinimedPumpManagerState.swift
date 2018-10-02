@@ -134,8 +134,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             pumpRegion: pumpRegion,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
             timeZone: timeZone,
+            lastValidFrequency: lastValidFrequency,
             isPumpSuspended: isPumpSuspended
-            lastValidFrequency: lastValidFrequency
         )
     }
 

@@ -12,9 +12,29 @@ import XCTest
 @testable import OmniKit
 
 class TempBasalTests: XCTestCase {
+    
+    func testAlternatingSegmentFlag() {
+        // Encode 0.05U/hr 30mins
+        let cmd = SetInsulinScheduleCommand(nonce: 0x9746c65b, tempBasalRate: 0.05, duration: .hours(0.5))
+        // 1a 0e 9746c65b 01 0079 01 3840 0000 0000
+        XCTAssertEqual("1a0e9746c65b01007901384000000000", cmd.data.hexadecimalString)
+
+        // Encode 0.05U/hr 8.5hours
+        let cmd2 = SetInsulinScheduleCommand(nonce: 0x9746c65b, tempBasalRate: 0.05, duration: .hours(8.5))
+        // 1a 10 9746c65b 01 0091 11 3840 0000 f800 0000
+        XCTAssertEqual("1a109746c65b0100911138400000f8000000", cmd2.data.hexadecimalString)
+        
+        // Encode 0.05U/hr 16.5hours
+        let cmd3 = SetInsulinScheduleCommand(nonce: 0x9746c65b, tempBasalRate: 0.05, duration: .hours(16.5))
+        // 1a 12 9746c65b 01 00a9 21 3840 0000 f800 f800 0000
+        XCTAssertEqual("1a129746c65b0100a92138400000f800f8000000", cmd3.data.hexadecimalString)
+    }
+
+    
     func testSetTempBasalCommand() {
         do {
             // Decode 1a 0e ea2d0a3b 01 007d 01 3840 0002 0002
+            //        1a 0e 9746c65b 01 0079 01 3840 0000 0000 160e7c00000515752a
             let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0eea2d0a3b01007d01384000020002")!)
 
             XCTAssertEqual(0xea2d0a3b, cmd.nonce)

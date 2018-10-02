@@ -73,7 +73,7 @@ public struct BasalDeliveryTable {
         var remaining = Int(duration / BasalDeliveryTable.segmentDuration)
         while remaining > 0 {
             let segments = min(remaining, 16)
-            let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: alternateSegmentPulse)
+            let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: segments > 1 ? alternateSegmentPulse : false)
             tableEntries.append(tableEntry)
             remaining -= segments
         }

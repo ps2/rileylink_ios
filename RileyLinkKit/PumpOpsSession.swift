@@ -13,6 +13,7 @@ import RileyLinkBLEKit
 
 protocol PumpOpsSessionDelegate: class {
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState)
+    func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession)
 }
 
 
@@ -813,11 +814,16 @@ extension PumpOpsSession {
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
-    public func tuneRadio(current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
+    public func tuneRadio() throws -> FrequencyScanResults {
         let region = self.settings.pumpRegion
 
         do {
-            let results = try scanForPump(in: region.scanFrequencies, current: current)
+            let results = try scanForPump(in: region.scanFrequencies, fallback: pump.lastValidFrequency)
+            
+            pump.lastValidFrequency = results.bestFrequency
+            pump.lastTuned = Date()
+            
+            delegate.pumpOpsSessionDidChangeRadioConfig(self)
 
             return results
         } catch let error as PumpOpsError {
@@ -850,7 +856,7 @@ extension PumpOpsSession {
     /// - Throws:
     ///     - PumpOpsError.deviceError
     ///     - RileyLinkDeviceError
-    func configureRadio(for region: PumpRegion) throws {
+    func configureRadio(for region: PumpRegion, frequency: Measurement<UnitFrequency>?) throws {
         try session.resetRadioConfig()
         
         switch region {
@@ -871,6 +877,10 @@ extension PumpOpsSession {
             try session.updateRegister(.mdmcfg0, value: 0x7E)
             try session.updateRegister(.deviatn, value: 0x15)
         }
+        
+        if let frequency = frequency {
+            try session.setBaseFrequency(frequency)
+        }
     }
 
     /// - Throws:
@@ -878,7 +888,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
     ///     - LocalizedError
-    private func scanForPump(in frequencies: [Measurement<UnitFrequency>], current: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
+    private func scanForPump(in frequencies: [Measurement<UnitFrequency>], fallback: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
         
         var trials = [FrequencyTrial]()
         
@@ -920,7 +930,7 @@ extension PumpOpsSession {
         })
 
         guard sortedTrials.first!.successes > 0 else {
-            try session.setBaseFrequency(current ?? middleFreq)
+            try session.setBaseFrequency(fallback ?? middleFreq)
             throw PumpOpsError.rfCommsFailure("No pump responses during scan")
         }
 
@@ -928,7 +938,7 @@ extension PumpOpsSession {
             trials: trials,
             bestFrequency: sortedTrials.first!.frequency
         )
-
+        
         try session.setBaseFrequency(results.bestFrequency)
 
         return results

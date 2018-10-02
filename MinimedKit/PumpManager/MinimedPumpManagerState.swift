@@ -29,6 +29,10 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     
     public var isPumpSuspended: Bool
 
+    public var lastValidFrequency: Measurement<UnitFrequency>?
+
+    public var lastTuned: Date?
+
     public var pumpSettings: PumpSettings {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
@@ -44,12 +48,16 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             var state = PumpState()
             state.pumpModel = pumpModel
             state.timeZone = timeZone
+            state.lastValidFrequency = lastValidFrequency
+            state.lastTuned = lastTuned
             return state
         }
         set {
             if let model = newValue.pumpModel {
                 pumpModel = model
             }
+            lastValidFrequency = newValue.lastValidFrequency
+            lastTuned = newValue.lastTuned
             timeZone = newValue.timeZone
         }
     }
@@ -58,7 +66,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var timeZone: TimeZone
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, isPumpSuspended: Bool = false) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
@@ -68,6 +76,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
         self.isPumpSuspended = isPumpSuspended
+        self.lastValidFrequency = lastValidFrequency
     }
 
     public init?(rawValue: RawValue) {
@@ -108,6 +117,13 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         }
 
         let isPumpSuspended = (rawValue["isPumpSuspended"] as? Bool) ?? false
+        
+        let lastValidFrequency: Measurement<UnitFrequency>?
+        if let frequencyRaw = rawValue["lastValidFrequency"] as? Double {
+            lastValidFrequency = Measurement<UnitFrequency>(value: frequencyRaw, unit: .megahertz)
+        } else {
+            lastValidFrequency = nil
+        }
 
         self.init(
             batteryChemistry: batteryChemistry,
@@ -119,6 +135,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
             timeZone: timeZone,
             isPumpSuspended: isPumpSuspended
+            lastValidFrequency: lastValidFrequency
         )
     }
 
@@ -139,6 +156,11 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         if let rileyLinkConnectionManagerState = rileyLinkConnectionManagerState {
             value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState.rawValue
         }
+        
+        if let frequency = lastValidFrequency?.converted(to: .megahertz) {
+            value["lastValidFrequency"] = frequency.value
+        }
+
         return value
     }
 }
@@ -159,6 +181,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pumpID: ✔︎",
             "pumpModel: \(pumpModel.rawValue)",
             "pumpRegion: \(pumpRegion)",
+            "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "timeZone: \(timeZone)",
             "isPumpSuspended: \(isPumpSuspended)",
             String(reflecting: rileyLinkConnectionManagerState),

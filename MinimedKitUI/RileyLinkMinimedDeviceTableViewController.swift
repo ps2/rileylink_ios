@@ -20,8 +20,6 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
     public let device: RileyLinkDevice
 
-    private var deviceState: DeviceState
-
     private let ops: PumpOps
 
     private var pumpState: PumpState? {
@@ -35,6 +33,10 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
             if let cell = cellForRow(.model) {
                 cell.setPumpModel(pumpState?.pumpModel)
+            }
+            
+            if let cell = cellForRow(.tune) {
+                cell.setTuneInfo(lastValidFrequency: pumpState?.lastValidFrequency, lastTuned: pumpState?.lastTuned, measurementFormatter: measurementFormatter, dateFormatter: dateFormatter)
             }
         }
     }
@@ -79,14 +81,14 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
     private var appeared = false
 
-    public init(device: RileyLinkDevice, deviceState: DeviceState, pumpOps: PumpOps) {
+    public init(device: RileyLinkDevice, pumpOps: PumpOps) {
         self.device = device
-        self.deviceState = deviceState
         self.ops = pumpOps
 
         super.init(style: .grouped)
 
         updateDeviceStatus()
+        
         pumpOps.getPumpState { (state) in
             DispatchQueue.main.async {
                 self.pumpState = state
@@ -272,6 +274,10 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
         return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.pump.rawValue))
     }
 
+    private func cellForRow(_ row: CommandRow) -> UITableViewCell? {
+        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.commands.rawValue))
+    }
+
     public override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
@@ -338,14 +344,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
             switch CommandRow(rawValue: indexPath.row)! {
             case .tune:
-                switch (deviceState.lastValidFrequency, deviceState.lastTuned) {
-                case (let frequency?, let date?):
-                    cell.textLabel?.text = measurementFormatter.string(from: frequency)
-                    cell.setDetailDate(date, formatter: dateFormatter)
-                default:
-                    cell.textLabel?.text = LocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
-                }
-
+                cell.setTuneInfo(lastValidFrequency: pumpState?.lastValidFrequency, lastTuned: pumpState?.lastTuned, measurementFormatter: measurementFormatter, dateFormatter: dateFormatter)
             case .changeTime:
                 cell.textLabel?.text = LocalizedString("Change Time", comment: "The title of the command to change pump time")
 
@@ -448,7 +447,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
 
             switch CommandRow(rawValue: indexPath.row)! {
             case .tune:
-                vc = .tuneRadio(ops: ops, device: device, current: deviceState.lastValidFrequency, measurementFormatter: measurementFormatter)
+                vc = .tuneRadio(ops: ops, device: device, measurementFormatter: measurementFormatter)
             case .changeTime:
                 vc = .changeTime(ops: ops, device: device)
             case .mySentryPair:
@@ -563,4 +562,14 @@ private extension UITableViewCell {
             detailTextLabel?.text = LocalizedString("Unknown", comment: "The detail text for an unknown pump model")
         }
     }
+    
+    func setTuneInfo(lastValidFrequency: Measurement<UnitFrequency>?, lastTuned: Date?, measurementFormatter: MeasurementFormatter, dateFormatter: DateFormatter) {
+        if let frequency = lastValidFrequency, let date = lastTuned {
+            textLabel?.text = measurementFormatter.string(from: frequency)
+            setDetailDate(date, formatter: dateFormatter)
+        } else {
+            textLabel?.text = LocalizedString("Tune Radio Frequency", comment: "The title of the command to re-tune the radio")
+        }
+    }
+
 }

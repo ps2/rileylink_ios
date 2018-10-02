@@ -245,7 +245,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             }
 
             do {
-                _ = try session.tuneRadio(current: nil)
+                _ = try session.tuneRadio()
                 let model = try session.getPumpModel()
                 var isSentrySetUpNeeded = false
 

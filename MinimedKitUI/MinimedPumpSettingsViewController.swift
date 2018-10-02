@@ -214,11 +214,10 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
 
-            pumpManager.getStateForDevice(device) { (deviceState, pumpOps) in
+            pumpManager.getOpsForDevice(device) { (pumpOps) in
                 DispatchQueue.main.async {
                     let vc = RileyLinkMinimedDeviceTableViewController(
                         device: device,
-                        deviceState: deviceState,
                         pumpOps: pumpOps
                     )
 

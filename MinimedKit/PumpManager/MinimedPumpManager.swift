@@ -197,20 +197,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         // How long we should wait before we re-tune the RileyLink
         let tuneTolerance = TimeInterval(minutes: 14)
 
-        let deviceState = deviceStates[device.peripheralIdentifier, default: DeviceState()]
-        let lastTuned = deviceState.lastTuned ?? .distantPast
+        let lastTuned = state.lastTuned ?? .distantPast
 
         if lastTuned.timeIntervalSinceNow <= -tuneTolerance {
             pumpOps.runSession(withName: "Tune pump", using: device) { (session) in
                 do {
-                    let scanResult = try session.tuneRadio(current: deviceState.lastValidFrequency)
+                    let scanResult = try session.tuneRadio()
                     self.log.error("Device %{public}@ auto-tuned to %{public}@ MHz", device.name ?? "", String(describing: scanResult.bestFrequency))
-                    self.queue.async {
-                        self.deviceStates[device.peripheralIdentifier] = DeviceState(
-                            lastTuned: Date(),
-                            lastValidFrequency: scanResult.bestFrequency
-                        )
-                    }
                 } catch let error {
                     self.log.error("Device %{public}@ auto-tune failed with error: %{public}@", device.name ?? "", String(describing: error))
                     self.rileyLinkDeviceProvider.deprioritize(device, completion: nil)
@@ -262,14 +255,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         device.getStatus { (deviceStatus) in
             // Trigger device status upload, even if something is wrong with pumpStatus
             self.queue.async {
-                let deviceState = self.deviceStates[device.peripheralIdentifier]
 
                 let pumpManagerStatus = PumpManagerStatus(
                     date: pumpDate,
                     timeZone: timeZone,
                     device: deviceStatus.device(pumpID: self.state.pumpID, pumpModel: self.state.pumpModel),
-                    lastValidFrequency: deviceState?.lastValidFrequency,
-                    lastTuned: deviceState?.lastTuned,
+                    lastValidFrequency: self.state.lastValidFrequency,
+                    lastTuned: self.state.lastTuned,
                     battery: PumpManagerStatus.BatteryStatus(percent: Double(status.batteryRemainingPercent) / 100),
                     isSuspended: nil,
                     isBolusing: nil,
@@ -454,13 +446,12 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
                     device.getStatus { (deviceStatus) in
                         self.queue.async {
-                            let deviceState = self.deviceStates[device.peripheralIdentifier]
                             let pumpManagerStatus = PumpManagerStatus(
                                 date: date,
                                 timeZone: session.pump.timeZone,
                                 device: deviceStatus.device(pumpID: self.state.pumpID, pumpModel: self.state.pumpModel),
-                                lastValidFrequency: deviceState?.lastValidFrequency,
-                                lastTuned: deviceState?.lastTuned,
+                                lastValidFrequency: self.state.lastValidFrequency,
+                                lastTuned: self.state.lastTuned,
                                 battery: PumpManagerStatus.BatteryStatus(
                                     voltage: status.batteryVolts,
                                     state: {
@@ -598,13 +589,14 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - Configuration
 
     // MARK: Pump
-
+    
     // TODO
-    public func getStateForDevice(_ device: RileyLinkDevice, completion: @escaping (_ deviceState: DeviceState, _ pumpOps: PumpOps) -> Void) {
+    public func getOpsForDevice(_ device: RileyLinkDevice, completion: @escaping (_ pumpOps: PumpOps) -> Void) {
         queue.async {
-            completion(self.deviceStates[device.peripheralIdentifier, default: DeviceState()], self.pumpOps)
+            completion(self.pumpOps)
         }
     }
+
 
     public private(set) var pumpOps: PumpOps!
 

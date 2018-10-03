@@ -162,9 +162,9 @@ class MessageTests: XCTestCase {
             let cmd = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0ebed2e16b02010a0101a000340034")!)
             XCTAssertEqual(0xbed2e16b, cmd.nonce)
             
-            if case SetInsulinScheduleCommand.DeliverySchedule.bolus(let units, let multiplier) = cmd.deliverySchedule {
+            if case SetInsulinScheduleCommand.DeliverySchedule.bolus(let units, let timeBetweenPulses) = cmd.deliverySchedule {
                 XCTAssertEqual(2.6, units)
-                XCTAssertEqual(0x8, multiplier)
+                XCTAssertEqual(.seconds(1), timeBetweenPulses)
             } else {
                 XCTFail("Expected ScheduleEntry.bolus type")
             }

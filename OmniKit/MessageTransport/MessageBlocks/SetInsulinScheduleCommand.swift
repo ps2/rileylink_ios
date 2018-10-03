@@ -19,8 +19,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     public enum DeliverySchedule {
         case basalSchedule(currentSegment: UInt8, secondsRemaining: UInt16, pulsesRemaining: UInt16, table: BasalDeliveryTable)
         case tempBasal(secondsRemaining: UInt16, firstSegmentPulses: UInt16, table: BasalDeliveryTable)
-        // During prime, multiplier is 8, otherwise 16 (0x10)
-        case bolus(units: Double, multiplier: UInt16)
+        case bolus(units: Double, timeBetweenPulses: TimeInterval)
         
         fileprivate func typeCode() -> ScheduleTypeCode {
             switch self {
@@ -43,8 +42,9 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
                     data.append(entry.data)
                 }
                 return data
-            case .bolus(let units, let multiplier):
-                let pulseCount = UInt16(units / podPulseSize)
+            case .bolus(let units, let timeBetweenPulses):
+                let pulseCount = UInt16(round(units / podPulseSize))
+                let multiplier = UInt16(round(timeBetweenPulses * 8))
                 let fieldA = pulseCount * multiplier
                 let numHalfHourSegments: UInt8 = 1
                 var data = Data(bytes: [numHalfHourSegments])
@@ -140,7 +140,8 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
             let fieldA = encodedData[10...].toBigEndian(UInt16.self)
             let unitRate = encodedData[12...].toBigEndian(UInt16.self)
             let units = Double(unitRate) * 0.1 * duration.hours
-            deliverySchedule = .bolus(units: units, multiplier: fieldA / unitRate)
+            let multiplier = fieldA / unitRate
+            deliverySchedule = .bolus(units: units, timeBetweenPulses: Double(multiplier) / 8)
         }
         
         guard checksum == deliverySchedule.checksum() else {

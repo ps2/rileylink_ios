@@ -228,9 +228,10 @@ public class PodCommsSession {
         
         // 1a0e bed2e16b 02 010a 01 01a0 0034 0034 170d 00 0208 000186a0
         let primeUnits = 2.6
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, multiplier: 8)
+        let timeBetweenPulses = TimeInterval(seconds: 1)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
         let scheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
-        let bolusExtraCommand = BolusExtraCommand(units: primeUnits, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let bolusExtraCommand = BolusExtraCommand(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
         let _: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.advanceToNextNonce()
     }
@@ -252,7 +253,8 @@ public class PodCommsSession {
     
     public func bolus(units: Double) -> DeliveryCommandResult {
         
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, multiplier: 16)
+        let timeBetweenPulses = TimeInterval(seconds: 2)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
         guard podState.unfinalizedBolus == nil else {
@@ -260,7 +262,7 @@ public class PodCommsSession {
         }
         
         // 17 0d 00 0064 0001 86a0000000000000
-        let bolusExtraCommand = BolusExtraCommand(units: units, byte2: 0, unknownSection: Data(hexadecimalString: "00030d40")!)
+        let bolusExtraCommand = BolusExtraCommand(units: units)
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain)
@@ -407,11 +409,12 @@ public class PodCommsSession {
         // Insert Cannula
         // 1a0e7e30bf16020065010050000a000a
         let insertionBolusAmount = 0.5
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, multiplier: 8)
+        let timeBetweenPulses = TimeInterval(seconds: 1)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
 
         // 17 0d 00 0064 0001 86a0000000000000
-        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, byte2: 0, unknownSection: Data(hexadecimalString: "000186a0")!)
+        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
         let _: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.advanceToNextNonce()
     }

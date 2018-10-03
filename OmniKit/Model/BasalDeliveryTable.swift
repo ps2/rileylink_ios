@@ -112,7 +112,7 @@ public struct RateEntry {
     
     public var data: Data {
         var data = Data()
-        data.appendBigEndian(UInt16(totalPulses * 10))
+        data.appendBigEndian(UInt16(round(totalPulses * 10)))
         if totalPulses == 0 {
             data.appendBigEndian(UInt32(delayBetweenPulses.hundredthsOfMilliseconds) * 10)
         } else {

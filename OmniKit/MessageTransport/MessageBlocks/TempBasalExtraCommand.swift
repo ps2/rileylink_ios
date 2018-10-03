@@ -26,7 +26,7 @@ public struct TempBasalExtraCommand : MessageBlock {
             reminders,
             0
             ])
-        data.appendBigEndian(UInt16(remainingPulses * 10))
+        data.appendBigEndian(UInt16(round(remainingPulses * 10)))
         if remainingPulses == 0 {
             data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds) * 10)
         } else {
@@ -58,14 +58,6 @@ public struct TempBasalExtraCommand : MessageBlock {
             entries.append(RateEntry(totalPulses: totalPulses, delayBetweenPulses: delayBetweenPulses))
         }
         rateEntries = entries
-    }
-    
-    public init(confidenceReminder: Bool, programReminderInterval: TimeInterval, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
-        self.confidenceReminder = confidenceReminder
-        self.programReminderInterval = programReminderInterval
-        self.remainingPulses = remainingPulses
-        self.delayUntilNextPulse = delayUntilNextPulse
-        self.rateEntries = rateEntries
     }
     
     public init(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) {

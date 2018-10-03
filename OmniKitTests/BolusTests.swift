@@ -101,6 +101,17 @@ class BolusTests: XCTestCase {
         let bolusExtraCommand = BolusExtraCommand(units: bolusAmount)
         XCTAssertEqual("170d00001e00030d40000000000000", bolusExtraCommand.data.hexadecimalString)
     }
+    
+    func testLargeBolus() {
+        let bolusAmount = 29.95
+        let timeBetweenPulses = TimeInterval(seconds: 2)
+        let scheduleEntry = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: bolusAmount, timeBetweenPulses: timeBetweenPulses)
+        let bolusCommand = SetInsulinScheduleCommand(nonce: 0x31204ba7, deliverySchedule: scheduleEntry)
+        XCTAssertEqual("1a0e31204ba702014801257002570257", bolusCommand.data.hexadecimalString)
+        
+        let bolusExtraCommand = BolusExtraCommand(confidenceReminder: true, programReminderInterval: .hours(1), units: bolusAmount)
+        XCTAssertEqual("170d7c176600030d40000000000000", bolusExtraCommand.data.hexadecimalString)
+    }
 
     
     func testCancelBolusCommand() {

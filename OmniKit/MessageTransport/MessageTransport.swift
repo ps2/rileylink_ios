@@ -103,6 +103,7 @@ class MessageTransport {
             let responsePacket = try { () throws -> Packet in
                 var firstPacket = true
                 log.debug("Send: %@", String(describing: message))
+                log.debug("Send(Hex): %@", message.encoded().hexadecimalString)
                 var dataRemaining = message.encoded()
                 while true {
                     let packetType: PacketType = firstPacket ? .pdm : .con
@@ -127,7 +128,9 @@ class MessageTransport {
                 var responseData = responsePacket.data
                 while true {
                     do {
-                        return try Message(encodedData: responseData)
+                        let msg = try Message(encodedData: responseData)
+                        log.debug("Recv(Hex): %@", responseData.hexadecimalString)
+                        return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))

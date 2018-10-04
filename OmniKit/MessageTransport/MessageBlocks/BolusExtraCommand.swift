@@ -33,7 +33,7 @@ public struct BolusExtraCommand : MessageBlock {
         data.appendBigEndian(UInt16(round(units * 200)))
         data.appendBigEndian(UInt32(timeBetweenPulses.hundredthsOfMilliseconds))
         
-        let pulseCountX10 = UInt16(squareWaveUnits * 200)
+        let pulseCountX10 = UInt16(round(squareWaveUnits * 200))
         data.appendBigEndian(pulseCountX10)
         
         let timeBetweenExtendedPulses = pulseCountX10 > 0 ? squareWaveDuration / Double(pulseCountX10) : 0

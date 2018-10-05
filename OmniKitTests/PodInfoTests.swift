@@ -123,7 +123,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.initialized, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(9, decoded.recieverLowGain)
+            XCTAssertEqual(9, decoded.receiverLowGain)
             XCTAssertEqual(5, decoded.radioRSSI)
             XCTAssertEqual(.inactive, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
@@ -150,7 +150,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
+            XCTAssertEqual(10, decoded.receiverLowGain)
             XCTAssertEqual(1, decoded.radioRSSI)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
@@ -176,7 +176,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
+            XCTAssertEqual(10, decoded.receiverLowGain)
             XCTAssertEqual(14, decoded.radioRSSI)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
@@ -202,7 +202,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
+            XCTAssertEqual(10, decoded.receiverLowGain)
             XCTAssertEqual(2, decoded.radioRSSI)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {

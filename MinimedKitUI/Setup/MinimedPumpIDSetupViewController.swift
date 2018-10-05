@@ -121,7 +121,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         continueState = .inputSettings
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: .UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {

@@ -293,7 +293,6 @@ class TempBasalTests: XCTestCase {
     func testTempBasalExtraCommandExtremeValues2() {
         do {
             // 29.95 U/h for 12 hours
-            // Decode  16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f5af00092ba9f5af00092ba9231900092ba9")!)
             XCTAssertEqual(false, cmd.confidenceReminder)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
@@ -310,35 +309,7 @@ class TempBasalTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
         
-        // Encode (note, this produces a different encoding than we saw above, as we split at a different point; we'll test
-        //         that the difference ends up with the same result below.
-        // 1a 10 e83913dc 01 04e8 18 3840 012b f92b 792b 16 14 3c 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9 0113
         let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), confidenceReminder: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("16143c00f5af00092ba9f5af00092ba9231900092ba9", cmd.data.hexadecimalString)
-        
-        // Test that our variation on splitting up delivery produces the same overall rate and duration
-        do {
-            // 29.95 U/h for 12 hours
-            // Decode  16 14 3c 00 f618 00092ba9 f618 00092ba9 22af 00092ba9
-            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
-            XCTAssertEqual(false, cmd.confidenceReminder)
-            XCTAssertEqual(0, cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
-            XCTAssertEqual(6289.5, cmd.remainingPulses)
-            XCTAssertEqual(2, cmd.rateEntries.count)
-            let entry1 = cmd.rateEntries[0]
-            let entry2 = cmd.rateEntries[1]
-            XCTAssertEqual(TimeInterval(seconds: 6.01001), entry1.delayBetweenPulses, accuracy: .ulpOfOne)
-            XCTAssertEqual(TimeInterval(hours: 12), entry1.duration + entry2.duration, accuracy: 1)
-            XCTAssertEqual(29.95, entry1.rate, accuracy: 0.025)
-            
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
     }
-
-    
-    //    16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
-
-
 }

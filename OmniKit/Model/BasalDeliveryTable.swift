@@ -122,24 +122,28 @@ public struct RateEntry {
     }
     
     public static func makeEntries(rate: Double, duration: TimeInterval) -> [RateEntry] {
-        let maxPulses: Double = 6300
+        let maxPulsesPerEntry: Double = 6400
         var entries = [RateEntry]()
+        
+        var remainingSegments = Int(round(duration.minutes / 30))
+        
+        let pulsesPerSegment = round(rate / podPulseSize) / 2
+        let maxSegmentsPerEntry = pulsesPerSegment > 0 ? Int(maxPulsesPerEntry / pulsesPerSegment) : 1
         
         var remainingPulses = rate * duration.hours / podPulseSize
         let delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
         
-        var timeRemaining = duration
-
-        while (remainingPulses > 0 || (rate == 0 && timeRemaining > 0)) {
+        while (remainingSegments > 0) {
             if rate == 0 {
                 entries.append(RateEntry(totalPulses: 0, delayBetweenPulses: .minutes(30)))
-                timeRemaining -= .minutes(30)
+                remainingSegments -= 1
             } else {
-                let pulseCount = min(maxPulses, remainingPulses)
+                let numSegments = min(maxSegmentsPerEntry, Int(round(remainingPulses / pulsesPerSegment)))
+                remainingSegments -= numSegments
+                let pulseCount = pulsesPerSegment * Double(numSegments)
                 let entry = RateEntry(totalPulses: pulseCount, delayBetweenPulses: delayBetweenPulses)
                 entries.append(entry)
                 remainingPulses -= pulseCount
-                timeRemaining -= entry.duration
             }
         }
         return entries

@@ -245,21 +245,26 @@ class TempBasalTests: XCTestCase {
     
     func testBasalExtraCommandForOddPulseCountRate() {
 
-        let cmd = TempBasalExtraCommand(rate: 2.05, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
-        XCTAssertEqual("160e3c0000cd0085fac700cd0085fac7", cmd.data.hexadecimalString)
+        let cmd1 = TempBasalExtraCommand(rate: 0.05, duration: .hours(0.5), confidenceReminder: true, programReminderInterval: .minutes(60))
+        XCTAssertEqual("160e7c00000515752a00000515752a00", cmd1.data.hexadecimalString)
+        
+        let cmd2 = TempBasalExtraCommand(rate: 2.05, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
+        XCTAssertEqual("160e3c0000cd0085fac700cd0085fac7", cmd2.data.hexadecimalString)
 
-        let cmd2 = TempBasalExtraCommand(rate: 0.05, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
-        XCTAssertEqual("160e3c00000515752a00000515752a00", cmd2.data.hexadecimalString)
+        let cmd3 = TempBasalExtraCommand(rate: 2.10, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
+        XCTAssertEqual("160e3c0000d20082ca2400d20082ca24", cmd3.data.hexadecimalString)
+
+        let cmd4 = TempBasalExtraCommand(rate: 2.15, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
+        XCTAssertEqual("160e3c0000d7007fbf7d00d7007fbf7d", cmd4.data.hexadecimalString)
     }
     
     func testBasalExtraCommandPulseCount() {
-        // 16 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
-        // 16 0e 00 00 00d2 0082ca24 00d2 0082ca24        
-        
-        let cmd = TempBasalExtraCommand(rate: 2.125, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: 0)
-        XCTAssertEqual("160e000000d20081403c00d50081403c", cmd.data.hexadecimalString)
+        // 16 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ
+        // 16 14 00 00 f5b9 000a0ad7 f5b9 000a0ad7 0aaf 000a0ad7
+        // 16 14 00 00 f618 000a0ad7 f618 000a0ad7 0a50 000a0ad7
+        let cmd2 = TempBasalExtraCommand(rate: 27.35, duration: .hours(12), confidenceReminder: false, programReminderInterval: 0)
+        XCTAssertEqual("16140000f5b9000a0ad7f5b9000a0ad70aaf000a0ad7", cmd2.data.hexadecimalString)
     }
-
 
     func testTempBasalExtraCommandExtremeValues() {
         do {
@@ -289,9 +294,9 @@ class TempBasalTests: XCTestCase {
         do {
             // 29.95 U/h for 12 hours
             // Decode  16 14 00 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9
-            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16140000f5af00092ba9f5af00092ba9231900092ba9")!)
+            let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f5af00092ba9f5af00092ba9231900092ba9")!)
             XCTAssertEqual(false, cmd.confidenceReminder)
-            XCTAssertEqual(.minutes(0), cmd.programReminderInterval)
+            XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
             XCTAssertEqual(6289.5, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)
@@ -307,8 +312,9 @@ class TempBasalTests: XCTestCase {
         
         // Encode (note, this produces a different encoding than we saw above, as we split at a different point; we'll test
         //         that the difference ends up with the same result below.
+        // 1a 10 e83913dc 01 04e8 18 3840 012b f92b 792b 16 14 3c 00 f5af 00092ba9 f5af 00092ba9 2319 00092ba9 0113
         let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), confidenceReminder: false, programReminderInterval: .minutes(60))
-        XCTAssertEqual("16143c00f61800092ba9f61800092ba922b000092ba9", cmd.data.hexadecimalString)
+        XCTAssertEqual("16143c00f5af00092ba9f5af00092ba9231900092ba9", cmd.data.hexadecimalString)
         
         // Test that our variation on splitting up delivery produces the same overall rate and duration
         do {

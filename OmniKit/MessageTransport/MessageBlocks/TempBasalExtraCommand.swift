@@ -26,7 +26,7 @@ public struct TempBasalExtraCommand : MessageBlock {
             reminders,
             0
             ])
-        data.appendBigEndian(UInt16(round(remainingPulses * 10)))
+        data.appendBigEndian(UInt16(round(remainingPulses) * 10))
         if remainingPulses == 0 {
             data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds) * 10)
         } else {

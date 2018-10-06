@@ -251,6 +251,15 @@ class TempBasalTests: XCTestCase {
         let cmd2 = TempBasalExtraCommand(rate: 0.05, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e3c00000515752a00000515752a00", cmd2.data.hexadecimalString)
     }
+    
+    func testBasalExtraCommandPulseCount() {
+        // 16 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
+        // 16 0e 00 00 00d2 0082ca24 00d2 0082ca24        
+        
+        let cmd = TempBasalExtraCommand(rate: 2.125, duration: .hours(0.5), confidenceReminder: false, programReminderInterval: 0)
+        XCTAssertEqual("160e000000d20081403c00d50081403c", cmd.data.hexadecimalString)
+    }
+
 
     func testTempBasalExtraCommandExtremeValues() {
         do {

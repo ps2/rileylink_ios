@@ -27,6 +27,7 @@ public enum PodCommsError: Error {
     case nonceResyncFailed
     case missingBasalSchedule
     case podSuspended
+    case podFault(fault: PodInfoFaultEvent)
     case commsError(error: Error)
 }
 
@@ -63,6 +64,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .podSuspended:
             return LocalizedString("Pod is suspended", comment: "Error message action could not be performed because pod is suspended")
+        case .podFault(let fault):
+            return String(format: LocalizedString("Pod Fault: 0x%1$02x", comment: "Format string for pod fault code"), fault.originalLoggedFaultEvent.rawValue)
         case .commsError:
             return nil
         }
@@ -99,6 +102,8 @@ extension PodCommsError: LocalizedError {
         case .missingBasalSchedule:
             return nil
         case .podSuspended:
+            return nil
+        case .podFault:
             return nil
         case .commsError:
             return nil
@@ -137,6 +142,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .podSuspended:
             return nil
+        case .podFault:
+            return LocalizedString("Immediately remove pod. Please note error code, and deactivate pod. Then pair a new one.", comment: "Recovery suggestion when pod has a fault code")
         case .commsError:
             return nil
         }
@@ -179,6 +186,9 @@ public class PodCommsSession {
             triesRemaining -= 1
             let response = try transport.send(blocksToSend)
             
+            // Simulate fault
+            //let response = try Message(encodedData: Data(hexadecimalString: "1f019ee204180216020d0000a902012d14008d03ff008d0000185e08030d81cd")!)
+            
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %@", String(describing: responseMessageBlock))
                 return responseMessageBlock
@@ -201,7 +211,17 @@ public class PodCommsSession {
                             return block
                         }
                     })
-                } else {
+                } else if responseType == .podInfoResponse,
+                    let infoResponse = response.messageBlocks[0] as? PodInfoResponse,
+                    infoResponse.podInfoResponseSubType == .faultEvents,
+                    let fault = infoResponse.podInfo as? PodInfoFaultEvent
+                    
+                {
+                    self.podState.fault = fault
+                    log.error("Pod Fault: %@", String(describing: fault))
+                    throw PodCommsError.podFault(fault: fault)
+                }
+                else {
                     log.error("Unexpected response: %@", String(describing: response.messageBlocks[0]))
                     throw PodCommsError.unexpectedResponse(response: responseType)
                 }

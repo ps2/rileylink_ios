@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ReservoirStatus: UInt8, CustomStringConvertible {
+public enum ReservoirStatus: UInt8, CustomStringConvertible, Equatable {
     case initialized = 0
     case tankPowerActivated = 1
     case tankFillCompleted = 2

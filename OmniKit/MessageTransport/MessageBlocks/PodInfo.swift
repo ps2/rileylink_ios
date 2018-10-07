@@ -15,7 +15,7 @@ public protocol PodInfo {
     
 }
 
-public enum PodInfoResponseSubType: UInt8 {
+public enum PodInfoResponseSubType: UInt8, Equatable {
     case normal                      = 0x00
     case configuredAlerts            = 0x01
     case faultEvents                 = 0x02

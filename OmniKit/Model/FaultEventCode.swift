@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct FaultEventCode: CustomStringConvertible {
+public struct FaultEventCode: CustomStringConvertible, Equatable {
     let rawValue: UInt8
     
     public enum FaultEventType: UInt8 {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PodInfoFaultEvent : PodInfo {
+public struct PodInfoFaultEvent : PodInfo, Equatable {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     
 //    public enum lengthType: UInt8{
@@ -96,5 +96,47 @@ public struct PodInfoFaultEvent : PodInfo {
         self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
         
         self.data = Data(encodedData)
+    }
+}
+
+extension PodInfoFaultEvent: CustomDebugStringConvertible {
+    public typealias RawValue = Data
+
+    public var debugDescription: String {
+        return [
+            "## PodInfoFaultEvent",
+            "rawHex: \(data.hexadecimalString)",
+            "originalLoggedFaultEvent: \(originalLoggedFaultEvent)",
+            "secondaryLoggedFaultEvent: \(secondaryLoggedFaultEvent)",
+            "reservoirStatus: \(reservoirStatus)",
+            "deliveryType: \(deliveryType)",
+            "insulinNotDelivered: \(insulinNotDelivered)",
+            "unknownPageCode: \(unknownPageCode)",
+            "faultEventTimeSinceActivation: \(faultEventTimeSinceActivation)",
+            "insulinRemaining: \(insulinRemaining)",
+            "timeActive: \(timeActive)",
+            "logEventError: \(logEventError)",
+            "reservoirStatusAtFirstLoggedFaultEvent: \(reservoirStatusAtFirstLoggedFaultEvent)",
+            "recieverLowGain: \(recieverLowGain)",
+            "radioRSSI: \(radioRSSI)",
+            "reservoirStatusAtFirstLoggedFaultEventCheck: \(reservoirStatusAtFirstLoggedFaultEventCheck)",
+            "insulinStateTableCorruption: \(insulinStateTableCorruption)",
+            "immediateBolusInProgress: \(immediateBolusInProgress)",
+            "",
+            ].joined(separator: "\n")
+    }
+}
+
+extension PodInfoFaultEvent: RawRepresentable {
+    public init?(rawValue: Data) {
+        do {
+            try self.init(encodedData: rawValue)
+        } catch {
+            return nil
+        }
+    }
+    
+    public var rawValue: Data {
+        return data
     }
 }

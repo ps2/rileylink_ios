@@ -26,6 +26,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     var unfinalizedTempBasal: UnfinalizedDose?
     var finalizedDoses: [UnfinalizedDose]
     private(set) var suspended: Bool
+    public var fault: PodInfoFaultEvent?
     
     public var expiresAt: Date {
         return activatedAt + .days(3)
@@ -50,6 +51,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.finalizedDoses = []
         self.suspended = false
         self.basalSchedule = nil
+        self.fault = nil
     }
     
     public mutating func advanceToNextNonce() {
@@ -168,6 +170,13 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.basalSchedule = nil
         }
+        
+        if let rawFault = rawValue["fault"] as? PodInfoFaultEvent.RawValue {
+            self.fault = PodInfoFaultEvent(rawValue: rawFault)
+        } else {
+            self.fault = nil
+        }
+
     }
     
     public var rawValue: RawValue {
@@ -199,6 +208,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let basalSchedule = self.basalSchedule {
             rawValue["basalSchedule"] = basalSchedule.rawValue
         }
+        
+        if let fault = self.fault {
+            rawValue["fault"] = fault.rawValue
+        }
 
         return rawValue
     }
@@ -220,6 +233,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "finalizedDoses: \(String(describing: finalizedDoses))",
             "basalSchedule: \(String(describing: basalSchedule))",
+            "fault \(String(describing: fault))",
             "",
             ].joined(separator: "\n")
     }

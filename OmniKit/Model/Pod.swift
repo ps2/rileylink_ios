@@ -14,7 +14,7 @@ let podPulseSize: Double = 0.05
 // Units per second
 let bolusDeliveryRate: Double = 0.025
 
-public struct DeliveryType: OptionSet {
+public struct DeliveryType: OptionSet, Equatable {
     public let rawValue: UInt8
     
     public static let none          = DeliveryType(rawValue: 0)

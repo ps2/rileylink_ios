@@ -452,14 +452,11 @@ public class PodCommsSession {
         }
     }
     
-    public func changePod() throws -> StatusResponse {
+    public func deactivatePod() throws -> StatusResponse {
         
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .beeepBeeep)
-        let _: StatusResponse = try send([cancelDelivery])
-        podState.advanceToNextNonce()
-
-        // PDM at this point makes a few get status requests, for logs and other details, presumably.
-        // We don't know what to do with them, so skip for now.
+        if podState.fault == nil && !podState.suspended {
+            let _ = try cancelDelivery(deliveryType: .all, beepType: .beeepBeeep)
+        }
 
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         return try send([deactivatePod])

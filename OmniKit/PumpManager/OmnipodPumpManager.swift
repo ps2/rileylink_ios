@@ -117,6 +117,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (Double, Date) -> Void, completion: @escaping (Error?) -> Void) {
         
+        // Round to nearest supported volume
+        let enactUnits = round(units / podPulseSize) * podPulseSize
+        
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
             
@@ -158,9 +161,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return false
             })
             
-            willRequest(units, Date())
+            willRequest(enactUnits, Date())
             
-            let result = session.bolus(units: units)
+            let result = session.bolus(units: enactUnits)
             
             switch result {
             case .success:
@@ -175,6 +178,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         
+        // Round to nearest supported rate
         let rate = round(unitsPerHour / podPulseSize) * podPulseSize
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice

@@ -124,7 +124,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 do {
                     switch result {
                     case .success(let session):
-                        let _ = try session.changePod()
+                        let _ = try session.deactivatePod()
                         DispatchQueue.main.async {
                             super.cancelButtonPressed(sender)
                         }

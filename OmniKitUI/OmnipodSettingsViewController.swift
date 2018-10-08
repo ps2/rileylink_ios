@@ -316,7 +316,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     do {
                         switch result {
                         case .success(let session):
-                            let _ = try session.changePod()
+                            let _ = try session.deactivatePod()
                             DispatchQueue.main.async {
                                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
                                 self.navigationController?.popViewController(animated: true)

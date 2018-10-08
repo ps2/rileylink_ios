@@ -174,11 +174,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
-        //completion(PumpManagerResult.failure(PodCommsError.emptyResponse))
+        
+        let rate = round(unitsPerHour / podPulseSize) * podPulseSize
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
-            self.log.info("Enact temp basal %.03fU/hr for %ds", unitsPerHour, Int(duration))
+            self.log.info("Enact temp basal %.03fU/hr for %ds", rate, Int(duration))
             let session: PodCommsSession
             switch result {
             case .success(let s):
@@ -209,9 +210,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     let dose = DoseEntry(type: .basal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
                     completion(PumpManagerResult.success(dose))
                 } else {
-                    let result = session.setTempBasal(rate: unitsPerHour, duration: duration, confidenceReminder: false, programReminderInterval: 0)
+                    let result = session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: 0)
                     let basalStart = Date()
-                    let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: unitsPerHour, unit: .unitsPerHour)
+                    let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                     switch result {
                     case .success:
                         completion(PumpManagerResult.success(dose))

@@ -117,205 +117,199 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
     }
     
     public var description: String {
-        
+        let prefix = String(format: LocalizedString("Fault Event Code %1$02x:", comment:" Fault Event Code 0xXX"), rawValue)
+
         if let faultType = faultType {
             switch faultType {
             case .noFaults:
-                return "No faults, system running normally"
+                return "\(prefix) No faults, system running normally"
             case .failedFlashErase:
-                return "Flash erase failed in $4x00 page"
+                return "\(prefix) Flash erase failed in $4x00 page"
             case .failedFlashStore:
-                return "Flash store failed in $4x00 page"
+                return "\(prefix) Flash store failed in $4x00 page"
             case .tableCorruptionBasalExtraCommand:
-                return "Fault Event Type 0x03: Tab13 or Tab15 table corruption ($13 subcommand tables for basal.)"
+                return "\(prefix) Tab13 or Tab15 table corruption ($13 subcommand tables for basal.)"
             case .corruptionByte720:
-                return "Fault Event Type 0x05: Corruption in byte_720"
+                return "\(prefix) Corruption in byte_720"
             case .errorInResetHelper6:
-                return "Fault Event Type 0x06: Error in RESET_helper_6"
+                return "\(prefix) Error in RESET_helper_6"
             case .rtcInterruptHandlerCalled:
-                return "Fault Event Type 0x07: RTC interrupt handler called when byte_358 is not 1"
+                return "\(prefix) RTC interrupt handler called when byte_358 is not 1"
             case .valueGreaterThan8:
-                return "Fault Event Type 0x08: Value > 8"
+                return "\(prefix) Value > 8"
             case .bf0notEqualToBF1:
-                return "Fault Event Type 0x09: byte_BF0 != ~byte_BF1"
+                return "\(prefix) byte_BF0 != ~byte_BF1"
             case .tableCorruptionTempBasalExtraCommand:
-                return "Fault Event Type 0x0B: Tab9 or Tab11 table corruption ($16 subcommand tables for temp basal.)"
+                return "\(prefix) Tab9 or Tab11 table corruption ($16 subcommand tables for temp basal.)"
             case .resetDueToCOP:
-                return "Fault Event Type 0x0D: Reset due to COP"
+                return "\(prefix) Reset due to COP"
             case .resetDueToIllegalOpcode:
-                return "Fault Event Type 0x0E: Reset due to illegal opcode"
+                return "\(prefix) Reset due to illegal opcode"
             case .resetDueToIllegalAddress:
-                return "Fault Event Type 0x0F: Reset due to illegal address"
+                return "\(prefix) Reset due to illegal address"
             case .resetDueToSAWCOP:
-                return "Fault Event Type 0x10: Reset due to SAWCOP"
+                return "\(prefix) Reset due to SAWCOP"
             case .corruptionInByte_866:
-                return "Fault Event Type 0x11: Corruption in byte_866"
+                return "\(prefix) Corruption in byte_866"
             case .resetDueToLVD:
-                return "Fault Event Type 0x12: Reset due to LVD"
+                return "\(prefix) Reset due to LVD"
             case .messageLengthGreaterThan0x108:
-                return "Fault Event Type 0x13: Message length > $108"
+                return "\(prefix) Message length > $108"
             case .subF9AAStateIssuesWithTab10x19:
-                return "Fault Event Type 0x14: sub_F9AA() state issues with Tab1[$19]"
+                return "\(prefix) sub_F9AA() state issues with Tab1[$19]"
             case .corruptionInWord129:
-                return "Fault Event Type 0x15: Corruption in word_129[8][4] table, word_86A, dword_86E"
+                return "\(prefix) Corruption in word_129[8][4] table, word_86A, dword_86E"
             case .corruptionInByte868:
-                return "Fault Event Type 0x16: Corruption in byte_868"
+                return "\(prefix) Corruption in byte_868"
             case .corruptionInTab1or3or5or19:
-                return "Fault Event Type 0x17: Corruption in Tab1[], Tab3[], Tab5[], Tab19[] or $A7[] tables or bad $BED or bad $72"
+                return "\(prefix) Corruption in Tab1[], Tab3[], Tab5[], Tab19[] or $A7[] tables or bad $BED or bad $72"
             case .reservoirEmpty:
-                return "Fault Event Type 0x18: Tab1[0] == 0 (reservoir empty)"
+                return "\(prefix) Tab1[0] == 0 (reservoir empty)"
             case .unexpectedStateAfter80hours:
-                return "Fault Event Type 0x1C: Unexpected internal state after Pod running 80 hours"
+                return "\(prefix) Unexpected internal state after Pod running 80 hours"
             case .wrongValue0x4008:
-                return "Fault Event Type 0x1D: In sub_B10D if $4008 value wrong"
+                return "\(prefix) In sub_B10D if $4008 value wrong"
             case .table129SumWrong:
-                return "Fault Event Type 0x1F: Table 129 sum wrong"
+                return "\(prefix) Table 129 sum wrong"
             case .problemCalibrateTimer:
-                return "Fault Event Type 0x23: Problem in calibrate_timer_case_3"
+                return "\(prefix) Problem in calibrate_timer_case_3"
             case .rtcInterruptHandlerCalledByte358:
-                return "Fault Event Type 0x26: RTC interrupt handler called when byte_358 is 1"
+                return "\(prefix) RTC interrupt handler called when byte_358 is 1"
             case .missing2hourAlertToFillTank:
-                return "Fault Event Type 0x27: Failed to set up 2 hour alert for tank fill operation"
+                return "\(prefix) Failed to set up 2 hour alert for tank fill operation"
             case .faultEventSetupPod:
-                return "Fault Event Type 0x28: Bad arg to update_insulin_variables(), problem inside verify_and_start_pump, bad state in main_loop_control_pump()"
+                return "\(prefix) Bad arg to update_insulin_variables(), problem inside verify_and_start_pump, bad state in main_loop_control_pump()"
             case .errorMainLoopHelper0:
-                return "Fault Event Type 0x29: Error in big routine used by main_loop_helper_2($29+i[0])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[0])"
             case .errorMainLoopHelper1:
-                return "Fault Event Type 0x2A: Error in big routine used by main_loop_helper_2($29+i[1])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[1])"
             case .errorMainLoopHelper2:
-                return "Fault Event Type 0x2B: Error in big routine used by main_loop_helper_2($29+i[2])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[2])"
             case .errorMainLoopHelper3:
-                return "Fault Event Type 0x2C: Error in big routine used by main_loop_helper_2($29+i[3])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[3])"
             case .errorMainLoopHelper4:
-                return "Fault Event Type 0x2D: Error in big routine used by main_loop_helper_2($29+i[4])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[4])"
             case .errorMainLoopHelper5:
-                return "Fault Event Type 0x2E: Error in big routine used by main_loop_helper_2($29+i[5])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[5])"
             case .errorMainLoopHelper6:
-                return "Fault Event Type 0x2F: Error in big routine used by main_loop_helper_2($29+i[6])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[6])"
             case .errorMainLoopHelper7:
-                return "Fault Event Type 0x30: Error in big routine used by main_loop_helper_2($29+i[7])"
+                return "\(prefix) Error in big routine used by main_loop_helper_2($29+i[7])"
             case .deliveryScheduleFault:
-                return "Fault Event Type 0x31: Delivery schedule unexpected progress"
+                return "\(prefix) Delivery schedule unexpected progress"
             case .badValueStartupTest:
-                return "Fault Event Type 0x32: Bad value during startup testing (402D is not 0)"
+                return "\(prefix) Bad value during startup testing (402D is not 0)"
             case .badDecrementTab1:
-                return "Fault Event Type 0x33: Tab1[$12] was unexpectedly 0 after decrementing"
+                return "\(prefix) Tab1[$12] was unexpectedly 0 after decrementing"
             case .badStateInReset:
-                return "Fault Event Type 0x34: Bad internal state in __RESET()"
+                return "\(prefix) Bad internal state in __RESET()"
             case .errorFlashInitialisiation:
-                return "Fault Event Type 0x36: Flash initialization error, wrong bit set in $4008"
+                return "\(prefix) Flash initialization error, wrong bit set in $4008"
             case .unexpectedValueByte358:
-                return "Fault Event Type 0x38: Unexpected byte_358 value"
+                return "\(prefix) Unexpected byte_358 value"
             case .problemWithLoad1and2:
-                return "Fault Event Type 0x39: Problem with LOAD1/LOAD2"
+                return "\(prefix) Problem with LOAD1/LOAD2"
             case .aGreaterThan7inMessage:
-                return "Fault Event Type 0x3A: A > 7 in message processing"
+                return "\(prefix) A > 7 in message processing"
             case .failedTestSawReset:
-                return "Fault Event Type 0x3B: Failed SAW reset testing failed"
+                return "\(prefix) Failed SAW reset testing failed"
             case .testInProgress:
-                return "Fault Event Type 0x3C: Test in progress (402D is 'Z')"
+                return "\(prefix) Test in progress (402D is 'Z')"
             case .problemWithPumpAnchor:
-                return "Fault Event Type 0x3D: Problem with pump anchor"
+                return "\(prefix) Problem with pump anchor"
             case .errorFlashWrite:
-                return "Fault Event Type 0x3E: Flash write error, failed writing to $4000"
+                return "\(prefix) Flash write error, failed writing to $4000"
             case .badInitialByte357and71State:
-                return "Fault Event Type 0x40: Bad initial byte_71 & byte_357 encoder state"
+                return "\(prefix) Bad initial byte_71 & byte_357 encoder state"
             case .badValueByte357:
-                return "Fault Event Type 0x42: Bad byte_357 value"
+                return "\(prefix) Bad byte_357 value"
             case .badValueByte71:
-                return "Fault Event Type 0x43: Bad exit byte_71 value"
+                return "\(prefix) Bad exit byte_71 value"
             case .checkVoltagePullup1:
-                return "Fault Event Type 0x44: Check LOAD voltage, PRACMP Pullup 1 problem"
+                return "\(prefix) Check LOAD voltage, PRACMP Pullup 1 problem"
             case .checkVoltagePullup2:
-                return "Fault Event Type 0x45: Check LOAD voltage, PRACMP Pullup 2 problem"
+                return "\(prefix) Check LOAD voltage, PRACMP Pullup 2 problem"
             case .problemWithLoad1and2type46:
-                return "Fault Event Type 0x46: Problem with LOAD1/LOAD2 Type46"
+                return "\(prefix) Problem with LOAD1/LOAD2 Type46"
             case .problemWithLoad1and2type47:
-                return "Fault Event Type 0x47: Problem with LOAD1/LOAD2 Type47"
+                return "\(prefix) Problem with LOAD1/LOAD2 Type47"
             case .badTimerCalibration:
-                return "Fault Event Type 0x48: Bad timer calibration"
+                return "\(prefix) Bad timer calibration"
             case .badTimerRatios:
-                return "Fault Event Type 0x49: Bad timer values: COP timer ratio bad"
+                return "\(prefix) Bad timer values: COP timer ratio bad"
             case .badTimerValues:
-                return "Fault Event Type 0x4A: Bad timer values"
+                return "\(prefix) Bad timer values"
             case .trimICSTooCloseTo0x1FF:
-                return "Fault Event Type 0x4B: ICS trim too close to 0x1FF"
+                return "\(prefix) ICS trim too close to 0x1FF"
             case .problemFindingBestTrimValue:
-                return "Fault Event Type 0x4C: Problem finding best trim value"
+                return "\(prefix) Problem finding best trim value"
             case .badSetTPM1MultiCasesValue:
-                return "Fault Event Type 0x4D: Bad set_TPM1_multi_cases value"
+                return "\(prefix) Bad set_TPM1_multi_cases value"
             case .issueTXOKprocessInputBuffer:
-                return "Fault Event Type 0x52: TXOK issue in process_input_buffer"
+                return "\(prefix) TXOK issue in process_input_buffer"
             case .wrongValueWord_107:
-                return "Fault Event Type 0x53: Wrong word_107 value during input message processing"
+                return "\(prefix) Wrong word_107 value during input message processing"
             case .packetFrameLengthTooLong:
-                return "Fault Event Type 0x54: Packet frame length too long"
+                return "\(prefix) Packet frame length too long"
             case .unexpectedIRQHighinTimerTick:
-                return "Fault Event Type 0x55: Unexpected IRQ high in timer_tick()"
+                return "\(prefix) Unexpected IRQ high in timer_tick()"
             case .unexpectedIRQLowinTimerTick:
-                return "Fault Event Type 0x56: Unexpected IRQ low in timer_tick()"
+                return "\(prefix) Unexpected IRQ low in timer_tick()"
             case .badArgToGetEntry:
-                return "Fault Event Type 0x57: Bad argument to get_37A_entry() or sub_E245 or bad $4036 entry"
+                return "\(prefix) Bad argument to get_37A_entry() or sub_E245 or bad $4036 entry"
             case .badArgToUpdate37ATable:
-                return "Fault Event Type 0x58: Bad argument to update_37A_table()"
+                return "\(prefix) Bad argument to update_37A_table()"
             case .errorUpdating0x37ATable:
-                return "Fault Event Type 0x59: Error updating $37A table"
+                return "\(prefix) Error updating $37A table"
             case .deliveryErrorDuringPriming:
-                return "Fault Event Type 0x5C: Delivery Error During Priming"
+                return "\(prefix) Delivery Error During Priming"
             case .badValue0x109:
-                return "Fault Event Type 0x5D: Bad value for $109"
+                return "\(prefix) Bad value for $109"
             case .checkVoltageFailure:
-                return "Fault Event Type 0x5F: Failure in main_loop_control_pump(): check_LOAD_voltage()"
+                return "\(prefix) Failure in main_loop_control_pump(): check_LOAD_voltage()"
             case .problemBasalUpdateType80:
-                return "Fault Event Type 0x80: Basal variable state problem #1 inside update_insulin_variables"
+                return "\(prefix) Basal variable state problem #1 inside update_insulin_variables"
             case .problemBasalUpdateType81:
-                return "Fault Event Type 0x81: Basal variable state problem #2 inside update_insulin_variables"
+                return "\(prefix) Basal variable state problem #2 inside update_insulin_variables"
             case .problemTempBasalUpdateType82:
-                return "Fault Event Type 0x82: Temp Basal variable state problem #1 inside update_insulin_variables"
+                return "\(prefix) Temp Basal variable state problem #1 inside update_insulin_variables"
             case .problemTempBasalUpdateType83:
-                return "Fault Event Type 0x83: Temp Basal variable state problem #2 inside update_insulin_variables"
+                return "\(prefix) Temp Basal variable state problem #2 inside update_insulin_variables"
             case .problemBolusUpdateType84:
-                return "Fault Event Type 0x84: Bolus variable state problem #1 inside update_insulin_variables"
+                return "\(prefix) Bolus variable state problem #1 inside update_insulin_variables"
             case .problemBolusUpdateType85:
-                return "Fault Event Type 0x84: Bolus variable state problem #2 inside update_insulin_variables"
+                return "\(prefix) Bolus variable state problem #2 inside update_insulin_variables"
             case .faultEventSetupPodType86:
-                return "Fault Event Type 0x86: Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType87:
-                return "Fault Event Type 0x87: Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType88:
-                return "Fault Event Type 0x88: Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType89:
-                return "Fault Event Type 0x89: Bad value problem #1 to verify_and_start_pump"
+                return "\(prefix) Bad value problem #1 to verify_and_start_pump"
             case .faultEventSetupPodType8A:
-                return "Fault Event Type 0x8A: Bad value problem #2 to verify_and_start_pump"
+                return "\(prefix) Bad value problem #2 to verify_and_start_pump"
             case .corruptionOfTables:
-                return "Fault Event Type 0x8B: Corruption of $283, $2E3, $315 table"
+                return "\(prefix) Corruption of $283, $2E3, $315 table"
             case .faultEventSetupPodType8D:
-                return "Fault Event Type 0x8D: Bad value problem #3 to verify_and_start_pump"
+                return "\(prefix) Bad value problem #3 to verify_and_start_pump"
             case .faultEventSetupPodType8E:
-                return "Fault Event Type 0x8E: Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType8F:
-                return "Fault Event Type 0x8F: Bad value during verify_and_start_pump because of sub_ACE3 is stated as bad value"
+                return "\(prefix) Bad value during verify_and_start_pump because of sub_ACE3 is stated as bad value"
             case .badValueForTables:
-                return "Fault Event Type 0x90: Bad value for $283/$2E3/$315 table specification"
+                return "\(prefix) Bad value for $283/$2E3/$315 table specification"
             case .faultEventSetupPodType91:
-                return "Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType92:
-                return "Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .faultEventSetupPodType93:
-                return "Problem inside verify_and_start_pump"
+                return "\(prefix) Problem inside verify_and_start_pump"
             case .badValueField6in0x1A:
-                return "Bad table specifier field6 in 1A command"
+                return "\(prefix) Bad table specifier field6 in 1A command"
             }
         } else {
-             return "Unknown Error Code"
+             return "\(prefix) Unknown Error Code"
         }
-    }
-}
-
-extension String {
-    mutating func addFaultCodePrefix(rawValue: UInt8) {
-        let prefix = String(format: LocalizedString("Fault Event Code %1$02x: ", comment:" Fault Event Code 0xXX"), rawValue)
-        self = prefix + self
     }
 }

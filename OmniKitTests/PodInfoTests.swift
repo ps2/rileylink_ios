@@ -106,7 +106,6 @@ class PodInfoTests: XCTestCase {
     
     func testPodInfoNoFaultAlerts() {
         // 02 16 (omitted) // 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000
-        
         do {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
@@ -123,36 +122,35 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.initialized, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(9, decoded.recieverLowGain)
-            XCTAssertEqual(5, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(21, decoded.radioRSSI)
             XCTAssertEqual(.inactive, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-        
     }
-    
-    func testPodInfoFaultAlert() {
-        // 02 16 02 0d 00 0000 06 0034 5c 0001 03ff 0001 00 00 05 a1 05 0186
+
+    func testPodInfoFaultEventErrorShuttingDown() {
+        // 02 16 (omitted) // 02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600345c000103ff0001000005a1050186")!)
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a020000082308")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.reservoirStatus)
             XCTAssertEqual(.none, decoded.deliveryType)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
-            XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(.deliveryErrorDuringPriming, decoded.originalLoggedFaultEvent.faultType)
-            XCTAssertEqual(0001*60, decoded.faultEventTimeSinceActivation)
+            XCTAssertEqual(4, decoded.podMessageCounter)
+            XCTAssertEqual(.faultEventSetupPodType86, decoded.originalLoggedFaultEvent.faultType)
+            XCTAssertEqual(30660, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(51.15, decoded.insulinRemaining, accuracy: 0.05)
-            XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
+            XCTAssertEqual(120, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.secondaryLoggedFaultEvent.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
-            XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(1, decoded.radioRSSI)
-            XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.reservoirStatusAtFirstLoggedFaultEvent)
+            XCTAssertEqual(0, decoded.receiverLowGain)
+            XCTAssertEqual(35, decoded.radioRSSI)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -176,8 +174,8 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(14, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(46, decoded.radioRSSI)
             XCTAssertEqual(.readyForInjection, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -202,8 +200,8 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEvent)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(2, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(34, decoded.radioRSSI)
             XCTAssertEqual(.pairingSuccess, decoded.reservoirStatusAtFirstLoggedFaultEventCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")

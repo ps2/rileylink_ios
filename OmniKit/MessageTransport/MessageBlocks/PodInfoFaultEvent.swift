@@ -10,21 +10,7 @@ import Foundation
 
 public struct PodInfoFaultEvent : PodInfo, Equatable {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-    
-//    public enum lengthType: UInt8{
-//        case normal = 0x10
-//        case configuredAlerts = 0x13
-//        case faultEvents = 0x16
-//        case dataLog = 0x04*numberOfWords+0x08
-//        case faultDataInitializationTime = 0x11
-//        case hardcodedValues  = 0x5
-//        case resetStatus = numberOfBytes & 0x03
-//        case dumpRecentFlashLog = 0x13
-//        case dumpOlderFlashlog = 0x14
-//
-    // public let numberOfWords: UInt8 = 60
-    // public let numberOfBytes: UInt8 = 10
-    
+        
     public var podInfoType: PodInfoResponseSubType = .faultEvents
     public let reservoirStatus: ReservoirStatus
     public let deliveryType: DeliveryType
@@ -38,8 +24,8 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let secondaryLoggedFaultEvent: FaultEventCode
     public let logEventError: Bool
     public let reservoirStatusAtFirstLoggedFaultEvent: ReservoirStatus
-    public let recieverLowGain: UInt8
-    public let radioRSSI: UInt8
+    public let receiverLowGain: Int8
+    public let radioRSSI: Int8
     public let reservoirStatusAtFirstLoggedFaultEventCheck: ReservoirStatus
     public let insulinStateTableCorruption: Bool
     public let immediateBolusInProgress: Bool
@@ -86,9 +72,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.reservoirStatusAtFirstLoggedFaultEvent = reservoirStatusAtFirstLoggedFaultEventType
         
-        self.recieverLowGain = encodedData[18] >> 4
+        self.receiverLowGain = Int8(encodedData[18] >> 6)
         
-        self.radioRSSI =  encodedData[18] & 0xF
+        self.radioRSSI =  Int8(encodedData[18] & 0x3F)
         
         guard let reservoirStatusAtFirstLoggedFaultEventCheckType = ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ReservoirStatus")
@@ -117,7 +103,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "timeActive: \(timeActive)",
             "logEventError: \(logEventError)",
             "reservoirStatusAtFirstLoggedFaultEvent: \(reservoirStatusAtFirstLoggedFaultEvent)",
-            "recieverLowGain: \(recieverLowGain)",
+            "receiverLowGain: \(receiverLowGain)",
             "radioRSSI: \(radioRSSI)",
             "reservoirStatusAtFirstLoggedFaultEventCheck: \(reservoirStatusAtFirstLoggedFaultEventCheck)",
             "insulinStateTableCorruption: \(insulinStateTableCorruption)",

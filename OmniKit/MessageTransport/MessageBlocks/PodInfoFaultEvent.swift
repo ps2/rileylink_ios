@@ -24,8 +24,8 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let secondaryLoggedFaultEvent: FaultEventCode
     public let logEventError: Bool
     public let reservoirStatusAtFirstLoggedFaultEvent: ReservoirStatus
-    public let receiverLowGain: UInt8
-    public let radioRSSI: UInt8
+    public let receiverLowGain: Int8
+    public let radioRSSI: Int8
     public let reservoirStatusAtFirstLoggedFaultEventCheck: ReservoirStatus
     public let insulinStateTableCorruption: Bool
     public let immediateBolusInProgress: Bool

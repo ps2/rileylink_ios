@@ -72,9 +72,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.reservoirStatusAtFirstLoggedFaultEvent = reservoirStatusAtFirstLoggedFaultEventType
         
-        self.receiverLowGain = encodedData[18] >> 6
+        self.receiverLowGain = Int8(encodedData[18] >> 6)
         
-        self.radioRSSI =  encodedData[18] & 0x3F
+        self.radioRSSI =  Int8(encodedData[18] & 0x3F)
         
         guard let reservoirStatusAtFirstLoggedFaultEventCheckType = ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ReservoirStatus")

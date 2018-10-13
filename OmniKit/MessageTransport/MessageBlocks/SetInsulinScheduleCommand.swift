@@ -163,14 +163,25 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     
     public init(nonce: UInt32, basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) {
         let table = BasalDeliveryTable(schedule: basalSchedule)
-        
-        let segment = Int(scheduleOffset / BasalDeliveryTable.segmentDuration)
-        let timeRemainingInSegment = BasalDeliveryTable.segmentDuration - scheduleOffset.truncatingRemainder(dividingBy: BasalDeliveryTable.segmentDuration)
         let rate = basalSchedule.rateAt(offset: scheduleOffset)
-        let pulsesPerSegment = rate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
-        let pulsesRemainingInSegment = timeRemainingInSegment / BasalDeliveryTable.segmentDuration * pulsesPerSegment
+
+        let segment = Int(scheduleOffset / BasalDeliveryTable.segmentDuration)
+
+        let hourOffset = scheduleOffset.truncatingRemainder(dividingBy: .hours(1))
+        let pulsesPerHour = round(rate / podPulseSize)
         
-        self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: UInt8(segment), secondsRemaining: UInt16(timeRemainingInSegment), pulsesRemaining: UInt16(pulsesRemainingInSegment), table: table)
+        let pulsesElapsed = round((hourOffset / TimeInterval(hours: 1)) * pulsesPerHour)
+        
+        let pulsesRemainingInSegment: Double
+        if segment % 2 == 0 {
+            pulsesRemainingInSegment = pulsesPerHour - round(pulsesPerHour * 0.5) - pulsesElapsed
+        } else {
+            pulsesRemainingInSegment = pulsesPerHour - pulsesElapsed
+        }
+        
+        let timeRemainingInSegment = BasalDeliveryTable.segmentDuration - scheduleOffset.truncatingRemainder(dividingBy: BasalDeliveryTable.segmentDuration)
+            
+        self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: UInt8(segment), secondsRemaining: UInt16(timeRemainingInSegment), pulsesRemaining: UInt16(round(pulsesRemainingInSegment)), table: table)
         self.nonce = nonce
     }
 }

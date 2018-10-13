@@ -67,10 +67,12 @@ public struct BasalDeliveryTable {
     
     private static func rateToTableEntries(rate: Double, duration: TimeInterval) -> [BasalTableEntry] {
         var tableEntries = [BasalTableEntry]()
-
-        let pulsesPerSegment = rate * BasalDeliveryTable.segmentDuration / TimeInterval(hours: 1) / podPulseSize
-        let alternateSegmentPulse = pulsesPerSegment - floor(pulsesPerSegment) > 0
-        var remaining = Int(duration / BasalDeliveryTable.segmentDuration)
+        
+        let pulsesPerHour = Int(round(rate / podPulseSize))
+        let pulsesPerSegment = pulsesPerHour >> 1
+        let alternateSegmentPulse = pulsesPerHour & 0b1 != 0
+        
+        var remaining = Int(round(duration / BasalDeliveryTable.segmentDuration))
         while remaining > 0 {
             let segments = min(remaining, 16)
             let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: segments > 1 ? alternateSegmentPulse : false)

@@ -28,7 +28,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
             currentEntryIndex
             ])
         data.appendBigEndian(UInt16(remainingPulses * 10))
-        data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+        data.appendBigEndian(UInt32(round(delayUntilNextPulse.hundredthsOfMilliseconds)))
         for entry in rateEntries {
             data.append(entry.data)
         }
@@ -76,15 +76,16 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         for entry in schedule.durations() {
             rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
         }
+        
         self.rateEntries = rateEntries
         let (entryIndex, entry, duration) = schedule.lookup(offset: scheduleOffset)
         self.currentEntryIndex = UInt8(entryIndex)
         let timeRemainingInEntry = duration - (scheduleOffset - entry.startTime)
         let rate = schedule.rateAt(offset: scheduleOffset)
-        let pulsesPerHour = rate / podPulseSize
-        self.remainingPulses = ceil(timeRemainingInEntry * pulsesPerHour / TimeInterval(hours: 1))
+        let pulsesPerHour = round(rate / podPulseSize)
+        self.remainingPulses = pulsesPerHour * timeRemainingInEntry / .hours(1)
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
-        self.delayUntilNextPulse = timeBetweenPulses - scheduleOffset.truncatingRemainder(dividingBy: timeBetweenPulses)
+        self.delayUntilNextPulse = timeBetweenPulses - (scheduleOffset + timeBetweenPulses / 2.0).truncatingRemainder(dividingBy: timeBetweenPulses)
     }
 }
 

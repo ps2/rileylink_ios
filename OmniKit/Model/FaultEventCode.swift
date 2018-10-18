@@ -50,7 +50,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case errorMainLoopHelper5                 = 0x2E
         case errorMainLoopHelper6                 = 0x2F
         case errorMainLoopHelper7                 = 0x30
-        case deliveryScheduleFault                = 0x31
+        case badMType                             = 0x31
         case badValueStartupTest                  = 0x32
         case badDecrementTab1                     = 0x33
         case badStateInReset                      = 0x34
@@ -177,7 +177,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .unexpectedStateAfter80hours:
                     return "Unexpected internal state after Pod running 80 hours"
                 case .wrongValue0x4008:
-                    return "In sub_B10D if $4008 value wrong"
+                    return "Unexpected internal state command_1A_schedule_parse_routine_wrapper"
                 case .table129SumWrong:
                     return "Table 129 sum wrong"
                 case .problemCalibrateTimer:
@@ -204,8 +204,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Error in big routine used by main_loop_helper_2($29+i[6])"
                 case .errorMainLoopHelper7:
                     return "Error in big routine used by main_loop_helper_2($29+i[7])"
-                case .deliveryScheduleFault:
-                    return "Delivery schedule unexpected progress"
+                case .badMType:
+                    return "Bad mtype"
                 case .badValueStartupTest:
                     return "Bad value during startup testing (402D is not 0)"
                 case .badDecrementTab1:
@@ -221,7 +221,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .aGreaterThan7inMessage:
                     return "A > 7 in message processing"
                 case .failedTestSawReset:
-                    return "Failed SAW reset testing failed"
+                    return "SAW reset testing fail"
                 case .testInProgress:
                     return "Test in progress (402D is 'Z')"
                 case .problemWithPumpAnchor:
@@ -229,19 +229,19 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .errorFlashWrite:
                     return "Flash write error, failed writing to $4000"
                 case .badInitialByte357and71State:
-                    return "Bad initial byte_71 & byte_357 encoder state"
+                    return "Bad initial byte_71 & byte_357 state something_encoder_state()"
                 case .badValueByte357:
-                    return "Bad byte_357 value"
+                    return "Bad byte_357 value something_encoder_state()"
                 case .badValueByte71:
-                    return "Bad exit byte_71 value"
+                    return "Bad exit byte_71 value something_encoder_state()"
                 case .checkVoltagePullup1:
                     return "Check LOAD voltage, PRACMP Pullup 1 problem"
                 case .checkVoltagePullup2:
                     return "Check LOAD voltage, PRACMP Pullup 2 problem"
                 case .problemWithLoad1and2type46:
-                    return "Problem with LOAD1/LOAD2 Type46"
+                    return "Problem with LOAD1/LOAD2"
                 case .problemWithLoad1and2type47:
-                    return "Problem with LOAD1/LOAD2 Type47"
+                    return "Problem with LOAD1/LOAD2"
                 case .badTimerCalibration:
                     return "Bad timer calibration"
                 case .badTimerRatios:
@@ -293,43 +293,43 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .problemBigRoutine1Type6A:
                     return "Problem inside big_routine_1"
                 case .problemBasalUpdateType80:
-                    return "Basal variable state problem #1 inside update_insulin_variables"
+                    return "Basal pulse count too high when counter expired"
                 case .problemBasalUpdateType81:
-                    return "Basal variable state problem #2 inside update_insulin_variables"
+                    return "Basal pulse count too low when counter expired"
                 case .problemTempBasalUpdateType82:
-                    return "Temp Basal variable state problem #1 inside update_insulin_variables"
+                    return "Temp basal pulse count too low when counter expired"
                 case .problemTempBasalUpdateType83:
-                    return "Temp Basal variable state problem #2 inside update_insulin_variables"
+                    return "Temp basal pulse count too high when counter expired"
                 case .problemBolusUpdateType84:
-                    return "Bolus variable state problem #1 inside update_insulin_variables"
+                    return "Bolus pulse count too high when counter expired"
                 case .problemBolusUpdateType85:
-                    return "Bolus variable state problem #2 inside update_insulin_variables"
+                    return "Bolus pulse count too low when counter expired"
                 case .faultEventSetupPodType86:
-                    return "Temp Basal PPPP < -2 in verify_and_start_pump"
+                    return "Bolus pulse count too low when about to pulse"
                 case .faultEventSetupPodType87:
-                    return "Problem inside verify_and_start_pump"
+                    return "Temp basal count too low when about to pulse"
                 case .faultEventSetupPodType88:
-                    return "Bolus PPPP < -2 in verify_and_start_pump"
+                    return "Bad basal boolean state or bolus count too low when about to pulse"
                 case .faultEventSetupPodType89:
-                    return "Bad value problem #1 to verify_and_start_pump"
+                    return "Basal' boolean is unexpectedly set when about to pulse"
                 case .faultEventSetupPodType8A:
-                    return "Bad value problem #2 to verify_and_start_pump"
+                    return "Bolus count too low when about to pulse"
                 case .corruptionOfTables:
                     return "Corruption of $283, $2E3, $315 table"
                 case .faultEventSetupPodType8D:
-                    return "Bad value problem #3 to verify_and_start_pump"
+                    return "Bad input value to verify_and_start_pump"
                 case .faultEventSetupPodType8E:
-                    return "Problem inside verify_and_start_pump"
+                    return "Pump request 5 with either basal' clear or temp basal' set"
                 case .faultEventSetupPodType8F:
-                    return "Bad value during verify_and_start_pump because of sub_ACE3 is stated as bad value"
+                    return "Command $1A parse routine unexpected failed"
                 case .badValueForTables:
                     return "Bad value for $283/$2E3/$315 table specification"
                 case .faultEventSetupPodType91:
-                    return "Problem inside verify_and_start_pump"
+                    return "Pump request ~5 with basal' boolean not set"
                 case .faultEventSetupPodType92:
-                    return "Problem inside verify_and_start_pump"
+                    return "Pump request 2 with temp basal' boolean not set"
                 case .faultEventSetupPodType93:
-                    return "Problem inside verify_and_start_pump"
+                    return "Bolus' boolean is unexpectedly set when about to pulse"
                 case .badValueField6in0x1A:
                     return "Bad table specifier field6 in 1A command"
                 }

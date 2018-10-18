@@ -12,6 +12,46 @@ import MinimedKit
 
 
 extension MinimedPumpManager: PumpManagerUI {
+    
+    public var hudViewsRawState: MinimedPumpManager.PumpManagerHUDViewsRawState {
+        var rawValue: MinimedPumpManager.PumpManagerHUDViewsRawState = [
+            "pumpReservoirCapacity": pumpReservoirCapacity
+        ]
+        
+        if let batteryPercentage = state.batteryPercentage {
+            rawValue["batteryPercentage"] = batteryPercentage
+        }
+        
+        if let lastReservoirReading = state.lastReservoirReading {
+            rawValue["lastReservoirReading"] = lastReservoirReading.rawValue
+        }
+        
+        return rawValue
+    }
+    
+    public static func instantiateHUDViews(rawValue: MinimedPumpManager.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
+        guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
+            return []
+        }
+        
+        let batteryPercentage = rawValue["batteryPercentage"] as? Double
+        
+        let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
+        if let rawLastReservoirReading = rawValue["lastReservoirReading"] as? ReservoirReading.RawValue,
+            let lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
+        {
+            let reservoirLevel = min(1, max(0, lastReservoirReading.units / pumpReservoirCapacity))
+            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
+            reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
+        }
+        
+        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
+        batteryLevelHUDView.batteryLevel = batteryPercentage
+        
+        return [reservoirVolumeHUDView, batteryLevelHUDView]
+    }
+    
+    
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
@@ -23,8 +63,27 @@ extension MinimedPumpManager: PumpManagerUI {
     public var smallImage: UIImage? {
         return state.smallPumpImage
     }
+    
+    public func hudViews() -> [BaseHUDView] {
+        let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
+        if let lastReservoirVolume = state.lastReservoirReading {
+            let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpReservoirCapacity))
+            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
+            reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
+        }
+        self.addReservoirVolumeObserver(reservoirVolumeHUDView)
+        
+        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
+        batteryLevelHUDView.batteryLevel = state.batteryPercentage
+        self.addBatteryLevelObserver(batteryLevelHUDView)
+        
+        return [reservoirVolumeHUDView, batteryLevelHUDView]
+    }
+    
+    public func hudTapAction(identifier: HUDViewIdentifier) -> HUDTapAction? {
+        return nil
+    }
 }
-
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MinimedPumpManager {
@@ -98,5 +157,22 @@ extension MinimedPumpManager {
 
     public func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
         return false
+    }
+}
+
+extension BatteryLevelHUDView: BatteryLevelObserver {
+    public func batteryLevelDidChange(_ newValue: Double) {
+        DispatchQueue.main.async {
+            self.batteryLevel = newValue
+        }
+    }
+}
+
+extension ReservoirVolumeHUDView: ReservoirVolumeObserver {
+    public func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?) {
+        DispatchQueue.main.async {
+            self.reservoirLevel = level
+            self.setReservoirVolume(volume: units, at: validTime)
+        }
     }
 }

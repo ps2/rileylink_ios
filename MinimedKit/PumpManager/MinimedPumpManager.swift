@@ -11,6 +11,13 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
+public protocol BatteryLevelObserver {
+    func batteryLevelDidChange(_ newValue: Double)
+}
+
+public protocol ReservoirVolumeObserver {
+    func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?)
+}
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
@@ -19,6 +26,10 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
         self.isBolusing = false
+        
+        self.batteryLevelObservers = []
+        
+        self.reservoirVolumeObservers = []
         
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
@@ -57,13 +68,46 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var rawState: PumpManager.RawStateValue {
         return state.rawValue
     }
+    
+    private var batteryLevelObservers: [BatteryLevelObserver]
+    
+
+    public func addBatteryLevelObserver(_ observer: BatteryLevelObserver) {
+        batteryLevelObservers.append(observer)
+    }
+
+    private var reservoirVolumeObservers: [ReservoirVolumeObserver]
+    
+    public func addReservoirVolumeObserver(_ observer: ReservoirVolumeObserver) {
+        reservoirVolumeObservers.append(observer)
+    }
 
     // TODO: apply lock
     public private(set) var state: MinimedPumpManagerState {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
-            if oldValue.timeZone != state.timeZone || oldValue.isPumpSuspended != state.isPumpSuspended {
+            
+            if oldValue.timeZone != state.timeZone ||
+                oldValue.isPumpSuspended != state.isPumpSuspended ||
+                oldValue.batteryPercentage != state.batteryPercentage {
                 self.notifyStatusChanged()
+            }
+            
+            if oldValue.batteryPercentage != state.batteryPercentage,
+                let batteryPercentage = state.batteryPercentage
+            {
+                for observer in batteryLevelObservers {
+                    observer.batteryLevelDidChange(batteryPercentage)
+                }
+            }
+            
+            if oldValue.lastReservoirReading != state.lastReservoirReading,
+                let reservoirReading = state.lastReservoirReading
+            {
+                for observer in reservoirVolumeObservers {
+                    let reservoirLevel = min(1, max(0, reservoirReading.units / pumpReservoirCapacity))
+                    observer.reservoirVolumeDidChange(reservoirReading.units, at: reservoirReading.validAt, level: reservoirLevel)
+                }
             }
         }
     }
@@ -109,6 +153,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 self.sensorState = sensorState
             }
             notifyStatusChanged()
+            storeBatteryPercentage()
         }
     }
     
@@ -116,6 +161,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private var latestPumpStatus: PumpStatus? {
         didSet {
             notifyStatusChanged()
+            storeBatteryPercentage()
         }
     }
 
@@ -123,14 +169,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private var lastAddedPumpEvents: Date = .distantPast
 
     // TODO: Isolate to queue
-    // Returns a value in the range 0 - 1
-    private var pumpBatteryChargeRemaining: Double? {
+    private func storeBatteryPercentage() {
         if let status = latestPumpStatusFromMySentry {
-            return Double(status.batteryRemainingPercent) / 100
+            state.batteryPercentage = Double(status.batteryRemainingPercent) / 100
         } else if let status = latestPumpStatus {
-            return batteryChemistry.chargeRemaining(at: status.batteryVolts)
+            state.batteryPercentage = batteryChemistry.chargeRemaining(at: status.batteryVolts)
         } else {
-            return nil
+            state.batteryPercentage = nil
         }
     }
     
@@ -144,7 +189,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return PumpManagerStatus(
             timeZone: state.timeZone,
             device: device!,
-            pumpBatteryChargeRemaining: pumpBatteryChargeRemaining,
+            pumpBatteryChargeRemaining: state.batteryPercentage,
             isSuspended: state.isPumpSuspended,
             isBolusing: isBolusing)
     }
@@ -365,6 +410,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
      - parameter timeLeft: The approximate time before the reservoir is empty
      */
     private func updateReservoirVolume(_ units: Double, at date: Date, withTimeLeft timeLeft: TimeInterval?) {
+        
+        self.state.lastReservoirReading = ReservoirReading(units: units, validAt: date)
+
         pumpManagerDelegate?.pumpManager(self, didReadReservoirValue: units, at: date) { (result) in
             /// TODO: Isolate to queue
 

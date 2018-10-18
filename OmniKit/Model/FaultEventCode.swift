@@ -86,6 +86,14 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case deliveryErrorDuringPriming           = 0x5C
         case badValue0x109                        = 0x5D
         case checkVoltageFailure                  = 0x5F
+        case problemBigRoutine1Type60             = 0x60
+        case problemBigRoutine1Type61             = 0x61
+        case problemBigRoutine1Type62             = 0x62
+        case problemBigRoutine1Type66             = 0x66
+        case problemBigRoutine1Type67             = 0x67
+        case problemBigRoutine1Type68             = 0x68
+        case problemBigRoutine1Type69             = 0x69
+        case problemBigRoutine1Type6A             = 0x6A
         case problemBasalUpdateType80             = 0x80
         case problemBasalUpdateType81             = 0x81
         case problemTempBasalUpdateType82         = 0x82
@@ -268,6 +276,22 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Bad value for $109"
                 case .checkVoltageFailure:
                     return "Failure in main_loop_control_pump(): check_LOAD_voltage()"
+                case .problemBigRoutine1Type60:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type61:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type62:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type66:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type67:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type68:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type69:
+                    return "Problem inside big_routine_1"
+                case .problemBigRoutine1Type6A:
+                    return "Problem inside big_routine_1"
                 case .problemBasalUpdateType80:
                     return "Basal variable state problem #1 inside update_insulin_variables"
                 case .problemBasalUpdateType81:
@@ -281,11 +305,11 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .problemBolusUpdateType85:
                     return "Bolus variable state problem #2 inside update_insulin_variables"
                 case .faultEventSetupPodType86:
-                    return "Problem inside verify_and_start_pump"
+                    return "Temp Basal PPPP < -2 in verify_and_start_pump"
                 case .faultEventSetupPodType87:
                     return "Problem inside verify_and_start_pump"
                 case .faultEventSetupPodType88:
-                    return "Problem inside verify_and_start_pump"
+                    return "Bolus PPPP < -2 in verify_and_start_pump"
                 case .faultEventSetupPodType89:
                     return "Bad value problem #1 to verify_and_start_pump"
                 case .faultEventSetupPodType8A:

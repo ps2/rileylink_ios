@@ -106,7 +106,7 @@ public struct StatusResponse : MessageBlock {
     public let blockType: MessageBlockType = .statusResponse
     public let length: UInt8 = 10
     public let deliveryStatus: DeliveryStatus
-    public let reservoirStatus: ReservoirStatus
+    public let podProgressStatus: PodProgressStatus
     public let timeActive: TimeInterval
     public let reservoirLevel: Double?
     public let insulin: Double
@@ -129,10 +129,10 @@ public struct StatusResponse : MessageBlock {
         }
         self.deliveryStatus = deliveryStatus
         
-        guard let reservoirStatus = ReservoirStatus(rawValue: encodedData[1] & 0xf) else {
-            throw MessageError.unknownValue(value: encodedData[1] & 0xf, typeDescription: "ReservoirStatus")
+        guard let podProgressStatus = PodProgressStatus(rawValue: encodedData[1] & 0xf) else {
+            throw MessageError.unknownValue(value: encodedData[1] & 0xf, typeDescription: "PodProgressStatus")
         }
-        self.reservoirStatus = reservoirStatus
+        self.podProgressStatus = podProgressStatus
 
         let minutes = ((Int(encodedData[7]) & 0x7f) << 6) + (Int(encodedData[8]) >> 2)
         self.timeActive = TimeInterval(minutes: Double(minutes))

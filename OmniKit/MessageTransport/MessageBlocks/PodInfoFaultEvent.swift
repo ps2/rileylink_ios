@@ -10,37 +10,23 @@ import Foundation
 
 public struct PodInfoFaultEvent : PodInfo, Equatable {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-    
-//    public enum lengthType: UInt8{
-//        case normal = 0x10
-//        case configuredAlerts = 0x13
-//        case faultEvents = 0x16
-//        case dataLog = 0x04*numberOfWords+0x08
-//        case faultDataInitializationTime = 0x11
-//        case hardcodedValues  = 0x5
-//        case resetStatus = numberOfBytes & 0x03
-//        case dumpRecentFlashLog = 0x13
-//        case dumpOlderFlashlog = 0x14
-//
-    // public let numberOfWords: UInt8 = 60
-    // public let numberOfBytes: UInt8 = 10
-    
+
     public var podInfoType: PodInfoResponseSubType = .faultEvents
-    public let reservoirStatus: ReservoirStatus
+    public let podProgressStatus: PodProgressStatus
     public let deliveryType: DeliveryType
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
-    public let unknownPageCode: Double
-    public let originalLoggedFaultEvent: FaultEventCode
-    public let faultEventTimeSinceActivation: Double
-    public let insulinRemaining: Double
+    public let unknownPageCode: Data
+    public let previousStatus: FaultEventCode
+    public let currentStatus: FaultEventCode
+    public let faultEventTimeSinceActivation: TimeInterval
+    public let reservoirLevel: Double?
     public let timeActive: TimeInterval
-    public let secondaryLoggedFaultEvent: FaultEventCode
     public let logEventError: Bool
-    public let reservoirStatusAtFirstLoggedFaultEvent: ReservoirStatus
+    public let previousPodProgressStatus: PodProgressStatus
     public let recieverLowGain: UInt8
     public let radioRSSI: UInt8
-    public let reservoirStatusAtFirstLoggedFaultEventCheck: ReservoirStatus
+    public let previousPodProgressStatusCheck: PodProgressStatus
     public let insulinStateTableCorruption: Bool
     public let immediateBolusInProgress: Bool
     
@@ -52,48 +38,54 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
             throw MessageBlockError.notEnoughData
         }
         
-        guard let reservoirStatus = ReservoirStatus(rawValue: encodedData[1]) else {
-            throw MessageError.unknownValue(value: encodedData[1], typeDescription: "ReservoirStatus")
+        guard PodProgressStatus(rawValue: encodedData[1]) != nil else {
+            throw MessageError.unknownValue(value: encodedData[1], typeDescription: "PodProgressStatus")
         }
-        self.reservoirStatus = reservoirStatus
+        self.podProgressStatus = PodProgressStatus(rawValue: encodedData[1])!
         
         self.deliveryType = DeliveryType(rawValue: encodedData[2] & 0xf)
         
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         
         self.podMessageCounter = encodedData[5]
-        self.unknownPageCode = Double(Int(encodedData[6]) | Int(encodedData[7]))
+        self.unknownPageCode = encodedData[6...7]
         
-        self.originalLoggedFaultEvent = FaultEventCode(rawValue: encodedData[8])
+        self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
-        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double((Int(encodedData[9] & 0b1) << 8) + Int(encodedData[10])))
+        self.faultEventTimeSinceActivation = TimeInterval(seconds: Double(encodedData[9...10].toBigEndian(UInt16.self)))
         
-        self.insulinRemaining = podPulseSize * Double((Int(encodedData[11] & 0x3) << 8) | Int(encodedData[12]))
-        
+        let resHighBits = Int(encodedData[11] & 0x03) << 6
+        let resLowBits = Int(encodedData[12] >> 2)
+        let reservoirValue = round(Double((resHighBits + resLowBits) * 50)/255)
+        if reservoirValue < StatusResponse.maximumReservoirReading {
+            reservoirLevel = reservoirValue
+        } else {
+            reservoirLevel = nil
+        }
         self.timeActive = TimeInterval(minutes: Double((Int(encodedData[13] & 0b1) << 8) + Int(encodedData[14])))
         
-        self.secondaryLoggedFaultEvent = FaultEventCode(rawValue: encodedData[15])
+        self.previousStatus = FaultEventCode(rawValue: encodedData[15])
         
         self.logEventError = encodedData[16] == 2
 
         self.insulinStateTableCorruption = encodedData[17] & 0b10000000 != 0
         
-        guard let reservoirStatusAtFirstLoggedFaultEventType = ReservoirStatus(rawValue: encodedData[17] & 0xF) else {
-            throw MessageError.unknownValue(value: encodedData[17] & 0xF, typeDescription: "ReservoirStatus")
+        guard let previousPodProgressStatus = PodProgressStatus(rawValue: encodedData[17] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[17] & 0xF, typeDescription: "PodProgressStatus")
         }
         
         self.immediateBolusInProgress = encodedData[17] & 0b00010000 != 0
         
-        self.reservoirStatusAtFirstLoggedFaultEvent = reservoirStatusAtFirstLoggedFaultEventType
+        self.previousPodProgressStatus = previousPodProgressStatus
         
         self.recieverLowGain = encodedData[18] >> 4
         
         self.radioRSSI =  encodedData[18] & 0xF
         
-        guard let reservoirStatusAtFirstLoggedFaultEventCheckType = ReservoirStatus(rawValue: encodedData[19] & 0xF) else {
-            throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "ReservoirStatus")
+        guard let previousPodProgressStatusCheck = PodProgressStatus(rawValue: encodedData[19] & 0xF) else {
+            throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "PodProgressStatus")
         }
-        self.reservoirStatusAtFirstLoggedFaultEventCheck = reservoirStatusAtFirstLoggedFaultEventCheckType
+        self.previousPodProgressStatusCheck = previousPodProgressStatusCheck
         
         self.data = Data(encodedData)
     }
@@ -102,24 +94,32 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
 extension PodInfoFaultEvent: CustomDebugStringConvertible {
     public typealias RawValue = Data
 
+    public func secondsToHoursMinutesSeconds (duration : Double) -> String {
+        let interval = Int(duration)
+        let seconds = interval % 60
+        let minutes = (interval / 60) % 60
+        let hours = (interval / 3600)
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
     public var debugDescription: String {
         return [
             "## PodInfoFaultEvent",
             "rawHex: \(data.hexadecimalString)",
-            "originalLoggedFaultEvent: \(originalLoggedFaultEvent)",
-            "secondaryLoggedFaultEvent: \(secondaryLoggedFaultEvent)",
-            "reservoirStatus: \(reservoirStatus)",
+            "currentStatus: \(currentStatus)",
+            "previousStatus: \(previousStatus)",
+            "podProgressStatus: \(podProgressStatus)",
             "deliveryType: \(deliveryType)",
-            "insulinNotDelivered: \(insulinNotDelivered)",
-            "unknownPageCode: \(unknownPageCode)",
-            "faultEventTimeSinceActivation: \(faultEventTimeSinceActivation)",
-            "insulinRemaining: \(insulinRemaining)",
-            "timeActive: \(timeActive)",
+            "insulinNotDelivered: \(insulinNotDelivered)U",
+            "unknownPageCode: \(unknownPageCode.hexadecimalString)",
+            "faultEventTimeSinceActivation: \(faultEventTimeSinceActivation.stringValue)",
+            "reservoirLevel: \(reservoirLevel ?? 50)U",
+            "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
-            "reservoirStatusAtFirstLoggedFaultEvent: \(reservoirStatusAtFirstLoggedFaultEvent)",
+            "previousPodProgressStatus: \(previousPodProgressStatus)",
             "recieverLowGain: \(recieverLowGain)",
             "radioRSSI: \(radioRSSI)",
-            "reservoirStatusAtFirstLoggedFaultEventCheck: \(reservoirStatusAtFirstLoggedFaultEventCheck)",
+            "previousPodProgressStatusCheck: \(previousPodProgressStatusCheck)",
             "insulinStateTableCorruption: \(insulinStateTableCorruption)",
             "immediateBolusInProgress: \(immediateBolusInProgress)",
             "",
@@ -138,5 +138,15 @@ extension PodInfoFaultEvent: RawRepresentable {
     
     public var rawValue: Data {
         return data
+    }
+}
+
+extension TimeInterval {
+    var stringValue: String {
+        let seconds = Int(self) % 60
+        let minutes = (seconds / 60) % 60
+        let hours = (seconds / 3600)
+        let days = (hours / 24)
+        return String(format: "%d day(s), %02d:%02d:%02d", days, hours, minutes, seconds)
     }
 }

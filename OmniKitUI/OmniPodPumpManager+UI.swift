@@ -19,6 +19,22 @@ let temporaryBasalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.
 
 
 extension OmnipodPumpManager: PumpManagerUI {
+    public static func instantiateHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
+        return []
+    }
+    
+    public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
+        return PumpManagerUI.PumpManagerHUDViewsRawState()
+    }
+    
+    public func hudViews() -> [BaseHUDView] {
+        return []
+    }
+    
+    public func hudTapAction(identifier: HUDViewIdentifier) -> HUDTapAction? {
+        return nil
+    }
+    
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
     }

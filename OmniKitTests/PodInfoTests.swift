@@ -106,7 +106,6 @@ class PodInfoTests: XCTestCase {
     
     func testPodInfoNoFaultAlerts() {
         // 02 16 (omitted) // 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000
-        
         do {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
@@ -123,20 +122,19 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.initialized, decoded.previousPodProgressStatus)
-            XCTAssertEqual(9, decoded.recieverLowGain)
-            XCTAssertEqual(5, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(21, decoded.radioRSSI)
             XCTAssertEqual(.inactive, decoded.previousPodProgressStatusCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-        
     }
-    
-    func testPodInfoFaultAlert() {
-        // 02 16 02 0d 00 0000 06 0034 5c 0001 03ff 0001 00 00 05 a1 05 0186
+
+    func testPodInfoFaultEventErrorShuttingDown() {
+        // 02 16 (omitted) // 02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600345c000103ff0001000005a1050186")!)
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a020000082308")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
             XCTAssertEqual(.none, decoded.deliveryType)
@@ -150,13 +148,9 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatus)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(1, decoded.radioRSSI)
+            XCTAssertEqual(0, decoded.receiverLowGain)
+            XCTAssertEqual(35, decoded.radioRSSI)
             XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatusCheck)
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
-    }
     
     func testPodInfoDeliveryErrorDuringPriming() {
         //0216 BODY:020f0000000900345c000103ff0001000005ae05602903
@@ -183,6 +177,7 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
+
     func testPodInfoDuringPriming() {
         // Needle cap accidentally removed before priming started leaking and gave error:
         // 0216020d0000000600008f000003ff0000000003a20386a002
@@ -231,8 +226,8 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatus)
-            XCTAssertEqual(2, decoded.recieverLowGain)
-            XCTAssertEqual(3, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(34, decoded.radioRSSI)
             XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatusCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")

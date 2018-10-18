@@ -60,6 +60,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     private var pumpOps: PumpOps?
 
     private var pumpState: PumpState?
+    
+    private var pumpFirmwareVersion: String?
 
     var maxBasalRateUnitsPerHour: Double?
 
@@ -75,19 +77,19 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 let pumpID = pumpID,
                 let pumpModel = pumpState?.pumpModel,
                 let pumpRegion = pumpRegionCode?.region,
-                let timeZone = pumpState?.timeZone
+                let timeZone = pumpState?.timeZone,
+                let pumpFirmwareVersion = pumpFirmwareVersion
             else {
                 return nil
             }
-
             return MinimedPumpManagerState(
                 pumpColor: pumpColor,
                 pumpID: pumpID,
                 pumpModel: pumpModel,
+                pumpFirmwareVersion: pumpFirmwareVersion,
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
-                timeZone: timeZone
-            )
+                timeZone: timeZone)
         }
     }
 
@@ -248,6 +250,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 _ = try session.tuneRadio()
                 let model = try session.getPumpModel()
                 var isSentrySetUpNeeded = false
+                
+                self.pumpFirmwareVersion = try session.getPumpFirmwareVersion()
 
                 // Radio
                 if model.hasMySentry {

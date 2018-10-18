@@ -24,9 +24,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let timeActive: TimeInterval
     public let logEventError: Bool
     public let previousPodProgressStatus: PodProgressStatus
-    public let recieverLowGain: UInt8
-    public let radioRSSI: UInt8
     public let previousPodProgressStatusCheck: PodProgressStatus
+    public let receiverLowGain: Int8
+    public let radioRSSI: Int8
     public let insulinStateTableCorruption: Bool
     public let immediateBolusInProgress: Bool
     
@@ -78,9 +78,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.previousPodProgressStatus = previousPodProgressStatus
         
-        self.recieverLowGain = encodedData[18] >> 4
+        self.receiverLowGain = Int8(encodedData[18] >> 6)
         
-        self.radioRSSI =  encodedData[18] & 0xF
+        self.radioRSSI =  Int8(encodedData[18] & 0x3F)
         
         guard let previousPodProgressStatusCheck = PodProgressStatus(rawValue: encodedData[19] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "PodProgressStatus")
@@ -110,9 +110,9 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "previousStatus: \(previousStatus)",
             "podProgressStatus: \(podProgressStatus)",
             "deliveryType: \(deliveryType)",
-            "insulinNotDelivered: \(insulinNotDelivered)U",
-            "unknownPageCode: \(unknownPageCode.hexadecimalString)",
-            "faultEventTimeSinceActivation: \(faultEventTimeSinceActivation.stringValue)",
+            "currentStatus: \(currentStatus)",
+            "previousStatus: \(previousStatus)",
+            "podProgressStatus: \(podProgressStatus)",
             "reservoirLevel: \(reservoirLevel ?? 50)U",
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
@@ -120,8 +120,8 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "recieverLowGain: \(recieverLowGain)",
             "radioRSSI: \(radioRSSI)",
             "previousPodProgressStatusCheck: \(previousPodProgressStatusCheck)",
-            "insulinStateTableCorruption: \(insulinStateTableCorruption)",
-            "immediateBolusInProgress: \(immediateBolusInProgress)",
+            "previousPodProgressStatus: \(previousPodProgressStatus)",
+            "recieverLowGain: \(recieverLowGain)",
             "",
             ].joined(separator: "\n")
     }

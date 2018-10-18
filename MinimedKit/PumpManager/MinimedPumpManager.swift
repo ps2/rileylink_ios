@@ -13,10 +13,23 @@ import os.log
 
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
+    
     public static let managerIdentifier: String = "Minimed500"
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
+        self.isBolusing = false
+        
+        self.device = HKDevice(
+            name: type(of: self).managerIdentifier,
+            manufacturer: "Medtronic",
+            model: state.pumpModel.rawValue,
+            hardwareVersion: nil,
+            firmwareVersion: state.pumpFirmwareVersion,
+            softwareVersion: String(MinimedKitVersionNumber),
+            localIdentifier: state.pumpID,
+            udiDeviceIdentifier: nil
+        )
 
         super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
 
@@ -49,6 +62,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public private(set) var state: MinimedPumpManagerState {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+            if oldValue.timeZone != state.timeZone || oldValue.isPumpSuspended != state.isPumpSuspended {
+                self.notifyStatusChanged()
+            }
         }
     }
     
@@ -60,7 +76,18 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             state.rileyLinkConnectionManagerState = newValue
         }
     }
-
+    
+    private var isSuspended: Bool {
+        get {
+            return state.isPumpSuspended
+        }
+        set {
+            state.isPumpSuspended = newValue
+        }
+    }
+    
+    private var isBolusing: Bool
+    
     public weak var cgmManagerDelegate: CGMManagerDelegate?
 
     public weak var pumpManagerDelegate: PumpManagerDelegate?
@@ -70,6 +97,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - CGMManager
 
     public private(set) var sensorState: SensorDisplayable?
+    
+    public var device: HKDevice?
 
     // MARK: - Pump data
 
@@ -79,33 +108,23 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             if let sensorState = latestPumpStatusFromMySentry {
                 self.sensorState = sensorState
             }
+            notifyStatusChanged()
         }
     }
-
+    
     // TODO: Isolate to queue
     private var latestPumpStatus: PumpStatus? {
         didSet {
-            if let suspended = latestPumpStatus?.suspended {
-                isDeliverySuspended = suspended
-            }
+            notifyStatusChanged()
         }
     }
 
     // TODO: Isolate to queue
     private var lastAddedPumpEvents: Date = .distantPast
 
-    // Battery monitor
-    private func observeBatteryDuring(_ block: () -> Void) {
-        let oldVal = pumpBatteryChargeRemaining
-        block()
-        pumpManagerDelegate?.pumpManagerDidUpdatePumpBatteryChargeRemaining(self, oldValue: oldVal)
-    }
-
-    // MARK: - PumpManager
-
     // TODO: Isolate to queue
     // Returns a value in the range 0 - 1
-    public var pumpBatteryChargeRemaining: Double? {
+    private var pumpBatteryChargeRemaining: Double? {
         if let status = latestPumpStatusFromMySentry {
             return Double(status.batteryRemainingPercent) / 100
         } else if let status = latestPumpStatus {
@@ -114,7 +133,22 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             return nil
         }
     }
+    
+    private func notifyStatusChanged() {
+        self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+    }
+    
+    // MARK: - PumpManager
 
+    public var status: PumpManagerStatus {
+        return PumpManagerStatus(
+            timeZone: state.timeZone,
+            device: device!,
+            pumpBatteryChargeRemaining: pumpBatteryChargeRemaining,
+            isSuspended: state.isPumpSuspended,
+            isBolusing: isBolusing)
+    }
+    
     public func updateBLEHeartbeatPreference() {
         queue.async {
             /// Controls the management of the RileyLink timer tick, which is a reliably-changing BLE
@@ -141,20 +175,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
     public var localizedTitle: String {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
-    }
-    
-    public var isDeliverySuspended: Bool {
-        set {
-            let notify = state.isPumpSuspended != newValue
-            state.isPumpSuspended = newValue
-            if notify {
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateSuspendState: newValue)
-            }
-        }
-        
-        get {
-            return state.isPumpSuspended
-        }
     }
     
     public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
@@ -184,7 +204,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
                 do {
                     try session.setSuspendResumeState(state)
-                    self.isDeliverySuspended = (state == .suspend)
+                    self.isSuspended = (state == .suspend)
                     completion(PumpManagerResult.success(true))
                 } catch let error {
                     self.troubleshootPumpComms(using: device)
@@ -230,10 +250,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return [
             "## MinimedPumpManager",
             "isPumpDataStale: \(isPumpDataStale)",
-            "latestPumpStatus: \(String(describing: latestPumpStatus))",
+            "status: \(String(describing: status))",
             "latestPumpStatusFromMySentry: \(String(describing: latestPumpStatusFromMySentry))",
             "lastAddedPumpEvents: \(lastAddedPumpEvents)",
-            "pumpBatteryChargeRemaining: \(String(reflecting: pumpBatteryChargeRemaining))",
             "state: \(String(reflecting: state))",
             "sensorState: \(String(describing: sensorState))",
             "",
@@ -306,54 +325,32 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             log.error("Ignored MySentry status due to date mismatch: %{public}@ in %{public}", String(describing: pumpDate), String(describing: timeZone))
             return
         }
+        
+        latestPumpStatusFromMySentry = status
 
-        observeBatteryDuring {
-            latestPumpStatusFromMySentry = status
-        }
-
-        device.getStatus { (deviceStatus) in
-            // Trigger device status upload, even if something is wrong with pumpStatus
-            self.queue.async {
-
-                let pumpManagerStatus = PumpManagerStatus(
-                    date: pumpDate,
-                    timeZone: timeZone,
-                    device: deviceStatus.device(pumpID: self.state.pumpID, pumpModel: self.state.pumpModel),
-                    lastValidFrequency: self.state.lastValidFrequency,
-                    lastTuned: self.state.lastTuned,
-                    battery: PumpManagerStatus.BatteryStatus(percent: Double(status.batteryRemainingPercent) / 100),
-                    isSuspended: nil,
-                    isBolusing: nil,
-                    remainingReservoir: HKQuantity(unit: .internationalUnit(), doubleValue: status.reservoirRemainingUnits)
+        switch status.glucose {
+        case .active(glucose: let glucose):
+            // Enlite data is included
+            if let date = glucoseDateComponents?.date {
+                let sample = NewGlucoseSample(
+                    date: date,
+                    quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(glucose)),
+                    isDisplayOnly: false,
+                    syncIdentifier: status.glucoseSyncIdentifier ?? UUID().uuidString,
+                    device: self.device
                 )
 
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: pumpManagerStatus)
-
-                switch status.glucose {
-                case .active(glucose: let glucose):
-                    // Enlite data is included
-                    if let date = glucoseDateComponents?.date {
-                        let sample = NewGlucoseSample(
-                            date: date,
-                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(glucose)),
-                            isDisplayOnly: false,
-                            syncIdentifier: status.glucoseSyncIdentifier ?? UUID().uuidString,
-                            device: deviceStatus.device(pumpID: self.state.pumpID, pumpModel: self.state.pumpModel)
-                        )
-
-                        self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: .newData([sample]))
-                    }
-                case .off:
-                    // Enlite is disabled, so assert glucose from another source
-                    self.pumpManagerDelegate?.pumpManagerBLEHeartbeatDidFire(self)
-                default:
-                    // Anything else is an Enlite error
-                    // TODO: Provide info about status.glucose
-                    self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: .error(PumpManagerError.deviceState(nil)))
-                }
+                self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: .newData([sample]))
             }
+        case .off:
+            // Enlite is disabled, so assert glucose from another source
+            self.pumpManagerDelegate?.pumpManagerBLEHeartbeatDidFire(self)
+        default:
+            // Anything else is an Enlite error
+            // TODO: Provide info about status.glucose
+            self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: .error(PumpManagerError.deviceState(nil)))
         }
-
+        
         // Sentry packets are sent in groups of 3, 5s apart. Wait 11s before allowing the loop data to continue to avoid conflicting comms.
         queue.asyncAfter(deadline: .now() + .seconds(11)) {
             self.updateReservoirVolume(status.reservoirRemainingUnits, at: pumpDate, withTimeLeft: TimeInterval(minutes: Double(status.reservoirRemainingMinutes)))
@@ -497,41 +494,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                         date = newDate
                     }
 
-                    self.observeBatteryDuring {
-                        self.latestPumpStatus = status
-                    }
+                    self.state.isPumpSuspended = status.suspended
+                    self.isBolusing = status.bolusing
 
+                    self.latestPumpStatus = status
+                    
                     self.updateReservoirVolume(status.reservoir, at: date, withTimeLeft: nil)
 
-                    device.getStatus { (deviceStatus) in
-                        self.queue.async {
-                            let pumpManagerStatus = PumpManagerStatus(
-                                date: date,
-                                timeZone: session.pump.timeZone,
-                                device: deviceStatus.device(pumpID: self.state.pumpID, pumpModel: self.state.pumpModel),
-                                lastValidFrequency: self.state.lastValidFrequency,
-                                lastTuned: self.state.lastTuned,
-                                battery: PumpManagerStatus.BatteryStatus(
-                                    voltage: status.batteryVolts,
-                                    state: {
-                                        switch status.batteryStatus {
-                                        case .normal:
-                                            return .normal
-                                        case .low:
-                                            return .low
-                                        case .unknown:
-                                            return nil
-                                        }
-                                    }()
-                                ),
-                                isSuspended: status.suspended,
-                                isBolusing: status.bolusing,
-                                remainingReservoir: HKQuantity(unit: .internationalUnit(), doubleValue: status.reservoir)
-                            )
-
-                            self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: pumpManagerStatus)
-                        }
-                    }
                 } catch let error {
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
                     self.pumpManagerDelegate?.pumpManager(self, didError: PumpManagerError.communication(error as? LocalizedError))
@@ -584,9 +553,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             }
 
             do {
-                if self.isDeliverySuspended {
+                if self.isSuspended {
                     try session.setSuspendResumeState(.resume)
-                    self.isDeliverySuspended = false
+                    self.isSuspended = false
                 }
                 
                 willRequest(units, Date())
@@ -684,6 +653,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             state.batteryChemistry = newValue
         }
     }
+    
 }
 
 
@@ -704,10 +674,6 @@ extension MinimedPumpManager: CGMManager {
     }
 
     public var managedDataInterval: TimeInterval? {
-        return nil
-    }
-
-    public var device: HKDevice? {
         return nil
     }
 

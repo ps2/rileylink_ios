@@ -22,6 +22,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var pumpColor: PumpColor
 
     public var pumpModel: PumpModel
+    
+    public var pumpFirmwareVersion: String
 
     public var pumpID: String
 
@@ -32,7 +34,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var lastValidFrequency: Measurement<UnitFrequency>?
 
     public var lastTuned: Date?
-
+    
     public var pumpSettings: PumpSettings {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
@@ -66,12 +68,13 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var timeZone: TimeZone
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
         self.pumpID = pumpID
         self.pumpModel = pumpModel
+        self.pumpFirmwareVersion = pumpFirmwareVersion
         self.pumpRegion = pumpRegion
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
@@ -124,13 +127,16 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         } else {
             lastValidFrequency = nil
         }
-
+        
+        let pumpFirmwareVersion = (rawValue["pumpFirmwareVersion"] as? String) ?? ""
+        
         self.init(
             batteryChemistry: batteryChemistry,
             preferredInsulinDataSource: insulinDataSource,
             pumpColor: pumpColor,
             pumpID: pumpID,
             pumpModel: pumpModel,
+            pumpFirmwareVersion: pumpFirmwareVersion,
             pumpRegion: pumpRegion,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
             timeZone: timeZone,
@@ -146,6 +152,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "pumpColor": pumpColor.rawValue,
             "pumpID": pumpID,
             "pumpModel": pumpModel.rawValue,
+            "pumpFirmwareVersion": pumpFirmwareVersion,
             "pumpRegion": pumpRegion.rawValue,
             "timeZone": timeZone.secondsFromGMT(),
             "isPumpSuspended": isPumpSuspended,
@@ -180,6 +187,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pumpColor: \(pumpColor)",
             "pumpID: ✔︎",
             "pumpModel: \(pumpModel.rawValue)",
+            "pumpFirmwareVersion: \(pumpFirmwareVersion)",
             "pumpRegion: \(pumpRegion)",
             "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "timeZone: \(timeZone)",

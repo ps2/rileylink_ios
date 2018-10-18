@@ -129,7 +129,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .failedFlashStore:
                     return "Flash store failed in $4x00 page"
                 case .tableCorruptionBasalExtraCommand:
-                    return "Tab13 or Tab15 table corruption ($13 subcommand tables for basal.)"
+                    return "Tab13 or Tab15 table corruption ($13 subcommand tables for basal)"
                 case .corruptionByte720:
                     return "Corruption in byte_720"
                 case .errorInResetHelper6:
@@ -141,7 +141,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .bf0notEqualToBF1:
                     return "byte_BF0 != ~byte_BF1"
                 case .tableCorruptionTempBasalExtraCommand:
-                    return "Tab9 or Tab11 table corruption ($16 subcommand tables for temp basal.)"
+                    return "Tab9 or Tab11 table corruption ($16 subcommand tables for temp basal)"
                 case .resetDueToCOP:
                     return "Reset due to COP"
                 case .resetDueToIllegalOpcode:

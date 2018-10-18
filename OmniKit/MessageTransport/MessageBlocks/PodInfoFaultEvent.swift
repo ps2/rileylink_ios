@@ -20,7 +20,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let previousStatus: FaultEventCode
     public let currentStatus: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval
-    public let reservoirLevel: Double?
+    public let reservoirLevel: String
     public let timeActive: TimeInterval
     public let logEventError: Bool
     public let previousPodProgressStatus: PodProgressStatus
@@ -58,10 +58,11 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         let resLowBits = Int(encodedData[12] >> 2)
         let reservoirValue = round(Double((resHighBits + resLowBits) * 50)/255)
         if reservoirValue < StatusResponse.maximumReservoirReading {
-            reservoirLevel = reservoirValue
+            reservoirLevel = "\(reservoirValue) U"
         } else {
-            reservoirLevel = nil
+            reservoirLevel = ">50 U"
         }
+        
         self.timeActive = TimeInterval(seconds: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
         self.previousStatus = FaultEventCode(rawValue: encodedData[15])
@@ -93,15 +94,6 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
 
 extension PodInfoFaultEvent: CustomDebugStringConvertible {
     public typealias RawValue = Data
-
-    public func secondsToHoursMinutesSeconds (duration : Double) -> String {
-        let interval = Int(duration)
-        let seconds = interval % 60
-        let minutes = (interval / 60) % 60
-        let hours = (interval / 3600)
-        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-    }
-
     public var debugDescription: String {
         return [
             "## PodInfoFaultEvent",
@@ -113,7 +105,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "currentStatus: \(currentStatus)",
             "previousStatus: \(previousStatus)",
             "podProgressStatus: \(podProgressStatus)",
-            "reservoirLevel: \(reservoirLevel ?? 50)U",
+            "reservoirLevel: \(reservoirLevel)",
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
             "previousPodProgressStatus: \(previousPodProgressStatus)",
@@ -147,6 +139,6 @@ extension TimeInterval {
         let minutes = (seconds / 60) % 60
         let hours = (seconds / 3600)
         let days = (hours / 24)
-        return String(format: "%d day(s), %02d:%02d:%02d", days, hours, minutes, seconds)
+        return String(format: "%d day == 1 ? “” : “s”, %02d:%02d:%02d", days, hours, minutes, seconds)
     }
 }

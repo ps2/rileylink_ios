@@ -62,7 +62,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         } else {
             reservoirLevel = nil
         }
-        self.timeActive = TimeInterval(minutes: Double((Int(encodedData[13] & 0b1) << 8) + Int(encodedData[14])))
+        self.timeActive = TimeInterval(seconds: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
         self.previousStatus = FaultEventCode(rawValue: encodedData[15])
         
@@ -117,11 +117,11 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
             "previousPodProgressStatus: \(previousPodProgressStatus)",
-            "recieverLowGain: \(recieverLowGain)",
+            "recieverLowGain: \(receiverLowGain)",
             "radioRSSI: \(radioRSSI)",
             "previousPodProgressStatusCheck: \(previousPodProgressStatusCheck)",
             "previousPodProgressStatus: \(previousPodProgressStatus)",
-            "recieverLowGain: \(recieverLowGain)",
+            "recieverLowGain: \(receiverLowGain)",
             "",
             ].joined(separator: "\n")
     }

@@ -117,7 +117,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.noFaults, decoded.currentStatus.faultType)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
-            XCTAssertEqual(135*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
+            XCTAssertEqual(135, decoded.timeActive, accuracy: 0)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
@@ -130,28 +130,6 @@ class PodInfoTests: XCTestCase {
         }
     }
 
-    func testPodInfoFaultEventErrorShuttingDown() {
-        // 02 16 (omitted) // 02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08
-        do {
-            // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a020000082308")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
-            XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
-            XCTAssertEqual(.none, decoded.deliveryType)
-            XCTAssertEqual(0000, decoded.insulinNotDelivered)
-            XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(.deliveryErrorDuringPriming, decoded.currentStatus.faultType)
-            XCTAssertEqual(1, decoded.faultEventTimeSinceActivation)
-            XCTAssertEqual(nil, decoded.reservoirLevel)
-            XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
-            XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
-            XCTAssertEqual(false, decoded.logEventError)
-            XCTAssertEqual(false, decoded.insulinStateTableCorruption)
-            XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatus)
-            XCTAssertEqual(0, decoded.receiverLowGain)
-            XCTAssertEqual(35, decoded.radioRSSI)
-            XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatusCheck)
-    
     func testPodInfoDeliveryErrorDuringPriming() {
         //0216 BODY:020f0000000900345c000103ff0001000005ae05602903
         do {
@@ -165,13 +143,13 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.deliveryErrorDuringPriming, decoded.currentStatus.faultType)
             XCTAssertEqual(1, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
-            XCTAssertEqual(0001*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
+            XCTAssertEqual(1, decoded.timeActive)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatus)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(14, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(46, decoded.radioRSSI)
             XCTAssertEqual(.readyForInjection, decoded.previousPodProgressStatusCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -192,20 +170,20 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.faultEventSetupPodType8F, decoded.currentStatus.faultType)
             XCTAssertEqual(0000*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
-            XCTAssertEqual(0000*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
+            XCTAssertEqual(0, decoded.timeActive) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.pairingSuccess, decoded.previousPodProgressStatus)
-            XCTAssertEqual(10, decoded.recieverLowGain)
-            XCTAssertEqual(2, decoded.radioRSSI)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(34, decoded.radioRSSI)
             XCTAssertEqual(.pairingSuccess, decoded.previousPodProgressStatusCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
     }
 
-    func testPodInfoFault86() {
+    func testPodInfoFaultEventErrorShuttingDown() {
         // Failed Pod after 1 day, 18+ hours of live use shortly after installing new omniloop.
         // 02 0d 00 0000 04 07f2 8609ff03ff0a020000082308
 
@@ -221,13 +199,13 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.faultEventSetupPodType86, decoded.currentStatus.faultType)
             XCTAssertEqual(2559, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
-            XCTAssertEqual(2*60, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
+            XCTAssertEqual(2562, decoded.timeActive, accuracy: 0) // timeActive converts minutes to seconds
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(false, decoded.insulinStateTableCorruption)
             XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatus)
-            XCTAssertEqual(2, decoded.receiverLowGain)
-            XCTAssertEqual(34, decoded.radioRSSI)
+            XCTAssertEqual(0, decoded.receiverLowGain)
+            XCTAssertEqual(35, decoded.radioRSSI)
             XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatusCheck)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
@@ -298,11 +276,7 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-    
-    
-    
-    
-    
+
     func testPodInfoResetStatus() {
         //02 7c (omitted)// 4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
         do {
@@ -317,5 +291,4 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-    
 }

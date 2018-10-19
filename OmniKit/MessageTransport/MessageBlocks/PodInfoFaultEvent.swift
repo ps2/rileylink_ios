@@ -101,7 +101,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "currentStatus: \(currentStatus.description)",
             "previousStatus: \(previousStatus.description)",
             "podProgressStatus: \(podProgressStatus)",
-            "deliveryType: \(deliveryType)",
+            "deliveryType: \(deliveryType.description)",
             "podProgressStatus: \(podProgressStatus)",
             "reservoirLevel: \(reservoirLevel)",
             "timeActive: \(timeActive.stringValue)",

@@ -28,4 +28,21 @@ public struct DeliveryType: OptionSet, Equatable {
     public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
+    
+    public var description: String {
+        switch self {
+        case .none:
+            return LocalizedString("None", comment: "Nothing running")
+        case .basal:
+            return LocalizedString("Basal", comment: "Basal")
+        case .tempBasal:
+            return LocalizedString("Temp Basal", comment: "Temp Basal")
+        case .bolus:
+            return LocalizedString("Bolus", comment: "Bolus")
+        case .extendedBolus:
+            return LocalizedString("Extended Bolus", comment: "Extended Bolus")
+        default:
+            return "DeliveryType: \(rawValue)"
+        }
+    }
 }

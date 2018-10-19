@@ -32,8 +32,8 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         if encodedData.count < Int(11) {
             throw MessageBlockError.notEnoughData
         }
-        self.podInfoType                  = PodInfoResponseSubType.init(rawValue: encodedData[0])!
-        self.word_278                     = encodedData[1...2]
+        self.podInfoType = PodInfoResponseSubType.init(rawValue: encodedData[0])!
+        self.word_278 = encodedData[1...2]
         
         let numAlertTypes = 8
         let beepType = ConfigureAlertsCommand.BeepType.self

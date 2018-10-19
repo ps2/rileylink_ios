@@ -19,7 +19,7 @@ public struct PodInfoResponse : MessageBlock {
         // TODO test to evaluate if this works:
         let len = encodedData.count
         self.podInfoResponseSubType = PodInfoResponseSubType.init(rawValue: encodedData[2])!
-        podInfo = try podInfoResponseSubType.podInfoType.init(encodedData: encodedData.subdata(in: 2..<len-2))
+        podInfo = try podInfoResponseSubType.podInfoType.init(encodedData: encodedData.subdata(in: 2..<len))
         self.data = encodedData
     }
 }

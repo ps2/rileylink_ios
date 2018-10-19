@@ -23,18 +23,40 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let reservoirLevel: String
     public let timeActive: TimeInterval
     public let logEventError: Bool
-    public let previousPodProgressStatus: PodProgressStatus
-    public let previousPodProgressStatusCheck: PodProgressStatus
+    public let logEventErrorType: LogEventErrorType
+    public let logEventErrorPodProgressStatus: PodProgressStatus
     public let receiverLowGain: Int8
     public let radioRSSI: Int8
-    public let insulinStateTableCorruption: Bool
-    public let immediateBolusInProgress: Bool
-    
+    public let previousPodProgressStatus: PodProgressStatus
+    public let unKnownValue: Data
     public let data: Data
+    
+    public enum LogEventErrorType: UInt8, CustomStringConvertible {
+        case none                                                     = 0b0000
+        case immediateBolusInProgress                                 = 0b0001
+        case internal2BitVariableSetAndManipulatedInMainLoopRoutines2 = 0b0010
+        case internal2BitVariableSetAndManipulatedInMainLoopRoutines3 = 0b0100
+        case insulinStateTableCorruption                              = 0b1000
+        
+        public var description: String {
+            switch self {
+                case .none:
+                    return "None"
+                case .immediateBolusInProgress:
+                    return "Immediate Bolus In Progress"
+                case .internal2BitVariableSetAndManipulatedInMainLoopRoutines2:
+                    return "Internal 2-Bit Variable Set And Manipulated In Main Loop Routines 0x02"
+                case .internal2BitVariableSetAndManipulatedInMainLoopRoutines3:
+                    return "Internal 2-Bit Variable Set And Manipulated In Main Loop Routines 0x03"
+                case .insulinStateTableCorruption:
+                    return "Insulin State Table Corruption"
+            }
+        }        
+    }
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < 19 {
+        if encodedData.count < 21 {
             throw MessageBlockError.notEnoughData
         }
         
@@ -69,24 +91,26 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.logEventError = encodedData[16] == 2
 
-        self.insulinStateTableCorruption = encodedData[17] & 0b10000000 != 0
+        guard let logEventErrorType = LogEventErrorType(rawValue:encodedData[17] >> 4) else {
+            throw MessageError.unknownValue(value: encodedData[17] >> 4, typeDescription: "LogEventErrorType")
+        }
+        self.logEventErrorType = logEventErrorType
         
-        guard let previousPodProgressStatus = PodProgressStatus(rawValue: encodedData[17] & 0xF) else {
+        guard let logEventErrorPodProgressStatus = PodProgressStatus(rawValue: encodedData[17] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[17] & 0xF, typeDescription: "PodProgressStatus")
         }
-        
-        self.immediateBolusInProgress = encodedData[17] & 0b00010000 != 0
-        
-        self.previousPodProgressStatus = previousPodProgressStatus
+        self.logEventErrorPodProgressStatus = logEventErrorPodProgressStatus
         
         self.receiverLowGain = Int8(encodedData[18] >> 6)
         
         self.radioRSSI =  Int8(encodedData[18] & 0x3F)
         
-        guard let previousPodProgressStatusCheck = PodProgressStatus(rawValue: encodedData[19] & 0xF) else {
+        guard let previousPodProgressStatus = PodProgressStatus(rawValue: encodedData[19] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[19] & 0xF, typeDescription: "PodProgressStatus")
         }
-        self.previousPodProgressStatusCheck = previousPodProgressStatusCheck
+        self.previousPodProgressStatus = previousPodProgressStatus
+        
+        self.unKnownValue = encodedData[20...21]
         
         self.data = Data(encodedData)
     }
@@ -106,12 +130,13 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "reservoirLevel: \(reservoirLevel)",
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
-            "previousPodProgressStatus: \(previousPodProgressStatus)",
+            "logEventErrorType: \(logEventErrorType.description)",
+            "logEventErrorPodProgressStatus: \(logEventErrorPodProgressStatus)",
             "recieverLowGain: \(receiverLowGain)",
             "radioRSSI: \(radioRSSI)",
-            "previousPodProgressStatusCheck: \(previousPodProgressStatusCheck)",
-            "previousPodProgressStatus: \(previousPodProgressStatus)",
             "recieverLowGain: \(receiverLowGain)",
+            "previousPodProgressStatus: \(previousPodProgressStatus)",
+            "unKnownValue: \(unKnownValue)",
             "",
             ].joined(separator: "\n")
     }

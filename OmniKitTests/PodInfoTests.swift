@@ -117,7 +117,8 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.noFaults, decoded.currentStatus.faultType)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(">50 U", decoded.reservoirLevel)
-            XCTAssertEqual(135, decoded.timeActive, accuracy: 0)
+            XCTAssertEqual(8100, decoded.timeActive)
+            XCTAssertEqual("0 days, 02:15", decoded.timeActive.stringValue)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.none, decoded.logEventErrorType)
@@ -141,9 +142,10 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
             XCTAssertEqual(.deliveryErrorDuringPriming, decoded.currentStatus.faultType)
-            XCTAssertEqual(1, decoded.faultEventTimeSinceActivation)
+            XCTAssertEqual(60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(">50 U", decoded.reservoirLevel)
-            XCTAssertEqual(1, decoded.timeActive)
+            XCTAssertEqual("0 days plus 00:01", decoded.timeActive.stringValue)
+            XCTAssertEqual(60, decoded.timeActive)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.none, decoded.logEventErrorType)
@@ -199,7 +201,8 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual("07f2", decoded.unknownPageCode.hexadecimalString)
             XCTAssertEqual(.faultEventSetupPodType86, decoded.currentStatus.faultType)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
-            XCTAssertEqual(2559, decoded.faultEventTimeSinceActivation)
+            XCTAssertEqual(2559 * 60, decoded.faultEventTimeSinceActivation) //09ff
+            XCTAssertEqual("1 day plus 18:39", decoded.faultEventTimeSinceActivation.stringValue)
             XCTAssertEqual(">50 U", decoded.reservoirLevel)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.none, decoded.logEventErrorType)
@@ -212,6 +215,34 @@ class PodInfoTests: XCTestCase {
         }
     }
     
+    func testPodInfoFaultEventError2Days() {
+        // OFF    0 1  2  3  4  5 6  7  8 9 10 1112 1314 15 16 17 18 19 20 2122
+        // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        //       02 0d 00 0000 04 07eb 6a 0e0c 03ff 0e14 00 00 28 17 08 0000
+        do {
+            // Decode
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407eb6a0e0c03ff0e1400002817080000")!)
+            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
+            XCTAssertEqual(.none, decoded.deliveryType)
+            XCTAssertEqual(0000, decoded.insulinNotDelivered)
+            XCTAssertEqual(4, decoded.podMessageCounter)
+            XCTAssertEqual("07eb", decoded.unknownPageCode.hexadecimalString)
+            XCTAssertEqual(.problemBigRoutine1Type6A, decoded.currentStatus.faultType)
+            XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
+            XCTAssertEqual(3596 * 60, decoded.faultEventTimeSinceActivation) //09ff
+            XCTAssertEqual("2 days plus 11:56", decoded.faultEventTimeSinceActivation.stringValue)
+            XCTAssertEqual(">50 U", decoded.reservoirLevel)
+            XCTAssertEqual(false, decoded.logEventError)
+            XCTAssertEqual(.internal2BitVariableSetAndManipulatedInMainLoopRoutines2, decoded.logEventErrorType)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.logEventErrorPodProgressStatus)
+            XCTAssertEqual(0, decoded.receiverLowGain)
+            XCTAssertEqual(23, decoded.radioRSSI)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatus)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
     func testPodInfoDataLog() {
         // 027c // 030100010001043c
         do {

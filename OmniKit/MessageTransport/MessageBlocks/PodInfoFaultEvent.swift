@@ -74,7 +74,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
-        self.faultEventTimeSinceActivation = TimeInterval(seconds: Double(encodedData[9...10].toBigEndian(UInt16.self)))
+        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(encodedData[9...10].toBigEndian(UInt16.self)))
         
         let resHighBits = Int(encodedData[11] & 0x03) << 6
         let resLowBits = Int(encodedData[12] >> 2)
@@ -85,7 +85,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
             reservoirLevel = ">50 U"
         }
         
-        self.timeActive = TimeInterval(seconds: Double(encodedData[13...14].toBigEndian(UInt16.self)))
+        self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
         self.previousStatus = FaultEventCode(rawValue: encodedData[15])
         
@@ -158,10 +158,14 @@ extension PodInfoFaultEvent: RawRepresentable {
 
 extension TimeInterval {
     var stringValue: String {
-        let seconds = Int(self) % 60
-        let minutes = (seconds / 60) % 60
-        let hours = (seconds / 3600)
-        let days = (hours / 24)
-        return String(format: "%d day == 1 ? “” : “s”, %02d:%02d:%02d", days, hours, minutes, seconds)
+        let totalSeconds = self
+        let minutes = Int(totalSeconds / 60) % 60
+        let hours = Int(totalSeconds / 3600) - (Int(self / 3600)/24 * 24)
+        let days = Int((totalSeconds / 3600) / 24)
+        var pluralFormOfDays = "days"
+        if days == 1 {
+            pluralFormOfDays = "day"
+        }
+        return String(format: "%d \(pluralFormOfDays) plus %02d:%02d", days, hours, minutes)
     }
 }

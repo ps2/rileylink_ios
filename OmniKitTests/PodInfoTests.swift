@@ -118,7 +118,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(">50 U", decoded.reservoirLevel)
             XCTAssertEqual(8100, decoded.timeActive)
-            XCTAssertEqual("0 days, 02:15", decoded.timeActive.stringValue)
+            XCTAssertEqual("0 days plus 02:15", decoded.timeActive.stringValue)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.none, decoded.logEventErrorType)

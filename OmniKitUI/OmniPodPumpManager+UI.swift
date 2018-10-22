@@ -19,21 +19,6 @@ let temporaryBasalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 0.
 
 
 extension OmnipodPumpManager: PumpManagerUI {
-    public static func instantiateHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
-        return []
-    }
-    
-    public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
-        return PumpManagerUI.PumpManagerHUDViewsRawState()
-    }
-    
-    public func hudViews() -> [BaseHUDView] {
-        return []
-    }
-    
-    public func hudTapAction(identifier: HUDViewIdentifier) -> HUDTapAction? {
-        return nil
-    }
     
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
@@ -45,6 +30,22 @@ extension OmnipodPumpManager: PumpManagerUI {
     
     public var smallImage: UIImage? {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    }
+    
+    public func createHUDViews() -> [BaseHUDView] {
+        return []
+    }
+    
+    public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
+        return nil
+    }
+    
+    public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
+        return PumpManagerUI.PumpManagerHUDViewsRawState()
+    }
+    
+    public static func createHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
+        return []
     }
 }
 

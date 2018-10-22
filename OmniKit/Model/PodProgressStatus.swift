@@ -1,5 +1,5 @@
 //
-//  ReservoirStatus.swift
+//  PodProgressStatus.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 9/28/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ReservoirStatus: UInt8, CustomStringConvertible, Equatable {
+public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
     case initialized = 0
     case tankPowerActivated = 1
     case tankFillCompleted = 2
@@ -39,27 +39,27 @@ public enum ReservoirStatus: UInt8, CustomStringConvertible, Equatable {
         case .priming:
             return LocalizedString("Priming", comment: "Pod status when priming")
         case .readyForInjection:
-            return LocalizedString("Ready to insert cannula", comment: "Pod status when ready for cannula insertion")
+            return LocalizedString("Ready to insert cannula", comment: "Pod state when ready for cannula insertion")
         case .injectionStarted:
-            return LocalizedString("Cannula inserting", comment: "Pod status when inserting cannula")
+            return LocalizedString("Cannula inserting", comment: "Pod state when inserting cannula")
         case .injectionDone:
-            return LocalizedString("Cannula inserted", comment: "Pod status when cannula insertion finished")
+            return LocalizedString("Cannula inserted", comment: "Pod state when cannula insertion finished")
         case .aboveFiftyUnits:
-            return LocalizedString("Normal", comment: "Pod status when running above fifty units")
+            return LocalizedString("Normal", comment: "Pod state when running above fifty units")
         case .belowFiftyUnits:
-            return LocalizedString("Below 50 units", comment: "Pod status when running below fifty units")
+            return LocalizedString("Below 50 units", comment: "Pod state when running below fifty units")
         case .oneNotUsedButin33:
-            return LocalizedString("oneNotUsedButin33", comment: "Pod status oneNotUsedButin33")
+            return LocalizedString("oneNotUsedButin33", comment: "Pod state oneNotUsedButin33")
         case .twoNotUsedButin33:
-            return LocalizedString("twoNotUsedButin33", comment: "Pod status twoNotUsedButin33")
+            return LocalizedString("twoNotUsedButin33", comment: "Pod state twoNotUsedButin33")
         case .threeNotUsedButin33:
-            return LocalizedString("threeNotUsedButin33", comment: "Pod status threeNotUsedButin33")
+            return LocalizedString("threeNotUsedButin33", comment: "Pod state threeNotUsedButin33")
         case .errorEventLoggedShuttingDown:
-            return LocalizedString("Error event logged, shutting down", comment: "Pod status error event logged shutting down")
+            return LocalizedString("Error event logged, shutting down", comment: "Pod state error event logged shutting down")
         case .delayedPrime:
-            return LocalizedString("Prime not completed", comment: "Pod status when prime has not completed")
+            return LocalizedString("Prime not completed", comment: "Pod state when prime has not completed")
         case .inactive:
-            return LocalizedString("Deactivated", comment: "Pod status when pod has been deactivated")
+            return LocalizedString("Deactivated", comment: "Pod state when pod has been deactivated")
         }
     }
 }

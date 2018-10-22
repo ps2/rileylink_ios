@@ -33,7 +33,21 @@ extension OmnipodPumpManager: PumpManagerUI {
     }
     
     public func createHUDViews() -> [BaseHUDView] {
-        return []
+        let reservoirView = OmnipodReservoirView.instantiate()
+        if let lastInsulinMeasurements = state.podState.lastInsulinMeasurements,
+            let reservoirVolume = lastInsulinMeasurements.reservoirVolume
+        {
+            let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
+            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.setReservoirVolume(volume: reservoirVolume, at: lastInsulinMeasurements.validTime)
+        }
+        self.addReservoirVolumeObserver(reservoirView)
+        
+//        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
+//        batteryLevelHUDView.batteryLevel = state.batteryPercentage
+//        self.addBatteryLevelObserver(batteryLevelHUDView)
+        
+        return [reservoirView]
     }
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {

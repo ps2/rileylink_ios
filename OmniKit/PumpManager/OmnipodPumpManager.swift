@@ -12,6 +12,10 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
+public protocol ReservoirVolumeObserver: AnyObject {
+    func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?)
+}
+
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     public var pumpRecordsBasalProfileStartEvents = false
@@ -23,6 +27,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     private var lastPumpDataReportDate: Date?
+    
+    private var reservoirVolumeObservers: NSHashTable<AnyObject>
+    
+    public func addReservoirVolumeObserver(_ observer: ReservoirVolumeObserver) {
+        reservoirVolumeObservers.add(observer)
+    }
     
     public func assertCurrentPumpData() {
         
@@ -238,6 +248,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state
         
+        self.reservoirVolumeObservers = NSHashTable<AnyObject>.weakObjects()
+        
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
             manufacturer: "Insulet",
@@ -289,6 +301,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             if oldValue.podState.timeZone != state.podState.timeZone || oldValue.podState.suspended != state.podState.suspended {
                 self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
             }
+            
+            if oldValue.podState.lastInsulinMeasurements != state.podState.lastInsulinMeasurements,
+                let lastInsulinMeasurements = state.podState.lastInsulinMeasurements,
+                let reservoirVolume = lastInsulinMeasurements.reservoirVolume
+            {
+                for observer in (reservoirVolumeObservers.allObjects.compactMap { $0 as? ReservoirVolumeObserver }) {
+                    let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
+                    observer.reservoirVolumeDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel)
+                }
+            }
+
         }
     }
     

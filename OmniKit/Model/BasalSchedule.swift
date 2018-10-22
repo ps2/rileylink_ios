@@ -64,7 +64,7 @@ public struct BasalSchedule: RawRepresentable, Equatable {
         
         var last: TimeInterval = .hours(24)
         for (index, entry) in entries.reversed().enumerated() {
-            if entry.startTime < offset {
+            if entry.startTime <= offset {
                 return (entries.count - (index + 1), entry, last - entry.startTime)
             }
             last = entry.startTime

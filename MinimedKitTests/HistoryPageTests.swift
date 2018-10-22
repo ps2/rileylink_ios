@@ -296,7 +296,7 @@ class HistoryPageTests: XCTestCase {
         XCTAssertEqual(126, events.count)
 
         let alarm = events[9] as! PumpAlarmPumpEvent
-        XCTAssertEqual("unknownType(21)", "\(alarm.alarmType)")
+        XCTAssertEqual("unknownType(rawType: 21)", "\(alarm.alarmType)")
         XCTAssertEqual(DateComponents(gregorianYear: 2007, month: 1, day: 1, hour: 0, minute: 0, second: 0), alarm.timestamp)
 
         let batteryDepletedAlarm = events[13] as! PumpAlarmPumpEvent

@@ -16,7 +16,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
     public let programReminderInterval: TimeInterval
     public let currentEntryIndex: UInt8
     public let remainingPulses: Double
-    public let delayUntilNextPulse: TimeInterval
+    public let delayUntilNextTenthOfPulse: TimeInterval
     public let rateEntries: [RateEntry]
 
     public var data: Data {
@@ -28,7 +28,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
             currentEntryIndex
             ])
         data.appendBigEndian(UInt16(remainingPulses * 10))
-        data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+        data.appendBigEndian(UInt32(round(delayUntilNextTenthOfPulse.milliseconds * 1000)))
         for entry in rateEntries {
             data.append(entry.data)
         }
@@ -48,7 +48,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         currentEntryIndex = encodedData[3]
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
-        delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+        delayUntilNextTenthOfPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
         var entries = [RateEntry]()
         for entryIndex in (0..<numEntries) {
             let offset = 10 + entryIndex * 6
@@ -60,12 +60,12 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(confidenceReminder: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
+    public init(confidenceReminder: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
         self.confidenceReminder = confidenceReminder
         self.programReminderInterval = programReminderInterval
         self.currentEntryIndex = currentEntryIndex
         self.remainingPulses = remainingPulses
-        self.delayUntilNextPulse = delayUntilNextPulse
+        self.delayUntilNextTenthOfPulse = delayUntilNextTenthOfPulse
         self.rateEntries = rateEntries
     }
     
@@ -76,15 +76,16 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         for entry in schedule.durations() {
             rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
         }
+        
         self.rateEntries = rateEntries
         let (entryIndex, entry, duration) = schedule.lookup(offset: scheduleOffset)
         self.currentEntryIndex = UInt8(entryIndex)
         let timeRemainingInEntry = duration - (scheduleOffset - entry.startTime)
         let rate = schedule.rateAt(offset: scheduleOffset)
-        let pulsesPerHour = rate / podPulseSize
-        self.remainingPulses = ceil(timeRemainingInEntry * pulsesPerHour / TimeInterval(hours: 1))
+        let pulsesPerHour = round(rate / podPulseSize)
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
-        self.delayUntilNextPulse = timeBetweenPulses - scheduleOffset.truncatingRemainder(dividingBy: timeBetweenPulses)
+        self.delayUntilNextTenthOfPulse = timeRemainingInEntry.truncatingRemainder(dividingBy: (timeBetweenPulses / 10))
+        self.remainingPulses = pulsesPerHour * (timeRemainingInEntry-self.delayUntilNextTenthOfPulse) / .hours(1) + 0.1
     }
 }
 

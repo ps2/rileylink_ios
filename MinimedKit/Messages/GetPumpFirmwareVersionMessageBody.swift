@@ -12,7 +12,7 @@ public class GetPumpFirmwareVersionMessageBody: CarelinkLongMessageBody {
     public let version: String
     
     public required init?(rxData: Data) {
-        let stringEnd = rxData.index(of: 0) ?? rxData.count
+        let stringEnd = rxData.firstIndex(of: 0) ?? rxData.count
         guard rxData.count == type(of: self).length,
             let vsn = String(data: rxData.subdata(in: 1..<stringEnd), encoding: String.Encoding.ascii) else {
                 version = ""

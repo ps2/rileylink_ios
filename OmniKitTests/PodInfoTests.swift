@@ -215,7 +215,7 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testPodInfoFaultEventError2Days() {
+    func testPodInfoFaultEventLogEventErrorCode2() {
         // OFF    0 1  2  3  4  5 6  7  8 9 10 1112 1314 15 16 17 18 19 20 2122
         // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
         //       02 0d 00 0000 04 07eb 6a 0e0c 03ff 0e14 00 00 28 17 08 0000
@@ -243,6 +243,35 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
+    
+    func testPodInfoFaultEventIsulinNotDelivered() {
+        //         02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 0216 // 02 0f 00 00 01 0200 ec 6a02 68 03ff 026b 0000 28 a7 08 20 23 0169
+        do {
+            // Decode
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000010200ec6a026803ff026b000028a708202301")!)
+            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            XCTAssertEqual(.inactive, decoded.podProgressStatus)
+            XCTAssertEqual(.none, decoded.deliveryType)
+            XCTAssertEqual(0.05, decoded.insulinNotDelivered)
+            XCTAssertEqual(2, decoded.podMessageCounter)
+            XCTAssertEqual("00ec", decoded.unknownPageCode.hexadecimalString)
+            XCTAssertEqual(.problemBigRoutine1Type6A, decoded.currentStatus.faultType)
+            XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
+            XCTAssertEqual(616 * 60, decoded.faultEventTimeSinceActivation) //09ff
+            XCTAssertEqual("0 days plus 10:16", decoded.faultEventTimeSinceActivation.stringValue)
+            XCTAssertEqual(nil, decoded.reservoirLevel)
+            XCTAssertEqual(false, decoded.logEventError)
+            XCTAssertEqual(.internal2BitVariableSetAndManipulatedInMainLoopRoutines2, decoded.logEventErrorType.eventErrorType)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.logEventErrorPodProgressStatus)
+            XCTAssertEqual(2, decoded.receiverLowGain)
+            XCTAssertEqual(39, decoded.radioRSSI)
+            XCTAssertEqual(.aboveFiftyUnits, decoded.previousPodProgressStatus)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+    
     func testPodInfoDataLog() {
         // 027c // 030100010001043c
         do {

@@ -20,39 +20,16 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let previousStatus: FaultEventCode
     public let currentStatus: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval
-    public let reservoirLevel: String
+    public let reservoirLevel: Double?
     public let timeActive: TimeInterval
     public let logEventError: Bool
-    public let logEventErrorType: LogEventErrorType
+    public let logEventErrorType: LogEventErrorCode
     public let logEventErrorPodProgressStatus: PodProgressStatus
     public let receiverLowGain: Int8
     public let radioRSSI: Int8
     public let previousPodProgressStatus: PodProgressStatus
     public let unKnownValue: Data
     public let data: Data
-    
-    public enum LogEventErrorType: UInt8, CustomStringConvertible {
-        case none                                                     = 0b0000
-        case immediateBolusInProgress                                 = 0b0001
-        case internal2BitVariableSetAndManipulatedInMainLoopRoutines2 = 0b0010
-        case internal2BitVariableSetAndManipulatedInMainLoopRoutines3 = 0b0100
-        case insulinStateTableCorruption                              = 0b1000
-        
-        public var description: String {
-            switch self {
-                case .none:
-                    return "None"
-                case .immediateBolusInProgress:
-                    return "Immediate Bolus In Progress"
-                case .internal2BitVariableSetAndManipulatedInMainLoopRoutines2:
-                    return "Internal 2-Bit Variable Set And Manipulated In Main Loop Routines 0x02"
-                case .internal2BitVariableSetAndManipulatedInMainLoopRoutines3:
-                    return "Internal 2-Bit Variable Set And Manipulated In Main Loop Routines 0x03"
-                case .insulinStateTableCorruption:
-                    return "Insulin State Table Corruption"
-            }
-        }        
-    }
     
     public init(encodedData: Data) throws {
         
@@ -80,9 +57,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         let resLowBits = Int(encodedData[12] >> 2)
         let reservoirValue = round(Double((resHighBits + resLowBits) * 50)/255)
         if reservoirValue < StatusResponse.maximumReservoirReading {
-            reservoirLevel = "\(reservoirValue) U"
+            self.reservoirLevel = reservoirValue
         } else {
-            reservoirLevel = ">50 U"
+            self.reservoirLevel = nil
         }
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
@@ -91,10 +68,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.logEventError = encodedData[16] == 2
 
-        guard let logEventErrorType = LogEventErrorType(rawValue:encodedData[17] >> 4) else {
-            throw MessageError.unknownValue(value: encodedData[17] >> 4, typeDescription: "LogEventErrorType")
-        }
-        self.logEventErrorType = logEventErrorType
+        self.logEventErrorType = LogEventErrorCode(rawValue: encodedData[17] >> 4)
         
         guard let logEventErrorPodProgressStatus = PodProgressStatus(rawValue: encodedData[17] & 0xF) else {
             throw MessageError.unknownValue(value: encodedData[17] & 0xF, typeDescription: "PodProgressStatus")
@@ -127,7 +101,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "podProgressStatus: \(podProgressStatus)",
             "deliveryType: \(deliveryType.description)",
             "podProgressStatus: \(podProgressStatus)",
-            "reservoirLevel: \(reservoirLevel)",
+            "reservoirLevel: \(String(describing: reservoirLevel)) U",
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
             "logEventErrorType: \(logEventErrorType.description)",

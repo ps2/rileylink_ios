@@ -11,11 +11,11 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
-public protocol BatteryLevelObserver {
+public protocol BatteryLevelObserver: AnyObject {
     func batteryLevelDidChange(_ newValue: Double)
 }
 
-public protocol ReservoirVolumeObserver {
+public protocol ReservoirVolumeObserver: AnyObject {
     func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?)
 }
 
@@ -27,9 +27,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         self.state = state
         self.isBolusing = false
         
-        self.batteryLevelObservers = []
+        self.batteryLevelObservers = NSHashTable<AnyObject>.weakObjects()
         
-        self.reservoirVolumeObservers = []
+        self.reservoirVolumeObservers = NSHashTable<AnyObject>.weakObjects()
         
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
@@ -69,17 +69,16 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return state.rawValue
     }
     
-    private var batteryLevelObservers: [BatteryLevelObserver]
+    private var batteryLevelObservers: NSHashTable<AnyObject>
     
-
     public func addBatteryLevelObserver(_ observer: BatteryLevelObserver) {
-        batteryLevelObservers.append(observer)
+        batteryLevelObservers.add(observer)
     }
 
-    private var reservoirVolumeObservers: [ReservoirVolumeObserver]
+    private var reservoirVolumeObservers: NSHashTable<AnyObject>
     
     public func addReservoirVolumeObserver(_ observer: ReservoirVolumeObserver) {
-        reservoirVolumeObservers.append(observer)
+        reservoirVolumeObservers.add(observer)
     }
 
     // TODO: apply lock
@@ -96,7 +95,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             if oldValue.batteryPercentage != state.batteryPercentage,
                 let batteryPercentage = state.batteryPercentage
             {
-                for observer in batteryLevelObservers {
+                for observer in (batteryLevelObservers.allObjects.compactMap { $0 as? BatteryLevelObserver }) {
                     observer.batteryLevelDidChange(batteryPercentage)
                 }
             }
@@ -104,7 +103,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             if oldValue.lastReservoirReading != state.lastReservoirReading,
                 let reservoirReading = state.lastReservoirReading
             {
-                for observer in reservoirVolumeObservers {
+                for observer in (reservoirVolumeObservers.allObjects.compactMap { $0 as? ReservoirVolumeObserver }) {
                     let reservoirLevel = min(1, max(0, reservoirReading.units / pumpReservoirCapacity))
                     observer.reservoirVolumeDidChange(reservoirReading.units, at: reservoirReading.validAt, level: reservoirLevel)
                 }

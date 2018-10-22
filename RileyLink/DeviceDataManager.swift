@@ -60,9 +60,6 @@ extension DeviceDataManager: PumpManagerDelegate {
         log.debug("didAdjustPumpClockBy %@", adjustment)
     }
     
-    func pumpManagerDidUpdatePumpBatteryChargeRemaining(_ pumpManager: PumpManager, oldValue: Double?) {
-    }
-    
     func pumpManagerDidUpdateState(_ pumpManager: PumpManager) {
         UserDefaults.standard.pumpManagerRawValue = pumpManager.rawValue
     }

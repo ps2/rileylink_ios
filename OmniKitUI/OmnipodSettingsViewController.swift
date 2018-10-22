@@ -446,7 +446,7 @@ private extension UITableViewCell {
             case .deliveryStatus:
                 detailTextLabel?.text = String(describing: podStatus.deliveryStatus)
             case .podStatus:
-                detailTextLabel?.text = String(describing: podStatus.reservoirStatus)
+                detailTextLabel?.text = String(describing: podStatus.podProgressStatus)
             case .alarms:
                 detailTextLabel?.text = String(describing: podStatus.alarms)
             case .reservoirLevel:

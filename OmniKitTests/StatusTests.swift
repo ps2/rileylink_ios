@@ -27,6 +27,24 @@ class StatusTests: XCTestCase {
         }
         
     }
+
+    func testStatusResponse46UnitsLeft() {
+        /// 1d19050ec82c08376f9801dc
+        do {
+            // Decode
+            let decoded = try StatusResponse(encodedData: Data(hexadecimalString: "1d19050ec82c08376f9801dc")!)
+            XCTAssertEqual(TimeInterval(minutes: 3547), decoded.timeActive)
+            XCTAssertEqual(.normal, decoded.deliveryStatus)
+            XCTAssertEqual(.belowFiftyUnits, decoded.podProgressStatus)
+            XCTAssertEqual(129.45, decoded.insulin, accuracy: 0.01)
+            XCTAssertEqual(46.00, decoded.reservoirLevel)
+            XCTAssertEqual(2.2, decoded.insulinNotDelivered)
+            XCTAssertEqual(9, decoded.podMessageCounter)
+            //XCTAssert(,decoded.alarms)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
     
     func testStatusRequestCommandConfiguredAlerts() {
         // 0e 01 01

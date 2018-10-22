@@ -148,9 +148,7 @@ public struct StatusResponse : MessageBlock {
 
         self.alarms = PodAlarmState(rawValue: ((encodedData[6] & 0x7f) << 1) | (encodedData[7] >> 7))
         
-        let resHighBits = Int(encodedData[8] & 0x03) << 6
-        let resLowBits = Int(encodedData[9] >> 2)
-        let reservoirValue = round((Double((resHighBits + resLowBits))*50)/255)
+        let reservoirValue = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) * podPulseSize
         if reservoirValue < StatusResponse.maximumReservoirReading {
             self.reservoirLevel = reservoirValue
         } else {

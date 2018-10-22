@@ -53,7 +53,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(encodedData[9...10].toBigEndian(UInt16.self)))
         
-        let reservoirValue = Double(encodedData[11...12].toBigEndian(Int16.self)) * podPulseSize
+        let reservoirValue = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) * podPulseSize
         
         if reservoirValue <= StatusResponse.maximumReservoirReading {
             self.reservoirLevel = reservoirValue

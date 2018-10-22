@@ -109,7 +109,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "radioRSSI: \(radioRSSI)",
             "recieverLowGain: \(receiverLowGain)",
             "previousPodProgressStatus: \(previousPodProgressStatus)",
-            "unknownValue: \(unknownValue)",
+            "unknownValue: \(unknownValue.hexadecimalString)",
             "",
             ].joined(separator: "\n")
     }

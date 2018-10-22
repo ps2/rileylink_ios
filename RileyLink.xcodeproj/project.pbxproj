@@ -2929,7 +2929,6 @@
 					};
 					C1FFAF7F213323CC00C50C1D = {
 						CreatedOnToolsVersion = 9.4.1;
-						DevelopmentTeam = 86HTWX383F;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C12EA236198B436800309FA4;
 					};

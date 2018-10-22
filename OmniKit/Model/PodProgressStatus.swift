@@ -1,5 +1,5 @@
 //
-//  PodState.swift
+//  PodProgressStatus.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 9/28/18.

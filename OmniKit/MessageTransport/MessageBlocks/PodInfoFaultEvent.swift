@@ -28,7 +28,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let receiverLowGain: Int8
     public let radioRSSI: Int8
     public let previousPodProgressStatus: PodProgressStatus
-    public let unKnownValue: Data
+    public let unknownValue: Data
     public let data: Data
     
     public init(encodedData: Data) throws {
@@ -83,7 +83,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         }
         self.previousPodProgressStatus = previousPodProgressStatus
         
-        self.unKnownValue = encodedData[20...21]
+        self.unknownValue = encodedData[20...21]
         
         self.data = Data(encodedData)
     }
@@ -109,7 +109,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "radioRSSI: \(radioRSSI)",
             "recieverLowGain: \(receiverLowGain)",
             "previousPodProgressStatus: \(previousPodProgressStatus)",
-            "unKnownValue: \(unKnownValue)",
+            "unknownValue: \(unknownValue)",
             "",
             ].joined(separator: "\n")
     }

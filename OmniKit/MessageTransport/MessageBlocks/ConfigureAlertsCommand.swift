@@ -45,6 +45,18 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
         case reservoir(volume: Double)
         case time(TimeInterval)
     }
+
+    public enum BeepRepeat: UInt8 {
+        case once = 0
+        case every1MinuteFor3MinutesAndRepeatEvery60Minutes = 1
+        case every1MinuteFor15Minutes = 2
+        case every1MinuteFor3MinutesAndRepeatEvery15Minutes = 3
+        case every3MinutesFor60minutesStartingAt2Minutes = 4
+        case every60Minutes = 5
+        case every15Minutes = 6
+        case every15MinutesFor60minutesStartingAt14Minutes = 7
+        case every5Minutes = 8
+    }
     
     public enum BeepType: UInt8 {
         case noBeep = 0
@@ -63,8 +75,8 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
         let expirationType: ExpirationType
         let audible: Bool
         let duration: TimeInterval
+        let beepRepeat: BeepRepeat
         let beepType: BeepType
-        let beepRepeat: UInt8
         let autoOffModifier: Bool
         
         static let length = 6
@@ -95,20 +107,21 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
                 let minutes = UInt16(duration.minutes)
                 data.appendBigEndian(minutes)
             }
+            data.append(beepRepeat.rawValue)
             data.append(beepType.rawValue)
-            data.append(beepRepeat)
 
             return data
         }
         
-        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: BeepType, beepRepeat: UInt8) {
+        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepRepeat: BeepRepeat, beepType: BeepType) {
             self.alertType = alertType
             self.audible = audible
             self.autoOffModifier = autoOffModifier
             self.duration = duration
             self.expirationType = expirationType
-            self.beepType = beepType
             self.beepRepeat = beepRepeat
+            self.beepType = beepType
+            
         }
         
         public init(encodedData: Data) throws {
@@ -137,13 +150,17 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
                 self.expirationType = .time(TimeInterval(minutes: Double(yyyy)))
             }
             
-            let beepTypeBits = encodedData[4]
+            let beepRepeatBits = encodedData[4]
+            guard let beepRepeat = BeepRepeat(rawValue: beepRepeatBits) else {
+                throw MessageError.unknownValue(value: beepRepeatBits, typeDescription: "BeepRepeat")
+            }
+            self.beepRepeat = beepRepeat
+            
+            let beepTypeBits = encodedData[5]
             guard let beepType = BeepType(rawValue: beepTypeBits) else {
                 throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "BeepType")
             }
             self.beepType = beepType
-            
-            self.beepRepeat = encodedData[5]
  
         }
     }

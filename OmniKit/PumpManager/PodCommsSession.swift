@@ -232,14 +232,14 @@ public class PodCommsSession {
 
     public func configurePod() throws {
         //4c00 00c8 0102
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepType: .beepBeepBeepBeep, beepRepeat: 2)
+        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeepBeep)
         
         let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
         let _: StatusResponse = try send([configureAlerts1])
         podState.advanceToNextNonce()
         
         //7837 0005 0802
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepType: .beeepBeeep, beepRepeat: 2)
+        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
         let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
         let _: StatusResponse = try send([configureAlerts2])
         podState.advanceToNextNonce()
@@ -258,7 +258,7 @@ public class PodCommsSession {
     
     public func finishPrime() throws {
         // 3800 0ff0 0302
-        let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepType: .bipBip, beepRepeat: 2)
+        let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBip)
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
         let _: StatusResponse = try send([configureAlerts])
         podState.advanceToNextNonce()
@@ -409,13 +409,13 @@ public class PodCommsSession {
         // Configure Alerts
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepType: .beepBeepBeep, beepRepeat: 2)
+        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
         
         // 2800 1283 0602
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: .beeeeeep, beepRepeat: 2)
+        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
         
         // 020f 0000 0202
-        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepType: .bipBeepBipBeepBipBeepBipBeep, beepRepeat: 2) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
+        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
 
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1, alertConfig2, alertConfig3])
 

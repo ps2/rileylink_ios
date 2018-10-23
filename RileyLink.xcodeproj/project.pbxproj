@@ -281,6 +281,11 @@
 		C104A9C2217E603E006E3C3E /* OmnipodReservoirView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */; };
 		C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C104A9C5217E645C006E3C3E /* HUDAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */; };
+		C104A9C7217E9F35006E3C3E /* PodLifeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */; };
+		C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */; };
+		C104A9CE217ECF82006E3C3E /* MKGradientGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */; };
+		C104A9CF217ECF82006E3C3E /* MKRingProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */; };
+		C104A9D0217ECF82006E3C3E /* MKRingProgressLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1149,6 +1154,11 @@
 		C104A9BF217E603E006E3C3E /* OmnipodReservoirView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodReservoirView.swift; sourceTree = "<group>"; };
 		C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OmnipodReservoirView.xib; sourceTree = "<group>"; };
 		C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HUDAssets.xcassets; sourceTree = "<group>"; };
+		C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PodLifeHUDView.xib; sourceTree = "<group>"; };
+		C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodLifeHUDView.swift; sourceTree = "<group>"; };
+		C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKGradientGenerator.swift; sourceTree = "<group>"; };
+		C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKRingProgressView.swift; sourceTree = "<group>"; };
+		C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKRingProgressLayer.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1891,11 +1901,24 @@
 		C104A9BE217E6027006E3C3E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C104A9CA217ECF81006E3C3E /* MKRingProgressView */,
 				C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */,
 				C104A9BF217E603E006E3C3E /* OmnipodReservoirView.swift */,
 				C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */,
+				C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */,
+				C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C104A9CA217ECF81006E3C3E /* MKRingProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */,
+				C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */,
+				C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */,
+			);
+			path = MKRingProgressView;
 			sourceTree = "<group>";
 		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
@@ -3136,6 +3159,7 @@
 			files = (
 				C104A9C2217E603E006E3C3E /* OmnipodReservoirView.xib in Resources */,
 				C1FFB00D2133242C00C50C1D /* OmnipodPumpManager.storyboard in Resources */,
+				C104A9C7217E9F35006E3C3E /* PodLifeHUDView.xib in Resources */,
 				C104A9C5217E645C006E3C3E /* HUDAssets.xcassets in Resources */,
 				C1FFB00F2133242C00C50C1D /* OmniKitUI.xcassets in Resources */,
 			);
@@ -3729,11 +3753,15 @@
 				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
 				C1FFB02121343E6D00C50C1D /* TimeInterval.swift in Sources */,
 				C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */,
+				C104A9CF217ECF82006E3C3E /* MKRingProgressView.swift in Sources */,
+				C104A9D0217ECF82006E3C3E /* MKRingProgressLayer.swift in Sources */,
 				C1FFB0132133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift in Sources */,
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
+				C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
 				C127D925215C00320031799D /* OSLog.swift in Sources */,
+				C104A9CE217ECF82006E3C3E /* MKGradientGenerator.swift in Sources */,
 				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
 				C104A9C1217E603E006E3C3E /* OmnipodReservoirView.swift in Sources */,
@@ -5206,7 +5234,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 86HTWX383F;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OmniKitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
@@ -5236,7 +5264,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 86HTWX383F;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OmniKitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;

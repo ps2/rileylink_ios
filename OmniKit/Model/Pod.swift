@@ -9,10 +9,16 @@
 import Foundation
 
 // Units
+
 let podPulseSize: Double = 0.05
 
 // Units per second
 let bolusDeliveryRate: Double = 0.025
+
+// Default expiration times
+let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
+let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
+
 
 public struct DeliveryType: OptionSet, Equatable {
     public let rawValue: UInt8

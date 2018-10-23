@@ -85,6 +85,7 @@ public class PodComms : CustomDebugStringConvertible {
                     let newPodState = PodState(
                         address: newAddress,
                         activatedAt: activationDate,
+                        expiresAt: activationDate.addingTimeInterval(podSoftExpirationTime),
                         timeZone: timeZone,
                         piVersion: String(describing: config2.piVersion),
                         pmVersion: String(describing: config2.pmVersion),

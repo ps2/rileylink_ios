@@ -406,11 +406,9 @@ public class PodCommsSession {
         // Configure Alerts
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
-        let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
         let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepType: .beepBeepBeep, beepRepeat: 2)
         
         // 2800 1283 0602
-        let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
         let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepType: .beeeeeep, beepRepeat: 2)
         
         // 020f 0000 0202

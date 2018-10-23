@@ -15,6 +15,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let address: UInt32
     fileprivate var nonceState: NonceState
     public let activatedAt: Date
+    public let expiresAt: Date
     public var timeZone: TimeZone
     public let piVersion: String
     public let pmVersion: String
@@ -28,18 +29,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     private(set) var suspended: Bool
     public var fault: PodInfoFaultEvent?
     
-    public var expiresAt: Date {
-        return activatedAt + .days(3)
-    }
-    
     public var deliveryScheduleUncertain: Bool {
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
     }
     
-    public init(address: UInt32, activatedAt: Date, timeZone: TimeZone, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
+    public init(address: UInt32, activatedAt: Date, expiresAt: Date, timeZone: TimeZone, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.activatedAt = activatedAt
+        self.expiresAt = expiresAt
         self.timeZone = timeZone
         self.piVersion = piVersion
         self.pmVersion = pmVersion
@@ -176,7 +174,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.fault = nil
         }
-
+        
+        if let expiresAt = rawValue["expiresAt"] as? Date {
+            self.expiresAt = expiresAt
+        } else {
+            self.expiresAt = activatedAt.addingTimeInterval(podSoftExpirationTime)
+        }
     }
     
     public var rawValue: RawValue {
@@ -184,6 +187,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "address": address,
             "nonceState": nonceState.rawValue,
             "activatedAt": activatedAt,
+            "expiresAt": expiresAt,
             "timeZone": timeZone.secondsFromGMT(),
             "piVersion": piVersion,
             "pmVersion": pmVersion,
@@ -223,6 +227,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "## PodState",
             "address: \(String(format: "%04X", address))",
             "activatedAt: \(String(reflecting: activatedAt))",
+            "expiresAt: \(String(reflecting: expiresAt))",
             "timeZone: \(timeZone)",
             "piVersion: \(piVersion)",
             "pmVersion: \(pmVersion)",

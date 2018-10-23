@@ -43,23 +43,67 @@ extension OmnipodPumpManager: PumpManagerUI {
         }
         self.addReservoirVolumeObserver(reservoirView)
         
-//        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
-//        batteryLevelHUDView.batteryLevel = state.batteryPercentage
-//        self.addBatteryLevelObserver(batteryLevelHUDView)
+        let podLifeHUDView = PodLifeHUDView.instantiate()
+        let lifetime = state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt)
+        podLifeHUDView.setPodLifeCycle(startTime: state.podState.activatedAt, lifetime: lifetime)
         
-        return [reservoirView]
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+            let reservoirVolume = 25.0
+            let reservoirLevel = min(1, max(0, reservoirVolume / self.pumpReservoirCapacity))
+            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.setReservoirVolume(volume: reservoirVolume, at: Date())
+        }
+        
+        return [reservoirView, podLifeHUDView]
     }
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
+        if let _ = view as? PodLifeHUDView {
+            return HUDTapAction.showViewController(settingsViewController())
+        }
         return nil
     }
     
     public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
-        return PumpManagerUI.PumpManagerHUDViewsRawState()
+        var rawValue: PumpManagerUI.PumpManagerHUDViewsRawState = [
+            "pumpReservoirCapacity": pumpReservoirCapacity,
+            "podActivatedAt": state.podState.activatedAt,
+            "lifetime": state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt),
+        ]
+        
+        if let lastInsulinMeasurements = state.podState.lastInsulinMeasurements {
+            rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
+            rawValue["reservoirVolumeValidTime"] = lastInsulinMeasurements.validTime
+        }
+        
+        return rawValue
     }
     
     public static func createHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
-        return []
+        guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double,
+            let podActivatedAt = rawValue["podActivatedAt"] as? Date,
+            let lifetime = rawValue["lifetime"] as? Double else
+        {
+            return []
+        }
+        
+        let reservoirVolume = rawValue["reservoirVolume"] as? Double
+        let reservoirVolumeValidTime = rawValue["reservoirVolumeValidTime"] as? Date
+        
+        
+        let reservoirView = OmnipodReservoirView.instantiate()
+        if let reservoirVolume = reservoirVolume,
+            let reservoirVolumeValidTime = reservoirVolumeValidTime
+        {
+            let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
+            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.setReservoirVolume(volume: reservoirVolume, at: reservoirVolumeValidTime)
+        }
+        
+        let podLifeHUDView = PodLifeHUDView.instantiate()
+        podLifeHUDView.setPodLifeCycle(startTime: podActivatedAt, lifetime: lifetime)
+        
+        return [reservoirView, podLifeHUDView]
     }
 }
 

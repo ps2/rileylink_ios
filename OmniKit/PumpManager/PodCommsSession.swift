@@ -365,7 +365,10 @@ public class PodCommsSession {
         //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
     }
     
-    public func setTime(basalSchedule: BasalSchedule, timeZone: TimeZone, date: Date) throws -> StatusResponse {
+    public func setTime(timeZone: TimeZone, date: Date) throws -> StatusResponse {
+        guard let basalSchedule = podState.basalSchedule else {
+            throw PodCommsError.missingBasalSchedule
+        }
         let _ = try cancelDelivery(deliveryType: .all, beepType: .noBeep)
         let scheduleOffset = timeZone.scheduleOffset(forDate: date)
         let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))

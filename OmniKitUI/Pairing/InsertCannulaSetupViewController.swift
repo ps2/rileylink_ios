@@ -147,9 +147,13 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     func insertCannula() {
         
-        guard let podComms = pumpManager.podComms else {
+        guard let podComms = pumpManager.podComms,
+            let basalSchedule = setupViewController?.basalSchedule else
+        {
             return
         }
+        
+        let basal = BasalSchedule(repeatingScheduleValues: basalSchedule.items)
         
         let deviceSelector = pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
         
@@ -159,7 +163,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 do {
                     // TODO: Need to get schedule from PumpManagerDelegate
                     let scheduleOffset = self.pumpManager.state.podState.timeZone.scheduleOffset(forDate: Date())
-                    try session.insertCannula(basalSchedule: temporaryBasalSchedule, scheduleOffset: scheduleOffset)
+                    try session.insertCannula(basalSchedule: basal, scheduleOffset: scheduleOffset)
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
                         self.continueState = .ready
                     }

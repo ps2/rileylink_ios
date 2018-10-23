@@ -47,13 +47,6 @@ extension OmnipodPumpManager: PumpManagerUI {
         let lifetime = state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt)
         podLifeHUDView.setPodLifeCycle(startTime: state.podState.activatedAt, lifetime: lifetime)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-            let reservoirVolume = 25.0
-            let reservoirLevel = min(1, max(0, reservoirVolume / self.pumpReservoirCapacity))
-            reservoirView.reservoirLevel = reservoirLevel
-            reservoirView.setReservoirVolume(volume: reservoirVolume, at: Date())
-        }
-        
         return [reservoirView, podLifeHUDView]
     }
     

@@ -19,36 +19,38 @@ let bolusDeliveryRate: Double = 0.025
 let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
 let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
 
-
-public struct DeliveryType: OptionSet, Equatable {
-    public let rawValue: UInt8
+// DeliveryStatus used in StatusResponse and PodInfoFaults
+public enum DeliveryStatus: UInt8, CustomStringConvertible {
+    case suspended = 0
+    case normal = 1
+    case tempBasalRunning = 2
+    case priming = 4
+    case bolusInProgress = 5
+    case bolusAndTempBasal = 6
     
-    public static let none          = DeliveryType(rawValue: 0)
-    public static let basal         = DeliveryType(rawValue: 1 << 0)
-    public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
-    public static let bolus         = DeliveryType(rawValue: 1 << 2)
-    public static let extendedBolus = DeliveryType(rawValue: 1 << 3)
-    
-    public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
-    
-    public init(rawValue: UInt8) {
-        self.rawValue = rawValue
+    public var bolusing: Bool {
+        return self == .bolusInProgress || self == .bolusAndTempBasal
     }
+    
+    public var tempBasalRunning: Bool {
+        return self == .tempBasalRunning || self == .bolusAndTempBasal
+    }
+    
     
     public var description: String {
         switch self {
-        case .none:
-            return LocalizedString("None", comment: "Nothing running")
-        case .basal:
-            return LocalizedString("Basal", comment: "Basal")
-        case .tempBasal:
-            return LocalizedString("Temp Basal", comment: "Temp Basal")
-        case .bolus:
-            return LocalizedString("Bolus", comment: "Bolus")
-        case .extendedBolus:
-            return LocalizedString("Extended Bolus", comment: "Extended Bolus")
-        default:
-            return "DeliveryType: \(rawValue)"
+        case .suspended:
+            return LocalizedString("Suspended", comment: "Delivery status when insulin delivery is suspended")
+        case .normal:
+            return LocalizedString("Normal", comment: "Delivery status when basal is running")
+        case .tempBasalRunning:
+            return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
+        case .priming:
+            return LocalizedString("Priming", comment: "Delivery status when pod is priming")
+        case .bolusInProgress:
+            return LocalizedString("Bolusing", comment: "Delivery status when bolusing")
+        case .bolusAndTempBasal:
+            return LocalizedString("Bolusing with temp basal", comment: "Delivery status when bolusing and temp basal is running")
         }
     }
 }

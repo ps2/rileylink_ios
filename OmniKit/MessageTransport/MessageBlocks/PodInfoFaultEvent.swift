@@ -13,7 +13,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     
     public var podInfoType: PodInfoResponseSubType = .faultEvents
     public let podProgressStatus: PodProgressStatus
-    public let deliveryStatus: StatusResponse.DeliveryStatus
+    public let deliveryStatus: DeliveryStatus
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let unknownPageCode: Data
@@ -42,7 +42,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         }
         self.podProgressStatus = PodProgressStatus(rawValue: encodedData[1])!
         
-        self.deliveryStatus = StatusResponse.DeliveryStatus(rawValue: encodedData[2] & 0xf)!
+        self.deliveryStatus = DeliveryStatus(rawValue: encodedData[2] & 0xf)!
         
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         

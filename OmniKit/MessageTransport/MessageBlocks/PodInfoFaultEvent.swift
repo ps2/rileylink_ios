@@ -10,10 +10,10 @@ import Foundation
 
 public struct PodInfoFaultEvent : PodInfo, Equatable {
     // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-
+    
     public var podInfoType: PodInfoResponseSubType = .faultEvents
     public let podProgressStatus: PodProgressStatus
-    public let deliveryType: DeliveryType
+    public let deliveryStatus: StatusResponse.DeliveryStatus
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let unknownPageCode: Data
@@ -42,7 +42,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         }
         self.podProgressStatus = PodProgressStatus(rawValue: encodedData[1])!
         
-        self.deliveryType = DeliveryType(rawValue: encodedData[2] & 0xf)
+        self.deliveryStatus = StatusResponse.DeliveryStatus(rawValue: encodedData[2] & 0xf)!
         
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         
@@ -66,7 +66,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         self.previousStatus = FaultEventCode(rawValue: encodedData[15])
         
         self.logEventError = encodedData[16] == 2
-
+        
         self.logEventErrorType = LogEventErrorCode(rawValue: encodedData[17] >> 4)
         
         guard let logEventErrorPodProgressStatus = PodProgressStatus(rawValue: encodedData[17] & 0xF) else {
@@ -96,7 +96,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "## PodInfoFaultEvent",
             "rawHex: \(data.hexadecimalString)",
             "podProgressStatus: \(podProgressStatus)",
-            "deliveryType: \(deliveryType.description)",
+            "deliveryStatus: \(deliveryStatus.description)",
             "insulinNotDelivered: \(insulinNotDelivered) U",
             "podMessageCounter: \(podMessageCounter)",
             "unknownPageCode: \(unknownPageCode.hexadecimalString)",

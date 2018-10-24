@@ -51,7 +51,7 @@ public struct StatusResponse : MessageBlock {
         case podExpired      = 0b10000000
         case suspendExpired  = 0b01000000
         case suspended       = 0b00100000
-        case belowFiftyUnits = 0b00010000
+        case lowReservoir    = 0b00010000
         case oneHourExpiry   = 0b00001000
         case podDeactivated  = 0b00000100
         case unknownBit2     = 0b00000010

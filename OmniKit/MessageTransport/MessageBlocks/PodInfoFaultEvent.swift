@@ -98,8 +98,8 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "currentStatus: \(currentStatus.description)",
             "previousStatus: \(previousStatus.description)",
             "podProgressStatus: \(podProgressStatus)",
+            "previousPodProgressStatus: \(previousPodProgressStatus)",
             "deliveryType: \(deliveryType.description)",
-            "podProgressStatus: \(podProgressStatus)",
             "reservoirLevel: \(String(describing: reservoirLevel)) U",
             "timeActive: \(timeActive.stringValue)",
             "logEventError: \(logEventError)",
@@ -107,8 +107,6 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "logEventErrorPodProgressStatus: \(logEventErrorPodProgressStatus)",
             "recieverLowGain: \(receiverLowGain)",
             "radioRSSI: \(radioRSSI)",
-            "recieverLowGain: \(receiverLowGain)",
-            "previousPodProgressStatus: \(previousPodProgressStatus)",
             "unknownValue: \(unknownValue.hexadecimalString)",
             "",
             ].joined(separator: "\n")

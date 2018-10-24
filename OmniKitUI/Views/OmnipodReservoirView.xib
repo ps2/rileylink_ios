@@ -27,16 +27,28 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOD-1q-wHA" customClass="LevelMaskView" customModule="LoopKitUI">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                             <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="reservoir_mask"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="pod_reservoir_mask"/>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pod_reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                         </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xXX-k2-494">
+                            <rect key="frame" x="26" y="0.0" width="18" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="18" id="3I5-Os-VLS"/>
+                                <constraint firstAttribute="width" constant="18" id="p6F-2f-KO3"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Bbr-RV-LDU"/>
                         <constraint firstItem="UOD-1q-wHA" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" id="SXN-bj-sAO"/>
+                        <constraint firstItem="xXX-k2-494" firstAttribute="top" secondItem="sSE-Jz-j8k" secondAttribute="top" id="Tav-6N-DrG"/>
+                        <constraint firstAttribute="trailing" secondItem="xXX-k2-494" secondAttribute="trailing" id="Yuy-lB-O23"/>
                         <constraint firstAttribute="trailing" secondItem="UOD-1q-wHA" secondAttribute="trailing" id="co9-t4-Q4a"/>
                         <constraint firstAttribute="bottom" secondItem="zcH-tM-6Pm" secondAttribute="bottom" id="eNS-sV-TWI"/>
                         <constraint firstItem="zcH-tM-6Pm" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" id="kKl-WM-ctU"/>
@@ -68,6 +80,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="alertLabel" destination="xXX-k2-494" id="eX0-oj-QSn"/>
                 <outlet property="caption" destination="7G0-xU-Hfm" id="gzP-d7-lM6"/>
                 <outlet property="levelMaskView" destination="UOD-1q-wHA" id="nsX-iI-myz"/>
                 <outlet property="volumeLabel" destination="g9J-nS-4US" id="5ki-bV-jMd"/>
@@ -76,7 +89,7 @@
         </view>
     </objects>
     <resources>
-        <image name="reservoir" width="31" height="40"/>
-        <image name="reservoir_mask" width="28" height="39"/>
+        <image name="pod_reservoir" width="31" height="40"/>
+        <image name="pod_reservoir_mask" width="31" height="40"/>
     </resources>
 </document>

@@ -231,12 +231,11 @@ public class PodCommsSession {
     }
 
     public func configurePod() throws {
-        //4c00 00c8 0102
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepType: .beepBeepBeepBeep, beepRepeat: 2)
-        
-        let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
-        let _: StatusResponse = try send([configureAlerts1])
-        podState.advanceToNextNonce()
+//        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepType: .beepBeepBeepBeep, beepRepeat: 2)
+//
+//        let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
+//        let _: StatusResponse = try send([configureAlerts1])
+//        podState.advanceToNextNonce()
         
         //7837 0005 0802
         let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepType: .beeepBeeep, beepRepeat: 2)
@@ -338,7 +337,7 @@ public class PodCommsSession {
             log.info("Interrupted bolus: %@", String(describing: unfinalizedBolus))
         }
         
-        podState.updateDeliveryStatus(deliveryStatus: status.deliveryStatus)
+        podState.updateStatus(status)
 
         podState.advanceToNextNonce()
         
@@ -396,7 +395,7 @@ public class PodCommsSession {
         
         let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
-        podState.updateDeliveryStatus(deliveryStatus: status.deliveryStatus)
+        podState.updateStatus(status)
         
         return status
     }
@@ -444,11 +443,11 @@ public class PodCommsSession {
         
         do {
             let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-            podState.lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
+            podState.updateStatus(response)
             return response
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             let response: StatusResponse = try send([GetStatusCommand()])
+            podState.updateStatus(response)
             return response
         }
     }
@@ -462,6 +461,17 @@ public class PodCommsSession {
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         return try send([deactivatePod])
     }
+    
+    public func acknowledgeAlarms(alarms: PodAlarmState) throws -> StatusResponse {
+        
+        let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alarms: alarms)
+        let status: StatusResponse = try send([cmd])
+
+        podState.advanceToNextNonce()
+
+        return status
+    }
+
     
     func storeFinalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
         if storageHandler(podState.finalizedDoses) {

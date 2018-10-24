@@ -13,6 +13,15 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
     
     @IBOutlet private weak var timeLabel: UILabel!
     @IBOutlet private weak var progressRing: RingProgressView!
+    
+    @IBOutlet private weak var alertLabel: UILabel! {
+        didSet {
+            alertLabel.alpha = 0
+            alertLabel.textColor = UIColor.white
+            alertLabel.layer.cornerRadius = 9
+            alertLabel.clipsToBounds = true
+        }
+    }
 
     private var startTime: Date?
     private var lifetime: TimeInterval?

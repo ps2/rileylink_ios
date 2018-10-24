@@ -6,14 +6,6 @@
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
 
-//
-//  GetStatusCommand.swift
-//  OmniKit
-//
-//  Created by Pete Schwamb on 10/14/17.
-//  Copyright © 2017 Pete Schwamb. All rights reserved.
-//
-
 import Foundation
 
 public struct AcknowledgeAlertCommand : MessageBlock {
@@ -22,11 +14,11 @@ public struct AcknowledgeAlertCommand : MessageBlock {
     public let blockType: MessageBlockType = .acknowledgeAlert
     public let length: UInt8 = 5
     public var nonce: UInt32
-    public let beepType: ConfigureAlertsCommand.BeepType
+    public let alarms: PodAlarmState
     
-    public init(nonce: UInt32, beepType: ConfigureAlertsCommand.BeepType) {
+    public init(nonce: UInt32, alarms: PodAlarmState) {
         self.nonce = nonce
-        self.beepType = beepType
+        self.alarms = alarms
     }
     
     public init(encodedData: Data) throws {
@@ -34,10 +26,7 @@ public struct AcknowledgeAlertCommand : MessageBlock {
             throw MessageBlockError.notEnoughData
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
-        guard ConfigureAlertsCommand.BeepType(rawValue: encodedData[6] >> 2) != nil else {
-            throw MessageError.unknownValue(value: 1 >> encodedData[6], typeDescription: "BeepType")
-        }
-        self.beepType = ConfigureAlertsCommand.BeepType(rawValue: encodedData[6] >> 2)!
+        self.alarms = PodAlarmState(rawValue: encodedData[6])
     }
     
     public var data:  Data {
@@ -46,7 +35,7 @@ public struct AcknowledgeAlertCommand : MessageBlock {
             length
             ])
         data.appendBigEndian(nonce)
-        data.append(UInt8(1<<beepType.rawValue))
+        data.append(alarms.rawValue)
         return data
     }
 }

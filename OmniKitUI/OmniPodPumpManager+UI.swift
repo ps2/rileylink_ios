@@ -34,7 +34,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         {
             let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
             reservoirView.reservoirLevel = reservoirLevel
-            reservoirView.setReservoirVolume(volume: reservoirVolume, at: lastInsulinMeasurements.validTime)
+            let reservoirAlertState: ReservoirAlertState = state.podState.alarms.contains(.lowReservoir) ? .lowReservoir : .ok
+            reservoirView.reservoirStateDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
         }
         self.addReservoirVolumeObserver(reservoirView)
         
@@ -57,6 +58,7 @@ extension OmnipodPumpManager: PumpManagerUI {
             "pumpReservoirCapacity": pumpReservoirCapacity,
             "podActivatedAt": state.podState.activatedAt,
             "lifetime": state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt),
+            "alarms": state.podState.alarms.rawValue
         ]
         
         if let lastInsulinMeasurements = state.podState.lastInsulinMeasurements {
@@ -70,11 +72,13 @@ extension OmnipodPumpManager: PumpManagerUI {
     public static func createHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double,
             let podActivatedAt = rawValue["podActivatedAt"] as? Date,
-            let lifetime = rawValue["lifetime"] as? Double else
+            let lifetime = rawValue["lifetime"] as? Double,
+            let rawAlarms = rawValue["alarms"] as? UInt8 else
         {
             return []
         }
         
+        let alarms = PodAlarmState(rawValue: rawAlarms)
         let reservoirVolume = rawValue["reservoirVolume"] as? Double
         let reservoirVolumeValidTime = rawValue["reservoirVolumeValidTime"] as? Date
         
@@ -85,7 +89,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         {
             let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
             reservoirView.reservoirLevel = reservoirLevel
-            reservoirView.setReservoirVolume(volume: reservoirVolume, at: reservoirVolumeValidTime)
+            let reservoirAlertState: ReservoirAlertState = alarms.contains(.lowReservoir) ? .lowReservoir : .ok
+            reservoirView.reservoirStateDidChange(reservoirVolume, at: reservoirVolumeValidTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
         }
         
         let podLifeHUDView = PodLifeHUDView.instantiate()

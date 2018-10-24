@@ -22,6 +22,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let lot: UInt32
     public let tid: UInt32
     public var basalSchedule: BasalSchedule?
+    public var alarms: PodAlarmState
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     var unfinalizedBolus: UnfinalizedDose?
     var unfinalizedTempBasal: UnfinalizedDose?
@@ -50,6 +51,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.suspended = false
         self.basalSchedule = nil
         self.fault = nil
+        self.alarms = .none
     }
     
     public mutating func advanceToNextNonce() {
@@ -66,7 +68,13 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
     
-    public mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
+    public mutating func updateStatus(_ response: StatusResponse) {
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
+        alarms = response.alarms
+    }
+    
+    private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
         let now = Date()
         
         if let bolus = unfinalizedBolus {
@@ -180,6 +188,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.expiresAt = activatedAt.addingTimeInterval(podSoftExpirationTime)
         }
+        
+        if let alarmsRawValue = rawValue["alarms"] as? UInt8 {
+            self.alarms = PodAlarmState(rawValue: alarmsRawValue)
+        } else {
+            self.alarms = .none
+        }
     }
     
     public var rawValue: RawValue {
@@ -194,7 +208,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "lot": lot,
             "tid": tid,
             "suspended": suspended,
-            "finalizedDoses": finalizedDoses.map( { $0.rawValue })
+            "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
+            "alarms": alarms.rawValue
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -238,7 +253,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "finalizedDoses: \(String(describing: finalizedDoses))",
             "basalSchedule: \(String(describing: basalSchedule))",
-            "fault \(String(describing: fault))",
+            "fault: \(String(describing: fault))",
+            "alarms: \(String(describing: alarms))",
             "",
             ].joined(separator: "\n")
     }

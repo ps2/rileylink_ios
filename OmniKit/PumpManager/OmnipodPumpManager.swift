@@ -12,8 +12,14 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
+public enum ReservoirAlertState {
+    case ok
+    case lowReservoir
+    case empty
+}
+
 public protocol ReservoirVolumeObserver: AnyObject {
-    func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?)
+    func reservoirStateDidChange(_ units: Double, at validTime: Date, level: Double?, reservoirAlertState: ReservoirAlertState)
 }
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
@@ -116,6 +122,28 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: self.status)
             } catch (let error) {
                 completion(PumpManagerResult.failure(error))
+            }
+        }
+    }
+    
+    
+    public func acknowledgeAlarms(_ alarmsToAcknowledge: PodAlarmState, completion: @escaping (_ status: StatusResponse?) -> Void) {
+        let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Acknowledge Alarms", using: rileyLinkSelector) { (result) in
+            let session: PodCommsSession
+            switch result {
+            case .success(let s):
+                session = s
+            case .failure:
+                completion(nil)
+                return
+            }
+            
+            do {
+                let status = try session.acknowledgeAlarms(alarms: alarmsToAcknowledge)
+                completion(status)
+            } catch {
+                completion(nil)
             }
         }
     }
@@ -308,7 +336,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             {
                 for observer in (reservoirVolumeObservers.allObjects.compactMap { $0 as? ReservoirVolumeObserver }) {
                     let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
-                    observer.reservoirVolumeDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel)
+                    let reservoirAlert: ReservoirAlertState = state.podState.alarms.contains(.lowReservoir) ? .lowReservoir : .ok
+                    observer.reservoirStateDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlert)
                 }
             }
 

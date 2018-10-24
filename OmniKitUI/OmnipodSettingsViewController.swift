@@ -46,6 +46,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(AlarmsTableViewCell.self, forCellReuseIdentifier: AlarmsTableViewCell.className)
         
         let imageView = UIImageView(image: podImage)
         imageView.contentMode = .center
@@ -248,24 +249,36 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             cell.accessoryType = .disclosureIndicator
             return cell
         case .status:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-            
-            switch StatusRow(rawValue: indexPath.row)! {
-            case .deliveryStatus:
-                cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivery status")
-            case .podStatus:
-                cell.textLabel?.text = NSLocalizedString("Pod Status", comment: "The title of the cell showing pod status")
-            case .alarms:
+            let statusRow = StatusRow(rawValue: indexPath.row)!
+            if statusRow == .alarms {
+                let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableViewCell.className, for: indexPath) as! AlarmsTableViewCell
                 cell.textLabel?.text = NSLocalizedString("Alarms", comment: "The title of the cell showing alarm status")
-            case .reservoirLevel:
-                cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title of the cell showing reservoir status")
-            case .deliveredInsulin:
-                cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivered insulin")
-            case .insulinNotDelivered:
-                cell.textLabel?.text = NSLocalizedString("Insulin Not Delivered", comment: "The title of the cell showing insulin not delivered")
+                if let podStatus = podStatus {
+                    cell.podAlarmState = podStatus.alarms
+                } else {
+                    cell.detailTextLabel?.text = ""
+                }
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                
+                switch statusRow {
+                case .deliveryStatus:
+                    cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivery status")
+                case .podStatus:
+                    cell.textLabel?.text = NSLocalizedString("Pod Status", comment: "The title of the cell showing pod status")
+                case .reservoirLevel:
+                    cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title of the cell showing reservoir status")
+                case .deliveredInsulin:
+                    cell.textLabel?.text = NSLocalizedString("Delivery", comment: "The title of the cell showing delivered insulin")
+                case .insulinNotDelivered:
+                    cell.textLabel?.text = NSLocalizedString("Insulin Not Delivered", comment: "The title of the cell showing insulin not delivered")
+                default:
+                    break
+                }
+                cell.setStatusDetail(podStatus: podStatus, statusRow: StatusRow(rawValue: indexPath.row)!)
+                return cell
             }
-            cell.setStatusDetail(podStatus: podStatus, statusRow: StatusRow(rawValue: indexPath.row)!)
-            return cell
         case .rileyLinks:
             return super.tableView(tableView, cellForRowAt: indexPath)
         case .deactivate:
@@ -281,8 +294,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
-        case .info, .status:
+        case .info:
             return false
+        case .status:
+            switch StatusRow(rawValue: indexPath.row)! {
+            case .alarms:
+                return true
+            default:
+                return false
+            }
         case .configuration, .rileyLinks, .deactivate:
             return true
         }
@@ -292,8 +312,27 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let sender = tableView.cellForRow(at: indexPath)
         
         switch Section(rawValue: indexPath.section)! {
-        case .info, .status:
+        case .info:
             break
+        case .status:
+            switch StatusRow(rawValue: indexPath.row)! {
+            case .alarms:
+                if let cell = tableView.cellForRow(at: indexPath) as? AlarmsTableViewCell {
+                    cell.isLoading = true
+                    cell.isEnabled = false
+                    pumpManager.acknowledgeAlarms(cell.podAlarmState) { (status) in
+                        DispatchQueue.main.async {
+                            cell.isLoading = false
+                            cell.isEnabled = true
+                            if let status = status {
+                                cell.podAlarmState = status.alarms
+                            }
+                        }
+                    }
+                }
+            default:
+                break
+            }
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -412,6 +451,59 @@ private extension TimeInterval {
         
         return formatter.string(from: self)
     }
+}
+
+class AlarmsTableViewCell: LoadingTableViewCell {
+    
+    private var defaultDetailColor: UIColor?
+
+    override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: .value1, reuseIdentifier: reuseIdentifier)
+        detailTextLabel?.tintAdjustmentMode = .automatic
+        defaultDetailColor = detailTextLabel?.textColor
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private func updateColor() {
+        if podAlarmState == .none {
+            detailTextLabel?.textColor = defaultDetailColor
+        } else {
+            detailTextLabel?.textColor = tintColor
+        }
+    }
+    
+    public var isEnabled = true {
+        didSet {
+            selectionStyle = isEnabled ? .default : .none
+        }
+    }
+    
+    override public func loadingStatusChanged() {
+        self.detailTextLabel?.isHidden = isLoading
+    }
+    
+    var podAlarmState: PodAlarmState = .none {
+        didSet {
+            updateColor()
+            detailTextLabel?.text = String(describing: podAlarmState)
+//            detailTextLabel?.tintAdjustmentMode = .dimmed
+            //detailTextLabel?.tintAdjustmentMode = (podAlarmState == .none) ? .dimmed : .normal
+        }
+    }
+    
+    open override func tintColorDidChange() {
+        super.tintColorDidChange()
+        updateColor()
+    }
+    
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateColor()
+    }
+
 }
 
 

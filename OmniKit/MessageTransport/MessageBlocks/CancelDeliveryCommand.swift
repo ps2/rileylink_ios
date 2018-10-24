@@ -33,6 +33,23 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     // Deactivate pod:
     // 1f 05 e1f78752 07
     
+    public struct DeliveryType: OptionSet, Equatable {
+        public let rawValue: UInt8
+        
+        public static let none          = DeliveryType(rawValue: 0)
+        public static let basal         = DeliveryType(rawValue: 1 << 0)
+        public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
+        public static let bolus         = DeliveryType(rawValue: 1 << 2)
+        public static let extendedBolus = DeliveryType(rawValue: 1 << 3)
+        
+        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
+        
+        public init(rawValue: UInt8) {
+            self.rawValue = rawValue
+        }
+        
+    }
+    
     public let deliveryType: DeliveryType
     
     public let beepType: ConfigureAlertsCommand.BeepType

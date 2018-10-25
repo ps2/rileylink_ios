@@ -45,7 +45,7 @@ public struct LogEventErrorCode: CustomStringConvertible, Equatable {
         } else {
             eventErrorDescription = "Unknown Log Error State"
         }
-        return String(format: "Log Event Error Code %02x: %@", rawValue, eventErrorDescription)
+        return String(format: "Log Event Error Code 0x%02x: %@", rawValue, eventErrorDescription)
     }
     
     init(rawValue: UInt8) {

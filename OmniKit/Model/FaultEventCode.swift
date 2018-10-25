@@ -337,6 +337,6 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         } else {
             faultDescription = "Unknown Fault"
         }
-        return String(format: "Fault Event Code %02x: %@", rawValue, faultDescription)
+        return String(format: "Fault Event Code 0x%02x: %@", rawValue, faultDescription)
     }
 }

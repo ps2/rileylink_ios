@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum PodAlarm: UInt8 {
+public enum PodAlarm: UInt8, CustomStringConvertible {
     case podExpired      = 0b10000000
     case suspendExpired  = 0b01000000
     case suspended       = 0b00100000
@@ -22,6 +22,27 @@ public enum PodAlarm: UInt8 {
     
     static var allCases: AllCases {
         return (0..<8).map { PodAlarm(rawValue: 1<<$0)! }
+    }
+    
+    public var description: String {
+        switch self {
+        case .podExpired:
+            return LocalizedString("Pod Expired", comment: "Pod alarm when pod expires")
+        case .suspendExpired:
+            return LocalizedString("Suspend Expired", comment: "Pod alarm when suspend has expired")
+        case .suspended:
+            return LocalizedString("Suspended", comment: "Pod alarm when pod has suspended")
+        case .lowReservoir:
+            return LocalizedString("Low Reservoir", comment: "Pod alarm when reservoir is low")
+        case .oneHourExpiry:
+            return LocalizedString("One Hour Expiry", comment: "Pod alarm for one hour expiry")
+        case .podDeactivated:
+            return LocalizedString("One Hour Expiry", comment: "Pod alarm for deactivated pod")
+        case .unknownBit2:
+            return LocalizedString("Unknown Alarm 2", comment: "Pod alarm for unknown bit2")
+        case .unknownBit1:
+            return LocalizedString("Unknown Alarm 1", comment: "Pod alarm for unknown bit1")
+        }
     }
 }
 

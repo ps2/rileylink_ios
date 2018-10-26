@@ -253,8 +253,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
             "* basalSchedule: \(String(describing: basalSchedule))",
-            "* fault: \(String(describing: fault))",
             "* alarms: \(String(describing: alarms))",
+            "",
+            fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",
             ].joined(separator: "\n")
     }

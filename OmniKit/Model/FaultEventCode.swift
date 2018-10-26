@@ -131,7 +131,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
             faultDescription = {
                 switch faultType {
                 case .noFaults:
-                    return "No faults, system running normally"
+                    return "No fault"
                 case .failedFlashErase:
                     return "Flash erase failed in $4x00 page"
                 case .failedFlashStore:

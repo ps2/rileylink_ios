@@ -11,12 +11,8 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
-public protocol BatteryLevelObserver: AnyObject {
-    func batteryLevelDidChange(_ newValue: Double)
-}
-
-public protocol ReservoirVolumeObserver: AnyObject {
-    func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?)
+public protocol MinimedPumpManagerStateObserver {
+    func didUpdatePumpManagerState(_ state: MinimedPumpManagerState)
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
@@ -26,10 +22,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
         self.isBolusing = false
-        
-        self.batteryLevelObservers = NSHashTable<AnyObject>.weakObjects()
-        
-        self.reservoirVolumeObservers = NSHashTable<AnyObject>.weakObjects()
         
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
@@ -69,17 +61,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return state.rawValue
     }
     
-    private var batteryLevelObservers: NSHashTable<AnyObject>
-    
-    public func addBatteryLevelObserver(_ observer: BatteryLevelObserver) {
-        batteryLevelObservers.add(observer)
-    }
-
-    private var reservoirVolumeObservers: NSHashTable<AnyObject>
-    
-    public func addReservoirVolumeObserver(_ observer: ReservoirVolumeObserver) {
-        reservoirVolumeObservers.add(observer)
-    }
+    public var stateObserver: MinimedPumpManagerStateObserver?
 
     // TODO: apply lock
     public private(set) var state: MinimedPumpManagerState {
@@ -92,22 +74,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 self.notifyStatusChanged()
             }
             
-            if oldValue.batteryPercentage != state.batteryPercentage,
-                let batteryPercentage = state.batteryPercentage
-            {
-                for observer in (batteryLevelObservers.allObjects.compactMap { $0 as? BatteryLevelObserver }) {
-                    observer.batteryLevelDidChange(batteryPercentage)
-                }
-            }
-            
-            if oldValue.lastReservoirReading != state.lastReservoirReading,
-                let reservoirReading = state.lastReservoirReading
-            {
-                for observer in (reservoirVolumeObservers.allObjects.compactMap { $0 as? ReservoirVolumeObserver }) {
-                    let reservoirLevel = min(1, max(0, reservoirReading.units / pumpReservoirCapacity))
-                    observer.reservoirVolumeDidChange(reservoirReading.units, at: reservoirReading.validAt, level: reservoirLevel)
-                }
-            }
+            stateObserver?.didUpdatePumpManagerState(state)
         }
     }
     

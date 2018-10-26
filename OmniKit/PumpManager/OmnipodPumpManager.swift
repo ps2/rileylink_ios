@@ -18,8 +18,8 @@ public enum ReservoirAlertState {
     case empty
 }
 
-public protocol ReservoirVolumeObserver: AnyObject {
-    func reservoirStateDidChange(_ units: Double, at validTime: Date, level: Double?, reservoirAlertState: ReservoirAlertState)
+public protocol PodStateObserver: class {
+    func didUpdatePodState(_ state: PodState)
 }
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
@@ -34,11 +34,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     private var lastPumpDataReportDate: Date?
     
-    private var reservoirVolumeObservers: NSHashTable<AnyObject>
-    
-    public func addReservoirVolumeObserver(_ observer: ReservoirVolumeObserver) {
-        reservoirVolumeObservers.add(observer)
-    }
+    public weak var podStateObserver: PodStateObserver?
     
     public func assertCurrentPumpData() {
         
@@ -276,8 +272,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state
         
-        self.reservoirVolumeObservers = NSHashTable<AnyObject>.weakObjects()
-        
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
             manufacturer: "Insulet",
@@ -326,21 +320,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public private(set) var state: OmnipodPumpManagerState {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+            
             if oldValue.podState.timeZone != state.podState.timeZone || oldValue.podState.suspended != state.podState.suspended {
                 self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
             }
-            
-            if oldValue.podState.lastInsulinMeasurements != state.podState.lastInsulinMeasurements,
-                let lastInsulinMeasurements = state.podState.lastInsulinMeasurements,
-                let reservoirVolume = lastInsulinMeasurements.reservoirVolume
-            {
-                for observer in (reservoirVolumeObservers.allObjects.compactMap { $0 as? ReservoirVolumeObserver }) {
-                    let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
-                    let reservoirAlert: ReservoirAlertState = state.podState.alarms.contains(.lowReservoir) ? .lowReservoir : .ok
-                    observer.reservoirStateDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlert)
-                }
-            }
-
         }
     }
     
@@ -354,7 +337,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             isSuspended: state.podState.suspended,
             isBolusing: state.podState.unfinalizedBolus != nil)
     }
-
+    
     public weak var pumpManagerDelegate: PumpManagerDelegate?
     
     public let log = OSLog(category: "OmnipodPumpManager")
@@ -413,6 +396,7 @@ extension OmnipodPumpManager: PodCommsDelegate {
     
     public func podComms(_ podComms: PodComms, didChange state: PodState) {
         self.state.podState = state
+        self.podStateObserver?.didUpdatePodState(state)
     }
 }
 

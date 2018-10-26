@@ -11,6 +11,10 @@ import LoopKitUI
 import OmniKit
 
 public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
+    
+    override public var orderPriority: HUDViewOrderPriority {
+        return 11
+    }
 
     @IBOutlet private weak var volumeLabel: UILabel!
     
@@ -30,21 +34,11 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
     override public func awakeFromNib() {
         super.awakeFromNib()
 
-        self.alpha = 0.0
-        self.isHidden = true
         volumeLabel.isHidden = true
     }
 
     public var reservoirLevel: Double? {
         didSet {
-            if oldValue == nil && reservoirLevel != nil {
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 1, animations: {
-                        self.alpha = 1.0
-                        self.isHidden = false
-                    })
-                }
-            }
             level = reservoirLevel
 
             switch reservoirLevel {
@@ -61,6 +55,13 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
             }
         }
     }
+    
+    override public func tintColorDidChange() {
+        super.tintColorDidChange()
+        
+        volumeLabel.textColor = tintColor
+    }
+
     
     private func updateColor() {
         switch reservoirAlertState {
@@ -84,7 +85,6 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
             
             updateColor()
             
-            print("setting alert state to: \(reservoirAlertState)")
             UIView.animate(withDuration: 0.25, animations: {
                 self.alertLabel.alpha = alertLabelAlpha
             })
@@ -107,7 +107,9 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
         return formatter
     }()
 
-    private func setReservoirVolume(volume: Double, at date: Date) {
+    public func updateReservoir(volume: Double, at date: Date, level: Double?, reservoirAlertState: ReservoirAlertState) {
+        self.reservoirLevel = level
+        
         if let units = numberFormatter.string(from: volume) {
             volumeLabel.text = String(format: LocalizedString("%@U", comment: "Format string for reservoir volume. (1: The localized volume)"), units)
             let time = timeFormatter.string(from: date)
@@ -115,16 +117,8 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
 
             accessibilityValue = String(format: LocalizedString("%1$@ units remaining at %2$@", comment: "Accessibility format string for (1: localized volume)(2: time)"), units, time)
         }
+        self.reservoirAlertState = reservoirAlertState
     }
 }
 
-extension OmnipodReservoirView: ReservoirVolumeObserver {
-    public func reservoirStateDidChange(_ units: Double, at validTime: Date, level: Double?, reservoirAlertState: ReservoirAlertState) {
-        DispatchQueue.main.async {
-            self.reservoirLevel = level
-            self.setReservoirVolume(volume: units, at: validTime)
-            self.reservoirAlertState = reservoirAlertState
-        }
-    }
-}
 

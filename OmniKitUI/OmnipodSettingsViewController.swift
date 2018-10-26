@@ -197,7 +197,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 return cell
             case .expiresAt:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = NSLocalizedString("Expires", comment: "The title of the cell showing the pod expiration")
+                if pumpManager.state.podState.expiresAt.timeIntervalSinceNow > 0 {
+                    cell.textLabel?.text = NSLocalizedString("Expires", comment: "The title of the cell showing the pod expiration")
+                } else {
+                    cell.textLabel?.text = NSLocalizedString("Expired", comment: "The title of the cell showing the pod expiration after expiry")
+                }
                 cell.setDetailDate(pumpManager.state.podState.expiresAt, formatter: dateFormatter)
                 return cell
             case .podAddress:

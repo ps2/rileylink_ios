@@ -10,7 +10,11 @@ import UIKit
 import LoopKitUI
 
 public class PodLifeHUDView: BaseHUDView, NibLoadable {
-    
+
+    override public var orderPriority: HUDViewOrderPriority {
+        return 12
+    }
+
     @IBOutlet private weak var timeLabel: UILabel!
     @IBOutlet private weak var progressRing: RingProgressView!
     

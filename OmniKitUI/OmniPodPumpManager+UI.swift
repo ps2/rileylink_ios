@@ -13,55 +13,87 @@ import LoopKit
 import LoopKitUI
 import OmniKit
 
-extension OmnipodPumpManager: PumpManagerUI {
+
+internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
+    var managerIdentifier: String {
+        return OmnipodPumpManager.managerIdentifier
+    }
+
+    public weak var delegate: HUDProviderDelegate?
     
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
-        return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
+    private var podState: PodState {
+        didSet {
+            if oldValue.lastInsulinMeasurements?.reservoirVolume == nil && podState.lastInsulinMeasurements?.reservoirVolume != nil {
+                reservoirView = OmnipodReservoirView.instantiate()
+                delegate?.newHUDViewsAvailable([reservoirView!])
+            }
+            
+            if oldValue.lastInsulinMeasurements != podState.lastInsulinMeasurements {
+                updateReservoirView()
+            }
+        }
     }
     
-    public func settingsViewController() -> UIViewController {
-        return OmnipodSettingsViewController(pumpManager: self)
+    private let pumpManager: OmnipodPumpManager
+    
+    private var reservoirView: OmnipodReservoirView?
+    
+    private var podLifeView: PodLifeHUDView?
+    
+    public init(pumpManager: OmnipodPumpManager) {
+        self.pumpManager = pumpManager
+        self.podState = pumpManager.state.podState
     }
     
-    public var smallImage: UIImage? {
-        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    private func updateReservoirView() {
+        if let lastInsulinMeasurements = podState.lastInsulinMeasurements,
+            let reservoirVolume = lastInsulinMeasurements.reservoirVolume,
+            let reservoirView = reservoirView
+        {
+            let reservoirLevel = min(1, max(0, reservoirVolume / pumpManager.pumpReservoirCapacity))
+            reservoirView.reservoirLevel = reservoirLevel
+            let reservoirAlertState: ReservoirAlertState = podState.alarms.contains(.lowReservoir) ? .lowReservoir : .ok
+            
+            reservoirView.updateReservoir(volume: reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
+        }
+    }
+    
+    private func updatePodLifeView() {
+        if let podLifeView = podLifeView {
+            let lifetime = podState.expiresAt.timeIntervalSince(podState.activatedAt)
+            podLifeView.setPodLifeCycle(startTime: podState.activatedAt, lifetime: lifetime)
+        }
     }
     
     public func createHUDViews() -> [BaseHUDView] {
-        let reservoirView = OmnipodReservoirView.instantiate()
-        if let lastInsulinMeasurements = state.podState.lastInsulinMeasurements,
-            let reservoirVolume = lastInsulinMeasurements.reservoirVolume
-        {
-            let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
-            reservoirView.reservoirLevel = reservoirLevel
-            let reservoirAlertState: ReservoirAlertState = state.podState.alarms.contains(.lowReservoir) ? .lowReservoir : .ok
-            reservoirView.reservoirStateDidChange(reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
+        if podState.lastInsulinMeasurements?.reservoirVolume != nil {
+            self.reservoirView = OmnipodReservoirView.instantiate()
+            self.updateReservoirView()
+            self.delegate?.newHUDViewsAvailable([self.reservoirView!])
         }
-        self.addReservoirVolumeObserver(reservoirView)
         
-        let podLifeHUDView = PodLifeHUDView.instantiate()
-        let lifetime = state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt)
-        podLifeHUDView.setPodLifeCycle(startTime: state.podState.activatedAt, lifetime: lifetime)
+        podLifeView = PodLifeHUDView.instantiate()
+        updatePodLifeView()
         
-        return [reservoirView, podLifeHUDView]
+        return [reservoirView, podLifeView].compactMap { $0 }
     }
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
         if let _ = view as? PodLifeHUDView {
-            return HUDTapAction.showViewController(settingsViewController())
+            return HUDTapAction.showViewController(pumpManager.settingsViewController())
         }
         return nil
     }
     
-    public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
-        var rawValue: PumpManagerUI.PumpManagerHUDViewsRawState = [
-            "pumpReservoirCapacity": pumpReservoirCapacity,
-            "podActivatedAt": state.podState.activatedAt,
-            "lifetime": state.podState.expiresAt.timeIntervalSince(state.podState.activatedAt),
-            "alarms": state.podState.alarms.rawValue
+    public var hudViewsRawState: HUDProvider.HUDViewsRawState {
+        var rawValue: HUDProvider.HUDViewsRawState = [
+            "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity,
+            "podActivatedAt": podState.activatedAt,
+            "lifetime": podState.expiresAt.timeIntervalSince(podState.activatedAt),
+            "alarms": podState.alarms.rawValue
         ]
         
-        if let lastInsulinMeasurements = state.podState.lastInsulinMeasurements {
+        if let lastInsulinMeasurements = podState.lastInsulinMeasurements {
             rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
             rawValue["reservoirVolumeValidTime"] = lastInsulinMeasurements.validTime
         }
@@ -69,7 +101,7 @@ extension OmnipodPumpManager: PumpManagerUI {
         return rawValue
     }
     
-    public static func createHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
+    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double,
             let podActivatedAt = rawValue["podActivatedAt"] as? Date,
             let lifetime = rawValue["lifetime"] as? Double,
@@ -90,13 +122,42 @@ extension OmnipodPumpManager: PumpManagerUI {
             let reservoirLevel = min(1, max(0, reservoirVolume / pumpReservoirCapacity))
             reservoirView.reservoirLevel = reservoirLevel
             let reservoirAlertState: ReservoirAlertState = alarms.contains(.lowReservoir) ? .lowReservoir : .ok
-            reservoirView.reservoirStateDidChange(reservoirVolume, at: reservoirVolumeValidTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
+            reservoirView.updateReservoir(volume: reservoirVolume, at: reservoirVolumeValidTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
         }
         
         let podLifeHUDView = PodLifeHUDView.instantiate()
         podLifeHUDView.setPodLifeCycle(startTime: podActivatedAt, lifetime: lifetime)
         
         return [reservoirView, podLifeHUDView]
+    }
+    
+    func didUpdatePodState(_ podState: PodState) {
+        DispatchQueue.main.async {
+            self.podState = podState
+        }
+    }
+}
+
+extension OmnipodPumpManager: PumpManagerUI {
+    
+    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
+        return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
+    }
+    
+    public func settingsViewController() -> UIViewController {
+        return OmnipodSettingsViewController(pumpManager: self)
+    }
+    
+    public var smallImage: UIImage? {
+        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    }
+    
+    public func hudProvider() -> HUDProvider? {
+        return OmnipodHUDProvider(pumpManager: self)
+    }
+    
+    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
+        return OmnipodHUDProvider.createHUDViews(rawValue: rawValue)
     }
 }
 

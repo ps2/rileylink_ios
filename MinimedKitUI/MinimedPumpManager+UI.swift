@@ -10,44 +10,71 @@ import LoopKit
 import LoopKitUI
 import MinimedKit
 
+class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
+    var managerIdentifier: String {
+        return MinimedPumpManager.managerIdentifier
+    }
 
-extension MinimedPumpManager: PumpManagerUI {
+    var delegate: HUDProviderDelegate?
     
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
-        return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+    private var state: MinimedPumpManagerState {
+        didSet {
+            if oldValue.batteryPercentage != state.batteryPercentage {
+                self.updateBatteryView()
+            }
+            
+            if oldValue.lastReservoirReading != state.lastReservoirReading {
+                self.updateReservoirView()
+            }
+        }
     }
-
-    public func settingsViewController() -> UIViewController {
-        return MinimedPumpSettingsViewController(pumpManager: self)
+    
+    private let pumpManager: MinimedPumpManager
+    
+    public init(pumpManager: MinimedPumpManager) {
+        self.pumpManager = pumpManager
+        self.state = pumpManager.state
+        pumpManager.stateObserver = self
     }
-
-    public var smallImage: UIImage? {
-        return state.smallPumpImage
+    
+    private weak var reservoirView: ReservoirVolumeHUDView?
+    
+    private weak var batteryView: BatteryLevelHUDView?
+    
+    private func updateReservoirView() {
+        if let lastReservoirVolume = state.lastReservoirReading,
+            let reservoirView = reservoirView
+        {
+            let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpManager.pumpReservoirCapacity))
+            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
+        }
+    }
+    
+    private func updateBatteryView() {
+        if let batteryView = batteryView {
+            batteryView.batteryLevel = state.batteryPercentage
+        }
     }
     
     public func createHUDViews() -> [BaseHUDView] {
-        let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
-        if let lastReservoirVolume = state.lastReservoirReading {
-            let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpReservoirCapacity))
-            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
-            reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
-        }
-        self.addReservoirVolumeObserver(reservoirVolumeHUDView)
         
-        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
-        batteryLevelHUDView.batteryLevel = state.batteryPercentage
-        self.addBatteryLevelObserver(batteryLevelHUDView)
+        reservoirView = ReservoirVolumeHUDView.instantiate()
+        updateReservoirView()
         
-        return [reservoirVolumeHUDView, batteryLevelHUDView]
+        batteryView = BatteryLevelHUDView.instantiate()
+        updateBatteryView()
+        
+        return [reservoirView, batteryView].compactMap { $0 }
     }
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
     }
-
-    public var hudViewsRawState: PumpManagerUI.PumpManagerHUDViewsRawState {
-        var rawValue: MinimedPumpManager.PumpManagerHUDViewsRawState = [
-            "pumpReservoirCapacity": pumpReservoirCapacity
+    
+    public var hudViewsRawState: HUDProvider.HUDViewsRawState {
+        var rawValue: HUDProvider.HUDViewsRawState = [
+            "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity
         ]
         
         if let batteryPercentage = state.batteryPercentage {
@@ -61,7 +88,7 @@ extension MinimedPumpManager: PumpManagerUI {
         return rawValue
     }
     
-    public static func createHUDViews(rawValue: PumpManagerUI.PumpManagerHUDViewsRawState) -> [BaseHUDView] {
+    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
             return []
         }
@@ -81,6 +108,34 @@ extension MinimedPumpManager: PumpManagerUI {
         batteryLevelHUDView.batteryLevel = batteryPercentage
         
         return [reservoirVolumeHUDView, batteryLevelHUDView]
+    }
+    
+    func didUpdatePumpManagerState(_ state: MinimedPumpManagerState) {
+        DispatchQueue.main.async {
+            self.state = state
+        }
+    }
+}
+
+extension MinimedPumpManager: PumpManagerUI {
+    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
+        return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+    }
+
+    public func settingsViewController() -> UIViewController {
+        return MinimedPumpSettingsViewController(pumpManager: self)
+    }
+
+    public var smallImage: UIImage? {
+        return state.smallPumpImage
+    }
+    
+    public func hudProvider() -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self)
+    }
+    
+    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
+        return MinimedHUDProvider.createHUDViews(rawValue: rawValue)
     }
 }
 
@@ -156,22 +211,5 @@ extension MinimedPumpManager {
 
     public func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
         return false
-    }
-}
-
-extension BatteryLevelHUDView: BatteryLevelObserver {
-    public func batteryLevelDidChange(_ newValue: Double) {
-        DispatchQueue.main.async {
-            self.batteryLevel = newValue
-        }
-    }
-}
-
-extension ReservoirVolumeHUDView: ReservoirVolumeObserver {
-    public func reservoirVolumeDidChange(_ units: Double, at validTime: Date, level: Double?) {
-        DispatchQueue.main.async {
-            self.reservoirLevel = level
-            self.setReservoirVolume(volume: units, at: validTime)
-        }
     }
 }

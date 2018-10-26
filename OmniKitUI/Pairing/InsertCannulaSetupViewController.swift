@@ -161,7 +161,6 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             switch result {
             case .success(let session):
                 do {
-                    // TODO: Need to get schedule from PumpManagerDelegate
                     let scheduleOffset = self.pumpManager.state.podState.timeZone.scheduleOffset(forDate: Date())
                     try session.insertCannula(basalSchedule: basal, scheduleOffset: scheduleOffset)
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {

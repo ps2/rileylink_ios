@@ -147,7 +147,7 @@ open class RingProgressLayer: CALayer {
         let w = min(ringWidth, squareSize / 2)
         let r = min(bounds.width, bounds.height) / 2 - w / 2
         let c = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
-        let p = max(0.0, disableProgressAnimation ? progress : presentation()?.progress ?? 0.0)
+        let p = max(0.0, disableProgressAnimation ? progress : presentation()?.progress ?? progress)
         let angleOffset = CGFloat.pi / 2
         let angle = 2 * .pi * p - angleOffset
         let minAngle = 1.1 * atan(0.5 * w / r)
@@ -157,7 +157,7 @@ open class RingProgressLayer: CALayer {
         let circlePath = UIBezierPath(ovalIn: circleRect)
 
         let angle1 = angle > maxAngle ? maxAngle : angle
-
+        
         ctx.setLineWidth(w)
         ctx.setLineCap(progressStyle.lineCap)
 

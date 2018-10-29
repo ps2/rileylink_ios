@@ -35,7 +35,10 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case corruptionInByte868                  = 0x16
         case corruptionInTab1or3or5or19           = 0x17
         case reservoirEmpty                       = 0x18
-        case unexpectedStateAfter80hours          = 0x1C
+        case badPowerSwitchArrayValue1            = 0x19
+        case badPowerSwitchArrayValue2            = 0x1A
+        case badLoadCnthValue                     = 0x1B
+        case exceededMaximumPodLife80Hrs          = 0x1C
         case wrongValue0x4008                     = 0x1D
         case table129SumWrong                     = 0x1F
         case problemCalibrateTimer                = 0x23
@@ -75,6 +78,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case trimICSTooCloseTo0x1FF               = 0x4B
         case problemFindingBestTrimValue          = 0x4C
         case badSetTPM1MultiCasesValue            = 0x4D
+        case badCheckSdrhAndByte11FState          = 0x51
         case issueTXOKprocessInputBuffer          = 0x52
         case wrongValueWord_107                   = 0x53
         case packetFrameLengthTooLong             = 0x54
@@ -114,6 +118,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case faultEventSetupPodType92             = 0x92
         case faultEventSetupPodType93             = 0x93
         case badValueField6in0x1A                 = 0x95
+        case valuesDoNotMatchOrAreGreaterThen0x96 = 0x96
+        case valuesDoNotMatchOrAreGreaterThen0x97 = 0x97
     }
     
     public var faultType: FaultEventType? {
@@ -173,9 +179,15 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .corruptionInTab1or3or5or19:
                     return "Corruption in Tab1[], Tab3[], Tab5[], Tab19[] or $A7[] tables or bad $BED or bad $72"
                 case .reservoirEmpty:
-                    return "Tab1[0] == 0 (reservoir empty)"
-                case .unexpectedStateAfter80hours:
-                    return "Unexpected internal state after Pod running 80 hours"
+                    return "Tab1[0] == 0 (reservoir empty) or Tab1[2] >= 0x10C4"
+                case .badPowerSwitchArrayValue1:
+                    return "Bad Power Switch Array Status and Control Register value 1 before starting pump"
+                case .badPowerSwitchArrayValue2:
+                    return "Bad Power Switch Array Status and Control Register value 2 before starting pump"
+                case .badLoadCnthValue:
+                    return "Bad LOADCNTH value when running pump"
+                case .exceededMaximumPodLife80Hrs:
+                    return "Exceeded maximum Pod life of 80 hours"
                 case .wrongValue0x4008:
                     return "Unexpected internal state command_1A_schedule_parse_routine_wrapper"
                 case .table129SumWrong:
@@ -187,7 +199,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .missing2hourAlertToFillTank:
                     return "Failed to set up 2 hour alert for tank fill operation"
                 case .faultEventSetupPod:
-                    return "Bad arg to update_insulin_variables(), problem inside verify_and_start_pump, bad state in main_loop_control_pump()"
+                    return "Bad arg or state in update_insulin_variables(), verify_and_start_pump() or main_loop_control_pump()"
                 case .errorMainLoopHelper0:
                     return "Error in big routine used by main_loop_helper_2($29+i[0])"
                 case .errorMainLoopHelper1:
@@ -254,6 +266,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Problem finding best trim value"
                 case .badSetTPM1MultiCasesValue:
                     return "Bad set_TPM1_multi_cases value"
+                case .badCheckSdrhAndByte11FState:
+                    return "Bad check_SDIRH and byte_11F state before starting pump"
                 case .issueTXOKprocessInputBuffer:
                     return "TXOK issue in process_input_buffer"
                 case .wrongValueWord_107:
@@ -271,11 +285,11 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .errorUpdating0x37ATable:
                     return "Error updating $37A table"
                 case .deliveryErrorDuringPriming:
-                    return "Delivery Error During Priming"
+                    return "Tab1[2] >= 0x34 in sub_D5AF"
                 case .badValue0x109:
                     return "Bad value for $109"
                 case .checkVoltageFailure:
-                    return "Failure in main_loop_control_pump(): check_LOAD_voltage()"
+                    return "Two check_LOAD_voltage failures before starting pump"
                 case .problemBigRoutine1Type60:
                     return "Problem inside big_routine_1"
                 case .problemBigRoutine1Type61:
@@ -293,45 +307,49 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .problemBigRoutine1Type6A:
                     return "Problem inside big_routine_1"
                 case .problemBasalUpdateType80:
-                    return "Basal pulse count too high when counter expired"
+                    return "Basal PPPP count too high when counter expired"
                 case .problemBasalUpdateType81:
-                    return "Basal pulse count too low when counter expired"
+                    return "Basal PPPP count too low when counter expired"
                 case .problemTempBasalUpdateType82:
-                    return "Temp basal pulse count too low when counter expired"
+                    return "Temp basal PPPP count too low when counter expired"
                 case .problemTempBasalUpdateType83:
-                    return "Temp basal pulse count too high when counter expired"
+                    return "Temp basal PPPP count too high when counter expired"
                 case .problemBolusUpdateType84:
-                    return "Bolus pulse count too high when counter expired"
+                    return "Bolus PPPP count too high when counter expired"
                 case .problemBolusUpdateType85:
-                    return "Bolus pulse count too low when counter expired"
+                    return "Bolus PPPP count too low when counter expired"
                 case .faultEventSetupPodType86:
-                    return "Bolus pulse count too low when about to pulse"
+                    return "Bolus PPPP count too low when about to pulse"
                 case .faultEventSetupPodType87:
-                    return "Temp basal count too low when about to pulse"
+                    return "Temp basal PPPP count too low when about to pulse"
                 case .faultEventSetupPodType88:
-                    return "Bad basal boolean state or bolus count too low when about to pulse"
+                    return "Pump request 3 with bolus IST index # not 0 or bolus PPPP count too low when about to pulse"
                 case .faultEventSetupPodType89:
-                    return "Basal' boolean is unexpectedly set when about to pulse"
+                    return "Pump request 4 and bolus IST index # is 0 about to pulse"
                 case .faultEventSetupPodType8A:
-                    return "Bolus count too low when about to pulse"
+                    return "Pump request 4 and bolus PPPP count too low when about to pulse"
                 case .corruptionOfTables:
                     return "Corruption of $283, $2E3, $315 table"
                 case .faultEventSetupPodType8D:
                     return "Bad input value to verify_and_start_pump"
                 case .faultEventSetupPodType8E:
-                    return "Pump request 5 with either basal' clear or temp basal' set"
+                    return "Pump req 5 with basal IST not set or temp basal IST set"
                 case .faultEventSetupPodType8F:
                     return "Command $1A parse routine unexpected failed"
                 case .badValueForTables:
                     return "Bad value for $283/$2E3/$315 table specification"
                 case .faultEventSetupPodType91:
-                    return "Pump request ~5 with basal' boolean not set"
+                    return "Pump request 1 with temp basal IST not set"
                 case .faultEventSetupPodType92:
-                    return "Pump request 2 with temp basal' boolean not set"
+                    return "Pump request 2 with temp basal IST not set"
                 case .faultEventSetupPodType93:
-                    return "Bolus' boolean is unexpectedly set when about to pulse"
+                    return "Pump request 3 and bolus IST not set when about to pulse"
                 case .badValueField6in0x1A:
                     return "Bad table specifier field6 in 1A command"
+                case .valuesDoNotMatchOrAreGreaterThen0x96:
+                    return "Byte_35D != 4 or byte_33D >= 2 in sub_5DAF or sub_B148"
+                case .valuesDoNotMatchOrAreGreaterThen0x97:
+                    return " Byte_35D != 4 or byte_33D >= 2 in sub_5DAF"
                 }
             }()
         } else {

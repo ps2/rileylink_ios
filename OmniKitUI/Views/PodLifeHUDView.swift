@@ -90,7 +90,8 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
                 timeLabel.isHidden = true
                 caption.text = LocalizedString("Pod Age", comment: "Label describing pod age view")
             } else if remaining > 0 {
-                if let timeString = timeFormatter.string(from: remaining) {
+                let remainingFlooredToHour = remaining > .hours(1) ? remaining - remaining.truncatingRemainder(dividingBy: .hours(1)) : remaining
+                if let timeString = timeFormatter.string(from: remainingFlooredToHour) {
                     timeLabel.isHidden = false
                     timeLabel.text = timeString
                 }

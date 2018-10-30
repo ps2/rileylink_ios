@@ -43,6 +43,7 @@ internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
     public init(pumpManager: OmnipodPumpManager) {
         self.pumpManager = pumpManager
         self.podState = pumpManager.state.podState
+        self.pumpManager.podStateObserver = self
     }
     
     private func updateReservoirView() {

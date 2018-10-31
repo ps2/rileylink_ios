@@ -68,7 +68,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
     }
     
-    public mutating func updateStatus(_ response: StatusResponse) {
+    public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
         alarms = response.alarms

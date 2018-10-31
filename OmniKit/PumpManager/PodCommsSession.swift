@@ -334,11 +334,11 @@ public class PodCommsSession {
             deliveryType.contains(.bolus),
             unfinalizedBolus.finishTime.compare(now) == .orderedDescending
         {
-            podState.unfinalizedBolus?.cancel(at: now)
+            podState.unfinalizedBolus?.cancel(at: now, withRemaining: status.insulinNotDelivered)
             log.info("Interrupted bolus: %@", String(describing: unfinalizedBolus))
         }
         
-        podState.updateStatus(status)
+        podState.updateFromStatusResponse(status)
 
         podState.advanceToNextNonce()
         
@@ -396,7 +396,7 @@ public class PodCommsSession {
         
         let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
-        podState.updateStatus(status)
+        podState.updateFromStatusResponse(status)
         
         return status
     }
@@ -444,11 +444,11 @@ public class PodCommsSession {
         
         do {
             let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateStatus(response)
+            podState.updateFromStatusResponse(response)
             return response
         } catch PodCommsError.podAckedInsteadOfReturningResponse {
             let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateStatus(response)
+            podState.updateFromStatusResponse(response)
             return response
         }
     }
@@ -474,12 +474,11 @@ public class PodCommsSession {
     }
 
     
-    func storeFinalizeDoses(deliveryStatus: StatusResponse.DeliveryStatus, storageHandler: ([UnfinalizedDose]) -> Bool) {
+    func storeFinalizedDoses(_ storageHandler: ([UnfinalizedDose]) -> Bool) {
         if storageHandler(podState.finalizedDoses) {
             log.info("Finalized %@", String(describing: podState.finalizedDoses))
             self.podState.finalizedDoses.removeAll()
         }
     }
-    
 }
 

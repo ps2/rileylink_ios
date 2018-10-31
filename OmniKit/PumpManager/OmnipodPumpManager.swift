@@ -53,9 +53,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     case .success(let session):
                         let status = try session.getStatus()
                         
-                        session.storeFinalizeDoses(deliveryStatus: status.deliveryStatus, storageHandler: { (doses) -> Bool in
+                        session.storeFinalizedDoses() { (doses) -> Bool in
                             return self.store(doses: doses)
-                        })
+                        }
 
                         if let reservoirLevel = status.reservoirLevel {
                             let semaphore = DispatchSemaphore(value: 0)
@@ -93,9 +93,15 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 let status = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                 completion(PumpManagerResult.success(status.deliveryStatus == .suspended))
                 self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: self.status)
+                
+                session.storeFinalizedDoses() { (doses) -> Bool in
+                    return self.store(doses: doses)
+                }
+
             } catch (let error) {
                 completion(PumpManagerResult.failure(error))
             }
+        
         }
     }
     
@@ -185,10 +191,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(SetBolusError.certain(PodCommsError.unfinalizedBolus))
                 return
             }
-            
-            session.storeFinalizeDoses(deliveryStatus: podStatus.deliveryStatus, storageHandler: { ( _ ) -> Bool in
-                return false
-            })
             
             willRequest(enactUnits, Date())
             

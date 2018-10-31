@@ -86,13 +86,17 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledUnits = nil
     }
     
-    public mutating func cancel(at date: Date) {
+    public mutating func cancel(at date: Date, withRemaining remaining: Double? = nil) {
         scheduledUnits = units
         let oldRate = rate
         duration = date.timeIntervalSince(startTime)
-        units = oldRate * duration.hours
+        if let remaining = remaining {
+            units = units - remaining
+        } else {
+            units = oldRate * duration.hours 
+        }
     }
-    
+
     public var description: String {
         let unitsStr = insulinFormatter.string(from: units) ?? "?"
         let startTimeStr = dateFormatter.string(from: startTime)
@@ -124,21 +128,30 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             else {
                 return nil
         }
+        
         self.doseType = doseType
         self.units = units
         self.startTime = startTime
         self.duration = TimeInterval(duration)
         self.scheduledCertainty = scheduledCertainty
+        
+        if let scheduledUnits = rawValue["scheduledUnits"] as? Double {
+            self.scheduledUnits = scheduledUnits
+        }
     }
     
     public var rawValue: RawValue {
-        let rawValue: RawValue = [
+        var rawValue: RawValue = [
             "doseType": doseType.rawValue,
             "units": units,
             "startTime": startTime,
             "duration": duration,
             "scheduledCertainty": scheduledCertainty.rawValue
             ]
+        
+        if let scheduledUnits = scheduledUnits {
+           rawValue["scheduledUnits"] = scheduledUnits
+        }
         
         return rawValue
     }

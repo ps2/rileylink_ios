@@ -18,6 +18,12 @@ public protocol MinimedPumpManagerStateObserver {
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     public static let managerIdentifier: String = "Minimed500"
+    
+    /*
+     It takes a MM pump about 40s to deliver 1 Unit while bolusing
+     See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
+     */
+    private static let deliveryUnitsPerMinute = 1.5
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
@@ -525,7 +531,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     // TODO: Isolate to queue
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ units: Double, _ date: Date) -> Void, completion: @escaping (_ error: Error?) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ error: Error?) -> Void) {
         guard units > 0 else {
             completion(nil)
             return
@@ -572,7 +578,10 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     self.isSuspended = false
                 }
                 
-                willRequest(units, Date())
+                let date = Date()
+                let endDate = date.addingTimeInterval(.minutes(units / MinimedPumpManager.deliveryUnitsPerMinute))
+                let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
+                willRequest(dose)
 
                 try session.setNormalBolus(units: units)
                 completion(nil)

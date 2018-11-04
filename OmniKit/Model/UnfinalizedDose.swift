@@ -45,7 +45,11 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         timeFormatter.timeStyle = .medium
         return timeFormatter
     }
-
+    
+    fileprivate var uniqueKey: Data {
+        let keys: [Any] = [doseType.rawValue, startTime, scheduledUnits ?? units]
+        return NSKeyedArchiver.archivedData(withRootObject:keys)
+    }
     
     let doseType: DoseType
     var units: Double
@@ -170,15 +174,15 @@ private extension TimeInterval {
 }
 
 extension NewPumpEvent {
-    init(_ unfinalizedDose: UnfinalizedDose) {
-        let title = String(describing: unfinalizedDose)
+    init(_ dose: UnfinalizedDose) {
+        let title = String(describing: dose)
         let entry: DoseEntry
-        switch unfinalizedDose.doseType {
+        switch dose.doseType {
         case .bolus:
-            entry = DoseEntry(type: .bolus, startDate: unfinalizedDose.startTime, value: unfinalizedDose.units, unit: .units)
+            entry = DoseEntry(type: .bolus, startDate: dose.startTime, value: dose.units, unit: .units)
         case .tempBasal:
-            entry = DoseEntry(type: .tempBasal, startDate: unfinalizedDose.startTime, endDate: unfinalizedDose.finishTime, value: unfinalizedDose.rate, unit: .unitsPerHour)
+            entry = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.rate, unit: .unitsPerHour)
         }
-        self.init(date: unfinalizedDose.startTime, dose: entry, isMutable: false, raw: title.data(using: .utf8)!, title: title)
+        self.init(date: dose.startTime, dose: entry, isMutable: false, raw: dose.uniqueKey, title: title)
     }
 }

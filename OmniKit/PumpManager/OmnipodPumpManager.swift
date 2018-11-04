@@ -150,7 +150,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (Double, Date) -> Void, completion: @escaping (Error?) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (Error?) -> Void) {
         
         // Round to nearest supported volume
         let enactUnits = round(units / podPulseSize) * podPulseSize
@@ -192,7 +192,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            willRequest(enactUnits, Date())
+            let date = Date()
+            let endDate = date.addingTimeInterval(units / bolusDeliveryRate)
+            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
+            willRequest(dose)
             
             let result = session.bolus(units: enactUnits)
             

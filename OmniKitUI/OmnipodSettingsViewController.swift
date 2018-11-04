@@ -103,12 +103,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum Section: Int {
         case info = 0
+        case suspendResume
         case configuration
         case status
         case rileyLinks
         case deactivate
         
-        static let count = 5
+        static let count = 6
     }
     
     private enum InfoRow: Int {
@@ -151,6 +152,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .info:
             return InfoRow.count
+        case .suspendResume:
+            return 1
         case .configuration:
             return ConfigurationRow.count
         case .status:
@@ -166,6 +169,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .info:
             return NSLocalizedString("Device Information", comment: "The title of the device information section in settings")
+        case .suspendResume:
+            return nil
         case .configuration:
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .status:
@@ -181,7 +186,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .configuration, .status, .deactivate:
+        case .info, .suspendResume, .configuration, .status, .deactivate:
             return nil
         }
     }
@@ -230,6 +235,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.detailTextLabel?.text = pumpManager.state.podState.pmVersion
                 return cell
             }
+        case .suspendResume:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
+            cell.option = pumpManager.status.isSuspended ? .resume : .suspend
+            return cell
         case .configuration:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             
@@ -307,7 +316,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             default:
                 return false
             }
-        case .configuration, .rileyLinks, .deactivate:
+        case .configuration, .suspendResume, .rileyLinks, .deactivate:
             return true
         }
     }
@@ -318,6 +327,41 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             break
+        case .suspendResume:
+            if let cell = tableView.cellForRow(at: indexPath) as? SuspendResumeTableViewCell
+            {
+                cell.isLoading = true
+                cell.isEnabled = false
+                switch cell.option {
+                case .resume:
+                    pumpManager.resumeDelivery { (result) in
+                        DispatchQueue.main.async {
+                            cell.isEnabled = true
+                            cell.isLoading = false
+                            if case .failure(let error) = result {
+                                let alert = UIAlertController(nibName: NSLocalizedString("Error Resuming", comment: "The alert title for a resume error"), bundle: error as? Bundle)
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                self.tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    }
+                case .suspend:
+                    pumpManager.suspendDelivery { (result) in
+                        DispatchQueue.main.async {
+                            cell.isEnabled = true
+                            cell.isLoading = false
+                            if case .failure(let error) = result {
+                                let alert = UIAlertController(nibName: NSLocalizedString("Error Suspending", comment: "The alert title for a suspend error"), bundle: error as? Bundle)
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                self.tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    }
+                }
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         case .status:
             switch StatusRow(rawValue: indexPath.row)! {
             case .alarms:
@@ -387,6 +431,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
         case .info, .status:
+            break
+        case .suspendResume:
             break
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
@@ -575,3 +621,21 @@ private extension UITableViewCell {
 
 }
 
+class SuspendResumeTableViewCell: TextButtonTableViewCell {
+    
+    enum Option {
+        case suspend
+        case resume
+    }
+    
+    var option: Option = .suspend {
+        didSet {
+            switch option {
+            case .suspend:
+                textLabel?.text = NSLocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
+            case .resume:
+                textLabel?.text = NSLocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
+            }
+        }
+    }
+}

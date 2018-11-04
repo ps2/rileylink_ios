@@ -34,7 +34,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 55
-
+        
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
 
@@ -59,11 +60,12 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     private enum Section: Int {
         case info = 0
+        case suspendResume
         case settings
         case rileyLinks
         case delete
 
-        static let count = 4
+        static let count = 5
     }
 
     private enum InfoRow: Int {
@@ -91,6 +93,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .info:
             return InfoRow.count
+        case .suspendResume:
+            return 1
         case .settings:
             return SettingsRow.count
         case .rileyLinks:
@@ -103,6 +107,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .info:
+            return nil
+        case .suspendResume:
             return nil
         case .settings:
             return LocalizedString("Configuration", comment: "The title of the configuration section in settings")
@@ -117,7 +123,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .delete:
+        case .info, .suspendResume, .settings, .delete:
             return nil
         }
     }
@@ -137,6 +143,10 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
                 return cell
             }
+        case .suspendResume:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
+            cell.option = pumpManager.status.isSuspended ? .resume : .suspend
+            return cell
         case .settings:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
 
@@ -180,7 +190,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             return false
-        case .settings, .rileyLinks, .delete:
+        case .settings, .suspendResume, .rileyLinks, .delete:
             return true
         }
     }
@@ -191,6 +201,42 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             break
+        case .suspendResume:
+            if let cell = tableView.cellForRow(at: indexPath) as? SuspendResumeTableViewCell
+            {
+                cell.isLoading = true
+                cell.isEnabled = false
+                switch cell.option {
+                case .resume:
+                    pumpManager.resumeDelivery { (result) in
+                        DispatchQueue.main.async {
+                            cell.isEnabled = true
+                            cell.isLoading = false
+                            if case .failure(let error) = result {
+                                let alert = UIAlertController(nibName: NSLocalizedString("Error Resuming", comment: "The alert title for a resume error"), bundle: error as? Bundle)
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                self.tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    }
+                case .suspend:
+                    pumpManager.suspendDelivery { (result) in
+                        DispatchQueue.main.async {
+                            cell.isEnabled = true
+                            cell.isLoading = false
+                            if case .failure(let error) = result {
+                                let alert = UIAlertController(nibName: NSLocalizedString("Error Suspending", comment: "The alert title for a suspend error"), bundle: error as? Bundle)
+                                self.present(alert, animated: true, completion: nil)
+                            } else {
+                                self.tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    }
+                }
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
+
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -239,6 +285,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
         case .info:
+            break
+        case .suspendResume:
             break
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
@@ -307,5 +355,24 @@ private extension UIAlertController {
 
         let cancel = LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+    }
+}
+
+class SuspendResumeTableViewCell: TextButtonTableViewCell {
+    
+    enum Option {
+        case suspend
+        case resume
+    }
+    
+    var option: Option = .suspend {
+        didSet {
+            switch option {
+            case .suspend:
+                textLabel?.text = NSLocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
+            case .resume:
+                textLabel?.text = NSLocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
+            }
+        }
     }
 }

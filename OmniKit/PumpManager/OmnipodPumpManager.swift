@@ -370,11 +370,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             ].joined(separator: "\n")
     }
     
-    // MARK: - Configuration
+    // MARK: - Pod comms
+    public private(set) var podComms: PodComms!
     
-    // MARK: Pump
-    
-    public private(set) var podComms: PodComms!    
+    // MARK: Testing
+    public static func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32) -> OmnipodPumpManager {
+        let connectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
+        let podState = PodState(address: address, activatedAt: Date(), expiresAt: Date().addingTimeInterval(.days(3)), timeZone: TimeZone.currentFixed, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+        let state = OmnipodPumpManagerState(podState: podState, rileyLinkConnectionManagerState: connectionManager.state)
+        return OmnipodPumpManager(state: state, rileyLinkDeviceProvider: connectionManager.deviceProvider)
+    }
+
 }
 
 extension OmnipodPumpManager: PodCommsDelegate {

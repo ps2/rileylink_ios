@@ -29,7 +29,11 @@ class TempBasalTests: XCTestCase {
         // 1a 12 9746c65b 01 00a9 21 3840 0000 f800 f800 0000
         XCTAssertEqual("1a129746c65b0100a92138400000f800f8000000", cmd3.data.hexadecimalString)
     }
-
+    
+    func testTempBasalThreeTenthsUnitPerHour() {
+        let cmd = SetInsulinScheduleCommand(nonce: 0xeac79411, tempBasalRate: 0.3, duration: .hours(0.5))
+        XCTAssertEqual("1a0eeac7941101007f01384000030003", cmd.data.hexadecimalString)
+    }
     
     func testSetTempBasalCommand() {
         do {

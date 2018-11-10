@@ -179,9 +179,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch Section(rawValue: section)! {
+        case .status:
+            if podStatus == nil {
+                return super.tableView(tableView, viewForHeaderInSection: section)
+            } else {
+                return nil
+            }
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .configuration, .status, .deactivate:
+        case .info, .configuration, .deactivate:
             return nil
         }
     }

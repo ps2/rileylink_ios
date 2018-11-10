@@ -47,7 +47,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(AlarmsTableViewCell.self, forCellReuseIdentifier: AlarmsTableViewCell.className)
-        
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
+
         let imageView = UIImageView(image: podImage)
         imageView.contentMode = .center
         imageView.frame.size.height += 18  // feels right

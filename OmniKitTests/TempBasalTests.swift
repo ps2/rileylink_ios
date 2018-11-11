@@ -13,6 +13,15 @@ import XCTest
 
 class TempBasalTests: XCTestCase {
     
+    func testRateQuantization() {
+        // Test previously failing case
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.15))
+        
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.15000000000000002))
+        
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.145))
+    }
+    
     func testAlternatingSegmentFlag() {
         // Encode 0.05U/hr 30mins
         let cmd = SetInsulinScheduleCommand(nonce: 0x9746c65b, tempBasalRate: 0.05, duration: .hours(0.5))

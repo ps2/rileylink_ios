@@ -153,7 +153,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (Error?) -> Void) {
         
         // Round to nearest supported volume
-        let enactUnits = round(units / podPulseSize) * podPulseSize
+        let enactUnits = OmnipodPumpManager.roundToDeliveryIncrement(units)
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
@@ -193,8 +193,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
             
             let date = Date()
-            let endDate = date.addingTimeInterval(units / bolusDeliveryRate)
-            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
+            let endDate = date.addingTimeInterval(enactUnits / bolusDeliveryRate)
+            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
             willRequest(dose)
             
             let result = session.bolus(units: enactUnits)
@@ -213,7 +213,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         
         // Round to nearest supported rate
-        let rate = round(unitsPerHour / podPulseSize) * podPulseSize
+        let rate = OmnipodPumpManager.roundToDeliveryIncrement(unitsPerHour)
         
         let rileyLinkSelector = rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
@@ -273,6 +273,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     public static let managerIdentifier: String = "Omnipod"
+    
+    public static func roundToDeliveryIncrement(_ units: Double) -> Double {
+        return round(units * pulsesPerUnit) / pulsesPerUnit
+    }
     
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state

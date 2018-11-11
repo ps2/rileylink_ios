@@ -19,6 +19,12 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     public static let managerIdentifier: String = "Minimed500"
     
+    private static let pulsesPerUnit = 20.0
+    
+    public static func roundToDeliveryIncrement(_ units: Double) -> Double {
+        return round(units * pulsesPerUnit) / pulsesPerUnit
+    }
+    
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing
      See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3

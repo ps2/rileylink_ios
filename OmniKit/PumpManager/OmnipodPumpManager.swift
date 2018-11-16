@@ -234,6 +234,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     throw PodCommsError.podSuspended
                 }
                 
+                if podStatus.deliveryStatus.bolusing {
+                    throw PodCommsError.unfinalizedBolus
+                }
+
                 if podStatus.deliveryStatus.tempBasalRunning {
                     let cancelStatus = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
 

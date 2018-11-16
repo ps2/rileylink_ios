@@ -55,7 +55,7 @@ extension PodCommsError: LocalizedError {
         case .noRileyLinkAvailable:
             return LocalizedString("No RileyLink available", comment: "Error message shown when no response from pod was received")
         case .unfinalizedBolus:
-            return LocalizedString("Bolus in progress", comment: "Error message shown when bolus could not be completed due to exiting bolus in progress")
+            return LocalizedString("Bolus in progress", comment: "Error message shown when operation could not be completed due to existing bolus in progress")
         case .unfinalizedTempBasal:
             return LocalizedString("Temp basal in progress", comment: "Error message shown when temp basal could not be set due to existing temp basal in progress")
         case .nonceResyncFailed:
@@ -94,9 +94,9 @@ extension PodCommsError: LocalizedError {
         case .noRileyLinkAvailable:
             return nil
         case .unfinalizedBolus:
-            return LocalizedString("Unable to issue concurrent boluses", comment: "Failure reason when bolus could not be completed due to existing bolus in progress")
+            return nil
         case .unfinalizedTempBasal:
-            return LocalizedString("Unable to issue concurrent temp basals", comment: "Failure reason when temp basal could not be set due to existing temp basal in progress")
+            return nil
         case .nonceResyncFailed:
             return nil
         case .missingBasalSchedule:
@@ -133,9 +133,9 @@ extension PodCommsError: LocalizedError {
         case .noRileyLinkAvailable:
             return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion when no RileyLink is available")
         case .unfinalizedBolus:
-            return LocalizedString("Wait for existing bolus to finish, or suspend to cancel", comment: "Recovery suggestion when bolus could not be completed due to existing bolus in progress")
+            return LocalizedString("Wait for existing bolus to finish, or suspend to cancel", comment: "Recovery suggestion when operation could not be completed due to existing bolus in progress")
         case .unfinalizedTempBasal:
-            return LocalizedString("Wait for existing temp basal to finish, or suspend to cancel", comment: "Recovery suggestion when temp basal could not be completed due to existing temp basal in progress")
+            return LocalizedString("Wait for existing temp basal to finish, or suspend to cancel", comment: "Recovery suggestion when operation could not be completed due to existing temp basal in progress")
         case .nonceResyncFailed:
             return nil
         case .missingBasalSchedule:

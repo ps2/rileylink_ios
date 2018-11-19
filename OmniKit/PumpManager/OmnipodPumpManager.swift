@@ -36,6 +36,28 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public weak var podStateObserver: PodStateObserver?
     
+    private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
+    
+    public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
+        queue.async {
+            self.statusObservers.add(observer)
+        }
+    }
+    
+    public func removeStatusObserver(_ observer: PumpManagerStatusObserver) {
+        queue.async {
+            self.statusObservers.remove(observer)
+        }
+    }
+    
+    private func notifyStatusObservers() {
+        let status = self.status
+        pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+        for observer in statusObservers {
+            observer.pumpManager(self, didUpdateStatus: status)
+        }
+    }
+    
     public func assertCurrentPumpData() {
         
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
@@ -90,15 +112,20 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
             
             do {
+                self.suspendState = .suspending
                 let status = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                 completion(PumpManagerResult.success(status.deliveryStatus == .suspended))
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: self.status)
+                
+                if self.suspendState == .suspending {
+                    self.suspendState = self.state.podState.suspended ? .suspended : .none
+                }
                 
                 session.storeFinalizedDoses() { (doses) -> Bool in
                     return self.store(doses: doses)
                 }
 
             } catch (let error) {
+                self.suspendState = self.state.podState.suspended ? .suspended : .none
                 completion(PumpManagerResult.failure(error))
             }
         
@@ -119,10 +146,16 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
             
             do {
+                self.suspendState = .resuming
                 let status = try session.resumeBasal()
                 completion(PumpManagerResult.success(status.deliveryStatus != .suspended))
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: self.status)
+                
+                if self.suspendState == .resuming {
+                    self.suspendState = self.state.podState.suspended ? .suspended : .none
+                }
+
             } catch (let error) {
+                self.suspendState = self.state.podState.suspended ? .suspended : .none
                 completion(PumpManagerResult.failure(error))
             }
         }
@@ -184,7 +217,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
                     return
                 }
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: self.status)
+                self.notifyStatusObservers()
             }
             
             guard !podStatus.deliveryStatus.bolusing else {
@@ -285,6 +318,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state
         
+        self.suspendState = state.podState.suspended ? .suspended : .none
+        
+        if let bolus = state.podState.unfinalizedBolus, bolus.finishTime.timeIntervalSinceNow < 0 {
+            self.bolusState = .bolusing(progress: Float(bolus.progress))
+        } else {
+            self.bolusState = .none
+        }
+        
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
             manufacturer: "Insulet",
@@ -334,21 +375,37 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
             
-            if oldValue.podState.timeZone != state.podState.timeZone || oldValue.podState.suspended != state.podState.suspended {
-                self.pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+            if oldValue.podState.suspended != state.podState.suspended {
+                suspendState = state.podState.suspended ? .suspended : .none
+            }
+
+            if oldValue.podState.timeZone != state.podState.timeZone {
+                notifyStatusObservers()
             }
         }
     }
     
     public var device: HKDevice?
     
+    private var suspendState: PumpManagerStatus.SuspendState {
+        didSet {
+            notifyStatusObservers()
+        }
+    }
+    
+    private var bolusState: PumpManagerStatus.BolusState {
+        didSet {
+            notifyStatusObservers()
+        }
+    }
+    
     public var status: PumpManagerStatus {
         return PumpManagerStatus(
             timeZone: state.podState.timeZone,
             device: device!,
             pumpBatteryChargeRemaining: nil,
-            isSuspended: state.podState.suspended,
-            isBolusing: state.podState.unfinalizedBolus != nil)
+            suspendState: suspendState,
+            bolusState: bolusState)
     }
     
     public weak var pumpManagerDelegate: PumpManagerDelegate?

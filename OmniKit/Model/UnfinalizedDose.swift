@@ -67,6 +67,11 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
     }
     
+    var progress: Double {
+        let elapsed = -startTime.timeIntervalSinceNow
+        return min(elapsed / duration, 100)
+    }
+    
     // Units per hour
     var rate: Double {
         return units / duration.hours

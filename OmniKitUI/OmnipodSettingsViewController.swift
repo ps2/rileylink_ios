@@ -31,7 +31,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     public var podImage: UIImage? {
         return UIImage(named: "PodLarge", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
-
+    
+    lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
+        let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.delegate = self
+        cell.suspendState = pumpManager.status.suspendState
+        pumpManager.addStatusObserver(cell)
+        return cell
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,17 +108,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     // MARK: - Data Source
     
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case info = 0
+        case actions
         case configuration
         case status
         case rileyLinks
         case deactivate
-        
-        static let count = 5
     }
     
-    private enum InfoRow: Int {
+    private enum InfoRow: Int, CaseIterable {
         case activatedAt = 0
         case expiresAt
         case podAddress
@@ -119,42 +125,42 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case podTid
         case piVersion
         case pmVersion
-        
-        static let count = 7
     }
     
-    private enum ConfigurationRow: Int {
+    private enum ActionsRow: Int, CaseIterable {
+        case suspendResume = 0
+    }
+    
+    private enum ConfigurationRow: Int, CaseIterable {
         case timeZoneOffset = 0
         case testCommand
-        
-        static let count = 2
     }
     
-    fileprivate enum StatusRow: Int {
+    fileprivate enum StatusRow: Int, CaseIterable {
         case deliveryStatus = 0
         case podStatus
         case alarms
         case reservoirLevel
         case deliveredInsulin
         case insulinNotDelivered
-        
-        static let count = 6
     }
     
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .info:
-            return InfoRow.count
+            return InfoRow.allCases.count
+        case .actions:
+            return ActionsRow.allCases.count
         case .configuration:
-            return ConfigurationRow.count
+            return ConfigurationRow.allCases.count
         case .status:
-            return StatusRow.count
+            return StatusRow.allCases.count
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
         case .deactivate:
@@ -166,6 +172,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .info:
             return NSLocalizedString("Device Information", comment: "The title of the device information section in settings")
+        case .actions:
+            return nil
         case .configuration:
             return NSLocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .status:
@@ -181,7 +189,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .configuration, .status, .deactivate:
+        case .info, .actions, .configuration, .status, .deactivate:
             return nil
         }
     }
@@ -229,6 +237,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = NSLocalizedString("PM Version", comment: "The title of the cell showing the pod pm version")
                 cell.detailTextLabel?.text = pumpManager.state.podState.pmVersion
                 return cell
+            }
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                return suspendResumeTableViewCell
             }
         case .configuration:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -307,7 +320,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             default:
                 return false
             }
-        case .configuration, .rileyLinks, .deactivate:
+        case .actions, .configuration, .rileyLinks, .deactivate:
             return true
         }
     }
@@ -318,6 +331,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             break
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                suspendResumeTableViewCell.toggle()
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         case .status:
             switch StatusRow(rawValue: indexPath.row)! {
             case .alarms:
@@ -386,7 +405,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
-        case .info, .status:
+        case .info, .actions, .status:
             break
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
@@ -403,6 +422,29 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 }
 
+extension OmnipodSettingsViewController: SuspendResumeTableViewCellDelegate {
+    func suspendTapped() {
+        pumpManager.suspendDelivery { (result) in
+            if case .failure(let error) = result {
+                DispatchQueue.main.async {
+                    let alert = LocalizedErrorAlertController(title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"), error: error)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    func resumeTapped() {
+        pumpManager.resumeDelivery { (result) in
+            if case .failure(let error) = result {
+                DispatchQueue.main.async {
+                    let alert = LocalizedErrorAlertController(title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"), error: error)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+}
 
 extension OmnipodSettingsViewController: RadioSelectionTableViewControllerDelegate {
     func radioSelectionTableViewControllerDidChangeSelectedIndex(_ controller: RadioSelectionTableViewController) {

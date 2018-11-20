@@ -427,7 +427,7 @@ extension OmnipodSettingsViewController: SuspendResumeTableViewCellDelegate {
         pumpManager.suspendDelivery { (result) in
             if case .failure(let error) = result {
                 DispatchQueue.main.async {
-                    let alert = LocalizedErrorAlertController(title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"), error: error)
+                    let alert = UIAlertController(title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"), error: error)
                     self.present(alert, animated: true, completion: nil)
                 }
             }
@@ -438,7 +438,7 @@ extension OmnipodSettingsViewController: SuspendResumeTableViewCellDelegate {
         pumpManager.resumeDelivery { (result) in
             if case .failure(let error) = result {
                 DispatchQueue.main.async {
-                    let alert = LocalizedErrorAlertController(title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"), error: error)
+                    let alert = UIAlertController(title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"), error: error)
                     self.present(alert, animated: true, completion: nil)
                 }
             }

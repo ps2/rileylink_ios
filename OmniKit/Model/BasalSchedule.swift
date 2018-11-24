@@ -76,10 +76,10 @@ public struct BasalSchedule: RawRepresentable, Equatable {
         self.entries = entries
     }
     
-    public func durations() -> [(rate: Double, duration: TimeInterval)] {
+    public func durations() -> [(rate: Double, duration: TimeInterval, startTime: TimeInterval)] {
         var last: TimeInterval = .hours(24)
-        let durations = entries.reversed().map { (entry) -> (rate: Double, duration: TimeInterval) in
-            let duration = (rate: entry.rate, duration: last - entry.startTime)
+        let durations = entries.reversed().map { (entry) -> (rate: Double, duration: TimeInterval, startTime: TimeInterval) in
+            let duration = (rate: entry.rate, duration: last - entry.startTime, startTime: entry.startTime)
             last = entry.startTime
             return duration
         }
@@ -107,3 +107,4 @@ public struct BasalSchedule: RawRepresentable, Equatable {
     }
 
 }
+

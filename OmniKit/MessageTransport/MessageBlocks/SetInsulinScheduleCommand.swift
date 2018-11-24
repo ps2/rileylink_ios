@@ -162,26 +162,23 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     }
     
     public init(nonce: UInt32, basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) {
+        let scheduleOffsetNearestSecond = round(scheduleOffset)
         let table = BasalDeliveryTable(schedule: basalSchedule)
-        let rate = basalSchedule.rateAt(offset: scheduleOffset)
+        let rate = basalSchedule.rateAt(offset: scheduleOffsetNearestSecond)
 
-        let segment = Int(scheduleOffset / BasalDeliveryTable.segmentDuration)
+        let segment = Int(scheduleOffsetNearestSecond / BasalDeliveryTable.segmentDuration)
 
-        let hourOffset = scheduleOffset.truncatingRemainder(dividingBy: .hours(1))
-        let pulsesPerHour = round(rate / podPulseSize)
+        let segmentOffset = round(scheduleOffsetNearestSecond.truncatingRemainder(dividingBy: BasalDeliveryTable.segmentDuration))
         
-        let pulsesElapsed = round((hourOffset / TimeInterval(hours: 1)) * pulsesPerHour)
+        let timeRemainingInSegment = BasalDeliveryTable.segmentDuration - segmentOffset
         
-        let pulsesRemainingInSegment: Double
-        if segment % 2 == 0 {
-            pulsesRemainingInSegment = pulsesPerHour - round(pulsesPerHour * 0.5) - pulsesElapsed
-        } else {
-            pulsesRemainingInSegment = pulsesPerHour - pulsesElapsed
-        }
+        let timeBetweenPulses: TimeInterval = .hours(1) / (rate / podPulseSize)
         
-        let timeRemainingInSegment = BasalDeliveryTable.segmentDuration - scheduleOffset.truncatingRemainder(dividingBy: BasalDeliveryTable.segmentDuration)
-            
-        self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: UInt8(segment), secondsRemaining: UInt16(timeRemainingInSegment), pulsesRemaining: UInt16(round(pulsesRemainingInSegment)), table: table)
+        let offsetToNextTenth = timeRemainingInSegment.truncatingRemainder(dividingBy: timeBetweenPulses / 10.0)
+        
+        let pulsesRemainingInSegment = (timeRemainingInSegment + timeBetweenPulses / 10.0 - offsetToNextTenth) / timeBetweenPulses
+        
+        self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: UInt8(segment), secondsRemaining: UInt16(timeRemainingInSegment), pulsesRemaining: UInt16(pulsesRemainingInSegment), table: table)
         self.nonce = nonce
     }
 }

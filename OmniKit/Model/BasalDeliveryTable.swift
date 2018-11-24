@@ -50,14 +50,72 @@ public struct BasalDeliveryTable {
         self.entries = entries
     }
     
+    
     public init(schedule: BasalSchedule) {
-        var tableEntries = [BasalTableEntry]()
         
-        let durations = schedule.durations()
-        
-        for entry in durations {
-            tableEntries.append(contentsOf: BasalDeliveryTable.rateToTableEntries(rate: entry.rate, duration: entry.duration))
+        struct TempSegment {
+            let pulses: Int
         }
+        
+        let numSegments = 48
+        let maxSegmentsPerEntry = 16
+        
+        var halfPulseRemainder = false
+        
+        let expandedSegments = stride(from: 0, to: numSegments, by: 1).map { (index) -> TempSegment in
+            let rate = schedule.rateAt(offset: Double(index) * .minutes(30))
+            let pulsesPerHour = Int(round(rate / podPulseSize))
+            let pulsesPerSegment = pulsesPerHour >> 1
+            let halfPulse = pulsesPerHour & 0b1 != 0
+            
+            let segment = TempSegment(pulses: pulsesPerSegment + ((halfPulseRemainder && halfPulse) ? 1 : 0))
+            halfPulseRemainder = halfPulseRemainder != halfPulse
+
+            return segment
+        }
+        
+        var tableEntries = [BasalTableEntry]()
+
+        let addEntry = { (segments: [TempSegment], alternateSegmentPulse: Bool) in
+            tableEntries.append(BasalTableEntry(
+                segments: segments.count,
+                pulses: segments.first!.pulses,
+                alternateSegmentPulse: alternateSegmentPulse
+            ))
+        }
+
+        var altSegmentPulse = false
+        var segmentsToMerge = [TempSegment]()
+        
+        for segment in expandedSegments {
+            guard let firstSegment = segmentsToMerge.first else {
+                segmentsToMerge.append(segment)
+                continue
+            }
+            
+            let delta = segment.pulses - firstSegment.pulses
+            
+            if segmentsToMerge.count == 1 {
+                altSegmentPulse = delta == 1
+            }
+            
+            let expectedDelta: Int
+            
+            if !altSegmentPulse {
+                expectedDelta = 0
+            } else {
+                expectedDelta = segmentsToMerge.count % 2
+            }
+            
+            if expectedDelta != delta || segmentsToMerge.count == maxSegmentsPerEntry {
+                addEntry(segmentsToMerge, altSegmentPulse)
+                segmentsToMerge.removeAll()
+            }
+            
+            segmentsToMerge.append(segment)
+        }
+        addEntry(segmentsToMerge, altSegmentPulse)
+
         self.entries = tableEntries
     }
     
@@ -73,6 +131,7 @@ public struct BasalDeliveryTable {
         let alternateSegmentPulse = pulsesPerHour & 0b1 != 0
         
         var remaining = Int(round(duration / BasalDeliveryTable.segmentDuration))
+        
         while remaining > 0 {
             let segments = min(remaining, 16)
             let tableEntry = BasalTableEntry(segments: segments, pulses: Int(pulsesPerSegment), alternateSegmentPulse: segments > 1 ? alternateSegmentPulse : false)

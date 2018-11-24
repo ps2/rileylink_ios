@@ -175,16 +175,13 @@ class BasalScheduleTests: XCTestCase {
         
         let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 1.05, startTime: 0)])
         
-        // 16:02:26 - 1a122a845e170003142033c00009f80af80af80a130e40000688009cf29113b001059449028a
-        
         let hh       = 0x20       // 16:00, rate = 1.05
         let ssss     = 0x33c0     // 1656s left, 144s into segment
         let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
         
-        // 1a 18 6a51490b 00 02dd 01 19f8 0004 f80a 000a 0005 f009 c009 000b 13 20 00 0006 5e 00def8a1 06f9 01059449 0037 01f360e8 0a32 01312d00 0073
-        
         // 1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp
         // 1a 12 2a845e17 00 0314 20 33c0 0009 f80a f80a f80a
+        // 1a 12 2a845e17 00 0315 20 33c0 000a f80a f80a f80a
 
         let cmd1 = SetInsulinScheduleCommand(nonce: 0x2a845e17, basalSchedule: schedule, scheduleOffset: offset)
         XCTAssertEqual("1a122a845e170003142033c00009f80af80af80a", cmd1.data.hexadecimalString)
@@ -238,5 +235,137 @@ class BasalScheduleTests: XCTestCase {
         let cmd = CancelDeliveryCommand(nonce: 0x6fede14a, deliveryType: .basal, beepType: .noBeep)
         XCTAssertEqual("1f056fede14a01", cmd.data.hexadecimalString)
     }
-}
+    
+    func testSegmentMerging() {
+        let entries = [
+            BasalScheduleEntry(rate: 0.80, startTime: 0),
+            BasalScheduleEntry(rate: 0.90, startTime: .hours(3)),
+            BasalScheduleEntry(rate: 0.85, startTime: .hours(5)),
+            BasalScheduleEntry(rate: 0.85, startTime: .hours(7.5)),
+            BasalScheduleEntry(rate: 0.85, startTime: .hours(12.5)),
+            BasalScheduleEntry(rate: 0.70, startTime: .hours(15)),
+            BasalScheduleEntry(rate: 0.90, startTime: .hours(18)),
+            BasalScheduleEntry(rate: 1.10, startTime: .hours(20)),
+            ]
+        
+        let schedule = BasalSchedule(entries: entries)
+        
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp
+        // PDM: 1a 1a 851072aa 00 0242 2a 1e50 0006 5008 3009 f808 3808 5007 3009 700b
+        
+        let hh       = 0x2a
+        let ssss     = 0x1e50
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+        
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a1a851072aa0002422a1e50000650083009f808380850073009700b", cmd1.data.hexadecimalString)
+    }
+    
+    func testRounding() {
+        let entries = [
+            BasalScheduleEntry(rate:  2.75, startTime: 0),
+            BasalScheduleEntry(rate: 20.25, startTime: .hours(1)),
+            BasalScheduleEntry(rate:  5.00, startTime: .hours(1.5)),
+            BasalScheduleEntry(rate: 10.10, startTime: .hours(2)),
+            BasalScheduleEntry(rate:  0.05, startTime: .hours(2.5)),
+            BasalScheduleEntry(rate:  3.50, startTime: .hours(15.5)),
+            ]
+        
+        let schedule = BasalSchedule(entries: entries)
+        
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp napp napp
+        // PDM: 1a 1e c2a32da8 00 053a 28 1af0 0010 181b 00ca 0032 0065 0001 f800 8800 f023 0023
 
+        let hh       = 0x28
+        let ssss     = 0x1af0
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+        
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0xc2a32da8, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a1ec2a32da800053a281af00010181b00ca003200650001f8008800f0230023", cmd1.data.hexadecimalString)
+    }
+    
+    func testRounding2() {
+        let entries = [
+            BasalScheduleEntry(rate:  0.60, startTime: 0),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(7.5)),
+            BasalScheduleEntry(rate:  0.50, startTime: .hours(8.5)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(9.5)),
+            BasalScheduleEntry(rate:  0.15, startTime: .hours(15.5)),
+            BasalScheduleEntry(rate:  0.80, startTime: .hours(16.3)),
+            ]
+        
+        let schedule = BasalSchedule(entries: entries)
+        
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp
+        // PDM: 1a 18 851072aa 00 021b 2c 2190 0004 f006 0007 1005 b806 1801 e008
+
+        
+        let hh       = 0x2c
+        let ssss     = 0x2190
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+        
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a18851072aa00021b2c21900004f00600071005b8061801e008", cmd1.data.hexadecimalString)
+    }
+    
+    func testThirteenEntries() {
+        let entries = [
+            BasalScheduleEntry(rate:  1.30, startTime: 0),
+            BasalScheduleEntry(rate:  0.05, startTime: .hours(0.5)),
+            BasalScheduleEntry(rate:  1.70, startTime: .hours(2.0)),
+            BasalScheduleEntry(rate:  0.85, startTime: .hours(2.5)),
+            BasalScheduleEntry(rate:  1.00, startTime: .hours(3.0)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(7.5)),
+            BasalScheduleEntry(rate:  0.50, startTime: .hours(8.5)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(9.5)),
+            BasalScheduleEntry(rate:  0.60, startTime: .hours(10.5)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(11.5)),
+            BasalScheduleEntry(rate:  1.65, startTime: .hours(14.0)),
+            BasalScheduleEntry(rate:  0.15, startTime: .hours(15.5)),
+            BasalScheduleEntry(rate:  0.85, startTime: .hours(16.5)),
+            ]
+        
+        let schedule = BasalSchedule(entries: entries)
+        
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp napp napp napp napp napp napp napp napp
+        // PDM: 1a 2a 851072aa 00 01dd 27 1518 0003 000d 2800 0011 1809 700a 1806 1005 2806 1006 0007 2806 0011 1810 1801 e808
+        
+        
+        let hh       = 0x27
+        let ssss     = 0x1518
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+        
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a2a851072aa0001dd2715180003000d280000111809700a180610052806100600072806001118101801e808", cmd1.data.hexadecimalString)
+    }
+    
+    func testJoe12Entries() {
+        let entries = [
+            BasalScheduleEntry(rate:  1.30, startTime: 0),
+            BasalScheduleEntry(rate:  0.05, startTime: .hours(0.5)),
+            BasalScheduleEntry(rate:  1.70, startTime: .hours(2.0)),
+            BasalScheduleEntry(rate:  0.85, startTime: .hours(2.5)),
+            BasalScheduleEntry(rate:  1.00, startTime: .hours(3.0)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(7.5)),
+            BasalScheduleEntry(rate:  0.50, startTime: .hours(8.5)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(9.5)),
+            BasalScheduleEntry(rate:  0.60, startTime: .hours(10.5)),
+            BasalScheduleEntry(rate:  0.65, startTime: .hours(11.5)),
+            BasalScheduleEntry(rate:  1.65, startTime: .hours(14.0)),
+            BasalScheduleEntry(rate:  0.85, startTime: .hours(16)),
+            ]
+        
+        let schedule = BasalSchedule(entries: entries)
+        
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp napp napp napp napp napp napp napp napp
+        // PDM: 1a 2a f36a23a3 00 0291 03 0ae8 0000 000d 2800 0011 1809 700a 1806 1005 2806 1006 0007 2806 0011 2810 0009 e808
+        
+        
+        let hh       = 0x03
+        let ssss     = 0x0ae8
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+        
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0xf36a23a3, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a2af36a23a3000291030ae80000000d280000111809700a180610052806100600072806001128100009e808", cmd1.data.hexadecimalString)
+    }
+}

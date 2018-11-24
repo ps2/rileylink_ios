@@ -252,6 +252,7 @@ class BasalScheduleTests: XCTestCase {
         
         //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp
         // PDM: 1a 1a 851072aa 00 0242 2a 1e50 0006 5008 3009 f808 3808 5007 3009 700b
+
         
         let hh       = 0x2a
         let ssss     = 0x1e50
@@ -259,6 +260,12 @@ class BasalScheduleTests: XCTestCase {
         
         let cmd1 = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
         XCTAssertEqual("1a1a851072aa0002422a1e50000650083009f808380850073009700b", cmd1.data.hexadecimalString)
+        
+        //      13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ
+        // PDM: 13 2c 40 05 0262 00455b9c 01e0 015752a0 0168 01312d00 06a4 01432096 01a4 01885e6d 0168 01312d00 0370 00f9b074
+        
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, confidenceReminder: true, programReminderInterval: 0)
+        checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "132c4005026200455b9c01e0015752a0016801312d0006a40143209601a401885e6d016801312d00037000f9b074")!, cmd2.data)
     }
     
     func testRounding() {
@@ -335,8 +342,15 @@ class BasalScheduleTests: XCTestCase {
         let ssss     = 0x1518
         let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
         
-        let cmd1 = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
-        XCTAssertEqual("1a2a851072aa0001dd2715180003000d280000111809700a180610052806100600072806001118101801e808", cmd1.data.hexadecimalString)
+        let cmd = SetInsulinScheduleCommand(nonce: 0x851072aa, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a2a851072aa0001dd2715180003000d280000111809700a180610052806100600072806001118101801e808", cmd.data.hexadecimalString)
+        
+        //      13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ
+        // PDM: 13 56 40 0c 02c8 011abc64 0082 00d34689 000f 15752a00 00aa 00a1904b 0055 01432096 0384 0112a880 0082 01a68d13 0064 02255100 0082 01a68d13 0078 01c9c380 0145 01a68d13 01ef 00a675a2 001e 07270e00 04fb 01432096
+        
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, confidenceReminder: true, programReminderInterval: 0)
+        checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "1356400c02c8011abc64008200d34689000f15752a0000aa00a1904b00550143209603840112a880008201a68d13006402255100008201a68d13007801c9c380014501a68d1301ef00a675a2001e07270e0004fb01432096")!, cmd2.data)
+
     }
     
     func testJoe12Entries() {

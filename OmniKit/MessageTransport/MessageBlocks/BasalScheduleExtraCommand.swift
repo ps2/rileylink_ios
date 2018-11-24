@@ -27,7 +27,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
             reminders,
             currentEntryIndex
             ])
-        data.appendBigEndian(UInt16(remainingPulses * 10))
+        data.appendBigEndian(UInt16(round(remainingPulses * 10)))
         data.appendBigEndian(UInt32(round(delayUntilNextTenthOfPulse.milliseconds * 1000)))
         for entry in rateEntries {
             data.append(entry.data)
@@ -73,20 +73,20 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         self.confidenceReminder = confidenceReminder
         self.programReminderInterval = programReminderInterval
         var rateEntries = [RateEntry]()
-        for entry in schedule.durations() {
+        
+        let mergedSchedule = BasalSchedule(entries: schedule.entries.adjacentEqualRatesMerged())
+        for entry in mergedSchedule.durations() {
             rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
         }
         
         self.rateEntries = rateEntries
-        let (entryIndex, entry, duration) = schedule.lookup(offset: scheduleOffset)
+        let (entryIndex, entry, duration) = mergedSchedule.lookup(offset: scheduleOffset)
         self.currentEntryIndex = UInt8(entryIndex)
         let timeRemainingInEntry = duration - (scheduleOffset - entry.startTime)
-        let rate = schedule.rateAt(offset: scheduleOffset)
+        let rate = mergedSchedule.rateAt(offset: scheduleOffset)
         let pulsesPerHour = round(rate / podPulseSize)
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
         self.delayUntilNextTenthOfPulse = timeRemainingInEntry.truncatingRemainder(dividingBy: (timeBetweenPulses / 10))
         self.remainingPulses = pulsesPerHour * (timeRemainingInEntry-self.delayUntilNextTenthOfPulse) / .hours(1) + 0.1
     }
 }
-
-

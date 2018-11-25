@@ -382,4 +382,22 @@ class BasalScheduleTests: XCTestCase {
         let cmd1 = SetInsulinScheduleCommand(nonce: 0xf36a23a3, basalSchedule: schedule, scheduleOffset: offset)
         XCTAssertEqual("1a2af36a23a3000291030ae80000000d280000111809700a180610052806100600072806001128100009e808", cmd1.data.hexadecimalString)
     }
+    
+    func testBasalScheduleExtraCommandRoundsToNearestSecond() {
+        let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 1.0, startTime: 0)])
+        
+        let hh       = 0x2b
+        let ssss     = 0x1b38
+        
+        //  Add 0.456 to the clock to have a non-integer # of seconds, and verify that it still produces valid results
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8)) + .seconds(0.456)
+        
+        // 13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
+        // 13 0e 40 00 01c1 006acfc0 12c0 0112a880
+        
+        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, confidenceReminder: true, programReminderInterval: 0)
+        
+        checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "130e400001c1006acfc012c00112a880")!, cmd.data)
+    }
+
 }

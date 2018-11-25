@@ -80,10 +80,11 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         }
         
         self.rateEntries = rateEntries
-        let (entryIndex, entry, duration) = mergedSchedule.lookup(offset: scheduleOffset)
+        let scheduleOffsetNearestSecond = round(scheduleOffset)
+        let (entryIndex, entry, duration) = mergedSchedule.lookup(offset: scheduleOffsetNearestSecond)
         self.currentEntryIndex = UInt8(entryIndex)
-        let timeRemainingInEntry = duration - (scheduleOffset - entry.startTime)
-        let rate = mergedSchedule.rateAt(offset: scheduleOffset)
+        let timeRemainingInEntry = duration - (scheduleOffsetNearestSecond - entry.startTime)
+        let rate = mergedSchedule.rateAt(offset: scheduleOffsetNearestSecond)
         let pulsesPerHour = round(rate / podPulseSize)
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
         self.delayUntilNextTenthOfPulse = timeRemainingInEntry.truncatingRemainder(dividingBy: (timeBetweenPulses / 10))

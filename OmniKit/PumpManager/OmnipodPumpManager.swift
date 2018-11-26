@@ -67,8 +67,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         let messageDirection: MessageDirection
         let timestamp: Date
         let data: Data
-        
-        
     }
     
     private var messageLog = [MessageLogEntry]()

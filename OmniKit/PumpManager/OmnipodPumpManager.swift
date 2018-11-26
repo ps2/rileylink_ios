@@ -28,10 +28,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public var pumpReservoirCapacity: Double = 200
     
-    public var pumpTimeZone: TimeZone {
-        return state.podState.timeZone
-    }
-    
     private var lastPumpDataReportDate: Date?
     
     public weak var podStateObserver: PodStateObserver?

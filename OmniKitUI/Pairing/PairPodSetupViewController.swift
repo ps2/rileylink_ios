@@ -268,6 +268,12 @@ extension PairPodSetupViewController: PodCommsDelegate {
     public func podComms(_ podComms: PodComms, didChange state: PodState) {
         self.podState = state
     }
+
+    func podComms(_ podComms: PodComms, didSend message: Data) {
+    }
+    
+    func podComms(_ podComms: PodComms, didReceive message: Data) {
+    }
 }
 
 private extension SetupButton {

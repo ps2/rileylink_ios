@@ -13,6 +13,10 @@ import os.log
 
 public protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange state: PodState)
+    
+    // Comms logging
+    func podComms(_ podComms: PodComms, didSend message: Data)
+    func podComms(_ podComms: PodComms, didReceive message: Data)
 }
 
 public class PodComms : CustomDebugStringConvertible {
@@ -119,6 +123,7 @@ public class PodComms : CustomDebugStringConvertible {
                 device.runSession(withName: name) { (commandSession) in
                     self.configureDevice(device, with: commandSession)
                     let transport = MessageTransport(session: commandSession, address: self.podState.address)
+                    transport.delegate = self
                     let podSession = PodCommsSession(podState: self.podState, transport: transport, delegate: self)
                     block(.success(session: podSession))
                     semaphore.signal()
@@ -235,5 +240,15 @@ private extension CommandSession {
 extension PodComms: PodCommsSessionDelegate {
     public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
         self.podState = state
+    }
+}
+
+extension PodComms: MessageTransportDelegate {
+    func messageTransport(_ messageTransport: MessageTransport, didSend message: Data) {
+        delegate?.podComms(self, didSend: message)
+    }
+    
+    func messageTransport(_ messageTransport: MessageTransport, didReceive message: Data) {
+        delegate?.podComms(self, didReceive: message)
     }
 }

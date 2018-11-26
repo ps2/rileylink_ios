@@ -11,6 +11,12 @@ import os.log
 
 import RileyLinkBLEKit
 
+protocol MessageTransportDelegate: class {
+    // Comms logging
+    func messageTransport(_ messageTransport: MessageTransport, didSend message: Data)
+    func messageTransport(_ messageTransport: MessageTransport, didReceive message: Data)
+}
+
 class MessageTransport {
     
     private let session: CommandSession
@@ -21,8 +27,9 @@ class MessageTransport {
     private(set) var messageNumber = 0
     private let address: UInt32
     private var ackAddress: UInt32 // During pairing, PDM acks with address it is assigning to channel
-
     
+    public weak var delegate: MessageTransportDelegate?
+
     init(session: CommandSession, address: UInt32 = 0xffffffff, ackAddress: UInt32? = nil) {
         self.session = session
         self.address = address
@@ -103,8 +110,9 @@ class MessageTransport {
             let responsePacket = try { () throws -> Packet in
                 var firstPacket = true
                 log.debug("Send: %@", String(describing: message))
-                log.debug("Send(Hex): %@", message.encoded().hexadecimalString)
                 var dataRemaining = message.encoded()
+                log.debug("Send(Hex): %@", dataRemaining.hexadecimalString)
+                delegate?.messageTransport(self, didSend: dataRemaining)
                 while true {
                     let packetType: PacketType = firstPacket ? .pdm : .con
                     let sendPacket = Packet(address: address, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
@@ -130,6 +138,7 @@ class MessageTransport {
                     do {
                         let msg = try Message(encodedData: responseData)
                         log.debug("Recv(Hex): %@", responseData.hexadecimalString)
+                        delegate?.messageTransport(self, didReceive: responseData)
                         return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")

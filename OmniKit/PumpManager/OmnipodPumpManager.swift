@@ -58,6 +58,25 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
+    private struct MessageLogEntry: CustomStringConvertible {
+        var description: String {
+            return "\(timestamp) \(messageDirection) \(data.hexadecimalString)"
+        }
+        
+        enum MessageDirection {
+            case send
+            case receive
+        }
+        
+        let messageDirection: MessageDirection
+        let timestamp: Date
+        let data: Data
+        
+        
+    }
+    
+    private var messageLog = [MessageLogEntry]()
+    
     public func assertCurrentPumpData() {
         
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
@@ -425,14 +444,20 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - CustomDebugStringConvertible
     
     override public var debugDescription: String {
-        return [
+        var lines = [
             "## OmnipodPumpManager",
-            "state: \(state.debugDescription)",
+            state.debugDescription,
             "",
             String(describing: podComms!),
             super.debugDescription,
             "",
-            ].joined(separator: "\n")
+            ]
+        
+        lines.append("### MessageLog")
+        for entry in messageLog {
+            lines.append("* " + entry.description)
+        }
+        return lines.joined(separator: "\n")
     }
     
     // MARK: - Pod comms
@@ -445,10 +470,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         let state = OmnipodPumpManagerState(podState: podState, rileyLinkConnectionManagerState: connectionManager.state)
         return OmnipodPumpManager(state: state, rileyLinkDeviceProvider: connectionManager.deviceProvider)
     }
-
 }
 
 extension OmnipodPumpManager: PodCommsDelegate {
+    
+    public func podComms(_ podComms: PodComms, didSend message: Data) {
+        messageLog.append(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
+    }
+    
+    public func podComms(_ podComms: PodComms, didReceive message: Data) {
+        messageLog.append(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
+    }
     
     public func store(doses: [UnfinalizedDose]) -> Bool {
         let semaphore = DispatchSemaphore(value: 0)

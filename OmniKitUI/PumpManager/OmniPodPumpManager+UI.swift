@@ -50,7 +50,7 @@ extension OmnipodPumpManager {
     }
     
     public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {
-        return NSLocalizedString("Save", comment: "Title of button to save delivery limit settings")    }
+        return LocalizedString("Save", comment: "Title of button to save delivery limit settings")    }
     
     public func syncButtonDetailText(for viewController: DeliveryLimitSettingsTableViewController) -> String? {
         return nil
@@ -64,28 +64,18 @@ extension OmnipodPumpManager {
 // MARK: - SingleValueScheduleTableViewControllerSyncSource
 extension OmnipodPumpManager {
     public func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
-        let timeZone = state.podState.timeZone
-        podComms.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
-            do {
-                switch result {
-                case .success(let session):
-                    let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
-                    let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
-                    let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
-                    let _ = try session.setBasalSchedule(schedule: newSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
-                    completion(.success(scheduleItems: viewController.scheduleItems, timeZone: timeZone))
-                case .failure(let error):
-                    throw error
-                }
-            } catch let error {
-                self.log.error("Save basal profile failed: %{public}@", String(describing: error))
+        let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
+        setBasalSchedule(newSchedule) { (error) in
+            if let error = error {
                 completion(.failure(error))
+            } else {
+                completion(.success(scheduleItems: viewController.scheduleItems, timeZone: self.state.timeZone))
             }
         }
     }
     
     public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
-        return NSLocalizedString("Sync With Pod", comment: "Title of button to sync basal profile from pod")
+        return LocalizedString("Sync With Pod", comment: "Title of button to sync basal profile from pod")
     }
     
     public func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {

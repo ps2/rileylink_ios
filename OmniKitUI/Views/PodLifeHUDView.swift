@@ -9,6 +9,12 @@
 import UIKit
 import LoopKitUI
 
+public enum PodAlertState {
+    case none
+    case warning
+    case fault
+}
+
 public class PodLifeHUDView: BaseHUDView, NibLoadable {
 
     override public var orderPriority: HUDViewOrderPriority {
@@ -31,6 +37,12 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
     private var lifetime: TimeInterval?
     private var timer: Timer?
     
+    public var alertState: PodAlertState = .none {
+        didSet {
+            updateAlertStateLabel()
+        }
+    }
+
     public class func instantiate() -> PodLifeHUDView {
         return nib().instantiate(withOwner: nil, options: nil)[0] as! PodLifeHUDView
     }
@@ -38,13 +50,13 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
     public func setPodLifeCycle(startTime: Date, lifetime: TimeInterval) {
         self.startTime = startTime
         self.lifetime = lifetime
-        
-        update()
+        updateProgressCircle()
     }
     
     override open func stateColorsDidUpdate() {
         super.stateColorsDidUpdate()
-        update()
+        updateProgressCircle()
+        updateAlertStateLabel()
     }
     
     private var endColor: UIColor? {
@@ -65,8 +77,31 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
         return formatter
     }()
 
+    private func updateAlertStateLabel() {
+        var alertLabelAlpha: CGFloat = 1
+        
+        if alertState == .fault {
+            timer = nil
+        }
+        
+        switch alertState {
+        case .fault:
+            alertLabel.text = "!"
+            alertLabel.backgroundColor = stateColors?.error
+        case .warning:
+            alertLabel.text = "!"
+            alertLabel.backgroundColor = stateColors?.warning
+        case .none:
+            alertLabelAlpha = 0
+        }
+        alertLabel.alpha = alertLabelAlpha
+        UIView.animate(withDuration: 0.25, animations: {
+            self.alertLabel.alpha = alertLabelAlpha
+        })
+    }
     
-    private func update() {
+    private func updateProgressCircle() {
+        
         if let startTime = startTime, let lifetime = lifetime {
             let age = -startTime.timeIntervalSinceNow
             let progress = Double(age / lifetime)
@@ -84,9 +119,12 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
             }
             
             let remaining = (lifetime - age)
-            //let remaining = TimeInterval(days: 3) * (1-progress)
 
-            if remaining > .hours(24) {
+            // Update time label and caption
+            if alertState == .fault {
+                timeLabel.isHidden = true
+                caption.text = "Fault"
+            } else if remaining > .hours(24) {
                 timeLabel.isHidden = true
                 caption.text = LocalizedString("Pod Age", comment: "Label describing pod age view")
             } else if remaining > 0 {
@@ -107,7 +145,7 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
         super.awakeFromNib()
         
         timer = Timer.scheduledTimer(withTimeInterval: .seconds(10), repeats: true) { [weak self] _ in
-            self?.update()
+            self?.updateProgressCircle()
         }
     }
 }

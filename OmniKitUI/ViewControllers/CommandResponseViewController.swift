@@ -16,20 +16,14 @@ extension CommandResponseViewController {
     
     private static let successText = LocalizedString("Succeeded", comment: "A message indicating a command succeeded")
     
-    static func changeTime(podComms: PodComms?, rileyLinkDeviceProvider: RileyLinkDeviceProvider) -> T {
+    static func changeTime(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            podComms?.runSession(withName: "Set time", using: rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
+            pumpManager.setTime() { (error) in
                 let response: String
-                switch result {
-                case .success(let session):
-                    do {
-                        let _ = try session.setTime(timeZone: .currentFixed, date: Date())
-                        response = self.successText
-                    } catch let error {
-                        response = String(describing: error)
-                    }
-                case .failure(let error):
+                if let error = error {
                     response = String(describing: error)
+                } else {
+                    response = self.successText
                 }
                 DispatchQueue.main.async {
                     completionHandler(response)
@@ -40,20 +34,14 @@ extension CommandResponseViewController {
     }
 
 
-    static func testCommand(podComms: PodComms?, rileyLinkDeviceProvider: RileyLinkDeviceProvider) -> T {
+    static func testCommand(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            podComms?.runSession(withName: "Testing Commands", using: rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
+            pumpManager.testingCommands() { (error) in
                 let response: String
-                switch result {
-                case .success(let session):
-                    do {
-                        try session.testingCommands()
-                        response = self.successText
-                    } catch let error {
-                        response = String(describing: error)
-                    }
-                case .failure(let error):
+                if let error = error {
                     response = String(describing: error)
+                } else {
+                    response = self.successText
                 }
                 DispatchQueue.main.async {
                     completionHandler(response)

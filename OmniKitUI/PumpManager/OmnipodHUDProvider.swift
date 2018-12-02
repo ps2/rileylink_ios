@@ -11,23 +11,36 @@ import LoopKit
 import LoopKitUI
 import OmniKit
 
-internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
+internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     var managerIdentifier: String {
         return OmnipodPumpManager.managerIdentifier
     }
     
     public weak var delegate: HUDProviderDelegate?
     
-    private var podState: PodState {
+    private var podState: PodState? {
         didSet {
-            if oldValue.lastInsulinMeasurements?.reservoirVolume == nil && podState.lastInsulinMeasurements?.reservoirVolume != nil {
+            if oldValue?.lastInsulinMeasurements?.reservoirVolume == nil && podState?.lastInsulinMeasurements?.reservoirVolume != nil {
                 reservoirView = OmnipodReservoirView.instantiate()
-                delegate?.newHUDViewsAvailable([reservoirView!])
+                delegate?.addHudViews([reservoirView!])
             }
             
-            if oldValue.lastInsulinMeasurements != podState.lastInsulinMeasurements {
+            if oldValue?.lastInsulinMeasurements != podState?.lastInsulinMeasurements {
                 updateReservoirView()
             }
+            
+            if oldValue == nil && podState != nil {
+                podLifeView = PodLifeHUDView.instantiate()
+                updatePodLifeView()
+            }
+            
+            if oldValue?.fault != podState?.fault {
+                updateFaultDisplay()
+            }
+            
+            if oldValue != nil && podState == nil {
+                delegate?.removeHudViews([reservoirView, podLifeView].compactMap { $0 })
+            }            
         }
     }
     
@@ -40,13 +53,15 @@ internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
     public init(pumpManager: OmnipodPumpManager) {
         self.pumpManager = pumpManager
         self.podState = pumpManager.state.podState
-        self.pumpManager.podStateObserver = self
+        super.init()
+        self.pumpManager.addPodStateObserver(self)
     }
     
     private func updateReservoirView() {
-        if let lastInsulinMeasurements = podState.lastInsulinMeasurements,
+        if let lastInsulinMeasurements = podState?.lastInsulinMeasurements,
             let reservoirVolume = lastInsulinMeasurements.reservoirVolume,
-            let reservoirView = reservoirView
+            let reservoirView = reservoirView,
+            let podState = podState
         {
             let reservoirLevel = min(1, max(0, reservoirVolume / pumpManager.pumpReservoirCapacity))
             reservoirView.reservoirLevel = reservoirLevel
@@ -56,42 +71,66 @@ internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
         }
     }
     
-    private func updatePodLifeView() {
+    private func updateFaultDisplay() {
         if let podLifeView = podLifeView {
+            if podState?.fault != nil {
+                podLifeView.alertState = .fault
+            } else {
+                podLifeView.alertState = .none
+            }
+        }
+    }
+    
+    private func updatePodLifeView() {
+        if let podLifeView = podLifeView, let podState = podState {
             let lifetime = podState.expiresAt.timeIntervalSince(podState.activatedAt)
             podLifeView.setPodLifeCycle(startTime: podState.activatedAt, lifetime: lifetime)
         }
     }
     
     public func createHUDViews() -> [BaseHUDView] {
-        if podState.lastInsulinMeasurements?.reservoirVolume != nil {
+        if podState?.lastInsulinMeasurements?.reservoirVolume != nil {
             self.reservoirView = OmnipodReservoirView.instantiate()
             self.updateReservoirView()
-            self.delegate?.newHUDViewsAvailable([self.reservoirView!])
         }
         
-        podLifeView = PodLifeHUDView.instantiate()
+        if podState != nil {
+            podLifeView = PodLifeHUDView.instantiate()
+        }
         updatePodLifeView()
+        updateFaultDisplay()
         
         return [reservoirView, podLifeView].compactMap { $0 }
     }
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
         if let _ = view as? PodLifeHUDView {
-            return HUDTapAction.showViewController(pumpManager.settingsViewController())
+            if podState?.fault != nil {
+                return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiateFaultHandlerFlow(pumpManager))
+            } else {
+                return HUDTapAction.showViewController(pumpManager.settingsViewController())
+            }
+
         }
         return nil
+    }
+    
+    func hudDidAppear() {
+        pumpManager.refreshStatus()
     }
     
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {
         var rawValue: HUDProvider.HUDViewsRawState = [
             "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity,
-            "podActivatedAt": podState.activatedAt,
-            "lifetime": podState.expiresAt.timeIntervalSince(podState.activatedAt),
-            "alarms": podState.alarms.rawValue
         ]
         
-        if let lastInsulinMeasurements = podState.lastInsulinMeasurements {
+        if let podState = podState {
+            rawValue["podActivatedAt"] = podState.activatedAt
+            rawValue["lifetime"] = podState.expiresAt.timeIntervalSince(podState.activatedAt)
+            rawValue["alarms"] = podState.alarms.rawValue
+        }
+        
+        if let lastInsulinMeasurements = podState?.lastInsulinMeasurements {
             rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
             rawValue["reservoirVolumeValidTime"] = lastInsulinMeasurements.validTime
         }
@@ -129,7 +168,7 @@ internal class OmnipodHUDProvider: HUDProvider, PodStateObserver {
         return [reservoirView, podLifeHUDView]
     }
     
-    func didUpdatePodState(_ podState: PodState) {
+    func podStateDidUpdate(_ podState: PodState?) {
         DispatchQueue.main.async {
             self.podState = podState
         }

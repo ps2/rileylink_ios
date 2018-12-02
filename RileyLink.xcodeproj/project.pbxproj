@@ -352,6 +352,8 @@
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
+		C168C40021AEF8DE00ADE90E /* PodReplacementNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */; };
+		C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
 		C16C3D4421AC40AF00401105 /* OmnipodHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16C3D4321AC40AF00401105 /* OmnipodHUDProvider.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -1228,6 +1230,8 @@
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
+		C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodReplacementNavigationController.swift; sourceTree = "<group>"; };
+		C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacePodViewController.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
 		C16C3D4321AC40AF00401105 /* OmnipodHUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmnipodHUDProvider.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
@@ -2165,6 +2169,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		C168C3FE21AEF85400ADE90E /* PumpManager */ = {
+			isa = PBXGroup;
+			children = (
+				C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */,
+				C16C3D4321AC40AF00401105 /* OmnipodHUDProvider.swift */,
+			);
+			path = PumpManager;
+			sourceTree = "<group>";
+		};
 		C1842BB91C8E15C600DB42AC /* PumpEvents */ = {
 			isa = PBXGroup;
 			children = (
@@ -2481,30 +2494,31 @@
 		C1FFAFDA213323F900C50C1D /* OmniKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C168C3FE21AEF85400ADE90E /* PumpManager */,
+				C1FFB0092133242C00C50C1D /* ViewControllers */,
 				C104A9BE217E6027006E3C3E /* Views */,
+				C1FFAFDC213323F900C50C1D /* Info.plist */,
+				C1FFAFDB213323F900C50C1D /* OmniKitUI.h */,
 				C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */,
 				C1FFB0052133242B00C50C1D /* OmnipodPumpManager.storyboard */,
-				C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */,
-				C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */,
-				C1FC49ED2135DD56007D0788 /* CommandResponseViewController.swift */,
-				C1FFB0092133242C00C50C1D /* Pairing */,
-				C1FFAFDB213323F900C50C1D /* OmniKitUI.h */,
-				C1FFAFDC213323F900C50C1D /* Info.plist */,
-				C16C3D4321AC40AF00401105 /* OmnipodHUDProvider.swift */,
 			);
 			path = OmniKitUI;
 			sourceTree = "<group>";
 		};
-		C1FFB0092133242C00C50C1D /* Pairing */ = {
+		C1FFB0092133242C00C50C1D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */,
+				C1FC49ED2135DD56007D0788 /* CommandResponseViewController.swift */,
 				C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */,
 				C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */,
 				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
 				C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */,
 				C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */,
+				C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */,
+				C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */,
 			);
-			path = Pairing;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3767,7 +3781,9 @@
 				C104A9CF217ECF82006E3C3E /* MKRingProgressView.swift in Sources */,
 				C104A9D0217ECF82006E3C3E /* MKRingProgressLayer.swift in Sources */,
 				C1FFB0132133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift in Sources */,
+				C168C40021AEF8DE00ADE90E /* PodReplacementNavigationController.swift in Sources */,
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
+				C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
 				C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,

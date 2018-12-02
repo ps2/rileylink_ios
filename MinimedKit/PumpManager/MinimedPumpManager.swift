@@ -224,18 +224,18 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
     }
     
-    public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+    public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         setSuspendResumeState(state: .suspend, completion: completion)
     }
     
-    public func resumeDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+    public func resumeDelivery(completion: @escaping (Error?) -> Void) {
         setSuspendResumeState(state: .resume, completion: completion)
     }
     
-    private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+    private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, completion: @escaping (Error?) -> Void) {
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
-                completion(PumpManagerResult.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
             
@@ -258,11 +258,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                     try session.setSuspendResumeState(state)
                     self.state.isPumpSuspended = state == .suspend
-                    completion(PumpManagerResult.success(true))
+                    completion(nil)
                 } catch let error {
                     self.suspendState = self.state.isPumpSuspended ? .suspended : .none
                     self.troubleshootPumpComms(using: device)
-                    completion(PumpManagerResult.failure(PumpManagerError.communication(error as? LocalizedError)))
+                    completion(PumpManagerError.communication(error as? LocalizedError))
                 }
             }
         }
@@ -552,12 +552,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                         }
                         
                         self.state.isPumpSuspended = status.suspended
-                        
-                        if status.bolusing {
-                            self.bolusState = .bolusing(progress: nil)
-                        } else {
-                            self.bolusState = .none
-                        }
                         
                         self.latestPumpStatus = status
                         

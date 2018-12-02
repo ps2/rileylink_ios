@@ -14,7 +14,7 @@ import RileyLinkKit
 public class RileyLinkDevicesTableViewDataSource: NSObject {
     public let rileyLinkPumpManager: RileyLinkPumpManager
 
-    public let devicesSectionIndex: Int
+    public var devicesSectionIndex: Int
 
     public var tableView: UITableView! {
         didSet {

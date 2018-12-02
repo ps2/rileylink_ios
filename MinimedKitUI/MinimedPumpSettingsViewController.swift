@@ -306,8 +306,8 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 
 extension MinimedPumpSettingsViewController: SuspendResumeTableViewCellDelegate {
     func suspendTapped() {
-        pumpManager.suspendDelivery { (result) in
-            if case .failure(let error) = result {
+        pumpManager.suspendDelivery { (error) in
+            if let error = error {
                 DispatchQueue.main.async {
                     self.presentAlertController(with: error, title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"))
                 }
@@ -316,8 +316,8 @@ extension MinimedPumpSettingsViewController: SuspendResumeTableViewCellDelegate 
     }
     
     func resumeTapped() {
-        pumpManager.resumeDelivery { (result) in
-            if case .failure(let error) = result {
+        pumpManager.resumeDelivery { (error) in
+            if let error = error {
                 DispatchQueue.main.async {
                     self.presentAlertController(with: error, title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"))
                 }

@@ -11,6 +11,7 @@ import LoopKitUI
 import MinimedKit
 
 class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
+
     var managerIdentifier: String {
         return MinimedPumpManager.managerIdentifier
     }
@@ -70,6 +71,9 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
     
     public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
+    }
+    
+    func hudDidAppear() {
     }
     
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {

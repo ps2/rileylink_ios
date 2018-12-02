@@ -26,6 +26,10 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
     case delayedPrime = 14 // Saw this after delaying prime for a day
     case inactive = 15 // ($1C Deactivate Pod or packet header mismatch)
     
+    public var readyForDelivery: Bool {
+        return self == .belowFiftyUnits || self == .aboveFiftyUnits
+    }
+    
     public var description: String {
         switch self {
         case .initialized:
@@ -57,7 +61,7 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
         case .errorEventLoggedShuttingDown:
             return LocalizedString("Error event logged, shutting down", comment: "Pod state error event logged shutting down")
         case .delayedPrime:
-            return LocalizedString("Prime not completed", comment: "Pod state when prime has not completed")
+            return LocalizedString("Pod setup window expired", comment: "Pod state when prime or cannula insertion has not completed in the time allotted")
         case .inactive:
             return LocalizedString("Deactivated", comment: "Pod state when pod has been deactivated")
         }

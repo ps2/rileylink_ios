@@ -119,61 +119,32 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     override func cancelButtonPressed(_ sender: Any) {
         let confirmVC = UIAlertController(pumpDeletionHandler: {
-            let deviceSelector = self.pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-            self.pumpManager.podComms.runSession(withName: "Deactivate Pod", using: deviceSelector, { (result) in
-                do {
-                    switch result {
-                    case .success(let session):
-                        let _ = try session.deactivatePod()
-                        DispatchQueue.main.async {
-                            super.cancelButtonPressed(sender)
-                        }
-                    case.failure(let error):
-                        throw error
-                    }
-                } catch let error {
-                    DispatchQueue.main.async {
+            self.pumpManager.deactivatePod() { (error) in
+                DispatchQueue.main.async {
+                    if let error = error {
                         self.cancelErrorCount += 1
                         self.lastError = error
                         if self.cancelErrorCount >= 2 {
                             super.cancelButtonPressed(sender)
                         }
+                    } else {
+                        super.cancelButtonPressed(sender)
                     }
                 }
-            })
+            }
         })
         present(confirmVC, animated: true) {}
     }
     
     func insertCannula() {
-        
-        guard let podComms = pumpManager.podComms,
-            let basalSchedule = setupViewController?.basalSchedule else
-        {
-            return
-        }
-        
-        let basal = BasalSchedule(repeatingScheduleValues: basalSchedule.items)
-        
-        let deviceSelector = pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-        
-        podComms.runSession(withName: "Insert cannula", using: deviceSelector) { (result) in
-            switch result {
-            case .success(let session):
-                do {
-                    let scheduleOffset = self.pumpManager.state.podState.timeZone.scheduleOffset(forDate: Date())
-                    try session.insertCannula(basalSchedule: basal, scheduleOffset: scheduleOffset)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-                        self.continueState = .ready
-                    }
-                } catch let error {
-                    DispatchQueue.main.async {
-                        self.lastError = error
-                    }
-                }
-            case .failure(let error):
+        pumpManager.insertCannula() { (error) in
+            if let error = error {
                 DispatchQueue.main.async {
                     self.lastError = error
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+                    self.continueState = .ready
                 }
             }
         }
@@ -190,19 +161,19 @@ private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: NSLocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
+            message: LocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
             preferredStyle: .actionSheet
         )
         
         addAction(UIAlertAction(
-            title: NSLocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
+            title: LocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
             style: .destructive,
             handler: { (_) in
                 handler()
         }
         ))
         
-        let exit = NSLocalizedString("Continue", comment: "The title of the continue action in an action sheet")
+        let exit = LocalizedString("Continue", comment: "The title of the continue action in an action sheet")
         addAction(UIAlertAction(title: exit, style: .default, handler: nil))
     }
 }

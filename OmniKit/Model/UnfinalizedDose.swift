@@ -52,7 +52,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     }
     
     let doseType: DoseType
-    var units: Double
+    public var units: Double
     var scheduledUnits: Double?
     let startTime: Date
     var duration: TimeInterval
@@ -67,13 +67,13 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
     }
     
-    var progress: Double {
+    public var progress: Double {
         let elapsed = -startTime.timeIntervalSinceNow
-        return min(elapsed / duration, 100)
+        return min(elapsed / duration, 1)
     }
     
     // Units per hour
-    var rate: Double {
+    public var rate: Double {
         return units / duration.hours
     }
     

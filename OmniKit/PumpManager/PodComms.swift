@@ -11,19 +11,17 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
-public protocol PodCommsDelegate: class {
+protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange state: PodState)
-    
-    // Comms logging
-    func podComms(_ podComms: PodComms, didSend message: Data)
-    func podComms(_ podComms: PodComms, didReceive message: Data)
 }
 
-public class PodComms : CustomDebugStringConvertible {
+class PodComms : CustomDebugStringConvertible {
     
     private var configuredDevices: Set<RileyLinkDevice> = Set()
     
     private weak var delegate: PodCommsDelegate?
+    
+    private weak var messageLogger: MessageLogger?
 
     private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
 
@@ -35,17 +33,18 @@ public class PodComms : CustomDebugStringConvertible {
         }
     }
 
-    public init(podState: PodState, delegate: PodCommsDelegate?) {
+    init(podState: PodState, delegate: PodCommsDelegate?, messageLogger: MessageLogger? = nil) {
         self.podState = podState
         self.delegate = delegate
+        self.messageLogger = messageLogger
     }
     
-    public enum PairResults {
+    enum PairResults {
         case success(podState: PodState)
         case failure(Error)
     }
     
-    public class func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, completion: @escaping (PairResults) -> Void)
+    class func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, completion: @escaping (PairResults) -> Void)
     {
         deviceSelector { (device) in
             guard let device = device else {
@@ -61,8 +60,11 @@ public class PodComms : CustomDebugStringConvertible {
                     // Create random address with 20 bits.  Can we use all 24 bits?
                     let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
                     
-                    let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress)
-                
+                    let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
+                    
+                    let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress, state: messageTransportState)
+                    transport.messageLogger = messageLogger
+
                     // Assign Address
                     let assignAddress = AssignAddressCommand(address: newAddress)
                     
@@ -90,7 +92,6 @@ public class PodComms : CustomDebugStringConvertible {
                         address: newAddress,
                         activatedAt: activationDate,
                         expiresAt: activationDate.addingTimeInterval(podSoftExpirationTime),
-                        timeZone: timeZone,
                         piVersion: String(describing: config2.piVersion),
                         pmVersion: String(describing: config2.pmVersion),
                         lot: config2.lot,
@@ -122,8 +123,8 @@ public class PodComms : CustomDebugStringConvertible {
             
                 device.runSession(withName: name) { (commandSession) in
                     self.configureDevice(device, with: commandSession)
-                    let transport = MessageTransport(session: commandSession, address: self.podState.address)
-                    transport.delegate = self
+                    let transport = MessageTransport(session: commandSession, address: self.podState.address, state: self.podState.messageTransportState)
+                    transport.messageLogger = self.messageLogger
                     let podSession = PodCommsSession(podState: self.podState, transport: transport, delegate: self)
                     block(.success(session: podSession))
                     semaphore.signal()
@@ -170,7 +171,7 @@ public class PodComms : CustomDebugStringConvertible {
     
     // MARK: - CustomDebugStringConvertible
     
-    public var debugDescription: String {
+    var debugDescription: String {
         return [
             "## PodComms",
             "configuredDevices: \(configuredDevices.map { $0.peripheralIdentifier })",
@@ -238,17 +239,7 @@ private extension CommandSession {
 }
 
 extension PodComms: PodCommsSessionDelegate {
-    public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
+    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
         self.podState = state
-    }
-}
-
-extension PodComms: MessageTransportDelegate {
-    func messageTransport(_ messageTransport: MessageTransport, didSend message: Data) {
-        delegate?.podComms(self, didSend: message)
-    }
-    
-    func messageTransport(_ messageTransport: MessageTransport, didReceive message: Data) {
-        delegate?.podComms(self, didReceive: message)
     }
 }

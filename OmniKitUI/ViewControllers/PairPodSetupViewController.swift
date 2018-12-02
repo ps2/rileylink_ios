@@ -16,35 +16,9 @@ class PairPodSetupViewController: SetupTableViewController {
     
     var rileyLinkPumpManager: RileyLinkPumpManager!
     
-    private var podComms: PodComms?
-    
-    private var podState: PodState?
+    var pumpManager: OmnipodPumpManager!
     
     private var cancelErrorCount = 0
-    
-    var pumpManagerState: OmnipodPumpManagerState? {
-        get {
-            guard let podState = podState else {
-                return nil
-            }
-            
-            return OmnipodPumpManagerState(
-                podState: podState,
-                rileyLinkConnectionManagerState: self.rileyLinkPumpManager.rileyLinkConnectionManagerState
-            )
-        }
-    }
-    
-    var pumpManager: OmnipodPumpManager? {
-        guard let pumpManagerState = pumpManagerState else {
-            return nil
-        }
-        
-        return OmnipodPumpManager(
-            state: pumpManagerState,
-            rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
-            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager)
-    }
 
     // MARK: -
     
@@ -140,11 +114,11 @@ class PairPodSetupViewController: SetupTableViewController {
         if case .paired = continueState {
             super.continueButtonPressed(sender)
         } else if case .initial = continueState {
-            if podState == nil {
+            if !pumpManager.hasPairedPod {
                 continueState = .pairing
                 pair()
             } else {
-                configurePod()
+                configureAndPrimePod()
             }
         }
     }
@@ -152,28 +126,19 @@ class PairPodSetupViewController: SetupTableViewController {
     override func cancelButtonPressed(_ sender: Any) {
         if case .paired = continueState, let pumpManager = self.pumpManager {
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                let deviceSelector = pumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-                pumpManager.podComms.runSession(withName: "Deactivate Pod", using: deviceSelector, { (result) in
-                    do {
-                        switch result {
-                        case .success(let session):
-                            let _ = try session.deactivatePod()
-                            DispatchQueue.main.async {
-                                super.cancelButtonPressed(sender)
-                            }
-                        case.failure(let error):
-                            throw error
-                        }
-                    } catch let error {
-                        DispatchQueue.main.async {
+                pumpManager.deactivatePod() { (error) in
+                    DispatchQueue.main.async {
+                        if let error = error {
                             self.cancelErrorCount += 1
                             self.lastError = error
                             if self.cancelErrorCount >= 2 {
                                 super.cancelButtonPressed(sender)
                             }
+                        } else {
+                            super.cancelButtonPressed(sender)
                         }
                     }
-                })
+                }
             })
             present(confirmVC, animated: true) {}
         } else {
@@ -182,97 +147,41 @@ class PairPodSetupViewController: SetupTableViewController {
     }
     
     func pair() {
-        
-        guard podComms == nil else {
-            return
-        }
-        
-        let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-        
-        // TODO: Let user choose between current and previously used timezone?
-        PodComms.pair(using: deviceSelector, timeZone: .currentFixed, completion: { (result) in
+        pumpManager.pair() { (error) in
             DispatchQueue.main.async {
-                switch result {
-                case .success(let podState):
-                    self.podState = podState
-                    self.podComms = PodComms(podState: podState, delegate: self)
-                    self.configurePod()
-                case .failure(let error):
+                if let error = error {
                     self.lastError = error
+                } else {
+                    self.configureAndPrimePod()
                 }
             }
-        })
+        }
     }
 
-    func configurePod() {
-        guard let podComms = podComms else {
-            return
-        }
-        
-        let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-        
-        podComms.runSession(withName: "Configure pod", using: deviceSelector) { (result) in
-            switch result {
-            case .success(let session):
-                do {
-                    try session.configurePod()
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(55)) {
-                        self.finishPrime()
-                    }
-                } catch let error {
-                    DispatchQueue.main.async {
-                        self.lastError = error
-                    }
-                }
-            case .failure(let error):
+    func configureAndPrimePod() {
+        pumpManager.configureAndPrimePod { (error) in
+            if let error = error {
                 DispatchQueue.main.async {
                     self.lastError = error
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(55)) {
+                    self.finishPrime()
                 }
             }
         }
     }
     
     func finishPrime() {
-        guard let podComms = podComms else {
-            return
-        }
-        
-        let deviceSelector = rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice
-        
-        podComms.runSession(withName: "Finish Prime", using: deviceSelector) { (result) in
-            switch result {
-            case .success(let session):
-                do {
-                    try session.finishPrime()
-                    DispatchQueue.main.async {
-                        self.continueState = .paired
-                    }
-                } catch let error {
-                    DispatchQueue.main.async {
-                        self.lastError = error
-                    }
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
+        pumpManager.finishPrime { (error) in
+            DispatchQueue.main.async {
+                if let error = error {
                     self.lastError = error
+                } else {
+                    self.continueState = .paired
                 }
             }
         }
-    }
-
-
-}
-
-extension PairPodSetupViewController: PodCommsDelegate {
-    public func podComms(_ podComms: PodComms, didChange state: PodState) {
-        self.podState = state
-    }
-
-    func podComms(_ podComms: PodComms, didSend message: Data) {
-    }
-    
-    func podComms(_ podComms: PodComms, didReceive message: Data) {
     }
 }
 
@@ -286,19 +195,19 @@ private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: NSLocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
+            message: LocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
             preferredStyle: .actionSheet
         )
         
         addAction(UIAlertAction(
-            title: NSLocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
+            title: LocalizedString("Deactivate Pod", comment: "Button title to deactivate pod"),
             style: .destructive,
             handler: { (_) in
                 handler()
         }
         ))
         
-        let exit = NSLocalizedString("Continue", comment: "The title of the continue action in an action sheet")
+        let exit = LocalizedString("Continue", comment: "The title of the continue action in an action sheet")
         addAction(UIAlertAction(title: exit, style: .default, handler: nil))
     }
 }

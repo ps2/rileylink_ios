@@ -11,10 +11,46 @@ import os.log
 
 import RileyLinkBLEKit
 
-protocol MessageTransportDelegate: class {
+protocol MessageLogger: class {
     // Comms logging
-    func messageTransport(_ messageTransport: MessageTransport, didSend message: Data)
-    func messageTransport(_ messageTransport: MessageTransport, didReceive message: Data)
+    func didSend(_ message: Data)
+    func didReceive(_ message: Data)
+}
+
+public struct MessageTransportState: Equatable, RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public var packetNumber: Int
+    public var messageNumber: Int
+    
+    init(packetNumber: Int, messageNumber: Int) {
+        self.packetNumber = packetNumber
+        self.messageNumber = messageNumber
+    }
+    
+    // RawRepresentable
+    public init?(rawValue: RawValue) {
+        guard
+            let packetNumber = rawValue["packetNumber"] as? Int,
+            let messageNumber = rawValue["messageNumber"] as? Int
+            else {
+                return nil
+        }
+        self.packetNumber = packetNumber
+        self.messageNumber = messageNumber
+    }
+    
+    public var rawValue: RawValue {
+        return [
+            "packetNumber": packetNumber,
+            "messageNumber": messageNumber
+        ]
+    }
+
+}
+
+protocol MessageTransportDelegate: class {
+    func messageTransport(_ messageTransport: MessageTransport, didUpdate state: MessageTransportState)
 }
 
 class MessageTransport {
@@ -23,17 +59,41 @@ class MessageTransport {
     
     private let log = OSLog(category: "PodMessageTransport")
     
-    private var packetNumber = 0
-    private(set) var messageNumber = 0
+    private var state: MessageTransportState {
+        didSet {
+            self.delegate?.messageTransport(self, didUpdate: state)
+        }
+    }
+    
+    private var packetNumber: Int {
+        get {
+            return state.packetNumber
+        }
+        set {
+            state.packetNumber = newValue
+        }
+    }
+    
+    private(set) var messageNumber: Int {
+        get {
+            return state.messageNumber
+        }
+        set {
+            state.messageNumber = newValue
+        }
+    }
+    
     private let address: UInt32
     private var ackAddress: UInt32 // During pairing, PDM acks with address it is assigning to channel
     
-    public weak var delegate: MessageTransportDelegate?
+    weak var messageLogger: MessageLogger?
+    weak var delegate: MessageTransportDelegate?
 
-    init(session: CommandSession, address: UInt32 = 0xffffffff, ackAddress: UInt32? = nil) {
+    init(session: CommandSession, address: UInt32 = 0xffffffff, ackAddress: UInt32? = nil, state: MessageTransportState) {
         self.session = session
         self.address = address
         self.ackAddress = ackAddress ?? address
+        self.state = state
     }
     
     private func incrementPacketNumber(_ count: Int = 1) {
@@ -112,7 +172,7 @@ class MessageTransport {
                 log.debug("Send: %@", String(describing: message))
                 var dataRemaining = message.encoded()
                 log.debug("Send(Hex): %@", dataRemaining.hexadecimalString)
-                delegate?.messageTransport(self, didSend: dataRemaining)
+                messageLogger?.didSend(dataRemaining)
                 while true {
                     let packetType: PacketType = firstPacket ? .pdm : .con
                     let sendPacket = Packet(address: address, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
@@ -126,8 +186,9 @@ class MessageTransport {
                 }()
             
             guard responsePacket.packetType != .ack else {
+                messageLogger?.didReceive(responsePacket.data)
                 log.debug("Pod responded with ack instead of response: %@", String(describing: responsePacket))
-                incrementMessageNumber()
+                //incrementMessageNumber()
                 throw PodCommsError.podAckedInsteadOfReturningResponse
             }
             
@@ -138,7 +199,7 @@ class MessageTransport {
                     do {
                         let msg = try Message(encodedData: responseData)
                         log.debug("Recv(Hex): %@", responseData.hexadecimalString)
-                        delegate?.messageTransport(self, didReceive: responseData)
+                        messageLogger?.didReceive(responseData)
                         return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")

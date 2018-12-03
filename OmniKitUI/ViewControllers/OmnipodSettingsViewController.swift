@@ -110,8 +110,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private class func sectionList(_ podState: PodState?) -> [Section] {
-        if let progress = podState?.podProgressStatus, progress != .readyForInjection {
-            return Section.allCases
+        if let podState = podState {
+            if podState.unfinishedPairing {
+                return [.actions, .rileyLinks]
+            } else {
+                return [.podDetails, .actions, .configuration, .status, .rileyLinks]
+            }
         } else {
             return [.actions, .rileyLinks, .deletePumpManager]
         }
@@ -262,14 +266,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 if podState == nil {
                     cell.textLabel?.text = LocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 } else if podState?.fault != nil {
-                    cell.textLabel?.text = LocalizedString("Fault! Replace Pod Now", comment: "The title of the command to replace pod when there is a pod fault")
+                    cell.textLabel?.text = LocalizedString("Replace Pod Now", comment: "The title of the command to replace pod when there is a pod fault")
                 } else if let progress = podState?.podProgressStatus, progress == .readyForInjection {
                     cell.textLabel?.text = LocalizedString("Finish pod setup", comment: "The title of the command to finish pod setup")
                 } else {
                     cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
                 }
-//            } else if let progress = podState?.podProgressStatus, progress == .readyForInjection {
-//                vc = PodReplacementNavigationController.instantiateInsertCannulaFlow(pumpManager)
 
                 cell.tintColor = .deleteColor
                 cell.isEnabled = true
@@ -338,7 +340,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .deletePumpManager:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             
-            cell.textLabel?.text = LocalizedString("Remove Omnipod", comment: "Title text for the button to delete Omnipod PumpManager")
+            cell.textLabel?.text = LocalizedString("Switch from Omnipod Pumps", comment: "Title text for the button to delete Omnipod PumpManager")
             cell.textLabel?.textAlignment = .center
             cell.tintColor = .deleteColor
             cell.isEnabled = true
@@ -423,17 +425,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             let vc = RileyLinkDeviceTableViewController(device: device)
             self.show(vc, sender: sender)
         case .deletePumpManager:
-            let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.deactivatePod() { (error) in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            self.statusError = error
-                            self.tableView.reloadSections([Section.status.rawValue], with: .none)
-                        }
-                        self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                }
+            let confirmVC = UIAlertController(pumpManagerDeletionHandler: {
+                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
+                self.navigationController?.popViewController(animated: true)
             })
             
             present(confirmVC, animated: true) {
@@ -507,7 +501,7 @@ extension OmnipodSettingsViewController: PodStateObserver {
     func podStateDidUpdate(_ state: PodState?) {
         DispatchQueue.main.async {
             let newSections = OmnipodSettingsViewController.sectionList(state)
-            let sectionsChanged = OmnipodSettingsViewController.sectionList(self.podState).count != newSections.count
+            let sectionsChanged = OmnipodSettingsViewController.sectionList(self.podState) != newSections
             self.podState = state
             
             if sectionsChanged {
@@ -533,15 +527,15 @@ extension OmnipodSettingsViewController: PumpManagerStatusObserver {
 
 
 private extension UIAlertController {
-    convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
+    convenience init(pumpManagerDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: LocalizedString("Are you sure you want to shutdown this pod?", comment: "Confirmation message for shutting down a pod"),
+            message: LocalizedString("Are you sure you want to stop using Omnipod?", comment: "Confirmation message for removing Omnipod PumpManager"),
             preferredStyle: .actionSheet
         )
         
         addAction(UIAlertAction(
-            title: LocalizedString("Replace Pod", comment: "Button title to replace pod"),
+            title: LocalizedString("Delete Omnipod", comment: "Button title to delete Omnipod PumpManager"),
             style: .destructive,
             handler: { (_) in
                 handler()

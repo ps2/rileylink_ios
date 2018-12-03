@@ -430,16 +430,9 @@ public class PodCommsSession {
     }
     
     public func getStatus() throws -> StatusResponse {
-        
-        do {
-            let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateFromStatusResponse(response)
-            return response
-        } catch PodCommsError.podAckedInsteadOfReturningResponse {
-            let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateFromStatusResponse(response)
-            return response
-        }
+        let response: StatusResponse = try send([GetStatusCommand()])
+        podState.updateFromStatusResponse(response)
+        return response
     }
     
     public func deactivatePod() throws {

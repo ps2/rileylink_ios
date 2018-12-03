@@ -34,6 +34,14 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
     }
     
+    public var unfinishedPairing: Bool {
+        if let progress = podProgressStatus, progress.unfinishedPairing {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)

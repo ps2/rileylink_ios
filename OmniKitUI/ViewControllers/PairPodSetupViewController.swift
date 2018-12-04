@@ -149,15 +149,8 @@ class PairPodSetupViewController: SetupTableViewController {
     func pair() {
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-            let fault: PodInfoFaultEvent?
-            do {
-                fault = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
-            } catch {
-                fault = nil
-            }
-            let basalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 1.0, startTime: 0)])
-            self.pumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, schedule: basalSchedule, fault: fault)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.pumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: true)
             self.continueState = .paired
         }
         #else

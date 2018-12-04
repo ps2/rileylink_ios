@@ -322,13 +322,15 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     // MARK: Testing
-    public func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, schedule: BasalSchedule, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil) {
-        let connectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
-        let start = startDate ?? Date()
-        let expire = start.addingTimeInterval(.days(3))
-        var podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
-        podState.fault = fault
-        self.state = OmnipodPumpManagerState(podState: podState, timeZone: TimeZone.currentFixed, basalSchedule: schedule, rileyLinkConnectionManagerState: connectionManager.state)
+    public func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil, mockFault: Bool) {
+        queue.async {
+            let start = startDate ?? Date()
+            let expire = start.addingTimeInterval(.days(3))
+            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+            
+            let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!) : nil
+            self.state.podState?.fault = fault
+        }
     }
     
     // MARK: - Pairing

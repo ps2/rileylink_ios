@@ -41,22 +41,6 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         if let omnipodPairingViewController = topViewController as? PairPodSetupViewController, let rileyLinkPumpManager = rileyLinkPumpManager {
             omnipodPairingViewController.rileyLinkPumpManager = rileyLinkPumpManager
         }
-
-        #if targetEnvironment(simulator)
-        // If we're in the simulator, create a mock PodState
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            let fault: PodInfoFaultEvent?
-            do {
-                fault = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
-            } catch {
-                fault = nil
-            }
-            let basalSchedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 1.0, startTime: 0)])
-            self.pumpManager = OmnipodPumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, schedule: basalSchedule, fault: fault)
-            self.completeSetup()
-        }
-        #endif
-
     }
         
     private(set) var pumpManager: OmnipodPumpManager?

@@ -336,6 +336,7 @@
 		C14303161C97C98000A40450 /* PumpAckMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303151C97C98000A40450 /* PumpAckMessageBody.swift */; };
 		C14303181C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303171C97CC6B00A40450 /* GetPumpModelCarelinkMessageBodyTests.swift */; };
 		C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */; };
+		C14CD28E21B5872D00F259DB /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		C14D2B051C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */; };
 		C14D2B091C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */; };
 		C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */; };
@@ -3791,6 +3792,7 @@
 				C104A9CE217ECF82006E3C3E /* MKGradientGenerator.swift in Sources */,
 				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
+				C14CD28E21B5872D00F259DB /* Data.swift in Sources */,
 				C104A9C1217E603E006E3C3E /* OmnipodReservoirView.swift in Sources */,
 				C1FFB01C21332E0900C50C1D /* UITableViewCell.swift in Sources */,
 				C1FFB00E2133242C00C50C1D /* OmniPodPumpManager+UI.swift in Sources */,

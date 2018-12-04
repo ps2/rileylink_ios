@@ -127,7 +127,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="qG6-Ic-XqX" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
@@ -238,7 +238,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="fNn-3N-mJd" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
@@ -484,7 +484,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="fX6-Eg-Jsv" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
@@ -627,7 +627,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="aXp-n1-WDr" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="50"/>
+                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
@@ -681,6 +681,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Q4k-oc-csy"/>
-        <segue reference="Hnx-w3-aQg"/>
+        <segue reference="NVm-H4-esT"/>
     </inferredMetricsTieBreakers>
 </document>

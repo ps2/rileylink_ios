@@ -16,7 +16,7 @@ import OmniKit
 extension OmnipodPumpManager: PumpManagerUI {
     
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
-        return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
+        return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()        
     }
     
     public func settingsViewController() -> UIViewController {

@@ -141,15 +141,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state
-        
+        self.podComms = PodComms(podState: state.podState)
         super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
         
-        // Pod communication
-        if let podState = state.podState {
-            self.podComms = PodComms(podState: podState, delegate: self, messageLogger: self)
-        } else {
-            self.podComms = nil
-        }
+        self.podComms.delegate = self
+        self.podComms.messageLogger = self
+        
     }
     
     public required convenience init?(rawState: PumpManager.RawStateValue) {
@@ -284,7 +281,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             "## OmnipodPumpManager",
             state.debugDescription,
             "",
-            String(describing: podComms!),
+            String(describing: podComms),
             super.debugDescription,
             "",
             ]
@@ -297,10 +294,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     // MARK: - Pod comms
-    private(set) var podComms: PodComms?
+    private(set) var podComms: PodComms
     
     public var hasPairedPod: Bool {
-        return podComms != nil
+        return state.podState?.pairingState == .paired
     }
     
     // Paired, primed, cannula inserted, and not faulting
@@ -314,8 +311,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func forgetPod() {
         queue.async {
-            self.podComms = nil
             self.state.podState = nil
+            self.podComms = PodComms(podState: nil)
+            self.podComms.delegate = self
+            self.podComms.messageLogger = self
             self.notifyPodStateObservers()
             self.messageLog.removeAll()
         }
@@ -326,7 +325,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         queue.async {
             let start = startDate ?? Date()
             let expire = start.addingTimeInterval(.days(3))
-            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, pairingState: .paired)
             
             let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!) : nil
             self.state.podState?.fault = fault
@@ -337,37 +336,27 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func pair(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.podComms == nil else {
+            guard !self.hasPairedPod else {
                 completion(OmnipodPumpManagerError.podAlreadyPaired)
                 return
             }
             
             let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            
-            PodComms.pair(using: deviceSelector, timeZone: .currentFixed, messageLogger: self) { (result) in
-                switch(result) {
-                case .success(let podState):
-                    self.state.podState = podState
-                    self.podComms = PodComms(podState: podState, delegate: self, messageLogger: self)
-                    completion(nil)
-                case .failure(let error):
-                    completion(error)
-                }
-            }
+            self.podComms.pair(using: deviceSelector, timeZone: .currentFixed, messageLogger: self, completion: completion)
         }
     }
     
     public func configureAndPrimePod(completion: @escaping (Error?) -> Void) {
         
         queue.async {
-            guard let podComms = self.podComms else {
+            guard self.hasPairedPod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
 
             let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             
-            podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
+            self.podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
@@ -385,14 +374,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func finishPrime(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard let podComms = self.podComms else {
+            guard self.hasPairedPod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
             
             let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             
-            podComms.runSession(withName: "Finish prime", using: deviceSelector) { (result) in
+            self.podComms.runSession(withName: "Finish prime", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
@@ -410,7 +399,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func insertCannula(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard let podComms = self.podComms else
+            guard self.hasPairedPod else
             {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
@@ -419,7 +408,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             let timeZone = self.state.timeZone
             
-            podComms.runSession(withName: "Insert cannula", using: deviceSelector) { (result) in
+            self.podComms.runSession(withName: "Insert cannula", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
@@ -442,7 +431,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
         
         queue.async {
-            guard let podComms = self.podComms, let podState = self.state.podState, podState.fault == nil else {
+            guard self.hasPairedPod, let podState = self.state.podState, podState.fault == nil else {
                 return
             }
             
@@ -450,7 +439,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            self.getPodStatus(podComms: podComms) { (response) in
+            self.getPodStatus(podComms: self.podComms) { (response) in
                 if case .success = response {
                     self.log.info("Recommending Loop")
                     self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
@@ -461,11 +450,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func refreshStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         queue.async {
-            guard let podComms = self.podComms, let podState = self.state.podState, podState.fault == nil else {
+            guard self.hasPairedPod, let podState = self.state.podState, podState.fault == nil else {
                 return
             }
             
-            self.getPodStatus(podComms: podComms, completion: completion)
+            self.getPodStatus(podComms: self.podComms, completion: completion)
         }
     }
 
@@ -503,13 +492,13 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Suspend", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Suspend", using: rileyLinkSelector) { (result) in
                 
                 let session: PodCommsSession
                 switch result {
@@ -540,12 +529,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Resume", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Resume", using: rileyLinkSelector) { (result) in
                 
                 let session: PodCommsSession
                 switch result {
@@ -573,12 +562,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func acknowledgeAlarms(_ alarmsToAcknowledge: PodAlarmState, completion: @escaping (_ status: StatusResponse?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(nil)
                 return
             }
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Acknowledge Alarms", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Acknowledge Alarms", using: rileyLinkSelector) { (result) in
                 let session: PodCommsSession
                 switch result {
                 case .success(let s):
@@ -600,7 +589,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
@@ -609,7 +598,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             let enactUnits = OmnipodPumpManager.roundToDeliveryIncrement(units)
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
                 
                 let session: PodCommsSession
                 switch result {
@@ -670,7 +659,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(PumpManagerResult.failure(OmnipodPumpManagerError.noPodPaired))
                 return
             }
@@ -679,7 +668,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             let rate = OmnipodPumpManager.roundToDeliveryIncrement(unitsPerHour)
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in
                 self.log.info("Enact temp basal %.03fU/hr for %ds", rate, Int(duration))
                 let session: PodCommsSession
                 switch result {
@@ -741,13 +730,13 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         let timeZone = TimeZone.currentFixed
         
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
 
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Set time zone", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Set time zone", using: rileyLinkSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
@@ -766,14 +755,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     public func setBasalSchedule(_ schedule: BasalSchedule, completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
 
             let timeZone = self.state.timeZone
             
-            podComms.runSession(withName: "Save Basal Profile", using: self.rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
+            self.podComms.runSession(withName: "Save Basal Profile", using: self.rileyLinkDeviceProvider.firstConnectedDevice) { (result) in
                 do {
                     switch result {
                     case .success(let session):
@@ -794,13 +783,13 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     public func deactivatePod(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard let podComms = self.podComms else {
+            guard self.hasPairedPod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Deactivate pod", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Deactivate pod", using: rileyLinkSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
@@ -818,13 +807,13 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func testingCommands(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasActivePod, let podComms = self.podComms else {
+            guard self.hasActivePod else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            podComms.runSession(withName: "Testing Commands", using: rileyLinkSelector) { (result) in
+            self.podComms.runSession(withName: "Testing Commands", using: rileyLinkSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {

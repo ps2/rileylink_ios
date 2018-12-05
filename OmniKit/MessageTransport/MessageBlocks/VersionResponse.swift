@@ -26,14 +26,6 @@ public struct VersionResponse : MessageBlock {
         }
     }
     
-    public enum PairingState: UInt8 {
-        case sleeping = 0
-        case readyToPair = 1
-        case addressAssigned = 2
-        case paired = 3
-        case pairingExpired = 14
-    }
-
     public let blockType: MessageBlockType = .versionResponse
 
     public let lot: UInt32

@@ -22,8 +22,8 @@ class PodSetupCompleteViewController: SetupTableViewController {
         if let setupViewController = setupViewController as? OmnipodPumpManagerSetupViewController {
             setupViewController.completeSetup()
         }
-        if let setupViewController = setupViewController as? PodReplacementNavigationController {
-            setupViewController.completeSetup()
+        if let setupNavigationController = setupNavigationController as? PodReplacementNavigationController {
+            setupNavigationController.completeSetup()
         }
     }
 }

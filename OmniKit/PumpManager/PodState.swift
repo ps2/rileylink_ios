@@ -29,6 +29,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var podProgressStatus: PodProgressStatus?
     public var fault: PodInfoFaultEvent?
     public var messageTransportState: MessageTransportState
+    public var pairingState: PairingState
     
     public var deliveryScheduleUncertain: Bool {
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
@@ -42,7 +43,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
     }
     
-    public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
+    public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, pairingState: PairingState) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.activatedAt = activatedAt
@@ -60,6 +61,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.podProgressStatus = nil
         self.alarms = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
+        self.pairingState = pairingState
     }
     
     public mutating func advanceToNextNonce() {
@@ -207,6 +209,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         }
+        
+        if let pairingStateRaw = rawValue["pairingState"] as? PairingState.RawValue {
+            self.pairingState = PairingState(rawValue: pairingStateRaw) ?? .paired
+        } else {
+            self.pairingState = .paired
+        }
     }
     
     public var rawValue: RawValue {
@@ -222,7 +230,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "suspended": suspended,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alarms": alarms.rawValue,
-            "messageTransportState": messageTransportState.rawValue
+            "messageTransportState": messageTransportState.rawValue,
+            "pairingState": pairingState.rawValue
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -267,6 +276,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* alarms: \(String(describing: alarms))",
             "* podProgressStatus: \(String(describing: podProgressStatus))",
             "* messageTransportState: \(String(describing: messageTransportState))",
+            "* pairingState: \(pairingState)",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

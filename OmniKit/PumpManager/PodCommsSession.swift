@@ -12,6 +12,7 @@ import LoopKit
 import os.log
 
 public enum PodCommsError: Error {
+    case noPodPaired
     case invalidData
     case crcMismatch
     case unknownPacketType(rawType: UInt8)
@@ -33,6 +34,8 @@ public enum PodCommsError: Error {
 extension PodCommsError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .noPodPaired:
+            return LocalizedString("No pod paired", comment: "Error message shown when no pod is paired")
         case .invalidData:
             return nil
         case .crcMismatch:
@@ -70,6 +73,8 @@ extension PodCommsError: LocalizedError {
     
     public var failureReason: String? {
         switch self {
+        case .noPodPaired:
+            return nil
         case .invalidData:
             return nil
         case .crcMismatch:
@@ -107,6 +112,8 @@ extension PodCommsError: LocalizedError {
     
     public var recoverySuggestion: String? {
         switch self {
+        case .noPodPaired:
+            return nil
         case .invalidData:
             return nil
         case .crcMismatch:
@@ -205,12 +212,7 @@ public class PodCommsSession {
                             return block
                         }
                     })
-                } else if responseType == .podInfoResponse,
-                    let infoResponse = response.messageBlocks[0] as? PodInfoResponse,
-                    infoResponse.podInfoResponseSubType == .faultEvents,
-                    let fault = infoResponse.podInfo as? PodInfoFaultEvent
-                    
-                {
+                } else if let fault = response.fault {
                     self.podState.fault = fault
                     log.error("Pod Fault: %@", String(describing: fault))
                     throw PodCommsError.podFault(fault: fault)

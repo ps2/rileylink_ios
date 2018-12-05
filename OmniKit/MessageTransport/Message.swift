@@ -83,5 +83,17 @@ struct Message {
         data.appendBigEndian(crc)
         return data
     }
+    
+    var fault: PodInfoFaultEvent? {
+        if messageBlocks.count > 0 && messageBlocks[0].blockType == .podInfoResponse,
+            let infoResponse = messageBlocks[0] as? PodInfoResponse,
+            infoResponse.podInfoResponseSubType == .faultEvents,
+            let fault = infoResponse.podInfo as? PodInfoFaultEvent
+        {
+            return fault
+        } else {
+            return nil
+        }
+    }
 }
 

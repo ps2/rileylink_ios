@@ -63,7 +63,6 @@ class ReplacePodViewController: SetupTableViewController {
             case .deactivating:
                 activityIndicator.state = .loading
                 footerView.primaryButton.isEnabled = false
-                footerView.primaryButton.setDeactivateTitle()
                 lastError = nil
             case .deactivationFailed:
                 activityIndicator.state = .hidden

@@ -20,6 +20,14 @@ let bolusDeliveryRate: Double = 0.025
 let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
 let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
 
+public enum PairingState: UInt8 {
+    case sleeping = 0
+    case readyToPair = 1
+    case addressAssigned = 2
+    case paired = 3
+    case pairingExpired = 14
+}
+
 // DeliveryStatus used in StatusResponse and PodInfoFaults
 public enum DeliveryStatus: UInt8, CustomStringConvertible {
     case suspended = 0

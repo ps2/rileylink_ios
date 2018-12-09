@@ -96,7 +96,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Prepare Pod" footerTitle="NOTE: Do not remove needle cap at this time." id="EUt-xk-Rmp" userLabel="Instructions Section">
+                            <tableViewSection headerTitle="Prepare Pod" footerTitle="NOTE: Do not remove the pod's needle cap at this time." id="EUt-xk-Rmp" userLabel="Instructions Section">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="vmF-Dc-3DS" rowHeight="45" style="IBUITableViewCellStyleDefault" id="zQ2-f5-GDP" userLabel="Instructions">
                                         <rect key="frame" x="0.0" y="222.33333333333334" width="375" height="45.000000000000028"/>
@@ -105,7 +105,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Fill a new pod with insulin. After filling pod, listen for 2 beeps." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vmF-Dc-3DS">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Fill a new pod with insulin. After filling pod, listen for 2 beeps. Make sure your RileyLink is near the pod." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vmF-Dc-3DS">
                                                     <rect key="frame" x="16" y="0.0" width="343" height="45"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
@@ -127,14 +127,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="qG6-Ic-XqX" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
+                                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="qG6-Ic-XqX" secondAttribute="trailing" constant="10" id="5nX-Z2-GdW"/>
                                                 <constraint firstItem="qG6-Ic-XqX" firstAttribute="centerX" secondItem="vND-m3-QTC" secondAttribute="centerX" id="78Q-ip-Aix"/>
-                                                <constraint firstAttribute="bottom" secondItem="qG6-Ic-XqX" secondAttribute="bottom" id="pIc-EI-1Pr"/>
+                                                <constraint firstItem="qG6-Ic-XqX" firstAttribute="leading" secondItem="vND-m3-QTC" secondAttribute="leading" constant="10" id="iZu-ba-c1l"/>
                                                 <constraint firstItem="qG6-Ic-XqX" firstAttribute="top" secondItem="vND-m3-QTC" secondAttribute="top" id="sS2-nP-7hf"/>
+                                                <constraint firstAttribute="bottom" secondItem="qG6-Ic-XqX" secondAttribute="bottom" id="tev-yn-MaZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -172,7 +174,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69p-di-WUy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="655" y="231"/>
+            <point key="canvasLocation" x="653.60000000000002" y="230.54187192118226"/>
         </scene>
         <!--Insert Cannula-->
         <scene sceneID="xNW-i2-fPX">
@@ -209,15 +211,15 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Apply POD" footerTitle="NOTE: If cannula sticks out, press cancel." id="rcC-ke-lUP" userLabel="Instructions Section">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="Iuv-5M-bDH" rowHeight="44" style="IBUITableViewCellStyleDefault" id="Nsn-dD-nL6" userLabel="Instructions">
-                                        <rect key="frame" x="0.0" y="222.33333333333334" width="375" height="44.000000000000028"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="Iuv-5M-bDH" rowHeight="73.999999999999972" style="IBUITableViewCellStyleDefault" id="Nsn-dD-nL6" userLabel="Instructions">
+                                        <rect key="frame" x="0.0" y="222.33333333333337" width="375" height="74"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Nsn-dD-nL6" id="Rjj-Oz-AlR">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Prepare site. Remove pod's needle cap and adhesive backing. If pod is OK, apply to site." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iuv-5M-bDH">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="44"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Prepare site. Remove the pod's needle cap and adhesive backing. If pod is OK, apply to site." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iuv-5M-bDH">
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="74"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
@@ -231,26 +233,28 @@
                             <tableViewSection id="VgK-az-0oS" userLabel="Status Section">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="50" id="V0c-ku-Ha8">
-                                        <rect key="frame" x="0.0" y="314.00000000000006" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="344.00000000000006" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="V0c-ku-Ha8" id="ryO-Kg-4KE">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="fNn-3N-mJd" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
+                                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="fNn-3N-mJd" secondAttribute="bottom" id="EzP-zU-M6a"/>
+                                                <constraint firstItem="fNn-3N-mJd" firstAttribute="leading" secondItem="ryO-Kg-4KE" secondAttribute="leading" constant="10" id="Vg7-84-t7b"/>
+                                                <constraint firstAttribute="trailing" secondItem="fNn-3N-mJd" secondAttribute="trailing" constant="10" id="a4k-wh-F36"/>
                                                 <constraint firstItem="fNn-3N-mJd" firstAttribute="top" secondItem="ryO-Kg-4KE" secondAttribute="top" id="c8n-ga-OZk"/>
                                                 <constraint firstItem="fNn-3N-mJd" firstAttribute="centerX" secondItem="ryO-Kg-4KE" secondAttribute="centerX" id="vbL-I0-mjm"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="DkY-8R-pUP" style="IBUITableViewCellStyleDefault" id="bHr-BP-Q9x">
-                                        <rect key="frame" x="0.0" y="364.00000000000006" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="394.00000000000006" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bHr-BP-Q9x" id="MMX-hw-6gS">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -484,14 +488,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="fX6-Eg-Jsv" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
+                                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="fX6-Eg-Jsv" firstAttribute="centerX" secondItem="QLN-wz-1ac" secondAttribute="centerX" id="1eK-s6-byt"/>
+                                                <constraint firstAttribute="trailing" secondItem="fX6-Eg-Jsv" secondAttribute="trailing" constant="10" id="FIq-nA-KW9"/>
                                                 <constraint firstAttribute="bottom" secondItem="fX6-Eg-Jsv" secondAttribute="bottom" id="NHz-Ig-TyN"/>
                                                 <constraint firstItem="fX6-Eg-Jsv" firstAttribute="top" secondItem="QLN-wz-1ac" secondAttribute="top" id="XOT-Oa-Q24"/>
+                                                <constraint firstAttribute="bottom" secondItem="fX6-Eg-Jsv" secondAttribute="bottom" id="cLz-Ip-AfD"/>
+                                                <constraint firstItem="fX6-Eg-Jsv" firstAttribute="leading" secondItem="QLN-wz-1ac" secondAttribute="leading" constant="10" id="k25-z4-z38"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -529,7 +536,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="skE-zp-VTx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="638" y="-856"/>
+            <point key="canvasLocation" x="637.60000000000002" y="-856.4039408866995"/>
         </scene>
         <!--Fault Handler Flow-->
         <scene sceneID="7FS-NJ-Y6T">
@@ -627,14 +634,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="aXp-n1-WDr" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="162.66666666666666" y="0.0" width="50" height="0.0"/>
+                                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="aXp-n1-WDr" secondAttribute="bottom" id="2d2-FO-TvK"/>
                                                 <constraint firstItem="aXp-n1-WDr" firstAttribute="centerX" secondItem="RfI-2H-kjS" secondAttribute="centerX" id="DfY-pg-x6E"/>
                                                 <constraint firstItem="aXp-n1-WDr" firstAttribute="top" secondItem="RfI-2H-kjS" secondAttribute="top" id="NNF-AY-ZOp"/>
+                                                <constraint firstAttribute="trailing" secondItem="aXp-n1-WDr" secondAttribute="trailing" constant="10" id="XxV-M7-Jzu"/>
+                                                <constraint firstItem="aXp-n1-WDr" firstAttribute="leading" secondItem="RfI-2H-kjS" secondAttribute="leading" constant="10" id="f13-Qz-ufg"/>
+                                                <constraint firstAttribute="bottom" secondItem="aXp-n1-WDr" secondAttribute="bottom" id="iMr-aq-amP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -672,7 +681,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UY0-mb-xq0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2694" y="-856"/>
+            <point key="canvasLocation" x="2693.5999999999999" y="-856.4039408866995"/>
         </scene>
     </scenes>
     <resources>
@@ -680,7 +689,7 @@
         <image name="PodLarge" width="99.839996337890625" height="79.199996948242188"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Q4k-oc-csy"/>
+        <segue reference="3Py-Xn-kuv"/>
         <segue reference="NVm-H4-esT"/>
     </inferredMetricsTieBreakers>
 </document>

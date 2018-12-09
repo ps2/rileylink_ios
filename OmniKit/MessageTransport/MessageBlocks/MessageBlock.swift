@@ -38,7 +38,7 @@ public enum MessageBlockType: UInt8 {
         case .podInfoResponse:
             return PodInfoResponse.self
         case .setupPod:
-            return SetupPodCommand.self
+            return ConfigurePodCommand.self
         case .errorResponse:
             return ErrorResponse.self
         case .assignAddress:

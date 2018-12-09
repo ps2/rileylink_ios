@@ -37,10 +37,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard continueState != .inserting else {
+        if case .startingInsertion = continueState {
             return
         }
-        
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -48,7 +48,8 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     private enum State {
         case initial
-        case inserting
+        case startingInsertion
+        case inserting(finishTime: Date)
         case ready
     }
     
@@ -59,10 +60,13 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.setConnectTitle()
-            case .inserting:
+            case .startingInsertion:
                 activityIndicator.state = .loading
                 footerView.primaryButton.isEnabled = false
-                footerView.primaryButton.setConnectTitle()
+                lastError = nil
+            case .inserting(let finishTime):
+                activityIndicator.state = .timedProgress(finishTime: finishTime)
+                footerView.primaryButton.isEnabled = false
                 lastError = nil
             case .ready:
                 activityIndicator.state = .completed
@@ -104,7 +108,11 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return continueState == .ready
+        if case .ready = continueState {
+            return true
+        } else {
+            return false
+        }
     }
     
     override func continueButtonPressed(_ sender: Any) {
@@ -112,7 +120,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         if case .ready = continueState {
             super.continueButtonPressed(sender)
         } else if case .initial = continueState {
-            continueState = .inserting
+            continueState = .startingInsertion
             insertCannula()
         }
     }
@@ -137,17 +145,33 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     }
     
     func insertCannula() {
-        pumpManager.insertCannula() { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
+        #if targetEnvironment(simulator)
+        let mockDelay = TimeInterval(seconds: 3)
+        DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
+            let finishTime = Date() + mockDelay
+            self.continueState = .inserting(finishTime: finishTime)
+            DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
+                self.continueState = .ready
+            }
+        }
+        #else
+        pumpManager.insertCannula() { (result) in
+            DispatchQueue.main.async {
+                switch(result) {
+                case .success(let finishTime):
+                    self.continueState = .inserting(finishTime: finishTime)
+                    let delay = finishTime.timeIntervalSinceNow
+                    if delay > 0 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+                            self.continueState = .ready
+                        }
+                    }
+                case .failure(let error):
                     self.lastError = error
-                }
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-                    self.continueState = .ready
                 }
             }
         }
+        #endif
     }
 }
 

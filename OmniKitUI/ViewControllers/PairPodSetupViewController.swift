@@ -16,7 +16,13 @@ class PairPodSetupViewController: SetupTableViewController {
     
     var rileyLinkPumpManager: RileyLinkPumpManager!
     
-    var pumpManager: OmnipodPumpManager!
+    var pumpManager: OmnipodPumpManager! {
+        didSet {
+            if oldValue == nil && pumpManager != nil {
+                pumpManagerWasSet()
+            }
+        }
+    }
     
     private var cancelErrorCount = 0
 
@@ -28,8 +34,21 @@ class PairPodSetupViewController: SetupTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         continueState = .initial
+    }
+    
+    private func pumpManagerWasSet() {
+        // Still priming?
+        pumpManager.primeFinishesAt(completion: { (finishTime) in
+            let currentTime = Date()
+            if let finishTime = finishTime, finishTime > currentTime {
+                self.continueState = .pairing
+                let delay = finishTime.timeIntervalSince(currentTime)
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    self.continueState = .ready
+                }
+            }
+        })
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -39,7 +58,7 @@ class PairPodSetupViewController: SetupTableViewController {
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard continueState != .pairing else {
+        if case .pairing = continueState {
             return
         }
         
@@ -51,7 +70,8 @@ class PairPodSetupViewController: SetupTableViewController {
     private enum State {
         case initial
         case pairing
-        case paired
+        case priming(finishTime: Date)
+        case ready
     }
     
     private var continueState: State = .initial {
@@ -66,12 +86,31 @@ class PairPodSetupViewController: SetupTableViewController {
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setConnectTitle()
                 lastError = nil
-            case .paired:
+                loadingText = LocalizedString("Pairing...", comment: "The text of the loading label when pairing")
+            case .priming(let finishTime):
+                activityIndicator.state = .timedProgress(finishTime: finishTime)
+                footerView.primaryButton.isEnabled = false
+                footerView.primaryButton.setConnectTitle()
+                lastError = nil
+                loadingText = LocalizedString("Priming...", comment: "The text of the loading label when priming")
+            case .ready:
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.resetTitle()
                 lastError = nil
+                loadingText = LocalizedString("Primed", comment: "The text of the loading label when pod is primed")
             }
+        }
+    }
+    
+    private var loadingText: String? {
+        didSet {
+            tableView.beginUpdates()
+            loadingLabel.text = loadingText
+            
+            let isHidden = (loadingText == nil)
+            loadingLabel.isHidden = isHidden
+            tableView.endUpdates()
         }
     }
     
@@ -91,40 +130,34 @@ class PairPodSetupViewController: SetupTableViewController {
                 }
             }
             
-            tableView.beginUpdates()
-            loadingLabel.text = errorText
+            loadingText = errorText
             
-            let isHidden = (errorText == nil)
-            loadingLabel.isHidden = isHidden
-            tableView.endUpdates()
-            
-            // If we changed the error text, update the continue state
-            if !isHidden {
+            // If we have an error, update the continue state
+            if lastError != nil {
                 continueState = .initial
             }
         }
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        return continueState == .paired
+        if case .ready = continueState {
+            return true
+        } else {
+            return false
+        }
     }
     
     override func continueButtonPressed(_ sender: Any) {
         
-        if case .paired = continueState {
+        if case .ready = continueState {
             super.continueButtonPressed(sender)
         } else if case .initial = continueState {
-            if !pumpManager.hasPairedPod {
-                continueState = .pairing
-                pair()
-            } else {
-                configureAndPrimePod()
-            }
+            pair()
         }
     }
     
     override func cancelButtonPressed(_ sender: Any) {
-        if case .paired = continueState, let pumpManager = self.pumpManager {
+        if case .ready = continueState, let pumpManager = self.pumpManager {
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 pumpManager.deactivatePod() { (error) in
                     DispatchQueue.main.async {
@@ -147,51 +180,36 @@ class PairPodSetupViewController: SetupTableViewController {
     }
     
     func pair() {
+        self.continueState = .pairing
+        
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.pumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: true)
-            self.continueState = .paired
+        let mockDelay = TimeInterval(seconds: 5)
+        DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
+            let finishTime = Date() + mockDelay
+            self.continueState = .priming(finishTime: finishTime)
+            DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
+                self.pumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: true)
+                self.continueState = .ready
+            }
         }
         #else
 
-        pumpManager.pair() { (error) in
+        pumpManager.pairAndPrime() { (result) in
             DispatchQueue.main.async {
-                if let error = error {
+                switch result {
+                case .success(let finishTime):
+                    self.continueState = .priming(finishTime: finishTime)
+                    let delay = finishTime.timeIntervalSinceNow
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                        self.continueState = .ready
+                    }
+                case .failure(let error):
                     self.lastError = error
-                } else {
-                    self.configureAndPrimePod()
                 }
             }
         }
         #endif
-    }
-
-    func configureAndPrimePod() {
-
-        pumpManager.configureAndPrimePod { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.lastError = error
-                }
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(55)) {
-                    self.finishPrime()
-                }
-            }
-        }
-    }
-    
-    func finishPrime() {
-        pumpManager.finishPrime { (error) in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self.lastError = error
-                } else {
-                    self.continueState = .paired
-                }
-            }
-        }
     }
 }
 

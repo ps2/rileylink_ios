@@ -141,10 +141,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private var actions: [ActionsRow] {
-        if let progress = podState?.podProgressStatus, progress != .readyForInjection {
-            return ActionsRow.allCases
-        } else {
+        if let podState = podState, podState.unfinishedPairing {
             return [.replacePod]
+        } else {
+            return ActionsRow.allCases
         }
     }
     
@@ -267,7 +267,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.textLabel?.text = LocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 } else if podState?.fault != nil {
                     cell.textLabel?.text = LocalizedString("Replace Pod Now", comment: "The title of the command to replace pod when there is a pod fault")
-                } else if let progress = podState?.podProgressStatus, progress == .readyForInjection {
+                } else if let podState = podState, podState.unfinishedPairing {
                     cell.textLabel?.text = LocalizedString("Finish pod setup", comment: "The title of the command to finish pod setup")
                 } else {
                     cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
@@ -377,11 +377,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 tableView.deselectRow(at: indexPath, animated: true)
             case .replacePod:
                 let vc: UIViewController
-                if podState == nil {
+                if podState == nil || podState!.setupProgress.primingNeeded {
                     vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
                 } else if podState?.fault != nil {
                     vc = PodReplacementNavigationController.instantiateFaultHandlerFlow(pumpManager)
-                } else if let progress = podState?.podProgressStatus, progress == .readyForInjection {
+                } else if let podState = podState, podState.unfinishedPairing {
                     vc = PodReplacementNavigationController.instantiateInsertCannulaFlow(pumpManager)
                 } else {
                     vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)

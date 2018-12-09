@@ -8,6 +8,30 @@
 
 import Foundation
 
+public enum SetupProgress: Int {
+    case addressAssigned = 0
+    case podConfigured
+    case startingPrime
+    case priming
+    case settingInitialBasalSchedule
+    case initialBasalScheduleSet
+    case startingInsertCannula
+    case completed
+    
+    public var primingNeeded: Bool {
+        return self.rawValue < SetupProgress.priming.rawValue
+    }
+    
+    public var needsCannulaInsertion: Bool {
+        return self.rawValue < SetupProgress.completed.rawValue
+    }
+
+    public var needsInitialBasalSchedule: Bool {
+        return self.rawValue < SetupProgress.initialBasalScheduleSet.rawValue
+    }
+
+}
+
 public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertible {
     
     public typealias RawValue = [String: Any]
@@ -26,24 +50,16 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var unfinalizedTempBasal: UnfinalizedDose?
     var finalizedDoses: [UnfinalizedDose]
     public private(set) var suspended: Bool
-    public var podProgressStatus: PodProgressStatus?
     public var fault: PodInfoFaultEvent?
     public var messageTransportState: MessageTransportState
-    public var pairingState: PairingState
+    public var primeFinishTime: Date?
+    public var setupProgress: SetupProgress
     
     public var deliveryScheduleUncertain: Bool {
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
     }
     
-    public var unfinishedPairing: Bool {
-        if let progress = podProgressStatus, progress.unfinishedPairing {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, pairingState: PairingState) {
+    public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.activatedAt = activatedAt
@@ -58,11 +74,24 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.finalizedDoses = []
         self.suspended = false
         self.fault = nil
-        self.podProgressStatus = nil
         self.alarms = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
-        self.pairingState = pairingState
+        self.primeFinishTime = nil
+        self.setupProgress = .addressAssigned
     }
+    
+    public var unfinishedPairing: Bool {
+        return setupProgress != .completed
+    }
+    
+    public var readyForCannulaInsertion: Bool {
+        guard let primeFinishTime = self.primeFinishTime else {
+            return false
+        }
+        return !setupProgress.primingNeeded && primeFinishTime.timeIntervalSinceNow < 0
+    }
+    
+
     
     public mutating func advanceToNextNonce() {
         nonceState.advanceToNextNonce()
@@ -82,7 +111,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
         alarms = response.alarms
-        podProgressStatus = response.podProgressStatus
     }
     
     private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
@@ -197,24 +225,24 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.alarms = .none
         }
         
-        if let podProgressRaw = rawValue["podProgressStatus"] as? UInt8 {
-            self.podProgressStatus = PodProgressStatus(rawValue: podProgressRaw)
+        if let setupProgressRaw = rawValue["setupProgress"] as? Int,
+            let setupProgress = SetupProgress(rawValue: setupProgressRaw)
+        {
+            self.setupProgress = setupProgress
         } else {
-            self.podProgressStatus = nil
+            // Migrate
+            self.setupProgress = .completed
         }
         
         if let messageTransportStateRaw = rawValue["messageTransportState"] as? MessageTransportState.RawValue,
-            let messageTransportState = MessageTransportState(rawValue: messageTransportStateRaw) {
+            let messageTransportState = MessageTransportState(rawValue: messageTransportStateRaw)
+        {
             self.messageTransportState = messageTransportState
         } else {
             self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         }
         
-        if let pairingStateRaw = rawValue["pairingState"] as? PairingState.RawValue {
-            self.pairingState = PairingState(rawValue: pairingStateRaw) ?? .paired
-        } else {
-            self.pairingState = .paired
-        }
+        self.primeFinishTime = rawValue["primeFinishTime"] as? Date
     }
     
     public var rawValue: RawValue {
@@ -231,7 +259,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alarms": alarms.rawValue,
             "messageTransportState": messageTransportState.rawValue,
-            "pairingState": pairingState.rawValue
+            "setupProgress": setupProgress.rawValue
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -249,9 +277,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let fault = self.fault {
             rawValue["fault"] = fault.rawValue
         }
-        
-        if let podProgressStatus = podProgressStatus {
-            rawValue["podProgressStatus"] = podProgressStatus.rawValue
+
+        if let primeFinishTime = primeFinishTime {
+            rawValue["primeFinishTime"] = primeFinishTime
         }
 
         return rawValue
@@ -274,9 +302,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
             "* alarms: \(String(describing: alarms))",
-            "* podProgressStatus: \(String(describing: podProgressStatus))",
             "* messageTransportState: \(String(describing: messageTransportState))",
-            "* pairingState: \(pairingState)",
+            "* setupProgress: \(setupProgress)",
+            "* primeFinishTime: \(String(describing: primeFinishTime))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

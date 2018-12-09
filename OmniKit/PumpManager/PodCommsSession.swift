@@ -226,23 +226,40 @@ public class PodCommsSession {
         throw PodCommsError.nonceResyncFailed
     }
 
-    public func configureAndPrimePod() throws {
+    // Returns time at which prime is expected to finish.
+    public func prime() throws -> Date {
         //4c00 00c8 0102
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeepBeep)
         
-        let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
-        let _: StatusResponse = try send([configureAlerts1])
-        podState.advanceToNextNonce()
-        
-        //7837 0005 0802
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
-        let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
-        let _: StatusResponse = try send([configureAlerts2])
-        podState.advanceToNextNonce()
+        // Skip following alerts if we've already done them before
+        if podState.setupProgress != .startingPrime {
+    
+            let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeepBeep)
+            
+            let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
+            let _: StatusResponse = try send([configureAlerts1])
+            podState.advanceToNextNonce()
+            
+            //7837 0005 0802
+            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
+            let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
+            let _: StatusResponse = try send([configureAlerts2])
+            podState.advanceToNextNonce()
+        } else {
+            // We started prime, but didn't get confirmation somehow, so check status
+            let status: StatusResponse = try send([GetStatusCommand()])
+            podState.updateFromStatusResponse(status)
+            if status.podProgressStatus == .priming || status.podProgressStatus == .readyForBasalSchedule {
+                podState.setupProgress = .priming
+                return podState.primeFinishTime!
+            }
+        }
 
         // Mark 2.6U delivery for prime
         
-        // 1a0e bed2e16b 02 010a 01 01a0 0034 0034 170d 00 0208 000186a0
+        let primeFinishTime = Date() + .seconds(55)
+        podState.primeFinishTime = primeFinishTime
+        podState.setupProgress = .startingPrime
+
         let primeUnits = 2.6
         let timeBetweenPulses = TimeInterval(seconds: 1)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
@@ -251,43 +268,62 @@ public class PodCommsSession {
         let status: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status)
         podState.advanceToNextNonce()
+        podState.setupProgress = .priming
+        return primeFinishTime
     }
     
-    public func finishPrime() throws {
+    public func programInitialBasalSchedule(_ basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
         // 3800 0ff0 0302
-        let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBip)
-        let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
-        let status: StatusResponse = try send([configureAlerts])
-        podState.updateFromStatusResponse(status)
-        podState.advanceToNextNonce()
+        if podState.setupProgress != .settingInitialBasalSchedule {
+            let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBip)
+            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
+            let status: StatusResponse = try send([configureAlerts])
+            podState.updateFromStatusResponse(status)
+            podState.advanceToNextNonce()
+        } else {
+            // We started basal schedule programming, but didn't get confirmation somehow, so check status
+            let status: StatusResponse = try send([GetStatusCommand()])
+            podState.updateFromStatusResponse(status)
+            if status.podProgressStatus == .readyForCannulaInsertion {
+                podState.setupProgress = .initialBasalScheduleSet
+                return
+            }
+        }
+        
+        podState.setupProgress = .settingInitialBasalSchedule
+        // Set basal schedule
+        let status2 = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        podState.updateFromStatusResponse(status2)
+        podState.setupProgress = .initialBasalScheduleSet
     }
     
-    public func insertCannula(basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
-        
-        // Set basal schedule
-        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
-        
+    public func insertCannula() throws -> Date {
         // Configure Alerts
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
-        
-        // 2800 1283 0602
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
-        
-        // 020f 0000 0202
-        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
-        
-        let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1, alertConfig2, alertConfig3])
-        
-        do {
+        if podState.setupProgress != .startingInsertCannula {
+            let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
+            
+            // 2800 1283 0602
+            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
+            
+            // 020f 0000 0202
+            let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
+            
+            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1, alertConfig2, alertConfig3])
+            
             let status: StatusResponse = try send([configureAlerts])
             podState.updateFromStatusResponse(status)
-        } catch PodCommsError.podAckedInsteadOfReturningResponse {
-            print("pod acked?")
+            podState.advanceToNextNonce()
+        } else {
+            // We started cannula insertion, but didn't get confirmation somehow, so check status
+            let status: StatusResponse = try send([GetStatusCommand()])
+            podState.updateFromStatusResponse(status)
+            if status.podProgressStatus == .cannulaInserting || status.podProgressStatus == .aboveFiftyUnits {
+                podState.setupProgress = .completed
+                return Date() + .seconds(10)
+            }
         }
-        
-        podState.advanceToNextNonce()
         
         // Insert Cannula
         // 1a0e7e30bf16020065010050000a000a
@@ -297,10 +333,15 @@ public class PodCommsSession {
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
         // 17 0d 00 0064 0001 86a0000000000000
+        podState.setupProgress = .startingInsertCannula
         let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
-        let status: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
-        podState.updateFromStatusResponse(status)
+        let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
+        podState.updateFromStatusResponse(status2)
         podState.advanceToNextNonce()
+        
+        let cannulaInsertionFinishTime = Date() + .seconds(10)
+        podState.setupProgress = .completed
+        return cannulaInsertionFinishTime
     }
 
     

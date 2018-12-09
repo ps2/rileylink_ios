@@ -530,7 +530,7 @@
 		C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */; };
 		C1FFAFCB213323E900C50C1D /* BasalScheduleExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */; };
 		C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */; };
-		C1FFAFCD213323E900C50C1D /* SetPodTimeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */; };
+		C1FFAFCD213323E900C50C1D /* ConfigurePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */; };
 		C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */; };
 		C1FFAFCF213323E900C50C1D /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */; };
 		C1FFAFD0213323E900C50C1D /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */; };
@@ -1425,7 +1425,7 @@
 		C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStatusCommand.swift; sourceTree = "<group>"; };
 		C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleExtraCommand.swift; sourceTree = "<group>"; };
 		C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelDeliveryCommand.swift; sourceTree = "<group>"; };
-		C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetPodTimeCommand.swift; sourceTree = "<group>"; };
+		C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurePodCommand.swift; sourceTree = "<group>"; };
 		C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssignAddressCommand.swift; sourceTree = "<group>"; };
 		C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInsulinScheduleCommand.swift; sourceTree = "<group>"; };
@@ -2484,7 +2484,7 @@
 				C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */,
 				E9EDD476215BED3500A103D1 /* PodInfoTester.swift */,
 				C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */,
-				C1FFAFAF213323E800C50C1D /* SetPodTimeCommand.swift */,
+				C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */,
 				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
 				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
 				C1FFAFA4213323E800C50C1D /* VersionResponse.swift */,
@@ -3721,7 +3721,7 @@
 				C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */,
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,
-				C1FFAFCD213323E900C50C1D /* SetPodTimeCommand.swift in Sources */,
+				C1FFAFCD213323E900C50C1D /* ConfigurePodCommand.swift in Sources */,
 				E9EE3370214ED01200888876 /* PodInfoFaultEvent.swift in Sources */,
 				E9E54AB421542E8A00E319B8 /* PodInfoResetStatus.swift in Sources */,
 				E9EE336E214ED01200888876 /* PodInfo.swift in Sources */,

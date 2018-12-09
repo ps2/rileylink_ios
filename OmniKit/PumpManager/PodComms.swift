@@ -12,7 +12,7 @@ import LoopKit
 import os.log
 
 protocol PodCommsDelegate: class {
-    func podComms(_ podComms: PodComms, didChange state: PodState)
+    func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
 
 class PodComms : CustomDebugStringConvertible {
@@ -34,7 +34,7 @@ class PodComms : CustomDebugStringConvertible {
             }
         }
     }
-
+    
     init(podState: PodState?) {
         self.podState = podState
         self.delegate = nil
@@ -42,16 +42,17 @@ class PodComms : CustomDebugStringConvertible {
     }
     
     private func assignAddress(commandSession: CommandSession) throws {
+        
         let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         
         // Create random address with 20 bits.  Can we use all 24 bits?
-        let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
+        let address = 0x1f000000 | (arc4random() & 0x000fffff)
         
-        let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress, state: messageTransportState)
+        let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
         transport.messageLogger = messageLogger
-
+        
         // Assign Address
-        let assignAddress = AssignAddressCommand(address: newAddress)
+        let assignAddress = AssignAddressCommand(address: address)
         
         let response = try transport.send([assignAddress])
         
@@ -69,26 +70,24 @@ class PodComms : CustomDebugStringConvertible {
         
         // Pairing state should be addressAssigned
         self.podState = PodState(
-            address: newAddress,
+            address: address,
             activatedAt: activationDate,
             expiresAt: activationDate.addingTimeInterval(podSoftExpirationTime),
             piVersion: String(describing: config.piVersion),
             pmVersion: String(describing: config.pmVersion),
             lot: config.lot,
-            tid: config.tid,
-            pairingState: config.pairingState
+            tid: config.tid
         )
-
     }
     
-    private func setupPod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
+    private func configurePod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
         
         let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
         transport.messageLogger = messageLogger
         
-        let dateComponents = SetupPodCommand.dateComponents(date: podState.activatedAt, timeZone: timeZone)
-        let setupPod = SetupPodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
-        
+        let dateComponents = ConfigurePodCommand.dateComponents(date: podState.activatedAt, timeZone: timeZone)
+        let setupPod = ConfigurePodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
+
         let response = try transport.send([setupPod])
         
         if let fault = response.fault {
@@ -100,10 +99,10 @@ class PodComms : CustomDebugStringConvertible {
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
+
+        self.podState?.setupProgress = .podConfigured
         
-        self.podState?.pairingState = config.pairingState
-        
-        guard config.pairingState == .paired else {
+        guard config.setupState == .paired else {
             throw PodCommsError.invalidData
         }
     }
@@ -128,7 +127,8 @@ class PodComms : CustomDebugStringConvertible {
                         completion(PodCommsError.noPodPaired)
                         return
                     }
-                    try self.setupPod(podState: podState, timeZone: timeZone, commandSession: commandSession)
+                    
+                    try self.configurePod(podState: podState, timeZone: timeZone, commandSession: commandSession)
 
                     completion(nil)
                 } catch let error {

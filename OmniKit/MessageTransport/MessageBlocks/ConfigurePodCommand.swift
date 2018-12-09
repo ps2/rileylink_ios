@@ -1,5 +1,5 @@
 //
-//  SetupPodCommand.swift
+//  ConfigurePodCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/17/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SetupPodCommand : MessageBlock {
+public struct ConfigurePodCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .setupPod
     

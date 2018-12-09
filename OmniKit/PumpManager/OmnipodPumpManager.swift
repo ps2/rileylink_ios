@@ -25,6 +25,9 @@ public protocol PodStateObserver: class {
 public enum OmnipodPumpManagerError: Error {
     case noPodPaired
     case podAlreadyPaired
+    case podAlreadyPrimed
+    case notReadyForPrime
+    case notReadyForCannulaInsertion
 }
 
 extension OmnipodPumpManagerError: LocalizedError {
@@ -32,8 +35,14 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return LocalizedString("No pod paired", comment: "Error message shown when no pod is paired")
+        case .podAlreadyPrimed:
+            return LocalizedString("Pod already primed", comment: "Error message shown when prime is attempted, but pod is already primed")
         case .podAlreadyPaired:
-            return nil
+            return LocalizedString("Pod already paired", comment: "Error message shown when user cannot pair because pod is already paired")
+        case .notReadyForPrime:
+            return LocalizedString("Pod is not in a state ready for priming.", comment: "Error message when prime fails because the pod is in an unexpected state")
+        case .notReadyForCannulaInsertion:
+            return LocalizedString("Pod is not in a state ready for cannula insertion.", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
         }
     }
     
@@ -41,7 +50,13 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return nil
+        case .podAlreadyPrimed:
+            return nil
         case .podAlreadyPaired:
+            return nil
+        case .notReadyForPrime:
+            return nil
+        case .notReadyForCannulaInsertion:
             return nil
         }
     }
@@ -50,7 +65,13 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return LocalizedString("Please pair a new pod", comment: "Recover suggestion shown when no pod is paired")
+        case .podAlreadyPrimed:
+            return nil
         case .podAlreadyPaired:
+            return nil
+        case .notReadyForPrime:
+            return nil
+        case .notReadyForCannulaInsertion:
             return nil
         }
     }
@@ -146,7 +167,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         
         self.podComms.delegate = self
         self.podComms.messageLogger = self
-        
     }
     
     public required convenience init?(rawState: PumpManager.RawStateValue) {
@@ -296,16 +316,18 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - Pod comms
     private(set) var podComms: PodComms
     
-    public var hasPairedPod: Bool {
-        return state.podState?.pairingState == .paired
-    }
-    
-    // Paired, primed, cannula inserted, and not faulting
+    // Setup complete, and not faulting
     public var hasActivePod: Bool {
-        if let podState = state.podState, let podProgressStatus = podState.podProgressStatus {
-            return podState.fault == nil && podProgressStatus.readyForDelivery
+        if let podState = state.podState, podState.setupProgress == .completed, podState.fault == nil {
+            return true
         } else {
             return false
+        }
+    }
+    
+    public func primeFinishesAt(completion: @escaping (Date?) -> Void) {
+        queue.async {
+            completion(self.state.podState?.primeFinishTime)
         }
     }
     
@@ -325,83 +347,72 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         queue.async {
             let start = startDate ?? Date()
             let expire = start.addingTimeInterval(.days(3))
-            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, pairingState: .paired)
+            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+            self.state.podState?.setupProgress = .completed
             
             let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!) : nil
             self.state.podState?.fault = fault
+            
+            self.notifyPodStateObservers()
         }
     }
     
     // MARK: - Pairing
-    
-    public func pair(completion: @escaping (Error?) -> Void) {
+    public func pairAndPrime(completion: @escaping (PumpManagerResult<Date>) -> Void) {
         queue.async {
-            guard !self.hasPairedPod else {
-                completion(OmnipodPumpManagerError.podAlreadyPaired)
+            
+            if let podState = self.state.podState, !podState.setupProgress.primingNeeded {
+                completion(PumpManagerResult.failure(OmnipodPumpManagerError.podAlreadyPrimed))
                 return
             }
             
             let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            self.podComms.pair(using: deviceSelector, timeZone: .currentFixed, messageLogger: self, completion: completion)
-        }
-    }
-    
-    public func configureAndPrimePod(completion: @escaping (Error?) -> Void) {
-        
-        queue.async {
-            guard self.hasPairedPod else {
-                completion(OmnipodPumpManagerError.noPodPaired)
+            
+            let semaphore = DispatchSemaphore(value: 0)
+            var pairError: Error? = nil
+            
+            // If no pod state, or still need configuring, run pair()
+            if self.state.podState == nil || self.state.podState?.setupProgress == .addressAssigned {
+                self.podComms.pair(using: deviceSelector, timeZone: .currentFixed, messageLogger: self) { (error) in
+                    pairError = error
+                    semaphore.signal()
+                }
+            } else {
+                semaphore.signal()
+            }
+            semaphore.wait()
+            
+            if let pairError = pairError {
+                completion(PumpManagerResult.failure(pairError))
                 return
             }
-
-            let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             
             self.podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
-                        try session.configureAndPrimePod()
-                        completion(nil)
+                        let primeFinishedAt = try session.prime()
+                        completion(PumpManagerResult.success(primeFinishedAt))
                     } catch let error {
-                        completion(error)
+                        completion(PumpManagerResult.failure(error))
                     }
                 case .failure(let error):
-                    completion(error)
+                    completion(PumpManagerResult.failure(error))
                 }
             }
         }
     }
-    
-    public func finishPrime(completion: @escaping (Error?) -> Void) {
+        
+    public func insertCannula(completion: @escaping (PumpManagerResult<Date>) -> Void) {
         queue.async {
-            guard self.hasPairedPod else {
-                completion(OmnipodPumpManagerError.noPodPaired)
+            guard let podState = self.state.podState, podState.readyForCannulaInsertion else
+            {
+                completion(PumpManagerResult.failure(OmnipodPumpManagerError.notReadyForCannulaInsertion))
                 return
             }
             
-            let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-            
-            self.podComms.runSession(withName: "Finish prime", using: deviceSelector) { (result) in
-                switch result {
-                case .success(let session):
-                    do {
-                        try session.finishPrime()
-                        completion(nil)
-                    } catch let error {
-                        completion(error)
-                    }
-                case .failure(let error):
-                    completion(error)
-                }
-            }
-        }
-    }
-    
-    public func insertCannula(completion: @escaping (Error?) -> Void) {
-        queue.async {
-            guard self.hasPairedPod else
-            {
-                completion(OmnipodPumpManagerError.noPodPaired)
+            guard podState.setupProgress.needsCannulaInsertion else {
+                completion(PumpManagerResult.failure(OmnipodPumpManagerError.podAlreadyPaired))
                 return
             }
             
@@ -412,14 +423,19 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 switch result {
                 case .success(let session):
                     do {
-                        let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
-                        try session.insertCannula(basalSchedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
-                        completion(nil)
+                        
+                        if podState.setupProgress.needsInitialBasalSchedule {
+                            let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
+                            try session.programInitialBasalSchedule(self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                        }
+
+                        let finishTime = try session.insertCannula()
+                        completion(PumpManagerResult.success(finishTime))
                     } catch let error {
-                        completion(error)
+                        completion(PumpManagerResult.failure(error))
                     }
                 case .failure(let error):
-                    completion(error)
+                    completion(PumpManagerResult.failure(error))
                 }
             }
         }
@@ -431,7 +447,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
         
         queue.async {
-            guard self.hasPairedPod, let podState = self.state.podState, podState.fault == nil else {
+            guard self.hasActivePod else {
                 return
             }
             
@@ -450,7 +466,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func refreshStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         queue.async {
-            guard self.hasPairedPod, let podState = self.state.podState, podState.fault == nil else {
+            guard self.hasActivePod else {
+                completion?(PumpManagerResult.failure(OmnipodPumpManagerError.noPodPaired))
                 return
             }
             
@@ -783,7 +800,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     public func deactivatePod(completion: @escaping (Error?) -> Void) {
         queue.async {
-            guard self.hasPairedPod else {
+            guard self.state.podState != nil else {
                 completion(OmnipodPumpManagerError.noPodPaired)
                 return
             }
@@ -864,8 +881,8 @@ extension OmnipodPumpManager: PodCommsDelegate {
         return success
     }
     
-    func podComms(_ podComms: PodComms, didChange state: PodState) {
-        self.state.podState = state
+    func podComms(_ podComms: PodComms, didChange podState: PodState) {
+        self.state.podState = podState
         notifyPodStateObservers()
     }
 }

@@ -183,12 +183,11 @@ class MessageTransport {
                         return response
                     }
                 }
-                }()
+            }()
             
             guard responsePacket.packetType != .ack else {
                 messageLogger?.didReceive(responsePacket.data)
                 log.debug("Pod responded with ack instead of response: %@", String(describing: responsePacket))
-                //incrementMessageNumber()
                 throw PodCommsError.podAckedInsteadOfReturningResponse
             }
             

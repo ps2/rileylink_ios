@@ -31,7 +31,7 @@ public struct VersionResponse : MessageBlock {
     public let lot: UInt32
     public let tid: UInt32
     public let address: UInt32?
-    public let pairingState: PairingState
+    public let setupState: SetupState
     public let pmVersion: FirmwareVersion
     public let piVersion: FirmwareVersion
     
@@ -61,8 +61,8 @@ public struct VersionResponse : MessageBlock {
             // II = RLG/RSSI?
             // JJ = address
             
-            if let pairingState = PairingState(rawValue: encodedData[9]) {
-                self.pairingState = pairingState
+            if let setupState = SetupState(rawValue: encodedData[9]) {
+                self.setupState = setupState
             } else {
                 throw MessageBlockError.parseError
             }
@@ -90,8 +90,8 @@ public struct VersionResponse : MessageBlock {
             // II = tid
             // JJ = address
             
-            if let pairingState = PairingState(rawValue: encodedData[16]) {
-                self.pairingState = pairingState
+            if let pairingState = SetupState(rawValue: encodedData[16]) {
+                self.setupState = pairingState
             } else {
                 throw MessageBlockError.parseError
             }

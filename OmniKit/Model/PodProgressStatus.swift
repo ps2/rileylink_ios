@@ -14,9 +14,9 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
     case tankFillCompleted = 2
     case pairingSuccess = 3
     case priming = 4
-    case readyForInjection = 5
-    case injectionStarted = 6
-    case injectionDone = 7
+    case readyForBasalSchedule = 5
+    case readyForCannulaInsertion = 6
+    case cannulaInserting = 7
     case aboveFiftyUnits = 8
     case belowFiftyUnits = 9
     case oneNotUsedButin33 = 10
@@ -46,12 +46,12 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
             return LocalizedString("Paired", comment: "Pod status after pairing")
         case .priming:
             return LocalizedString("Priming", comment: "Pod status when priming")
-        case .readyForInjection:
+        case .readyForBasalSchedule:
+            return LocalizedString("Ready for basal programming", comment: "Pod state when ready for basal programming")
+        case .readyForCannulaInsertion:
             return LocalizedString("Ready to insert cannula", comment: "Pod state when ready for cannula insertion")
-        case .injectionStarted:
+        case .cannulaInserting:
             return LocalizedString("Cannula inserting", comment: "Pod state when inserting cannula")
-        case .injectionDone:
-            return LocalizedString("Cannula inserted", comment: "Pod state when cannula insertion finished")
         case .aboveFiftyUnits:
             return LocalizedString("Normal", comment: "Pod state when running above fifty units")
         case .belowFiftyUnits:

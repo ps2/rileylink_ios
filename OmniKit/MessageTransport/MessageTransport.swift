@@ -125,9 +125,9 @@ class MessageTransport {
     }
     
     
-    func exchangePackets(packet: Packet, repeatCount: Int = 0, packetResponseTimeout: TimeInterval = .milliseconds(165), exchangeTimeout:TimeInterval = .seconds(20), preambleExtension: TimeInterval = .milliseconds(127)) throws -> Packet {
+    func exchangePackets(packet: Packet, repeatCount: Int = 0, packetResponseTimeout: TimeInterval = .milliseconds(333), exchangeTimeout:TimeInterval = .seconds(9), preambleExtension: TimeInterval = .milliseconds(127)) throws -> Packet {
         let packetData = packet.encoded()
-        let radioRetryCount = 20
+        let radioRetryCount = 9
         
         let start = Date()
         

@@ -41,7 +41,31 @@ class PodComms : CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
+    private func sendPacket(session: CommandSession) throws {
+        
+        let packetNumber = 19
+        let messageNumber = 0x24 >> 2
+        let address: UInt32 = 0x1f0b3554
+        
+        let cmd = GetStatusCommand(podInfoType: .normal)
+        
+        let message = Message(address: address, messageBlocks: [cmd], sequenceNum: messageNumber)
+
+        var dataRemaining = message.encoded()
+
+        let sendPacket = Packet(address: address, packetType: .pdm, sequenceNum: packetNumber, data: dataRemaining)
+        dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
+        
+        let _ = try session.sendAndListen(sendPacket.encoded(), repeatCount: 0, timeout: .milliseconds(333), retryCount: 0, preambleExtension: .milliseconds(127))
+        
+        throw PodCommsError.emptyResponse
+    }
+
+    
     private func assignAddress(commandSession: CommandSession) throws {
+        
+        // Testing
+        //try sendPacket(session: commandSession)
         
         let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         

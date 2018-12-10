@@ -65,7 +65,8 @@ extension PodCommsError: LocalizedError {
         case .podSuspended:
             return LocalizedString("Pod is suspended", comment: "Error message action could not be performed because pod is suspended")
         case .podFault(let fault):
-            return String(format: LocalizedString("Pod Fault: 0x%1$02x", comment: "Format string for pod fault code"), fault.currentStatus.rawValue)
+            let faultDescription = String(describing: fault.currentStatus)
+            return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError:
             return nil
         }
@@ -143,7 +144,7 @@ extension PodCommsError: LocalizedError {
         case .podSuspended:
             return nil
         case .podFault:
-            return LocalizedString("Immediately remove pod. Please note error code, and deactivate pod. Then pair a new one.", comment: "Recovery suggestion when pod has a fault code")
+            return nil
         case .commsError:
             return nil
         }

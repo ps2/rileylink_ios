@@ -39,7 +39,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NqL-eX-926" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2855" y="-536"/>
+            <point key="canvasLocation" x="-218" y="-616"/>
         </scene>
         <!--RileyLink Setup-->
         <scene sceneID="IFR-Fz-Qw6">
@@ -170,6 +170,7 @@
                         <outlet property="activityIndicator" destination="qG6-Ic-XqX" id="4N0-3t-DEO"/>
                         <outlet property="loadingLabel" destination="PqY-xo-4Qg" id="ZYu-le-J3n"/>
                         <segue destination="k1Y-x4-m0a" kind="show" identifier="Continue" id="3Py-Xn-kuv"/>
+                        <segue destination="ack-ra-XH6" kind="show" identifier="ReplacePod" id="IS8-xY-rnN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69p-di-WUy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -283,11 +284,12 @@
                         <outlet property="activityIndicator" destination="fNn-3N-mJd" id="rt9-7o-8RH"/>
                         <outlet property="loadingLabel" destination="DkY-8R-pUP" id="GBm-5r-hej"/>
                         <segue destination="aNg-mm-Uuy" kind="show" identifier="Continue" id="LPg-Hi-Eag"/>
+                        <segue destination="ack-ra-XH6" kind="show" identifier="ReplacePod" id="rEL-w2-Eiw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DmI-Gw-k1w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1476" y="230.54187192118226"/>
+            <point key="canvasLocation" x="1607" y="231"/>
         </scene>
         <!--Setup Complete-->
         <scene sceneID="hkh-fg-zc5">
@@ -348,7 +350,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b4d-Ps-yhl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2288.8000000000002" y="231.2807881773399"/>
+            <point key="canvasLocation" x="2591" y="231"/>
         </scene>
         <!--Pod Settings-->
         <scene sceneID="qel-YT-3JK">
@@ -392,26 +394,10 @@
             </objects>
             <point key="canvasLocation" x="-218.40000000000001" y="230.54187192118226"/>
         </scene>
-        <!--Fault Handler Flow-->
-        <scene sceneID="8o2-Dp-j56">
-            <objects>
-                <navigationController storyboardIdentifier="FaultHandlerFlow" id="07T-4h-koF" userLabel="Fault Handler Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JKK-qU-fF2">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="5tP-r0-TyR" kind="relationship" relationship="rootViewController" id="ocJ-k1-s5w"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="REw-8U-CBd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-247" y="-856"/>
-        </scene>
-        <!--Fault Handler Flow-->
+        <!--New Pod Flow-->
         <scene sceneID="TQ9-7N-bzE">
             <objects>
-                <navigationController storyboardIdentifier="NewPodFlow" id="WXk-8g-hpZ" userLabel="Fault Handler Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewPodFlow" id="WXk-8g-hpZ" userLabel="New Pod Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0HF-vr-EoV">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -422,126 +408,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hQG-HV-m7W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1303" y="-856"/>
+            <point key="canvasLocation" x="721" y="-616"/>
         </scene>
-        <!--Pod Fault-->
-        <scene sceneID="5yK-6I-BKa">
-            <objects>
-                <tableViewController title="Pump Setup" id="5tP-r0-TyR" userLabel="Pod Fault" customClass="ReplacePodViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="p0B-Ez-CuV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <sections>
-                            <tableViewSection id="NzV-vT-fmP" userLabel="Pod Image Section">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="124" id="n6O-rE-f0w">
-                                        <rect key="frame" x="0.0" y="35" width="375" height="124"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="n6O-rE-f0w" id="fhu-2a-T0u">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="124"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="36T-jc-Ty6">
-                                                    <rect key="frame" x="138" y="0.0" width="99" height="113"/>
-                                                </imageView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="36T-jc-Ty6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fhu-2a-T0u" secondAttribute="leadingMargin" id="0Vo-VV-2Xq"/>
-                                                <constraint firstItem="36T-jc-Ty6" firstAttribute="centerX" secondItem="fhu-2a-T0u" secondAttribute="centerX" id="FsM-sg-1wh"/>
-                                                <constraint firstItem="36T-jc-Ty6" firstAttribute="top" secondItem="fhu-2a-T0u" secondAttribute="top" id="Zhh-0y-VLx"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="36T-jc-Ty6" secondAttribute="bottom" id="qlt-Dg-pew"/>
-                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="36T-jc-Ty6" secondAttribute="trailing" id="zGX-SR-VQL"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection headerTitle="Remove POD" footerTitle="Note: If the audible alarm does not stop after deactivation, use a paperclip to break the tab behind the alarm shut-off port." id="wBu-CD-Lb0" userLabel="Instructions Section">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="NSY-qi-egh" rowHeight="75.999999999999972" style="IBUITableViewCellStyleDefault" id="gg0-dV-FlX" userLabel="Instructions">
-                                        <rect key="frame" x="0.0" y="222.33333333333337" width="375" height="76"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gg0-dV-FlX" id="2ov-Lv-2aq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="The pod has detected an internal fault.  Insulin delivery has stopped. Please remove pod and then deactivate it." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NSY-qi-egh">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="76"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="Ue1-BM-oYN" userLabel="Status Section">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="50" id="LzM-Gx-0Qb">
-                                        <rect key="frame" x="0.0" y="378.00000000000006" width="375" height="50"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LzM-Gx-0Qb" id="QLN-wz-1ac">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="50" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="fX6-Eg-Jsv" customClass="SetupIndicatorView" customModule="LoopKitUI">
-                                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </view>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="fX6-Eg-Jsv" firstAttribute="centerX" secondItem="QLN-wz-1ac" secondAttribute="centerX" id="1eK-s6-byt"/>
-                                                <constraint firstAttribute="trailing" secondItem="fX6-Eg-Jsv" secondAttribute="trailing" constant="10" id="FIq-nA-KW9"/>
-                                                <constraint firstAttribute="bottom" secondItem="fX6-Eg-Jsv" secondAttribute="bottom" id="NHz-Ig-TyN"/>
-                                                <constraint firstItem="fX6-Eg-Jsv" firstAttribute="top" secondItem="QLN-wz-1ac" secondAttribute="top" id="XOT-Oa-Q24"/>
-                                                <constraint firstAttribute="bottom" secondItem="fX6-Eg-Jsv" secondAttribute="bottom" id="cLz-Ip-AfD"/>
-                                                <constraint firstItem="fX6-Eg-Jsv" firstAttribute="leading" secondItem="QLN-wz-1ac" secondAttribute="leading" constant="10" id="k25-z4-z38"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="70U-81-Mdo" style="IBUITableViewCellStyleDefault" id="elZ-jS-6zK">
-                                        <rect key="frame" x="0.0" y="428.00000000000006" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="elZ-jS-6zK" id="v1d-RK-Md1">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="70U-81-Mdo">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="5tP-r0-TyR" id="EIs-py-oZf"/>
-                            <outlet property="delegate" destination="5tP-r0-TyR" id="Wgz-Nl-NYg"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Pod Fault" id="8pF-GH-cpI"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="fX6-Eg-Jsv" id="fOv-xb-0IT"/>
-                        <outlet property="loadingLabel" destination="70U-81-Mdo" id="MKe-cc-vii"/>
-                        <segue destination="91O-Un-vKc" kind="show" identifier="Continue" id="NVm-H4-esT"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="skE-zp-VTx" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="637.60000000000002" y="-856.4039408866995"/>
-        </scene>
-        <!--Fault Handler Flow-->
+        <!--Pod Replacement Flow-->
         <scene sceneID="7FS-NJ-Y6T">
             <objects>
-                <navigationController storyboardIdentifier="PodReplacementFlow" id="FeF-id-k7K" userLabel="Fault Handler Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PodReplacementFlow" id="FeF-id-k7K" userLabel="Pod Replacement Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7oS-eK-uDH">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -552,12 +424,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hNW-CF-MJf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1721" y="-856"/>
+            <point key="canvasLocation" x="-974" y="1088"/>
         </scene>
-        <!--Fault Handler Flow-->
+        <!--Insert Cannula Flow-->
         <scene sceneID="m8o-hd-O7z">
             <objects>
-                <navigationController storyboardIdentifier="InsertCannulaFlow" id="3i0-qf-uVi" userLabel="Fault Handler Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="InsertCannulaFlow" id="3i0-qf-uVi" userLabel="Insert Cannula Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wXV-5C-dcE">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -568,12 +440,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dfa-L4-QJa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3910" y="-662"/>
+            <point key="canvasLocation" x="1606" y="-616"/>
         </scene>
-        <!--Pod Fault-->
+        <!--Replace Pod-->
         <scene sceneID="vTH-FF-uZG">
             <objects>
-                <tableViewController title="Pump Setup" id="ack-ra-XH6" userLabel="Pod Fault" customClass="ReplacePodViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="ack-ra-XH6" userLabel="Replace Pod" customClass="ReplacePodViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="D1s-eE-9wz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -675,13 +547,14 @@
                     <navigationItem key="navigationItem" title="Replace Pod" id="yy1-xf-HdR"/>
                     <connections>
                         <outlet property="activityIndicator" destination="aXp-n1-WDr" id="AuX-82-9r3"/>
+                        <outlet property="instructionsLabel" destination="GK7-jb-tyY" id="joX-Di-0cm"/>
                         <outlet property="loadingLabel" destination="P2i-hy-J41" id="CmG-Vh-pQQ"/>
                         <segue destination="91O-Un-vKc" kind="show" identifier="Continue" id="Hnx-w3-aQg"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UY0-mb-xq0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2693.5999999999999" y="-856.4039408866995"/>
+            <point key="canvasLocation" x="-124" y="1089"/>
         </scene>
     </scenes>
     <resources>
@@ -689,7 +562,8 @@
         <image name="PodLarge" width="99.839996337890625" height="79.199996948242188"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3Py-Xn-kuv"/>
-        <segue reference="NVm-H4-esT"/>
+        <segue reference="rEL-w2-Eiw"/>
+        <segue reference="Q4k-oc-csy"/>
+        <segue reference="hNK-Aw-cMk"/>
     </inferredMetricsTieBreakers>
 </document>

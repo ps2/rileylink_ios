@@ -10,16 +10,63 @@ import UIKit
 import LoopKitUI
 import OmniKit
 
+
 class ReplacePodViewController: SetupTableViewController {
+
+    enum PodReplacementReason {
+        case normal
+        case fault
+        case canceledPairingBeforeApplication
+        case canceledPairing
+    }
+
+    var replacementReason: PodReplacementReason = .normal {
+        didSet {
+            if oldValue != replacementReason {
+                switch replacementReason {
+                case .normal:
+                    break // Text set in interface builder
+                case .fault:
+                    instructionsLabel.text = LocalizedString("The pod has detected an internal fault. Insulin delivery has stopped. Please remove pod and then deactivate it.", comment: "Instructions when replacing pod due to a fault")
+                case .canceledPairingBeforeApplication:
+                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
+                case .canceledPairing:
+                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one.  Please remove the pod and then deactivate it.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
+                    break
+                }
+                
+                tableView.reloadData()
+            }
+        }
+    }
     
-    var pumpManager: OmnipodPumpManager!
+    var pumpManager: OmnipodPumpManager! {
+        didSet {
+            pumpManager.getPodState { (podState) in
+                DispatchQueue.main.async {
+                    if podState?.fault != nil {
+                        self.replacementReason = .fault
+                    } else if podState?.setupProgress.primingNeeded == true {
+                        self.replacementReason = .canceledPairingBeforeApplication
+                    } else if podState?.setupProgress.needsCannulaInsertion == true {
+                        self.replacementReason = .canceledPairing
+                    } else {
+                        self.replacementReason = .normal
+                    }
+                }
+            }
+        }
+    }
     
     // MARK: -
     
     @IBOutlet weak var activityIndicator: SetupIndicatorView!
     
     @IBOutlet weak var loadingLabel: UILabel!
-    
+
+    @IBOutlet weak var instructionsLabel: UILabel!
+
+
     private var tryCount: Int = 0
     
     override func viewDidLoad() {

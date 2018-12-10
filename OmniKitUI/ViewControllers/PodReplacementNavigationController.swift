@@ -30,12 +30,6 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
         return vc
     }
 
-    class func instantiateFaultHandlerFlow(_ pumpManager: OmnipodPumpManager) -> PodReplacementNavigationController {
-        let vc = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: PodReplacementNavigationController.self)).instantiateViewController(withIdentifier: "FaultHandlerFlow") as! PodReplacementNavigationController
-        vc.pumpManager = pumpManager
-        return vc
-    }
-    
     private(set) var pumpManager: OmnipodPumpManager!
 
     override func viewDidLoad() {

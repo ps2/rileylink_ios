@@ -156,6 +156,7 @@ class MessageTransport {
                 
                 return candidatePacket
             } catch RileyLinkDeviceError.responseTimeout {
+                incrementPacketNumber()
                 continue
             }
         }

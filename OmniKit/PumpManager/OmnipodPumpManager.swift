@@ -132,6 +132,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
+    // MARK: - Message Log
     
     private struct MessageLogEntry: CustomStringConvertible {
         var description: String {
@@ -149,6 +150,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     private var messageLog = [MessageLogEntry]()
+    
+    // MARK: PumpManager
     
     public func updateBLEHeartbeatPreference() {
         return
@@ -209,7 +212,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
-    public var device: HKDevice {
+    private var device: HKDevice {
         if let podState = state.podState {
             return HKDevice(
                 name: type(of: self).managerIdentifier,
@@ -279,6 +282,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             suspendState: suspendState,
             bolusState: bolusState)
     }
+   
+    private var hasActivePod: Bool {
+        return self.state.podState?.isActive == true
+    }
     
     public weak var pumpManagerDelegate: PumpManagerDelegate?
     
@@ -316,12 +323,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - Pod comms
     private(set) var podComms: PodComms
     
-    // Setup complete, and not faulting
-    public var hasActivePod: Bool {
-        if let podState = state.podState, podState.setupProgress == .completed, podState.fault == nil {
-            return true
-        } else {
-            return false
+    
+    public func getPodState(completion: @escaping (PodState?) -> Void) {
+        queue.async {
+            completion(self.state.podState)
         }
     }
     
@@ -343,22 +348,38 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     // MARK: Testing
-    public func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil, mockFault: Bool) {
-        queue.async {
-            let start = startDate ?? Date()
-            let expire = start.addingTimeInterval(.days(3))
-            self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
-            self.state.podState?.setupProgress = .completed
-            
-            let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!) : nil
-            self.state.podState?.fault = fault
-            
-            self.notifyPodStateObservers()
-        }
+    private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil, mockFault: Bool) {
+        let start = startDate ?? Date()
+        let expire = start.addingTimeInterval(.days(3))
+        self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+        self.state.podState?.setupProgress = .podConfigured
+        
+        let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
+        self.state.podState?.fault = fault
+        self.podComms = PodComms(podState: state.podState)
+        self.notifyPodStateObservers()
     }
     
     // MARK: - Pairing
     public func pairAndPrime(completion: @escaping (PumpManagerResult<Date>) -> Void) {
+        
+        #if targetEnvironment(simulator)
+        // If we're in the simulator, create a mock PodState
+        let mockFaultDuringPairing = false
+        queue.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
+            self.state.podState?.setupProgress = .priming
+            self.notifyPodStateObservers()
+            if mockFaultDuringPairing {
+                completion(.failure(PodCommsError.podFault(fault: self.state.podState!.fault!)))
+            } else {
+                let mockPrimeDuration = TimeInterval(.seconds(3))
+                let finishTime = Date() + mockPrimeDuration
+                completion(.success(finishTime))
+            }
+        }
+        #else
+        
         queue.async {
             
             if let podState = self.state.podState, !podState.setupProgress.primingNeeded {
@@ -392,27 +413,46 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 case .success(let session):
                     do {
                         let primeFinishedAt = try session.prime()
-                        completion(PumpManagerResult.success(primeFinishedAt))
+                        completion(.success(primeFinishedAt))
                     } catch let error {
-                        completion(PumpManagerResult.failure(error))
+                        completion(.failure(error))
                     }
                 case .failure(let error):
                     completion(PumpManagerResult.failure(error))
                 }
             }
         }
+        #endif
     }
         
     public func insertCannula(completion: @escaping (PumpManagerResult<Date>) -> Void) {
+        #if targetEnvironment(simulator)
+        let mockDelay = TimeInterval(seconds: 3)
+        queue.asyncAfter(deadline: .now() + mockDelay) {
+
+            // Mock fault
+//            let fault = try! PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
+//            self.state.podState?.fault = fault
+//            completion(.failure(PodCommsError.podFault(fault: fault)))
+            
+            // Mock success
+            self.state.podState?.setupProgress = .completed
+            self.notifyPodStateObservers()
+            let finishTime = Date() + mockDelay
+            completion(.success(finishTime))
+        }
+        #else
+        
         queue.async {
+            
             guard let podState = self.state.podState, podState.readyForCannulaInsertion else
             {
-                completion(PumpManagerResult.failure(OmnipodPumpManagerError.notReadyForCannulaInsertion))
+                completion(.failure(OmnipodPumpManagerError.notReadyForCannulaInsertion))
                 return
             }
             
             guard podState.setupProgress.needsCannulaInsertion else {
-                completion(PumpManagerResult.failure(OmnipodPumpManagerError.podAlreadyPaired))
+                completion(.failure(OmnipodPumpManagerError.podAlreadyPaired))
                 return
             }
             
@@ -430,15 +470,16 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         }
 
                         let finishTime = try session.insertCannula()
-                        completion(PumpManagerResult.success(finishTime))
+                        completion(.success(finishTime))
                     } catch let error {
-                        completion(PumpManagerResult.failure(error))
+                        completion(.failure(error))
                     }
                 case .failure(let error):
-                    completion(PumpManagerResult.failure(error))
+                    completion(.failure(error))
                 }
             }
         }
+        #endif
     }
     
     // MARK: - Pump Commands

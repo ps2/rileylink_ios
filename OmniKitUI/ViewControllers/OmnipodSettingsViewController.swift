@@ -380,7 +380,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 if podState == nil || podState!.setupProgress.primingNeeded {
                     vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
                 } else if podState?.fault != nil {
-                    vc = PodReplacementNavigationController.instantiateFaultHandlerFlow(pumpManager)
+                    vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
                 } else if let podState = podState, podState.unfinishedPairing {
                     vc = PodReplacementNavigationController.instantiateInsertCannulaFlow(pumpManager)
                 } else {

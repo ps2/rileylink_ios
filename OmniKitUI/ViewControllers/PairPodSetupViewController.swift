@@ -24,13 +24,22 @@ class PairPodSetupViewController: SetupTableViewController {
         }
     }
     
-    private var cancelErrorCount = 0
-
     // MARK: -
     
     @IBOutlet weak var activityIndicator: SetupIndicatorView!
     
     @IBOutlet weak var loadingLabel: UILabel!
+    
+    private var loadingText: String? {
+        didSet {
+            tableView.beginUpdates()
+            loadingLabel.text = loadingText
+            
+            let isHidden = (loadingText == nil)
+            loadingLabel.isHidden = isHidden
+            tableView.endUpdates()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,10 +60,6 @@ class PairPodSetupViewController: SetupTableViewController {
         })
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-    }
-    
     // MARK: - UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -65,12 +70,13 @@ class PairPodSetupViewController: SetupTableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    // MARK: - Navigation
+    // MARK: - State
     
     private enum State {
         case initial
         case pairing
         case priming(finishTime: Date)
+        case fault
         case ready
     }
     
@@ -80,19 +86,23 @@ class PairPodSetupViewController: SetupTableViewController {
             case .initial:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
-                footerView.primaryButton.setConnectTitle()
+                footerView.primaryButton.setPairTitle()
             case .pairing:
                 activityIndicator.state = .loading
                 footerView.primaryButton.isEnabled = false
-                footerView.primaryButton.setConnectTitle()
+                footerView.primaryButton.setPairTitle()
                 lastError = nil
                 loadingText = LocalizedString("Pairing...", comment: "The text of the loading label when pairing")
             case .priming(let finishTime):
                 activityIndicator.state = .timedProgress(finishTime: finishTime)
                 footerView.primaryButton.isEnabled = false
-                footerView.primaryButton.setConnectTitle()
+                footerView.primaryButton.setPairTitle()
                 lastError = nil
                 loadingText = LocalizedString("Priming...", comment: "The text of the loading label when priming")
+            case .fault:
+                activityIndicator.state = .hidden
+                footerView.primaryButton.isEnabled = true
+                footerView.primaryButton.setDeactivateTitle()
             case .ready:
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
@@ -100,17 +110,6 @@ class PairPodSetupViewController: SetupTableViewController {
                 lastError = nil
                 loadingText = LocalizedString("Primed", comment: "The text of the loading label when pod is primed")
             }
-        }
-    }
-    
-    private var loadingText: String? {
-        didSet {
-            tableView.beginUpdates()
-            loadingLabel.text = loadingText
-            
-            let isHidden = (loadingText == nil)
-            loadingLabel.isHidden = isHidden
-            tableView.endUpdates()
         }
     }
     
@@ -133,68 +132,56 @@ class PairPodSetupViewController: SetupTableViewController {
             loadingText = errorText
             
             // If we have an error, update the continue state
-            if lastError != nil {
+            if let podCommsError = lastError as? PodCommsError,
+                case PodCommsError.podFault = podCommsError
+            {
+                continueState = .fault
+            } else if lastError != nil {
                 continueState = .initial
             }
         }
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if case .ready = continueState {
-            return true
-        } else {
-            return false
-        }
-    }
+    // MARK: - Navigation
     
+    private func navigateToReplacePod() {
+        performSegue(withIdentifier: "ReplacePod", sender: nil)
+    }
+
     override func continueButtonPressed(_ sender: Any) {
-        
-        if case .ready = continueState {
-            super.continueButtonPressed(sender)
-        } else if case .initial = continueState {
+        switch continueState {
+        case .initial:
             pair()
+        case .ready:
+            super.continueButtonPressed(sender)
+        case .fault:
+            navigateToReplacePod()
+        default:
+            break
         }
+
     }
     
     override func cancelButtonPressed(_ sender: Any) {
-        if case .ready = continueState, let pumpManager = self.pumpManager {
-            let confirmVC = UIAlertController(pumpDeletionHandler: {
-                pumpManager.deactivatePod() { (error) in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            self.cancelErrorCount += 1
-                            self.lastError = error
-                            if self.cancelErrorCount >= 2 {
-                                super.cancelButtonPressed(sender)
-                            }
-                        } else {
-                            super.cancelButtonPressed(sender)
-                        }
-                    }
+        pumpManager.getPodState { (podState) in
+            DispatchQueue.main.async {
+                if podState != nil {
+                    let confirmVC = UIAlertController(pumpDeletionHandler: {
+                        self.navigateToReplacePod()
+                    })
+                    self.present(confirmVC, animated: true) {}
+                } else {
+                    super.cancelButtonPressed(sender)
                 }
-            })
-            present(confirmVC, animated: true) {}
-        } else {
-            super.cancelButtonPressed(sender)
+            }
         }
     }
+    
+    // MARK: -
     
     func pair() {
         self.continueState = .pairing
         
-        #if targetEnvironment(simulator)
-        // If we're in the simulator, create a mock PodState
-        let mockDelay = TimeInterval(seconds: 5)
-        DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
-            let finishTime = Date() + mockDelay
-            self.continueState = .priming(finishTime: finishTime)
-            DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
-                self.pumpManager.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: true)
-                self.continueState = .ready
-            }
-        }
-        #else
-
         pumpManager.pairAndPrime() { (result) in
             DispatchQueue.main.async {
                 switch result {
@@ -209,13 +196,16 @@ class PairPodSetupViewController: SetupTableViewController {
                 }
             }
         }
-        #endif
     }
 }
 
 private extension SetupButton {
-    func setConnectTitle() {
+    func setPairTitle() {
         setTitle(LocalizedString("Pair", comment: "Button title to pair with pod during setup"), for: .normal)
+    }
+    
+    func setDeactivateTitle() {
+        setTitle(LocalizedString("Deactivate", comment: "Button title to deactivate pod because of fault during setup"), for: .normal)
     }
 }
 

@@ -22,6 +22,17 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     @IBOutlet weak var loadingLabel: UILabel!
     
+    private var loadingText: String? {
+        didSet {
+            tableView.beginUpdates()
+            loadingLabel.text = loadingText
+            
+            let isHidden = (loadingText == nil)
+            loadingLabel.isHidden = isHidden
+            tableView.endUpdates()
+        }
+    }
+    
     private var cancelErrorCount = 0
     
     override func viewDidLoad() {
@@ -50,6 +61,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         case initial
         case startingInsertion
         case inserting(finishTime: Date)
+        case fault
         case ready
     }
     
@@ -68,6 +80,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 activityIndicator.state = .timedProgress(finishTime: finishTime)
                 footerView.primaryButton.isEnabled = false
                 lastError = nil
+            case .fault:
+                activityIndicator.state = .hidden
+                footerView.primaryButton.isEnabled = true
+                footerView.primaryButton.setDeactivateTitle()
             case .ready:
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
@@ -93,68 +109,45 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 }
             }
             
-            tableView.beginUpdates()
-            loadingLabel.text = errorText
+            loadingText = errorText
             
-            let isHidden = (errorText == nil)
-            loadingLabel.isHidden = isHidden
-            tableView.endUpdates()
-            
-            // If we changed the error text, update the continue state
-            if !isHidden {
+            // If we have an error, update the continue state
+            if let podCommsError = lastError as? PodCommsError,
+                case PodCommsError.podFault = podCommsError
+            {
+                continueState = .fault
+            } else if lastError != nil {
                 continueState = .initial
             }
         }
     }
-    
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if case .ready = continueState {
-            return true
-        } else {
-            return false
-        }
+
+    private func navigateToReplacePod() {
+        performSegue(withIdentifier: "ReplacePod", sender: nil)
     }
-    
+
     override func continueButtonPressed(_ sender: Any) {
-        
-        if case .ready = continueState {
-            super.continueButtonPressed(sender)
-        } else if case .initial = continueState {
+        switch continueState {
+        case .initial:
             continueState = .startingInsertion
             insertCannula()
+        case .ready:
+            super.continueButtonPressed(sender)
+        case .fault:
+            navigateToReplacePod()
+        default:
+            break
         }
     }
     
     override func cancelButtonPressed(_ sender: Any) {
         let confirmVC = UIAlertController(pumpDeletionHandler: {
-            self.pumpManager.deactivatePod() { (error) in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        self.cancelErrorCount += 1
-                        self.lastError = error
-                        if self.cancelErrorCount >= 2 {
-                            super.cancelButtonPressed(sender)
-                        }
-                    } else {
-                        super.cancelButtonPressed(sender)
-                    }
-                }
-            }
+            self.navigateToReplacePod()
         })
         present(confirmVC, animated: true) {}
     }
     
     func insertCannula() {
-        #if targetEnvironment(simulator)
-        let mockDelay = TimeInterval(seconds: 3)
-        DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
-            let finishTime = Date() + mockDelay
-            self.continueState = .inserting(finishTime: finishTime)
-            DispatchQueue.main.asyncAfter(deadline: .now() + mockDelay) {
-                self.continueState = .ready
-            }
-        }
-        #else
         pumpManager.insertCannula() { (result) in
             DispatchQueue.main.async {
                 switch(result) {
@@ -162,7 +155,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                     self.continueState = .inserting(finishTime: finishTime)
                     let delay = finishTime.timeIntervalSinceNow
                     if delay > 0 {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                             self.continueState = .ready
                         }
                     }
@@ -171,7 +164,6 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 }
             }
         }
-        #endif
     }
 }
 
@@ -179,6 +171,10 @@ private extension SetupButton {
     func setConnectTitle() {
         setTitle(LocalizedString("Insert Cannula", comment: "Button title to insert cannula during setup"), for: .normal)
     }
+    func setDeactivateTitle() {
+        setTitle(LocalizedString("Deactivate", comment: "Button title to deactivate pod because of fault during setup"), for: .normal)
+    }
+
 }
 
 private extension UIAlertController {

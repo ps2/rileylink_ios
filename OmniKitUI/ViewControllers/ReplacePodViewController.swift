@@ -124,6 +124,7 @@ class ReplacePodViewController: SetupTableViewController {
                 loadingLabel.isHidden = false
                 tableView.endUpdates()
             case .ready:
+                navigationItem.rightBarButtonItem = nil
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.resetTitle()
@@ -164,7 +165,6 @@ class ReplacePodViewController: SetupTableViewController {
     override func continueButtonPressed(_ sender: Any) {
         switch continueState {
         case .ready, .continueAfterFailure:
-            pumpManager.forgetPod()
             super.continueButtonPressed(sender)
         case .initial, .deactivationFailed:
             continueState = .deactivating
@@ -178,6 +178,7 @@ class ReplacePodViewController: SetupTableViewController {
         tryCount += 1
         
         pumpManager.deactivatePod { (error) in
+            self.pumpManager.forgetPod()
             DispatchQueue.main.async {
                 if let error = error {
                     if self.tryCount > 1 {

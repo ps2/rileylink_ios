@@ -383,7 +383,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         queue.async {
             
             if let podState = self.state.podState, !podState.setupProgress.primingNeeded {
-                completion(PumpManagerResult.failure(OmnipodPumpManagerError.podAlreadyPrimed))
+                completion(.failure(OmnipodPumpManagerError.podAlreadyPrimed))
                 return
             }
             
@@ -404,7 +404,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             semaphore.wait()
             
             if let pairError = pairError {
-                completion(PumpManagerResult.failure(pairError))
+                completion(.failure(pairError))
                 return
             }
             
@@ -418,7 +418,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         completion(.failure(error))
                     }
                 case .failure(let error):
-                    completion(PumpManagerResult.failure(error))
+                    completion(.failure(error))
                 }
             }
         }
@@ -508,7 +508,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public func refreshStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         queue.async {
             guard self.hasActivePod else {
-                completion?(PumpManagerResult.failure(OmnipodPumpManagerError.noPodPaired))
+                completion?(.failure(OmnipodPumpManagerError.noPodPaired))
                 return
             }
             
@@ -537,12 +537,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         }
                         semaphore.wait()
                     }
-                    completion?(PumpManagerResult.success(status))
+                    completion?(.success(status))
                 case .failure(let error):
                     throw error
                 }
             } catch let error {
-                completion?(PumpManagerResult.failure(error))
+                completion?(.failure(error))
                 self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
             }
         }
@@ -718,7 +718,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         queue.async {
             guard self.hasActivePod else {
-                completion(PumpManagerResult.failure(OmnipodPumpManagerError.noPodPaired))
+                completion(.failure(OmnipodPumpManagerError.noPodPaired))
                 return
             }
 
@@ -733,7 +733,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 case .success(let s):
                     session = s
                 case .failure(let error):
-                    completion(PumpManagerResult.failure(error))
+                    completion(.failure(error))
                     return
                 }
                 
@@ -760,24 +760,24 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         // 0 duration temp basals are used to cancel any existing temp basal
                         let cancelTime = Date()
                         let dose = DoseEntry(type: .basal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
-                        completion(PumpManagerResult.success(dose))
+                        completion(.success(dose))
                     } else {
                         let result = session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: 0)
                         let basalStart = Date()
                         let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                         switch result {
                         case .success:
-                            completion(PumpManagerResult.success(dose))
+                            completion(.success(dose))
                         case .uncertainFailure(let error):
                             self.log.error("Temp basal uncertain error: %@", String(describing: error))
-                            completion(PumpManagerResult.success(dose))
+                            completion(.success(dose))
                         case .certainFailure(let error):
-                            completion(PumpManagerResult.failure(error))
+                            completion(.failure(error))
                         }
                     }
                 } catch let error {
                     self.log.error("Error during temp basal: %@", String(describing: error))
-                    completion(PumpManagerResult.failure(error))
+                    completion(.failure(error))
                 }
             }
         }
@@ -840,6 +840,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public func deactivatePod(completion: @escaping (Error?) -> Void) {
+        #if targetEnvironment(simulator)
+        queue.asyncAfter(deadline: .now() + .seconds(2)) {
+            completion(nil)
+        }
+        #else
         queue.async {
             guard self.state.podState != nil else {
                 completion(OmnipodPumpManagerError.noPodPaired)
@@ -861,8 +866,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 }
             }
         }
+        #endif
     }
-    
+
     public func testingCommands(completion: @escaping (Error?) -> Void) {
         queue.async {
             guard self.hasActivePod else {

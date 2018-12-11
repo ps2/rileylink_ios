@@ -50,7 +50,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var unfinalizedTempBasal: UnfinalizedDose?
     var finalizedDoses: [UnfinalizedDose]
     public private(set) var suspended: Bool
-    public var fault: PodInfoFaultEvent?
+    public var fault: PodInfoFaultEvent? {
+        didSet {
+            
+        }
+    }
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress

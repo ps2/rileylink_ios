@@ -216,6 +216,12 @@ public class PodCommsSession {
                 } else if let fault = response.fault {
                     self.podState.fault = fault
                     log.error("Pod Fault: %@", String(describing: fault))
+                    let now = Date()
+                    if fault.deliveryStatus == .suspended {
+                        podState.unfinalizedTempBasal?.cancel(at: now)
+                        podState.unfinalizedBolus?.cancel(at: now, withRemaining: fault.insulinNotDelivered)
+                    }
+
                     throw PodCommsError.podFault(fault: fault)
                 }
                 else {
@@ -484,7 +490,7 @@ public class PodCommsSession {
         if podState.fault == nil && !podState.suspended {
             let _ = try cancelDelivery(deliveryType: .all, beepType: .beeepBeeep)
         }
-
+        
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
         
         if podState.fault != nil {

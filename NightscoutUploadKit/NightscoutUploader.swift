@@ -235,6 +235,7 @@ public class NightscoutUploader {
             direction: direction
         )
         entries.append(entry)
+        flushAll()
     }
     
     public func handleMeterMessage(_ msg: MeterMessage) {

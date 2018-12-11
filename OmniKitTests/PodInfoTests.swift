@@ -149,10 +149,10 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(LogEventErrorCode(rawValue: 0), decoded.logEventErrorType)
-            XCTAssertEqual(.readyForSchedule, decoded.logEventErrorPodProgressStatus)
+            XCTAssertEqual(.readyForBasalSchedule, decoded.logEventErrorPodProgressStatus)
             XCTAssertEqual(2, decoded.receiverLowGain)
             XCTAssertEqual(46, decoded.radioRSSI)
-            XCTAssertEqual(.readyForSchedule, decoded.previousPodProgressStatus)
+            XCTAssertEqual(.readyForBasalSchedule, decoded.previousPodProgressStatus)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

@@ -53,7 +53,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case errorMainLoopHelper5                 = 0x2E
         case errorMainLoopHelper6                 = 0x2F
         case errorMainLoopHelper7                 = 0x30
-        case badMType                             = 0x31
+        case insulinDeliveryCommandError          = 0x31
         case badValueStartupTest                  = 0x32
         case badDecrementTab1                     = 0x33
         case badStateInReset                      = 0x34
@@ -216,8 +216,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Error in big routine used by main_loop_helper_2($29+i[6])"
                 case .errorMainLoopHelper7:
                     return "Error in big routine used by main_loop_helper_2($29+i[7])"
-                case .badMType:
-                    return "Bad mtype"
+                case .insulinDeliveryCommandError:
+                    return "Error during insulin command setup"
                 case .badValueStartupTest:
                     return "Bad value during startup testing (402D is not 0)"
                 case .badDecrementTab1:

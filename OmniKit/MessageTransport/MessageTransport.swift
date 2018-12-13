@@ -131,6 +131,8 @@ class MessageTransport {
         
         let start = Date()
         
+        incrementPacketNumber()
+        
         while (-start.timeIntervalSinceNow < exchangeTimeout)  {
             do {
                 let rfPacket = try session.sendAndListen(packetData, repeatCount: repeatCount, timeout: packetResponseTimeout, retryCount: radioRetryCount, preambleExtension: preambleExtension)
@@ -147,16 +149,15 @@ class MessageTransport {
                     continue
                 }
                 
-                guard candidatePacket.sequenceNum == ((packetNumber + 1) & 0b11111) else {
+                guard candidatePacket.sequenceNum == ((packet.sequenceNum + 1) & 0b11111) else {
                     continue
                 }
                 
                 // Once we have verification that the POD heard us, we can increment our counters
-                incrementPacketNumber(2)
+                incrementPacketNumber()
                 
                 return candidatePacket
             } catch RileyLinkDeviceError.responseTimeout {
-                incrementPacketNumber()
                 continue
             }
         }
@@ -164,8 +165,10 @@ class MessageTransport {
         throw PodCommsError.noResponse
     }
     
-    func send(_ messageBlocks: [MessageBlock]) throws -> Message {
-        let message = Message(address: address, messageBlocks: messageBlocks, sequenceNum: messageNumber)
+    func sendMessage(_ message: Message) throws -> Message {
+        
+        messageNumber = message.sequenceNum
+        incrementMessageNumber()
 
         do {
             let responsePacket = try { () throws -> Packet in
@@ -222,7 +225,7 @@ class MessageTransport {
             }
             
             if response.messageBlocks[0].blockType != .errorResponse {
-                incrementMessageNumber(2)
+                incrementMessageNumber()
             }
             
             log.debug("Recv: %@", String(describing: response))

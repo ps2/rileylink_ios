@@ -40,9 +40,8 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
         public static let basal         = DeliveryType(rawValue: 1 << 0)
         public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
         public static let bolus         = DeliveryType(rawValue: 1 << 2)
-        public static let extendedBolus = DeliveryType(rawValue: 1 << 3)
         
-        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
+        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus]
         
         public init(rawValue: UInt8) {
             self.rawValue = rawValue

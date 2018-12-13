@@ -41,6 +41,8 @@ class PodComms : CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
+    
+    // This is just a testing function for spoofing PDM packets, or other times when you need to generate a custom packet
     private func sendPacket(session: CommandSession) throws {
         
         let packetNumber = 19
@@ -78,7 +80,9 @@ class PodComms : CustomDebugStringConvertible {
         // Assign Address
         let assignAddress = AssignAddressCommand(address: address)
         
-        let response = try transport.send([assignAddress])
+        let message = Message(address: 0xffffffff, messageBlocks: [assignAddress], sequenceNum: transport.messageNumber)
+        
+        let response = try transport.sendMessage(message)
         
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))
@@ -111,8 +115,10 @@ class PodComms : CustomDebugStringConvertible {
         
         let dateComponents = ConfigurePodCommand.dateComponents(date: podState.activatedAt, timeZone: timeZone)
         let setupPod = ConfigurePodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
+        
+        let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
 
-        let response = try transport.send([setupPod])
+        let response = try transport.sendMessage(message)
         
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))

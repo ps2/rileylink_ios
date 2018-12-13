@@ -186,9 +186,13 @@ class PairPodSetupViewController: SetupTableViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let finishTime):
-                    self.continueState = .priming(finishTime: finishTime)
                     let delay = finishTime.timeIntervalSinceNow
-                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    if delay > 0 {
+                        self.continueState = .priming(finishTime: finishTime)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                            self.continueState = .ready
+                        }
+                    } else {
                         self.continueState = .ready
                     }
                 case .failure(let error):

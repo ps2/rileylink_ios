@@ -31,24 +31,24 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
     }
     
-    private var insulinFormatter: NumberFormatter {
+    private let insulinFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 3
-        
         return formatter
-    }
+    }()
     
-    private var dateFormatter: DateFormatter {
+    private let shortDateFormatter: DateFormatter = {
         let timeFormatter = DateFormatter()
         timeFormatter.dateStyle = .short
         timeFormatter.timeStyle = .medium
         return timeFormatter
-    }
+    }()
+    
+    private let dateFormatter = ISO8601DateFormatter()
     
     fileprivate var uniqueKey: Data {
-        let keys: [Any] = [doseType.rawValue, startTime, scheduledUnits ?? units]
-        return NSKeyedArchiver.archivedData(withRootObject:keys)
+        return "\(doseType) \(scheduledUnits ?? units) \(dateFormatter.string(from: startTime)) \(duration)".data(using: .utf8)!
     }
     
     let doseType: DoseType
@@ -70,6 +70,10 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var progress: Double {
         let elapsed = -startTime.timeIntervalSinceNow
         return min(elapsed / duration, 1)
+    }
+    
+    public var finished: Bool {
+        return progress >= 1
     }
     
     // Units per hour
@@ -108,7 +112,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
     public var description: String {
         let unitsStr = insulinFormatter.string(from: units) ?? "?"
-        let startTimeStr = dateFormatter.string(from: startTime)
+        let startTimeStr = shortDateFormatter.string(from: startTime)
         let durationStr = duration.format(using: [.minute, .second]) ?? "?"
         switch doseType {
         case .bolus:

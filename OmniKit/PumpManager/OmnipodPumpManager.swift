@@ -717,7 +717,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         queue.async {
-            guard self.hasActivePod else {
+            guard let podState = self.state.podState, self.hasActivePod else {
                 completion(.failure(OmnipodPumpManagerError.noPodPaired))
                 return
             }
@@ -738,17 +738,21 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 }
                 
                 do {
-                    let podStatus = try session.getStatus()
-                    
-                    if podStatus.deliveryStatus == .suspended {
+                    if podState.suspended {
                         throw PodCommsError.podSuspended
                     }
                     
-                    if podStatus.deliveryStatus.bolusing {
-                        throw PodCommsError.unfinalizedBolus
+                    var tempBasalRunning = podState.unfinalizedTempBasal?.finished == false
+                    
+                    if podState.unfinalizedBolus != nil {
+                        let status = try session.getStatus()
+                        if status.deliveryStatus.bolusing {
+                            throw PodCommsError.unfinalizedBolus
+                        }
+                        tempBasalRunning = status.deliveryStatus.tempBasalRunning
                     }
-
-                    if podStatus.deliveryStatus.tempBasalRunning {
+                    
+                    if tempBasalRunning {
                         let cancelStatus = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
 
                         guard !cancelStatus.deliveryStatus.tempBasalRunning else {

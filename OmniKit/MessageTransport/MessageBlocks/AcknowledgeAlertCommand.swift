@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AcknowledgeAlertCommand : MessageBlock {
+public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
     
     
     public let blockType: MessageBlockType = .acknowledgeAlert

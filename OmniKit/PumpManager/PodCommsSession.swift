@@ -177,16 +177,33 @@ public class PodCommsSession {
         transport.delegate = self
     }
 
-
     func send<T: MessageBlock>(_ messageBlocks: [MessageBlock]) throws -> T {
         
-        var triesRemaining = 2
+        var triesRemaining = 2  // Retries only happen for nonce resync
         
         var blocksToSend = messageBlocks
         
+        if blocksToSend.contains(where: { $0 as? NonceResyncableMessageBlock != nil }) {
+            podState.advanceToNextNonce()
+        }
+        
+        let flagA: Bool
+        if let insulinScheduleCommand = blocksToSend[0] as? SetInsulinScheduleCommand,
+            case .basalSchedule = insulinScheduleCommand.deliverySchedule
+        {
+            flagA = true
+        } else {
+            flagA = false
+        }
+        
+        let messageNumber = transport.messageNumber
+        
         while (triesRemaining > 0) {
             triesRemaining -= 1
-            let response = try transport.send(blocksToSend)
+            
+            let message = Message(address: podState.address, messageBlocks: messageBlocks, sequenceNum: messageNumber, flagA: flagA)
+            
+            let response = try transport.sendMessage(message)
             
             // Simulate fault
             //let response = try Message(encodedData: Data(hexadecimalString: "1f019ee204180216020d0000a902012d14008d03ff008d0000185e08030d81cd")!)
@@ -202,8 +219,8 @@ public class PodCommsSession {
                     errorResponse.errorReponseType == .badNonce
                 {
                     let sentNonce = podState.currentNonce
-                    self.podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: transport.messageNumber)
-                    log.info("resyncNonce(syncWord: %02X, sentNonce: %04X, messageSequenceNum: %d) -> %04X", errorResponse.nonceSearchKey, sentNonce, transport.messageNumber, podState.currentNonce)
+                    self.podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
+                    log.info("resyncNonce(syncWord: %02X, sentNonce: %04X, messageSequenceNum: %d) -> %04X", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
                     
                     blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
                         if var resyncableBlock = block as? NonceResyncableMessageBlock {
@@ -244,13 +261,11 @@ public class PodCommsSession {
             
             let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
             let _: StatusResponse = try send([configureAlerts1])
-            podState.advanceToNextNonce()
             
             //7837 0005 0802
             let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
             let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
             let _: StatusResponse = try send([configureAlerts2])
-            podState.advanceToNextNonce()
         } else {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -274,7 +289,6 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
         let status: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status)
-        podState.advanceToNextNonce()
         podState.setupProgress = .priming
         return primeFinishTime
     }
@@ -286,7 +300,6 @@ public class PodCommsSession {
             let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
             let status: StatusResponse = try send([configureAlerts])
             podState.updateFromStatusResponse(status)
-            podState.advanceToNextNonce()
         } else {
             // We started basal schedule programming, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -321,7 +334,6 @@ public class PodCommsSession {
             
             let status: StatusResponse = try send([configureAlerts])
             podState.updateFromStatusResponse(status)
-            podState.advanceToNextNonce()
         } else {
             // We started cannula insertion, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -344,7 +356,6 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
         let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status2)
-        podState.advanceToNextNonce()
         
         let cannulaInsertionFinishTime = Date() + .seconds(10)
         podState.setupProgress = .completed
@@ -374,7 +385,6 @@ public class PodCommsSession {
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain)
-            podState.advanceToNextNonce()
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch let error {
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
@@ -394,7 +404,6 @@ public class PodCommsSession {
         do {
             let statusResponse: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain)
-            podState.advanceToNextNonce()
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch let error {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
@@ -428,8 +437,6 @@ public class PodCommsSession {
         
         podState.updateFromStatusResponse(status)
 
-        podState.advanceToNextNonce()
-        
         return status
     }
     
@@ -466,7 +473,6 @@ public class PodCommsSession {
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
         let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
-        podState.advanceToNextNonce()
         return status
     }
     
@@ -504,8 +510,6 @@ public class PodCommsSession {
         
         let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alarms: alarms)
         let status: StatusResponse = try send([cmd])
-
-        podState.advanceToNextNonce()
 
         return status
     }

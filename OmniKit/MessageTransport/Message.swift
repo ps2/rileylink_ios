@@ -20,13 +20,13 @@ struct Message {
     let address: UInt32
     let messageBlocks: [MessageBlock]
     let sequenceNum: Int
-    let flagA: Bool
+    let expectFollowOnMessage: Bool
     
-    init(address: UInt32, messageBlocks: [MessageBlock], sequenceNum: Int, flagA: Bool = false) {
+    init(address: UInt32, messageBlocks: [MessageBlock], sequenceNum: Int, expectFollowOnMessage: Bool = false) {
         self.address = address
         self.messageBlocks = messageBlocks
         self.sequenceNum = sequenceNum
-        self.flagA = flagA
+        self.expectFollowOnMessage = expectFollowOnMessage
     }
     
     init(encodedData: Data) throws {
@@ -41,7 +41,7 @@ struct Message {
             throw MessageError.notEnoughData
         }
         
-        self.flagA = (b9 & 0b10000000) != 0
+        self.expectFollowOnMessage = (b9 & 0b10000000) != 0
         self.sequenceNum = Int((b9 >> 2) & 0b11111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
         let msgWithoutCrc = encodedData.prefix(encodedData.count - 2)
@@ -77,7 +77,7 @@ struct Message {
             cmdData.append(cmd.data)
         }
         
-        let b9: UInt8 = ((flagA ? 1 : 0) << 7) + (UInt8(sequenceNum & 0b11111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
+        let b9: UInt8 = ((expectFollowOnMessage ? 1 : 0) << 7) + (UInt8(sequenceNum & 0b11111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
         bytes.append(b9)
         bytes.append(UInt8(cmdData.count & 0xff))
         

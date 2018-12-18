@@ -177,7 +177,7 @@ public class PodCommsSession {
         transport.delegate = self
     }
 
-    func send<T: MessageBlock>(_ messageBlocks: [MessageBlock]) throws -> T {
+    func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], expectFollowOnMessage: Bool = false) throws -> T {
         
         var triesRemaining = 2  // Retries only happen for nonce resync
         
@@ -187,21 +187,12 @@ public class PodCommsSession {
             podState.advanceToNextNonce()
         }
         
-        let flagA: Bool
-        if let insulinScheduleCommand = blocksToSend[0] as? SetInsulinScheduleCommand,
-            case .basalSchedule = insulinScheduleCommand.deliverySchedule
-        {
-            flagA = true
-        } else {
-            flagA = false
-        }
-        
         let messageNumber = transport.messageNumber
         
         while (triesRemaining > 0) {
             triesRemaining -= 1
             
-            let message = Message(address: podState.address, messageBlocks: messageBlocks, sequenceNum: messageNumber, flagA: flagA)
+            let message = Message(address: podState.address, messageBlocks: messageBlocks, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
             
             let response = try transport.sendMessage(message)
             

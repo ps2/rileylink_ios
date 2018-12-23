@@ -141,7 +141,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private var actions: [ActionsRow] {
-        if let podState = podState, podState.unfinishedPairing {
+        if podState == nil || podState?.unfinishedPairing == true {
             return [.replacePod]
         } else {
             return ActionsRow.allCases

@@ -84,15 +84,15 @@ public struct StatusResponse : MessageBlock {
         let highInsulinBits = Int(encodedData[2] & 0xf) << 9
         let midInsulinBits = Int(encodedData[3]) << 1
         let lowInsulinBits = Int(encodedData[4] >> 7)
-        self.insulin = podPulseSize * Double(highInsulinBits | midInsulinBits | lowInsulinBits)
+        self.insulin = Double(highInsulinBits | midInsulinBits | lowInsulinBits) / pulsesPerUnit
         
         self.podMessageCounter = (encodedData[4] >> 3) & 0xf
         
-        self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5]))
+        self.insulinNotDelivered = Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5])) / pulsesPerUnit
 
         self.alarms = PodAlarmState(rawValue: ((encodedData[6] & 0x7f) << 1) | (encodedData[7] >> 7))
         
-        let reservoirValue = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) * podPulseSize
+        let reservoirValue = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) / pulsesPerUnit
         if reservoirValue < StatusResponse.maximumReservoirReading {
             self.reservoirLevel = reservoirValue
         } else {
@@ -100,3 +100,10 @@ public struct StatusResponse : MessageBlock {
         }
     }
 }
+
+extension StatusResponse: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "StatusResponse(\(deliveryStatus), \(podProgressStatus), \(timeActive.stringValue), \(String(describing: reservoirLevel)), delivered:\(insulin), undelivered:\(insulinNotDelivered), seq:\(podMessageCounter), \(alarms)"
+    }
+}
+

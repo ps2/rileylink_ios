@@ -141,6 +141,11 @@ extension TimeInterval {
         if days == 1 {
             pluralFormOfDays = "day"
         }
-        return String(format: "%d \(pluralFormOfDays) plus %02d:%02d", days, hours, minutes)
+        let timeComponent = String(format: "%02d:%02d", hours, minutes)
+        if days > 0 {
+            return String(format: "%d \(pluralFormOfDays) plus %@", days, timeComponent)
+        } else {
+            return timeComponent
+        }
     }
 }

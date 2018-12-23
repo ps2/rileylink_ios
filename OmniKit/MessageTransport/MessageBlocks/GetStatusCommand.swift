@@ -50,3 +50,10 @@ public struct GetStatusCommand : MessageBlock {
         return data
     }
 }
+
+extension GetStatusCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "GetStatusCommand(\(podInfoType))"
+    }
+}
+

@@ -293,6 +293,7 @@
 		C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C11166AE2180D834000EEAAB /* PodAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* PodAlarm.swift */; };
+		C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
 		C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198621C8DF4C800BC374C /* HistoryPageTests.swift */; };
@@ -447,6 +448,48 @@
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
+		C1BB128821CB5603009A29B5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB128721CB5603009A29B5 /* main.swift */; };
+		C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA0213323E800C50C1D /* CRC8.swift */; };
+		C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9E213323E700C50C1D /* CRC16.swift */; };
+		C1BB129621CB564D009A29B5 /* Packet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB5213323E900C50C1D /* Packet.swift */; };
+		C1BB129821CB564D009A29B5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9C213323E700C50C1D /* Message.swift */; };
+		C1BB129921CB5654009A29B5 /* AcknowledgeAlertCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2921506BF300B602AD /* AcknowledgeAlertCommand.swift */; };
+		C1BB129A21CB5654009A29B5 /* AssignAddressCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */; };
+		C1BB129B21CB5654009A29B5 /* BasalScheduleExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */; };
+		C1BB129C21CB5654009A29B5 /* BolusExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAA213323E800C50C1D /* BolusExtraCommand.swift */; };
+		C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */; };
+		C1BB129E21CB5654009A29B5 /* ConfigureAlertsCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB3213323E800C50C1D /* ConfigureAlertsCommand.swift */; };
+		C1BB129F21CB5654009A29B5 /* DeactivatePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */; };
+		C1BB12A021CB5654009A29B5 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */; };
+		C1BB12A121CB5654009A29B5 /* GetStatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */; };
+		C1BB12A221CB5654009A29B5 /* MessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA8213323E800C50C1D /* MessageBlock.swift */; };
+		C1BB12A321CB5654009A29B5 /* PlaceholderMessageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA9213323E800C50C1D /* PlaceholderMessageBlock.swift */; };
+		C1BB12A421CB5654009A29B5 /* PodInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336B214ED01200888876 /* PodInfo.swift */; };
+		C1BB12A521CB5654009A29B5 /* PodInfoConfiguredAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */; };
+		C1BB12A621CB5654009A29B5 /* PodInfoDataLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */; };
+		C1BB12A721CB5654009A29B5 /* PodInfoFault.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */; };
+		C1BB12A821CB5654009A29B5 /* PodInfoFaultEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336D214ED01200888876 /* PodInfoFaultEvent.swift */; };
+		C1BB12A921CB5654009A29B5 /* PodInfoFlashLogRecent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoFlashLogRecent.swift */; };
+		C1BB12AA21CB5654009A29B5 /* PodInfoResetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */; };
+		C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */; };
+		C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD476215BED3500A103D1 /* PodInfoTester.swift */; };
+		C1BB12AD21CB5654009A29B5 /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */; };
+		C1BB12AE21CB5654009A29B5 /* ConfigurePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */; };
+		C1BB12AF21CB5654009A29B5 /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAB213323E800C50C1D /* StatusResponse.swift */; };
+		C1BB12B021CB5654009A29B5 /* TempBasalExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */; };
+		C1BB12B121CB5654009A29B5 /* VersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA4213323E800C50C1D /* VersionResponse.swift */; };
+		C1BB12B221CB5654009A29B5 /* FaultConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */; };
+		C1BB12B421CB5697009A29B5 /* Packet+RFPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */; };
+		C1BB12B521CB56D2009A29B5 /* FaultEventCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13FD2F3215E7338005FC495 /* FaultEventCode.swift */; };
+		C1BB12B621CB56D2009A29B5 /* PodProgressStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13FD2F5215E743C005FC495 /* PodProgressStatus.swift */; };
+		C1BB12B721CB56E2009A29B5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
+		C1BB12B821CB56F3009A29B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
+		C1BB12B921CB571C009A29B5 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF98213323E600C50C1D /* Pod.swift */; };
+		C1BB12BA21CB5758009A29B5 /* PodAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* PodAlarm.swift */; };
+		C1BB12BB21CB5767009A29B5 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
+		C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E993D18B217E455000E489BF /* LogEventErrorCode.swift */; };
+		C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */; };
+		C1BB12BE21CB57AA009A29B5 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
@@ -813,6 +856,15 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C1BB128321CB5603009A29B5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -1172,6 +1224,7 @@
 		C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C10D9BD31C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C11166AD2180D834000EEAAB /* PodAlarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodAlarm.swift; sourceTree = "<group>"; };
+		C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaultConfigCommand.swift; sourceTree = "<group>"; };
 		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198621C8DF4C800BC374C /* HistoryPageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPageTests.swift; sourceTree = "<group>"; };
@@ -1328,6 +1381,9 @@
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioAdapter.swift; sourceTree = "<group>"; };
+		C1BB128521CB5603009A29B5 /* OmniKitPacketParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OmniKitPacketParser; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1BB128721CB5603009A29B5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Packet+RFPacket.swift"; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
@@ -1595,6 +1651,13 @@
 				43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */,
 				C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */,
 				4352A74B20DED87F00CAC200 /* LoopKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1BB128221CB5603009A29B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2037,6 +2100,7 @@
 				C1FFAF79213323CC00C50C1D /* OmniKit */,
 				C1FFAF86213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFDA213323F900C50C1D /* OmniKitUI */,
+				C1BB128621CB5603009A29B5 /* OmniKitPacketParser */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 			);
@@ -2061,6 +2125,7 @@
 				C1FFAF78213323CC00C50C1D /* OmniKit.framework */,
 				C1FFAF80213323CC00C50C1D /* OmniKitTests.xctest */,
 				C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */,
+				C1BB128521CB5603009A29B5 /* OmniKitPacketParser */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2138,6 +2203,7 @@
 				C1FFAFA0213323E800C50C1D /* CRC8.swift */,
 				C1FFAF9E213323E700C50C1D /* CRC16.swift */,
 				C1FFAFB5213323E900C50C1D /* Packet.swift */,
+				C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */,
 				C1FFAF9B213323E700C50C1D /* MessageTransport.swift */,
 				C1FFAF9C213323E700C50C1D /* Message.swift */,
 				C1FFAFA3213323E800C50C1D /* MessageBlocks */,
@@ -2345,6 +2411,14 @@
 			name = Managers;
 			sourceTree = "<group>";
 		};
+		C1BB128621CB5603009A29B5 /* OmniKitPacketParser */ = {
+			isa = PBXGroup;
+			children = (
+				C1BB128721CB5603009A29B5 /* main.swift */,
+			);
+			path = OmniKitPacketParser;
+			sourceTree = "<group>";
+		};
 		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -2488,6 +2562,7 @@
 				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
 				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
 				C1FFAFA4213323E800C50C1D /* VersionResponse.swift */,
+				C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */,
 			);
 			path = MessageBlocks;
 			sourceTree = "<group>";
@@ -2855,6 +2930,23 @@
 			productReference = C1B383141CD0665D00CE7782 /* NightscoutUploadKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C1BB128421CB5603009A29B5 /* OmniKitPacketParser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1BB128B21CB5603009A29B5 /* Build configuration list for PBXNativeTarget "OmniKitPacketParser" */;
+			buildPhases = (
+				C1BB128121CB5603009A29B5 /* Sources */,
+				C1BB128221CB5603009A29B5 /* Frameworks */,
+				C1BB128321CB5603009A29B5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OmniKitPacketParser;
+			productName = OmniKitPacketParser;
+			productReference = C1BB128521CB5603009A29B5 /* OmniKitPacketParser */;
+			productType = "com.apple.product-type.tool";
+		};
 		C1FFAF77213323CC00C50C1D /* OmniKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1FFAF93213323CD00C50C1D /* Build configuration list for PBXNativeTarget "OmniKit" */;
@@ -2918,7 +3010,7 @@
 		C12EA22F198B436800309FA4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Pete Schwamb";
 				TargetAttributes = {
@@ -2986,6 +3078,11 @@
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1000;
 					};
+					C1BB128421CB5603009A29B5 = {
+						CreatedOnToolsVersion = 10.1;
+						DevelopmentTeam = UY678SP37Q;
+						ProvisioningStyle = Automatic;
+					};
 					C1FFAF77213323CC00C50C1D = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
@@ -3043,6 +3140,7 @@
 				C1FFAF77213323CC00C50C1D /* OmniKit */,
 				C1FFAF7F213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFD8213323F900C50C1D /* OmniKitUI */,
+				C1BB128421CB5603009A29B5 /* OmniKitPacketParser */,
 			);
 		};
 /* End PBXProject section */
@@ -3687,6 +3785,54 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C1BB128121CB5603009A29B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1BB12BB21CB5767009A29B5 /* LocalizedString.swift in Sources */,
+				C1BB12BE21CB57AA009A29B5 /* BasalSchedule.swift in Sources */,
+				C1BB129F21CB5654009A29B5 /* DeactivatePodCommand.swift in Sources */,
+				C1BB12A821CB5654009A29B5 /* PodInfoFaultEvent.swift in Sources */,
+				C1BB128821CB5603009A29B5 /* main.swift in Sources */,
+				C1BB12B921CB571C009A29B5 /* Pod.swift in Sources */,
+				C1BB12B021CB5654009A29B5 /* TempBasalExtraCommand.swift in Sources */,
+				C1BB129E21CB5654009A29B5 /* ConfigureAlertsCommand.swift in Sources */,
+				C1BB12AD21CB5654009A29B5 /* SetInsulinScheduleCommand.swift in Sources */,
+				C1BB129B21CB5654009A29B5 /* BasalScheduleExtraCommand.swift in Sources */,
+				C1BB129621CB564D009A29B5 /* Packet.swift in Sources */,
+				C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */,
+				C1BB12B521CB56D2009A29B5 /* FaultEventCode.swift in Sources */,
+				C1BB12A421CB5654009A29B5 /* PodInfo.swift in Sources */,
+				C1BB12AA21CB5654009A29B5 /* PodInfoResetStatus.swift in Sources */,
+				C1BB12B221CB5654009A29B5 /* FaultConfigCommand.swift in Sources */,
+				C1BB12AF21CB5654009A29B5 /* StatusResponse.swift in Sources */,
+				C1BB12B721CB56E2009A29B5 /* Data.swift in Sources */,
+				C1BB129921CB5654009A29B5 /* AcknowledgeAlertCommand.swift in Sources */,
+				C1BB12A921CB5654009A29B5 /* PodInfoFlashLogRecent.swift in Sources */,
+				C1BB12B621CB56D2009A29B5 /* PodProgressStatus.swift in Sources */,
+				C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */,
+				C1BB12A321CB5654009A29B5 /* PlaceholderMessageBlock.swift in Sources */,
+				C1BB129C21CB5654009A29B5 /* BolusExtraCommand.swift in Sources */,
+				C1BB12B121CB5654009A29B5 /* VersionResponse.swift in Sources */,
+				C1BB12B821CB56F3009A29B5 /* TimeInterval.swift in Sources */,
+				C1BB12A521CB5654009A29B5 /* PodInfoConfiguredAlerts.swift in Sources */,
+				C1BB12A221CB5654009A29B5 /* MessageBlock.swift in Sources */,
+				C1BB12BA21CB5758009A29B5 /* PodAlarm.swift in Sources */,
+				C1BB12A121CB5654009A29B5 /* GetStatusCommand.swift in Sources */,
+				C1BB12A621CB5654009A29B5 /* PodInfoDataLog.swift in Sources */,
+				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
+				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
+				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,
+				C1BB12AE21CB5654009A29B5 /* ConfigurePodCommand.swift in Sources */,
+				C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */,
+				C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */,
+				C1BB12A021CB5654009A29B5 /* ErrorResponse.swift in Sources */,
+				C1BB129821CB564D009A29B5 /* Message.swift in Sources */,
+				C1BB129A21CB5654009A29B5 /* AssignAddressCommand.swift in Sources */,
+				C1BB12A721CB5654009A29B5 /* PodInfoFault.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1FFAF73213323CC00C50C1D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3734,10 +3880,12 @@
 				C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */,
 				C13FD2F4215E7338005FC495 /* FaultEventCode.swift in Sources */,
 				C1FFAFBF213323E900C50C1D /* BasalSchedule.swift in Sources */,
+				C1BB12B421CB5697009A29B5 /* Packet+RFPacket.swift in Sources */,
 				E9C06B2A21506BF300B602AD /* AcknowledgeAlertCommand.swift in Sources */,
 				C1FFAFC9213323E900C50C1D /* StatusResponse.swift in Sources */,
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
 				C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */,
+				C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */,
 				C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */,
 				E9EDD475215AFFF300A103D1 /* PodInfoFault.swift in Sources */,
 				C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */,
@@ -5215,6 +5363,55 @@
 			};
 			name = Release;
 		};
+		C1BB128921CB5603009A29B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = UY678SP37Q;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		C1BB128A21CB5603009A29B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = UY678SP37Q;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 		C1FFAF8F213323CC00C50C1D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5574,6 +5771,15 @@
 			buildConfigurations = (
 				C1B383261CD0665D00CE7782 /* Debug */,
 				C1B383271CD0665D00CE7782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1BB128B21CB5603009A29B5 /* Build configuration list for PBXNativeTarget "OmniKitPacketParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1BB128921CB5603009A29B5 /* Debug */,
+				C1BB128A21CB5603009A29B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

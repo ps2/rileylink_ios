@@ -68,3 +68,9 @@ public struct TempBasalExtraCommand : MessageBlock {
         self.programReminderInterval = programReminderInterval
     }
 }
+
+extension TempBasalExtraCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "TempBasalExtraCommand(confidenceReminder:\(confidenceReminder), programReminderInterval:\(programReminderInterval.stringValue) remainingPulses:\(remainingPulses), delayUntilNextPulse:\(delayUntilNextPulse.stringValue), rateEntries:\(rateEntries))"
+    }
+}

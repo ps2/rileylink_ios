@@ -141,8 +141,8 @@ class MessageTransport {
                 
                 do {
                     candidatePacket = try Packet(rfPacket: rfPacket)
-                } catch PodCommsError.invalidData {
-                    log.debug("Invalid packet data: %@", rfPacket.data.hexadecimalString)
+                } catch PacketError.insufficientData {
+                    log.debug("Insufficient packet data: %@", rfPacket.data.hexadecimalString)
                     continue
                 } catch let error {
                     log.debug("Packet error: %@", String(describing: error))

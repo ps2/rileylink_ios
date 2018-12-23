@@ -38,8 +38,14 @@ public struct BasalTableEntry {
         let checksumPerSegment = (pulses & 0xff) + (pulses >> 8)
         return UInt16(checksumPerSegment * segments + (alternateSegmentPulse ? segments / 2 : 0))
     }
-    
 }
+
+extension BasalTableEntry: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "BasalTableEntry(segments:\(segments), pulses:\(pulses), alternateSegmentPulse:\(alternateSegmentPulse))"
+    }
+}
+
 
 public struct BasalDeliveryTable {
     static let segmentDuration: TimeInterval = .minutes(30)
@@ -146,6 +152,12 @@ public struct BasalDeliveryTable {
     }
 }
 
+extension BasalDeliveryTable: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "BasalDeliveryTable(\(entries))"
+    }
+}
+
 public struct RateEntry {
     let totalPulses: Double
     let delayBetweenPulses: TimeInterval
@@ -159,7 +171,7 @@ public struct RateEntry {
         if totalPulses == 0 {
             return 0
         } else {
-            return TimeInterval(hours: 1) / delayBetweenPulses * podPulseSize
+            return round(TimeInterval(hours: 1) / delayBetweenPulses) / pulsesPerUnit
         }
     }
     
@@ -167,7 +179,7 @@ public struct RateEntry {
         if totalPulses == 0 {
             return delayBetweenPulses / 10
         } else {
-            return delayBetweenPulses * Double(totalPulses)
+            return round(delayBetweenPulses * Double(totalPulses))
         }
     }
     
@@ -210,6 +222,13 @@ public struct RateEntry {
         return entries
     }
 }
+
+extension RateEntry: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "RateEntry(rate:\(rate) duration:\(duration.stringValue))"
+    }
+}
+
 
 
 

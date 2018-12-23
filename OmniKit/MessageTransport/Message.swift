@@ -59,7 +59,7 @@ struct Message {
                 throw MessageBlockError.unknownBlockType(rawVal: data[idx])
             }
             do {
-                let block = try blockType.blockType.init(encodedData: data.suffix(from: idx))
+                let block = try blockType.blockType.init(encodedData: Data(data.suffix(from: idx)))
                 blocks.append(block)
                 idx += Int(block.data.count)
             } catch (let error) {
@@ -100,3 +100,8 @@ struct Message {
     }
 }
 
+extension Message: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "Message(\(Data(bigEndian: address).hexadecimalString) seq:\(sequenceNum) \(messageBlocks))"
+    }
+}

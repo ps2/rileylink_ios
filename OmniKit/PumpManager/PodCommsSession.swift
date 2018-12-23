@@ -14,8 +14,6 @@ import os.log
 public enum PodCommsError: Error {
     case noPodPaired
     case invalidData
-    case crcMismatch
-    case unknownPacketType(rawType: UInt8)
     case noResponse
     case emptyResponse
     case podAckedInsteadOfReturningResponse
@@ -37,10 +35,6 @@ extension PodCommsError: LocalizedError {
         case .noPodPaired:
             return LocalizedString("No pod paired", comment: "Error message shown when no pod is paired")
         case .invalidData:
-            return nil
-        case .crcMismatch:
-            return nil
-        case .unknownPacketType:
             return nil
         case .noResponse:
             return LocalizedString("No response from pod", comment: "Error message shown when no response from pod was received")
@@ -78,10 +72,6 @@ extension PodCommsError: LocalizedError {
             return nil
         case .invalidData:
             return nil
-        case .crcMismatch:
-            return nil
-        case .unknownPacketType:
-            return nil
         case .noResponse:
             return nil
         case .emptyResponse:
@@ -116,10 +106,6 @@ extension PodCommsError: LocalizedError {
         case .noPodPaired:
             return nil
         case .invalidData:
-            return nil
-        case .crcMismatch:
-            return nil
-        case .unknownPacketType:
             return nil
         case .noResponse:
             return LocalizedString("Please bring your pod closer to the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
@@ -192,7 +178,7 @@ public class PodCommsSession {
         while (triesRemaining > 0) {
             triesRemaining -= 1
             
-            let message = Message(address: podState.address, messageBlocks: messageBlocks, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
+            let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
             
             let response = try transport.sendMessage(message)
             
@@ -432,23 +418,8 @@ public class PodCommsSession {
     }
     
     public func testingCommands() throws {
-//        let response: StatusResponse = try send([GetStatusCommand()])
-//        storeFinalizeDoses(deliveryStatus: response.deliveryStatus) { (_) -> Bool in
-//            return true
-//        }
-//        //try setTempBasal(rate: 2.5, duration: .minutes(30), confidenceReminder: false, programReminderInterval: .minutes(0))
-//        //try cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
-//        
-//        let result = bolus(units: 20)
-//        switch result {
-//        case .certainFailure(let error):
-//            throw error
-//        case .uncertainFailure(let error):
-//            throw error
-//        case .success:
-//            return
-//        }
-        //try cancelDelivery(deliveryType: .bolus, beepType: .bipBip)
+        let response: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 1, tab5Sub17: 0)])
+        print(response)
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {

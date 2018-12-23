@@ -6,6 +6,8 @@
 //  Copyright © 2017 Pete Schwamb. All rights reserved.
 //
 
+import Foundation
+
 public enum MessageBlockError: Error {
     case notEnoughData
     case unknownBlockType(rawVal: UInt8)
@@ -18,6 +20,7 @@ public enum MessageBlockType: UInt8 {
     case setupPod           = 0x03
     case errorResponse      = 0x06
     case assignAddress      = 0x07
+    case faultConfig        = 0x08
     case getStatus          = 0x0e
     case acknowledgeAlert   = 0x11
     case basalScheduleExtra = 0x13
@@ -61,6 +64,8 @@ public enum MessageBlockType: UInt8 {
             return TempBasalExtraCommand.self
         case .cancelDelivery:
             return CancelDeliveryCommand.self
+        case .faultConfig:
+            return FaultConfigCommand.self
         }
     }
 }

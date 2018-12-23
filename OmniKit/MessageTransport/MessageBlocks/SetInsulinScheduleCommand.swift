@@ -187,3 +187,8 @@ fileprivate func calculateChecksum(_ data: Data) -> UInt16 {
     return data.reduce(0) { $0 + UInt16($1) }
 }
 
+extension SetInsulinScheduleCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "SetInsulinScheduleCommand(nonce:\(nonce), \(deliverySchedule)"
+    }
+}

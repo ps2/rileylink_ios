@@ -43,85 +43,150 @@ extension Int {
     }
 }
 
+//from NSHipster - http://nshipster.com/swift-literal-convertible/
+struct Regex {
+    let pattern: String
+    let options: NSRegularExpression.Options!
+    
+    private var matcher: NSRegularExpression {
+        return try! NSRegularExpression(pattern: self.pattern, options: self.options)
+    }
+    
+    init(_ pattern: String, options: NSRegularExpression.Options = []) {
+        self.pattern = pattern
+        self.options = options
+    }
+    
+    func match(string: String, options: NSRegularExpression.MatchingOptions = []) -> Bool {
+        return self.matcher.numberOfMatches(in: string, options: options, range: NSMakeRange(0, string.count)) != 0
+    }
+}
+
+protocol RegularExpressionMatchable {
+    func match(regex: Regex) -> Bool
+}
+
+extension String: RegularExpressionMatchable {
+    func match(regex: Regex) -> Bool {
+        return regex.match(string: self)
+    }
+}
+
+func ~=<T: RegularExpressionMatchable>(pattern: Regex, matchable: T) -> Bool {
+    return matchable.match(regex: pattern)
+}
+
+
+class LoopIssueReportParser {
+    // * 2018-12-27 01:46:56 +0000 send 1f0e41a6101f1a0e81ed50b102010a0101a000340034170d000208000186a00000000000000111
+    func parseLine(_ line: String) {
+        let components = line.components(separatedBy: .whitespaces)
+        if components.count == 6, let data = Data(hexadecimalString: components[5]), let message = try? Message(encodedData: data) {
+            let direction = components[4].padding(toLength: 7, withPad: " ", startingAt: 0)
+            let date = components[1..<4].joined(separator: " ")
+            print("\(date) \(direction) \(message)")
+        }
+    }
+}
+
+class RTLOmniLineParser {
+    private var lastPacket: ArraySlice<String>? = nil
+    private var messageDate: String = ""
+    private var lastMessageData = Data()
+    private var messageData = Data()
+    private var messageSource: PacketType = .pdm
+    private var address: String = ""
+    private var packetNumber: Int = 0
+    private var repeatCount: Int = 0
+    
+    func parseLine(_ line: String) {
+        let components = line.components(separatedBy: .whitespaces)
+        if components.count > 3, let packetType = try? PacketType(rtlomniString: components[2]) {
+            if lastPacket == components[1...] {
+                return
+            }
+            lastPacket = components[1...]
+            switch packetType {
+            case .pod, .pdm:
+                if components.count != 9 {
+                    print("Invalid line:\(line)")
+                    return
+                }
+                // 2018-12-19T20:50:48.3d ID1:1f0b3557 PTYPE:POD SEQ:31 ID2:1f0b3557 B9:00 BLEN:205 BODY:02cb510032602138800120478004213c80092045800c203980 CRC:a8
+                messageDate = components[0]
+                messageSource = packetType
+                address = String(components[1].valPart())
+                packetNumber = Int(components[3].valPart())!
+                let messageAddress = String(components[4].valPart())
+                let b9 = String(components[5].valPart())
+                if messageData.count > 0 {
+                    print("Dropping incomplete message data: \(messageData.hexadecimalString)")
+                }
+                messageData = Data(hexadecimalString: messageAddress + b9)!
+                let messageLen = UInt8(components[6].valPart())!
+                messageData.append(messageLen)
+                let packetData = Data(hexadecimalString: components[7].valPart())!
+                messageData.append(packetData)
+            case .con:
+                // 2018-12-19T05:19:04.3d ID1:1f0b3557 PTYPE:CON SEQ:12 CON:0000000000000126 CRC:60
+                let packetAddress = String(components[1].valPart())
+                let nextPacketNumber = Int(components[3].valPart())!
+                if (packetAddress == address) && (nextPacketNumber == packetNumber.nextPacketNumber(2)) {
+                    packetNumber = nextPacketNumber
+                    let packetData = Data(hexadecimalString: components[4].valPart())!
+                    messageData.append(packetData)
+                } else if packetAddress != address {
+                    print("mismatched address: \(line)")
+                } else if nextPacketNumber != packetNumber.nextPacketNumber(2) {
+                    print("mismatched packet number: \(nextPacketNumber) != \(packetNumber.nextPacketNumber(2)) \(line)")
+                }
+            default:
+                break
+            }
+            do {
+                let message = try Message(encodedData: messageData)
+                let messageStr = "\(messageDate) \(messageSource) \(message)"
+                if lastMessageData == messageData {
+                    repeatCount += 1
+                    if printRepeats {
+                        print(messageStr + " repeat:\(repeatCount)")
+                    }
+                } else {
+                    lastMessageData = messageData
+                    repeatCount = 0
+                    print(messageStr)
+                }
+                messageData = Data()
+            } catch MessageError.notEnoughData {
+                return
+            } catch let error {
+                print("Error decoding message: \(error)")
+            }
+        }
+    }
+}
+
 for filename in CommandLine.arguments[1...] {
+    let rtlOmniParser = RTLOmniLineParser()
+    let loopIssueReportParser = LoopIssueReportParser()
+    
     do {
         let data = try String(contentsOfFile: filename, encoding: .utf8)
         let lines = data.components(separatedBy: .newlines)
         
-        // 1f00ee84 30 0a 1d18003f1800004297ff 8128
-        var messageDate: String = ""
-        var lastMessageData = Data()
-        var lastPacket: ArraySlice<String>? = nil
-        var messageData = Data()
-        var messageSource: PacketType = .pdm
-        var address: String = ""
-        var packetNumber: Int = 0
-        var repeatCount: Int = 0
-
         for line in lines {
-            let components = line.components(separatedBy: .whitespaces)
-            if components.count > 3, let packetType = try? PacketType(rtlomniString: components[2]) {
-                if lastPacket == components[1...] {
-                    continue
-                }
-                lastPacket = components[1...]
-                switch packetType {
-                case .pod, .pdm:
-                    if components.count != 9 {
-                        print("Invalid line:\(line)")
-                        continue
-                    }
-                    // 2018-12-19T20:50:48.3d ID1:1f0b3557 PTYPE:POD SEQ:31 ID2:1f0b3557 B9:00 BLEN:205 BODY:02cb510032602138800120478004213c80092045800c203980 CRC:a8
-                    messageDate = components[0]
-                    messageSource = packetType
-                    address = String(components[1].valPart())
-                    packetNumber = Int(components[3].valPart())!
-                    let messageAddress = String(components[4].valPart())
-                    let b9 = String(components[5].valPart())
-                    if messageData.count > 0 {
-                        print("Dropping incomplete message data: \(messageData.hexadecimalString)")
-                    }
-                    messageData = Data(hexadecimalString: messageAddress + b9)!
-                    let messageLen = UInt8(components[6].valPart())!
-                    messageData.append(messageLen)
-                    let packetData = Data(hexadecimalString: components[7].valPart())!
-                    messageData.append(packetData)
-                case .con:
-                    // 2018-12-19T05:19:04.3d ID1:1f0b3557 PTYPE:CON SEQ:12 CON:0000000000000126 CRC:60
-                    let packetAddress = String(components[1].valPart())
-                    let nextPacketNumber = Int(components[3].valPart())!
-                    if (packetAddress == address) && (nextPacketNumber == packetNumber.nextPacketNumber(2)) {
-                        packetNumber = nextPacketNumber
-                        let packetData = Data(hexadecimalString: components[4].valPart())!
-                        messageData.append(packetData)
-                    } else if packetAddress != address {
-                        print("mismatched address: \(line)")
-                    } else if nextPacketNumber != packetNumber.nextPacketNumber(2) {
-                        print("mismatched packet number: \(nextPacketNumber) != \(packetNumber.nextPacketNumber(2)) \(line)")
-                    }
-                default:
-                    break
-                }
-                do {
-                    let message = try Message(encodedData: messageData)
-                    let messageStr = "\(messageDate) \(messageSource) \(message)"
-                    if lastMessageData == messageData {
-                        repeatCount += 1
-                        if printRepeats {
-                            print(messageStr + " repeat:\(repeatCount)")
-                        }
-                    } else {
-                        lastMessageData = messageData
-                        repeatCount = 0
-                        print(messageStr)
-                    }
-                    messageData = Data()
-                } catch MessageError.notEnoughData {
-                    continue
-                } catch let error {
-                    print("Error decoding message: \(error)")
-                }
+            switch line {
+            case Regex("ID1:\\[0-9a-fA-F]+ PTYPE:"):
+                // 2018-12-24T10:58:41.3d ID1:1f0f407e PTYPE:POD SEQ:02 ID2:1f0f407e B9:3c BLEN:24 BODY:0216020d0000000000d23102b103ff02b1000008ab08016e83 CRC:c2
+                rtlOmniParser.parseLine(line)
+            case Regex("(send|receive) [0-9a-fA-F]+"):
+                // 2018-12-27 01:46:56 +0000 send 1f0e41a6101f1a0e81ed50b102010a0101a000340034170d000208000186a00000000000000111
+                loopIssueReportParser.parseLine(line)
+            default:
+                break
             }
+            
+
         }
     } catch let error {
         print("Error: \(error)")

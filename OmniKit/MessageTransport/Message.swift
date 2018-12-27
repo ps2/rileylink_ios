@@ -102,6 +102,7 @@ struct Message {
 
 extension Message: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "Message(\(Data(bigEndian: address).hexadecimalString) seq:\(sequenceNum) \(messageBlocks))"
+        let sequenceNumStr = String(format: "%02d", sequenceNum)
+        return "Message(\(Data(bigEndian: address).hexadecimalString) seq:\(sequenceNumStr) \(messageBlocks))"
     }
 }

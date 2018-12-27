@@ -32,7 +32,7 @@ public struct StatusResponse : MessageBlock {
             case .suspended:
                 return LocalizedString("Suspended", comment: "Delivery status when insulin delivery is suspended")
             case .normal:
-                return LocalizedString("Normal", comment: "Delivery status when basal is running")
+                return LocalizedString("Scheduled Basal", comment: "Delivery status when basal is running")
             case .tempBasalRunning:
                 return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
             case .priming:
@@ -103,7 +103,7 @@ public struct StatusResponse : MessageBlock {
 
 extension StatusResponse: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "StatusResponse(\(deliveryStatus), \(podProgressStatus), \(timeActive.stringValue), \(String(describing: reservoirLevel)), delivered:\(insulin), undelivered:\(insulinNotDelivered), seq:\(podMessageCounter), \(alarms)"
+        return "StatusResponse(\(deliveryStatus), \(podProgressStatus), \(timeActive.stringValue), \(String(describing: reservoirLevel)), delivered:\(insulin), undelivered:\(insulinNotDelivered), seq:\(podMessageCounter), \(alarms))"
     }
 }
 

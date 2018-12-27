@@ -48,13 +48,22 @@ public struct TempBasalExtraCommand : MessageBlock {
         
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
-        delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+        if remainingPulses == 0 {
+            delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter) / 10)
+        } else {
+            delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+        }
         var entries = [RateEntry]()
         for entryIndex in (0..<numEntries) {
             let offset = 10 + entryIndex * 6
             let totalPulses = Double(encodedData[offset...].toBigEndian(UInt16.self)) / 10.0
             let timerCounter = encodedData[(offset+2)...].toBigEndian(UInt32.self)
-            let delayBetweenPulses = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+            let delayBetweenPulses: TimeInterval
+            if totalPulses == 0 {
+                delayBetweenPulses = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter)) / 10
+            } else {
+                delayBetweenPulses = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+            }
             entries.append(RateEntry(totalPulses: totalPulses, delayBetweenPulses: delayBetweenPulses))
         }
         rateEntries = entries

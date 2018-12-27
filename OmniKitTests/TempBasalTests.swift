@@ -157,7 +157,9 @@ class TempBasalTests: XCTestCase {
     func testZeroTempExtraCommand() {
         do {
             // 0 U/h for 0.5 hours
+            //        16 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
             // Decode 16 0e 7c 00 0000 6b49d200 0000 6b49d200
+
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c0000006b49d20000006b49d200")!)
             XCTAssertEqual(true, cmd.confidenceReminder)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)

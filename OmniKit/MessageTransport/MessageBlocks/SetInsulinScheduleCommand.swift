@@ -189,6 +189,6 @@ fileprivate func calculateChecksum(_ data: Data) -> UInt16 {
 
 extension SetInsulinScheduleCommand: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "SetInsulinScheduleCommand(nonce:\(nonce), \(deliverySchedule)"
+        return "SetInsulinScheduleCommand(nonce:\(nonce), \(deliverySchedule))"
     }
 }

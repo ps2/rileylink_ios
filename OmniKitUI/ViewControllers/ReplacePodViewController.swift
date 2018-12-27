@@ -178,16 +178,17 @@ class ReplacePodViewController: SetupTableViewController {
         tryCount += 1
         
         pumpManager.deactivatePod { (error) in
-            self.pumpManager.forgetPod()
             DispatchQueue.main.async {
                 if let error = error {
                     if self.tryCount > 1 {
+                        self.pumpManager.forgetPod()
                         self.continueState = .continueAfterFailure
                     } else {
                         self.lastError = error
                         self.continueState = .deactivationFailed
                     }
                 } else {
+                    self.pumpManager.forgetPod()
                     self.continueState = .ready
                 }
             }

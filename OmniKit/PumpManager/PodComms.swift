@@ -173,15 +173,16 @@ class PodComms : CustomDebugStringConvertible {
         case failure(PodCommsError)
     }
     
+    // Synchronous
     func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
+        
+        let semaphore = DispatchSemaphore(value: 0)
         sessionQueue.async {
-            
             guard let podState = self.podState else {
                 block(.failure(PodCommsError.noPodPaired))
+                semaphore.signal()
                 return
             }
-            
-            let semaphore = DispatchSemaphore(value: 0)
             
             deviceSelector { (device) in
                 guard let device = device else {
@@ -199,9 +200,8 @@ class PodComms : CustomDebugStringConvertible {
                     semaphore.signal()
                 }
             }
-            
-            semaphore.wait()
         }
+        semaphore.wait()
     }
     
     // Must be called from within the RileyLinkDevice sessionQueue

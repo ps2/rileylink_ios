@@ -374,14 +374,15 @@ public class PodCommsSession {
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
         let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
-        guard podState.unfinalizedBolus == nil else {
-            return DeliveryCommandResult.certainFailure(error: .unfinalizedTempBasal)
+        guard podState.unfinalizedBolus?.finished != false else {
+            return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
         }
 
         do {
-            let statusResponse: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
+            let status: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain)
-            return DeliveryCommandResult.success(statusResponse: statusResponse)
+            podState.updateFromStatusResponse(status)
+            return DeliveryCommandResult.success(statusResponse: status)
         } catch let error {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -416,8 +417,9 @@ public class PodCommsSession {
 
         return status
     }
-    
+
     public func testingCommands() throws {
+        let _ = try cancelDelivery(deliveryType: .all, beepType: .noBeep)
         let response: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 1, tab5Sub17: 0)])
         print(response)
     }

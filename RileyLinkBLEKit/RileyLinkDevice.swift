@@ -155,9 +155,16 @@ extension RileyLinkDevice {
 extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
-            self?.log.debug("======================== %{public}@ ===========================", name)
-            block(CommandSession(manager: manager, responseType: self?.bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: self?.radioFirmwareVersion ?? .unknown))
-            self?.log.debug("------------------------ %{public}@ ---------------------------", name)
+            self?.log.default("======================== %{public}@ ===========================", name)
+            let bleFirmwareVersion = self?.bleFirmwareVersion
+            let radioFirmwareVersion = self?.radioFirmwareVersion
+
+            if bleFirmwareVersion == nil || radioFirmwareVersion == nil {
+                self?.log.error("Running session with incomplete configuration: bleFirmwareVersion %{public}@, radioFirmwareVersion: %{public}@", String(describing: bleFirmwareVersion), String(describing: radioFirmwareVersion))
+            }
+
+            block(CommandSession(manager: manager, responseType: bleFirmwareVersion?.responseType ?? .buffered, firmwareVersion: radioFirmwareVersion ?? .unknown))
+            self?.log.default("------------------------ %{public}@ ---------------------------", name)
         }))
     }
 }
@@ -307,6 +314,8 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     } else {
                         self.log.error("Unknown idle response: %@", value.hexadecimalString)
                     }
+                } else {
+                    self.log.error("Skipping parsing characteristic value update due to missing BLE firmware version")
                 }
 
                 self.assertIdleListening(forceRestart: true)
@@ -341,6 +350,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
 
     func completeConfiguration(for manager: PeripheralManager) throws {
         // Read bluetooth version to determine compatibility
+        log.default("Reading firmware versions for PeripheralManager configuration")
         let bleVersionString = try manager.readBluetoothFirmwareVersion(timeout: 1)
         bleFirmwareVersion = BLEFirmwareVersion(versionString: bleVersionString)
 
@@ -361,7 +371,7 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
             "isTimerTickNotifying: \(manager.timerTickEnabled)",
             "radioFirmware: \(String(describing: radioFirmwareVersion))",
             "bleFirmware: \(String(describing: bleFirmwareVersion))",
-            "peripheral: \(manager.peripheral)",
+            "peripheralManager: \(String(reflecting: manager))",
             "sessionQueue.operationCount: \(sessionQueue.operationCount)"
         ].joined(separator: "\n")
     }

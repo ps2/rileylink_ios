@@ -75,7 +75,7 @@ public struct RileyLinkStatistics {
 public struct CommandSession {
     let manager: PeripheralManager
     let responseType: PeripheralManager.ResponseType
-    let firmwareVersion: RadioFirmwareVersion
+    public let firmwareVersion: RadioFirmwareVersion
 
     /// Invokes a command expecting a response
     ///

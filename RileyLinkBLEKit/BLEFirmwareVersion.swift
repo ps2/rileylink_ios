@@ -20,8 +20,26 @@ public struct BLEFirmwareVersion {
             return nil
         }
 
+        self.init(
+            components: versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) }),
+            versionString: versionString
+        )
+    }
+
+    init(components: [Int], versionString: String) {
+        self.components = components
         self.versionString = versionString
-        components = versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) })
+    }
+}
+
+
+extension BLEFirmwareVersion {
+    static var unknown: BLEFirmwareVersion {
+        return self.init(components: [0], versionString: "Unknown")
+    }
+
+    public var isUnknown: Bool {
+        return self == BLEFirmwareVersion.unknown
     }
 }
 
@@ -29,6 +47,13 @@ public struct BLEFirmwareVersion {
 extension BLEFirmwareVersion: CustomStringConvertible {
     public var description: String {
         return versionString
+    }
+}
+
+
+extension BLEFirmwareVersion: Equatable {
+    public static func ==(lhs: BLEFirmwareVersion, rhs: BLEFirmwareVersion) -> Bool {
+        return lhs.components == rhs.components
     }
 }
 

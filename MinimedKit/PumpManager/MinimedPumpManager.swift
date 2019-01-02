@@ -335,7 +335,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             pumpOps.runSession(withName: "Tune pump", using: device) { (session) in
                 do {
                     let scanResult = try session.tuneRadio()
-                    self.log.error("Device %{public}@ auto-tuned to %{public}@ MHz", device.name ?? "", String(describing: scanResult.bestFrequency))
+                    self.log.default("Device %{public}@ auto-tuned to %{public}@ MHz", device.name ?? "", String(describing: scanResult.bestFrequency))
                 } catch let error {
                     self.log.error("Device %{public}@ auto-tune failed with error: %{public}@", device.name ?? "", String(describing: error))
                     self.rileyLinkDeviceProvider.deprioritize(device, completion: nil)
@@ -361,6 +361,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
      */
     private func updatePumpStatus(_ status: MySentryPumpStatusMessageBody, from device: RileyLinkDevice) {
         dispatchPrecondition(condition: .onQueue(queue))
+
+        log.default("MySentry message received")
 
         var pumpDateComponents = status.pumpDateComponents
         var glucoseDateComponents = status.glucoseDateComponents
@@ -520,7 +522,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
             
-            self.log.debug("Pump data is stale, fetching.")
+            self.log.default("Pump data is stale, fetching.")
             
             self.rileyLinkDeviceProvider.getDevices { (devices) in
                 guard let device = devices.firstConnected else {

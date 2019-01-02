@@ -51,6 +51,7 @@
 		431CE7A51F9D78F500255374 /* RFPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A41F9D78F500255374 /* RFPacket.swift */; };
 		431CE7A71F9D98F700255374 /* CommandSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A61F9D98F700255374 /* CommandSession.swift */; };
 		4322B75620282DA60002837D /* ResponseBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4322B75520282DA60002837D /* ResponseBufferTests.swift */; };
+		43260F6F21C9B21000DD6837 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
 		432847C11FA1737400CDE69C /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
 		432847C31FA57C0F00CDE69C /* RadioFirmwareVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432847C21FA57C0F00CDE69C /* RadioFirmwareVersion.swift */; };
 		432CF9061FF74CCB003AB446 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
@@ -3344,6 +3345,7 @@
 				431CE7A11F9D195600255374 /* CBCentralManager.swift in Sources */,
 				431CE7911F985D8D00255374 /* RileyLinkDeviceManager.swift in Sources */,
 				431CE78D1F985B5400255374 /* PeripheralManager.swift in Sources */,
+				43260F6F21C9B21000DD6837 /* Locked.swift in Sources */,
 				431CE79E1F9BE73900255374 /* BLEFirmwareVersion.swift in Sources */,
 				432847C31FA57C0F00CDE69C /* RadioFirmwareVersion.swift in Sources */,
 				431CE7931F985DE700255374 /* PeripheralManager+RileyLink.swift in Sources */,

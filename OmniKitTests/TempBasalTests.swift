@@ -163,11 +163,11 @@ class TempBasalTests: XCTestCase {
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c0000006b49d20000006b49d200")!)
             XCTAssertEqual(true, cmd.confidenceReminder)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 18000), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
             XCTAssertEqual(1, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
-            XCTAssertEqual(TimeInterval(seconds: 18000), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(seconds: 1800), entry.delayBetweenPulses)
             XCTAssertEqual(TimeInterval(minutes: 30), entry.duration)
             XCTAssertEqual(0, entry.rate)
             
@@ -186,11 +186,11 @@ class TempBasalTests: XCTestCase {
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "162c7c0000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d200")!)
             XCTAssertEqual(true, cmd.confidenceReminder)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 18000), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
             XCTAssertEqual(6, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
-            XCTAssertEqual(TimeInterval(seconds: 18000), entry.delayBetweenPulses)
+            XCTAssertEqual(TimeInterval(seconds: 1800), entry.delayBetweenPulses)
             XCTAssertEqual(TimeInterval(minutes: 30), entry.duration)
             XCTAssertEqual(0, entry.rate)
             

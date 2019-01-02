@@ -96,7 +96,7 @@ public class PumpOps {
             return
         }
 
-        log.default("Configuring RileyLinkDevice:%{public}@", String(describing: device))
+        log.default("Configuring RileyLinkDevice: %{public}@", String(describing: device.deviceURI))
 
         do {
             _ = try session.configureRadio(for: pumpSettings.pumpRegion, frequency: pumpState.lastValidFrequency)

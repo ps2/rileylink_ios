@@ -177,7 +177,7 @@ public struct RateEntry {
     
     public var duration: TimeInterval {
         if totalPulses == 0 {
-            return delayBetweenPulses / 10
+            return delayBetweenPulses
         } else {
             return round(delayBetweenPulses * Double(totalPulses))
         }

@@ -75,7 +75,11 @@ extension OmnipodPumpManager {
     }
     
     public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
-        return LocalizedString("Sync With Pod", comment: "Title of button to sync basal profile from pod")
+        if self.hasActivePod {
+            return LocalizedString("Sync With Pod", comment: "Title of button to sync basal profile from pod")
+        } else {
+            return LocalizedString("Save", comment: "Title of button to sync basal profile when no pod paired")
+        }
     }
     
     public func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {

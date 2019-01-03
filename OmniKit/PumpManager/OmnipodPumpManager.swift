@@ -283,7 +283,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             bolusState: bolusState)
     }
    
-    private var hasActivePod: Bool {
+    public var hasActivePod: Bool {
         return self.state.podState?.isActive == true
     }
     
@@ -818,7 +818,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public func setBasalSchedule(_ schedule: BasalSchedule, completion: @escaping (Error?) -> Void) {
         queue.async {
             guard self.hasActivePod else {
-                completion(OmnipodPumpManagerError.noPodPaired)
+                self.state.basalSchedule = schedule
+                completion(nil)
                 return
             }
 
@@ -831,6 +832,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
                         let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                         let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
+                        self.state.basalSchedule = schedule
                         completion(nil)
                     case .failure(let error):
                         throw error

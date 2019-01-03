@@ -19,7 +19,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let unknownPageCode: Data
     public let previousStatus: FaultEventCode
     public let currentStatus: FaultEventCode
-    public let faultEventTimeSinceActivation: TimeInterval
+    public let faultEventTimeSinceActivation: TimeInterval?
     public let reservoirLevel: Double?
     public let timeActive: TimeInterval
     public let logEventError: Bool
@@ -51,7 +51,12 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
-        self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(encodedData[9...10].toBigEndian(UInt16.self)))
+        let minutesSinceActivation = encodedData[9...10].toBigEndian(UInt16.self)
+        if minutesSinceActivation != 0xffff {
+            self.faultEventTimeSinceActivation = TimeInterval(minutes: Double(minutesSinceActivation))
+        } else {
+            self.faultEventTimeSinceActivation = nil
+        }
         
         let reservoirValue = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) * podPulseSize
         
@@ -101,7 +106,7 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "* podMessageCounter: \(podMessageCounter)",
             "* unknownPageCode: \(unknownPageCode.hexadecimalString)",
             "* currentStatus: \(currentStatus.description)",
-            "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation.stringValue)",
+            "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
             "* reservoirLevel: \(String(describing: reservoirLevel)) U",
             "* timeActive: \(timeActive.stringValue)",
             "* previousStatus: \(previousStatus.description)",

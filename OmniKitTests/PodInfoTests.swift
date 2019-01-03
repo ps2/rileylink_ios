@@ -202,7 +202,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.faultEventSetupPodType86, decoded.currentStatus.faultType)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(2559 * 60, decoded.faultEventTimeSinceActivation) //09ff
-            XCTAssertEqual("1 day plus 18:39", decoded.faultEventTimeSinceActivation.stringValue)
+            XCTAssertEqual("1 day plus 18:39", decoded.faultEventTimeSinceActivation?.stringValue)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(LogEventErrorCode(rawValue: 0), decoded.logEventErrorType)
@@ -231,7 +231,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.problemBigRoutine1Type6A, decoded.currentStatus.faultType)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(3596 * 60, decoded.faultEventTimeSinceActivation) //09ff
-            XCTAssertEqual("2 days plus 11:56", decoded.faultEventTimeSinceActivation.stringValue)
+            XCTAssertEqual("2 days plus 11:56", decoded.faultEventTimeSinceActivation?.stringValue)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.internal2BitVariableSetAndManipulatedInMainLoopRoutines2, decoded.logEventErrorType.eventErrorType)
@@ -259,7 +259,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.problemBigRoutine1Type6A, decoded.currentStatus.faultType)
             XCTAssertEqual(.noFaults, decoded.previousStatus.faultType)
             XCTAssertEqual(616 * 60, decoded.faultEventTimeSinceActivation) //09ff
-            XCTAssertEqual("10:16", decoded.faultEventTimeSinceActivation.stringValue)
+            XCTAssertEqual("10:16", decoded.faultEventTimeSinceActivation?.stringValue)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(false, decoded.logEventError)
             XCTAssertEqual(.internal2BitVariableSetAndManipulatedInMainLoopRoutines2, decoded.logEventErrorType.eventErrorType)
@@ -287,7 +287,6 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-    
     
     func testPodInfoFault() {
         // 02 11 (omitted)// 05 92 0001 00000000 00000000 091912170e
@@ -351,4 +350,17 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
+    
+    func testPodFault12() {
+        do {
+            // Decode
+            let faultEvent = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d00000000000012ffff03ff000000008792070000")!)
+            XCTAssertEqual(faultEvent.logEventError, false)
+            XCTAssertNil(faultEvent.faultEventTimeSinceActivation)
+            
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
 }

@@ -234,8 +234,8 @@ public class PodCommsSession {
         // Skip following alerts if we've already done them before
         if podState.setupProgress != .startingPrime {
             
-            // Uncomment the following to set Tab5[$16] to 0 during pairing, which should disable $6x faults.
-            //let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
+            // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
+            let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
     
             let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeepBeep)
             

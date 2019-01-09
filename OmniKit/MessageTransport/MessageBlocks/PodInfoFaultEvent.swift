@@ -16,13 +16,13 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let deliveryStatus: DeliveryStatus
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
-    public let unknownPageCode: Data
-    public let previousStatus: FaultEventCode
+    public let totalInsulinDelivered: Double
     public let currentStatus: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval?
-    public let reservoirLevel: Double?
+    public let reservoirLevel: String
     public let timeActive: TimeInterval
-    public let logEventError: Bool
+    public let unacknowledgedAlerts: Data
+    public let faultAccessingTables: Bool
     public let logEventErrorType: LogEventErrorCode
     public let logEventErrorPodProgressStatus: PodProgressStatus
     public let receiverLowGain: Int8
@@ -47,8 +47,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         
         self.podMessageCounter = encodedData[5]
-        self.unknownPageCode = encodedData[6...7]
         
+        self.totalInsulinDelivered = podPulseSize * Double((Int(encodedData[6] & 0x3) << 8) | Int(encodedData[7]))
+
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
         let minutesSinceActivation = encodedData[9...10].toBigEndian(UInt16.self)
@@ -61,16 +62,16 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         let reservoirValue = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) * podPulseSize
         
         if reservoirValue <= StatusResponse.maximumReservoirReading {
-            self.reservoirLevel = reservoirValue
+            self.reservoirLevel = String(format:"%.2f", reservoirValue)
         } else {
-            self.reservoirLevel = nil
+            self.reservoirLevel = "50+"
         }
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
-        self.previousStatus = FaultEventCode(rawValue: encodedData[15])
+        self.unacknowledgedAlerts = Data(encodedData[15])
         
-        self.logEventError = encodedData[16] == 2
+        self.faultAccessingTables = encodedData[16] == 2
         
         self.logEventErrorType = LogEventErrorCode(rawValue: encodedData[17] >> 4)
         
@@ -96,27 +97,28 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
 
 extension PodInfoFaultEvent: CustomDebugStringConvertible {
     public typealias RawValue = Data
+    
     public var debugDescription: String {
         return [
             "## PodInfoFaultEvent",
             "* rawHex: \(data.hexadecimalString)",
             "* podProgressStatus: \(podProgressStatus)",
             "* deliveryStatus: \(deliveryStatus.description)",
-            "* insulinNotDelivered: \(insulinNotDelivered) U",
-            "* podMessageCounter: \(podMessageCounter)",
-            "* unknownPageCode: \(unknownPageCode.hexadecimalString)",
+            "* insulinNotDelivered: (%.2f, \(insulinNotDelivered)) U",
+            "* podMessageCounter: 0x\(podMessageCounter)",
+            "* totalInsulinDelivered: (%.2f, \(totalInsulinDelivered)) U",
             "* currentStatus: \(currentStatus.description)",
             "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
-            "* reservoirLevel: \(String(describing: reservoirLevel)) U",
+            "* reservoirLevel: \(reservoirLevel) U",
             "* timeActive: \(timeActive.stringValue)",
-            "* previousStatus: \(previousStatus.description)",
-            "* logEventError: \(logEventError)",
+            "* unacknowledgedAlerts: 0x\(unacknowledgedAlerts.hexadecimalString)",
+            "* faultAccessingTables: \(faultAccessingTables)",
             "* logEventErrorType: \(logEventErrorType.description)",
             "* logEventErrorPodProgressStatus: \(logEventErrorPodProgressStatus)",
-            "* recieverLowGain: \(receiverLowGain)",
+            "* receiverLowGain: \(receiverLowGain)",
             "* radioRSSI: \(radioRSSI)",
             "* previousPodProgressStatus: \(previousPodProgressStatus)",
-            "* unknownValue: \(unknownValue.hexadecimalString)",
+            "* unknownValue: 0x\(unknownValue.hexadecimalString)",
             "",
             ].joined(separator: "\n")
     }

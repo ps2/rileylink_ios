@@ -19,9 +19,9 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let totalInsulinDelivered: Double
     public let currentStatus: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval?
-    public let reservoirLevel: String
+    public let reservoirLevel: Double?
     public let timeActive: TimeInterval
-    public let unacknowledgedAlerts: Data
+    public let unacknowledgedAlerts: UInt8
     public let faultAccessingTables: Bool
     public let logEventErrorType: LogEventErrorCode
     public let logEventErrorPodProgressStatus: PodProgressStatus
@@ -49,7 +49,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         self.podMessageCounter = encodedData[5]
         
         self.totalInsulinDelivered = podPulseSize * Double((Int(encodedData[6] & 0x3) << 8) | Int(encodedData[7]))
-
+        
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
         let minutesSinceActivation = encodedData[9...10].toBigEndian(UInt16.self)
@@ -62,14 +62,14 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         let reservoirValue = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) * podPulseSize
         
         if reservoirValue <= StatusResponse.maximumReservoirReading {
-            self.reservoirLevel = String(format:"%.2f", reservoirValue)
+            self.reservoirLevel = reservoirValue
         } else {
-            self.reservoirLevel = "50+"
+            self.reservoirLevel =  nil
         }
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
-        self.unacknowledgedAlerts = Data(encodedData[15])
+        self.unacknowledgedAlerts = encodedData[15]
         
         self.faultAccessingTables = encodedData[16] == 2
         
@@ -97,21 +97,20 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
 
 extension PodInfoFaultEvent: CustomDebugStringConvertible {
     public typealias RawValue = Data
-    
     public var debugDescription: String {
         return [
             "## PodInfoFaultEvent",
             "* rawHex: \(data.hexadecimalString)",
             "* podProgressStatus: \(podProgressStatus)",
             "* deliveryStatus: \(deliveryStatus.description)",
-            "* insulinNotDelivered: (%.2f, \(insulinNotDelivered)) U",
-            "* podMessageCounter: 0x\(podMessageCounter)",
-            "* totalInsulinDelivered: (%.2f, \(totalInsulinDelivered)) U",
+            "* insulinNotDelivered: \(insulinNotDelivered.twoDecimals)) U",
+            "* podMessageCounter: \(podMessageCounter)",
+            "* totalInsulinDelivered: \(totalInsulinDelivered.twoDecimals)) U",
             "* currentStatus: \(currentStatus.description)",
             "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
-            "* reservoirLevel: \(reservoirLevel) U",
+            "* reservoirLevel: \(reservoirLevel?.twoDecimals ?? "50+") U",
             "* timeActive: \(timeActive.stringValue)",
-            "* unacknowledgedAlerts: 0x\(unacknowledgedAlerts.hexadecimalString)",
+            "* unacknowledgedAlerts: \(unacknowledgedAlerts)",
             "* faultAccessingTables: \(faultAccessingTables)",
             "* logEventErrorType: \(logEventErrorType.description)",
             "* logEventErrorPodProgressStatus: \(logEventErrorPodProgressStatus)",
@@ -154,5 +153,12 @@ extension TimeInterval {
         } else {
             return timeComponent
         }
+    }
+}
+
+extension Double {
+    var twoDecimals: String {
+        let reservoirLevel = self
+        return String(format: "%.2f", reservoirLevel)
     }
 }

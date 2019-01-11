@@ -103,9 +103,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     private func notifyStatusObservers() {
         let status = self.status
-        pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+        pumpManagerDelegate?.pumpManager(self, didUpdate: status)
         for observer in statusObservers {
-            observer.pumpManager(self, didUpdateStatus: status)
+            observer.pumpManager(self, didUpdate: status)
         }
     }
 
@@ -159,9 +159,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public static let managerIdentifier: String = "Omnipod"
     
-    public static func roundToDeliveryIncrement(_ units: Double) -> Double {
+    public static func roundToDeliveryIncrement(units: Double) -> Double {
         return round(units * pulsesPerUnit) / pulsesPerUnit
     }
+    
+    public func roundToDeliveryIncrement(units: Double) -> Double {
+        return OmnipodPumpManager.roundToDeliveryIncrement(units: units)
+    }
+
     
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.state = state
@@ -238,18 +243,18 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
-    private var suspendStateTransitioning: Bool = false {
+    private var basalDeliveryStateTransitioning: Bool = false {
         didSet {
             notifyStatusObservers()
         }
     }
     
-    private var suspendState: PumpManagerStatus.SuspendState {
+    private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
             return .none
         }
         
-        if suspendStateTransitioning {
+        if basalDeliveryStateTransitioning {
             return podState.suspended ? .resuming : .suspending
         } else {
             return podState.suspended ? .suspended : .none
@@ -279,7 +284,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             timeZone: state.timeZone,
             device: device,
             pumpBatteryChargeRemaining: nil,
-            suspendState: suspendState,
+            basalDeliveryState: basalDeliveryState,
             bolusState: bolusState)
     }
    
@@ -567,8 +572,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     return
                 }
                 
-                defer { self.suspendStateTransitioning = false }
-                self.suspendStateTransitioning = true
+                defer { self.basalDeliveryStateTransitioning = false }
+                self.basalDeliveryStateTransitioning = true
 
                 do {
                     let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
@@ -603,8 +608,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     return
                 }
                 
-                defer { self.suspendStateTransitioning = false }
-                self.suspendStateTransitioning = true
+                defer { self.basalDeliveryStateTransitioning = false }
+                self.basalDeliveryStateTransitioning = true
                 
                 do {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
@@ -653,7 +658,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
 
             // Round to nearest supported volume
-            let enactUnits = OmnipodPumpManager.roundToDeliveryIncrement(units)
+            let enactUnits = OmnipodPumpManager.roundToDeliveryIncrement(units: units)
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             self.podComms.runSession(withName: "Bolus", using: rileyLinkSelector) { (result) in
@@ -723,7 +728,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
 
             // Round to nearest supported rate
-            let rate = OmnipodPumpManager.roundToDeliveryIncrement(unitsPerHour)
+            let rate = OmnipodPumpManager.roundToDeliveryIncrement(units: unitsPerHour)
             
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             self.podComms.runSession(withName: "Enact Temp Basal", using: rileyLinkSelector) { (result) in

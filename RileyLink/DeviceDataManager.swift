@@ -71,7 +71,7 @@ extension DeviceDataManager: PumpManagerDelegate {
         return true
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
     }
     
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager) {

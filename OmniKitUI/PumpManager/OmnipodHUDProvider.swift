@@ -22,13 +22,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         didSet {
             if reservoirView == nil && podState?.lastInsulinMeasurements?.reservoirVolume != nil {
                 reservoirView = OmnipodReservoirView.instantiate()
-                delegate?.addHudViews([reservoirView!])
+                delegate?.hudProvider(self, didAddHudViews: [reservoirView!])
             }
             
             if podLifeView == nil && podState != nil {
                 podLifeView = PodLifeHUDView.instantiate()
                 updatePodLifeView()
-                delegate?.addHudViews([podLifeView!])
+                delegate?.hudProvider(self, didAddHudViews: [podLifeView!])
             }
             
             if oldValue?.lastInsulinMeasurements != podState?.lastInsulinMeasurements {
@@ -40,7 +40,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             }
             
             if oldValue != nil && podState == nil {
-                delegate?.removeHudViews([reservoirView, podLifeView].compactMap { $0 })
+                delegate?.hudProvider(self, didRemoveHudViews: [reservoirView, podLifeView].compactMap { $0 })
                 podLifeView = nil
                 reservoirView = nil
             }            

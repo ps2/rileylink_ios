@@ -27,7 +27,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.delegate = self
-        cell.suspendState = pumpManager.status.suspendState
+        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         pumpManager.addStatusObserver(cell)
         return cell
     }()

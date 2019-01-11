@@ -48,7 +48,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.delegate = self
-        cell.suspendState = pumpManager.status.suspendState
+        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         pumpManager.addStatusObserver(cell)
         return cell
     }()
@@ -516,7 +516,7 @@ extension OmnipodSettingsViewController: PodStateObserver {
 }
 
 extension OmnipodSettingsViewController: PumpManagerStatusObserver {
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
             self.pumpManagerStatus = status
             self.tableView.reloadSections([Section.status.rawValue], with: .none)
@@ -665,7 +665,7 @@ private extension UITableViewCell {
         }
         
         let progress = dose.progress
-        let delivered = OmnipodPumpManager.roundToDeliveryIncrement(progress * dose.units)
+        let delivered = OmnipodPumpManager.roundToDeliveryIncrement(units: progress * dose.units)
         if let units = self.insulinFormatter.string(from: dose.units), let deliveredUnits = self.insulinFormatter.string(from: delivered) {
             if progress >= 1 {
                 self.detailTextLabel?.text = String(format: LocalizedString("%@ U (Finished)", comment: "Format string for bolus progress when finished. (1: The localized amount)"), units)

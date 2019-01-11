@@ -15,11 +15,11 @@ class TempBasalTests: XCTestCase {
     
     func testRateQuantization() {
         // Test previously failing case
-        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.15))
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(units: 0.15))
         
-        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.15000000000000002))
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(units: 0.15000000000000002))
         
-        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(0.145))
+        XCTAssertEqual(0.15, OmnipodPumpManager.roundToDeliveryIncrement(units: 0.145))
     }
     
     func testAlternatingSegmentFlag() {

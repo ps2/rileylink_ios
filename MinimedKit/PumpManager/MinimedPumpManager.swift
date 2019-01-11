@@ -21,8 +21,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     private static let pulsesPerUnit = 20.0
     
-    public static func roundToDeliveryIncrement(_ units: Double) -> Double {
-        return round(units * pulsesPerUnit) / pulsesPerUnit
+    public func roundToDeliveryIncrement(units: Double) -> Double {
+        return round(units * MinimedPumpManager.pulsesPerUnit) / MinimedPumpManager.pulsesPerUnit
     }
     
     /*
@@ -34,7 +34,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
         self.bolusState = .none
-        self.suspendState = state.isPumpSuspended ? .suspended : .none
+        self.basalDeliveryState = state.isPumpSuspended ? .suspended : .none
         
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
@@ -82,7 +82,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
             
             if oldValue.isPumpSuspended != state.isPumpSuspended {
-                self.suspendState = state.isPumpSuspended ? .suspended : .none
+                self.basalDeliveryState = state.isPumpSuspended ? .suspended : .none
             }
             
             if oldValue.timeZone != state.timeZone ||
@@ -119,9 +119,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     private func notifyStatusObservers() {
         let status = self.status
-        pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+        pumpManagerDelegate?.pumpManager(self, didUpdate: status)
         for observer in statusObservers {
-            observer.pumpManager(self, didUpdateStatus: status)
+            observer.pumpManager(self, didUpdate: status)
         }
     }
 
@@ -175,7 +175,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     // MARK: - PumpManager
 
-    private var suspendState: PumpManagerStatus.SuspendState {
+    private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
         didSet {
             notifyStatusObservers()
         }
@@ -192,7 +192,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             timeZone: state.timeZone,
             device: device!,
             pumpBatteryChargeRemaining: state.batteryPercentage,
-            suspendState: suspendState,
+            basalDeliveryState: basalDeliveryState,
             bolusState: bolusState)
     }
     
@@ -252,15 +252,15 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 do {
                     switch state {
                     case .suspend:
-                        self.suspendState = .suspending
+                        self.basalDeliveryState = .suspending
                     case .resume:
-                        self.suspendState = .resuming
+                        self.basalDeliveryState = .resuming
                     }
                     try session.setSuspendResumeState(state)
                     self.state.isPumpSuspended = state == .suspend
                     completion(nil)
                 } catch let error {
-                    self.suspendState = self.state.isPumpSuspended ? .suspended : .none
+                    self.basalDeliveryState = self.state.isPumpSuspended ? .suspended : .none
                     self.troubleshootPumpComms(using: device)
                     completion(PumpManagerError.communication(error as? LocalizedError))
                 }

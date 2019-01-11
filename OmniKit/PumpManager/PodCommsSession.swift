@@ -242,7 +242,6 @@ public class PodCommsSession {
             let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
             let _: StatusResponse = try send([configureAlerts1])
             
-            //7837 0005 0802
             let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
             let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
             let _: StatusResponse = try send([configureAlerts2])

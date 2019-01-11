@@ -313,7 +313,11 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 super.continueButtonPressed(sender)
             }
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
+#if targetEnvironment(simulator)
+            self.continueState = .completed
+#else
             readPumpState(with: PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion))
+#endif
         }
     }
 

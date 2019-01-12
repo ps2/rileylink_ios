@@ -16,13 +16,13 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let deliveryStatus: DeliveryStatus
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
-    public let unknownPageCode: Data
-    public let previousStatus: FaultEventCode
+    public let totalInsulinDelivered: Double
     public let currentStatus: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval?
     public let reservoirLevel: Double?
     public let timeActive: TimeInterval
-    public let logEventError: Bool
+    public let unacknowledgedAlerts: UInt8
+    public let faultAccessingTables: Bool
     public let logEventErrorType: LogEventErrorCode
     public let logEventErrorPodProgressStatus: PodProgressStatus
     public let receiverLowGain: Int8
@@ -47,7 +47,8 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         self.insulinNotDelivered = podPulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
         
         self.podMessageCounter = encodedData[5]
-        self.unknownPageCode = encodedData[6...7]
+        
+        self.totalInsulinDelivered = podPulseSize * Double((Int(encodedData[6] & 0x3) << 8) | Int(encodedData[7]))
         
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
@@ -63,14 +64,14 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         if reservoirValue <= StatusResponse.maximumReservoirReading {
             self.reservoirLevel = reservoirValue
         } else {
-            self.reservoirLevel = nil
+            self.reservoirLevel =  nil
         }
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
-        self.previousStatus = FaultEventCode(rawValue: encodedData[15])
+        self.unacknowledgedAlerts = encodedData[15]
         
-        self.logEventError = encodedData[16] == 2
+        self.faultAccessingTables = encodedData[16] == 2
         
         self.logEventErrorType = LogEventErrorCode(rawValue: encodedData[17] >> 4)
         
@@ -102,21 +103,21 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "* rawHex: \(data.hexadecimalString)",
             "* podProgressStatus: \(podProgressStatus)",
             "* deliveryStatus: \(deliveryStatus.description)",
-            "* insulinNotDelivered: \(insulinNotDelivered) U",
+            "* insulinNotDelivered: \(insulinNotDelivered.twoDecimals)) U",
             "* podMessageCounter: \(podMessageCounter)",
-            "* unknownPageCode: \(unknownPageCode.hexadecimalString)",
+            "* totalInsulinDelivered: \(totalInsulinDelivered.twoDecimals)) U",
             "* currentStatus: \(currentStatus.description)",
             "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
-            "* reservoirLevel: \(String(describing: reservoirLevel)) U",
+            "* reservoirLevel: \(reservoirLevel?.twoDecimals ?? "50+") U",
             "* timeActive: \(timeActive.stringValue)",
-            "* previousStatus: \(previousStatus.description)",
-            "* logEventError: \(logEventError)",
+            "* unacknowledgedAlerts: \(unacknowledgedAlerts)",
+            "* faultAccessingTables: \(faultAccessingTables)",
             "* logEventErrorType: \(logEventErrorType.description)",
             "* logEventErrorPodProgressStatus: \(logEventErrorPodProgressStatus)",
-            "* recieverLowGain: \(receiverLowGain)",
+            "* receiverLowGain: \(receiverLowGain)",
             "* radioRSSI: \(radioRSSI)",
             "* previousPodProgressStatus: \(previousPodProgressStatus)",
-            "* unknownValue: \(unknownValue.hexadecimalString)",
+            "* unknownValue: 0x\(unknownValue.hexadecimalString)",
             "",
             ].joined(separator: "\n")
     }
@@ -152,5 +153,12 @@ extension TimeInterval {
         } else {
             return timeComponent
         }
+    }
+}
+
+extension Double {
+    var twoDecimals: String {
+        let reservoirLevel = self
+        return String(format: "%.2f", reservoirLevel)
     }
 }

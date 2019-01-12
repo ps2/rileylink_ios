@@ -33,7 +33,7 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
     public var unfinishedPairing: Bool {
         return self.rawValue < PodProgressStatus.aboveFiftyUnits.rawValue
     }
-    
+
     public var description: String {
         switch self {
         case .initialized:

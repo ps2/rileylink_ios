@@ -474,8 +474,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                             try session.programInitialBasalSchedule(self.state.basalSchedule, scheduleOffset: scheduleOffset)
                         }
 
-                        let finishTime = try session.insertCannula()
-                        completion(.success(finishTime))
+                        let finishWait = try session.insertCannula()
+
+                        self.queue.asyncAfter(deadline: .now() + finishWait) {
+                            self.checkCannulaInsertionFinished()
+                        }
+                        completion(.success(Date() + finishWait))
                     } catch let error {
                         completion(.failure(error))
                     }
@@ -485,6 +489,24 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
         }
         #endif
+    }
+
+    public func checkCannulaInsertionFinished() {
+        queue.async {
+            let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+            self.podComms.runSession(withName: "Check cannula insertion finished", using: deviceSelector) { (result) in
+                switch result {
+                case .success(let session):
+                    do {
+                        try session.checkInsertionCompleted()
+                    } catch let error {
+                        self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
+                    }
+                case .failure(let error):
+                    self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
+                }
+            }
+        }
     }
     
     // MARK: - Pump Commands

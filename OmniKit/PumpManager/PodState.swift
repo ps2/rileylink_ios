@@ -16,6 +16,7 @@ public enum SetupProgress: Int {
     case settingInitialBasalSchedule
     case initialBasalScheduleSet
     case startingInsertCannula
+    case cannulaInserting
     case completed
     
     public var primingNeeded: Bool {
@@ -23,7 +24,7 @@ public enum SetupProgress: Int {
     }
     
     public var needsCannulaInsertion: Bool {
-        return self.rawValue < SetupProgress.completed.rawValue
+        return self.rawValue < SetupProgress.cannulaInserting.rawValue
     }
 
     public var needsInitialBasalSchedule: Bool {

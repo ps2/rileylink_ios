@@ -296,11 +296,23 @@ public class PodCommsSession {
         podState.setupProgress = .initialBasalScheduleSet
     }
     
-    public func insertCannula() throws -> Date {
-        // Configure Alerts
-        // 79a4 10df 0502
-        // Pod expires 1 minute short of 3 days
-        if podState.setupProgress != .startingInsertCannula {
+    public func insertCannula() throws -> TimeInterval {
+        let insertionWait: TimeInterval = .seconds(10)
+
+        if podState.setupProgress == .startingInsertCannula || podState.setupProgress == .cannulaInserting {
+            // We started cannula insertion, but didn't get confirmation somehow, so check status
+            let status: StatusResponse = try send([GetStatusCommand()])
+            podState.updateFromStatusResponse(status)
+            if status.podProgressStatus == .cannulaInserting {
+                podState.setupProgress = .cannulaInserting
+                return insertionWait// Not sure when it started, wait full time to be sure
+            }
+            if status.podProgressStatus.readyForDelivery {
+                podState.setupProgress = .completed
+                return TimeInterval(0) // Already done; no need to wait
+            }
+        } else {
+            // Configure Alerts
             let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
             
             // 2800 1283 0602
@@ -313,14 +325,6 @@ public class PodCommsSession {
             
             let status: StatusResponse = try send([configureAlerts])
             podState.updateFromStatusResponse(status)
-        } else {
-            // We started cannula insertion, but didn't get confirmation somehow, so check status
-            let status: StatusResponse = try send([GetStatusCommand()])
-            podState.updateFromStatusResponse(status)
-            if status.podProgressStatus == .cannulaInserting || status.podProgressStatus == .aboveFiftyUnits {
-                podState.setupProgress = .completed
-                return Date() + .seconds(10)
-            }
         }
         
         // Insert Cannula
@@ -336,11 +340,19 @@ public class PodCommsSession {
         let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status2)
         
-        let cannulaInsertionFinishTime = Date() + .seconds(10)
-        podState.setupProgress = .completed
-        return cannulaInsertionFinishTime
+        podState.setupProgress = .cannulaInserting
+        return insertionWait
     }
 
+    public func checkInsertionCompleted() throws {
+        if podState.setupProgress == .cannulaInserting {
+            let response: StatusResponse = try send([GetStatusCommand()])
+            podState.updateFromStatusResponse(response)
+            if response.podProgressStatus.readyForDelivery {
+                podState.setupProgress = .completed
+            }
+        }
+    }
     
     // Throws SetBolusError
     public enum DeliveryCommandResult {

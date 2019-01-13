@@ -9,38 +9,7 @@
 import Foundation
 
 public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
-    
-    // Pairing ConfigureAlerts #1
-    // 4c00 0190 0102
-    // 4c00 00c8 0102
-    // 4c00 00c8 0102
-    // 4c00 0096 0102
-    // 4c00 0064 0102
-    
-    // Pairing ConfigureAlerts #2
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    
-    // Pairing ConfigureAlerts #3
-    // 3800 0ff0 0302
-    // 3800 10a4 0302
-    // 3800 10a4 0302
-    // 3800 10a4 0302
-    // 3800 0ff0 0302
-    
-    public enum AlertType: UInt8 {
-        case autoOff            = 0x00
-        case endOfService       = 0x02
-        case expirationAdvisory = 0x03
-        case lowReservoir       = 0x04
-        case suspendInProgress  = 0x05
-        case suspendEnded       = 0x06
-        case timerLimit         = 0x07
-    }
-    
+
     public enum ExpirationType {
         case reservoir(volume: Double)
         case time(TimeInterval)
@@ -71,7 +40,7 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
     } // Reused in CancelDeliveryCommand
     
     public struct AlertConfiguration {
-        let alertType: AlertType
+        let alertType: Alert
         let expirationType: ExpirationType
         let audible: Bool
         let duration: TimeInterval
@@ -113,7 +82,7 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
             return data
         }
         
-        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepRepeat: BeepRepeat, beepType: BeepType) {
+        public init(alertType: Alert, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepRepeat: BeepRepeat, beepType: BeepType) {
             self.alertType = alertType
             self.audible = audible
             self.autoOffModifier = autoOffModifier
@@ -130,7 +99,7 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
             }
             
             let alertTypeBits = encodedData[0] >> 4
-            guard let alertType = AlertType(rawValue: alertTypeBits) else {
+            guard let alertType = Alert(rawValue: alertTypeBits) else {
                 throw MessageError.unknownValue(value: alertTypeBits, typeDescription: "AlertType")
             }
             self.alertType = alertType

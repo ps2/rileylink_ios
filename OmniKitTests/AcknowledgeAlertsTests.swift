@@ -15,7 +15,7 @@ class AcknowledgeAlertsTests: XCTestCase {
         // 11 05 2f9b5b2f 10
         do {
             // Encode
-            let encoded = AcknowledgeAlertCommand(nonce: 0x2f9b5b2f, alarms: PodAlarmState(rawValue: 0x10))
+            let encoded = AcknowledgeAlertCommand(nonce: 0x2f9b5b2f, alarms: AlertSet(rawValue: 0x10))
             XCTAssertEqual("11052f9b5b2f10", encoded.data.hexadecimalString)
             
             // Decode

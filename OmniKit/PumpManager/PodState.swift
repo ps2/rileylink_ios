@@ -45,7 +45,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
-    public var alarms: PodAlarmState
+    public var alerts: AlertSet
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -55,6 +55,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
+    //var registeredAlerts: [AlertSlot: ]
     
     public var deliveryScheduleUncertain: Bool {
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
@@ -75,7 +76,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.finalizedDoses = []
         self.suspended = false
         self.fault = nil
-        self.alarms = .none
+        self.alerts = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
@@ -113,7 +114,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
-        alarms = response.alarms
+        alerts = response.alerts
     }
     
     private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
@@ -222,10 +223,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.expiresAt = activatedAt.addingTimeInterval(podSoftExpirationTime)
         }
         
-        if let alarmsRawValue = rawValue["alarms"] as? UInt8 {
-            self.alarms = PodAlarmState(rawValue: alarmsRawValue)
+        if let alarmsRawValue = rawValue["alerts"] as? UInt8 {
+            self.alerts = AlertSet(rawValue: alarmsRawValue)
         } else {
-            self.alarms = .none
+            self.alerts = .none
         }
         
         if let setupProgressRaw = rawValue["setupProgress"] as? Int,
@@ -260,7 +261,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "tid": tid,
             "suspended": suspended,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
-            "alarms": alarms.rawValue,
+            "alerts": alerts.rawValue,
             "messageTransportState": messageTransportState.rawValue,
             "setupProgress": setupProgress.rawValue
             ]
@@ -304,7 +305,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
-            "* alarms: \(String(describing: alarms))",
+            "* alerts: \(String(describing: alerts))",
             "* messageTransportState: \(String(describing: messageTransportState))",
             "* setupProgress: \(setupProgress)",
             "* primeFinishTime: \(String(describing: primeFinishTime))",

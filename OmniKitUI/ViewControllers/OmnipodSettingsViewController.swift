@@ -307,7 +307,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             if statusRow == .alarms {
                 let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableViewCell.className, for: indexPath) as! AlarmsTableViewCell
                 cell.textLabel?.text = LocalizedString("Alarms", comment: "The title of the cell showing alarm status")
-                cell.podAlarmState = podState.alarms
+                cell.alerts = podState.alerts
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -396,12 +396,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 if let cell = tableView.cellForRow(at: indexPath) as? AlarmsTableViewCell {
                     cell.isLoading = true
                     cell.isEnabled = false
-                    pumpManager.acknowledgeAlarms(cell.podAlarmState) { (status) in
+                    pumpManager.acknowledgeAlerts(cell.alerts) { (status) in
                         DispatchQueue.main.async {
                             cell.isLoading = false
                             cell.isEnabled = true
                             if let status = status {
-                                cell.podAlarmState = status.alarms
+                                cell.alerts = status.alerts
                             }
                         }
                     }
@@ -574,7 +574,7 @@ class AlarmsTableViewCell: LoadingTableViewCell {
     }
     
     private func updateColor() {
-        if podAlarmState == .none {
+        if alerts == .none {
             detailTextLabel?.textColor = defaultDetailColor
         } else {
             detailTextLabel?.textColor = tintColor
@@ -591,12 +591,10 @@ class AlarmsTableViewCell: LoadingTableViewCell {
         self.detailTextLabel?.isHidden = isLoading
     }
     
-    var podAlarmState: PodAlarmState = .none {
+    var alerts: AlertSet = .none {
         didSet {
             updateColor()
-            detailTextLabel?.text = String(describing: podAlarmState)
-//            detailTextLabel?.tintAdjustmentMode = .dimmed
-            //detailTextLabel?.tintAdjustmentMode = (podAlarmState == .none) ? .dimmed : .normal
+            detailTextLabel?.text = String(describing: alerts)
         }
     }
     

@@ -14,11 +14,11 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
     public let blockType: MessageBlockType = .acknowledgeAlert
     public let length: UInt8 = 5
     public var nonce: UInt32
-    public let alarms: PodAlarmState
+    public let alerts: AlertSet
     
-    public init(nonce: UInt32, alarms: PodAlarmState) {
+    public init(nonce: UInt32, alerts: AlertSet) {
         self.nonce = nonce
-        self.alarms = alarms
+        self.alerts = alerts
     }
     
     public init(encodedData: Data) throws {
@@ -26,7 +26,7 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
             throw MessageBlockError.notEnoughData
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
-        self.alarms = PodAlarmState(rawValue: encodedData[6])
+        self.alerts = AlertSet(rawValue: encodedData[6])
     }
     
     public var data:  Data {
@@ -35,7 +35,7 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
             length
             ])
         data.appendBigEndian(nonce)
-        data.append(alarms.rawValue)
+        data.append(alerts.rawValue)
         return data
     }
 }

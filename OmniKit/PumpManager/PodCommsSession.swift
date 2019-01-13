@@ -316,7 +316,7 @@ public class PodCommsSession {
             let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
             
             // 2800 1283 0602
-            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
+            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
             
             // 020f 0000 0202
             let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
@@ -484,9 +484,9 @@ public class PodCommsSession {
         }
     }
     
-    public func acknowledgeAlarms(alarms: PodAlarmState) throws -> StatusResponse {
+    public func acknowledgeAlerts(alerts: AlertSet) throws -> StatusResponse {
         
-        let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alarms: alarms)
+        let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alerts: alerts)
         let status: StatusResponse = try send([cmd])
 
         return status

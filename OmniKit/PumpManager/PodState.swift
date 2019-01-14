@@ -175,6 +175,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             let nonceStateRaw = rawValue["nonceState"] as? NonceState.RawValue,
             let nonceState = NonceState(rawValue: nonceStateRaw),
             let activatedAt = rawValue["activatedAt"] as? Date,
+            let expiresAt = rawValue["expiresAt"] as? Date,
             let piVersion = rawValue["piVersion"] as? String,
             let pmVersion = rawValue["pmVersion"] as? String,
             let lot = rawValue["lot"] as? UInt32,
@@ -186,6 +187,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.address = address
         self.nonceState = nonceState
         self.activatedAt = activatedAt
+        self.expiresAt = expiresAt
         self.piVersion = piVersion
         self.pmVersion = pmVersion
         self.lot = lot
@@ -229,12 +231,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.fault = PodInfoFaultEvent(rawValue: rawFault)
         } else {
             self.fault = nil
-        }
-        
-        if let expiresAt = rawValue["expiresAt"] as? Date {
-            self.expiresAt = expiresAt
-        } else {
-            self.expiresAt = activatedAt.addingTimeInterval(podSoftExpirationTime)
         }
         
         if let alarmsRawValue = rawValue["alerts"] as? UInt8 {

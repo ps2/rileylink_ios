@@ -16,9 +16,17 @@ let pulsesPerUnit: Double = 20
 // Units per second
 let bolusDeliveryRate: Double = 0.025
 
-// Default expiration times
-let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
-let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
+ // User configured time before expiration advisory (PDM allows 1-24 hours)
+let expirationAlertWindow = TimeInterval(hours: 2)
+
+// Expiration advisory window: time after expiration alert, and end of service imminent alarm
+let expirationAdvisoryWindow = TimeInterval(hours: 7)
+
+// End of service imminent window, relative to pod end of service
+let endOfServiceImminentWindow = TimeInterval(hours: 1)
+
+// Total pod service time. A fault is triggered if this time is reached before pod deactivation.
+let podServiceDuration = TimeInterval(hours: 80)
 
 public enum SetupState: UInt8 {
     case sleeping = 0

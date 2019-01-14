@@ -260,10 +260,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         }
 
-        if let rawConfiguredAlerts = rawValue["configuredAlerts"] as? [AlertSlot.RawValue: PodAlert.RawValue] {
+        if let rawConfiguredAlerts = rawValue["configuredAlerts"] as? [String: PodAlert.RawValue] {
             var configuredAlerts = [AlertSlot: PodAlert]()
             for (rawSlot, rawAlert) in rawConfiguredAlerts {
-                if let slot = AlertSlot(rawValue: rawSlot), let alert = PodAlert(rawValue: rawAlert) {
+                if let slotNum = UInt8(rawSlot), let slot = AlertSlot(rawValue: slotNum), let alert = PodAlert(rawValue: rawAlert) {
                     configuredAlerts[slot] = alert
                 }
             }
@@ -320,7 +320,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:
-                configuredAlerts.map { slot, alarm in (slot.rawValue, alarm.rawValue) })
+                configuredAlerts.map { slot, alarm in (String(describing: slot.rawValue), alarm.rawValue) })
             rawValue["configuredAlerts"] = rawConfiguredAlerts
         }
 

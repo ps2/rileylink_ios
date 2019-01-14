@@ -229,7 +229,7 @@ public enum AlertSlot: UInt8 {
     case slot7 = 0x07
 
     public var bitMaskValue: UInt8 {
-        return 1<<rawValue
+        return 0x80>>rawValue
     }
 
     public typealias AllCases = [AlertSlot]

@@ -433,9 +433,7 @@ public class PodCommsSession {
     }
 
     public func testingCommands() throws {
-//        let _ = try cancelDelivery(deliveryType: .all, beepType: .noBeep)
-//        let response: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 1, tab5Sub17: 0)])
-//        print(response)
+        let autoOffAlarm = PodAlert.autoOffAlarm(active: true, countdownDuration: .minutes(5)) // Turn Auto-off feature on
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {

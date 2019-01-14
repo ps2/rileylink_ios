@@ -321,7 +321,7 @@ public class PodCommsSession {
         } else {
             // Configure Alerts
             // TODO: these should be configured relative to pod start time, not now
-            let expirationAdvisoryAlarm = PodAlert.expirationAlert(podSoftExpirationTime)
+            let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: podSoftExpirationTime, duration: .hours(7))
             let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm(podHardExpirationTime)
             let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: .hours(1)) // Turn Auto-off feature off
             let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
@@ -434,6 +434,7 @@ public class PodCommsSession {
 
     public func testingCommands() throws {
         let autoOffAlarm = PodAlert.autoOffAlarm(active: true, countdownDuration: .minutes(5)) // Turn Auto-off feature on
+        let _ = try configureAlerts([autoOffAlarm])
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {

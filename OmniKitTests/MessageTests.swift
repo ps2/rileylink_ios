@@ -40,7 +40,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(6.3, statusResponse.insulin, accuracy: 0.01)
             XCTAssertEqual(0, statusResponse.insulinNotDelivered)
             XCTAssertEqual(3, statusResponse.podMessageCounter)
-            XCTAssert(statusResponse.alarms.isEmpty)
+            XCTAssert(statusResponse.alerts.isEmpty)
 
             XCTAssertEqual("1f00ee84300a1d18003f1800004297ff8128", msg.encoded().hexadecimalString)
         } catch (let error) {
@@ -179,8 +179,8 @@ class MessageTests: XCTestCase {
         do {
             // Decode
             let status = try StatusResponse(encodedData: Data(hexadecimalString: "1d28008200004446ebff")!)
-            XCTAssert(status.alarms.contains(.oneHourExpiry))
-            XCTAssert(status.alarms.contains(.podExpired))
+            XCTAssert(status.alerts.contains(.slot3))
+            XCTAssert(status.alerts.contains(.slot7))
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -190,16 +190,16 @@ class MessageTests: XCTestCase {
         // 79a4 10df 0502
         // Pod expires 1 minute short of 3 days
         let podSoftExpirationTime = TimeInterval(hours:72) - TimeInterval(minutes:1)
-        let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .hours(7), expirationType: .time(podSoftExpirationTime), beepRepeat: .every60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+        let alertConfig1 = AlertConfiguration(alertType: .slot7, active: true, autoOffModifier: false, duration: .hours(7), trigger: .timeUntilAlert(podSoftExpirationTime), beepRepeat: .every60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         XCTAssertEqual("79a410df0502", alertConfig1.data.hexadecimalString)
 
         // 2800 1283 0602
         let podHardExpirationTime = TimeInterval(hours:79) - TimeInterval(minutes:1)
-        let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .endOfService, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+        let alertConfig2 = AlertConfiguration(alertType: .slot2, active: true, autoOffModifier: false, duration: .minutes(0), trigger: .timeUntilAlert(podHardExpirationTime), beepRepeat: .every15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         XCTAssertEqual("280012830602", alertConfig2.data.hexadecimalString)
 
         // 020f 0000 0202
-        let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+        let alertConfig3 = AlertConfiguration(alertType: .slot0, active: false, autoOffModifier: true, duration: .minutes(15), trigger: .timeUntilAlert(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         XCTAssertEqual("020f00000202", alertConfig3.data.hexadecimalString)
         
         let configureAlerts = ConfigureAlertsCommand(nonce: 0xfeb6268b, configurations:[alertConfig1, alertConfig2, alertConfig3])
@@ -210,22 +210,22 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(3, decoded.configurations.count)
             
             let config1 = decoded.configurations[0]
-            XCTAssertEqual(.timerLimit, config1.alertType)
-            XCTAssertEqual(true, config1.audible)
+            XCTAssertEqual(.slot7, config1.slot)
+            XCTAssertEqual(true, config1.active)
             XCTAssertEqual(false, config1.autoOffModifier)
             XCTAssertEqual(.hours(7), config1.duration)
-            if case ConfigureAlertsCommand.ExpirationType.time(let duration) = config1.expirationType {
+            if case AlertTrigger.timeUntilAlert(let duration) = config1.trigger {
                 XCTAssertEqual(podSoftExpirationTime, duration)
             }
             XCTAssertEqual(.every60Minutes, config1.beepRepeat)
             XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, config1.beepType)
             
-            let cfg = try ConfigureAlertsCommand.AlertConfiguration(encodedData: Data(hexadecimalString: "4c0000640102")!)
-            XCTAssertEqual(.lowReservoir, cfg.alertType)
-            XCTAssertEqual(true, cfg.audible)
+            let cfg = try AlertConfiguration(encodedData: Data(hexadecimalString: "4c0000640102")!)
+            XCTAssertEqual(.slot4, cfg.slot)
+            XCTAssertEqual(true, cfg.active)
             XCTAssertEqual(false, cfg.autoOffModifier)
             XCTAssertEqual(0, cfg.duration)
-            if case ConfigureAlertsCommand.ExpirationType.reservoir(let volume) = cfg.expirationType {
+            if case AlertTrigger.unitsRemaining(let volume) = cfg.trigger {
                 XCTAssertEqual(10, volume)
             }
             XCTAssertEqual(.every1MinuteFor3MinutesAndRepeatEvery60Minutes, cfg.beepRepeat)

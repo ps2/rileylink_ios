@@ -23,14 +23,13 @@ public enum SetupProgress: Int {
         return self.rawValue < SetupProgress.priming.rawValue
     }
     
-    public var needsCannulaInsertion: Bool {
-        return self.rawValue < SetupProgress.cannulaInserting.rawValue
-    }
-
     public var needsInitialBasalSchedule: Bool {
         return self.rawValue < SetupProgress.initialBasalScheduleSet.rawValue
     }
 
+    public var needsCannulaInsertion: Bool {
+        return self.rawValue < SetupProgress.completed.rawValue
+    }
 }
 
 public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertible {
@@ -45,7 +44,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let pmVersion: String
     public let lot: UInt32
     public let tid: UInt32
-    public var alerts: AlertSet
+    var activeAlertSlots: AlertSet
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -55,7 +54,17 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
-    //var registeredAlerts: [AlertSlot: ]
+    var configuredAlerts: [AlertSlot: PodAlert]
+
+    public var activeAlerts: [AlertSlot: PodAlert] {
+        var active = [AlertSlot: PodAlert]()
+        for slot in activeAlertSlots {
+            if let alert = configuredAlerts[slot] {
+                active[slot] = alert
+            }
+        }
+        return active
+    }
     
     public var deliveryScheduleUncertain: Bool {
         return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
@@ -76,10 +85,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.finalizedDoses = []
         self.suspended = false
         self.fault = nil
-        self.alerts = .none
+        self.activeAlertSlots = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
+        self.configuredAlerts = [.slot7: .waitingForPairingReminder]
     }
     
     public var unfinishedPairing: Bool {
@@ -114,7 +124,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
-        alerts = response.alerts
+        activeAlertSlots = response.alerts
     }
     
     private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
@@ -224,9 +234,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
         
         if let alarmsRawValue = rawValue["alerts"] as? UInt8 {
-            self.alerts = AlertSet(rawValue: alarmsRawValue)
+            self.activeAlertSlots = AlertSet(rawValue: alarmsRawValue)
         } else {
-            self.alerts = .none
+            self.activeAlertSlots = .none
         }
         
         if let setupProgressRaw = rawValue["setupProgress"] as? Int,
@@ -245,6 +255,24 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         }
+
+        if let rawConfiguredAlerts = rawValue["configuredAlerts"] as? [AlertSlot.RawValue: PodAlert.RawValue] {
+            var configuredAlerts = [AlertSlot: PodAlert]()
+            for (rawSlot, rawAlert) in rawConfiguredAlerts {
+                if let slot = AlertSlot(rawValue: rawSlot), let alert = PodAlert(rawValue: rawAlert) {
+                    configuredAlerts[slot] = alert
+                }
+            }
+            self.configuredAlerts = configuredAlerts
+        } else {
+            // Assume migration, and set up with alerts that are normally configured
+            self.configuredAlerts = [
+                .slot2: .shutdownImminentAlarm(0),
+                .slot3: .expirationAlert(0),
+                .slot4: .lowReservoirAlarm(0),
+                .slot7: .expirationAdvisoryAlarm(alarmTime: 0, duration: 0)
+            ]
+        }
         
         self.primeFinishTime = rawValue["primeFinishTime"] as? Date
     }
@@ -261,7 +289,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "tid": tid,
             "suspended": suspended,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
-            "alerts": alerts.rawValue,
+            "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,
             "setupProgress": setupProgress.rawValue
             ]
@@ -286,6 +314,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             rawValue["primeFinishTime"] = primeFinishTime
         }
 
+        if configuredAlerts.count > 0 {
+            let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:
+                configuredAlerts.map { slot, alarm in (slot.rawValue, alarm.rawValue) })
+            rawValue["configuredAlerts"] = rawConfiguredAlerts
+        }
+
         return rawValue
     }
     
@@ -305,10 +339,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
-            "* alerts: \(String(describing: alerts))",
+            "* activeAlerts: \(String(describing: activeAlerts))",
             "* messageTransportState: \(String(describing: messageTransportState))",
             "* setupProgress: \(setupProgress)",
             "* primeFinishTime: \(String(describing: primeFinishTime))",
+            "* configuredAlerts: \(String(describing: configuredAlerts))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

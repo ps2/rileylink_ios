@@ -236,15 +236,12 @@ public class PodCommsSession {
             
             // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
-    
-            let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .lowReservoir, audible: true, autoOffModifier: false, duration: 0, expirationType: .reservoir(volume: 20), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeepBeep)
-            
-            let configureAlerts1 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1])
-            let _: StatusResponse = try send([configureAlerts1])
-            
-            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible:true, autoOffModifier: false, duration: .minutes(55), expirationType: .time(.minutes(5)), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeepBeeep)
-            let configureAlerts2 = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig2])
-            let _: StatusResponse = try send([configureAlerts2])
+
+            let lowReservoirAlarm = PodAlert.lowReservoirAlarm(20) // Alarm at 20 units remaining
+            let _ = try configureAlerts([lowReservoirAlarm])
+
+            let finishSetupReminder = PodAlert.finishSetupReminder
+            let _ = try configureAlerts([finishSetupReminder])
         } else {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -275,10 +272,9 @@ public class PodCommsSession {
     public func programInitialBasalSchedule(_ basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
         // 3800 0ff0 0302
         if podState.setupProgress != .settingInitialBasalSchedule {
-            let alertConfig = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: false, autoOffModifier: false, duration: .minutes(0), expirationType: .time(.hours(68)), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBip)
-            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig])
-            let status: StatusResponse = try send([configureAlerts])
-            podState.updateFromStatusResponse(status)
+            // TODO: hours until alert should be 68 hours relative to pod start time, not now
+            let expirationAlert = PodAlert.expirationAlert(.hours(68))
+            let _ = try configureAlerts([expirationAlert])
         } else {
             // We started basal schedule programming, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -294,6 +290,14 @@ public class PodCommsSession {
         let status2 = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         podState.updateFromStatusResponse(status2)
         podState.setupProgress = .initialBasalScheduleSet
+    }
+
+    private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
+        let configurations = alerts.map { $0.configuration }
+        let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
+        let status: StatusResponse = try send([configureAlerts])
+        podState.updateFromStatusResponse(status)
+        return status
     }
     
     public func insertCannula() throws -> TimeInterval {
@@ -313,18 +317,11 @@ public class PodCommsSession {
             }
         } else {
             // Configure Alerts
-            let alertConfig1 = ConfigureAlertsCommand.AlertConfiguration(alertType: .timerLimit, audible: true, autoOffModifier: false, duration: .minutes(164), expirationType: .time(podSoftExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beepBeepBeep)
-            
-            // 2800 1283 0602
-            let alertConfig2 = ConfigureAlertsCommand.AlertConfiguration(alertType: .expirationAdvisory, audible: true, autoOffModifier: false, duration: .minutes(0), expirationType: .time(podHardExpirationTime), beepRepeat: .every1MinuteFor15Minutes, beepType: .beeeeeep)
-            
-            // 020f 0000 0202
-            let alertConfig3 = ConfigureAlertsCommand.AlertConfiguration(alertType: .autoOff, audible: false, autoOffModifier: true, duration: .minutes(15), expirationType: .time(0), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep) // Would like to change this to be less annoying, for example .bipBipBipbipBipBip
-            
-            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations:[alertConfig1, alertConfig2, alertConfig3])
-            
-            let status: StatusResponse = try send([configureAlerts])
-            podState.updateFromStatusResponse(status)
+            // TODO: these should be configured relative to pod start time, not now
+            let expirationAdvisoryAlarm = PodAlert.expirationAlert(podSoftExpirationTime)
+            let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm(podHardExpirationTime)
+            let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: .hours(1)) // Turn Auto-off feature off
+            let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
         }
         
         // Insert Cannula
@@ -403,7 +400,7 @@ public class PodCommsSession {
         }
     }
     
-    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType:ConfigureAlertsCommand.BeepType) throws -> StatusResponse {
+    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) throws -> StatusResponse {
         
         let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
         
@@ -470,7 +467,7 @@ public class PodCommsSession {
     }
     
     public func deactivatePod() throws {
-        
+
         if podState.fault == nil && !podState.suspended {
             let _ = try cancelDelivery(deliveryType: .all, beepType: .beeepBeeep)
         }
@@ -484,12 +481,11 @@ public class PodCommsSession {
         }
     }
     
-    public func acknowledgeAlerts(alerts: AlertSet) throws -> StatusResponse {
-        
+    public func acknowledgeAlerts(alerts: AlertSet) throws -> [AlertSlot: PodAlert] {
         let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alerts: alerts)
         let status: StatusResponse = try send([cmd])
-
-        return status
+        podState.updateFromStatusResponse(status)
+        return podState.activeAlerts
     }
 
     

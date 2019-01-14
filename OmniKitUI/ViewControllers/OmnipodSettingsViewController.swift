@@ -307,7 +307,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             if statusRow == .alarms {
                 let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableViewCell.className, for: indexPath) as! AlarmsTableViewCell
                 cell.textLabel?.text = LocalizedString("Alarms", comment: "The title of the cell showing alarm status")
-                cell.alerts = podState.alerts
+                cell.alerts = podState.activeAlerts
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -396,12 +396,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 if let cell = tableView.cellForRow(at: indexPath) as? AlarmsTableViewCell {
                     cell.isLoading = true
                     cell.isEnabled = false
-                    pumpManager.acknowledgeAlerts(cell.alerts) { (status) in
-                        DispatchQueue.main.async {
-                            cell.isLoading = false
-                            cell.isEnabled = true
-                            if let status = status {
-                                cell.alerts = status.alerts
+                    let activeSlots = AlertSet(slots: Array(cell.alerts.keys))
+                    if activeSlots.count > 0 {
+                        pumpManager.acknowledgeAlerts(activeSlots) { (updatedAlerts) in
+                            DispatchQueue.main.async {
+                                cell.isLoading = false
+                                cell.isEnabled = true
+                                if let updatedAlerts = updatedAlerts {
+                                    cell.alerts = updatedAlerts
+                                }
                             }
                         }
                     }
@@ -591,10 +594,10 @@ class AlarmsTableViewCell: LoadingTableViewCell {
         self.detailTextLabel?.isHidden = isLoading
     }
     
-    var alerts: AlertSet = .none {
+    var alerts = [AlertSlot: PodAlert]() {
         didSet {
             updateColor()
-            detailTextLabel?.text = String(describing: alerts)
+            detailTextLabel?.text = alerts.map { slot, alert in String.init(describing: alert) }.joined(separator: ", ")
         }
     }
     

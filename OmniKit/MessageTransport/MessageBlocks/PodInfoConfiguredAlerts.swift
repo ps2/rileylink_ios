@@ -17,11 +17,11 @@ public struct PodInfoConfiguredAlerts : PodInfo {
     public let data       : Data
 
     public struct AlertActivation {
-        let beepType: ConfigureAlertsCommand.BeepType
+        let beepType: BeepType
         let unitsLeft: Double
         let timeFromPodStart: UInt8
         
-        public init(beepType: ConfigureAlertsCommand.BeepType, timeFromPodStart: UInt8, unitsLeft: Double) {
+        public init(beepType: BeepType, timeFromPodStart: UInt8, unitsLeft: Double) {
             self.beepType = beepType
             self.timeFromPodStart = timeFromPodStart
             self.unitsLeft = unitsLeft
@@ -36,7 +36,7 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         self.word_278 = encodedData[1...2]
         
         let numAlertTypes = 8
-        let beepType = ConfigureAlertsCommand.BeepType.self
+        let beepType = BeepType.self
         
         var activations = [AlertActivation]()
 

@@ -645,7 +645,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     
-    public func acknowledgeAlerts(_ alertsToAcknowledge: AlertSet, completion: @escaping (_ status: StatusResponse?) -> Void) {
+    public func acknowledgeAlerts(_ alertsToAcknowledge: AlertSet, completion: @escaping (_ alerts: [AlertSlot: PodAlert]?) -> Void) {
         queue.async {
             guard self.hasActivePod else {
                 completion(nil)
@@ -663,8 +663,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 }
                 
                 do {
-                    let status = try session.acknowledgeAlerts(alerts: alertsToAcknowledge)
-                    completion(status)
+                    let alerts = try session.acknowledgeAlerts(alerts: alertsToAcknowledge)
+                    completion(alerts)
                 } catch {
                     completion(nil)
                 }

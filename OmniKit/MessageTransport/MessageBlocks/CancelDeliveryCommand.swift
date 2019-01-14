@@ -51,7 +51,7 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     
     public let deliveryType: DeliveryType
     
-    public let beepType: ConfigureAlertsCommand.BeepType
+    public let beepType: BeepType
     
     public var nonce: UInt32
     
@@ -71,10 +71,10 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
         self.deliveryType = DeliveryType(rawValue: encodedData[6] & 0xf)
-        self.beepType = ConfigureAlertsCommand.BeepType(rawValue: encodedData[6] >> 4)!
+        self.beepType = BeepType(rawValue: encodedData[6] >> 4)!
     }
     
-    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: ConfigureAlertsCommand.BeepType) {
+    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: BeepType) {
         self.nonce = nonce
         self.deliveryType = deliveryType
         self.beepType = beepType

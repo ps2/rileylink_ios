@@ -126,6 +126,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
         activeAlertSlots = response.alerts
     }
+
+    public mutating func registerConfiguredAlert(slot: AlertSlot, alert: PodAlert) {
+        configuredAlerts[slot] = alert
+    }
     
     private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
         let now = Date()

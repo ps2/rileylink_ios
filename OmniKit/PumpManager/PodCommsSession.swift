@@ -296,6 +296,9 @@ public class PodCommsSession {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
         let status: StatusResponse = try send([configureAlerts])
+        for alert in alerts {
+            podState.registerConfiguredAlert(slot: alert.configuration.slot, alert: alert)
+        }
         podState.updateFromStatusResponse(status)
         return status
     }

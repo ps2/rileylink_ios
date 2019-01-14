@@ -293,7 +293,7 @@
 		C10D9BCB1C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C10D9BD61C8269D500378342 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C11166AE2180D834000EEAAB /* PodAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* PodAlarm.swift */; };
+		C11166AE2180D834000EEAAB /* AlertSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* AlertSlot.swift */; };
 		C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
@@ -486,7 +486,7 @@
 		C1BB12B721CB56E2009A29B5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		C1BB12B821CB56F3009A29B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		C1BB12B921CB571C009A29B5 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF98213323E600C50C1D /* Pod.swift */; };
-		C1BB12BA21CB5758009A29B5 /* PodAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* PodAlarm.swift */; };
+		C1BB12BA21CB5758009A29B5 /* AlertSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* AlertSlot.swift */; };
 		C1BB12BB21CB5767009A29B5 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E993D18B217E455000E489BF /* LogEventErrorCode.swift */; };
 		C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */; };
@@ -1224,7 +1224,7 @@
 		C10D9BC51C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C10D9BD31C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C11166AD2180D834000EEAAB /* PodAlarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodAlarm.swift; sourceTree = "<group>"; };
+		C11166AD2180D834000EEAAB /* AlertSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSlot.swift; sourceTree = "<group>"; };
 		C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaultConfigCommand.swift; sourceTree = "<group>"; };
 		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -2222,7 +2222,7 @@
 				C13FD2F3215E7338005FC495 /* FaultEventCode.swift */,
 				C13FD2F5215E743C005FC495 /* PodProgressStatus.swift */,
 				E993D18B217E455000E489BF /* LogEventErrorCode.swift */,
-				C11166AD2180D834000EEAAB /* PodAlarm.swift */,
+				C11166AD2180D834000EEAAB /* AlertSlot.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3819,7 +3819,7 @@
 				C1BB12B821CB56F3009A29B5 /* TimeInterval.swift in Sources */,
 				C1BB12A521CB5654009A29B5 /* PodInfoConfiguredAlerts.swift in Sources */,
 				C1BB12A221CB5654009A29B5 /* MessageBlock.swift in Sources */,
-				C1BB12BA21CB5758009A29B5 /* PodAlarm.swift in Sources */,
+				C1BB12BA21CB5758009A29B5 /* AlertSlot.swift in Sources */,
 				C1BB12A121CB5654009A29B5 /* GetStatusCommand.swift in Sources */,
 				C1BB12A621CB5654009A29B5 /* PodInfoDataLog.swift in Sources */,
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
@@ -3850,7 +3850,7 @@
 				C1FFAFD0213323E900C50C1D /* SetInsulinScheduleCommand.swift in Sources */,
 				C1FFAFC4213323E900C50C1D /* TempBasalExtraCommand.swift in Sources */,
 				C1FB4275216E83D200FAB378 /* Locked.swift in Sources */,
-				C11166AE2180D834000EEAAB /* PodAlarm.swift in Sources */,
+				C11166AE2180D834000EEAAB /* AlertSlot.swift in Sources */,
 				C1FFAFB9213323E900C50C1D /* PodCommsSession.swift in Sources */,
 				C1FFAFC8213323E900C50C1D /* BolusExtraCommand.swift in Sources */,
 				C1FFAFC7213323E900C50C1D /* PlaceholderMessageBlock.swift in Sources */,

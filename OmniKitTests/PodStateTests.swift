@@ -14,7 +14,7 @@ class PodStateTests: XCTestCase {
     let now = Date()
     
     func testNonceValues() {
-        var podState = PodState(address: 0x1f000000, activatedAt: now, expiresAt: now.addingTimeInterval(podSoftExpirationTime), piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771)
+        var podState = PodState(address: 0x1f000000, activatedAt: now, expiresAt: now.addingTimeInterval(.hours(72)), piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771)
         
         XCTAssertEqual(podState.currentNonce, 0x8c61ee59)
         podState.advanceToNextNonce()
@@ -28,7 +28,7 @@ class PodStateTests: XCTestCase {
     func testNonceSync() {
         do {
             let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a62b0002249da11f00ee860318")!)
-            var podState = PodState(address: 0x1f00ee86, activatedAt: now, expiresAt: now.addingTimeInterval(podSoftExpirationTime), piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
+            var podState = PodState(address: 0x1f00ee86, activatedAt: now, expiresAt: now.addingTimeInterval(.hours(72)), piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
 
             XCTAssertEqual(42539, config.lot)
             XCTAssertEqual(140445,  config.tid)
@@ -57,7 +57,7 @@ class PodStateTests: XCTestCase {
     func testNonceSync2() {
         do {
             let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a7420007f050961f0b35570264")!)
-            var podState = PodState(address: 0x1f0b3557, activatedAt: now, expiresAt: now.addingTimeInterval(podSoftExpirationTime), piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
+            var podState = PodState(address: 0x1f0b3557, activatedAt: now, expiresAt: now.addingTimeInterval(.hours(72)), piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
             
 //            XCTAssertEqual(42125, config.lot)
 //            XCTAssertEqual(170175,  config.tid)

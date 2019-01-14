@@ -21,7 +21,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
     public let faultEventTimeSinceActivation: TimeInterval?
     public let reservoirLevel: Double?
     public let timeActive: TimeInterval
-    public let unacknowledgedAlerts: UInt8
+    public let unacknowledgedAlerts: AlertSet
     public let faultAccessingTables: Bool
     public let logEventErrorType: LogEventErrorCode
     public let logEventErrorPodProgressStatus: PodProgressStatus
@@ -69,7 +69,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
-        self.unacknowledgedAlerts = encodedData[15]
+        self.unacknowledgedAlerts =  AlertSet(rawValue: encodedData[15])
         
         self.faultAccessingTables = encodedData[16] == 2
         

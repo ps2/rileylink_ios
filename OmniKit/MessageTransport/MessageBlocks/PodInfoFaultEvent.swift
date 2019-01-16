@@ -48,7 +48,7 @@ public struct PodInfoFaultEvent : PodInfo, Equatable {
         
         self.podMessageCounter = encodedData[5]
         
-        self.totalInsulinDelivered = podPulseSize * Double((Int(encodedData[6] & 0x3) << 8) | Int(encodedData[7]))
+        self.totalInsulinDelivered = podPulseSize * Double((Int(encodedData[6]) << 8) | Int(encodedData[7]))
         
         self.currentStatus = FaultEventCode(rawValue: encodedData[8])
         
@@ -103,9 +103,9 @@ extension PodInfoFaultEvent: CustomDebugStringConvertible {
             "* rawHex: \(data.hexadecimalString)",
             "* podProgressStatus: \(podProgressStatus)",
             "* deliveryStatus: \(deliveryStatus.description)",
-            "* insulinNotDelivered: \(insulinNotDelivered.twoDecimals)) U",
+            "* insulinNotDelivered: \(insulinNotDelivered.twoDecimals) U",
             "* podMessageCounter: \(podMessageCounter)",
-            "* totalInsulinDelivered: \(totalInsulinDelivered.twoDecimals)) U",
+            "* totalInsulinDelivered: \(totalInsulinDelivered.twoDecimals) U",
             "* currentStatus: \(currentStatus.description)",
             "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
             "* reservoirLevel: \(reservoirLevel?.twoDecimals ?? "50+") U",

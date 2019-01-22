@@ -60,7 +60,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     private enum State {
         case initial
         case startingInsertion
-        case inserting(finishTime: Date)
+        case inserting(finishTime: CFTimeInterval)
         case fault
         case ready
     }
@@ -153,7 +153,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 switch(result) {
                 case .success(let finishTime):
                     self.continueState = .inserting(finishTime: finishTime)
-                    let delay = finishTime.timeIntervalSinceNow
+                    let delay = finishTime
                     if delay > 0 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                             self.continueState = .ready

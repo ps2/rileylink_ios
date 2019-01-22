@@ -16,7 +16,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
     var pumpManager: MinimedPumpManager?
 
     private var pumpManagerSetupViewController: MinimedPumpManagerSetupViewController? {
-        return setupViewController as? MinimedPumpManagerSetupViewController
+        return navigationController as? MinimedPumpManagerSetupViewController
     }
 
     override func viewDidLoad() {
@@ -81,7 +81,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
             case .basalRates:
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
 
-                if let basalRateSchedule = setupViewController?.basalSchedule {
+                if let basalRateSchedule = pumpManagerSetupViewController?.basalSchedule {
                     let unit = HKUnit.internationalUnit()
                     let total = HKQuantity(unit: unit, doubleValue: basalRateSchedule.total())
                     cell.detailTextLabel?.text = quantityFormatter.string(from: total, for: unit)
@@ -91,7 +91,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
             case .deliveryLimits:
                 cell.textLabel?.text = LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
 
-                if setupViewController?.maxBolusUnits == nil || setupViewController?.maxBasalRateUnitsPerHour == nil {
+                if pumpManagerSetupViewController?.maxBolusUnits == nil || pumpManagerSetupViewController?.maxBasalRateUnitsPerHour == nil {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.EnabledString
@@ -124,7 +124,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
             case .basalRates:
                 let vc = SingleValueScheduleTableViewController(style: .grouped)
 
-                if let profile = setupViewController?.basalSchedule {
+                if let profile = pumpManagerSetupViewController?.basalSchedule {
                     vc.scheduleItems = profile.items
                     vc.timeZone = profile.timeZone
                 } else if let timeZone = pumpManager?.pumpTimeZone {
@@ -139,8 +139,8 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
             case .deliveryLimits:
                 let vc = DeliveryLimitSettingsTableViewController(style: .grouped)
 
-                vc.maximumBasalRatePerHour = setupViewController?.maxBasalRateUnitsPerHour
-                vc.maximumBolus = setupViewController?.maxBolusUnits
+                vc.maximumBasalRatePerHour = pumpManagerSetupViewController?.maxBasalRateUnitsPerHour
+                vc.maximumBolus = pumpManagerSetupViewController?.maxBolusUnits
 
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self

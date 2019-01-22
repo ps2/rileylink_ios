@@ -34,8 +34,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.state = state
         self.bolusState = .none
-        self.basalDeliveryState = state.isPumpSuspended ? .suspended : .none
-        
+
         self.device = HKDevice(
             name: type(of: self).managerIdentifier,
             manufacturer: "Medtronic",
@@ -80,11 +79,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public private(set) var state: MinimedPumpManagerState {
         didSet {
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
-            
-            if oldValue.isPumpSuspended != state.isPumpSuspended {
-                self.basalDeliveryState = state.isPumpSuspended ? .suspended : .none
-            }
-            
+
             if oldValue.timeZone != state.timeZone ||
                 oldValue.batteryPercentage != state.batteryPercentage {
                 self.notifyStatusObservers()
@@ -93,6 +88,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             stateObserver?.didUpdatePumpManagerState(state)
         }
     }
+
+    private var basalDeliveryStateTransitioning: Bool = false {
+        didSet {
+            notifyStatusObservers()
+        }
+    }
+
     
     override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
@@ -176,11 +178,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - PumpManager
 
     private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
-        didSet {
-            notifyStatusObservers()
+        if basalDeliveryStateTransitioning {
+            return state.isPumpSuspended ? .resuming : .suspending
+        } else {
+            return state.isPumpSuspended ? .suspended : .active
         }
     }
-    
+
     private var bolusState: PumpManagerStatus.BolusState {
         didSet {
             notifyStatusObservers()
@@ -250,17 +254,14 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             
             self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
                 do {
-                    switch state {
-                    case .suspend:
-                        self.basalDeliveryState = .suspending
-                    case .resume:
-                        self.basalDeliveryState = .resuming
-                    }
+
+                    defer { self.basalDeliveryStateTransitioning = false }
+                    self.basalDeliveryStateTransitioning = true
+
                     try session.setSuspendResumeState(state)
                     self.state.isPumpSuspended = state == .suspend
                     completion(nil)
                 } catch let error {
-                    self.basalDeliveryState = self.state.isPumpSuspended ? .suspended : .none
                     self.troubleshootPumpComms(using: device)
                     completion(PumpManagerError.communication(error as? LocalizedError))
                 }

@@ -49,7 +49,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.delegate = self
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
-        pumpManager.addStatusObserver(cell)
         return cell
     }()
     
@@ -459,21 +458,24 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 }
 
 extension OmnipodSettingsViewController: SuspendResumeTableViewCellDelegate {
-    func suspendTapped() {
-        pumpManager.suspendDelivery { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.presentAlertController(with: error, title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"))
+    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action) {
+        switch actionTapped {
+        case .resume:
+            pumpManager.resumeDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Resuming", comment: "The alert title for a resume error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
                 }
             }
-        }
-    }
-    
-    func resumeTapped() {
-        pumpManager.resumeDelivery { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.presentAlertController(with: error, title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"))
+        case .suspend:
+            pumpManager.suspendDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
                 }
             }
         }
@@ -515,17 +517,16 @@ extension OmnipodSettingsViewController: PodStateObserver {
             }
         }
     }
-    
 }
 
 extension OmnipodSettingsViewController: PumpManagerStatusObserver {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
             self.pumpManagerStatus = status
+            self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
             self.tableView.reloadSections([Section.status.rawValue], with: .none)
         }
     }
-    
 }
 
 

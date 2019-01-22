@@ -251,13 +251,13 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
-            return .none
+            return .active
         }
         
         if basalDeliveryStateTransitioning {
             return podState.suspended ? .resuming : .suspending
         } else {
-            return podState.suspended ? .suspended : .none
+            return podState.suspended ? .suspended : .active
         }
     }
     
@@ -366,7 +366,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     // MARK: - Pairing
-    public func pairAndPrime(completion: @escaping (PumpManagerResult<Date>) -> Void) {
+    public func pairAndPrime(completion: @escaping (PumpManagerResult<TimeInterval>) -> Void) {
         
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
@@ -379,8 +379,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(.failure(PodCommsError.podFault(fault: self.state.podState!.fault!)))
             } else {
                 let mockPrimeDuration = TimeInterval(.seconds(3))
-                let finishTime = Date() + mockPrimeDuration
-                completion(.success(finishTime))
+                completion(.success(mockPrimeDuration))
             }
         }
         #else
@@ -430,7 +429,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         #endif
     }
         
-    public func insertCannula(completion: @escaping (PumpManagerResult<Date>) -> Void) {
+    public func insertCannula(completion: @escaping (PumpManagerResult<TimeInterval>) -> Void) {
         #if targetEnvironment(simulator)
         let mockDelay = TimeInterval(seconds: 3)
         queue.asyncAfter(deadline: .now() + mockDelay) {
@@ -443,8 +442,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             // Mock success
             self.state.podState?.setupProgress = .completed
             self.notifyPodStateObservers()
-            let finishTime = Date() + mockDelay
-            completion(.success(finishTime))
+            completion(.success(mockDelay))
         }
         #else
         
@@ -479,7 +477,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         self.queue.asyncAfter(deadline: .now() + finishWait) {
                             self.checkCannulaInsertionFinished()
                         }
-                        completion(.success(Date() + finishWait))
+                        completion(.success(finishWait))
                     } catch let error {
                         completion(.failure(error))
                     }

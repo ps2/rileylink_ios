@@ -69,7 +69,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         return [reservoirView, batteryView].compactMap { $0 }
     }
     
-    public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
+    public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
     }
     

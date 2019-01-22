@@ -10,7 +10,7 @@ import Foundation
 import OmniKit
 import LoopKitUI
 
-class PodReplacementNavigationController: UINavigationController, UINavigationControllerDelegate, SetupNavigationController {
+class PodReplacementNavigationController: UINavigationController, UINavigationControllerDelegate {
     
     class func instantiatePodReplacementFlow(_ pumpManager: OmnipodPumpManager) -> PodReplacementNavigationController {
         let vc = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: PodReplacementNavigationController.self)).instantiateViewController(withIdentifier: "PodReplacementFlow") as! PodReplacementNavigationController
@@ -39,7 +39,11 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
     }
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        
+
+        if let setupViewController = viewController as? SetupTableViewController {
+            setupViewController.delegate = self
+        }
+
         switch viewController {
         case let vc as ReplacePodViewController:
             vc.pumpManager = pumpManager
@@ -53,11 +57,13 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
 
     }
     
-    func cancelSetup() {
+    func completeSetup() {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    func completeSetup() {
+}
+
+extension PodReplacementNavigationController: SetupTableViewControllerDelegate {
+    func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
         self.dismiss(animated: true, completion: nil)
     }
 }

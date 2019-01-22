@@ -22,13 +22,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         didSet {
             if reservoirView == nil && podState?.lastInsulinMeasurements?.reservoirVolume != nil {
                 reservoirView = OmnipodReservoirView.instantiate()
-                delegate?.hudProvider(self, didAddHudViews: [reservoirView!])
+                delegate?.hudProvider(self, didAddViews: [reservoirView!])
             }
             
             if podLifeView == nil && podState != nil {
                 podLifeView = PodLifeHUDView.instantiate()
                 updatePodLifeView()
-                delegate?.hudProvider(self, didAddHudViews: [podLifeView!])
+                delegate?.hudProvider(self, didAddViews: [podLifeView!])
             }
             
             if oldValue?.lastInsulinMeasurements != podState?.lastInsulinMeasurements {
@@ -40,7 +40,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             }
             
             if oldValue != nil && podState == nil {
-                delegate?.hudProvider(self, didRemoveHudViews: [reservoirView, podLifeView].compactMap { $0 })
+                delegate?.hudProvider(self, didRemoveViews: [reservoirView, podLifeView].compactMap { $0 })
                 podLifeView = nil
                 reservoirView = nil
             }            
@@ -113,7 +113,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         return [reservoirView, podLifeView].compactMap { $0 }
     }
     
-    public func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
+    public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
         if let _ = view as? PodLifeHUDView {
             if podState?.fault != nil {
                 return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))

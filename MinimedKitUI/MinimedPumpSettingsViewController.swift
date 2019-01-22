@@ -9,7 +9,7 @@ import UIKit
 import LoopKitUI
 import MinimedKit
 import RileyLinkKitUI
-
+import LoopKit
 
 class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
@@ -28,7 +28,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.delegate = self
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
-        pumpManager.addStatusObserver(cell)
         return cell
     }()
 
@@ -50,6 +49,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         imageView.contentMode = .bottom
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
+
+        pumpManager.addStatusObserver(self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -305,26 +306,38 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 }
 
 extension MinimedPumpSettingsViewController: SuspendResumeTableViewCellDelegate {
-    func suspendTapped() {
-        pumpManager.suspendDelivery { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.presentAlertController(with: error, title: LocalizedString("Error Suspending", comment: "The alert title for a suspend error"))
+    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action) {
+        switch actionTapped {
+        case .resume:
+            pumpManager.resumeDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Resuming", comment: "The alert title for a resume error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
                 }
             }
-        }
-    }
-    
-    func resumeTapped() {
-        pumpManager.resumeDelivery { (error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    self.presentAlertController(with: error, title: LocalizedString("Error Resuming", comment: "The alert title for a resume error"))
+        case .suspend:
+            pumpManager.suspendDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
                 }
             }
         }
     }
 }
+
+extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
+        DispatchQueue.main.async {
+            self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+        }
+    }
+}
+
 
 
 private extension UIAlertController {

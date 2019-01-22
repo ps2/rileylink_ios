@@ -74,6 +74,11 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
             }
         }
 
+        if let setupViewController = viewController as? SetupTableViewController {
+            setupViewController.delegate = self
+        }
+
+
         // Set state values
         switch viewController {
         case let vc as PairPodSetupViewController:
@@ -99,5 +104,11 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         if let pumpManager = pumpManager {
             setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
         }
+    }
+}
+
+extension OmnipodPumpManagerSetupViewController: SetupTableViewControllerDelegate {
+    public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
+        setupDelegate?.pumpManagerSetupViewControllerDidCancel(self)
     }
 }

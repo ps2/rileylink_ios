@@ -73,6 +73,10 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
             }
         }
 
+        if let setupViewController = viewController as? SetupTableViewController {
+            setupViewController.delegate = self
+        }
+
         // Set state values
         switch viewController {
         case let vc as MinimedPumpIDSetupViewController:
@@ -116,5 +120,11 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         if let pumpManager = pumpManager {
             setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
         }
+    }
+}
+
+extension MinimedPumpManagerSetupViewController: SetupTableViewControllerDelegate {
+    public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
+        setupDelegate?.pumpManagerSetupViewControllerDidCancel(self)
     }
 }

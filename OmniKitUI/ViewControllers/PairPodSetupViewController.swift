@@ -75,7 +75,7 @@ class PairPodSetupViewController: SetupTableViewController {
     private enum State {
         case initial
         case pairing
-        case priming(finishTime: Date)
+        case priming(finishTime: TimeInterval)
         case fault
         case ready
     }
@@ -186,10 +186,9 @@ class PairPodSetupViewController: SetupTableViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let finishTime):
-                    let delay = finishTime.timeIntervalSinceNow
-                    if delay > 0 {
+                    if finishTime > 0 {
                         self.continueState = .priming(finishTime: finishTime)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + finishTime) {
                             self.continueState = .ready
                         }
                     } else {

@@ -194,6 +194,11 @@ class ReplacePodViewController: SetupTableViewController {
             }
         }
     }
+
+    override func cancelButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
 }
 
 private extension SetupButton {
@@ -205,3 +210,5 @@ private extension SetupButton {
         setTitle(LocalizedString("Retry Pod Deactivation", comment: "Button title for retrying pod deactivation"), for: .normal)
     }
 }
+
+

@@ -228,8 +228,10 @@ public class PodCommsSession {
     }
 
     // Returns time at which prime is expected to finish.
-    public func prime() throws -> Date {
+    public func prime() throws -> TimeInterval {
         //4c00 00c8 0102
+
+        let primeDuration = TimeInterval(seconds: 55)
         
         // Skip following alerts if we've already done them before
         if podState.setupProgress != .startingPrime {
@@ -248,13 +250,13 @@ public class PodCommsSession {
             podState.updateFromStatusResponse(status)
             if status.podProgressStatus == .priming || status.podProgressStatus == .readyForBasalSchedule {
                 podState.setupProgress = .priming
-                return podState.primeFinishTime!
+                return podState.primeFinishTime?.timeIntervalSinceNow ?? primeDuration
             }
         }
 
         // Mark 2.6U delivery for prime
         
-        let primeFinishTime = Date() + .seconds(55)
+        let primeFinishTime = Date() + primeDuration
         podState.primeFinishTime = primeFinishTime
         podState.setupProgress = .startingPrime
 
@@ -266,7 +268,7 @@ public class PodCommsSession {
         let status: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status)
         podState.setupProgress = .priming
-        return primeFinishTime
+        return primeFinishTime.timeIntervalSinceNow
     }
     
     public func programInitialBasalSchedule(_ basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
@@ -433,8 +435,9 @@ public class PodCommsSession {
     }
 
     public func testingCommands() throws {
-        let autoOffAlarm = PodAlert.autoOffAlarm(active: true, countdownDuration: .minutes(5)) // Turn Auto-off feature on
-        let _ = try configureAlerts([autoOffAlarm])
+//        let autoOffAlarm = PodAlert.autoOffAlarm(active: true, countdownDuration: .minutes(5)) // Turn Auto-off feature on
+//        let _ = try configureAlerts([autoOffAlarm])
+        let _ = try getStatus()
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {

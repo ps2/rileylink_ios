@@ -11,7 +11,7 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
-public protocol MinimedPumpManagerStateObserver {
+public protocol MinimedPumpManagerStateObserver: class {
     func didUpdatePumpManagerState(_ state: MinimedPumpManagerState)
 }
 
@@ -73,7 +73,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         return state.rawValue
     }
     
-    public var stateObserver: MinimedPumpManagerStateObserver?
+    public weak var stateObserver: MinimedPumpManagerStateObserver?
     
     // TODO: apply lock
     public private(set) var state: MinimedPumpManagerState {

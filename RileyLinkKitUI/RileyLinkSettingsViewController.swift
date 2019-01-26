@@ -15,7 +15,7 @@ open class RileyLinkSettingsViewController: UITableViewController {
 
     public let devicesDataSource: RileyLinkDevicesTableViewDataSource
 
-    public init(rileyLinkPumpManager: RileyLinkPumpManager, devicesSectionIndex: Int, style: UITableViewStyle) {
+    public init(rileyLinkPumpManager: RileyLinkPumpManager, devicesSectionIndex: Int, style: UITableView.Style) {
         devicesDataSource = RileyLinkDevicesTableViewDataSource(rileyLinkPumpManager: rileyLinkPumpManager, devicesSectionIndex: devicesSectionIndex)
         super.init(style: style)
     }

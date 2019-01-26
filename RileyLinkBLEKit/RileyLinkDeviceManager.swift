@@ -12,6 +12,7 @@ import os.log
 public class RileyLinkDeviceManager: NSObject {
     private let log = OSLog(category: "RileyLinkDeviceManager")
 
+    // Isolated to centralQueue
     private var central: CBCentralManager!
 
     private let centralQueue = DispatchQueue(label: "com.rileylink.RileyLinkBLEKit.BluetoothManager.centralQueue", qos: .utility)
@@ -34,16 +35,18 @@ public class RileyLinkDeviceManager: NSObject {
 
         super.init()
 
-        central = CBCentralManager(
-            delegate: self,
-            queue: centralQueue,
-            options: [
-                CBCentralManagerOptionRestoreIdentifierKey: "com.rileylink.CentralManager"
-            ]
-        )
+        centralQueue.sync {
+            central = CBCentralManager(
+                delegate: self,
+                queue: centralQueue,
+                options: [
+                    CBCentralManagerOptionRestoreIdentifierKey: "com.rileylink.CentralManager"
+                ]
+            )
+        }
     }
 
-    // MARK: - Configuration. Not thread-safe.
+    // MARK: - Configuration
 
     public var idleListeningEnabled: Bool {
         if case .disabled = idleListeningState {
@@ -53,22 +56,27 @@ public class RileyLinkDeviceManager: NSObject {
         }
     }
 
-    public var idleListeningState: RileyLinkDevice.IdleListeningState = .disabled {
-        didSet {
-            let newState = self.idleListeningState
-
+    public var idleListeningState: RileyLinkDevice.IdleListeningState {
+        get {
+            return lockedIdleListeningState.value
+        }
+        set {
+            lockedIdleListeningState.value = newValue
             centralQueue.async {
                 for device in self.devices {
-                    device.setIdleListeningState(newState)
+                    device.setIdleListeningState(newValue)
                 }
             }
         }
     }
+    private let lockedIdleListeningState = Locked(RileyLinkDevice.IdleListeningState.disabled)
 
-    public var timerTickEnabled = true {
-        didSet {
-            let newValue = timerTickEnabled
-
+    public var timerTickEnabled: Bool {
+        get {
+            return lockedTimerTickEnabled.value
+        }
+        set {
+            lockedTimerTickEnabled.value = newValue
             centralQueue.async {
                 for device in self.devices {
                     device.setTimerTickEnabled(newValue)
@@ -76,6 +84,7 @@ public class RileyLinkDeviceManager: NSObject {
             }
         }
     }
+    private let lockedTimerTickEnabled = Locked(true)
 }
 
 

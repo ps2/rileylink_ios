@@ -121,7 +121,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         continueState = .inputSettings
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: .UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -332,7 +332,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 extension MinimedPumpIDSetupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     private static let regionRows: [RegionCode] = [.northAmerica, .canada, .worldWide]
 
-    private static let colorRows: [PumpColor] = [.blue, .clear, .purple, .smoke]
+    private static let colorRows: [PumpColor] = [.blue, .clear, .purple, .smoke, .pink]
 
     private enum PickerViewComponent: Int {
         case region

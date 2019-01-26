@@ -9,6 +9,7 @@
 import Foundation
 import RileyLinkKit
 import RileyLinkBLEKit
+import os.log
 
 
 public protocol PumpOpsDelegate: class {
@@ -17,6 +18,8 @@ public protocol PumpOpsDelegate: class {
 
 
 public class PumpOps {
+
+    private let log = OSLog(category: "PumpOps")
 
     public let pumpSettings: PumpSettings
 
@@ -69,10 +72,15 @@ public class PumpOps {
         sessionQueue.async {
             let semaphore = DispatchSemaphore(value: 0)
 
-            device.runSession(withName: name) { (session) in
-                let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: session, delegate: self)
+            device.runSession(withName: name) { (commandSession) in
+                let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState, session: commandSession, delegate: self)
                 self.sessionDevice = device
-                self.configureDevice(device, with: session)
+                if !commandSession.firmwareVersion.isUnknown {
+                    self.configureDevice(device, with: session)
+                } else {
+                    self.log.error("Skipping device configuration due to unknown firmware version")
+                }
+
                 block(session)
                 self.sessionDevice = nil
                 semaphore.signal()
@@ -88,10 +96,13 @@ public class PumpOps {
             return
         }
 
+        log.default("Configuring RileyLinkDevice: %{public}@", String(describing: device.deviceURI))
+
         do {
             _ = try session.configureRadio(for: pumpSettings.pumpRegion, frequency: pumpState.lastValidFrequency)
-        } catch {
+        } catch let error {
             // Ignore the error and let the block run anyway
+            log.error("Error configuring device: %{public}@", String(describing: error))
             return
         }
 
@@ -108,7 +119,9 @@ public class PumpOps {
 
         NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
-        configuredDevices.remove(device)
+
+        // TODO: Unsafe access
+        self.configuredDevices.remove(device)
     }
 
     public func getPumpState(_ completion: @escaping (_ state: PumpState) -> Void) {

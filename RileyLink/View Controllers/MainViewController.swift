@@ -13,6 +13,7 @@ import RileyLinkKit
 import RileyLinkKitUI
 import LoopKit
 import LoopKitUI
+import OmniKitUI
 
 class MainViewController: RileyLinkSettingsViewController {
     
@@ -36,10 +37,10 @@ class MainViewController: RileyLinkSettingsViewController {
         
         tableView.backgroundColor = UIColor.white
         tableView.separatorStyle = .none
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         
-        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 55
         
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
@@ -54,6 +55,8 @@ class MainViewController: RileyLinkSettingsViewController {
         tableView.tableHeaderView = imageView
 
         tableView.register(RileyLinkDeviceTableViewCell.self, forCellReuseIdentifier: RileyLinkDeviceTableViewCell.className)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceConnectionStateDidChange), name: .DeviceConnectionStateDidChange, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,10 +75,21 @@ class MainViewController: RileyLinkSettingsViewController {
     
     fileprivate enum PumpActionRow: Int, CaseCountable {
         case addMinimedPump = 0
+        case setupOmnipod
     }
     
     weak var rileyLinkManager: RileyLinkDeviceManager!
     
+    @objc private func deviceConnectionStateDidChange() {
+        DispatchQueue.main.async {
+            self.tableView.reloadSections(IndexSet([Section.pump.rawValue]), with: .none)
+        }
+    }
+    
+    private var shouldAllowAddingPump: Bool {
+        return deviceDataManager.rileyLinkConnectionManager.connectingCount > 0
+    }
+
     // MARK: Data Source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -112,7 +126,16 @@ class MainViewController: RileyLinkSettingsViewController {
                 switch(PumpActionRow(rawValue: indexPath.row)!) {
                 case .addMinimedPump:
                     cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath)
+                    let textButtonCell = cell as? TextButtonTableViewCell
+                    textButtonCell?.isEnabled = shouldAllowAddingPump
+                    textButtonCell?.isUserInteractionEnabled = shouldAllowAddingPump
                     cell.textLabel?.text = NSLocalizedString("Add Minimed Pump", comment: "Title text for button to set up a new minimed pump")
+                case .setupOmnipod:
+                    cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath)
+                    let textButtonCell = cell as? TextButtonTableViewCell
+                    textButtonCell?.isEnabled = shouldAllowAddingPump
+                    textButtonCell?.isUserInteractionEnabled = shouldAllowAddingPump
+                    cell.textLabel?.text = NSLocalizedString("Setup Omnipod", comment: "Title text for button to set up omnipod")
                 }
             }
         }
@@ -159,6 +182,8 @@ class MainViewController: RileyLinkSettingsViewController {
                 switch PumpActionRow(rawValue: indexPath.row)! {
                 case .addMinimedPump:
                     setupViewController = UIStoryboard(name: "MinimedPumpManager", bundle: Bundle(for: MinimedPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! MinimedPumpManagerSetupViewController
+                case .setupOmnipod:
+                    setupViewController = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: OmnipodPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! OmnipodPumpManagerSetupViewController
                 }
                 if let rileyLinkManagerViewController = setupViewController as? RileyLinkManagerSetupViewController {
                     rileyLinkManagerViewController.rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceDataManager.rileyLinkConnectionManager.deviceProvider)

@@ -473,6 +473,15 @@ extension PumpOpsSession {
         throw lastError ?? PumpOpsError.noResponse(during: "Set temp basal")
     }
 
+    public func readTempBasal() throws -> Double {
+        
+        try wakeup()
+        
+        let response: ReadTempBasalCarelinkMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readTempBasal), responseType: .readTempBasal)
+        
+        return response.rate
+    }
+
     /// Changes the pump's clock to the specified date components in the system time zone
     ///
     /// - Parameter generator: A closure which returns the desired date components. An exeception is raised if the date components are not valid.

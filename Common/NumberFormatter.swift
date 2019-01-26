@@ -15,4 +15,8 @@ extension NumberFormatter {
             return nil
         }
     }
+    
+    func string(from number: Double) -> String? {
+        return string(from: NSNumber(value: number))
+    }
 }

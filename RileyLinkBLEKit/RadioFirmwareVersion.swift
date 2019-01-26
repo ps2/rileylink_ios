@@ -19,17 +19,26 @@ public struct RadioFirmwareVersion {
             return nil
         }
 
-        self.versionString = versionString
-        components = versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) })
+        self.init(
+            components: versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) }),
+            versionString: versionString
+        )
     }
 
-    private init(components: [Int]) {
-        versionString = "Unknown"
+    private init(components: [Int], versionString: String) {
+        self.versionString = versionString
         self.components = components
     }
+}
 
+
+extension RadioFirmwareVersion {
     static var unknown: RadioFirmwareVersion {
-        return self.init(components: [1])
+        return self.init(components: [0], versionString: "Unknown")
+    }
+
+    public var isUnknown: Bool {
+        return self == RadioFirmwareVersion.unknown
     }
 }
 
@@ -37,6 +46,12 @@ public struct RadioFirmwareVersion {
 extension RadioFirmwareVersion: CustomStringConvertible {
     public var description: String {
         return versionString
+    }
+}
+
+extension RadioFirmwareVersion: Equatable {
+    public static func ==(lhs: RadioFirmwareVersion, rhs: RadioFirmwareVersion) -> Bool {
+        return lhs.components == rhs.components
     }
 }
 

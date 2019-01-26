@@ -34,7 +34,7 @@ protocol PumpMessageSender {
     ///   - retryCount: The number of times to repeat the send & listen sequence
     /// - Returns: The packet reply
     /// - Throws: LocalizedError
-    func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket?
+    func sendAndListen(_ data: Data, repeatCount: Int, timeout: TimeInterval, retryCount: Int) throws -> RFPacket
 
     /// - Throws: LocalizedError
     func listen(onChannel channel: Int, timeout: TimeInterval) throws -> RFPacket?

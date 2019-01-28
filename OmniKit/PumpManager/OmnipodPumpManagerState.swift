@@ -24,6 +24,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
 
+    public var messageLog = MessageLog()
+
     public init(podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?) {
         self.podState = podState
         self.timeZone = timeZone
@@ -86,6 +88,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             basalSchedule: basalSchedule,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState
         )
+
+        if let rawMessageLog = rawValue["messageLog"] as? MessageLog.RawValue, let messageLog = MessageLog(rawValue: rawMessageLog) {
+            self.messageLog = messageLog
+        }
     }
     
     public var rawValue: RawValue {
@@ -93,6 +99,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "version": OmnipodPumpManagerState.version,
             "timeZone": timeZone.secondsFromGMT(),
             "basalSchedule": basalSchedule.rawValue,
+            "messageLog": messageLog.rawValue,
         ]
         
         if let podState = podState {
@@ -120,6 +127,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* basalSchedule: \(String(describing: basalSchedule))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
+            String(reflecting: messageLog),
             ].joined(separator: "\n")
     }
 }

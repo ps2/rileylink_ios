@@ -132,25 +132,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
-    // MARK: - Message Log
-    
-    private struct MessageLogEntry: CustomStringConvertible {
-        var description: String {
-            return "\(timestamp) \(messageDirection) \(data.hexadecimalString)"
-        }
-        
-        enum MessageDirection {
-            case send
-            case receive
-        }
-        
-        let messageDirection: MessageDirection
-        let timestamp: Date
-        let data: Data
-    }
-    
-    private var messageLog = [MessageLogEntry]()
-    
     // MARK: PumpManager
     
     public func updateBLEHeartbeatPreference() {
@@ -309,7 +290,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: - CustomDebugStringConvertible
     
     override public var debugDescription: String {
-        var lines = [
+        let lines = [
             "## OmnipodPumpManager",
             state.debugDescription,
             "",
@@ -317,11 +298,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             super.debugDescription,
             "",
             ]
-        
-        lines.append("### MessageLog")
-        for entry in messageLog {
-            lines.append("* " + entry.description)
-        }
+
         return lines.joined(separator: "\n")
     }
     
@@ -348,7 +325,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             self.podComms.delegate = self
             self.podComms.messageLogger = self
             self.notifyPodStateObservers()
-            self.messageLog.removeAll()
+            self.state.messageLog.erase()
         }
     }
     
@@ -929,11 +906,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
 extension OmnipodPumpManager: MessageLogger {
     func didSend(_ message: Data) {
-        messageLog.append(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
+        state.messageLog.record(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
     }
     
     func didReceive(_ message: Data) {
-        messageLog.append(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
+        state.messageLog.record(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
     }
 }
 

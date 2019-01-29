@@ -118,7 +118,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             if podState?.fault != nil {
                 return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
             } else {
-                return HUDTapAction.showViewController(pumpManager.settingsViewController())
+                return HUDTapAction.presentViewController(pumpManager.settingsViewController())
             }
 
         }

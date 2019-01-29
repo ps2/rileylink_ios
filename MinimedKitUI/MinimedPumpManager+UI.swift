@@ -127,7 +127,10 @@ extension MinimedPumpManager: PumpManagerUI {
     }
 
     public func settingsViewController() -> UIViewController {
-        return MinimedPumpSettingsViewController(pumpManager: self)
+        let settings = MinimedPumpSettingsViewController(pumpManager: self)
+        let nav = UINavigationController()
+        nav.pushViewController(settings, animated: false)
+        return nav
     }
 
     public var smallImage: UIImage? {

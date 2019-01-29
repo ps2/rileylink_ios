@@ -51,6 +51,14 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         tableView.tableHeaderView = imageView
 
         pumpManager.addStatusObserver(self)
+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        self.navigationItem.setRightBarButton(button, animated: false)
+
+    }
+
+    @objc func doneTapped(_ sender: Any) {
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {

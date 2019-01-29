@@ -20,7 +20,10 @@ extension OmnipodPumpManager: PumpManagerUI {
     }
     
     public func settingsViewController() -> UIViewController {
-        return OmnipodSettingsViewController(pumpManager: self)
+        let settings = OmnipodSettingsViewController(pumpManager: self)
+        let nav = UINavigationController()
+        nav.pushViewController(settings, animated: false)
+        return nav
     }
     
     public var smallImage: UIImage? {

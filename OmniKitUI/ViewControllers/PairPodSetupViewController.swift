@@ -88,13 +88,13 @@ class PairPodSetupViewController: SetupTableViewController {
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.setPairTitle()
             case .pairing:
-                activityIndicator.state = .loading
+                activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setPairTitle()
                 lastError = nil
                 loadingText = LocalizedString("Pairing...", comment: "The text of the loading label when pairing")
             case .priming(let finishTime):
-                activityIndicator.state = .timedProgress(finishTime: finishTime)
+                activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setPairTitle()
                 lastError = nil

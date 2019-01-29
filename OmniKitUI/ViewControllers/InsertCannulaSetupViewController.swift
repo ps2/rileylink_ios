@@ -73,11 +73,11 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.setConnectTitle()
             case .startingInsertion:
-                activityIndicator.state = .loading
+                activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
                 lastError = nil
             case .inserting(let finishTime):
-                activityIndicator.state = .timedProgress(finishTime: finishTime)
+                activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
                 lastError = nil
             case .fault:

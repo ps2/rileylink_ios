@@ -180,7 +180,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 footerView.primaryButton.setConnectTitle()
             case .reading:
                 pumpIDTextField.isEnabled = false
-                activityIndicator.state = .loading
+                activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setConnectTitle()
                 lastError = nil

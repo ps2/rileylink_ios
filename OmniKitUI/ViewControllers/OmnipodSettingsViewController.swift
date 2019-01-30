@@ -47,7 +47,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.delegate = self
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         return cell
     }()
@@ -78,7 +77,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     @objc func doneTapped(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if let nav = navigationController as? SettingsNavigationViewController {
+            nav.notifyComplete()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -379,7 +380,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             switch actions[indexPath.row] {
             case .suspendResume:
-                suspendResumeTableViewCell.toggle()
+                suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
             case .replacePod:
                 let vc: UIViewController
@@ -462,11 +463,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         
         return indexPath
     }
-}
 
-extension OmnipodSettingsViewController: SuspendResumeTableViewCellDelegate {
-    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action) {
-        switch actionTapped {
+    private func suspendResumeTapped() {
+        switch suspendResumeTableViewCell.shownAction {
         case .resume:
             pumpManager.resumeDelivery { (error) in
                 if let error = error {

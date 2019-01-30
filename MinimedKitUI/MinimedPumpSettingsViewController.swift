@@ -26,7 +26,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.delegate = self
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         return cell
     }()
@@ -58,7 +57,9 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     }
 
     @objc func doneTapped(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        if let nav = navigationController as? SettingsNavigationViewController {
+            nav.notifyComplete()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -217,7 +218,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                suspendResumeTableViewCell.toggle()
+                suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         case .settings:
@@ -311,11 +312,9 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 
         tableView.reloadRows(at: [indexPath], with: .none)
     }
-}
 
-extension MinimedPumpSettingsViewController: SuspendResumeTableViewCellDelegate {
-    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action) {
-        switch actionTapped {
+    private func suspendResumeTapped() {
+        switch suspendResumeTableViewCell.shownAction {
         case .resume:
             pumpManager.resumeDelivery { (error) in
                 if let error = error {

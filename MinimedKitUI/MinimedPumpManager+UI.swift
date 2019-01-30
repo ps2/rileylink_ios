@@ -122,13 +122,14 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
 }
 
 extension MinimedPumpManager: PumpManagerUI {
+
     static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController() -> UIViewController {
+    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = UINavigationController()
+        let nav = SettingsNavigationViewController()
         nav.pushViewController(settings, animated: false)
         return nav
     }

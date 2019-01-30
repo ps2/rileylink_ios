@@ -10,8 +10,10 @@ import Foundation
 import OmniKit
 import LoopKitUI
 
-class PodReplacementNavigationController: UINavigationController, UINavigationControllerDelegate {
-    
+class PodReplacementNavigationController: UINavigationController, UINavigationControllerDelegate, CompletionNotifying {
+
+    weak var completionDelegate: CompletionDelegate?
+
     class func instantiatePodReplacementFlow(_ pumpManager: OmnipodPumpManager) -> PodReplacementNavigationController {
         let vc = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: PodReplacementNavigationController.self)).instantiateViewController(withIdentifier: "PodReplacementFlow") as! PodReplacementNavigationController
         vc.pumpManager = pumpManager
@@ -56,9 +58,9 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
         }
 
     }
-    
+
     func completeSetup() {
-        self.dismiss(animated: true, completion: nil)
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }
 

@@ -19,9 +19,9 @@ extension OmnipodPumpManager: PumpManagerUI {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()        
     }
     
-    public func settingsViewController() -> UIViewController {
+    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
         let settings = OmnipodSettingsViewController(pumpManager: self)
-        let nav = UINavigationController()
+        let nav = SettingsNavigationViewController()
         nav.pushViewController(settings, animated: false)
         return nav
     }

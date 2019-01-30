@@ -257,7 +257,9 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .delete:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.navigationController?.popViewController(animated: true)
+                if let nav = self.navigationController as? SettingsNavigationViewController {
+                    nav.notifyComplete()
+                }
             })
 
             present(confirmVC, animated: true) {

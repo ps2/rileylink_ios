@@ -77,6 +77,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     @objc func doneTapped(_ sender: Any) {
+        notifyComplete()
+    }
+
+    private func notifyComplete() {
         if let nav = navigationController as? SettingsNavigationViewController {
             nav.notifyComplete()
         }
@@ -393,9 +397,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 } else {
                     vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
                 }
-                self.navigationController?.present(vc, animated: true, completion: {
-                    self.navigationController?.popViewController(animated: false)
-                })
+                if var completionNotifying = vc as? CompletionNotifying {
+                    completionNotifying.completionDelegate = self
+                }
+                self.navigationController?.present(vc, animated: true, completion: nil)
             }
         case .status:
             switch StatusRow(rawValue: indexPath.row)! {
@@ -437,7 +442,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .deletePumpManager:
             let confirmVC = UIAlertController(pumpManagerDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.navigationController?.popViewController(animated: true)
+                self.notifyComplete()
             })
             
             present(confirmVC, animated: true) {
@@ -488,6 +493,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 }
 
+extension OmnipodSettingsViewController: CompletionDelegate {
+    func completionNotifyingDidComplete(_ object: CompletionNotifying) {
+        if let vc = object as? UIViewController {
+            vc.dismiss(animated: false, completion: nil)
+        }
+    }
+}
+
 extension OmnipodSettingsViewController: RadioSelectionTableViewControllerDelegate {
     func radioSelectionTableViewControllerDidChangeSelectedIndex(_ controller: RadioSelectionTableViewController) {
         guard let indexPath = self.tableView.indexPathForSelectedRow else {
@@ -530,7 +543,9 @@ extension OmnipodSettingsViewController: PumpManagerStatusObserver {
         DispatchQueue.main.async {
             self.pumpManagerStatus = status
             self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            self.tableView.reloadSections([Section.status.rawValue], with: .none)
+            if let sectionIdx = self.sections.firstIndex(of: .status) {
+                self.tableView.reloadSections([sectionIdx], with: .none)
+            }
         }
     }
 }

@@ -167,7 +167,8 @@ class MainViewController: RileyLinkSettingsViewController {
             show(vc, sender: indexPath)
         case .pump:
             if let pumpManager = deviceDataManager.pumpManager {
-                let settings = pumpManager.settingsViewController()
+                var settings = pumpManager.settingsViewController()
+                settings.completionDelegate = self
                 show(settings, sender: sender)
             } else {
                 var setupViewController: PumpManagerSetupViewController & UIViewController
@@ -193,6 +194,14 @@ class MainViewController: RileyLinkSettingsViewController {
         }
         
         return indexPath
+    }
+}
+
+extension MainViewController: CompletionDelegate {
+    func completionNotifyingDidComplete(_ object: CompletionNotifying) {
+        if let vc = object as UIViewController {
+            viewController.dismiss(animated: true, completion: nil)
+        }
     }
 }
 

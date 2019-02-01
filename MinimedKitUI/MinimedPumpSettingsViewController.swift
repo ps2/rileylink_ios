@@ -9,12 +9,12 @@ import UIKit
 import LoopKitUI
 import MinimedKit
 import RileyLinkKitUI
-
+import LoopKit
 
 class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     let pumpManager: MinimedPumpManager
-
+    
     init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         super.init(rileyLinkPumpManager: pumpManager, devicesSectionIndex: Section.rileyLinks.rawValue, style: .grouped)
@@ -23,6 +23,12 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
+        let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
+        return cell
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +48,18 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         imageView.contentMode = .bottom
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
+
+        pumpManager.addStatusObserver(self)
+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        self.navigationItem.setRightBarButton(button, animated: false)
+
+    }
+
+    @objc func doneTapped(_ sender: Any) {
+        if let nav = navigationController as? SettingsNavigationViewController {
+            nav.notifyComplete()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,42 +75,43 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     // MARK: - Data Source
 
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case info = 0
+        case actions
         case settings
         case rileyLinks
         case delete
-
-        static let count = 4
     }
 
-    private enum InfoRow: Int {
+    private enum InfoRow: Int, CaseIterable {
         case pumpID = 0
         case pumpModel
-
-        static let count = 2
     }
 
-    private enum SettingsRow: Int {
+    private enum ActionsRow: Int, CaseIterable {
+        case suspendResume = 0
+    }
+
+    private enum SettingsRow: Int, CaseIterable {
         case timeZoneOffset = 0
         case batteryChemistry
         case preferredInsulinDataSource
-
-        static let count = 3
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .info:
-            return InfoRow.count
+            return InfoRow.allCases.count
+        case .actions:
+            return ActionsRow.allCases.count
         case .settings:
-            return SettingsRow.count
+            return SettingsRow.allCases.count
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
         case .delete:
@@ -102,14 +121,14 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .info:
-            return nil
         case .settings:
             return LocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
         case .delete:
             return " "  // Use an empty string for more dramatic spacing
+        case .info, .actions:
+            return nil
         }
     }
 
@@ -117,7 +136,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .delete:
+        case .info, .settings, .delete, .actions:
             return nil
         }
     }
@@ -136,6 +155,11 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
                 return cell
+            }
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                return suspendResumeTableViewCell
             }
         case .settings:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -180,7 +204,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             return false
-        case .settings, .rileyLinks, .delete:
+        case .actions, .settings, .rileyLinks, .delete:
             return true
         }
     }
@@ -191,6 +215,12 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             break
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                suspendResumeTapped()
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -238,8 +268,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
-        case .info:
-            break
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -249,9 +277,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             case .preferredInsulinDataSource:
                 break
             }
-        case .rileyLinks:
-            break
-        case .delete:
+        case .info, .actions, .rileyLinks, .delete:
             break
         }
 
@@ -286,7 +312,39 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+
+    private func suspendResumeTapped() {
+        switch suspendResumeTableViewCell.shownAction {
+        case .resume:
+            pumpManager.resumeDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Resuming", comment: "The alert title for a resume error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            }
+        case .suspend:
+            pumpManager.suspendDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            }
+        }
+    }
 }
+
+extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
+        DispatchQueue.main.async {
+            self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+        }
+    }
+}
+
 
 
 private extension UIAlertController {

@@ -9,7 +9,6 @@ import LoopKit
 import RileyLinkKit
 import RileyLinkBLEKit
 
-
 public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public typealias RawValue = PumpManager.RawStateValue
 
@@ -22,15 +21,23 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var pumpColor: PumpColor
 
     public var pumpModel: PumpModel
+    
+    public var pumpFirmwareVersion: String
 
     public var pumpID: String
 
     public var pumpRegion: PumpRegion
     
+    public var isPumpSuspended: Bool
+
     public var lastValidFrequency: Measurement<UnitFrequency>?
 
     public var lastTuned: Date?
+    
+    public var batteryPercentage: Double?
 
+    public var lastReservoirReading: ReservoirReading?
+    
     public var pumpSettings: PumpSettings {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
@@ -64,16 +71,20 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var timeZone: TimeZone
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
         self.pumpID = pumpID
         self.pumpModel = pumpModel
+        self.pumpFirmwareVersion = pumpFirmwareVersion
         self.pumpRegion = pumpRegion
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
+        self.isPumpSuspended = isPumpSuspended
         self.lastValidFrequency = lastValidFrequency
+        self.batteryPercentage = batteryPercentage
+        self.lastReservoirReading = lastReservoirReading
     }
 
     public init?(rawValue: RawValue) {
@@ -112,6 +123,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
                 rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
             }
         }
+
+        let isPumpSuspended = (rawValue["isPumpSuspended"] as? Bool) ?? false
         
         let lastValidFrequency: Measurement<UnitFrequency>?
         if let frequencyRaw = rawValue["lastValidFrequency"] as? Double {
@@ -119,17 +132,31 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         } else {
             lastValidFrequency = nil
         }
-
+        
+        let pumpFirmwareVersion = (rawValue["pumpFirmwareVersion"] as? String) ?? ""
+        let batteryPercentage = rawValue["batteryPercentage"] as? Double
+        
+        let lastReservoirReading: ReservoirReading?
+        if let rawLastReservoirReading = rawValue["lastReservoirReading"] as? ReservoirReading.RawValue {
+            lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
+        } else {
+            lastReservoirReading = nil
+        }
+        
         self.init(
             batteryChemistry: batteryChemistry,
             preferredInsulinDataSource: insulinDataSource,
             pumpColor: pumpColor,
             pumpID: pumpID,
             pumpModel: pumpModel,
+            pumpFirmwareVersion: pumpFirmwareVersion,
             pumpRegion: pumpRegion,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
             timeZone: timeZone,
-            lastValidFrequency: lastValidFrequency
+            lastValidFrequency: lastValidFrequency,
+            isPumpSuspended: isPumpSuspended,
+            batteryPercentage: batteryPercentage,
+            lastReservoirReading: lastReservoirReading
         )
     }
 
@@ -140,9 +167,10 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "pumpColor": pumpColor.rawValue,
             "pumpID": pumpID,
             "pumpModel": pumpModel.rawValue,
+            "pumpFirmwareVersion": pumpFirmwareVersion,
             "pumpRegion": pumpRegion.rawValue,
             "timeZone": timeZone.secondsFromGMT(),
-
+            "isPumpSuspended": isPumpSuspended,
             "version": MinimedPumpManagerState.version,
             ]
         
@@ -152,6 +180,14 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         
         if let frequency = lastValidFrequency?.converted(to: .megahertz) {
             value["lastValidFrequency"] = frequency.value
+        }
+        
+        if let batteryPercentage = batteryPercentage {
+            value["batteryPercentage"] = batteryPercentage
+        }
+
+        if let lastReservoirReading = lastReservoirReading {
+            value["lastReservoirReading"] = lastReservoirReading.rawValue
         }
 
         return value
@@ -173,10 +209,46 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pumpColor: \(pumpColor)",
             "pumpID: ✔︎",
             "pumpModel: \(pumpModel.rawValue)",
+            "pumpFirmwareVersion: \(pumpFirmwareVersion)",
             "pumpRegion: \(pumpRegion)",
             "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "timeZone: \(timeZone)",
+            "isPumpSuspended: \(isPumpSuspended)",
+            "batteryPercentage: \(String(describing: batteryPercentage))",
+            "reservoirUnits: \(String(describing: lastReservoirReading?.units))",
+            "reservoirValidAt: \(String(describing: lastReservoirReading?.validAt))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
+    }
+}
+
+public struct ReservoirReading: RawRepresentable, Equatable {
+    public typealias RawValue = [String: Any]
+    
+    public let units: Double
+    public let validAt: Date
+    
+    public init(units: Double, validAt: Date) {
+        self.units = units
+        self.validAt = validAt
+    }
+    
+    public init?(rawValue: RawValue) {
+        guard
+            let units = rawValue["units"] as? Double,
+            let validAt = rawValue["validAt"] as? Date
+            else {
+                return nil
+        }
+        
+        self.units = units
+        self.validAt = validAt
+    }
+    
+    public var rawValue: RawValue {
+        return [
+            "units": units,
+            "validAt": validAt
+        ]
     }
 }

@@ -14,7 +14,7 @@ public struct RFPacket {
     public let rssi: Int
 
     init?(rfspyResponse: Data) {
-        guard rfspyResponse.count > 2 else {
+        guard rfspyResponse.count >= 2 else {
             return nil
         }
 

@@ -134,7 +134,7 @@ extension PumpOpsSession {
 
 // MARK: - Single reads
 extension PumpOpsSession {
-    /// Retrieves the pump model from either the state or from the
+    /// Retrieves the pump model from either the state or from the cache
     ///
     /// - Parameter usingCache: Whether the pump state should be checked first for a known pump model
     /// - Returns: The pump model
@@ -162,6 +162,26 @@ extension PumpOpsSession {
         pump.pumpModel = pumpModel
 
         return pumpModel
+    }
+
+    /// Retrieves the pump firmware version
+    ///
+    /// - Returns: The pump firmware version as string
+    /// - Throws:
+    ///     - PumpCommandError.command
+    ///     - PumpCommandError.arguments
+    ///     - PumpOpsError.couldNotDecode
+    ///     - PumpOpsError.crosstalk
+    ///     - PumpOpsError.deviceError
+    ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.unexpectedResponse
+    ///     - PumpOpsError.unknownResponse
+    public func getPumpFirmwareVersion(usingCache: Bool = true) throws -> String {
+        
+        try wakeup()
+        let body: GetPumpFirmwareVersionMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readFirmwareVersion), responseType: .readFirmwareVersion)
+        
+        return body.version
     }
 
     /// - Throws:
@@ -391,6 +411,13 @@ extension PumpOpsSession {
     public func pressButton(_ type: ButtonPressCarelinkMessageBody.ButtonType) throws {
         let message = PumpMessage(settings: settings, type: .buttonPress, body: ButtonPressCarelinkMessageBody(buttonType: type))
 
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+    }
+    
+    /// - Throws: `PumpCommandError` specifying the failure sequence
+    public func setSuspendResumeState(_ state: SuspendResumeMessageBody.SuspendResumeState) throws {
+        let message = PumpMessage(settings: settings, type: .suspendResume, body: SuspendResumeMessageBody(state: state))
+        
         let _: PumpAckMessageBody = try runCommandWithArguments(message)
     }
 

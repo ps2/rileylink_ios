@@ -60,9 +60,6 @@ extension DeviceDataManager: PumpManagerDelegate {
         log.debug("didAdjustPumpClockBy %@", adjustment)
     }
     
-    func pumpManagerDidUpdatePumpBatteryChargeRemaining(_ pumpManager: PumpManager, oldValue: Double?) {
-    }
-    
     func pumpManagerDidUpdateState(_ pumpManager: PumpManager) {
         UserDefaults.standard.pumpManagerRawValue = pumpManager.rawValue
     }
@@ -74,7 +71,7 @@ extension DeviceDataManager: PumpManagerDelegate {
         return true
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
     }
     
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager) {
@@ -103,5 +100,5 @@ extension DeviceDataManager: PumpManagerDelegate {
     
     func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.minutes(-15))
-    }
+    }    
 }

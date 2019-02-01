@@ -129,8 +129,7 @@ extension MinimedPumpManager: PumpManagerUI {
 
     public func settingsViewController() -> (UIViewController & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController()
-        nav.pushViewController(settings, animated: false)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 

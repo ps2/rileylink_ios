@@ -209,8 +209,8 @@ class MainViewController: RileyLinkSettingsViewController {
 
 extension MainViewController: CompletionDelegate {
     func completionNotifyingDidComplete(_ object: CompletionNotifying) {
-        if let vc = object as UIViewController {
-            viewController.dismiss(animated: true, completion: nil)
+        if let vc = object as? UIViewController {
+            vc.dismiss(animated: true, completion: nil)
         }
     }
 }

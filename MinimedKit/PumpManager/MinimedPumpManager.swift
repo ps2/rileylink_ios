@@ -614,7 +614,25 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
             do {
                 if self.state.isPumpSuspended {
-                    try session.setSuspendResumeState(.resume)
+                    do {
+                        try session.setSuspendResumeState(.resume)
+                    } catch let error as PumpOpsError {
+                        self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
+                        completion(SetBolusError.certain(error))
+                        return
+                    } catch let error as PumpCommandError {
+                        self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
+                        switch error {
+                        case .arguments(let error):
+                            completion(SetBolusError.certain(error))
+                        case .command(let error):
+                            completion(SetBolusError.certain(error))
+                        }
+                        return
+                    } catch let error {
+                        completion(error)
+                        return
+                    }
                 }
                 
                 let date = Date()

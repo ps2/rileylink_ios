@@ -36,6 +36,11 @@ public struct PumpState: RawRepresentable, Equatable {
         self.timeZone = .currentFixed
     }
 
+    public init(timeZone: TimeZone, pumpModel: PumpModel) {
+        self.timeZone = timeZone
+        self.pumpModel = pumpModel
+    }
+
     public init?(rawValue: RawValue) {
         guard
             let timeZoneSeconds = rawValue["timeZone"] as? Int,

@@ -315,6 +315,9 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
 #if targetEnvironment(simulator)
             self.continueState = .completed
+            self.pumpState = PumpState(timeZone: .currentFixed, pumpModel: PumpModel(rawValue:
+                "523")!)
+            self.pumpFirmwareVersion = "2.4Mock"
 #else
             readPumpState(with: PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion))
 #endif

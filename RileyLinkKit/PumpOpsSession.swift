@@ -176,7 +176,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
-    public func getPumpFirmwareVersion(usingCache: Bool = true) throws -> String {
+    public func getPumpFirmwareVersion() throws -> String {
         
         try wakeup()
         let body: GetPumpFirmwareVersionMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readFirmwareVersion), responseType: .readFirmwareVersion)

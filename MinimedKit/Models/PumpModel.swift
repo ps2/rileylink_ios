@@ -83,6 +83,14 @@ public enum PumpModel: String {
         }
     }
 
+    public var pulsesPerUnit: Int {
+        if generation >= 23 {
+            return 40
+        } else {
+            return 20
+        }
+    }
+
     /// Even though this is capped by the system at 250 / 10 U, the message takes a UInt16.
     var usesTwoBytesForMaxBolus: Bool {
         return generation >= 23

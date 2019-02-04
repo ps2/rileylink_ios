@@ -19,10 +19,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     public static let managerIdentifier: String = "Minimed500"
     
-    private static let pulsesPerUnit = 20.0
-    
     public func roundToDeliveryIncrement(units: Double) -> Double {
-        return round(units * MinimedPumpManager.pulsesPerUnit) / MinimedPumpManager.pulsesPerUnit
+        return round(units * Double(state.pumpModel.pulsesPerUnit)) / Double(state.pumpModel.pulsesPerUnit)
     }
     
     /*

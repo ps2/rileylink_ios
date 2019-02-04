@@ -32,7 +32,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private static let deliveryUnitsPerMinute = 1.5
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
-        self.state = state
+        self.lockedState = Locked(state)
         self.bolusState = .none
 
         self.device = HKDevice(
@@ -74,20 +74,25 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     public weak var stateObserver: MinimedPumpManagerStateObserver?
-    
-    // TODO: apply lock
-    public private(set) var state: MinimedPumpManagerState {
-        didSet {
-            pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+
+    private(set) public var state: MinimedPumpManagerState {
+        get {
+            return lockedState.value
+        }
+        set {
+            let oldValue = lockedState.value
+            lockedState.value = newValue
 
             if oldValue.timeZone != state.timeZone ||
                 oldValue.batteryPercentage != state.batteryPercentage {
                 self.notifyStatusObservers()
-            }            
-            
-            stateObserver?.didUpdatePumpManagerState(state)
+            }
+
+            pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+            stateObserver?.didUpdatePumpManagerState(lockedState.value)
         }
     }
+    private let lockedState: Locked<MinimedPumpManagerState>
 
     private var basalDeliveryStateTransitioning: Bool = false {
         didSet {

@@ -340,6 +340,7 @@
 		C16E611D2203CB7A0069F357 /* SuspendResumeMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16E611B2203CB7A0069F357 /* SuspendResumeMessageBody.swift */; };
 		C16E611E2203CB7A0069F357 /* GetPumpFirmwareVersionMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16E611C2203CB7A0069F357 /* GetPumpFirmwareVersionMessageBody.swift */; };
 		C16E611F22065B8E0069F357 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
+		C16E6120220779210069F357 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
 		C1711A5A1C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */; };
 		C1711A5C1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */; };
@@ -2869,6 +2870,7 @@
 				54BC44821DB476BB00340EED /* CalBGForGHGlucoseEvent.swift in Sources */,
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				43D8708B20DE1BCA006B549E /* PumpColor.swift in Sources */,
+				C16E6120220779210069F357 /* Locked.swift in Sources */,
 				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
 				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,

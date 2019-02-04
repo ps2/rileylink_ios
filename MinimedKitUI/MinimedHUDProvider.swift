@@ -82,7 +82,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
             "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity
         ]
 
-        rawValue["batteryPercentage"] = batteryPercentage
+        rawValue["batteryPercentage"] = state.batteryPercentage
 
         if let lastReservoirReading = state.lastReservoirReading {
             rawValue["lastReservoirReading"] = lastReservoirReading.rawValue

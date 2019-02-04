@@ -37,6 +37,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
         let imageView = UIImageView(image: pumpManager.state.largePumpImage)
         imageView.contentMode = .bottom
@@ -153,7 +154,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
+                let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
                 cell.basalDeliveryState = pumpManager.status.basalDeliveryState
                 return cell
             }

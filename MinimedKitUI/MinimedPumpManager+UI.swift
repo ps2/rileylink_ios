@@ -10,116 +10,6 @@ import LoopKit
 import LoopKitUI
 import MinimedKit
 
-class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
-
-    var managerIdentifier: String {
-        return MinimedPumpManager.managerIdentifier
-    }
-
-    var delegate: HUDProviderDelegate?
-    
-    private var state: MinimedPumpManagerState {
-        didSet {
-            if oldValue.batteryPercentage != state.batteryPercentage {
-                self.updateBatteryView()
-            }
-            
-            if oldValue.lastReservoirReading != state.lastReservoirReading {
-                self.updateReservoirView()
-            }
-        }
-    }
-    
-    private let pumpManager: MinimedPumpManager
-    
-    public init(pumpManager: MinimedPumpManager) {
-        self.pumpManager = pumpManager
-        self.state = pumpManager.state
-        pumpManager.stateObserver = self
-    }
-    
-    private weak var reservoirView: ReservoirVolumeHUDView?
-    
-    private weak var batteryView: BatteryLevelHUDView?
-    
-    private func updateReservoirView() {
-        if let lastReservoirVolume = state.lastReservoirReading,
-            let reservoirView = reservoirView
-        {
-            let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpManager.pumpReservoirCapacity))
-            reservoirView.reservoirLevel = reservoirLevel
-            reservoirView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
-        }
-    }
-    
-    private func updateBatteryView() {
-        if let batteryView = batteryView {
-            batteryView.batteryLevel = state.batteryPercentage
-        }
-    }
-    
-    public func createHUDViews() -> [BaseHUDView] {
-        
-        reservoirView = ReservoirVolumeHUDView.instantiate()
-        updateReservoirView()
-        
-        batteryView = BatteryLevelHUDView.instantiate()
-        updateBatteryView()
-        
-        return [reservoirView, batteryView].compactMap { $0 }
-    }
-    
-    public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
-        return nil
-    }
-    
-    func hudDidAppear() {
-    }
-    
-    public var hudViewsRawState: HUDProvider.HUDViewsRawState {
-        var rawValue: HUDProvider.HUDViewsRawState = [
-            "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity
-        ]
-        
-        if let batteryPercentage = state.batteryPercentage {
-            rawValue["batteryPercentage"] = batteryPercentage
-        }
-        
-        if let lastReservoirReading = state.lastReservoirReading {
-            rawValue["lastReservoirReading"] = lastReservoirReading.rawValue
-        }
-        
-        return rawValue
-    }
-    
-    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
-        guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
-            return []
-        }
-        
-        let batteryPercentage = rawValue["batteryPercentage"] as? Double
-        
-        let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
-        if let rawLastReservoirReading = rawValue["lastReservoirReading"] as? ReservoirReading.RawValue,
-            let lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
-        {
-            let reservoirLevel = min(1, max(0, lastReservoirReading.units / pumpReservoirCapacity))
-            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
-            reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
-        }
-        
-        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
-        batteryLevelHUDView.batteryLevel = batteryPercentage
-        
-        return [reservoirVolumeHUDView, batteryLevelHUDView]
-    }
-    
-    func didUpdatePumpManagerState(_ state: MinimedPumpManagerState) {
-        DispatchQueue.main.async {
-            self.state = state
-        }
-    }
-}
 
 extension MinimedPumpManager: PumpManagerUI {
 
@@ -129,8 +19,7 @@ extension MinimedPumpManager: PumpManagerUI {
 
     public func settingsViewController() -> (UIViewController & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController()
-        nav.pushViewController(settings, animated: false)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 

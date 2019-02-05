@@ -24,12 +24,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
-        let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
-        return cell
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,6 +37,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
         let imageView = UIImageView(image: pumpManager.state.largePumpImage)
         imageView.contentMode = .bottom
@@ -86,6 +81,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     private enum InfoRow: Int, CaseIterable {
         case pumpID = 0
         case pumpModel
+        case pumpFirmware
+        case pumpRegion
     }
 
     private enum ActionsRow: Int, CaseIterable {
@@ -155,11 +152,23 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
                 return cell
+            case .pumpFirmware:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Firmware Version", comment: "The title of the cell showing the pump firmware version")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpFirmwareVersion)
+                return cell
+            case .pumpRegion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Region", comment: "The title of the cell showing the pump region")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpRegion)
+                return cell
             }
         case .actions:
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                return suspendResumeTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
+                cell.basalDeliveryState = pumpManager.status.basalDeliveryState
+                return cell
             }
         case .settings:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -218,7 +227,9 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                suspendResumeTapped()
+                if let suspendResumeCell = sender as? SuspendResumeTableViewCell {
+                    suspendResumeCellTapped(suspendResumeCell)
+                }
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         case .settings:
@@ -315,8 +326,8 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
         tableView.reloadRows(at: [indexPath], with: .none)
     }
 
-    private func suspendResumeTapped() {
-        switch suspendResumeTableViewCell.shownAction {
+    private func suspendResumeCellTapped(_ cell: SuspendResumeTableViewCell) {
+        switch cell.shownAction {
         case .resume:
             pumpManager.resumeDelivery { (error) in
                 if let error = error {
@@ -342,7 +353,10 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
     public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
-            self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
+            {
+                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+            }
         }
     }
 }

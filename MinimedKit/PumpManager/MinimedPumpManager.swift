@@ -19,10 +19,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
     public static let managerIdentifier: String = "Minimed500"
     
-    private static let pulsesPerUnit = 20.0
-    
     public func roundToDeliveryIncrement(units: Double) -> Double {
-        return round(units * MinimedPumpManager.pulsesPerUnit) / MinimedPumpManager.pulsesPerUnit
+        return round(units * Double(state.pumpModel.pulsesPerUnit)) / Double(state.pumpModel.pulsesPerUnit)
     }
     
     /*
@@ -32,7 +30,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private static let deliveryUnitsPerMinute = 1.5
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
-        self.state = state
+        self.lockedState = Locked(state)
         self.bolusState = .none
 
         self.device = HKDevice(
@@ -72,23 +70,31 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var rawState: PumpManager.RawStateValue {
         return state.rawValue
     }
-    
-    public weak var stateObserver: MinimedPumpManagerStateObserver?
-    
-    // TODO: apply lock
-    public private(set) var state: MinimedPumpManagerState {
-        didSet {
-            pumpManagerDelegate?.pumpManagerDidUpdateState(self)
 
+    // TODO: Accessed (various queues) and set (main) on different threads
+    public weak var stateObserver: MinimedPumpManagerStateObserver?
+
+    private(set) public var state: MinimedPumpManagerState {
+        get {
+            return lockedState.value
+        }
+        set {
+            let oldValue = lockedState.value
+            lockedState.value = newValue
+
+            // TODO: Use newValue for determining notifications rather than re-accessing state
             if oldValue.timeZone != state.timeZone ||
                 oldValue.batteryPercentage != state.batteryPercentage {
                 self.notifyStatusObservers()
-            }            
-            
-            stateObserver?.didUpdatePumpManagerState(state)
+            }
+
+            pumpManagerDelegate?.pumpManagerDidUpdateState(self)
+            stateObserver?.didUpdatePumpManagerState(lockedState.value)
         }
     }
+    private let lockedState: Locked<MinimedPumpManagerState>
 
+    // TODO: Accessed and set on different threads
     private var basalDeliveryStateTransitioning: Bool = false {
         didSet {
             notifyStatusObservers()
@@ -571,9 +577,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     // TODO: Isolate to queue
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ error: Error?) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         guard units > 0 else {
-            completion(nil)
+            completion(.failure(SetBolusError.certain(MinimedPumpManagerError.zeroBolus)))
             return
         }
 
@@ -582,7 +588,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
-                completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
             }
 
@@ -595,26 +601,44 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 } catch let error as PumpOpsError {
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
-                    completion(SetBolusError.certain(error))
+                    completion(.failure(SetBolusError.certain(error)))
                     return
                 } catch let error as PumpCommandError {
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
                     switch error {
                     case .arguments(let error):
-                        completion(SetBolusError.certain(error))
+                        completion(.failure(SetBolusError.certain(error)))
                     case .command(let error):
-                        completion(SetBolusError.certain(error))
+                        completion(.failure(SetBolusError.certain(error)))
                     }
                     return
                 } catch let error {
-                    completion(error)
+                    completion(.failure(error))
                     return
                 }
             }
 
             do {
                 if self.state.isPumpSuspended {
-                    try session.setSuspendResumeState(.resume)
+                    do {
+                        try session.setSuspendResumeState(.resume)
+                    } catch let error as PumpOpsError {
+                        self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
+                        completion(.failure(SetBolusError.certain(error)))
+                        return
+                    } catch let error as PumpCommandError {
+                        self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
+                        switch error {
+                        case .arguments(let error):
+                            completion(.failure(SetBolusError.certain(error)))
+                        case .command(let error):
+                            completion(.failure(SetBolusError.certain(error)))
+                        }
+                        return
+                    } catch let error {
+                        completion(.failure(error))
+                        return
+                    }
                 }
                 
                 let date = Date()
@@ -623,10 +647,10 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 willRequest(dose)
 
                 try session.setNormalBolus(units: units)
-                completion(nil)
+                completion(.success(dose))
             } catch let error {
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
-                completion(error)
+                completion(.failure(error))
             }
         }
     }

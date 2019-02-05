@@ -646,11 +646,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
         }
     }
-    
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (Error?) -> Void) {
+
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         queue.async {
             guard self.hasActivePod else {
-                completion(OmnipodPumpManagerError.noPodPaired)
+                completion(.failure(SetBolusError.certain(OmnipodPumpManagerError.noPodPaired)))
                 return
             }
 
@@ -665,7 +665,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 case .success(let s):
                     session = s
                 case .failure(let error):
-                    completion(SetBolusError.certain(error))
+                    completion(.failure(SetBolusError.certain(error)))
                     return
                 }
                 
@@ -674,7 +674,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 do {
                     podStatus = try session.getStatus()
                 } catch let error {
-                    completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
+                    completion(.failure(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error))))
                     return
                 }
                 
@@ -684,14 +684,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                         podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
                     } catch let error {
-                        completion(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error)))
+                        completion(.failure(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error))))
                         return
                     }
                     self.notifyStatusObservers()
                 }
                 
                 guard !podStatus.deliveryStatus.bolusing else {
-                    completion(SetBolusError.certain(PodCommsError.unfinalizedBolus))
+                    completion(.failure(SetBolusError.certain(PodCommsError.unfinalizedBolus)))
                     return
                 }
                 
@@ -707,11 +707,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 
                 switch result {
                 case .success:
-                    completion(nil)
+                    completion(.success(dose))
                 case .certainFailure(let error):
-                    completion(SetBolusError.certain(error))
+                    completion(.failure(SetBolusError.certain(error)))
                 case .uncertainFailure(let error):
-                    completion(SetBolusError.uncertain(error))
+                    completion(.failure(SetBolusError.uncertain(error)))
                 }
             }
         }

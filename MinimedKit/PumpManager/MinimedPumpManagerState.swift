@@ -18,15 +18,15 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var preferredInsulinDataSource: InsulinDataSource
 
-    public var pumpColor: PumpColor
+    public let pumpColor: PumpColor
 
-    public var pumpModel: PumpModel
+    public let pumpModel: PumpModel
     
-    public var pumpFirmwareVersion: String
+    public let pumpFirmwareVersion: String
 
-    public var pumpID: String
+    public let pumpID: String
 
-    public var pumpRegion: PumpRegion
+    public let pumpRegion: PumpRegion
     
     public var isPumpSuspended: Bool
 
@@ -42,10 +42,6 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
         }
-        set {
-            pumpID = newValue.pumpID
-            pumpRegion = newValue.pumpRegion
-        }
     }
 
     public var pumpState: PumpState {
@@ -58,9 +54,6 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             return state
         }
         set {
-            if let model = newValue.pumpModel {
-                pumpModel = model
-            }
             lastValidFrequency = newValue.lastValidFrequency
             lastTuned = newValue.lastTuned
             timeZone = newValue.timeZone
@@ -219,36 +212,5 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "reservoirValidAt: \(String(describing: lastReservoirReading?.validAt))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
-    }
-}
-
-public struct ReservoirReading: RawRepresentable, Equatable {
-    public typealias RawValue = [String: Any]
-    
-    public let units: Double
-    public let validAt: Date
-    
-    public init(units: Double, validAt: Date) {
-        self.units = units
-        self.validAt = validAt
-    }
-    
-    public init?(rawValue: RawValue) {
-        guard
-            let units = rawValue["units"] as? Double,
-            let validAt = rawValue["validAt"] as? Date
-            else {
-                return nil
-        }
-        
-        self.units = units
-        self.validAt = validAt
-    }
-    
-    public var rawValue: RawValue {
-        return [
-            "units": units,
-            "validAt": validAt
-        ]
     }
 }

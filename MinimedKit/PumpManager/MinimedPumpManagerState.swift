@@ -18,15 +18,15 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var preferredInsulinDataSource: InsulinDataSource
 
-    public var pumpColor: PumpColor
+    public let pumpColor: PumpColor
 
-    public var pumpModel: PumpModel
+    public let pumpModel: PumpModel
     
-    public var pumpFirmwareVersion: String
+    public let pumpFirmwareVersion: String
 
-    public var pumpID: String
+    public let pumpID: String
 
-    public var pumpRegion: PumpRegion
+    public let pumpRegion: PumpRegion
     
     public var isPumpSuspended: Bool
 
@@ -42,10 +42,6 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
         }
-        set {
-            pumpID = newValue.pumpID
-            pumpRegion = newValue.pumpRegion
-        }
     }
 
     public var pumpState: PumpState {
@@ -58,9 +54,6 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             return state
         }
         set {
-            if let model = newValue.pumpModel {
-                pumpModel = model
-            }
             lastValidFrequency = newValue.lastValidFrequency
             lastTuned = newValue.lastTuned
             timeZone = newValue.timeZone

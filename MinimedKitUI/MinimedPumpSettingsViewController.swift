@@ -81,6 +81,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     private enum InfoRow: Int, CaseIterable {
         case pumpID = 0
         case pumpModel
+        case pumpFirmware
+        case pumpRegion
     }
 
     private enum ActionsRow: Int, CaseIterable {
@@ -149,6 +151,16 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
+                return cell
+            case .pumpFirmware:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Firmware Version", comment: "The title of the cell showing the pump firmware version")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpFirmwareVersion)
+                return cell
+            case .pumpRegion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Region", comment: "The title of the cell showing the pump region")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpRegion)
                 return cell
             }
         case .actions:

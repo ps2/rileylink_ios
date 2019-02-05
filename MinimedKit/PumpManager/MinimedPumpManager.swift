@@ -577,9 +577,9 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     // TODO: Isolate to queue
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ error: Error?) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         guard units > 0 else {
-            completion(nil)
+            completion(.failure(SetBolusError.certain(MinimedPumpManagerError.zeroBolus)))
             return
         }
 
@@ -588,7 +588,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
-                completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
             }
 
@@ -601,19 +601,19 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                 } catch let error as PumpOpsError {
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
-                    completion(SetBolusError.certain(error))
+                    completion(.failure(SetBolusError.certain(error)))
                     return
                 } catch let error as PumpCommandError {
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
                     switch error {
                     case .arguments(let error):
-                        completion(SetBolusError.certain(error))
+                        completion(.failure(SetBolusError.certain(error)))
                     case .command(let error):
-                        completion(SetBolusError.certain(error))
+                        completion(.failure(SetBolusError.certain(error)))
                     }
                     return
                 } catch let error {
-                    completion(error)
+                    completion(.failure(error))
                     return
                 }
             }
@@ -624,19 +624,19 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                         try session.setSuspendResumeState(.resume)
                     } catch let error as PumpOpsError {
                         self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
-                        completion(SetBolusError.certain(error))
+                        completion(.failure(SetBolusError.certain(error)))
                         return
                     } catch let error as PumpCommandError {
                         self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
                         switch error {
                         case .arguments(let error):
-                            completion(SetBolusError.certain(error))
+                            completion(.failure(SetBolusError.certain(error)))
                         case .command(let error):
-                            completion(SetBolusError.certain(error))
+                            completion(.failure(SetBolusError.certain(error)))
                         }
                         return
                     } catch let error {
-                        completion(error)
+                        completion(.failure(error))
                         return
                     }
                 }
@@ -647,10 +647,10 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 willRequest(dose)
 
                 try session.setNormalBolus(units: units)
-                completion(nil)
+                completion(.success(dose))
             } catch let error {
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
-                completion(error)
+                completion(.failure(error))
             }
         }
     }

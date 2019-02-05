@@ -70,7 +70,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var rawState: PumpManager.RawStateValue {
         return state.rawValue
     }
-    
+
+    // TODO: Accessed (various queues) and set (main) on different threads
     public weak var stateObserver: MinimedPumpManagerStateObserver?
 
     private(set) public var state: MinimedPumpManagerState {
@@ -81,6 +82,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             let oldValue = lockedState.value
             lockedState.value = newValue
 
+            // TODO: Use newValue for determining notifications rather than re-accessing state
             if oldValue.timeZone != state.timeZone ||
                 oldValue.batteryPercentage != state.batteryPercentage {
                 self.notifyStatusObservers()
@@ -92,6 +94,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
     private let lockedState: Locked<MinimedPumpManagerState>
 
+    // TODO: Accessed and set on different threads
     private var basalDeliveryStateTransitioning: Bool = false {
         didSet {
             notifyStatusObservers()

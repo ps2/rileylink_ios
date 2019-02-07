@@ -77,12 +77,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     @objc func doneTapped(_ sender: Any) {
-        notifyComplete()
+        done()
     }
 
-    private func notifyComplete() {
+    private func done() {
         if let nav = navigationController as? SettingsNavigationViewController {
             nav.notifyComplete()
+        }
+        if let nav = navigationController as? OmnipodPumpManagerSetupViewController {
+            nav.finishedSettingsDisplay()
         }
     }
     
@@ -327,11 +330,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 case .bolus:
                     cell.textLabel?.text = LocalizedString("Bolus Delivery", comment: "The title of the cell showing pod bolus status")
                     cell.setDetailBolus(suspended: podState.suspended, dose: podState.unfinalizedBolus)
-                    if bolusProgressTimer == nil {
-                        bolusProgressTimer = Timer.scheduledTimer(withTimeInterval: .seconds(2), repeats: true) { [weak self] (_) in
-                            self?.tableView.reloadRows(at: [indexPath], with: .none)
-                        }
-                    }
+                    // TODO: This timer is in the wrong context; should be part of a custom bolus progress cell
+//                    if bolusProgressTimer == nil {
+//                        bolusProgressTimer = Timer.scheduledTimer(withTimeInterval: .seconds(2), repeats: true) { [weak self] (_) in
+//                            self?.tableView.reloadRows(at: [indexPath], with: .none)
+//                        }
+//                    }
                 case .basal:
                     cell.textLabel?.text = LocalizedString("Basal Delivery", comment: "The title of the cell showing pod basal status")
                     cell.setDetailBasal(suspended: podState.suspended, dose: podState.unfinalizedTempBasal)
@@ -442,7 +446,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .deletePumpManager:
             let confirmVC = UIAlertController(pumpManagerDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.notifyComplete()
+                self.done()
             })
             
             present(confirmVC, animated: true) {
@@ -531,8 +535,9 @@ extension OmnipodSettingsViewController: PodStateObserver {
             if sectionsChanged {
                 self.devicesDataSource.devicesSectionIndex = self.sections.firstIndex(of: .rileyLinks)!
                 self.tableView.reloadData()
-            } else if let sectionIdx = newSections.firstIndex(of: .status) {
-                self.tableView.reloadSections([sectionIdx], with: .none)
+            } else {
+                let updatedSections = IndexSet([Section.status, Section.actions].compactMap{ newSections.firstIndex(of: $0) })
+                self.tableView.reloadSections(updatedSections, with: .none)
             }
         }
     }
@@ -543,8 +548,8 @@ extension OmnipodSettingsViewController: PumpManagerStatusObserver {
         DispatchQueue.main.async {
             self.pumpManagerStatus = status
             self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            if let sectionIdx = self.sections.firstIndex(of: .status) {
-                self.tableView.reloadSections([sectionIdx], with: .none)
+            if let statusSectionIdx = self.sections.firstIndex(of: .status) {
+                self.tableView.reloadSections([statusSectionIdx], with: .none)
             }
         }
     }

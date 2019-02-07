@@ -20,7 +20,7 @@ class PodSetupCompleteViewController: SetupTableViewController {
     
     override func continueButtonPressed(_ sender: Any) {
         if let setupVC = navigationController as? OmnipodPumpManagerSetupViewController {
-            setupVC.completeSetup()
+            setupVC.finishedSetup()
         }
         if let replaceVC = navigationController as? PodReplacementNavigationController {
             replaceVC.completeSetup()

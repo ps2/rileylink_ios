@@ -23,15 +23,6 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         return UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: OmnipodPumpManagerSetupViewController.self)).instantiateInitialViewController() as! OmnipodPumpManagerSetupViewController
     }
 
-    class func instantiateFromStoryboard(with pumpManager: OmnipodPumpManager) -> OmnipodPumpManagerSetupViewController {
-        let vc = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: OmnipodPumpManagerSetupViewController.self)).instantiateInitialViewController() as! OmnipodPumpManagerSetupViewController
-        vc.pumpManager = pumpManager
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            vc.completeSetup()
-        }
-        return vc
-    }
-
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -87,10 +78,12 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
                 let connectionManagerState = rileyLinkPumpManager?.rileyLinkConnectionManagerState
                 let schedule = BasalSchedule(repeatingScheduleValues: basalSchedule.items)
                 let pumpManagerState = OmnipodPumpManagerState(podState: nil, timeZone: .currentFixed, basalSchedule: schedule, rileyLinkConnectionManagerState: connectionManagerState)
-                vc.pumpManager = OmnipodPumpManager(
+                let pumpManager = OmnipodPumpManager(
                     state: pumpManagerState,
                     rileyLinkDeviceProvider: deviceProvider,
                     rileyLinkConnectionManager: rileyLinkPumpManager?.rileyLinkConnectionManager)
+                vc.pumpManager = pumpManager
+                setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
             }
         case let vc as InsertCannulaSetupViewController:
             vc.pumpManager = pumpManager
@@ -99,16 +92,20 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         }        
     }
 
-    
-    func completeSetup() {
+    override open func finishedSetup() {
         if let pumpManager = pumpManager {
-            setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+            let settings = OmnipodSettingsViewController(pumpManager: pumpManager)
+            setViewControllers([settings], animated: true)
         }
+    }
+
+    public func finishedSettingsDisplay() {
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }
 
 extension OmnipodPumpManagerSetupViewController: SetupTableViewControllerDelegate {
     public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
-        setupDelegate?.pumpManagerSetupViewControllerDidCancel(self)
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }

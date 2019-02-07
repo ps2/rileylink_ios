@@ -150,6 +150,15 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
             }
         }
     }
+
+    override func continueButtonPressed(_ sender: Any) {
+        if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
+            let pumpManager = pumpManager
+        {
+            super.continueButtonPressed(sender)
+            setupViewController.pumpManagerSetupComplete(pumpManager)
+        }
+    }
 }
 
 extension MinimedPumpSettingsSetupViewController: DailyValueScheduleTableViewControllerDelegate {

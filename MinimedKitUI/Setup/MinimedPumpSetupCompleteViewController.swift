@@ -31,7 +31,7 @@ class MinimedPumpSetupCompleteViewController: SetupTableViewController {
 
     override func continueButtonPressed(_ sender: Any) {
         if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController {
-            setupViewController.completeSetup()
+            setupViewController.finishedSetup()
         }
     }
 }

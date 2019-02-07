@@ -52,8 +52,15 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     }
 
     @objc func doneTapped(_ sender: Any) {
+        done()
+    }
+
+    private func done() {
         if let nav = navigationController as? SettingsNavigationViewController {
             nav.notifyComplete()
+        }
+        if let nav = navigationController as? MinimedPumpManagerSetupViewController {
+            nav.finishedSettingsDisplay()
         }
     }
 
@@ -268,9 +275,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .delete:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                if let nav = self.navigationController as? SettingsNavigationViewController {
-                    nav.notifyComplete()
-                }
+                self.done()
             })
 
             present(confirmVC, animated: true) {

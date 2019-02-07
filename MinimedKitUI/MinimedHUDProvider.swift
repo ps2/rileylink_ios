@@ -17,8 +17,6 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         return MinimedPumpManager.managerIdentifier
     }
 
-    var delegate: HUDProviderDelegate?
-
     private var state: MinimedPumpManagerState {
         didSet {
             if oldValue.batteryPercentage != state.batteryPercentage {

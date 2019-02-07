@@ -13,7 +13,7 @@ import MinimedKit
 
 extension MinimedPumpManager: PumpManagerUI {
 
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
+    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 

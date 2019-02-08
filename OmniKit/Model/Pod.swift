@@ -8,25 +8,33 @@
 
 import Foundation
 
-// Units
+public struct Pod {
+    // Volume of insulin in one motor pulse
+    public static let pulseSize: Double = 0.05
 
-let podPulseSize: Double = 0.05
-let pulsesPerUnit: Double = 20
+    // Number of pulses required to delivery one unit of insulin
+    public static let pulsesPerUnit: Double = 20
 
-// Units per second
-let bolusDeliveryRate: Double = 0.025
+    // Units per second
+    public static let bolusDeliveryRate: Double = 0.025
 
- // User configured time before expiration advisory (PDM allows 1-24 hours)
-let expirationAlertWindow = TimeInterval(hours: 2)
+    // User configured time before expiration advisory (PDM allows 1-24 hours)
+    public static let expirationAlertWindow = TimeInterval(hours: 2)
 
-// Expiration advisory window: time after expiration alert, and end of service imminent alarm
-let expirationAdvisoryWindow = TimeInterval(hours: 7)
+    // Expiration advisory window: time after expiration alert, and end of service imminent alarm
+    public static let expirationAdvisoryWindow = TimeInterval(hours: 7)
 
-// End of service imminent window, relative to pod end of service
-let endOfServiceImminentWindow = TimeInterval(hours: 1)
+    // End of service imminent window, relative to pod end of service
+    public static let endOfServiceImminentWindow = TimeInterval(hours: 1)
 
-// Total pod service time. A fault is triggered if this time is reached before pod deactivation.
-let podServiceDuration = TimeInterval(hours: 80)
+    // Total pod service time. A fault is triggered if this time is reached before pod deactivation.
+    public static let serviceDuration = TimeInterval(hours: 80)
+
+    // Maximum reservoir level reading
+    public static let maximumReservoirReading: Double = 50
+
+    public static let reservoirCapacity: Double = 200
+}
 
 public enum SetupState: UInt8 {
     case sleeping = 0

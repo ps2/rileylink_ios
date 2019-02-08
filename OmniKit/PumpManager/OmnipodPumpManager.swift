@@ -82,7 +82,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     public var pumpRecordsBasalProfileStartEvents = false
     
-    public var pumpReservoirCapacity: Double = 200
+    public var pumpReservoirCapacity: Double {
+        return Pod.reservoirCapacity
+    }
     
     private var lastPumpDataReportDate: Date?
     
@@ -141,7 +143,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     public static let managerIdentifier: String = "Omnipod"
     
     public static func roundToDeliveryIncrement(units: Double) -> Double {
-        return round(units * pulsesPerUnit) / pulsesPerUnit
+        return round(units * Pod.pulsesPerUnit) / Pod.pulsesPerUnit
     }
     
     public func roundToDeliveryIncrement(units: Double) -> Double {
@@ -699,7 +701,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 self.bolusStateTransitioning = true
                 
                 let date = Date()
-                let endDate = date.addingTimeInterval(enactUnits / bolusDeliveryRate)
+                let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
                 let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
                 willRequest(dose)
                 

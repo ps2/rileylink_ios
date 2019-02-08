@@ -37,7 +37,7 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
         volumeLabel.isHidden = true
     }
 
-    public var reservoirLevel: Double? {
+    private var reservoirLevel: Double? {
         didSet {
             level = reservoirLevel
 
@@ -107,15 +107,28 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
         return formatter
     }()
 
-    public func updateReservoir(volume: Double, at date: Date, level: Double?, reservoirAlertState: ReservoirAlertState) {
-        self.reservoirLevel = level
-        
-        if let units = numberFormatter.string(from: volume) {
-            volumeLabel.text = String(format: LocalizedString("%@U", comment: "Format string for reservoir volume. (1: The localized volume)"), units)
-            let time = timeFormatter.string(from: date)
-            caption?.text = time
+    private let insulinFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 3
+        return formatter
+    }()
 
-            accessibilityValue = String(format: LocalizedString("%1$@ units remaining at %2$@", comment: "Accessibility format string for (1: localized volume)(2: time)"), units, time)
+
+    public func update(volume: Double?, at date: Date, level: Double?, reservoirAlertState: ReservoirAlertState) {
+        self.reservoirLevel = level
+
+        let time = timeFormatter.string(from: date)
+        caption?.text = time
+
+        if let volume = volume {
+            if let units = numberFormatter.string(from: volume) {
+                volumeLabel.text = String(format: LocalizedString("%@U", comment: "Format string for reservoir volume. (1: The localized volume)"), units)
+
+                accessibilityValue = String(format: LocalizedString("%1$@ units remaining at %2$@", comment: "Accessibility format string for (1: localized volume)(2: time)"), units, time)
+            }
+        } else if let maxReservoirReading = insulinFormatter.string(from: Pod.maximumReservoirReading) {
+            accessibilityValue = String(format: LocalizedString("Greater than %1$@ units remaining at %2$@", comment: "Accessibility format string for (1: localized volume)(2: time)"), maxReservoirReading, time)
         }
         self.reservoirAlertState = reservoirAlertState
     }

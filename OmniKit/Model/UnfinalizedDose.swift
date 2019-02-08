@@ -85,7 +85,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
-        self.duration = TimeInterval(bolusAmount / bolusDeliveryRate)
+        self.duration = TimeInterval(bolusAmount / Pod.bolusDeliveryRate)
         self.scheduledCertainty = scheduledCertainty
         self.scheduledUnits = nil
     }

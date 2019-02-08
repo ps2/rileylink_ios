@@ -70,7 +70,7 @@ public struct BasalDeliveryTable {
         
         let expandedSegments = stride(from: 0, to: numSegments, by: 1).map { (index) -> TempSegment in
             let rate = schedule.rateAt(offset: Double(index) * .minutes(30))
-            let pulsesPerHour = Int(round(rate / podPulseSize))
+            let pulsesPerHour = Int(round(rate / Pod.pulseSize))
             let pulsesPerSegment = pulsesPerHour >> 1
             let halfPulse = pulsesPerHour & 0b1 != 0
             
@@ -132,7 +132,7 @@ public struct BasalDeliveryTable {
     private static func rateToTableEntries(rate: Double, duration: TimeInterval) -> [BasalTableEntry] {
         var tableEntries = [BasalTableEntry]()
         
-        let pulsesPerHour = Int(round(rate / podPulseSize))
+        let pulsesPerHour = Int(round(rate / Pod.pulseSize))
         let pulsesPerSegment = pulsesPerHour >> 1
         let alternateSegmentPulse = pulsesPerHour & 0b1 != 0
         
@@ -171,7 +171,7 @@ public struct RateEntry {
         if totalPulses == 0 {
             return 0
         } else {
-            return round(TimeInterval(hours: 1) / delayBetweenPulses) / pulsesPerUnit
+            return round(TimeInterval(hours: 1) / delayBetweenPulses) / Pod.pulsesPerUnit
         }
     }
     
@@ -200,11 +200,11 @@ public struct RateEntry {
         
         var remainingSegments = Int(round(duration.minutes / 30))
         
-        let pulsesPerSegment = round(rate / podPulseSize) / 2
+        let pulsesPerSegment = round(rate / Pod.pulseSize) / 2
         let maxSegmentsPerEntry = pulsesPerSegment > 0 ? Int(maxPulsesPerEntry / pulsesPerSegment) : 1
         
-        var remainingPulses = rate * duration.hours / podPulseSize
-        let delayBetweenPulses = TimeInterval(hours: 1) / rate * podPulseSize
+        var remainingPulses = rate * duration.hours / Pod.pulseSize
+        let delayBetweenPulses = TimeInterval(hours: 1) / rate * Pod.pulseSize
         
         while (remainingSegments > 0) {
             if rate == 0 {

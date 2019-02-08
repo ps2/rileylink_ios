@@ -273,7 +273,7 @@ public class PodCommsSession {
     
     public func programInitialBasalSchedule(_ basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
         if podState.setupProgress != .settingInitialBasalSchedule {
-            let timeUntilExpirationAlert = (podState.activatedAt + podServiceDuration - endOfServiceImminentWindow - expirationAdvisoryWindow - expirationAlertWindow).timeIntervalSinceNow
+            let timeUntilExpirationAlert = (podState.activatedAt + Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow - Pod.expirationAlertWindow).timeIntervalSinceNow
             let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
             let _ = try configureAlerts([expirationAlert])
         } else {
@@ -321,10 +321,10 @@ public class PodCommsSession {
             }
         } else {
             // Configure Alerts
-            let endOfServiceTime = podState.activatedAt + podServiceDuration
-            let timeUntilExpirationAdvisory = (endOfServiceTime - endOfServiceImminentWindow - expirationAdvisoryWindow).timeIntervalSinceNow
-            let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: expirationAdvisoryWindow)
-            let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - endOfServiceImminentWindow).timeIntervalSinceNow)
+            let endOfServiceTime = podState.activatedAt + Pod.serviceDuration
+            let timeUntilExpirationAdvisory = (endOfServiceTime - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow).timeIntervalSinceNow
+            let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
+            let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
             let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: 0) // Turn Auto-off feature off
             let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
         }

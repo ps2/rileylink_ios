@@ -96,7 +96,7 @@ class PodComms : CustomDebugStringConvertible {
         
         let activationDate = Date()
 
-        let expirationDate = activationDate + podServiceDuration - endOfServiceImminentWindow - expirationAdvisoryWindow
+        let expirationDate = activationDate + Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow
         
         // Pairing state should be addressAssigned
         self.podState = PodState(

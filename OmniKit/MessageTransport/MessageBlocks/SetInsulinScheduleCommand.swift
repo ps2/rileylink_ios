@@ -43,7 +43,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
                 }
                 return data
             case .bolus(let units, let timeBetweenPulses):
-                let pulseCount = UInt16(round(units / podPulseSize))
+                let pulseCount = UInt16(round(units / Pod.pulseSize))
                 let multiplier = UInt16(round(timeBetweenPulses * 8))
                 let fieldA = pulseCount * multiplier
                 let numHalfHourSegments: UInt8 = 1
@@ -156,7 +156,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     
     public init(nonce: UInt32, tempBasalRate: Double, duration: TimeInterval) {
         self.nonce = nonce
-        let pulsesPerHour = Int(round(tempBasalRate / podPulseSize))
+        let pulsesPerHour = Int(round(tempBasalRate / Pod.pulseSize))
         let table = BasalDeliveryTable(tempBasalRate: tempBasalRate, duration: duration)
         self.deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.tempBasal(secondsRemaining: 30*60, firstSegmentPulses: UInt16(pulsesPerHour / 2), table: table)
     }
@@ -172,7 +172,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
         
         let timeRemainingInSegment = BasalDeliveryTable.segmentDuration - segmentOffset
         
-        let timeBetweenPulses: TimeInterval = .hours(1) / (rate / podPulseSize)
+        let timeBetweenPulses: TimeInterval = .hours(1) / (rate / Pod.pulseSize)
         
         let offsetToNextTenth = timeRemainingInSegment.truncatingRemainder(dividingBy: timeBetweenPulses / 10.0)
         

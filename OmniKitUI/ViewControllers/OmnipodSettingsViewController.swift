@@ -713,7 +713,7 @@ private extension UITableViewCell {
             return
         }
         if let units = insulinFormatter.string(from: measurements.delivered) {
-            detailTextLabel?.text = String(format: LocalizedString("%@U", comment: "Format string for delivered insulin. (1: The localized amount)"), units)
+            detailTextLabel?.text = String(format: LocalizedString("%@ U", comment: "Format string for delivered insulin. (1: The localized amount)"), units)
         }
     }
 
@@ -724,7 +724,7 @@ private extension UITableViewCell {
         }
         if measurements.reservoirVolume == nil {
             if let units = insulinFormatter.string(from: Pod.maximumReservoirReading) {
-                detailTextLabel?.text = String(format: LocalizedString("%@U+", comment: "Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount)"), units)
+                detailTextLabel?.text = String(format: LocalizedString("%@+ U", comment: "Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount)"), units)
             }
         } else {
             if let reservoirValue = measurements.reservoirVolume,

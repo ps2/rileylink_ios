@@ -134,10 +134,24 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
+    /// TODO: Isolate to queue
+    private var isPumpDataStale: Bool {
+        let pumpStatusAgeTolerance = TimeInterval(minutes: 6)
+        let pumpDataAge = -(self.lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow
+        return pumpDataAge > pumpStatusAgeTolerance
+    }
+
+
     // MARK: PumpManager
     
     public func updateBLEHeartbeatPreference() {
-        return
+        queue.async {
+            /// Controls the management of the RileyLink timer tick, which is a reliably-changing BLE
+            /// characteristic which can cause the app to wake. For most users, the G5 Transmitter and
+            /// G4 Receiver are reliable as hearbeats, but users who find their resources extremely constrained
+            /// due to greedy apps or older devices may choose to always enable the timer by always setting `true`
+            self.rileyLinkDeviceProvider.timerTickEnabled = self.isPumpDataStale || (self.pumpManagerDelegate?.pumpManagerShouldProvideBLEHeartbeat(self) == true)
+        }
     }
     
     public static let managerIdentifier: String = "Omnipod"
@@ -485,27 +499,34 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
         }
     }
-    
-    // MARK: - Pump Commands
 
     public func assertCurrentPumpData() {
-        let pumpStatusAgeTolerance = TimeInterval(minutes: 4)
-        
+
         queue.async {
             guard self.hasActivePod else {
                 return
             }
-            
-            guard (self.lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow < -pumpStatusAgeTolerance else {
-                return
+
+            let recommendLoop = {
+                self.log.info("Recommending Loop")
+                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
             }
-            
-            self.getPodStatus(podComms: self.podComms) { (response) in
-                if case .success = response {
-                    self.log.info("Recommending Loop")
-                    self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
+
+            if self.isPumpDataStale {
+                self.log.info("Fetching status because pumpData is too old")
+                self.getPodStatus(podComms: self.podComms) { (response) in
+                    if case .success = response {
+                        recommendLoop()
+                    }
                 }
             }
+            
+            guard !self.isPumpDataStale else {
+                self.log.info("Not recommending Loop because pump data is stale")
+                return
+            }
+
+            recommendLoop()
         }
     }
     
@@ -519,6 +540,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             self.getPodStatus(podComms: self.podComms, completion: completion)
         }
     }
+
+    // MARK: - Pump Commands
 
     // PumpManager queue only
     private func getPodStatus(podComms: PodComms, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
@@ -742,28 +765,26 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 }
                 
                 do {
-                    if podState.suspended {
+                    guard !podState.suspended else {
+                        self.log.info("Canceling temp basal because podState indicates pod is suspended.")
                         throw PodCommsError.podSuspended
                     }
                     
-                    var tempBasalRunning = podState.unfinalizedTempBasal?.finished == false
-                    
-                    if podState.unfinalizedBolus != nil {
-                        let status = try session.getStatus()
-                        if status.deliveryStatus.bolusing {
-                            throw PodCommsError.unfinalizedBolus
-                        }
-                        tempBasalRunning = status.deliveryStatus.tempBasalRunning
-                    }
-                    
-                    if tempBasalRunning {
-                        let cancelStatus = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+                    let status = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
 
-                        guard !cancelStatus.deliveryStatus.tempBasalRunning else {
-                            throw PodCommsError.unfinalizedTempBasal
-                        }
+                    guard !status.deliveryStatus.bolusing else {
+                        throw PodCommsError.unfinalizedBolus
                     }
-                    
+
+                    guard status.deliveryStatus != .suspended else {
+                        self.log.info("Canceling temp basal because status return indicates pod is suspended.")
+                        throw PodCommsError.podSuspended
+                    }
+
+                    session.storeFinalizedDoses() { (doses) -> Bool in
+                        return self.store(doses: doses)
+                    }
+
                     if duration < .ulpOfOne {
                         // 0 duration temp basals are used to cancel any existing temp basal
                         let cancelTime = Date()

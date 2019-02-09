@@ -166,10 +166,69 @@ class RTLOmniLineParser {
     }
 }
 
+class XcodeLogParser {
+    private var lastPacket: ArraySlice<String>? = nil
+    private var messageDate: String = ""
+    private var lastMessageData = Data()
+    private var messageData = Data()
+    private var messageSource: PacketType = .pdm
+    private var address: String = ""
+    private var packetNumber: Int = 0
+    private var repeatCount: Int = 0
+
+    func parseLine(_ line: String) {
+        let components = line.components(separatedBy: .whitespaces)
+        if let rlCmd = components.last {
+            let direction = components[5].prefix(4)
+            let timeStamp = "\(components[0]) \(components[1])"
+
+            switch direction {
+            case "Send":
+                let cmdCode = rlCmd.prefix(4).suffix(2)
+                switch(cmdCode) {
+                case "05": // SendAndListen
+                    let packetData = Data(hexadecimalString: String(rlCmd.suffix(rlCmd.count - 28)))!
+                    do {
+                        let packet = try Packet(encodedData: packetData)
+                        print("\(timeStamp) \(direction) \(packet)")
+                    } catch let error {
+                        print("Error parsing \(rlCmd): \(error)")
+                    }
+                default:
+                    print("Unhandled command: \(direction) \(cmdCode) \(rlCmd)")
+                }
+            case "Recv":
+                let status = rlCmd.prefix(2)
+                switch(status) {
+                case "dd":
+                    if rlCmd.count > 6 {
+                        let packetData = Data(hexadecimalString: String(rlCmd.suffix(rlCmd.count - 6)))!
+                        do {
+                            let packet = try Packet(encodedData: packetData)
+                            print("\(timeStamp) \(direction) success \(packet)")
+                        } catch let error {
+                            print("Error parsing \(rlCmd): \(error)")
+                        }
+                    } else {
+                        print("\(timeStamp) \(direction) \(rlCmd)")
+                    }
+                default:
+                    print("Unhandled response type: \(direction) \(rlCmd)")
+                }
+            default:
+                break
+            }
+        }
+    }
+}
+
+
 for filename in CommandLine.arguments[1...] {
     let rtlOmniParser = RTLOmniLineParser()
     let loopIssueReportParser = LoopIssueReportParser()
-    
+    let xcodeLogParser = XcodeLogParser()
+    print("Parsing \(filename)")
+
     do {
         let data = try String(contentsOfFile: filename, encoding: .utf8)
         let lines = data.components(separatedBy: .newlines)
@@ -182,6 +241,10 @@ for filename in CommandLine.arguments[1...] {
             case Regex("(send|receive) [0-9a-fA-F]+"):
                 // 2018-12-27 01:46:56 +0000 send 1f0e41a6101f1a0e81ed50b102010a0101a000340034170d000208000186a00000000000000111
                 loopIssueReportParser.parseLine(line)
+            case Regex("RL (Send|Recv) ?\\(single\\): [0-9a-fA-F]+"):
+//              2019-02-09 08:23:27.605518-0800 Loop[2978:2294033] [PeripheralManager+RileyLink] RL Send (single): 17050005000000000002580000281f0c27a4591f0c27a447
+//              2019-02-09 08:23:28.262888-0800 Loop[2978:2294816] [PeripheralManager+RileyLink] RL Recv(single): dd0c2f1f079e674b1f079e6769
+                xcodeLogParser.parseLine(line)
             default:
                 break
             }

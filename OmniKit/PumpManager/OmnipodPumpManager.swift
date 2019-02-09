@@ -545,6 +545,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     // PumpManager queue only
     private func getPodStatus(podComms: PodComms, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
+
+        guard state.podState?.unfinalizedBolus?.finished != false else {
+            self.log.info("Skipping status request due to unfinalized bolus in progress.")
+            completion?(.failure(PodCommsError.unfinalizedBolus))
+            return
+        }
         
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Get pod status", using: rileyLinkSelector) { (result) in
@@ -768,6 +774,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     guard !podState.suspended else {
                         self.log.info("Canceling temp basal because podState indicates pod is suspended.")
                         throw PodCommsError.podSuspended
+                    }
+
+                    guard podState.unfinalizedBolus?.finished != false else {
+                        self.log.info("Canceling temp basal because podState indicates unfinalized bolus in progress.")
+                        throw PodCommsError.unfinalizedBolus
                     }
                     
                     let status = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)

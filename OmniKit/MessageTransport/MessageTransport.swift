@@ -112,13 +112,20 @@ class MessageTransport {
         
         let packetData = makeAckPacket().encoded()
         
-        var quiet = false
-        while !quiet {
+        var lastHeardAt = Date()
+        let quietWindow = TimeInterval(milliseconds: 300)
+        while lastHeardAt.timeIntervalSinceNow > -quietWindow {
             do {
-                let _ = try session.sendAndListen(packetData, repeatCount: 5, timeout: TimeInterval(milliseconds: 600), retryCount: 0, preambleExtension: TimeInterval(milliseconds: 40))
+                let rfPacket = try session.sendAndListen(packetData, repeatCount: 1, timeout: quietWindow, retryCount: 0, preambleExtension: TimeInterval(milliseconds: 40))
+                let packet = try Packet(rfPacket: rfPacket)
+                if packet.address == address {
+                    lastHeardAt = Date() // Pod still sending
+                }
             } catch RileyLinkDeviceError.responseTimeout {
                 // Haven't heard anything in 300ms.  POD heard our ack.
-                quiet = true
+                break
+            } catch {
+                continue
             }
         }
         incrementPacketNumber()

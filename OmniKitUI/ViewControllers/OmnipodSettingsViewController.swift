@@ -530,14 +530,32 @@ extension OmnipodSettingsViewController: PodStateObserver {
         DispatchQueue.main.async {
             let newSections = OmnipodSettingsViewController.sectionList(state)
             let sectionsChanged = OmnipodSettingsViewController.sectionList(self.podState) != newSections
+
+            let oldActionsCount = self.actions.count
+            let oldState = self.podState
             self.podState = state
-            
+
             if sectionsChanged {
                 self.devicesDataSource.devicesSectionIndex = self.sections.firstIndex(of: .rileyLinks)!
                 self.tableView.reloadData()
             } else {
-                let updatedSections = IndexSet([Section.status, Section.actions].compactMap{ newSections.firstIndex(of: $0) })
-                self.tableView.reloadSections(updatedSections, with: .none)
+                if oldActionsCount != self.actions.count, let idx = newSections.firstIndex(of: .actions) {
+                    self.tableView.reloadSections([idx], with: .fade)
+                }
+            }
+
+            guard let statusIdx = newSections.firstIndex(of: .status) else {
+                return
+            }
+
+            let reloadRows: [StatusRow] = [.bolus, .basal, .reservoirLevel, .deliveredInsulin]
+            self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
+
+            if oldState?.activeAlerts != state?.activeAlerts,
+                let alerts = state?.activeAlerts,
+                let alertCell = self.tableView.cellForRow(at: IndexPath(row: StatusRow.alarms.rawValue, section: statusIdx)) as? AlarmsTableViewCell
+            {
+                alertCell.alerts = alerts
             }
         }
     }

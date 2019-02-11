@@ -579,7 +579,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     // TODO: Isolate to queue
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         guard units > 0 else {
-            completion(.failure(SetBolusError.certain(MinimedPumpManagerError.zeroBolus)))
+            assertionFailure("Invalid zero unit bolus")
             return
         }
 

@@ -169,7 +169,7 @@ class MainViewController: RileyLinkSettingsViewController {
             if let pumpManager = deviceDataManager.pumpManager {
                 var settings = pumpManager.settingsViewController()
                 settings.completionDelegate = self
-                present(settings, sender: sender)
+                present(settings, animated: true)
             } else {
                 var setupViewController: PumpManagerSetupViewController & UIViewController & CompletionNotifying
                 switch PumpActionRow(rawValue: indexPath.row)! {

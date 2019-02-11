@@ -642,7 +642,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 }
                 
                 let date = Date()
-                let endDate = date.addingTimeInterval(.minutes(units / MinimedPumpManager.deliveryUnitsPerMinute))
+                var deliveryTime = TimeInterval(minutes: units / MinimedPumpManager.deliveryUnitsPerMinute)
+                if self.state.pumpModel.constrainsBolusDeliveryTimeTo5Minutes {
+                    deliveryTime = min(TimeInterval(minutes: 5), deliveryTime)
+                }
+                let endDate = date.addingTimeInterval(deliveryTime)
                 let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
                 willRequest(dose)
 

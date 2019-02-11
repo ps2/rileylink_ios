@@ -83,6 +83,10 @@ public enum PumpModel: String {
         }
     }
 
+    public var constrainsBolusDeliveryTimeTo5Minutes: Bool {
+        return generation >= 23
+    }
+
     public var pulsesPerUnit: Int {
         if generation >= 23 {
             return 40

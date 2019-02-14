@@ -46,7 +46,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
             let reservoirView = reservoirView
         {
             let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpManager.pumpReservoirCapacity))
-            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.level = reservoirLevel
             reservoirView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
         }
     }
@@ -101,7 +101,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
             let lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
         {
             let reservoirLevel = min(1, max(0, lastReservoirReading.units / pumpReservoirCapacity))
-            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
+            reservoirVolumeHUDView.level = reservoirLevel
             reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
         }
 

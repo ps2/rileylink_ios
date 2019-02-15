@@ -19,6 +19,10 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
 
     private var state: MinimedPumpManagerState {
         didSet {
+            guard active else {
+                return
+            }
+
             if oldValue.batteryPercentage != state.batteryPercentage {
                 self.updateBatteryView()
             }
@@ -37,6 +41,15 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         pumpManager.stateObserver = self
     }
 
+    var active: Bool = false {
+        didSet {
+            if oldValue != active && active {
+                self.updateBatteryView()
+                self.updateReservoirView()
+            }
+        }
+    }
+
     private weak var reservoirView: ReservoirVolumeHUDView?
 
     private weak var batteryView: BatteryLevelHUDView?
@@ -46,7 +59,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
             let reservoirView = reservoirView
         {
             let reservoirLevel = min(1, max(0, lastReservoirVolume.units / pumpManager.pumpReservoirCapacity))
-            reservoirView.reservoirLevel = reservoirLevel
+            reservoirView.level = reservoirLevel
             reservoirView.setReservoirVolume(volume: lastReservoirVolume.units, at: lastReservoirVolume.validAt)
         }
     }
@@ -60,19 +73,18 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
     public func createHUDViews() -> [BaseHUDView] {
 
         reservoirView = ReservoirVolumeHUDView.instantiate()
-        updateReservoirView()
-
         batteryView = BatteryLevelHUDView.instantiate()
-        updateBatteryView()
+
+        if active {
+            updateReservoirView()
+            updateBatteryView()
+        }
 
         return [reservoirView, batteryView].compactMap { $0 }
     }
 
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
-    }
-
-    func hudDidAppear() {
     }
 
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {
@@ -101,7 +113,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
             let lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
         {
             let reservoirLevel = min(1, max(0, lastReservoirReading.units / pumpReservoirCapacity))
-            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
+            reservoirVolumeHUDView.level = reservoirLevel
             reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
         }
 

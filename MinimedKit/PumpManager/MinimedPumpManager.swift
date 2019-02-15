@@ -111,11 +111,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
-    private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
+    private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
         queue.async {
-            self.statusObservers.add(observer)
+            self.statusObservers.insert(observer)
         }
     }
     
@@ -579,7 +579,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     // TODO: Isolate to queue
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         guard units > 0 else {
-            completion(.failure(SetBolusError.certain(MinimedPumpManagerError.zeroBolus)))
+            assertionFailure("Invalid zero unit bolus")
             return
         }
 
@@ -642,7 +642,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 }
                 
                 let date = Date()
-                let endDate = date.addingTimeInterval(.minutes(units / MinimedPumpManager.deliveryUnitsPerMinute))
+                var deliveryTime = TimeInterval(minutes: units / MinimedPumpManager.deliveryUnitsPerMinute)
+                if self.state.pumpModel.constrainsBolusDeliveryTimeTo5Minutes {
+                    deliveryTime = min(TimeInterval(minutes: 5), deliveryTime)
+                }
+                let endDate = date.addingTimeInterval(deliveryTime)
                 let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
                 willRequest(dose)
 

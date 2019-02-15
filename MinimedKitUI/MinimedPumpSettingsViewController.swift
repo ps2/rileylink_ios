@@ -332,6 +332,10 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
     }
 
     private func suspendResumeCellTapped(_ cell: SuspendResumeTableViewCell) {
+        guard cell.isEnabled else {
+            return
+        }
+        
         switch cell.shownAction {
         case .resume:
             pumpManager.resumeDelivery { (error) in

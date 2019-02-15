@@ -18,6 +18,11 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private var podState: PodState? {
         didSet {
+
+            guard active else {
+                return
+            }
+
             if oldValue?.lastInsulinMeasurements != podState?.lastInsulinMeasurements {
                 updateReservoirView()
             }
@@ -42,6 +47,15 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     private var reservoirView: OmnipodReservoirView?
     
     private var podLifeView: PodLifeHUDView?
+
+    var active: Bool = false {
+        didSet {
+            if oldValue != active && active {
+                updatePodLifeView()
+                updateFaultDisplay()
+            }
+        }
+    }
     
     public init(pumpManager: OmnipodPumpManager) {
         self.pumpManager = pumpManager
@@ -98,8 +112,11 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         self.updateReservoirView()
 
         podLifeView = PodLifeHUDView.instantiate()
-        updatePodLifeView()
-        updateFaultDisplay()
+
+        if active {
+            updatePodLifeView()
+            updateFaultDisplay()
+        }
 
         return [reservoirView, podLifeView].compactMap { $0 }
     }

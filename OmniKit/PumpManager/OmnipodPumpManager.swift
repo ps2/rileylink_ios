@@ -89,11 +89,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     private var lastPumpDataReportDate: Date?
     
     // MARK: - PumpManagerStatusObserver
-    private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
+    private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
         queue.async {
-            self.statusObservers.add(observer)
+            self.statusObservers.insert(observer)
         }
     }
     
@@ -113,11 +113,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
     
     // MARK: - PodStateObserver
-    private var podStateObservers = WeakObserverSet<PodStateObserver>()
+    private var podStateObservers = WeakSet<PodStateObserver>()
     
     public func addPodStateObserver(_ observer: PodStateObserver) {
         queue.async {
-            self.podStateObservers.add(observer)
+            self.podStateObservers.insert(observer)
         }
     }
     

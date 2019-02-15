@@ -19,6 +19,10 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
 
     private var state: MinimedPumpManagerState {
         didSet {
+            guard active else {
+                return
+            }
+
             if oldValue.batteryPercentage != state.batteryPercentage {
                 self.updateBatteryView()
             }
@@ -35,6 +39,15 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         self.pumpManager = pumpManager
         self.state = pumpManager.state
         pumpManager.stateObserver = self
+    }
+
+    var active: Bool = false {
+        didSet {
+            if oldValue != active && active {
+                self.updateBatteryView()
+                self.updateReservoirView()
+            }
+        }
     }
 
     private weak var reservoirView: ReservoirVolumeHUDView?
@@ -60,19 +73,18 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
     public func createHUDViews() -> [BaseHUDView] {
 
         reservoirView = ReservoirVolumeHUDView.instantiate()
-        updateReservoirView()
-
         batteryView = BatteryLevelHUDView.instantiate()
-        updateBatteryView()
+
+        if active {
+            updateReservoirView()
+            updateBatteryView()
+        }
 
         return [reservoirView, batteryView].compactMap { $0 }
     }
 
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
-    }
-
-    func hudDidAppear() {
     }
 
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {

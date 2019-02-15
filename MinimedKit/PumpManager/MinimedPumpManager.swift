@@ -111,11 +111,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     
-    private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
+    private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
         queue.async {
-            self.statusObservers.add(observer)
+            self.statusObservers.insert(observer)
         }
     }
     

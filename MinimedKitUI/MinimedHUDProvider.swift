@@ -19,7 +19,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
 
     private var state: MinimedPumpManagerState {
         didSet {
-            guard active else {
+            guard visible else {
                 return
             }
 
@@ -41,9 +41,9 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         pumpManager.stateObserver = self
     }
 
-    var active: Bool = false {
+    var visible: Bool = false {
         didSet {
-            if oldValue != active && active {
+            if oldValue != visible && visible {
                 self.updateBatteryView()
                 self.updateReservoirView()
             }
@@ -75,7 +75,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
         reservoirView = ReservoirVolumeHUDView.instantiate()
         batteryView = BatteryLevelHUDView.instantiate()
 
-        if active {
+        if visible {
             updateReservoirView()
             updateBatteryView()
         }

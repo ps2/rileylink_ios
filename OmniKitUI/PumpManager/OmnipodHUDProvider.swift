@@ -19,7 +19,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     private var podState: PodState? {
         didSet {
 
-            guard active else {
+            guard visible else {
                 return
             }
 
@@ -48,9 +48,9 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private var podLifeView: PodLifeHUDView?
 
-    var active: Bool = false {
+    var visible: Bool = false {
         didSet {
-            if oldValue != active && active {
+            if oldValue != visible && visible {
                 updatePodLifeView()
                 updateFaultDisplay()
             }
@@ -113,7 +113,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
 
         podLifeView = PodLifeHUDView.instantiate()
 
-        if active {
+        if visible {
             updatePodLifeView()
             updateFaultDisplay()
         }

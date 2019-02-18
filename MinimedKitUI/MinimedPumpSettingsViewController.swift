@@ -362,10 +362,8 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
     public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
-            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
-            {
-                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            }
+            let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as! SuspendResumeTableViewCell
+            suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
         }
     }
 }

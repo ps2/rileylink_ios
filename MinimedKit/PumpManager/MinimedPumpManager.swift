@@ -82,14 +82,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             let oldValue = lockedState.value
             lockedState.value = newValue
 
-            // TODO: Use newValue for determining notifications rather than re-accessing state
-            if oldValue.timeZone != state.timeZone ||
-                oldValue.batteryPercentage != state.batteryPercentage {
+            if oldValue.timeZone != newValue.timeZone ||
+                oldValue.batteryPercentage != newValue.batteryPercentage {
                 self.notifyStatusObservers()
             }
 
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
-            stateObserver?.didUpdatePumpManagerState(lockedState.value)
+            stateObserver?.didUpdatePumpManagerState(newValue)
         }
     }
     private let lockedState: Locked<MinimedPumpManagerState>

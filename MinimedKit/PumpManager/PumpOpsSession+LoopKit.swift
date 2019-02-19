@@ -18,7 +18,6 @@ extension PumpOpsSession {
 }
 
 
-
 extension BasalSchedule {
     public init(repeatingScheduleValues: [LoopKit.RepeatingScheduleValue<Double>]) {
         self.init(entries: repeatingScheduleValues.enumerated().map({ (index, value) -> BasalScheduleEntry in

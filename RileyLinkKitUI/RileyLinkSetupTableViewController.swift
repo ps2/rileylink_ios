@@ -140,11 +140,16 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
     // MARK: - Navigation
 
     private var shouldContinue: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        
         guard let connectionManager = rileyLinkPumpManager.rileyLinkConnectionManager else {
             return false
         }
         
         return connectionManager.connectingCount > 0
+        #endif
     }
 
     @objc private func deviceConnectionStateDidChange() {

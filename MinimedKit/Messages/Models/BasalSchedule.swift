@@ -29,7 +29,6 @@ public struct BasalSchedule {
     }
 }
 
-
 extension BasalSchedule {
     static let rawValueLength = 192
     public typealias RawValue = Data

@@ -14,6 +14,7 @@ open class RileyLinkPumpManager {
         
         self.rileyLinkDeviceProvider = rileyLinkDeviceProvider
         self.rileyLinkConnectionManager = rileyLinkConnectionManager
+        self.rileyLinkConnectionManagerState = rileyLinkConnectionManager?.state
         
         // Listen for device notifications
         NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: .DevicePacketReceived, object: nil)

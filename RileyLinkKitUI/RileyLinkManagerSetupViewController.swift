@@ -11,7 +11,7 @@ import LoopKitUI
 import RileyLinkKit
 
 
-open class RileyLinkManagerSetupViewController: UINavigationController, PumpManagerSetupViewController, UINavigationControllerDelegate {
+open class RileyLinkManagerSetupViewController: UINavigationController, PumpManagerSetupViewController, UINavigationControllerDelegate, CompletionNotifying {
 
     open var maxBasalRateUnitsPerHour: Double?
 
@@ -20,6 +20,8 @@ open class RileyLinkManagerSetupViewController: UINavigationController, PumpMana
     open var basalSchedule: BasalRateSchedule?
 
     open weak var setupDelegate: PumpManagerSetupViewControllerDelegate?
+
+    open weak var completionDelegate: CompletionDelegate?
 
     open var rileyLinkPumpManager: RileyLinkPumpManager?
 
@@ -36,5 +38,9 @@ open class RileyLinkManagerSetupViewController: UINavigationController, PumpMana
         if count >= 2, let setupViewController = viewControllers[count - 2] as? RileyLinkSetupTableViewController {
             rileyLinkPumpManager = setupViewController.rileyLinkPumpManager
         }
+    }
+
+    open func finishedSetup() {
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }

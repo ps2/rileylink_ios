@@ -234,9 +234,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                if let suspendResumeCell = sender as? SuspendResumeTableViewCell {
-                    suspendResumeCellTapped(suspendResumeCell)
-                }
+                suspendResumeCellTapped(sender as! SuspendResumeTableViewCell)
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         case .settings:
@@ -362,16 +360,11 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
     public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
-            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
-            {
-                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            }
+            let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as! SuspendResumeTableViewCell
+            suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
         }
     }
 }
-
-
-
 
 private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {

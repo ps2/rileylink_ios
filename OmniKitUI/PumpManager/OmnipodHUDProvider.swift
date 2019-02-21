@@ -52,6 +52,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         didSet {
             if oldValue != visible && visible {
                 updatePodLifeView()
+                updateReservoirView()
                 updateFaultDisplay()
             }
         }

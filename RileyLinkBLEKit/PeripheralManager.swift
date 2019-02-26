@@ -34,7 +34,7 @@ class PeripheralManager: NSObject {
     }
     
     /// The dispatch queue used to serialize operations on the peripheral
-    let queue = DispatchQueue(label: "com.loopkit.PeripheralManager.queue", qos: .utility)
+    let queue: DispatchQueue
 
     /// The condition used to signal command completion
     private let commandLock = NSCondition()
@@ -61,10 +61,11 @@ class PeripheralManager: NSObject {
     }
 
     // Called from RileyLinkDeviceManager.managerQueue
-    init(peripheral: CBPeripheral, configuration: Configuration, centralManager: CBCentralManager) {
+    init(peripheral: CBPeripheral, configuration: Configuration, centralManager: CBCentralManager, queue: DispatchQueue) {
         self.peripheral = peripheral
         self.central = centralManager
         self.configuration = configuration
+        self.queue = queue
 
         super.init()
 

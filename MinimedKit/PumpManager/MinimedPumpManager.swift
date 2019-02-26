@@ -109,7 +109,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             state.rileyLinkConnectionManagerState = newValue
         }
     }
-    
+
+    // Isolated to queue
     private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
@@ -127,6 +128,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private func notifyStatusObservers() {
         let status = self.status
         pumpManagerDelegate?.pumpManager(self, didUpdate: status)
+        // TODO: Not thread-safe
         for observer in statusObservers {
             observer.pumpManager(self, didUpdate: status)
         }

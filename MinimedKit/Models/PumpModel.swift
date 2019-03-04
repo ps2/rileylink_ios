@@ -99,6 +99,29 @@ public enum PumpModel: String {
     var usesTwoBytesForMaxBolus: Bool {
         return generation >= 23
     }
+
+    public var supportedBasalRates: [Double] {
+        if generation >= 23 {
+            // 0.025 units (for rates between 0.0-0.975 U/h)
+            let rateGroup1 = ((0...38).map { Double($0) / Double(pulsesPerUnit) })
+            // 0.05 units (for rates between 1-9.95 U/h)
+            let rateGroup2 = ((20...199).map { Double($0) / Double(pulsesPerUnit/2) })
+            // 0.1 units (for rates between 10-35 U/h)
+            let rateGroup3 = ((100...350).map { Double($0) / Double(pulsesPerUnit/4) })
+            return rateGroup1 + rateGroup2 + rateGroup3
+        } else {
+            // 0.05 units for rates between 0.0-35U/hr
+            return (0...700).map { Double($0) / Double(pulsesPerUnit) }
+        }
+    }
+
+    public var maximumBasalScheduleEntryCount: Int {
+        return 48
+    }
+
+    public var minimumBasalScheduleEntryDuration: TimeInterval {
+        return .minutes(30)
+    }
 }
 
 

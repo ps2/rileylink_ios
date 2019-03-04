@@ -122,13 +122,16 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRates:
-                let vc = SingleValueScheduleTableViewController(style: .grouped)
+                guard let pumpManager = pumpManager else {
+                    return
+                }
+                let vc = BasalScheduleTableViewController(allowedBasalRates: pumpManager.supportedBasalRates, maximumScheduleItemCount: pumpManager.maximumBasalScheduleEntryCount, minimumTimeInterval: pumpManager.minimumBasalScheduleEntryDuration)
 
                 if let profile = pumpManagerSetupViewController?.basalSchedule {
                     vc.scheduleItems = profile.items
                     vc.timeZone = profile.timeZone
-                } else if let timeZone = pumpManager?.pumpTimeZone {
-                    vc.timeZone = timeZone
+                } else {
+                    vc.timeZone = pumpManager.pumpTimeZone
                 }
 
                 vc.title = sender?.textLabel?.text

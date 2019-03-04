@@ -22,8 +22,8 @@ class PodSettingsSetupViewController: SetupTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        footerView.primaryButton.isEnabled = pumpManagerSetupViewController?.basalSchedule != nil && (pumpManagerSetupViewController?.basalSchedule?.items.count)! > 0
+
+        updateContinueButton()
         
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
     }
@@ -35,25 +35,51 @@ class PodSettingsSetupViewController: SetupTableViewController {
         
         return quantityFormatter
     }()
-    
+
+    func updateContinueButton() {
+        let enabled: Bool
+        if pumpManagerSetupViewController?.maxBolusUnits == nil || pumpManagerSetupViewController?.maxBasalRateUnitsPerHour == nil {
+            enabled = false
+        }
+        else if let basalSchedule = pumpManagerSetupViewController?.basalSchedule {
+            enabled = !basalSchedule.items.isEmpty && !scheduleHasError
+        } else {
+            enabled = false
+        }
+        footerView.primaryButton.isEnabled = enabled
+    }
+
+    var scheduleHasError: Bool {
+        return scheduleErrorMessage != nil
+    }
+
+    var scheduleErrorMessage: String? {
+        if let basalRateSchedule = pumpManagerSetupViewController?.basalSchedule {
+            if basalRateSchedule.items.count > Pod.maximumBasalScheduleEntryCount {
+                return LocalizedString("Too many entries", comment: "The error message shown when Loop's basal schedule has more entries than the pod can support")
+            }
+            let allowedRates = Pod.supportedBasalRates
+            if basalRateSchedule.items.contains(where: {!allowedRates.contains($0.value)}) {
+                return LocalizedString("Invalid entry", comment: "The error message shown when Loop's basal schedule has an unsupported rate")
+            }
+        }
+        return nil
+    }
+
     // MARK: - Table view data source
     
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case description
         case configuration
-        
-        static let count = 2
     }
     
-    private enum ConfigurationRow: Int {
-        case basalRates
+    private enum ConfigurationRow: Int, CaseIterable {
         case deliveryLimits
-        
-        static let count = 2
+        case basalRates
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,10 +102,14 @@ class PodSettingsSetupViewController: SetupTableViewController {
             case .basalRates:
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
                 
-                if let basalRateSchedule = pumpManagerSetupViewController?.basalSchedule {
-                    let unit = HKUnit.internationalUnit()
-                    let total = HKQuantity(unit: unit, doubleValue: basalRateSchedule.total())
-                    cell.detailTextLabel?.text = quantityFormatter.string(from: total, for: unit)
+                if let basalRateSchedule = pumpManagerSetupViewController?.basalSchedule, !basalRateSchedule.items.isEmpty {
+                    if let errorMessage = scheduleErrorMessage {
+                        cell.detailTextLabel?.text = errorMessage
+                    } else {
+                        let unit = HKUnit.internationalUnit()
+                        let total = HKQuantity(unit: unit, doubleValue: basalRateSchedule.total())
+                        cell.detailTextLabel?.text = quantityFormatter.string(from: total, for: unit)
+                    }
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString
                 }
@@ -117,7 +147,7 @@ class PodSettingsSetupViewController: SetupTableViewController {
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRates:
-                let vc = SingleValueScheduleTableViewController(style: .grouped)
+                let vc = BasalScheduleTableViewController(allowedBasalRates: Pod.supportedBasalRates, maximumScheduleItemCount: Pod.maximumBasalScheduleEntryCount, minimumTimeInterval: Pod.minimumBasalScheduleEntryDuration)
                 
                 if let profile = pumpManagerSetupViewController?.basalSchedule {
                     vc.scheduleItems = profile.items
@@ -148,11 +178,11 @@ class PodSettingsSetupViewController: SetupTableViewController {
 
 extension PodSettingsSetupViewController: DailyValueScheduleTableViewControllerDelegate {
     func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController) {
-        if let controller = controller as? SingleValueScheduleTableViewController {
+        if let controller = controller as? BasalScheduleTableViewController {
             
-            footerView.primaryButton.isEnabled = controller.scheduleItems.count > 0
-
             pumpManagerSetupViewController?.basalSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
+
+            footerView.primaryButton.isEnabled = controller.scheduleItems.count > 0 && !scheduleHasError
         }
         
         tableView.reloadRows(at: [[Section.configuration.rawValue, ConfigurationRow.basalRates.rawValue]], with: .none)

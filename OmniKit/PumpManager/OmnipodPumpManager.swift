@@ -79,6 +79,18 @@ extension OmnipodPumpManagerError: LocalizedError {
 
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
+    public var supportedBasalRates: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
+
+    public var maximumBasalScheduleEntryCount: Int {
+        return Pod.maximumBasalScheduleEntryCount
+    }
+
+    public var minimumBasalScheduleEntryDuration: TimeInterval {
+        return Pod.minimumBasalScheduleEntryDuration
+    }
 
     public var pumpRecordsBasalProfileStartEvents = false
     

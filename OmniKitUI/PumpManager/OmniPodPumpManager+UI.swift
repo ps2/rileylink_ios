@@ -63,9 +63,10 @@ extension OmnipodPumpManager {
     }
 }
 
-// MARK: - SingleValueScheduleTableViewControllerSyncSource
+// MARK: - BasalScheduleTableViewControllerSyncSource
 extension OmnipodPumpManager {
-    public func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
+
+    public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
         let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
         setBasalSchedule(newSchedule) { (error) in
             if let error = error {
@@ -75,20 +76,20 @@ extension OmnipodPumpManager {
             }
         }
     }
-    
-    public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
+
+    public func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
         if self.hasActivePod {
             return LocalizedString("Sync With Pod", comment: "Title of button to sync basal profile from pod")
         } else {
             return LocalizedString("Save", comment: "Title of button to sync basal profile when no pod paired")
         }
     }
-    
-    public func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {
+
+    public func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
         return nil
     }
-    
-    public func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
+
+    public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
     }
 }

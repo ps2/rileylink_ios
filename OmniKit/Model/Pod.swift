@@ -34,6 +34,12 @@ public struct Pod {
     public static let maximumReservoirReading: Double = 50
 
     public static let reservoirCapacity: Double = 200
+
+    public static let supportedBasalRates: [Double] = (1...600).map { Double($0) / Double(pulsesPerUnit) }
+
+    public static let maximumBasalScheduleEntryCount: Int = 24
+
+    public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
 }
 
 public enum SetupState: UInt8 {
@@ -60,8 +66,7 @@ public enum DeliveryStatus: UInt8, CustomStringConvertible {
     public var tempBasalRunning: Bool {
         return self == .tempBasalRunning || self == .bolusAndTempBasal
     }
-    
-    
+
     public var description: String {
         switch self {
         case .suspended:

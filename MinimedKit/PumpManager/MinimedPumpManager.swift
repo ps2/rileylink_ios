@@ -16,6 +16,18 @@ public protocol MinimedPumpManagerStateObserver: class {
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
+
+    public var supportedBasalRates: [Double] {
+        return state.pumpModel.supportedBasalRates
+    }
+
+    public var maximumBasalScheduleEntryCount: Int {
+        return state.pumpModel.maximumBasalScheduleEntryCount
+    }
+
+    public var minimumBasalScheduleEntryDuration: TimeInterval {
+        return state.pumpModel.minimumBasalScheduleEntryDuration
+    }
     
     public static let managerIdentifier: String = "Minimed500"
     

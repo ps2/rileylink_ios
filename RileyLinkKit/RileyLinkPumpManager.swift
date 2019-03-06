@@ -23,14 +23,15 @@ open class RileyLinkPumpManager {
     
     /// Manages all the RileyLinks - access to management is optional
     public let rileyLinkConnectionManager: RileyLinkConnectionManager?
-    
+
+    // TODO: Not thread-safe
     open var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
     
     /// Access to rileylink devices
     public let rileyLinkDeviceProvider: RileyLinkDeviceProvider
     
     // TODO: Evaluate if this is necessary
-    public let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .utility)
+    public let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .unspecified)
 
     /// Isolated to queue
     // TODO: Put this on each RileyLinkDevice?

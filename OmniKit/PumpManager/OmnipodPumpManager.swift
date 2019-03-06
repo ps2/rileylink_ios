@@ -519,26 +519,23 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
 
-            let recommendLoop = {
-                self.log.info("Recommending Loop")
-                self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
-            }
-
-            if self.isPumpDataStale {
+            guard !self.isPumpDataStale else {
                 self.log.info("Fetching status because pumpData is too old")
-                self.getPodStatus(podComms: self.podComms) { (response) in
-                    if case .success = response {
-                        recommendLoop()
+                self.getPodStatus(podComms: self.podComms) { [weak self] (response) in
+                    if let self = self {
+                        if case .success = response {
+                            self.log.info("Recommending Loop")
+                            self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
+                        } else {
+                            self.log.info("Not recommending Loop because pump data is stale")
+                        }
                     }
                 }
-            }
-            
-            guard !self.isPumpDataStale else {
-                self.log.info("Not recommending Loop because pump data is stale")
                 return
             }
 
-            recommendLoop()
+            self.log.info("Recommending Loop")
+            self.pumpManagerDelegate?.pumpManagerRecommendsLoop(self)
         }
     }
     
@@ -811,12 +808,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     if duration < .ulpOfOne {
                         // 0 duration temp basals are used to cancel any existing temp basal
                         let cancelTime = Date()
-                        let dose = DoseEntry(type: .basal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
+                        let dose = DoseEntry(type: .tempBasal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
                         completion(.success(dose))
                     } else {
                         let result = session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: 0)
                         let basalStart = Date()
-                        let dose = DoseEntry(type: .basal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
+                        let dose = DoseEntry(type: .tempBasal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                         switch result {
                         case .success:
                             completion(.success(dose))

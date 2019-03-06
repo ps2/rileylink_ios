@@ -103,7 +103,7 @@ public enum PumpModel: String {
     public var supportedBasalRates: [Double] {
         if generation >= 23 {
             // 0.025 units (for rates between 0.0-0.975 U/h)
-            let rateGroup1 = ((0...38).map { Double($0) / Double(pulsesPerUnit) })
+            let rateGroup1 = ((0...39).map { Double($0) / Double(pulsesPerUnit) })
             // 0.05 units (for rates between 1-9.95 U/h)
             let rateGroup2 = ((20...199).map { Double($0) / Double(pulsesPerUnit/2) })
             // 0.1 units (for rates between 10-35 U/h)

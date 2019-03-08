@@ -112,7 +112,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
-    
     override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
             return state.rileyLinkConnectionManagerState
@@ -261,7 +260,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
-            
+
             let sessionName: String = {
                 switch state {
                 case .suspend:
@@ -354,7 +353,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         if lastTuned.timeIntervalSinceNow <= -tuneTolerance {
             pumpOps.runSession(withName: "Tune pump", using: device) { (session) in
                 do {
-                    let scanResult = try session.tuneRadio()
+                    let scanResult = try session.tuneRadio(attempts: 1)
                     self.log.default("Device %{public}@ auto-tuned to %{public}@ MHz", device.name ?? "", String(describing: scanResult.bestFrequency))
                 } catch let error {
                     self.log.error("Device %{public}@ auto-tune failed with error: %{public}@", device.name ?? "", String(describing: error))

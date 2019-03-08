@@ -12,7 +12,7 @@ fileprivate let crcTable: [UInt8] = [0x0, 0x9B, 0xAD, 0x36, 0xC1, 0x5A, 0x6C, 0x
 
 public extension Sequence where Element == UInt8 {
     
-    public func crc8() -> UInt8 {
+    func crc8() -> UInt8 {
         
         var crc: UInt8 = 0
         for byte in self {

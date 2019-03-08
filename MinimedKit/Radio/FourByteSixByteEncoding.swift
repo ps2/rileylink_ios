@@ -14,7 +14,7 @@ fileprivate let codesRev = Dictionary<Int, UInt8>(uniqueKeysWithValues: codes.en
 
 public extension Sequence where Element == UInt8 {
 
-    public func decode4b6b() -> [UInt8]? {
+    func decode4b6b() -> [UInt8]? {
         var buffer = [UInt8]()
         var availBits = 0
         var bitAccumulator = 0
@@ -40,7 +40,7 @@ public extension Sequence where Element == UInt8 {
         return buffer
     }
     
-    public func encode4b6b() -> [UInt8] {
+    func encode4b6b() -> [UInt8] {
         var buffer = [UInt8]()
         var bitAccumulator = 0x0
         var bitcount = 0

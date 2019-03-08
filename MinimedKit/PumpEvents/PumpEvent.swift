@@ -23,7 +23,7 @@ public protocol PumpEvent : DictionaryRepresentable {
 }
 
 public extension PumpEvent {
-    public func isDelayedAppend(with pumpModel: PumpModel) -> Bool {
+    func isDelayedAppend(with pumpModel: PumpModel) -> Bool {
         // Delays only occur for bolus events
         guard let bolus = self as? BolusNormalPumpEvent else {
             return false

@@ -834,11 +834,11 @@ extension PumpOpsSession {
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
-    public func tuneRadio() throws -> FrequencyScanResults {
+    public func tuneRadio(attempts: Int = 3) throws -> FrequencyScanResults {
         let region = self.settings.pumpRegion
 
         do {
-            let results = try scanForPump(in: region.scanFrequencies, fallback: pump.lastValidFrequency)
+            let results = try scanForPump(in: region.scanFrequencies, fallback: pump.lastValidFrequency, tries: attempts)
             
             pump.lastValidFrequency = results.bestFrequency
             pump.lastTuned = Date()
@@ -908,7 +908,7 @@ extension PumpOpsSession {
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.rfCommsFailure
     ///     - LocalizedError
-    private func scanForPump(in frequencies: [Measurement<UnitFrequency>], fallback: Measurement<UnitFrequency>?) throws -> FrequencyScanResults {
+    private func scanForPump(in frequencies: [Measurement<UnitFrequency>], fallback: Measurement<UnitFrequency>?, tries: Int = 3) throws -> FrequencyScanResults {
         
         var trials = [FrequencyTrial]()
         
@@ -923,7 +923,6 @@ extension PumpOpsSession {
         }
         
         for freq in frequencies {
-            let tries = 3
             var trial = FrequencyTrial(frequency: freq)
 
             try session.setBaseFrequency(freq)

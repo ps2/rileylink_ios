@@ -22,18 +22,7 @@ public class RileyLinkDevice {
     private var radioFirmwareVersion: RadioFirmwareVersion?
 
     // Confined to `lock`
-    private var idleListeningState: IdleListeningState = .disabled {
-        didSet {
-            switch (oldValue, idleListeningState) {
-            case (.disabled, .enabled):
-                assertIdleListening(forceRestart: true)
-            case (.enabled, .enabled):
-                assertIdleListening(forceRestart: false)
-            default:
-                break
-            }
-        }
-    }
+    private var idleListeningState: IdleListeningState = .disabled
 
     // Confined to `lock`
     private var lastIdle: Date?
@@ -115,8 +104,8 @@ extension RileyLinkDevice: Equatable, Hashable {
         return lhs === rhs
     }
 
-    public var hashValue: Int {
-        return peripheralIdentifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(peripheralIdentifier)
     }
 }
 
@@ -178,8 +167,18 @@ extension RileyLinkDevice {
 
     func setIdleListeningState(_ state: IdleListeningState) {
         os_unfair_lock_lock(&lock)
-        self.idleListeningState = state
+        let oldValue = idleListeningState
+        idleListeningState = state
         os_unfair_lock_unlock(&lock)
+
+        switch (oldValue, state) {
+        case (.disabled, .enabled):
+            assertIdleListening(forceRestart: true)
+        case (.enabled, .enabled):
+            assertIdleListening(forceRestart: false)
+        default:
+            break
+        }
     }
 
     public func assertIdleListening(forceRestart: Bool = false) {

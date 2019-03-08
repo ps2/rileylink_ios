@@ -184,10 +184,11 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         self.sensorRemainingHours = Int(sensorRemainingHours)
         
         let matchingHour: UInt8 = rxData[20]
-        nextSensorCalibrationDateComponents = DateComponents()
-        nextSensorCalibrationDateComponents?.hour = Int(matchingHour)
-        nextSensorCalibrationDateComponents?.minute = Int(rxData[21])
-        nextSensorCalibrationDateComponents?.calendar = calendar
+        var nextSensorCalibrationDateComponents = DateComponents()
+        nextSensorCalibrationDateComponents.hour = Int(matchingHour)
+        nextSensorCalibrationDateComponents.minute = Int(rxData[21])
+        nextSensorCalibrationDateComponents.calendar = calendar
+        self.nextSensorCalibrationDateComponents = nextSensorCalibrationDateComponents
     }
     
     public var dictionaryRepresentation: [String: Any] {

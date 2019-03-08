@@ -166,8 +166,6 @@ class MainViewController: RileyLinkSettingsViewController {
     
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let sender = tableView.cellForRow(at: indexPath)
-        
         switch Section(rawValue: indexPath.section)! {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]

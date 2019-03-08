@@ -16,9 +16,28 @@ public protocol MinimedPumpManagerStateObserver: class {
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
+    public func roundToSupportedTemporaryBasalRate(unitsPerHour: Double) -> Double {
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
+    }
+
+    public func roundToSupportedBolusVolume(units: Double) -> Double {
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
+    }
 
     public var supportedBasalRates: [Double] {
         return state.pumpModel.supportedBasalRates
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        return state.pumpModel.supportedBolusVolumes
+    }
+
+    public var maximumBolusVolume: Double {
+        return state.pumpModel.maximumBolusVolume
+    }
+
+    public var maximumBasalRate: Double {
+        return state.pumpModel.maximumBasalRate
     }
 
     public var maximumBasalScheduleEntryCount: Int {
@@ -28,7 +47,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var minimumBasalScheduleEntryDuration: TimeInterval {
         return state.pumpModel.minimumBasalScheduleEntryDuration
     }
-    
+
     public static let managerIdentifier: String = "Minimed500"
     
     public func roundToDeliveryIncrement(units: Double) -> Double {
@@ -112,7 +131,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
-    
     override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
             return state.rileyLinkConnectionManagerState
@@ -121,7 +139,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             state.rileyLinkConnectionManagerState = newValue
         }
     }
-    
+
+    // Isolated to queue
     private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
@@ -139,6 +158,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     private func notifyStatusObservers() {
         let status = self.status
         pumpManagerDelegate?.pumpManager(self, didUpdate: status)
+        // TODO: Not thread-safe
         for observer in statusObservers {
             observer.pumpManager(self, didUpdate: status)
         }
@@ -259,7 +279,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
-            
+
             let sessionName: String = {
                 switch state {
                 case .suspend:
@@ -352,7 +372,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         if lastTuned.timeIntervalSinceNow <= -tuneTolerance {
             pumpOps.runSession(withName: "Tune pump", using: device) { (session) in
                 do {
-                    let scanResult = try session.tuneRadio()
+                    let scanResult = try session.tuneRadio(attempts: 1)
                     self.log.default("Device %{public}@ auto-tuned to %{public}@ MHz", device.name ?? "", String(describing: scanResult.bestFrequency))
                 } catch let error {
                     self.log.error("Device %{public}@ auto-tune failed with error: %{public}@", device.name ?? "", String(describing: error))

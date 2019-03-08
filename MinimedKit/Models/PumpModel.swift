@@ -103,7 +103,7 @@ public enum PumpModel: String {
     public var supportedBasalRates: [Double] {
         if generation >= 23 {
             // 0.025 units (for rates between 0.0-0.975 U/h)
-            let rateGroup1 = ((0...38).map { Double($0) / Double(pulsesPerUnit) })
+            let rateGroup1 = ((0...39).map { Double($0) / Double(pulsesPerUnit) })
             // 0.05 units (for rates between 1-9.95 U/h)
             let rateGroup2 = ((20...199).map { Double($0) / Double(pulsesPerUnit/2) })
             // 0.1 units (for rates between 10-35 U/h)
@@ -113,6 +113,18 @@ public enum PumpModel: String {
             // 0.05 units for rates between 0.0-35U/hr
             return (0...700).map { Double($0) / Double(pulsesPerUnit) }
         }
+    }
+
+    public var maximumBolusVolume: Double {
+        return 25
+    }
+
+    public var maximumBasalRate: Double {
+        return 35
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        return supportedBasalRates.filter { $0 < maximumBolusVolume }
     }
 
     public var maximumBasalScheduleEntryCount: Int {

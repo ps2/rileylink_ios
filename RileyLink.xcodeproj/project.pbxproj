@@ -172,7 +172,6 @@
 		43D5E7951FAF7BFB004ACDB7 /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
 		43D5E7961FAF7BFB004ACDB7 /* RileyLinkKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43D5E79A1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */; };
-		43D5E79B1FAF7C47004ACDB7 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */; };
 		43D5E79C1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */; };
 		43D5E79F1FAF7C98004ACDB7 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431185AE1CF25A590059ED98 /* IdentifiableClass.swift */; };
 		43D5E7A01FAF7CCA004ACDB7 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
@@ -1300,7 +1299,6 @@
 		C16E61212208C7A80069F357 /* ReservoirReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservoirReading.swift; sourceTree = "<group>"; };
 		C16E61252208EC580069F357 /* MinimedHUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedHUDProvider.swift; sourceTree = "<group>"; };
 		C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBPeripheralState.swift; sourceTree = "<group>"; };
-		C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
 		C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceTableViewController.swift; sourceTree = "<group>"; };
 		C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonPressCarelinkMessageBody.swift; sourceTree = "<group>"; };
 		C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPumpModelCarelinkMessageBody.swift; sourceTree = "<group>"; };
@@ -1864,7 +1862,6 @@
 				7D23679521252EBC0028B67D /* Localizable.strings */,
 				43709AEB20E0056F00F941B3 /* RileyLinkKitUI.xcassets */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
-				C170C9961CECD80000F3D8E5 /* CommandResponseViewController.swift */,
 				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
 				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
 				435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */,
@@ -3459,7 +3456,6 @@
 				43D5E79A1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewCell.swift in Sources */,
 				43D5E79F1FAF7C98004ACDB7 /* IdentifiableClass.swift in Sources */,
 				435D26B420DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift in Sources */,
-				43D5E79B1FAF7C47004ACDB7 /* CommandResponseViewController.swift in Sources */,
 				43709ABF20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift in Sources */,
 				43709ABD20DF1C6400F941B3 /* RileyLinkSetupTableViewController.swift in Sources */,
 				43D5E79C1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewController.swift in Sources */,
@@ -4560,6 +4556,7 @@
 		4352A72F20DEC9B700CAC200 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -4601,6 +4598,7 @@
 		4352A73020DEC9B700CAC200 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -4831,7 +4829,7 @@
 		43D5E7981FAF7BFB004ACDB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -4871,7 +4869,7 @@
 		43D5E7991FAF7BFB004ACDB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

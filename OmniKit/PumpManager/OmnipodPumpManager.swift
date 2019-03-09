@@ -79,6 +79,19 @@ extension OmnipodPumpManagerError: LocalizedError {
 
 
 public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
+    public func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
+    }
+
+    public func roundToSupportedBolusVolume(units: Double) -> Double {
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
+
     public var supportedBasalRates: [Double] {
         // 0.05 units for rates between 0.05-30U/hr
         return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }

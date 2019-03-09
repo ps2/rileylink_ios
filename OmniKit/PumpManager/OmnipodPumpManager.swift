@@ -581,7 +581,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 case .success(let session):
                     let status = try session.getStatus()
                     
-                    session.storeFinalizedDoses() { (doses) -> Bool in
+                    session.dosesForStorage() { (doses) -> Bool in
                         return self.store(doses: doses)
                     }
 
@@ -629,7 +629,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                     completion(nil)
                     
-                    session.storeFinalizedDoses() { (doses) -> Bool in
+                    session.dosesForStorage() { (doses) -> Bool in
                         return self.store(doses: doses)
                     }
 
@@ -814,15 +814,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         throw PodCommsError.podSuspended
                     }
 
-                    session.storeFinalizedDoses() { (doses) -> Bool in
-                        return self.store(doses: doses)
-                    }
-
                     if duration < .ulpOfOne {
                         // 0 duration temp basals are used to cancel any existing temp basal
                         let cancelTime = Date()
                         let dose = DoseEntry(type: .tempBasal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
                         completion(.success(dose))
+                        session.dosesForStorage() { (doses) -> Bool in
+                            return self.store(doses: doses)
+                        }
                     } else {
                         let result = session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: 0)
                         let basalStart = Date()
@@ -835,6 +834,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                             completion(.success(dose))
                         case .certainFailure(let error):
                             completion(.failure(error))
+                        }
+                        session.dosesForStorage() { (doses) -> Bool in
+                            return self.store(doses: doses)
                         }
                     }
                 } catch let error {

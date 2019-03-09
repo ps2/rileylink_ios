@@ -493,10 +493,13 @@ public class PodCommsSession {
         return podState.activeAlerts
     }
 
-    
-    func storeFinalizedDoses(_ storageHandler: ([UnfinalizedDose]) -> Bool) {
-        if storageHandler(podState.finalizedDoses) {
-            log.info("Finalized %@", String(describing: podState.finalizedDoses))
+    func dosesForStorage(_ storageHandler: ([UnfinalizedDose]) -> Bool) {
+        var dosesToStore = podState.finalizedDoses
+        if let unfinalizedTempBasal = podState.unfinalizedTempBasal {
+            dosesToStore.append(unfinalizedTempBasal)
+        }
+        if storageHandler(dosesToStore) {
+            log.info("Stored %@", String(describing: dosesToStore))
             self.podState.finalizedDoses.removeAll()
         }
     }

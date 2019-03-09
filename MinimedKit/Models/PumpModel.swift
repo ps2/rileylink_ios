@@ -115,6 +115,18 @@ public enum PumpModel: String {
         }
     }
 
+    public var maximumBolusVolume: Double {
+        return 25
+    }
+
+    public var maximumBasalRate: Double {
+        return 35
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        return supportedBasalRates.filter { $0 <= maximumBolusVolume }
+    }
+
     public var maximumBasalScheduleEntryCount: Int {
         return 48
     }

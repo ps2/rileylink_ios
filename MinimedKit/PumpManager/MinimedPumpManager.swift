@@ -16,9 +16,20 @@ public protocol MinimedPumpManagerStateObserver: class {
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
+    public func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
+    }
+
+    public func roundToSupportedBolusVolume(units: Double) -> Double {
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
+    }
 
     public var supportedBasalRates: [Double] {
         return state.pumpModel.supportedBasalRates
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        return state.pumpModel.supportedBolusVolumes
     }
 
     public var maximumBasalScheduleEntryCount: Int {
@@ -28,7 +39,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public var minimumBasalScheduleEntryDuration: TimeInterval {
         return state.pumpModel.minimumBasalScheduleEntryDuration
     }
-    
+
     public static let managerIdentifier: String = "Minimed500"
     
     public func roundToDeliveryIncrement(units: Double) -> Double {

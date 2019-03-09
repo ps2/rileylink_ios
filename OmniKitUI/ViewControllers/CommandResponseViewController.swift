@@ -20,7 +20,18 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.setTime() { (error) in
                 let response: String
-                if let error = error {
+                if let error = error as? LocalizedError {
+                    let sentenceFormat = LocalizedString("%@.", comment: "Appends a full-stop to a statement")
+                    let messageWithRecovery = [error.failureReason, error.recoverySuggestion].compactMap({ $0 }).map({
+                        String(format: sentenceFormat, $0)
+                    }).joined(separator: "\n")
+
+                    if messageWithRecovery.isEmpty {
+                        response = String(describing: error)
+                    } else {
+                        response = messageWithRecovery
+                    }
+                } else if let error = error {
                     response = String(describing: error)
                 } else {
                     response = self.successText

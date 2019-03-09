@@ -293,7 +293,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         guard let podState = state.podState else {
             return .none
         }
-        if let bolus = podState.unfinalizedBolus, bolus.finishTime.timeIntervalSinceNow < 0 {
+        
+        if let bolus = podState.unfinalizedBolus, !bolus.finished {
             // TODO: return progress
             return bolusStateTransitioning ? .canceling : .inProgress(Float(bolus.progress))
         } else {
@@ -857,6 +858,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
 
+            guard self.state.podState?.unfinalizedBolus?.finished != false else {
+                completion(PodCommsError.unfinalizedBolus)
+                return
+            }
+
             let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
             self.podComms.runSession(withName: "Set time zone", using: rileyLinkSelector) { (result) in
                 switch result {
@@ -880,6 +886,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             guard self.hasActivePod else {
                 self.state.basalSchedule = schedule
                 completion(nil)
+                return
+            }
+
+            guard self.state.podState?.unfinalizedBolus?.finished != false else {
+                completion(PodCommsError.unfinalizedBolus)
                 return
             }
 

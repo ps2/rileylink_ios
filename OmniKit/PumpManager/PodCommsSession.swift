@@ -288,8 +288,7 @@ public class PodCommsSession {
         
         podState.setupProgress = .settingInitialBasalSchedule
         // Set basal schedule
-        let status2 = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
-        podState.updateFromStatusResponse(status2)
+        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         podState.setupProgress = .initialBasalScheduleSet
     }
 
@@ -453,15 +452,13 @@ public class PodCommsSession {
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
         
         let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
+        podState.updateFromStatusResponse(status)
         return status
     }
     
     public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
         
         let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
-        
-        podState.updateFromStatusResponse(status)
-        
         return status
     }
     

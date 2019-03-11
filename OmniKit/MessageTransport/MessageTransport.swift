@@ -108,7 +108,7 @@ class MessageTransport {
         return Packet(address: address, packetType: .ack, sequenceNum: packetNumber, data: Data(bigEndian: ackAddress))
     }
     
-    func ackUntilQuiet() throws {
+    func ackUntilQuiet() {
         
         let packetData = makeAckPacket().encoded()
         
@@ -131,7 +131,19 @@ class MessageTransport {
         incrementPacketNumber()
     }
     
-    
+
+    /// Encodes and sends a packet to the pod, and receives and decodes its response
+    ///
+    /// - Parameters:
+    ///   - message: The packet to send
+    ///   - repeatCount: Number of times to repeat packet before listening for a response. 0 = send once and do not repeat.
+    ///   - packetResponseTimeout: The amount of time to wait before retrying
+    ///   - exchangeTimeout: The amount of time to continue retrying before giving up
+    ///   - preambleExtension: Duration of preamble. Default is 127ms
+    /// - Returns: The received response packet
+    /// - Throws:
+    ///     - PodCommsError.noResponse
+    ///     - RileyLinkDeviceError
     func exchangePackets(packet: Packet, repeatCount: Int = 0, packetResponseTimeout: TimeInterval = .milliseconds(333), exchangeTimeout:TimeInterval = .seconds(9), preambleExtension: TimeInterval = .milliseconds(127)) throws -> Packet {
         let packetData = packet.encoded()
         let radioRetryCount = 9
@@ -175,7 +187,16 @@ class MessageTransport {
         
         throw PodCommsError.noResponse
     }
-    
+
+    /// Packetizes a message, and performs a set of packet exchanges to send a message and receive the response
+    ///
+    /// - Parameters:
+    ///   - message: The message to send
+    /// - Returns: The received message response
+    /// - Throws:
+    ///     - PodCommsError.noResponse
+    ///     - MessageError.invalidCrc
+    ///     - RileyLinkDeviceError
     func sendMessage(_ message: Message) throws -> Message {
         
         messageNumber = message.sequenceNum
@@ -228,7 +249,7 @@ class MessageTransport {
                 }
                 }()
             
-            try ackUntilQuiet()
+            ackUntilQuiet()
             
             guard response.messageBlocks.count > 0 else {
                 log.debug("Empty response")

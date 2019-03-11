@@ -163,6 +163,17 @@ public class PodCommsSession {
         transport.delegate = self
     }
 
+    /// Performs a message exchange, handling nonce resync, pod faults
+    ///
+    /// - Parameters:
+    ///   - messageBlocks: The message blocks to send
+    ///   - expectFollowOnMessage: If true, the pod will expect another message within 4 minutes, or will alarm with an 0x33 (51) fault.
+    /// - Returns: The received message response
+    /// - Throws:
+    ///     - PodCommsError.nonceResyncFailed
+    ///     - PodCommsError.noResponse
+    ///     - MessageError.invalidCrc
+    ///     - RileyLinkDeviceError
     func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], expectFollowOnMessage: Bool = false) throws -> T {
         
         var triesRemaining = 2  // Retries only happen for nonce resync
@@ -378,6 +389,8 @@ public class PodCommsSession {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
+        } catch PodCommsError.nonceResyncFailed {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
         } catch let error {
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -398,6 +411,8 @@ public class PodCommsSession {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain)
             podState.updateFromStatusResponse(status)
             return DeliveryCommandResult.success(statusResponse: status)
+        } catch PodCommsError.nonceResyncFailed {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
         } catch let error {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))

@@ -51,9 +51,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     var visible: Bool = false {
         didSet {
             if oldValue != visible && visible {
-                updatePodLifeView()
-                updateReservoirView()
-                updateFaultDisplay()
+                hudDidAppear()
             }
         }
     }
@@ -131,6 +129,9 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     func hudDidAppear() {
+        updatePodLifeView()
+        updateReservoirView()
+        updateFaultDisplay()
         pumpManager.refreshStatus()
     }
     

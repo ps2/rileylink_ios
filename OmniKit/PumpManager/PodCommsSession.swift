@@ -492,8 +492,8 @@ public class PodCommsSession {
         
         let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
-        podState.unfinalizedSuspend?.cancel(at: Date())
-
+        podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain)
+        podState.updateFromStatusResponse(status)
         return status
     }
     

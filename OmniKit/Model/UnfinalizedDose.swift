@@ -16,6 +16,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         case bolus = 0
         case tempBasal
         case suspend
+        case resume
     }
     
     enum ScheduledCertainty: Int {
@@ -113,6 +114,13 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledCertainty = scheduledCertainty
     }
 
+    init(resumeStartTime: Date, scheduledCertainty: ScheduledCertainty) {
+        self.doseType = .resume
+        self.units = 0
+        self.startTime = resumeStartTime
+        self.scheduledCertainty = scheduledCertainty
+    }
+
     public mutating func cancel(at date: Date, withRemaining remaining: Double? = nil) {
         scheduledUnits = units
         let oldRate = rate
@@ -125,22 +133,24 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     }
 
     public var description: String {
-        let unitsStr = insulinFormatter.string(from: units) ?? "?"
+        let unitsStr = insulinFormatter.string(from: units) ?? ""
         let startTimeStr = shortDateFormatter.string(from: startTime)
-        let durationStr = duration?.format(using: [.minute, .second])
+        let durationStr = duration?.format(using: [.minute, .second]) ?? ""
         switch doseType {
         case .bolus:
             if let scheduledUnits = scheduledUnits {
                 let scheduledUnitsStr = insulinFormatter.string(from: scheduledUnits) ?? "?"
-                return String(format: LocalizedString("InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
             } else {
-                return String(format: LocalizedString("Bolus: %1$@U %2$@ %3$@ %4$@", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("Bolus: %1$@U %2$@ %3$@ %4$@", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
             }
         case .tempBasal:
             let rateStr = NumberFormatter.localizedString(from: NSNumber(value: rate), number: .decimal)
-            return String(format: LocalizedString("TempBasal: %1$@ U/hour %2$@ %3$@ %4$@", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
+            return String(format: LocalizedString("TempBasal: %1$@ U/hour %2$@ %3$@ %4$@", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
         case .suspend:
-            return String(format: LocalizedString("Suspend: %1$@ %2$@ %3$@", comment: "The format string describing a suspend. (1: Start time)(2: duration)(3: scheduled certainty"), startTimeStr, durationStr ?? "ongoing", scheduledCertainty.localizedDescription)
+            return String(format: LocalizedString("Suspend: %1$@ %2$@", comment: "The format string describing a suspend. (1: Time)(2: Scheduled certainty"), startTimeStr, scheduledCertainty.localizedDescription)
+        case .resume:
+            return String(format: LocalizedString("Resume: %1$@ %2$@", comment: "The format string describing a resume. (1: Time)(2: Scheduled certainty"), startTimeStr, scheduledCertainty.localizedDescription)
         }
     }
     
@@ -213,7 +223,9 @@ extension NewPumpEvent {
         case .tempBasal:
             entry = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.rate, unit: .unitsPerHour)
         case .suspend:
-            entry = DoseEntry(type: .suspend, startDate: dose.startTime, endDate: dose.finishTime, value: 0, unit: .units)
+            entry = DoseEntry(suspendDate: dose.startTime)
+        case .resume:
+            entry = DoseEntry(resumeDate: dose.startTime)
         }
         self.init(date: dose.startTime, dose: entry, isMutable: false, raw: dose.uniqueKey, title: title)
     }

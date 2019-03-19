@@ -15,6 +15,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     enum DoseType: Int {
         case bolus = 0
         case tempBasal
+        case suspend
     }
     
     enum ScheduledCertainty: Int {
@@ -48,26 +49,29 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     private let dateFormatter = ISO8601DateFormatter()
     
     fileprivate var uniqueKey: Data {
-        return "\(doseType) \(scheduledUnits ?? units) \(dateFormatter.string(from: startTime)) \(duration)".data(using: .utf8)!
+        return "\(doseType) \(scheduledUnits ?? units) \(dateFormatter.string(from: startTime))".data(using: .utf8)!
     }
     
     let doseType: DoseType
     public var units: Double
     var scheduledUnits: Double?
     let startTime: Date
-    var duration: TimeInterval
+    var duration: TimeInterval?
     var scheduledCertainty: ScheduledCertainty
     
-    var finishTime: Date {
+    var finishTime: Date? {
         get {
-            return startTime.addingTimeInterval(duration)
+            return duration != nil ? startTime.addingTimeInterval(duration!) : nil
         }
         set {
-            duration = newValue.timeIntervalSince(startTime)
+            duration = newValue?.timeIntervalSince(startTime)
         }
     }
     
     public var progress: Double {
+        guard let duration = duration else {
+            return 0
+        }
         let elapsed = -startTime.timeIntervalSinceNow
         return min(elapsed / duration, 1)
     }
@@ -78,6 +82,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     
     // Units per hour
     public var rate: Double {
+        guard let duration = duration else {
+            return 0
+        }
         return units / duration.hours
     }
     
@@ -98,14 +105,21 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledCertainty = scheduledCertainty
         self.scheduledUnits = nil
     }
-    
+
+    init(suspendStartTime: Date, scheduledCertainty: ScheduledCertainty) {
+        self.doseType = .suspend
+        self.units = 0
+        self.startTime = suspendStartTime
+        self.scheduledCertainty = scheduledCertainty
+    }
+
     public mutating func cancel(at date: Date, withRemaining remaining: Double? = nil) {
         scheduledUnits = units
         let oldRate = rate
         duration = date.timeIntervalSince(startTime)
         if let remaining = remaining {
             units = units - remaining
-        } else {
+        } else if let duration = duration {
             units = oldRate * duration.hours 
         }
     }
@@ -113,18 +127,20 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var description: String {
         let unitsStr = insulinFormatter.string(from: units) ?? "?"
         let startTimeStr = shortDateFormatter.string(from: startTime)
-        let durationStr = duration.format(using: [.minute, .second]) ?? "?"
+        let durationStr = duration?.format(using: [.minute, .second])
         switch doseType {
         case .bolus:
             if let scheduledUnits = scheduledUnits {
                 let scheduledUnitsStr = insulinFormatter.string(from: scheduledUnits) ?? "?"
-                return String(format: LocalizedString("InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@", comment: "The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty)"), unitsStr, scheduledUnitsStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
             } else {
-                return String(format: LocalizedString("Bolus: %1$@U %2$@ %3$@ %4$@", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+                return String(format: LocalizedString("Bolus: %1$@U %2$@ %3$@ %4$@", comment: "The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty)"), unitsStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
             }
         case .tempBasal:
             let rateStr = NumberFormatter.localizedString(from: NSNumber(value: rate), number: .decimal)
-            return String(format: LocalizedString("TempBasal: %1$@ U/hour %2$@ for %3$@ %4$@", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr, scheduledCertainty.localizedDescription)
+            return String(format: LocalizedString("TempBasal: %1$@ U/hour %2$@ %3$@ %4$@", comment: "The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: scheduled certainty"), rateStr, startTimeStr, durationStr ?? "", scheduledCertainty.localizedDescription)
+        case .suspend:
+            return String(format: LocalizedString("Suspend: %1$@ %2$@ %3$@", comment: "The format string describing a suspend. (1: Start time)(2: duration)(3: scheduled certainty"), startTimeStr, durationStr ?? "ongoing", scheduledCertainty.localizedDescription)
         }
     }
     
@@ -135,7 +151,6 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             let doseType = DoseType(rawValue: rawDoseType),
             let units = rawValue["units"] as? Double,
             let startTime = rawValue["startTime"] as? Date,
-            let duration = rawValue["duration"] as? Double,
             let rawScheduledCertainty = rawValue["scheduledCertainty"] as? Int,
             let scheduledCertainty = ScheduledCertainty(rawValue: rawScheduledCertainty)
             else {
@@ -145,11 +160,14 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.doseType = doseType
         self.units = units
         self.startTime = startTime
-        self.duration = TimeInterval(duration)
         self.scheduledCertainty = scheduledCertainty
         
         if let scheduledUnits = rawValue["scheduledUnits"] as? Double {
             self.scheduledUnits = scheduledUnits
+        }
+
+        if let duration = rawValue["duration"] as? Double {
+            self.duration = duration
         }
     }
     
@@ -158,12 +176,15 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "doseType": doseType.rawValue,
             "units": units,
             "startTime": startTime,
-            "duration": duration,
             "scheduledCertainty": scheduledCertainty.rawValue
             ]
         
         if let scheduledUnits = scheduledUnits {
            rawValue["scheduledUnits"] = scheduledUnits
+        }
+
+        if let duration = duration {
+            rawValue["duration"] = duration
         }
         
         return rawValue
@@ -191,6 +212,8 @@ extension NewPumpEvent {
             entry = DoseEntry(type: .bolus, startDate: dose.startTime, value: dose.units, unit: .units)
         case .tempBasal:
             entry = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.rate, unit: .unitsPerHour)
+        case .suspend:
+            entry = DoseEntry(type: .suspend, startDate: dose.startTime, endDate: dose.finishTime, value: 0, unit: .units)
         }
         self.init(date: dose.startTime, dose: entry, isMutable: false, raw: dose.uniqueKey, title: title)
     }

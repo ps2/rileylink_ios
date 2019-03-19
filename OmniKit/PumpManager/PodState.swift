@@ -48,6 +48,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var lastInsulinMeasurements: PodInsulinMeasurements?
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
+    public var unfinalizedSuspend: UnfinalizedDose?
     var finalizedDoses: [UnfinalizedDose]
     public private(set) var suspended: Bool
     public var fault: PodInfoFaultEvent?
@@ -66,10 +67,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return active
     }
     
-    public var deliveryScheduleUncertain: Bool {
-        return unfinalizedBolus?.scheduledCertainty == .uncertain || unfinalizedTempBasal?.scheduledCertainty == .uncertain
-    }
-    
     public init(address: UInt32, activatedAt: Date, expiresAt: Date, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
@@ -80,8 +77,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.lot = lot
         self.tid = tid
         self.lastInsulinMeasurements = nil
-        self.unfinalizedBolus = nil
-        self.unfinalizedTempBasal = nil
         self.finalizedDoses = []
         self.suspended = false
         self.fault = nil
@@ -134,8 +129,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
         let now = Date()
         
-        if let bolus = unfinalizedBolus {
-            if bolus.finishTime <= now {
+        if let bolus = unfinalizedBolus, let finishTime = bolus.finishTime {
+            if finishTime <= now {
                 finalizedDoses.append(bolus)
                 unfinalizedBolus = nil
             } else if bolus.scheduledCertainty == .uncertain {
@@ -149,8 +144,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             }
         }
 
-        if let tempBasal = unfinalizedTempBasal {
-            if tempBasal.finishTime <= now {
+        if let tempBasal = unfinalizedTempBasal, let finishTime = tempBasal.finishTime {
+            if finishTime <= now {
                 finalizedDoses.append(tempBasal)
                 unfinalizedTempBasal = nil
             } else if tempBasal.scheduledCertainty == .uncertain {
@@ -163,7 +158,17 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 }
             }
         }
-        
+
+        if let suspend = unfinalizedSuspend, suspend.scheduledCertainty == .uncertain {
+            if deliveryStatus == .suspended {
+                // Suspend was enacted
+                unfinalizedSuspend?.scheduledCertainty = .certain
+            } else {
+                // Suspend wasn't enacted
+                unfinalizedSuspend = nil
+            }
+        }
+
         suspended = deliveryStatus == .suspended
     }
 
@@ -213,6 +218,14 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.unfinalizedTempBasal = unfinalizedTempBasal
         } else {
             self.unfinalizedTempBasal = nil
+        }
+
+        if let rawUnfinalizedSuspend = rawValue["unfinalizedSuspend"] as? UnfinalizedDose.RawValue,
+            let unfinalizedSuspend = UnfinalizedDose(rawValue: rawUnfinalizedSuspend)
+        {
+            self.unfinalizedSuspend = unfinalizedSuspend
+        } else {
+            self.unfinalizedSuspend = nil
         }
         
         if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue {
@@ -301,7 +314,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let unfinalizedTempBasal = self.unfinalizedTempBasal {
             rawValue["unfinalizedTempBasal"] = unfinalizedTempBasal.rawValue
         }
-        
+
+        if let unfinalizedSuspend = self.unfinalizedSuspend {
+            rawValue["unfinalizedSuspend"] = unfinalizedSuspend.rawValue
+        }
+
         if let lastInsulinMeasurements = self.lastInsulinMeasurements {
             rawValue["lastInsulinMeasurements"] = lastInsulinMeasurements.rawValue
         }
@@ -338,6 +355,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* suspended: \(suspended)",
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
+            "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
             "* activeAlerts: \(String(describing: activeAlerts))",
             "* messageTransportState: \(String(describing: messageTransportState))",

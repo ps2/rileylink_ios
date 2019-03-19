@@ -626,16 +626,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 defer { self.basalDeliveryStateTransitioning = false }
                 self.basalDeliveryStateTransitioning = true
 
-                do {
-                    let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                switch result {
+                case .certainFailure(let error):
+                    completion(error)
+                case .uncertainFailure(let error):
+                    completion(error)
+                case .success:
                     completion(nil)
-                    
                     session.dosesForStorage() { (doses) -> Bool in
                         return self.store(doses: doses)
                     }
-
-                } catch (let error) {
-                    completion(error)
                 }
             }
         }
@@ -803,8 +804,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         self.log.info("Canceling temp basal because podState indicates unfinalized bolus in progress.")
                         throw PodCommsError.unfinalizedBolus
                     }
-                    
-                    let status = try session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+
+                    let status: StatusResponse
+                    let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+                    switch result {
+                    case .certainFailure(let error):
+                        throw error
+                    case .uncertainFailure(let error):
+                        throw error
+                    case .success(let cancelTempStatus):
+                        status = cancelTempStatus
+                    }
 
                     guard !status.deliveryStatus.bolusing else {
                         throw PodCommsError.unfinalizedBolus
@@ -901,7 +911,15 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     switch result {
                     case .success(let session):
                         let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
-                        let _ = try session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                        let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+                        switch result {
+                        case .certainFailure(let error):
+                            throw error
+                        case .uncertainFailure(let error):
+                            throw error
+                        case .success:
+                            break
+                        }
                         let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
                         self.state.basalSchedule = schedule
                         completion(nil)

@@ -388,6 +388,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",
+            "* unfinalizedResume: \(String(describing: unfinalizedResume))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
             "* activeAlerts: \(String(describing: activeAlerts))",
             "* messageTransportState: \(String(describing: messageTransportState))",

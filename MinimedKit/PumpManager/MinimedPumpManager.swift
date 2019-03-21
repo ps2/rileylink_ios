@@ -42,11 +42,10 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public static let managerIdentifier: String = "Minimed500"
-    
-    public func progressEstimatorForDose(_ dose: DoseEntry) -> DoseProgressEstimator? {
-        return MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel)
-    }
-    
+
+
+    public var bolusProgressEstimator: DoseProgressEstimator?
+
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
         self.bolusState = .none
@@ -218,6 +217,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
     private var bolusState: PumpManagerStatus.BolusState {
         didSet {
+            if case .inProgress(let dose) = bolusState, oldValue != bolusState {
+                let estimator = MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel)
+                estimator.addObserver(self)
+                self.bolusProgressEstimator = estimator
+            }
             notifyStatusObservers()
         }
     }
@@ -794,13 +798,20 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
 }
 
-
 extension MinimedPumpManager: PumpOpsDelegate {
     public func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
         self.state.pumpState = state
     }
 }
 
+extension MinimedPumpManager: DoseProgressObserver {
+    public func doseProgressEstimatorHasNewEstimate(_ doseProgressEstimator: DoseProgressEstimator) {
+        if doseProgressEstimator === self.bolusProgressEstimator, doseProgressEstimator.progress.isComplete {
+            self.bolusState = .none
+            self.bolusProgressEstimator = nil
+        }
+    }
+}
 
 extension MinimedPumpManager: CGMManager {
     public var shouldSyncToRemoteService: Bool {

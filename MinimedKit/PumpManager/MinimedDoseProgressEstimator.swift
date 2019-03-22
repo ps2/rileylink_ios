@@ -96,10 +96,10 @@ class MinimedDoseProgressEstimator: DoseProgressEstimator {
 
     private func notify() {
         os_unfair_lock_lock(&lock)
-        defer {
-            os_unfair_lock_unlock(&lock)
-        }
-        for observer in self.observers {
+        let observersCopy = observers
+        os_unfair_lock_unlock(&lock)
+
+        for observer in observersCopy {
             observer.doseProgressEstimatorHasNewEstimate(self)
         }
     }

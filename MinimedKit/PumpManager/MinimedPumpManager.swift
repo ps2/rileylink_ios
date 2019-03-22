@@ -807,8 +807,10 @@ extension MinimedPumpManager: PumpOpsDelegate {
 extension MinimedPumpManager: DoseProgressObserver {
     public func doseProgressEstimatorHasNewEstimate(_ doseProgressEstimator: DoseProgressEstimator) {
         if doseProgressEstimator === self.bolusProgressEstimator, doseProgressEstimator.progress.isComplete {
-            self.bolusState = .none
-            self.bolusProgressEstimator = nil
+            queue.async {
+                self.bolusState = .none
+                self.bolusProgressEstimator = nil
+            }
         }
     }
 }

@@ -44,7 +44,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public static let managerIdentifier: String = "Minimed500"
 
 
-    public var bolusProgressEstimator: DoseProgressEstimator?
+    public var bolusProgressReporter: DoseProgressReporter?
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
@@ -220,7 +220,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             if case .inProgress(let dose) = bolusState, oldValue != bolusState {
                 let estimator = MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel)
                 estimator.addObserver(self)
-                self.bolusProgressEstimator = estimator
+                self.bolusProgressReporter = estimator
             }
             notifyStatusObservers()
         }
@@ -805,11 +805,11 @@ extension MinimedPumpManager: PumpOpsDelegate {
 }
 
 extension MinimedPumpManager: DoseProgressObserver {
-    public func doseProgressEstimatorHasNewEstimate(_ doseProgressEstimator: DoseProgressEstimator) {
-        if doseProgressEstimator === self.bolusProgressEstimator, doseProgressEstimator.progress.isComplete {
+    public func doseProgressReporterProgressUpdated(_ doseProgressReporter: DoseProgressReporter) {
+        if doseProgressReporter === self.bolusProgressReporter, doseProgressReporter.progress.isComplete {
             queue.async {
                 self.bolusState = .none
-                self.bolusProgressEstimator = nil
+                self.bolusProgressReporter = nil
             }
         }
     }

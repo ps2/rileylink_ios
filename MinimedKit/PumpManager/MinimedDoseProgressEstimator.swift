@@ -9,19 +9,13 @@
 import Foundation
 import LoopKit
 
-class MinimedDoseProgressEstimator: DoseProgressEstimator {
+class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
 
-    public let dose: DoseEntry
+    let dose: DoseEntry
 
     public let pumpModel: PumpModel
 
-    private var observers = WeakSet<DoseProgressObserver>()
-
-    private var lock = os_unfair_lock()
-
-    private var timer: Timer?
-
-    var progress: DoseProgress {
+    override var progress: DoseProgress {
         let elapsed = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let timeProgress = min(elapsed / duration, 1)
@@ -69,57 +63,19 @@ class MinimedDoseProgressEstimator: DoseProgressEstimator {
     init(dose: DoseEntry, pumpModel: PumpModel) {
         self.dose = dose
         self.pumpModel = pumpModel
+        super.init()
     }
 
-    func addObserver(_ observer: DoseProgressObserver) {
-        os_unfair_lock_lock(&lock)
-        defer {
-            os_unfair_lock_unlock(&lock)
-        }
-        let firstObserver = observers.isEmpty
-        observers.insert(observer)
-        if firstObserver {
-            start(on: RunLoop.main)
-        }
-    }
-
-    func removeObserver(_ observer: DoseProgressObserver) {
-        os_unfair_lock_lock(&lock)
-        defer {
-            os_unfair_lock_unlock(&lock)
-        }
-        observers.remove(observer)
-        if observers.isEmpty {
-            stop()
-        }
-    }
-
-    private func notify() {
-        os_unfair_lock_lock(&lock)
-        let observersCopy = observers
-        os_unfair_lock_unlock(&lock)
-
-        for observer in observersCopy {
-            observer.doseProgressEstimatorHasNewEstimate(self)
-        }
-    }
-
-    private func start(on runLoop: RunLoop) {
+    override func createTimer() -> Timer {
         let timeSinceStart = dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let timeBetweenPulses = duration / (Double(pumpModel.pulsesPerUnit) * dose.units)
 
         let delayUntilNextPulse = timeBetweenPulses - timeSinceStart.remainder(dividingBy: timeBetweenPulses)
-        let timer = Timer(fire: Date() + delayUntilNextPulse, interval: timeBetweenPulses, repeats: true) { [weak self] _  in
+        return Timer(fire: Date() + delayUntilNextPulse, interval: timeBetweenPulses, repeats: true) { [weak self] _  in
             if let self = self {
                 self.notify()
             }
         }
-        runLoop.add(timer, forMode: .default)
-        self.timer = timer
-    }
-
-    private func stop() {
-        timer?.invalidate()
     }
 }

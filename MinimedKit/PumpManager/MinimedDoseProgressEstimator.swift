@@ -66,16 +66,13 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
         super.init()
     }
 
-    override func createTimer() -> Timer {
+    override func timerParameters() -> (delay: TimeInterval, repeating: TimeInterval) {
         let timeSinceStart = dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let timeBetweenPulses = duration / (Double(pumpModel.pulsesPerUnit) * dose.units)
 
         let delayUntilNextPulse = timeBetweenPulses - timeSinceStart.remainder(dividingBy: timeBetweenPulses)
-        return Timer(fire: Date() + delayUntilNextPulse, interval: timeBetweenPulses, repeats: true) { [weak self] _  in
-            if let self = self {
-                self.notify()
-            }
-        }
+        
+        return (delay: delayUntilNextPulse, repeating: timeBetweenPulses)
     }
 }

@@ -16,7 +16,6 @@ public protocol MinimedPumpManagerStateObserver: class {
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
-
     public func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
         return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
     }
@@ -44,7 +43,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     public static let managerIdentifier: String = "Minimed500"
 
 
-    public var bolusProgressReporter: DoseProgressReporter?
+    public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
+        if case .inProgress(let dose) = bolusState {
+            return MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel, reportingQueue: dispatchQueue)
+        }
+        return nil
+    }
+
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
@@ -217,11 +222,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 
     private var bolusState: PumpManagerStatus.BolusState {
         didSet {
-            if case .inProgress(let dose) = bolusState, oldValue != bolusState {
-                let estimator = MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel)
-                estimator.addObserver(self)
-                self.bolusProgressReporter = estimator
-            }
             notifyStatusObservers()
         }
     }
@@ -801,17 +801,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
 extension MinimedPumpManager: PumpOpsDelegate {
     public func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
         self.state.pumpState = state
-    }
-}
-
-extension MinimedPumpManager: DoseProgressObserver {
-    public func doseProgressReporterDidUpdate(_ doseProgressReporter: DoseProgressReporter) {
-        if doseProgressReporter === self.bolusProgressReporter, doseProgressReporter.progress.isComplete {
-            queue.async {
-                self.bolusState = .none
-                self.bolusProgressReporter = nil
-            }
-        }
     }
 }
 

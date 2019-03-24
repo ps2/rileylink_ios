@@ -60,14 +60,14 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
         return DoseProgress(deliveredUnits: roundedVolume, percentComplete: roundedVolume / dose.units)
     }
 
-    init(dose: DoseEntry, pumpModel: PumpModel) {
+    init(dose: DoseEntry, pumpModel: PumpModel, reportingQueue: DispatchQueue) {
         self.dose = dose
         self.pumpModel = pumpModel
-        super.init()
+        super.init(reportingQueue: reportingQueue)
     }
 
     override func timerParameters() -> (delay: TimeInterval, repeating: TimeInterval) {
-        let timeSinceStart = dose.startDate.timeIntervalSinceNow
+        let timeSinceStart = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let timeBetweenPulses = duration / (Double(pumpModel.pulsesPerUnit) * dose.units)
 

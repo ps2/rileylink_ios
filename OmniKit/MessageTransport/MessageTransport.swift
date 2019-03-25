@@ -53,7 +53,15 @@ protocol MessageTransportDelegate: class {
     func messageTransport(_ messageTransport: MessageTransport, didUpdate state: MessageTransportState)
 }
 
-class MessageTransport {
+protocol MessageTransport {
+    var delegate: MessageTransportDelegate? { get set }
+
+    var messageNumber: Int { get }
+
+    func sendMessage(_ message: Message) throws -> Message
+}
+
+class PodMessageTransport: MessageTransport {
     
     private let session: CommandSession
     

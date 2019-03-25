@@ -437,6 +437,7 @@
 		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
 		C1A721621EC3E0500080FAD7 /* PumpErrorMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */; };
 		C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */; };
+		C1ABE397224947C000570E82 /* PodCommsSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1ABE396224947C000570E82 /* PodCommsSessionTests.swift */; };
 		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
 		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
 		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
@@ -1372,6 +1373,7 @@
 		C1A7215F1EC29C0B0080FAD7 /* PumpOpsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsError.swift; sourceTree = "<group>"; };
 		C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpErrorMessageBody.swift; sourceTree = "<group>"; };
 		C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartialDecode.swift; sourceTree = "<group>"; };
+		C1ABE396224947C000570E82 /* PodCommsSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodCommsSessionTests.swift; sourceTree = "<group>"; };
 		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
 		C1AF21E51D48667F0088C41D /* UploaderStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploaderStatus.swift; sourceTree = "<group>"; };
@@ -2505,19 +2507,20 @@
 		C1FFAF86213323CC00C50C1D /* OmniKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				E9C06B2B21513B2600B602AD /* PodInfoTests.swift */,
 				E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */,
-				E9EE3369214ED00400888876 /* BolusTests.swift */,
-				E9EE3367214ECFF900888876 /* StatusTests.swift */,
 				C1FFAFFB2133241600C50C1D /* BasalScheduleTests.swift */,
+				E9EE3369214ED00400888876 /* BolusTests.swift */,
 				C1FFAFF92133241600C50C1D /* CRC8Tests.swift */,
 				C1FFAFFC2133241600C50C1D /* CRC16Tests.swift */,
+				C1FFAF89213323CC00C50C1D /* Info.plist */,
 				C1FFAFF62133241500C50C1D /* MessageTests.swift */,
 				C1FFAFFD2133241600C50C1D /* OmniKitTests-Bridging-Header.h */,
 				C1FFAFFA2133241600C50C1D /* PacketTests.swift */,
+				C1ABE396224947C000570E82 /* PodCommsSessionTests.swift */,
+				E9C06B2B21513B2600B602AD /* PodInfoTests.swift */,
 				C1FFAFF72133241500C50C1D /* PodStateTests.swift */,
+				E9EE3367214ECFF900888876 /* StatusTests.swift */,
 				C1FFAFF82133241500C50C1D /* TempBasalTests.swift */,
-				C1FFAF89213323CC00C50C1D /* Info.plist */,
 			);
 			path = OmniKitTests;
 			sourceTree = "<group>";
@@ -3924,6 +3927,7 @@
 				C17EDC4F2134D0CC0031D9F0 /* TimeZone.swift in Sources */,
 				C1FFB0042133241700C50C1D /* CRC16Tests.swift in Sources */,
 				E9C06B2C21513B2600B602AD /* PodInfoTests.swift in Sources */,
+				C1ABE397224947C000570E82 /* PodCommsSessionTests.swift in Sources */,
 				C1FFB0012133241700C50C1D /* CRC8Tests.swift in Sources */,
 				E9EE3368214ECFF900888876 /* StatusTests.swift in Sources */,
 				C1FFB0002133241700C50C1D /* TempBasalTests.swift in Sources */,

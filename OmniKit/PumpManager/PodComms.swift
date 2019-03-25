@@ -74,7 +74,7 @@ class PodComms : CustomDebugStringConvertible {
         // Create random address with 20 bits.  Can we use all 24 bits?
         let address = 0x1f000000 | (arc4random() & 0x000fffff)
         
-        let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
+        let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
         transport.messageLogger = messageLogger
         
         // Assign Address
@@ -112,7 +112,7 @@ class PodComms : CustomDebugStringConvertible {
     
     private func configurePod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
         
-        let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
+        let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
         transport.messageLogger = messageLogger
         
         let dateComponents = ConfigurePodCommand.dateComponents(date: podState.activatedAt, timeZone: timeZone)
@@ -195,7 +195,7 @@ class PodComms : CustomDebugStringConvertible {
             
                 device.runSession(withName: name) { (commandSession) in
                     self.configureDevice(device, with: commandSession)
-                    let transport = MessageTransport(session: commandSession, address: podState.address, state: podState.messageTransportState)
+                    let transport = PodMessageTransport(session: commandSession, address: podState.address, state: podState.messageTransportState)
                     transport.messageLogger = self.messageLogger
                     let podSession = PodCommsSession(podState: podState, transport: transport, delegate: self)
                     block(.success(session: podSession))

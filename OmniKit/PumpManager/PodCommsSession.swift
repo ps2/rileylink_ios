@@ -154,13 +154,13 @@ public class PodCommsSession {
     }
     
     private unowned let delegate: PodCommsSessionDelegate
-    private let transport: MessageTransport
+    private var transport: MessageTransport
 
     init(podState: PodState, transport: MessageTransport, delegate: PodCommsSessionDelegate) {
         self.podState = podState
         self.transport = transport
         self.delegate = delegate
-        transport.delegate = self
+        self.transport.delegate = self
     }
 
     /// Performs a message exchange, handling nonce resync, pod faults
@@ -185,12 +185,20 @@ public class PodCommsSession {
         }
         
         let messageNumber = transport.messageNumber
-        
+
+        var sentNonce: UInt32?
+
+
         while (triesRemaining > 0) {
             triesRemaining -= 1
-            
+
+            if let nonceBlock = messageBlocks[0] as? NonceResyncableMessageBlock {
+                sentNonce = nonceBlock.nonce
+            }
+
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
-            
+
+
             let response = try transport.sendMessage(message)
             
             // Simulate fault
@@ -203,10 +211,10 @@ public class PodCommsSession {
                 let responseType = response.messageBlocks[0].blockType
                 
                 if responseType == .errorResponse,
+                    let sentNonce = sentNonce,
                     let errorResponse = response.messageBlocks[0] as? ErrorResponse,
                     errorResponse.errorReponseType == .badNonce
                 {
-                    let sentNonce = podState.currentNonce
                     self.podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
                     log.info("resyncNonce(syncWord: %02X, sentNonce: %04X, messageSequenceNum: %d) -> %04X", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
                     

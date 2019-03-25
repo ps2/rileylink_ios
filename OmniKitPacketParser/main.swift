@@ -113,6 +113,7 @@ class RTLOmniLineParser {
                     return
                 }
                 // 2018-12-19T20:50:48.3d ID1:1f0b3557 PTYPE:POD SEQ:31 ID2:1f0b3557 B9:00 BLEN:205 BODY:02cb510032602138800120478004213c80092045800c203980 CRC:a8
+                // 2018-05-25T13:03:51.765792 ID1:ffffffff PTYPE:POD SEQ:01 ID2:ffffffff B9:04 BLEN:23 BODY:011502070002070002020000aa6400088cb98f1f16b11e82a5 CRC:72
                 messageDate = components[0]
                 messageSource = packetType
                 address = String(components[1].valPart())
@@ -235,8 +236,9 @@ for filename in CommandLine.arguments[1...] {
         
         for line in lines {
             switch line {
-            case Regex("ID1:\\[0-9a-fA-F]+ PTYPE:"):
+            case Regex("ID1:[0-9a-fA-F]+ PTYPE:"):
                 // 2018-12-24T10:58:41.3d ID1:1f0f407e PTYPE:POD SEQ:02 ID2:1f0f407e B9:3c BLEN:24 BODY:0216020d0000000000d23102b103ff02b1000008ab08016e83 CRC:c2
+                // 2018-05-25T13:03:51.765792 ID1:ffffffff PTYPE:POD SEQ:01 ID2:ffffffff B9:04 BLEN:23 BODY:011502070002070002020000aa6400088cb98f1f16b11e82a5 CRC:72
                 rtlOmniParser.parseLine(line)
             case Regex("(send|receive) [0-9a-fA-F]+"):
                 // 2018-12-27 01:46:56 +0000 send 1f0e41a6101f1a0e81ed50b102010a0101a000340034170d000208000186a00000000000000111

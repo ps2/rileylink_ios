@@ -699,9 +699,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
+        let oldState = self.bolusState
         self.bolusState = .canceling
         setSuspendResumeState(state: .suspend) { (error) in
             if let error = error {
+                self.bolusState = oldState
                 completion(.failure(error))
             } else {
                 self.bolusState = .none

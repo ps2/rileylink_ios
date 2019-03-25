@@ -23,7 +23,7 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
         let updateResolution: Double
         let unroundedVolume: Double
 
-        if pumpModel.variableDeliveryRate {
+        if pumpModel.isDeliveryRateVariable {
             if dose.units < 1 {
                 updateResolution = 40 // Resolution = 0.025
                 unroundedVolume = timeProgress * dose.units

@@ -128,13 +128,13 @@ public enum PumpModel: String {
         return .minutes(30)
     }
 
-    public var variableDeliveryRate: Bool {
+    public var isDeliveryRateVariable: Bool {
         return generation >= 23
     }
 
     public func bolusDeliveryTime(units: Double) -> TimeInterval {
         let unitsPerMinute: Double
-        if variableDeliveryRate {
+        if isDeliveryRateVariable {
             switch units {
             case let u where u < 1.0:
                 unitsPerMinute = 0.75

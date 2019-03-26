@@ -490,18 +490,24 @@ public class PodCommsSession {
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
         let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
-        
-        let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
-        podState.updateFromStatusResponse(status)
-        return status
+
+        do {
+            let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
+            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain)
+            podState.updateFromStatusResponse(status)
+            return status
+        } catch PodCommsError.nonceResyncFailed {
+            throw PodCommsError.nonceResyncFailed
+        } catch let error {
+            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .uncertain)
+            throw error
+        }
     }
     
     public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
         
         let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
-        podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain)
-        podState.updateFromStatusResponse(status)
         return status
     }
     

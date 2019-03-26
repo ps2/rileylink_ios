@@ -181,7 +181,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 }
             }
 
-            if let resume = unfinalizedResume {
+            if let resume = unfinalizedResume, suspend.startTime < resume.startTime {
                 finalizedDoses.append(suspend)
                 finalizedDoses.append(resume)
                 unfinalizedSuspend = nil

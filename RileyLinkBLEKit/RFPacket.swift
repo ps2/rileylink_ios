@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RFPacket {
+public struct RFPacket : CustomStringConvertible {
     public let data: Data
     let packetCounter: Int
     public let rssi: Int
@@ -32,5 +32,10 @@ public struct RFPacket {
         
         self.data = rfspyResponse.subdata(in: startIndex.advanced(by: 2)..<rfspyResponse.endIndex)
     }
+
+    public var description: String {
+        return String(format: "RFPacket(%1$@, %2$@, %3$@)", String(describing: rssi), String(describing: packetCounter), data.hexadecimalString)
+    }
+
 }
 

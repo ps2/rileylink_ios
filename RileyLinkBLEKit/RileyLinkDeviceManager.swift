@@ -7,6 +7,7 @@
 
 import CoreBluetooth
 import os.log
+import LoopKit
 
 
 public class RileyLinkDeviceManager: NSObject {

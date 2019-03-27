@@ -68,8 +68,13 @@ public enum PumpModel: String {
     }
     
     /// Newer models allow higher precision delivery, and have bit packing to accomodate this.
-    public var strokesPerUnit: Int {
+    public var insulinBitPackingScale: Int {
         return (generation >= 23) ? 40 : 10
+    }
+
+    /// Pulses per unit is the inverse of the minimum volume of delivery.
+    public var pulsesPerUnit: Int {
+        return (generation >= 23) ? 40 : 20
     }
 
     public var reservoirCapacity: Int {
@@ -80,18 +85,6 @@ public enum PumpModel: String {
             return 300
         default:
             fatalError("Unknown reservoir capacity for PumpModel.\(self)")
-        }
-    }
-
-    public var constrainsBolusDeliveryTimeTo5Minutes: Bool {
-        return generation >= 23
-    }
-
-    public var pulsesPerUnit: Int {
-        if generation >= 23 {
-            return 40
-        } else {
-            return 20
         }
     }
 
@@ -133,6 +126,27 @@ public enum PumpModel: String {
 
     public var minimumBasalScheduleEntryDuration: TimeInterval {
         return .minutes(30)
+    }
+
+    public var isDeliveryRateVariable: Bool {
+        return generation >= 23
+    }
+
+    public func bolusDeliveryTime(units: Double) -> TimeInterval {
+        let unitsPerMinute: Double
+        if isDeliveryRateVariable {
+            switch units {
+            case let u where u < 1.0:
+                unitsPerMinute = 0.75
+            case let u where u > 7.5:
+                unitsPerMinute = units / 5
+            default:
+                unitsPerMinute = 1.5
+            }
+        } else {
+            unitsPerMinute = 1.5
+        }
+        return TimeInterval(minutes: units / unitsPerMinute)
     }
 }
 

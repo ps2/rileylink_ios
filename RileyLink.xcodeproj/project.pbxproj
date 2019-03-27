@@ -630,6 +630,13 @@
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
 		};
+		C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FB610120DDEF26002B996B;
+			remoteInfo = Cartfile;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -2148,6 +2155,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C1C0BE29224BF75600C03B4D /* PBXTargetDependency */,
 			);
 			name = RileyLinkBLEKit;
 			productName = RileyLinkBLEKit;
@@ -3234,6 +3242,11 @@
 			isa = PBXTargetDependency;
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */;
+		};
+		C1C0BE29224BF75600C03B4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FB610120DDEF26002B996B /* Cartfile */;
+			targetProxy = C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

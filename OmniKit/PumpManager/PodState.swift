@@ -114,7 +114,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func resyncNonce(syncWord: UInt16, sentNonce: UInt32, messageSequenceNum: Int) {
         let sum = (sentNonce & 0xffff) + UInt32(crc16Table[messageSequenceNum]) + (lot & 0xffff) + (tid & 0xffff)
         let seed = UInt16(sum & 0xffff) ^ syncWord
-        nonceState = NonceState(lot: lot, tid: tid, seed: UInt8(seed & 0xff))
+        nonceState = NonceState(lot: lot, tid: tid, seed: seed)
     }
     
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
@@ -408,8 +408,8 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
     var table: [UInt32]
     var idx: UInt8
     
-    public init(lot: UInt32 = 0, tid: UInt32 = 0, seed: UInt8 = 0) {
-        table = Array(repeating: UInt32(0), count: 21)
+    public init(lot: UInt32 = 0, tid: UInt32 = 0, seed: UInt16 = 0) {
+        table = Array(repeating: UInt32(0), count: 2 + 16)
         table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
         table[0] = table[0] & 0xFFFFFFFF
         table[1] = (tid & 0xFFFF) + 0xAAAAE44E + (tid >> 16)
@@ -417,7 +417,8 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
         
         idx = 0
         
-        table[0] += UInt32(seed)
+        table[0] += UInt32((seed & 0x00ff))
+        table[1] += UInt32((seed & 0xff00) >> 8)
         
         for i in 0..<16 {
             table[2 + i] = generateEntry()
@@ -429,7 +430,7 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
     private mutating func generateEntry() -> UInt32 {
         table[0] = ((table[0] >> 16) + (table[0] & 0xFFFF) * 0x5D7F) & 0xFFFFFFFF
         table[1] = ((table[1] >> 16) + (table[1] & 0xFFFF) * 0x8CA0) & 0xFFFFFFFF
-        return UInt32((UInt64(table[1]) + (UInt64(table[0]) << 16)) & 0xFFFFFFFF)
+        return UInt32((UInt64(table[1]) + (UInt64((table[0]) & 0xFFFF) << 16)) & 0xFFFFFFFF)
     }
     
     public mutating func advanceToNextNonce() {

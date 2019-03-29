@@ -43,8 +43,10 @@ class MockMessageTransport: MessageTransport {
 
 class PodCommsSessionTests: XCTestCase, PodCommsSessionDelegate {
 
+    var lastPodStateUpdate: PodState?
+
     func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
-        // nop
+        lastPodStateUpdate = state
     }
 
 
@@ -91,5 +93,13 @@ class PodCommsSessionTests: XCTestCase, PodCommsSessionDelegate {
         } catch (let error) {
             XCTFail("message sending error: \(error)")
         }
+
+        // Try sending another bolus command: nonce should be 676940027
+        XCTAssertEqual(545302454, lastPodStateUpdate!.currentNonce)
+
+        let result = session.bolus(units: 2)
+        let bolusTry3 = messageTransport.sentMessages[2].messageBlocks[0] as! SetInsulinScheduleCommand
+        XCTAssertEqual(545302454, bolusTry3.nonce)
+
     }
 }

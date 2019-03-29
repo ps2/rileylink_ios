@@ -215,7 +215,7 @@ public class PodCommsSession {
                     let errorResponse = response.messageBlocks[0] as? ErrorResponse,
                     errorResponse.errorReponseType == .badNonce
                 {
-                    self.podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
+                    podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
                     log.info("resyncNonce(syncWord: %02X, sentNonce: %04X, messageSequenceNum: %d) -> %04X", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
                     
                     blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
@@ -226,6 +226,7 @@ public class PodCommsSession {
                             return block
                         }
                     })
+                    podState.advanceToNextNonce()
                 } else if let fault = response.fault {
                     self.podState.fault = fault
                     log.error("Pod Fault: %@", String(describing: fault))

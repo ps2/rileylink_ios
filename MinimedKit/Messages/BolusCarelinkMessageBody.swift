@@ -11,12 +11,12 @@ import Foundation
 
 public class BolusCarelinkMessageBody: CarelinkLongMessageBody {
     
-    public convenience init(units: Double, strokesPerUnit: Int = 10) {
+    public convenience init(units: Double, insulinBitPackingScale: Int = 10) {
         
         let length: Int
         let scrollRate: Int
         
-        if strokesPerUnit >= 40 {
+        if insulinBitPackingScale >= 40 {
             length = 2
             
             // 40-stroke pumps scroll faster for higher unit values
@@ -33,7 +33,7 @@ public class BolusCarelinkMessageBody: CarelinkLongMessageBody {
             scrollRate = 1
         }
         
-        let strokes = Int(units * Double(strokesPerUnit / scrollRate)) * scrollRate
+        let strokes = Int(units * Double(insulinBitPackingScale / scrollRate)) * scrollRate
         
         let data = Data(hexadecimalString: String(format: "%02x%0\(2 * length)x", length, strokes))!
         

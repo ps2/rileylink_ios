@@ -41,16 +41,15 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
 
     public static let managerIdentifier: String = "Minimed500"
-    
-    public func roundToDeliveryIncrement(units: Double) -> Double {
-        return round(units * Double(state.pumpModel.pulsesPerUnit)) / Double(state.pumpModel.pulsesPerUnit)
+
+
+    public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
+        if case .inProgress(let dose) = bolusState {
+            return MinimedDoseProgressEstimator(dose: dose, pumpModel: state.pumpModel, reportingQueue: dispatchQueue)
+        }
+        return nil
     }
-    
-    /*
-     It takes a MM pump about 40s to deliver 1 Unit while bolusing
-     See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
-     */
-    private static let deliveryUnitsPerMinute = 1.5
+
 
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
@@ -115,13 +114,6 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
     private let lockedState: Locked<MinimedPumpManagerState>
-
-    // TODO: Accessed and set on different threads
-    private var basalDeliveryStateTransitioning: Bool = false {
-        didSet {
-            notifyStatusObservers()
-        }
-    }
 
     override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
         get {
@@ -205,11 +197,25 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     }
     
     // MARK: - PumpManager
+    private enum SuspendTransition {
+        case suspending
+        case resuming
+    }
+
+    // TODO: Accessed and set on different threads
+    private var suspendTransition: SuspendTransition? {
+        didSet {
+            notifyStatusObservers()
+        }
+    }
 
     private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
-        if basalDeliveryStateTransitioning {
-            return state.isPumpSuspended ? .resuming : .suspending
-        } else {
+        switch suspendTransition {
+        case .suspending?:
+            return .suspending
+        case .resuming?:
+            return .resuming
+        case .none:
             return state.isPumpSuspended ? .suspended : .active
         }
     }
@@ -284,8 +290,8 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
             self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
                 do {
 
-                    defer { self.basalDeliveryStateTransitioning = false }
-                    self.basalDeliveryStateTransitioning = true
+                    defer { self.suspendTransition = nil }
+                    self.suspendTransition = state == .suspend ? .suspending : .resuming
 
                     try session.setSuspendResumeState(state)
                     self.state.isPumpSuspended = state == .suspend
@@ -610,10 +616,13 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
         let shouldReadReservoir = isReservoirDataOlderThan(timeIntervalSinceNow: .minutes(-6))
 
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
             }
+
+            self.bolusState = .initiating
 
             if shouldReadReservoir {
                 do {
@@ -636,6 +645,7 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                     }
                     return
                 } catch let error {
+                    self.bolusState = .none
                     completion(.failure(error))
                     return
                 }
@@ -659,28 +669,49 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
                         }
                         return
                     } catch let error {
+                        self.bolusState = .none
                         completion(.failure(error))
                         return
                     }
                 }
                 
                 let date = Date()
-                var deliveryTime = TimeInterval(minutes: units / MinimedPumpManager.deliveryUnitsPerMinute)
-                if self.state.pumpModel.constrainsBolusDeliveryTimeTo5Minutes {
-                    deliveryTime = min(TimeInterval(minutes: 5), deliveryTime)
-                }
+                let deliveryTime = self.state.pumpModel.bolusDeliveryTime(units: units)
                 let endDate = date.addingTimeInterval(deliveryTime)
                 let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: units, unit: .units)
                 willRequest(dose)
 
                 try session.setNormalBolus(units: units)
-                completion(.success(dose))
+
+                // Between bluetooth and the radio and firmware, about 2s on average passes before we start tracking
+                let commsOffset = TimeInterval(seconds: -2)
+                let acknowledgedDate = Date().addingTimeInterval(commsOffset)
+                let acknowledgedDose = DoseEntry(type: .bolus, startDate: acknowledgedDate, endDate: acknowledgedDate.addingTimeInterval(deliveryTime), value: units, unit: .units)
+
+                self.bolusState = .inProgress(acknowledgedDose)
+                completion(.success(acknowledgedDose))
             } catch let error {
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
+                self.bolusState = .none
                 completion(.failure(error))
             }
         }
     }
+
+    public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
+        let oldState = self.bolusState
+        self.bolusState = .canceling
+        setSuspendResumeState(state: .suspend) { (error) in
+            if let error = error {
+                self.bolusState = oldState
+                completion(.failure(error))
+            } else {
+                self.bolusState = .none
+                completion(.success(nil))
+            }
+        }
+    }
+
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         pumpOps.runSession(withName: "Set Temp Basal", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
@@ -769,13 +800,11 @@ public class MinimedPumpManager: RileyLinkPumpManager, PumpManager {
     
 }
 
-
 extension MinimedPumpManager: PumpOpsDelegate {
     public func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
         self.state.pumpState = state
     }
 }
-
 
 extension MinimedPumpManager: CGMManager {
     public var shouldSyncToRemoteService: Bool {

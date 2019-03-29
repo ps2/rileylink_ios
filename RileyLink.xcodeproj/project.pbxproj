@@ -51,7 +51,6 @@
 		431CE7A51F9D78F500255374 /* RFPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A41F9D78F500255374 /* RFPacket.swift */; };
 		431CE7A71F9D98F700255374 /* CommandSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7A61F9D98F700255374 /* CommandSession.swift */; };
 		4322B75620282DA60002837D /* ResponseBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4322B75520282DA60002837D /* ResponseBufferTests.swift */; };
-		43260F6F21C9B21000DD6837 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
 		432847C11FA1737400CDE69C /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
 		432847C31FA57C0F00CDE69C /* RadioFirmwareVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432847C21FA57C0F00CDE69C /* RadioFirmwareVersion.swift */; };
 		432CF9061FF74CCB003AB446 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
@@ -101,7 +100,6 @@
 		435D26B020DA08CE00891C17 /* RileyLinkPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */; };
 		435D26B420DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */; };
 		435D26B620DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B520DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift */; };
-		435D26B920DC83F300891C17 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
 		43709ABD20DF1C6400F941B3 /* RileyLinkSetupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ABA20DF1C6400F941B3 /* RileyLinkSetupTableViewController.swift */; };
 		43709ABE20DF1C6400F941B3 /* RileyLinkManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ABB20DF1C6400F941B3 /* RileyLinkManagerSetupViewController.swift */; };
 		43709ABF20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ABC20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift */; };
@@ -363,7 +361,6 @@
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
 		C16C3D4421AC40AF00401105 /* OmnipodHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16C3D4321AC40AF00401105 /* OmnipodHUDProvider.swift */; };
 		C16E611F22065B8E0069F357 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
-		C16E6120220779210069F357 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
 		C16E61222208C7A80069F357 /* ReservoirReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16E61212208C7A80069F357 /* ReservoirReading.swift */; };
 		C16E61262208EC580069F357 /* MinimedHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16E61252208EC580069F357 /* MinimedHUDProvider.swift */; };
 		C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1711A551C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift */; };
@@ -455,6 +452,7 @@
 		C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
 		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
+		C1B44CA7224BDFDF00DE47E5 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
 		C1BB128821CB5603009A29B5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB128721CB5603009A29B5 /* main.swift */; };
 		C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA0213323E800C50C1D /* CRC8.swift */; };
@@ -544,7 +542,7 @@
 		C1F6EB891F89C3E200CFE393 /* FourByteSixByteEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */; };
 		C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */; };
 		C1F6EB8D1F89C45500CFE393 /* MinimedPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */; };
-		C1FB4275216E83D200FAB378 /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D26B720DC83E400891C17 /* Locked.swift */; };
+		C1F8B1DF223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */; };
 		C1FC49EC2135CB2D007D0788 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1FC49EB2135CB2D007D0788 /* LaunchScreen.storyboard */; };
 		C1FC49EE2135DD56007D0788 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FC49ED2135DD56007D0788 /* CommandResponseViewController.swift */; };
 		C1FDFCA91D964A3E00ADBC31 /* BolusReminderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */; };
@@ -822,7 +820,7 @@
 			remoteGlobalIDString = 43FB610120DDEF26002B996B;
 			remoteInfo = Cartfile;
 		};
-		C1FFB02221343EB500C50C1D /* PBXContainerItemProxy */ = {
+		C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
@@ -924,7 +922,6 @@
 		435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManager.swift; sourceTree = "<group>"; };
 		435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesHeaderView.swift; sourceTree = "<group>"; };
 		435D26B520DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesTableViewDataSource.swift; sourceTree = "<group>"; };
-		435D26B720DC83E400891C17 /* Locked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
 		436CCEF11FB953E800A6822B /* CommandSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandSession.swift; sourceTree = "<group>"; };
 		43709ABA20DF1C6400F941B3 /* RileyLinkSetupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkSetupTableViewController.swift; sourceTree = "<group>"; };
 		43709ABB20DF1C6400F941B3 /* RileyLinkManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkManagerSetupViewController.swift; sourceTree = "<group>"; };
@@ -1440,6 +1437,7 @@
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
 		C1FB4272216E5DFD00FAB378 /* GetPumpFirmwareVersionMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPumpFirmwareVersionMessageBody.swift; sourceTree = "<group>"; };
+		C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedDoseProgressEstimator.swift; sourceTree = "<group>"; };
 		C1FC49EB2135CB2D007D0788 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C1FC49ED2135DD56007D0788 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
 		C1FDFCA81D964A3E00ADBC31 /* BolusReminderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusReminderPumpEvent.swift; sourceTree = "<group>"; };
@@ -1535,6 +1533,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1B44CA7224BDFDF00DE47E5 /* LoopKit.framework in Frameworks */,
 				43C0196C1FA6B8AE007ABFA1 /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1900,6 +1899,7 @@
 				434AB0941CBA0DF600422F4A /* PumpState.swift */,
 				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C16E61212208C7A80069F357 /* ReservoirReading.swift */,
+				C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */,
 			);
 			path = PumpManager;
 			sourceTree = "<group>";
@@ -1920,7 +1920,6 @@
 				C1EAD6BA1C826B92006DBA60 /* Data.swift */,
 				4352A73D20DED01700CAC200 /* HKUnit.swift */,
 				431185AE1CF25A590059ED98 /* IdentifiableClass.swift */,
-				435D26B720DC83E400891C17 /* Locked.swift */,
 				C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */,
 				43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */,
 				431CE7941F9B0DAE00255374 /* OSLog.swift */,
@@ -2701,6 +2700,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C1C0BE29224BF75600C03B4D /* PBXTargetDependency */,
 			);
 			name = RileyLinkBLEKit;
 			productName = RileyLinkBLEKit;
@@ -3120,6 +3120,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				es,
 				ru,
@@ -3358,7 +3359,6 @@
 				431CE7A11F9D195600255374 /* CBCentralManager.swift in Sources */,
 				431CE7911F985D8D00255374 /* RileyLinkDeviceManager.swift in Sources */,
 				431CE78D1F985B5400255374 /* PeripheralManager.swift in Sources */,
-				43260F6F21C9B21000DD6837 /* Locked.swift in Sources */,
 				431CE79E1F9BE73900255374 /* BLEFirmwareVersion.swift in Sources */,
 				432847C31FA57C0F00CDE69C /* RadioFirmwareVersion.swift in Sources */,
 				431CE7931F985DE700255374 /* PeripheralManager+RileyLink.swift in Sources */,
@@ -3420,7 +3420,6 @@
 				4352A74120DED23100CAC200 /* RileyLinkDeviceManager.swift in Sources */,
 				431CE7961F9B0F0200255374 /* OSLog.swift in Sources */,
 				435D26B020DA08CE00891C17 /* RileyLinkPumpManager.swift in Sources */,
-				435D26B920DC83F300891C17 /* Locked.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3557,7 +3556,6 @@
 				54BC44821DB476BB00340EED /* CalBGForGHGlucoseEvent.swift in Sources */,
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				43D8708B20DE1BCA006B549E /* PumpColor.swift in Sources */,
-				C16E6120220779210069F357 /* Locked.swift in Sources */,
 				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
 				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
@@ -3565,6 +3563,7 @@
 				C1842C011C8FA45100DB42AC /* JournalEntryPumpLowBatteryPumpEvent.swift in Sources */,
 				54BC447E1DB4753A00340EED /* GlucoseSensorDataGlucoseEvent.swift in Sources */,
 				C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */,
+				C1F8B1DF223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift in Sources */,
 				54DA4E851DFDC0A70007F489 /* SensorValueGlucoseEvent.swift in Sources */,
 				4352A71C20DEC8C100CAC200 /* TimeZone.swift in Sources */,
 				C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */,
@@ -4106,10 +4105,10 @@
 			target = 43FB610120DDEF26002B996B /* Cartfile */;
 			targetProxy = C1FFB01F21343B9700C50C1D /* PBXContainerItemProxy */;
 		};
-		C1FFB02321343EB500C50C1D /* PBXTargetDependency */ = {
+		C1C0BE29224BF75600C03B4D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43FB610120DDEF26002B996B /* Cartfile */;
-			targetProxy = C1FFB02221343EB500C50C1D /* PBXContainerItemProxy */;
+			targetProxy = C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4446,8 +4445,12 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RileyLinkBLEKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -4484,8 +4487,12 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = RileyLinkBLEKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -4575,7 +4582,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4618,7 +4625,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4649,11 +4656,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4688,11 +4695,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4778,12 +4785,12 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Crypto/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -4810,12 +4817,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Crypto/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -4846,7 +4853,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4887,7 +4894,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4933,12 +4940,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4972,11 +4979,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5085,7 +5092,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -5152,7 +5159,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -5282,11 +5289,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -5314,11 +5321,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 46;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 44;
+				DYLIB_CURRENT_VERSION = 46;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;

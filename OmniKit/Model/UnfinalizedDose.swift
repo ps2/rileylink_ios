@@ -216,17 +216,22 @@ private extension TimeInterval {
 extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
         let title = String(describing: dose)
-        let entry: DoseEntry
+        let entry = DoseEntry(dose)
+        self.init(date: dose.startTime, dose: entry, isMutable: false, raw: dose.uniqueKey, title: title)
+    }
+}
+
+extension DoseEntry {
+    init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            entry = DoseEntry(type: .bolus, startDate: dose.startTime, value: dose.units, unit: .units)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.units, unit: .units)
         case .tempBasal:
-            entry = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.rate, unit: .unitsPerHour)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.rate, unit: .unitsPerHour)
         case .suspend:
-            entry = DoseEntry(suspendDate: dose.startTime)
+            self = DoseEntry(suspendDate: dose.startTime)
         case .resume:
-            entry = DoseEntry(resumeDate: dose.startTime)
+            self = DoseEntry(resumeDate: dose.startTime)
         }
-        self.init(date: dose.startTime, dose: entry, isMutable: false, raw: dose.uniqueKey, title: title)
     }
 }

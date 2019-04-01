@@ -402,8 +402,10 @@ public class PodCommsSession {
         // 17 0d 00 0064 0001 86a0000000000000
         let bolusExtraCommand = BolusExtraCommand(units: units)
         do {
+            // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
+            let commsOffset = TimeInterval(seconds: -1.5)
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
-            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain)
+            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)

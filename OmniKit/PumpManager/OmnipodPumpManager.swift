@@ -273,25 +273,34 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             )
         }
     }
-    
-    private var basalDeliveryStateTransitioning: Bool = false {
+
+    private enum SuspendTransition {
+        case suspending
+        case resuming
+    }
+
+    // TODO: Accessed and set on different threads
+    private var suspendTransition: SuspendTransition? {
         didSet {
             notifyStatusObservers()
         }
     }
-    
+
     private var basalDeliveryState: PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
-            return .active
+            return .suspended
         }
-        
-        if basalDeliveryStateTransitioning {
-            return podState.suspended ? .resuming : .suspending
-        } else {
+
+        switch suspendTransition {
+        case .suspending?:
+            return .suspending
+        case .resuming?:
+            return .resuming
+        case .none:
             return podState.suspended ? .suspended : .active
         }
     }
-    
+
     private var bolusStateTransitioning: Bool = false {
         didSet {
             notifyStatusObservers()
@@ -632,8 +641,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     return
                 }
                 
-                defer { self.basalDeliveryStateTransitioning = false }
-                self.basalDeliveryStateTransitioning = true
+                defer { self.suspendTransition = .none }
+                self.suspendTransition = .suspending
 
                 let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                 switch result {
@@ -669,8 +678,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     return
                 }
                 
-                defer { self.basalDeliveryStateTransitioning = false }
-                self.basalDeliveryStateTransitioning = true
+                defer { self.suspendTransition = .none }
+                self.suspendTransition = .resuming
                 
                 do {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
@@ -799,9 +808,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     completion(.failure(error))
                     return
                 }
-
-                defer { self.basalDeliveryStateTransitioning = false }
-                self.basalDeliveryStateTransitioning = true
 
                 do {
                     let result = session.cancelDelivery(deliveryType: .bolus, beepType: .noBeep)

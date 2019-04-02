@@ -308,7 +308,7 @@ public class PodCommsSession {
         
         podState.setupProgress = .settingInitialBasalSchedule
         // Set basal schedule
-        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+        let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, acknowledgementReminder: false, confidenceReminder: false, programReminderInterval: .minutes(0))
         podState.setupProgress = .initialBasalScheduleSet
     }
 
@@ -415,10 +415,10 @@ public class PodCommsSession {
         }
     }
     
-    public func setTempBasal(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) -> DeliveryCommandResult {
+    public func setTempBasal(rate: Double, duration: TimeInterval, acknowledgementReminder: Bool, confidenceReminder: Bool, programReminderInterval: TimeInterval) -> DeliveryCommandResult {
         
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
-        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
+        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgeReminder: acknowledgementReminder, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
         guard podState.unfinalizedBolus?.finished != false else {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
@@ -494,15 +494,15 @@ public class PodCommsSession {
             throw error
         case .success:
             let scheduleOffset = timeZone.scheduleOffset(forDate: date)
-            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
+            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, acknowledgementReminder: false, confidenceReminder: false, programReminderInterval: .minutes(0))
             return status
         }
     }
     
-    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws -> StatusResponse {
+    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementReminder: Bool, confidenceReminder: Bool, programReminderInterval: TimeInterval) throws -> StatusResponse {
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
-        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
+        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgeReminder: acknowledgementReminder, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
         do {
             let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
@@ -517,9 +517,9 @@ public class PodCommsSession {
         }
     }
     
-    public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
+    public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementReminder: Bool = false, confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
         
-        let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
+        let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementReminder: acknowledgementReminder, confidenceReminder: confidenceReminder, programReminderInterval: programReminderInterval)
 
         return status
     }

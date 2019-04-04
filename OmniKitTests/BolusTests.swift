@@ -47,6 +47,7 @@ class BolusTests: XCTestCase {
             // Decode
             let cmd = try BolusExtraCommand(encodedData: Data(hexadecimalString: "170d7c177000030d40000000000000")!)
             XCTAssertEqual(30.0, cmd.units)
+            XCTAssertEqual(false, cmd.acknowledgeReminder)
             XCTAssertEqual(true, cmd.confidenceReminder)
             XCTAssertEqual(.hours(1), cmd.programReminderInterval)
             XCTAssertEqual(.seconds(2), cmd.timeBetweenPulses)
@@ -64,7 +65,7 @@ class BolusTests: XCTestCase {
     
     func testBolusExtraOddPulseCount() {
         // 17 0d 7c 00fa 00030d40 000000000000
-        let cmd = BolusExtraCommand(confidenceReminder: true, programReminderInterval: .hours(1), units: 1.25)
+        let cmd = BolusExtraCommand(acknowledgeReminder: false, confidenceReminder: true, programReminderInterval: .hours(1), units: 1.25)
         XCTAssertEqual("170d7c00fa00030d40000000000000", cmd.data.hexadecimalString)
     }
 
@@ -109,7 +110,7 @@ class BolusTests: XCTestCase {
         let bolusCommand = SetInsulinScheduleCommand(nonce: 0x31204ba7, deliverySchedule: scheduleEntry)
         XCTAssertEqual("1a0e31204ba702014801257002570257", bolusCommand.data.hexadecimalString)
         
-        let bolusExtraCommand = BolusExtraCommand(confidenceReminder: true, programReminderInterval: .hours(1), units: bolusAmount)
+        let bolusExtraCommand = BolusExtraCommand(acknowledgeReminder: false, confidenceReminder: true, programReminderInterval: .hours(1), units: bolusAmount)
         XCTAssertEqual("170d7c176600030d40000000000000", bolusExtraCommand.data.hexadecimalString)
     }
     
@@ -125,7 +126,7 @@ class BolusTests: XCTestCase {
         
         // 17 LL RR NNNN XXXXXXXX
         // 17 0d 3c 019a 00030d40 0000 00000000
-        let bolusExtraCommand = BolusExtraCommand(confidenceReminder: false, programReminderInterval: .hours(1), units: bolusAmount)
+        let bolusExtraCommand = BolusExtraCommand(acknowledgeReminder: false, confidenceReminder: false, programReminderInterval: .hours(1), units: bolusAmount)
         XCTAssertEqual("170d3c019a00030d40000000000000", bolusExtraCommand.data.hexadecimalString)
     }
 

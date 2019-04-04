@@ -10,6 +10,7 @@ import Foundation
 import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
+import LoopKit
 
 
 public protocol PumpOpsDelegate: class {
@@ -19,7 +20,6 @@ public protocol PumpOpsDelegate: class {
 
 
 public class PumpOps {
-
     private let log = OSLog(category: "PumpOps")
 
     public let pumpSettings: PumpSettings

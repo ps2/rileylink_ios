@@ -100,7 +100,7 @@ public struct CommandSession {
         case .zeroData:
             throw RileyLinkDeviceError.invalidResponse(Data())
         case .invalidParam, .unknownCommand:
-            throw RileyLinkDeviceError.invalidInput(String(describing: command.data))
+            throw RileyLinkDeviceError.invalidInput(command.data.hexadecimalString)
         case .success:
             return response
         }

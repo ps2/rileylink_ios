@@ -353,7 +353,7 @@ extension PumpOpsSession {
         let reservoir: ReadRemainingInsulinMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readRemainingInsulin), responseType: .readRemainingInsulin)
 
         return (
-            units: reservoir.getUnitsRemainingForStrokes(pumpModel.strokesPerUnit),
+            units: reservoir.getUnitsRemaining(insulinBitPackingScale: pumpModel.insulinBitPackingScale),
             clock: pumpClock
         )
     }
@@ -588,7 +588,7 @@ extension PumpOpsSession {
         }
 
         do {
-            let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, strokesPerUnit: pumpModel.strokesPerUnit))
+            let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, insulinBitPackingScale: pumpModel.insulinBitPackingScale))
 
             if pumpModel.returnsErrorOnBolus {
                 // TODO: This isn't working as expected; this logic was probably intended to be in the catch block below

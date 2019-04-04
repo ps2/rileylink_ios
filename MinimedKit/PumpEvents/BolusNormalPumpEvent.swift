@@ -68,7 +68,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         }
         
         func decodeInsulin(from bytes: Data) -> Double {
-            return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.strokesPerUnit)
+            return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.insulinBitPackingScale)
         }
         
         length = BolusNormalPumpEvent.calculateLength(pumpModel.larger)

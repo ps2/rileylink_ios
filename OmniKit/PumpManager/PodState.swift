@@ -410,8 +410,10 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
     
     public init(lot: UInt32 = 0, tid: UInt32 = 0, seed: UInt16 = 0) {
         table = Array(repeating: UInt32(0), count: 2 + 16)
-        table[0] = (lot & 0xFFFF) &+ (lot >> 16) &+ 0x55543DC3
-        table[1] = (tid & 0xFFFF) &+ (tid >> 16) &+ 0xAAAAE44E
+        table[0] = (lot & 0xFFFF) + 0x55543DC3 + (lot >> 16)
+        table[0] = table[0] & 0xFFFFFFFF
+        table[1] = (tid & 0xFFFF) + 0xAAAAE44E + (tid >> 16)
+        table[1] = table[1] & 0xFFFFFFFF
         
         idx = 0
         
@@ -426,9 +428,9 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
     }
     
     private mutating func generateEntry() -> UInt32 {
-        table[0] = (table[0] >> 16) &+ ((table[0] & 0xFFFF) &* 0x5D7F)
-        table[1] = (table[1] >> 16) &+ ((table[1] & 0xFFFF) &* 0x8CA0)
-        return table[1] &+ ((table[0] & 0xFFFF) << 16)
+        table[0] = ((table[0] >> 16) + (table[0] & 0xFFFF) * 0x5D7F) & 0xFFFFFFFF
+        table[1] = ((table[1] >> 16) + (table[1] & 0xFFFF) * 0x8CA0) & 0xFFFFFFFF
+        return UInt32((UInt64(table[1]) + (UInt64((table[0]) & 0xFFFF) << 16)) & 0xFFFFFFFF)
     }
     
     public mutating func advanceToNextNonce() {

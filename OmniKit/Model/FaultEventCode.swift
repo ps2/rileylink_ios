@@ -16,21 +16,21 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case noFaults                             = 0x00
         case failedFlashErase                     = 0x01
         case failedFlashStore                     = 0x02
-        case tableCorruptionBasalExtraCommand     = 0x03
+        case tableCorruptionBasalSubcommand       = 0x03
         case corruptionByte720                    = 0x05
-        case errorInResetHelper6                  = 0x06
-        case rtcInterruptHandlerCalled            = 0x07
+        case dataCorruptionInTestRTCInterrupt     = 0x06
+        case rtcInterruptHandlerInconsistentState = 0x07
         case valueGreaterThan8                    = 0x08
         case bf0notEqualToBF1                     = 0x0A
-        case tableCorruptionTempBasalExtraCommand = 0x0B
+        case tableCorruptionTempBasalSubcommand   = 0x0B
         case resetDueToCOP                        = 0x0D
         case resetDueToIllegalOpcode              = 0x0E
         case resetDueToIllegalAddress             = 0x0F
         case resetDueToSAWCOP                     = 0x10
         case corruptionInByte_866                 = 0x11
         case resetDueToLVD                        = 0x12
-        case messageLengthGreaterThan0x108        = 0x13
-        case problemInBigRoutine3                 = 0x14
+        case messageLengthTooLong                 = 0x13
+        case occluded                             = 0x14
         case corruptionInWord129                  = 0x15
         case corruptionInByte868                  = 0x16
         case corruptionInAValidatedTable          = 0x17
@@ -39,14 +39,14 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case badPowerSwitchArrayValue2            = 0x1A
         case badLoadCnthValue                     = 0x1B
         case exceededMaximumPodLife80Hrs          = 0x1C
-        case wrongValue0x4008                     = 0x1D
+        case badStateCommand1AScheduleParse       = 0x1D
         case unexpectedStateInRegisterUponReset   = 0x1E
         case wrongSummaryForTable129              = 0x1F
         case validateCountErrorWhenBolusing       = 0x20
         case badTimerVariableState                = 0x21
         case unexpectedRTCModuleValueDuringReset  = 0x22
         case problemCalibrateTimer                = 0x23
-        case rtcInterruptHandlerCalledByte358     = 0x26
+        case rtcInterruptHandlerUnexpectedCall    = 0x26
         case missing2hourAlertToFillTank          = 0x27
         case faultEventSetupPod                   = 0x28
         case errorMainLoopHelper0                 = 0x29
@@ -59,8 +59,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case errorMainLoopHelper7                 = 0x30
         case insulinDeliveryCommandError          = 0x31
         case badValueStartupTest                  = 0x32
-        case badDecrementTab1                     = 0x33
-        case badStateInReset                      = 0x34
+        case connectedPodCommandTimeout           = 0x33
+        case resetFromUnknownCause                = 0x34
         case errorFlashInitialisiation            = 0x36
         case unexpectedValueByte358               = 0x38
         case problemWithLoad1and2                 = 0x39
@@ -69,11 +69,12 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case testInProgress                       = 0x3C
         case problemWithPumpAnchor                = 0x3D
         case errorFlashWrite                      = 0x3E
-        case badInitialByte357and71State          = 0x40
-        case badValueByte357                      = 0x42
-        case badValueByte71                       = 0x43
-        case checkVoltagePullup1                  = 0x44
-        case checkVoltagePullup2                  = 0x45
+        case encoderCountTooHigh                  = 0x40
+        case encoderCountExcessiveVariance        = 0x41
+        case encoderCountTooLow                   = 0x42
+        case encoderCountProblem                  = 0x43
+        case checkVoltageOpenWire1                = 0x44
+        case checkVoltageOpenWire2                = 0x45
         case problemWithLoad1and2type46           = 0x46
         case problemWithLoad1and2type47           = 0x47
         case badTimerCalibration                  = 0x48
@@ -92,42 +93,43 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case badArgToGetEntry                     = 0x57
         case badArgToUpdate37ATable               = 0x58
         case errorUpdating37ATable                = 0x59
-        case problemInsideBigRoutine1Type5A       = 0x5A
+        case occlusionCheckValueTooHigh           = 0x5A
         case loadTableCorruption                  = 0x5B
-        case deliveryErrorDuringPriming           = 0x5C
+        case primeOpenCountTooLow                 = 0x5C
         case badValueByte109                      = 0x5D
         case disableFlashSecurityFailed           = 0x5E
         case checkVoltageFailure                  = 0x5F
-        case problemBigRoutine1Type60             = 0x60
-        case problemBigRoutine1Type61             = 0x61
-        case problemBigRoutine1Type62             = 0x62
-        case problemBigRoutine1Type66             = 0x66
-        case problemBigRoutine1Type67             = 0x67
-        case problemBigRoutine1Type68             = 0x68
-        case problemBigRoutine1Type69             = 0x69
-        case problemBigRoutine1Type6A             = 0x6A
-        case problemBasalUpdateType80             = 0x80
-        case problemBasalUpdateType81             = 0x81
-        case problemTempBasalUpdateType82         = 0x82
-        case problemTempBasalUpdateType83         = 0x83
-        case problemBolusUpdateType84             = 0x84
-        case problemBolusUpdateType85             = 0x85
-        case faultEventSetupPodType86             = 0x86
-        case faultEventSetupPodType87             = 0x87
-        case faultEventSetupPodType88             = 0x88
-        case faultEventSetupPodType89             = 0x89
-        case faultEventSetupPodType8A             = 0x8A
+        case occlusionCheckStartup1               = 0x60
+        case occlusionCheckStartup2               = 0x61
+        case occlusionCheckTimeouts1              = 0x62
+        case occlusionCheckTimeouts2              = 0x66
+        case occlusionCheckTimeouts3              = 0x67
+        case occlusionCheckPulseIssue             = 0x68
+        case occlusionCheckBolusProblem           = 0x69
+        case occlusionCheckAboveThreshold         = 0x6A
+        case basalUnderInfusion                   = 0x80
+        case basalOverInfusion                    = 0x81
+        case tempBasalUnderInfusion               = 0x82
+        case tempBasalOverInfusion                = 0x83
+        case bolusUnderInfusion                   = 0x84
+        case bolusOverInfusion                    = 0x85
+        case basalOverInfusionPulse               = 0x86
+        case tempBasalOverInfusionPulse           = 0x87
+        case bolusOverInfusionPulse               = 0x88
+        case immediateBolusOverInfusionPulse      = 0x89
+        case extendedBolusOverInfusionPulse       = 0x8A
         case corruptionOfTables                   = 0x8B
-        case faultEventSetupPodType8D             = 0x8D
-        case faultEventSetupPodType8E             = 0x8E
-        case faultEventSetupPodType8F             = 0x8F
+        case badInputToVerifyAndStartPump         = 0x8D
+        case badPumpReq5State                     = 0x8E
+        case command1AParseUnexpectedFailed       = 0x8F
         case badValueForTables                    = 0x90
-        case faultEventSetupPodType91             = 0x91
-        case faultEventSetupPodType92             = 0x92
-        case faultEventSetupPodType93             = 0x93
+        case badPumpReq1State                     = 0x91
+        case badPumpReq2State                     = 0x92
+        case badPumpReq3State                     = 0x93
         case badValueField6in0x1A                 = 0x95
-        case valuesDoNotMatchOrAreGreaterThen0x96 = 0x96
-        case valuesDoNotMatchOrAreGreaterThen0x97 = 0x97
+        case badStateInClearBolusIST2AndVars      = 0x96
+        case badStateInMaybeInc33D                = 0x97
+        case valuesDoNotMatchOrAreGreaterThan0x97 = 0x98
     }
     
     public var faultType: FaultEventType? {
@@ -147,23 +149,23 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .noFaults:
                     return "No fault"
                 case .failedFlashErase:
-                    return "Flash erase failed in $4x00 page"
+                    return "Flash erase failed"
                 case .failedFlashStore:
-                    return "Flash store failed in $4x00 page"
-                case .tableCorruptionBasalExtraCommand:
-                    return "Basal extra command table corruption"
+                    return "Flash store failed"
+                case .tableCorruptionBasalSubcommand:
+                    return "Basal subcommand table corruption"
                 case .corruptionByte720:
                     return "Corruption in byte_720"
-                case .errorInResetHelper6:
-                    return "Error in RESET_helper_6"
-                case .rtcInterruptHandlerCalled:
-                    return "RTC interrupt handler called when byte_358 is not 1"
+                case .dataCorruptionInTestRTCInterrupt:
+                    return "Data corruption error in test_RTC_interrupt"
+                case .rtcInterruptHandlerInconsistentState:
+                    return "RTC interrupt handler called with inconstent state"
                 case .valueGreaterThan8:
                     return "Value > 8"
                 case .bf0notEqualToBF1:
                     return "Corruption in byte_BF0"
-                case .tableCorruptionTempBasalExtraCommand:
-                    return "Temp basal extra command table corruption"
+                case .tableCorruptionTempBasalSubcommand:
+                    return "Temp basal subcommand table corruption"
                 case .resetDueToCOP:
                     return "Reset due to COP"
                 case .resetDueToIllegalOpcode:
@@ -176,10 +178,10 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Corruption in byte_866"
                 case .resetDueToLVD:
                     return "Reset due to LVD"
-                case .messageLengthGreaterThan0x108:
-                    return "Message length > $108"
-                case .problemInBigRoutine3:
-                    return "Problem in big_routine_3"
+                case .messageLengthTooLong:
+                    return "Message length too long"
+                case .occluded:
+                    return "Occluded"
                 case .corruptionInWord129:
                     return "Corruption in word_129 table/word_86A/dword_86E"
                 case .corruptionInByte868:
@@ -196,8 +198,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Bad LOADCNTH value when running pump"
                 case .exceededMaximumPodLife80Hrs:
                     return "Exceeded maximum Pod life of 80 hours"
-                case .wrongValue0x4008:
-                    return "Unexpected internal state command_1A_schedule_parse_routine_wrapper"
+                case .badStateCommand1AScheduleParse:
+                    return "Unexpected internal state in command_1A_schedule_parse_routine_wrapper"
                 case .unexpectedStateInRegisterUponReset:
                     return "Unexpected commissioned state in status and control register upon reset"
                 case .wrongSummaryForTable129:
@@ -210,8 +212,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Unexpected RTC Modulo Register value during reset"
                 case .problemCalibrateTimer:
                     return "Problem in calibrate_timer_case_3"
-                case .rtcInterruptHandlerCalledByte358:
-                    return "RTC interrupt handler called when byte_358 is 1"
+                case .rtcInterruptHandlerUnexpectedCall:
+                    return "RTC interrupt handler unexpectedly called"
                 case .missing2hourAlertToFillTank:
                     return "Failed to set up 2 hour alert for tank fill operation"
                 case .faultEventSetupPod:
@@ -236,12 +238,12 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Incorrect pod state for command or error during insulin command setup"
                 case .badValueStartupTest:
                     return "Bad value during startup testing"
-                case .badDecrementTab1:
-                    return "Tab1[$12] was unexpectedly 0 after decrementing"
-                case .badStateInReset:
-                    return "Bad internal state in __RESET"
+                case .connectedPodCommandTimeout:
+                    return "Connected Pod command timeout"
+                case .resetFromUnknownCause:
+                    return "Reset from unknown cause"
                 case .errorFlashInitialisiation:
-                    return "Flash initialization error, wrong bit set in $4008"
+                    return "Flash initialization error"
                 case .unexpectedValueByte358:
                     return "Unexpected byte_358 value"
                 case .problemWithLoad1and2:
@@ -255,17 +257,19 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                 case .problemWithPumpAnchor:
                     return "Problem with pump anchor"
                 case .errorFlashWrite:
-                    return "Flash initialization error/failed writing to $4000/flash write error"
-                case .badInitialByte357and71State:
-                    return "validate_encoder_count bad initial byte_71 & byte_357 state"
-                case .badValueByte357:
-                    return "validate_encoder_count bad byte_357 value"
-                case .badValueByte71:
-                    return "validate_encoder_count bad exit byte_71 value"
-                case .checkVoltagePullup1:
-                    return "check_LOAD_voltage PRACMP Pullup 1 problem"
-                case .checkVoltagePullup2:
-                    return "check_LOAD_voltage PRACMP Pullup 2 problem"
+                    return "Flash initialization or write error"
+                case .encoderCountTooHigh:
+                    return "Encoder count too high"
+                case .encoderCountExcessiveVariance:
+                    return "Encoder count excessive variance"
+                case .encoderCountTooLow:
+                    return "Encoder count too low"
+                case .encoderCountProblem:
+                    return "Encoder count problem"
+                case .checkVoltageOpenWire1:
+                    return "Check voltage open wire 1 problem"
+                case .checkVoltageOpenWire2:
+                    return "Check voltage open wire 2 problem"
                 case .problemWithLoad1and2type46:
                     return "Problem with LOAD1/LOAD2"
                 case .problemWithLoad1and2type47:
@@ -302,78 +306,80 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Bad argument to update_37A_table"
                 case .errorUpdating37ATable:
                     return "Error updating constants byte_37A table"
-                case .problemInsideBigRoutine1Type5A:
-                    return "Problem inside big_routine_1"
+                case .occlusionCheckValueTooHigh:
+                    return "Occlusion check value too high for detection"
                 case .loadTableCorruption:
                     return "Load table corruption"
-                case .deliveryErrorDuringPriming:
-                    return "Bad internal state in byte_35x_byte_11D_stuff after priming"
+                case .primeOpenCountTooLow:
+                    return "Prime open count too low"
                 case .badValueByte109:
                     return "Bad byte_109 value"
                 case .disableFlashSecurityFailed:
                     return "Write flash byte to disable flash security failed"
                 case .checkVoltageFailure:
-                    return "Two check_LOAD_voltage failures before starting pump"
-                case .problemBigRoutine1Type60:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type61:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type62:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type66:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type67:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type68:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type69:
-                    return "Problem inside big_routine_1"
-                case .problemBigRoutine1Type6A:
-                    return "Problem inside big_routine_1"
-                case .problemBasalUpdateType80:
-                    return "Basal PPPP count too high when counter expired"
-                case .problemBasalUpdateType81:
-                    return "Basal PPPP count too low when counter expired"
-                case .problemTempBasalUpdateType82:
-                    return "Temp basal PPPP count too low when counter expired"
-                case .problemTempBasalUpdateType83:
-                    return "Temp basal PPPP count too high when counter expired"
-                case .problemBolusUpdateType84:
-                    return "Bolus PPPP count too high when counter expired"
-                case .problemBolusUpdateType85:
-                    return "Bolus PPPP count too low when counter expired"
-                case .faultEventSetupPodType86:
-                    return "Bolus PPPP count too low when about to pulse"
-                case .faultEventSetupPodType87:
-                    return "Temp basal PPPP count too low when about to pulse"
-                case .faultEventSetupPodType88:
-                    return "Pump request 3 with bolus IST index # not 0 or bolus PPPP count too low when about to pulse"
-                case .faultEventSetupPodType89:
-                    return "Pump request 4 and bolus IST index # is 0 about to pulse"
-                case .faultEventSetupPodType8A:
-                    return "Pump request 4 and bolus PPPP count too low when about to pulse"
+                    return "Two check voltage failures before starting pump"
+                case .occlusionCheckStartup1:
+                    return "Occlusion check startup problem 1"
+                case .occlusionCheckStartup2:
+                    return "Occlusion check startup problem 2"
+                case .occlusionCheckTimeouts1:
+                    return "Occlusion check excess timeouts 1"
+                case .occlusionCheckTimeouts2:
+                    return "Occlusion check excess timeouts 2"
+                case .occlusionCheckTimeouts3:
+                    return "Occlusion check excess timeouts 3"
+                case .occlusionCheckPulseIssue:
+                    return "Occlusion check pulse issue"
+                case .occlusionCheckBolusProblem:
+                    return "Occlusion check bolus problem"
+                case .occlusionCheckAboveThreshold:
+                    return "Occlusion check above threshold"
+                case .basalUnderInfusion:
+                    return "Basal under infusion"
+                case .basalOverInfusion:
+                    return "Basal over infusion"
+                case .tempBasalUnderInfusion:
+                    return "Temp basal under infusion"
+                case .tempBasalOverInfusion:
+                    return "Temp basal over infusion"
+                case .bolusUnderInfusion:
+                    return "Bolus under infusion"
+                case .bolusOverInfusion:
+                    return "Bolus over infusion"
+                case .basalOverInfusionPulse:
+                    return "Basal over infusion pulse"
+                case .tempBasalOverInfusionPulse:
+                    return "Temp basal over infusion pulse"
+                case .bolusOverInfusionPulse:
+                    return "Bolus over infusion pulse"
+                case .immediateBolusOverInfusionPulse:
+                    return "Immediate bolus under infusion pulse"
+                case .extendedBolusOverInfusionPulse:
+                    return "Extended bolus over infusion pulse"
                 case .corruptionOfTables:
                     return "Corruption of $283/$2E3/$315 tables"
-                case .faultEventSetupPodType8D:
+                case .badInputToVerifyAndStartPump:
                     return "Bad input value to verify_and_start_pump"
-                case .faultEventSetupPodType8E:
+                case .badPumpReq5State:
                     return "Pump req 5 with basal IST not set or temp basal IST set"
-                case .faultEventSetupPodType8F:
+                case .command1AParseUnexpectedFailed:
                     return "Command 1A parse routine unexpected failed"
                 case .badValueForTables:
                     return "Bad value for $283/$2E3/$315 table specification"
-                case .faultEventSetupPodType91:
+                case .badPumpReq1State:
                     return "Pump request 1 with temp basal IST not set"
-                case .faultEventSetupPodType92:
+                case .badPumpReq2State:
                     return "Pump request 2 with temp basal IST not set"
-                case .faultEventSetupPodType93:
+                case .badPumpReq3State:
                     return "Pump request 3 and bolus IST not set when about to pulse"
                 case .badValueField6in0x1A:
                     return "Bad table specifier field6 in 1A command"
-                case .valuesDoNotMatchOrAreGreaterThen0x96:
+                case .badStateInClearBolusIST2AndVars:
                     return "Bad variable state in clear_Bolus_IST2_and_vars"
-                case .valuesDoNotMatchOrAreGreaterThen0x97:
-                    return "Bad variable state in maybe_inc_33DF"
+                case .badStateInMaybeInc33D:
+                    return "Bad variable state in maybe_inc_33D"
+                case .valuesDoNotMatchOrAreGreaterThan0x97:
+                    return "Unknown fault code"
                 }
             }()
         } else {

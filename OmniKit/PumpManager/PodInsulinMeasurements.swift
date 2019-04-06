@@ -17,7 +17,7 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
     
     public init(statusResponse: StatusResponse, validTime: Date) {
         self.validTime = validTime
-        self.delivered = statusResponse.insulin
+        self.delivered = statusResponse.insulin - Pod.primeUnits
         self.reservoirVolume = statusResponse.reservoirLevel
     }
     

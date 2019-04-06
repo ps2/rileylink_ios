@@ -280,11 +280,10 @@ public class PodCommsSession {
         podState.primeFinishTime = primeFinishTime
         podState.setupProgress = .startingPrime
 
-        let primeUnits = 2.6
         let timeBetweenPulses = TimeInterval(seconds: 1)
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
         let scheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
-        let bolusExtraCommand = BolusExtraCommand(units: primeUnits, timeBetweenPulses: timeBetweenPulses)
+        let bolusExtraCommand = BolusExtraCommand(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
         let status: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status)
         podState.setupProgress = .priming

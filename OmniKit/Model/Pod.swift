@@ -33,13 +33,20 @@ public struct Pod {
     // Maximum reservoir level reading
     public static let maximumReservoirReading: Double = 50
 
+    // Reservoir Capacity
     public static let reservoirCapacity: Double = 200
 
+    // Supported basal rates
     public static let supportedBasalRates: [Double] = (1...600).map { Double($0) / Double(pulsesPerUnit) }
 
+    // Maximum number of basal schedule entries supported
     public static let maximumBasalScheduleEntryCount: Int = 24
 
+    // Minimum duration of a single basal schedule entry
     public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
+
+    // Amount of insulin delivered for priming
+    public static let primeUnits = 2.6
 }
 
 public enum SetupState: UInt8 {

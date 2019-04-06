@@ -5,4 +5,4 @@ xcode_scheme: RileyLink
 before_script:
     - git config --global protocol.version 1
 script:
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink build -destination 'name=iPhone SE' test
+    - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -scheme RileyLink build -destination 'name=iPhone SE' test | xcpretty

@@ -301,7 +301,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         }
     }
 
-    private var bolusStateTransitioning: Bool = false {
+    private enum BolusTransition {
+        case initiating
+        case canceling
+    }
+
+    private var bolusTransition: BolusTransition? {
         didSet {
             notifyStatusObservers()
         }
@@ -311,12 +316,18 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         guard let podState = state.podState else {
             return .none
         }
-        
-        if let bolus = podState.unfinalizedBolus, !bolus.finished {
-            // TODO: return progress
-            return bolusStateTransitioning ? .canceling : .inProgress(DoseEntry(bolus))
-        } else {
-            return bolusStateTransitioning ? .initiating : .none
+
+        switch bolusTransition {
+        case .initiating?:
+            return .initiating
+        case .canceling?:
+            return .canceling
+        case .none:
+            if let bolus = podState.unfinalizedBolus, !bolus.finished {
+                return .inProgress(DoseEntry(bolus))
+            } else {
+                return .none
+            }
         }
     }
     
@@ -768,8 +779,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     return
                 }
                 
-                defer { self.bolusStateTransitioning = false }
-                self.bolusStateTransitioning = true
+                defer { self.bolusTransition = nil }
+                self.bolusTransition = .initiating
                 
                 let date = Date()
                 let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
@@ -810,6 +821,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 }
 
                 do {
+                    defer { self.bolusTransition = nil }
+                    self.bolusTransition = .canceling
+
                     let result = session.cancelDelivery(deliveryType: .bolus, beepType: .noBeep)
                     switch result {
                     case .certainFailure(let error):

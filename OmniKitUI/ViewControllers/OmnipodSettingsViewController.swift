@@ -285,9 +285,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.textLabel?.text = LocalizedString("Finish pod setup", comment: "The title of the command to finish pod setup")
                 } else {
                     cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
+                    cell.tintColor = .deleteColor
                 }
 
-                cell.tintColor = .deleteColor
                 cell.isEnabled = true
                 return cell
             }

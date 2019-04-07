@@ -17,7 +17,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     public static let version = 2
     
     public var podState: PodState?
-    
+
     public var timeZone: TimeZone
     
     public var basalSchedule: BasalSchedule
@@ -26,11 +26,14 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var messageLog = MessageLog()
 
+    public var unstoredDoses: [UnfinalizedDose]
+
     public init(podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?) {
         self.podState = podState
         self.timeZone = timeZone
         self.basalSchedule = basalSchedule
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
+        self.unstoredDoses = []
     }
     
     public init?(rawValue: RawValue) {

@@ -10,6 +10,7 @@ import Foundation
 
 public struct TempBasalExtraCommand : MessageBlock {
     
+    public let acknowledgementBeep: Bool
     public let confidenceReminder: Bool
     public let programReminderInterval: TimeInterval
     public let remainingPulses: Double
@@ -19,11 +20,11 @@ public struct TempBasalExtraCommand : MessageBlock {
     public let blockType: MessageBlockType = .tempBasalExtra
     
     public var data: Data {
-        let reminders = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0)
+        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
-            reminders,
+            beepOptions,
             0
             ])
         data.appendBigEndian(UInt16(round(remainingPulses * 2) * 5))
@@ -43,6 +44,7 @@ public struct TempBasalExtraCommand : MessageBlock {
         let length = encodedData[1]
         let numEntries = (length - 8) / 6
         
+        acknowledgementBeep = encodedData[2] & (1<<7) != 0
         confidenceReminder = encodedData[2] & (1<<6) != 0
         programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
         
@@ -69,10 +71,11 @@ public struct TempBasalExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(rate: Double, duration: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) {
+    public init(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool, confidenceReminder: Bool, programReminderInterval: TimeInterval) {
         rateEntries = RateEntry.makeEntries(rate: rate, duration: duration)
         remainingPulses = rateEntries[0].totalPulses
         delayUntilNextPulse = rateEntries[0].delayBetweenPulses
+        self.acknowledgementBeep = acknowledgementBeep
         self.confidenceReminder = confidenceReminder
         self.programReminderInterval = programReminderInterval
     }

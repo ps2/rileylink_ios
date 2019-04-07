@@ -906,7 +906,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                             return self.store(doses: doses)
                         }
                     } else {
-                        let result = session.setTempBasal(rate: rate, duration: duration, confidenceReminder: false, programReminderInterval: 0)
+                        let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: 0)
                         let basalStart = Date()
                         let dose = DoseEntry(type: .tempBasal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                         switch result {
@@ -992,7 +992,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         case .success:
                             break
                         }
-                        let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: 0)
+                        let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: 0)
                         self.state.basalSchedule = schedule
                         completion(nil)
                     case .failure(let error):

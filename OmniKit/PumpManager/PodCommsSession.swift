@@ -309,6 +309,7 @@ public class PodCommsSession {
         // Set basal schedule
         let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, confidenceReminder: false, programReminderInterval: .minutes(0))
         podState.setupProgress = .initialBasalScheduleSet
+        podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain))
     }
 
     private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
@@ -568,13 +569,8 @@ public class PodCommsSession {
     }
 
     func dosesForStorage(_ storageHandler: ([UnfinalizedDose]) -> Bool) {
-        var dosesToStore = podState.finalizedDoses
-        if let unfinalizedTempBasal = podState.unfinalizedTempBasal {
-            dosesToStore.append(unfinalizedTempBasal)
-        }
-        if let unfinalizedSuspend = podState.unfinalizedSuspend {
-            dosesToStore.append(unfinalizedSuspend)
-        }
+        let dosesToStore = podState.dosesToStore
+
         if storageHandler(dosesToStore) {
             log.info("Stored %@", String(describing: dosesToStore))
             self.podState.finalizedDoses.removeAll()

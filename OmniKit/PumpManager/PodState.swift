@@ -46,11 +46,25 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let tid: UInt32
     var activeAlertSlots: AlertSet
     public var lastInsulinMeasurements: PodInsulinMeasurements?
+
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
     public var unfinalizedSuspend: UnfinalizedDose?
     public var unfinalizedResume: UnfinalizedDose?
+
     var finalizedDoses: [UnfinalizedDose]
+
+    public var dosesToStore: [UnfinalizedDose] {
+        var dosesToStore = finalizedDoses
+        if let unfinalizedTempBasal = unfinalizedTempBasal {
+            dosesToStore.append(unfinalizedTempBasal)
+        }
+        if let unfinalizedSuspend = unfinalizedSuspend {
+            dosesToStore.append(unfinalizedSuspend)
+        }
+        return dosesToStore
+    }
+
     public private(set) var suspended: Bool
     public var fault: PodInfoFaultEvent?
     public var messageTransportState: MessageTransportState

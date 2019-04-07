@@ -391,12 +391,20 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func forgetPod() {
         queue.async {
+            if let podState = self.state.podState {
+                let dosesToStore = podState.dosesToStore
+                if !self.store(doses: dosesToStore) {
+                    self.state.unstoredDoses.append(contentsOf: dosesToStore)
+                }
+            }
+
             self.state.podState = nil
             self.podComms = PodComms(podState: nil)
             self.podComms.delegate = self
             self.podComms.messageLogger = self
             self.notifyPodStateObservers()
             self.state.messageLog.erase()
+
         }
     }
     
@@ -433,6 +441,12 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         #else
         
         queue.async {
+
+            if self.state.unstoredDoses.count > 0 {
+                if self.store(doses: self.state.unstoredDoses) {
+                    self.state.unstoredDoses.removeAll()
+                }
+            }
             
             if let podState = self.state.podState, !podState.setupProgress.primingNeeded {
                 completion(.failure(OmnipodPumpManagerError.podAlreadyPrimed))
@@ -518,6 +532,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                         if podState.setupProgress.needsInitialBasalSchedule {
                             let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
                             try session.programInitialBasalSchedule(self.state.basalSchedule, scheduleOffset: scheduleOffset)
+
+                            session.dosesForStorage() { (doses) -> Bool in
+                                return self.store(doses: doses)
+                            }
                         }
 
                         let finishWait = try session.insertCannula()

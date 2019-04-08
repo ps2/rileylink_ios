@@ -122,7 +122,7 @@ extension PodCommsError: LocalizedError {
         case .noRileyLinkAvailable:
             return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion when no RileyLink is available")
         case .unfinalizedBolus:
-            return LocalizedString("Wait for existing bolus to finish, or suspend to cancel", comment: "Recovery suggestion when operation could not be completed due to existing bolus in progress")
+            return LocalizedString("Wait for existing bolus to finish, or cancel bolus", comment: "Recovery suggestion when operation could not be completed due to existing bolus in progress")
         case .unfinalizedTempBasal:
             return LocalizedString("Wait for existing temp basal to finish, or suspend to cancel", comment: "Recovery suggestion when operation could not be completed due to existing temp basal in progress")
         case .nonceResyncFailed:

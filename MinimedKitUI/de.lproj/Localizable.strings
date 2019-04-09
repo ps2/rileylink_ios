@@ -167,7 +167,7 @@
 "Save to Pump…" = "In der Pumpe abspeichern…";
 
 /* The title of the command to send a button press */
-"Send Button Press" = "Senden Knopfdruck";
+"Send Button Press" = "Sende-Taste drücken";
 
 /* Progress message for sending button press to pump. */
 "Sending button press…" = "Sende Knopfdruck…";

@@ -15,45 +15,37 @@ class ReplacePodViewController: SetupTableViewController {
 
     enum PodReplacementReason {
         case normal
-        case fault
+        case fault(_ eventType: FaultEventCode.FaultEventType)
         case canceledPairingBeforeApplication
         case canceledPairing
     }
 
-    private var faultType: FaultEventCode.FaultEventType?
-
     var replacementReason: PodReplacementReason = .normal {
         didSet {
-            if oldValue != replacementReason {
-                switch replacementReason {
-                case .normal:
+            switch replacementReason {
+            case .normal:
                     break // Text set in interface builder
-                case .fault:
-                    if let eventType = self.faultType {
-                        switch eventType {
-                        case .reservoirEmpty:                                                                       // $18
-                            instructionsLabel.text = LocalizedString("Empty reservoir. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an empty reservoir")
-                        case .exceededMaximumPodLife80Hrs:                                                          // $1C
-                            instructionsLabel.text = LocalizedString("Pod expired. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an expired pod")
-                        case .occluded,                                                                             // $14
-                             .occlusionCheckValueTooHigh, .occlusionCheckStartup1, .occlusionCheckStartup2,         // $5A, $60, $60
-                             .occlusionCheckTimeouts1, .occlusionCheckTimeouts2, .occlusionCheckTimeouts3,          // $62, $66, $67
-                             .occlusionCheckPulseIssue, .occlusionCheckBolusProblem, .occlusionCheckAboveThreshold: // $68, $69, $6A
-                            instructionsLabel.text = LocalizedString("Occlusion detected. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an occlusion")
-                        default:
-                            instructionsLabel.text = String(format: LocalizedString("The pod has detected internal fault 0x%02x. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to a fault (1: The fault code value)"), eventType.rawValue)
-                        }
-                    } else {
-                        instructionsLabel.text = LocalizedString("The pod has detected an internal fault. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an fault")
-                    }
-                case .canceledPairingBeforeApplication:
-                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
-                case .canceledPairing:
-                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one.  Please deactivate and remove pod.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
+            case .fault(let eventType):
+                switch eventType {
+                case .reservoirEmpty:              // $18
+                    instructionsLabel.text = LocalizedString("Empty reservoir. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an empty reservoir")
+                case .exceededMaximumPodLife80Hrs: // $1C
+                    instructionsLabel.text = LocalizedString("Pod expired. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an expired pod")
+                case .occluded,                    // $14
+                     .occlusionCheckValueTooHigh, .occlusionCheckStartup1, .occlusionCheckStartup2,         // $5A, $60, $60
+                     .occlusionCheckTimeouts1, .occlusionCheckTimeouts2, .occlusionCheckTimeouts3,          // $62, $66, $67
+                     .occlusionCheckPulseIssue, .occlusionCheckBolusProblem, .occlusionCheckAboveThreshold: // $68, $69, $6A
+                    instructionsLabel.text = LocalizedString("Occlusion detected. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an occlusion")
+                default:
+                    instructionsLabel.text = String(format: LocalizedString("The pod has detected internal fault 0x%02x. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to a fault (1: The fault code value)"), eventType.rawValue)
                 }
-                
-                tableView.reloadData()
+            case .canceledPairingBeforeApplication:
+                instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
+            case .canceledPairing:
+                instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Please deactivate and remove pod.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
             }
+
+            tableView.reloadData()
         }
     }
     
@@ -61,9 +53,12 @@ class ReplacePodViewController: SetupTableViewController {
         didSet {
             pumpManager.getPodState { (podState) in
                 DispatchQueue.main.async {
-                    if let fault = podState?.fault {
-                        self.faultType = fault.currentStatus.faultType
-                        self.replacementReason = .fault
+                    if let podFault = podState?.fault {
+                        if let faultType = podFault.currentStatus.faultType {
+                            self.replacementReason = .fault(faultType)
+                        } else {
+                            self.replacementReason = .fault(.valuesDoNotMatchOrAreGreaterThan0x97)
+                        }
                     } else if podState?.setupProgress.primingNeeded == true {
                         self.replacementReason = .canceledPairingBeforeApplication
                     } else if podState?.setupProgress.needsCannulaInsertion == true {

@@ -68,13 +68,13 @@
 "Pump responded unexpectedly" = "Pumpe hat unerwartet geantwortet";
 
 /* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
-"PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "MensageMicroinfusadora(%1$@, %2$@, %3$@, %4$@)";
+"PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "Pumpennachricht(%1$@, %2$@, %3$@, %4$@)";
 
 /* Describing the reservoir insulin data source */
 "Reservoir" = "Reservoir";
 
 /* Error description */
-"RileyLink radio tune failed" = "RileyLink Radiosignal fehlerhaft";
+"RileyLink radio tune failed" = "Einstellen des RileyLink Funksignals fehlgeschlagen";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Temporäre Basalrate: %1$.3f E/St";

@@ -10,7 +10,7 @@ import Foundation
 
 
 public struct FaultEventCode: CustomStringConvertible, Equatable {
-    let rawValue: UInt8
+    public let rawValue: UInt8
     
     public enum FaultEventType: UInt8 {
         case noFaults                             = 0x00

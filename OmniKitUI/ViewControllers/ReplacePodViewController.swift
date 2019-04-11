@@ -26,27 +26,20 @@ class ReplacePodViewController: SetupTableViewController {
             case .normal:
                     break // Text set in interface builder
             case .fault(let faultCode):
-                if let faultType = faultCode.faultType {
-                    switch faultType {
-                    case .reservoirEmpty:              // $18
-                       instructionsLabel.text = LocalizedString("Empty reservoir. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an empty reservoir")
-                    case .exceededMaximumPodLife80Hrs: // $1C
-                       instructionsLabel.text = LocalizedString("Pod expired. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an expired pod")
-                    case .occluded,                    // $14
-                         .occlusionCheckValueTooHigh, .occlusionCheckStartup1, .occlusionCheckStartup2,         // $5A, $60, $60
-                         .occlusionCheckTimeouts1, .occlusionCheckTimeouts2, .occlusionCheckTimeouts3,          // $62, $66, $67
-                         .occlusionCheckPulseIssue, .occlusionCheckBolusProblem, .occlusionCheckAboveThreshold: // $68, $69, $6A
+                switch faultCode.rawValue {
+                case 0x18:
+                    instructionsLabel.text = LocalizedString("Empty reservoir. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an empty reservoir")
+                case 0x1C:
+                    instructionsLabel.text = LocalizedString("Pod expired. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an expired pod")
+                case 0x14, 0x5A, 0x60, 0x61, 0x62, 0x66, 0x67, 0x68, 0x69, 0x6A:
                         instructionsLabel.text = LocalizedString("Occlusion detected. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to an occlusion")
-                    default:
-                        instructionsLabel.text = String(format: LocalizedString("The pod has detected internal fault %d. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to a fault (1: The fault code value)"), faultType.rawValue)
-                    }
-                } else {
-                    instructionsLabel.text = LocalizedString("The pod has detected an internal fault. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to a fault ")
+                default:
+                    instructionsLabel.text = String(format: LocalizedString("The pod has detected internal fault %d. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Instructions when replacing pod due to a fault (1: The fault code value)"), faultCode.rawValue)
                 }
             case .canceledPairingBeforeApplication:
-                instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
+                instructionsLabel.text = LocalizedString("Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
             case .canceledPairing:
-                instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Please deactivate and remove pod.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
+                instructionsLabel.text = LocalizedString("Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
             }
 
             tableView.reloadData()

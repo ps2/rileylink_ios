@@ -358,7 +358,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public weak var pumpManagerDelegate: PumpManagerDelegate? {
         didSet {
-            pumpManagerDelegate?.clearNotification(for: self, identifier: LoopNotificationCategory.pumpExpirationWarning.rawValue)
             self.queue.async {
                 self.clearPodExpirationNotification()
                 self.schedulePodExpirationNotification()
@@ -536,17 +535,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 return
             }
 
-            guard let podState = self.state.podState else {
-                completion(.failure(OmnipodPumpManagerError.noPodPaired))
-                return
-            }
-            
             self.podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
                         let primeFinishedAt = try session.prime()
-                        self.state.expirationReminderDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertDefaultTimeBeforeExpiration)
                         completion(.success(primeFinishedAt))
                     } catch let error {
                         completion(.failure(error))
@@ -578,12 +571,14 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         
         queue.async {
             
-            guard let podState = self.state.podState, podState.readyForCannulaInsertion else
+            guard let podState = self.state.podState, let expiresAt = podState.expiresAt, podState.readyForCannulaInsertion else
             {
                 completion(.failure(OmnipodPumpManagerError.notReadyForCannulaInsertion))
                 return
             }
-            
+
+            self.expirationReminderDate = expiresAt.addingTimeInterval(-Pod.expirationReminderAlertDefaultTimeBeforeExpiration)
+
             guard podState.setupProgress.needsCannulaInsertion else {
                 completion(.failure(OmnipodPumpManagerError.podAlreadyPaired))
                 return

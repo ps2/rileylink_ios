@@ -134,6 +134,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
     
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        if activatedAt == nil {
+            self.activatedAt = Date() - response.timeActive
+        }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
         activeAlertSlots = response.alerts
@@ -215,7 +218,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             let address = rawValue["address"] as? UInt32,
             let nonceStateRaw = rawValue["nonceState"] as? NonceState.RawValue,
             let nonceState = NonceState(rawValue: nonceStateRaw),
-            let activatedAt = rawValue["activatedAt"] as? Date,
             let piVersion = rawValue["piVersion"] as? String,
             let pmVersion = rawValue["pmVersion"] as? String,
             let lot = rawValue["lot"] as? UInt32,
@@ -226,12 +228,16 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         
         self.address = address
         self.nonceState = nonceState
-        self.activatedAt = activatedAt
         self.piVersion = piVersion
         self.pmVersion = pmVersion
         self.lot = lot
         self.tid = tid
-        
+
+
+        if let activatedAt = rawValue["activatedAt"] as? Date {
+            self.activatedAt = activatedAt
+        }
+
         if let suspended = rawValue["suspended"] as? Bool {
             self.suspended = suspended
         } else {

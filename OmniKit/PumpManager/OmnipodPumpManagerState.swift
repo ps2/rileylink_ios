@@ -28,6 +28,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var unstoredDoses: [UnfinalizedDose]
 
+    public var expirationReminderDate: Date?
+
     public init(podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?) {
         self.podState = podState
         self.timeZone = timeZone
@@ -69,7 +71,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         } else {
             podState = nil
         }
-        
+
         let timeZone: TimeZone
         if let timeZoneSeconds = rawValue["timeZone"] as? Int,
             let tz = TimeZone(secondsFromGMT: timeZoneSeconds) {
@@ -95,6 +97,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         if let rawMessageLog = rawValue["messageLog"] as? MessageLog.RawValue, let messageLog = MessageLog(rawValue: rawMessageLog) {
             self.messageLog = messageLog
         }
+
+        if let expirationReminderDate = rawValue["expirationReminderDate"] as? Date {
+            self.expirationReminderDate = expirationReminderDate
+        }
     }
     
     public var rawValue: RawValue {
@@ -107,6 +113,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         
         if let podState = podState {
             value["podState"] = podState.rawValue
+        }
+
+        if let expirationReminderDate = expirationReminderDate {
+            value["expirationReminderDate"] = expirationReminderDate
         }
         
         if let rileyLinkConnectionManagerState = rileyLinkConnectionManagerState {
@@ -128,6 +138,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
         return [
             "* timeZone: \(timeZone)",
             "* basalSchedule: \(String(describing: basalSchedule))",
+            "* expirationReminderDate: \(String(describing: expirationReminderDate))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
             String(reflecting: messageLog),

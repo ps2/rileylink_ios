@@ -98,9 +98,9 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         guard let podLifeView = podLifeView else {
             return
         }
-        if let podState = podState {
-            let lifetime = podState.expiresAt.timeIntervalSince(podState.activatedAt)
-            podLifeView.setPodLifeCycle(startTime: podState.activatedAt, lifetime: lifetime)
+        if let activatedAt = podState?.activatedAt, let expiresAt = podState?.expiresAt  {
+            let lifetime = expiresAt.timeIntervalSince(activatedAt)
+            podLifeView.setPodLifeCycle(startTime: activatedAt, lifetime: lifetime)
         } else {
             podLifeView.setPodLifeCycle(startTime: Date(), lifetime: 0)
         }
@@ -140,7 +140,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         
         if let podState = podState {
             rawValue["podActivatedAt"] = podState.activatedAt
-            rawValue["lifetime"] = podState.expiresAt.timeIntervalSince(podState.activatedAt)
+            let lifetime: TimeInterval
+            if let expiresAt = podState.expiresAt, let activatedAt = podState.activatedAt {
+                lifetime = expiresAt.timeIntervalSince(activatedAt)
+            } else {
+                lifetime = 0
+            }
+            rawValue["lifetime"] = lifetime
             rawValue["alerts"] = podState.activeAlerts.values.map { $0.rawValue }
         }
         

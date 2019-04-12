@@ -10,6 +10,7 @@ import HealthKit
 import LoopKit
 import RileyLinkKit
 import RileyLinkBLEKit
+import UserNotifications
 import os.log
 
 public enum ReservoirAlertState {
@@ -247,6 +248,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
             }
         }
     }
+
+    public var expirationReminderDate: Date? {
+        set {
+            self.state.expirationReminderDate = newValue
+            clearPodExpirationNotification()
+            schedulePodExpirationNotification()
+        }
+        get {
+            return self.state.expirationReminderDate
+        }
+    }
     
     private var device: HKDevice {
         if let podState = state.podState {
@@ -344,7 +356,15 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
         return self.state.podState?.isActive == true
     }
     
-    public weak var pumpManagerDelegate: PumpManagerDelegate?
+    public weak var pumpManagerDelegate: PumpManagerDelegate? {
+        didSet {
+            pumpManagerDelegate?.clearNotification(for: self, identifier: LoopNotificationCategory.pumpExpirationWarning.rawValue)
+            self.queue.async {
+                self.clearPodExpirationNotification()
+                self.schedulePodExpirationNotification()
+            }
+        }
+    }
     
     public let log = OSLog(category: "OmnipodPumpManager")
     
@@ -372,7 +392,48 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
 
         return lines.joined(separator: "\n")
     }
-    
+
+
+
+    // MARK: - Notifications
+
+    static let podExpirationNotificationIdentifier = "Omnipod:\(LoopNotificationCategory.pumpExpired.rawValue)"
+
+    func schedulePodExpirationNotification() {
+
+        if let expirationReminderDate = self.state.expirationReminderDate, expirationReminderDate.timeIntervalSinceNow > 0, let expiresAt = self.state.podState?.expiresAt {
+
+            let content = UNMutableNotificationContent()
+
+            let timeBetweenNoticeAndExpiration = expiresAt.timeIntervalSince(expirationReminderDate)
+
+            let formatter = DateComponentsFormatter()
+            formatter.maximumUnitCount = 1
+            formatter.allowedUnits = [.hour, .minute]
+            formatter.unitsStyle = .full
+
+            let timeUntilExpiration = formatter.string(from: timeBetweenNoticeAndExpiration) ?? ""
+
+            content.title = NSLocalizedString("Pod Expiration Notice", comment: "The title for pod expiration notification")
+
+            content.body = String(format: NSLocalizedString("Time to replace your pod! Your pod will expire in %1$@", comment: "The format string for pod expiration notification body (1: time until expiration)"), timeUntilExpiration)
+            content.sound = UNNotificationSound.default
+            content.categoryIdentifier = LoopNotificationCategory.pumpExpired.rawValue
+            content.threadIdentifier = LoopNotificationCategory.pumpExpired.rawValue
+
+            let trigger = UNTimeIntervalNotificationTrigger(
+                timeInterval: expirationReminderDate.timeIntervalSinceNow,
+                repeats: false
+            )
+
+            self.pumpManagerDelegate?.scheduleNotification(for: self, identifier: OmnipodPumpManager.podExpirationNotificationIdentifier, content: content, trigger: trigger)
+        }
+    }
+
+    func clearPodExpirationNotification() {
+        self.pumpManagerDelegate?.clearNotification(for: self, identifier: OmnipodPumpManager.podExpirationNotificationIdentifier)
+    }
+
     // MARK: - Pod comms
     private(set) var podComms: PodComms
     
@@ -411,9 +472,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     // MARK: Testing
     private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil, mockFault: Bool) {
         let start = startDate ?? Date()
-        let expire = start.addingTimeInterval(.days(3))
-        self.state.podState = PodState(address: address, activatedAt: start, expiresAt: expire, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+        self.state.podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
         self.state.podState?.setupProgress = .podConfigured
+        self.state.podState?.activatedAt = start
+        self.state.expirationReminderDate = start + .hours(70)
         
         let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
         self.state.podState?.fault = fault
@@ -447,7 +509,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                     self.state.unstoredDoses.removeAll()
                 }
             }
-            
+
             if let podState = self.state.podState, !podState.setupProgress.primingNeeded {
                 completion(.failure(OmnipodPumpManagerError.podAlreadyPrimed))
                 return
@@ -473,12 +535,18 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
                 completion(.failure(pairError))
                 return
             }
+
+            guard let podState = self.state.podState else {
+                completion(.failure(OmnipodPumpManagerError.noPodPaired))
+                return
+            }
             
             self.podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
                 switch result {
                 case .success(let session):
                     do {
                         let primeFinishedAt = try session.prime()
+                        self.state.expirationReminderDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertDefaultTimeBeforeExpiration)
                         completion(.success(primeFinishedAt))
                     } catch let error {
                         completion(.failure(error))

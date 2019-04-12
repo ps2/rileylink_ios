@@ -281,9 +281,6 @@
 		C104A9C5217E645C006E3C3E /* HUDAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */; };
 		C104A9C7217E9F35006E3C3E /* PodLifeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */; };
 		C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */; };
-		C104A9CE217ECF82006E3C3E /* MKGradientGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */; };
-		C104A9CF217ECF82006E3C3E /* MKRingProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */; };
-		C104A9D0217ECF82006E3C3E /* MKRingProgressLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -373,6 +370,8 @@
 		C17884611D519F1E00405663 /* BatteryIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17884601D519F1E00405663 /* BatteryIndicator.swift */; };
 		C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C17EDC4F2134D0CC0031D9F0 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
+		C1814B88225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B87225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift */; };
+		C1814B8A225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1814B89225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -1217,9 +1216,6 @@
 		C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HUDAssets.xcassets; sourceTree = "<group>"; };
 		C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PodLifeHUDView.xib; sourceTree = "<group>"; };
 		C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodLifeHUDView.swift; sourceTree = "<group>"; };
-		C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKGradientGenerator.swift; sourceTree = "<group>"; };
-		C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKRingProgressView.swift; sourceTree = "<group>"; };
-		C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKRingProgressLayer.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1307,6 +1303,8 @@
 		C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadPumpStatusMessageBody.swift; sourceTree = "<group>"; };
 		C178845E1D5166BE00405663 /* COBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COBStatus.swift; sourceTree = "<group>"; };
 		C17884601D519F1E00405663 /* BatteryIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryIndicator.swift; sourceTree = "<group>"; };
+		C1814B87225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirationReminderDateTableViewCell.swift; sourceTree = "<group>"; };
+		C1814B89225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExpirationReminderDateTableViewCell.xib; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1986,24 +1984,15 @@
 		C104A9BE217E6027006E3C3E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C104A9CA217ECF81006E3C3E /* MKRingProgressView */,
 				C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */,
 				C104A9BF217E603E006E3C3E /* OmnipodReservoirView.swift */,
 				C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */,
 				C104A9C8217E9F6C006E3C3E /* PodLifeHUDView.swift */,
 				C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */,
+				C1814B87225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift */,
+				C1814B89225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		C104A9CA217ECF81006E3C3E /* MKRingProgressView */ = {
-			isa = PBXGroup;
-			children = (
-				C104A9CB217ECF81006E3C3E /* MKGradientGenerator.swift */,
-				C104A9CC217ECF81006E3C3E /* MKRingProgressView.swift */,
-				C104A9CD217ECF81006E3C3E /* MKRingProgressLayer.swift */,
-			);
-			path = MKRingProgressView;
 			sourceTree = "<group>";
 		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
@@ -3300,6 +3289,7 @@
 				C1FFB00D2133242C00C50C1D /* OmnipodPumpManager.storyboard in Resources */,
 				C104A9C7217E9F35006E3C3E /* PodLifeHUDView.xib in Resources */,
 				C104A9C5217E645C006E3C3E /* HUDAssets.xcassets in Resources */,
+				C1814B8A225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib in Resources */,
 				C1FFB00F2133242C00C50C1D /* OmniKitUI.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3946,10 +3936,9 @@
 				C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */,
 				C16C3D4421AC40AF00401105 /* OmnipodHUDProvider.swift in Sources */,
 				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
+				C1814B88225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift in Sources */,
 				C1FFB02121343E6D00C50C1D /* TimeInterval.swift in Sources */,
 				C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */,
-				C104A9CF217ECF82006E3C3E /* MKRingProgressView.swift in Sources */,
-				C104A9D0217ECF82006E3C3E /* MKRingProgressLayer.swift in Sources */,
 				C1FFB0132133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift in Sources */,
 				C168C40021AEF8DE00ADE90E /* PodReplacementNavigationController.swift in Sources */,
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
@@ -3958,7 +3947,6 @@
 				C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
 				C127D925215C00320031799D /* OSLog.swift in Sources */,
-				C104A9CE217ECF82006E3C3E /* MKGradientGenerator.swift in Sources */,
 				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
 				C14CD28E21B5872D00F259DB /* Data.swift in Sources */,

@@ -94,15 +94,9 @@ class PodComms : CustomDebugStringConvertible {
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
         
-        let activationDate = Date()
-
-        let expirationDate = activationDate + Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow
-        
         // Pairing state should be addressAssigned
         self.podState = PodState(
             address: address,
-            activatedAt: activationDate,
-            expiresAt: expirationDate,
             piVersion: String(describing: config.piVersion),
             pmVersion: String(describing: config.pmVersion),
             lot: config.lot,
@@ -115,7 +109,7 @@ class PodComms : CustomDebugStringConvertible {
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
         transport.messageLogger = messageLogger
         
-        let dateComponents = ConfigurePodCommand.dateComponents(date: podState.activatedAt, timeZone: timeZone)
+        let dateComponents = ConfigurePodCommand.dateComponents(date: Date(), timeZone: timeZone)
         let setupPod = ConfigurePodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
         
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)

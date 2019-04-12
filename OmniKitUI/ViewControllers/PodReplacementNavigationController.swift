@@ -53,6 +53,8 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
             vc.pumpManager = pumpManager
         case let vc as InsertCannulaSetupViewController:
             vc.pumpManager = pumpManager
+        case let vc as PodSetupCompleteViewController:
+            vc.pumpManager = pumpManager
         default:
             break
         }

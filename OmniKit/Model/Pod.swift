@@ -47,6 +47,11 @@ public struct Pod {
 
     // Amount of insulin delivered for priming
     public static let primeUnits = 2.6
+
+    // Default and limits for expiration reminder alerts
+    public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)
+    public static let expirationReminderAlertMinTimeBeforeExpiration = TimeInterval.hours(1)
+    public static let expirationReminderAlertMaxTimeBeforeExpiration = TimeInterval.hours(24)
 }
 
 public enum SetupState: UInt8 {

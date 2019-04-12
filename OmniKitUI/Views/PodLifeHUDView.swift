@@ -8,6 +8,7 @@
 
 import UIKit
 import LoopKitUI
+import MKRingProgressView
 
 public enum PodAlertState {
     case none

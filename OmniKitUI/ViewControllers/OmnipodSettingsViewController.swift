@@ -65,7 +65,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(AlarmsTableViewCell.self, forCellReuseIdentifier: AlarmsTableViewCell.className)
-        
+        tableView.register(ExpirationReminderDateTableViewCell.nib(), forCellReuseIdentifier: ExpirationReminderDateTableViewCell.className)
+
         let imageView = UIImageView(image: podImage)
         imageView.contentMode = .center
         imageView.frame.size.height += 18  // feels right
@@ -163,7 +164,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private enum ConfigurationRow: Int, CaseIterable {
-        case timeZoneOffset = 0
+        case reminder = 0
+        case timeZoneOffset
         case testCommand
     }
     
@@ -232,14 +234,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .activatedAt:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
-                cell.setDetailAge(-podState.activatedAt.timeIntervalSinceNow)
+                cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
                 return cell
             case .expiresAt:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                if podState.expiresAt.timeIntervalSinceNow > 0 {
-                    cell.textLabel?.text = LocalizedString("Expires", comment: "The title of the cell showing the pod expiration")
-                } else {
-                    cell.textLabel?.text = LocalizedString("Expired", comment: "The title of the cell showing the pod expiration after expiry")
+                if let expiresAt = podState.expiresAt {
+                    if expiresAt.timeIntervalSinceNow > 0 {
+                        cell.textLabel?.text = LocalizedString("Expires", comment: "The title of the cell showing the pod expiration")
+                    } else {
+                        cell.textLabel?.text = LocalizedString("Expired", comment: "The title of the cell showing the pod expiration after expiry")
+                    }
                 }
                 cell.setDetailDate(podState.expiresAt, formatter: dateFormatter)
                 return cell
@@ -292,10 +296,23 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 return cell
             }
         case .configuration:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-            
+
             switch ConfigurationRow(rawValue: indexPath.row)! {
+            case .reminder:
+                let cell = tableView.dequeueReusableCell(withIdentifier: ExpirationReminderDateTableViewCell.className, for: indexPath) as! ExpirationReminderDateTableViewCell
+                if let podState = podState, let reminderDate = pumpManager.expirationReminderDate {
+                    cell.titleLabel.text = LocalizedString("Expiration Reminder", comment: "The title of the cell showing the pod expiration reminder date")
+                    cell.date = reminderDate
+                    cell.datePicker.datePickerMode = .dateAndTime
+                    cell.datePicker.maximumDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertMinTimeBeforeExpiration)
+                    cell.datePicker.minimumDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertMaxTimeBeforeExpiration)
+                    cell.datePicker.minuteInterval = 1
+                    cell.delegate = self
+                    print("cell selection style: \(cell.selectionStyle)")
+                }
+                return cell
             case .timeZoneOffset:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone")
                 
                 let localTimeZone = TimeZone.current
@@ -309,12 +326,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     
                     cell.detailTextLabel?.text = String(format: LocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
                 }
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .testCommand:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
+                cell.accessoryType = .disclosureIndicator
+                return cell
             }
             
-            cell.accessoryType = .disclosureIndicator
-            return cell
         case .status:
             let podState = self.podState!
             let statusRow = StatusRow(rawValue: indexPath.row)!
@@ -378,7 +398,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             return true
         }
     }
-    
+
+
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if indexPath == IndexPath(row: ConfigurationRow.reminder.rawValue, section: Section.configuration.rawValue) {
+            tableView.beginUpdates()
+        }
+        return indexPath
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let sender = tableView.cellForRow(at: indexPath)
         
@@ -430,6 +458,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             }
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
+            case .reminder:
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.endUpdates()
+                break
             case .timeZoneOffset:
                 let vc = CommandResponseViewController.changeTime(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
@@ -463,6 +495,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .timeZoneOffset, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
+            case .reminder:
+                break
             }
         case .rileyLinks:
             break
@@ -573,6 +607,11 @@ extension OmnipodSettingsViewController: PumpManagerStatusObserver {
     }
 }
 
+extension OmnipodSettingsViewController: DatePickerTableViewCellDelegate {
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+        pumpManager.expirationReminderDate = cell.date
+    }
+}
 
 private extension UIAlertController {
     convenience init(pumpManagerDeletionHandler handler: @escaping () -> Void) {
@@ -686,7 +725,7 @@ private extension UITableViewCell {
     
     func setDetailAge(_ age: TimeInterval?) {
         if let age = age {
-            detailTextLabel?.text = age.format(using: [.day, .hour, .minute])
+            detailTextLabel?.text = fabs(age).format(using: [.day, .hour, .minute])
         } else {
             detailTextLabel?.text = ""
         }

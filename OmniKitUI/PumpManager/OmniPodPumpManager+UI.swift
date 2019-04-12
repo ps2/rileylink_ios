@@ -36,6 +36,7 @@ extension OmnipodPumpManager: PumpManagerUI {
     public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
         return OmnipodHUDProvider.createHUDViews(rawValue: rawValue)
     }
+
 }
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource

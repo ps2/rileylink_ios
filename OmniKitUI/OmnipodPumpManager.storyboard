@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -82,7 +82,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodBottom" translatesAutoresizingMaskIntoConstraints="NO" id="fvP-ab-vGQ">
-                                                    <rect key="frame" x="39.666666666666657" y="0.0" width="296" height="113"/>
+                                                    <rect key="frame" x="179.66666666666666" y="0.0" width="16" height="113"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -196,7 +196,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="QH8-CP-KKu">
-                                                    <rect key="frame" x="138" y="0.0" width="99" height="113"/>
+                                                    <rect key="frame" x="118.33333333333333" y="0.0" width="138.66666666666669" height="113"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -310,7 +310,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="dvx-vd-E9Z">
-                                                    <rect key="frame" x="138" y="0.0" width="99" height="181"/>
+                                                    <rect key="frame" x="179.66666666666666" y="0.0" width="16" height="181"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -340,6 +340,92 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection id="TrW-Z2-rUk" userLabel="Replacement Alert Section">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" textLabel="Eng-IY-fQ7" style="IBUITableViewCellStyleDefault" id="515-YZ-29R">
+                                        <rect key="frame" x="0.0" y="317.66666666666669" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="515-YZ-29R" id="Jqq-Jl-MTx">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Loop will remind you to change your pod before it expires. You can change this to a time convenient for you." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Eng-IY-fQ7">
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="244" id="Ga0-4g-gXh" customClass="ExpirationReminderDateTableViewCell" customModule="OmniKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="361.66666666666669" width="375" height="244.00000000000006"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ga0-4g-gXh" id="COc-lx-SrN">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="244"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jRk-Yq-YKR">
+                                                    <rect key="frame" x="16" y="11" width="343" height="28"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reminder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ePA-6p-q8C">
+                                                            <rect key="frame" x="0.0" y="0.0" width="73" height="28"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vEc-Km-ewe">
+                                                            <rect key="frame" x="301" y="0.0" width="42" height="28"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="ePA-6p-q8C" secondAttribute="bottom" id="4ea-0t-wtm"/>
+                                                        <constraint firstItem="ePA-6p-q8C" firstAttribute="top" secondItem="jRk-Yq-YKR" secondAttribute="top" id="5ao-cd-BYo"/>
+                                                        <constraint firstItem="vEc-Km-ewe" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ePA-6p-q8C" secondAttribute="trailing" constant="8" symbolic="YES" id="AYq-XH-8Uv"/>
+                                                        <constraint firstAttribute="trailing" secondItem="vEc-Km-ewe" secondAttribute="trailing" id="LuA-mf-XdP"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="ljo-Bt-YtL"/>
+                                                        <constraint firstAttribute="bottom" secondItem="vEc-Km-ewe" secondAttribute="bottom" id="sxy-vG-Vqo"/>
+                                                        <constraint firstItem="vEc-Km-ewe" firstAttribute="top" secondItem="jRk-Yq-YKR" secondAttribute="top" id="u7F-Cu-CyL"/>
+                                                        <constraint firstItem="ePA-6p-q8C" firstAttribute="leading" secondItem="jRk-Yq-YKR" secondAttribute="leading" id="yjQ-I0-5up"/>
+                                                    </constraints>
+                                                </view>
+                                                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="VqV-Tk-RuC">
+                                                    <rect key="frame" x="0.0" y="47" width="375" height="200"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" priority="750" constant="200" id="zem-Mj-KZO"/>
+                                                    </constraints>
+                                                    <date key="date" timeIntervalSinceReferenceDate="474584803.36239803">
+                                                        <!--2016-01-15 21:06:43 +0000-->
+                                                    </date>
+                                                    <connections>
+                                                        <action selector="dateChanged:" destination="Ga0-4g-gXh" eventType="valueChanged" id="ECt-8u-ZDO"/>
+                                                    </connections>
+                                                </datePicker>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="VqV-Tk-RuC" firstAttribute="top" secondItem="jRk-Yq-YKR" secondAttribute="bottom" constant="8" id="2qY-W0-HJD"/>
+                                                <constraint firstAttribute="trailing" secondItem="VqV-Tk-RuC" secondAttribute="trailing" id="4lv-jO-iR1"/>
+                                                <constraint firstItem="jRk-Yq-YKR" firstAttribute="leading" secondItem="COc-lx-SrN" secondAttribute="leadingMargin" id="Yug-hO-a8W"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="VqV-Tk-RuC" secondAttribute="bottom" priority="750" constant="-8" id="dqG-9g-4V7"/>
+                                                <constraint firstItem="jRk-Yq-YKR" firstAttribute="top" secondItem="COc-lx-SrN" secondAttribute="topMargin" id="kPT-w5-5UZ"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="jRk-Yq-YKR" secondAttribute="trailing" id="sok-Mf-Pi5"/>
+                                                <constraint firstItem="VqV-Tk-RuC" firstAttribute="leading" secondItem="COc-lx-SrN" secondAttribute="leading" id="uzf-Ib-Ux0"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="dateLabel" destination="vEc-Km-ewe" id="xbc-UF-rlD"/>
+                                            <outlet property="datePicker" destination="VqV-Tk-RuC" id="k1H-p3-r1q"/>
+                                            <outlet property="datePickerHeightConstraint" destination="zem-Mj-KZO" id="d2v-8T-viN"/>
+                                            <outlet property="titleLabel" destination="ePA-6p-q8C" id="906-re-iw0"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="aNg-mm-Uuy" id="E86-1n-vuI"/>
@@ -347,10 +433,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Setup Complete" id="nDb-R5-e02"/>
+                    <connections>
+                        <outlet property="expirationReminderDateCell" destination="Ga0-4g-gXh" id="pu5-uu-FWs"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b4d-Ps-yhl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2591" y="231"/>
+            <point key="canvasLocation" x="2589.5999999999999" y="230.54187192118226"/>
         </scene>
         <!--Pod Settings-->
         <scene sceneID="qel-YT-3JK">
@@ -461,7 +550,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="nVw-Qs-ZRl">
-                                                    <rect key="frame" x="138" y="0.0" width="99" height="113"/>
+                                                    <rect key="frame" x="118.33333333333333" y="0.0" width="138.66666666666669" height="113"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -558,11 +647,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="PodBottom" width="296.25" height="247.5"/>
-        <image name="PodLarge" width="99.839996337890625" height="79.199996948242188"/>
+        <image name="PodBottom" width="131.66667175292969" height="110"/>
+        <image name="PodLarge" width="138.66667175292969" height="110"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IS8-xY-rnN"/>
+        <segue reference="rEL-w2-Eiw"/>
         <segue reference="3Py-Xn-kuv"/>
         <segue reference="Hnx-w3-aQg"/>
     </inferredMetricsTieBreakers>

@@ -259,8 +259,9 @@ public class PodCommsSession {
             // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
 
-            let lowReservoirAlarm = PodAlert.lowReservoirAlarm(20) // Alarm at 20 units remaining
-            let _ = try configureAlerts([lowReservoirAlarm])
+            // Uncomment to get an audible pod alert for low reservoir
+//            let lowReservoirAlarm = PodAlert.lowReservoirAlarm(20) // Alarm at 20 units remaining
+//            let _ = try configureAlerts([lowReservoirAlarm])
 
             let finishSetupReminder = PodAlert.finishSetupReminder
             let _ = try configureAlerts([finishSetupReminder])
@@ -291,11 +292,7 @@ public class PodCommsSession {
     }
     
     public func programInitialBasalSchedule(_ basalSchedule: BasalSchedule, scheduleOffset: TimeInterval) throws {
-        if podState.setupProgress != .settingInitialBasalSchedule {
-            let timeUntilExpirationAlert = (podState.activatedAt + Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow - Pod.expirationAlertWindow).timeIntervalSinceNow
-            let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
-            let _ = try configureAlerts([expirationAlert])
-        } else {
+        if podState.setupProgress == .settingInitialBasalSchedule {
             // We started basal schedule programming, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(status)
@@ -303,6 +300,11 @@ public class PodCommsSession {
                 podState.setupProgress = .initialBasalScheduleSet
                 return
             }
+        } else {
+            // Uncomment the following to get an audible expiration notice before the expiration advisory alert
+//            let timeUntilExpirationAlert = (podState.activatedAt + Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow - Pod.expirationAlertWindow).timeIntervalSinceNow
+//            let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
+//            let _ = try configureAlerts([expirationAlert])
         }
         
         podState.setupProgress = .settingInitialBasalSchedule
@@ -326,6 +328,10 @@ public class PodCommsSession {
     public func insertCannula() throws -> TimeInterval {
         let insertionWait: TimeInterval = .seconds(10)
 
+        guard let activatedAt = podState.activatedAt else {
+            throw PodCommsError.noPodPaired
+        }
+
         if podState.setupProgress == .startingInsertCannula || podState.setupProgress == .cannulaInserting {
             // We started cannula insertion, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -340,7 +346,7 @@ public class PodCommsSession {
             }
         } else {
             // Configure Alerts
-            let endOfServiceTime = podState.activatedAt + Pod.serviceDuration
+            let endOfServiceTime = activatedAt + Pod.serviceDuration
             let timeUntilExpirationAdvisory = (endOfServiceTime - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow).timeIntervalSinceNow
             let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
             let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)

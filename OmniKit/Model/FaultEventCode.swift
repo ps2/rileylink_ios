@@ -10,7 +10,7 @@ import Foundation
 
 
 public struct FaultEventCode: CustomStringConvertible, Equatable {
-    let rawValue: UInt8
+    public let rawValue: UInt8
     
     public enum FaultEventType: UInt8 {
         case noFaults                             = 0x00
@@ -386,5 +386,25 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
             faultDescription = "Unknown Fault"
         }
         return String(format: "Fault Event Code 0x%02x: %@", rawValue, faultDescription)
+    }
+    
+    public var localizedDescription: String {
+        if let faultType = faultType {
+            switch faultType {
+            case .reservoirEmpty:
+                return LocalizedString("Empty reservoir", comment: "Description for Empty reservoir pod fault")
+            case .exceededMaximumPodLife80Hrs:
+                return LocalizedString("Pod expired", comment: "Description for Pod expired pod fault")
+            case .occluded,
+                 .occlusionCheckValueTooHigh, .occlusionCheckStartup1, .occlusionCheckStartup2,
+                 .occlusionCheckTimeouts1, .occlusionCheckTimeouts2, .occlusionCheckTimeouts3,
+                 .occlusionCheckPulseIssue, .occlusionCheckBolusProblem, .occlusionCheckAboveThreshold:
+                return LocalizedString("Occlusion detected", comment: "Description for Occlusion detected pod fault")
+            default:
+                return String(format: LocalizedString("Internal pod fault %1$03d", comment: "The format string for Internal pod fault (1: The fault code value)"), rawValue)
+            }
+        } else {
+            return String(format: LocalizedString("Unknown pod fault %1$03d", comment: "The format string for Unknown pod fault (1: The fault code value)"), rawValue)
+        }
     }
 }

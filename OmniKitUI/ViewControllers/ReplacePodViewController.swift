@@ -15,28 +15,25 @@ class ReplacePodViewController: SetupTableViewController {
 
     enum PodReplacementReason {
         case normal
-        case fault
+        case fault(_ faultCode: FaultEventCode)
         case canceledPairingBeforeApplication
         case canceledPairing
     }
 
     var replacementReason: PodReplacementReason = .normal {
         didSet {
-            if oldValue != replacementReason {
-                switch replacementReason {
-                case .normal:
-                    break // Text set in interface builder
-                case .fault:
-                    instructionsLabel.text = LocalizedString("The pod has detected an internal fault. Insulin delivery has stopped. Please remove pod and then deactivate it.", comment: "Instructions when replacing pod due to a fault")
-                case .canceledPairingBeforeApplication:
-                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one. Deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
-                case .canceledPairing:
-                    instructionsLabel.text = LocalizedString("Incompletely setup pod must be deactivated before pairing with a new one.  Please remove the pod and then deactivate it.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
-                    break
-                }
-                
-                tableView.reloadData()
+            switch replacementReason {
+            case .normal:
+                break // Text set in interface builder
+            case .fault(let faultCode):
+                instructionsLabel.text = String(format: LocalizedString("%1$@. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Format string providing instructions for replacing pod due to a fault. (1: The fault description)"), faultCode.localizedDescription)
+            case .canceledPairingBeforeApplication:
+                instructionsLabel.text = LocalizedString("Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
+            case .canceledPairing:
+                instructionsLabel.text = LocalizedString("Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod.", comment: "Instructions when deactivating pod that has been paired and possibly attached.")
             }
+
+            tableView.reloadData()
         }
     }
     
@@ -44,8 +41,8 @@ class ReplacePodViewController: SetupTableViewController {
         didSet {
             pumpManager.getPodState { (podState) in
                 DispatchQueue.main.async {
-                    if podState?.fault != nil {
-                        self.replacementReason = .fault
+                    if let podFault = podState?.fault {
+                        self.replacementReason = .fault(podFault.currentStatus)
                     } else if podState?.setupProgress.primingNeeded == true {
                         self.replacementReason = .canceledPairingBeforeApplication
                     } else if podState?.setupProgress.needsCannulaInsertion == true {

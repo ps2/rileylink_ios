@@ -22,6 +22,7 @@ class ReplacePodViewController: SetupTableViewController {
 
     var replacementReason: PodReplacementReason = .normal {
         didSet {
+            updateButtonTint()
             switch replacementReason {
             case .normal:
                 break // Text set in interface builder
@@ -99,6 +100,7 @@ class ReplacePodViewController: SetupTableViewController {
     
     private var continueState: State = .initial {
         didSet {
+            updateButtonTint()
             switch continueState {
             case .initial:
                 activityIndicator.state = .hidden
@@ -125,6 +127,7 @@ class ReplacePodViewController: SetupTableViewController {
                 activityIndicator.state = .completed
                 footerView.primaryButton.isEnabled = true
                 footerView.primaryButton.resetTitle()
+                footerView.primaryButton.tintColor = nil
                 lastError = nil
             }
         }
@@ -194,6 +197,16 @@ class ReplacePodViewController: SetupTableViewController {
 
     override func cancelButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    private func updateButtonTint() {
+        let buttonTint: UIColor?
+        if case .normal = replacementReason, case .initial = continueState {
+            buttonTint = .deleteColor
+        } else {
+            buttonTint = nil
+        }
+        footerView.primaryButton.tintColor = buttonTint
     }
 
 }

@@ -97,6 +97,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 _ = tableView(tableView, willDeselectRowAt: indexPath)
             }
         }
+
+        if let configSectionIdx = self.sections.firstIndex(of: .configuration) {
+            self.tableView.reloadRows(at: [IndexPath(row: ConfigurationRow.reminder.rawValue, section: configSectionIdx)], with: .none)
+        }
         
         super.viewWillAppear(animated)
     }

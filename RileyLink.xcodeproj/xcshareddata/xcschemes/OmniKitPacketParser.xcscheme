@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/pete/Downloads/nonce-resync.md"
+            argument = "/Users/pete/Downloads/XcodeLog.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

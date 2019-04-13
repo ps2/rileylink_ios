@@ -158,6 +158,8 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                             self.continueState = .ready
                         }
+                    } else {
+                        self.continueState = .ready
                     }
                 case .failure(let error):
                     self.lastError = error

@@ -83,3 +83,11 @@ public struct Packet {
         return output
     }
 }
+
+extension Packet: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let sequenceNumStr = String(format: "%02d", sequenceNum)
+        return "Packet(\(Data(bigEndian: address).hexadecimalString) packetType:\(packetType) seq:\(sequenceNumStr) data:\(data.hexadecimalString))"
+    }
+}
+

@@ -100,6 +100,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
         if let expirationReminderDate = rawValue["expirationReminderDate"] as? Date {
             self.expirationReminderDate = expirationReminderDate
+        } else if let expiresAt = podState?.expiresAt {
+            self.expirationReminderDate = expiresAt.addingTimeInterval(-Pod.expirationReminderAlertDefaultTimeBeforeExpiration)
         }
     }
     

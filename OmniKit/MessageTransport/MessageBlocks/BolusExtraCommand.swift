@@ -13,7 +13,7 @@ public struct BolusExtraCommand : MessageBlock {
     public let blockType: MessageBlockType = .bolusExtra
     
     public let acknowledgementBeep: Bool
-    public let confidenceReminder: Bool
+    public let completionBeep: Bool
     public let programReminderInterval: TimeInterval
     public let units: Double
     public let timeBetweenPulses: TimeInterval
@@ -23,7 +23,7 @@ public struct BolusExtraCommand : MessageBlock {
     // 17 0d 7c 1770 00030d40 0000 00000000
     // 0  1  2  3    5        9    13
     public var data: Data {
-        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
+        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (completionBeep ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
 
         var data = Data(bytes: [
             blockType.rawValue,
@@ -48,7 +48,7 @@ public struct BolusExtraCommand : MessageBlock {
         }
         
         acknowledgementBeep = encodedData[2] & (1<<7) != 0
-        confidenceReminder = encodedData[2] & (1<<6) != 0
+        completionBeep = encodedData[2] & (1<<6) != 0
         programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
         
         units = Double(encodedData[3...].toBigEndian(UInt16.self)) / 200
@@ -64,9 +64,9 @@ public struct BolusExtraCommand : MessageBlock {
         squareWaveDuration = timeBetweenExtendedPulses * Double(pulseCountX10) / 10
     }
     
-    public init(acknowledgementBeep: Bool = false, confidenceReminder: Bool = false, programReminderInterval: TimeInterval = 0, units: Double, timeBetweenPulses: TimeInterval = 2, squareWaveUnits: Double = 0.0, squareWaveDuration: TimeInterval = 0) {
+    public init(acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0, units: Double, timeBetweenPulses: TimeInterval = 2, squareWaveUnits: Double = 0.0, squareWaveDuration: TimeInterval = 0) {
         self.acknowledgementBeep = acknowledgementBeep
-        self.confidenceReminder = confidenceReminder
+        self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
         self.units = units
         self.timeBetweenPulses = timeBetweenPulses

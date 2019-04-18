@@ -57,7 +57,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
     // MARK: - PumpManager
 
-    public let stateObservers = WeakObserverSet<MinimedPumpManagerStateObserver>()
+    public let stateObservers = WeakSynchronizedSet<MinimedPumpManagerStateObserver>()
 
     private(set) public var state: MinimedPumpManagerState {
         get {
@@ -126,7 +126,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
     }
     private let lockedRecents = Locked(MinimedPumpManagerRecents())
 
-    private let statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
+    private let statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
 
     private func notifyStatusObservers(oldStatus: PumpManagerStatus) {
         let status = self.status
@@ -138,8 +138,8 @@ public class MinimedPumpManager: RileyLinkPumpManager {
         }
     }
 
-    private let cgmDelegate = CGMManagerDelegateWrapper()
-    private let pumpDelegate = PumpManagerDelegateWrapper()
+    private let cgmDelegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
+    private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
 
     public let log = OSLog(category: "MinimedPumpManager")
 
@@ -588,11 +588,11 @@ extension MinimedPumpManager: PumpManager {
     }
 
     public func addStatusObserver(_ observer: PumpManagerStatusObserver, queue: DispatchQueue) {
-        statusObservers.addObserver(observer, queue: queue)
+        statusObservers.insert(observer, queue: queue)
     }
 
     public func removeStatusObserver(_ observer: PumpManagerStatusObserver) {
-        statusObservers.removeObserver(observer)
+        statusObservers.removeElement(observer)
     }
 
     public func setMustProvideBLEHeartbeat(_ mustProvideBLEHeartbeat: Bool) {

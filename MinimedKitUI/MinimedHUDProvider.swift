@@ -38,7 +38,7 @@ class MinimedHUDProvider: HUDProvider {
     public init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         self.state = pumpManager.state
-        pumpManager.stateObservers.addObserver(self, queue: .main)
+        pumpManager.stateObservers.insert(self, queue: .main)
     }
 
     var visible: Bool = false {

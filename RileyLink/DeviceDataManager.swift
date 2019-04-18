@@ -67,11 +67,11 @@ extension DeviceDataManager: PumpManagerDelegate {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager) {
     }
     
-    func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
+    func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
         return true
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
     }
     
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager) {
@@ -97,8 +97,4 @@ extension DeviceDataManager: PumpManagerDelegate {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.hours(-2))
     }
-    
-    func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date {
-        return Date().addingTimeInterval(.minutes(-15))
-    }    
 }

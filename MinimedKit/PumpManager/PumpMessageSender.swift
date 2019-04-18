@@ -73,6 +73,7 @@ extension PumpMessageSender {
     ///     - PumpOpsError.crosstalk
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
+    ///     - PumpOpsError.pumpError
     ///     - PumpOpsError.unexpectedResponse
     ///     - PumpOpsError.unknownResponse
     func getResponse<T: MessageBody>(to message: PumpMessage, responseType: MessageType = .pumpAck, repeatCount: Int = 0, timeout: TimeInterval = standardPumpResponseWindow, retryCount: Int = 3) throws -> T {

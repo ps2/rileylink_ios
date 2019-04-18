@@ -44,7 +44,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
 
-        pumpManager.addStatusObserver(self)
+        pumpManager.addStatusObserver(self, queue: .main)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
@@ -260,20 +260,19 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
 
-            pumpManager.getOpsForDevice(device) { (pumpOps) in
-                DispatchQueue.main.async {
-                    let vc = RileyLinkMinimedDeviceTableViewController(
-                        device: device,
-                        pumpOps: pumpOps
-                    )
+            let vc = RileyLinkMinimedDeviceTableViewController(
+                device: device,
+                pumpOps: pumpManager.pumpOps
+            )
 
-                    self.show(vc, sender: sender)
-                }
-            }
+            self.show(vc, sender: sender)
         case .delete:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.done()
+                self.pumpManager.notifyDelegateOfDeactivation {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
 
             present(confirmVC, animated: true) {
@@ -358,11 +357,10 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 }
 
 extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as! SuspendResumeTableViewCell
-            suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-        }
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
+        dispatchPrecondition(condition: .onQueue(.main))
+        let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as! SuspendResumeTableViewCell
+        suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
     }
 }
 

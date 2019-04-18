@@ -162,6 +162,7 @@
 		43CA93311CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */; };
 		43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */; };
 		43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */; };
+		43CACE1A224844E200F90AF5 /* MinimedPumpManagerRecents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CACE19224844E200F90AF5 /* MinimedPumpManagerRecents.swift */; };
 		43CEC07420D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */; };
 		43CEC07620D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */; };
 		43CEC07820D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEC07720D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift */; };
@@ -773,6 +774,7 @@
 		43CA93301CB97191000026B5 /* ReadTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93321CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTimeCarelinMessageBodyTests.swift; sourceTree = "<group>"; };
 		43CA93341CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeTempBasalCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
+		43CACE19224844E200F90AF5 /* MinimedPumpManagerRecents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpManagerRecents.swift; sourceTree = "<group>"; };
 		43CEC07320D0949B00F1BC19 /* ReadRemoteControlIDsMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRemoteControlIDsMessageBody.swift; sourceTree = "<group>"; };
 		43CEC07520D099B400F1BC19 /* SetRemoteControlEnabledMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRemoteControlEnabledMessageBody.swift; sourceTree = "<group>"; };
 		43CEC07720D0CF7200F1BC19 /* ReadRemoteControlIDsMessageBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRemoteControlIDsMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -1557,16 +1559,17 @@
 				43D8709820DE1CB6006B549E /* MinimedPumpManager.swift */,
 				43D8709920DE1CB6006B549E /* MinimedPumpManagerError.swift */,
 				43D8709A20DE1CB6006B549E /* MinimedPumpManagerState.swift */,
-				2F962EC21E6873A10070EFBD /* PumpMessageSender.swift */,
+				43CACE19224844E200F90AF5 /* MinimedPumpManagerRecents.swift */,
 				435535DB1FB8B37E00CE5A23 /* PumpMessage+PumpOpsSession.swift */,
+				2F962EC21E6873A10070EFBD /* PumpMessageSender.swift */,
 				434AB0921CBA0DF600422F4A /* PumpOps.swift */,
 				C1A7215F1EC29C0B0080FAD7 /* PumpOpsError.swift */,
 				434AB0931CBA0DF600422F4A /* PumpOpsSession.swift */,
 				43D8709220DE1C80006B549E /* PumpOpsSession+LoopKit.swift */,
 				4384C8C71FB937E500D916E6 /* PumpSettings.swift */,
 				434AB0941CBA0DF600422F4A /* PumpState.swift */,
-				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C16E61212208C7A80069F357 /* ReservoirReading.swift */,
+				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */,
 			);
 			path = PumpManager;
@@ -2404,7 +2407,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Pete Schwamb";
 				TargetAttributes = {
 					431CE76E1F98564100255374 = {
@@ -2475,7 +2478,7 @@
 			};
 			buildConfigurationList = C12EA232198B436800309FA4 /* Build configuration list for PBXProject "RileyLink" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
@@ -2908,6 +2911,7 @@
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
 				C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
+				43CACE1A224844E200F90AF5 /* MinimedPumpManagerRecents.swift in Sources */,
 				C1F6EB891F89C3E200CFE393 /* FourByteSixByteEncoding.swift in Sources */,
 				54BC44751DB46B0A00340EED /* GlucosePage.swift in Sources */,
 				C1EAD6C51C826B92006DBA60 /* Int.swift in Sources */,

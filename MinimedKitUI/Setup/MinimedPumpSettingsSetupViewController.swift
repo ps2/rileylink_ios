@@ -131,7 +131,7 @@ class MinimedPumpSettingsSetupViewController: SetupTableViewController {
                     vc.scheduleItems = profile.items
                     vc.timeZone = profile.timeZone
                 } else {
-                    vc.timeZone = pumpManager.pumpTimeZone
+                    vc.timeZone = pumpManager.state.timeZone
                 }
 
                 vc.title = sender?.textLabel?.text

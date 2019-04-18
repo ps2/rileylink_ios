@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum BatteryStatus {
+public enum BatteryStatus: Equatable {
     case low
     case normal
     case unknown(rawVal: UInt8)

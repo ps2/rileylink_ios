@@ -10,15 +10,21 @@ import Foundation
 import LoopKit
 
 
-struct EnliteSensorDisplayable: SensorDisplayable {
+struct EnliteSensorDisplayable: Equatable, SensorDisplayable {
     public let isStateValid: Bool
     public let trendType: LoopKit.GlucoseTrend?
     public let isLocal: Bool
 
-    public init?(_ event: MinimedKit.RelativeTimestampedGlucoseEvent) {
+    public init(_ event: MinimedKit.RelativeTimestampedGlucoseEvent) {
         isStateValid = event.isStateValid
         trendType = event.trendType
         isLocal = event.isLocal
+    }
+
+    public init(_ status: MySentryPumpStatusMessageBody) {
+        isStateValid = status.isStateValid
+        trendType = status.trendType
+        isLocal = status.isLocal
     }
 }
 

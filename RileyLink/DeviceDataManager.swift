@@ -15,6 +15,7 @@ import MinimedKitUI
 import NightscoutUploadKit
 import LoopKit
 import LoopKitUI
+import UserNotifications
 import os.log
 
 class DeviceDataManager {
@@ -56,6 +57,12 @@ extension DeviceDataManager: RileyLinkConnectionManagerDelegate {
 }
 
 extension DeviceDataManager: PumpManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager, identifier: String, content: UNNotificationContent, trigger: UNNotificationTrigger?) {
+    }
+
+    func clearNotification(for manager: DeviceManager, identifier: String) {
+    }
+
     func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval) {
         log.debug("didAdjustPumpClockBy %@", adjustment)
     }

@@ -162,7 +162,7 @@ class TempBasalTests: XCTestCase {
 
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c0000006b49d20000006b49d200")!)
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
@@ -177,7 +177,7 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: .minutes(60))
+        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: true, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e7c0000006b49d20000006b49d200", cmd.data.hexadecimalString)
     }
     
@@ -186,7 +186,7 @@ class TempBasalTests: XCTestCase {
             // 0 U/h for 3 hours
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "162c7c0000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d200")!)
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
@@ -201,7 +201,7 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(3), acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: .minutes(60))
+        let cmd = TempBasalExtraCommand(rate: 0, duration: .hours(3), acknowledgementBeep: false, completionBeep: true, programReminderInterval: .minutes(60))
         XCTAssertEqual("162c7c0000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d20000006b49d200", cmd.data.hexadecimalString)
     }
 
@@ -242,7 +242,7 @@ class TempBasalTests: XCTestCase {
             // Decode 16 0e 7c 00 0bb8 000927c0 0bb8 000927c0
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "160e7c000bb8000927c00bb8000927c0")!)
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
             XCTAssertEqual(300, cmd.remainingPulses)
@@ -257,22 +257,22 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: .minutes(60))
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: true, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e7c000bb8000927c00bb8000927c0", cmd.data.hexadecimalString)
     }
     
     func testBasalExtraCommandForOddPulseCountRate() {
 
-        let cmd1 = TempBasalExtraCommand(rate: 0.05, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: .minutes(60))
+        let cmd1 = TempBasalExtraCommand(rate: 0.05, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: true, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e7c00000515752a00000515752a00", cmd1.data.hexadecimalString)
         
-        let cmd2 = TempBasalExtraCommand(rate: 2.05, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: .minutes(60))
+        let cmd2 = TempBasalExtraCommand(rate: 2.05, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e3c0000cd0085fac700cd0085fac7", cmd2.data.hexadecimalString)
 
-        let cmd3 = TempBasalExtraCommand(rate: 2.10, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: .minutes(60))
+        let cmd3 = TempBasalExtraCommand(rate: 2.10, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e3c0000d20082ca2400d20082ca24", cmd3.data.hexadecimalString)
 
-        let cmd4 = TempBasalExtraCommand(rate: 2.15, duration: .hours(0.5), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: .minutes(60))
+        let cmd4 = TempBasalExtraCommand(rate: 2.15, duration: .hours(0.5), acknowledgementBeep: false, completionBeep: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("160e3c0000d7007fbf7d00d7007fbf7d", cmd4.data.hexadecimalString)
     }
     
@@ -280,7 +280,7 @@ class TempBasalTests: XCTestCase {
         // 16 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ
         // 16 14 00 00 f5b9 000a0ad7 f5b9 000a0ad7 0aaf 000a0ad7
         // 16 14 00 00 f618 000a0ad7 f618 000a0ad7 0a50 000a0ad7
-        let cmd2 = TempBasalExtraCommand(rate: 27.35, duration: .hours(12), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: 0)
+        let cmd2 = TempBasalExtraCommand(rate: 27.35, duration: .hours(12), acknowledgementBeep: false, completionBeep: false, programReminderInterval: 0)
         XCTAssertEqual("16140000f5b9000a0ad7f5b9000a0ad70aaf000a0ad7", cmd2.data.hexadecimalString)
     }
 
@@ -290,7 +290,7 @@ class TempBasalTests: XCTestCase {
             // Decode 16 14 3c 00 f618 000927c0 f618 000927c0 2328 000927c0
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f618000927c0f618000927c02328000927c0")!)
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(false, cmd.confidenceReminder)
+            XCTAssertEqual(false, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
             XCTAssertEqual(6300, cmd.remainingPulses)
@@ -305,7 +305,7 @@ class TempBasalTests: XCTestCase {
         }
         
         // Encode
-        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(12), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: .minutes(60))
+        let cmd = TempBasalExtraCommand(rate: 30, duration: .hours(12), acknowledgementBeep: false, completionBeep: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("16143c00f618000927c0f618000927c02328000927c0", cmd.data.hexadecimalString)
     }
     
@@ -314,7 +314,7 @@ class TempBasalTests: XCTestCase {
             // 29.95 U/h for 12 hours
             let cmd = try TempBasalExtraCommand(encodedData: Data(hexadecimalString: "16143c00f5af00092ba9f5af00092ba9231900092ba9")!)
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(false, cmd.confidenceReminder)
+            XCTAssertEqual(false, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
             XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
             XCTAssertEqual(6289.5, cmd.remainingPulses)
@@ -329,7 +329,7 @@ class TempBasalTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
         
-        let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), acknowledgementBeep: false, confidenceReminder: false, programReminderInterval: .minutes(60))
+        let cmd = TempBasalExtraCommand(rate: 29.95, duration: .hours(12), acknowledgementBeep: false, completionBeep: false, programReminderInterval: .minutes(60))
         XCTAssertEqual("16143c00f5af00092ba9f5af00092ba9231900092ba9", cmd.data.hexadecimalString)
     }
 }

@@ -80,7 +80,7 @@ class BasalScheduleTests: XCTestCase {
             let cmd = try BasalScheduleExtraCommand(encodedData: Data(hexadecimalString: "130e40001aea001e84803840005b8d80")!)
             
             XCTAssertEqual(false, cmd.acknowledgementBeep)
-            XCTAssertEqual(true, cmd.confidenceReminder)
+            XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(0, cmd.programReminderInterval)
             XCTAssertEqual(0, cmd.currentEntryIndex)
             XCTAssertEqual(689, cmd.remainingPulses)
@@ -97,7 +97,7 @@ class BasalScheduleTests: XCTestCase {
         
         // Encode
         let rateEntries = RateEntry.makeEntries(rate: 3.0, duration: TimeInterval(hours: 24))
-        let cmd = BasalScheduleExtraCommand(acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0, currentEntryIndex: 0, remainingPulses: 689, delayUntilNextTenthOfPulse: TimeInterval(seconds: 20), rateEntries: rateEntries)
+        let cmd = BasalScheduleExtraCommand(acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0, currentEntryIndex: 0, remainingPulses: 689, delayUntilNextTenthOfPulse: TimeInterval(seconds: 20), rateEntries: rateEntries)
 
 
         XCTAssertEqual("130e40001aea01312d003840005b8d80", cmd.data.hexadecimalString)
@@ -108,10 +108,10 @@ class BasalScheduleTests: XCTestCase {
         let entry = BasalScheduleEntry(rate: 0.05, startTime: 0)
         let schedule = BasalSchedule(entries: [entry])
         
-        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: .hours(8.25), acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 60)
+        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: .hours(8.25), acknowledgementBeep: false, completionBeep: true, programReminderInterval: 60)
         
         XCTAssertEqual(false, cmd.acknowledgementBeep)
-        XCTAssertEqual(true, cmd.confidenceReminder)
+        XCTAssertEqual(true, cmd.completionBeep)
         XCTAssertEqual(60, cmd.programReminderInterval)
         XCTAssertEqual(0, cmd.currentEntryIndex)
         XCTAssertEqual(15.8, cmd.remainingPulses, accuracy: 0.01)
@@ -146,7 +146,7 @@ class BasalScheduleTests: XCTestCase {
         // 13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ
         // 13 1a 40 02 0096 00a7d8c0 089d 01059449 05a0 01312d00 044c 0112a880  * PDM
         // 13 1a 40 02 0095 00a7d8c0 089d 01059449 05a0 01312d00 044c 0112a880
-        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         XCTAssertEqual("131a4002009600a7d8c0089d0105944905a001312d00044c0112a880", cmd2.data.hexadecimalString) // PDM
     }
     
@@ -192,7 +192,7 @@ class BasalScheduleTests: XCTestCase {
         // 13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
         // 13 0e 40 00 0688 009cf291 13b0 01059449
         
-        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "130e40000688009cf29113b001059449")!, cmd2.data)
     }
     
@@ -218,7 +218,7 @@ class BasalScheduleTests: XCTestCase {
         // 13 0e 40 00 0519 001a2865 13b0 01059449
         // 13 0e 40 00 0519 001a286e 13b0 01059449
         
-        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "130e40000519001a286513b001059449")!, cmd2.data)
     }
 
@@ -266,7 +266,7 @@ class BasalScheduleTests: XCTestCase {
         //      13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ
         // PDM: 13 2c 40 05 0262 00455b9c 01e0 015752a0 0168 01312d00 06a4 01432096 01a4 01885e6d 0168 01312d00 0370 00f9b074
         
-        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "132c4005026200455b9c01e0015752a0016801312d0006a40143209601a401885e6d016801312d00037000f9b074")!, cmd2.data)
     }
     
@@ -350,7 +350,7 @@ class BasalScheduleTests: XCTestCase {
         //      13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ YYYY ZZZZZZZZ
         // PDM: 13 56 40 0c 02c8 011abc64 0082 00d34689 000f 15752a00 00aa 00a1904b 0055 01432096 0384 0112a880 0082 01a68d13 0064 02255100 0082 01a68d13 0078 01c9c380 0145 01a68d13 01ef 00a675a2 001e 07270e00 04fb 01432096
         
-        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd2 = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "1356400c02c8011abc64008200d34689000f15752a0000aa00a1904b00550143209603840112a880008201a68d13006402255100008201a68d13007801c9c380014501a68d1301ef00a675a2001e07270e0004fb01432096")!, cmd2.data)
 
     }
@@ -397,7 +397,7 @@ class BasalScheduleTests: XCTestCase {
         // 13 LL RR MM NNNN XXXXXXXX YYYY ZZZZZZZZ
         // 13 0e 40 00 01c1 006acfc0 12c0 0112a880
         
-        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, confidenceReminder: true, programReminderInterval: 0)
+        let cmd = BasalScheduleExtraCommand(schedule: schedule, scheduleOffset: offset, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
         
         checkBasalScheduleExtraCommandDataWithLessPrecision(Data(hexadecimalString: "130e400001c1006acfc012c00112a880")!, cmd.data)
     }

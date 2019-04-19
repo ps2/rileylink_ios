@@ -256,7 +256,7 @@ class PodMessageTransport: MessageTransport {
                     }
                 }
                 }()
-            
+
             ackUntilQuiet()
             
             guard response.messageBlocks.count > 0 else {

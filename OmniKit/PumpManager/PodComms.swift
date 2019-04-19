@@ -83,7 +83,7 @@ class PodComms : CustomDebugStringConvertible {
         let message = Message(address: 0xffffffff, messageBlocks: [assignAddress], sequenceNum: transport.messageNumber)
         
         let response = try transport.sendMessage(message)
-        
+
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))
             throw PodCommsError.podFault(fault: fault)
@@ -114,13 +114,23 @@ class PodComms : CustomDebugStringConvertible {
         
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
 
-        let response = try transport.sendMessage(message)
-        
+        let response: Message
+        do {
+            response = try transport.sendMessage(message)
+        } catch let error {
+            if case PodCommsError.podAckedInsteadOfReturningResponse = error {
+                // Pod alread configured...
+                self.podState?.setupProgress = .podConfigured
+                return
+            }
+            throw error
+        }
+
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))
             throw PodCommsError.podFault(fault: fault)
         }
-        
+
         guard let config = response.messageBlocks[0] as? VersionResponse else {
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)

@@ -451,8 +451,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager, PumpManager {
     
     public func forgetPod() {
         queue.async {
+            self.state.podState?.finalizeFinishedDoses()
             if let podState = self.state.podState {
                 let dosesToStore = podState.dosesToStore
+
                 if !self.store(doses: dosesToStore) {
                     self.state.unstoredDoses.append(contentsOf: dosesToStore)
                 }

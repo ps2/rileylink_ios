@@ -202,8 +202,9 @@ public class PodCommsSession {
             let response = try transport.sendMessage(message)
             
             // Simulate fault
-            //let response = try Message(encodedData: Data(hexadecimalString: "1f019ee204180216020d0000a902012d14008d03ff008d0000185e08030d81cd")!)
-            
+            //let podInfoResponse = try PodInfoResponse(encodedData: Data(hexadecimalString: "0216020d0000000000ab6a038403ff03860000285708030d0000")!)
+            //let response = Message(address: podState.address, messageBlocks: [podInfoResponse], sequenceNum: message.sequenceNum)
+
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %@", String(describing: responseMessageBlock))
                 return responseMessageBlock
@@ -559,11 +560,16 @@ public class PodCommsSession {
         }
         
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
-        
-        if podState.fault != nil {
-            let _: PodInfoResponse = try send([deactivatePod])
-        } else {
+
+        do {
             let _: StatusResponse = try send([deactivatePod])
+        } catch let error {
+            if case PodCommsError.unexpectedResponse = error {
+                // Normally we get a StatusResponse, but might get a fault (PodInfoResponse)
+                // We're ok with any actual response
+                return
+            }
+            throw error
         }
     }
     

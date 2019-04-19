@@ -13,7 +13,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
     public let blockType: MessageBlockType = .basalScheduleExtra
     
     public let acknowledgementBeep: Bool
-    public let confidenceReminder: Bool
+    public let completionBeep: Bool
     public let programReminderInterval: TimeInterval
     public let currentEntryIndex: UInt8
     public let remainingPulses: Double
@@ -21,7 +21,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
     public let rateEntries: [RateEntry]
 
     public var data: Data {
-        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
+        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (completionBeep ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
         var data = Data(bytes: [
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
@@ -44,7 +44,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let numEntries = (length - 8) / 6
         
         acknowledgementBeep = encodedData[2] & (1<<7) != 0
-        confidenceReminder = encodedData[2] & (1<<6) != 0
+        completionBeep = encodedData[2] & (1<<6) != 0
         programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
 
         currentEntryIndex = encodedData[3]
@@ -62,9 +62,9 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(acknowledgementBeep: Bool, confidenceReminder: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
+    public init(acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
         self.acknowledgementBeep = acknowledgementBeep
-        self.confidenceReminder = confidenceReminder
+        self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
         self.currentEntryIndex = currentEntryIndex
         self.remainingPulses = remainingPulses
@@ -72,9 +72,9 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         self.rateEntries = rateEntries
     }
     
-    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool, confidenceReminder: Bool, programReminderInterval: TimeInterval) {
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
         self.acknowledgementBeep = acknowledgementBeep
-        self.confidenceReminder = confidenceReminder
+        self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
         var rateEntries = [RateEntry]()
         

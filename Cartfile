@@ -1,2 +1,2 @@
-github "LoopKit/LoopKit" "notification-identifiers"
+github "LoopKit/LoopKit" "omnipod-testing"
 github "maxkonovalov/MKRingProgressView" ~> 2.2

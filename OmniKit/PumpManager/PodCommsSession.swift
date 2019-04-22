@@ -539,37 +539,29 @@ public class PodCommsSession {
     
     public func deactivatePod() throws {
 
-        do {
-            if podState.fault == nil && !podState.suspended {
-                let result = cancelDelivery(deliveryType: .all, beepType: .beeepBeeep)
-                switch result {
-                case .certainFailure(let error):
-                    throw error
-                case .uncertainFailure(let error):
-                    throw error
-                default:
-                    break
-                }
-            }
-        } catch let error as PodCommsError {
-            if case .podFault = error {
-                // Ignore fault response during deactivation; it has been stored to pod state at this point.
-            } else {
+        if podState.fault == nil && !podState.suspended {
+            let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
+            switch result {
+            case .certainFailure(let error):
                 throw error
+            case .uncertainFailure(let error):
+                throw error
+            default:
+                break
             }
         }
-        
+
         let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
 
         do {
             let _: StatusResponse = try send([deactivatePod])
-        } catch let error {
-            if case PodCommsError.unexpectedResponse = error {
-                // Normally we get a StatusResponse, but might get a fault (PodInfoResponse)
-                // We're ok with any actual response
-                return
+        } catch let error as PodCommsError {
+            switch error {
+            case .podFault, .unexpectedResponse:
+                break
+            default:
+                throw error
             }
-            throw error
         }
     }
     

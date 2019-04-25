@@ -16,6 +16,7 @@ import NightscoutUploadKit
 import LoopKit
 import LoopKitUI
 import os.log
+import UserNotifications
 
 class DeviceDataManager {
 
@@ -96,5 +97,29 @@ extension DeviceDataManager: PumpManagerDelegate {
     
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.hours(-2))
+    }
+}
+
+// MARK: - DeviceManagerDelegate
+extension DeviceDataManager: DeviceManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?) {
+        let request = UNNotificationRequest(
+            identifier: identifier,
+            content: content,
+            trigger: trigger
+        )
+
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().add(request)
+        }
+    }
+
+    func clearNotification(for manager: DeviceManager, identifier: String) {
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+        }
     }
 }

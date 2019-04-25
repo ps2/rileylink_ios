@@ -41,7 +41,7 @@
 "Change Time" = "Zeit ändern";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Zeitzone Aendern";
+"Change Time Zone" = "Zeitzone ändern";
 
 /* Progress message for changing pump time. */
 "Changing time…" = "Zeit ändern…";
@@ -60,7 +60,7 @@
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
-"Delete Pump" = "Pumpe loeschen";
+"Delete Pump" = "Pumpe löschen";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Insulin Abgabelimits";
@@ -75,25 +75,25 @@
 "Discovering commands…" = "Befehle werden entdeckt…";
 
 /* The title of the command to enable diagnostic LEDs */
-"Enable Diagnostic LEDs" = "Diagnostische LEDs Aktivieren";
+"Enable Diagnostic LEDs" = "Diagnostische LEDs aktivieren";
 
 /* Progress message for enabling diagnostic LEDs */
 "Enabled Diagnostic LEDs" = "Diagnostische LEDs aktiviert";
 
 /* The title of the command to fetch recent glucose */
-"Fetch Enlite Glucose" = "Fetch Enlite Glucose";
+"Fetch Enlite Glucose" = "Enlite-Glukosewert einlesen";
 
 /* The title of the command to fetch recent history */
-"Fetch Recent History" = "Recuperar Historia Reciente";
+"Fetch Recent History" = "Aktueller Verlauf abrufen";
 
 /* Progress message for fetching pump glucose. */
-"Fetching glucose…" = "Recuperar glucosa…";
+"Fetching glucose…" = "Glukosewerte abrufen…";
 
 /* Progress message for fetching pump history. */
-"Fetching history…" = "Recuperar historial…";
+"Fetching history…" = "Verlauf abrufen…";
 
 /* Progress message for fetching pump model. */
-"Fetching pump model…" = "Recuperar modelo de microinfusora…";
+"Fetching pump model…" = "Pumpenmodell abrufen…";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
@@ -167,10 +167,10 @@
 "Save to Pump…" = "In der Pumpe abspeichern…";
 
 /* The title of the command to send a button press */
-"Send Button Press" = "Sende Knopf drücken";
+"Send Button Press" = "Sende-Taste drücken";
 
 /* Progress message for sending button press to pump. */
-"Sending button press…" = "Senden der Taste drücken…";
+"Sending button press…" = "Sende Knopfdruck…";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signalstärke";
@@ -179,16 +179,16 @@
 "Succeeded" = "Erfolgreich";
 
 /* The format string describing pump suspended state: (1: suspended) */
-"Suspended: %1$@\n" = "Suspendiert: %1$@\n";
+"Suspended: %1$@\n" = "Unterbrochen: %1$@\n";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Versuche";
 
 /* The title of the command to re-tune the radio */
-"Tune Radio Frequency" = "Stellen Sie die Radiofrequenz ein";
+"Tune Radio Frequency" = "Stellen Sie die Sendefrequenz ein";
 
 /* Progress message for tuning radio */
-"Tuning radio…" = "Radio abstimmen…";
+"Tuning radio…" = "Frequenz abstimmen…";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Unbekannt";

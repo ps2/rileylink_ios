@@ -11,7 +11,7 @@ import LoopKit
 import LoopKitUI
 import MinimedKit
 
-class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
+class MinimedHUDProvider: HUDProvider {
 
     var managerIdentifier: String {
         return MinimedPumpManager.managerIdentifier
@@ -38,7 +38,7 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
     public init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         self.state = pumpManager.state
-        pumpManager.stateObserver = self
+        pumpManager.stateObservers.insert(self, queue: .main)
     }
 
     var visible: Bool = false {
@@ -122,10 +122,11 @@ class MinimedHUDProvider: HUDProvider, MinimedPumpManagerStateObserver {
 
         return [reservoirVolumeHUDView, batteryLevelHUDView]
     }
+}
 
+extension MinimedHUDProvider: MinimedPumpManagerStateObserver {
     func didUpdatePumpManagerState(_ state: MinimedPumpManagerState) {
-        DispatchQueue.main.async {
-            self.state = state
-        }
+        dispatchPrecondition(condition: .onQueue(.main))
+        self.state = state
     }
 }

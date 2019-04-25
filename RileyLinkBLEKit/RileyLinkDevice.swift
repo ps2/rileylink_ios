@@ -96,6 +96,20 @@ extension RileyLinkDevice {
     public func enableBLELEDs() {
         manager.setLEDMode(mode: .on)
     }
+
+    /// Asserts that the caller is currently on the session queue
+    public func assertOnSessionQueue() {
+        dispatchPrecondition(condition: .onQueue(manager.queue))
+    }
+
+    /// Schedules a closure to execute on the session queue after a specified time
+    ///
+    /// - Parameters:
+    ///   - deadline: The time after which to execute
+    ///   - execute: The closure to execute
+    public func sessionQueueAsyncAfter(deadline: DispatchTime, execute: @escaping () -> Void) {
+        manager.queue.asyncAfter(deadline: deadline, execute: execute)
+    }
 }
 
 

@@ -318,7 +318,7 @@ extension PumpOpsSession {
 
 
 // MARK: - Aggregate reads
-public struct PumpStatus {
+public struct PumpStatus: Equatable {
     // Date components read from the pump, along with PumpState.timeZone
     public let clock: DateComponents
     public let batteryVolts: Measurement<UnitElectricPotentialDifference>
@@ -458,7 +458,7 @@ extension PumpOpsSession {
     /// - Returns: The pump message body describing the new basal rate
     /// - Throws: PumpCommandError
     public func setTempBasal(_ unitsPerHour: Double, duration: TimeInterval) throws -> ReadTempBasalCarelinkMessageBody {
-        var lastError: Error?
+        var lastError: PumpCommandError?
         
         let message = PumpMessage(settings: settings, type: .changeTempBasal, body: ChangeTempBasalCarelinkMessageBody(unitsPerHour: unitsPerHour, duration: duration))
 
@@ -476,10 +476,10 @@ extension PumpOpsSession {
                 do {
                     let _: PumpAckMessageBody = try session.getResponse(to: message, retryCount: 0)
                 } catch PumpOpsError.pumpError(let errorCode) {
-                    lastError = PumpCommandError.arguments(.pumpError(errorCode))
+                    lastError = .arguments(.pumpError(errorCode))
                     break  // Stop because we have a pump error response
                 } catch PumpOpsError.unknownPumpErrorCode(let errorCode) {
-                    lastError = PumpCommandError.arguments(.unknownPumpErrorCode(errorCode))
+                    lastError = .arguments(.unknownPumpErrorCode(errorCode))
                     break  // Stop because we have a pump error response
                 } catch {
                     // The pump does not ACK a successful temp basal. We'll check manually below if it was successful.
@@ -492,12 +492,16 @@ extension PumpOpsSession {
                 } else {
                     throw PumpCommandError.arguments(PumpOpsError.rfCommsFailure("Could not verify TempBasal on attempt \(attempt). "))
                 }
-            } catch let error {
+            } catch let error as PumpCommandError {
                 lastError = error
+            } catch let error as PumpOpsError {
+                lastError = .command(error)
+            } catch {
+                lastError = .command(.noResponse(during: "Set temp basal"))
             }
         }
 
-        throw lastError ?? PumpOpsError.noResponse(during: "Set temp basal")
+        throw lastError!
     }
 
     public func readTempBasal() throws -> Double {

@@ -16,6 +16,16 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var batteryChemistry: BatteryChemistryType
 
+    public var batteryPercentage: Double?
+
+    public var isPumpSuspended: Bool
+
+    public var lastReservoirReading: ReservoirReading?
+
+    public var lastTuned: Date?  // In-memory only
+
+    public var lastValidFrequency: Measurement<UnitFrequency>?
+
     public var preferredInsulinDataSource: InsulinDataSource
 
     public let pumpColor: PumpColor
@@ -27,17 +37,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public let pumpID: String
 
     public let pumpRegion: PumpRegion
-    
-    public var isPumpSuspended: Bool
 
-    public var lastValidFrequency: Measurement<UnitFrequency>?
-
-    public var lastTuned: Date?
-    
-    public var batteryPercentage: Double?
-
-    public var lastReservoirReading: ReservoirReading?
-    
     public var pumpSettings: PumpSettings {
         get {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
@@ -165,23 +165,12 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "timeZone": timeZone.secondsFromGMT(),
             "isPumpSuspended": isPumpSuspended,
             "version": MinimedPumpManagerState.version,
-            ]
-        
-        if let rileyLinkConnectionManagerState = rileyLinkConnectionManagerState {
-            value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState.rawValue
-        }
-        
-        if let frequency = lastValidFrequency?.converted(to: .megahertz) {
-            value["lastValidFrequency"] = frequency.value
-        }
-        
-        if let batteryPercentage = batteryPercentage {
-            value["batteryPercentage"] = batteryPercentage
-        }
+        ]
 
-        if let lastReservoirReading = lastReservoirReading {
-            value["lastReservoirReading"] = lastReservoirReading.rawValue
-        }
+        value["batteryPercentage"] = batteryPercentage
+        value["lastReservoirReading"] = lastReservoirReading?.rawValue
+        value["lastValidFrequency"] = lastValidFrequency?.converted(to: .megahertz).value
+        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState?.rawValue
 
         return value
     }
@@ -198,18 +187,18 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
         return [
             "## MinimedPumpManagerState",
             "batteryChemistry: \(batteryChemistry)",
+            "batteryPercentage: \(String(describing: batteryPercentage))",
+            "isPumpSuspended: \(isPumpSuspended)",
+            "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "preferredInsulinDataSource: \(preferredInsulinDataSource)",
             "pumpColor: \(pumpColor)",
             "pumpID: ✔︎",
             "pumpModel: \(pumpModel.rawValue)",
             "pumpFirmwareVersion: \(pumpFirmwareVersion)",
             "pumpRegion: \(pumpRegion)",
-            "lastValidFrequency: \(String(describing: lastValidFrequency))",
-            "timeZone: \(timeZone)",
-            "isPumpSuspended: \(isPumpSuspended)",
-            "batteryPercentage: \(String(describing: batteryPercentage))",
             "reservoirUnits: \(String(describing: lastReservoirReading?.units))",
             "reservoirValidAt: \(String(describing: lastReservoirReading?.validAt))",
+            "timeZone: \(timeZone)",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

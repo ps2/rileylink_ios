@@ -11,6 +11,8 @@ import Foundation
 public struct PumpStatus {
     let clock: Date
     let pumpID: String
+    let manufacturer: String?
+    let model: String?
     let iob: IOBStatus?
     let battery: BatteryStatus?
     let suspended: Bool?
@@ -18,9 +20,11 @@ public struct PumpStatus {
     let reservoir: Double?
     let secondsFromGMT: Int?
 
-    public init(clock: Date, pumpID: String, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil) {
+    public init(clock: Date, pumpID: String, manufacturer: String? = nil, model: String? = nil, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil) {
         self.clock = clock
         self.pumpID = pumpID
+        self.manufacturer = manufacturer
+        self.model = model
         self.iob = iob
         self.battery = battery
         self.suspended = suspended
@@ -34,6 +38,14 @@ public struct PumpStatus {
         
         rval["clock"] = TimeFormat.timestampStrFromDate(clock)
         rval["pumpID"] = pumpID
+
+        if let manufacturer = manufacturer {
+            rval["manufacturer"] = manufacturer
+        }
+
+        if let model = model {
+            rval["model"] = model
+        }
 
         if let iob = iob {
             rval["iob"] = iob.dictionaryRepresentation

@@ -1,5 +1,5 @@
 //
-//  eventErrorCode.swift
+//  LogEventErrorCode.swift
 //  OmniKit
 //
 //  Created by Eelke Jager on 22/10/2018.

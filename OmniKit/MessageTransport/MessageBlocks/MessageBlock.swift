@@ -30,6 +30,7 @@ public enum MessageBlockType: UInt8 {
     case setInsulinSchedule = 0x1a
     case deactivatePod      = 0x1c
     case statusResponse     = 0x1d
+    case beepConfig         = 0x1e
     case cancelDelivery     = 0x1f
     
     public var blockType: MessageBlock.Type {
@@ -62,6 +63,8 @@ public enum MessageBlockType: UInt8 {
             return StatusResponse.self
         case .tempBasalExtra:
             return TempBasalExtraCommand.self
+        case .beepConfig:
+            return BeepConfigCommand.self
         case .cancelDelivery:
             return CancelDeliveryCommand.self
         case .faultConfig:

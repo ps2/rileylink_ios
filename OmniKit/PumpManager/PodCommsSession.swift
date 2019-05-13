@@ -490,6 +490,8 @@ public class PodCommsSession {
 
     public func testingCommands() throws {
         let _ = try getStatus()
+        // uncomment the next line to enable pod check alarms
+        // let _ = try checkAlarms()
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {
@@ -536,7 +538,18 @@ public class PodCommsSession {
         podState.updateFromStatusResponse(response)
         return response
     }
-    
+
+    public func checkAlarms() throws -> StatusResponse {
+        var response: StatusResponse
+
+        response = try send([BeepConfigCommand(beepType: .bipBeepBipBeepBipBeepBipBeep)])
+        podState.updateFromStatusResponse(response)
+        // Could use .fiveSecondBeep for PDM style "Check alarms", but this can only be successfully used if pod is suspended
+        response = try send([BeepConfigCommand(beepType: .beeeeeep)])
+        podState.updateFromStatusResponse(response)
+        return response
+    }
+
     public func deactivatePod() throws {
 
         if podState.fault == nil && !podState.suspended {
@@ -587,6 +600,3 @@ extension PodCommsSession: MessageTransportDelegate {
         podState.messageTransportState = state
     }
 }
-
-
-

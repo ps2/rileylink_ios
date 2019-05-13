@@ -9,7 +9,7 @@
 import Foundation
 
 public struct PodInfoResetStatus : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-46
     
     //    public enum lengthType: UInt8{
     //        case normal = 0x10

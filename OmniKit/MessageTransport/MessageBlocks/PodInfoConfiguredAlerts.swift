@@ -9,6 +9,7 @@
 import Foundation
 
 public struct PodInfoConfiguredAlerts : PodInfo {
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-1
 
     public var podInfoType : PodInfoResponseSubType = .configuredAlerts
     public let word_278    : Data
@@ -50,4 +51,3 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         self.data         = encodedData
     }
 }
-

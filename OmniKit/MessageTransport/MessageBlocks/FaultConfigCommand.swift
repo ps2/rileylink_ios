@@ -8,24 +8,14 @@
 
 import Foundation
 
-//
-//  GetStatusCommand.swift
-//  OmniKit
-//
-//  Created by Pete Schwamb on 10/14/17.
-//  Copyright © 2017 Pete Schwamb. All rights reserved.
-//
-
-import Foundation
-
 public struct FaultConfigCommand : NonceResyncableMessageBlock {
+    // https://github.com/openaps/openomni/wiki/Command-08-Configure-Delivery-Flags
 
     public let blockType: MessageBlockType = .faultConfig
     public let length: UInt8 = 6
-    
+    public var nonce: UInt32
     public let tab5Sub16: UInt8
     public let tab5Sub17: UInt8
-    public var nonce: UInt32
 
     public init(nonce: UInt32, tab5Sub16: UInt8, tab5Sub17: UInt8) {
         self.nonce = nonce

@@ -9,8 +9,8 @@
 import Foundation
 
 public struct PodInfoDataLog : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-    
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-3
+
     // dataLogLength = 0x04*numberOfWords+0x08
     // public let numberOfWords: UInt8 = 60
     // public let numberOfBytes: UInt8 = 10
@@ -25,6 +25,7 @@ public struct PodInfoDataLog : PodInfo {
     // TODO adding a datadump variable based on length
     //length = dataChunckSize * N + 8 where N is the number of dword entries
     // public let loggedData               : Data
+
     public init(encodedData: Data) throws {
         
         if encodedData.count < Int(6) {

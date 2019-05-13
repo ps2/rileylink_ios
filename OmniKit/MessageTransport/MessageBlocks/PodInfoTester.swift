@@ -9,8 +9,8 @@
 import Foundation
 
 public struct PodInfoTester : PodInfo {
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-6
     
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     public var podInfoType   : PodInfoResponseSubType = .hardcodedTestValues
     public let byte1         : UInt8
     public let byte2         : UInt8

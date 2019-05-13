@@ -1,4 +1,3 @@
-
 //
 //  PodInfoFlashLogRecent.swift
 //  OmniKit
@@ -10,8 +9,9 @@
 import Foundation
 
 public struct PodInfoFlashLogRecent : PodInfo {
-    
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-50
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-51
+
     public var podInfoType   : PodInfoResponseSubType = .flashLogRecent
     public let indexLastEntry: UInt8
     public let hexWordLog    : Data

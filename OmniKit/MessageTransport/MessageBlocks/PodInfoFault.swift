@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoFault : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-5
+
     public var podInfoType: PodInfoResponseSubType = .fault
     public let faultEventCode: FaultEventCode
     public let timeActivation: TimeInterval

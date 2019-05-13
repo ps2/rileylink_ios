@@ -9,8 +9,8 @@
 import Foundation
 
 public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
-    
-    
+    // https://github.com/openaps/openomni/wiki/Command-11-Acknowledge-Alerts
+
     public let blockType: MessageBlockType = .acknowledgeAlert
     public let length: UInt8 = 5
     public var nonce: UInt32
@@ -22,7 +22,7 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < 3 {
+        if encodedData.count < 7 {
             throw MessageBlockError.notEnoughData
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)

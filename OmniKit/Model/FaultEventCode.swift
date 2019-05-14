@@ -61,7 +61,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case badValueStartupTest                  = 0x32
         case connectedPodCommandTimeout           = 0x33
         case resetFromUnknownCause                = 0x34
-        case errorFlashInitialisiation            = 0x36
+        case errorFlashInitialization             = 0x36
+        case badPiezoValue                        = 0x37
         case unexpectedValueByte358               = 0x38
         case problemWithLoad1and2                 = 0x39
         case aGreaterThan7inMessage               = 0x3A
@@ -242,8 +243,10 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Connected Pod command timeout"
                 case .resetFromUnknownCause:
                     return "Reset from unknown cause"
-                case .errorFlashInitialisiation:
+                case .errorFlashInitialization:
                     return "Flash initialization error"
+                case .badPiezoValue:
+                    return "Bad piezo value"
                 case .unexpectedValueByte358:
                     return "Unexpected byte_358 value"
                 case .problemWithLoad1and2:

@@ -25,17 +25,6 @@ public enum BeepRepeat: UInt8 {
     case every5Minutes = 8
 }
 
-public enum BeepType: UInt8 {
-    case noBeep = 0
-    case beepBeepBeepBeep = 1
-    case bipBeepBipBeepBipBeepBipBeep = 2
-    case bipBip = 3
-    case beep = 4
-    case beepBeepBeep = 5
-    case beeeeeep = 6
-    case bipBipBipbipBipBip = 7
-    case beeepBeeep = 8
-} // Reused in CancelDeliveryCommand
 
 public struct AlertConfiguration {
 
@@ -58,8 +47,6 @@ public struct AlertConfiguration {
         self.beepRepeat = beepRepeat
         self.beepType = beepType
     }
-
-
 }
 
 public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {

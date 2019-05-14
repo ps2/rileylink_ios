@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoFault : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-5
+    // OFF 1  2  3  4 5  6 7 8 9 10111213 1415161718
+    // 02 11 05 PP QQQQ 00000000 00000000 MMDDYYHHMM
 
     public var podInfoType: PodInfoResponseSubType = .fault
     public let faultEventCode: FaultEventCode

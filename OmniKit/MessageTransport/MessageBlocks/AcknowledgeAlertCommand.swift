@@ -9,7 +9,8 @@
 import Foundation
 
 public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
-    // https://github.com/openaps/openomni/wiki/Command-11-Acknowledge-Alerts
+    // OFF 1  2 3 4 5  6
+    // 11 05 NNNNNNNN MM
 
     public let blockType: MessageBlockType = .acknowledgeAlert
     public let length: UInt8 = 5

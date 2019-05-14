@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoTester : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-6
+    // OFF 1  2  3  4  5  6
+    // 02 05 06 01 00 3F A8
     
     public var podInfoType   : PodInfoResponseSubType = .hardcodedTestValues
     public let byte1         : UInt8
@@ -20,13 +21,13 @@ public struct PodInfoTester : PodInfo {
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(4) {
+        if encodedData.count < 7 {
             throw MessageBlockError.notEnoughData
         }
-        self.byte1  = encodedData[1]
-        self.byte2  = encodedData[2]
-        self.byte3  = encodedData[3]
-        self.byte4  = encodedData[4]
+        self.byte1  = encodedData[3]
+        self.byte2  = encodedData[4]
+        self.byte3  = encodedData[5]
+        self.byte4  = encodedData[6]
         self.data   = encodedData
     }
 }

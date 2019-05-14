@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoDataLog : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-3
+    // OFF 1  2  3  4 5  6 7  8  9 10
+    // 02 LL 03 PP QQQQ SSSS 04 3c XXXXXXXX ...
 
     // dataLogLength = 0x04*numberOfWords+0x08
     // public let numberOfWords: UInt8 = 60

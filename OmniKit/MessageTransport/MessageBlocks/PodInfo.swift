@@ -16,8 +16,6 @@ public protocol PodInfo {
 }
 
 public enum PodInfoResponseSubType: UInt8, Equatable {
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response
-
     case normal                      = 0x00
     case configuredAlerts            = 0x01
     case faultEvents                 = 0x02

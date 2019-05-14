@@ -9,8 +9,9 @@
 import Foundation
 
 public struct PodInfoFlashLogRecent : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-50
-    // https://github.com/openaps/openomni/wiki/Command-02-Pod-Information-Response#Type-51
+    // OFF 1  2  3 4  5 6 7 8
+    // 02 LL 50 IIII XXXXXXXX ...
+    // 02 LL 51 NNNN XXXXXXXX ...
 
     public var podInfoType   : PodInfoResponseSubType = .flashLogRecent
     public let indexLastEntry: UInt8
@@ -19,7 +20,7 @@ public struct PodInfoFlashLogRecent : PodInfo {
 
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(166) {
+        if encodedData.count < 166 {
             throw MessageBlockError.notEnoughData
         }
         self.indexLastEntry = encodedData[2]

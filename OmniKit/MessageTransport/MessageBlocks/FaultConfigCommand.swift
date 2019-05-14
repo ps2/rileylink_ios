@@ -9,7 +9,8 @@
 import Foundation
 
 public struct FaultConfigCommand : NonceResyncableMessageBlock {
-    // https://github.com/openaps/openomni/wiki/Command-08-Configure-Delivery-Flags
+    // OFF 1  2 3 4 5  6  7
+    // 08 06 NNNNNNNN JJ KK
 
     public let blockType: MessageBlockType = .faultConfig
     public let length: UInt8 = 6

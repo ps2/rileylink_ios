@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoFlashLogRecent : PodInfo {
-    // OFF 1  2  3 4  5 6 7 8
+    // CMD 1  2  3 4  5 6 7 8
+    // DATA   0  1 2  3 4 5 6
     // 02 LL 50 IIII XXXXXXXX ...
     // 02 LL 51 NNNN XXXXXXXX ...
 

@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoConfiguredAlerts : PodInfo {
-    // OFF 1  2  3 4  5 6  7 8  910 1112 1314 1516 1718 1920
+    // CMD 1  2  3 4  5 6  7 8  910 1112 1314 1516 1718 1920
+    // DATA   0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
     // 02 13 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
 
     public var podInfoType : PodInfoResponseSubType = .configuredAlerts

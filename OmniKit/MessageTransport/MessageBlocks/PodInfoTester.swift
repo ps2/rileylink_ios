@@ -9,7 +9,8 @@
 import Foundation
 
 public struct PodInfoTester : PodInfo {
-    // OFF 1  2  3  4  5  6
+    // DATA   0  1  2  3  4
+    // CMD 1  2  3  4  5  6
     // 02 05 06 01 00 3F A8
     
     public var podInfoType   : PodInfoResponseSubType = .hardcodedTestValues
@@ -21,13 +22,13 @@ public struct PodInfoTester : PodInfo {
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < 7 {
+        if encodedData.count < 5 {
             throw MessageBlockError.notEnoughData
         }
-        self.byte1  = encodedData[3]
-        self.byte2  = encodedData[4]
-        self.byte3  = encodedData[5]
-        self.byte4  = encodedData[6]
+        self.byte1  = encodedData[1]
+        self.byte2  = encodedData[2]
+        self.byte3  = encodedData[3]
+        self.byte4  = encodedData[4]
         self.data   = encodedData
     }
 }

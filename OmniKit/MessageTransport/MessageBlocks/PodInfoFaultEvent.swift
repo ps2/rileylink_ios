@@ -9,8 +9,10 @@
 import Foundation
 
 public struct PodInfoFaultEvent : PodInfo, Equatable {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
-    
+    // CMD 1  2  3  4  5 6  7  8 9 10 1112 1314 1516 17 18 19 20 21 2223
+    // DATA   0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+    // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+
     public var podInfoType: PodInfoResponseSubType = .faultEvents
     public let podProgressStatus: PodProgressStatus
     public let deliveryStatus: DeliveryStatus

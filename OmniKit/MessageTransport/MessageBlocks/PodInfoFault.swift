@@ -9,7 +9,10 @@
 import Foundation
 
 public struct PodInfoFault : PodInfo {
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+    // OFF 1  2  3  4 5  6 7 8 9 10111213 1415161718
+    // DATA   0  1  2 3  4 5 6 7 8 9 1011 1213141516
+    // 02 11 05 PP QQQQ 00000000 00000000 MMDDYYHHMM
+
     public var podInfoType: PodInfoResponseSubType = .fault
     public let faultEventCode: FaultEventCode
     public let timeActivation: TimeInterval
@@ -18,7 +21,7 @@ public struct PodInfoFault : PodInfo {
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(16) {
+        if encodedData.count < 16 {
             throw MessageBlockError.notEnoughData
         }
         

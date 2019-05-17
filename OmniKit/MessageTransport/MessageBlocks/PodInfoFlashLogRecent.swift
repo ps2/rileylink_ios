@@ -1,4 +1,3 @@
-
 //
 //  PodInfoFlashLogRecent.swift
 //  OmniKit
@@ -10,8 +9,11 @@
 import Foundation
 
 public struct PodInfoFlashLogRecent : PodInfo {
-    
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
+    // CMD 1  2  3 4  5 6 7 8
+    // DATA   0  1 2  3 4 5 6
+    // 02 LL 50 IIII XXXXXXXX ...
+    // 02 LL 51 NNNN XXXXXXXX ...
+
     public var podInfoType   : PodInfoResponseSubType = .flashLogRecent
     public let indexLastEntry: UInt8
     public let hexWordLog    : Data
@@ -19,7 +21,7 @@ public struct PodInfoFlashLogRecent : PodInfo {
 
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(166) {
+        if encodedData.count < 166 {
             throw MessageBlockError.notEnoughData
         }
         self.indexLastEntry = encodedData[2]

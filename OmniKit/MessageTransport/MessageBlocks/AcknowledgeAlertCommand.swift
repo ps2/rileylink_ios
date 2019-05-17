@@ -9,8 +9,9 @@
 import Foundation
 
 public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
-    
-    
+    // OFF 1  2 3 4 5  6
+    // 11 05 NNNNNNNN MM
+
     public let blockType: MessageBlockType = .acknowledgeAlert
     public let length: UInt8 = 5
     public var nonce: UInt32
@@ -22,7 +23,7 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < 3 {
+        if encodedData.count < 7 {
             throw MessageBlockError.notEnoughData
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)

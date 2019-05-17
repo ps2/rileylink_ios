@@ -1,5 +1,5 @@
 //
-//  Command.swift
+//  MessageBlock.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 10/14/17.
@@ -14,6 +14,7 @@ public enum MessageBlockError: Error {
     case parseError
 }
 
+// See https://github.com/openaps/openomni/wiki/Message-Types
 public enum MessageBlockType: UInt8 {
     case versionResponse    = 0x01
     case podInfoResponse    = 0x02

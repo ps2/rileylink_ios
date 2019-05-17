@@ -26,7 +26,9 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoConfiguredAlertsNoAlerts() {
-        // 02 13 first 2 bytes are omitted: 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
+        // 02DATAOFF 0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
+        // 02 13 // 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
+        // 02 13 // 01 0000 0000 0000 0000 0000 0000 0000 0000 0000
         do {
             // Decode
             let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "01000000000000000000000000000000000000")!)
@@ -37,13 +39,13 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoConfiguredAlertsSuspendStillActive() {
+        // 02DATAOFF 0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
+        // 02 13 // 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
         // 02 13 // 01 0000 0000 0000 0000 0000 0000 0bd7 0c40 0000 // real alert value after 2 hour suspend
         // 02 13 // 01 0000 0102 0304 0506 0708 090a 0bd7 0c40 0000 // used as a tester to find each alarm
-        // AlarmTyoe     1    2    3    4    5    6    7    8
-        // alertActivation nr  0    1    2    3    4    5    6    7
         do {
             // Decode
-            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000000000000000000bd70c400000828c")!)
+            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000000000000000000bd70c400000")!)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.beepBeepBeep, decoded.alertsActivations[5].beepType)
             XCTAssertEqual(11, decoded.alertsActivations[5].timeFromPodStart) // in minutes
@@ -57,9 +59,11 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoConfiguredAlertsReplacePodAfter3DaysAnd8Hours() {
-        // 02 13 (omitted)// 01 0000 0000 0000 0000 0000 0000 0000 0000 1160
+        // 02DATAOFF 0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
+        // 02 13 // 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
+        // 02 13 // 01 0000 0000 0000 0000 0000 0000 0000 0000 10e1
         do {
-            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000000000000000000000000010e10208")!)
+            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000000000000000000000000010e1")!)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBipBipbipBipBip, decoded.alertsActivations[7].beepType)
             XCTAssertEqual(16, decoded.alertsActivations[7].timeFromPodStart) // in 2 hours steps
@@ -70,9 +74,11 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoConfiguredAlertsReplacePodAfterReservoirEmpty() {
-        // 02 13 (omitted)// 01 0000 0000 0000 1285 0000 11c7 0000 0000 119c 82b8
+        // 02DATAOFF 0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
+        // 02 13 // 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
+        // 02 13 // 01 0000 0000 0000 1285 0000 11c7 0000 0000 119c
         do {
-            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000001285000011c700000000119c82b8")!)
+            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000001285000011c700000000119c")!)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
             XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps
@@ -89,9 +95,11 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoConfiguredAlertsReplacePod() {
-        // 02 13 (omitted) // 01 0000 0000 0000 1284 0000 0000 0000 0000 10e0 0191
+        // 02DATAOFF 0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
+        // 02 13 // 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
+        // 02 13 // 01 0000 0000 0000 1284 0000 0000 0000 0000 10e0
         do {
-            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000001284000000000000000010e00191")!)
+            let decoded = try PodInfoConfiguredAlerts(encodedData: Data(hexadecimalString: "010000000000001284000000000000000010e0")!)
             XCTAssertEqual(.configuredAlerts, decoded.podInfoType)
             XCTAssertEqual(.bipBeepBipBeepBipBeepBipBeep, decoded.alertsActivations[2].beepType)
             XCTAssertEqual(18, decoded.alertsActivations[2].timeFromPodStart) // in 2 hours steps
@@ -105,7 +113,9 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoNoFaultAlerts() {
-        // 02 16 (omitted) // 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000
         do {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
@@ -132,10 +142,12 @@ class PodInfoTests: XCTestCase {
     }
 
     func testPodInfoDeliveryErrorDuringPriming() {
-        //0216 BODY:020f0000000900345c000103ff0001000005ae05602903
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0f 00 0000 09 0034 5c 0001 03ff 0001 00 00 05 ae 05 6029
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae05602903")!)
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.inactive, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
@@ -160,10 +172,12 @@ class PodInfoTests: XCTestCase {
 
     func testPodInfoDuringPriming() {
         // Needle cap accidentally removed before priming started leaking and gave error:
-        // 0216020d0000000600008f000003ff0000000003a20386a002
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0d 00 0000 06 0000 8f 0000 03ff 0000 00 00 03 a2 03 86a0
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a002")!)
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a0")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
@@ -187,9 +201,9 @@ class PodInfoTests: XCTestCase {
 
     func testPodInfoFaultEventErrorShuttingDown() {
         // Failed Pod after 1 day, 18+ hours of live use shortly after installing new omniloop.
-        // OFF    0 1  2  3  4  5 6  7  8 9 10 1112 1314 15 16 17 18 19 20 2122
-        // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
-        //       02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08 0000
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08 0000
         do {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a0200000823080000")!)
@@ -216,9 +230,9 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoFaultEventLogEventErrorCode2() {
-        // OFF    0 1  2  3  4  5 6  7  8 9 10 1112 1314 15 16 17 18 19 20 2122
-        // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
-        //       02 0d 00 0000 04 07eb 6a 0e0c 03ff 0e14 00 00 28 17 08 0000
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0d 00 0000 04 07eb 6a 0e0c 03ff 0e14 00 00 28 17 08 0000
         do {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407eb6a0e0c03ff0e1400002817080000")!)
@@ -245,11 +259,12 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoFaultEventIsulinNotDelivered() {
-        //         02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
-        // 0216 // 02 0f 00 00 01 0200 ec 6a02 68 03ff 026b 0000 28 a7 08 20 23 0169
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0f 00 0001 02 00ec 6a 0268 03ff 026b 00 00 28 a7 08 2023
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000010200ec6a026803ff026b000028a708202301")!)
+            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000010200ec6a026803ff026b000028a7082023")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
             XCTAssertEqual(.inactive, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
@@ -273,7 +288,9 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoDataLog() {
-        // 027c // 030100010001043c
+        // 02DATAOFF 0  1  2 3  4 5  6  7  8
+        // 02 LL // 03 PP QQQQ SSSS 04 3c  ....
+        // 02 7c // 03 01 0001 0001 04 3c ....
         do {
             let decoded = try PodInfoDataLog(encodedData: Data(hexadecimalString: "030100010001043c")!)
             XCTAssertEqual(.dataLog, decoded.podInfoType)
@@ -282,14 +299,16 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0001*60, decoded.timeActivation)
             XCTAssertEqual(04, decoded.dataChunkSize)
             XCTAssertEqual(60, decoded.dataChunkWords)
-            // TODO adding a datadump variable based on length
+            // TODO adding a datadump variable based on length LL
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
     }
     
     func testPodInfoFault() {
-        // 02 11 (omitted)// 05 92 0001 00000000 00000000 091912170e
+        // 02DATAOFF 0  1  2 3  4 5 6 7  8 91011 1213141516
+        // 02 11 // 05 PP QQQQ 00000000 00000000 MMDDYYHHMM
+        // 02 11 // 05 92 0001 00000000 00000000 091912170e
         // 09-25-18 23:14 int values for datetime
         do {                                            
             // Decode
@@ -309,7 +328,8 @@ class PodInfoTests: XCTestCase {
     }
     
     func testPodInfoTester() {
-        //02 05 // 06 01 00 3F A8
+        // 02DATAOFF 0  1  2  3  4
+        // 02 05 // 06 01 00 3F A8
         do {
             // Decode
             let decoded = try PodInfoTester(encodedData: Data(hexadecimalString: "0601003FA8")!)
@@ -337,21 +357,25 @@ class PodInfoTests: XCTestCase {
     }
 
     func testPodInfoResetStatus() {
-        //02 7c (omitted)// 4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065
+        // 02DATAOF  0  1  2  3
+        // 02 LL // 46 00 NN XX ...
+        // 02 7c // 46 00 79 1f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
         do {
             // Decode
-            let decoded = try PodInfoResetStatus(encodedData: Data(hexadecimalString: "4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffff2d00658effffffffffffff2d0065")!)
+            let decoded = try PodInfoResetStatus(encodedData: Data(hexadecimalString: "4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffffff")!)
             XCTAssertEqual(.resetStatus, decoded.podInfoType)
             XCTAssertEqual(0, decoded.zero)
             XCTAssertEqual(121, decoded.numberOfBytes)
-            XCTAssertEqual(0x1f00ee84, decoded.address)
-
+            XCTAssertEqual(0x1f00ee84, decoded.podAddress)	// Pod address is in the first 4 bytes of the flash
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
     }
     
     func testPodFault12() {
+        // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
+        // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
+        // 02 16 // 02 0d 00 0000 00 0000 12 ffff 03ff 0000 00 00 87 92 07 0000
         do {
             // Decode
             let faultEvent = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d00000000000012ffff03ff000000008792070000")!)
@@ -362,5 +386,4 @@ class PodInfoTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-
 }

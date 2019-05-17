@@ -9,8 +9,10 @@
 import Foundation
 
 public struct PodInfoTester : PodInfo {
+    // DATA   0  1  2  3  4
+    // CMD 1  2  3  4  5  6
+    // 02 05 06 01 00 3F A8
     
-    // https://github.com/openaps/openomni/wiki/Command-02-Status-Error-response
     public var podInfoType   : PodInfoResponseSubType = .hardcodedTestValues
     public let byte1         : UInt8
     public let byte2         : UInt8
@@ -20,7 +22,7 @@ public struct PodInfoTester : PodInfo {
     
     public init(encodedData: Data) throws {
         
-        if encodedData.count < Int(4) {
+        if encodedData.count < 5 {
             throw MessageBlockError.notEnoughData
         }
         self.byte1  = encodedData[1]

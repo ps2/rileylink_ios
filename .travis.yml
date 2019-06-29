@@ -1,10 +1,8 @@
 language: objective-c
 osx_image: xcode10.2
-xcode_project: RileyLink.xcodeproj
-xcode_scheme: RileyLink
+
 before_script:
-    - git config --global protocol.version 1
-    - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -target Cartfile
+    - carthage bootstrap
 
 script:
-    - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -scheme RileyLink build -destination 'name=iPhone SE' test | xcpretty
+    - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -scheme Shared build -destination 'name=iPhone SE' test | xcpretty

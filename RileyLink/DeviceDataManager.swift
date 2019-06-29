@@ -17,6 +17,7 @@ import LoopKit
 import LoopKitUI
 import UserNotifications
 import os.log
+import UserNotifications
 
 class DeviceDataManager {
 
@@ -74,11 +75,11 @@ extension DeviceDataManager: PumpManagerDelegate {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager) {
     }
     
-    func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
+    func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
         return true
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
     }
     
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager) {
@@ -104,8 +105,28 @@ extension DeviceDataManager: PumpManagerDelegate {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.hours(-2))
     }
-    
-    func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date {
-        return Date().addingTimeInterval(.minutes(-15))
-    }    
+}
+
+// MARK: - DeviceManagerDelegate
+extension DeviceDataManager: DeviceManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?) {
+        let request = UNNotificationRequest(
+            identifier: identifier,
+            content: content,
+            trigger: trigger
+        )
+
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().add(request)
+        }
+    }
+
+    func clearNotification(for manager: DeviceManager, identifier: String) {
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+        }
+    }
 }

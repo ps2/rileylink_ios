@@ -18,8 +18,11 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private var podState: PodState? {
         didSet {
-
             guard visible else {
+                return
+            }
+
+            guard oldValue != podState else {
                 return
             }
 
@@ -60,7 +63,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         self.pumpManager = pumpManager
         self.podState = pumpManager.state.podState
         super.init()
-        self.pumpManager.addPodStateObserver(self)
+        self.pumpManager.addPodStateObserver(self, queue: .main)
     }
     
     private func updateReservoirView() {
@@ -194,9 +197,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     func podStateDidUpdate(_ podState: PodState?) {
-        DispatchQueue.main.async {
-            self.podState = podState
-        }
+        self.podState = podState
     }
 }
 

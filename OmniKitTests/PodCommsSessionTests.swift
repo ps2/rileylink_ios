@@ -39,6 +39,10 @@ class MockMessageTransport: MessageTransport {
     func addResponse(_ messageBlock: MessageBlock) {
         responseMessageBlocks.append(messageBlock)
     }
+
+    func assertOnSessionQueue() {
+        // Do nothing in tests
+    }
 }
 
 class PodCommsSessionTests: XCTestCase, PodCommsSessionDelegate {

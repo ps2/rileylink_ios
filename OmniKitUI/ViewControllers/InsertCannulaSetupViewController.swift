@@ -135,7 +135,8 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             super.continueButtonPressed(sender)
         case .fault:
             navigateToReplacePod()
-        default:
+        case .startingInsertion,
+             .inserting:
             break
         }
     }

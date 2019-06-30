@@ -11,6 +11,7 @@ import LoopKit
 import LoopKitUI
 import RileyLinkKit
 import OmniKit
+import os.log
 
 class PairPodSetupViewController: SetupTableViewController {
     
@@ -23,7 +24,9 @@ class PairPodSetupViewController: SetupTableViewController {
             }
         }
     }
-    
+
+    private let log = OSLog(category: "PairPodSetupViewController")
+
     // MARK: -
     
     @IBOutlet weak var activityIndicator: SetupIndicatorView!
@@ -48,16 +51,15 @@ class PairPodSetupViewController: SetupTableViewController {
     
     private func pumpManagerWasSet() {
         // Still priming?
-        pumpManager.primeFinishesAt(completion: { (finishTime) in
-            let currentTime = Date()
-            if let finishTime = finishTime, finishTime > currentTime {
-                self.continueState = .pairing
-                let delay = finishTime.timeIntervalSince(currentTime)
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    self.continueState = .ready
-                }
+        let primeFinishesAt = pumpManager.state.podState?.primeFinishTime
+        let currentTime = Date()
+        if let finishTime = primeFinishesAt, finishTime > currentTime {
+            self.continueState = .pairing
+            let delay = finishTime.timeIntervalSince(currentTime)
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                self.continueState = .ready
             }
-        })
+        }
     }
     
     // MARK: - UITableViewDelegate
@@ -82,6 +84,8 @@ class PairPodSetupViewController: SetupTableViewController {
     
     private var continueState: State = .initial {
         didSet {
+            log.default("Changed continueState from %{public}@ to %{public}@", String(describing: oldValue), String(describing: continueState))
+
             switch continueState {
             case .initial:
                 activityIndicator.state = .hidden
@@ -92,13 +96,13 @@ class PairPodSetupViewController: SetupTableViewController {
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setPairTitle()
                 lastError = nil
-                loadingText = LocalizedString("Pairing...", comment: "The text of the loading label when pairing")
+                loadingText = LocalizedString("Pairing…", comment: "The text of the loading label when pairing")
             case .priming(let finishTime):
                 activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setPairTitle()
                 lastError = nil
-                loadingText = LocalizedString("Priming...", comment: "The text of the loading label when priming")
+                loadingText = LocalizedString("Priming…", comment: "The text of the loading label when priming")
             case .fault:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
@@ -145,6 +149,7 @@ class PairPodSetupViewController: SetupTableViewController {
     // MARK: - Navigation
     
     private func navigateToReplacePod() {
+        log.default("Navigating to ReplacePod screen")
         performSegue(withIdentifier: "ReplacePod", sender: nil)
     }
 
@@ -163,29 +168,28 @@ class PairPodSetupViewController: SetupTableViewController {
     }
     
     override func cancelButtonPressed(_ sender: Any) {
-        pumpManager.getPodState { (podState) in
-            DispatchQueue.main.async {
-                if podState != nil {
-                    let confirmVC = UIAlertController(pumpDeletionHandler: {
-                        self.navigateToReplacePod()
-                    })
-                    self.present(confirmVC, animated: true) {}
-                } else {
-                    super.cancelButtonPressed(sender)
-                }
-            }
+        let podState = pumpManager.state.podState
+
+        if podState != nil {
+            let confirmVC = UIAlertController(pumpDeletionHandler: {
+                self.navigateToReplacePod()
+            })
+            self.present(confirmVC, animated: true) {}
+        } else {
+            super.cancelButtonPressed(sender)
         }
     }
     
     // MARK: -
     
-    func pair() {
+    private func pair() {
         self.continueState = .pairing
-        
+
         pumpManager.pairAndPrime() { (result) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let finishTime):
+                    self.log.default("Pairing succeeded, finishing in %{public}@ sec", String(describing: finishTime))
                     if finishTime > 0 {
                         self.continueState = .priming(finishTime: finishTime)
                         DispatchQueue.main.asyncAfter(deadline: .now() + finishTime) {
@@ -195,6 +199,7 @@ class PairPodSetupViewController: SetupTableViewController {
                         self.continueState = .ready
                     }
                 case .failure(let error):
+                    self.log.default("Pairing failed with error: %{public}@", String(describing: error))
                     self.lastError = error
                 }
             }

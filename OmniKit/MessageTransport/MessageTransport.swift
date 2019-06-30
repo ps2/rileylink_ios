@@ -59,6 +59,9 @@ protocol MessageTransport {
     var messageNumber: Int { get }
 
     func sendMessage(_ message: Message) throws -> Message
+
+    /// Asserts that the caller is currently on the session's queue
+    func assertOnSessionQueue()
 }
 
 class PodMessageTransport: MessageTransport {
@@ -276,4 +279,7 @@ class PodMessageTransport: MessageTransport {
         }
     }
 
+    func assertOnSessionQueue() {
+        session.assertOnSessionQueue()
+    }
 }

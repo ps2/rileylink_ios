@@ -32,6 +32,10 @@ public enum SetupProgress: Int {
     }
 }
 
+// TODO: Mutating functions aren't guaranteed to synchronize read/write calls.
+// mutating funcs should be moved to something like this:
+// extension Locked where T == PodState {
+// }
 public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertible {
     
     public typealias RawValue = [String: Any]
@@ -118,7 +122,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var isActive: Bool {
         return setupProgress == .completed && fault == nil
     }
-    
+
     public mutating func advanceToNextNonce() {
         nonceState.advanceToNextNonce()
     }
@@ -422,7 +426,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",
-            ].joined(separator: "\n")
+        ].joined(separator: "\n")
     }
 }
 
@@ -448,7 +452,7 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
         
         idx = UInt8((table[0] + table[1]) & 0x0F)
     }
-    
+
     private mutating func generateEntry() -> UInt32 {
         table[0] = (table[0] >> 16) &+ ((table[0] & 0xFFFF) &* 0x5D7F)
         table[1] = (table[1] >> 16) &+ ((table[1] & 0xFFFF) &* 0x8CA0)

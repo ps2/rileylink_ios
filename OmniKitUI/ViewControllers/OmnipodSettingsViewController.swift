@@ -33,8 +33,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
         super.init(rileyLinkPumpManager: pumpManager, devicesSectionIndex: devicesSectionIndex, style: .grouped)
         
-        pumpManager.addStatusObserver(self)
-        pumpManager.addPodStateObserver(self)
+        pumpManager.addStatusObserver(self, queue: .main)
+        pumpManager.addPodStateObserver(self, queue: .main)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,7 +45,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         return UIImage(named: "PodLarge", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
     
-    lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
+    lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = {
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         return cell
@@ -353,7 +353,15 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 switch statusRow {
                 case .bolus:
                     cell.textLabel?.text = LocalizedString("Bolus Delivery", comment: "The title of the cell showing pod bolus status")
-                    cell.setDetailBolus(suspended: podState.suspended, dose: podState.unfinalizedBolus)
+
+                    let deliveredUnits: Double?
+                    if let dose = podState.unfinalizedBolus {
+                        deliveredUnits = pumpManager.roundToSupportedBolusVolume(units: dose.progress * dose.units)
+                    } else {
+                        deliveredUnits = nil
+                    }
+
+                    cell.setDetailBolus(suspended: podState.suspended, dose: podState.unfinalizedBolus, deliveredUnits: deliveredUnits)
                     // TODO: This timer is in the wrong context; should be part of a custom bolus progress cell
 //                    if bolusProgressTimer == nil {
 //                        bolusProgressTimer = Timer.scheduledTimer(withTimeInterval: .seconds(2), repeats: true) { [weak self] (_) in
@@ -481,8 +489,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             self.show(vc, sender: sender)
         case .deletePumpManager:
             let confirmVC = UIAlertController(pumpManagerDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.done()
+                self.pumpManager.notifyDelegateOfDeactivation {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
             
             present(confirmVC, animated: true) {
@@ -565,48 +576,44 @@ extension OmnipodSettingsViewController: RadioSelectionTableViewControllerDelega
 
 extension OmnipodSettingsViewController: PodStateObserver {
     func podStateDidUpdate(_ state: PodState?) {
-        DispatchQueue.main.async {
-            let newSections = OmnipodSettingsViewController.sectionList(state)
-            let sectionsChanged = OmnipodSettingsViewController.sectionList(self.podState) != newSections
+        let newSections = OmnipodSettingsViewController.sectionList(state)
+        let sectionsChanged = OmnipodSettingsViewController.sectionList(self.podState) != newSections
 
-            let oldActionsCount = self.actions.count
-            let oldState = self.podState
-            self.podState = state
+        let oldActionsCount = self.actions.count
+        let oldState = self.podState
+        self.podState = state
 
-            if sectionsChanged {
-                self.devicesDataSource.devicesSectionIndex = self.sections.firstIndex(of: .rileyLinks)!
-                self.tableView.reloadData()
-            } else {
-                if oldActionsCount != self.actions.count, let idx = newSections.firstIndex(of: .actions) {
-                    self.tableView.reloadSections([idx], with: .fade)
-                }
+        if sectionsChanged {
+            self.devicesDataSource.devicesSectionIndex = self.sections.firstIndex(of: .rileyLinks)!
+            self.tableView.reloadData()
+        } else {
+            if oldActionsCount != self.actions.count, let idx = newSections.firstIndex(of: .actions) {
+                self.tableView.reloadSections([idx], with: .fade)
             }
+        }
 
-            guard let statusIdx = newSections.firstIndex(of: .status) else {
-                return
-            }
+        guard let statusIdx = newSections.firstIndex(of: .status) else {
+            return
+        }
 
-            let reloadRows: [StatusRow] = [.bolus, .basal, .reservoirLevel, .deliveredInsulin]
-            self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
+        let reloadRows: [StatusRow] = [.bolus, .basal, .reservoirLevel, .deliveredInsulin]
+        self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
 
-            if oldState?.activeAlerts != state?.activeAlerts,
-                let alerts = state?.activeAlerts,
-                let alertCell = self.tableView.cellForRow(at: IndexPath(row: StatusRow.alarms.rawValue, section: statusIdx)) as? AlarmsTableViewCell
-            {
-                alertCell.alerts = alerts
-            }
+        if oldState?.activeAlerts != state?.activeAlerts,
+            let alerts = state?.activeAlerts,
+            let alertCell = self.tableView.cellForRow(at: IndexPath(row: StatusRow.alarms.rawValue, section: statusIdx)) as? AlarmsTableViewCell
+        {
+            alertCell.alerts = alerts
         }
     }
 }
 
 extension OmnipodSettingsViewController: PumpManagerStatusObserver {
-    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            self.pumpManagerStatus = status
-            self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            if let statusSectionIdx = self.sections.firstIndex(of: .status) {
-                self.tableView.reloadSections([statusSectionIdx], with: .none)
-            }
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
+        self.pumpManagerStatus = status
+        self.suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+        if let statusSectionIdx = self.sections.firstIndex(of: .status) {
+            self.tableView.reloadSections([statusSectionIdx], with: .none)
         }
     }
 }
@@ -747,14 +754,13 @@ private extension UITableViewCell {
         }
     }
     
-    func setDetailBolus(suspended: Bool, dose: UnfinalizedDose?) {
-        guard let dose = dose, !suspended else {
+    func setDetailBolus(suspended: Bool, dose: UnfinalizedDose?, deliveredUnits: Double?) {
+        guard let dose = dose, let delivered = deliveredUnits, !suspended else {
             detailTextLabel?.text = LocalizedString("None", comment: "The detail text for bolus delivery when no bolus is being delivered")
             return
         }
         
         let progress = dose.progress
-        let delivered = OmnipodPumpManager.roundToDeliveryIncrement(units: progress * dose.units)
         if let units = self.insulinFormatter.string(from: dose.units), let deliveredUnits = self.insulinFormatter.string(from: delivered) {
             if progress >= 1 {
                 self.detailTextLabel?.text = String(format: LocalizedString("%@ U (Finished)", comment: "Format string for bolus progress when finished. (1: The localized amount)"), units)

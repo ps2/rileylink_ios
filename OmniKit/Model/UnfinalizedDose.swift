@@ -187,7 +187,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "units": units,
             "startTime": startTime,
             "scheduledCertainty": scheduledCertainty.rawValue
-            ]
+        ]
         
         if let scheduledUnits = scheduledUnits {
            rawValue["scheduledUnits"] = scheduledUnits

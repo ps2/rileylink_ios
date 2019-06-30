@@ -12,7 +12,7 @@ public struct Pod {
     // Volume of insulin in one motor pulse
     public static let pulseSize: Double = 0.05
 
-    // Number of pulses required to delivery one unit of insulin
+    // Number of pulses required to deliver one unit of insulin
     public static let pulsesPerUnit: Double = 20
 
     // Units per second

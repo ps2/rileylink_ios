@@ -108,7 +108,7 @@ public struct BasalSchedule: RawRepresentable, Equatable {
 }
 
 public extension Sequence where Element == BasalScheduleEntry {
-    public func adjacentEqualRatesMerged() -> [BasalScheduleEntry] {
+    func adjacentEqualRatesMerged() -> [BasalScheduleEntry] {
         var output = [BasalScheduleEntry]()
         let _ = self.reduce(nil) { (lastRate, entry) -> TimeInterval? in
             if entry.rate != lastRate {

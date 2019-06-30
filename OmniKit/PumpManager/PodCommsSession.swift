@@ -149,6 +149,7 @@ public class PodCommsSession {
     
     private var podState: PodState {
         didSet {
+            assertOnSessionQueue()
             delegate.podCommsSession(self, didChange: podState)
         }
     }
@@ -586,6 +587,8 @@ public class PodCommsSession {
     }
 
     func dosesForStorage(_ storageHandler: ([UnfinalizedDose]) -> Bool) {
+        assertOnSessionQueue()
+
         let dosesToStore = podState.dosesToStore
 
         if storageHandler(dosesToStore) {
@@ -593,10 +596,15 @@ public class PodCommsSession {
             self.podState.finalizedDoses.removeAll()
         }
     }
+
+    public func assertOnSessionQueue() {
+        transport.assertOnSessionQueue()
+    }
 }
 
 extension PodCommsSession: MessageTransportDelegate {
     func messageTransport(_ messageTransport: MessageTransport, didUpdate state: MessageTransportState) {
+        messageTransport.assertOnSessionQueue()
         podState.messageTransportState = state
     }
 }

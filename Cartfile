@@ -1,2 +1,2 @@
-github "LoopKit/LoopKit" "omnipod-testing"
+github "LoopKit/LoopKit" "tidepool-dev-merge"
 github "maxkonovalov/MKRingProgressView" ~> 2.2

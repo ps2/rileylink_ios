@@ -674,6 +674,27 @@
 			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
 			remoteInfo = RileyLinkKit;
 		};
+		437DE4FC229BB0D1003B1074 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
+			remoteInfo = RileyLinkKit;
+		};
+		437DE4FE229BB0E3003B1074 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C1FFAF77213323CC00C50C1D;
+			remoteInfo = OmniKit;
+		};
+		437DE500229BB0E9003B1074 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D5E78D1FAF7BFB004ACDB7;
+			remoteInfo = RileyLinkKitUI;
+		};
 		43C246A21D891D6C0031F8D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -800,26 +821,12 @@
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
 		};
-		C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FB610120DDEF26002B996B;
-			remoteInfo = Cartfile;
-		};
 		C1FFAF82213323CC00C50C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C1FFAF77213323CC00C50C1D;
 			remoteInfo = OmniKit;
-		};
-		C1FFAF84213323CC00C50C1D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
 		};
 		C1FFAF8B213323CC00C50C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -834,13 +841,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = C1FFAFD8213323F900C50C1D;
 			remoteInfo = OmniKitUI;
-		};
-		C1FFB01F21343B9700C50C1D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43FB610120DDEF26002B996B;
-			remoteInfo = Cartfile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -951,6 +951,7 @@
 		43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RileyLinkKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43722FC01CB9F7640038B7F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		437462381FA9287A00643383 /* RileyLinkDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevice.swift; sourceTree = "<group>"; };
+		437DE508229C8A05003B1074 /* copy-frameworks.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "copy-frameworks.sh"; sourceTree = "<group>"; };
 		4384C8C51FB92F8100D916E6 /* HistoryPage+PumpOpsSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPage+PumpOpsSession.swift"; sourceTree = "<group>"; };
 		4384C8C71FB937E500D916E6 /* PumpSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpSettings.swift; sourceTree = "<group>"; };
 		438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderPumpEvent.swift; sourceTree = "<group>"; };
@@ -1849,6 +1850,14 @@
 			path = RileyLinkKitTests;
 			sourceTree = "<group>";
 		};
+		437DE504229C898D003B1074 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				437DE508229C8A05003B1074 /* copy-frameworks.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
 		43C246941D8918AE0031F8D1 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
@@ -2112,6 +2121,7 @@
 				C1BB128621CB5603009A29B5 /* OmniKitPacketParser */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
+				437DE504229C898D003B1074 /* Scripts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2597,14 +2607,14 @@
 		C1FFB0092133242C00C50C1D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */,
 				C1FC49ED2135DD56007D0788 /* CommandResponseViewController.swift */,
-				C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */,
-				C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */,
-				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
 				C1F1A5EB2151F73F00F0B820 /* InsertCannulaSetupViewController.swift */,
-				C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */,
+				C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */,
+				C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */,
+				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
 				C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */,
+				C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */,
+				C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */,
 				C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */,
 			);
 			path = ViewControllers;
@@ -2976,7 +2986,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				C1FFB02021343B9700C50C1D /* PBXTargetDependency */,
+				437DE4FD229BB0D1003B1074 /* PBXTargetDependency */,
 			);
 			name = OmniKit;
 			productName = OmniKit;
@@ -2995,7 +3005,6 @@
 			);
 			dependencies = (
 				C1FFAF83213323CC00C50C1D /* PBXTargetDependency */,
-				C1FFAF85213323CC00C50C1D /* PBXTargetDependency */,
 			);
 			name = OmniKitTests;
 			productName = OmniKitTests;
@@ -3014,6 +3023,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				437DE501229BB0E9003B1074 /* PBXTargetDependency */,
+				437DE4FF229BB0E3003B1074 /* PBXTargetDependency */,
 			);
 			name = OmniKitUI;
 			productName = OmniKitUI;
@@ -3026,8 +3037,8 @@
 		C12EA22F198B436800309FA4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1000;
+				LastSwiftUpdateCheck = 0940;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Pete Schwamb";
 				TargetAttributes = {
 					431CE76E1F98564100255374 = {
@@ -3118,7 +3129,6 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				es,
 				ru,
@@ -3149,7 +3159,6 @@
 				431CE7761F98564200255374 /* RileyLinkBLEKitTests */,
 				43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */,
 				4352A72420DEC9B700CAC200 /* MinimedKitUI */,
-				43FB610120DDEF26002B996B /* Cartfile */,
 				C1FFAF77213323CC00C50C1D /* OmniKit */,
 				C1FFAF7F213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFD8213323F900C50C1D /* OmniKitUI */,
@@ -3320,7 +3329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "CARTHAGE_BUILD_DIR=\"${SRCROOT}/Carthage/Build\"\nif [ -n \"${IPHONEOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/iOS\"\nelif [ -n \"${WATCHOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/watchOS\"\nelse\n    echo \"ERROR: Unexpected deployment target type\"\n    exit 1\nfi\n\nfor SCRIPT_INPUT_FILE in ${!SCRIPT_INPUT_FILE_*}; do\n    CARTHAGE_BUILD_FILE=\"${!SCRIPT_INPUT_FILE/${BUILT_PRODUCTS_DIR}/${CARTHAGE_BUILD_DIR}}\"\n    if [ -e \"${CARTHAGE_BUILD_FILE}\" ]; then\n        if [ -e \"${SCRIPT_INPUT_FILE}\" ]; then\n            echo \"ERROR: Duplicate frameworks found at:\"\n            echo \"  ${SCRIPT_INPUT_FILE}\"\n            echo \"  ${CARTHAGE_BUILD_FILE}\"\n            exit 1\n        fi\n        echo \"Substituting \\\"${CARTHAGE_BUILD_FILE}\\\" for \\\"${!SCRIPT_INPUT_FILE}\\\"\"\n        export ${SCRIPT_INPUT_FILE}=\"${CARTHAGE_BUILD_FILE}\"\n    fi\ndone\n\necho \"Copy Frameworks with Carthage\"\ncarthage copy-frameworks\n\n";
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
 		};
 		A9B839DC2280A178004E745E /* Copy Frameworks with Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4016,6 +4025,21 @@
 			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
 			targetProxy = 43722FC11CB9F7640038B7F2 /* PBXContainerItemProxy */;
 		};
+		437DE4FD229BB0D1003B1074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
+			targetProxy = 437DE4FC229BB0D1003B1074 /* PBXContainerItemProxy */;
+		};
+		437DE4FF229BB0E3003B1074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1FFAF77213323CC00C50C1D /* OmniKit */;
+			targetProxy = 437DE4FE229BB0E3003B1074 /* PBXContainerItemProxy */;
+		};
+		437DE501229BB0E9003B1074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */;
+			targetProxy = 437DE500229BB0E9003B1074 /* PBXContainerItemProxy */;
+		};
 		43C246A31D891D6C0031F8D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43C246921D8918AE0031F8D1 /* Crypto */;
@@ -4106,20 +4130,10 @@
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */;
 		};
-		C1C0BE29224BF75600C03B4D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FB610120DDEF26002B996B /* Cartfile */;
-			targetProxy = C1C0BE28224BF75600C03B4D /* PBXContainerItemProxy */;
-		};
 		C1FFAF83213323CC00C50C1D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C1FFAF77213323CC00C50C1D /* OmniKit */;
 			targetProxy = C1FFAF82213323CC00C50C1D /* PBXContainerItemProxy */;
-		};
-		C1FFAF85213323CC00C50C1D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1FFAF84213323CC00C50C1D /* PBXContainerItemProxy */;
 		};
 		C1FFAF8C213323CC00C50C1D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4130,11 +4144,6 @@
 			isa = PBXTargetDependency;
 			target = C1FFAFD8213323F900C50C1D /* OmniKitUI */;
 			targetProxy = C1FFAFEC213323FA00C50C1D /* PBXContainerItemProxy */;
-		};
-		C1FFB02021343B9700C50C1D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43FB610120DDEF26002B996B /* Cartfile */;
-			targetProxy = C1FFB01F21343B9700C50C1D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -5442,6 +5451,7 @@
 		C1FFAF8F213323CC00C50C1D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -5484,6 +5494,7 @@
 		C1FFAF90213323CC00C50C1D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -5584,6 +5595,7 @@
 		C1FFAFF1213323FA00C50C1D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -5626,6 +5638,7 @@
 		C1FFAFF2213323FA00C50C1D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

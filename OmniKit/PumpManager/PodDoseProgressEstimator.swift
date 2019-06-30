@@ -11,18 +11,21 @@ import LoopKit
 
 class PodDoseProgressEstimator: DoseProgressTimerEstimator {
 
-    public let dose: DoseEntry
+    let dose: DoseEntry
+
+    weak var pumpManager: PumpManager?
 
     override var progress: DoseProgress {
         let elapsed = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let percentComplete = min(elapsed / duration, 1)
-        let delivered = OmnipodPumpManager.roundToDeliveryIncrement(units: percentComplete * dose.units)
+        let delivered = pumpManager?.roundToSupportedBolusVolume(units: percentComplete * dose.units) ?? dose.units
         return DoseProgress(deliveredUnits: delivered, percentComplete: percentComplete)
     }
 
-    init(dose: DoseEntry, reportingQueue: DispatchQueue) {
+    init(dose: DoseEntry, pumpManager: PumpManager, reportingQueue: DispatchQueue) {
         self.dose = dose
+        self.pumpManager = pumpManager
         super.init(reportingQueue: reportingQueue)
     }
 

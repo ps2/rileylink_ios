@@ -30,6 +30,26 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var expirationReminderDate: Date?
 
+    // Temporal state not persisted
+
+    internal enum SuspendTransition {
+        case suspending
+        case resuming
+    }
+
+    internal var suspendTransition: SuspendTransition?
+
+    internal enum BolusTransition {
+        case initiating
+        case canceling
+    }
+
+    internal var bolusTransition: BolusTransition?
+
+    internal var lastPumpDataReportDate: Date?
+
+    // MARK: -
+
     public init(podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?) {
         self.podState = podState
         self.timeZone = timeZone
@@ -136,22 +156,34 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     }
 }
 
-
 extension OmnipodPumpManagerState {
-    static let idleListeningEnabledDefaults: RileyLinkDevice.IdleListeningState = .enabled(timeout: .minutes(4), channel: 0)
+    var hasActivePod: Bool {
+        return podState?.isActive == true
+    }
+
+    var isPumpDataStale: Bool {
+        let pumpStatusAgeTolerance = TimeInterval(minutes: 6)
+        let pumpDataAge = -(self.lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow
+        return pumpDataAge > pumpStatusAgeTolerance
+    }
 }
 
 
 extension OmnipodPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return [
+            "## OmnipodPumpManagerState",
             "* timeZone: \(timeZone)",
             "* basalSchedule: \(String(describing: basalSchedule))",
             "* expirationReminderDate: \(String(describing: expirationReminderDate))",
             "* unstoredDoses: \(String(describing: unstoredDoses))",
+            "* suspendTransition: \(String(describing: suspendTransition))",
+            "* bolusTransition: \(String(describing: bolusTransition))",
+            "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
+            "* isPumpDataStale: \(String(describing: isPumpDataStale))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
             String(reflecting: messageLog),
-            ].joined(separator: "\n")
+        ].joined(separator: "\n")
     }
 }

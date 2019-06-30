@@ -15,22 +15,22 @@ protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
 
-class PodComms : CustomDebugStringConvertible {
+class PodComms: CustomDebugStringConvertible {
     
-    private var configuredDevices: Set<RileyLinkDevice> = Set()
+    private let configuredDevices: Locked<Set<RileyLinkDevice>> = Locked(Set())
     
     weak var delegate: PodCommsDelegate?
     
     weak var messageLogger: MessageLogger?
 
-    private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
-
     public let log = OSLog(category: "PodComms")
-    
+
+    // Only valid to access on the session serial queue
     private var podState: PodState? {
         didSet {
-            if let podState = podState {
-                self.delegate?.podComms(self, didChange: podState)
+            if let newValue = podState, newValue != oldValue {
+                log.debug("Notifying delegate of new podState: %{public}@", String(reflecting: newValue))
+                delegate?.podComms(self, didChange: newValue)
             }
         }
     }
@@ -41,31 +41,9 @@ class PodComms : CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
-    
-    // This is just a testing function for spoofing PDM packets, or other times when you need to generate a custom packet
-    private func sendPacket(session: CommandSession) throws {
-        
-        let packetNumber = 19
-        let messageNumber = 0x24 >> 2
-        let address: UInt32 = 0x1f0b3554
-        
-        let cmd = GetStatusCommand(podInfoType: .normal)
-        
-        let message = Message(address: address, messageBlocks: [cmd], sequenceNum: messageNumber)
+    private func assignAddress(commandSession: CommandSession) throws -> PodState {
+        commandSession.assertOnSessionQueue()
 
-        var dataRemaining = message.encoded()
-
-        let sendPacket = Packet(address: address, packetType: .pdm, sequenceNum: packetNumber, data: dataRemaining)
-        dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
-        
-        let _ = try session.sendAndListen(sendPacket.encoded(), repeatCount: 0, timeout: .milliseconds(333), retryCount: 0, preambleExtension: .milliseconds(127))
-        
-        throw PodCommsError.emptyResponse
-    }
-
-    
-    private func assignAddress(commandSession: CommandSession) throws {
-        
         // Testing
         //try sendPacket(session: commandSession)
         
@@ -95,7 +73,7 @@ class PodComms : CustomDebugStringConvertible {
         }
         
         // Pairing state should be addressAssigned
-        self.podState = PodState(
+        return PodState(
             address: address,
             piVersion: String(describing: config.piVersion),
             pmVersion: String(describing: config.pmVersion),
@@ -105,6 +83,7 @@ class PodComms : CustomDebugStringConvertible {
     }
     
     private func configurePod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
+        commandSession.assertOnSessionQueue()
         
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
         transport.messageLogger = messageLogger
@@ -119,7 +98,7 @@ class PodComms : CustomDebugStringConvertible {
             response = try transport.sendMessage(message)
         } catch let error {
             if case PodCommsError.podAckedInsteadOfReturningResponse = error {
-                // Pod alread configured...
+                // Pod already configured...
                 self.podState?.setupProgress = .podConfigured
                 return
             }
@@ -143,11 +122,11 @@ class PodComms : CustomDebugStringConvertible {
         }
     }
     
-    func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, completion: @escaping (Error?) -> Void)
+    func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
     {
         deviceSelector { (device) in
             guard let device = device else {
-                completion(PodCommsError.noRileyLinkAvailable)
+                block(.failure(PodCommsError.noRileyLinkAvailable))
                 return
             }
 
@@ -156,19 +135,26 @@ class PodComms : CustomDebugStringConvertible {
                     self.configureDevice(device, with: commandSession)
                     
                     if self.podState == nil {
-                        try self.assignAddress(commandSession: commandSession)
+                        self.podState = try self.assignAddress(commandSession: commandSession)
                     }
                     
-                    guard let podState = self.podState else {
-                        completion(PodCommsError.noPodPaired)
+                    guard self.podState != nil else {
+                        block(.failure(PodCommsError.noPodPaired))
                         return
                     }
-                    
-                    try self.configurePod(podState: podState, timeZone: timeZone, commandSession: commandSession)
 
-                    completion(nil)
-                } catch let error {
-                    completion(error)
+                    try self.configurePod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+
+                    // Run a session now for any post-pairing commands
+                    let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)
+                    transport.messageLogger = self.messageLogger
+                    let podSession = PodCommsSession(podState: self.podState!, transport: transport, delegate: self)
+
+                    block(.success(session: podSession))
+                } catch let error as PodCommsError {
+                    block(.failure(error))
+                } catch {
+                    block(.failure(PodCommsError.commsError(error: error)))
                 }
             }
         }
@@ -179,40 +165,34 @@ class PodComms : CustomDebugStringConvertible {
         case failure(PodCommsError)
     }
     
-    // Synchronous
     func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        sessionQueue.async {
-            guard let podState = self.podState else {
-                block(.failure(PodCommsError.noPodPaired))
-                semaphore.signal()
+
+        deviceSelector { (device) in
+            guard let device = device else {
+                block(.failure(PodCommsError.noRileyLinkAvailable))
                 return
             }
-            
-            deviceSelector { (device) in
-                guard let device = device else {
-                    block(.failure(PodCommsError.noRileyLinkAvailable))
-                    semaphore.signal()
+
+            device.runSession(withName: name) { (commandSession) in
+                guard self.podState != nil else {
+                    block(.failure(PodCommsError.noPodPaired))
                     return
                 }
-            
-                device.runSession(withName: name) { (commandSession) in
-                    self.configureDevice(device, with: commandSession)
-                    let transport = PodMessageTransport(session: commandSession, address: podState.address, state: podState.messageTransportState)
-                    transport.messageLogger = self.messageLogger
-                    let podSession = PodCommsSession(podState: podState, transport: transport, delegate: self)
-                    block(.success(session: podSession))
-                    semaphore.signal()
-                }
+
+                self.configureDevice(device, with: commandSession)
+                let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)
+                transport.messageLogger = self.messageLogger
+                let podSession = PodCommsSession(podState: self.podState!, transport: transport, delegate: self)
+                block(.success(session: podSession))
             }
         }
-        semaphore.wait()
     }
     
     // Must be called from within the RileyLinkDevice sessionQueue
     private func configureDevice(_ device: RileyLinkDevice, with session: CommandSession) {
-        guard !self.configuredDevices.contains(device) else {
+        session.assertOnSessionQueue()
+
+        guard !self.configuredDevices.value.contains(device) else {
             return
         }
         
@@ -230,7 +210,9 @@ class PodComms : CustomDebugStringConvertible {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceConnectionStateDidChange, object: device)
         
         log.debug("added device %{public}@ to configuredDevices", device.name ?? "unknown")
-        configuredDevices.insert(device)
+        _ = configuredDevices.mutate { (value) in
+            value.insert(device)
+        }
     }
     
     @objc private func deviceRadioConfigDidChange(_ note: Notification) {
@@ -241,7 +223,10 @@ class PodComms : CustomDebugStringConvertible {
 
         NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
-        configuredDevices.remove(device)
+
+        _ = configuredDevices.mutate { (value) in
+            value.remove(device)
+        }
     }
     
     // MARK: - CustomDebugStringConvertible
@@ -249,12 +234,22 @@ class PodComms : CustomDebugStringConvertible {
     var debugDescription: String {
         return [
             "## PodComms",
-            "configuredDevices: \(configuredDevices.map { $0.peripheralIdentifier })",
+            "podState: \(String(reflecting: podState))",
+            "configuredDevices: \(configuredDevices.value.map { $0.peripheralIdentifier.uuidString })",
+            "delegate: \(String(describing: delegate != nil))",
             ""
-            ].joined(separator: "\n")
+        ].joined(separator: "\n")
     }
 
 }
+
+extension PodComms: PodCommsSessionDelegate {
+    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
+        podCommsSession.assertOnSessionQueue()
+        self.podState = state
+    }
+}
+
 
 private extension CommandSession {
     
@@ -311,10 +306,24 @@ private extension CommandSession {
         try updateRegister(.sync1, value: 0xA5)
         try updateRegister(.sync0, value: 0x5A)
     }
-}
 
-extension PodComms: PodCommsSessionDelegate {
-    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
-        self.podState = state
+    // This is just a testing function for spoofing PDM packets, or other times when you need to generate a custom packet
+    private func sendPacket() throws {
+        let packetNumber = 19
+        let messageNumber = 0x24 >> 2
+        let address: UInt32 = 0x1f0b3554
+
+        let cmd = GetStatusCommand(podInfoType: .normal)
+
+        let message = Message(address: address, messageBlocks: [cmd], sequenceNum: messageNumber)
+
+        var dataRemaining = message.encoded()
+
+        let sendPacket = Packet(address: address, packetType: .pdm, sequenceNum: packetNumber, data: dataRemaining)
+        dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
+
+        let _ = try sendAndListen(sendPacket.encoded(), repeatCount: 0, timeout: .milliseconds(333), retryCount: 0, preambleExtension: .milliseconds(127))
+
+        throw PodCommsError.emptyResponse
     }
 }

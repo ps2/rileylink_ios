@@ -40,18 +40,16 @@ class ReplacePodViewController: SetupTableViewController {
     
     var pumpManager: OmnipodPumpManager! {
         didSet {
-            pumpManager.getPodState { (podState) in
-                DispatchQueue.main.async {
-                    if let podFault = podState?.fault {
-                        self.replacementReason = .fault(podFault.currentStatus)
-                    } else if podState?.setupProgress.primingNeeded == true {
-                        self.replacementReason = .canceledPairingBeforeApplication
-                    } else if podState?.setupProgress.needsCannulaInsertion == true {
-                        self.replacementReason = .canceledPairing
-                    } else {
-                        self.replacementReason = .normal
-                    }
-                }
+            let podState = pumpManager.state.podState
+
+            if let podFault = podState?.fault {
+                self.replacementReason = .fault(podFault.currentStatus)
+            } else if podState?.setupProgress.primingNeeded == true {
+                self.replacementReason = .canceledPairingBeforeApplication
+            } else if podState?.setupProgress.needsCannulaInsertion == true {
+                self.replacementReason = .canceledPairing
+            } else {
+                self.replacementReason = .normal
             }
         }
     }
@@ -176,19 +174,18 @@ class ReplacePodViewController: SetupTableViewController {
     
     func deactivate() {
         tryCount += 1
-        
-        pumpManager.deactivatePod { (error) in
+
+        let continueAfterFailure = tryCount > 1
+        pumpManager.deactivatePod(forgetPodOnFail: continueAfterFailure) { (error) in
             DispatchQueue.main.async {
                 if let error = error {
-                    if self.tryCount > 1 {
-                        self.pumpManager.forgetPod()
+                    if continueAfterFailure {
                         self.continueState = .continueAfterFailure
                     } else {
                         self.lastError = error
                         self.continueState = .deactivationFailed
                     }
                 } else {
-                    self.pumpManager.forgetPod()
                     self.continueState = .ready
                 }
             }

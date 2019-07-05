@@ -137,6 +137,12 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         updateFaultDisplay()
         pumpManager.refreshStatus()
     }
+
+    func hudDidDisappear(_ animated: Bool) {
+        if let podLifeView = podLifeView {
+            podLifeView.pauseUpdates()
+        }
+    }
     
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {
         var rawValue: HUDProvider.HUDViewsRawState = [:]

@@ -35,7 +35,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
         fileprivate var data: Data {
             switch self {
             case .basalSchedule(let currentSegment, let secondsRemaining, let pulsesRemaining, let table):
-                var data = Data(bytes: [currentSegment])
+                var data = Data([currentSegment])
                 data.appendBigEndian(secondsRemaining << 3)
                 data.appendBigEndian(pulsesRemaining)
                 for entry in table.entries {
@@ -47,13 +47,13 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
                 let multiplier = UInt16(round(timeBetweenPulses * 8))
                 let fieldA = pulseCount * multiplier
                 let numHalfHourSegments: UInt8 = 1
-                var data = Data(bytes: [numHalfHourSegments])
+                var data = Data([numHalfHourSegments])
                 data.appendBigEndian(fieldA)
                 data.appendBigEndian(pulseCount)
                 data.appendBigEndian(pulseCount)
                 return data
             case .tempBasal(let secondsRemaining, let firstSegmentPulses, let table):
-                var data = Data(bytes: [UInt8(table.numSegments())])
+                var data = Data([UInt8(table.numSegments())])
                 data.appendBigEndian(secondsRemaining << 3)
                 data.appendBigEndian(firstSegmentPulses)
                 for entry in table.entries {
@@ -84,7 +84,7 @@ public struct SetInsulinScheduleCommand : NonceResyncableMessageBlock {
     public let deliverySchedule: DeliverySchedule
     
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             UInt8(7 + deliverySchedule.data.count),
             ])

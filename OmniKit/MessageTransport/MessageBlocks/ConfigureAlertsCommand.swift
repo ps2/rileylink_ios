@@ -16,7 +16,7 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
     let configurations: [AlertConfiguration]
     
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             UInt8(4 + configurations.count * AlertConfiguration.length),
             ])

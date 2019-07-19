@@ -201,7 +201,7 @@ extension Array where Element == RileyLinkDevice {
     }
 
     mutating func deprioritize(_ element: Element) {
-        if let index = self.index(where: { $0 === element }) {
+        if let index = self.firstIndex(where: { $0 === element }) {
             self.swapAt(index, self.count - 1)
         }
     }

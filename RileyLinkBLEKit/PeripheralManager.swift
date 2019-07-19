@@ -316,7 +316,7 @@ extension PeripheralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         commandLock.lock()
 
-        if let index = commandConditions.index(where: { (condition) -> Bool in
+        if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .discoverServices = condition {
                 return true
             } else {
@@ -337,7 +337,7 @@ extension PeripheralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         commandLock.lock()
 
-        if let index = commandConditions.index(where: { (condition) -> Bool in
+        if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .discoverCharacteristicsForService(serviceUUID: service.uuid) = condition {
                 return true
             } else {
@@ -358,7 +358,7 @@ extension PeripheralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
 
-        if let index = commandConditions.index(where: { (condition) -> Bool in
+        if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .notificationStateUpdate(characteristic: characteristic, enabled: characteristic.isNotifying) = condition {
                 return true
             } else {
@@ -379,7 +379,7 @@ extension PeripheralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
 
-        if let index = commandConditions.index(where: { (condition) -> Bool in
+        if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .write(characteristic: characteristic) = condition {
                 return true
             } else {
@@ -402,7 +402,7 @@ extension PeripheralManager: CBPeripheralDelegate {
 
         var notifyDelegate = false
 
-        if let index = commandConditions.index(where: { (condition) -> Bool in
+        if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .valueUpdate(characteristic: characteristic, matching: let matching) = condition {
                 return matching?(characteristic.value) ?? true
             } else {

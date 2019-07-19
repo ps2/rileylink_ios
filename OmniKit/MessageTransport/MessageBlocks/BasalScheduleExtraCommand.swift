@@ -22,7 +22,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
 
     public var data: Data {
         let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (completionBeep ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
             beepOptions,

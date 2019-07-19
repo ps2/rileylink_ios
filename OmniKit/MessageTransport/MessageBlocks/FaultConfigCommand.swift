@@ -36,7 +36,7 @@ public struct FaultConfigCommand : NonceResyncableMessageBlock {
     }
 
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             length])
             

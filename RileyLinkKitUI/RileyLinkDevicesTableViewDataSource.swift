@@ -103,6 +103,8 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
             if !isAutoConnectDevice {
                 state = .disconnected
             }
+        @unknown default:
+            break
         }
 
         return state
@@ -126,7 +128,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
 
     @objc private func deviceDidUpdate(_ note: Notification) {
         DispatchQueue.main.async {
-            if let device = note.object as? RileyLinkDevice, let index = self.devices.index(where: { $0 === device }) {
+            if let device = note.object as? RileyLinkDevice, let index = self.devices.firstIndex(where: { $0 === device }) {
                 if let rssi = note.userInfo?[RileyLinkDevice.notificationRSSIKey] as? Int {
                     self.deviceRSSI[device.peripheralIdentifier] = rssi
                 }

@@ -49,7 +49,7 @@ public struct BeepConfigCommand : MessageBlock {
     }
 
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             4,
             ])

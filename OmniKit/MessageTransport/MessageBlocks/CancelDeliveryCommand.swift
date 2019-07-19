@@ -56,7 +56,7 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     public var nonce: UInt32
     
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             5,
             ])

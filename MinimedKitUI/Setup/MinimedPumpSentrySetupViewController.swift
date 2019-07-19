@@ -93,7 +93,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
                 return
             }
 
-            let watchdogID = Data(bytes: [0xd0, 0x00, 0x07])
+            let watchdogID = Data([0xd0, 0x00, 0x07])
             do {
                 try session.changeWatchdogMarriageProfile(watchdogID)
                 DispatchQueue.main.async {

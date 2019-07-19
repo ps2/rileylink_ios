@@ -16,7 +16,7 @@ public struct AssignAddressCommand : MessageBlock {
     let address: UInt32
 
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             4
         ])

@@ -28,7 +28,7 @@ public struct BasalTableEntry {
     public var data: Data {
         let pulsesHighBits = UInt8((pulses >> 8) & 0b11)
         let pulsesLowBits = UInt8(pulses & 0xff)
-        return Data(bytes: [
+        return Data([
             UInt8((segments - 1) << 4) + UInt8((alternateSegmentPulse ? 1 : 0) << 3) + pulsesHighBits,
             UInt8(pulsesLowBits)
             ])

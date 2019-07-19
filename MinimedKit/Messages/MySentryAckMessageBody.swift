@@ -46,6 +46,6 @@ public struct MySentryAckMessageBody: MessageBody {
 
         buffer.replaceSubrange(5..<5 + responseMessageTypes.count, with: responseMessageTypes.map({ $0.rawValue }))
 
-        return Data(bytes: buffer)
+        return Data(buffer)
     }
 }

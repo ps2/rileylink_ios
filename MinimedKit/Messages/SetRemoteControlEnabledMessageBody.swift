@@ -10,6 +10,6 @@ import Foundation
 
 public class SetRemoteControlEnabledMessageBody: CarelinkLongMessageBody {
     public convenience init(enabled: Bool) {
-        self.init(rxData: Data(bytes: [1, enabled ? 1 : 0]))!
+        self.init(rxData: Data([1, enabled ? 1 : 0]))!
     }
 }

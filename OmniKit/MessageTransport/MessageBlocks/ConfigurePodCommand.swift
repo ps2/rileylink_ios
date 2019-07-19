@@ -32,7 +32,7 @@ public struct ConfigurePodCommand : MessageBlock {
     
     // 03 13 1f08ced2 14 04 09 0b 11 0b 08 0000a640 00097c27 83e4
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             19,
             ])
@@ -44,7 +44,7 @@ public struct ConfigurePodCommand : MessageBlock {
         let hour = UInt8(dateComponents.hour ?? 0)
         let minute = UInt8(dateComponents.minute ?? 0)
         
-        let data2: Data = Data(bytes: [
+        let data2: Data = Data([
             UInt8(0x14), // Unknown
             packetTimeoutLimit,
             month,

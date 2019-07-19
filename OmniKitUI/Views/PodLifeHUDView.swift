@@ -52,6 +52,12 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
         self.startTime = startTime
         self.lifetime = lifetime
         updateProgressCircle()
+
+        if timer == nil {
+            self.timer = Timer.scheduledTimer(withTimeInterval: .seconds(10), repeats: true) { [weak self] _ in
+                self?.updateProgressCircle()
+            }
+        }
     }
     
     override open func stateColorsDidUpdate() {
@@ -142,11 +148,12 @@ public class PodLifeHUDView: BaseHUDView, NibLoadable {
         }
     }
 
+    func pauseUpdates() {
+        timer?.invalidate()
+        timer = nil
+    }
+
     override public func awakeFromNib() {
         super.awakeFromNib()
-        
-        timer = Timer.scheduledTimer(withTimeInterval: .seconds(10), repeats: true) { [weak self] _ in
-            self?.updateProgressCircle()
-        }
     }
 }

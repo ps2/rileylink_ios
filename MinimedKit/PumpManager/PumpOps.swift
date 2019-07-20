@@ -24,7 +24,7 @@ public class PumpOps {
 
     public let pumpSettings: PumpSettings
 
-    private let pumpState: Locked<PumpState>
+    public let pumpState: Locked<PumpState>
 
     private let configuredDevices: Locked<Set<RileyLinkDevice>> = Locked(Set())
 
@@ -107,10 +107,6 @@ public class PumpOps {
         _ = configuredDevices.mutate { (value) in
             value.remove(device)
         }
-    }
-
-    public func getPumpState(_ completion: @escaping (_ state: PumpState) -> Void) {
-        completion(self.pumpState.value)
     }
 }
 

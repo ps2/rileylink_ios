@@ -158,8 +158,8 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         let batteryRemainingPercent: UInt8 = rxData[14]
         self.batteryRemainingPercent = Int(round(Double(batteryRemainingPercent) / 4.0 * 100))
         
-        let glucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[9], rxData[24] << 7])) >> 7
-        let previousGlucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[10], rxData[24] << 6])) >> 7
+        let glucoseValue = Int(bigEndianBytes: Data([rxData[9], rxData[24] << 7])) >> 7
+        let previousGlucoseValue = Int(bigEndianBytes: Data([rxData[10], rxData[24] << 6])) >> 7
         
         glucose = SensorReading(glucose: glucoseValue)
         previousGlucose = SensorReading(glucose: previousGlucoseValue)

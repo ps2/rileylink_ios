@@ -15,6 +15,7 @@ import MinimedKitUI
 import NightscoutUploadKit
 import LoopKit
 import LoopKitUI
+import UserNotifications
 import os.log
 import UserNotifications
 

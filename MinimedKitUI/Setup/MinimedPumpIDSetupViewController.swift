@@ -269,7 +269,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                     let remoteIDCount = try session.getRemoteControlIDs().ids.count
 
                     if remoteIDCount == 0 {
-                        try session.setRemoteControlID(Data(bytes: [9, 9, 9, 9, 9, 9]), atIndex: 2)
+                        try session.setRemoteControlID(Data([9, 9, 9, 9, 9, 9]), atIndex: 2)
                     }
 
                     try session.setRemoteControlEnabled(true)

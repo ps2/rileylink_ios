@@ -39,7 +39,7 @@ public class DataFrameMessageBody: CarelinkLongMessageBody {
             byte0 |= 0b1000_0000
         }
 
-        var data = Data(bytes: [byte0])
+        var data = Data([byte0])
         data.append(contents)
 
         return data

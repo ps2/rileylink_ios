@@ -23,6 +23,8 @@ extension CBPeripheralState {
             return LocalizedString("Disconnected", comment: "The disconnected state")
         case .disconnecting:
             return LocalizedString("Disconnecting", comment: "The in-progress disconnecting state")
+        @unknown default:
+            return "Unknown: \(rawValue)"
         }
     }
 }

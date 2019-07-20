@@ -44,7 +44,7 @@ public struct PumpMessage : CustomStringConvertible {
         buffer.append(messageType.rawValue)
         buffer.append(contentsOf: messageBody.txData)
 
-        return Data(bytes: buffer)
+        return Data(buffer)
     }
     
     public var description: String {

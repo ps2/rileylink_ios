@@ -27,7 +27,7 @@ class TimestampedHistoryEventTests: XCTestCase {
     }
     
     func testEventIsntMutable() {
-        let data = Data(bytes: Array<UInt8>([7,6,5,4,3,2,1,0]))
+        let data = Data(Array<UInt8>([7,6,5,4,3,2,1,0]))
         let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model523)!
         
         let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())
@@ -36,7 +36,7 @@ class TimestampedHistoryEventTests: XCTestCase {
     }
     
     func testEventIsNotMutableFor522() {
-        let data = Data(bytes: Array<UInt8>([7,6,5,4,3,2,1,0]))
+        let data = Data(Array<UInt8>([7,6,5,4,3,2,1,0]))
         let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model522)!
         
         let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())

@@ -298,4 +298,8 @@ public struct CommandSession {
         _ = try writeCommand(command, timeout: 0)
     }
 
+    /// Asserts that the caller is currently on the session's queue
+    public func assertOnSessionQueue() {
+        dispatchPrecondition(condition: .onQueue(manager.queue))
+    }
 }

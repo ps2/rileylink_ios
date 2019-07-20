@@ -16,7 +16,7 @@ class ReadRemoteControlIDsMessageBodyTests: XCTestCase {
         let body = message.messageBody as! ReadRemoteControlIDsMessageBody
 
         XCTAssertEqual(1, body.ids.count)
-        XCTAssertEqual(Data(bytes: [1, 2, 3, 4, 5, 6]), body.ids[0])
+        XCTAssertEqual(Data([1, 2, 3, 4, 5, 6]), body.ids[0])
     }
 
 
@@ -34,9 +34,9 @@ class ReadRemoteControlIDsMessageBodyTests: XCTestCase {
         let body = message.messageBody as! ReadRemoteControlIDsMessageBody
 
         XCTAssertEqual(3, body.ids.count)
-        XCTAssertEqual(Data(bytes: [0, 0, 0, 0, 0, 0]), body.ids[0])
-        XCTAssertEqual(Data(bytes: [1, 0, 0, 1, 0, 0]), body.ids[1])
-        XCTAssertEqual(Data(bytes: [9, 9, 9, 9, 9, 9]), body.ids[2])
+        XCTAssertEqual(Data([0, 0, 0, 0, 0, 0]), body.ids[0])
+        XCTAssertEqual(Data([1, 0, 0, 1, 0, 0]), body.ids[1])
+        XCTAssertEqual(Data([9, 9, 9, 9, 9, 9]), body.ids[2])
     }
 
 }

@@ -253,7 +253,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let minuteMonthByte = minuteByte | monthLowerComponent
         let yearByte = UInt8(year) & 0b01111111
 
-        let batteryData = Data(bytes: [0,0, secondMonthByte, minuteMonthByte, hourByte, dayByte, yearByte])
+        let batteryData = Data([0,0, secondMonthByte, minuteMonthByte, hourByte, dayByte, yearByte])
         let batteryPumpEvent = BatteryPumpEvent(availableData: batteryData, pumpModel: PumpModel.model523)!
         return batteryPumpEvent
     }

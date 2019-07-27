@@ -74,7 +74,7 @@ public struct TempBasalExtraCommand : MessageBlock {
     public init(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
         rateEntries = RateEntry.makeEntries(rate: rate, duration: duration)
         remainingPulses = rateEntries[0].totalPulses
-        delayUntilNextPulse = rateEntries[0].delayBetweenPulses
+        delayUntilNextPulse = rateEntries[0].delayBetweenPulses / 2 // Make the first pulse of the TB happen halfway through the cycle
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval

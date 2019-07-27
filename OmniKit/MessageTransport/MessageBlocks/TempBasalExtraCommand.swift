@@ -14,7 +14,7 @@ public struct TempBasalExtraCommand : MessageBlock {
     public let completionBeep: Bool
     public let programReminderInterval: TimeInterval
     public let remainingPulses: Double
-    public let delayUntilNextPulse: TimeInterval
+    public let delayUntilFirstTenthOfPulse: TimeInterval
     public let rateEntries: [RateEntry]
 
     public let blockType: MessageBlockType = .tempBasalExtra
@@ -29,9 +29,9 @@ public struct TempBasalExtraCommand : MessageBlock {
             ])
         data.appendBigEndian(UInt16(round(remainingPulses * 2) * 5))
         if remainingPulses == 0 {
-            data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds) * 10)
+            data.appendBigEndian(UInt32(delayUntilFirstTenthOfPulse.hundredthsOfMilliseconds) * 10)
         } else {
-            data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+            data.appendBigEndian(UInt32(delayUntilFirstTenthOfPulse.hundredthsOfMilliseconds))
         }
         for entry in rateEntries {
             data.append(entry.data)
@@ -51,9 +51,9 @@ public struct TempBasalExtraCommand : MessageBlock {
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
         if remainingPulses == 0 {
-            delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter) / 10)
+            delayUntilFirstTenthOfPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter) / 10)
         } else {
-            delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+            delayUntilFirstTenthOfPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
         }
         var entries = [RateEntry]()
         for entryIndex in (0..<numEntries) {
@@ -74,7 +74,7 @@ public struct TempBasalExtraCommand : MessageBlock {
     public init(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
         rateEntries = RateEntry.makeEntries(rate: rate, duration: duration)
         remainingPulses = rateEntries[0].totalPulses
-        delayUntilNextPulse = rateEntries[0].delayBetweenPulses
+        delayUntilFirstTenthOfPulse = rateEntries[0].delayBetweenPulses
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
@@ -83,6 +83,6 @@ public struct TempBasalExtraCommand : MessageBlock {
 
 extension TempBasalExtraCommand: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "TempBasalExtraCommand(completionBeep:\(completionBeep), programReminderInterval:\(programReminderInterval.stringValue) remainingPulses:\(remainingPulses), delayUntilNextPulse:\(delayUntilNextPulse.stringValue), rateEntries:\(rateEntries))"
+        return "TempBasalExtraCommand(completionBeep:\(completionBeep), programReminderInterval:\(programReminderInterval.stringValue) remainingPulses:\(remainingPulses), delayUntilNextPulse:\(delayUntilFirstTenthOfPulse.stringValue), rateEntries:\(rateEntries))"
     }
 }

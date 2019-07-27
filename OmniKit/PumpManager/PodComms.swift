@@ -29,7 +29,7 @@ class PodComms: CustomDebugStringConvertible {
     private var podState: PodState? {
         didSet {
             if let newValue = podState, newValue != oldValue {
-                log.debug("Notifying delegate of new podState: %{public}@", String(reflecting: newValue))
+                //log.debug("Notifying delegate of new podState: %{public}@", String(reflecting: newValue))
                 delegate?.podComms(self, didChange: newValue)
             }
         }

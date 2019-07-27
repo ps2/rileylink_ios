@@ -1338,7 +1338,7 @@ extension OmnipodPumpManager: PodCommsDelegate {
                 if let error = error {
                     self.log.error("Error storing pod events: %@", String(describing: error))
                 } else {
-                    self.log.error("Stored pod events: %@", String(describing: doses))
+                    self.log.info("Stored pod events: %@", String(describing: doses))
                 }
 
                 completion(error)

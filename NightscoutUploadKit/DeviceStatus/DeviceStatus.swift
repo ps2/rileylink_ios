@@ -15,14 +15,16 @@ public struct DeviceStatus {
     let uploaderStatus: UploaderStatus?
     let loopStatus: LoopStatus?
     let radioAdapter: RadioAdapter?
+    let overrideStatus: OverrideStatus?
 
-    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil, radioAdapter: RadioAdapter? = nil) {
+    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil, radioAdapter: RadioAdapter? = nil, overrideStatus: OverrideStatus? = nil) {
         self.device = device
         self.timestamp = timestamp
         self.pumpStatus = pumpStatus
         self.uploaderStatus = uploaderStatus
         self.loopStatus = loopStatus
         self.radioAdapter = radioAdapter
+        self.overrideStatus = overrideStatus
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -45,6 +47,10 @@ public struct DeviceStatus {
 
         if let radioAdapter = radioAdapter {
             rval["radioAdapter"] = radioAdapter.dictionaryRepresentation
+        }
+        
+        if let override = overrideStatus {
+            rval["override"] = override.dictionaryRepresentation
         }
 
         return rval

@@ -391,7 +391,7 @@ public class PodCommsSession {
     }
 
     public enum CancelDeliveryResult {
-        case success(statusResponse: StatusResponse, canceledBolus: UnfinalizedDose?)
+        case success(statusResponse: StatusResponse, canceledDose: UnfinalizedDose?)
         case certainFailure(error: PodCommsError)
         case uncertainFailure(error: PodCommsError)
     }
@@ -456,16 +456,18 @@ public class PodCommsSession {
                 podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
             }
 
+            var canceledDose: UnfinalizedDose? = nil
+
             if let unfinalizedTempBasal = podState.unfinalizedTempBasal,
                 let finishTime = unfinalizedTempBasal.finishTime,
                 deliveryType.contains(.tempBasal),
                 finishTime.compare(now) == .orderedDescending
             {
                 podState.unfinalizedTempBasal?.cancel(at: now)
-                log.info("Interrupted temp basal: %@", String(describing: unfinalizedTempBasal))
+                canceledDose = podState.unfinalizedTempBasal
+                log.info("Interrupted temp basal: %@", String(describing: canceledDose))
             }
 
-            var canceledBolus: UnfinalizedDose? = nil
 
             if let unfinalizedBolus = podState.unfinalizedBolus,
                 let finishTime = unfinalizedBolus.finishTime,
@@ -473,13 +475,13 @@ public class PodCommsSession {
                 finishTime.compare(now) == .orderedDescending
             {
                 podState.unfinalizedBolus?.cancel(at: now, withRemaining: status.insulinNotDelivered)
-                canceledBolus = podState.unfinalizedBolus
-                log.info("Interrupted bolus: %@", String(describing: canceledBolus))
+                canceledDose = podState.unfinalizedBolus
+                log.info("Interrupted bolus: %@", String(describing: canceledDose))
             }
 
             podState.updateFromStatusResponse(status)
 
-            return CancelDeliveryResult.success(statusResponse: status, canceledBolus: canceledBolus)
+            return CancelDeliveryResult.success(statusResponse: status, canceledDose: canceledDose)
 
         } catch PodCommsError.nonceResyncFailed {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.nonceResyncFailed)
@@ -592,7 +594,7 @@ public class PodCommsSession {
         let dosesToStore = podState.dosesToStore
 
         if storageHandler(dosesToStore) {
-            log.info("Stored %@", String(describing: dosesToStore))
+            log.info("Stored doses: %@", String(describing: dosesToStore))
             self.podState.finalizedDoses.removeAll()
         }
     }

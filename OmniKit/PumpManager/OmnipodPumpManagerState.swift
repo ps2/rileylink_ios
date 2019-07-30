@@ -32,19 +32,17 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     // Temporal state not persisted
 
-    internal enum SuspendTransition {
-        case suspending
-        case resuming
+    internal enum EngageablePumpState: Equatable {
+        case engaging
+        case disengaging
+        case stable
     }
 
-    internal var suspendTransition: SuspendTransition?
+    internal var suspendEngageState: EngageablePumpState = .stable
 
-    internal enum BolusTransition {
-        case initiating
-        case canceling
-    }
+    internal var bolusEngageState: EngageablePumpState = .stable
 
-    internal var bolusTransition: BolusTransition?
+    internal var tempBasalEngageState: EngageablePumpState = .stable
 
     internal var lastPumpDataReportDate: Date?
 
@@ -177,8 +175,9 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* basalSchedule: \(String(describing: basalSchedule))",
             "* expirationReminderDate: \(String(describing: expirationReminderDate))",
             "* unstoredDoses: \(String(describing: unstoredDoses))",
-            "* suspendTransition: \(String(describing: suspendTransition))",
-            "* bolusTransition: \(String(describing: bolusTransition))",
+            "* suspendEngageState: \(String(describing: suspendEngageState))",
+            "* bolusEngageState: \(String(describing: bolusEngageState))",
+            "* tempBasalEngageState: \(String(describing: tempBasalEngageState))",
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
             String(reflecting: podState),

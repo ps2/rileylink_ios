@@ -63,14 +63,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     var finalizedDoses: [UnfinalizedDose]
 
     public var dosesToStore: [UnfinalizedDose] {
-        var dosesToStore = finalizedDoses
-        if let unfinalizedTempBasal = unfinalizedTempBasal {
-            dosesToStore.append(unfinalizedTempBasal)
-        }
-        if let unfinalizedSuspend = unfinalizedSuspend {
-            dosesToStore.append(unfinalizedSuspend)
-        }
-        return dosesToStore
+        return  finalizedDoses + [unfinalizedTempBasal, unfinalizedSuspend, unfinalizedBolus].compactMap {$0}
     }
 
     public private(set) var suspended: Bool

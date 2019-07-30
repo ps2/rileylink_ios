@@ -1139,6 +1139,9 @@ extension OmnipodPumpManager: PumpManager {
             willRequest(dose)
 
             let result = session.bolus(units: enactUnits)
+            session.dosesForStorage() { (doses) -> Bool in
+                return self.store(doses: doses, in: session)
+            }
 
             switch result {
             case .success:
@@ -1186,6 +1189,10 @@ extension OmnipodPumpManager: PumpManager {
                 case .uncertainFailure(let error):
                     throw error
                 case .success(_, let canceledBolus):
+                    session.dosesForStorage() { (doses) -> Bool in
+                        return self.store(doses: doses, in: session)
+                    }
+
                     let canceledDoseEntry: DoseEntry? = canceledBolus != nil ? DoseEntry(canceledBolus!) : nil
                     completion(.success(canceledDoseEntry))
                     session.dosesForStorage() { (doses) -> Bool in

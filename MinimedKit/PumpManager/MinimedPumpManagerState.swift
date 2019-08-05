@@ -71,7 +71,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     // Doses we're tracking that haven't shown up in history yet
     public var pendingDoses: [UnfinalizedDose]
 
-    // A record of delayedAppend history events that have recently been used to reconcile an unfinalized dose
+    // A record of history events that have recently been used to reconcile unfinalized doses
     public var recentlyReconciledEventIDs: [Data]
 
     public var lastReconciliation: Date?

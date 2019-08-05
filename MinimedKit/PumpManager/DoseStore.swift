@@ -17,19 +17,18 @@ extension Collection where Element == TimestampedHistoryEvent {
         // Always assume the sequence may have started rewound. LoopKit will ignore unmatched resume events.
         var isRewound = true
         var title: String
+        let now = Date()
 
         for event in self {
             var dose: DoseEntry?
             var eventType: LoopKit.PumpEventType?
-            var isMutable = false
+
 
             switch event.pumpEvent {
             case let bolus as BolusNormalPumpEvent:
                 // For entries in-progress, use the programmed amount
-                let deliveryFinishDate = event.date.addingTimeInterval(bolus.deliveryTime)
                 let units: Double
-                if model.appendsSquareWaveToHistoryOnStartOfDelivery && bolus.type == .square && deliveryFinishDate > Date() {
-                    isMutable = true
+                if event.isMutable(atDate: now, forPump: model) {
                     units = bolus.programmed
                 } else {
                     units = bolus.amount
@@ -100,7 +99,7 @@ extension Collection where Element == TimestampedHistoryEvent {
             }
 
             title = String(describing: event.pumpEvent)
-            events.append(NewPumpEvent(date: event.date, dose: dose, isMutable: isMutable, raw: event.pumpEvent.rawData, title: title, type: eventType))
+            events.append(NewPumpEvent(date: event.date, dose: dose, isMutable: event.isMutable(atDate: now, forPump: model), raw: event.pumpEvent.rawData, title: title, type: eventType))
         }
 
         return events

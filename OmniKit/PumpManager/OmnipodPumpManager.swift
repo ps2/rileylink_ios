@@ -1200,9 +1200,6 @@ extension OmnipodPumpManager: PumpManager {
 
                     let canceledDoseEntry: DoseEntry? = canceledBolus != nil ? DoseEntry(canceledBolus!) : nil
                     completion(.success(canceledDoseEntry))
-                    session.dosesForStorage() { (doses) -> Bool in
-                        return self.store(doses: doses, in: session)
-                    }
                 }
             } catch {
                 completion(.failure(error))

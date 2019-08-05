@@ -14,17 +14,6 @@ public struct TimestampedHistoryEvent {
     public let pumpEvent: PumpEvent
     public let date: Date
 
-    public func isMutable(atDate date: Date = Date()) -> Bool {
-        switch pumpEvent {
-        case let bolus as BolusNormalPumpEvent:
-            // Square boluses
-            let deliveryFinishDate = self.date.addingTimeInterval(bolus.deliveryTime)
-            return deliveryFinishDate.compare(date) == .orderedDescending
-        default:
-            return false
-        }
-    }
-
     public init(pumpEvent: PumpEvent, date: Date) {
         self.pumpEvent = pumpEvent
         self.date = date

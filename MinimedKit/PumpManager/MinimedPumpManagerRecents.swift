@@ -9,9 +9,18 @@ import Foundation
 import LoopKit
 
 struct MinimedPumpManagerRecents: Equatable {
-    var bolusState: PumpManagerStatus.BolusState = .none
 
-    var basalDeliveryStateTransitioning = false
+    internal enum EngageablePumpState: Equatable {
+        case engaging
+        case disengaging
+        case stable
+    }
+
+    internal var suspendEngageState: EngageablePumpState = .stable
+
+    internal var bolusEngageState: EngageablePumpState = .stable
+
+    internal var tempBasalEngageState: EngageablePumpState = .stable
 
     var lastAddedPumpEvents: Date = .distantPast
 
@@ -32,8 +41,9 @@ extension MinimedPumpManagerRecents: CustomDebugStringConvertible {
     var debugDescription: String {
         return """
         ### MinimedPumpManagerRecents
-        bolusState: \(bolusState)
-        basalDeliveryStateTransitioning: \(basalDeliveryStateTransitioning)
+        suspendEngageState: \(suspendEngageState)
+        bolusEngageState: \(bolusEngageState)
+        tempBasalEngageState: \(tempBasalEngageState)
         lastAddedPumpEvents: \(lastAddedPumpEvents)
         latestPumpStatus: \(String(describing: latestPumpStatus))
         latestPumpStatusFromMySentry: \(String(describing: latestPumpStatusFromMySentry))

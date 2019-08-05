@@ -874,6 +874,7 @@ extension OmnipodPumpManager {
 
 // MARK: - PumpManager
 extension OmnipodPumpManager: PumpManager {
+
     public static let managerIdentifier: String = "Omnipod"
 
     public static let localizedTitle = LocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
@@ -914,6 +915,10 @@ extension OmnipodPumpManager: PumpManager {
 
     public var pumpReservoirCapacity: Double {
         return Pod.reservoirCapacity
+    }
+
+    public var lastReconciliation: Date? {
+        return self.state.podState?.lastInsulinMeasurements?.validTime
     }
 
     public var status: PumpManagerStatus {
@@ -1345,12 +1350,14 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     func store(doses: [UnfinalizedDose], completion: @escaping (_ error: Error?) -> Void) {
+        let lastPumpReconciliation = lastReconciliation
+
         pumpDelegate.notify { (delegate) in
             guard let delegate = delegate else {
                 preconditionFailure("pumpManagerDelegate cannot be nil")
             }
 
-            delegate.pumpManager(self, didReadPumpEvents: doses.map { NewPumpEvent($0) }, completion: { (error) in
+            delegate.pumpManager(self, hasNewPumpEvents: doses.map { NewPumpEvent($0) }, lastReconciliation: lastPumpReconciliation, completion: { (error) in
                 if let error = error {
                     self.log.error("Error storing pod events: %@", String(describing: error))
                 } else {

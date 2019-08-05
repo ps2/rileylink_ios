@@ -243,36 +243,24 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.suspended = false
         }
 
-        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue,
-            let unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedBolus = unfinalizedBolus
-        } else {
-            self.unfinalizedBolus = nil
+            self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         }
 
-        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue,
-            let unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedTempBasal = unfinalizedTempBasal
-        } else {
-            self.unfinalizedTempBasal = nil
+            self.unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
         }
 
-        if let rawUnfinalizedSuspend = rawValue["unfinalizedSuspend"] as? UnfinalizedDose.RawValue,
-            let unfinalizedSuspend = UnfinalizedDose(rawValue: rawUnfinalizedSuspend)
+        if let rawUnfinalizedSuspend = rawValue["unfinalizedSuspend"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedSuspend = unfinalizedSuspend
-        } else {
-            self.unfinalizedSuspend = nil
+            self.unfinalizedSuspend = UnfinalizedDose(rawValue: rawUnfinalizedSuspend)
         }
 
-        if let rawUnfinalizedResume = rawValue["unfinalizedResume"] as? UnfinalizedDose.RawValue,
-            let unfinalizedResume = UnfinalizedDose(rawValue: rawUnfinalizedResume)
+        if let rawUnfinalizedResume = rawValue["unfinalizedResume"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedResume = unfinalizedResume
-        } else {
-            self.unfinalizedResume = nil
+            self.unfinalizedResume = UnfinalizedDose(rawValue: rawUnfinalizedResume)
         }
 
         if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue {

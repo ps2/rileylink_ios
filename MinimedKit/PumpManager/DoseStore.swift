@@ -21,12 +21,19 @@ extension Collection where Element == TimestampedHistoryEvent {
         for event in self {
             var dose: DoseEntry?
             var eventType: LoopKit.PumpEventType?
+            var isMutable = false
 
             switch event.pumpEvent {
             case let bolus as BolusNormalPumpEvent:
                 // For entries in-progress, use the programmed amount
-                let units = event.isMutable() ? bolus.programmed : bolus.amount
-
+                let deliveryFinishDate = event.date.addingTimeInterval(bolus.deliveryTime)
+                let units: Double
+                if model.appendsSquareWaveToHistoryOnStartOfDelivery && bolus.type == .square && deliveryFinishDate > Date() {
+                    isMutable = true
+                    units = bolus.programmed
+                } else {
+                    units = bolus.amount
+                }
                 dose = DoseEntry(type: .bolus, startDate: event.date, endDate: event.date.addingTimeInterval(bolus.duration), value: units, unit: .units)
             case is SuspendPumpEvent:
                 dose = DoseEntry(suspendDate: event.date)
@@ -93,7 +100,7 @@ extension Collection where Element == TimestampedHistoryEvent {
             }
 
             title = String(describing: event.pumpEvent)
-            events.append(NewPumpEvent(date: event.date, dose: dose, isMutable: event.isMutable(), raw: event.pumpEvent.rawData, title: title, type: eventType))
+            events.append(NewPumpEvent(date: event.date, dose: dose, isMutable: isMutable, raw: event.pumpEvent.rawData, title: title, type: eventType))
         }
 
         return events

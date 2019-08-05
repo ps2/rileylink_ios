@@ -338,6 +338,7 @@
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
+		C164A56222F1F0A6000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */; };
 		C168C40021AEF8DE00ADE90E /* PodReplacementNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */; };
 		C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
@@ -1292,6 +1293,7 @@
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
+		C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodReplacementNavigationController.swift; sourceTree = "<group>"; };
 		C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacePodViewController.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
@@ -1916,6 +1918,7 @@
 				C16E61212208C7A80069F357 /* ReservoirReading.swift */,
 				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */,
+				C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */,
 			);
 			path = PumpManager;
 			sourceTree = "<group>";
@@ -3586,6 +3589,7 @@
 				43D8709520DE1C91006B549E /* RileyLinkDevice.swift in Sources */,
 				4352A71820DEC7B900CAC200 /* PumpMessage+PumpOpsSession.swift in Sources */,
 				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
+				C164A56222F1F0A6000E3FA5 /* UnfinalizedDose.swift in Sources */,
 				C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */,
 				43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,

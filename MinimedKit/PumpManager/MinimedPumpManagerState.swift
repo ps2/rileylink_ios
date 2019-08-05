@@ -64,7 +64,19 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var timeZone: TimeZone
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil) {
+    public var unfinalizedBolus: UnfinalizedDose?
+
+    public var unfinalizedTempBasal: UnfinalizedDose?
+
+    // Doses we're tracking that haven't shown up in history yet
+    public var pendingDoses: [UnfinalizedDose]
+
+    // A record of delayedAppend history events that have recently been used to reconcile an unfinalized dose
+    public var recentlyReconciledEventIDs: [Data]
+
+    public var lastReconciliation: Date?
+
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEventIDs: [Data]? = nil, lastReconciliation: Date? = nil) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
@@ -78,6 +90,11 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.lastValidFrequency = lastValidFrequency
         self.batteryPercentage = batteryPercentage
         self.lastReservoirReading = lastReservoirReading
+        self.unfinalizedBolus = unfinalizedBolus
+        self.unfinalizedTempBasal = unfinalizedTempBasal
+        self.pendingDoses = pendingDoses ?? []
+        self.recentlyReconciledEventIDs = recentlyReconciledEventIDs ?? []
+        self.lastReconciliation = lastReconciliation
     }
 
     public init?(rawValue: RawValue) {
@@ -135,6 +152,38 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         } else {
             lastReservoirReading = nil
         }
+
+        let unfinalizedBolus: UnfinalizedDose?
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
+        {
+            unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
+        } else {
+            unfinalizedBolus = nil
+        }
+
+        let unfinalizedTempBasal: UnfinalizedDose?
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue
+        {
+            unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
+        } else {
+            unfinalizedTempBasal = nil
+        }
+
+        let pendingDoses: [UnfinalizedDose]
+        if let rawPendingDoses = rawValue["pendingDoses"] as? [UnfinalizedDose.RawValue] {
+            pendingDoses = rawPendingDoses.compactMap( { UnfinalizedDose(rawValue: $0) } )
+        } else {
+            pendingDoses = []
+        }
+
+        let recentlyReconciledEventIDs: [Data]
+        if let rawRecentlyReconciledEventIDs = rawValue["recentlyReconciledEventIDs"] as? [String] {
+            recentlyReconciledEventIDs = rawRecentlyReconciledEventIDs.compactMap( { Data(hexadecimalString: $0) } )
+        } else {
+            recentlyReconciledEventIDs = []
+        }
+
+        let lastReconciliation = rawValue["lastReconciliation"] as? Date
         
         self.init(
             batteryChemistry: batteryChemistry,
@@ -149,7 +198,12 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             lastValidFrequency: lastValidFrequency,
             isPumpSuspended: isPumpSuspended,
             batteryPercentage: batteryPercentage,
-            lastReservoirReading: lastReservoirReading
+            lastReservoirReading: lastReservoirReading,
+            unfinalizedBolus: unfinalizedBolus,
+            unfinalizedTempBasal: unfinalizedTempBasal,
+            pendingDoses: pendingDoses,
+            recentlyReconciledEventIDs: recentlyReconciledEventIDs,
+            lastReconciliation: lastReconciliation
         )
     }
 
@@ -165,12 +219,17 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "timeZone": timeZone.secondsFromGMT(),
             "isPumpSuspended": isPumpSuspended,
             "version": MinimedPumpManagerState.version,
+            "pendingDoses": pendingDoses.map { $0.rawValue },
+            "recentlyReconciledEventIDs": recentlyReconciledEventIDs.map { $0.hexadecimalString },
         ]
 
         value["batteryPercentage"] = batteryPercentage
         value["lastReservoirReading"] = lastReservoirReading?.rawValue
         value["lastValidFrequency"] = lastValidFrequency?.converted(to: .megahertz).value
         value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState?.rawValue
+        value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
+        value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
+        value["lastReconciliation"] = lastReconciliation
 
         return value
     }
@@ -198,7 +257,12 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pumpRegion: \(pumpRegion)",
             "reservoirUnits: \(String(describing: lastReservoirReading?.units))",
             "reservoirValidAt: \(String(describing: lastReservoirReading?.validAt))",
+            "unfinalizedBolus: \(String(describing: unfinalizedBolus))",
+            "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
+            "pendingDoses: \(pendingDoses)",
             "timeZone: \(timeZone)",
+            "recentlyReconciledEventIDs: \(recentlyReconciledEventIDs.map { $0.hexadecimalString })",
+            "lastReconciliation: \(String(describing: lastReconciliation))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

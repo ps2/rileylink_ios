@@ -9,6 +9,7 @@ import Foundation
 
 public enum MinimedPumpManagerError: Error {
     case noRileyLink
+    case bolusInProgress
     case noDate  // TODO: This is less of an error and more of a precondition/assertion state
     case tuneFailed(LocalizedError)
 }
@@ -18,6 +19,8 @@ extension MinimedPumpManagerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .noRileyLink:
+            return nil
+        case .bolusInProgress:
             return nil
         case .noDate:
             return nil
@@ -30,6 +33,8 @@ extension MinimedPumpManagerError: LocalizedError {
         switch self {
         case .noRileyLink:
             return nil
+        case .bolusInProgress:
+            return nil
         case .noDate:
             return nil
         case .tuneFailed(let error):
@@ -41,6 +46,8 @@ extension MinimedPumpManagerError: LocalizedError {
         switch self {
         case .noRileyLink:
             return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion")
+        case .bolusInProgress:
+            return nil
         case .noDate:
             return nil
         case .tuneFailed(let error):

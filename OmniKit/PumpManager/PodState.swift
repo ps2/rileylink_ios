@@ -346,7 +346,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion": pmVersion,
             "lot": lot,
             "tid": tid,
-            "suspendState": suspendState,
+            "suspendState": suspendState.rawValue,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,

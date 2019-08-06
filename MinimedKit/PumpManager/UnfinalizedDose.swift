@@ -19,10 +19,10 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         case resume
     }
 
-    private let dateFormatter = ISO8601DateFormatter()
+    private static let dateFormatter = ISO8601DateFormatter()
 
     fileprivate var uniqueKey: Data {
-        return "\(doseType) \(scheduledUnits ?? units) \(dateFormatter.string(from: startTime))".data(using: .utf8)!
+        return "\(doseType) \(scheduledUnits ?? units) \(UnfinalizedDose.dateFormatter.string(from: startTime))".data(using: .utf8)!
     }
 
     let doseType: DoseType

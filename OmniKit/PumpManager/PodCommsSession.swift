@@ -454,9 +454,8 @@ public class PodCommsSession {
             let now = Date()
             if deliveryType.contains(.basal) {
                 podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
+                podState.suspendState = .suspended(now)
             }
-
-            podState.suspendState = .suspended(now)
 
             var canceledDose: UnfinalizedDose? = nil
 

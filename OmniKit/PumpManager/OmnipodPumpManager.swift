@@ -991,10 +991,10 @@ extension OmnipodPumpManager: PumpManager {
             case .uncertainFailure(let error):
                 completion(error)
             case .success:
-                completion(nil)
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }
+                completion(nil)
             }
         }
     }
@@ -1029,6 +1029,9 @@ extension OmnipodPumpManager: PumpManager {
             do {
                 let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                 let _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                session.dosesForStorage() { (doses) -> Bool in
+                    return self.store(doses: doses, in: session)
+                }
                 completion(nil)
             } catch (let error) {
                 completion(error)

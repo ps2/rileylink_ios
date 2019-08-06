@@ -70,7 +70,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
             // PumpManagerStatus may have changed
             if oldValue.timeZone != newValue.timeZone ||
-                oldValue.isPumpSuspended != newValue.isPumpSuspended
+                oldValue.suspendState != newValue.suspendState
             {
                 notifyStatusObservers(oldStatus: oldStatus)
             }
@@ -239,6 +239,32 @@ extension MinimedPumpManager {
         }
     }
 
+    private func runSuspendResumeOnSession(state: SuspendResumeMessageBody.SuspendResumeState, session: PumpOpsSession) throws {
+        defer { self.recents.suspendEngageState = .stable }
+        self.recents.suspendEngageState = state == .suspend ? .engaging : .disengaging
+
+        try session.setSuspendResumeState(state)
+        let date = Date()
+        switch state {
+        case .suspend:
+            self.state.suspendState = .suspended(date)
+        case .resume:
+            self.state.suspendState = .resumed(date)
+        }
+
+        if state == .suspend {
+            self.state.unfinalizedBolus?.cancel(at: Date())
+            if let bolus = self.state.unfinalizedBolus {
+                self.state.pendingDoses.append(bolus)
+            }
+            self.state.unfinalizedBolus = nil
+
+            self.state.pendingDoses.append(UnfinalizedDose(suspendStartTime: Date()))
+        } else {
+            self.state.pendingDoses.append(UnfinalizedDose(resumeStartTime: Date()))
+        }
+    }
+
     private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, completion: @escaping (Error?) -> Void) {
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
@@ -257,29 +283,7 @@ extension MinimedPumpManager {
 
             self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
                 do {
-                    defer { self.recents.tempBasalEngageState = .stable }
-                    self.recents.tempBasalEngageState = state == .suspend ? .engaging : .disengaging
-
-                    try session.setSuspendResumeState(state)
-                    self.state.isPumpSuspended = state == .suspend
-
-                    if state == .suspend {
-                        self.state.unfinalizedBolus?.cancel(at: Date())
-                        if let bolus = self.state.unfinalizedBolus {
-                            self.state.pendingDoses.append(bolus)
-                        }
-                        self.state.unfinalizedBolus = nil
-
-                        self.state.unfinalizedTempBasal?.cancel(at: Date())
-                        if let tempBasal = self.state.unfinalizedTempBasal {
-                            self.state.pendingDoses.append(tempBasal)
-                        }
-                        self.state.unfinalizedTempBasal = nil
-
-                        self.state.pendingDoses.append(UnfinalizedDose(suspendStartTime: Date()))
-                    } else {
-                        self.state.pendingDoses.append(UnfinalizedDose(resumeStartTime: Date()))
-                    }
+                    try self.runSuspendResumeOnSession(state: state, session: session)
                     self.storePendingPumpEvents({ (error) in
                         completion(error)
                     })
@@ -652,10 +656,15 @@ extension MinimedPumpManager: PumpManager {
             case .disengaging:
                 basalDeliveryState = .cancelingTempBasal
             case .stable:
-                if let tempBasal = state.unfinalizedTempBasal, !tempBasal.finished {
-                    basalDeliveryState = .tempBasal(DoseEntry(tempBasal))
-                } else {
-                    basalDeliveryState = self.state.isPumpSuspended ? .suspended : .active
+                switch self.state.suspendState {
+                case .suspended(let date):
+                    basalDeliveryState = .suspended(date)
+                case .resumed(let date):
+                    if let tempBasal = state.unfinalizedTempBasal, !tempBasal.finished {
+                        basalDeliveryState = .tempBasal(DoseEntry(tempBasal))
+                    } else {
+                        basalDeliveryState = .active(date)
+                    }
                 }
             }
         }
@@ -774,7 +783,10 @@ extension MinimedPumpManager: PumpManager {
                         date = newDate
                     }
 
-                    self.state.isPumpSuspended = status.suspended
+                    if case .resumed = self.state.suspendState, status.suspended {
+                        self.state.suspendState = .suspended(Date())
+                    }
+
                     self.recents.latestPumpStatus = status
 
                     self.updateReservoirVolume(status.reservoir, at: date, withTimeLeft: nil)
@@ -843,9 +855,9 @@ extension MinimedPumpManager: PumpManager {
             }
 
             do {
-                if self.state.isPumpSuspended {
+                if case .suspended = self.state.suspendState {
                     do {
-                        try session.setSuspendResumeState(.resume)
+                        try self.runSuspendResumeOnSession(state: .resume, session: session)
                     } catch let error as PumpOpsError {
                         self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
                         completion(.failure(SetBolusError.certain(error)))
@@ -929,11 +941,15 @@ extension MinimedPumpManager: PumpManager {
                         self.state.pendingDoses.append(previousTempBasal)
                     }
                 }
+
+                // If we were successful, then we know we aren't suspended
+                if case .suspended = self.state.suspendState {
+                    self.state.suspendState = .resumed(Date())
+                }
+
                 self.state.unfinalizedTempBasal = dose
                 self.recents.tempBasalEngageState = .stable
 
-                // If we were successful, then we know we aren't suspended
-                self.state.isPumpSuspended = false
 
                 self.storePendingPumpEvents({ (error) in
                     completion(.success(DoseEntry(dose)))
@@ -947,7 +963,9 @@ extension MinimedPumpManager: PumpManager {
                 if case .arguments(.pumpError(.commandRefused)) = error {
                     do {
                         let status = try session.getCurrentPumpStatus()
-                        self.state.isPumpSuspended = status.suspended
+                        if case .resumed = self.state.suspendState, status.suspended {
+                            self.state.suspendState = .suspended(Date())
+                        }
                         self.recents.latestPumpStatus = status
                     } catch {
                         self.log.error("Post-basal suspend state fetch failed: %{public}@", String(describing: error))

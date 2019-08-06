@@ -89,7 +89,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpFirmwareVersion: pumpFirmwareVersion,
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
-                timeZone: timeZone)
+                timeZone: timeZone,
+                suspendState: .resumed(Date()))
         }
     }
 

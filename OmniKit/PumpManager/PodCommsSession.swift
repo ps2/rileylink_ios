@@ -456,6 +456,8 @@ public class PodCommsSession {
                 podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
             }
 
+            podState.suspendState = .suspended(now)
+
             var canceledDose: UnfinalizedDose? = nil
 
             if let unfinalizedTempBasal = podState.unfinalizedTempBasal,
@@ -532,6 +534,8 @@ public class PodCommsSession {
     public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
         
         let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
+
+        podState.suspendState = .resumed(Date())
 
         return status
     }

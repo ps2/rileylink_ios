@@ -66,7 +66,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return  finalizedDoses + [unfinalizedTempBasal, unfinalizedSuspend, unfinalizedBolus].compactMap {$0}
     }
 
-    public private(set) var suspended: Bool
+    public var suspendState: SuspendState
+
+    public var suspended: Bool {
+        if case .suspended = suspendState {
+            return true
+        }
+        return false
+    }
+
     public var fault: PodInfoFaultEvent?
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
@@ -92,7 +100,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.tid = tid
         self.lastInsulinMeasurements = nil
         self.finalizedDoses = []
-        self.suspended = false
+        self.suspendState = .resumed(Date())
         self.fault = nil
         self.activeAlertSlots = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
@@ -206,8 +214,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 unfinalizedResume = nil
             }
         }
-
-        suspended = deliveryStatus == .suspended
     }
 
     // MARK: - RawRepresentable
@@ -238,9 +244,16 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
 
         if let suspended = rawValue["suspended"] as? Bool {
-            self.suspended = suspended
+            // Migrate old value
+            if suspended {
+                suspendState = .suspended(Date())
+            } else {
+                suspendState = .resumed(Date())
+            }
+        } else if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
+            self.suspendState = suspendState
         } else {
-            self.suspended = false
+            return nil
         }
 
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
@@ -333,7 +346,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion": pmVersion,
             "lot": lot,
             "tid": tid,
-            "suspended": suspended,
+            "suspendState": suspendState,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,
@@ -393,7 +406,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* pmVersion: \(pmVersion)",
             "* lot: \(lot)",
             "* tid: \(tid)",
-            "* suspended: \(suspended)",
+            "* suspendState: \(suspendState)",
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",
@@ -473,3 +486,52 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
 }
 
 
+public enum SuspendState: Equatable, RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    private enum SuspendStateType: Int {
+        case suspend, resume
+    }
+
+    case suspended(Date)
+    case resumed(Date)
+
+    private var identifier: Int {
+        switch self {
+        case .suspended:
+            return 1
+        case .resumed:
+            return 2
+        }
+    }
+
+    public init?(rawValue: RawValue) {
+        guard let suspendStateType = rawValue["case"] as? SuspendStateType.RawValue,
+            let date = rawValue["date"] as? Date else {
+                return nil
+        }
+        switch SuspendStateType(rawValue: suspendStateType) {
+        case .suspend?:
+            self = .suspended(date)
+        case .resume?:
+            self = .resumed(date)
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: RawValue {
+        switch self {
+        case .suspended(let date):
+            return [
+                "case": SuspendStateType.suspend.rawValue,
+                "date": date
+            ]
+        case .resumed(let date):
+            return [
+                "case": SuspendStateType.resume.rawValue,
+                "date": date
+            ]
+        }
+    }
+}

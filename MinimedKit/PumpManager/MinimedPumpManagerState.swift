@@ -18,7 +18,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var batteryPercentage: Double?
 
-    public var isPumpSuspended: Bool
+    public var suspendState: SuspendState
 
     public var lastReservoirReading: ReservoirReading?
 
@@ -76,7 +76,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var lastReconciliation: Date?
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, lastValidFrequency: Measurement<UnitFrequency>? = nil, isPumpSuspended: Bool = false, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEventIDs: [Data]? = nil, lastReconciliation: Date? = nil) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, lastValidFrequency: Measurement<UnitFrequency>? = nil, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEventIDs: [Data]? = nil, lastReconciliation: Date? = nil) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
@@ -86,7 +86,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.pumpRegion = pumpRegion
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
-        self.isPumpSuspended = isPumpSuspended
+        self.suspendState = suspendState
         self.lastValidFrequency = lastValidFrequency
         self.batteryPercentage = batteryPercentage
         self.lastReservoirReading = lastReservoirReading
@@ -134,7 +134,19 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             }
         }
 
-        let isPumpSuspended = (rawValue["isPumpSuspended"] as? Bool) ?? false
+        let suspendState: SuspendState
+        if let isPumpSuspended = rawValue["isPumpSuspended"] as? Bool {
+            // migrate
+            if isPumpSuspended {
+                suspendState = .suspended(Date())
+            } else {
+                suspendState = .resumed(Date())
+            }
+        } else if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let storedSuspendState = SuspendState(rawValue: rawSuspendState) {
+            suspendState = storedSuspendState
+        } else {
+            return nil
+        }
         
         let lastValidFrequency: Measurement<UnitFrequency>?
         if let frequencyRaw = rawValue["lastValidFrequency"] as? Double {
@@ -195,8 +207,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             pumpRegion: pumpRegion,
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
             timeZone: timeZone,
+            suspendState: suspendState,
             lastValidFrequency: lastValidFrequency,
-            isPumpSuspended: isPumpSuspended,
             batteryPercentage: batteryPercentage,
             lastReservoirReading: lastReservoirReading,
             unfinalizedBolus: unfinalizedBolus,
@@ -217,7 +229,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "pumpFirmwareVersion": pumpFirmwareVersion,
             "pumpRegion": pumpRegion.rawValue,
             "timeZone": timeZone.secondsFromGMT(),
-            "isPumpSuspended": isPumpSuspended,
+            "suspendState": suspendState.rawValue,
             "version": MinimedPumpManagerState.version,
             "pendingDoses": pendingDoses.map { $0.rawValue },
             "recentlyReconciledEventIDs": recentlyReconciledEventIDs.map { $0.hexadecimalString },
@@ -247,7 +259,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "## MinimedPumpManagerState",
             "batteryChemistry: \(batteryChemistry)",
             "batteryPercentage: \(String(describing: batteryPercentage))",
-            "isPumpSuspended: \(isPumpSuspended)",
+            "suspendState: \(suspendState)",
             "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "preferredInsulinDataSource: \(preferredInsulinDataSource)",
             "pumpColor: \(pumpColor)",
@@ -265,5 +277,55 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "lastReconciliation: \(String(describing: lastReconciliation))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
+    }
+}
+
+public enum SuspendState: Equatable, RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    private enum SuspendStateType: Int {
+        case suspend, resume
+    }
+
+    case suspended(Date)
+    case resumed(Date)
+
+    private var identifier: Int {
+        switch self {
+        case .suspended:
+            return 1
+        case .resumed:
+            return 2
+        }
+    }
+
+    public init?(rawValue: RawValue) {
+        guard let suspendStateType = rawValue["case"] as? SuspendStateType.RawValue,
+            let date = rawValue["date"] as? Date else {
+                return nil
+        }
+        switch SuspendStateType(rawValue: suspendStateType) {
+        case .suspend?:
+            self = .suspended(date)
+        case .resume?:
+            self = .resumed(date)
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: RawValue {
+        switch self {
+        case .suspended(let date):
+            return [
+                "case": SuspendStateType.suspend.rawValue,
+                "date": date
+            ]
+        case .resumed(let date):
+            return [
+                "case": SuspendStateType.resume.rawValue,
+                "date": date
+            ]
+        }
     }
 }

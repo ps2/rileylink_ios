@@ -290,7 +290,7 @@ extension OmnipodPumpManager {
 
     private func basalDeliveryState(for state: OmnipodPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
-            return .suspended
+            return .suspended(state.lastPumpDataReportDate ?? .distantPast)
         }
 
         switch state.suspendEngageState {
@@ -299,9 +299,7 @@ extension OmnipodPumpManager {
         case .disengaging:
             return .resuming
         case .stable:
-            if podState.suspended {
-                return .suspended
-            }
+            break
         }
 
         switch state.tempBasalEngageState {
@@ -313,9 +311,13 @@ extension OmnipodPumpManager {
             if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.finished {
                 return .tempBasal(DoseEntry(tempBasal))
             }
+            switch podState.suspendState {
+            case .resumed(let date):
+                return .active(date)
+            case .suspended(let date):
+                return .suspended(date)
+            }
         }
-
-        return .active
     }
 
     private func bolusState(for state: OmnipodPumpManagerState) -> PumpManagerStatus.BolusState {
@@ -1230,7 +1232,7 @@ extension OmnipodPumpManager: PumpManager {
 
             do {
                 let preError = self.setStateWithResult({ (state) -> PodCommsError? in
-                    guard state.podState?.suspended == false else {
+                    if case .some(.suspended) = state.podState?.suspendState {
                         self.log.info("Not enacting temp basal because podState indicates pod is suspended.")
                         return .podSuspended
                     }

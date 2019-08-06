@@ -940,6 +940,7 @@ extension MinimedPumpManager: PumpManager {
                     if let previousTempBasal = self.state.unfinalizedTempBasal, !previousTempBasal.isReconciledWithHistory {
                         self.state.pendingDoses.append(previousTempBasal)
                     }
+                    self.state.suspendState = .resumed(startDate)
                 }
 
                 // If we were successful, then we know we aren't suspended

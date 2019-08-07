@@ -465,10 +465,10 @@ public class PodCommsSession {
                 finishTime.compare(now) == .orderedDescending
             {
                 podState.unfinalizedTempBasal?.cancel(at: now)
+                podState.suspendState = .resumed(now)
                 canceledDose = podState.unfinalizedTempBasal
                 log.info("Interrupted temp basal: %@", String(describing: canceledDose))
             }
-
 
             if let unfinalizedBolus = podState.unfinalizedBolus,
                 let finishTime = unfinalizedBolus.finishTime,

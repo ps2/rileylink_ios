@@ -802,10 +802,13 @@ extension MinimedPumpManager: PumpManager {
     }
 
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
-        guard units > 0 else {
+        let enactUnits = roundToSupportedBolusVolume(units: units)
+
+        guard enactUnits > 0 else {
             assertionFailure("Invalid zero unit bolus")
             return
         }
+
 
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
 
@@ -879,17 +882,17 @@ extension MinimedPumpManager: PumpManager {
                 }
 
                 let date = Date()
-                let deliveryTime = self.state.pumpModel.bolusDeliveryTime(units: units)
-                let requestedDose = UnfinalizedDose(bolusAmount: units, startTime: date, duration: deliveryTime)
+                let deliveryTime = self.state.pumpModel.bolusDeliveryTime(units: enactUnits)
+                let requestedDose = UnfinalizedDose(bolusAmount: enactUnits, startTime: date, duration: deliveryTime)
                 willRequest(DoseEntry(requestedDose))
 
-                try session.setNormalBolus(units: units)
+                try session.setNormalBolus(units: enactUnits)
 
                 // Between bluetooth and the radio and firmware, about 2s on average passes before we start tracking
                 let commsOffset = TimeInterval(seconds: -2)
                 let doseStart = Date().addingTimeInterval(commsOffset)
 
-                let dose = UnfinalizedDose(bolusAmount: units, startTime: doseStart, duration: deliveryTime)
+                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime)
                 self.state.unfinalizedBolus = dose
                 self.recents.bolusEngageState = .stable
 

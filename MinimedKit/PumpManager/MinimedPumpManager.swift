@@ -890,10 +890,6 @@ extension MinimedPumpManager: PumpManager {
                 let requestedDose = UnfinalizedDose(bolusAmount: enactUnits, startTime: date, duration: deliveryTime)
                 willRequest(DoseEntry(requestedDose))
 
-
-                self.state.unfinalizedBolus = UnfinalizedDose(bolusAmount: enactUnits, startTime: Date(), duration: deliveryTime)
-                self.storePendingPumpEvents { (_) in}
-
                 try session.setNormalBolus(units: enactUnits)
 
                 // Between bluetooth and the radio and firmware, about 2s on average passes before we start tracking
@@ -908,12 +904,9 @@ extension MinimedPumpManager: PumpManager {
                     completion(.success(DoseEntry(dose)))
                 })
             } catch let error {
-                self.state.unfinalizedBolus = nil
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
                 self.recents.bolusEngageState = .stable
-                self.storePendingPumpEvents({ (_) in
-                    completion(.failure(error))
-                })
+                completion(.failure(error))
             }
         }
     }

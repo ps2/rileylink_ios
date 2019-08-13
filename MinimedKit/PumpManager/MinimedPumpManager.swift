@@ -431,7 +431,7 @@ extension MinimedPumpManager {
         // If we have a bolus in progress, see if it has shown up in history yet
         if let bolus = self.state.unfinalizedBolus, let index = reconcilableEvents.firstMatchingIndex(for: bolus, within: matchingTimeWindow) {
             let matchingBolus = reconcilableEvents[index]
-            self.log.debug("Matched unfinalized bolus %{public}@ to history record %{public}@", String(describing: bolus), String(describing: matchingBolus))
+            self.log.debug("Matched unfinalized bolus %@ to history record %@", String(describing: bolus), String(describing: matchingBolus))
             self.state.unfinalizedBolus = nil
             markReconciled(raw: matchingBolus.raw, index: index)
         }
@@ -439,18 +439,22 @@ extension MinimedPumpManager {
         // Reconcile temp basal
         if let tempBasal = self.state.unfinalizedTempBasal, let index = reconcilableEvents.firstMatchingIndex(for: tempBasal, within: matchingTimeWindow), let dose = events[index].dose {
             let matchedTempBasal = reconcilableEvents[index]
-            self.log.debug("Matched unfinalized temp basal %{public}@ to history record %{public}@", String(describing: tempBasal), String(describing: matchedTempBasal))
+            self.log.debug("Matched unfinalized temp basal %@ to history record %@", String(describing: tempBasal), String(describing: matchedTempBasal))
             // Update unfinalizedTempBasal to match entry in history, and mark as reconciled
             self.state.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: dose.endDate.timeIntervalSince(dose.startDate), isReconciledWithHistory: true)
             markReconciled(raw: matchedTempBasal.raw, index: index)
         }
 
-        // Reconcile any finished doses that we were temporarily tracking
+        // Reconcile any pending doses, and remove expired doses
+        let expirationCutoff = Date().addingTimeInterval(.hours(-24))
         self.state.pendingDoses.removeAll { (dose) -> Bool in
             if let index = reconcilableEvents.firstMatchingIndex(for: dose, within: matchingTimeWindow) {
                 let historyEvent = reconcilableEvents[index]
-                self.log.debug("Matched pending dose %{public}@ to history record %{public}@", String(describing: dose), String(describing: historyEvent))
+                self.log.debug("Matched pending dose %@ to history record %@", String(describing: dose), String(describing: historyEvent))
                 markReconciled(raw: historyEvent.raw, index: index)
+                return true
+            } else if dose.finishTime < expirationCutoff {
+                self.log.debug("Expiring pending dose that did not match any history records: %@", String(describing: dose))
                 return true
             }
             return false

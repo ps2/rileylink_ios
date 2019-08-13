@@ -519,7 +519,9 @@ public class PodCommsSession {
 
         do {
             let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
-            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain)
+            let now = Date()
+            podState.suspendState = .resumed(now)
+            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: now, scheduledCertainty: .certain)
             podState.updateFromStatusResponse(status)
             return status
         } catch PodCommsError.nonceResyncFailed {

@@ -24,11 +24,11 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
         let unroundedVolume: Double
 
         if pumpModel.isDeliveryRateVariable {
-            if dose.units < 1 {
+            if dose.programmedUnits < 1 {
                 updateResolution = 40 // Resolution = 0.025
-                unroundedVolume = timeProgress * dose.units
+                unroundedVolume = timeProgress * dose.programmedUnits
             } else {
-                var remainingUnits = dose.units
+                var remainingUnits = dose.programmedUnits
                 var baseDuration: TimeInterval = 0
                 var overlay1Duration: TimeInterval = 0
                 var overlay2Duration: TimeInterval = 0
@@ -54,10 +54,10 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
 
         } else {
             updateResolution = 20 // Resolution = 0.05
-            unroundedVolume = timeProgress * dose.units
+            unroundedVolume = timeProgress * dose.programmedUnits
         }
         let roundedVolume = round(unroundedVolume * updateResolution) / updateResolution
-        return DoseProgress(deliveredUnits: roundedVolume, percentComplete: roundedVolume / dose.units)
+        return DoseProgress(deliveredUnits: roundedVolume, percentComplete: roundedVolume / dose.programmedUnits)
     }
 
     init(dose: DoseEntry, pumpModel: PumpModel, reportingQueue: DispatchQueue) {
@@ -69,7 +69,7 @@ class MinimedDoseProgressEstimator: DoseProgressTimerEstimator {
     override func timerParameters() -> (delay: TimeInterval, repeating: TimeInterval) {
         let timeSinceStart = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
-        let timeBetweenPulses = duration / (Double(pumpModel.pulsesPerUnit) * dose.units)
+        let timeBetweenPulses = duration / (Double(pumpModel.pulsesPerUnit) * dose.programmedUnits)
 
         let delayUntilNextPulse = timeBetweenPulses - timeSinceStart.remainder(dividingBy: timeBetweenPulses)
         

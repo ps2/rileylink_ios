@@ -27,8 +27,8 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
     let doseType: DoseType
     public var units: Double
-    var scheduledUnits: Double?     // Tracks the scheduled units, as boluses may be canceled before finishing, at which point units would reflect actual delivered volume.
-    var scheduledTempRate: Double?  // Tracks the original temp rate, as during finalization the units are discretized to pump pulses, changing the actual rate
+    var scheduledUnits: Double?     // Set when finalized; tracks original scheduled units
+    var scheduledTempRate: Double?  // Set when finalized; tracks the original temp rate
     let startTime: Date
     var duration: TimeInterval
     var isReconciledWithHistory: Bool
@@ -193,7 +193,7 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.units, unit: .units)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
         case .tempBasal:
             self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
         case .suspend:
@@ -214,7 +214,7 @@ extension Collection where Element == NewPumpEvent {
 
             switch dose.doseType {
             case .bolus:
-                return type == .bolus && eventDose.units == dose.scheduledUnits ?? dose.units
+                return type == .bolus && eventDose.programmedUnits == dose.scheduledUnits ?? dose.units
             case .tempBasal:
                 return type == .tempBasal && eventDose.unitsPerHour == dose.scheduledTempRate ?? dose.rate
             case .suspend:

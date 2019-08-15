@@ -78,7 +78,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return min(elapsed / duration, 1)
     }
     
-    public var finished: Bool {
+    public var isFinished: Bool {
         return progress >= 1
     }
     
@@ -91,7 +91,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     }
 
     public var finalizedUnits: Double? {
-        guard finished else {
+        guard isFinished else {
             return nil
         }
         return units
@@ -158,7 +158,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var isMutable: Bool {
         switch doseType {
         case .bolus, .tempBasal:
-            return !finished
+            return !isFinished
         default:
             return false
         }
@@ -266,7 +266,7 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.units, unit: .units)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
         case .tempBasal:
             self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
         case .suspend:

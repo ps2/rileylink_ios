@@ -361,7 +361,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                         deliveredUnits = nil
                     }
 
-                    cell.setDetailBolus(suspended: podState.suspended, dose: podState.unfinalizedBolus, deliveredUnits: deliveredUnits)
+                    cell.setDetailBolus(suspended: podState.isSuspended, dose: podState.unfinalizedBolus, deliveredUnits: deliveredUnits)
                     // TODO: This timer is in the wrong context; should be part of a custom bolus progress cell
 //                    if bolusProgressTimer == nil {
 //                        bolusProgressTimer = Timer.scheduledTimer(withTimeInterval: .seconds(2), repeats: true) { [weak self] (_) in
@@ -370,7 +370,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 //                    }
                 case .basal:
                     cell.textLabel?.text = LocalizedString("Basal Delivery", comment: "The title of the cell showing pod basal status")
-                    cell.setDetailBasal(suspended: podState.suspended, dose: podState.unfinalizedTempBasal)
+                    cell.setDetailBasal(suspended: podState.isSuspended, dose: podState.unfinalizedTempBasal)
                 case .reservoirLevel:
                     cell.textLabel?.text = LocalizedString("Reservoir", comment: "The title of the cell showing reservoir status")
                     cell.setReservoirDetail(podState.lastInsulinMeasurements)

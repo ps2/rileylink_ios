@@ -308,7 +308,7 @@ extension OmnipodPumpManager {
         case .disengaging:
             return .cancelingTempBasal
         case .stable:
-            if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.finished {
+            if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished {
                 return .tempBasal(DoseEntry(tempBasal))
             }
             switch podState.suspendState {
@@ -331,7 +331,7 @@ extension OmnipodPumpManager {
         case .disengaging:
             return .canceling
         case .stable:
-            if let bolus = podState.unfinalizedBolus, !bolus.finished {
+            if let bolus = podState.unfinalizedBolus, !bolus.isFinished {
                 return .inProgress(DoseEntry(bolus))
             }
         }
@@ -644,7 +644,7 @@ extension OmnipodPumpManager {
     // MARK: - Pump Commands
 
     private func getPodStatus(storeDosesOnSuccess: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
-        guard state.podState?.unfinalizedBolus?.finished != false else {
+        guard state.podState?.unfinalizedBolus?.isFinished != false else {
             self.log.info("Skipping status request due to unfinalized bolus in progress.")
             completion?(.failure(PodCommsError.unfinalizedBolus))
             return
@@ -707,7 +707,7 @@ extension OmnipodPumpManager {
                 return OmnipodPumpManagerError.noPodPaired
             }
 
-            guard state.podState?.unfinalizedBolus?.finished != false else {
+            guard state.podState?.unfinalizedBolus?.isFinished != false else {
                 return PodCommsError.unfinalizedBolus
             }
 
@@ -746,7 +746,7 @@ extension OmnipodPumpManager {
                 return .success(false)
             }
 
-            guard state.podState?.unfinalizedBolus?.finished != false else {
+            guard state.podState?.unfinalizedBolus?.isFinished != false else {
                 return .failure(PodCommsError.unfinalizedBolus)
             }
 
@@ -1240,7 +1240,7 @@ extension OmnipodPumpManager: PumpManager {
                         return .podSuspended
                     }
 
-                    guard state.podState?.unfinalizedBolus?.finished != false else {
+                    guard state.podState?.unfinalizedBolus?.isFinished != false else {
                         self.log.info("Not enacting temp basal because podState indicates unfinalized bolus in progress.")
                         return .unfinalizedBolus
                     }

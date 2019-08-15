@@ -428,7 +428,7 @@ public class PodCommsSession {
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
         let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
 
-        guard podState.unfinalizedBolus?.finished != false else {
+        guard podState.unfinalizedBolus?.isFinished != false else {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
         }
 
@@ -560,7 +560,7 @@ public class PodCommsSession {
 
     public func deactivatePod() throws {
 
-        if podState.fault == nil && !podState.suspended {
+        if podState.fault == nil && !podState.isSuspended {
             let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
             switch result {
             case .certainFailure(let error):

@@ -68,7 +68,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
     public var suspendState: SuspendState
 
-    public var suspended: Bool {
+    public var isSuspended: Bool {
         if case .suspended = suspendState {
             return true
         }
@@ -152,12 +152,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public mutating func finalizeFinishedDoses() {
-        if let bolus = unfinalizedBolus, bolus.finished {
+        if let bolus = unfinalizedBolus, bolus.isFinished {
             finalizedDoses.append(bolus)
             unfinalizedBolus = nil
         }
 
-        if let tempBasal = unfinalizedTempBasal, tempBasal.finished {
+        if let tempBasal = unfinalizedTempBasal, tempBasal.isFinished {
             finalizedDoses.append(tempBasal)
             unfinalizedTempBasal = nil
         }

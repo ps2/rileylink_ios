@@ -462,10 +462,9 @@ public class PodCommsSession {
             if let unfinalizedTempBasal = podState.unfinalizedTempBasal,
                 let finishTime = unfinalizedTempBasal.finishTime,
                 deliveryType.contains(.tempBasal),
-                finishTime.compare(now) == .orderedDescending
+                finishTime > now
             {
                 podState.unfinalizedTempBasal?.cancel(at: now)
-                podState.suspendState = .resumed(now)
                 canceledDose = podState.unfinalizedTempBasal
                 log.info("Interrupted temp basal: %@", String(describing: canceledDose))
             }
@@ -473,7 +472,7 @@ public class PodCommsSession {
             if let unfinalizedBolus = podState.unfinalizedBolus,
                 let finishTime = unfinalizedBolus.finishTime,
                 deliveryType.contains(.bolus),
-                finishTime.compare(now) == .orderedDescending
+                finishTime > now
             {
                 podState.unfinalizedBolus?.cancel(at: now, withRemaining: status.insulinNotDelivered)
                 canceledDose = podState.unfinalizedBolus

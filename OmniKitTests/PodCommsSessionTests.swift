@@ -58,8 +58,6 @@ class PodCommsSessionTests: XCTestCase, PodCommsSessionDelegate {
 
         // From https://raw.githubusercontent.com/wiki/openaps/openomni/Full-life-of-a-pod-(omni-flo).md
 
-        let now = Date()
-
         // 2018-05-25T13:03:51.765792 pod Message(ffffffff seq:01 [OmniKitPacketParser.VersionResponse(blockType: OmniKitPacketParser.MessageBlockType.versionResponse, lot: 43620, tid: 560313, address: Optional(521580830), setupState: OmniKitPacketParser.SetupState.addressAssigned, pmVersion: 2.7.0, piVersion: 2.7.0, data: 23 bytes)])
 
         let podState = PodState(address: 521580830, piVersion: "2.7.0", pmVersion: "2.7.0", lot: 43620, tid: 560313)

@@ -63,17 +63,18 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     var finalizedDoses: [UnfinalizedDose]
 
     public var dosesToStore: [UnfinalizedDose] {
-        var dosesToStore = finalizedDoses
-        if let unfinalizedTempBasal = unfinalizedTempBasal {
-            dosesToStore.append(unfinalizedTempBasal)
-        }
-        if let unfinalizedSuspend = unfinalizedSuspend {
-            dosesToStore.append(unfinalizedSuspend)
-        }
-        return dosesToStore
+        return  finalizedDoses + [unfinalizedTempBasal, unfinalizedSuspend, unfinalizedBolus].compactMap {$0}
     }
 
-    public private(set) var suspended: Bool
+    public var suspendState: SuspendState
+
+    public var isSuspended: Bool {
+        if case .suspended = suspendState {
+            return true
+        }
+        return false
+    }
+
     public var fault: PodInfoFaultEvent?
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
@@ -99,7 +100,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.tid = tid
         self.lastInsulinMeasurements = nil
         self.finalizedDoses = []
-        self.suspended = false
+        self.suspendState = .resumed(Date())
         self.fault = nil
         self.activeAlertSlots = .none
         self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
@@ -151,12 +152,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public mutating func finalizeFinishedDoses() {
-        if let bolus = unfinalizedBolus, bolus.finished {
+        if let bolus = unfinalizedBolus, bolus.isFinished {
             finalizedDoses.append(bolus)
             unfinalizedBolus = nil
         }
 
-        if let tempBasal = unfinalizedTempBasal, tempBasal.finished {
+        if let tempBasal = unfinalizedTempBasal, tempBasal.isFinished {
             finalizedDoses.append(tempBasal)
             unfinalizedTempBasal = nil
         }
@@ -213,8 +214,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 unfinalizedResume = nil
             }
         }
-
-        suspended = deliveryStatus == .suspended
     }
 
     // MARK: - RawRepresentable
@@ -245,41 +244,36 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
 
         if let suspended = rawValue["suspended"] as? Bool {
-            self.suspended = suspended
+            // Migrate old value
+            if suspended {
+                suspendState = .suspended(Date())
+            } else {
+                suspendState = .resumed(Date())
+            }
+        } else if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
+            self.suspendState = suspendState
         } else {
-            self.suspended = false
+            return nil
         }
 
-        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue,
-            let unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedBolus = unfinalizedBolus
-        } else {
-            self.unfinalizedBolus = nil
+            self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         }
 
-        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue,
-            let unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedTempBasal = unfinalizedTempBasal
-        } else {
-            self.unfinalizedTempBasal = nil
+            self.unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
         }
 
-        if let rawUnfinalizedSuspend = rawValue["unfinalizedSuspend"] as? UnfinalizedDose.RawValue,
-            let unfinalizedSuspend = UnfinalizedDose(rawValue: rawUnfinalizedSuspend)
+        if let rawUnfinalizedSuspend = rawValue["unfinalizedSuspend"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedSuspend = unfinalizedSuspend
-        } else {
-            self.unfinalizedSuspend = nil
+            self.unfinalizedSuspend = UnfinalizedDose(rawValue: rawUnfinalizedSuspend)
         }
 
-        if let rawUnfinalizedResume = rawValue["unfinalizedResume"] as? UnfinalizedDose.RawValue,
-            let unfinalizedResume = UnfinalizedDose(rawValue: rawUnfinalizedResume)
+        if let rawUnfinalizedResume = rawValue["unfinalizedResume"] as? UnfinalizedDose.RawValue
         {
-            self.unfinalizedResume = unfinalizedResume
-        } else {
-            self.unfinalizedResume = nil
+            self.unfinalizedResume = UnfinalizedDose(rawValue: rawUnfinalizedResume)
         }
 
         if let rawLastInsulinMeasurements = rawValue["lastInsulinMeasurements"] as? PodInsulinMeasurements.RawValue {
@@ -352,7 +346,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "pmVersion": pmVersion,
             "lot": lot,
             "tid": tid,
-            "suspended": suspended,
+            "suspendState": suspendState.rawValue,
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,
@@ -412,7 +406,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* pmVersion: \(pmVersion)",
             "* lot: \(lot)",
             "* tid: \(tid)",
-            "* suspended: \(suspended)",
+            "* suspendState: \(suspendState)",
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",
@@ -492,3 +486,52 @@ fileprivate struct NonceState: RawRepresentable, Equatable {
 }
 
 
+public enum SuspendState: Equatable, RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    private enum SuspendStateType: Int {
+        case suspend, resume
+    }
+
+    case suspended(Date)
+    case resumed(Date)
+
+    private var identifier: Int {
+        switch self {
+        case .suspended:
+            return 1
+        case .resumed:
+            return 2
+        }
+    }
+
+    public init?(rawValue: RawValue) {
+        guard let suspendStateType = rawValue["case"] as? SuspendStateType.RawValue,
+            let date = rawValue["date"] as? Date else {
+                return nil
+        }
+        switch SuspendStateType(rawValue: suspendStateType) {
+        case .suspend?:
+            self = .suspended(date)
+        case .resume?:
+            self = .resumed(date)
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: RawValue {
+        switch self {
+        case .suspended(let date):
+            return [
+                "case": SuspendStateType.suspend.rawValue,
+                "date": date
+            ]
+        case .resumed(let date):
+            return [
+                "case": SuspendStateType.resume.rawValue,
+                "date": date
+            ]
+        }
+    }
+}

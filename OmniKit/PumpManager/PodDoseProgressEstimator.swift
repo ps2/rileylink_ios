@@ -19,7 +19,7 @@ class PodDoseProgressEstimator: DoseProgressTimerEstimator {
         let elapsed = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let percentComplete = min(elapsed / duration, 1)
-        let delivered = pumpManager?.roundToSupportedBolusVolume(units: percentComplete * dose.units) ?? dose.units
+        let delivered = pumpManager?.roundToSupportedBolusVolume(units: percentComplete * dose.programmedUnits) ?? dose.programmedUnits
         return DoseProgress(deliveredUnits: delivered, percentComplete: percentComplete)
     }
 

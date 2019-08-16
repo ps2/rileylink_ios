@@ -178,12 +178,14 @@ class PodMessageTransport: MessageTransport {
                     log.debug("Packet error: %@", String(describing: error))
                     continue
                 }
-                
+
                 guard candidatePacket.address == packet.address else {
+                    log.debug("Address %@ does not match %@", String(describing: candidatePacket.address), String(describing: packet.address))
                     continue
                 }
                 
                 guard candidatePacket.sequenceNum == ((packet.sequenceNum + 1) & 0b11111) else {
+                    log.debug("Sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
                     continue
                 }
                 

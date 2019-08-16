@@ -164,7 +164,7 @@ class TempBasalTests: XCTestCase {
             XCTAssertEqual(false, cmd.acknowledgementBeep)
             XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilFirstTenthOfPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
             XCTAssertEqual(1, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
@@ -188,7 +188,7 @@ class TempBasalTests: XCTestCase {
             XCTAssertEqual(false, cmd.acknowledgementBeep)
             XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 1800), cmd.delayUntilFirstTenthOfPulse)
             XCTAssertEqual(0, cmd.remainingPulses)
             XCTAssertEqual(6, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
@@ -244,7 +244,7 @@ class TempBasalTests: XCTestCase {
             XCTAssertEqual(false, cmd.acknowledgementBeep)
             XCTAssertEqual(true, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilFirstTenthOfPulse)
             XCTAssertEqual(300, cmd.remainingPulses)
             XCTAssertEqual(1, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
@@ -292,7 +292,7 @@ class TempBasalTests: XCTestCase {
             XCTAssertEqual(false, cmd.acknowledgementBeep)
             XCTAssertEqual(false, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 6), cmd.delayUntilFirstTenthOfPulse)
             XCTAssertEqual(6300, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)
             let entry = cmd.rateEntries[0]
@@ -316,7 +316,7 @@ class TempBasalTests: XCTestCase {
             XCTAssertEqual(false, cmd.acknowledgementBeep)
             XCTAssertEqual(false, cmd.completionBeep)
             XCTAssertEqual(.minutes(60), cmd.programReminderInterval)
-            XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilNextPulse)
+            XCTAssertEqual(TimeInterval(seconds: 6.01001), cmd.delayUntilFirstTenthOfPulse)
             XCTAssertEqual(6289.5, cmd.remainingPulses)
             XCTAssertEqual(2, cmd.rateEntries.count)
             let entry1 = cmd.rateEntries[0]

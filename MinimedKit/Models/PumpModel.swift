@@ -108,7 +108,7 @@ public enum PumpModel: String {
         }
     }
 
-    public var maximumBolusVolume: Double {
+    public var maximumBolusVolume: Int {
         return 25
     }
 
@@ -117,7 +117,18 @@ public enum PumpModel: String {
     }
 
     public var supportedBolusVolumes: [Double] {
-        return supportedBasalRates.filter { $0 <= maximumBolusVolume }
+        if generation >= 23 {
+            let breakpoints: [Int] = [0,1,10,maximumBolusVolume]
+            let scales: [Int] = [40,20,10]
+            let scalingGroups = zip(scales, (zip(breakpoints, breakpoints[1...]).map {($0.0)...$0.1}))
+            let segments = scalingGroups.map { (scale, range) -> [Double] in
+                let scaledRanges = ((range.lowerBound*scale+1)...(range.upperBound*scale))
+                return scaledRanges.map { Double($0) / Double(scale) }
+            }
+            return segments.flatMap { $0 }
+        } else {
+            return (1...(maximumBolusVolume*10)).map { Double($0) / 10.0 }
+        }
     }
 
     public var maximumBasalScheduleEntryCount: Int {

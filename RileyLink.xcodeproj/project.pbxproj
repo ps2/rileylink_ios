@@ -77,7 +77,6 @@
 		4352A74920DED81D00CAC200 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		4352A74B20DED87F00CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		4352A74C20DED8C200CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
-		4352A74D20DED8FC00CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		4352A74F20DEDE8400CAC200 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
 		4352A75020DEDE8700CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		4352A75120DEDE9B00CAC200 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
@@ -111,15 +110,12 @@
 		43709AF020E0120F00F941B3 /* SetupImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43709AEF20E0120F00F941B3 /* SetupImageTableViewCell.xib */; };
 		43709AF120E0127000F941B3 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		43722FB11CB9F7640038B7F2 /* RileyLinkKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		43722FC31CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		43722FC41CB9F7640038B7F2 /* RileyLinkKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		437462391FA9287A00643383 /* RileyLinkDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437462381FA9287A00643383 /* RileyLinkDevice.swift */; };
 		437F540A1FBFDAA60070FF2C /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
-		4384C8C91FB941FB00D916E6 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		438D39221D19011700D40CA4 /* PlaceholderPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438D39211D19011700D40CA4 /* PlaceholderPumpEvent.swift */; };
 		43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */; };
-		43A9E50E1F6B865000307931 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */; };
 		43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */; };
 		43B0ADC41D12506A00AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
@@ -247,7 +243,6 @@
 		7D2366F5212527DA0028B67D /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		7D2366F6212527DA0028B67D /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		7D2366F7212527DA0028B67D /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
-		7D23674721252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674521252A5E0028B67D /* InfoPlist.strings */; };
 		7D23674A21252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674821252A5E0028B67D /* InfoPlist.strings */; };
 		7D23674D21252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674B21252A5E0028B67D /* InfoPlist.strings */; };
 		7D23675021252A5E0028B67D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23674E21252A5E0028B67D /* InfoPlist.strings */; };
@@ -290,7 +285,6 @@
 		C12572922121EEEE0061BA2F /* SettingsImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12572912121EEEE0061BA2F /* SettingsImageTableViewCell.swift */; };
 		C125729421220FEC0061BA2F /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C125729321220FEC0061BA2F /* MainStoryboard.storyboard */; };
 		C12572982125FA390061BA2F /* RileyLinkConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12572972125FA390061BA2F /* RileyLinkConnectionManager.swift */; };
-		C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12616431B685F0A001FAD87 /* CoreData.framework */; };
 		C1271B071A9A34E900B7C949 /* Log.m in Sources */ = {isa = PBXBuildFile; fileRef = C1271B061A9A34E900B7C949 /* Log.m */; };
 		C1274F771D8232580002912B /* DailyTotal515PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F761D8232580002912B /* DailyTotal515PumpEvent.swift */; };
 		C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */; };
@@ -303,11 +297,6 @@
 		C12EA23D198B436800309FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23C198B436800309FA4 /* CoreGraphics.framework */; };
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
 		C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA243198B436800309FA4 /* InfoPlist.strings */; };
-		C12EA254198B436800309FA4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA253198B436800309FA4 /* XCTest.framework */; };
-		C12EA255198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
-		C12EA256198B436900309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
-		C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA25C198B436900309FA4 /* InfoPlist.strings */; };
-		C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA25F198B436900309FA4 /* RileyLinkTests.m */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
@@ -338,6 +327,7 @@
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
+		C164A56222F1F0A6000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */; };
 		C168C40021AEF8DE00ADE90E /* PodReplacementNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */; };
 		C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */; };
 		C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */; };
@@ -516,7 +506,6 @@
 		C1EAD6E41C82BA87006DBA60 /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6E31C82BA87006DBA60 /* CRC16Tests.swift */; };
 		C1EB955D1C887FE5002517DF /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EB955C1C887FE5002517DF /* HistoryPage.swift */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
-		C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
 		C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */; };
 		C1F000501EBE727C00F65163 /* BasalScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004F1EBE727C00F65163 /* BasalScheduleTests.swift */; };
 		C1F000521EBE73F400F65163 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F000511EBE73F400F65163 /* BasalSchedule.swift */; };
@@ -625,13 +614,6 @@
 			remoteGlobalIDString = 431CE76E1F98564100255374;
 			remoteInfo = RileyLinkBLEKit;
 		};
-		431CE77B1F98564200255374 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		431CE7821F98564200255374 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -639,33 +621,12 @@
 			remoteGlobalIDString = 431CE76E1F98564100255374;
 			remoteInfo = RileyLinkBLEKit;
 		};
-		4327EEB820E1E55D002598CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
-		4327EEBA20E1E562002598CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		4352A72A20DEC9B700CAC200 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 4352A72420DEC9B700CAC200;
 			remoteInfo = MinimedKitUI;
-		};
-		43722FB91CB9F7640038B7F2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
-			remoteInfo = RileyLinkKit;
 		};
 		43722FC11CB9F7640038B7F2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -715,13 +676,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43D5E78D1FAF7BFB004ACDB7;
 			remoteInfo = RileyLinkKitUI;
-		};
-		A9B839C422809D82004E745E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
-			remoteInfo = RileyLinkKit;
 		};
 		A9B839C622809D8D004E745E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -793,13 +747,6 @@
 			remoteGlobalIDString = C10D9BC01C8269D500378342;
 			remoteInfo = MinimedKit;
 		};
-		C12EA257198B436900309FA4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -807,19 +754,40 @@
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
 		};
-		C1B383181CD0665D00CE7782 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
 		C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
+		};
+		C1D289AA22F7CC26003FFBD9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
+		C1D289AC22F7CC2A003FFBD9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
+		C1D289AE22F7CC2D003FFBD9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
+		};
+		C1D289B222F7CC32003FFBD9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C12EA236198B436800309FA4;
+			remoteInfo = RileyLink;
 		};
 		C1FFAF82213323CC00C50C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -948,7 +916,6 @@
 		43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RileyLinkKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43722FB01CB9F7640038B7F2 /* RileyLinkKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RileyLinkKit.h; sourceTree = "<group>"; };
 		43722FB21CB9F7640038B7F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RileyLinkKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43722FC01CB9F7640038B7F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		437462381FA9287A00643383 /* RileyLinkDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevice.swift; sourceTree = "<group>"; };
 		437DE508229C8A05003B1074 /* copy-frameworks.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "copy-frameworks.sh"; sourceTree = "<group>"; };
@@ -1258,7 +1225,6 @@
 		C12EA23E198B436800309FA4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C12EA242198B436800309FA4 /* RileyLink-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RileyLink-Info.plist"; sourceTree = "<group>"; };
 		C12EA244198B436800309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C12EA252198B436800309FA4 /* RileyLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RileyLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA253198B436800309FA4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C12EA25B198B436900309FA4 /* RileyLinkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RileyLinkTests-Info.plist"; sourceTree = "<group>"; };
 		C12EA25D198B436900309FA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1292,6 +1258,7 @@
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
+		C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodReplacementNavigationController.swift; sourceTree = "<group>"; };
 		C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplacePodViewController.swift; sourceTree = "<group>"; };
 		C16A08301D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryMealMarkerPumpEvent.swift; sourceTree = "<group>"; };
@@ -1573,15 +1540,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43722FB41CB9F7640038B7F2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43722FB81CB9F7640038B7F2 /* RileyLinkKit.framework in Frameworks */,
-				4352A74D20DED8FC00CAC200 /* LoopKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43C2468F1D8918AE0031F8D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1636,18 +1594,6 @@
 				C1FFAF8D213323CC00C50C1D /* OmniKit.framework in Frameworks */,
 				4352A74720DED4AF00CAC200 /* LoopKit.framework in Frameworks */,
 				4352A74620DED4AB00CAC200 /* LoopKitUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C12EA24F198B436800309FA4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C1F000481EBE352900F65163 /* RileyLinkKit.framework in Frameworks */,
-				C12616441B685F0A001FAD87 /* CoreData.framework in Frameworks */,
-				C12EA254198B436800309FA4 /* XCTest.framework in Frameworks */,
-				C12EA256198B436900309FA4 /* UIKit.framework in Frameworks */,
-				C12EA255198B436800309FA4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1916,6 +1862,7 @@
 				C16E61212208C7A80069F357 /* ReservoirReading.swift */,
 				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */,
+				C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */,
 			);
 			path = PumpManager;
 			sourceTree = "<group>";
@@ -2129,11 +2076,9 @@
 			isa = PBXGroup;
 			children = (
 				C12EA237198B436800309FA4 /* RileyLink.app */,
-				C12EA252198B436800309FA4 /* RileyLinkTests.xctest */,
 				C10D9BC11C8269D500378342 /* MinimedKit.framework */,
 				C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */,
 				43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */,
-				43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */,
 				C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */,
 				C1B383141CD0665D00CE7782 /* NightscoutUploadKitTests.xctest */,
 				43C246931D8918AE0031F8D1 /* Crypto.framework */,
@@ -2728,7 +2673,7 @@
 			);
 			dependencies = (
 				431CE77A1F98564200255374 /* PBXTargetDependency */,
-				431CE77C1F98564200255374 /* PBXTargetDependency */,
+				C1D289AD22F7CC2A003FFBD9 /* PBXTargetDependency */,
 			);
 			name = RileyLinkBLEKitTests;
 			productName = RileyLinkBLEKitTests;
@@ -2773,25 +2718,6 @@
 			productName = RileyLinkKit;
 			productReference = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		43722FB61CB9F7640038B7F2 /* RileyLinkKitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43722FCA1CB9F7640038B7F2 /* Build configuration list for PBXNativeTarget "RileyLinkKitTests" */;
-			buildPhases = (
-				43722FB31CB9F7640038B7F2 /* Sources */,
-				43722FB41CB9F7640038B7F2 /* Frameworks */,
-				43722FB51CB9F7640038B7F2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				43722FBA1CB9F7640038B7F2 /* PBXTargetDependency */,
-				4327EEBB20E1E562002598CB /* PBXTargetDependency */,
-			);
-			name = RileyLinkKitTests;
-			productName = RileyLinkKitTests;
-			productReference = 43722FB71CB9F7640038B7F2 /* RileyLinkKitTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		43C246921D8918AE0031F8D1 /* Crypto */ = {
 			isa = PBXNativeTarget;
@@ -2862,7 +2788,7 @@
 			);
 			dependencies = (
 				C10D9BCD1C8269D500378342 /* PBXTargetDependency */,
-				4327EEB920E1E55D002598CB /* PBXTargetDependency */,
+				C1D289B322F7CC32003FFBD9 /* PBXTargetDependency */,
 			);
 			name = MinimedKitTests;
 			productName = MinimedKitTests;
@@ -2896,25 +2822,6 @@
 			productName = RileyLink;
 			productReference = C12EA237198B436800309FA4 /* RileyLink.app */;
 			productType = "com.apple.product-type.application";
-		};
-		C12EA251198B436800309FA4 /* RileyLinkTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C12EA266198B436900309FA4 /* Build configuration list for PBXNativeTarget "RileyLinkTests" */;
-			buildPhases = (
-				C12EA24E198B436800309FA4 /* Sources */,
-				C12EA24F198B436800309FA4 /* Frameworks */,
-				C12EA250198B436800309FA4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A9B839C522809D82004E745E /* PBXTargetDependency */,
-				C12EA258198B436900309FA4 /* PBXTargetDependency */,
-			);
-			name = RileyLinkTests;
-			productName = RileyLinkTests;
-			productReference = C12EA252198B436800309FA4 /* RileyLinkTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXNativeTarget;
@@ -2950,7 +2857,7 @@
 			dependencies = (
 				A9B839CF22809DCF004E745E /* PBXTargetDependency */,
 				C1B383171CD0665D00CE7782 /* PBXTargetDependency */,
-				C1B383191CD0665D00CE7782 /* PBXTargetDependency */,
+				C1D289AF22F7CC2D003FFBD9 /* PBXTargetDependency */,
 			);
 			name = NightscoutUploadKitTests;
 			productName = NightscoutUploadKitTests;
@@ -3005,6 +2912,7 @@
 			);
 			dependencies = (
 				C1FFAF83213323CC00C50C1D /* PBXTargetDependency */,
+				C1D289AB22F7CC26003FFBD9 /* PBXTargetDependency */,
 			);
 			name = OmniKitTests;
 			productName = OmniKitTests;
@@ -3061,11 +2969,6 @@
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1020;
 					};
-					43722FB61CB9F7640038B7F2 = {
-						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 1000;
-						TestTargetID = C12EA236198B436800309FA4;
-					};
 					43C246921D8918AE0031F8D1 = {
 						CreatedOnToolsVersion = 8.0;
 						LastSwiftMigration = 1020;
@@ -3089,10 +2992,6 @@
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
-					C12EA251198B436800309FA4 = {
-						ProvisioningStyle = Automatic;
-						TestTargetID = C12EA236198B436800309FA4;
-					};
 					C1B3830A1CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1020;
@@ -3100,6 +2999,7 @@
 					C1B383131CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1000;
+						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C1BB128421CB5603009A29B5 = {
 						CreatedOnToolsVersion = 10.1;
@@ -3146,11 +3046,9 @@
 			projectRoot = "";
 			targets = (
 				C12EA236198B436800309FA4 /* RileyLink */,
-				C12EA251198B436800309FA4 /* RileyLinkTests */,
 				C10D9BC01C8269D500378342 /* MinimedKit */,
 				C10D9BC91C8269D500378342 /* MinimedKitTests */,
 				43722FAD1CB9F7630038B7F2 /* RileyLinkKit */,
-				43722FB61CB9F7640038B7F2 /* RileyLinkKitTests */,
 				C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */,
 				C1B383131CD0665D00CE7782 /* NightscoutUploadKitTests */,
 				43C246921D8918AE0031F8D1 /* Crypto */,
@@ -3201,14 +3099,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43722FB51CB9F7640038B7F2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7D23674721252A5E0028B67D /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43C246911D8918AE0031F8D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3255,14 +3145,6 @@
 				C1FC49EC2135CB2D007D0788 /* LaunchScreen.storyboard in Resources */,
 				C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */,
 				7D7076951FE09311004AC8EA /* Localizable.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C12EA250198B436800309FA4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C12EA25E198B436900309FA4 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3436,15 +3318,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43722FB31CB9F7640038B7F2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4384C8C91FB941FB00D916E6 /* TimeInterval.swift in Sources */,
-				43A9E50E1F6B865000307931 /* Data.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43C2468E1D8918AE0031F8D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3586,6 +3459,7 @@
 				43D8709520DE1C91006B549E /* RileyLinkDevice.swift in Sources */,
 				4352A71820DEC7B900CAC200 /* PumpMessage+PumpOpsSession.swift in Sources */,
 				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
+				C164A56222F1F0A6000E3FA5 /* UnfinalizedDose.swift in Sources */,
 				C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */,
 				43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
@@ -3757,14 +3631,6 @@
 				C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */,
 				C1271B071A9A34E900B7C949 /* Log.m in Sources */,
 				434FF1DC1CF268BD000DB779 /* IdentifiableClass.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C12EA24E198B436800309FA4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C12EA260198B436900309FA4 /* RileyLinkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3989,35 +3855,15 @@
 			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
 			targetProxy = 431CE7791F98564200255374 /* PBXContainerItemProxy */;
 		};
-		431CE77C1F98564200255374 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = 431CE77B1F98564200255374 /* PBXContainerItemProxy */;
-		};
 		431CE7831F98564200255374 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
 			targetProxy = 431CE7821F98564200255374 /* PBXContainerItemProxy */;
 		};
-		4327EEB920E1E55D002598CB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = 4327EEB820E1E55D002598CB /* PBXContainerItemProxy */;
-		};
-		4327EEBB20E1E562002598CB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = 4327EEBA20E1E562002598CB /* PBXContainerItemProxy */;
-		};
 		4352A72B20DEC9B700CAC200 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4352A72420DEC9B700CAC200 /* MinimedKitUI */;
 			targetProxy = 4352A72A20DEC9B700CAC200 /* PBXContainerItemProxy */;
-		};
-		43722FBA1CB9F7640038B7F2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
-			targetProxy = 43722FB91CB9F7640038B7F2 /* PBXContainerItemProxy */;
 		};
 		43722FC21CB9F7640038B7F2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4053,11 +3899,6 @@
 			isa = PBXTargetDependency;
 			target = 43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */;
 			targetProxy = 43D5E7931FAF7BFB004ACDB7 /* PBXContainerItemProxy */;
-		};
-		A9B839C522809D82004E745E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
-			targetProxy = A9B839C422809D82004E745E /* PBXContainerItemProxy */;
 		};
 		A9B839C722809D8D004E745E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4109,25 +3950,35 @@
 			target = C10D9BC01C8269D500378342 /* MinimedKit */;
 			targetProxy = C10D9BD41C8269D500378342 /* PBXContainerItemProxy */;
 		};
-		C12EA258198B436900309FA4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C12EA257198B436900309FA4 /* PBXContainerItemProxy */;
-		};
 		C1B383171CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */;
 		};
-		C1B383191CD0665D00CE7782 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1B383181CD0665D00CE7782 /* PBXContainerItemProxy */;
-		};
 		C1B3831F1CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */;
+		};
+		C1D289AB22F7CC26003FFBD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = C1D289AA22F7CC26003FFBD9 /* PBXContainerItemProxy */;
+		};
+		C1D289AD22F7CC2A003FFBD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = C1D289AC22F7CC2A003FFBD9 /* PBXContainerItemProxy */;
+		};
+		C1D289AF22F7CC2D003FFBD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = C1D289AE22F7CC2D003FFBD9 /* PBXContainerItemProxy */;
+		};
+		C1D289B322F7CC32003FFBD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C12EA236198B436800309FA4 /* RileyLink */;
+			targetProxy = C1D289B222F7CC32003FFBD9 /* PBXContainerItemProxy */;
 		};
 		C1FFAF83213323CC00C50C1D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4731,56 +4582,6 @@
 			};
 			name = Release;
 		};
-		43722FC71CB9F7640038B7F2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = RileyLinkKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
-			};
-			name = Debug;
-		};
-		43722FC81CB9F7640038B7F2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = RileyLinkKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
-			};
-			name = Release;
-		};
 		43C2469C1D8918AE0031F8D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5210,44 +5011,6 @@
 			};
 			name = Release;
 		};
-		C12EA267198B436900309FA4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = RileyLinkTests;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		C12EA268198B436900309FA4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = RileyLinkTests;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 		C1B383231CD0665D00CE7782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5327,6 +5090,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -5351,6 +5115,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.NightscoutUploadKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};
@@ -5651,15 +5416,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		43722FCA1CB9F7640038B7F2 /* Build configuration list for PBXNativeTarget "RileyLinkKitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43722FC71CB9F7640038B7F2 /* Debug */,
-				43722FC81CB9F7640038B7F2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		43C2469E1D8918AE0031F8D1 /* Build configuration list for PBXNativeTarget "Crypto" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -5710,15 +5466,6 @@
 			buildConfigurations = (
 				C12EA264198B436900309FA4 /* Debug */,
 				C12EA265198B436900309FA4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C12EA266198B436900309FA4 /* Build configuration list for PBXNativeTarget "RileyLinkTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C12EA267198B436900309FA4 /* Debug */,
-				C12EA268198B436900309FA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -146,7 +146,17 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             podStateObservers.forEach { (observer) in
                 observer.podStateDidUpdate(newValue.podState)
             }
+
+            if oldValue.podState?.lastInsulinMeasurements?.reservoirVolume != newValue.podState?.lastInsulinMeasurements?.reservoirVolume {
+                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirVolume {
+                    self.pumpDelegate.notify({ (delegate) in
+                        self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirVolume))
+                        delegate?.pumpManager(self, didReadReservoirValue: reservoirVolume, at: lastInsulinMeasurements.validTime) { _ in }
+                    })
+                }
+            }
         }
+
 
         // Ideally we ensure that oldValue.rawValue != newValue.rawValue, but the types aren't
         // defined as equatable
@@ -158,9 +168,6 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
         let newStatus = status(for: newValue)
 
         if oldStatus != newStatus {
-            // TODO: remove comment
-            //            if oldValue.podState?.suspended != newValue.podState?.suspended ||
-            //                oldValue.timeZone != newValue.timeZone
             notifyStatusObservers(oldStatus: oldStatus)
         }
 
@@ -283,16 +290,33 @@ extension OmnipodPumpManager {
 
     private func basalDeliveryState(for state: OmnipodPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
-            return .suspended
+            return .suspended(state.lastPumpDataReportDate ?? .distantPast)
         }
 
-        switch state.suspendTransition {
-        case .suspending?:
+        switch state.suspendEngageState {
+        case .engaging:
             return .suspending
-        case .resuming?:
+        case .disengaging:
             return .resuming
-        case .none:
-            return podState.suspended ? .suspended : .active
+        case .stable:
+            break
+        }
+
+        switch state.tempBasalEngageState {
+        case .engaging:
+            return .initiatingTempBasal
+        case .disengaging:
+            return .cancelingTempBasal
+        case .stable:
+            if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished {
+                return .tempBasal(DoseEntry(tempBasal))
+            }
+            switch podState.suspendState {
+            case .resumed(let date):
+                return .active(date)
+            case .suspended(let date):
+                return .suspended(date)
+            }
         }
     }
 
@@ -301,18 +325,17 @@ extension OmnipodPumpManager {
             return .none
         }
 
-        switch state.bolusTransition {
-        case .initiating?:
+        switch state.bolusEngageState {
+        case .engaging:
             return .initiating
-        case .canceling?:
+        case .disengaging:
             return .canceling
-        case .none:
-            if let bolus = podState.unfinalizedBolus, !bolus.finished {
+        case .stable:
+            if let bolus = podState.unfinalizedBolus, !bolus.isFinished {
                 return .inProgress(DoseEntry(bolus))
-            } else {
-                return .none
             }
         }
+        return .none
     }
 
     // Thread-safe
@@ -615,13 +638,13 @@ extension OmnipodPumpManager {
             return
         }
 
-        self.getPodStatus(completion)
+        self.getPodStatus(storeDosesOnSuccess: false, completion: completion)
     }
 
     // MARK: - Pump Commands
 
-    private func getPodStatus(_ completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
-        guard state.podState?.unfinalizedBolus?.finished != false else {
+    private func getPodStatus(storeDosesOnSuccess: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
+        guard state.podState?.unfinalizedBolus?.isFinished != false else {
             self.log.info("Skipping status request due to unfinalized bolus in progress.")
             completion?(.failure(PodCommsError.unfinalizedBolus))
             return
@@ -633,21 +656,10 @@ extension OmnipodPumpManager {
                 switch result {
                 case .success(let session):
                     let status = try session.getStatus()
-                    
-                    session.dosesForStorage() { (doses) -> Bool in
-                        return self.store(doses: doses, in: session)
-                    }
-
-                    if let reservoirLevel = status.reservoirLevel {
-                        let reservoirDate = Date()
-                        // We block the session until the data's confirmed stored by the delegate
-                        let semaphore = DispatchSemaphore(value: 0)
-                        self.pumpDelegate.notify({ (delegate) in
-                            delegate?.pumpManager(self, didReadReservoirValue: reservoirLevel, at: reservoirDate) { (_) in
-                                semaphore.signal()
-                            }
+                    if storeDosesOnSuccess {
+                        session.dosesForStorage({ (doses) -> Bool in
+                            self.store(doses: doses, in: session)
                         })
-                        semaphore.wait()
                     }
                     completion?(.success(status))
                 case .failure(let error):
@@ -695,7 +707,7 @@ extension OmnipodPumpManager {
                 return OmnipodPumpManagerError.noPodPaired
             }
 
-            guard state.podState?.unfinalizedBolus?.finished != false else {
+            guard state.podState?.unfinalizedBolus?.isFinished != false else {
                 return PodCommsError.unfinalizedBolus
             }
 
@@ -734,7 +746,7 @@ extension OmnipodPumpManager {
                 return .success(false)
             }
 
-            guard state.podState?.unfinalizedBolus?.finished != false else {
+            guard state.podState?.unfinalizedBolus?.isFinished != false else {
                 return .failure(PodCommsError.unfinalizedBolus)
             }
 
@@ -864,6 +876,7 @@ extension OmnipodPumpManager {
 
 // MARK: - PumpManager
 extension OmnipodPumpManager: PumpManager {
+
     public static let managerIdentifier: String = "Omnipod"
 
     public static let localizedTitle = LocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
@@ -904,6 +917,10 @@ extension OmnipodPumpManager: PumpManager {
 
     public var pumpReservoirCapacity: Double {
         return Pod.reservoirCapacity
+    }
+
+    public var lastReconciliation: Date? {
+        return self.state.podState?.lastInsulinMeasurements?.validTime
     }
 
     public var status: PumpManagerStatus {
@@ -960,11 +977,11 @@ extension OmnipodPumpManager: PumpManager {
 
             defer {
                 self.setState({ (state) in
-                    state.suspendTransition = .none
+                    state.suspendEngageState = .stable
                 })
             }
             self.setState({ (state) in
-                state.suspendTransition = .suspending
+                state.suspendEngageState = .engaging
             })
 
             let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
@@ -974,10 +991,10 @@ extension OmnipodPumpManager: PumpManager {
             case .uncertainFailure(let error):
                 completion(error)
             case .success:
-                completion(nil)
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }
+                completion(nil)
             }
         }
     }
@@ -1002,16 +1019,19 @@ extension OmnipodPumpManager: PumpManager {
 
             defer {
                 self.setState({ (state) in
-                    state.suspendTransition = .none
+                    state.suspendEngageState = .stable
                 })
             }
             self.setState({ (state) in
-                state.suspendTransition = .resuming
+                state.suspendEngageState = .disengaging
             })
 
             do {
                 let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                 let _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                session.dosesForStorage() { (doses) -> Bool in
+                    return self.store(doses: doses, in: session)
+                }
                 completion(nil)
             } catch (let error) {
                 completion(error)
@@ -1045,7 +1065,7 @@ extension OmnipodPumpManager: PumpManager {
             return // No active pod
         case true?:
             log.default("Fetching status because pumpData is too old")
-            getPodStatus { (response) in
+            getPodStatus(storeDosesOnSuccess: true) { (response) in
                 self.pumpDelegate.notify({ (delegate) in
                     switch response {
                     case .success:
@@ -1116,11 +1136,11 @@ extension OmnipodPumpManager: PumpManager {
             // TODO: Move this to the top, since Loop is expecting a status change to cancel its loading indicator?
             defer {
                 self.setState({ (state) in
-                    state.bolusTransition = nil
+                    state.bolusEngageState = .stable
                 })
             }
             self.setState({ (state) in
-                state.bolusTransition = .initiating
+                state.bolusEngageState = .engaging
             })
 
             let date = Date()
@@ -1129,6 +1149,9 @@ extension OmnipodPumpManager: PumpManager {
             willRequest(dose)
 
             let result = session.bolus(units: enactUnits)
+            session.dosesForStorage() { (doses) -> Bool in
+                return self.store(doses: doses, in: session)
+            }
 
             switch result {
             case .success:
@@ -1162,11 +1185,11 @@ extension OmnipodPumpManager: PumpManager {
             do {
                 defer {
                     self.setState({ (state) in
-                        state.bolusTransition = nil
+                        state.bolusEngageState = .stable
                     })
                 }
                 self.setState({ (state) in
-                    state.bolusTransition = .canceling
+                    state.bolusEngageState = .disengaging
                 })
 
                 let result = session.cancelDelivery(deliveryType: .bolus, beepType: .noBeep)
@@ -1176,11 +1199,12 @@ extension OmnipodPumpManager: PumpManager {
                 case .uncertainFailure(let error):
                     throw error
                 case .success(_, let canceledBolus):
-                    let canceledDoseEntry: DoseEntry? = canceledBolus != nil ? DoseEntry(canceledBolus!) : nil
-                    completion(.success(canceledDoseEntry))
                     session.dosesForStorage() { (doses) -> Bool in
                         return self.store(doses: doses, in: session)
                     }
+
+                    let canceledDoseEntry: DoseEntry? = canceledBolus != nil ? DoseEntry(canceledBolus!) : nil
+                    completion(.success(canceledDoseEntry))
                 }
             } catch {
                 completion(.failure(error))
@@ -1211,13 +1235,13 @@ extension OmnipodPumpManager: PumpManager {
 
             do {
                 let preError = self.setStateWithResult({ (state) -> PodCommsError? in
-                    guard state.podState?.suspended == false else {
-                        self.log.info("Canceling temp basal because podState indicates pod is suspended.")
+                    if case .some(.suspended) = state.podState?.suspendState {
+                        self.log.info("Not enacting temp basal because podState indicates pod is suspended.")
                         return .podSuspended
                     }
 
-                    guard state.podState?.unfinalizedBolus?.finished != false else {
-                        self.log.info("Canceling temp basal because podState indicates unfinalized bolus in progress.")
+                    guard state.podState?.unfinalizedBolus?.isFinished != false else {
+                        self.log.info("Not enacting temp basal because podState indicates unfinalized bolus in progress.")
                         return .unfinalizedBolus
                     }
 
@@ -1229,14 +1253,17 @@ extension OmnipodPumpManager: PumpManager {
                 }
 
                 let status: StatusResponse
+                let canceledDose: UnfinalizedDose?
+
                 let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
                 switch result {
                 case .certainFailure(let error):
                     throw error
                 case .uncertainFailure(let error):
                     throw error
-                case .success(let cancelTempStatus,_):
+                case .success(let cancelTempStatus, let dose):
                     status = cancelTempStatus
+                    canceledDose = dose
                 }
 
                 guard !status.deliveryStatus.bolusing else {
@@ -1248,18 +1275,34 @@ extension OmnipodPumpManager: PumpManager {
                     throw PodCommsError.podSuspended
                 }
 
+                defer {
+                    self.setState({ (state) in
+                        state.tempBasalEngageState = .stable
+                    })
+                }
+
                 if duration < .ulpOfOne {
                     // 0 duration temp basals are used to cancel any existing temp basal
-                    let cancelTime = Date()
+                    self.setState({ (state) in
+                        state.tempBasalEngageState = .disengaging
+                    })
+                    let cancelTime = canceledDose?.finishTime ?? Date()
                     let dose = DoseEntry(type: .tempBasal, startDate: cancelTime, endDate: cancelTime, value: 0, unit: .unitsPerHour)
-                    completion(.success(dose))
                     session.dosesForStorage() { (doses) -> Bool in
                         return self.store(doses: doses, in: session)
                     }
+                    completion(.success(dose))
                 } else {
+                    self.setState({ (state) in
+                        state.tempBasalEngageState = .engaging
+                    })
+
                     let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: false, completionBeep: false, programReminderInterval: 0)
                     let basalStart = Date()
                     let dose = DoseEntry(type: .tempBasal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
+                    session.dosesForStorage() { (doses) -> Bool in
+                        return self.store(doses: doses, in: session)
+                    }
                     switch result {
                     case .success:
                         completion(.success(dose))
@@ -1268,9 +1311,6 @@ extension OmnipodPumpManager: PumpManager {
                         completion(.success(dose))
                     case .certainFailure(let error):
                         completion(.failure(error))
-                    }
-                    session.dosesForStorage() { (doses) -> Bool in
-                        return self.store(doses: doses, in: session)
                     }
                 }
             } catch let error {
@@ -1286,6 +1326,49 @@ extension OmnipodPumpManager: PumpManager {
             return PodDoseProgressEstimator(dose: dose, pumpManager: self, reportingQueue: dispatchQueue)
         }
         return nil
+    }
+
+    // This cannot be called from within the lockedState lock!
+    func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
+        session.assertOnSessionQueue()
+
+        // We block the session until the data's confirmed stored by the delegate
+        let semaphore = DispatchSemaphore(value: 0)
+        var success = false
+
+        store(doses: doses) { (error) in
+            success = (error == nil)
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+
+        if success {
+            setState { (state) in
+                state.lastPumpDataReportDate = Date()
+            }
+        }
+        return success
+    }
+
+    func store(doses: [UnfinalizedDose], completion: @escaping (_ error: Error?) -> Void) {
+        let lastPumpReconciliation = lastReconciliation
+
+        pumpDelegate.notify { (delegate) in
+            guard let delegate = delegate else {
+                preconditionFailure("pumpManagerDelegate cannot be nil")
+            }
+
+            delegate.pumpManager(self, hasNewPumpEvents: doses.map { NewPumpEvent($0) }, lastReconciliation: lastPumpReconciliation, completion: { (error) in
+                if let error = error {
+                    self.log.error("Error storing pod events: %@", String(describing: error))
+                } else {
+                    self.log.info("DU: Stored pod events: %@", String(describing: doses))
+                }
+
+                completion(error)
+            })
+        }
     }
 }
 
@@ -1304,48 +1387,6 @@ extension OmnipodPumpManager: MessageLogger {
 }
 
 extension OmnipodPumpManager: PodCommsDelegate {
-
-    // This cannot be called from within the lockedState lock!
-    func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
-        session.assertOnSessionQueue()
-
-        // We block the session until the data's confirmed stored by the delegate
-        let semaphore = DispatchSemaphore(value: 0)
-        var success = false
-
-        store(doses: doses) { (error) in
-            success = (error == nil)
-            semaphore.signal()
-        }
-
-        semaphore.wait()
-        
-        if success {
-            setState { (state) in
-                state.lastPumpDataReportDate = Date()
-            }
-        }
-        return success
-    }
-
-    func store(doses: [UnfinalizedDose], completion: @escaping (_ error: Error?) -> Void) {
-        pumpDelegate.notify { (delegate) in
-            guard let delegate = delegate else {
-                preconditionFailure("pumpManagerDelegate cannot be nil")
-            }
-
-            delegate.pumpManager(self, didReadPumpEvents: doses.map { NewPumpEvent($0) }, completion: { (error) in
-                if let error = error {
-                    self.log.error("Error storing pod events: %@", String(describing: error))
-                } else {
-                    self.log.error("Stored pod events: %@", String(describing: doses))
-                }
-
-                completion(error)
-            })
-        }
-    }
-    
     func podComms(_ podComms: PodComms, didChange podState: PodState) {
         setState { (state) in
             state.podState = podState

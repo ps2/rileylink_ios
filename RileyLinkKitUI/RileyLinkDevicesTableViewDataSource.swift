@@ -120,8 +120,8 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
 
     @objc private func reloadDevices() {
         rileyLinkPumpManager.rileyLinkDeviceProvider.getDevices { (devices) in
-            DispatchQueue.main.async {
-                self.devices = devices
+            DispatchQueue.main.async { [weak self] in
+                self?.devices = devices
             }
         }
     }

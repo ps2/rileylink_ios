@@ -324,6 +324,8 @@
 		C14FFC671D3D7E390049CF85 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC661D3D7E390049CF85 /* KeychainManager.swift */; };
 		C14FFC691D3D7E560049CF85 /* KeychainManager+RileyLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */; };
 		C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
+		C15500272308FA1000345FCC /* BeepType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D72289135D006BCDF0 /* BeepType.swift */; };
+		C15500282308FA2F00345FCC /* BeepConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D9228913EC006BCDF0 /* BeepConfigCommand.swift */; };
 		C15AF2AD1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */; };
 		C15AF2AF1D7498930031FC9D /* RestoreMystery54PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */; };
 		C15AF2B11D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */; };
@@ -3695,6 +3697,7 @@
 				C1BB12B021CB5654009A29B5 /* TempBasalExtraCommand.swift in Sources */,
 				C1BB129E21CB5654009A29B5 /* ConfigureAlertsCommand.swift in Sources */,
 				C1BB12AD21CB5654009A29B5 /* SetInsulinScheduleCommand.swift in Sources */,
+				C15500272308FA1000345FCC /* BeepType.swift in Sources */,
 				C1BB129B21CB5654009A29B5 /* BasalScheduleExtraCommand.swift in Sources */,
 				C1BB129621CB564D009A29B5 /* Packet.swift in Sources */,
 				C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */,
@@ -3717,6 +3720,7 @@
 				C1BB12BA21CB5758009A29B5 /* AlertSlot.swift in Sources */,
 				C1BB12A121CB5654009A29B5 /* GetStatusCommand.swift in Sources */,
 				C1BB12A621CB5654009A29B5 /* PodInfoDataLog.swift in Sources */,
+				C15500282308FA2F00345FCC /* BeepConfigCommand.swift in Sources */,
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
 				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
 				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,

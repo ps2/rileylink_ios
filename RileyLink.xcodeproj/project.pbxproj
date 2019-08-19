@@ -255,6 +255,7 @@
 		7D70768B1FE09310004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D70768D1FE09310004AC8EA /* Localizable.strings */; };
 		7D7076901FE09311004AC8EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076921FE09311004AC8EA /* InfoPlist.strings */; };
 		7D7076951FE09311004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076971FE09311004AC8EA /* Localizable.strings */; };
+		7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */; };
 		C104A9C1217E603E006E3C3E /* OmnipodReservoirView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104A9BF217E603E006E3C3E /* OmnipodReservoirView.swift */; };
 		C104A9C2217E603E006E3C3E /* OmnipodReservoirView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */; };
 		C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
@@ -1185,6 +1186,7 @@
 		7D70768C1FE09310004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D7076911FE09311004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D7076961FE09311004AC8EA /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideStatus.swift; sourceTree = "<group>"; };
 		C104A9BF217E603E006E3C3E /* OmnipodReservoirView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodReservoirView.swift; sourceTree = "<group>"; };
 		C104A9C0217E603E006E3C3E /* OmnipodReservoirView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OmnipodReservoirView.xib; sourceTree = "<group>"; };
 		C104A9C4217E645C006E3C3E /* HUDAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HUDAssets.xcassets; sourceTree = "<group>"; };
@@ -2304,6 +2306,7 @@
 			isa = PBXGroup;
 			children = (
 				C1AF21E11D4838C90088C41D /* DeviceStatus.swift */,
+				7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */,
 				C1AF21E51D48667F0088C41D /* UploaderStatus.swift */,
 				C1AF21E71D4866960088C41D /* PumpStatus.swift */,
 				C1A492621D4A5A19008964FF /* IOBStatus.swift */,
@@ -3661,6 +3664,7 @@
 				43F348061D596270009933DC /* HKUnit.swift in Sources */,
 				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
 				C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */,
+				7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */,
 				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,

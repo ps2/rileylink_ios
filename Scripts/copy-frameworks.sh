@@ -5,6 +5,8 @@
 #
 #  Copyright © 2019 LoopKit Authors. All rights reserved.
 
+date
+
 CARTHAGE_BUILD_DIR="${SRCROOT}/Carthage/Build"
 if [ -n "${IPHONEOS_DEPLOYMENT_TARGET}" ]; then
     CARTHAGE_BUILD_DIR="${CARTHAGE_BUILD_DIR}/iOS"
@@ -27,7 +29,7 @@ for COUNTER in $(seq 0 $(($SCRIPT_INPUT_FILE_COUNT - 1))); do
         fi
         echo "Substituting \"${CARTHAGE_BUILD_FILE}\" for \"${!SCRIPT_INPUT_FILE}\""
         export ${SCRIPT_INPUT_FILE}="${CARTHAGE_BUILD_FILE}"
-    elif [ -e "${SCRIPT_INPUT_FILE}" ]; then
+    elif [ -e "${!SCRIPT_INPUT_FILE}" ]; then
         echo "Using original path: \"${!SCRIPT_INPUT_FILE}\""
     else
         echo "ERROR: Input file not found at \"${!SCRIPT_INPUT_FILE}\""

@@ -564,12 +564,17 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .podDetails, .status:
             break
         case .actions:
-            tableView.reloadRows(at: [indexPath], with: .fade)
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume, .replacePod:
+                break
+            case .testCommand, .checkBeeps:
+                tableView.reloadRows(at: [indexPath], with: .fade)
+            }
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .reminder:
+            case .reminder, .enableDisableConfirmationBeeps, .enableDisableOptionalPodAlarms:
                 break
-            case .timeZoneOffset, .enableDisableConfirmationBeeps, .enableDisableOptionalPodAlarms:
+            case .timeZoneOffset:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .rileyLinks:

@@ -19,7 +19,7 @@ public struct PodInfoFlashLogRecent : PodInfo {
     public var podInfoType   : PodInfoResponseSubType = .flashLogRecent
     public let data          : Data
     public let indexLastEntry: UInt16 // how many 32-bit pump log entries total in Pod
-    public let pumpLogs      : Data   // TODO make a 32-bit pump log entry type
+    public let hexWordLog    : Data   // TODO make a 32-bit pump log entry type
 
     public init(encodedData: Data) throws {
         if encodedData.count < 3 || ((encodedData.count - 3) & 0x3) != 0 {
@@ -33,7 +33,7 @@ public struct PodInfoFlashLogRecent : PodInfo {
         }
         self.data           = encodedData
         self.indexLastEntry = lastPumpEntry
-        self.pumpLogs       = encodedData.subdata(in: 3..<Int(encodedData.count))
+        self.hexWordLog     = encodedData.subdata(in: 3..<Int(encodedData.count))
     }
     // TODO add code to nicely format the 32-bit pump log entries
 }
@@ -47,7 +47,7 @@ public struct PodInfoFlashLogPrevious : PodInfo {
     public var podInfoType   : PodInfoResponseSubType = .dumpOlderFlashlog
     public let data          : Data
     public let nEntries      : UInt16 // how many 32-bit pump log entries returned
-    public let pumpLogs      : Data   // TODO make a 32-bit pump log entry type
+    public let hexWordLog    : Data   // TODO make a 32-bit pump log entry type
 
     public init(encodedData: Data) throws {
         if encodedData.count < 3 || ((encodedData.count - 3) & 0x3) != 0 {
@@ -62,7 +62,7 @@ public struct PodInfoFlashLogPrevious : PodInfo {
         }
         self.data           = encodedData
         self.nEntries       = nLogEntriesReported
-        self.pumpLogs       = encodedData.subdata(in: 3..<Int(encodedData.count))
+        self.hexWordLog     = encodedData.subdata(in: 3..<Int(encodedData.count))
     }
     // TODO add code to nicely format the 32-bit pump log entries
 }

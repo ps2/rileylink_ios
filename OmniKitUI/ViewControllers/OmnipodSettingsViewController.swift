@@ -12,6 +12,28 @@ import LoopKit
 import OmniKit
 import LoopKitUI
 
+public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
+
+    public func updateTextLabel(enabled: Bool) {
+        if enabled {
+            self.textLabel?.text = LocalizedString("Disable Confirmation Beeps", comment: "Title text for button to disable confirmation beeps")
+        } else {
+            self.textLabel?.text = LocalizedString("Enable Confirmation Beeps", comment: "Title text for button to enable confirmation beeps")
+        }
+    }
+}
+
+public class OptionalPodAlarmsTableViewCell: TextButtonTableViewCell {
+
+    public func updateTextLabel(enabled: Bool) {
+        if enabled {
+            self.textLabel?.text = LocalizedString("Disable Optional Pod Alarms", comment: "Title text for button to disable optional pod alarms")
+        } else {
+            self.textLabel?.text = LocalizedString("Enable Optional Pod Alarms", comment: "Title text for button to enable optional pod alarms")
+        }
+    }
+}
+
 class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
     let pumpManager: OmnipodPumpManager
@@ -50,7 +72,19 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         return cell
     }()
-    
+
+    lazy var confirmationBeepsTableViewCell: ConfirmationBeepsTableViewCell = {
+        let cell = ConfirmationBeepsTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.updateTextLabel(enabled: confirmationBeeps)
+        return cell
+    }()
+
+    lazy var optionalPodAlarmsTableViewCell: OptionalPodAlarmsTableViewCell = {
+        let cell = OptionalPodAlarmsTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.updateTextLabel(enabled: optionalPodAlarms)
+        return cell
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -156,6 +190,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum ActionsRow: Int, CaseIterable {
         case suspendResume = 0
+        case testCommand
+        case checkBeeps
         case replacePod
     }
     
@@ -170,7 +206,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private enum ConfigurationRow: Int, CaseIterable {
         case reminder = 0
         case timeZoneOffset
-        case testCommand
+        case enableDisableConfirmationBeeps
+        case enableDisableOptionalPodAlarms
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
@@ -282,6 +319,17 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch actions[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
+            case .testCommand:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .checkBeeps:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Check Beeps", comment: "The title of the command to run check beeps")
+                cell.accessoryType = .disclosureIndicator
+                return cell
+
             case .replacePod:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
                 
@@ -332,11 +380,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
                 cell.accessoryType = .disclosureIndicator
                 return cell
-            case .testCommand:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
-                cell.accessoryType = .disclosureIndicator
-                return cell
+            case .enableDisableConfirmationBeeps:
+                return confirmationBeepsTableViewCell
+            case .enableDisableOptionalPodAlarms:
+                return optionalPodAlarmsTableViewCell
             }
             
         case .status:
@@ -430,6 +477,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .suspendResume:
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .testCommand:
+                let vc = CommandResponseViewController.runCommand(pumpManager: pumpManager, type: .testingCommands)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
+            case .checkBeeps:
+                let vc = CommandResponseViewController.runCommand(pumpManager: pumpManager, type: .checkBeeps)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
             case .replacePod:
                 let vc: UIViewController
                 if podState == nil || podState!.setupProgress.primingNeeded {
@@ -478,10 +533,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = CommandResponseViewController.changeTime(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
-            case .testCommand:
-                let vc = CommandResponseViewController.testCommand(pumpManager: pumpManager)
-                vc.title = sender?.textLabel?.text
-                show(vc, sender: indexPath)
+            case .enableDisableConfirmationBeeps:
+                confirmationBeepsTapped()
+                tableView.deselectRow(at: indexPath, animated: true)
+            case .enableDisableOptionalPodAlarms:
+                optionalPodAlarmsTapped()
+                tableView.deselectRow(at: indexPath, animated: true)
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
@@ -504,14 +561,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch sections[indexPath.section] {
-        case .podDetails, .actions, .status:
+        case .podDetails, .status:
             break
+        case .actions:
+            tableView.reloadRows(at: [indexPath], with: .fade)
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .timeZoneOffset, .testCommand:
-                tableView.reloadRows(at: [indexPath], with: .fade)
             case .reminder:
                 break
+            case .timeZoneOffset, .enableDisableConfirmationBeeps, .enableDisableOptionalPodAlarms:
+                tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .rileyLinks:
             break
@@ -543,6 +602,58 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             }
         }
+    }
+
+    private func confirmationBeepsTapped() {
+        let newConfirmationBeeps: Bool = !confirmationBeeps
+
+        if confirmationBeeps {
+            pumpManager.runCommand(type: .disableConfirmationBeeps, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            })
+        } else {
+            pumpManager.runCommand(type: .enableConfirmationBeeps, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error enanbling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            })
+        }
+        // TODO rework to have a spinner and in progress message while running and update the label upon completion
+        confirmationBeepsTableViewCell.updateTextLabel(enabled: newConfirmationBeeps)
+    }
+
+    private func optionalPodAlarmsTapped() {
+        let newOptionalPodAlarms: Bool = !optionalPodAlarms
+
+        if optionalPodAlarms {
+            pumpManager.runCommand(type: .disableOptionalPodAlarms, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error disabling optional pod alarms", comment: "The alert title for disable optional pod alarms error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            })
+        } else {
+            pumpManager.runCommand(type: .enableOptionalPodAlarms, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error enabling optional pod alarms", comment: "The alert title for enable optional pod alarms error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            })
+        }
+        // TODO rework to have a spinner and in progress message while running and update the label upon completion
+        optionalPodAlarmsTableViewCell.updateTextLabel(enabled: newOptionalPodAlarms)
     }
 }
 

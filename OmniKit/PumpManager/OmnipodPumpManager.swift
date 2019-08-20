@@ -31,6 +31,15 @@ public enum OmnipodPumpManagerError: Error {
     case notReadyForCannulaInsertion
 }
 
+public enum RunCommandSessionType {
+    case testingCommands
+    case checkBeeps
+    case enableConfirmationBeeps
+    case disableConfirmationBeeps
+    case enableOptionalPodAlarms
+    case disableOptionalPodAlarms
+}
+
 extension OmnipodPumpManagerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
@@ -780,7 +789,7 @@ extension OmnipodPumpManager {
                     case .success:
                         break
                     }
-                    let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: false, completionBeep: false, programReminderInterval: 0)
+                    let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset)
 
                     self.setState { (state) in
                         state.basalSchedule = schedule
@@ -851,18 +860,46 @@ extension OmnipodPumpManager {
         #endif
     }
 
-    public func testingCommands(completion: @escaping (Error?) -> Void) {
+    public func runCommand(type: RunCommandSessionType, completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod else {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Testing Commands", using: rileyLinkSelector) { (result) in
+        let name: String
+        switch type {
+        case .testingCommands:
+            name = "Testing Commands"
+        case .checkBeeps:
+            name = "Check Beeps"
+        case .enableConfirmationBeeps:
+            name = "Enable Confirmation Beeps"
+        case .disableConfirmationBeeps:
+            name = "Disable Confirmation Beeps"
+        case .enableOptionalPodAlarms:
+            name = "Enable Optional Pod Alarms"
+        case .disableOptionalPodAlarms:
+            name = "Disable Optional Pod Alarms"
+        }
+        self.podComms.runSession(withName: name, using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    let _ = try session.testingCommands()
+                    switch type {
+                    case .testingCommands:
+                        try session.testingCommands()
+                    case .checkBeeps:
+                        try session.checkBeeps()
+                    case .enableConfirmationBeeps:
+                        try session.enableConfirmationBeeps()
+                    case .disableConfirmationBeeps:
+                        try session.disableConfirmationBeeps()
+                    case .enableOptionalPodAlarms:
+                        try session.enableOptionalPodAlarms()
+                    case .disableOptionalPodAlarms:
+                        try session.disableOptionalPodAlarms()
+                    }
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -1297,7 +1334,7 @@ extension OmnipodPumpManager: PumpManager {
                         state.tempBasalEngageState = .engaging
                     })
 
-                    let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: false, completionBeep: false, programReminderInterval: 0)
+                    let result = session.setTempBasal(rate: rate, duration: duration)
                     let basalStart = Date()
                     let dose = DoseEntry(type: .tempBasal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                     session.dosesForStorage() { (doses) -> Bool in

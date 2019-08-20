@@ -45,9 +45,9 @@ extension CommandResponseViewController {
     }
 
 
-    static func testCommand(pumpManager: OmnipodPumpManager) -> T {
+    static func runCommand(pumpManager: OmnipodPumpManager, type: RunCommandSessionType) -> T {
         return T { (completionHandler) -> String in
-            pumpManager.testingCommands() { (error) in
+            pumpManager.runCommand(type: type) { (error) in
                 let response: String
                 if let error = error {
                     response = String(describing: error)
@@ -58,7 +58,20 @@ extension CommandResponseViewController {
                     completionHandler(response)
                 }
             }
-            return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
+            switch type {
+            case .testingCommands:
+                return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
+            case .checkBeeps:
+                return LocalizedString("Check Beeps…", comment: "Progress message for check beeps.")
+            case .enableConfirmationBeeps:
+                return LocalizedString("Enable Confirmation Beeps…", comment: "Progress message for enable confirmation beeps.")
+            case .disableConfirmationBeeps:
+                return LocalizedString("Disable Confirmation Beeps…", comment: "Progress message for disable confirmation beeps.")
+            case .enableOptionalPodAlarms:
+                return LocalizedString("Enable Optional Pod Alarms…", comment: "Progress message for enable optional pod alarms.")
+            case .disableOptionalPodAlarms:
+                return LocalizedString("Disable Optional Pod Alarms…", comment: "Progress message for disable optional pod alarms.")
+            }
         }
     }
 }

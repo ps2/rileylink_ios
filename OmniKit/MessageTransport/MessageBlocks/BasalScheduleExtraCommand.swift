@@ -62,7 +62,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
+    public init(acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
@@ -72,7 +72,7 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         self.rateEntries = rateEntries
     }
     
-    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval

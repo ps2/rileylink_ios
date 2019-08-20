@@ -71,7 +71,7 @@ public struct TempBasalExtraCommand : MessageBlock {
         rateEntries = entries
     }
     
-    public init(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
+    public init(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         rateEntries = RateEntry.makeEntries(rate: rate, duration: duration)
         remainingPulses = rateEntries[0].totalPulses
         delayUntilFirstTenthOfPulse = rateEntries[0].delayBetweenPulses

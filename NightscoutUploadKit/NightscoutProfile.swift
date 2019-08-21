@@ -5,6 +5,12 @@
 
 import Foundation
 
+fileprivate let timeZoneMap = (-18...18).reduce(into: [String: String]()) { (dict, hour) in
+    let from = TimeZone(secondsFromGMT: 3600 * hour)!.identifier
+    let to = String(format: "ETC/GMT%+d", hour * -1)
+    dict[from] = to
+}
+
 public class ProfileSet {
     
     public struct ScheduleItem {
@@ -53,7 +59,7 @@ public class ProfileSet {
                 "dia": dia.hours,
                 "carbs_hr": "0",
                 "delay": "0",
-                "timezone": timezone.identifier,
+                "timezone": timeZoneMap[timezone.identifier] ?? timezone.identifier,
                 "target_low": targetLow.map { $0.dictionaryRepresentation },
                 "target_high": targetHigh.map { $0.dictionaryRepresentation },
                 "sens": sensitivity.map { $0.dictionaryRepresentation },

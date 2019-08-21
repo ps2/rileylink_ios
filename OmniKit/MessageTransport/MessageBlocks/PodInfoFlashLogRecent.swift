@@ -8,7 +8,7 @@
 
 import Foundation
 
-let maxPumpEntriesReturned = 50
+fileprivate let maxPumpEntriesReturned = 50
 
 // read (up to) the most recent 50 32-bit pump entries from flash log
 public struct PodInfoFlashLogRecent : PodInfo {

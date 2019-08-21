@@ -191,7 +191,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private enum ActionsRow: Int, CaseIterable {
         case suspendResume = 0
         case testCommand
-        case checkBeeps
+        case playTestBeeps
         case replacePod
     }
     
@@ -324,12 +324,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
                 cell.accessoryType = .disclosureIndicator
                 return cell
-            case .checkBeeps:
+            case .playTestBeeps:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = LocalizedString("Check Beeps", comment: "The title of the command to run check beeps")
+                cell.textLabel?.text = LocalizedString("Play Test Beeps", comment: "The title of the command to play test beeps")
                 cell.accessoryType = .disclosureIndicator
                 return cell
-
             case .replacePod:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
                 
@@ -478,11 +477,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
             case .testCommand:
-                let vc = CommandResponseViewController.runCommand(pumpManager: pumpManager, type: .testingCommands)
+                let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
-            case .checkBeeps:
-                let vc = CommandResponseViewController.runCommand(pumpManager: pumpManager, type: .checkBeeps)
+            case .playTestBeeps:
+                let vc = CommandResponseViewController.playTestBeeps(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
             case .replacePod:
@@ -567,7 +566,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume, .replacePod:
                 break
-            case .testCommand, .checkBeeps:
+            case .testCommand, .playTestBeeps:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .configuration:
@@ -613,7 +612,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let newConfirmationBeeps: Bool = !confirmationBeeps
 
         if confirmationBeeps {
-            pumpManager.runCommand(type: .disableConfirmationBeeps, completion: { (error) in
+            pumpManager.disableConfirmationBeeps(completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
@@ -622,7 +621,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             })
         } else {
-            pumpManager.runCommand(type: .enableConfirmationBeeps, completion: { (error) in
+            pumpManager.enableConfirmationBeeps(completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error enanbling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
@@ -639,7 +638,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let newOptionalPodAlarms: Bool = !optionalPodAlarms
 
         if optionalPodAlarms {
-            pumpManager.runCommand(type: .disableOptionalPodAlarms, completion: { (error) in
+            pumpManager.disableOptionalPodAlarms(completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error disabling optional pod alarms", comment: "The alert title for disable optional pod alarms error")
@@ -648,7 +647,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             })
         } else {
-            pumpManager.runCommand(type: .enableOptionalPodAlarms, completion: { (error) in
+            pumpManager.enableOptionalPodAlarms(completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error enabling optional pod alarms", comment: "The alert title for enable optional pod alarms error")

@@ -31,15 +31,6 @@ public enum OmnipodPumpManagerError: Error {
     case notReadyForCannulaInsertion
 }
 
-public enum RunCommandSessionType {
-    case testingCommands
-    case checkBeeps
-    case enableConfirmationBeeps
-    case disableConfirmationBeeps
-    case enableOptionalPodAlarms
-    case disableOptionalPodAlarms
-}
-
 extension OmnipodPumpManagerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
@@ -87,6 +78,8 @@ extension OmnipodPumpManagerError: LocalizedError {
     }
 }
 
+public var confirmationBeeps: Bool = false // TODO create methods to get/set, make persistent?
+public var optionalPodAlarms: Bool = false // TODO create methods to get/set, make persistent?
 
 public class OmnipodPumpManager: RileyLinkPumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
@@ -860,46 +853,128 @@ extension OmnipodPumpManager {
         #endif
     }
 
-    public func runCommand(type: RunCommandSessionType, completion: @escaping (Error?) -> Void) {
+    public func testingCommands(completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod else {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        let name: String
-        switch type {
-        case .testingCommands:
-            name = "Testing Commands"
-        case .checkBeeps:
-            name = "Check Beeps"
-        case .enableConfirmationBeeps:
-            name = "Enable Confirmation Beeps"
-        case .disableConfirmationBeeps:
-            name = "Disable Confirmation Beeps"
-        case .enableOptionalPodAlarms:
-            name = "Enable Optional Pod Alarms"
-        case .disableOptionalPodAlarms:
-            name = "Disable Optional Pod Alarms"
-        }
-        self.podComms.runSession(withName: name, using: rileyLinkSelector) { (result) in
+        self.podComms.runSession(withName: "Testing Commands", using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    switch type {
-                    case .testingCommands:
-                        try session.testingCommands()
-                    case .checkBeeps:
-                        try session.checkBeeps()
-                    case .enableConfirmationBeeps:
-                        try session.enableConfirmationBeeps()
-                    case .disableConfirmationBeeps:
-                        try session.disableConfirmationBeeps()
-                    case .enableOptionalPodAlarms:
-                        try session.enableOptionalPodAlarms()
-                    case .disableOptionalPodAlarms:
-                        try session.disableOptionalPodAlarms()
-                    }
+                    try session.testingCommands()
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func playTestBeeps(completion: @escaping (Error?) -> Void) {
+        guard self.hasActivePod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Play Test Beeps", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
+                do {
+                    try session.playTestBeeps()
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func enableConfirmationBeeps(completion: @escaping (Error?) -> Void) {
+        guard self.hasActivePod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Enable Confirmation Beeps", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
+                do {
+                    try session.enableConfirmationBeeps()
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func disableConfirmationBeeps(completion: @escaping (Error?) -> Void) {
+        guard self.hasActivePod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Disable Confirmation Beeps", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
+                do {
+                    try session.disableConfirmationBeeps()
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func enableOptionalPodAlarms(completion: @escaping (Error?) -> Void) {
+        guard self.hasActivePod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Enable Optional Pod Alarms", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
+                do {
+                    try session.enableOptionalPodAlarms()
+                    completion(nil)
+                } catch let error {
+                    completion(error)
+                }
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func disableOptionalPodAlarms(completion: @escaping (Error?) -> Void) {
+        guard self.hasActivePod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Disable Optional Pod Alarms", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
+                do {
+                    try session.disableOptionalPodAlarms()
                     completion(nil)
                 } catch let error {
                     completion(error)

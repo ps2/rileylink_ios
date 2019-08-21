@@ -44,10 +44,9 @@ extension CommandResponseViewController {
         }
     }
 
-
-    static func runCommand(pumpManager: OmnipodPumpManager, type: RunCommandSessionType) -> T {
+    static func testingCommands(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            pumpManager.runCommand(type: type) { (error) in
+            pumpManager.testingCommands() { (error) in
                 let response: String
                 if let error = error {
                     response = String(describing: error)
@@ -58,20 +57,92 @@ extension CommandResponseViewController {
                     completionHandler(response)
                 }
             }
-            switch type {
-            case .testingCommands:
-                return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
-            case .checkBeeps:
-                return LocalizedString("Check Beeps…", comment: "Progress message for check beeps.")
-            case .enableConfirmationBeeps:
-                return LocalizedString("Enable Confirmation Beeps…", comment: "Progress message for enable confirmation beeps.")
-            case .disableConfirmationBeeps:
-                return LocalizedString("Disable Confirmation Beeps…", comment: "Progress message for disable confirmation beeps.")
-            case .enableOptionalPodAlarms:
-                return LocalizedString("Enable Optional Pod Alarms…", comment: "Progress message for enable optional pod alarms.")
-            case .disableOptionalPodAlarms:
-                return LocalizedString("Disable Optional Pod Alarms…", comment: "Progress message for disable optional pod alarms.")
+            return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
+        }
+    }
+
+    static func playTestBeeps(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.playTestBeeps() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
             }
+            return LocalizedString("Play Test Beeps…", comment: "Progress message for play test beeps.")
+        }
+    }
+
+    static func enableConfirmationBeeps(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.enableConfirmationBeeps() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Enable Confirmation Beeps…", comment: "Progress message for enable confirmation beeps.")
+        }
+    }
+
+    static func disableConfirmationBeeps(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.disableConfirmationBeeps() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Disable Confirmation Beeps…", comment: "Progress message for disable confirmation beeps.")
+        }
+    }
+
+    static func enableOptionalPodAlarms(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.enableOptionalPodAlarms() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Enable Optional Pod Alarms…", comment: "Progress message for enable optional pod alarms.")
+        }
+    }
+
+    static func disableOptionalPodAlarms(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.disableOptionalPodAlarms() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Disable Optional Pod Alarms…", comment: "Progress message for disable optional pod alarms.")
         }
     }
 }

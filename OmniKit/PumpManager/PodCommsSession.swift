@@ -137,9 +137,6 @@ extension PodCommsError: LocalizedError {
     }
 }
 
-public var confirmationBeeps: Bool = false // TODO determine placement, create methods to get/set, make persistent?
-public var optionalPodAlarms: Bool = false // TODO determine placement, create methods to get/set, make persistent?
-
 public protocol PodCommsSessionDelegate: class {
     func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState)
 }
@@ -592,10 +589,10 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    public func checkBeeps() throws {
+    public func playTestBeeps() throws {
         let _ = try getStatus()
         guard podState.unfinalizedBolus?.isFinished != false else {
-            log.info("Unfinalized bolus, skipping check beeps")
+            log.info("Unfinalized bolus, skipping play test beeps")
             throw PodCommsError.unfinalizedBolus
         }
 

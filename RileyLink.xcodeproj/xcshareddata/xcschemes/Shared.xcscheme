@@ -146,6 +146,20 @@
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C136AA5D231187B0008A320D"
+               BuildableName = "MinimedKitPlugin.loopplugin"
+               BlueprintName = "MinimedKitPlugin"
+               ReferencedContainer = "container:RileyLink.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

@@ -141,7 +141,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C136AA2923116E32008A320D"
-               BuildableName = "OmniKitPlugin.framework"
+               BuildableName = "OmniKitPlugin.loopplugin"
                BlueprintName = "OmniKitPlugin"
                ReferencedContainer = "container:RileyLink.xcodeproj">
             </BuildableReference>

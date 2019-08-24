@@ -310,6 +310,9 @@
 		C136AA55231176F0008A320D /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
 		C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; };
 		C136AA57231176FA008A320D /* OmniKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */; };
+		C136AA62231187B0008A320D /* MinimedKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA60231187B0008A320D /* MinimedKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C136AA6723118817008A320D /* MinimedKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA6623118817008A320D /* MinimedKitPlugin.swift */; };
+		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -795,6 +798,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = C1FFAFD8213323F900C50C1D;
 			remoteInfo = OmniKitUI;
+		};
+		C136AA68231188F1008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 431CE76E1F98564100255374;
+			remoteInfo = RileyLinkBLEKit;
+		};
+		C136AA6A231188F1008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
+			remoteInfo = RileyLinkKit;
+		};
+		C136AA6C231188F1008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D5E78D1FAF7BFB004ACDB7;
+			remoteInfo = RileyLinkKitUI;
+		};
+		C136AA6E231188F1008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C10D9BC01C8269D500378342;
+			remoteInfo = MinimedKit;
+		};
+		C136AA70231188F1008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4352A72420DEC9B700CAC200;
+			remoteInfo = MinimedKitUI;
 		};
 		C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1285,6 +1323,10 @@
 		C136AA2C23116E32008A320D /* OmniKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmniKitPlugin.h; sourceTree = "<group>"; };
 		C136AA2D23116E32008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C136AA4123116E7B008A320D /* OmniKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniKitPlugin.swift; sourceTree = "<group>"; };
+		C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		C136AA60231187B0008A320D /* MinimedKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimedKitPlugin.h; sourceTree = "<group>"; };
+		C136AA61231187B0008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C136AA6623118817008A320D /* MinimedKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedKitPlugin.swift; sourceTree = "<group>"; };
 		C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInsulinMeasurements.swift; sourceTree = "<group>"; };
 		C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
@@ -1664,6 +1706,13 @@
 				C136AA52231176D8008A320D /* LoopKitUI.framework in Frameworks */,
 				C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */,
 				C136AA54231176EC008A320D /* RileyLinkBLEKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C136AA5B231187B0008A320D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2137,6 +2186,7 @@
 				C1FFAFDA213323F900C50C1D /* OmniKitUI */,
 				C1BB128621CB5603009A29B5 /* OmniKitPacketParser */,
 				C136AA2B23116E32008A320D /* OmniKitPlugin */,
+				C136AA5F231187B0008A320D /* MinimedKitPlugin */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 				437DE504229C898D003B1074 /* Scripts */,
@@ -2162,6 +2212,7 @@
 				C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */,
 				C1BB128521CB5603009A29B5 /* OmniKitPacketParser */,
 				C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */,
+				C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2241,6 +2292,16 @@
 				C136AA4123116E7B008A320D /* OmniKitPlugin.swift */,
 			);
 			path = OmniKitPlugin;
+			sourceTree = "<group>";
+		};
+		C136AA5F231187B0008A320D /* MinimedKitPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				C136AA60231187B0008A320D /* MinimedKitPlugin.h */,
+				C136AA61231187B0008A320D /* Info.plist */,
+				C136AA6623118817008A320D /* MinimedKitPlugin.swift */,
+			);
+			path = MinimedKitPlugin;
 			sourceTree = "<group>";
 		};
 		C13BD64021403362006D7F19 /* MessageTransport */ = {
@@ -2708,6 +2769,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C136AA59231187B0008A320D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C136AA62231187B0008A320D /* MinimedKitPlugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1B383081CD0665D00CE7782 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2939,6 +3008,30 @@
 			productReference = C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */;
 			productType = "com.apple.product-type.framework";
 		};
+		C136AA5D231187B0008A320D /* MinimedKitPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C136AA63231187B0008A320D /* Build configuration list for PBXNativeTarget "MinimedKitPlugin" */;
+			buildPhases = (
+				C136AA59231187B0008A320D /* Headers */,
+				C136AA5A231187B0008A320D /* Sources */,
+				C136AA5B231187B0008A320D /* Frameworks */,
+				C136AA5C231187B0008A320D /* Resources */,
+				C136AA72231188FC008A320D /* Copy Frameworks with Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C136AA69231188F1008A320D /* PBXTargetDependency */,
+				C136AA6B231188F1008A320D /* PBXTargetDependency */,
+				C136AA6D231188F1008A320D /* PBXTargetDependency */,
+				C136AA6F231188F1008A320D /* PBXTargetDependency */,
+				C136AA71231188F1008A320D /* PBXTargetDependency */,
+			);
+			name = MinimedKitPlugin;
+			productName = MinimedKitPlugin;
+			productReference = C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */;
+			productType = "com.apple.product-type.framework";
+		};
 		C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1B383221CD0665D00CE7782 /* Build configuration list for PBXNativeTarget "NightscoutUploadKit" */;
@@ -3113,6 +3206,11 @@
 						LastSwiftMigration = 1030;
 						ProvisioningStyle = Automatic;
 					};
+					C136AA5D231187B0008A320D = {
+						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
+						ProvisioningStyle = Automatic;
+					};
 					C1B3830A1CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1020;
@@ -3167,21 +3265,22 @@
 			projectRoot = "";
 			targets = (
 				C12EA236198B436800309FA4 /* RileyLink */,
-				C10D9BC01C8269D500378342 /* MinimedKit */,
-				C10D9BC91C8269D500378342 /* MinimedKitTests */,
-				43722FAD1CB9F7630038B7F2 /* RileyLinkKit */,
-				C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */,
-				C1B383131CD0665D00CE7782 /* NightscoutUploadKitTests */,
 				43C246921D8918AE0031F8D1 /* Crypto */,
 				431CE76E1F98564100255374 /* RileyLinkBLEKit */,
 				431CE7761F98564200255374 /* RileyLinkBLEKitTests */,
+				43722FAD1CB9F7630038B7F2 /* RileyLinkKit */,
 				43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */,
+				C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */,
+				C1B383131CD0665D00CE7782 /* NightscoutUploadKitTests */,
+				C10D9BC01C8269D500378342 /* MinimedKit */,
 				4352A72420DEC9B700CAC200 /* MinimedKitUI */,
+				C10D9BC91C8269D500378342 /* MinimedKitTests */,
+				C136AA5D231187B0008A320D /* MinimedKitPlugin */,
 				C1FFAF77213323CC00C50C1D /* OmniKit */,
 				C1FFAF7F213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFD8213323F900C50C1D /* OmniKitUI */,
-				C1BB128421CB5603009A29B5 /* OmniKitPacketParser */,
 				C136AA2923116E32008A320D /* OmniKitPlugin */,
+				C1BB128421CB5603009A29B5 /* OmniKitPacketParser */,
 			);
 		};
 /* End PBXProject section */
@@ -3271,6 +3370,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C136AA2823116E32008A320D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C136AA5C231187B0008A320D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3374,6 +3480,29 @@
 				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
+			);
+			name = "Copy Frameworks with Carthage";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
+		};
+		C136AA72231188FC008A320D /* Copy Frameworks with Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/MinimedKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/MinimedKitUI.framework",
 			);
 			name = "Copy Frameworks with Carthage";
 			outputFileListPaths = (
@@ -3795,6 +3924,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C136AA5A231187B0008A320D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C136AA732311899D008A320D /* OSLog.swift in Sources */,
+				C136AA6723118817008A320D /* MinimedKitPlugin.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1B383061CD0665D00CE7782 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4138,6 +4276,31 @@
 			isa = PBXTargetDependency;
 			target = C1FFAFD8213323F900C50C1D /* OmniKitUI */;
 			targetProxy = C136AA4D23117228008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA69231188F1008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
+			targetProxy = C136AA68231188F1008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA6B231188F1008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
+			targetProxy = C136AA6A231188F1008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA6D231188F1008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */;
+			targetProxy = C136AA6C231188F1008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA6F231188F1008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C10D9BC01C8269D500378342 /* MinimedKit */;
+			targetProxy = C136AA6E231188F1008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA71231188F1008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4352A72420DEC9B700CAC200 /* MinimedKitUI */;
+			targetProxy = C136AA70231188F1008A320D /* PBXContainerItemProxy */;
 		};
 		C1B383171CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5279,6 +5442,79 @@
 			};
 			name = Release;
 		};
+		C136AA64231187B0008A320D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MinimedKitPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_PREFIX = "";
+				WRAPPER_EXTENSION = loopplugin;
+			};
+			name = Debug;
+		};
+		C136AA65231187B0008A320D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MinimedKitPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_PREFIX = "";
+				WRAPPER_EXTENSION = loopplugin;
+			};
+			name = Release;
+		};
 		C1B383231CD0665D00CE7782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5743,6 +5979,15 @@
 			buildConfigurations = (
 				C136AA3B23116E32008A320D /* Debug */,
 				C136AA3C23116E32008A320D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C136AA63231187B0008A320D /* Build configuration list for PBXNativeTarget "MinimedKitPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C136AA64231187B0008A320D /* Debug */,
+				C136AA65231187B0008A320D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

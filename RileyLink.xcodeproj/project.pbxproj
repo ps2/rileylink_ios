@@ -300,6 +300,16 @@
 		C12EA245198B436800309FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C12EA243198B436800309FA4 /* InfoPlist.strings */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
+		C136AA3A23116E32008A320D /* OmniKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA2C23116E32008A320D /* OmniKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C136AA4223116E7B008A320D /* OmniKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA4123116E7B008A320D /* OmniKitPlugin.swift */; };
+		C136AA442311704A008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
+		C136AA51231176D4008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
+		C136AA52231176D8008A320D /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
+		C136AA53231176E8008A320D /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
+		C136AA54231176EC008A320D /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
+		C136AA55231176F0008A320D /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
+		C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; };
+		C136AA57231176FA008A320D /* OmniKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -750,6 +760,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = C10D9BC01C8269D500378342;
 			remoteInfo = MinimedKit;
+		};
+		C136AA4523117228008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
+			remoteInfo = RileyLinkKit;
+		};
+		C136AA4723117228008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 431CE76E1F98564100255374;
+			remoteInfo = RileyLinkBLEKit;
+		};
+		C136AA4923117228008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D5E78D1FAF7BFB004ACDB7;
+			remoteInfo = RileyLinkKitUI;
+		};
+		C136AA4B23117228008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C1FFAF77213323CC00C50C1D;
+			remoteInfo = OmniKit;
+		};
+		C136AA4D23117228008A320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C1FFAFD8213323F900C50C1D;
+			remoteInfo = OmniKitUI;
 		};
 		C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1236,6 +1281,10 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
+		C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmniKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		C136AA2C23116E32008A320D /* OmniKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmniKitPlugin.h; sourceTree = "<group>"; };
+		C136AA2D23116E32008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C136AA4123116E7B008A320D /* OmniKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniKitPlugin.swift; sourceTree = "<group>"; };
 		C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInsulinMeasurements.swift; sourceTree = "<group>"; };
 		C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
@@ -1601,6 +1650,20 @@
 				C1FFAF8D213323CC00C50C1D /* OmniKit.framework in Frameworks */,
 				4352A74720DED4AF00CAC200 /* LoopKit.framework in Frameworks */,
 				4352A74620DED4AB00CAC200 /* LoopKitUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C136AA2723116E32008A320D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C136AA57231176FA008A320D /* OmniKitUI.framework in Frameworks */,
+				C136AA53231176E8008A320D /* RileyLinkKit.framework in Frameworks */,
+				C136AA55231176F0008A320D /* RileyLinkKitUI.framework in Frameworks */,
+				C136AA51231176D4008A320D /* LoopKit.framework in Frameworks */,
+				C136AA52231176D8008A320D /* LoopKitUI.framework in Frameworks */,
+				C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */,
+				C136AA54231176EC008A320D /* RileyLinkBLEKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2073,6 +2136,7 @@
 				C1FFAF86213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFDA213323F900C50C1D /* OmniKitUI */,
 				C1BB128621CB5603009A29B5 /* OmniKitPacketParser */,
+				C136AA2B23116E32008A320D /* OmniKitPlugin */,
 				C12EA239198B436800309FA4 /* Frameworks */,
 				C12EA238198B436800309FA4 /* Products */,
 				437DE504229C898D003B1074 /* Scripts */,
@@ -2097,6 +2161,7 @@
 				C1FFAF80213323CC00C50C1D /* OmniKitTests.xctest */,
 				C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */,
 				C1BB128521CB5603009A29B5 /* OmniKitPacketParser */,
+				C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2166,6 +2231,16 @@
 				C12EA25C198B436900309FA4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C136AA2B23116E32008A320D /* OmniKitPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				C136AA2C23116E32008A320D /* OmniKitPlugin.h */,
+				C136AA2D23116E32008A320D /* Info.plist */,
+				C136AA4123116E7B008A320D /* OmniKitPlugin.swift */,
+			);
+			path = OmniKitPlugin;
 			sourceTree = "<group>";
 		};
 		C13BD64021403362006D7F19 /* MessageTransport */ = {
@@ -2625,6 +2700,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C136AA2523116E32008A320D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C136AA3A23116E32008A320D /* OmniKitPlugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1B383081CD0665D00CE7782 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2832,6 +2915,30 @@
 			productReference = C12EA237198B436800309FA4 /* RileyLink.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C136AA2923116E32008A320D /* OmniKitPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C136AA3F23116E32008A320D /* Build configuration list for PBXNativeTarget "OmniKitPlugin" */;
+			buildPhases = (
+				C136AA2523116E32008A320D /* Headers */,
+				C136AA2623116E32008A320D /* Sources */,
+				C136AA2723116E32008A320D /* Frameworks */,
+				C136AA2823116E32008A320D /* Resources */,
+				C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C136AA4623117228008A320D /* PBXTargetDependency */,
+				C136AA4823117228008A320D /* PBXTargetDependency */,
+				C136AA4A23117228008A320D /* PBXTargetDependency */,
+				C136AA4C23117228008A320D /* PBXTargetDependency */,
+				C136AA4E23117228008A320D /* PBXTargetDependency */,
+			);
+			name = OmniKitPlugin;
+			productName = OmniKitPlugin;
+			productReference = C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */;
+			productType = "com.apple.product-type.framework";
+		};
 		C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1B383221CD0665D00CE7782 /* Build configuration list for PBXNativeTarget "NightscoutUploadKit" */;
@@ -2954,7 +3061,7 @@
 		C12EA22F198B436800309FA4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1030;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Pete Schwamb";
 				TargetAttributes = {
@@ -2999,6 +3106,11 @@
 					};
 					C12EA236198B436800309FA4 = {
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					C136AA2923116E32008A320D = {
+						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
 						ProvisioningStyle = Automatic;
 					};
 					C1B3830A1CD0665D00CE7782 = {
@@ -3069,6 +3181,7 @@
 				C1FFAF7F213323CC00C50C1D /* OmniKitTests */,
 				C1FFAFD8213323F900C50C1D /* OmniKitUI */,
 				C1BB128421CB5603009A29B5 /* OmniKitPacketParser */,
+				C136AA2923116E32008A320D /* OmniKitPlugin */,
 			);
 		};
 /* End PBXProject section */
@@ -3157,6 +3270,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C136AA2823116E32008A320D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1B383091CD0665D00CE7782 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3240,6 +3360,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "CARTHAGE_BUILD_DIR=\"${SRCROOT}/Carthage/Build\"\nif [ -n \"${IPHONEOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/iOS\"\nelif [ -n \"${WATCHOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/watchOS\"\nelse\n    echo \"ERROR: Unexpected deployment target type\"\n    exit 1\nfi\n\nfor SCRIPT_INPUT_FILE in ${!SCRIPT_INPUT_FILE_*}; do\n    CARTHAGE_BUILD_FILE=\"${!SCRIPT_INPUT_FILE/${BUILT_PRODUCTS_DIR}/${CARTHAGE_BUILD_DIR}}\"\n    if [ -e \"${CARTHAGE_BUILD_FILE}\" ]; then\n        if [ -e \"${SCRIPT_INPUT_FILE}\" ]; then\n            echo \"ERROR: Duplicate frameworks found at:\"\n            echo \"  ${SCRIPT_INPUT_FILE}\"\n            echo \"  ${CARTHAGE_BUILD_FILE}\"\n            exit 1\n        fi\n        echo \"Substituting \\\"${CARTHAGE_BUILD_FILE}\\\" for \\\"${!SCRIPT_INPUT_FILE}\\\"\"\n        export ${SCRIPT_INPUT_FILE}=\"${CARTHAGE_BUILD_FILE}\"\n    fi\ndone\n\necho \"Copy Frameworks with Carthage\"\ncarthage copy-frameworks\n";
+		};
+		C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/OmniKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/OmniKitUI.framework",
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
+			);
+			name = "Copy Frameworks with Carthage";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3643,6 +3786,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C136AA2623116E32008A320D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C136AA442311704A008A320D /* OSLog.swift in Sources */,
+				C136AA4223116E7B008A320D /* OmniKitPlugin.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C1B383061CD0665D00CE7782 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3961,6 +4113,31 @@
 			isa = PBXTargetDependency;
 			target = C10D9BC01C8269D500378342 /* MinimedKit */;
 			targetProxy = C10D9BD41C8269D500378342 /* PBXContainerItemProxy */;
+		};
+		C136AA4623117228008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
+			targetProxy = C136AA4523117228008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA4823117228008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
+			targetProxy = C136AA4723117228008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA4A23117228008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */;
+			targetProxy = C136AA4923117228008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA4C23117228008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1FFAF77213323CC00C50C1D /* OmniKit */;
+			targetProxy = C136AA4B23117228008A320D /* PBXContainerItemProxy */;
+		};
+		C136AA4E23117228008A320D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1FFAFD8213323F900C50C1D /* OmniKitUI */;
+			targetProxy = C136AA4D23117228008A320D /* PBXContainerItemProxy */;
 		};
 		C1B383171CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5023,6 +5200,85 @@
 			};
 			name = Release;
 		};
+		C136AA3B23116E32008A320D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OmniKitPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_DYLIB_INSTALL_NAME = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.OmniKitPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSION_INFO_PREFIX = "";
+				WRAPPER_EXTENSION = loopplugin;
+			};
+			name = Debug;
+		};
+		C136AA3C23116E32008A320D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OmniKitPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_DYLIB_INSTALL_NAME = "";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.OmniKitPlugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = "non-global";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSION_INFO_PREFIX = "";
+				WRAPPER_EXTENSION = loopplugin;
+			};
+			name = Release;
+		};
 		C1B383231CD0665D00CE7782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5478,6 +5734,15 @@
 			buildConfigurations = (
 				C12EA264198B436900309FA4 /* Debug */,
 				C12EA265198B436900309FA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C136AA3F23116E32008A320D /* Build configuration list for PBXNativeTarget "OmniKitPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C136AA3B23116E32008A320D /* Debug */,
+				C136AA3C23116E32008A320D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

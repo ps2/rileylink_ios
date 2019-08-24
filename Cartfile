@@ -1,2 +1,2 @@
 github "LoopKit/LoopKit" "dev"
-github "maxkonovalov/MKRingProgressView" ~> 2.2
+github "LoopKit/MKRingProgressView" "appex-safe"

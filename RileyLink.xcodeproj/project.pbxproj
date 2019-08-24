@@ -313,6 +313,7 @@
 		C136AA62231187B0008A320D /* MinimedKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA60231187B0008A320D /* MinimedKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C136AA6723118817008A320D /* MinimedKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA6623118817008A320D /* MinimedKitPlugin.swift */; };
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
+		C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C13F0436230B1DE6001413FF /* MKRingProgressView.framework */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -1768,6 +1769,7 @@
 				C1FFB02421343EC200C50C1D /* OmniKit.framework in Frameworks */,
 				C1FFB02521343F0300C50C1D /* LoopKit.framework in Frameworks */,
 				C1FFB02621343F0600C50C1D /* LoopKitUI.framework in Frameworks */,
+				C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

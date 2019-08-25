@@ -314,6 +314,7 @@
 		C136AA6723118817008A320D /* MinimedKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA6623118817008A320D /* MinimedKitPlugin.swift */; };
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C13F0436230B1DE6001413FF /* MKRingProgressView.framework */; };
+		C136AA76231234E1008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -848,34 +849,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
-		};
-		C1D289AA22F7CC26003FFBD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
-		C1D289AC22F7CC2A003FFBD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
-		C1D289AE22F7CC2D003FFBD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
-		};
-		C1D289B222F7CC32003FFBD9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C12EA236198B436800309FA4;
-			remoteInfo = RileyLink;
 		};
 		C1FFAF82213323CC00C50C1D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1615,6 +1588,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				431CE7781F98564200255374 /* RileyLinkBLEKit.framework in Frameworks */,
+				C136AA76231234E1008A320D /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2831,12 +2805,12 @@
 				431CE7731F98564200255374 /* Sources */,
 				431CE7741F98564200255374 /* Frameworks */,
 				431CE7751F98564200255374 /* Resources */,
+				C136AA7723123A5D008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				431CE77A1F98564200255374 /* PBXTargetDependency */,
-				C1D289AD22F7CC2A003FFBD9 /* PBXTargetDependency */,
 			);
 			name = RileyLinkBLEKitTests;
 			productName = RileyLinkBLEKitTests;
@@ -2946,12 +2920,12 @@
 				C10D9BC61C8269D500378342 /* Sources */,
 				C10D9BC71C8269D500378342 /* Frameworks */,
 				C10D9BC81C8269D500378342 /* Resources */,
+				C136AA7823123B8C008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				C10D9BCD1C8269D500378342 /* PBXTargetDependency */,
-				C1D289B322F7CC32003FFBD9 /* PBXTargetDependency */,
 			);
 			name = MinimedKitTests;
 			productName = MinimedKitTests;
@@ -3068,7 +3042,6 @@
 			dependencies = (
 				A9B839CF22809DCF004E745E /* PBXTargetDependency */,
 				C1B383171CD0665D00CE7782 /* PBXTargetDependency */,
-				C1D289AF22F7CC2D003FFBD9 /* PBXTargetDependency */,
 			);
 			name = NightscoutUploadKitTests;
 			productName = NightscoutUploadKitTests;
@@ -3118,12 +3091,12 @@
 				C1FFAF7C213323CC00C50C1D /* Sources */,
 				C1FFAF7D213323CC00C50C1D /* Frameworks */,
 				C1FFAF7E213323CC00C50C1D /* Resources */,
+				C14A538023123CF500C86755 /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				C1FFAF83213323CC00C50C1D /* PBXTargetDependency */,
-				C1D289AB22F7CC26003FFBD9 /* PBXTargetDependency */,
 			);
 			name = OmniKitTests;
 			productName = OmniKitTests;
@@ -3168,8 +3141,7 @@
 					431CE7761F98564200255374 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 1000;
-						ProvisioningStyle = Automatic;
-						TestTargetID = C12EA236198B436800309FA4;
+						ProvisioningStyle = Manual;
 					};
 					4352A72420DEC9B700CAC200 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -3197,7 +3169,7 @@
 					C10D9BC91C8269D500378342 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 1000;
-						TestTargetID = C12EA236198B436800309FA4;
+						ProvisioningStyle = Manual;
 					};
 					C12EA236198B436800309FA4 = {
 						LastSwiftMigration = 1020;
@@ -3220,7 +3192,7 @@
 					C1B383131CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 1000;
-						TestTargetID = C12EA236198B436800309FA4;
+						ProvisioningStyle = Manual;
 					};
 					C1BB128421CB5603009A29B5 = {
 						CreatedOnToolsVersion = 10.1;
@@ -3235,7 +3207,6 @@
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
-						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C1FFAFD8213323F900C50C1D = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -3467,7 +3438,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "CARTHAGE_BUILD_DIR=\"${SRCROOT}/Carthage/Build\"\nif [ -n \"${IPHONEOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/iOS\"\nelif [ -n \"${WATCHOS_DEPLOYMENT_TARGET}\" ]; then\n    CARTHAGE_BUILD_DIR=\"${CARTHAGE_BUILD_DIR}/watchOS\"\nelse\n    echo \"ERROR: Unexpected deployment target type\"\n    exit 1\nfi\n\nfor SCRIPT_INPUT_FILE in ${!SCRIPT_INPUT_FILE_*}; do\n    CARTHAGE_BUILD_FILE=\"${!SCRIPT_INPUT_FILE/${BUILT_PRODUCTS_DIR}/${CARTHAGE_BUILD_DIR}}\"\n    if [ -e \"${CARTHAGE_BUILD_FILE}\" ]; then\n        if [ -e \"${SCRIPT_INPUT_FILE}\" ]; then\n            echo \"ERROR: Duplicate frameworks found at:\"\n            echo \"  ${SCRIPT_INPUT_FILE}\"\n            echo \"  ${CARTHAGE_BUILD_FILE}\"\n            exit 1\n        fi\n        echo \"Substituting \\\"${CARTHAGE_BUILD_FILE}\\\" for \\\"${!SCRIPT_INPUT_FILE}\\\"\"\n        export ${SCRIPT_INPUT_FILE}=\"${CARTHAGE_BUILD_FILE}\"\n    fi\ndone\n\necho \"Copy Frameworks with Carthage\"\ncarthage copy-frameworks\n";
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n\n";
 		};
 		C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3505,6 +3476,64 @@
 				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/MinimedKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/MinimedKitUI.framework",
+			);
+			name = "Copy Frameworks with Carthage";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
+		};
+		C136AA7723123A5D008A320D /* Copy Frameworks with Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
+			);
+			name = "Copy Frameworks with Carthage";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
+		};
+		C136AA7823123B8C008A320D /* Copy Frameworks with Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/MKRingProgressView.framework",
+				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
+			);
+			name = "Copy Frameworks with Carthage";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Scripts/copy-frameworks.sh\n";
+		};
+		C14A538023123CF500C86755 /* Copy Frameworks with Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
 			);
 			name = "Copy Frameworks with Carthage";
 			outputFileListPaths = (
@@ -4314,26 +4343,6 @@
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */;
 		};
-		C1D289AB22F7CC26003FFBD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1D289AA22F7CC26003FFBD9 /* PBXContainerItemProxy */;
-		};
-		C1D289AD22F7CC2A003FFBD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1D289AC22F7CC2A003FFBD9 /* PBXContainerItemProxy */;
-		};
-		C1D289AF22F7CC2D003FFBD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1D289AE22F7CC2D003FFBD9 /* PBXContainerItemProxy */;
-		};
-		C1D289B322F7CC32003FFBD9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C12EA236198B436800309FA4 /* RileyLink */;
-			targetProxy = C1D289B222F7CC32003FFBD9 /* PBXContainerItemProxy */;
-		};
 		C1FFAF83213323CC00C50C1D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C1FFAF77213323CC00C50C1D /* OmniKit */;
@@ -4750,7 +4759,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4759,11 +4768,11 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -4777,7 +4786,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -4787,9 +4796,9 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.RileyLinkBLEKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};
@@ -5142,6 +5151,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5155,9 +5165,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -5167,6 +5177,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -5181,8 +5192,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.MinimedKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};
@@ -5581,6 +5592,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5594,9 +5606,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.NightscoutUploadKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -5606,6 +5618,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
@@ -5620,8 +5633,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.NightscoutUploadKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};
@@ -5774,7 +5787,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Debug;
 		};
@@ -5802,7 +5814,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 			};
 			name = Release;
 		};

@@ -6,7 +6,13 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import MinimedKit
+import Foundation
+
+public protocol DictionaryRepresentable {
+    var dictionaryRepresentation: [String: Any] {
+        get
+    }
+}
 
 public class NightscoutTreatment: DictionaryRepresentable {
     

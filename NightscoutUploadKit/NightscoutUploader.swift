@@ -6,7 +6,6 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import MinimedKit
 import Crypto
 
 public enum UploadError: Error {
@@ -48,46 +47,6 @@ public class NightscoutUploader {
         self.apiSecret = APISecret
     }
     
-    // MARK: - Processing data from pump
-
-    /**
-     Enqueues pump history events for upload, with automatic retry management.
-     
-     - parameter events:    An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
-     - parameter source:    The device identifier to display in Nightscout
-     - parameter pumpModel: The pump model info associated with the events
-     */
-    public func processPumpEvents(_ events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
-        for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
-            treatmentsQueue.append(treatment)
-        }
-        self.flushAll()
-    }
-
-    /**
-     Enqueues pump glucose events for upload, with automatic retry management.
-     
-     - parameter events:    An array of timestamped glucose events. Only sensor glucose data will be uploaded.
-     - parameter source:    The device identifier to display in Nightscout
-     */
-    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) -> Date? {
-        for event in events {
-            if let entry = NightscoutEntry(event: event, device: source) {
-                entries.append(entry)
-            }
-        }
-        
-        var timestamp: Date? = nil
-        
-        if let lastEntry = entries.last {
-            timestamp = lastEntry.timestamp
-        }
-        
-        self.flushAll()
-        
-        return timestamp
-    }
-
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
     ///
@@ -157,73 +116,6 @@ public class NightscoutUploader {
         flushAll()
     }
     
-    //  Entries [ { sgv: 375,
-    //    date: 1432421525000,
-    //    dateString: '2015-05-23T22:52:05.000Z',
-    //    trend: 1,
-    //    direction: 'DoubleUp',
-    //    device: 'share2',
-    //    type: 'sgv' } ]
-    
-    public func uploadSGVFromMySentryPumpStatus(_ status: MySentryPumpStatusMessageBody, device: String) {
-        
-        var recordSGV = true
-        let glucose: Int = {
-            switch status.glucose {
-            case .active(glucose: let glucose):
-                return glucose
-            case .highBG:
-                return 401
-            case .weakSignal:
-                return DexcomSensorError.badRF.rawValue
-            case .meterBGNow, .calError:
-                return DexcomSensorError.sensorNotCalibrated.rawValue
-            case .lost, .missing, .ended, .unknown, .off, .warmup:
-                recordSGV = false
-                return DexcomSensorError.sensorNotActive.rawValue
-            }
-        }()
-        
-
-        // Create SGV entry from this mysentry packet
-        if (recordSGV) {
-            
-            guard let sensorDateComponents = status.glucoseDateComponents, let sensorDate = sensorDateComponents.date else {
-                return
-            }
-            
-            let previousSGV: Int?
-            let previousSGVNotActive: Bool?
-            
-            switch status.previousGlucose {
-            case .active(glucose: let previousGlucose):
-                previousSGV = previousGlucose
-                previousSGVNotActive = nil
-            default:
-                previousSGV = nil
-                previousSGVNotActive = true
-            }
-            let direction: String = {
-                switch status.glucoseTrend {
-                case .up:
-                    return "SingleUp"
-                case .upUp:
-                    return "DoubleUp"
-                case .down:
-                    return "SingleDown"
-                case .downDown:
-                    return "DoubleDown"
-                case .flat:
-                    return "Flat"
-                }
-            }()
-            
-            let entry = NightscoutEntry(glucose: glucose, timestamp: sensorDate, device: device, glucoseType: .Sensor, previousSGV: previousSGV, previousSGVNotActive: previousSGVNotActive, direction: direction)
-            entries.append(entry)
-        }
-        flushAll()
-    }
-
     public func uploadSGV(glucoseMGDL: Int, at date: Date, direction: String?, device: String) {
         let entry = NightscoutEntry(
             glucose: glucoseMGDL,
@@ -237,25 +129,6 @@ public class NightscoutUploader {
         entries.append(entry)
     }
     
-    public func handleMeterMessage(_ msg: MeterMessage) {
-        
-        // TODO: Should only accept meter messages from specified meter ids.
-        // Need to add an interface to allow user to specify linked meters.
-        
-        if msg.ackFlag {
-            return
-        }
-        
-        let date = Date()
-        
-        // Skip duplicates
-        if lastMeterMessageRxTime == nil || lastMeterMessageRxTime!.timeIntervalSinceNow.minutes < -3 {
-            let entry = NightscoutEntry(glucose: msg.glucose, timestamp: date, device: "Contour Next Link", glucoseType: .Meter)
-            entries.append(entry)
-            lastMeterMessageRxTime = date
-        }
-    }
-
     // MARK: - Profiles
 
     public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {

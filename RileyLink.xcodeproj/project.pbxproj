@@ -122,7 +122,6 @@
 		43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC81D1268B300AAD278 /* TimeFormat.swift */; };
 		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
 		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
-		43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */; };
 		43BA719B202591A70058961E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BA719A202591A70058961E /* Response.swift */; };
 		43BA719D2026C9B00058961E /* ResponseBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BA719C2026C9B00058961E /* ResponseBuffer.swift */; };
 		43BF58B01FF594CB00499C46 /* SelectBasalProfileMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */; };
@@ -134,7 +133,6 @@
 		43C246A61D891DBF0031F8D1 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C246931D8918AE0031F8D1 /* Crypto.framework */; };
 		43C246A91D8A31540031F8D1 /* Crypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C246931D8918AE0031F8D1 /* Crypto.framework */; };
 		43C246AA1D8A31540031F8D1 /* Crypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43C246931D8918AE0031F8D1 /* Crypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		43CA93291CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA93281CB8CF22000026B5 /* ChangeTempBasalCarelinkMessageBody.swift */; };
 		43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932A1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift */; };
 		43CA932E1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */; };
@@ -443,8 +441,6 @@
 		C1B383201CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; };
 		C1B383211CD0665D00CE7782 /* NightscoutUploadKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */; };
-		C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */; };
-		C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1B44CA7224BDFDF00DE47E5 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
@@ -490,6 +486,7 @@
 		C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E993D18B217E455000E489BF /* LogEventErrorCode.swift */; };
 		C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */; };
 		C1BB12BE21CB57AA009A29B5 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */; };
+		C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
@@ -717,20 +714,6 @@
 			remoteGlobalIDString = 431CE76E1F98564100255374;
 			remoteInfo = RileyLinkBLEKit;
 		};
-		A9B839CC22809DC3004E745E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C10D9BC01C8269D500378342;
-			remoteInfo = MinimedKit;
-		};
-		A9B839CE22809DCF004E745E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C10D9BC01C8269D500378342;
-			remoteInfo = MinimedKit;
-		};
 		A9B839D022809DE7004E745E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -836,14 +819,14 @@
 			remoteGlobalIDString = 4352A72420DEC9B700CAC200;
 			remoteInfo = MinimedKitUI;
 		};
-		C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */ = {
+		C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C1B3830A1CD0665D00CE7782;
 			remoteInfo = NightscoutUploadKit;
 		};
-		C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */ = {
+		C1BC25992313843700E80E3F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
 			proxyType = 1;
@@ -1313,7 +1296,6 @@
 		C145BF9D2219F2EC00A977CB /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		C145BFA3221BBA7E00A977CB /* SuspendResumeMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeMessageBody.swift; sourceTree = "<group>"; };
 		C14B42F921FF78840073A836 /* MessageLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageLog.swift; sourceTree = "<group>"; };
-		C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NightscoutPumpEventsTests.swift; path = ../RileyLinkTests/NightscoutPumpEventsTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14FFC491D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntryInsulinMarkerPumpEvent.swift; sourceTree = "<group>"; };
@@ -1401,7 +1383,6 @@
 		C1842BFA1C8FA45100DB42AC /* BatteryPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BatteryPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842BFB1C8FA45100DB42AC /* AlarmSensorPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AlarmSensorPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
-		C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutPumpEvents.swift; sourceTree = "<group>"; };
 		C184875B20BC232F00ABE9E7 /* CorrectionRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRange.swift; sourceTree = "<group>"; };
 		C184875D20BCDB0000ABE9E7 /* ForecastError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastError.swift; sourceTree = "<group>"; };
 		C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableBolusWizardPumpEvent.swift; sourceTree = "<group>"; };
@@ -1434,6 +1415,7 @@
 		C1BB128521CB5603009A29B5 /* OmniKitPacketParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OmniKitPacketParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BB128721CB5603009A29B5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Packet+RFPacket.swift"; sourceTree = "<group>"; };
+		C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfileTests.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
@@ -1696,7 +1678,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C246A61D891DBF0031F8D1 /* Crypto.framework in Frameworks */,
-				C1B383301CD0680800CE7782 /* MinimedKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1704,7 +1685,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C9071B1D863772002BAD29 /* MinimedKit.framework in Frameworks */,
 				C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */,
 				4352A74B20DED87F00CAC200 /* LoopKit.framework in Frameworks */,
 			);
@@ -2464,7 +2444,6 @@
 				43F348051D596270009933DC /* HKUnit.swift */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
 				546145C01DCEB47600DC6DEB /* NightscoutEntry.swift */,
-				C1842C2A1C90DFB600DB42AC /* NightscoutPumpEvents.swift */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
@@ -2477,9 +2456,9 @@
 		C1B3831A1CD0665D00CE7782 /* NightscoutUploadKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				C14C8A7F1C9CFBEE000F72C5 /* NightscoutPumpEventsTests.swift */,
 				C1B3831D1CD0665D00CE7782 /* Info.plist */,
 				7D23675121252A5E0028B67D /* InfoPlist.strings */,
+				C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */,
 			);
 			path = NightscoutUploadKitTests;
 			sourceTree = "<group>";
@@ -3021,7 +3000,6 @@
 			);
 			dependencies = (
 				43C246A51D891DB80031F8D1 /* PBXTargetDependency */,
-				A9B839CD22809DC3004E745E /* PBXTargetDependency */,
 			);
 			name = NightscoutUploadKit;
 			productName = NightscoutUploadKit;
@@ -3040,8 +3018,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A9B839CF22809DCF004E745E /* PBXTargetDependency */,
-				C1B383171CD0665D00CE7782 /* PBXTargetDependency */,
+				C1BC259A2313843700E80E3F /* PBXTargetDependency */,
 			);
 			name = NightscoutUploadKitTests;
 			productName = NightscoutUploadKitTests;
@@ -3191,7 +3168,7 @@
 					};
 					C1B383131CD0665D00CE7782 = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1030;
 						ProvisioningStyle = Manual;
 					};
 					C1BB128421CB5603009A29B5 = {
@@ -3968,7 +3945,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1B383291CD0668600CE7782 /* NightscoutPumpEvents.swift in Sources */,
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
@@ -4009,7 +3985,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43B6E0121D24E2320022E6D7 /* NightscoutPumpEventsTests.swift in Sources */,
+				C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4248,16 +4224,6 @@
 			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
 			targetProxy = A9B839CA22809DB3004E745E /* PBXContainerItemProxy */;
 		};
-		A9B839CD22809DC3004E745E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C10D9BC01C8269D500378342 /* MinimedKit */;
-			targetProxy = A9B839CC22809DC3004E745E /* PBXContainerItemProxy */;
-		};
-		A9B839CF22809DCF004E745E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C10D9BC01C8269D500378342 /* MinimedKit */;
-			targetProxy = A9B839CE22809DCF004E745E /* PBXContainerItemProxy */;
-		};
 		A9B839D122809DE7004E745E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
@@ -4333,15 +4299,15 @@
 			target = 4352A72420DEC9B700CAC200 /* MinimedKitUI */;
 			targetProxy = C136AA70231188F1008A320D /* PBXContainerItemProxy */;
 		};
-		C1B383171CD0665D00CE7782 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
-			targetProxy = C1B383161CD0665D00CE7782 /* PBXContainerItemProxy */;
-		};
 		C1B3831F1CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
 			targetProxy = C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */;
+		};
+		C1BC259A2313843700E80E3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */;
+			targetProxy = C1BC25992313843700E80E3F /* PBXContainerItemProxy */;
 		};
 		C1FFAF83213323CC00C50C1D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5590,6 +5556,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -5609,6 +5576,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -5616,6 +5584,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -5635,6 +5604,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

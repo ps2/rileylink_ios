@@ -137,15 +137,16 @@ extension PodCommsError: LocalizedError {
     }
 }
 
+public let basalBeeps: Bool = true         // whether to give basal beeps when Confirmation Beeps are enabled
+public let tempBasalBeeps: Bool = false    // whether to give temp basal beeps when Confirmation Beeps are enabled
+public let bolusBeeps: Bool = true         // whether to give bolus beeps when Confirmation Beeps are enabled
+public let supplementaryBeeps: Bool = true // whether to give supplementary Beeps when Confirmation Beeps are enabled
+
 public protocol PodCommsSessionDelegate: class {
     func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState)
 }
 
 public class PodCommsSession {
-
-    private let bolusBeeps: Bool = true              // whether to give bolus confirmation beeps if Confirmation Beeps are enabled
-    private let basalBeeps: Bool = true              // whether to give basal confirmation beeps if Confirmation Beeps are enabled
-    private let tempBasalBeeps: Bool = false         // whether to give temp basal confirmation beeps if Confirmation Beeps are enabled
     private let useCancelNoneForStatus: Bool = false // whether to use a fake cancel none when getting status which also validates & advances nonce
 
     private let podLowReservoirLevel: Double = 20    // default pod low reservoir alert value
@@ -324,26 +325,30 @@ public class PodCommsSession {
         return status
     }
 
-    private func emitBeep(beepType: BeepType) throws {
-        let bolusCompletionBeep: Bool = confirmationBeeps ? bolusBeeps : false
+    // emits the specified beep type and sets the completion beep flags based on the specified confirmationBeep value
+    public func emitBeep(beepType: BeepType, confirmationBeeps: Bool) throws {
+        let basalCompletionBeep: Bool = confirmationBeeps ? basalBeeps : false
         let tempBasalCompletionBeep: Bool = confirmationBeeps ? tempBasalBeeps : false
+        let bolusCompletionBeep: Bool = confirmationBeeps ? bolusBeeps : false
 
-        let statusResponse: StatusResponse = try send([BeepConfigCommand(beepType: beepType, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)])
+        let statusResponse: StatusResponse = try send([BeepConfigCommand(beepType: beepType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)])
         podState.updateFromStatusResponse(statusResponse)
     }
 
-    private func configureCompleted() throws {
+    private func configureCompleted(confirmationBeeps: Bool, optionalPodAlarms: Bool) throws {
         podState.setupProgress = .completed
 
-        // beep to confirm Pod setup is complete to test piezo
-        try emitBeep(beepType: .bipBeepBipBeepBipBeepBipBeep)
-
         if optionalPodAlarms {
-            try enableOptionalPodAlarms() // program optional pod alerts
+            // program any optional pod alarms, beeps upon completion if Confirmation Beeps are enabled
+            try enableOptionalPodAlarms(confirmationBeeps: confirmationBeeps)
+        }
+        if confirmationBeeps && !optionalPodAlarms {
+            // beep to confirm Pod setup is complete
+            try emitBeep(beepType: .bipBip, confirmationBeeps: confirmationBeeps)
         }
     }
-    
-    public func insertCannula() throws -> TimeInterval {
+
+    public func insertCannula(confirmationBeeps: Bool, optionalPodAlarms: Bool) throws -> TimeInterval {
         let insertionWait: TimeInterval = .seconds(10)
 
         guard let activatedAt = podState.activatedAt else {
@@ -359,7 +364,7 @@ public class PodCommsSession {
                 return insertionWait// Not sure when it started, wait full time to be sure
             }
             if status.podProgressStatus.readyForDelivery {
-                try configureCompleted()
+                try configureCompleted(confirmationBeeps: confirmationBeeps, optionalPodAlarms: optionalPodAlarms)
                 return TimeInterval(0) // Already done; no need to wait
             }
         } else {
@@ -389,12 +394,12 @@ public class PodCommsSession {
         return insertionWait
     }
 
-    public func checkInsertionCompleted() throws {
+    public func checkInsertionCompleted(confirmationBeeps: Bool, optionalPodAlarms: Bool) throws {
         if podState.setupProgress == .cannulaInserting {
             let response: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(response)
             if response.podProgressStatus.readyForDelivery {
-                try configureCompleted()
+                try configureCompleted(confirmationBeeps: confirmationBeeps, optionalPodAlarms: optionalPodAlarms)
             }
         }
     }
@@ -413,7 +418,7 @@ public class PodCommsSession {
     }
 
     
-    public func bolus(units: Double) -> DeliveryCommandResult {
+    public func bolus(units: Double, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
         let timeBetweenPulses = TimeInterval(seconds: 2)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
@@ -424,8 +429,7 @@ public class PodCommsSession {
         }
         
         // 17 0d 00 0064 0001 86a0000000000000
-        let beep = (bolusBeeps && confirmationBeeps) ? true : false
-        let bolusExtraCommand = BolusExtraCommand(acknowledgementBeep: beep, completionBeep: beep, units: units)
+        let bolusExtraCommand = BolusExtraCommand(units: units, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
         do {
             // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
             let commsOffset = TimeInterval(seconds: -1.5)
@@ -440,11 +444,10 @@ public class PodCommsSession {
         }
     }
     
-    public func setTempBasal(rate: Double, duration: TimeInterval) -> DeliveryCommandResult {
+    public func setTempBasal(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
-        let beep = (tempBasalBeeps && confirmationBeeps) ? true : false
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
-        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: beep, completionBeep: beep, programReminderInterval: 0)
+        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
 
         guard podState.unfinalizedBolus?.isFinished != false else {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
@@ -463,11 +466,9 @@ public class PodCommsSession {
         }
     }
     
-    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) -> CancelDeliveryResult {
-        
-        // when cancelling a bolus, give a type 6 beeeeeep to match PDM if confirmation beep && bolusBeeps is set
-        let btype: BeepType = (deliveryType == .bolus && confirmationBeeps && bolusBeeps) ? .beeeeeep : beepType
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: btype)
+    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType, confirmationBeeps: Bool) -> CancelDeliveryResult {
+
+        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
 
         do {
             let status: StatusResponse = try send([cancelDelivery])
@@ -501,6 +502,12 @@ public class PodCommsSession {
 
             podState.updateFromStatusResponse(status)
 
+            if deliveryType == .all && basalBeeps && confirmationBeeps {
+                // With a deliveryType of .all and a beepType other than .noBeep, the Omnipod will emit 3 beeps!
+                // So instead if we are going to give a confirmation beep, we do it this way instead
+                try emitBeep(beepType: .beeeeeep, confirmationBeeps: true)
+            }
+
             return CancelDeliveryResult.success(statusResponse: status, canceledDose: canceledDose)
 
         } catch PodCommsError.nonceResyncFailed {
@@ -511,14 +518,14 @@ public class PodCommsSession {
         }
     }
 
-    public func testingCommands() throws {
-        let _ = try cancelNone() // gets status and checks & advances nonce
+    public func testingCommands(confirmationBeeps: Bool) throws {
+        let _ = try cancelNone() // gets status as well as verifies & advances the nonce
         // uncomment the next line to have testingCommands read the Pod's pump logs kept in flash memory
-        // try readFlashLogs()
+        // try readFlashLogs(confirmationBeeps: confirmationBeeps)
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {
-        let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
+        let result = cancelDelivery(deliveryType: .all, beepType: .noBeep, confirmationBeeps: false)
         switch result {
         case .certainFailure(let error):
             throw error
@@ -531,10 +538,10 @@ public class PodCommsSession {
         }
     }
     
-    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval) throws -> StatusResponse {
-        let beep = basalBeeps && confirmationBeeps ? true : false
+    public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
+
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
-        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep, programReminderInterval: 0)
+        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: 0)
 
         do {
             let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
@@ -551,9 +558,9 @@ public class PodCommsSession {
         }
     }
     
-    public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval) throws -> StatusResponse {
+    public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
         
-        let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset)
+        let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
 
         podState.suspendState = .resumed(Date())
 
@@ -564,7 +571,7 @@ public class PodCommsSession {
         var statusResponse: StatusResponse
 
         // use cancelDelivery .none to get status AND validate & advance the nonce
-        let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, beepType: .noBeep)
+        let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, beepType: .noBeep, confirmationBeeps: false)
         switch cancelResult {
         case .certainFailure(let error):
             throw error
@@ -589,23 +596,23 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    public func playTestBeeps() throws {
+    public func playTestBeeps(confirmationBeeps: Bool) throws {
         let _ = try getStatus()
         guard podState.unfinalizedBolus?.isFinished != false else {
             log.info("Unfinalized bolus, skipping play test beeps")
             throw PodCommsError.unfinalizedBolus
         }
 
-        try emitBeep(beepType: .bipBeepBipBeepBipBeepBipBeep)
+        try emitBeep(beepType: .bipBeepBipBeepBipBeepBipBeep, confirmationBeeps: confirmationBeeps)
         // .fiveSecondBeep could be used for a PDM style "Check alarms", but this only works if the pod is suspended!
-        try emitBeep(beepType: .beeeeeep)
+        try emitBeep(beepType: .beeeeeep, confirmationBeeps: confirmationBeeps)
 
         sleep(4) // pause for the beeping to complete before returning
     }
 
-    private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
-        if confirmationBeeps {
-            try emitBeep(beepType: . bipBip)
+    private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType, confirmationBeeps: Bool) throws {
+        if confirmationBeeps && supplementaryBeeps {
+            try emitBeep(beepType: .bipBip, confirmationBeeps: confirmationBeeps)
         }
 
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
@@ -623,25 +630,27 @@ public class PodCommsSession {
         }
     }
 
-    public func readFlashLogs() throws {
+    public func readFlashLogs(confirmationBeeps: Bool) throws {
         let _ = try getStatus()
         guard podState.unfinalizedBolus?.isFinished != false else {
             log.info("Unfinalized bolus, skipping read flash logs")
             throw PodCommsError.unfinalizedBolus
         }
 
-        try readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)    // read up to the most recent 50 entries from flash log
-        try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog) // read up to the previous 50 entries from flash log
+        // read up to the most recent 50 entries from flash log
+        try readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent, confirmationBeeps: confirmationBeeps)
+        // read up to the previous 50 entries from flash log
+        try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog, confirmationBeeps: confirmationBeeps)
 
-        if confirmationBeeps {
-            try emitBeep(beepType: .beeeeeep)
+        if confirmationBeeps && supplementaryBeeps {
+            try emitBeep(beepType: .beeeeeep, confirmationBeeps: confirmationBeeps)
         }
     }
 
     public func deactivatePod() throws {
 
         if podState.fault == nil && !podState.isSuspended {
-            let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
+            let result = cancelDelivery(deliveryType: .all, beepType: .noBeep, confirmationBeeps: false)
             switch result {
             case .certainFailure(let error):
                 throw error
@@ -689,21 +698,18 @@ public class PodCommsSession {
     }
 
     public func enableConfirmationBeeps() throws {
-        confirmationBeeps = true
-	// this call to emitBeep() will enable completion beeps for any in-progress bolus or temp-basal as needed
-        try emitBeep(beepType: .bipBip)
+        // this call to emitBeep() will enable completion beeps for any in-progress bolus or temp-basal
+        try emitBeep(beepType: .bipBip, confirmationBeeps: true)
     }
 
     public func disableConfirmationBeeps() throws {
-        confirmationBeeps = false
-	// this call to emitBeep() will disable any completion beeps for any in-progress bolus or tempbasal
-        try emitBeep(beepType: .beep)
+        // this call to emitBeep() will disable any completion beeps for any in-progress bolus or temp-basal
+        try emitBeep(beepType: .beep, confirmationBeeps: false)
     }
 
-    public func enableOptionalPodAlarms() throws {
-        optionalPodAlarms = true
-
-        // set pod low reservoir alert
+    // enables all the optional Pod Alarms
+    public func enableOptionalPodAlarms(confirmationBeeps: Bool) throws {
+        // TODO add UI to set the low reservoir alert value
         let lowReservoirAlarm = PodAlert.lowReservoirAlarm(podLowReservoirLevel)
         let _ = try configureAlerts([lowReservoirAlarm])
 
@@ -715,24 +721,24 @@ public class PodCommsSession {
             return // already past the expiration alert time
         }
         // set pod expiration alert for timeUntilExpirationAlert minutes from now
+        // TODO tie this value to the UI's expiration time?
         let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
         let _ = try configureAlerts([expirationAlert])
 
-        if confirmationBeeps {
-            try emitBeep(beepType: .bipBip)
+        if supplementaryBeeps && confirmationBeeps {
+            try emitBeep(beepType: .bipBip, confirmationBeeps: true)
         }
     }
 
-    public func disableOptionalPodAlarms() throws {
-        optionalPodAlarms = false
-
+    // disables all the optional Pod Alarms by setting their values to 0
+    public func disableOptionalPodAlarms(confirmationBeeps: Bool) throws {
         let lowReservoirAlarm = PodAlert.lowReservoirAlarm(0)
         let _ = try configureAlerts([lowReservoirAlarm])
         let expirationAlert = PodAlert.expirationAlert(TimeInterval(hours: 0))
         let _ = try configureAlerts([expirationAlert])
 
-        if confirmationBeeps {
-            try emitBeep(beepType: .beep)
+        if supplementaryBeeps && confirmationBeeps {
+            try emitBeep(beepType: .beep, confirmationBeeps: true)
         }
     }
 }

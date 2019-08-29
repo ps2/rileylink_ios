@@ -134,17 +134,9 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             self.unstoredDoses = []
         }
 
-        if let rawConfirmationBeeps = rawValue["confirmationBeeps"] as? Bool {
-            self.confirmationBeeps = rawConfirmationBeeps
-        } else {
-            self.confirmationBeeps = false
-        }
+        self.confirmationBeeps = rawValue["confirmationBeeps"] as? Bool ?? false
 
-        if let rawOptionalPodAlarms = rawValue["optionalPodAlarms"] as? Bool {
-            self.optionalPodAlarms = rawOptionalPodAlarms
-        } else {
-            self.optionalPodAlarms = false
-        }
+        self.optionalPodAlarms = rawValue["optionalPodAlarms"] as? Bool ?? false
     }
     
     public var rawValue: RawValue {
@@ -177,6 +169,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 extension OmnipodPumpManagerState {
     var hasActivePod: Bool {
         return podState?.isActive == true
+    }
+
+    var hasSetupCompletePod: Bool {
+        return podState?.isSetupComplete == true
     }
 
     var isPumpDataStale: Bool {

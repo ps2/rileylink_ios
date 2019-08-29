@@ -612,7 +612,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let confirmationBeeps: Bool = pumpManager.confirmationBeeps
 
         if confirmationBeeps {
-            pumpManager.disableConfirmationBeeps(completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
@@ -621,7 +621,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             })
         } else {
-            pumpManager.enableConfirmationBeeps(completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error enanbling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
@@ -638,7 +638,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let optionalPodAlarms: Bool = pumpManager.optionalPodAlarms
 
         if optionalPodAlarms {
-            pumpManager.disableOptionalPodAlarms(completion: { (error) in
+            pumpManager.setOptionalPodAlarms(enabled: false, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error disabling optional pod alarms", comment: "The alert title for disable optional pod alarms error")
@@ -647,7 +647,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             })
         } else {
-            pumpManager.enableOptionalPodAlarms(completion: { (error) in
+            pumpManager.setOptionalPodAlarms(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error enabling optional pod alarms", comment: "The alert title for enable optional pod alarms error")

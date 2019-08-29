@@ -345,6 +345,11 @@ extension OmnipodPumpManager {
     }
 
     // Thread-safe
+    public var hasSetupCompletePod: Bool {
+        return state.hasSetupCompletePod
+    }
+
+    // Thread-safe
     public var expirationReminderDate: Date? {
         get {
             return state.expirationReminderDate
@@ -524,7 +529,7 @@ extension OmnipodPumpManager {
                 }
 
                 do {
-                    let primeFinishedAt = try session.prime()
+                    let primeFinishedAt = try session.prime(confirmationBeeps: self.confirmationBeeps)
                     completion(.success(primeFinishedAt))
                 } catch let error {
                     completion(.failure(error))
@@ -795,7 +800,7 @@ extension OmnipodPumpManager {
                 switch result {
                 case .success(let session):
                     let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
-                    let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep, confirmationBeeps: false)
+                    let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
                     switch result {
                     case .certainFailure(let error):
                         throw error
@@ -877,7 +882,8 @@ extension OmnipodPumpManager {
     }
 
     public func testingCommands(completion: @escaping (Error?) -> Void) {
-        guard self.hasActivePod else {
+        // use hasSetupCompletePod instead of hasActivePod so we don't fail on a faulted Pod
+        guard self.hasSetupCompletePod else {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
         }
@@ -920,19 +926,29 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func enableConfirmationBeeps(completion: @escaping (Error?) -> Void) {
-        self.confirmationBeeps = true
+    public func setConfirmationBeeps(enabled: Bool, completion: @escaping (Error?) -> Void) {
+        self.confirmationBeeps = enabled
+        self.log.info("Set Confirmation Beeps to %s", enabled ? "true" : "false")
+
         guard self.hasActivePod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
+            completion(nil)
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Enable Confirmation Beeps", using: rileyLinkSelector) { (result) in
+        let name: String = enabled ? "Enable Confirmation Beeps" : "Disable Confirmation Beeps"
+        self.podComms.runSession(withName: name, using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    try session.enableConfirmationBeeps()
+                    if enabled {
+                        // this call to beepConfig() will enable Pod completion beeps for any in-progress insulin delivery
+                        try session.beepConfig(beepType: .bipBip, confirmationBeeps: true)
+                    } else {
+                        // this call to beepConfig() will disable Pod completion beeps for any in-progress insulin delivery
+                        // N.B. we need to use beepType other then .noBeep here or the Pod Beep Config Command will fail!
+                        try session.beepConfig(beepType: .beep, confirmationBeeps: false)
+                    }
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -943,65 +959,26 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func disableConfirmationBeeps(completion: @escaping (Error?) -> Void) {
-        self.confirmationBeeps = false
+    public func setOptionalPodAlarms(enabled: Bool, completion: @escaping (Error?) -> Void) {
+        self.optionalPodAlarms = enabled
+        self.log.info("Set Optional Pod Alarms to %s", enabled ? "true" : "false")
+
         guard self.hasActivePod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
+            completion(nil)
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Disable Confirmation Beeps", using: rileyLinkSelector) { (result) in
+        let name: String = enabled ? "Enable Optional Pod Alarms" : "Disable Optional Pod Alarms"
+        self.podComms.runSession(withName: name, using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    try session.disableConfirmationBeeps()
-                    completion(nil)
-                } catch let error {
-                    completion(error)
-                }
-            case .failure(let error):
-                completion(error)
-            }
-        }
-    }
-
-    public func enableOptionalPodAlarms(completion: @escaping (Error?) -> Void) {
-        self.optionalPodAlarms = true
-        guard self.hasActivePod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
-            return
-        }
-
-        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Enable Optional Pod Alarms", using: rileyLinkSelector) { (result) in
-            switch result {
-            case .success(let session):
-                do {
-                    try session.enableOptionalPodAlarms(confirmationBeeps: self.confirmationBeeps)
-                    completion(nil)
-                } catch let error {
-                    completion(error)
-                }
-            case .failure(let error):
-                completion(error)
-            }
-        }
-    }
-
-    public func disableOptionalPodAlarms(completion: @escaping (Error?) -> Void) {
-        self.optionalPodAlarms = false
-        guard self.hasActivePod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
-            return
-        }
-
-        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Disable Optional Pod Alarms", using: rileyLinkSelector) { (result) in
-            switch result {
-            case .success(let session):
-                do {
-                    try session.disableOptionalPodAlarms(confirmationBeeps: self.confirmationBeeps)
+                    if enabled {
+                        try session.enableOptionalPodAlarms(confirmationBeeps: self.confirmationBeeps)
+                    } else {
+                        try session.disableOptionalPodAlarms(confirmationBeeps: self.confirmationBeeps)
+                    }
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -1123,7 +1100,9 @@ extension OmnipodPumpManager: PumpManager {
                 state.suspendEngageState = .engaging
             })
 
-            let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep, confirmationBeeps: self.confirmationBeeps)
+            // N.B. with a deliveryType of .all and a beepType other then .noBeep, the Pod will emit 3 beeps!
+            // TODO add something to emit a single .beeeeeep beep if basalBeeps && self.confirmationBeeps
+            let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
             switch result {
             case .certainFailure(let error):
                 completion(error)
@@ -1336,7 +1315,7 @@ extension OmnipodPumpManager: PumpManager {
 
                 // when cancelling a bolus give a type 6 beeeeeep to match PDM if doing bolus confirmation beeps
                 let beeptype: BeepType = (self.confirmationBeeps && bolusBeeps) ? .beeeeeep : .noBeep
-                let result = session.cancelDelivery(deliveryType: .bolus, beepType: beeptype, confirmationBeeps: self.confirmationBeeps)
+                let result = session.cancelDelivery(deliveryType: .bolus, beepType: beeptype)
                 switch result {
                 case .certainFailure(let error):
                     throw error
@@ -1399,7 +1378,7 @@ extension OmnipodPumpManager: PumpManager {
                 let status: StatusResponse
                 let canceledDose: UnfinalizedDose?
 
-                let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep, confirmationBeeps: false)
+                let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
                 switch result {
                 case .certainFailure(let error):
                     throw error

@@ -119,9 +119,14 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
         return !setupProgress.primingNeeded && primeFinishTime.timeIntervalSinceNow < 0
     }
-    
+
     public var isActive: Bool {
         return setupProgress == .completed && fault == nil
+    }
+
+    // variation on isActive that doesn't care if Pod is faulted
+    public var isSetupComplete: Bool {
+        return setupProgress == .completed
     }
 
     public mutating func advanceToNextNonce() {

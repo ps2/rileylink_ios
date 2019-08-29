@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MinimedKit
 
 public class NightscoutEntry: DictionaryRepresentable {
     
@@ -34,14 +33,6 @@ public class NightscoutEntry: DictionaryRepresentable {
         self.previousSGVNotActive = previousSGVNotActive
         self.direction = direction
         self.glucoseType = glucoseType
-    }
-    
-    convenience init?(event: TimestampedGlucoseEvent, device: String) {
-        if let glucoseSensorData = event.glucoseEvent as? SensorValueGlucoseEvent {
-            self.init(glucose: glucoseSensorData.sgv, timestamp: event.date, device: device, glucoseType: .Sensor)
-        } else {
-            return nil
-        }
     }
     
     public var dictionaryRepresentation: [String: Any] {

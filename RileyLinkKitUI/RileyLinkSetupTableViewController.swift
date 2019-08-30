@@ -94,7 +94,9 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
                 let bundle = Bundle(for: type(of: self))
                 cell.mainImageView?.image = UIImage(named: "RileyLink", in: bundle, compatibleWith: cell.traitCollection)
                 cell.mainImageView?.tintColor = UIColor(named: "RileyLink Tint", in: bundle, compatibleWith: cell.traitCollection)
-
+                if #available(iOSApplicationExtension 13.0, *) {
+                    cell.backgroundColor = .systemBackground
+                }
                 return cell
             case .description:
                 var cell = tableView.dequeueReusableCell(withIdentifier: "DescriptionCell")

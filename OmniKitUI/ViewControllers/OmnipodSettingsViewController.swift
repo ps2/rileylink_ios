@@ -71,7 +71,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         imageView.contentMode = .center
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
-        tableView.tableHeaderView?.backgroundColor = UIColor.white
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            tableView.tableHeaderView?.backgroundColor = .systemBackground
+        } else {
+            tableView.tableHeaderView?.backgroundColor = UIColor.white
+        }
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)

@@ -34,7 +34,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     private var pumpRegionCode: RegionCode? {
         didSet {
             regionAndColorPickerCell.regionLabel.text = pumpRegionCode?.region.description
-            regionAndColorPickerCell.regionLabel.textColor = .darkText
+            regionAndColorPickerCell.regionLabel.textColor = nil
 
             updateStateForSettings()
         }

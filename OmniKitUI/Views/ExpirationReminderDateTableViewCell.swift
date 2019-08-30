@@ -13,9 +13,32 @@ public class ExpirationReminderDateTableViewCell: DatePickerTableViewCell {
 
     public weak var delegate: DatePickerTableViewCellDelegate?
 
-    @IBOutlet public weak var titleLabel: UILabel!
+    @IBOutlet public weak var titleLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                titleLabel?.textColor = .label
+            }
+        }
+    }
 
-    @IBOutlet public weak var dateLabel: UILabel!
+    @IBOutlet public weak var dateLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                dateLabel?.textColor = .secondaryLabel
+            }
+
+            switch effectiveUserInterfaceLayoutDirection {
+            case .leftToRight:
+                dateLabel?.textAlignment = .right
+            case .rightToLeft:
+                dateLabel?.textAlignment = .left
+            @unknown default:
+                dateLabel?.textAlignment = .right
+            }
+        }
+    }
 
     var maximumDate: Date? {
         set {

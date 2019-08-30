@@ -186,6 +186,7 @@
 		43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43EBE4551EAD24410073A0B5 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */; };
 		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
+		43F89CA122BDFB8D006BB54E /* UIActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F89CA022BDFB8D006BB54E /* UIActivityIndicatorView.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
 		492526711E4521FB00ACBA5F /* NoteNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492526701E4521FB00ACBA5F /* NoteNightscoutTreatment.swift */; };
 		541688DB1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541688DA1DB820BF005B1891 /* ReadCurrentGlucosePageMessageBodyTests.swift */; };
@@ -1019,6 +1020,7 @@
 		43DFB61420D3791A008A7BAE /* ChangeMaxBasalRateMessageBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeMaxBasalRateMessageBody.swift; sourceTree = "<group>"; };
 		43EBE4501EAD238C0073A0B5 /* TimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
+		43F89CA022BDFB8D006BB54E /* UIActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIActivityIndicatorView.swift; sourceTree = "<group>"; };
 		43FB610A20DDF55E002B996B /* LoopKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43FB610B20DDF55F002B996B /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
@@ -1909,6 +1911,7 @@
 				43709AED20E008F300F941B3 /* SetupImageTableViewCell.swift */,
 				43709AEF20E0120F00F941B3 /* SetupImageTableViewCell.xib */,
 				C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */,
+				43F89CA022BDFB8D006BB54E /* UIActivityIndicatorView.swift */,
 			);
 			path = RileyLinkKitUI;
 			sourceTree = "<group>";
@@ -3631,6 +3634,7 @@
 				435D26B620DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift in Sources */,
 				43709AE820DF22E700F941B3 /* UIColor.swift in Sources */,
 				43D5E79A1FAF7C47004ACDB7 /* RileyLinkDeviceTableViewCell.swift in Sources */,
+				43F89CA122BDFB8D006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				43D5E79F1FAF7C98004ACDB7 /* IdentifiableClass.swift in Sources */,
 				435D26B420DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift in Sources */,
 				43709ABF20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift in Sources */,

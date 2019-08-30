@@ -312,7 +312,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.datePicker.minimumDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertMaxTimeBeforeExpiration)
                     cell.datePicker.minuteInterval = 1
                     cell.delegate = self
-                    print("cell selection style: \(cell.selectionStyle)")
                 }
                 return cell
             case .timeZoneOffset:
@@ -548,8 +547,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
 extension OmnipodSettingsViewController: CompletionDelegate {
     func completionNotifyingDidComplete(_ object: CompletionNotifying) {
-        if let vc = object as? UIViewController {
-            vc.dismiss(animated: false, completion: nil)
+        if let vc = object as? UIViewController, vc === presentedViewController {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

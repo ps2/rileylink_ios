@@ -36,6 +36,11 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if #available(iOSApplicationExtension 13.0, *) {
+            // Prevent interactive dismissal
+            isModalInPresentation = true
+        }
         
         delegate = self
     }
@@ -68,6 +73,6 @@ class PodReplacementNavigationController: UINavigationController, UINavigationCo
 
 extension PodReplacementNavigationController: SetupTableViewControllerDelegate {
     func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
-        self.dismiss(animated: true, completion: nil)
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }

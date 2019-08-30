@@ -103,6 +103,10 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
                     cell?.selectionStyle = .none
                     cell?.textLabel?.text = LocalizedString("RileyLink allows for communication with the pump over Bluetooth Low Energy.", comment: "RileyLink setup description")
                     cell?.textLabel?.numberOfLines = 0
+
+                    if #available(iOSApplicationExtension 13.0, *) {
+                        cell?.backgroundColor = .systemBackground
+                    }
                 }
                 return cell!
             }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -66,7 +66,7 @@
             <objects>
                 <tableViewController title="Pump Setup" id="91O-Un-vKc" userLabel="Pair Pod" customClass="PairPodSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="1wC-au-0ju">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <sections>
@@ -83,7 +83,7 @@
                                                     <rect key="frame" x="121.66666666666667" y="0.0" width="131.66666666666663" height="113"/>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="fvP-ab-vGQ" firstAttribute="centerX" secondItem="JqU-2C-uNE" secondAttribute="centerX" id="6rH-IP-01J"/>
                                                 <constraint firstItem="fvP-ab-vGQ" firstAttribute="top" secondItem="JqU-2C-uNE" secondAttribute="top" id="8ru-dP-3bd"/>
@@ -185,7 +185,7 @@
             <objects>
                 <tableViewController title="Pump Setup" id="k1Y-x4-m0a" userLabel="Insert Cannula" customClass="InsertCannulaSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="YEa-Yl-3uG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <sections>
@@ -199,10 +199,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="QH8-CP-KKu">
-                                                    <rect key="frame" x="118.33333333333333" y="0.0" width="138.66666666666669" height="113"/>
+                                                    <rect key="frame" x="111.33333333333333" y="0.0" width="152.66666666666669" height="113"/>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="QH8-CP-KKu" firstAttribute="centerX" secondItem="MnS-FA-AjW" secondAttribute="centerX" id="5pT-vF-Qgv"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="QH8-CP-KKu" secondAttribute="bottom" id="OUy-eL-6r8"/>
@@ -303,7 +303,7 @@
             <objects>
                 <tableViewController title="Pump Setup" id="aNg-mm-Uuy" userLabel="Setup Complete" customClass="PodSetupCompleteViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="Mtx-27-ViY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <sections>
@@ -317,10 +317,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="dvx-vd-E9Z">
-                                                    <rect key="frame" x="118.33333333333333" y="0.0" width="138.66666666666669" height="181"/>
+                                                    <rect key="frame" x="111.33333333333333" y="0.0" width="152.66666666666669" height="181"/>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="dvx-vd-E9Z" firstAttribute="top" secondItem="bEL-i5-hDF" secondAttribute="top" id="ATC-bm-0nQ"/>
                                                 <constraint firstItem="dvx-vd-E9Z" firstAttribute="centerX" secondItem="bEL-i5-hDF" secondAttribute="centerX" id="Wmw-2T-jAV"/>
@@ -544,7 +544,7 @@
             <objects>
                 <tableViewController title="Pump Setup" id="ack-ra-XH6" userLabel="Replace Pod" customClass="ReplacePodViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="D1s-eE-9wz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <sections>
@@ -558,10 +558,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PodLarge" translatesAutoresizingMaskIntoConstraints="NO" id="nVw-Qs-ZRl">
-                                                    <rect key="frame" x="118.33333333333333" y="0.0" width="138.66666666666669" height="113"/>
+                                                    <rect key="frame" x="111.33333333333333" y="0.0" width="152.66666666666669" height="113"/>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
                                                 <constraint firstItem="nVw-Qs-ZRl" firstAttribute="top" secondItem="Lsr-JG-CQ1" secondAttribute="top" id="4uJ-JG-8TC"/>
                                                 <constraint firstItem="nVw-Qs-ZRl" firstAttribute="centerX" secondItem="Lsr-JG-CQ1" secondAttribute="centerX" id="HUk-do-p26"/>
@@ -660,11 +660,11 @@
     </scenes>
     <resources>
         <image name="PodBottom" width="131.66667175292969" height="110"/>
-        <image name="PodLarge" width="138.66667175292969" height="110"/>
+        <image name="PodLarge" width="152.66667175292969" height="115.66666412353516"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IS8-xY-rnN"/>
+        <segue reference="rEL-w2-Eiw"/>
         <segue reference="3Py-Xn-kuv"/>
-        <segue reference="Qdq-yA-Ml0"/>
+        <segue reference="Hnx-w3-aQg"/>
     </inferredMetricsTieBreakers>
 </document>

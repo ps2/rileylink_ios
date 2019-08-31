@@ -258,7 +258,7 @@ public class PodCommsSession {
     }
 
     // Returns time at which prime is expected to finish.
-    public func prime(confirmationBeeps: Bool) throws -> TimeInterval {
+    public func prime() throws -> TimeInterval {
         //4c00 00c8 0102
 
         let primeDuration = TimeInterval(seconds: 55)
@@ -289,7 +289,7 @@ public class PodCommsSession {
         let timeBetweenPulses = TimeInterval(seconds: 1)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
         let scheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
-        let bolusExtraCommand = BolusExtraCommand(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: confirmationBeeps, completionBeep: confirmationBeeps)
+        let bolusExtraCommand = BolusExtraCommand(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
         let status: StatusResponse = try send([scheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status)
         podState.setupProgress = .priming
@@ -327,11 +327,15 @@ public class PodCommsSession {
 
     // emits the specified beep type and sets the completion beep flags based on the specified confirmationBeep value
     public func beepConfig(beepType: BeepType, confirmationBeeps: Bool) throws {
+        guard self.podState.fault == nil else {
+            return // skip if already faulted to avoid a Beep Config Command error response
+        }
         let basalCompletionBeep: Bool = confirmationBeeps ? basalBeeps : false
         let tempBasalCompletionBeep: Bool = confirmationBeeps ? tempBasalBeeps : false
         let bolusCompletionBeep: Bool = confirmationBeeps ? bolusBeeps : false
 
-        let statusResponse: StatusResponse = try send([BeepConfigCommand(beepType: beepType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)])
+        let beepConfigCommand = BeepConfigCommand(beepType: beepType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+        let statusResponse: StatusResponse = try send([beepConfigCommand])
         podState.updateFromStatusResponse(statusResponse)
     }
 
@@ -385,7 +389,7 @@ public class PodCommsSession {
         
         // 17 0d 00 0064 0001 86a0000000000000
         podState.setupProgress = .startingInsertCannula
-        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: confirmationBeeps, completionBeep: confirmationBeeps)
+        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
         let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status2)
         
@@ -603,7 +607,7 @@ public class PodCommsSession {
     }
 
     private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType, confirmationBeeps: Bool) throws {
-        if confirmationBeeps && supplementaryBeeps && self.podState.fault == nil {
+        if confirmationBeeps && supplementaryBeeps {
             try beepConfig(beepType: .bipBip, confirmationBeeps: confirmationBeeps)
         }
 
@@ -636,7 +640,7 @@ public class PodCommsSession {
         // read up to the previous 50 entries from flash log
         try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog, confirmationBeeps: confirmationBeeps)
 
-        if confirmationBeeps && supplementaryBeeps && self.podState.fault == nil {
+        if confirmationBeeps && supplementaryBeeps {
             try beepConfig(beepType: .beeeeeep, confirmationBeeps: confirmationBeeps)
         }
     }

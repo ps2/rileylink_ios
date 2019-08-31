@@ -529,7 +529,7 @@ extension OmnipodPumpManager {
                 }
 
                 do {
-                    let primeFinishedAt = try session.prime(confirmationBeeps: self.confirmationBeeps)
+                    let primeFinishedAt = try session.prime()
                     completion(.success(primeFinishedAt))
                 } catch let error {
                     completion(.failure(error))
@@ -946,7 +946,7 @@ extension OmnipodPumpManager {
                         try session.beepConfig(beepType: .bipBip, confirmationBeeps: true)
                     } else {
                         // this call to beepConfig() will disable Pod completion beeps for any in-progress insulin delivery
-                        // N.B. we need to use beepType other then .noBeep here or the Pod Beep Config Command will fail!
+                        // N.B. can't use beepType .noBeep here or the Pod Beep Config Command will fail!
                         try session.beepConfig(beepType: .beep, confirmationBeeps: false)
                     }
                     completion(nil)

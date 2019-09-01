@@ -943,11 +943,10 @@ extension OmnipodPumpManager {
                 do {
                     if enabled {
                         // this call to beepConfig() will enable Pod completion beeps for any in-progress insulin delivery
-                        try session.beepConfig(beepType: .bipBip, confirmationBeeps: true)
+                        try session.beepConfig(beepConfigType: .bipBip, confirmationBeeps: true)
                     } else {
-                        // this call to beepConfig() will disable Pod completion beeps for any in-progress insulin delivery
-                        // N.B. can't use beepType .noBeep here or the Pod Beep Config Command will fail!
-                        try session.beepConfig(beepType: .beep, confirmationBeeps: false)
+                        // this call to beepConfig() will silently isable Pod completion beeps for any in-progress insulin delivery
+                        try session.beepConfig(beepConfigType: .beepConfig_NoBeep, confirmationBeeps: false)
                     }
                     completion(nil)
                 } catch let error {

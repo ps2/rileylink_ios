@@ -326,7 +326,7 @@ public class PodCommsSession {
     }
 
     // emits the specified beep type and sets the completion beep flags based on the specified confirmationBeep value
-    public func beepConfig(beepType: BeepType, confirmationBeeps: Bool) throws {
+    public func beepConfig(beepConfigType: BeepConfigType, confirmationBeeps: Bool) throws {
         guard self.podState.fault == nil else {
             return // skip if already faulted to avoid a Beep Config Command error response
         }
@@ -334,7 +334,7 @@ public class PodCommsSession {
         let tempBasalCompletionBeep: Bool = confirmationBeeps ? tempBasalBeeps : false
         let bolusCompletionBeep: Bool = confirmationBeeps ? bolusBeeps : false
 
-        let beepConfigCommand = BeepConfigCommand(beepType: beepType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+        let beepConfigCommand = BeepConfigCommand(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
         let statusResponse: StatusResponse = try send([beepConfigCommand])
         podState.updateFromStatusResponse(statusResponse)
     }
@@ -347,7 +347,7 @@ public class PodCommsSession {
             try enableOptionalPodAlarms(confirmationBeeps: confirmationBeeps)
         } else if supplementaryBeeps && confirmationBeeps {
             // beep to confirm Pod setup is complete
-            try beepConfig(beepType: .bipBip, confirmationBeeps: confirmationBeeps)
+            try beepConfig(beepConfigType: .bipBip, confirmationBeeps: confirmationBeeps)
         }
     }
 
@@ -599,16 +599,16 @@ public class PodCommsSession {
             throw PodCommsError.unfinalizedBolus
         }
 
-        try beepConfig(beepType: .bipBeepBipBeepBipBeepBipBeep, confirmationBeeps: confirmationBeeps)
+        try beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, confirmationBeeps: confirmationBeeps)
         // .fiveSecondBeep could be used for a PDM style "Check alarms", but this only works if the pod is suspended!
-        try beepConfig(beepType: .beeeeeep, confirmationBeeps: confirmationBeeps)
+        try beepConfig(beepConfigType: .beeeeeep, confirmationBeeps: confirmationBeeps)
 
         sleep(4) // pause for the beeping to complete before returning
     }
 
     private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType, confirmationBeeps: Bool) throws {
         if confirmationBeeps && supplementaryBeeps {
-            try beepConfig(beepType: .bipBip, confirmationBeeps: confirmationBeeps)
+            try beepConfig(beepConfigType: .bipBip, confirmationBeeps: confirmationBeeps)
         }
 
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
@@ -641,7 +641,7 @@ public class PodCommsSession {
         try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog, confirmationBeeps: confirmationBeeps)
 
         if confirmationBeeps && supplementaryBeeps {
-            try beepConfig(beepType: .beeeeeep, confirmationBeeps: confirmationBeeps)
+            try beepConfig(beepConfigType: .beeeeeep, confirmationBeeps: confirmationBeeps)
         }
     }
 
@@ -714,7 +714,7 @@ public class PodCommsSession {
         let _ = try configureAlerts([expirationAlert])
 
         if supplementaryBeeps && confirmationBeeps {
-            try beepConfig(beepType: .bipBip, confirmationBeeps: true)
+            try beepConfig(beepConfigType: .bipBip, confirmationBeeps: true)
         }
     }
 
@@ -726,7 +726,7 @@ public class PodCommsSession {
         let _ = try configureAlerts([expirationAlert])
 
         if supplementaryBeeps && confirmationBeeps {
-            try beepConfig(beepType: .beep, confirmationBeeps: true)
+            try beepConfig(beepConfigType: .beep, confirmationBeeps: true)
         }
     }
 }

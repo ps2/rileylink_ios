@@ -817,13 +817,13 @@ extension MinimedPumpManager: PumpManager {
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
 
             guard let session = session else {
-                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                completion(.failure(SetBolusError.certain(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))))
                 return
             }
 
             if let unfinalizedBolus = self.state.unfinalizedBolus {
                 guard unfinalizedBolus.finished else {
-                    completion(.failure(PumpManagerError.deviceState(MinimedPumpManagerError.bolusInProgress)))
+                    completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MinimedPumpManagerError.bolusInProgress))))
                     return
                 }
                 self.state.pendingDoses.append(unfinalizedBolus)

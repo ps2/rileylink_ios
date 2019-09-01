@@ -38,5 +38,5 @@ public enum BeepConfigType: UInt8 {
     case beeep = 0xC
     case bipBeeeeep = 0xD
     case fiveSecondBeep = 0xE    // can only be used if Pod is currently suspended
-    case beepConfig_NoBeep = 0xF
+    case noBeep = 0xF
 }

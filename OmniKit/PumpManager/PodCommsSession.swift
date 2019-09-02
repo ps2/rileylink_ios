@@ -330,7 +330,7 @@ public class PodCommsSession {
         podState.updateFromStatusResponse(statusResponse)
     }
 
-    public func insertCannula(confirmationBeeps: Bool, optionalPodAlarms: Bool) throws -> TimeInterval {
+    public func insertCannula() throws -> TimeInterval {
         let insertionWait: TimeInterval = .seconds(10)
 
         guard let activatedAt = podState.activatedAt else {
@@ -376,7 +376,7 @@ public class PodCommsSession {
         return insertionWait
     }
 
-    public func checkInsertionCompleted(confirmationBeeps: Bool, optionalPodAlarms: Bool) throws {
+    public func checkInsertionCompleted() throws {
         if podState.setupProgress == .cannulaInserting {
             let response: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(response)
@@ -494,7 +494,7 @@ public class PodCommsSession {
         }
     }
 
-    public func testingCommands(confirmationBeeps: Bool) throws {
+    public func testingCommands() throws {
         // try readFlashLogs()
         let _ = try cancelNone() // a functional replacement for getStatus() which also verifies & advances nonce
     }
@@ -648,33 +648,6 @@ public class PodCommsSession {
 
     public func assertOnSessionQueue() {
         transport.assertOnSessionQueue()
-    }
-
-    // enables all the optional Pod Alarms
-    public func enableOptionalPodAlarms() throws {
-        // TODO add UI to set the low reservoir alert value
-        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(podLowReservoirLevel)
-        let _ = try configureAlerts([lowReservoirAlarm])
-
-        guard let expiresAt = podState.expiresAt, expiresAt.timeIntervalSinceNow > 0 else {
-            return // already past expiration time
-        }
-        let timeUntilExpirationAlert = expiresAt.timeIntervalSinceNow - Pod.expirationAlertWindow
-        guard timeUntilExpirationAlert > 0 else {
-            return // already past the expiration alert time
-        }
-        // set pod expiration alert for timeUntilExpirationAlert minutes from now
-        // TODO tie this value to the UI's expiration time?
-        let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
-        let _ = try configureAlerts([expirationAlert])
-    }
-
-    // disables all the optional Pod Alarms by setting their values to 0
-    public func disableOptionalPodAlarms() throws {
-        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(0)
-        let _ = try configureAlerts([lowReservoirAlarm])
-        let expirationAlert = PodAlert.expirationAlert(TimeInterval(hours: 0))
-        let _ = try configureAlerts([expirationAlert])
     }
 }
 

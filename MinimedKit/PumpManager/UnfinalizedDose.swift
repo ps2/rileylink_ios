@@ -32,6 +32,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     let startTime: Date
     var duration: TimeInterval
     var isReconciledWithHistory: Bool
+    var uniqueId: String
 
     var finishTime: Date {
         get {
@@ -74,6 +75,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.duration = duration
         self.scheduledUnits = nil
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID().uuidString
     }
 
     init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
@@ -83,6 +85,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.duration = duration
         self.scheduledUnits = nil
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID().uuidString
     }
 
     init(suspendStartTime: Date, isReconciledWithHistory: Bool = false) {
@@ -91,6 +94,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = suspendStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID().uuidString
     }
 
     init(resumeStartTime: Date, isReconciledWithHistory: Bool = false) {
@@ -99,6 +103,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = resumeStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID().uuidString
     }
 
     public mutating func cancel(at date: Date) {
@@ -156,6 +161,12 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         if let scheduledTempRate = rawValue["scheduledTempRate"] as? Double {
             self.scheduledTempRate = scheduledTempRate
         }
+        
+        if let uniqueId = rawValue["uniqueId"] as? String {
+            self.uniqueId = uniqueId
+        } else {
+            self.uniqueId = UUID().uuidString
+        }
 
         self.isReconciledWithHistory = rawValue["isReconciledWithHistory"] as? Bool ?? false
     }
@@ -167,6 +178,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "startTime": startTime,
             "duration": duration,
             "isReconciledWithHistory": isReconciledWithHistory,
+            "uniqueId": uniqueId,
         ]
 
         if let scheduledUnits = scheduledUnits {
@@ -187,6 +199,10 @@ extension NewPumpEvent {
         let entry = DoseEntry(dose)
         self.init(date: dose.startTime, dose: entry, isMutable: true, raw: dose.uniqueKey, title: title)
     }
+    
+    func replacingDose(_ newDose: DoseEntry?) -> NewPumpEvent {
+        return NewPumpEvent(date: date, dose: newDose, isMutable: isMutable, raw: raw, title: title, type: type)
+    }
 }
 
 extension DoseEntry {
@@ -201,6 +217,17 @@ extension DoseEntry {
         case .resume:
             self = DoseEntry(resumeDate: dose.startTime)
         }
+    }
+    
+    func replacingSyncIdentifier(_ newSyncIdentifier: String?) -> DoseEntry {
+        let value: Double
+        switch unit {
+        case .units:
+            value = programmedUnits
+        case .unitsPerHour:
+            value = unitsPerHour
+        }
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: newSyncIdentifier)
     }
 }
 

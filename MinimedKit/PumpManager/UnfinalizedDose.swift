@@ -227,7 +227,8 @@ extension DoseEntry {
         case .unitsPerHour:
             value = unitsPerHour
         }
-        return DoseEntry(type: type, startDate: newStartDate, endDate: endDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier)
+        let newEndDate = max(newStartDate, endDate)
+        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier)
     }
 }
 

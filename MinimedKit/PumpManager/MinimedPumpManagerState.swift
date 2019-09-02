@@ -11,7 +11,7 @@ import RileyLinkBLEKit
 
 public struct ReconciledDoseMapping: Equatable {
     let startTime: Date
-    let uniqueDoseId: String
+    let uuid: UUID
     let eventRaw: Data
 }
 
@@ -21,21 +21,23 @@ extension ReconciledDoseMapping: RawRepresentable {
     public init?(rawValue: [String : Any]) {
         guard
             let startTime = rawValue["startTime"] as? Date,
-            let uniqueDoseId = rawValue["uniqueDoseId"] as? String,
+            let uuidString = rawValue["uuid"] as? String,
+            let uuid = UUID(uuidString: uuidString),
             let eventRawString = rawValue["eventRaw"] as? String,
             let eventRaw = Data(hexadecimalString: eventRawString) else
+            
         {
             return nil
         }
         self.startTime = startTime
-        self.uniqueDoseId = uniqueDoseId
+        self.uuid = uuid
         self.eventRaw = eventRaw
     }
     
     public var rawValue: [String : Any] {
         return [
             "startTime": startTime,
-            "uniqueDoseId": uniqueDoseId,
+            "uuid": uuid.uuidString,
             "eventRaw": eventRaw.hexadecimalString,
         ]
     }
@@ -104,7 +106,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var pendingDoses: [UnfinalizedDose]
 
     // Maps
-    public var recentlyReconciledEvents: [Data:ReconciledDoseMapping]
+    public var reconciliationMappings: [Data:ReconciledDoseMapping]
 
     public var lastReconciliation: Date?
 
@@ -125,7 +127,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.unfinalizedBolus = unfinalizedBolus
         self.unfinalizedTempBasal = unfinalizedTempBasal
         self.pendingDoses = pendingDoses ?? []
-        self.recentlyReconciledEvents = recentlyReconciledEvents ?? [:]
+        self.reconciliationMappings = recentlyReconciledEvents ?? [:]
         self.lastReconciliation = lastReconciliation
     }
 
@@ -266,7 +268,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "suspendState": suspendState.rawValue,
             "version": MinimedPumpManagerState.version,
             "pendingDoses": pendingDoses.map { $0.rawValue },
-            "recentlyReconciledEvents": recentlyReconciledEvents.values.map { $0.rawValue },
+            "recentlyReconciledEvents": reconciliationMappings.values.map { $0.rawValue },
         ]
 
         value["batteryPercentage"] = batteryPercentage
@@ -307,7 +309,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "pendingDoses: \(pendingDoses)",
             "timeZone: \(timeZone)",
-            "recentlyReconciledEvents: \(recentlyReconciledEvents.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uniqueDoseId)" })",
+            "recentlyReconciledEvents: \(reconciliationMappings.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uuid)" })",
             "lastReconciliation: \(String(describing: lastReconciliation))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")

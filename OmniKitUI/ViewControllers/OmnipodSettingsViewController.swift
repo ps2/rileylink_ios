@@ -603,7 +603,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
         confirmationBeepsTableViewCell.isLoading = true
         if confirmationBeeps {
-            pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
+            pumpManager.setBolusBeeps(enabled: false, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
@@ -613,7 +613,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 done()
             })
         } else {
-            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
+            pumpManager.setBolusBeeps(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")

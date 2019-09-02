@@ -16,9 +16,9 @@ public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
 
     public func updateTextLabel(enabled: Bool) {
         if enabled {
-            self.textLabel?.text = LocalizedString("Disable Confirmation Beeps", comment: "Title text for button to disable confirmation beeps")
+            self.textLabel?.text = LocalizedString("Disable Bolus Beeps", comment: "Title text for button to disable bolus beeps")
         } else {
-            self.textLabel?.text = LocalizedString("Enable Confirmation Beeps", comment: "Title text for button to enable confirmation beeps")
+            self.textLabel?.text = LocalizedString("Enable Bolus Beeps", comment: "Title text for button to enable bolus beeps")
         }
     }
     

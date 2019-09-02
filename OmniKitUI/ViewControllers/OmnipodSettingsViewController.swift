@@ -21,6 +21,10 @@ public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
             self.textLabel?.text = LocalizedString("Enable Confirmation Beeps", comment: "Title text for button to enable confirmation beeps")
         }
     }
+
+    override public func loadingStatusChanged() {
+        self.isEnabled = !isLoading
+    }
 }
 
 public class OptionalPodAlarmsTableViewCell: TextButtonTableViewCell {
@@ -31,6 +35,10 @@ public class OptionalPodAlarmsTableViewCell: TextButtonTableViewCell {
         } else {
             self.textLabel?.text = LocalizedString("Enable Optional Pod Alarms", comment: "Title text for button to enable optional pod alarms")
         }
+    }
+
+    override public func loadingStatusChanged() {
+        self.isEnabled = !isLoading
     }
 }
 
@@ -611,6 +619,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private func confirmationBeepsTapped() {
         let confirmationBeeps: Bool = pumpManager.confirmationBeeps
 
+        func done() {
+            DispatchQueue.main.async { [weak self] in
+                if let self = self {
+                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.confirmationBeeps)
+                    self.confirmationBeepsTableViewCell.isLoading = false
+                }
+            }
+        }
+
+        confirmationBeepsTableViewCell.isLoading = true
         if confirmationBeeps {
             pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
                 if let error = error {
@@ -619,24 +637,34 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
+                done()
             })
         } else {
             pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
-                        let title = LocalizedString("Error enanbling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
+                        let title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
+                done()
             })
         }
-        // TODO rework to have a spinner with a progress message while running and then update the button label upon completion
-        confirmationBeepsTableViewCell.updateTextLabel(enabled: !confirmationBeeps)
     }
 
     private func optionalPodAlarmsTapped() {
         let optionalPodAlarms: Bool = pumpManager.optionalPodAlarms
 
+        func done() {
+            DispatchQueue.main.async { [weak self] in
+                if let self = self {
+                    self.optionalPodAlarmsTableViewCell.updateTextLabel(enabled: self.pumpManager.optionalPodAlarms)
+                    self.optionalPodAlarmsTableViewCell.isLoading = false
+                }
+            }
+        }
+
+        optionalPodAlarmsTableViewCell.isLoading = true
         if optionalPodAlarms {
             pumpManager.setOptionalPodAlarms(enabled: false, completion: { (error) in
                 if let error = error {
@@ -645,6 +673,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
+                done()
             })
         } else {
             pumpManager.setOptionalPodAlarms(enabled: true, completion: { (error) in
@@ -654,10 +683,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
+                done()
             })
         }
-        // TODO rework to have a spinner with a progress message while running and then update the button label upon completion
-        optionalPodAlarmsTableViewCell.updateTextLabel(enabled: !optionalPodAlarms)
     }
 }
 

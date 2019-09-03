@@ -436,11 +436,16 @@ extension MinimedPumpManager {
         }
 
         // Reconcile temp basal
-        if let tempBasal = self.state.unfinalizedTempBasal, let index = reconcilableEvents.firstMatchingIndex(for: tempBasal, within: matchingTimeWindow), let dose = events[index].dose {
+        if let tempBasal = self.state.unfinalizedTempBasal, let index = reconcilableEvents.firstMatchingIndex(for: tempBasal, within: matchingTimeWindow) {
             let matchedTempBasal = reconcilableEvents[index]
             self.log.debug("Matched unfinalized temp basal %@ to history record %@", String(describing: tempBasal), String(describing: matchedTempBasal))
+            
             // Update unfinalizedTempBasal to match entry in history, and mark as reconciled
-            self.state.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: dose.endDate.timeIntervalSince(dose.startDate), isReconciledWithHistory: true)
+            //self.state.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: tempBasal.startDate, duration: dose.endDate.timeIntervalSince(dose.startDate), isReconciledWithHistory: true)
+            
+            // Temporary: Keeping original command time here, instead of pump time, for NS natural key restriction
+            self.state.unfinalizedTempBasal?.isReconciledWithHistory = true
+            
             markReconciled(startTime: tempBasal.startTime, uuid: tempBasal.uniqueId, eventRaw: matchedTempBasal.raw, index: index)
         }
 

@@ -32,7 +32,8 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         self.duration = duration
         self.carbs = carbs
         self.ratio = ratio
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id,
+        // Commenting out usage of surrogate ID until Nightscout supports it.
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, /* id: id, */
                    eventType: (carbs > 0) ? "Meal Bolus" : "Correction Bolus")
 
     }

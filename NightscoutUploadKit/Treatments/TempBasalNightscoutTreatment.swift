@@ -27,7 +27,8 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
         self.temp = temp
         self.duration = duration
         
-        super.init(timestamp: timestamp, enteredBy: enteredBy, id: id, eventType: "Temp Basal")
+        // Commenting out usage of surrogate ID until supported by Nightscout
+        super.init(timestamp: timestamp, enteredBy: enteredBy, /*id: id,*/ eventType: "Temp Basal")
     }
     
     override public var dictionaryRepresentation: [String: Any] {

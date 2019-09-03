@@ -21,13 +21,14 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
     let temp: RateType
     let duration: Int
     
-    public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int) {
+    public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int, id: String? = nil) {
         self.rate = rate
         self.absolute = absolute
         self.temp = temp
         self.duration = duration
         
-        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Temp Basal")
+        // Commenting out usage of surrogate ID until supported by Nightscout
+        super.init(timestamp: timestamp, enteredBy: enteredBy, /*id: id,*/ eventType: "Temp Basal")
     }
     
     override public var dictionaryRepresentation: [String: Any] {

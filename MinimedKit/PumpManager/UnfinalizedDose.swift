@@ -19,19 +19,14 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         case resume
     }
 
-    private static let dateFormatter = ISO8601DateFormatter()
-
-    fileprivate var uniqueKey: Data {
-        return "\(doseType) \(scheduledUnits ?? units) \(UnfinalizedDose.dateFormatter.string(from: startTime))".data(using: .utf8)!
-    }
-
     let doseType: DoseType
     public var units: Double
-    var scheduledUnits: Double?     // Set when finalized; tracks original scheduled units
-    var scheduledTempRate: Double?  // Set when finalized; tracks the original temp rate
+    var programmedUnits: Double?     // Set when finalized; tracks programmed units
+    var programmedTempRate: Double?  // Set when finalized; tracks programmed temp rate
     let startTime: Date
     var duration: TimeInterval
     var isReconciledWithHistory: Bool
+    var uniqueId: UUID
 
     var finishTime: Date {
         get {
@@ -72,8 +67,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.units = bolusAmount
         self.startTime = startTime
         self.duration = duration
-        self.scheduledUnits = nil
+        self.programmedUnits = nil
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID()
     }
 
     init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
@@ -81,8 +77,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
         self.duration = duration
-        self.scheduledUnits = nil
+        self.programmedUnits = nil
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID()
     }
 
     init(suspendStartTime: Date, isReconciledWithHistory: Bool = false) {
@@ -91,6 +88,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = suspendStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID()
     }
 
     init(resumeStartTime: Date, isReconciledWithHistory: Bool = false) {
@@ -99,6 +97,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = resumeStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.uniqueId = UUID()
     }
 
     public mutating func cancel(at date: Date) {
@@ -106,14 +105,14 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             return
         }
 
-        scheduledUnits = units
+        programmedUnits = units
         let newDuration = date.timeIntervalSince(startTime)
 
         switch doseType {
         case .bolus:
             units = rate * newDuration.hours
         case .tempBasal:
-            scheduledTempRate = rate
+            programmedTempRate = rate
             units = floor(rate * newDuration.hours * 20) / 20
         default:
             break
@@ -124,9 +123,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var description: String {
         switch doseType {
         case .bolus:
-            return "Bolus units:\(scheduledUnits ?? units) \(startTime)"
+            return "Bolus units:\(programmedUnits ?? units) \(startTime)"
         case .tempBasal:
-            return "TempBasal rate:\(scheduledTempRate ?? rate) \(startTime) duration:\(String(describing: duration))"
+            return "TempBasal rate:\(programmedTempRate ?? rate) \(startTime) duration:\(String(describing: duration))"
         default:
             return "\(String(describing: doseType).capitalized) \(startTime)"
         }
@@ -150,11 +149,21 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.duration = duration
 
         if let scheduledUnits = rawValue["scheduledUnits"] as? Double {
-            self.scheduledUnits = scheduledUnits
+            self.programmedUnits = scheduledUnits
         }
 
         if let scheduledTempRate = rawValue["scheduledTempRate"] as? Double {
-            self.scheduledTempRate = scheduledTempRate
+            self.programmedTempRate = scheduledTempRate
+        }
+        
+        if let uuidString = rawValue["uniqueId"] as? String {
+            if let uuid = UUID(uuidString: uuidString) {
+                self.uniqueId = uuid
+            } else {
+                return nil
+            }
+        } else {
+            self.uniqueId = UUID()
         }
 
         self.isReconciledWithHistory = rawValue["isReconciledWithHistory"] as? Bool ?? false
@@ -167,13 +176,14 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "startTime": startTime,
             "duration": duration,
             "isReconciledWithHistory": isReconciledWithHistory,
+            "uniqueId": uniqueId.uuidString,
         ]
 
-        if let scheduledUnits = scheduledUnits {
+        if let scheduledUnits = programmedUnits {
             rawValue["scheduledUnits"] = scheduledUnits
         }
 
-        if let scheduledTempRate = scheduledTempRate {
+        if let scheduledTempRate = programmedTempRate {
             rawValue["scheduledTempRate"] = scheduledTempRate
         }
 
@@ -185,7 +195,13 @@ extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
         let title = String(describing: dose)
         let entry = DoseEntry(dose)
-        self.init(date: dose.startTime, dose: entry, isMutable: true, raw: dose.uniqueKey, title: title)
+        let raw = dose.uniqueId.asRaw
+        self.init(date: dose.startTime, dose: entry, isMutable: true, raw: raw, title: title)
+    }
+    
+    func replacingRawAndDate(newRaw: Data, newDate: Date) -> NewPumpEvent {
+        let newDose = dose?.replacingStartDate(newDate)
+        return NewPumpEvent(date: newDate, dose: newDose, isMutable: isMutable, raw: newRaw, title: title, type: type)
     }
 }
 
@@ -193,14 +209,26 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
         case .suspend:
             self = DoseEntry(suspendDate: dose.startTime)
         case .resume:
             self = DoseEntry(resumeDate: dose.startTime)
         }
+    }
+    
+    func replacingStartDate(_ newStartDate: Date) -> DoseEntry {
+        let value: Double
+        switch unit {
+        case .units:
+            value = programmedUnits
+        case .unitsPerHour:
+            value = unitsPerHour
+        }
+        let newEndDate = max(newStartDate, endDate)
+        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier)
     }
 }
 
@@ -214,14 +242,22 @@ extension Collection where Element == NewPumpEvent {
 
             switch dose.doseType {
             case .bolus:
-                return type == .bolus && eventDose.programmedUnits == dose.scheduledUnits ?? dose.units
+                return type == .bolus && eventDose.programmedUnits == dose.programmedUnits ?? dose.units
             case .tempBasal:
-                return type == .tempBasal && eventDose.unitsPerHour == dose.scheduledTempRate ?? dose.rate
+                return type == .tempBasal && eventDose.unitsPerHour == dose.programmedTempRate ?? dose.rate
             case .suspend:
                 return type == .suspend
             case .resume:
                 return type == .resume
             }
         })
+    }
+}
+
+extension UUID {
+    var asRaw: Data {
+        return withUnsafePointer(to: self) {
+            Data(bytes: $0, count: MemoryLayout.size(ofValue: self))
+        }
     }
 }

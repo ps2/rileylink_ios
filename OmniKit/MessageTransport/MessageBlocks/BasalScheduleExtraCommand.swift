@@ -61,21 +61,18 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         }
         rateEntries = entries
     }
-    
-    public init(acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry]) {
-        self.acknowledgementBeep = acknowledgementBeep
-        self.completionBeep = completionBeep
-        self.programReminderInterval = programReminderInterval
+
+    public init(currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry], acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         self.currentEntryIndex = currentEntryIndex
         self.remainingPulses = remainingPulses
         self.delayUntilNextTenthOfPulse = delayUntilNextTenthOfPulse
         self.rateEntries = rateEntries
-    }
-    
-    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool, completionBeep: Bool, programReminderInterval: TimeInterval) {
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
+    }
+
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         var rateEntries = [RateEntry]()
         
         let mergedSchedule = BasalSchedule(entries: schedule.entries.adjacentEqualRatesMerged())
@@ -93,5 +90,8 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
         self.delayUntilNextTenthOfPulse = timeRemainingInEntry.truncatingRemainder(dividingBy: (timeBetweenPulses / 10))
         self.remainingPulses = pulsesPerHour * (timeRemainingInEntry-self.delayUntilNextTenthOfPulse) / .hours(1) + 0.1
+        self.acknowledgementBeep = acknowledgementBeep
+        self.completionBeep = completionBeep
+        self.programReminderInterval = programReminderInterval
     }
 }

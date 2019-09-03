@@ -12,6 +12,21 @@ import LoopKit
 import OmniKit
 import LoopKitUI
 
+public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
+
+    public func updateTextLabel(enabled: Bool) {
+        if enabled {
+            self.textLabel?.text = LocalizedString("Disable Bolus Beeps", comment: "Title text for button to disable bolus beeps")
+        } else {
+            self.textLabel?.text = LocalizedString("Enable Bolus Beeps", comment: "Title text for button to enable bolus beeps")
+        }
+    }
+    
+    override public func loadingStatusChanged() {
+        self.isEnabled = !isLoading
+    }
+}
+
 class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
     let pumpManager: OmnipodPumpManager
@@ -50,7 +65,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         return cell
     }()
-    
+
+    lazy var confirmationBeepsTableViewCell: ConfirmationBeepsTableViewCell = {
+        let cell = ConfirmationBeepsTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.updateTextLabel(enabled: pumpManager.bolusBeeps)
+        return cell
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -156,6 +177,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum ActionsRow: Int, CaseIterable {
         case suspendResume = 0
+        case testCommand
+        case playTestBeeps
         case replacePod
     }
     
@@ -170,7 +193,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private enum ConfigurationRow: Int, CaseIterable {
         case reminder = 0
         case timeZoneOffset
-        case testCommand
+        case enableDisableConfirmationBeeps
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
@@ -282,6 +305,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch actions[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
+            case .testCommand:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .playTestBeeps:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Play Test Beeps", comment: "The title of the command to play test beeps")
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .replacePod:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
                 
@@ -332,11 +365,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
                 cell.accessoryType = .disclosureIndicator
                 return cell
-            case .testCommand:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
-                cell.accessoryType = .disclosureIndicator
-                return cell
+            case .enableDisableConfirmationBeeps:
+                return confirmationBeepsTableViewCell
             }
             
         case .status:
@@ -430,6 +460,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .suspendResume:
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .testCommand:
+                let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
+            case .playTestBeeps:
+                let vc = CommandResponseViewController.playTestBeeps(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
             case .replacePod:
                 let vc: UIViewController
                 if podState == nil || podState!.setupProgress.primingNeeded {
@@ -478,10 +516,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = CommandResponseViewController.changeTime(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
-            case .testCommand:
-                let vc = CommandResponseViewController.testCommand(pumpManager: pumpManager)
-                vc.title = sender?.textLabel?.text
-                show(vc, sender: indexPath)
+            case .enableDisableConfirmationBeeps:
+                confirmationBeepsTapped()
+                tableView.deselectRow(at: indexPath, animated: true)
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
@@ -504,14 +541,21 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch sections[indexPath.section] {
-        case .podDetails, .actions, .status:
+        case .podDetails, .status:
             break
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume, .replacePod:
+                break
+            case .testCommand, .playTestBeeps:
+                tableView.reloadRows(at: [indexPath], with: .fade)
+            }
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .timeZoneOffset, .testCommand:
-                tableView.reloadRows(at: [indexPath], with: .fade)
-            case .reminder:
+            case .reminder, .enableDisableConfirmationBeeps:
                 break
+            case .timeZoneOffset:
+                tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .rileyLinks:
             break
@@ -542,6 +586,42 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     }
                 }
             }
+        }
+    }
+
+    private func confirmationBeepsTapped() {
+        let confirmationBeeps: Bool = pumpManager.bolusBeeps
+        
+        func done() {
+            DispatchQueue.main.async { [weak self] in
+                if let self = self {
+                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.bolusBeeps)
+                    self.confirmationBeepsTableViewCell.isLoading = false
+                }
+            }
+        }
+
+        confirmationBeepsTableViewCell.isLoading = true
+        if confirmationBeeps {
+            pumpManager.setBolusBeeps(enabled: false, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error disabling bolus beeps", comment: "The alert title for disable bolus beeps error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+                done()
+            })
+        } else {
+            pumpManager.setBolusBeeps(enabled: true, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error enabling bolus beeps", comment: "The alert title for enable bolus beeps error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+                done()
+            })
         }
     }
 }

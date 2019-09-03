@@ -44,8 +44,7 @@ extension CommandResponseViewController {
         }
     }
 
-
-    static func testCommand(pumpManager: OmnipodPumpManager) -> T {
+    static func testingCommands(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
             pumpManager.testingCommands() { (error) in
                 let response: String
@@ -59,6 +58,23 @@ extension CommandResponseViewController {
                 }
             }
             return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
+        }
+    }
+
+    static func playTestBeeps(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.playTestBeeps() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Play Test Beeps…", comment: "Progress message for play test beeps.")
         }
     }
 }

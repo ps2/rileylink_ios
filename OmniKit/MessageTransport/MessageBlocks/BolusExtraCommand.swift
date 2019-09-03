@@ -64,7 +64,7 @@ public struct BolusExtraCommand : MessageBlock {
         squareWaveDuration = timeBetweenExtendedPulses * Double(pulseCountX10) / 10
     }
     
-    public init(acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0, units: Double, timeBetweenPulses: TimeInterval = 2, squareWaveUnits: Double = 0.0, squareWaveDuration: TimeInterval = 0) {
+    public init(units: Double, timeBetweenPulses: TimeInterval = 2, squareWaveUnits: Double = 0.0, squareWaveDuration: TimeInterval = 0, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         self.acknowledgementBeep = acknowledgementBeep
         self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval

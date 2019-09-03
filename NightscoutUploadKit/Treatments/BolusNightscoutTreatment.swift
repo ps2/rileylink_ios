@@ -24,7 +24,7 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     let carbs: Int
     let ratio: Double
 
-    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, carbs: Int, ratio: Double, notes: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, carbs: Int, ratio: Double, notes: String? = nil, id: String?) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
@@ -32,7 +32,8 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         self.duration = duration
         self.carbs = carbs
         self.ratio = ratio
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes,
+        // Commenting out usage of surrogate ID until Nightscout supports it.
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, /* id: id, */
                    eventType: (carbs > 0) ? "Meal Bolus" : "Correction Bolus")
 
     }

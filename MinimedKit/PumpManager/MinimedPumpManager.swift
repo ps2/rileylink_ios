@@ -415,17 +415,16 @@ extension MinimedPumpManager {
     }
 
 
-    private func reconcilePendingDosesWith(_ events: [NewPumpEvent]) {
+    private func reconcilePendingDosesWith(_ events: [NewPumpEvent]) -> [NewPumpEvent] {
         // Must be called from the sessionQueue
 
-        var reconcilableEvents = events.filter { !self.state.recentlyReconciledEventIDs.contains($0.raw) }
+        var reconcilableEvents = events.filter { !self.state.reconciliationMappings.keys.contains($0.raw) }
 
         let matchingTimeWindow = TimeInterval(minutes: 1)
 
-        func markReconciled(raw: Data, index: Int) -> Void {
-            self.state.recentlyReconciledEventIDs.insert(raw, at: 0)
-            self.state.recentlyReconciledEventIDs = Array(self.state.recentlyReconciledEventIDs.prefix(5))
-            reconcilableEvents.remove(at: index)
+        func markReconciled(startTime: Date, uuid: UUID, eventRaw: Data, index: Int) -> Void {
+            let mapping = ReconciledDoseMapping(startTime: startTime, uuid: uuid, eventRaw: eventRaw)
+            self.state.reconciliationMappings[eventRaw] = mapping
         }
 
         // If we have a bolus in progress, see if it has shown up in history yet
@@ -433,25 +432,30 @@ extension MinimedPumpManager {
             let matchingBolus = reconcilableEvents[index]
             self.log.debug("Matched unfinalized bolus %@ to history record %@", String(describing: bolus), String(describing: matchingBolus))
             self.state.unfinalizedBolus = nil
-            markReconciled(raw: matchingBolus.raw, index: index)
+            markReconciled(startTime: bolus.startTime, uuid: bolus.uniqueId, eventRaw: matchingBolus.raw, index: index)
         }
 
         // Reconcile temp basal
-        if let tempBasal = self.state.unfinalizedTempBasal, let index = reconcilableEvents.firstMatchingIndex(for: tempBasal, within: matchingTimeWindow), let dose = events[index].dose {
+        if let tempBasal = self.state.unfinalizedTempBasal, let index = reconcilableEvents.firstMatchingIndex(for: tempBasal, within: matchingTimeWindow) {
             let matchedTempBasal = reconcilableEvents[index]
             self.log.debug("Matched unfinalized temp basal %@ to history record %@", String(describing: tempBasal), String(describing: matchedTempBasal))
+            
             // Update unfinalizedTempBasal to match entry in history, and mark as reconciled
-            self.state.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: dose.endDate.timeIntervalSince(dose.startDate), isReconciledWithHistory: true)
-            markReconciled(raw: matchedTempBasal.raw, index: index)
+            //self.state.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: tempBasal.startDate, duration: dose.endDate.timeIntervalSince(dose.startDate), isReconciledWithHistory: true)
+            
+            // Temporary: Keeping original command time here, instead of pump time, for NS natural key restriction
+            self.state.unfinalizedTempBasal?.isReconciledWithHistory = true
+            
+            markReconciled(startTime: tempBasal.startTime, uuid: tempBasal.uniqueId, eventRaw: matchedTempBasal.raw, index: index)
         }
 
         // Reconcile any pending doses, and remove expired doses
-        let expirationCutoff = Date().addingTimeInterval(.hours(-24))
+        let expirationCutoff = Date().addingTimeInterval(.hours(-12))
         self.state.pendingDoses.removeAll { (dose) -> Bool in
             if let index = reconcilableEvents.firstMatchingIndex(for: dose, within: matchingTimeWindow) {
                 let historyEvent = reconcilableEvents[index]
                 self.log.debug("Matched pending dose %@ to history record %@", String(describing: dose), String(describing: historyEvent))
-                markReconciled(raw: historyEvent.raw, index: index)
+                markReconciled(startTime: dose.startTime, uuid: dose.uniqueId, eventRaw: historyEvent.raw, index: index)
                 return true
             } else if dose.finishTime < expirationCutoff {
                 self.log.debug("Expiring pending dose that did not match any history records: %@", String(describing: dose))
@@ -461,6 +465,20 @@ extension MinimedPumpManager {
         }
 
         self.state.lastReconciliation = Date()
+        
+        let recentReconciliationMappings = self.state.reconciliationMappings.filter { (key, value) -> Bool in
+            return value.startTime >= expirationCutoff
+        }
+        self.state.reconciliationMappings = recentReconciliationMappings
+
+        let mappings = self.state.reconciliationMappings
+        return events.map({ (event) -> NewPumpEvent in
+            guard let mapping = mappings[event.raw] else {
+                return event
+            }
+            // We want to be using pump event date for reconciled events, but NS won't let us update startTime
+            return event.replacingRawAndDate(newRaw: mapping.uuid.asRaw, newDate: mapping.startTime)
+        })
     }
 
     private var pendingDosesForStorage: [NewPumpEvent] {
@@ -497,14 +515,14 @@ extension MinimedPumpManager {
 
                     // Reconcile history with pending doses
                     let newPumpEvents = historyEvents.pumpEvents(from: model)
-                    self.reconcilePendingDosesWith(newPumpEvents)
+                    let reconciledEvents = self.reconcilePendingDosesWith(newPumpEvents)
 
                     self.pumpDelegate.notify({ (delegate) in
                         guard let delegate = delegate else {
                             preconditionFailure("pumpManagerDelegate cannot be nil")
                         }
 
-                        delegate.pumpManager(self, hasNewPumpEvents: newPumpEvents + self.pendingDosesForStorage, lastReconciliation: self.lastReconciliation, completion: { (error) in
+                        delegate.pumpManager(self, hasNewPumpEvents: reconciledEvents + self.pendingDosesForStorage, lastReconciliation: self.lastReconciliation, completion: { (error) in
                             // Called on an unknown queue by the delegate
                             if error == nil {
                                 self.recents.lastAddedPumpEvents = Date()

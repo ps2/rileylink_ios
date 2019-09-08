@@ -25,7 +25,6 @@ extension ReconciledDoseMapping: RawRepresentable {
             let uuid = UUID(uuidString: uuidString),
             let eventRawString = rawValue["eventRaw"] as? String,
             let eventRaw = Data(hexadecimalString: eventRawString) else
-            
         {
             return nil
         }

@@ -20,9 +20,9 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
     let amount: Double?
     let absolute: Double?
     let temp: RateType
-    let duration: Int
+    let duration: TimeInterval
     
-    public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: Int, amount: Double? = nil, id: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: TimeInterval, amount: Double? = nil, id: String? = nil) {
         self.rate = rate
         self.absolute = absolute
         self.temp = temp
@@ -38,7 +38,7 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
         rval["temp"] = temp.rawValue
         rval["rate"] = rate
         rval["absolute"] = absolute
-        rval["duration"] = duration
+        rval["duration"] = duration.minutes
         rval["amount"] = amount
         return rval
     }

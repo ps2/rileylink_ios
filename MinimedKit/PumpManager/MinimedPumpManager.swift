@@ -277,7 +277,8 @@ extension MinimedPumpManager {
             }
             
             if suspendResumeState == .suspend {
-                state.unfinalizedBolus?.cancel(at: Date())
+                let pumpModel = state.pumpModel
+                state.unfinalizedBolus?.cancel(at: Date(), pumpModel: pumpModel)
                 if let bolus = state.unfinalizedBolus {
                     state.pendingDoses.append(bolus)
                 }
@@ -1027,7 +1028,9 @@ extension MinimedPumpManager: PumpManager {
                         state.suspendState = .resumed(startDate)
                     }
                     
-                    state.unfinalizedTempBasal?.cancel(at: startDate)
+                    let pumpModel = state.pumpModel
+                    
+                    state.unfinalizedTempBasal?.cancel(at: startDate, pumpModel: pumpModel)
                     if let previousTempBasal = state.unfinalizedTempBasal {
                         state.pendingDoses.append(previousTempBasal)
                     }

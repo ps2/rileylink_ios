@@ -100,20 +100,21 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.uuid = UUID()
     }
 
-    public mutating func cancel(at date: Date) {
+    public mutating func cancel(at date: Date, pumpModel: PumpModel) {
         guard date < finishTime else {
             return
         }
-
-        programmedUnits = units
+        
+        let programmedUnits = units
+        self.programmedUnits = programmedUnits
         let newDuration = date.timeIntervalSince(startTime)
 
         switch doseType {
         case .bolus:
-            units = rate * newDuration.hours
+            (units,_) = pumpModel.estimateBolusProgress(elapsed: newDuration, programmedUnits: programmedUnits)
         case .tempBasal:
             programmedTempRate = rate
-            units = floor(rate * newDuration.hours * 20) / 20
+            (units,_) = pumpModel.estimateTempBasalProgress(unitsPerHour: rate, duration: duration, elapsed: newDuration)
         default:
             break
         }

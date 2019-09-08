@@ -661,7 +661,7 @@ extension OmnipodPumpManager {
     // MARK: - Pump Commands
 
     private func getPodStatus(storeDosesOnSuccess: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
-        guard state.podState?.unfinalizedBolus?.isFinished != false else {
+        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
             self.log.info("Skipping status request due to unfinalized bolus in progress.")
             completion?(.failure(PodCommsError.unfinalizedBolus))
             return
@@ -1182,6 +1182,15 @@ extension OmnipodPumpManager: PumpManager {
                 completion(.failure(SetBolusError.certain(error)))
                 return
             }
+            
+            defer {
+                self.setState({ (state) in
+                    state.bolusEngageState = .stable
+                })
+            }
+            self.setState({ (state) in
+                state.bolusEngageState = .engaging
+            })
 
             var podStatus: StatusResponse
 
@@ -1208,16 +1217,6 @@ extension OmnipodPumpManager: PumpManager {
                 return
             }
 
-            // TODO: Move this to the top, since Loop is expecting a status change to cancel its loading indicator?
-            defer {
-                self.setState({ (state) in
-                    state.bolusEngageState = .stable
-                })
-            }
-            self.setState({ (state) in
-                state.bolusEngageState = .engaging
-            })
-
             let date = Date()
             let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
             let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
@@ -1234,7 +1233,16 @@ extension OmnipodPumpManager: PumpManager {
             case .certainFailure(let error):
                 completion(.failure(SetBolusError.certain(error)))
             case .uncertainFailure(let error):
-                completion(.failure(SetBolusError.uncertain(error)))
+                // Attempt to verify bolus
+                let _ = try? session.getStatus()
+                if let bolus = self.state.podState?.unfinalizedBolus {
+                    if bolus.scheduledCertainty == .uncertain {
+                        completion(.failure(SetBolusError.uncertain(error)))
+                    }
+                    completion(.success(dose))
+                } else {
+                    completion(.failure(SetBolusError.certain(error)))
+                }
             }
         }
     }

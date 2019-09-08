@@ -559,6 +559,7 @@ public class PodCommsSession {
         return statusResponse
     }
 
+    @discardableResult
     public func getStatus() throws -> StatusResponse {
         if useCancelNoneForStatus {
             return try cancelNone() // functional replacement for getStatus()

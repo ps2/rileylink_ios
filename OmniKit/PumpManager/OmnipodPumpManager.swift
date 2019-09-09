@@ -1233,16 +1233,7 @@ extension OmnipodPumpManager: PumpManager {
             case .certainFailure(let error):
                 completion(.failure(SetBolusError.certain(error)))
             case .uncertainFailure(let error):
-                // Attempt to verify bolus
-                let _ = try? session.getStatus()
-                if let bolus = self.state.podState?.unfinalizedBolus {
-                    if bolus.scheduledCertainty == .uncertain {
-                        completion(.failure(SetBolusError.uncertain(error)))
-                    }
-                    completion(.success(dose))
-                } else {
-                    completion(.failure(SetBolusError.certain(error)))
-                }
+                completion(.failure(SetBolusError.uncertain(error)))
             }
         }
     }
@@ -1474,6 +1465,14 @@ extension OmnipodPumpManager: MessageLogger {
 extension OmnipodPumpManager: PodCommsDelegate {
     func podComms(_ podComms: PodComms, didChange podState: PodState) {
         setState { (state) in
+            // Check for any updates to bolus certainty, and log them
+            if let bolus = state.podState?.unfinalizedBolus, bolus.scheduledCertainty == .uncertain, !bolus.isFinished {
+                if podState.unfinalizedBolus?.scheduledCertainty == .some(.certain) {
+                    self.log.debug("Resolved bolus uncertainty: did bolus")
+                } else if podState.unfinalizedBolus == nil {
+                    self.log.debug("Resolved bolus uncertainty: did not bolus")
+                }
+            }
             state.podState = podState
         }
     }

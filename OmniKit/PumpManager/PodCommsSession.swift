@@ -410,19 +410,33 @@ public class PodCommsSession {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
         }
         
-        // 17 0d 00 0064 0001 86a0000000000000
+        // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
+        let commsOffset = TimeInterval(seconds: -1.5)
+        
         let bolusExtraCommand = BolusExtraCommand(units: units, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
         do {
-            // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
-            let commsOffset = TimeInterval(seconds: -1.5)
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
         } catch let error {
-            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
-            return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+            self.log.debug("Uncertain result bolusing")
+            // Attempt to verify bolus
+            let podCommsError = error as? PodCommsError ?? PodCommsError.commsError(error: error)
+            guard let status = try? getStatus() else {
+                self.log.debug("Status check failed; could not resolve bolus uncertainty")
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
+                return DeliveryCommandResult.uncertainFailure(error: podCommsError)
+            }
+            if status.deliveryStatus.bolusing {
+                self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
+                return DeliveryCommandResult.success(statusResponse: status)
+            } else {
+                self.log.debug("getStatus resolved bolus uncertainty (failed)")
+                return DeliveryCommandResult.certainFailure(error: podCommsError)
+            }
         }
     }
     
@@ -559,6 +573,7 @@ public class PodCommsSession {
         return statusResponse
     }
 
+    @discardableResult
     public func getStatus() throws -> StatusResponse {
         if useCancelNoneForStatus {
             return try cancelNone() // functional replacement for getStatus()

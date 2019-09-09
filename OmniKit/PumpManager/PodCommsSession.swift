@@ -558,9 +558,9 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    public func getStatus() throws -> StatusResponse {
-        private let useCancelNone: Bool = false // edit to use cancelNone instead of get status
+    private let useCancelNone: Bool = false // edit to use cancelNone instead of get status
 
+    public func getStatus() throws -> StatusResponse {
         if useCancelNone {
             return try cancelNone() // a functional replacement for getStatus()
         }

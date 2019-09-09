@@ -203,7 +203,7 @@ extension NewPumpEvent {
         let title = String(describing: dose)
         let entry = DoseEntry(dose)
         let raw = dose.uuid.asRaw
-        self.init(date: dose.startTime, dose: entry, isMutable: !dose.isFinished, raw: raw, title: title)
+        self.init(date: dose.startTime, dose: entry, isMutable: !dose.isFinished || !dose.isReconciledWithHistory, raw: raw, title: title)
     }
     
     func replacingAttributes(raw newRaw: Data, date newDate: Date, duration newDuration: TimeInterval, mutable: Bool) -> NewPumpEvent {

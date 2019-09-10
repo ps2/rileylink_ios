@@ -65,7 +65,7 @@ class BolusTests: XCTestCase {
     
     func testBolusExtraOddPulseCount() {
         // 17 0d 7c 00fa 00030d40 000000000000
-        let cmd = BolusExtraCommand(acknowledgementBeep: false, completionBeep: true, programReminderInterval: .hours(1), units: 1.25)
+        let cmd = BolusExtraCommand(units: 1.25, acknowledgementBeep: false, completionBeep: true, programReminderInterval: .hours(1))
         XCTAssertEqual("170d7c00fa00030d40000000000000", cmd.data.hexadecimalString)
     }
 
@@ -110,7 +110,7 @@ class BolusTests: XCTestCase {
         let bolusCommand = SetInsulinScheduleCommand(nonce: 0x31204ba7, deliverySchedule: scheduleEntry)
         XCTAssertEqual("1a0e31204ba702014801257002570257", bolusCommand.data.hexadecimalString)
         
-        let bolusExtraCommand = BolusExtraCommand(acknowledgementBeep: false, completionBeep: true, programReminderInterval: .hours(1), units: bolusAmount)
+        let bolusExtraCommand = BolusExtraCommand(units: bolusAmount, acknowledgementBeep: false, completionBeep: true, programReminderInterval: .hours(1))
         XCTAssertEqual("170d7c176600030d40000000000000", bolusExtraCommand.data.hexadecimalString)
     }
     
@@ -126,7 +126,7 @@ class BolusTests: XCTestCase {
         
         // 17 LL RR NNNN XXXXXXXX
         // 17 0d 3c 019a 00030d40 0000 00000000
-        let bolusExtraCommand = BolusExtraCommand(acknowledgementBeep: false, completionBeep: false, programReminderInterval: .hours(1), units: bolusAmount)
+        let bolusExtraCommand = BolusExtraCommand(units: bolusAmount, acknowledgementBeep: false, completionBeep: false, programReminderInterval: .hours(1))
         XCTAssertEqual("170d3c019a00030d40000000000000", bolusExtraCommand.data.hexadecimalString)
     }
 

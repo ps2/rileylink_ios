@@ -78,7 +78,7 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
         case .waitingForPairingReminder:
             return LocalizedString("Waiting for pairing reminder", comment: "Description waiting for pairing reminder")
         case .finishSetupReminder:
-            return LocalizedString("Finish setup ", comment: "Description for expiration alert")
+            return LocalizedString("Finish setup ", comment: "Description for finish setup")
         case .expirationAlert:
             return LocalizedString("Expiration alert", comment: "Description for expiration alert")
         case .expirationAdvisoryAlarm:
@@ -99,13 +99,17 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
         case .finishSetupReminder:
             return AlertConfiguration(alertType: .slot7, duration: .minutes(55), trigger: .timeUntilAlert(.minutes(5)), beepRepeat: .every5Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .expirationAlert(let alertTime):
-            return AlertConfiguration(alertType: .slot3, duration: 0, trigger: .timeUntilAlert(alertTime), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+            let active = alertTime != 0 // disable if alertTime is 0
+            return AlertConfiguration(alertType: .slot3, active: active, duration: 0, trigger: .timeUntilAlert(alertTime), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .expirationAdvisoryAlarm(let alarmTime, let duration):
-            return AlertConfiguration(alertType: .slot7, duration: duration, trigger: .timeUntilAlert(alarmTime), beepRepeat: .every60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+            let active = alarmTime != 0 // disable if alarmTime is 0
+            return AlertConfiguration(alertType: .slot7, active: active, duration: duration, trigger: .timeUntilAlert(alarmTime), beepRepeat: .every60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .shutdownImminentAlarm(let alarmTime):
-            return AlertConfiguration(alertType: .slot2, duration: 0, trigger: .timeUntilAlert(alarmTime), beepRepeat: .every15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+            let active = alarmTime != 0 // disable if alarmTime is 0
+            return AlertConfiguration(alertType: .slot2, active: active, duration: 0, trigger: .timeUntilAlert(alarmTime), beepRepeat: .every15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .lowReservoirAlarm(let units):
-            return AlertConfiguration(alertType: .slot4, duration: 0, trigger: .unitsRemaining(units), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+            let active = units != 0 // disable if units is 0
+            return AlertConfiguration(alertType: .slot4, active: active, duration: 0, trigger: .unitsRemaining(units), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .autoOffAlarm(let active, let countdownDuration):
             return AlertConfiguration(alertType: .slot0, active: active, autoOffModifier: true, duration: .minutes(15), trigger: .timeUntilAlert(countdownDuration), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         }

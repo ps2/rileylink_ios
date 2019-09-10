@@ -45,7 +45,7 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
         case .flashLogRecent:
             return PodInfoFlashLogRecent.self
         case .dumpOlderFlashlog:
-            return PodInfoFlashLogRecent.self
+            return PodInfoFlashLogPrevious.self
         }
     }
 }

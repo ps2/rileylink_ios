@@ -30,6 +30,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var expirationReminderDate: Date?
 
+    public var bolusBeeps: Bool
+
     // Temporal state not persisted
 
     internal enum EngageablePumpState: Equatable {
@@ -54,6 +56,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         self.basalSchedule = basalSchedule
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.unstoredDoses = []
+        self.bolusBeeps = false
     }
     
     public init?(rawValue: RawValue) {
@@ -127,6 +130,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         } else {
             self.unstoredDoses = []
         }
+
+        self.bolusBeeps = rawValue["bolusBeeps"] as? Bool ?? false
     }
     
     public var rawValue: RawValue {
@@ -136,6 +141,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "basalSchedule": basalSchedule.rawValue,
             "messageLog": messageLog.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
+            "bolusBeeps": bolusBeeps,
         ]
         
         if let podState = podState {
@@ -159,6 +165,10 @@ extension OmnipodPumpManagerState {
         return podState?.isActive == true
     }
 
+    var hasSetupCompletePod: Bool {
+        return podState?.isSetupComplete == true
+    }
+
     var isPumpDataStale: Bool {
         let pumpStatusAgeTolerance = TimeInterval(minutes: 6)
         let pumpDataAge = -(self.lastPumpDataReportDate ?? .distantPast).timeIntervalSinceNow
@@ -180,6 +190,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* tempBasalEngageState: \(String(describing: tempBasalEngageState))",
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
+            "* bolusBeeps: \(String(describing: bolusBeeps))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
             String(reflecting: messageLog),

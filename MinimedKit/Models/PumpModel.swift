@@ -159,6 +159,55 @@ public enum PumpModel: String {
         }
         return TimeInterval(minutes: units / unitsPerMinute)
     }
+    
+    public func estimateTempBasalProgress(unitsPerHour: Double, duration: TimeInterval, elapsed: TimeInterval) ->  (deliveredUnits: Double, progress: Double) {
+        let roundedVolume = round(unitsPerHour * elapsed.hours * Double(pulsesPerUnit)) / Double(pulsesPerUnit)
+        return (deliveredUnits: roundedVolume, progress: min(elapsed / duration, 1))
+    }
+    
+    public func estimateBolusProgress(elapsed: TimeInterval, programmedUnits: Double) -> (deliveredUnits: Double, progress: Double) {
+        let duration = bolusDeliveryTime(units: programmedUnits)
+        let timeProgress = min(elapsed / duration, 1)
+        
+        let updateResolution: Double
+        let unroundedVolume: Double
+        
+        if isDeliveryRateVariable {
+            if programmedUnits < 1 {
+                updateResolution = 40 // Resolution = 0.025
+                unroundedVolume = timeProgress * programmedUnits
+            } else {
+                var remainingUnits = programmedUnits
+                var baseDuration: TimeInterval = 0
+                var overlay1Duration: TimeInterval = 0
+                var overlay2Duration: TimeInterval = 0
+                let baseDeliveryRate = 1.5 / TimeInterval(minutes: 1)
+                
+                baseDuration = min(duration, remainingUnits / baseDeliveryRate)
+                remainingUnits -= baseDuration * baseDeliveryRate
+                
+                overlay1Duration = min(duration, remainingUnits / baseDeliveryRate)
+                remainingUnits -= overlay1Duration * baseDeliveryRate
+                
+                overlay2Duration = min(duration, remainingUnits / baseDeliveryRate)
+                remainingUnits -= overlay2Duration * baseDeliveryRate
+                
+                unroundedVolume = (min(elapsed, baseDuration) + min(elapsed, overlay1Duration) + min(elapsed, overlay2Duration)) * baseDeliveryRate
+                
+                if overlay1Duration > elapsed {
+                    updateResolution = 10 // Resolution = 0.1
+                } else {
+                    updateResolution = 20 // Resolution = 0.05
+                }
+            }
+            
+        } else {
+            updateResolution = 20 // Resolution = 0.05
+            unroundedVolume = timeProgress * programmedUnits
+        }
+        let roundedVolume = round(unroundedVolume * updateResolution) / updateResolution
+        return (deliveredUnits: roundedVolume, progress: roundedVolume / programmedUnits)
+    }
 }
 
 

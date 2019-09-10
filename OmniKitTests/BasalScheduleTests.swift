@@ -97,7 +97,7 @@ class BasalScheduleTests: XCTestCase {
         
         // Encode
         let rateEntries = RateEntry.makeEntries(rate: 3.0, duration: TimeInterval(hours: 24))
-        let cmd = BasalScheduleExtraCommand(acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0, currentEntryIndex: 0, remainingPulses: 689, delayUntilNextTenthOfPulse: TimeInterval(seconds: 20), rateEntries: rateEntries)
+        let cmd = BasalScheduleExtraCommand(currentEntryIndex: 0, remainingPulses: 689, delayUntilNextTenthOfPulse: TimeInterval(seconds: 20), rateEntries: rateEntries, acknowledgementBeep: false, completionBeep: true, programReminderInterval: 0)
 
 
         XCTAssertEqual("130e40001aea01312d003840005b8d80", cmd.data.hexadecimalString)

@@ -161,7 +161,7 @@ public enum PumpModel: String {
     }
     
     public func estimateTempBasalProgress(unitsPerHour: Double, duration: TimeInterval, elapsed: TimeInterval) ->  (deliveredUnits: Double, progress: Double) {
-        let roundedVolume = floor(unitsPerHour * elapsed.hours * Double(pulsesPerUnit)) / Double(pulsesPerUnit)
+        let roundedVolume = round(unitsPerHour * elapsed.hours * Double(pulsesPerUnit)) / Double(pulsesPerUnit)
         return (deliveredUnits: roundedVolume, progress: min(elapsed / duration, 1))
     }
     

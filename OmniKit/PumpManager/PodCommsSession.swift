@@ -143,7 +143,6 @@ public protocol PodCommsSessionDelegate: class {
 
 public class PodCommsSession {
     private let useCancelNoneForStatus: Bool = false             // whether to always use a cancel none to get status
-    private let podLowReservoirLevel: Double = 20                // default pod low reservoir alert value
     
     public let log = OSLog(category: "PodCommsSession")
     
@@ -263,7 +262,7 @@ public class PodCommsSession {
             // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
             let finishSetupReminder = PodAlert.finishSetupReminder
-            let _ = try configureAlerts([finishSetupReminder])
+            try configureAlerts([finishSetupReminder])
         } else {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -308,6 +307,7 @@ public class PodCommsSession {
         podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain))
     }
 
+    @discardableResult
     private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
@@ -319,15 +319,18 @@ public class PodCommsSession {
         return status
     }
 
-    // emits the specified beep type and sets the completion beep flags based on the specified confirmationBeep value
-    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) throws {
+    // emits the specified beep type and sets the completion beep flags, never throws
+    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) {
         guard self.podState.fault == nil else {
-            return // skip if already faulted to avoid a Beep Config Command error response
+            log.info("Skip beep config with faulted pod")
+            return
         }
-        
+
         let beepConfigCommand = BeepConfigCommand(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-        let statusResponse: StatusResponse = try send([beepConfigCommand])
-        podState.updateFromStatusResponse(statusResponse)
+        do {
+            let statusResponse: StatusResponse = try send([beepConfigCommand])
+            podState.updateFromStatusResponse(statusResponse)
+        } catch {} // never critical
     }
 
     public func insertCannula() throws -> TimeInterval {
@@ -356,7 +359,7 @@ public class PodCommsSession {
             let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
             let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
             let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: 0) // Turn Auto-off feature off
-            let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
+            try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
         }
         
         // Insert Cannula
@@ -509,11 +512,10 @@ public class PodCommsSession {
     }
 
     public func testingCommands() throws {
-        // try readFlashLogs()
-        let _ = try cancelNone() // a functional replacement for getStatus() which also verifies & advances nonce
+        try cancelNone()
     }
     
-    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {
+    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool, completionBeep: Bool) throws -> StatusResponse {
         let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
         switch result {
         case .certainFailure(let error):
@@ -522,7 +524,7 @@ public class PodCommsSession {
             throw error
         case .success:
             let scheduleOffset = timeZone.scheduleOffset(forDate: date)
-            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset)
+            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
             return status
         }
     }
@@ -556,10 +558,11 @@ public class PodCommsSession {
         return status
     }
     
+    // use cancelDelivery with .none to get status as well as to validate & advance the nonce
+    @discardableResult
     public func cancelNone() throws -> StatusResponse {
         var statusResponse: StatusResponse
 
-        // use cancelDelivery .none to get status AND validate & advance the nonce
         let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, beepType: .noBeep)
         switch cancelResult {
         case .certainFailure(let error):
@@ -583,14 +586,14 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
+    public func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
 
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
         let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
         let messageResponse = try transport.sendMessage(message)
 
         if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.info("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
+            log.default("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
         } else if let fault = messageResponse.fault {
             handlePodFault(fault: fault)
             throw PodCommsError.podFault(fault: fault)
@@ -598,21 +601,6 @@ public class PodCommsSession {
             log.error("Unexpected Pod flash log response: %@", String(describing: messageResponse.messageBlocks[0]))
             throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
         }
-    }
-
-    public func readFlashLogs() throws {
-        if self.podState.fault == nil {
-            let _ = try cancelNone()
-            guard podState.unfinalizedBolus?.isFinished != false else {
-                log.info("Unfinalized bolus, skipping read flash logs")
-                throw PodCommsError.unfinalizedBolus
-            }
-        }
-
-        // read up to the most recent 50 entries from flash log
-        try readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
-        // read up to the previous 50 entries from flash log
-        try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
     }
 
     public func deactivatePod() throws {

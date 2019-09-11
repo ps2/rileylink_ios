@@ -30,7 +30,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var expirationReminderDate: Date?
 
-    public var bolusBeeps: Bool
+    public var confirmationBeeps: Bool
 
     // Temporal state not persisted
 
@@ -56,7 +56,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         self.basalSchedule = basalSchedule
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.unstoredDoses = []
-        self.bolusBeeps = false
+        self.confirmationBeeps = false
     }
     
     public init?(rawValue: RawValue) {
@@ -131,7 +131,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             self.unstoredDoses = []
         }
 
-        self.bolusBeeps = rawValue["bolusBeeps"] as? Bool ?? false
+        self.confirmationBeeps = rawValue["confirmationBeeps"] as? Bool ?? rawValue["bolusBeeps"] as? Bool ?? false
     }
     
     public var rawValue: RawValue {
@@ -141,7 +141,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "basalSchedule": basalSchedule.rawValue,
             "messageLog": messageLog.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
-            "bolusBeeps": bolusBeeps,
+            "confirmationBeeps": confirmationBeeps,
         ]
         
         if let podState = podState {
@@ -190,7 +190,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* tempBasalEngageState: \(String(describing: tempBasalEngageState))",
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
-            "* bolusBeeps: \(String(describing: bolusBeeps))",
+            "* confirmationBeeps: \(String(describing: confirmationBeeps))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
             String(reflecting: messageLog),

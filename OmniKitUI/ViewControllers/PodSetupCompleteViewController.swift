@@ -48,7 +48,6 @@ class PodSetupCompleteViewController: SetupTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        print("willSelectRowAt")
         tableView.beginUpdates()
         return indexPath
     }

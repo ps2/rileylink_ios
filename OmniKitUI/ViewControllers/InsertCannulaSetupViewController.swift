@@ -148,7 +148,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         present(confirmVC, animated: true) {}
     }
     
-    func insertCannula() {
+    private func insertCannula() {
         pumpManager.insertCannula() { (result) in
             DispatchQueue.main.async {
                 switch(result) {

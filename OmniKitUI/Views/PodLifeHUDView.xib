@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,11 +16,10 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="3 days" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7G0-xU-Hfm">
                     <rect key="frame" x="2" y="56" width="92" height="17"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSE-Jz-j8k">
-                    <rect key="frame" x="26" y="9" width="44" height="44"/>
+                    <rect key="frame" x="26" y="8" width="44" height="44"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pod_life" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -37,7 +34,6 @@
                                         <constraint firstAttribute="width" constant="18" id="pwi-Jo-qGF"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -83,7 +79,7 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1h" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9J-nS-4US">
-                    <rect key="frame" x="42" y="24" width="12.5" height="14"/>
+                    <rect key="frame" x="42" y="23" width="12.5" height="14"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -92,9 +88,9 @@
                 <bool key="isElement" value="YES"/>
             </accessibility>
             <constraints>
-                <constraint firstItem="sSE-Jz-j8k" firstAttribute="top" secondItem="Fgu-h0-N6n" secondAttribute="top" constant="9" id="6WN-Ek-Oap"/>
+                <constraint firstItem="sSE-Jz-j8k" firstAttribute="top" secondItem="Fgu-h0-N6n" secondAttribute="top" constant="8" id="6WN-Ek-Oap"/>
                 <constraint firstItem="g9J-nS-4US" firstAttribute="centerY" secondItem="sSE-Jz-j8k" secondAttribute="centerY" id="NeR-1T-w3W"/>
-                <constraint firstItem="7G0-xU-Hfm" firstAttribute="top" secondItem="sSE-Jz-j8k" secondAttribute="bottom" constant="3" id="P5X-jo-6DP"/>
+                <constraint firstItem="7G0-xU-Hfm" firstAttribute="top" secondItem="sSE-Jz-j8k" secondAttribute="bottom" constant="4" id="P5X-jo-6DP"/>
                 <constraint firstItem="7G0-xU-Hfm" firstAttribute="leading" secondItem="Fgu-h0-N6n" secondAttribute="leading" constant="2" id="b2j-Qm-6Qv"/>
                 <constraint firstAttribute="bottom" secondItem="7G0-xU-Hfm" secondAttribute="bottom" id="jdL-17-9Ay"/>
                 <constraint firstItem="sSE-Jz-j8k" firstAttribute="centerX" secondItem="Fgu-h0-N6n" secondAttribute="centerX" id="wJy-gl-hZ3"/>
@@ -104,6 +100,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="alertLabel" destination="MGp-dJ-1MV" id="Nuf-Sh-0wM"/>
+                <outlet property="backgroundRing" destination="zcH-tM-6Pm" id="pbk-sr-wSB"/>
                 <outlet property="caption" destination="7G0-xU-Hfm" id="gzP-d7-lM6"/>
                 <outlet property="progressRing" destination="9wR-SP-Zkm" id="LZQ-X5-6Z0"/>
                 <outlet property="timeLabel" destination="g9J-nS-4US" id="7rv-go-9Ax"/>

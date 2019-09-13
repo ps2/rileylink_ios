@@ -27,7 +27,12 @@ open class RileyLinkManagerSetupViewController: UINavigationController, PumpMana
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        if #available(iOSApplicationExtension 13.0, *) {
+            // Prevent interactive dismissal
+            isModalInPresentation = true
+        }
+
         delegate = self
     }
     

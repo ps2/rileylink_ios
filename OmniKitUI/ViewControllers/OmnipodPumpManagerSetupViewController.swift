@@ -26,7 +26,11 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        if #available(iOSApplicationExtension 13.0, *) {
+            view.backgroundColor = .systemBackground
+        } else {
+            view.backgroundColor = .white
+        }
         navigationBar.shadowImage = UIImage()
         
         if let omnipodPairingViewController = topViewController as? PairPodSetupViewController, let rileyLinkPumpManager = rileyLinkPumpManager {

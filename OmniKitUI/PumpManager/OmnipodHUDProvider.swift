@@ -159,7 +159,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             rawValue["alerts"] = podState.activeAlerts.values.map { $0.rawValue }
         }
         
-        if let lastInsulinMeasurements = podState?.lastInsulinMeasurements, lastInsulinMeasurements.reservoirVolume != nil {
+        if let lastInsulinMeasurements = podState?.lastInsulinMeasurements {
             rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
             rawValue["validTime"] = lastInsulinMeasurements.validTime
         }
@@ -175,15 +175,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             return []
         }
         
-        let reservoirView: OmnipodReservoirView?
-        
         let alerts = rawAlerts.compactMap { PodAlert.init(rawValue: $0) }
         let reservoirVolume = rawValue["reservoirVolume"] as? Double
         let validTime = rawValue["validTime"] as? Date
         
+        let reservoirView = OmnipodReservoirView.instantiate()
         if let validTime = validTime
         {
-            reservoirView = OmnipodReservoirView.instantiate()
             let reservoirLevel = reservoirVolume?.asReservoirPercentage()
             var reservoirAlertState: ReservoirAlertState = .ok
             for alert in alerts {
@@ -191,15 +189,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
                     reservoirAlertState = .lowReservoir
                 }
             }
-            reservoirView!.update(volume: reservoirVolume, at: validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
-        } else {
-            reservoirView = nil
+            reservoirView.update(volume: reservoirVolume, at: validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
         }
         
         let podLifeHUDView = PodLifeHUDView.instantiate()
         podLifeHUDView.setPodLifeCycle(startTime: podActivatedAt, lifetime: lifetime)
         
-        return [reservoirView, podLifeHUDView].compactMap({ $0 })
+        return [reservoirView, podLifeHUDView]
     }
     
     func podStateDidUpdate(_ podState: PodState?) {

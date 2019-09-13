@@ -142,6 +142,8 @@ public protocol PodCommsSessionDelegate: class {
 }
 
 public class PodCommsSession {
+    private let useCancelNone: Bool = false // whether to use a cancel none to get status
+    
     public let log = OSLog(category: "PodCommsSession")
     
     private var podState: PodState {
@@ -260,7 +262,7 @@ public class PodCommsSession {
             // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
             let finishSetupReminder = PodAlert.finishSetupReminder
-            let _ = try configureAlerts([finishSetupReminder])
+            try configureAlerts([finishSetupReminder])
         } else {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -305,6 +307,7 @@ public class PodCommsSession {
         podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain))
     }
 
+    @discardableResult
     private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
@@ -356,7 +359,7 @@ public class PodCommsSession {
             let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
             let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
             let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: 0) // Turn Auto-off feature off
-            let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
+            try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
         }
         
         // Insert Cannula
@@ -398,7 +401,6 @@ public class PodCommsSession {
         case certainFailure(error: PodCommsError)
         case uncertainFailure(error: PodCommsError)
     }
-
     
     public func bolus(units: Double, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
@@ -410,19 +412,33 @@ public class PodCommsSession {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
         }
         
-        // 17 0d 00 0064 0001 86a0000000000000
+        // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
+        let commsOffset = TimeInterval(seconds: -1.5)
+        
         let bolusExtraCommand = BolusExtraCommand(units: units, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
         do {
-            // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
-            let commsOffset = TimeInterval(seconds: -1.5)
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
         } catch let error {
-            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
-            return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+            self.log.debug("Uncertain result bolusing")
+            // Attempt to verify bolus
+            let podCommsError = error as? PodCommsError ?? PodCommsError.commsError(error: error)
+            guard let status = try? getStatus() else {
+                self.log.debug("Status check failed; could not resolve bolus uncertainty")
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
+                return DeliveryCommandResult.uncertainFailure(error: podCommsError)
+            }
+            if status.deliveryStatus.bolusing {
+                self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
+                return DeliveryCommandResult.success(statusResponse: status)
+            } else {
+                self.log.debug("getStatus resolved bolus uncertainty (failed)")
+                return DeliveryCommandResult.certainFailure(error: podCommsError)
+            }
         }
     }
     
@@ -495,7 +511,7 @@ public class PodCommsSession {
     }
 
     public func testingCommands() throws {
-        let _ = try cancelNone()
+        try cancelNone()
     }
     
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool, completionBeep: Bool) throws -> StatusResponse {
@@ -542,6 +558,7 @@ public class PodCommsSession {
     }
     
     // use cancelDelivery with .none to get status as well as to validate & advance the nonce
+    @discardableResult
     public func cancelNone() throws -> StatusResponse {
         var statusResponse: StatusResponse
 
@@ -558,11 +575,10 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    private let useCancelNone: Bool = false // edit to use cancelNone instead of get status
-
+    @discardableResult
     public func getStatus() throws -> StatusResponse {
         if useCancelNone {
-            return try cancelNone() // a functional replacement for getStatus()
+            return try cancelNone() // functional replacement for getStatus()
         }
         let statusResponse: StatusResponse = try send([GetStatusCommand()])
         podState.updateFromStatusResponse(statusResponse)
@@ -639,7 +655,7 @@ public class PodCommsSession {
         // consider verifying that the level is above the current reservior value?
         log.default("Setting pod alert for low reservior level %s units", String(describing: level))
         let lowReservoirAlarm = PodAlert.lowReservoirAlarm(level)
-        let _ = try configureAlerts([lowReservoirAlarm])
+        try configureAlerts([lowReservoirAlarm])
     }
 
     public func setPodExpirationAlert(expirationReminderDate: Date?) throws {
@@ -652,14 +668,14 @@ public class PodCommsSession {
         }
         log.default("Setting pod expiration alert for %s in %s", String(describing: expiryAlert), TimeInterval(seconds: timeUntilExpirationAlert).stringValue)
         let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
-        let _ = try configureAlerts([expirationAlert])
+        try configureAlerts([expirationAlert])
     }
 
     public func clearOptionalPodAlarms() throws {
         let lowReservoirAlarm = PodAlert.lowReservoirAlarm(0)
-        let _ = try configureAlerts([lowReservoirAlarm])
+        try configureAlerts([lowReservoirAlarm])
         let expirationAlert = PodAlert.expirationAlert(TimeInterval(hours: 0))
-        let _ = try configureAlerts([expirationAlert])
+        try configureAlerts([expirationAlert])
     }
 }
 

@@ -1,0 +1,59 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* The title of the about section */
+"About" = "About";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Thêm tài khoản";
+
+/* Title text for button to set up a new minimed pump */
+"Add Minimed Pump" = "Nhập bơm Minimed";
+
+/* The title of the nightscout API secret credential */
+"API Secret" = "API Secret";
+
+/* The title of the configuration section in settings */
+"Configuration" = "Cấu hình";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Xóa bỏ tài khoản";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Nhập 6 số ID của bơm";
+
+/* The title text for the pull cgm Data cell */
+"Fetch CGM" = "Lấy dữ liệu từ CGM";
+
+/* The placeholder text for the nightscout site URL credential */
+"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+
+/* The title of the Nightscout service */
+"Nightscout" = "Nightscout";
+
+/* The title text for the pump ID config value */
+"Pump ID" = "Số ID của bơm";
+
+/* The title text for the pump Region config value */
+"Pump Region" = "Khu vực bơm";
+
+/* Instructions on selecting the pump region */
+"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "Khu vực bơm được liệt kê phía sau bơm gồm 2 trong số 3 ký từ của model bơm, có thể thấy như: MMT-551NAB, hay MMT-515LWWS.  Nếu model bơm của bạn là \"NA\", thì khu vực bơm là North America.  Nếu là \"WW\", thì khu vực bơm là WorldWide.";
+
+/* Title text for section listing configured pumps */
+"Pumps" = "Pumps";
+
+/* The default placeholder string for a credential */
+"Required" = "Bắc buộc";
+
+/* The title of the nightscout site URL credential */
+"Site URL" = "Site URL";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Chạm để cài đặt";
+
+/* The title text for the nightscout upload enabled switch cell */
+"Upload To Nightscout" = "Tải lên Nightscout";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Đang xác minh";

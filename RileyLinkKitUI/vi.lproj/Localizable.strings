@@ -1,0 +1,56 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* The title of the cell describing an awake radio */
+"Awake Until" = "Hoạt động cho đến khi";
+
+/* The title of the section describing commands */
+"Commands" = "Commands";
+
+/* The connected state */
+"Connected" = "Đã kết nối";
+
+/* The in-progress connecting state */
+"Connecting" = "Đang kết nối";
+
+/* The title of the cell showing BLE connection state */
+"Connection State" = "Tình trạng kết nối";
+
+/* The title of the section describing the device */
+"Device" = "Thiết bị";
+
+/* The title of the devices table section in RileyLink settings */
+"Devices" = "Thiết bị";
+
+/* The disconnected state */
+"Disconnected" = "Đã ngắt kết nối";
+
+/* The in-progress disconnecting state */
+"Disconnecting" = "Đang ngắt kết nối";
+
+/* The title of the cell showing firmware version */
+"Firmware" = "Firmware";
+
+/* The title of the cell showing current rileylink frequency */
+"Frequency" = "Tần số";
+
+/* The title of the cell describing an awake radio */
+"Last Awake" = "Lần kết nối cuối cùng";
+
+/* The title of the cell describing no radio awake data */
+"Listening Off" = "Đang lắng nghe";
+
+/* The title of the cell showing device name */
+"Name" = "Tên";
+
+/* The title of the cell showing the last idle */
+"On Idle" = "Đang dừng";
+
+/* RileyLink setup description */
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink cho phép giao tiếp với bơm thông qua chuẩn kết nối bluetooth năng lượng thấp.";
+
+/* The title of the cell showing BLE signal strength (RSSI) */
+"Signal Strength" = "Cường độ tín hiệu";
+
+/* The title of the cell showing uptime */
+"Uptime" = "Thời gian hoạt động";

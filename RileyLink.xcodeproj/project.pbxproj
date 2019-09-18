@@ -891,6 +891,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02DD46FD2332919A006FB374 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		02DD46FE233291E6006FB374 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2B19B9871DF3EF68006AB65F /* NewTimePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTimePumpEvent.swift; sourceTree = "<group>"; };
 		2F962EBE1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpOpsSynchronousTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2F962EC01E6872170070EFBD /* TimestampedHistoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedHistoryEventTests.swift; sourceTree = "<group>"; };
@@ -4502,6 +4504,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D4C90DA2331DFF2003F5248 /* sv */,
+				02DD46FE233291E6006FB374 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4510,6 +4513,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D4C90DD2331DFF2003F5248 /* sv */,
+				02DD46FD2332919A006FB374 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

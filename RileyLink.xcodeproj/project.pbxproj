@@ -250,6 +250,7 @@
 		7D23679721252EBC0028B67D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D23679521252EBC0028B67D /* Localizable.strings */; };
 		7D4C90DB2331DFF2003F5248 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D4C90D92331DFF2003F5248 /* Localizable.strings */; };
 		7D4C90DE2331DFF2003F5248 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D4C90DC2331DFF2003F5248 /* Localizable.strings */; };
+		7D4C915923333FF0003F5248 /* OmnipodPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D4C915B23333FF0003F5248 /* OmnipodPumpManager.storyboard */; };
 		7D70766D1FE092D4004AC8EA /* LoopKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D70766F1FE092D4004AC8EA /* LoopKit.strings */; };
 		7D7076771FE092D6004AC8EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076791FE092D6004AC8EA /* InfoPlist.strings */; };
 		7D70767C1FE092D6004AC8EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D70767E1FE092D6004AC8EA /* InfoPlist.strings */; };
@@ -587,7 +588,6 @@
 		C1FFB0022133241700C50C1D /* PacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFFA2133241600C50C1D /* PacketTests.swift */; };
 		C1FFB0032133241700C50C1D /* BasalScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFFB2133241600C50C1D /* BasalScheduleTests.swift */; };
 		C1FFB0042133241700C50C1D /* CRC16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFFC2133241600C50C1D /* CRC16Tests.swift */; };
-		C1FFB00D2133242C00C50C1D /* OmnipodPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1FFB0052133242B00C50C1D /* OmnipodPumpManager.storyboard */; };
 		C1FFB00E2133242C00C50C1D /* OmniPodPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */; };
 		C1FFB00F2133242C00C50C1D /* OmniKitUI.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */; };
 		C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */; };
@@ -1259,6 +1259,8 @@
 		7D4C90D82331DFCD003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D4C90DA2331DFF2003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D4C90DD2331DFF2003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D4C915A23333FF0003F5248 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OmnipodPumpManager.storyboard; sourceTree = "<group>"; };
+		7D4C915D23333FF5003F5248 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
 		7D4F0A611F8F226F00A55FB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D4F0A621F8F226F00A55FB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AACB1FE31CE500522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1582,7 +1584,6 @@
 		C1FFAFFB2133241600C50C1D /* BasalScheduleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTests.swift; sourceTree = "<group>"; };
 		C1FFAFFC2133241600C50C1D /* CRC16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC16Tests.swift; sourceTree = "<group>"; };
 		C1FFAFFD2133241600C50C1D /* OmniKitTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OmniKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		C1FFB0052133242B00C50C1D /* OmnipodPumpManager.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OmnipodPumpManager.storyboard; sourceTree = "<group>"; };
 		C1FFB0062133242B00C50C1D /* OmniPodPumpManager+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OmniPodPumpManager+UI.swift"; sourceTree = "<group>"; };
 		C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OmniKitUI.xcassets; sourceTree = "<group>"; };
 		C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodSettingsViewController.swift; sourceTree = "<group>"; };
@@ -2697,7 +2698,7 @@
 				7D4C90DC2331DFF2003F5248 /* Localizable.strings */,
 				C1FFAFDB213323F900C50C1D /* OmniKitUI.h */,
 				C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */,
-				C1FFB0052133242B00C50C1D /* OmnipodPumpManager.storyboard */,
+				7D4C915B23333FF0003F5248 /* OmnipodPumpManager.storyboard */,
 			);
 			path = OmniKitUI;
 			sourceTree = "<group>";
@@ -3424,7 +3425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C104A9C2217E603E006E3C3E /* OmnipodReservoirView.xib in Resources */,
-				C1FFB00D2133242C00C50C1D /* OmnipodPumpManager.storyboard in Resources */,
+				7D4C915923333FF0003F5248 /* OmnipodPumpManager.storyboard in Resources */,
 				C104A9C7217E9F35006E3C3E /* PodLifeHUDView.xib in Resources */,
 				7D4C90DE2331DFF2003F5248 /* Localizable.strings in Resources */,
 				C104A9C5217E645C006E3C3E /* HUDAssets.xcassets in Resources */,
@@ -4552,6 +4553,15 @@
 				02DD475E2332F61F006FB374 /* nb */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D4C915B23333FF0003F5248 /* OmnipodPumpManager.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D4C915A23333FF0003F5248 /* Base */,
+				7D4C915D23333FF5003F5248 /* vi */,
+			);
+			name = OmnipodPumpManager.storyboard;
 			sourceTree = "<group>";
 		};
 		7D70766F1FE092D4004AC8EA /* LoopKit.strings */ = {

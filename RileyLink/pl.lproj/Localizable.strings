@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The title of the about section */
 "About" = "O aplikacji";
 
@@ -23,7 +20,7 @@
 "Fetch CGM" = "Pobierz dane z CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -31,14 +28,17 @@
 /* The title text for the pump ID config value */
 "Pump ID" = "ID pompy";
 
-/* The title text for the pump Region config value */
-"Pump Region" = "Region zakupu pompy";
-
-/* Instructions on selecting the pump region */
-"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "Region zakupu pompy znajduje się na etykiecie, na odwrocie pompy. Region jest określony przez dwa z trzech ostatnich znaków określających model pompy. Jeśli Twój model zawiera sekwencję \”NA\”, wtedy region to Ameryka Północna. Jeśli Twój model zawiera sekwencję \”WW\”, wtedy region to Ogólnoświatowy. Przykładowe modele pomp z regionem: MMT-551NAB - region to Ameryka Północna; MMT-515LWWS - region to Ogólnoświatowy.";
+/* Title text for section listing configured pumps */
+"Pumps" = "Pumps";
 
 /* The default placeholder string for a credential */
 "Required" = "Wymagany";
+
+/* Title for RileyLink Testing main view controller */
+"RileyLink Testing" = "RileyLink Testing";
+
+/* Title text for button to set up omnipod */
+"Setup Omnipod" = "Setup Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "URL strony";
@@ -48,6 +48,3 @@
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Wysyłaj do Nightscout";
-
-/* Label indicating validation is occurring */
-"Verifying" = "Weryfikacja";

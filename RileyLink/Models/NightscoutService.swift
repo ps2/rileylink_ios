@@ -20,7 +20,7 @@ struct NightscoutService: ServiceAuthentication {
         credentials = [
             ServiceCredential(
                 title: LocalizedString("Site URL", comment: "The title of the nightscout site URL credential"),
-                placeholder: LocalizedString("http://mysite.azurewebsites.net", comment: "The placeholder text for the nightscout site URL credential"),
+                placeholder: LocalizedString("http://mysite.herokuapp.com", comment: "The placeholder text for the nightscout site URL credential"),
                 isSecret: false,
                 keyboardType: .URL,
                 value: siteURL?.absoluteString

@@ -78,10 +78,10 @@
 "Enabled Diagnostic LEDs" = "Diagnóstico LEDs Habilitado";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error Resuming";
+"Error Resuming" = "Error de reanudación";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error Suspending";
+"Error Suspending" = "Error de suspensión";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Obtener Enlite Glucose";
@@ -102,7 +102,7 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware Version";
+"Firmware Version" = "Firmware";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Obtener modelo de Microinfusora";
@@ -166,7 +166,7 @@
 "Reading pump status…" = "Obteniendo estada de microinfusadora…";
 
 /* The title of the cell showing the pump region */
-"Region" = "Region";
+"Region" = "Región";
 
 /* Button title to retry sentry setup */
 "Retry" = "Reintentar";

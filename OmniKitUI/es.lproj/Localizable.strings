@@ -12,13 +12,13 @@
 "%@ U" = "%@ U";
 
 /* Format string for bolus progress when finished. (1: The localized amount) */
-"%@ U (Finished)" = "%@ U (Finished)";
+"%@ U (Finished)" = "%@ U (administrada)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
 "%@ U of %@ U (%@)" = "%1$@ U of %2$@ U (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
-"%@ U/hour" = "%@ U/hour";
+"%@ U/hour" = "%@ U/hora";
 
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
@@ -130,7 +130,7 @@
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod." = "Pod con configuración incompleta ha de desactivarse antes de emparejar uno nuevo. Por favor desactive y quítese el pod.";
 
 /* Button title to insert cannula during setup */
-"Insert Cannula" = "insertar cánula";
+"Insert Cannula" = "Insertar cánula";
 
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insulina administrada";

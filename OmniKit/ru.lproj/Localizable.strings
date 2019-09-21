@@ -44,7 +44,7 @@
 "Initialized" = "Активирован";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Внутренняя ошибка пода %1$03d" = ";
+"Internal pod fault %1$03d" = "Внутренняя ошибка пода %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Болюс прерван%1$@ ед (%2$@ ед намечено) %3$@ %4$@ %5$@";

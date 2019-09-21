@@ -1,41 +1,42 @@
 /* The title of the section describing commands */
-"Commands" = "Commands";
+"Commands" = "Comandos";
 
 /* The connected state */
-"Connected" = "Connected";
+"Connected" = "Conectado";
 
 /* The in-progress connecting state */
-"Connecting" = "Connecting";
+"Connecting" = "Conectando";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Connection State";
+"Connection State" = "Estado da Conexão";
 
 /* The title of the section describing the device */
-"Device" = "Device";
+"Device" = "Dispositivo";
 
 /* The title of the devices table section in RileyLink settings */
-"Devices" = "Devices";
+"Devices" = "Dispositivos";
 
 /* The disconnected state */
-"Disconnected" = "Disconnected";
+"Disconnected" = "Desconectado";
 
 /* The in-progress disconnecting state */
-"Disconnecting" = "Disconnecting";
+"Disconnecting" = "Desconectando";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
 
 /* The title of the cell showing current rileylink frequency */
-"Frequency" = "Frequency";
+"Frequency" = "Frequência";
 
 /* The title of the cell showing device name */
-"Name" = "Name";
+"Name" = "Nome";
 
 /* RileyLink setup description */
-"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink allows for communication with the pump over Bluetooth Low Energy.";
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "O RileyLink permite a comunicação com a bomba por Bluetooth de Baixa Energia.";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
-"Signal Strength" = "Signal Strength";
+"Signal Strength" = "Potência do Sinal";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Tempo de Atividade";
+

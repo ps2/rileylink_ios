@@ -2,22 +2,22 @@
 "About" = "About";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Add Account";
+"Add Account" = "Thêm tài khoản";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API Secret";
 
 /* The title of the configuration section in settings */
-"Configuration" = "Configuration";
+"Configuration" = "Cấu hình";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Delete Account";
+"Delete Account" = "Xóa bỏ tài khoản";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+"Enter the 6-digit pump ID" = "Nhập 6 số ID của bơm";
 
 /* The title text for the pull cgm Data cell */
-"Fetch CGM" = "Fetch CGM";
+"Fetch CGM" = "Lấy dữ liệu từ CGM";
 
 /* The placeholder text for the nightscout site URL credential */
 "http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
@@ -26,13 +26,13 @@
 "Nightscout" = "Nightscout";
 
 /* The title text for the pump ID config value */
-"Pump ID" = "Pump ID";
+"Pump ID" = "Số ID của bơm";
 
 /* Title text for section listing configured pumps */
 "Pumps" = "Pumps";
 
 /* The default placeholder string for a credential */
-"Required" = "Required";
+"Required" = "Bắc buộc";
 
 /* Title for RileyLink Testing main view controller */
 "RileyLink Testing" = "RileyLink Testing";
@@ -44,7 +44,7 @@
 "Site URL" = "Site URL";
 
 /* The empty-state text for a configuration value */
-"Tap to set" = "Tap to set";
+"Tap to set" = "Chạm để cài đặt";
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Upload To Nightscout";

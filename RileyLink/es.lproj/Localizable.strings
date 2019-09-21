@@ -29,13 +29,13 @@
 "Pump ID" = "ID de Microinfusora";
 
 /* Title text for section listing configured pumps */
-"Pumps" = "Pumps";
+"Pumps" = "Microinfusoras";
 
 /* The default placeholder string for a credential */
 "Required" = "Requerido";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink Testing";
+"RileyLink Testing" = "Preubas de RileyLink";
 
 /* Title text for button to set up omnipod */
 "Setup Omnipod" = "Setup Omnipod";

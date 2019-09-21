@@ -221,9 +221,6 @@
 /* Progress message for testing commands. */
 "Testing Commands…" = "Testing Commands…";
 
-/* The title of the cell showing the pod TID */
-"TID" = "TID";
-
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Too many entries";
 

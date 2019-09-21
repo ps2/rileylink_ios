@@ -33,187 +33,187 @@
 "%@U" = "%@U";
 
 /* The title of the cell showing the pod activated at time */
-"Active Time" = "Active Time";
+"Active Time" = "Tiempo en activo";
 
 /* The title of the cell showing alarm status */
-"Alarms" = "Alarms";
+"Alarms" = "Alarmas";
 
 /* Confirmation message for shutting down a pod */
-"Are you sure you want to shutdown this pod?" = "Are you sure you want to shutdown this pod?";
+"Are you sure you want to shutdown this pod?" = "¿está seguro de querer apagar este pod?";
 
 /* Confirmation message for removing Omnipod PumpManager */
-"Are you sure you want to stop using Omnipod?" = "Are you sure you want to stop using Omnipod?";
+"Are you sure you want to stop using Omnipod?" = "¿Está seguro de querer dejar de usar Ominpod?";
 
 /* The title text for the address assigned to the pod */
-"Assigned Address" = "Assigned Address";
+"Assigned Address" = "Dirección asignada";
 
 /* The title of the cell showing pod basal status */
-"Basal Delivery" = "Basal Delivery";
+"Basal Delivery" = "Basal administrada";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rates";
+"Basal Rates" = "Rangos de basal";
 
 /* The title of the cell showing pod bolus status */
-"Bolus Delivery" = "Bolus Delivery";
+"Bolus Delivery" = "Bolo administrado";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancel";
+"Cancel" = "Cancelar";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Change Time Zone";
+"Change Time Zone" = "Cambiar zona horaria";
 
 /* Progress message for changing pod time. */
-"Changing time…" = "Changing time…";
+"Changing time…" = "Cambiando la hora";
 
 /* The title of the configuration section in settings */
-"Configuration" = "Configuration";
+"Configuration" = "Configuración";
 
 /* The title of the continue action in an action sheet */
-"Continue" = "Continue";
+"Continue" = "Continuar";
 
 /* Button title to deactivate pod because of fault during setup */
-"Deactivate" = "Deactivate";
+"Deactivate" = "Desactivar";
 
 /* Button title for pod deactivation
    Button title to deactivate pod */
-"Deactivate Pod" = "Deactivate Pod";
+"Deactivate Pod" = "Desactivar pod";
 
 /* Button title to delete Omnipod PumpManager */
-"Delete Omnipod" = "Delete Omnipod";
+"Delete Omnipod" = "Eliminar Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Delivery Limits";
+"Delivery Limits" = "Límites de administración de insulina";
 
 /* The title of the device information section in settings */
-"Device Information" = "Device Information";
+"Device Information" = "información del dispositivo";
 
 /* Title text for button to disable bolus beeps */
-"Disable Bolus Beeps" = "Disable Bolus Beeps";
+"Disable Bolus Beeps" = "Desactivar pitidos del bolo";
 
 /* Title text for button to enable bolus beeps */
-"Enable Bolus Beeps" = "Enable Bolus Beeps";
+"Enable Bolus Beeps" = "Activar pitidos del bolo";
 
 /* The alert title for disable bolus beeps error */
-"Error disabling bolus beeps" = "Error disabling bolus beeps";
+"Error disabling bolus beeps" = "Error en desactivado de pitido del bolo";
 
 /* The alert title for enable bolus beeps error */
-"Error enabling bolus beeps" = "Error enabling bolus beeps";
+"Error enabling bolus beeps" = "Error en activado de pitido del bolo";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error Resuming";
+"Error Resuming" = "Error de reanudación";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error Suspending";
+"Error Suspending" = "Error de suspensión";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Expiration Reminder";
+"Expiration Reminder" = "Recordatorio de caducidad";
 
 /* The title of the cell showing the pod expiration after expiry */
-"Expired" = "Expired";
+"Expired" = "Caducado";
 
 /* The title of the cell showing the pod expiration */
-"Expires" = "Expires";
+"Expires" = "Caduca";
 
 /* Pod life HUD view label */
 "Fault" = "Fault";
 
 /* The title of the command to finish pod setup */
-"Finish pod setup" = "Finish pod setup";
+"Finish pod setup" = "Terminar la configuración del pod";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "Greater than %1$@ units remaining at %2$@" = "Greater than %1$@ units remaining at %2$@";
 
 /* Instructions when deactivating pod that has been paired, but not attached. */
-"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod.";
+"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Pod con configuración incompleta ha de desactivarse antes de emparejarse con uno nuevo";
 
 /* Instructions when deactivating pod that has been paired and possibly attached. */
-"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod." = "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod.";
+"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod." = "Pod con configuración incompleta ha de desactivarse antes de emparejar uno nuevo. Por favor desactive y quítese el pod.";
 
 /* Button title to insert cannula during setup */
-"Insert Cannula" = "Insert Cannula";
+"Insert Cannula" = "insertar cánula";
 
 /* The title of the cell showing delivered insulin */
-"Insulin Delivered" = "Insulin Delivered";
+"Insulin Delivered" = "Insulina administrada";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
-"Invalid entry" = "Invalid entry";
+"Invalid entry" = "Entrada no válida";
 
 /* The title of the cell showing the pod lot id */
-"Lot" = "Lot";
+"Lot" = "Lote";
 
 /* The detail text for bolus delivery when no bolus is being delivered */
-"None" = "None";
+"None" = "Ninguno";
 
 /* Button title to pair with pod during setup */
-"Pair" = "Pair";
+"Pair" = "Emparejar";
 
 /* The title of the command to pair new pod */
-"Pair New Pod" = "Pair New Pod";
+"Pair New Pod" = "Emparejar nuevo pod";
 
 /* The text of the loading label when pairing */
-"Pairing…" = "Pairing…";
+"Pairing…" = "Emparejando...";
 
 /* The title of the cell showing the pod pi version */
-"PI Version" = "PI Version";
+"PI Version" = "Versión del PI del pod";
 
 /* The title of the command to play test beeps */
-"Play Test Beeps" = "Play Test Beeps";
+"Play Test Beeps" = "Reproducir pitidos de prueba";
 
 /* Progress message for play test beeps. */
-"Play Test Beeps…" = "Play Test Beeps…";
+"Play Test Beeps…" = "Reproducir pitidos de prueba";
 
 /* The title of the cell showing the pod pm version */
-"PM Version" = "PM Version";
+"PM Version" = "Versión PM";
 
 /* Label describing pod age view */
-"Pod Age" = "Pod Age";
+"Pod Age" = "Tiempo del pod";
 
 /* Title of the pod settings view controller */
-"Pod Settings" = "Pod Settings";
+"Pod Settings" = "Configuración del pod";
 
 /* The text of the loading label when pod is primed */
-"Primed" = "Primed";
+"Primed" = "Purgado";
 
 /* The text of the loading label when priming */
-"Priming…" = "Priming…";
+"Priming…" = "Purgando";
 
 /* Label describing time remaining view */
-"Remaining" = "Remaining";
+"Remaining" = "Restante";
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */
-"Replace Pod" = "Replace Pod";
+"Replace Pod" = "Remplace el pod";
 
 /* The title of the command to replace pod when there is a pod fault */
-"Replace Pod Now" = "Replace Pod Now";
+"Replace Pod Now" = "Remplace el pod ahora";
 
 /* The title of the cell showing reservoir status */
-"Reservoir" = "Reservoir";
+"Reservoir" = "Reservorio";
 
 /* Button title for retrying pod deactivation */
-"Retry Pod Deactivation" = "Retry Pod Deactivation";
+"Retry Pod Deactivation" = "Intente la desactivación de nuevo";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
-"Save" = "Save";
+"Save" = "Guardar";
 
 /* The detail text of the basal row when pod is running scheduled basal */
-"Schedule" = "Schedule";
+"Schedule" = "Basal programada";
 
 /* The title of the status section in settings */
-"Status" = "Status";
+"Status" = "Estado";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Succeeded";
+"Succeeded" = "Logrado";
 
 /* The detail text of the basal row when pod is suspended */
-"Suspended" = "Suspended";
+"Suspended" = "En suspensión";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Switch from Omnipod Pumps";
+"Switch from Omnipod Pumps" = "Cambiar la bomba Omnipod";
 
 /* Title of button to sync basal profile from pod */
-"Sync With Pod" = "Sync With Pod";
+"Sync With Pod" = "Sincronizar con el pod";
 
 /* The title of the command to run the test command */
 "Test Command" = "Test Command";
@@ -221,14 +221,12 @@
 /* Progress message for testing commands. */
 "Testing Commands…" = "Testing Commands…";
 
-/* The title of the cell showing the pod TID */
-"TID" = "TID";
-
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
-"Too many entries" = "Too many entries";
+"Too many entries" = "Demasiadas entradas";
 
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Unable to deactivate pod. Please continue and pair a new one.";
+"Unable to deactivate pod. Please continue and pair a new one." = "No se puede desactivar el pod. Por favor, continúe y empareje uno nuevo";
 
 /* The detail text for delivered insulin when no measurement is available */
-"Unknown" = "Unknown";
+"Unknown" = "Desconocido";
+

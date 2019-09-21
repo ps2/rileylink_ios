@@ -1,6 +1,0 @@
-/* Bundle display name */
-"CFBundleDisplayName" = "${PRODUCT_NAME}";
-
-/* Bundle name */
-"CFBundleName" = "${PRODUCT_NAME}";
-

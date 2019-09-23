@@ -23,17 +23,9 @@ extension Collection where Element == TimestampedHistoryEvent {
             var dose: DoseEntry?
             var eventType: LoopKit.PumpEventType?
 
-
             switch event.pumpEvent {
             case let bolus as BolusNormalPumpEvent:
-                // For entries in-progress, use the programmed amount
-                let units: Double
-                if event.isMutable(atDate: now, forPump: model) {
-                    units = bolus.programmed
-                } else {
-                    units = bolus.amount
-                }
-                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: event.date.addingTimeInterval(bolus.duration), value: units, unit: .units)
+                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: event.date.addingTimeInterval(bolus.duration), value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount)
             case is SuspendPumpEvent:
                 dose = DoseEntry(suspendDate: event.date)
             case is ResumePumpEvent:

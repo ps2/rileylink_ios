@@ -482,6 +482,7 @@ public class PodCommsSession {
                 finishTime > now
             {
                 podState.unfinalizedTempBasal?.cancel(at: now)
+                podState.suspendState = .resumed(now)
                 canceledDose = podState.unfinalizedTempBasal
                 log.info("Interrupted temp basal: %@", String(describing: canceledDose))
             }

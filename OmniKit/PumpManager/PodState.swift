@@ -42,7 +42,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     
     public let address: UInt32
     fileprivate var nonceState: NonceState
-    public var activatedAt: Date?
+    public var activatedAt: Date? // set based on StatusResponse timeActive and can change due to Pod clock drift and/or a system time change
 
     public var expiresAt: Date? {
         return activatedAt?.addingTimeInterval(Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
@@ -144,11 +144,18 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
     
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        let now = Date()
+        let activatedAtComputed = now - response.timeActive
         if activatedAt == nil {
-            self.activatedAt = Date() - response.timeActive
+            self.activatedAt = activatedAtComputed
+        } else if let activatedAt = self.activatedAt && (activatedAtComputed < activatedAt || activatetdAtComputed >= activatedAt + TimeInterval(minutes: 1)) {
+            // Computed an activatedAt time that's earlier than or at least a minute later than the current activatedAt times,
+            // so use this newly computed activatedAt time instead to handle Pod clock drift and/or system time changes issues.
+            // The at least a minute later test prevents oscillation of activatedAt based on the exact timing of the responses.
+            self.activatedAt = activatedAtComputed
         }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
+        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now)
         activeAlertSlots = response.alerts
     }
 

@@ -148,10 +148,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         let activatedAtComputed = now - response.timeActive
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
-        } else if let activatedAt = self.activatedAt && (activatedAtComputed < activatedAt || activatetdAtComputed >= activatedAt + TimeInterval(minutes: 1)) {
-            // Computed an activatedAt time that's earlier than or at least a minute later than the current activatedAt times,
-            // so use this newly computed activatedAt time instead to handle Pod clock drift and/or system time changes issues.
-            // The at least a minute later test prevents oscillation of activatedAt based on the exact timing of the responses.
+        } else if let currActivatedAt = self.activatedAt,
+          (activatedAtComputed < currActivatedAt || activatedAtComputed > currActivatedAt + TimeInterval(minutes: 1)) {
+            // The computed activatedAt time is earlier than or more than a minute later than the current activatedAt time,
+            // so use the computed activatedAt time instead to handle Pod clock drift and/or system time changes issues.
+            // The more than a minute later test prevents oscillation of activatedAt based on the timing of the responses.
             self.activatedAt = activatedAtComputed
         }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)

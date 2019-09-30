@@ -36,7 +36,7 @@ class PodDoseProgressEstimator: DoseProgressTimerEstimator {
         case .bolus:
             timeBetweenPulses = Pod.pulseSize / Pod.bolusDeliveryRate
         case .basal, .tempBasal:
-            timeBetweenPulses = Pod.pulseSize / dose.unitsPerHour
+            timeBetweenPulses = Pod.pulseSize / (dose.unitsPerHour / TimeInterval(hours: 1))
         default:
             fatalError("Can only estimate progress on basal rates or boluses.")
         }

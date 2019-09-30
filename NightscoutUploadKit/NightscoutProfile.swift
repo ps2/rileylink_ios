@@ -114,7 +114,7 @@ public struct TemporaryScheduleOverride {
     let duration: TimeInterval
     let name: String?
 
-    public init(targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, duration: TimeInterval, name: String?) {
+    public init(duration: TimeInterval, targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, name: String?) {
         self.targetRange = targetRange
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
         self.symbol = symbol
@@ -142,7 +142,7 @@ public struct TemporaryScheduleOverride {
         if let name = name {
             rval["name"] = name
         }
-
+        
         return rval
     }
 }

@@ -13,13 +13,16 @@ public enum UploadError: Error {
     case missingTimezone
     case invalidResponse(reason: String)
     case unauthorized
+    case missingConfiguration
 }
 
-private let defaultNightscoutEntriesPath = "/api/v1/entries"
-private let defaultNightscoutTreatmentPath = "/api/v1/treatments"
-private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus"
-private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
-private let defaultNightscoutProfilePath = "/api/v1/profile"
+private enum Endpoint: String {
+    case entries = "/api/v1/entries"
+    case treatments = "/api/v1/treatments"
+    case deviceStatus = "/api/v1/devicestatus"
+    case authTest = "/api/v1/experiments/test"
+    case profile =  "/api/v1/profile"
+}
 
 public class NightscoutUploader {
 
@@ -46,6 +49,19 @@ public class NightscoutUploader {
         self.siteURL = siteURL
         self.apiSecret = APISecret
     }
+
+    private func url(with path: String, queryItems: [URLQueryItem]? = nil) -> URL? {
+        var components = URLComponents()
+        components.scheme = siteURL.scheme
+        components.host = siteURL.host
+        components.queryItems = queryItems
+        components.path = path
+        return components.url
+    }
+
+    private func url(for endpoint: Endpoint, queryItems: [URLQueryItem]? = nil) -> URL? {
+        return url(with: endpoint.rawValue, queryItems: queryItems)
+    }
     
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
@@ -53,7 +69,11 @@ public class NightscoutUploader {
     /// - parameter treatments:           An array of nightscout treatments.
     /// - parameter completionHandler:    A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
     public func upload(_ treatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
-        postToNS(treatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+        guard let url = url(for: .treatments) else {
+            completionHandler(.failure(UploadError.missingConfiguration))
+            return
+        }
+        postToNS(treatments.map { $0.dictionaryRepresentation }, url: url, completion: completionHandler)
     }
 
     /// Attempts to modify nightscout treatments. This method will not retry if the network task failed.
@@ -61,6 +81,10 @@ public class NightscoutUploader {
     /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.  Treatments without id will be ignored.
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
     public func modifyTreatments(_ treatments:[NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
+        guard let url = url(for: .treatments) else {
+            completionHandler(UploadError.missingConfiguration)
+            return
+        }
         dataAccessQueue.async {
             let modifyGroup = DispatchGroup()
             var errors = [Error]()
@@ -70,7 +94,7 @@ public class NightscoutUploader {
                     continue
                 }
                 modifyGroup.enter()
-                self.putToNS( treatment.dictionaryRepresentation, endpoint: defaultNightscoutTreatmentPath ) { (error) in
+                self.putToNS( treatment.dictionaryRepresentation, url: url ) { (error) in
                     if let error = error {
                         errors.append(error)
                     }
@@ -89,6 +113,7 @@ public class NightscoutUploader {
     /// - parameter id:                An array of nightscout treatment ids
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
     public func deleteTreatmentsById(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+
         dataAccessQueue.async {
             let deleteGroup = DispatchGroup()
             var errors = [Error]()
@@ -98,7 +123,7 @@ public class NightscoutUploader {
                     continue
                 }
                 deleteGroup.enter()
-                self.deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath) { (error) in
+                self.deleteFromNS(id, endpoint: .treatments) { (error) in
                     if let error = error {
                         errors.append(error)
                     }
@@ -110,6 +135,36 @@ public class NightscoutUploader {
             completionHandler(errors.first)
         }
     }
+    
+    /// Attempts to delete treatments from nightscout by client identifier. This method will not retry if the network task failed.
+    ///
+    /// - parameter id:                An array of client assigned uuid strings
+    /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
+    public func deleteTreatmentsByClientId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+        guard ids.count > 0 else {
+            // Running this query with no ids ends up in deleting the entire treatments db. Likely not intended. :)
+            return
+        }
+        
+        let queryItems = ids.map { URLQueryItem(name: "find[_id][$in][]", value: $0)  }
+        
+        guard let url = url(for: .treatments, queryItems: queryItems) else {
+            completionHandler(UploadError.missingConfiguration)
+            return
+        }
+
+        dataAccessQueue.async {
+            self.callNS(nil, url: url, method: "DELETE") { (result) in
+                switch result {
+                case .success( _):
+                    completionHandler(nil)
+                case .failure(let error):
+                    completionHandler(error)
+                }
+            }
+        }
+    }
+
 
     public func uploadDeviceStatus(_ status: DeviceStatus) {
         deviceStatuses.append(status.dictionaryRepresentation)
@@ -132,13 +187,23 @@ public class NightscoutUploader {
     // MARK: - Profiles
 
     public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {
-        postToNS([profileSet.dictionaryRepresentation], endpoint:defaultNightscoutProfilePath, completion: completion)
+        guard let url = url(for: .profile) else {
+            completion(.failure(UploadError.missingConfiguration))
+            return
+        }
+
+        postToNS([profileSet.dictionaryRepresentation], url: url, completion: completion)
     }
     
     public func updateProfile(profileSet: ProfileSet, id: String, completion: @escaping (Error?) -> Void) {
+        guard let url = url(for: .profile) else {
+            completion(UploadError.missingConfiguration)
+            return
+        }
+        
         var rep = profileSet.dictionaryRepresentation
         rep["_id"] = id
-        putToNS(rep, endpoint: defaultNightscoutProfilePath, completion: completion)
+        putToNS(rep, url: url, completion: completion)
     }
 
     // MARK: - Uploading
@@ -149,21 +214,14 @@ public class NightscoutUploader {
         flushTreatments()
     }
 
-    func deleteFromNS(_ id: String, endpoint:String, completion: @escaping (Error?) -> Void)  {
-        let resource = "\(endpoint)/\(id)"
-        callNS(nil, endpoint: resource, method: "DELETE") { (result) in
-            switch result {
-            case .success( _):
-                completion(nil)
-            case .failure(let error):
-                completion(error)
-            }
+    fileprivate func deleteFromNS(_ id: String, endpoint: Endpoint, completion: @escaping (Error?) -> Void)  {
+        let resource = "\(endpoint.rawValue)/\(id)"
+        guard let url = url(with: resource) else {
+            completion(UploadError.missingConfiguration)
+            return
         }
-
-    }
-
-    func putToNS(_ json: Any, endpoint:String, completion: @escaping (Error?) -> Void) {
-        callNS(json, endpoint: endpoint, method: "PUT") { (result) in
+        
+        callNS(nil, url: url, method: "DELETE") { (result) in
             switch result {
             case .success( _):
                 completion(nil)
@@ -173,13 +231,24 @@ public class NightscoutUploader {
         }
     }
 
-    func postToNS(_ json: [Any], endpoint:String, completion: @escaping (Either<[String],Error>) -> Void) {
+    func putToNS(_ json: Any, url:URL, completion: @escaping (Error?) -> Void) {
+        callNS(json, url: url, method: "PUT") { (result) in
+            switch result {
+            case .success( _):
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    func postToNS(_ json: [Any], url:URL, completion: @escaping (Either<[String],Error>) -> Void) {
         if json.count == 0 {
             completion(.success([]))
             return
         }
 
-        callNS(json, endpoint: endpoint, method: "POST") { (result) in
+        callNS(json, url: url, method: "POST") { (result) in
             switch result {
             case .success(let postResponse):
                 guard let insertedEntries = postResponse as? [[String: Any]], insertedEntries.count == json.count else {
@@ -207,9 +276,8 @@ public class NightscoutUploader {
         }
     }
 
-    func callNS(_ json: Any?, endpoint:String, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
-        let uploadURL = siteURL.appendingPathComponent(endpoint)
-        var request = URLRequest(url: uploadURL)
+    func callNS(_ json: Any?, url:URL, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
+        var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -290,9 +358,13 @@ public class NightscoutUploader {
     }
     
     func flushDeviceStatuses() {
+        guard let url = url(for: .deviceStatus) else {
+            return
+        }
+
         let inFlight = deviceStatuses
         deviceStatuses = []
-        postToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (result) in
+        postToNS(inFlight as [Any], url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading device status")
@@ -305,9 +377,13 @@ public class NightscoutUploader {
     }
     
     func flushEntries() {
+        guard let url = url(for: .entries) else {
+            return
+        }
+
         let inFlight = entries
         entries = []
-        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutEntriesPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout entries")
@@ -320,9 +396,13 @@ public class NightscoutUploader {
     }
     
     func flushTreatments() {
+        guard let url = url(for: .treatments) else {
+            return
+        }
+
         let inFlight = treatmentsQueue
         treatmentsQueue = []
-        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout treatment records")
@@ -335,8 +415,10 @@ public class NightscoutUploader {
     }
     
     public func checkAuth(_ completion: @escaping (Error?) -> Void) {
-        
-        let testURL = siteURL.appendingPathComponent(defaultNightscoutAuthTestPath)
+        guard let testURL = url(for: .authTest) else {
+            completion(UploadError.missingConfiguration)
+            return
+        }
         
         var request = URLRequest(url: testURL)
         

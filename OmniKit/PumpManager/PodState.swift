@@ -254,10 +254,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
         if let activatedAt = rawValue["activatedAt"] as? Date {
             self.activatedAt = activatedAt
-        }
-
-        if let expiresAt = rawValue["expiresAt"] as? Date {
-            self.expiresAt = expiresAt
+            if let expiresAt = rawValue["expiresAt"] as? Date {
+                self.expiresAt = expiresAt
+            } else {
+                self.expiresAt = activatedAt + (Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
+            }
         }
 
         if let suspended = rawValue["suspended"] as? Bool {

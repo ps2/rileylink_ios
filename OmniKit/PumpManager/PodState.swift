@@ -42,11 +42,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     
     public let address: UInt32
     fileprivate var nonceState: NonceState
-    public var activatedAt: Date? // set based on StatusResponse timeActive and can change due to Pod clock drift and/or a system time change
 
-    public var expiresAt: Date? {
-        return activatedAt?.addingTimeInterval(Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
-    }
+    public var activatedAt: Date?
+    public var expiresAt: Date?  // set based on StatusResponse timeActive and can change with Pod clock drift and/or system time change
 
     public let piVersion: String
     public let pmVersion: String
@@ -148,12 +146,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         let activatedAtComputed = now - response.timeActive
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
-        } else if let currActivatedAt = self.activatedAt,
-          (activatedAtComputed < currActivatedAt || activatedAtComputed > currActivatedAt + TimeInterval(minutes: 1)) {
-            // The computed activatedAt time is earlier than or more than a minute later than the current activatedAt time,
-            // so use the computed activatedAt time instead to handle Pod clock drift and/or system time changes issues.
-            // The more than a minute later test prevents oscillation of activatedAt based on the timing of the responses.
-            self.activatedAt = activatedAtComputed
+        }
+        let expiresAtComputed = activatedAtComputed + (Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
+        if expiresAt == nil {
+            self.expiresAt = expiresAtComputed
+        } else if expiresAtComputed < self.expiresAt! || expiresAtComputed > (self.expiresAt! + TimeInterval(minutes: 1)) {
+            // The computed expiresAt time is earlier than or more than a minute later than the current expiresAt time,
+            // so use the computed expiresAt time instead to handle Pod clock drift and/or system time changes issues.
+            // The more than a minute later test prevents oscillation of expiresAt based on the timing of the responses.
+            self.expiresAt = expiresAtComputed
         }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now)
@@ -254,6 +255,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
         if let activatedAt = rawValue["activatedAt"] as? Date {
             self.activatedAt = activatedAt
+            if let expiresAt = rawValue["expiresAt"] as? Date {
+                self.expiresAt = expiresAt
+            } else {
+                self.expiresAt = activatedAt + (Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
+            }
         }
 
         if let suspended = rawValue["suspended"] as? Bool {
@@ -396,6 +402,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
         if let activatedAt = activatedAt {
             rawValue["activatedAt"] = activatedAt
+        }
+
+        if let expiresAt = expiresAt {
+            rawValue["expiresAt"] = expiresAt
         }
 
         if configuredAlerts.count > 0 {

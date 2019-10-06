@@ -8,15 +8,21 @@
 
 import Foundation
 
+
 public class OverrideTreatment: NightscoutTreatment {
+    
+    public enum Duration {
+        case finite(TimeInterval)
+        case indefinite
+    }
 
     let correctionRange: ClosedRange<Double>?  // mg/dL
     let insulinNeedsScaleFactor: Double?
-    let duration: TimeInterval?
+    let duration: Duration
     let reason: String
     let remoteAddress: String?
 
-    public init(startDate: Date, enderedBy: String, reason: String, duration: TimeInterval?, correctionRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, remoteAddress: String? = nil, id: String? = nil) {
+    public init(startDate: Date, enderedBy: String, reason: String, duration: Duration, correctionRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, remoteAddress: String? = nil, id: String? = nil) {
         self.reason = reason
         self.duration = duration
         self.correctionRange = correctionRange
@@ -28,7 +34,12 @@ public class OverrideTreatment: NightscoutTreatment {
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
 
-        rval["duration"] = duration?.minutes
+        switch duration {
+        case .finite(let timeInterval):
+            rval["duration"] = timeInterval.minutes
+        case .indefinite:
+            rval["durationType"] = "indefinite"
+        }
         rval["reason"] = reason
         rval["insulinNeedsScaleFactor"] = insulinNeedsScaleFactor
         rval["remoteAddress"] = remoteAddress

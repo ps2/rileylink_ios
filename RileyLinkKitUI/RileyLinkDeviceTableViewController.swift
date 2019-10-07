@@ -334,6 +334,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     vc.value = device.name
                     vc.delegate = self
                     vc.keyboardType = .default
+                    vc.autocapitalizationType = .words
                 }
 
                 show(vc, sender: indexPath)

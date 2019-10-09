@@ -165,7 +165,7 @@ extension OmnipodPumpManagerState {
         return podState?.isActive == true
     }
 
-    var hasSetupCompletePod: Bool {
+    var hasSetupPod: Bool {
         return podState?.isSetupComplete == true
     }
 

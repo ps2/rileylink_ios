@@ -143,7 +143,6 @@ public protocol PodCommsSessionDelegate: class {
 
 public class PodCommsSession {
     private let useCancelNoneForStatus: Bool = false             // whether to always use a cancel none to get status
-    private let podLowReservoirLevel: Double = 20                // default pod low reservoir alert value
     
     public let log = OSLog(category: "PodCommsSession")
     
@@ -165,7 +164,9 @@ public class PodCommsSession {
     }
 
     private func handlePodFault(fault: PodInfoFaultEvent) {
-        self.podState.fault = fault
+        if self.podState.fault == nil {
+            self.podState.fault = fault // save the first fault returned
+        }
         log.error("Pod Fault: %@", String(describing: fault))
         if fault.deliveryStatus == .suspended {
             let now = Date()
@@ -263,7 +264,7 @@ public class PodCommsSession {
             // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
             let finishSetupReminder = PodAlert.finishSetupReminder
-            let _ = try configureAlerts([finishSetupReminder])
+            try configureAlerts([finishSetupReminder])
         } else {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
@@ -274,7 +275,7 @@ public class PodCommsSession {
             }
         }
 
-        // Mark 2.6U delivery for prime
+        // Mark 2.6U delivery with 1 second between pulses for prime
         
         let primeFinishTime = Date() + primeDuration
         podState.primeFinishTime = primeFinishTime
@@ -308,6 +309,7 @@ public class PodCommsSession {
         podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain))
     }
 
+    @discardableResult
     private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
@@ -319,15 +321,18 @@ public class PodCommsSession {
         return status
     }
 
-    // emits the specified beep type and sets the completion beep flags based on the specified confirmationBeep value
-    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) throws {
+    // emits the specified beep type and sets the completion beep flags, doesn't throw
+    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) {
         guard self.podState.fault == nil else {
-            return // skip if already faulted to avoid a Beep Config Command error response
+            log.info("Skip beep config with faulted pod")
+            return
         }
         
         let beepConfigCommand = BeepConfigCommand(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-        let statusResponse: StatusResponse = try send([beepConfigCommand])
-        podState.updateFromStatusResponse(statusResponse)
+        do {
+            let statusResponse: StatusResponse = try send([beepConfigCommand])
+            podState.updateFromStatusResponse(statusResponse)
+        } catch {} // never critical
     }
 
     public func insertCannula() throws -> TimeInterval {
@@ -351,24 +356,22 @@ public class PodCommsSession {
             }
         } else {
             // Configure all the non-optional Pod Alarms
-            let endOfServiceTime = activatedAt + Pod.serviceDuration
-            let timeUntilExpirationAdvisory = (endOfServiceTime - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow).timeIntervalSinceNow
+            let expirationTime = activatedAt + Pod.nominalPodLife
+            let timeUntilExpirationAdvisory = expirationTime.timeIntervalSinceNow
             let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
+            let endOfServiceTime = activatedAt + Pod.serviceDuration
             let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
-            let autoOffAlarm = PodAlert.autoOffAlarm(active: false, countdownDuration: 0) // Turn Auto-off feature off
-            let _ = try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm, autoOffAlarm])
+            try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm])
         }
         
-        // Insert Cannula
-        // 1a0e7e30bf16020065010050000a000a
-        let insertionBolusAmount = 0.5
+        // Mark 0.5U delivery with 1 second between pulses for cannula insertion
+
         let timeBetweenPulses = TimeInterval(seconds: 1)
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
-        // 17 0d 00 0064 0001 86a0000000000000
         podState.setupProgress = .startingInsertCannula
-        let bolusExtraCommand = BolusExtraCommand(units: insertionBolusAmount, timeBetweenPulses: timeBetweenPulses)
+        let bolusExtraCommand = BolusExtraCommand(units: Pod.cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
         let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status2)
         
@@ -510,11 +513,10 @@ public class PodCommsSession {
     }
 
     public func testingCommands() throws {
-        // try readFlashLogs()
-        let _ = try cancelNone() // a functional replacement for getStatus() which also verifies & advances nonce
+        try cancelNone() // reads status & verifies nonce by doing a cancel none
     }
     
-    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date) throws -> StatusResponse {
+    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool, completionBeep: Bool) throws -> StatusResponse {
         let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
         switch result {
         case .certainFailure(let error):
@@ -523,7 +525,7 @@ public class PodCommsSession {
             throw error
         case .success:
             let scheduleOffset = timeZone.scheduleOffset(forDate: date)
-            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset)
+            let status = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
             return status
         }
     }
@@ -557,10 +559,11 @@ public class PodCommsSession {
         return status
     }
     
+    // use cancelDelivery with .none to get status as well as to validate & advance the nonce
+    @discardableResult
     public func cancelNone() throws -> StatusResponse {
         var statusResponse: StatusResponse
 
-        // use cancelDelivery .none to get status AND validate & advance the nonce
         let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, beepType: .noBeep)
         switch cancelResult {
         case .certainFailure(let error):
@@ -584,14 +587,13 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    private func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
-
+    public func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
         let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
         let messageResponse = try transport.sendMessage(message)
 
         if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.info("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
+            log.default("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
         } else if let fault = messageResponse.fault {
             handlePodFault(fault: fault)
             throw PodCommsError.podFault(fault: fault)
@@ -599,21 +601,6 @@ public class PodCommsSession {
             log.error("Unexpected Pod flash log response: %@", String(describing: messageResponse.messageBlocks[0]))
             throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
         }
-    }
-
-    public func readFlashLogs() throws {
-        if self.podState.fault == nil {
-            let _ = try cancelNone()
-            guard podState.unfinalizedBolus?.isFinished != false else {
-                log.info("Unfinalized bolus, skipping read flash logs")
-                throw PodCommsError.unfinalizedBolus
-            }
-        }
-
-        // read up to the most recent 50 entries from flash log
-        try readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
-        // read up to the previous 50 entries from flash log
-        try readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
     }
 
     public func deactivatePod() throws {
@@ -664,6 +651,36 @@ public class PodCommsSession {
 
     public func assertOnSessionQueue() {
         transport.assertOnSessionQueue()
+    }
+
+    public func setPodLowReserviorAlert(level: Double) throws {
+        // consider verifying that the level is above the current reservior value?
+        log.default("Setting pod alert for low reservior level %s units", String(describing: level))
+        guard level > 0 && level <= Pod.maximumReservoirReading else {
+            throw PodCommsError.invalidData
+        }
+        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(level)
+        try configureAlerts([lowReservoirAlarm])
+    }
+
+    public func setPodExpirationAlert(expirationReminderDate: Date?) throws {
+        guard let expiryAlert = expirationReminderDate else {
+            return
+        }
+        let timeUntilExpirationAlert = expiryAlert.timeIntervalSinceNow
+        guard timeUntilExpirationAlert > 0 else {
+            log.default("Pod expiration reminder alert for %s already past %s ago, ignoring", String(describing: expiryAlert), TimeInterval(seconds: -timeUntilExpirationAlert).stringValue)
+            return // past the expiration reminder alert time
+        }
+        log.default("Setting pod expiration reminder alert for %s in %s", String(describing: expiryAlert), TimeInterval(seconds: timeUntilExpirationAlert).stringValue)
+        let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
+        try configureAlerts([expirationAlert])
+    }
+
+    public func clearOptionalPodAlarms() throws {
+        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(0)
+        let expirationAlert = PodAlert.expirationAlert(TimeInterval(hours: 0))
+        try configureAlerts([lowReservoirAlarm, expirationAlert])
     }
 }
 

@@ -57,10 +57,11 @@ public struct MessageLog: CustomStringConvertible, Equatable {
     var entries = [MessageLogEntry]()
 
     public var description: String {
-        var lines = ["### MessageLog"]
+        var lines = ["\n### MessageLog"]
         for entry in entries {
             lines.append("* " + entry.description)
         }
+        lines.append("")
         return lines.joined(separator: "\n")
     }
 

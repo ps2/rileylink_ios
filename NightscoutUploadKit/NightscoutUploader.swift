@@ -143,6 +143,7 @@ public class NightscoutUploader {
     public func deleteTreatmentsByClientId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
         guard ids.count > 0 else {
             // Running this query with no ids ends up in deleting the entire treatments db. Likely not intended. :)
+            completionHandler(nil)
             return
         }
         

@@ -278,6 +278,7 @@
 		C12198A91C8F2AF200BC374C /* DailyTotal523PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */; };
 		C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */; };
 		C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */; };
+		C121FE05233FA20E00630EB5 /* OverrideTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121FE04233FA20E00630EB5 /* OverrideTreatment.swift */; };
 		C125728B211F7E6C0061BA2F /* UnknownPumpEvent57.swift in Sources */ = {isa = PBXBuildFile; fileRef = C125728A211F7E6C0061BA2F /* UnknownPumpEvent57.swift */; };
 		C125728C2121D4D60061BA2F /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */; };
 		C125728D2121D56D0061BA2F /* CaseCountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C659181E16BA9D0025CC58 /* CaseCountable.swift */; };
@@ -314,6 +315,7 @@
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C13F0436230B1DE6001413FF /* MKRingProgressView.framework */; };
 		C136AA76231234E1008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
+		C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
 		C13D155A1DAACE8400ADC044 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13D15591DAACE8400ADC044 /* Either.swift */; };
@@ -1252,6 +1254,7 @@
 		C12198A81C8F2AF200BC374C /* DailyTotal523PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyTotal523PumpEvent.swift; sourceTree = "<group>"; };
 		C12198AC1C8F332500BC374C /* TimestampedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TimestampedPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C12198B21C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = BolusWizardEstimatePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C121FE04233FA20E00630EB5 /* OverrideTreatment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideTreatment.swift; sourceTree = "<group>"; };
 		C125728A211F7E6C0061BA2F /* UnknownPumpEvent57.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownPumpEvent57.swift; sourceTree = "<group>"; };
 		C125728E2121DB7C0061BA2F /* PumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerState.swift; sourceTree = "<group>"; };
 		C12572912121EEEE0061BA2F /* SettingsImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -2434,6 +2437,7 @@
 				C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */,
 				492526701E4521FB00ACBA5F /* NoteNightscoutTreatment.swift */,
 				C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */,
+				C121FE04233FA20E00630EB5 /* OverrideTreatment.swift */,
 			);
 			path = Treatments;
 			sourceTree = "<group>";
@@ -3962,6 +3966,7 @@
 				C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */,
 				C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */,
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
+				C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */,
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				C184875E20BCDB0000ABE9E7 /* ForecastError.swift in Sources */,
@@ -3980,6 +3985,7 @@
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
 				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
+				C121FE05233FA20E00630EB5 /* OverrideTreatment.swift in Sources */,
 				546145C11DCEB47600DC6DEB /* NightscoutEntry.swift in Sources */,
 				C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */,
 			);

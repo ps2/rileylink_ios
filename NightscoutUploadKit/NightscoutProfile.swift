@@ -114,7 +114,7 @@ public struct TemporaryScheduleOverride {
     let duration: TimeInterval
     let name: String?
 
-    public init(targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, duration: TimeInterval, name: String?) {
+    public init(duration: TimeInterval, targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, name: String?) {
         self.targetRange = targetRange
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
         self.symbol = symbol
@@ -142,7 +142,7 @@ public struct TemporaryScheduleOverride {
         if let name = name {
             rval["name"] = name
         }
-
+        
         return rval
     }
 }
@@ -155,8 +155,11 @@ public struct LoopSettings {
     let preMealTargetRange: ClosedRange<Double>?
     let maximumBasalRatePerHour: Double?
     let maximumBolus: Double?
+    let deviceToken: Data?
+    let bundleIdentifier: String?
 
-    public init(dosingEnabled: Bool, overridePresets: [TemporaryScheduleOverride], scheduleOverride: TemporaryScheduleOverride?, minimumBGGuard: Double?, preMealTargetRange: ClosedRange<Double>?, maximumBasalRatePerHour: Double?, maximumBolus: Double?) {
+    public init(dosingEnabled: Bool, overridePresets: [TemporaryScheduleOverride], scheduleOverride: TemporaryScheduleOverride?, minimumBGGuard: Double?, preMealTargetRange: ClosedRange<Double>?, maximumBasalRatePerHour: Double?, maximumBolus: Double?,
+                deviceToken: Data?, bundleIdentifier: String?) {
         self.dosingEnabled = dosingEnabled
         self.overridePresets = overridePresets
         self.scheduleOverride = scheduleOverride
@@ -164,6 +167,8 @@ public struct LoopSettings {
         self.preMealTargetRange = preMealTargetRange
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBolus = maximumBolus
+        self.deviceToken = deviceToken
+        self.bundleIdentifier = bundleIdentifier
     }
 
     public var dictionaryRepresentation: [String: Any] {
@@ -191,6 +196,14 @@ public struct LoopSettings {
 
         if let maximumBolus = maximumBolus {
             rval["maximumBolus"] = maximumBolus
+        }
+        
+        if let deviceToken = deviceToken {
+            rval["deviceToken"] = deviceToken.hexadecimalString
+        }
+        
+        if let bundleIdentifier = bundleIdentifier {
+            rval["bundleIdentifier"] = bundleIdentifier
         }
 
         return rval

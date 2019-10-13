@@ -22,13 +22,13 @@ public class OverrideTreatment: NightscoutTreatment {
     let reason: String
     let remoteAddress: String?
 
-    public init(startDate: Date, enderedBy: String, reason: String, duration: Duration, correctionRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, remoteAddress: String? = nil, id: String? = nil) {
+    public init(startDate: Date, enteredBy: String, reason: String, duration: Duration, correctionRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, remoteAddress: String? = nil, id: String? = nil) {
         self.reason = reason
         self.duration = duration
         self.correctionRange = correctionRange
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
         self.remoteAddress = remoteAddress
-        super.init(timestamp: startDate, enteredBy: enderedBy, id: id, eventType: "Temporary Override")
+        super.init(timestamp: startDate, enteredBy: enteredBy, id: id, eventType: "Temporary Override")
     }
 
     override public var dictionaryRepresentation: [String: Any] {

@@ -652,36 +652,6 @@ public class PodCommsSession {
     public func assertOnSessionQueue() {
         transport.assertOnSessionQueue()
     }
-
-    public func setPodLowReserviorAlert(level: Double) throws {
-        // consider verifying that the level is above the current reservior value?
-        log.default("Setting pod alert for low reservior level %s units", String(describing: level))
-        guard level > 0 && level <= Pod.maximumReservoirReading else {
-            throw PodCommsError.invalidData
-        }
-        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(level)
-        try configureAlerts([lowReservoirAlarm])
-    }
-
-    public func setPodExpirationAlert(expirationReminderDate: Date?) throws {
-        guard let expiryAlert = expirationReminderDate else {
-            return
-        }
-        let timeUntilExpirationAlert = expiryAlert.timeIntervalSinceNow
-        guard timeUntilExpirationAlert > 0 else {
-            log.default("Pod expiration reminder alert for %s already past %s ago, ignoring", String(describing: expiryAlert), TimeInterval(seconds: -timeUntilExpirationAlert).stringValue)
-            return // past the expiration reminder alert time
-        }
-        log.default("Setting pod expiration reminder alert for %s in %s", String(describing: expiryAlert), TimeInterval(seconds: timeUntilExpirationAlert).stringValue)
-        let expirationAlert = PodAlert.expirationAlert(timeUntilExpirationAlert)
-        try configureAlerts([expirationAlert])
-    }
-
-    public func clearOptionalPodAlarms() throws {
-        let lowReservoirAlarm = PodAlert.lowReservoirAlarm(0)
-        let expirationAlert = PodAlert.expirationAlert(TimeInterval(hours: 0))
-        try configureAlerts([lowReservoirAlarm, expirationAlert])
-    }
 }
 
 extension PodCommsSession: MessageTransportDelegate {

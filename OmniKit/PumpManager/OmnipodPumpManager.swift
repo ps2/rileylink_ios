@@ -13,7 +13,6 @@ import RileyLinkBLEKit
 import UserNotifications
 import os.log
 
-fileprivate let defaultPodLowReservoirLevel: Double = 10 // default pod low reservior alert level (1..50)
 
 
 public enum ReservoirAlertState {
@@ -637,13 +636,6 @@ extension OmnipodPumpManager {
         #endif
     }
 
-    private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
-        let basalCompletionBeep = false
-        let tempBasalCompletionBeep = false
-        let bolusCompletionBeep = self.bolusBeeps
-        session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-    }
-
     private func checkCannulaInsertionFinished() {
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Check cannula insertion finished", using: deviceSelector) { (result) in
@@ -929,28 +921,6 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func readPodStatus(completion: @escaping (Error?) -> Void) {
-        // use hasSetupPod so that the user can see any fault info
-        guard self.hasSetupPod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
-            return
-        }
-
-        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Read Pod Status", using: rileyLinkSelector) { (result) in switch result {
-            case .success(let session):
-                do {
-                    try session.getStatus()
-                    completion(nil)
-                } catch let error {
-                    completion(error)
-                }
-            case .failure(let error):
-                completion(error)
-            }
-        }
-    }
-
     public func readFlashLog(completion: @escaping (Error?) -> Void) {
         // use hasSetupPod to be able to read the flash log from a faulted Pod
         guard self.hasSetupPod else {
@@ -969,14 +939,11 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     // read up to the most recent 50 entries from flash log
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     try session.readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
 
                     // read up to the previous 50 entries from flash log
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     try session.readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
 
-                    self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
                     completion(nil)
                 } catch let error {
                     completion(error)

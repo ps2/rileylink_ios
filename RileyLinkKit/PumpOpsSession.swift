@@ -594,21 +594,7 @@ extension PumpOpsSession {
         do {
             let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, insulinBitPackingScale: pumpModel.insulinBitPackingScale))
 
-            if pumpModel.returnsErrorOnBolus {
-                // TODO: This isn't working as expected; this logic was probably intended to be in the catch block below
-                let error: PumpErrorMessageBody = try runCommandWithArguments(message, responseType: .errorResponse)
-
-                switch error.errorCode {
-                case .known(let errorCode):
-                    if errorCode != .bolusInProgress {
-                        throw PumpOpsError.pumpError(errorCode)
-                    }
-                case .unknown(let unknownErrorCode):
-                    throw PumpOpsError.unknownPumpErrorCode(unknownErrorCode)
-                }
-            } else {
-                let _: PumpAckMessageBody = try runCommandWithArguments(message)
-            }
+            let _: PumpAckMessageBody = try runCommandWithArguments(message)
         } catch let error as PumpOpsError {
             throw SetBolusError.certain(error)
         } catch let error as PumpCommandError {

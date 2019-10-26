@@ -62,11 +62,6 @@ public enum PumpModel: String {
         return generation >= 23
     }
     
-    // On x15 models, a bolus in progress error is returned when bolusing, even though the bolus succeeds
-    public var returnsErrorOnBolus: Bool {
-        return generation == 15
-    }
-    
     /// Newer models allow higher precision delivery, and have bit packing to accomodate this.
     public var insulinBitPackingScale: Int {
         return (generation >= 23) ? 40 : 10

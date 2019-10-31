@@ -147,7 +147,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
         }
-        let expiresAtComputed = activatedAtComputed + (Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
+        let expiresAtComputed = activatedAtComputed + Pod.nominalPodLife
         if expiresAt == nil {
             self.expiresAt = expiresAtComputed
         } else if expiresAtComputed < self.expiresAt! || expiresAtComputed > (self.expiresAt! + TimeInterval(minutes: 1)) {
@@ -258,7 +258,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             if let expiresAt = rawValue["expiresAt"] as? Date {
                 self.expiresAt = expiresAt
             } else {
-                self.expiresAt = activatedAt + (Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
+                self.expiresAt = activatedAt + Pod.nominalPodLife
             }
         }
 

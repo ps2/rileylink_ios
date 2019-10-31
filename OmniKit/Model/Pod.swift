@@ -30,6 +30,9 @@ public struct Pod {
     // Total pod service time. A fault is triggered if this time is reached before pod deactivation.
     public static let serviceDuration = TimeInterval(hours: 80)
 
+    // Nomimal pod life (72 hours)
+    public static let nominalPodLife = Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow
+
     // Maximum reservoir level reading
     public static let maximumReservoirReading: Double = 50
 
@@ -45,8 +48,11 @@ public struct Pod {
     // Minimum duration of a single basal schedule entry
     public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
 
-    // Amount of insulin delivered for priming
+    // Amount of insulin delivered with 1 second between pulses for priming
     public static let primeUnits = 2.6
+
+    // Amount of insulin delivered with 1 second between pulses for cannula insertion
+    public static let cannulaInsertionUnits = 0.5
 
     // Default and limits for expiration reminder alerts
     public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)

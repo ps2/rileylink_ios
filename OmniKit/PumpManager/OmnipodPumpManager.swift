@@ -13,6 +13,8 @@ import RileyLinkBLEKit
 import UserNotifications
 import os.log
 
+
+
 public enum ReservoirAlertState {
     case ok
     case lowReservoir
@@ -345,8 +347,8 @@ extension OmnipodPumpManager {
     }
 
     // Thread-safe
-    public var hasSetupCompletePod: Bool {
-        return state.hasSetupCompletePod
+    public var hasSetupPod: Bool {
+        return state.hasSetupPod
     }
 
     // Thread-safe
@@ -742,7 +744,8 @@ extension OmnipodPumpManager {
             switch result {
             case .success(let session):
                 do {
-                    let _ = try session.setTime(timeZone: timeZone, basalSchedule: self.state.basalSchedule, date: Date())
+                    let beep = false
+                    let _ = try session.setTime(timeZone: timeZone, basalSchedule: self.state.basalSchedule, date: Date(), acknowledgementBeep: beep, completionBeep: beep)
                     self.setState { (state) in
                         state.timeZone = timeZone
                     }
@@ -798,7 +801,8 @@ extension OmnipodPumpManager {
                     case .success:
                         break
                     }
-                    let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset)
+                    let beep = false
+                    let _ = try session.setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
 
                     self.setState { (state) in
                         state.basalSchedule = schedule
@@ -870,8 +874,8 @@ extension OmnipodPumpManager {
     }
 
     public func testingCommands(completion: @escaping (Error?) -> Void) {
-        // use hasSetupCompletePod instead of hasActivePod so we don't fail on a faulted Pod
-        guard self.hasSetupCompletePod else {
+        // use hasSetupPod so that the user can see any fault info
+        guard self.hasSetupPod else {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
         }
@@ -897,20 +901,49 @@ extension OmnipodPumpManager {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
         }
+        guard self.state.podState?.unfinalizedBolus?.isFinished != false else {
+            self.log.info("Skipping Play Test Beeps due to bolus still in progress.")
+            completion(PodCommsError.unfinalizedBolus)
+            return
+        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Play Test Beeps", using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
+                session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: self.bolusBeeps)
+                // Don't bother emitting another beep sequence to approximate the PDM "Check alarms" function as the Pod beeping is
+                // asynchronous to the UI which will have already printed Succeeded before the first beep sequence is done playing
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    public func readFlashLog(completion: @escaping (Error?) -> Void) {
+        // use hasSetupPod to be able to read the flash log from a faulted Pod
+        guard self.hasSetupPod else {
+            completion(OmnipodPumpManagerError.noPodPaired)
+            return
+        }
+        if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
+            self.log.info("Skipping Read Flash Log due to bolus still in progress.")
+            completion(PodCommsError.unfinalizedBolus)
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        self.podComms.runSession(withName: "Read Flash Log", using: rileyLinkSelector) { (result) in
+            switch result {
+            case .success(let session):
                 do {
-                    guard self.state.podState?.unfinalizedBolus?.isFinished != false else {
-                        self.log.info("Unfinalized bolus, skipping play test beeps")
-                        throw PodCommsError.unfinalizedBolus
-                    }
-                    
-                    try session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: self.bolusBeeps)
-                    // .fiveSecondBeep could be used for a PDM style "Check alarms", but this only works if the pod is suspended!
-                    try session.beepConfig(beepConfigType: .beeeeeep, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: self.bolusBeeps)
+                    // read up to the most recent 50 entries from flash log
+                    try session.readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
+
+                    // read up to the previous 50 entries from flash log
+                    try session.readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
+
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -922,26 +955,26 @@ extension OmnipodPumpManager {
     }
 
     public func setBolusBeeps(enabled: Bool, completion: @escaping (Error?) -> Void) {
-        self.log.info("Set Bolus Beeps to %s", enabled ? "true" : "false")
-
+        self.bolusBeeps = enabled // set here to allow changes on a faulted Pod
+        self.log.default("Set Bolus Beeps to %s", String(describing: enabled))
         guard self.hasActivePod else {
             completion(nil)
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        let name: String = enabled ? "Enable Confirmation Beeps" : "Disable Confirmation Beeps"
+        let name: String = enabled ? "Enable Bolus Beeps" : "Disable Bolus Beeps"
         self.podComms.runSession(withName: name, using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
-                do {
-                    let beepConfigType: BeepConfigType = enabled ? .bipBip : .noBeep
-                    try session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: enabled)
-                    self.bolusBeeps = enabled
-                    completion(nil)
-                } catch let error {
-                    completion(error)
-                }
+                let beepConfigType: BeepConfigType = enabled ? .bipBip : .noBeep
+                let basalCompletionBeep = false
+                let tempBasalCompletionBeep = false
+                let bolusCompletionBeep = enabled
+
+                // enable/disable Pod completion beeps for any in-progress insulin delivery
+                session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                completion(nil)
             case .failure(let error):
                 completion(error)
             }
@@ -1104,7 +1137,8 @@ extension OmnipodPumpManager: PumpManager {
 
             do {
                 let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
-                let _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                let beep = false
+                let _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }
@@ -1206,7 +1240,8 @@ extension OmnipodPumpManager: PumpManager {
             if podStatus.deliveryStatus == .suspended {
                 do {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
-                    podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                    let beep = false
+                    podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
                 } catch let error {
                     completion(.failure(SetBolusError.certain(error as? PodCommsError ?? PodCommsError.commsError(error: error))))
                     return
@@ -1223,7 +1258,8 @@ extension OmnipodPumpManager: PumpManager {
             let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
             willRequest(dose)
 
-            let result = session.bolus(units: enactUnits, acknowledgementBeep: self.bolusBeeps, completionBeep: self.bolusBeeps)
+            let beep = self.bolusBeeps
+            let result = session.bolus(units: enactUnits, acknowledgementBeep: beep, completionBeep: beep)
             session.dosesForStorage() { (doses) -> Bool in
                 return self.store(doses: doses, in: session)
             }
@@ -1374,7 +1410,8 @@ extension OmnipodPumpManager: PumpManager {
                         state.tempBasalEngageState = .engaging
                     })
 
-                    let result = session.setTempBasal(rate: rate, duration: duration)
+                    let beep = false
+                    let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: beep, completionBeep: beep)
                     let basalStart = Date()
                     let dose = DoseEntry(type: .tempBasal, startDate: basalStart, endDate: basalStart.addingTimeInterval(duration), value: rate, unit: .unitsPerHour)
                     session.dosesForStorage() { (doses) -> Bool in

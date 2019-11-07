@@ -12,8 +12,13 @@ import Foundation
 public class ChangeTimeCarelinkMessageBody: CarelinkLongMessageBody {
 
     public convenience init?(dateComponents: DateComponents) {
+        
+        var calendar = Calendar(identifier: .gregorian)
+        if let timeZone = dateComponents.timeZone {
+            calendar.timeZone = timeZone
+        }
 
-        guard dateComponents.isValidDate(in: Calendar(identifier: Calendar.Identifier.gregorian)) else {
+        guard dateComponents.isValidDate(in: calendar) else {
             return nil
         }
 

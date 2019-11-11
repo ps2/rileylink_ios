@@ -542,6 +542,11 @@ extension MinimedPumpManager {
                     // Include events up to a minute before startDate, since pump event time and pending event time might be off
                     let (historyEvents, model) = try session.getHistoryEvents(since: startDate.addingTimeInterval(.minutes(-1)))
                     
+//                    if let lastEvent = historyEvents.last, let _ = lastEvent.pumpEvent as? ResumePumpEvent {
+//                        self.log.default("Failing read when last event is resume.")
+//                        throw PumpOpsError.rfCommsFailure("made up error")
+//                    }
+                    
                     // Reconcile history with pending doses
                     let newPumpEvents = historyEvents.pumpEvents(from: model)
                     let reconciledEvents = self.reconcilePendingDosesWith(newPumpEvents)

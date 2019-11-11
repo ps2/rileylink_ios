@@ -25,6 +25,19 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
     public let type: BolusType
     public let duration: TimeInterval
     public let wasRemotelyTriggered: Bool
+    
+    public init(length: Int, rawData: Data, timestamp: DateComponents, unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?, amount: Double, programmed: Double, unabsorbedInsulinTotal: Double, type: BolusType, duration: TimeInterval, wasRemotelyTriggered: Bool) {
+        self.length = length
+        self.rawData = rawData
+        self.timestamp = timestamp
+        self.unabsorbedInsulinRecord = unabsorbedInsulinRecord
+        self.amount = amount
+        self.programmed = programmed
+        self.unabsorbedInsulinTotal = unabsorbedInsulinTotal
+        self.type = type
+        self.duration = duration
+        self.wasRemotelyTriggered = wasRemotelyTriggered
+    }
 
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing

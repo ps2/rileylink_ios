@@ -642,10 +642,7 @@ extension OmnipodPumpManager {
 
     private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
         if self.confirmationBeeps && supplementaryBeeps {
-            let basalCompletionBeep = basalConfirmationBeeps
-            let tempBasalCompletionBeep = tempBasalConfirmationBeeps
-            let bolusCompletionBeep = bolusConfirmationBeeps
-            session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+            session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalConfirmationBeeps, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: bolusConfirmationBeeps)
         }
     }
 

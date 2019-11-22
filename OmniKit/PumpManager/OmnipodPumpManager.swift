@@ -1389,7 +1389,9 @@ extension OmnipodPumpManager: PumpManager {
                 let status: StatusResponse
                 let canceledDose: UnfinalizedDose?
 
-                let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: .noBeep)
+                // if resuming a normal basal as denoted by a 0 duration temp basal, use a confirmation beep if appropriate
+                let beep: BeepType = duration < .ulpOfOne && self.confirmationBeeps && tempBasalConfirmationBeeps ? .beep : .noBeep
+                let result = session.cancelDelivery(deliveryType: .tempBasal, beepType: beep)
                 switch result {
                 case .certainFailure(let error):
                     throw error

@@ -336,7 +336,7 @@ public class PodCommsSession {
     }
 
     public func insertCannula() throws -> TimeInterval {
-        let insertionWait: TimeInterval = .seconds(10)
+        let insertionWait: TimeInterval = .seconds(Pod.cannulaInsertionUnits/Pod.pulseSize)
 
         guard let activatedAt = podState.activatedAt else {
             throw PodCommsError.noPodPaired

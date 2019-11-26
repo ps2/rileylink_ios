@@ -12,6 +12,7 @@ public struct ResumePumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
+    public let wasRemotelyTriggered: Bool
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
@@ -23,11 +24,14 @@ public struct ResumePumpEvent: TimestampedPumpEvent {
         rawData = availableData.subdata(in: 0..<length)
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        
+        wasRemotelyTriggered = availableData[5] & 0b01000000 != 0
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "Resume",
+            "wasRemotelyTriggered": wasRemotelyTriggered,
         ]
     }
 }

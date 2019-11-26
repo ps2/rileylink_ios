@@ -21,6 +21,7 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
     public let rateType: RateType
     public let rate: Double
     public let timestamp: DateComponents
+    public let wasRemotelyTriggered: Bool
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 8
@@ -43,6 +44,8 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
         }
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        
+        wasRemotelyTriggered = availableData[5] & 0b01000000 != 0
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -50,6 +53,7 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
             "_type": "TempBasal",
             "rate": rate,
             "temp": rateType.rawValue,
+            "wasRemotelyTriggered": wasRemotelyTriggered,
         ]
     }
 

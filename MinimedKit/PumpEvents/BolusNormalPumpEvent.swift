@@ -74,12 +74,14 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         
         if pumpModel.larger {
             timestamp = DateComponents(pumpEventData: availableData, offset: 8)
+            wasRemotelyTriggered = availableData[11] & 0b01000000 != 0
             programmed = decodeInsulin(from: availableData.subdata(in: 1..<3))
             amount = decodeInsulin(from: availableData.subdata(in: 3..<5))
             unabsorbedInsulinTotal = decodeInsulin(from: availableData.subdata(in: 5..<7))
             duration = TimeInterval(minutes: 30 * doubleValueFromData(at: 7))
         } else {
             timestamp = DateComponents(pumpEventData: availableData, offset: 4)
+            wasRemotelyTriggered = availableData[7] & 0b01000000 != 0
             programmed = decodeInsulin(from: availableData.subdata(in: 1..<2))
             amount = decodeInsulin(from: availableData.subdata(in: 2..<3))
             duration = TimeInterval(minutes: 30 * doubleValueFromData(at: 3))
@@ -87,7 +89,6 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         }
         type = duration > 0 ? .square : .normal
         
-        wasRemotelyTriggered = availableData[11] & 0b01000000 != 0
     }
     
     public var dictionaryRepresentation: [String: Any] {

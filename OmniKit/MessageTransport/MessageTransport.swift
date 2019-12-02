@@ -245,9 +245,9 @@ class PodMessageTransport: MessageTransport {
                 var responseData = responsePacket.data
                 while true {
                     do {
-                        let msg = try Message(encodedData: responseData)
                         log.debug("Recv(Hex): %@", responseData.hexadecimalString)
                         messageLogger?.didReceive(responseData)
+                        let msg = try Message(encodedData: responseData)
                         return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")

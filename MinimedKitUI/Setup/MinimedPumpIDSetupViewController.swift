@@ -17,13 +17,12 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     var rileyLinkPumpManager: RileyLinkPumpManager!
 
     private enum RegionCode: String {
-        case northAmerica = "NA"
-        case canada = "CA"
+        case northAmerica = "NA/CA"
         case worldWide = "WW"
 
         var region: PumpRegion {
             switch self {
-            case .northAmerica, .canada:
+            case .northAmerica:
                 return .northAmerica
             case .worldWide:
                 return .worldWide
@@ -342,7 +341,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
 
 extension MinimedPumpIDSetupViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    private static let regionRows: [RegionCode] = [.northAmerica, .canada, .worldWide]
+    private static let regionRows: [RegionCode] = [.northAmerica, .worldWide]
 
     private static let colorRows: [PumpColor] = [.blue, .clear, .purple, .smoke, .pink]
 

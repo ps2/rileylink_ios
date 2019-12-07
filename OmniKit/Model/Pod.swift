@@ -13,10 +13,19 @@ public struct Pod {
     public static let pulseSize: Double = 0.05
 
     // Number of pulses required to deliver one unit of insulin
-    public static let pulsesPerUnit: Double = 20
+    public static let pulsesPerUnit: Double = 1 / Pod.pulseSize
 
-    // Units per second
-    public static let bolusDeliveryRate: Double = 0.025
+    // Seconds per pulse for boluses
+    public static let secondsPerBolusPulse: Double = 2
+
+    // Units per second for boluses
+    public static let bolusDeliveryRate: Double = Pod.pulseSize / Pod.secondsPerBolusPulse
+
+    // Seconds per pulse for priming/cannula insertion
+    public static let secondsPerPrimePulse: Double = 1
+
+    // Units per second for priming/cannula insertion
+    public static let primeDeliveryRate: Double = Pod.pulseSize / Pod.secondsPerPrimePulse
 
     // User configured time before expiration advisory (PDM allows 1-24 hours)
     public static let expirationAlertWindow = TimeInterval(hours: 2)

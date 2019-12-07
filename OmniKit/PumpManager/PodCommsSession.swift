@@ -256,7 +256,7 @@ public class PodCommsSession {
     public func prime() throws -> TimeInterval {
         //4c00 00c8 0102
 
-        let primeDuration = TimeInterval(seconds: 55)
+        let primeDuration = TimeInterval(seconds: 55)   // a bit more than (Pod.primeUnits / Pod.primeDeliveryRate)
         
         // Skip following alerts if we've already done them before
         if podState.setupProgress != .startingPrime {
@@ -281,7 +281,7 @@ public class PodCommsSession {
         podState.primeFinishTime = primeFinishTime
         podState.setupProgress = .startingPrime
 
-        let timeBetweenPulses = TimeInterval(seconds: 1)
+        let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerPrimePulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
         let scheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         let bolusExtraCommand = BolusExtraCommand(units: Pod.primeUnits, timeBetweenPulses: timeBetweenPulses)
@@ -336,7 +336,7 @@ public class PodCommsSession {
     }
 
     public func insertCannula() throws -> TimeInterval {
-        let insertionWait: TimeInterval = .seconds(10)
+        let insertionWait: TimeInterval = .seconds(Pod.cannulaInsertionUnits / Pod.primeDeliveryRate)
 
         guard let activatedAt = podState.activatedAt else {
             throw PodCommsError.noPodPaired
@@ -366,7 +366,7 @@ public class PodCommsSession {
         
         // Mark 0.5U delivery with 1 second between pulses for cannula insertion
 
-        let timeBetweenPulses = TimeInterval(seconds: 1)
+        let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerPrimePulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
@@ -405,7 +405,7 @@ public class PodCommsSession {
     
     public func bolus(units: Double, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
-        let timeBetweenPulses = TimeInterval(seconds: 2)
+        let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerBolusPulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
@@ -416,7 +416,7 @@ public class PodCommsSession {
         // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
         let commsOffset = TimeInterval(seconds: -1.5)
         
-        let bolusExtraCommand = BolusExtraCommand(units: units, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
+        let bolusExtraCommand = BolusExtraCommand(units: units, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)

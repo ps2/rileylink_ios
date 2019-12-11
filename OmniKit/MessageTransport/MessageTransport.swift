@@ -241,13 +241,13 @@ class PodMessageTransport: MessageTransport {
             }
             
             // Assemble fragmented message from multiple packets
-            let response =  try { () throws -> Message in
+            let response = try { () throws -> Message in
                 var responseData = responsePacket.data
                 while true {
                     do {
+                        let msg = try Message(encodedData: responseData)
                         log.debug("Recv(Hex): %@", responseData.hexadecimalString)
                         messageLogger?.didReceive(responseData)
-                        let msg = try Message(encodedData: responseData)
                         return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
@@ -258,9 +258,13 @@ class PodMessageTransport: MessageTransport {
                             throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
                         }
                         responseData += conPacket.data
+                    } catch let error {
+                        log.debug("Error Recv(Hex): %@", responseData.hexadecimalString)
+                        messageLogger?.didReceive(responseData)
+                        throw error
                     }
                 }
-                }()
+            }()
 
             ackUntilQuiet()
             

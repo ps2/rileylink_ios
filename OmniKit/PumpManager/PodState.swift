@@ -46,6 +46,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var activatedAt: Date?
     public var expiresAt: Date?  // set based on StatusResponse timeActive and can change with Pod clock drift and/or system time change
 
+    public var setupUnitsDelivered: Double?
+
     public let piVersion: String
     public let pmVersion: String
     public let lot: UInt32
@@ -157,7 +159,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.expiresAt = expiresAtComputed
         }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now)
+        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now, setupUnitsDelivered: setupUnitsDelivered)
         activeAlertSlots = response.alerts
     }
 
@@ -260,6 +262,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             } else {
                 self.expiresAt = activatedAt + Pod.nominalPodLife
             }
+        }
+
+        if let setupUnitsDelivered = rawValue["setupUnitsDelivered"] as? Double {
+            self.setupUnitsDelivered = setupUnitsDelivered
         }
 
         if let suspended = rawValue["suspended"] as? Bool {
@@ -408,6 +414,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             rawValue["expiresAt"] = expiresAt
         }
 
+        if let setupUnitsDelivered = setupUnitsDelivered {
+            rawValue["setupUnitsDelivered"] = setupUnitsDelivered
+        }
+
+
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:
                 configuredAlerts.map { slot, alarm in (String(describing: slot.rawValue), alarm.rawValue) })
@@ -425,6 +436,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* address: \(String(format: "%04X", address))",
             "* activatedAt: \(String(reflecting: activatedAt))",
             "* expiresAt: \(String(reflecting: expiresAt))",
+            "* setupUnitsDelivered: \(String(reflecting: setupUnitsDelivered))",
             "* piVersion: \(piVersion)",
             "* pmVersion: \(pmVersion)",
             "* lot: \(lot)",

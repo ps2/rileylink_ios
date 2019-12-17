@@ -335,6 +335,14 @@ public class PodCommsSession {
         } catch {} // never critical
     }
 
+    private func markSetupProgressCompleted(statusResponse: StatusResponse) {
+        if (podState.setupProgress != .completed) {
+            podState.setupProgress = .completed
+            podState.setupUnitsDelivered = statusResponse.insulin // stash the current insulin delivered value as the baseline
+            log.info("Total setup units delivered: %@", String(describing: statusResponse.insulin))
+        }
+    }
+
     public func insertCannula() throws -> TimeInterval {
         let insertionWait: TimeInterval = .seconds(Pod.cannulaInsertionUnits / Pod.primeDeliveryRate)
 
@@ -345,15 +353,17 @@ public class PodCommsSession {
         if podState.setupProgress == .startingInsertCannula || podState.setupProgress == .cannulaInserting {
             // We started cannula insertion, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
-            podState.updateFromStatusResponse(status)
             if status.podProgressStatus == .cannulaInserting {
                 podState.setupProgress = .cannulaInserting
-                return insertionWait// Not sure when it started, wait full time to be sure
+                podState.updateFromStatusResponse(status)
+                return insertionWait // Not sure when it started, wait full time to be sure
             }
             if status.podProgressStatus.readyForDelivery {
-                podState.setupProgress = .completed
+                markSetupProgressCompleted(statusResponse: status)
+                podState.updateFromStatusResponse(status)
                 return TimeInterval(0) // Already done; no need to wait
             }
+            podState.updateFromStatusResponse(status)
         } else {
             // Configure all the non-optional Pod Alarms
             let expirationTime = activatedAt + Pod.nominalPodLife
@@ -382,13 +392,13 @@ public class PodCommsSession {
     public func checkInsertionCompleted() throws {
         if podState.setupProgress == .cannulaInserting {
             let response: StatusResponse = try send([GetStatusCommand()])
-            podState.updateFromStatusResponse(response)
             if response.podProgressStatus.readyForDelivery {
-                podState.setupProgress = .completed
+                markSetupProgressCompleted(statusResponse: response)
             }
+            podState.updateFromStatusResponse(response)
         }
     }
-    
+
     // Throws SetBolusError
     public enum DeliveryCommandResult {
         case success(statusResponse: StatusResponse)

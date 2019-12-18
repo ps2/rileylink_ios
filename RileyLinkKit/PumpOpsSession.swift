@@ -878,7 +878,7 @@ extension PumpOpsSession {
             try session.updateRegister(.mdmcfg1, value: 0x62)
             try session.updateRegister(.mdmcfg0, value: 0x1A)
             try session.updateRegister(.deviatn, value: 0x13)
-        case .northAmerica:
+        case .northAmerica, .canada:
             //try session.updateRegister(.mdmcfg4, value: 0x99)
             try setRXFilterMode(.narrow)
             //try session.updateRegister(.mdmcfg3, value: 0x66)

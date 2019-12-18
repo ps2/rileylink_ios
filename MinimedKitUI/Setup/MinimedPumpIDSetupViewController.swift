@@ -23,8 +23,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         var region: PumpRegion {
             switch self {
-            case .northAmerica, .canada:
+            case .northAmerica:
                 return .northAmerica
+            case .canada:
+                return .canada
             case .worldWide:
                 return .worldWide
             }

@@ -788,7 +788,7 @@ private extension PumpRegion {
         switch self {
         case .worldWide:
             scanFrequencies = [868.25, 868.30, 868.35, 868.40, 868.45, 868.50, 868.55, 868.60, 868.65]
-        case .northAmerica:
+        case .northAmerica, .canada:
             scanFrequencies = [916.45, 916.50, 916.55, 916.60, 916.65, 916.70, 916.75, 916.80]
         }
 
@@ -878,7 +878,7 @@ extension PumpOpsSession {
             try session.updateRegister(.mdmcfg1, value: 0x62)
             try session.updateRegister(.mdmcfg0, value: 0x1A)
             try session.updateRegister(.deviatn, value: 0x13)
-        case .northAmerica:
+        case .northAmerica, .canada:
             //try session.updateRegister(.mdmcfg4, value: 0x99)
             try setRXFilterMode(.narrow)
             //try session.updateRegister(.mdmcfg3, value: 0x66)

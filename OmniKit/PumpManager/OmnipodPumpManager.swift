@@ -1497,12 +1497,14 @@ extension OmnipodPumpManager: PumpManager {
 
 extension OmnipodPumpManager: MessageLogger {
     func didSend(_ message: Data) {
+        log.default("didSend: %{public}@", message.hexadecimalString)
         setState { (state) in
             state.messageLog.record(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
         }
     }
     
     func didReceive(_ message: Data) {
+        log.default("didReceive: %{public}@", message.hexadecimalString)
         setState { (state) in
             state.messageLog.record(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
         }

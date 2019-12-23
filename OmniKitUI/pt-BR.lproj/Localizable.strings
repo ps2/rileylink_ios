@@ -15,7 +15,7 @@
 "%@ U (Finished)" = "%@ U (Completo)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%1$@ U of %2$@ U (%3$@)";
+"%@ U of %@ U (%@)" = "%1$@ U do %2$@ U (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/hora";

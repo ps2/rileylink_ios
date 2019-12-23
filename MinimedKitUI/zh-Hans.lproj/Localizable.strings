@@ -78,10 +78,10 @@
 "Enabled Diagnostic LEDs" = "正在打开状态LED指示灯";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error Resuming";
+"Error Resuming" = "无法恢复";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error Suspending";
+"Error Suspending" = "无法暂停";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "获取Enlite葡萄糖";

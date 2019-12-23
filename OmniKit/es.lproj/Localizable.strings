@@ -1,5 +1,5 @@
 /* Description for auto-off alarm */
-"Auto-off alarm" = "alarma de apagado automático";
+"Auto-off alarm" = "Alarma de apagado automático";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Menos de 50 unidades";
@@ -41,13 +41,13 @@
 "Finish setup " = "Fin de la configuración";
 
 /* Pod inititialized */
-"Initialized" = " Iniciado";
+"Initialized" = " iniciado";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Internal pod fault %1$03d";
+"Internal pod fault %1$03d" = "Error pod interno %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BoloInterrumpido: %1$@ U (%2$@ U planeadas) %3$@ %4$@ %5$@";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarma de aviso de depósito bajo";
@@ -72,13 +72,13 @@
 "Normal" = "Normal";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Occlusion detected";
+"Occlusion detected" = "Oclusion detectada";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
 /* Pod status after pairing */
-"Paired" = "Emparejada";
+"Paired" = "Emparejado";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Por favor, acerque su pod al RileyLink e inténtelo de nuevo";
@@ -102,7 +102,7 @@
 "Pod expired" = "Pod caducado";
 
 /* Format string for pod fault code */
-"Pod Fault: %1$@" = "Pod Fault: %1$@";
+"Pod Fault: %1$@" = "Error de pod: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
 "Pod is not in a state ready for cannula insertion." = "El Pod no está listo para insertar la cánula";
@@ -127,7 +127,7 @@
 "Ready to insert cannula" = "Listo para insertar la cánula";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
-"Resume: %1$@ %2$@" = "Resume: %1$@ %2$@";
+"Resume: %1$@ %2$@" = "Reanudar: %1$@ %2$@";
 
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Basal programada";
@@ -154,10 +154,10 @@
 "Temp basal running" = "Basal temporal funcionando";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "BasalTemp: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "BasalTemporal: %1$@ U/hora %2$@ %3$@ %4$@ U %5$@";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
-"Time to replace your pod! Your pod will expire in %1$@" = "Time to replace your pod! Your pod will expire in %1$@";
+"Time to replace your pod! Your pod will expire in %1$@" = "Es hora de reemplazar el pod! El pod expira en %1$@";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Incierto";
@@ -166,13 +166,13 @@
 "Unexpected response from pod" = "Respuesta inesperada del pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Unknown pod fault %1$03d";
+"Unknown pod fault %1$03d" = "Fallo de pod desconocido %1$03d";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Espere a que termine el bolo o cancele el bolo";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Espere a que termine la basal temporal existente o suspéndala para cancelar";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Espere a que termine la basal temporal existente o suspénda para cancelar";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Esperando el recordatorio de emperejamiento";

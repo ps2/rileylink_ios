@@ -29,7 +29,7 @@
 "Pump ID" = "Pumpe-ID";
 
 /* Title text for section listing configured pumps */
-"Pumps" = "Pumps";
+"Pumps" = "Pumper";
 
 /* The default placeholder string for a credential */
 "Required" = "Påkrevd";
@@ -38,7 +38,7 @@
 "RileyLink Testing" = "RileyLink Testing";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
+"Setup Omnipod" = "Sett opp Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Nettstedslenke (URL)";

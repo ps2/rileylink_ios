@@ -78,10 +78,10 @@
 "Enabled Diagnostic LEDs" = "LED лампочки диагностики включены";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error Resuming";
+"Error Resuming" = "Ошибка при возобновлении";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error Suspending";
+"Error Suspending" = "Ошибка при остановке";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Получить данные гликемии с Enlite";

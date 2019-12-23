@@ -29,7 +29,7 @@
 "Pump ID" = "ID Microinfusore";
 
 /* Title text for section listing configured pumps */
-"Pumps" = "Pumps";
+"Pumps" = "Microinfusore";
 
 /* The default placeholder string for a credential */
 "Required" = "Necessario";

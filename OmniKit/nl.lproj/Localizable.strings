@@ -114,7 +114,7 @@
 "Pod is suspended" = "Pod is onderbroken";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "Pod setup window expired";
+"Pod setup window expired" = "Insteltijd van de Pod is verlopen";
 
 /* Delivery status when pod is priming
    Pod status when priming */

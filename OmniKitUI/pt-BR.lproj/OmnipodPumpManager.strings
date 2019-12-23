@@ -5,7 +5,7 @@
 "3HH-eJ-lRh.title" = "Configuração do RileyLink";
 
 /* Class = "UITableViewController"; title = "Pod Settings"; ObjectID = "6vo-Ov-UpE"; */
-"6vo-Ov-UpE.title" = "Configuração da Pod";
+"6vo-Ov-UpE.title" = "Configuração do Pod";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "91O-Un-vKc"; */
 "91O-Un-vKc.title" = "Configuração da Bomba";
@@ -26,7 +26,7 @@
 "HwT-30-f0y.title" = "Inserir Cânula";
 
 /* Class = "UILabel"; text = "Prepare site. Remove the pod's needle cap and adhesive backing. If pod is OK, apply to site."; ObjectID = "Iuv-5M-bDH"; */
-"Iuv-5M-bDH.text" = "Prepare o local. Remova a tampa da agulha do pod e o adesivo. Se o pod estiver OK, aplique ao local.";
+"Iuv-5M-bDH.text" = "Prepare o local. Remova a tampa da agulha do pod e o adesivo. Se o pod estiver OK, aplique no local.";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "aNg-mm-Uuy"; */
 "aNg-mm-Uuy.title" = "Configuração da Bomba";

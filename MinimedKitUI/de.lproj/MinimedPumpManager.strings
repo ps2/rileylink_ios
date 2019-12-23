@@ -23,7 +23,7 @@
 "fVG-pl-jT9.footerTitle" = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N).";
 
 /* Class = "UITableViewSection"; headerTitle = "Pump ID"; ObjectID = "fVG-pl-jT9"; */
-"fVG-pl-jT9.headerTitle" = "Pump ID";
+"fVG-pl-jT9.headerTitle" = "Pumpen-ID";
 
 /* Class = "UILabel"; text = "Your pump is ready for use."; ObjectID = "g1m-3k-XI3"; */
 "g1m-3k-XI3.text" = "Your pump is ready for use.";
@@ -50,7 +50,7 @@
 "lGI-LD-xR7.headerTitle" = "Region and Color";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Setup Complete";
+"Nwf-TJ-KmJ.title" = "Setup erfolgreich";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
 "oBL-lh-SHI.title" = "Pump Broadcasts";

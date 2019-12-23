@@ -1,41 +1,42 @@
 /* The title of the section describing commands */
-"Commands" = "Commands";
+"Commands" = "Comenzi";
 
 /* The connected state */
-"Connected" = "Connected";
+"Connected" = "Conectat";
 
 /* The in-progress connecting state */
-"Connecting" = "Connecting";
+"Connecting" = "Se conectează";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Connection State";
+"Connection State" = "Stare conexiune";
 
 /* The title of the section describing the device */
-"Device" = "Device";
+"Device" = "Dispozitiv";
 
 /* The title of the devices table section in RileyLink settings */
-"Devices" = "Devices";
+"Devices" = "Dispozitive";
 
 /* The disconnected state */
-"Disconnected" = "Disconnected";
+"Disconnected" = "Deconectat";
 
 /* The in-progress disconnecting state */
-"Disconnecting" = "Disconnecting";
+"Disconnecting" = "Se deconectează";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
 
 /* The title of the cell showing current rileylink frequency */
-"Frequency" = "Frequency";
+"Frequency" = "Frecvență";
 
 /* The title of the cell showing device name */
-"Name" = "Name";
+"Name" = "Nume";
 
 /* RileyLink setup description */
-"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink allows for communication with the pump over Bluetooth Low Energy.";
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink facilitează conexiunea cu pompa prin intermediul Bluetooth Low Energy.";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
-"Signal Strength" = "Signal Strength";
+"Signal Strength" = "Putere semnal";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Durată de la pornire";
+

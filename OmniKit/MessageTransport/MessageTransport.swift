@@ -241,7 +241,7 @@ class PodMessageTransport: MessageTransport {
             }
             
             // Assemble fragmented message from multiple packets
-            let response =  try { () throws -> Message in
+            let response = try { () throws -> Message in
                 var responseData = responsePacket.data
                 while true {
                     do {
@@ -258,9 +258,17 @@ class PodMessageTransport: MessageTransport {
                             throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
                         }
                         responseData += conPacket.data
+                    } catch MessageError.invalidCrc {
+                        // throw the error without any logging for a garbage message
+                        throw MessageError.invalidCrc
+                    } catch let error {
+                        // log any other non-garbage messages that generate errors
+                        log.debug("Error Recv(Hex): %@", responseData.hexadecimalString)
+                        messageLogger?.didReceive(responseData)
+                        throw error
                     }
                 }
-                }()
+            }()
 
             ackUntilQuiet()
             

@@ -210,7 +210,7 @@
 "Suspended" = "Suspendido";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Cambiar de Omnipod”;
+"Switch from Omnipod Pumps" = "Cambiar de Omnipod";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Sincronizar con el Pod";

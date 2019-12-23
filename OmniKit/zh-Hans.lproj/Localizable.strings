@@ -20,7 +20,7 @@
 "Cannula inserting" = "植入管路";
 
 /* String describing a dose that was certainly scheduled */
-"Certain" = "";
+"Certain" = "Certain";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "已解除";
@@ -75,10 +75,10 @@
 "Occlusion detected" = "堵管";
 
 /* Generic title of the omnipod pump manager */
-"Omnipod" = "";
+"Omnipod" = "Omnipod";
 
 /* Pod status after pairing */
-"Paired" = "已配对;
+"Paired" = "已配对";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "请确保Rileylink与Pod保持近距离并重试";

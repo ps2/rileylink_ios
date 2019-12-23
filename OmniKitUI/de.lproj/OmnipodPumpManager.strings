@@ -56,7 +56,7 @@
 "rcC-ke-lUP.footerTitle" = "HINWEIS: Sollte die Kanüle hervorstehen, wählen Sie abbrechen.";
 
 /* Class = "UITableViewSection"; headerTitle = "Apply POD"; ObjectID = "rcC-ke-lUP"; */
-"rcC-ke-lUP.headerTitle" = "Pod anbringen”;
+"rcC-ke-lUP.headerTitle" = "Pod anbringen";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "vEc-Km-ewe"; */
 "vEc-Km-ewe.text" = "Label";

@@ -45,7 +45,7 @@
 "Are you sure you want to stop using Omnipod?" = "确定要停止使用这个Pod吗？";
 
 /* The title text for the address assigned to the pod */
-"Assigned Address" = "";
+"Assigned Address" = "Assigned Address";
 
 /* The title of the cell showing pod basal status */
 "Basal Delivery" = "当前基础率";

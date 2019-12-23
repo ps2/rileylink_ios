@@ -47,7 +47,7 @@
 "Internal pod fault %1$03d" = "Errore interno Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BoloInterrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@" = ";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BoloInterrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Allarme di avviso livello serbatoio basso";

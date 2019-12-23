@@ -213,7 +213,7 @@
 "Switch from Omnipod Pumps" = "Отключиться от помп Omnipod";
 
 /* Title of button to sync basal profile from pod */
-"Sync With Pod" = "Синхронизировать с Pod’ом";
+"Sync With Pod" = "Синхронизировать с Pod'ом";
 
 /* The title of the command to run the test command */
 "Test Command" = "Провести тест";

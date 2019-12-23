@@ -44,6 +44,23 @@ extension CommandResponseViewController {
         }
     }
 
+    static func readPodStatus(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.readPodStatus() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Read Pod Status…", comment: "Progress message for reading Pod status.")
+        }
+    }
+
     static func testingCommands(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
             pumpManager.testingCommands() { (error) in

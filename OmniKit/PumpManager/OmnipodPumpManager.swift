@@ -873,6 +873,77 @@ extension OmnipodPumpManager {
         #endif
     }
 
+    private func podStatusString(status: StatusResponse) -> String {
+        var result, str: String
+        var delivered: Double
+
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = [.day, .hour, .minute]
+        if let timeStr = formatter.string(from: status.timeActive) {
+            str = timeStr
+        } else {
+            str = String(describing: status.timeActive / 60)
+            str += " minutes"
+        }
+        result = "Pod Active: \(str)"
+
+        result += "\nDelivery Status: \(status.deliveryStatus)"
+
+        if let lastInsulinMeasurements = self.state.podState?.lastInsulinMeasurements {
+            delivered = lastInsulinMeasurements.delivered
+        } else {
+            delivered = status.insulin
+        }
+        result += "\nTotal Insulin Delivered: \(delivered.twoDecimals) U"
+
+        result += "\nReservoir Level: \(status.reservoirLevel?.twoDecimals ?? "50+") U"
+
+        result += "\nLast Bolus Insulin Not Delivered: \(status.insulinNotDelivered.twoDecimals) U"
+
+        if let podState = self.state.podState,
+            podState.activeAlerts.startIndex != podState.activeAlerts.endIndex
+        {
+            // generate a more helpful string with the actual alert names
+            str = String(describing: podState.activeAlerts)
+        } else {
+            str = String(describing: status.alerts)
+        }
+        result += "\nAlerts: \(str)"
+
+        return result
+    }
+
+    public func readPodStatus(completion: @escaping (String?) -> Void) {
+        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
+            self.log.info("Skipping status request due to unfinalized bolus in progress.")
+            completion(String(describing: PodCommsError.unfinalizedBolus))
+            return
+        }
+
+        let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
+        podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
+            do {
+                switch result {
+                case .success(let session):
+                    let status = try session.getStatus()
+                    // self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    let statusString = self.podStatusString(status: status)
+                    session.dosesForStorage({ (doses) -> Bool in
+                        self.store(doses: doses, in: session)
+                    })
+                    completion(statusString)
+                case .failure(let error):
+                    completion(String(describing: error))
+                    throw error
+                }
+            } catch let error {
+                self.log.error("Failed to read pump status: %{public}@", String(describing: error))
+                completion(String(describing: error))
+            }
+        }
+    }
+
     public func testingCommands(completion: @escaping (Error?) -> Void) {
         // use hasSetupPod so that the user can see any fault info
         guard self.hasSetupPod else {

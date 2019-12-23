@@ -1302,6 +1302,15 @@ extension OmnipodPumpManager: PumpManager {
                 self.setState({ (state) in
                     state.bolusEngageState = .disengaging
                 })
+                
+                if let bolus = self.state.podState?.unfinalizedBolus, !bolus.isFinished, bolus.scheduledCertainty == .uncertain {
+                    let status = try session.getStatus()
+                    
+                    if !status.deliveryStatus.bolusing {
+                        completion(.success(nil))
+                        return
+                    }
+                }
 
                 // when cancelling a bolus give a type 6 beeeeeep to match PDM if doing bolus confirmation beeps
                 let beeptype: BeepType = self.bolusBeeps ? .beeeeeep : .noBeep
@@ -1488,12 +1497,14 @@ extension OmnipodPumpManager: PumpManager {
 
 extension OmnipodPumpManager: MessageLogger {
     func didSend(_ message: Data) {
+        log.default("didSend: %{public}@", message.hexadecimalString)
         setState { (state) in
             state.messageLog.record(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
         }
     }
     
     func didReceive(_ message: Data) {
+        log.default("didReceive: %{public}@", message.hexadecimalString)
         setState { (state) in
             state.messageLog.record(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
         }
@@ -1506,9 +1517,9 @@ extension OmnipodPumpManager: PodCommsDelegate {
             // Check for any updates to bolus certainty, and log them
             if let bolus = state.podState?.unfinalizedBolus, bolus.scheduledCertainty == .uncertain, !bolus.isFinished {
                 if podState.unfinalizedBolus?.scheduledCertainty == .some(.certain) {
-                    self.log.debug("Resolved bolus uncertainty: did bolus")
+                    self.log.default("Resolved bolus uncertainty: did bolus")
                 } else if podState.unfinalizedBolus == nil {
-                    self.log.debug("Resolved bolus uncertainty: did not bolus")
+                    self.log.default("Resolved bolus uncertainty: did not bolus")
                 }
             }
             state.podState = podState

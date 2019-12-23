@@ -178,7 +178,7 @@
 "Priming..." = "プライミング中";
 
 /* Label describing time remaining view */
-"Remaining" = ""残り;
+"Remaining" = "残り";
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */

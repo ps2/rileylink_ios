@@ -182,7 +182,7 @@
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */
-"Replace Pod" = “Cambie el Pod";
+"Replace Pod" = "Cambie el Pod";
 
 /* The title of the command to replace pod when there is a pod fault */
 "Replace Pod Now" = "Cambie el Pod Ahora";

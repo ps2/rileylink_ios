@@ -47,7 +47,7 @@
 "k1Y-x4-m0a.title" = "Ställ in pump";
 
 /* Class = "UILabel"; text = "Review your settings below. They will be programmed into the pod during pairing. You can change these settings at any time in Loopʼs Settings screen."; ObjectID = "kLL-SQ-K0a"; */
-"kLL-SQ-K0a.text" = “Se över dina inställningar nedan. Poden kommer att programmeras med dessa under parkopplingen. Du kan ändra dessa inställningar närsomhelst i menyn Inställningar i Loop.";
+"kLL-SQ-K0a.text" = "Se över dina inställningar nedan. Poden kommer att programmeras med dessa under parkopplingen. Du kan ändra dessa inställningar närsomhelst i menyn Inställningar i Loop.";
 
 /* Class = "UINavigationItem"; title = "Setup Complete"; ObjectID = "nDb-R5-e02"; */
 "nDb-R5-e02.title" = "Inställning färdig";

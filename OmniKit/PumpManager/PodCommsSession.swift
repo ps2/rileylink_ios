@@ -200,16 +200,17 @@ public class PodCommsSession {
 
         var sentNonce: UInt32?
 
-
         while (triesRemaining > 0) {
             triesRemaining -= 1
 
-            if let nonceBlock = messageBlocks[0] as? NonceResyncableMessageBlock {
-                sentNonce = nonceBlock.nonce
+            for command in blocksToSend {
+                if let nonceBlock = command as? NonceResyncableMessageBlock {
+                    sentNonce = nonceBlock.nonce
+                    break // N.B. all nonce commands in single message should have the same value
+                }
             }
 
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
-
 
             let response = try transport.sendMessage(message)
             
@@ -229,10 +230,11 @@ public class PodCommsSession {
                     errorResponse.errorReponseType == .badNonce
                 {
                     podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
-                    log.info("resyncNonce(syncWord: %02X, sentNonce: %04X, messageSequenceNum: %d) -> %04X", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
+                    log.info("resyncNonce(syncWord: 0x%02x, sentNonce: 0x%04x, messageSequenceNum: %d) -> 0x%04x", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
                     
                     blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
                         if var resyncableBlock = block as? NonceResyncableMessageBlock {
+                            log.info("Replaced old nonce 0x%04x with resync nonce 0x%04x", resyncableBlock.nonce, podState.currentNonce)
                             resyncableBlock.nonce = podState.currentNonce
                             return resyncableBlock
                         } else {
@@ -426,7 +428,7 @@ public class PodCommsSession {
         // Between bluetooth and the radio and firmware, about 1.2s on average passes before we start tracking
         let commsOffset = TimeInterval(seconds: -1.5)
         
-        let bolusExtraCommand = BolusExtraCommand(units: units, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
+        let bolusExtraCommand = BolusExtraCommand(units: units, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
@@ -456,7 +458,7 @@ public class PodCommsSession {
     public func setTempBasal(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
-        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep)
+        let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
 
         guard podState.unfinalizedBolus?.isFinished != false else {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
@@ -545,7 +547,7 @@ public class PodCommsSession {
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
-        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: 0)
+        let basalExtraCommand = BasalScheduleExtraCommand.init(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
 
         do {
             let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])

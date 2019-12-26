@@ -18,7 +18,7 @@
 "%@ U of %@ U (%@)" = "%1$@ J z %2$@ J (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
-"%@ U/hour" = "%@ U/hour";
+"%@ U/hour" = "%@ J/godzina";
 
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";

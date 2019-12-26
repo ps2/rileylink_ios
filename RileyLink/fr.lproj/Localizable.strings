@@ -29,7 +29,7 @@
 "Pump ID" = "ID de la Pompe";
 
 /* Title text for section listing configured pumps */
-"Pumps" = "Pumps";
+"Pumps" = "Pompes";
 
 /* The default placeholder string for a credential */
 "Required" = "Requis";

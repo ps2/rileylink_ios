@@ -26,16 +26,16 @@
 "Deactivated" = "Inaktiverad";
 
 /* Description for Empty reservoir pod fault */
-"Empty reservoir" = "Tom reservoar podfel";
+"Empty reservoir" = "Podfel, tom reservoarl";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Tomt svar från pod";
+"Empty response from pod" = "Inget svar från pod";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Felhändelse loggad, stänger ned";
 
 /* Description for expiration alert */
-"Expiration alert" = "Larm för utgångsdatum";
+"Expiration alert" = "Larm om utgångsdatum";
 
 /* Description for finish setup */
 "Finish setup " = "Inställning färdig";
@@ -172,7 +172,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Vänta på att pågående bolus är färdig, eller avbryt bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Vänta på nuvarande temporära basal, eller pausa att avbryta";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Vänta på nuvarande temporära basal, eller pausa för att avbryta";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Väntar på påminnelse för parkoppling";

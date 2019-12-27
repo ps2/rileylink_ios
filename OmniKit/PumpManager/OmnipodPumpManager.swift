@@ -883,23 +883,22 @@ extension OmnipodPumpManager {
         if let timeStr = formatter.string(from: status.timeActive) {
             str = timeStr
         } else {
-            str = String(describing: status.timeActive / 60)
-            str += " minutes"
+            str = String(format: LocalizedString("%1$@ minutes", comment: "The format string for minutes (1: number of minutes string)"), String(describing: Int(status.timeActive / 60)))
         }
-        result = "Pod Active: \(str)"
+        result = String(format: LocalizedString("Pod Active: %1$@\n", comment: "The format string for Pod Active: (1: Pod active time string)"), str)
 
-        result += "\nDelivery Status: \(status.deliveryStatus)"
+        result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
         if let lastInsulinMeasurements = self.state.podState?.lastInsulinMeasurements {
             delivered = lastInsulinMeasurements.delivered
         } else {
             delivered = status.insulin
         }
-        result += "\nTotal Insulin Delivered: \(delivered.twoDecimals) U"
+        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), delivered.twoDecimals)
 
-        result += "\nReservoir Level: \(status.reservoirLevel?.twoDecimals ?? "50+") U"
+        result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
 
-        result += "\nLast Bolus Insulin Not Delivered: \(status.insulinNotDelivered.twoDecimals) U"
+        result += String(format: LocalizedString("Last Bolus Not Delivered: %1$@ U\n", comment: "The format string for Last Bolus Not Delivered: (1: bolus not delivered string)"), status.insulinNotDelivered.twoDecimals)
 
         if let podState = self.state.podState,
             podState.activeAlerts.startIndex != podState.activeAlerts.endIndex
@@ -909,14 +908,18 @@ extension OmnipodPumpManager {
         } else {
             str = String(describing: status.alerts)
         }
-        result += "\nAlerts: \(str)"
+        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), str)
 
         return result
     }
 
     public func readPodStatus(completion: @escaping (String?) -> Void) {
+        guard self.hasActivePod else {
+            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
+            return
+        }
         guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
-            self.log.info("Skipping status request due to unfinalized bolus in progress.")
+            self.log.info("Skipping read pod status due to unfinalized bolus in progress.")
             completion(String(describing: PodCommsError.unfinalizedBolus))
             return
         }
@@ -928,17 +931,17 @@ extension OmnipodPumpManager {
                 case .success(let session):
                     let status = try session.getStatus()
                     // self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let statusString = self.podStatusString(status: status)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
+                    let statusString = self.podStatusString(status: status)
                     completion(statusString)
                 case .failure(let error):
                     completion(String(describing: error))
                     throw error
                 }
             } catch let error {
-                self.log.error("Failed to read pump status: %{public}@", String(describing: error))
+                self.log.error("Failed to read pod status: %{public}@", String(describing: error))
                 completion(String(describing: error))
             }
         }

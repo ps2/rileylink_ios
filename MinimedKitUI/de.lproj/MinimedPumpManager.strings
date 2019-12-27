@@ -44,7 +44,7 @@
 "iQZ-kT-QUm.title" = "Einstellungen der Pumpe";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
-"lGI-LD-xR7.footerTitle" = "Die Region und die Farbe der Pumpe sind mit den letzten 3 Buchstaben in der Modellnummer bezeichnet (“REF”-Nummer in der Kennzeichnung der Pumpe).";
+"lGI-LD-xR7.footerTitle" = "Die Region und die Farbe der Pumpe sind mit den letzten 3 Buchstaben in der Modellnummer bezeichnet (REF-Nummer in der Kennzeichnung der Pumpe).";
 
 /* Class = "UITableViewSection"; headerTitle = "Region and Color"; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.headerTitle" = "Region und Farbe";

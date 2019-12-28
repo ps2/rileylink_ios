@@ -16,9 +16,9 @@ public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
 
     public func updateTextLabel(enabled: Bool) {
         if enabled {
-            self.textLabel?.text = LocalizedString("Disable Bolus Beeps", comment: "Title text for button to disable bolus beeps")
+            self.textLabel?.text = LocalizedString("Disable Confirmation Beeps", comment: "Title text for button to disable confirmation beeps")
         } else {
-            self.textLabel?.text = LocalizedString("Enable Bolus Beeps", comment: "Title text for button to enable bolus beeps")
+            self.textLabel?.text = LocalizedString("Enable Confirmation Beeps", comment: "Title text for button to enable confirmation beeps")
         }
     }
     
@@ -68,7 +68,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
     lazy var confirmationBeepsTableViewCell: ConfirmationBeepsTableViewCell = {
         let cell = ConfirmationBeepsTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.updateTextLabel(enabled: pumpManager.bolusBeeps)
+        cell.updateTextLabel(enabled: pumpManager.confirmationBeeps)
         return cell
     }()
 
@@ -594,12 +594,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     private func confirmationBeepsTapped() {
-        let confirmationBeeps: Bool = pumpManager.bolusBeeps
+        let confirmationBeeps: Bool = pumpManager.confirmationBeeps
         
         func done() {
             DispatchQueue.main.async { [weak self] in
                 if let self = self {
-                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.bolusBeeps)
+                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.confirmationBeeps)
                     self.confirmationBeepsTableViewCell.isLoading = false
                 }
             }
@@ -607,20 +607,20 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
         confirmationBeepsTableViewCell.isLoading = true
         if confirmationBeeps {
-            pumpManager.setBolusBeeps(enabled: false, completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
-                        let title = LocalizedString("Error disabling bolus beeps", comment: "The alert title for disable bolus beeps error")
+                        let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
                 done()
             })
         } else {
-            pumpManager.setBolusBeeps(enabled: true, completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
-                        let title = LocalizedString("Error enabling bolus beeps", comment: "The alert title for enable bolus beeps error")
+                        let title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }

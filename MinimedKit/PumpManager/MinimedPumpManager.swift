@@ -1013,10 +1013,14 @@ extension MinimedPumpManager: PumpManager {
                 let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration)
                 
                 self.recents.tempBasalEngageState = .stable
+                
+                let isResumingScheduledBasal = duration < .ulpOfOne
 
                 // If we were successful, then we know we aren't suspended
                 self.setState({ (state) in
                     if case .suspended = state.suspendState {
+                        state.suspendState = .resumed(startDate)
+                    } else if isResumingScheduledBasal {
                         state.suspendState = .resumed(startDate)
                     }
                     
@@ -1027,7 +1031,7 @@ extension MinimedPumpManager: PumpManager {
                         state.pendingDoses.append(previousTempBasal)
                     }
                     
-                    if duration < .ulpOfOne {
+                    if isResumingScheduledBasal {
                         state.unfinalizedTempBasal = nil
                     } else {
                         state.unfinalizedTempBasal = dose

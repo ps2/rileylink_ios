@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -80,6 +77,12 @@
 /* Progress message for enabling diagnostic LEDs */
 "Enabled Diagnostic LEDs" = "正在打开状态LED指示灯";
 
+/* The alert title for a resume error */
+"Error Resuming" = "无法恢复";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "无法暂停";
+
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "获取Enlite葡萄糖";
 
@@ -97,6 +100,9 @@
 
 /* The title of the cell showing firmware version */
 "Firmware" = "固件";
+
+/* The title of the cell showing the pump firmware version */
+"Firmware Version" = "Firmware Version";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "获取胰岛素泵型号";
@@ -124,6 +130,9 @@
 
 /* The title of the cell showing the last idle */
 "On Idle" = "空闲";
+
+/* Pump find device instruction */
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "首选数据源";
@@ -155,6 +164,9 @@
 
 /* Progress message for reading pump status */
 "Reading pump status…" = "正在读取胰岛素泵状态…";
+
+/* The title of the cell showing the pump region */
+"Region" = "Region";
 
 /* Button title to retry sentry setup */
 "Retry" = "重试";
@@ -193,3 +205,5 @@
 /* The detail text for an unknown pump model */
 "Unknown" = "未知";
 
+/* The title of the cell showing uptime */
+"Uptime" = "Uptime";

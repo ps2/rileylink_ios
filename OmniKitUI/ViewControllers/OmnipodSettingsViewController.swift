@@ -182,8 +182,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum ActionsRow: Int, CaseIterable {
         case suspendResume = 0
-        case testCommand
+        case readPodStatus
         case playTestBeeps
+        case testCommand
         case replacePod
     }
     
@@ -310,6 +311,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch actions[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
+            case .readPodStatus:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Read Pod Status", comment: "The title of the command to read the pod status")
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .testCommand:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
@@ -464,6 +470,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .suspendResume:
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .readPodStatus:
+                let vc = CommandResponseViewController.readPodStatus(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
             case .testCommand:
                 let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
@@ -551,7 +561,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume, .replacePod:
                 break
-            case .testCommand, .playTestBeeps:
+            case .readPodStatus, .playTestBeeps, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .configuration:

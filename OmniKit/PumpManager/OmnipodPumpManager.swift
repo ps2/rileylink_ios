@@ -81,6 +81,23 @@ extension OmnipodPumpManagerError: LocalizedError {
     }
 }
 
+extension BinaryInteger {
+    var binaryDescription: String {
+        var binaryString = ""
+        var internalNumber = self
+        var counter = 0
+
+        for _ in (1...self.bitWidth) {
+            binaryString.insert(contentsOf: "\(internalNumber & 1)", at: binaryString.startIndex)
+            internalNumber >>= 1
+            counter += 1
+            if counter % 8 == 0 {
+                binaryString.insert(contentsOf: " ", at: binaryString.startIndex)
+            }
+        }
+        return binaryString
+    }
+}
 
 public class OmnipodPumpManager: RileyLinkPumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
@@ -638,7 +655,7 @@ extension OmnipodPumpManager {
     }
 
     private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
-        if self.confirmationBeeps{
+        if self.confirmationBeeps {
             session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
         }
     }
@@ -937,7 +954,7 @@ extension OmnipodPumpManager {
                 switch result {
                 case .success(let session):
                     let status = try session.getStatus()
-                    // self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
@@ -967,7 +984,7 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     try session.testingCommands()
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    self.emitConfirmationBeep(session: session, beepConfigType: .beepBeepBeep)
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -1006,38 +1023,56 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func readFlashLog(completion: @escaping (Error?) -> Void) {
-        // use hasSetupPod to be able to read the flash log from a faulted Pod
+    private func pulseLogString(pulseLogEntries: [UInt32], lastPulseNumber: Int) -> String {
+        var str: String = "Pulse eeeeee0a pppliiib cccccccc dfgggggg\n"
+        var index = pulseLogEntries.count - 1
+        var pulseNumber = lastPulseNumber
+        while index >= 0 {
+            str += String(format: "%04d:", pulseNumber) + UInt32(pulseLogEntries[index]).binaryDescription + "\n"
+            index -= 1
+            pulseNumber -= 1
+        }
+        return str + "\n"
+    }
+
+    public func readPulseLog(completion: @escaping (String?) -> Void) {
+        // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
+            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
-            self.log.info("Skipping Read Flash Log due to bolus still in progress.")
-            completion(PodCommsError.unfinalizedBolus)
+            self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
+            completion(String(describing: PodCommsError.unfinalizedBolus))
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Read Flash Log", using: rileyLinkSelector) { (result) in
+        self.podComms.runSession(withName: "Read Pulse Log", using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    // read up to the most recent 50 entries from flash log
+                    // read the most recent 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    try session.readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
+                    let podInfoResponse1 = try session.readPulseLogsRequest(podInfoResponseSubType: .pulseLogRecent)
+                    let podInfoPulseLogRecent = podInfoResponse1.podInfo as! PodInfoPulseLogRecent
+                    var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
+                    var result = self.pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLogEntry, lastPulseNumber: lastPulseNumber)
 
-                    // read up to the previous 50 entries from flash log
+                    // read up to the previous 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    try session.readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
+                    let podInfoResponse2 = try session.readPulseLogsRequest(podInfoResponseSubType: .dumpOlderPulseLog)
+                    let podInfoPulseLogPrevious = podInfoResponse2.podInfo as! PodInfoPulseLogPrevious
+                    lastPulseNumber -= podInfoPulseLogRecent.pulseLogEntry.count
+                    result += self.pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLogEntry, lastPulseNumber: lastPulseNumber)
 
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
-                    completion(nil)
+                    completion(result)
                 } catch let error {
-                    completion(error)
+                    completion(String(describing: error))
                 }
             case .failure(let error):
-                completion(error)
+                completion(String(describing: error))
             }
         }
     }

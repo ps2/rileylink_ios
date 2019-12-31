@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The title of the about section */
 "About" = "Om";
 
@@ -23,7 +20,7 @@
 "Fetch CGM" = "Hent CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -31,14 +28,17 @@
 /* The title text for the pump ID config value */
 "Pump ID" = "Pumpe-ID";
 
-/* The title text for the pump Region config value */
-"Pump Region" = "Pumperegion";
-
-/* Instructions on selecting the pump region */
-"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "Pumperegion er merket på baksiden av din pumpe som to av de tre siste tegnene i din modell, og ser ut noe som dette: MMT-551NAB, eller MMT-515LWWS. Hvis pumpa di har \"NA\" eller \"CA\" i navnet er regionen Nord-Amerika. Hvis den derimot har \"WW\" i navnet er regionen WorldWide.";
+/* Title text for section listing configured pumps */
+"Pumps" = "Pumper";
 
 /* The default placeholder string for a credential */
 "Required" = "Påkrevd";
+
+/* Title for RileyLink Testing main view controller */
+"RileyLink Testing" = "RileyLink Testing";
+
+/* Title text for button to set up omnipod */
+"Setup Omnipod" = "Sett opp Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Nettstedslenke (URL)";
@@ -48,7 +48,4 @@
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Last opp til Nightscout";
-
-/* Label indicating validation is occurring */
-"Verifying" = "Bekrefter";
 

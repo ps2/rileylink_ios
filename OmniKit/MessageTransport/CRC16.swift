@@ -44,7 +44,7 @@ let crc16Table: [UInt16] = [
 
 public extension Sequence where Element == UInt8 {
     
-    public func crc16() -> UInt16 {
+    func crc16() -> UInt16 {
         
         var acc: UInt16 = 0
         for byte in self {

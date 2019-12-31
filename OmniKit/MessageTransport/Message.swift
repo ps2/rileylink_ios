@@ -20,11 +20,13 @@ struct Message {
     let address: UInt32
     let messageBlocks: [MessageBlock]
     let sequenceNum: Int
+    let expectFollowOnMessage: Bool
     
-    init(address: UInt32, messageBlocks: [MessageBlock], sequenceNum: Int) {
+    init(address: UInt32, messageBlocks: [MessageBlock], sequenceNum: Int, expectFollowOnMessage: Bool = false) {
         self.address = address
         self.messageBlocks = messageBlocks
         self.sequenceNum = sequenceNum
+        self.expectFollowOnMessage = expectFollowOnMessage
     }
     
     init(encodedData: Data) throws {
@@ -39,6 +41,7 @@ struct Message {
             throw MessageError.notEnoughData
         }
         
+        self.expectFollowOnMessage = (b9 & 0b10000000) != 0
         self.sequenceNum = Int((b9 >> 2) & 0b11111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
         let msgWithoutCrc = encodedData.prefix(encodedData.count - 2)
@@ -56,7 +59,7 @@ struct Message {
                 throw MessageBlockError.unknownBlockType(rawVal: data[idx])
             }
             do {
-                let block = try blockType.blockType.init(encodedData: data.suffix(from: idx))
+                let block = try blockType.blockType.init(encodedData: Data(data.suffix(from: idx)))
                 blocks.append(block)
                 idx += Int(block.data.count)
             } catch (let error) {
@@ -74,7 +77,7 @@ struct Message {
             cmdData.append(cmd.data)
         }
         
-        let b9: UInt8 = (UInt8(sequenceNum & 0b11111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
+        let b9: UInt8 = ((expectFollowOnMessage ? 1 : 0) << 7) + (UInt8(sequenceNum & 0b11111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
         bytes.append(b9)
         bytes.append(UInt8(cmdData.count & 0xff))
         
@@ -83,5 +86,23 @@ struct Message {
         data.appendBigEndian(crc)
         return data
     }
+    
+    var fault: PodInfoFaultEvent? {
+        if messageBlocks.count > 0 && messageBlocks[0].blockType == .podInfoResponse,
+            let infoResponse = messageBlocks[0] as? PodInfoResponse,
+            infoResponse.podInfoResponseSubType == .faultEvents,
+            let fault = infoResponse.podInfo as? PodInfoFaultEvent
+        {
+            return fault
+        } else {
+            return nil
+        }
+    }
 }
 
+extension Message: CustomDebugStringConvertible {
+    var debugDescription: String {
+        let sequenceNumStr = String(format: "%02d", sequenceNum)
+        return "Message(\(Data(bigEndian: address).hexadecimalString) seq:\(sequenceNumStr) \(messageBlocks))"
+    }
+}

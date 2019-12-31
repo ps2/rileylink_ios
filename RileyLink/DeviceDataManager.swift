@@ -15,7 +15,9 @@ import MinimedKitUI
 import NightscoutUploadKit
 import LoopKit
 import LoopKitUI
+import UserNotifications
 import os.log
+import UserNotifications
 
 class DeviceDataManager {
 
@@ -60,9 +62,6 @@ extension DeviceDataManager: PumpManagerDelegate {
         log.debug("didAdjustPumpClockBy %@", adjustment)
     }
     
-    func pumpManagerDidUpdatePumpBatteryChargeRemaining(_ pumpManager: PumpManager, oldValue: Double?) {
-    }
-    
     func pumpManagerDidUpdateState(_ pumpManager: PumpManager) {
         UserDefaults.standard.pumpManagerRawValue = pumpManager.rawValue
     }
@@ -70,11 +69,11 @@ extension DeviceDataManager: PumpManagerDelegate {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager) {
     }
     
-    func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
+    func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
         return true
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
     }
     
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager) {
@@ -88,7 +87,7 @@ extension DeviceDataManager: PumpManagerDelegate {
         log.error("pumpManager didError %@", String(describing: error))
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didReadPumpEvents events: [NewPumpEvent], completion: @escaping (_ error: Error?) -> Void) {
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void) {
     }
     
     func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: PumpManagerResult<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)>) -> Void) {
@@ -100,8 +99,28 @@ extension DeviceDataManager: PumpManagerDelegate {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date {
         return Date().addingTimeInterval(.hours(-2))
     }
-    
-    func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date {
-        return Date().addingTimeInterval(.minutes(-15))
+}
+
+// MARK: - DeviceManagerDelegate
+extension DeviceDataManager: DeviceManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?) {
+        let request = UNNotificationRequest(
+            identifier: identifier,
+            content: content,
+            trigger: trigger
+        )
+
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().add(request)
+        }
+    }
+
+    func clearNotification(for manager: DeviceManager, identifier: String) {
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+        }
     }
 }

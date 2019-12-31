@@ -49,7 +49,7 @@ struct GetPacket: Command {
     }
 
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.getPacket.rawValue,
             listenChannel
         ])
@@ -63,7 +63,7 @@ struct GetVersion: Command {
     typealias ResponseType = GetVersionResponse
 
     var data: Data {
-        return Data(bytes: [RileyLinkCommand.getVersion.rawValue])
+        return Data([RileyLinkCommand.getVersion.rawValue])
     }
 }
 
@@ -97,7 +97,7 @@ struct SendAndListen: Command {
     }
 
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.sendAndListen.rawValue,
             sendChannel,
             repeatCount
@@ -145,7 +145,7 @@ struct SendPacket: Command {
     }
 
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.sendPacket.rawValue,
             sendChannel,
             repeatCount,
@@ -188,7 +188,7 @@ struct UpdateRegister: Command {
     }
 
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.updateRegister.rawValue,
             register.address.rawValue,
             register.value
@@ -217,7 +217,7 @@ struct ReadRegister: Command {
     }
     
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.readRegister.rawValue,
             address.rawValue,
             ])
@@ -246,7 +246,7 @@ struct SetModeRegisters: Command {
     }
 
     var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             RileyLinkCommand.setModeRegisters.rawValue,
             registerMode.rawValue
         ])
@@ -271,7 +271,7 @@ struct SetSoftwareEncoding: Command {
     }
     
     var data: Data {
-        return Data(bytes: [
+        return Data([
             RileyLinkCommand.setSWEncoding.rawValue,
             encodingType.rawValue
         ])
@@ -289,7 +289,7 @@ struct SetPreamble: Command {
     }
     
     var data: Data {
-        var data = Data(bytes: [RileyLinkCommand.setPreamble.rawValue])
+        var data = Data([RileyLinkCommand.setPreamble.rawValue])
         data.appendBigEndian(preambleValue)
         return data
         
@@ -309,7 +309,7 @@ struct SetLEDMode: Command {
     }
     
     var data: Data {
-        return Data(bytes: [RileyLinkCommand.led.rawValue, led.rawValue, mode.rawValue])
+        return Data([RileyLinkCommand.led.rawValue, led.rawValue, mode.rawValue])
     }
 }
 
@@ -318,7 +318,7 @@ struct ResetRadioConfig: Command {
     typealias ResponseType = CodeResponse
     
     var data: Data {
-        return Data(bytes: [RileyLinkCommand.resetRadioConfig.rawValue])        
+        return Data([RileyLinkCommand.resetRadioConfig.rawValue])
     }
 }
 
@@ -326,6 +326,6 @@ struct GetStatistics: Command {
     typealias ResponseType = GetStatisticsResponse
     
     var data: Data {
-        return Data(bytes: [RileyLinkCommand.getStatistics.rawValue])
+        return Data([RileyLinkCommand.getStatistics.rawValue])
     }
 }

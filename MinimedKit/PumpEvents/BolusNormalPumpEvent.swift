@@ -24,6 +24,20 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
     public let unabsorbedInsulinTotal: Double
     public let type: BolusType
     public let duration: TimeInterval
+    public let wasRemotelyTriggered: Bool
+    
+    public init(length: Int, rawData: Data, timestamp: DateComponents, unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?, amount: Double, programmed: Double, unabsorbedInsulinTotal: Double, type: BolusType, duration: TimeInterval, wasRemotelyTriggered: Bool) {
+        self.length = length
+        self.rawData = rawData
+        self.timestamp = timestamp
+        self.unabsorbedInsulinRecord = unabsorbedInsulinRecord
+        self.amount = amount
+        self.programmed = programmed
+        self.unabsorbedInsulinTotal = unabsorbedInsulinTotal
+        self.type = type
+        self.duration = duration
+        self.wasRemotelyTriggered = wasRemotelyTriggered
+    }
 
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing
@@ -40,35 +54,14 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         }
     }
     
-    public init(length: Int, rawData: Data, timestamp: DateComponents, unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?, amount: Double, programmed: Double, unabsorbedInsulinTotal: Double, type: BolusType, duration: TimeInterval) {
-        self.length = length
-        self.rawData = rawData
-        self.timestamp = timestamp
-        self.unabsorbedInsulinRecord = unabsorbedInsulinRecord
-        self.amount = amount
-        self.programmed = programmed
-        self.unabsorbedInsulinTotal = unabsorbedInsulinTotal
-        self.type = type
-        self.duration = duration
-    }
-
     public init?(availableData: Data, pumpModel: PumpModel) {
-        let length: Int
-        let rawData: Data
-        let timestamp: DateComponents
-        var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
-        let amount: Double
-        let programmed: Double
-        let unabsorbedInsulinTotal: Double
-        let type: BolusType
-        let duration: TimeInterval
         
         func doubleValueFromData(at index: Int) -> Double {
             return Double(availableData[index])
         }
         
         func decodeInsulin(from bytes: Data) -> Double {
-            return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.strokesPerUnit)
+            return Double(Int(bigEndianBytes: bytes)) / Double(pumpModel.insulinBitPackingScale)
         }
         
         length = BolusNormalPumpEvent.calculateLength(pumpModel.larger)
@@ -81,12 +74,14 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         
         if pumpModel.larger {
             timestamp = DateComponents(pumpEventData: availableData, offset: 8)
+            wasRemotelyTriggered = availableData[11] & 0b01000000 != 0
             programmed = decodeInsulin(from: availableData.subdata(in: 1..<3))
             amount = decodeInsulin(from: availableData.subdata(in: 3..<5))
             unabsorbedInsulinTotal = decodeInsulin(from: availableData.subdata(in: 5..<7))
             duration = TimeInterval(minutes: 30 * doubleValueFromData(at: 7))
         } else {
             timestamp = DateComponents(pumpEventData: availableData, offset: 4)
+            wasRemotelyTriggered = availableData[7] & 0b01000000 != 0
             programmed = decodeInsulin(from: availableData.subdata(in: 1..<2))
             amount = decodeInsulin(from: availableData.subdata(in: 2..<3))
             duration = TimeInterval(minutes: 30 * doubleValueFromData(at: 3))
@@ -94,7 +89,6 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
         }
         type = duration > 0 ? .square : .normal
         
-        self.init(length: length, rawData: rawData, timestamp: timestamp, unabsorbedInsulinRecord: unabsorbedInsulinRecord, amount:amount, programmed: programmed, unabsorbedInsulinTotal: unabsorbedInsulinTotal, type: type, duration: duration)
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -103,6 +97,7 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             "amount": amount,
             "programmed": programmed,
             "type": type.rawValue,
+            "wasRemotelyTriggered": wasRemotelyTriggered,
         ]
         
         if let unabsorbedInsulinRecord = unabsorbedInsulinRecord {

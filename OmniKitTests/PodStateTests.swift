@@ -10,10 +10,9 @@ import XCTest
 @testable import OmniKit
 
 class PodStateTests: XCTestCase {
-    
+
     func testNonceValues() {
-        
-        var podState = PodState(address: 0x1f000000, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771)
+        var podState = PodState(address: 0x1f000000, piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771)
         
         XCTAssertEqual(podState.currentNonce, 0x8c61ee59)
         podState.advanceToNextNonce()
@@ -24,10 +23,10 @@ class PodStateTests: XCTestCase {
         XCTAssertEqual(podState.currentNonce, 0xacf076ca)
     }
     
-    func testNonceSync() {
+    func testResyncNonce() {
         do {
             let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a62b0002249da11f00ee860318")!)
-            var podState = PodState(address: 0x1f00ee86, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
+            var podState = PodState(address: 0x1f00ee86, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
 
             XCTAssertEqual(42539, config.lot)
             XCTAssertEqual(140445,  config.tid)
@@ -52,43 +51,5 @@ class PodStateTests: XCTestCase {
             XCTFail("message decoding threw error: \(error)")
         }
     }
-    
-    func testNonceSync2() {
-        do {
-            let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a7420007f050961f0b35570264")!)
-            var podState = PodState(address: 0x1f0b3557, activatedAt: Date(), timeZone: .currentFixed, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
-            
-//            XCTAssertEqual(42125, config.lot)
-//            XCTAssertEqual(170175,  config.tid)
-//
-//            XCTAssertEqual(0x8d27868e,  podState.currentNonce)
-
-            let sentCommand = try SetInsulinScheduleCommand(encodedData: Data(hexadecimalString: "1a0e8ecd89d702002501002000020002")!)
-            
-//            // ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a
-//            let sentPacket = try Packet(encodedData: Data(hexadecimalString: "1f07b1eea31f07b1ee04071f05851072aa6200170a")!)
-//            let sentMessage = try Message(encodedData: sentPacket.data)
-//            let sentCommand = sentMessage.messageBlocks[0] as! CancelDeliveryCommand
-            
-            let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "060314a197820c")!)
-            
-            let sequenceNum = 13
-            
-            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sequenceNum)
-            
-            // 1a0eda1289d702002501002000020002
-            
-            XCTAssertEqual(0xda1289d7, podState.currentNonce)
-
-            
-//            2016-10-10T11:23:05.433141 ID1:1f07b1ee PTYPE:PDM SEQ:03 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05851072aa620017 CRC:0a
-//            2016-10-10T11:23:05.793768 ID1:1f07b1ee PTYPE:POD SEQ:04 ID2:1f07b1ee B9:08 BLEN:5 BODY:0603142ffa83cd CRC:35
-//            2016-10-10T11:23:06.182224 ID1:1f07b1ee PTYPE:PDM SEQ:06 ID2:1f07b1ee B9:04 BLEN:7 BODY:1f05f1488fc3620229 CRC:7b
-            
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
-    }
-
 }
 

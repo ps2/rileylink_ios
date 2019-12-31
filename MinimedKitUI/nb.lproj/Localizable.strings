@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -80,6 +77,12 @@
 /* Progress message for enabling diagnostic LEDs */
 "Enabled Diagnostic LEDs" = "Tilgjengeligjort diagnostiske LEDs";
 
+/* The alert title for a resume error */
+"Error Resuming" = "Gjenoppta feilet";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Pause feilet";
+
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Hent enlite blodsukker";
 
@@ -96,7 +99,10 @@
 "Fetching pump model…" = "Henter pumpemodell…";
 
 /* The title of the cell showing firmware version */
-"Firmware" = "Firmware";
+"Firmware" = "Fastvare";
+
+/* The title of the cell showing the pump firmware version */
+"Firmware Version" = "Fastvareversjon";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Hent pumpemodell";
@@ -124,6 +130,9 @@
 
 /* The title of the cell showing the last idle */
 "On Idle" = "På Vent";
+
+/* Pump find device instruction */
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Foretrukken datakilde";
@@ -155,6 +164,9 @@
 
 /* Progress message for reading pump status */
 "Reading pump status…" = "Leser pumpestatus…";
+
+/* The title of the cell showing the pump region */
+"Region" = "Region";
 
 /* Button title to retry sentry setup */
 "Retry" = "Prøv igjen";
@@ -193,3 +205,5 @@
 /* The detail text for an unknown pump model */
 "Unknown" = "Ukjent";
 
+/* The title of the cell showing uptime */
+"Uptime" = "Oppetid";

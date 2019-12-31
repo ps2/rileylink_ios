@@ -177,7 +177,7 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             var byteArray = [UInt8](repeating: 0, count: 16)
             (device.peripheralIdentifier as NSUUID).getBytes(&byteArray)
-            let watchdogID = Data(bytes: byteArray[0..<3])
+            let watchdogID = Data(byteArray[0..<3])
 
             ops?.runSession(withName: "Change watchdog marriage profile", using: device) { (session) in
                 let response: String

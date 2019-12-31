@@ -12,19 +12,29 @@ import MinimedKit
 
 
 extension MinimedPumpManager: PumpManagerUI {
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
+
+    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController() -> UIViewController {
-        return MinimedPumpSettingsViewController(pumpManager: self)
+    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
+        let settings = MinimedPumpSettingsViewController(pumpManager: self)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
+        return nav
     }
 
     public var smallImage: UIImage? {
         return state.smallPumpImage
     }
+    
+    public func hudProvider() -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self)
+    }
+    
+    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
+        return MinimedHUDProvider.createHUDViews(rawValue: rawValue)
+    }
 }
-
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MinimedPumpManager {
@@ -67,9 +77,9 @@ extension MinimedPumpManager {
 }
 
 
-// MARK: - SingleValueScheduleTableViewControllerSyncSource
+// MARK: - BasalScheduleTableViewControllerSyncSource
 extension MinimedPumpManager {
-    public func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
+    public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
         pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
@@ -88,15 +98,15 @@ extension MinimedPumpManager {
         }
     }
 
-    public func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
+    public func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
         return LocalizedString("Save to Pump…", comment: "Title of button to save basal profile to pump")
     }
 
-    public func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {
+    public func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
         return nil
     }
 
-    public func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
+    public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
     }
 }

@@ -19,6 +19,8 @@ extension CBCentralManager {
         case .connected:
             delegate?.centralManager?(self, didConnect: peripheral)
         case .connecting, .disconnected, .disconnecting:
+            fallthrough
+        @unknown default:
             connect(peripheral, options: options)
         }
     }
@@ -32,6 +34,8 @@ extension CBCentralManager {
         case .disconnected:
             delegate?.centralManager?(self, didDisconnectPeripheral: peripheral, error: nil)
         case .connected, .connecting, .disconnecting:
+            fallthrough
+        @unknown default:
             cancelPeripheralConnection(peripheral)
         }
     }
@@ -53,6 +57,8 @@ extension CBManagerState {
             return "Unknown"
         case .unsupported:
             return "Unsupported"
+        @unknown default:
+            return "Unknown: \(rawValue)"
         }
     }
 }

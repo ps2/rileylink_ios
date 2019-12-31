@@ -100,7 +100,7 @@ public struct CommandSession {
         case .zeroData:
             throw RileyLinkDeviceError.invalidResponse(Data())
         case .invalidParam, .unknownCommand:
-            throw RileyLinkDeviceError.invalidInput(String(describing: command.data))
+            throw RileyLinkDeviceError.invalidInput(command.data.hexadecimalString)
         case .success:
             return response
         }
@@ -298,4 +298,8 @@ public struct CommandSession {
         _ = try writeCommand(command, timeout: 0)
     }
 
+    /// Asserts that the caller is currently on the session's queue
+    public func assertOnSessionQueue() {
+        dispatchPrecondition(condition: .onQueue(manager.queue))
+    }
 }

@@ -12,7 +12,7 @@ class ChangeRemoteControlIDMessageBodyTests: XCTestCase {
 
     func testEncodeOneRemote() {
         let expected = Data(hexadecimalString: "0700313233343536000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!
-        let body = ChangeRemoteControlIDMessageBody(id: Data(bytes: [1, 2, 3, 4, 5, 6]), index: 0)!
+        let body = ChangeRemoteControlIDMessageBody(id: Data([1, 2, 3, 4, 5, 6]), index: 0)!
 
         XCTAssertEqual(expected, body.txData, body.txData.hexadecimalString)
     }

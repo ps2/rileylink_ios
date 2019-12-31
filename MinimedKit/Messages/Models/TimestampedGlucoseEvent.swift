@@ -12,10 +12,6 @@ public struct TimestampedGlucoseEvent {
     public let glucoseEvent: GlucoseEvent
     public let date: Date
     
-    public func isMutable(atDate date: Date = Date()) -> Bool {
-        return false
-    }
-    
     public init(glucoseEvent: GlucoseEvent, date: Date) {
         self.glucoseEvent = glucoseEvent
         self.date = date

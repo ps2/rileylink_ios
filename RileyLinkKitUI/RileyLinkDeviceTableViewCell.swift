@@ -72,6 +72,8 @@ public class RileyLinkDeviceTableViewCell: UITableViewCell {
                 connectSwitch?.isOn = false
                 connectSwitch?.isEnabled = true
             case .disconnecting:
+                fallthrough
+            @unknown default:
                 connectSwitch?.isOn = false
                 connectSwitch?.isEnabled = false
             }

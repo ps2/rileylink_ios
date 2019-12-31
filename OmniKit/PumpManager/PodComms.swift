@@ -11,126 +11,188 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
-public protocol PodCommsDelegate: class {
-    func podComms(_ podComms: PodComms, didChange state: PodState)
+protocol PodCommsDelegate: class {
+    func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
 
-public class PodComms {
+class PodComms: CustomDebugStringConvertible {
     
-    private var configuredDevices: Set<RileyLinkDevice> = Set()
+    private let configuredDevices: Locked<Set<RileyLinkDevice>> = Locked(Set())
     
-    private weak var delegate: PodCommsDelegate?
-
-    private let sessionQueue = DispatchQueue(label: "com.rileylink.OmniKit.PodComms", qos: .utility)
+    weak var delegate: PodCommsDelegate?
+    
+    weak var messageLogger: MessageLogger?
 
     public let log = OSLog(category: "PodComms")
-    
-    private var podState: PodState {
+
+    // Only valid to access on the session serial queue
+    private var podState: PodState? {
         didSet {
-            self.delegate?.podComms(self, didChange: podState)
+            if let newValue = podState, newValue != oldValue {
+                //log.debug("Notifying delegate of new podState: %{public}@", String(reflecting: newValue))
+                delegate?.podComms(self, didChange: newValue)
+            }
         }
     }
-
-    public init(podState: PodState, delegate: PodCommsDelegate?) {
+    
+    init(podState: PodState?) {
         self.podState = podState
-        self.delegate = delegate
+        self.delegate = nil
+        self.messageLogger = nil
     }
     
-    public enum PairResults {
-        case success(podState: PodState)
-        case failure(Error)
+    private func assignAddress(commandSession: CommandSession) throws -> PodState {
+        commandSession.assertOnSessionQueue()
+
+        // Testing
+        //try sendPacket(session: commandSession)
+        
+        let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
+        
+        // Create random address with 20 bits.  Can we use all 24 bits?
+        let address = 0x1f000000 | (arc4random() & 0x000fffff)
+        
+        let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
+        transport.messageLogger = messageLogger
+        
+        // Assign Address
+        let assignAddress = AssignAddressCommand(address: address)
+        
+        let message = Message(address: 0xffffffff, messageBlocks: [assignAddress], sequenceNum: transport.messageNumber)
+        
+        let response = try transport.sendMessage(message)
+
+        if let fault = response.fault {
+            self.log.error("Pod Fault: %@", String(describing: fault))
+            throw PodCommsError.podFault(fault: fault)
+        }
+        
+        guard let config = response.messageBlocks[0] as? VersionResponse else {
+            let responseType = response.messageBlocks[0].blockType
+            throw PodCommsError.unexpectedResponse(response: responseType)
+        }
+        
+        // Pairing state should be addressAssigned
+        return PodState(
+            address: address,
+            piVersion: String(describing: config.piVersion),
+            pmVersion: String(describing: config.pmVersion),
+            lot: config.lot,
+            tid: config.tid
+        )
     }
     
-    public class func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, completion: @escaping (PairResults) -> Void)
+    private func configurePod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
+        commandSession.assertOnSessionQueue()
+        
+        let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
+        transport.messageLogger = messageLogger
+        
+        let dateComponents = ConfigurePodCommand.dateComponents(date: Date(), timeZone: timeZone)
+        let setupPod = ConfigurePodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
+        
+        let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
+
+        let response: Message
+        do {
+            response = try transport.sendMessage(message)
+        } catch let error {
+            if case PodCommsError.podAckedInsteadOfReturningResponse = error {
+                // Pod already configured...
+                self.podState?.setupProgress = .podConfigured
+                return
+            }
+            throw error
+        }
+
+        if let fault = response.fault {
+            self.log.error("Pod Fault: %@", String(describing: fault))
+            throw PodCommsError.podFault(fault: fault)
+        }
+
+        guard let config = response.messageBlocks[0] as? VersionResponse else {
+            let responseType = response.messageBlocks[0].blockType
+            throw PodCommsError.unexpectedResponse(response: responseType)
+        }
+
+        self.podState?.setupProgress = .podConfigured
+        
+        guard config.setupState == .paired else {
+            throw PodCommsError.invalidData
+        }
+    }
+    
+    func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
     {
         deviceSelector { (device) in
             guard let device = device else {
-                completion(.failure(PodCommsError.noRileyLinkAvailable))
+                block(.failure(PodCommsError.noRileyLinkAvailable))
                 return
             }
 
             device.runSession(withName: "Pair Pod") { (commandSession) in
-                
                 do {
-                    try commandSession.configureRadio()
+                    self.configureDevice(device, with: commandSession)
                     
-                    // Create random address with 20 bits.  Can we use all 24 bits?
-                    let newAddress = 0x1f000000 | (arc4random() & 0x000fffff)
-                    
-                    let transport = MessageTransport(session: commandSession, address: 0xffffffff, ackAddress: newAddress)
-                
-                    // Assign Address
-                    let assignAddress = AssignAddressCommand(address: newAddress)
-                    
-                    let response = try transport.send([assignAddress])
-                    guard let config1 = response.messageBlocks[0] as? VersionResponse else {
-                        let responseType = response.messageBlocks[0].blockType
-                        throw PodCommsError.unexpectedResponse(response: responseType)
+                    if self.podState == nil {
+                        self.podState = try self.assignAddress(commandSession: commandSession)
                     }
                     
-                    // Verify address is set
-                    let activationDate = Date()
-                    let dateComponents = SetupPodCommand.dateComponents(date: activationDate, timeZone: timeZone)
-                    let setupPod = SetupPodCommand(address: newAddress, dateComponents: dateComponents, lot: config1.lot, tid: config1.tid)
-                    
-                    let response2 = try transport.send([setupPod])
-                    guard let config2 = response2.messageBlocks[0] as? VersionResponse else {
-                        let responseType = response.messageBlocks[0].blockType
-                        throw PodCommsError.unexpectedResponse(response: responseType)
+                    guard self.podState != nil else {
+                        block(.failure(PodCommsError.noPodPaired))
+                        return
                     }
-                    
-                    guard config2.pairingState == .paired else {
-                        throw PodCommsError.invalidData
-                    }
-                    let newPodState = PodState(
-                        address: newAddress,
-                        activatedAt: activationDate,
-                        timeZone: timeZone,
-                        piVersion: String(describing: config2.piVersion),
-                        pmVersion: String(describing: config2.pmVersion),
-                        lot: config2.lot,
-                        tid: config2.tid
-                    )
-                    completion(.success(podState: newPodState))
-                } catch let error {
-                    completion(.failure(error))
+
+                    try self.configurePod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+
+                    // Run a session now for any post-pairing commands
+                    let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)
+                    transport.messageLogger = self.messageLogger
+                    let podSession = PodCommsSession(podState: self.podState!, transport: transport, delegate: self)
+
+                    block(.success(session: podSession))
+                } catch let error as PodCommsError {
+                    block(.failure(error))
+                } catch {
+                    block(.failure(PodCommsError.commsError(error: error)))
                 }
             }
         }
     }
     
-    public enum SessionRunResult {
+    enum SessionRunResult {
         case success(session: PodCommsSession)
         case failure(PodCommsError)
     }
     
-    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
-        sessionQueue.async {
-            let semaphore = DispatchSemaphore(value: 0)
-            
-            deviceSelector { (device) in
-                guard let device = device else {
-                    block(.failure(PodCommsError.noRileyLinkAvailable))
-                    semaphore.signal()
+    func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ result: SessionRunResult) -> Void) {
+
+        deviceSelector { (device) in
+            guard let device = device else {
+                block(.failure(PodCommsError.noRileyLinkAvailable))
+                return
+            }
+
+            device.runSession(withName: name) { (commandSession) in
+                guard self.podState != nil else {
+                    block(.failure(PodCommsError.noPodPaired))
                     return
                 }
-            
-                device.runSession(withName: name) { (commandSession) in
-                    self.configureDevice(device, with: commandSession)
-                    let transport = MessageTransport(session: commandSession, address: self.podState.address)
-                    let podSession = PodCommsSession(podState: self.podState, transport: transport, delegate: self)
-                    block(.success(session: podSession))
-                    semaphore.signal()
-                }
+
+                self.configureDevice(device, with: commandSession)
+                let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)
+                transport.messageLogger = self.messageLogger
+                let podSession = PodCommsSession(podState: self.podState!, transport: transport, delegate: self)
+                block(.success(session: podSession))
             }
-            
-            semaphore.wait()
         }
     }
     
     // Must be called from within the RileyLinkDevice sessionQueue
     private func configureDevice(_ device: RileyLinkDevice, with session: CommandSession) {
-        guard !self.configuredDevices.contains(device) else {
+        session.assertOnSessionQueue()
+
+        guard !self.configuredDevices.value.contains(device) else {
             return
         }
         
@@ -148,7 +210,9 @@ public class PodComms {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceConnectionStateDidChange, object: device)
         
         log.debug("added device %{public}@ to configuredDevices", device.name ?? "unknown")
-        configuredDevices.insert(device)
+        _ = configuredDevices.mutate { (value) in
+            value.insert(device)
+        }
     }
     
     @objc private func deviceRadioConfigDidChange(_ note: Notification) {
@@ -159,9 +223,33 @@ public class PodComms {
 
         NotificationCenter.default.removeObserver(self, name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
-        configuredDevices.remove(device)
+
+        _ = configuredDevices.mutate { (value) in
+            value.remove(device)
+        }
+    }
+    
+    // MARK: - CustomDebugStringConvertible
+    
+    var debugDescription: String {
+        return [
+            "## PodComms",
+            "podState: \(String(reflecting: podState))",
+            "configuredDevices: \(configuredDevices.value.map { $0.peripheralIdentifier.uuidString })",
+            "delegate: \(String(describing: delegate != nil))",
+            ""
+        ].joined(separator: "\n")
+    }
+
+}
+
+extension PodComms: PodCommsSessionDelegate {
+    func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
+        podCommsSession.assertOnSessionQueue()
+        self.podState = state
     }
 }
+
 
 private extension CommandSession {
     
@@ -218,10 +306,24 @@ private extension CommandSession {
         try updateRegister(.sync1, value: 0xA5)
         try updateRegister(.sync0, value: 0x5A)
     }
-}
 
-extension PodComms: PodCommsSessionDelegate {
-    public func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState) {
-        self.podState = state
+    // This is just a testing function for spoofing PDM packets, or other times when you need to generate a custom packet
+    private func sendPacket() throws {
+        let packetNumber = 19
+        let messageNumber = 0x24 >> 2
+        let address: UInt32 = 0x1f0b3554
+
+        let cmd = GetStatusCommand(podInfoType: .normal)
+
+        let message = Message(address: address, messageBlocks: [cmd], sequenceNum: messageNumber)
+
+        var dataRemaining = message.encoded()
+
+        let sendPacket = Packet(address: address, packetType: .pdm, sequenceNum: packetNumber, data: dataRemaining)
+        dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
+
+        let _ = try sendAndListen(sendPacket.encoded(), repeatCount: 0, timeout: .milliseconds(333), retryCount: 0, preambleExtension: .milliseconds(127))
+
+        throw PodCommsError.emptyResponse
     }
 }

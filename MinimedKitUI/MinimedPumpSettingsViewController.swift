@@ -9,12 +9,12 @@ import UIKit
 import LoopKitUI
 import MinimedKit
 import RileyLinkKitUI
-
+import LoopKit
 
 class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     let pumpManager: MinimedPumpManager
-
+    
     init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         super.init(rileyLinkPumpManager: pumpManager, devicesSectionIndex: Section.rileyLinks.rawValue, style: .grouped)
@@ -37,11 +37,31 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
         let imageView = UIImageView(image: pumpManager.state.largePumpImage)
         imageView.contentMode = .bottom
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
+
+        pumpManager.addStatusObserver(self, queue: .main)
+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        self.navigationItem.setRightBarButton(button, animated: false)
+
+    }
+
+    @objc func doneTapped(_ sender: Any) {
+        done()
+    }
+
+    private func done() {
+        if let nav = navigationController as? SettingsNavigationViewController {
+            nav.notifyComplete()
+        }
+        if let nav = navigationController as? MinimedPumpManagerSetupViewController {
+            nav.finishedSettingsDisplay()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,42 +77,45 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     // MARK: - Data Source
 
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case info = 0
+        case actions
         case settings
         case rileyLinks
         case delete
-
-        static let count = 4
     }
 
-    private enum InfoRow: Int {
+    private enum InfoRow: Int, CaseIterable {
         case pumpID = 0
         case pumpModel
-
-        static let count = 2
+        case pumpFirmware
+        case pumpRegion
     }
 
-    private enum SettingsRow: Int {
+    private enum ActionsRow: Int, CaseIterable {
+        case suspendResume = 0
+    }
+
+    private enum SettingsRow: Int, CaseIterable {
         case timeZoneOffset = 0
         case batteryChemistry
         case preferredInsulinDataSource
-
-        static let count = 3
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .info:
-            return InfoRow.count
+            return InfoRow.allCases.count
+        case .actions:
+            return ActionsRow.allCases.count
         case .settings:
-            return SettingsRow.count
+            return SettingsRow.allCases.count
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
         case .delete:
@@ -102,14 +125,14 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
-        case .info:
-            return nil
         case .settings:
             return LocalizedString("Configuration", comment: "The title of the configuration section in settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
         case .delete:
             return " "  // Use an empty string for more dramatic spacing
+        case .info, .actions:
+            return nil
         }
     }
 
@@ -117,7 +140,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .delete:
+        case .info, .settings, .delete, .actions:
             return nil
         }
     }
@@ -135,6 +158,23 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Pump Model", comment: "The title of the cell showing the pump model number")
                 cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpModel)
+                return cell
+            case .pumpFirmware:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Firmware Version", comment: "The title of the cell showing the pump firmware version")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpFirmwareVersion)
+                return cell
+            case .pumpRegion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Region", comment: "The title of the cell showing the pump region")
+                cell.detailTextLabel?.text = String(describing: pumpManager.state.pumpRegion)
+                return cell
+            }
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
+                cell.basalDeliveryState = pumpManager.status.basalDeliveryState
                 return cell
             }
         case .settings:
@@ -180,7 +220,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             return false
-        case .settings, .rileyLinks, .delete:
+        case .actions, .settings, .rileyLinks, .delete:
             return true
         }
     }
@@ -191,6 +231,12 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             break
+        case .actions:
+            switch ActionsRow(rawValue: indexPath.row)! {
+            case .suspendResume:
+                suspendResumeCellTapped(sender as! SuspendResumeTableViewCell)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -214,20 +260,19 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
 
-            pumpManager.getOpsForDevice(device) { (pumpOps) in
-                DispatchQueue.main.async {
-                    let vc = RileyLinkMinimedDeviceTableViewController(
-                        device: device,
-                        pumpOps: pumpOps
-                    )
+            let vc = RileyLinkMinimedDeviceTableViewController(
+                device: device,
+                pumpOps: pumpManager.pumpOps
+            )
 
-                    self.show(vc, sender: sender)
-                }
-            }
+            self.show(vc, sender: sender)
         case .delete:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.navigationController?.popViewController(animated: true)
+                self.pumpManager.notifyDelegateOfDeactivation {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
 
             present(confirmVC, animated: true) {
@@ -238,8 +283,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
     override func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section)! {
-        case .info:
-            break
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
             case .timeZoneOffset:
@@ -249,9 +292,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             case .preferredInsulinDataSource:
                 break
             }
-        case .rileyLinks:
-            break
-        case .delete:
+        case .info, .actions, .rileyLinks, .delete:
             break
         }
 
@@ -286,8 +327,42 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
 
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+
+    private func suspendResumeCellTapped(_ cell: SuspendResumeTableViewCell) {
+        guard cell.isEnabled else {
+            return
+        }
+        
+        switch cell.shownAction {
+        case .resume:
+            pumpManager.resumeDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Resuming", comment: "The alert title for a resume error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            }
+        case .suspend:
+            pumpManager.suspendDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            }
+        }
+    }
 }
 
+extension MinimedPumpSettingsViewController: PumpManagerStatusObserver {
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
+        dispatchPrecondition(condition: .onQueue(.main))
+        let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionsRow.suspendResume.rawValue, section: Section.actions.rawValue)) as! SuspendResumeTableViewCell
+        suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
+    }
+}
 
 private extension UIAlertController {
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {

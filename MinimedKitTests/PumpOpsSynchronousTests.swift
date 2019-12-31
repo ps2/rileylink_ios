@@ -253,35 +253,28 @@ class PumpOpsSynchronousTests: XCTestCase {
         let minuteMonthByte = minuteByte | monthLowerComponent
         let yearByte = UInt8(year) & 0b01111111
 
-        let batteryData = Data(bytes: [0,0, secondMonthByte, minuteMonthByte, hourByte, dayByte, yearByte])
+        let batteryData = Data([0,0, secondMonthByte, minuteMonthByte, hourByte, dayByte, yearByte])
         let batteryPumpEvent = BatteryPumpEvent(availableData: batteryData, pumpModel: PumpModel.model523)!
         return batteryPumpEvent
-    }
-    
-    func createSquareBolusEvent2016() -> BolusNormalPumpEvent {
-        //2016-08-01 05:00:16 +000
-        let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2016, month: 8, day: 1, hour: 5, minute: 0, second: 16)
-        let data = Data(hexadecimalString: "01009009600058008a344b1010")!
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
     }
     
     func createSquareBolusEvent2010() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:16 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2010, month: 8, day: 1, hour: 5, minute: 0, second: 16)
         let data = Data(hexadecimalString: "01009000900058008a344b1010")!
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(minutes: 120), wasRemotelyTriggered: false)
     }
     
     func createSquareBolusEvent(dateComponents: DateComponents) -> BolusNormalPumpEvent {
         let data = Data(hexadecimalString: randomDataString(length: squareBolusDataLength))!
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(hours: 8))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .square, duration: TimeInterval(hours: 8), wasRemotelyTriggered: false)
     }
     
     func createBolusEvent2011() -> BolusNormalPumpEvent {
         //2010-08-01 05:00:11 +000
         let dateComponents = DateComponents(calendar: Calendar.current, timeZone: pumpState.timeZone, year: 2011, month: 8, day: 1, hour: 5, minute: 0, second: 16)
         let data = Data(hexadecimalString: "01009000900058008a344b10FF")!
-        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: TimeInterval(minutes: 120))
+        return BolusNormalPumpEvent(length: BolusNormalPumpEvent.calculateLength(pumpModel.larger), rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 0.0, programmed: 0.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: TimeInterval(minutes: 120), wasRemotelyTriggered: false)
     }
     
     func createTempEventBasal2016() -> TempBasalPumpEvent {
@@ -296,7 +289,7 @@ class PumpOpsSynchronousTests: XCTestCase {
         let timeInterval: TimeInterval = TimeInterval(minutes: 2)
         let data = Data(hexadecimalString:"338c4055145d2000")!
         
-        return BolusNormalPumpEvent(length: 13, rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 2.0, programmed: 1.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: timeInterval)
+        return BolusNormalPumpEvent(length: 13, rawData: data, timestamp: dateComponents, unabsorbedInsulinRecord: nil, amount: 2.0, programmed: 1.0, unabsorbedInsulinTotal: 0.0, type: .normal, duration: timeInterval, wasRemotelyTriggered: false)
     }
     
     func createNonDelayedEvent2009() -> BolusReminderPumpEvent {
@@ -311,7 +304,7 @@ class PumpOpsSynchronousTests: XCTestCase {
 // from comment at https://gist.github.com/szhernovoy/276e69eb90a0de84dd90
 func randomDataString(length:Int) -> String {
     let charSet = "abcdef0123456789"
-    var c = charSet.map { String($0) }
+    let c = charSet.map { String($0) }
     var s:String = ""
     for _ in 0..<length {
         s.append(c[Int(arc4random()) % c.count])

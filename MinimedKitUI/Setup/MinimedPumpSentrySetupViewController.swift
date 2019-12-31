@@ -64,7 +64,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
                 footerView.primaryButton.setTitle(LocalizedString("Retry", comment: "Button title to retry sentry setup"), for: .normal)
             case .listening:
                 lastError = nil
-                activityIndicator.state = .loading
+                activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
             case .completed:
                 lastError = nil
@@ -93,7 +93,7 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
                 return
             }
 
-            let watchdogID = Data(bytes: [0xd0, 0x00, 0x07])
+            let watchdogID = Data([0xd0, 0x00, 0x07])
             do {
                 try session.changeWatchdogMarriageProfile(watchdogID)
                 DispatchQueue.main.async {

@@ -12,23 +12,24 @@ public struct BasalScheduleExtraCommand : MessageBlock {
 
     public let blockType: MessageBlockType = .basalScheduleExtra
     
-    public let confidenceReminder: Bool
+    public let acknowledgementBeep: Bool
+    public let completionBeep: Bool
     public let programReminderInterval: TimeInterval
     public let currentEntryIndex: UInt8
     public let remainingPulses: Double
-    public let delayUntilNextPulse: TimeInterval
+    public let delayUntilNextTenthOfPulse: TimeInterval
     public let rateEntries: [RateEntry]
 
     public var data: Data {
-        let reminders = (UInt8(programReminderInterval.minutes) & 0x3f) + (confidenceReminder ? (1<<6) : 0)
-        var data = Data(bytes: [
+        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (completionBeep ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
+        var data = Data([
             blockType.rawValue,
             UInt8(8 + rateEntries.count * 6),
-            reminders,
+            beepOptions,
             currentEntryIndex
             ])
-        data.appendBigEndian(UInt16(remainingPulses * 10))
-        data.appendBigEndian(UInt32(delayUntilNextPulse.hundredthsOfMilliseconds))
+        data.appendBigEndian(UInt16(round(remainingPulses * 10)))
+        data.appendBigEndian(UInt32(round(delayUntilNextTenthOfPulse.milliseconds * 1000)))
         for entry in rateEntries {
             data.append(entry.data)
         }
@@ -42,13 +43,14 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         let length = encodedData[1]
         let numEntries = (length - 8) / 6
         
-        confidenceReminder = encodedData[2] & (1<<6) != 0
+        acknowledgementBeep = encodedData[2] & (1<<7) != 0
+        completionBeep = encodedData[2] & (1<<6) != 0
         programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
 
         currentEntryIndex = encodedData[3]
         remainingPulses = Double(encodedData[4...].toBigEndian(UInt16.self)) / 10.0
         let timerCounter = encodedData[6...].toBigEndian(UInt32.self)
-        delayUntilNextPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
+        delayUntilNextTenthOfPulse = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
         var entries = [RateEntry]()
         for entryIndex in (0..<numEntries) {
             let offset = 10 + entryIndex * 6
@@ -59,33 +61,37 @@ public struct BasalScheduleExtraCommand : MessageBlock {
         }
         rateEntries = entries
     }
-    
-    public init(confidenceReminder: Bool, programReminderInterval: TimeInterval, currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextPulse: TimeInterval, rateEntries: [RateEntry]) {
-        self.confidenceReminder = confidenceReminder
-        self.programReminderInterval = programReminderInterval
+
+    public init(currentEntryIndex: UInt8, remainingPulses: Double, delayUntilNextTenthOfPulse: TimeInterval, rateEntries: [RateEntry], acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         self.currentEntryIndex = currentEntryIndex
         self.remainingPulses = remainingPulses
-        self.delayUntilNextPulse = delayUntilNextPulse
+        self.delayUntilNextTenthOfPulse = delayUntilNextTenthOfPulse
         self.rateEntries = rateEntries
-    }
-    
-    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, confidenceReminder: Bool, programReminderInterval: TimeInterval) {
-        self.confidenceReminder = confidenceReminder
+        self.acknowledgementBeep = acknowledgementBeep
+        self.completionBeep = completionBeep
         self.programReminderInterval = programReminderInterval
+    }
+
+    public init(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
         var rateEntries = [RateEntry]()
-        for entry in schedule.entries {
+        
+        let mergedSchedule = BasalSchedule(entries: schedule.entries.adjacentEqualRatesMerged())
+        for entry in mergedSchedule.durations() {
             rateEntries.append(contentsOf: RateEntry.makeEntries(rate: entry.rate, duration: entry.duration))
         }
+        
         self.rateEntries = rateEntries
-        let (entryIndex, entry, entryStart) = schedule.lookup(offset: scheduleOffset)
+        let scheduleOffsetNearestSecond = round(scheduleOffset)
+        let (entryIndex, entry, duration) = mergedSchedule.lookup(offset: scheduleOffsetNearestSecond)
         self.currentEntryIndex = UInt8(entryIndex)
-        let timeRemainingInEntry = entry.duration - (scheduleOffset - entryStart)
-        let rate = schedule.rateAt(offset: scheduleOffset)
-        let pulsesPerHour = rate / podPulseSize
-        self.remainingPulses = ceil(timeRemainingInEntry * pulsesPerHour / TimeInterval(hours: 1))
+        let timeRemainingInEntry = duration - (scheduleOffsetNearestSecond - entry.startTime)
+        let rate = mergedSchedule.rateAt(offset: scheduleOffsetNearestSecond)
+        let pulsesPerHour = round(rate / Pod.pulseSize)
         let timeBetweenPulses = TimeInterval(hours: 1) / pulsesPerHour
-        self.delayUntilNextPulse = timeBetweenPulses - scheduleOffset.truncatingRemainder(dividingBy: timeBetweenPulses)
+        self.delayUntilNextTenthOfPulse = timeRemainingInEntry.truncatingRemainder(dividingBy: (timeBetweenPulses / 10))
+        self.remainingPulses = pulsesPerHour * (timeRemainingInEntry-self.delayUntilNextTenthOfPulse) / .hours(1) + 0.1
+        self.acknowledgementBeep = acknowledgementBeep
+        self.completionBeep = completionBeep
+        self.programReminderInterval = programReminderInterval
     }
 }
-
-

@@ -23,8 +23,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         var region: PumpRegion {
             switch self {
-            case .northAmerica, .canada:
+            case .northAmerica:
                 return .northAmerica
+            case .canada:
+                return .canada
             case .worldWide:
                 return .worldWide
             }
@@ -34,7 +36,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     private var pumpRegionCode: RegionCode? {
         didSet {
             regionAndColorPickerCell.regionLabel.text = pumpRegionCode?.region.description
-            regionAndColorPickerCell.regionLabel.textColor = .darkText
+            regionAndColorPickerCell.regionLabel.textColor = nil
 
             updateStateForSettings()
         }
@@ -60,6 +62,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     private var pumpOps: PumpOps?
 
     private var pumpState: PumpState?
+    
+    private var pumpFirmwareVersion: String?
 
     var maxBasalRateUnitsPerHour: Double?
 
@@ -75,19 +79,20 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 let pumpID = pumpID,
                 let pumpModel = pumpState?.pumpModel,
                 let pumpRegion = pumpRegionCode?.region,
-                let timeZone = pumpState?.timeZone
+                let timeZone = pumpState?.timeZone,
+                let pumpFirmwareVersion = pumpFirmwareVersion
             else {
                 return nil
             }
-
             return MinimedPumpManagerState(
                 pumpColor: pumpColor,
                 pumpID: pumpID,
                 pumpModel: pumpModel,
+                pumpFirmwareVersion: pumpFirmwareVersion,
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
-                timeZone: timeZone
-            )
+                timeZone: timeZone,
+                suspendState: .resumed(Date()))
         }
     }
 
@@ -178,7 +183,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 footerView.primaryButton.setConnectTitle()
             case .reading:
                 pumpIDTextField.isEnabled = false
-                activityIndicator.state = .loading
+                activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
                 footerView.primaryButton.setConnectTitle()
                 lastError = nil
@@ -248,6 +253,8 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 _ = try session.tuneRadio()
                 let model = try session.getPumpModel()
                 var isSentrySetUpNeeded = false
+                
+                self.pumpFirmwareVersion = try session.getPumpFirmwareVersion()
 
                 // Radio
                 if model.hasMySentry {
@@ -265,7 +272,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                     let remoteIDCount = try session.getRemoteControlIDs().ids.count
 
                     if remoteIDCount == 0 {
-                        try session.setRemoteControlID(Data(bytes: [9, 9, 9, 9, 9, 9]), atIndex: 2)
+                        try session.setRemoteControlID(Data([9, 9, 9, 9, 9, 9]), atIndex: 2)
                     }
 
                     try session.setRemoteControlEnabled(true)
@@ -309,7 +316,14 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 super.continueButtonPressed(sender)
             }
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
+#if targetEnvironment(simulator)
+            self.continueState = .completed
+            self.pumpState = PumpState(timeZone: .currentFixed, pumpModel: PumpModel(rawValue:
+                "523")!)
+            self.pumpFirmwareVersion = "2.4Mock"
+#else
             readPumpState(with: PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion))
+#endif
         }
     }
 

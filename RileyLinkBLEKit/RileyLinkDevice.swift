@@ -21,38 +21,26 @@ public class RileyLinkDevice {
     // Confined to `manager.queue`
     private var radioFirmwareVersion: RadioFirmwareVersion?
 
-    // Confined to `queue`
-    private var idleListeningState: IdleListeningState = .disabled {
-        didSet {
-            switch (oldValue, idleListeningState) {
-            case (.disabled, .enabled):
-                assertIdleListening(forceRestart: true)
-            case (.enabled, .enabled):
-                assertIdleListening(forceRestart: false)
-            default:
-                break
-            }
-        }
-    }
+    // Confined to `lock`
+    private var idleListeningState: IdleListeningState = .disabled
 
-    // Confined to `queue`
+    // Confined to `lock`
     private var lastIdle: Date?
     
-    // Confined to `queue`
+    // Confined to `lock`
     // TODO: Tidy up this state/preference machine
     private var isIdleListeningPending = false
 
-    // Confined to `queue`
+    // Confined to `lock`
     private var isTimerTickEnabled = true
 
     /// Serializes access to device state
-    private let queue = DispatchQueue(label: "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.queue", qos: .userInitiated)
+    private var lock = os_unfair_lock()
 
     /// The queue used to serialize sessions and observe when they've drained
     private let sessionQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.sessionQueue"
-        queue.qualityOfService = .utility
         queue.maxConcurrentOperationCount = 1
 
         return queue
@@ -108,6 +96,20 @@ extension RileyLinkDevice {
     public func enableBLELEDs() {
         manager.setLEDMode(mode: .on)
     }
+
+    /// Asserts that the caller is currently on the session queue
+    public func assertOnSessionQueue() {
+        dispatchPrecondition(condition: .onQueue(manager.queue))
+    }
+
+    /// Schedules a closure to execute on the session queue after a specified time
+    ///
+    /// - Parameters:
+    ///   - deadline: The time after which to execute
+    ///   - execute: The closure to execute
+    public func sessionQueueAsyncAfter(deadline: DispatchTime, execute: @escaping () -> Void) {
+        manager.queue.asyncAfter(deadline: deadline, execute: execute)
+    }
 }
 
 
@@ -116,8 +118,8 @@ extension RileyLinkDevice: Equatable, Hashable {
         return lhs === rhs
     }
 
-    public var hashValue: Int {
-        return peripheralIdentifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(peripheralIdentifier)
     }
 }
 
@@ -135,17 +137,17 @@ extension RileyLinkDevice {
     }
 
     public func getStatus(_ completion: @escaping (_ status: Status) -> Void) {
-        queue.async {
-            let lastIdle = self.lastIdle
+        os_unfair_lock_lock(&lock)
+        let lastIdle = self.lastIdle
+        os_unfair_lock_unlock(&lock)
 
-            self.manager.queue.async {
-                completion(Status(
-                    lastIdle: lastIdle,
-                    name: self.name,
-                    bleFirmwareVersion: self.bleFirmwareVersion,
-                    radioFirmwareVersion: self.radioFirmwareVersion
-                ))
-            }
+        self.manager.queue.async {
+            completion(Status(
+                lastIdle: lastIdle,
+                name: self.name,
+                bleFirmwareVersion: self.bleFirmwareVersion,
+                radioFirmwareVersion: self.radioFirmwareVersion
+            ))
         }
     }
 }
@@ -178,42 +180,58 @@ extension RileyLinkDevice {
     }
 
     func setIdleListeningState(_ state: IdleListeningState) {
-        queue.async {
-            self.idleListeningState = state
+        os_unfair_lock_lock(&lock)
+        let oldValue = idleListeningState
+        idleListeningState = state
+        os_unfair_lock_unlock(&lock)
+
+        switch (oldValue, state) {
+        case (.disabled, .enabled):
+            assertIdleListening(forceRestart: true)
+        case (.enabled, .enabled):
+            assertIdleListening(forceRestart: false)
+        default:
+            break
         }
     }
 
     public func assertIdleListening(forceRestart: Bool = false) {
-        queue.async {
-            guard case .enabled(timeout: let timeout, channel: let channel) = self.idleListeningState else {
-                return
-            }
+        os_unfair_lock_lock(&lock)
+        guard case .enabled(timeout: let timeout, channel: let channel) = self.idleListeningState else {
+            os_unfair_lock_unlock(&lock)
+            return
+        }
 
-            guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
-                return
-            }
+        guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
+            os_unfair_lock_unlock(&lock)
+            return
+        }
 
-            guard forceRestart || (self.lastIdle ?? .distantPast).timeIntervalSinceNow < -timeout else {
-                return
-            }
-            
-            guard !self.isIdleListeningPending else {
-                return
-            }
-            
-            self.isIdleListeningPending = true
-            self.log.debug("Enqueuing idle listening")
+        guard forceRestart || (self.lastIdle ?? .distantPast).timeIntervalSinceNow < -timeout else {
+            os_unfair_lock_unlock(&lock)
+            return
+        }
 
-            self.manager.startIdleListening(idleTimeout: timeout, channel: channel) { (error) in
-                self.queue.async {
-                    if let error = error {
-                        self.log.error("Unable to start idle listening: %@", String(describing: error))
-                    } else {
-                        self.lastIdle = Date()
-                        NotificationCenter.default.post(name: .DeviceDidStartIdle, object: self)
-                    }
-                    self.isIdleListeningPending = false
-                }
+        guard !self.isIdleListeningPending else {
+            os_unfair_lock_unlock(&lock)
+            return
+        }
+
+        self.isIdleListeningPending = true
+        os_unfair_lock_unlock(&lock)
+        self.log.debug("Enqueuing idle listening")
+
+        self.manager.startIdleListening(idleTimeout: timeout, channel: channel) { (error) in
+            os_unfair_lock_lock(&self.lock)
+            self.isIdleListeningPending = false
+
+            if let error = error {
+                self.log.error("Unable to start idle listening: %@", String(describing: error))
+                os_unfair_lock_unlock(&self.lock)
+            } else {
+                self.lastIdle = Date()
+                os_unfair_lock_unlock(&self.lock)
+                NotificationCenter.default.post(name: .DeviceDidStartIdle, object: self)
             }
         }
     }
@@ -223,17 +241,19 @@ extension RileyLinkDevice {
 // MARK: - Timer tick management
 extension RileyLinkDevice {
     func setTimerTickEnabled(_ enabled: Bool) {
-        queue.async {
-            self.isTimerTickEnabled = enabled
-            self.assertTimerTick()
-        }
+        os_unfair_lock_lock(&lock)
+        self.isTimerTickEnabled = enabled
+        os_unfair_lock_unlock(&lock)
+        self.assertTimerTick()
     }
 
     func assertTimerTick() {
-        queue.async {
-            if self.isTimerTickEnabled != self.manager.timerTickEnabled {
-                self.manager.setTimerTickEnabled(self.isTimerTickEnabled)
-            }
+        os_unfair_lock_lock(&self.lock)
+        let isTimerTickEnabled = self.isTimerTickEnabled
+        os_unfair_lock_unlock(&self.lock)
+
+        if isTimerTickEnabled != self.manager.timerTickEnabled {
+            self.manager.setTimerTickEnabled(isTimerTickEnabled)
         }
     }
 }
@@ -303,7 +323,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                             self.log.debug("Idle error received: %@", String(describing: response.code))
                         case .success:
                             if let packet = response.packet {
-                                self.log.debug("Idle packet received: %@", String(describing: value))
+                                self.log.debug("Idle packet received: %@", value.hexadecimalString)
                                 NotificationCenter.default.post(
                                     name: .DevicePacketReceived,
                                     object: self,
@@ -362,17 +382,23 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
 
 extension RileyLinkDevice: CustomDebugStringConvertible {
     public var debugDescription: String {
+        os_unfair_lock_lock(&lock)
+        let lastIdle = self.lastIdle
+        let isIdleListeningPending = self.isIdleListeningPending
+        let isTimerTickEnabled = self.isTimerTickEnabled
+        os_unfair_lock_unlock(&lock)
+
         return [
             "## RileyLinkDevice",
-            "name: \(name ?? "")",
-            "lastIdle: \(lastIdle ?? .distantPast)",
-            "isIdleListeningPending: \(isIdleListeningPending)",
-            "isTimerTickEnabled: \(isTimerTickEnabled)",
-            "isTimerTickNotifying: \(manager.timerTickEnabled)",
-            "radioFirmware: \(String(describing: radioFirmwareVersion))",
-            "bleFirmware: \(String(describing: bleFirmwareVersion))",
-            "peripheralManager: \(String(reflecting: manager))",
-            "sessionQueue.operationCount: \(sessionQueue.operationCount)"
+            "* name: \(name ?? "")",
+            "* lastIdle: \(lastIdle ?? .distantPast)",
+            "* isIdleListeningPending: \(isIdleListeningPending)",
+            "* isTimerTickEnabled: \(isTimerTickEnabled)",
+            "* isTimerTickNotifying: \(manager.timerTickEnabled)",
+            "* radioFirmware: \(String(describing: radioFirmwareVersion))",
+            "* bleFirmware: \(String(describing: bleFirmwareVersion))",
+            "* peripheralManager: \(manager)",
+            "* sessionQueue.operationCount: \(sessionQueue.operationCount)"
         ].joined(separator: "\n")
     }
 }

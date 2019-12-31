@@ -23,7 +23,11 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        if #available(iOSApplicationExtension 13.0, *) {
+            view.backgroundColor = .systemBackground
+        } else {
+            view.backgroundColor = .white
+        }
         navigationBar.shadowImage = UIImage()
         
         if let pumpIDSetupVC = topViewController as? MinimedPumpIDSetupViewController, let rileyLinkPumpManager = rileyLinkPumpManager {
@@ -52,6 +56,7 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
      5. Basal Rates & Delivery Limits
 
      6. Pump Setup Complete
+
      */
 
     override public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -71,6 +76,10 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
             default:
                 break
             }
+        }
+
+        if let setupViewController = viewController as? SetupTableViewController {
+            setupViewController.delegate = self
         }
 
         // Set state values
@@ -112,9 +121,24 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         }
     }
 
-    func completeSetup() {
+    public func pumpManagerSetupComplete(_ pumpManager: PumpManagerUI) {
+        setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+    }
+
+    override open func finishedSetup() {
         if let pumpManager = pumpManager {
-            setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+            let settings = MinimedPumpSettingsViewController(pumpManager: pumpManager)
+            setViewControllers([settings], animated: true)
         }
+    }
+
+    public func finishedSettingsDisplay() {
+        completionDelegate?.completionNotifyingDidComplete(self)
+    }
+}
+
+extension MinimedPumpManagerSetupViewController: SetupTableViewControllerDelegate {
+    public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }

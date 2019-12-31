@@ -5,8 +5,14 @@
 //  Created by Pete Schwamb on 10/14/17.
 //  Copyright © 2017 Pete Schwamb. All rights reserved.
 //
+import Foundation
 
-import RileyLinkBLEKit
+public enum PacketError: Error {
+    case insufficientData
+    case crcMismatch
+    case unknownPacketType(rawType: UInt8)
+}
+
 
 public enum PacketType: UInt8 {
     case pod = 0b111
@@ -47,13 +53,13 @@ public struct Packet {
     init(encodedData: Data) throws {
         guard encodedData.count >= 7 else {
             // Not enough data for packet
-            throw PodCommsError.invalidData
+            throw PacketError.insufficientData
         }
         
         self.address = encodedData[0...].toBigEndian(UInt32.self)
         
         guard let packetType = PacketType(rawValue: encodedData[4] >> 5) else {
-            throw PodCommsError.unknownPacketType(rawType: encodedData[4])
+            throw PacketError.unknownPacketType(rawType: encodedData[4])
         }
         self.packetType = packetType
         self.sequenceNum = Int(encodedData[4] & 0b11111)
@@ -63,7 +69,7 @@ public struct Packet {
         // Check crc
         guard encodedData[0..<len-1].crc8() == encodedData[len-1] else {
             // Invalid CRC
-            throw PodCommsError.crcMismatch
+            throw PacketError.crcMismatch
         }
         
         self.data = encodedData.subdata(in: 5..<len-1)
@@ -78,9 +84,10 @@ public struct Packet {
     }
 }
 
-// Extensions for RFPacket support
-extension Packet {
-    init(rfPacket: RFPacket) throws {
-        try self.init(encodedData: rfPacket.data)
+extension Packet: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let sequenceNumStr = String(format: "%02d", sequenceNum)
+        return "Packet(\(Data(bigEndian: address).hexadecimalString) packetType:\(packetType) seq:\(sequenceNumStr) data:\(data.hexadecimalString))"
     }
 }
+

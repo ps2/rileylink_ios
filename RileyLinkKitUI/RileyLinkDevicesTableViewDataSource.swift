@@ -14,7 +14,7 @@ import RileyLinkKit
 public class RileyLinkDevicesTableViewDataSource: NSObject {
     public let rileyLinkPumpManager: RileyLinkPumpManager
 
-    public let devicesSectionIndex: Int
+    public var devicesSectionIndex: Int
 
     public var tableView: UITableView! {
         didSet {
@@ -103,6 +103,8 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
             if !isAutoConnectDevice {
                 state = .disconnected
             }
+        @unknown default:
+            break
         }
 
         return state
@@ -118,15 +120,15 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
 
     @objc private func reloadDevices() {
         rileyLinkPumpManager.rileyLinkDeviceProvider.getDevices { (devices) in
-            DispatchQueue.main.async {
-                self.devices = devices
+            DispatchQueue.main.async { [weak self] in
+                self?.devices = devices
             }
         }
     }
 
     @objc private func deviceDidUpdate(_ note: Notification) {
         DispatchQueue.main.async {
-            if let device = note.object as? RileyLinkDevice, let index = self.devices.index(where: { $0 === device }) {
+            if let device = note.object as? RileyLinkDevice, let index = self.devices.firstIndex(where: { $0 === device }) {
                 if let rssi = note.userInfo?[RileyLinkDevice.notificationRSSIKey] as? Int {
                     self.deviceRSSI[device.peripheralIdentifier] = rssi
                 }

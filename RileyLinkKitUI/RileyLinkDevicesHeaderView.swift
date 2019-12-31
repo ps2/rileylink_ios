@@ -21,7 +21,7 @@ public class RileyLinkDevicesHeaderView: UITableViewHeaderFooterView, Identifiab
         setup()
     }
 
-    public let spinner = UIActivityIndicatorView(style: .gray)
+    public let spinner = UIActivityIndicatorView(style: .default)
 
     private func setup() {
         contentView.addSubview(spinner)

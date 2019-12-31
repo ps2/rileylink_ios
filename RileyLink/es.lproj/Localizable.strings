@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The title of the about section */
 "About" = "Respecto a";
 
@@ -23,7 +20,7 @@
 "Fetch CGM" = "Obtener de CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.azurewebsites.net" = "http://mysite.azurewebsites.net";
+"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -31,14 +28,17 @@
 /* The title text for the pump ID config value */
 "Pump ID" = "ID de Microinfusora";
 
-/* The title text for the pump Region config value */
-"Pump Region" = "Región de Microinfusora";
-
-/* Instructions on selecting the pump region */
-"Pump Region is listed on the back of your pump as two of the last three characters of the model string, which reads something like this: MMT-551NAB, or MMT-515LWWS.  If your model has an \"NA\" in it, then the region is North America.  If your model has an \"WW\" in it, then the region is WorldWide." = "La región de la microinfusora puede ser encontrada impresa en la parte trasera como parte del código de modelo (REF), por ejemplo MMT-551AB o MMT-515LWWS. Si el código de modelo contiene \"NA\" o \"CA\", la región es Norte América. Si contiene \"WW\" la región es Mundial.";
+/* Title text for section listing configured pumps */
+"Pumps" = "Microinfusoras";
 
 /* The default placeholder string for a credential */
 "Required" = "Requerido";
+
+/* Title for RileyLink Testing main view controller */
+"RileyLink Testing" = "Preubas de RileyLink";
+
+/* Title text for button to set up omnipod */
+"Setup Omnipod" = "Setup Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "URL de sitio";
@@ -48,7 +48,3 @@
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Subir a Nightscout";
-
-/* Label indicating validation is occurring */
-"Verifying" = "Verificando";
-

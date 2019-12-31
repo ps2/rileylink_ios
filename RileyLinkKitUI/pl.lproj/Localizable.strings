@@ -1,9 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
-/* The title of the cell describing an awake radio */
-"Awake Until" = "Aktywny od";
-
 /* The title of the section describing commands */
 "Commands" = "Komendy";
 
@@ -31,17 +25,11 @@
 /* The title of the cell showing firmware version */
 "Firmware" = "Oprogramowanie";
 
-/* The title of the cell describing an awake radio */
-"Last Awake" = "Ostatnio aktywny";
-
-/* The title of the cell describing no radio awake data */
-"Listening Off" = "Brak danych o aktywności";
+/* The title of the cell showing current rileylink frequency */
+"Frequency" = "Frequency";
 
 /* The title of the cell showing device name */
 "Name" = "Nazwa";
-
-/* The title of the cell showing the last idle */
-"On Idle" = "Bezczynny od";
 
 /* RileyLink setup description */
 "RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink będzie łączył się z pompą poprzez Bluetooth Low Energy.";
@@ -49,4 +37,5 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Siła sygnału";
 
-
+/* The title of the cell showing uptime */
+"Uptime" = "Uptime";

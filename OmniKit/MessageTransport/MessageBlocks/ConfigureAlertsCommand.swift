@@ -10,151 +10,13 @@ import Foundation
 
 public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
     
-    // Pairing ConfigureAlerts #1
-    // 4c00 0190 0102
-    // 4c00 00c8 0102
-    // 4c00 00c8 0102
-    // 4c00 0096 0102
-    // 4c00 0064 0102
-    
-    // Pairing ConfigureAlerts #2
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    // 7837 0005 0802
-    
-    // Pairing ConfigureAlerts #3
-    // 3800 0ff0 0302
-    // 3800 10a4 0302
-    // 3800 10a4 0302
-    // 3800 10a4 0302
-    // 3800 0ff0 0302
-    
-    public enum AlertType: UInt8 {
-        case autoOff            = 0x00
-        case endOfService       = 0x02
-        case expirationAdvisory = 0x03
-        case lowReservoir       = 0x04
-        case suspendInProgress  = 0x05
-        case suspendEnded       = 0x06
-        case timerLimit         = 0x07
-    }
-    
-    public enum ExpirationType {
-        case reservoir(volume: Double)
-        case time(TimeInterval)
-    }
-    
-    public enum BeepType: UInt8 {
-        case noBeep = 0
-        case beepBeepBeepBeep = 1
-        case bipBeepBipBeepBipBeepBipBeep = 2
-        case bipBip = 3
-        case beep = 4
-        case beepBeepBeep = 5
-        case beeeeeep = 6
-        case bipBipBipbipBipBip = 7
-        case beeepBeeep = 8
-    } // Reused in CancelDeliveryCommand
-    
-    public struct AlertConfiguration {
-        let alertType: AlertType
-        let expirationType: ExpirationType
-        let audible: Bool
-        let duration: TimeInterval
-        let beepType: BeepType
-        let beepRepeat: UInt8
-        let autoOffModifier: Bool
-        
-        static let length = 6
-        
-        public var data: Data {
-            var firstByte = alertType.rawValue << 4
-            firstByte += audible ? (1 << 3) : 0
-            
-            if case .reservoir = expirationType {
-                firstByte += 1 << 2
-            }
-            if autoOffModifier {
-                firstByte += 1 << 1
-            }
-            // High bit of duration
-            firstByte += UInt8((Int(duration.minutes) >> 8) & 0x1)
-            
-            var data = Data([
-                firstByte,
-                UInt8(Int(duration.minutes) & 0xff)
-                ])
-            
-            switch expirationType {
-            case .reservoir(let volume):
-                let ticks = UInt16(volume / podPulseSize / 2)
-                data.appendBigEndian(ticks)
-            case .time(let duration):
-                let minutes = UInt16(duration.minutes)
-                data.appendBigEndian(minutes)
-            }
-            data.append(beepType.rawValue)
-            data.append(beepRepeat)
-
-            return data
-        }
-        
-        public init(alertType: AlertType, audible: Bool, autoOffModifier: Bool, duration: TimeInterval, expirationType: ExpirationType, beepType: BeepType, beepRepeat: UInt8) {
-            self.alertType = alertType
-            self.audible = audible
-            self.autoOffModifier = autoOffModifier
-            self.duration = duration
-            self.expirationType = expirationType
-            self.beepType = beepType
-            self.beepRepeat = beepRepeat
-        }
-        
-        public init(encodedData: Data) throws {
-            if encodedData.count < 6 {
-                throw MessageBlockError.notEnoughData
-            }
-            
-            let alertTypeBits = encodedData[0] >> 4
-            guard let alertType = AlertType(rawValue: alertTypeBits) else {
-                throw MessageError.unknownValue(value: alertTypeBits, typeDescription: "AlertType")
-            }
-            self.alertType = alertType
-            
-            self.audible = encodedData[0] & 0b1000 != 0
-            
-            self.autoOffModifier = encodedData[0] & 0b10 != 0
-            
-            self.duration = TimeInterval(minutes: Double((Int(encodedData[0] & 0b1) << 8) + Int(encodedData[1])))
-            
-            let yyyy = (Int(encodedData[2]) << 8) + (Int(encodedData[3])) & 0x3fff
-            
-            if encodedData[0] & 0b100 != 0 {
-                let volume = Double(yyyy * 2) * podPulseSize
-                self.expirationType = .reservoir(volume: volume)
-            } else {
-                self.expirationType = .time(TimeInterval(minutes: Double(yyyy)))
-            }
-            
-            let beepTypeBits = encodedData[4]
-            guard let beepType = BeepType(rawValue: beepTypeBits) else {
-                throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "BeepType")
-            }
-            self.beepType = beepType
-            
-            self.beepRepeat = encodedData[5]
- 
-        }
-    }
-    
     public let blockType: MessageBlockType = .configureAlerts
     
     public var nonce: UInt32
     let configurations: [AlertConfiguration]
     
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             UInt8(4 + configurations.count * AlertConfiguration.length),
             ])
@@ -187,5 +49,81 @@ public struct ConfigureAlertsCommand : NonceResyncableMessageBlock {
     public init(nonce: UInt32, configurations: [AlertConfiguration]) {
         self.nonce = nonce
         self.configurations = configurations
+    }
+}
+
+// MARK: - AlertConfiguration encoding/decoding
+extension AlertConfiguration {
+    public init(encodedData: Data) throws {
+        if encodedData.count < 6 {
+            throw MessageBlockError.notEnoughData
+        }
+
+        let alertTypeBits = encodedData[0] >> 4
+        guard let alertType = AlertSlot(rawValue: alertTypeBits) else {
+            throw MessageError.unknownValue(value: alertTypeBits, typeDescription: "AlertType")
+        }
+        self.slot = alertType
+
+        self.active = encodedData[0] & 0b1000 != 0
+
+        self.autoOffModifier = encodedData[0] & 0b10 != 0
+
+        self.duration = TimeInterval(minutes: Double((Int(encodedData[0] & 0b1) << 8) + Int(encodedData[1])))
+
+        let yyyy = (Int(encodedData[2]) << 8) + (Int(encodedData[3])) & 0x3fff
+
+        if encodedData[0] & 0b100 != 0 {
+            let volume = Double(yyyy * 2) * Pod.pulseSize
+            self.trigger = .unitsRemaining(volume)
+        } else {
+            self.trigger = .timeUntilAlert(TimeInterval(minutes: Double(yyyy)))
+        }
+
+        let beepRepeatBits = encodedData[4]
+        guard let beepRepeat = BeepRepeat(rawValue: beepRepeatBits) else {
+            throw MessageError.unknownValue(value: beepRepeatBits, typeDescription: "BeepRepeat")
+        }
+        self.beepRepeat = beepRepeat
+
+        let beepTypeBits = encodedData[5]
+        guard let beepType = BeepType(rawValue: beepTypeBits) else {
+            throw MessageError.unknownValue(value: beepTypeBits, typeDescription: "BeepType")
+        }
+        self.beepType = beepType
+
+    }
+
+    public var data: Data {
+        var firstByte = slot.rawValue << 4
+        firstByte += active ? (1 << 3) : 0
+
+        if case .unitsRemaining = trigger {
+            firstByte += 1 << 2
+        }
+        if autoOffModifier {
+            firstByte += 1 << 1
+        }
+        // High bit of duration
+        firstByte += UInt8((Int(duration.minutes) >> 8) & 0x1)
+
+        var data = Data([
+            firstByte,
+            UInt8(Int(duration.minutes) & 0xff)
+            ])
+
+        switch trigger {
+        case .unitsRemaining(let volume):
+            let ticks = UInt16(volume / Pod.pulseSize / 2)
+            data.appendBigEndian(ticks)
+        case .timeUntilAlert(let secondsUntilAlert):
+            // round the time to alert to the nearest minute
+            let minutes = UInt16((secondsUntilAlert + 30).minutes)
+            data.appendBigEndian(minutes)
+        }
+        data.append(beepRepeat.rawValue)
+        data.append(beepType.rawValue)
+
+        return data
     }
 }

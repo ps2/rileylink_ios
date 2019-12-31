@@ -84,16 +84,11 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
     public init(device: RileyLinkDevice, pumpOps: PumpOps) {
         self.device = device
         self.ops = pumpOps
+        self.pumpState = pumpOps.pumpState.value
 
         super.init(style: .grouped)
 
         updateDeviceStatus()
-        
-        pumpOps.getPumpState { (state) in
-            DispatchQueue.main.async {
-                self.pumpState = state
-            }
-        }
     }
 
     required public init?(coder aDecoder: NSCoder) {

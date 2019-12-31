@@ -29,7 +29,7 @@ fileprivate let crcTable: [UInt8] = [
 
 public extension Sequence where Element == UInt8 {
     
-    public func crc8() -> UInt8 {
+    func crc8() -> UInt8 {
         
         var crc: UInt8 = 0
         for byte in self {

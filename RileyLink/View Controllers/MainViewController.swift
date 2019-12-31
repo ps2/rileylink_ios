@@ -166,8 +166,6 @@ class MainViewController: RileyLinkSettingsViewController {
     
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let sender = tableView.cellForRow(at: indexPath)
-        
         switch Section(rawValue: indexPath.section)! {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
@@ -175,10 +173,11 @@ class MainViewController: RileyLinkSettingsViewController {
             show(vc, sender: indexPath)
         case .pump:
             if let pumpManager = deviceDataManager.pumpManager {
-                let settings = pumpManager.settingsViewController()
-                show(settings, sender: sender)
+                var settings = pumpManager.settingsViewController()
+                settings.completionDelegate = self
+                present(settings, animated: true)
             } else {
-                var setupViewController: PumpManagerSetupViewController & UIViewController
+                var setupViewController: PumpManagerSetupViewController & UIViewController & CompletionNotifying
                 switch PumpActionRow(rawValue: indexPath.row)! {
                 case .addMinimedPump:
                     setupViewController = UIStoryboard(name: "MinimedPumpManager", bundle: Bundle(for: MinimedPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! MinimedPumpManagerSetupViewController
@@ -189,6 +188,7 @@ class MainViewController: RileyLinkSettingsViewController {
                     rileyLinkManagerViewController.rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceDataManager.rileyLinkConnectionManager.deviceProvider)
                 }
                 setupViewController.setupDelegate = self
+                setupViewController.completionDelegate = self
                 present(setupViewController, animated: true, completion: nil)
             }
         }
@@ -206,15 +206,18 @@ class MainViewController: RileyLinkSettingsViewController {
     }
 }
 
+extension MainViewController: CompletionDelegate {
+    func completionNotifyingDidComplete(_ object: CompletionNotifying) {
+        if let vc = object as? UIViewController, presentedViewController === vc {
+            dismiss(animated: true, completion: nil)
+        }
+    }
+}
+
 extension MainViewController: PumpManagerSetupViewControllerDelegate {
     func pumpManagerSetupViewController(_ pumpManagerSetupViewController: PumpManagerSetupViewController, didSetUpPumpManager pumpManager: PumpManagerUI) {
         deviceDataManager.pumpManager = pumpManager
         show(pumpManager.settingsViewController(), sender: nil)
         tableView.reloadSections(IndexSet([Section.pump.rawValue]), with: .none)
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func pumpManagerSetupViewControllerDidCancel(_ pumpManagerSetupViewController: PumpManagerSetupViewController) {
-        dismiss(animated: true, completion: nil)
     }
 }

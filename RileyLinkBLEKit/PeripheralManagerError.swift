@@ -22,9 +22,9 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error):
             return error.localizedDescription
         case .notReady:
-            return LocalizedString("Peripheral isnʼt connected", comment: "Not ready error description")
+            return LocalizedString("RileyLink is not connected", comment: "Not ready error description")
         case .timeout:
-            return LocalizedString("Peripheral did not respond in time", comment: "Timeout error description")
+            return LocalizedString("RileyLink did not respond in time", comment: "Timeout error description")
         case .unknownCharacteristic:
             return LocalizedString("Unknown characteristic", comment: "Error description")
         }

@@ -44,11 +44,11 @@ public struct PumpMessage : CustomStringConvertible {
         buffer.append(messageType.rawValue)
         buffer.append(contentsOf: messageBody.txData)
 
-        return Data(bytes: buffer)
+        return Data(buffer)
     }
     
     public var description: String {
-        return String(format: LocalizedString("PumpMessage(%1$@, %2$@, %3$@, %4$@)", comment: "The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data"), String(describing: packetType), String(describing: messageType), String(describing: address), String(describing: self.messageBody.txData))
+        return String(format: "PumpMessage(%1$@, %2$@, %3$@, %4$@)", String(describing: packetType), String(describing: messageType), address.hexadecimalString, self.messageBody.txData.hexadecimalString)
     }
 
 }

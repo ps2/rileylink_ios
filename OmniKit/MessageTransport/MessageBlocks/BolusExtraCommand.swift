@@ -12,21 +12,33 @@ public struct BolusExtraCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .bolusExtra
     
+    public let acknowledgementBeep: Bool
+    public let completionBeep: Bool
+    public let programReminderInterval: TimeInterval
     public let units: Double
-    public let byte2: UInt8
-    public let unknownSection: Data
-    
-    // 17 0d 7c 1770 00030d40 000000000000 00fa
-    // 0  1  2  3    5        9
+    public let timeBetweenPulses: TimeInterval
+    public let squareWaveUnits: Double
+    public let squareWaveDuration: TimeInterval
+
+    // 17 0d 7c 1770 00030d40 0000 00000000
+    // 0  1  2  3    5        9    13
     public var data: Data {
-        var data = Data(bytes: [
+        let beepOptions = (UInt8(programReminderInterval.minutes) & 0x3f) + (completionBeep ? (1<<6) : 0) + (acknowledgementBeep ? (1<<7) : 0)
+
+        var data = Data([
             blockType.rawValue,
             0x0d,
-            byte2
+            beepOptions
             ])
-        data.appendBigEndian(UInt16(units * 200))
-        data.append(unknownSection)
-        data.append(Data(hexadecimalString: "000000000000")!)
+        
+        data.appendBigEndian(UInt16(round(units * 200)))
+        data.appendBigEndian(UInt32(timeBetweenPulses.hundredthsOfMilliseconds))
+        
+        let pulseCountX10 = UInt16(round(squareWaveUnits * 200))
+        data.appendBigEndian(pulseCountX10)
+        
+        let timeBetweenExtendedPulses = pulseCountX10 > 0 ? squareWaveDuration / Double(pulseCountX10) : 0
+        data.appendBigEndian(UInt32(timeBetweenExtendedPulses.hundredthsOfMilliseconds))
         return data
     }
     
@@ -34,14 +46,32 @@ public struct BolusExtraCommand : MessageBlock {
         if encodedData.count < 15 {
             throw MessageBlockError.notEnoughData
         }
-        byte2 = encodedData[2]
+        
+        acknowledgementBeep = encodedData[2] & (1<<7) != 0
+        completionBeep = encodedData[2] & (1<<6) != 0
+        programReminderInterval = TimeInterval(minutes: Double(encodedData[2] & 0x3f))
+        
         units = Double(encodedData[3...].toBigEndian(UInt16.self)) / 200
-        unknownSection = encodedData.subdata(in: 5..<9)
+
+        let delayCounts = encodedData[5...].toBigEndian(UInt32.self)
+        timeBetweenPulses = TimeInterval(hundredthsOfMilliseconds: Double(delayCounts))
+
+        let pulseCountX10 = encodedData[9...].toBigEndian(UInt16.self)
+        squareWaveUnits = Double(pulseCountX10) / 200
+        
+        let intervalCounts = encodedData[5...].toBigEndian(UInt32.self)
+        let timeBetweenExtendedPulses = TimeInterval(hundredthsOfMilliseconds: Double(intervalCounts))
+        squareWaveDuration = timeBetweenExtendedPulses * Double(pulseCountX10) / 10
     }
     
-    public init(units: Double, byte2: UInt8, unknownSection: Data) {
+    public init(units: Double, timeBetweenPulses: TimeInterval = Pod.secondsPerBolusPulse, squareWaveUnits: Double = 0.0, squareWaveDuration: TimeInterval = 0, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) {
+        self.acknowledgementBeep = acknowledgementBeep
+        self.completionBeep = completionBeep
+        self.programReminderInterval = programReminderInterval
         self.units = units
-        self.byte2 = byte2
-        self.unknownSection = unknownSection
+        self.timeBetweenPulses = timeBetweenPulses
+        self.squareWaveUnits = squareWaveUnits
+        self.squareWaveDuration = squareWaveDuration
     }
 }
+

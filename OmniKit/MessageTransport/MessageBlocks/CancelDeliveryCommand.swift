@@ -8,25 +8,11 @@
 
 import Foundation
 
+
+
 public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     
     public let blockType: MessageBlockType = .cancelDelivery
-    
-    public struct DeliveryType: OptionSet {
-        public let rawValue: UInt8
-        
-        static let none          = DeliveryType(rawValue: 0)
-        static let basal         = DeliveryType(rawValue: 1 << 0)
-        static let tempBasal     = DeliveryType(rawValue: 1 << 1)
-        static let bolus         = DeliveryType(rawValue: 1 << 2)
-        static let extendedBolus = DeliveryType(rawValue: 1 << 3)
-        
-        static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus, .extendedBolus]
-        
-        public init(rawValue: UInt8) {
-            self.rawValue = rawValue
-        }
-    }
     
     // ID1:1f00ee84 PTYPE:PDM SEQ:26 ID2:1f00ee84 B9:ac BLEN:7 MTYPE:1f05 BODY:e1f78752078196 CRC:03
     
@@ -47,14 +33,30 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     // Deactivate pod:
     // 1f 05 e1f78752 07
     
+    public struct DeliveryType: OptionSet, Equatable {
+        public let rawValue: UInt8
+        
+        public static let none          = DeliveryType(rawValue: 0)
+        public static let basal         = DeliveryType(rawValue: 1 << 0)
+        public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
+        public static let bolus         = DeliveryType(rawValue: 1 << 2)
+        
+        public static let all: DeliveryType = [.none, .basal, .tempBasal, .bolus]
+        
+        public init(rawValue: UInt8) {
+            self.rawValue = rawValue
+        }
+        
+    }
+    
     public let deliveryType: DeliveryType
     
-    public let beepType: ConfigureAlertsCommand.BeepType
+    public let beepType: BeepType
     
     public var nonce: UInt32
     
     public var data: Data {
-        var data = Data(bytes: [
+        var data = Data([
             blockType.rawValue,
             5,
             ])
@@ -69,10 +71,10 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
         }
         self.nonce = encodedData[2...].toBigEndian(UInt32.self)
         self.deliveryType = DeliveryType(rawValue: encodedData[6] & 0xf)
-        self.beepType = ConfigureAlertsCommand.BeepType(rawValue: encodedData[6] >> 4)!
+        self.beepType = BeepType(rawValue: encodedData[6] >> 4)!
     }
     
-    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: ConfigureAlertsCommand.BeepType) {
+    public init(nonce: UInt32, deliveryType: DeliveryType, beepType: BeepType) {
         self.nonce = nonce
         self.deliveryType = deliveryType
         self.beepType = beepType

@@ -5,6 +5,7 @@
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
+import LoopKit
 import RileyLinkBLEKit
 
 open class RileyLinkPumpManager {
@@ -14,6 +15,7 @@ open class RileyLinkPumpManager {
         
         self.rileyLinkDeviceProvider = rileyLinkDeviceProvider
         self.rileyLinkConnectionManager = rileyLinkConnectionManager
+        self.rileyLinkConnectionManagerState = rileyLinkConnectionManager?.state
         
         // Listen for device notifications
         NotificationCenter.default.addObserver(self, selector: #selector(receivedRileyLinkPacketNotification(_:)), name: .DevicePacketReceived, object: nil)
@@ -22,18 +24,15 @@ open class RileyLinkPumpManager {
     
     /// Manages all the RileyLinks - access to management is optional
     public let rileyLinkConnectionManager: RileyLinkConnectionManager?
-    
+
+    // TODO: Not thread-safe
     open var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
     
     /// Access to rileylink devices
     public let rileyLinkDeviceProvider: RileyLinkDeviceProvider
-    
-    // TODO: Evaluate if this is necessary
-    public let queue = DispatchQueue(label: "com.loopkit.RileyLinkPumpManager", qos: .utility)
 
-    /// Isolated to queue
     // TODO: Put this on each RileyLinkDevice?
-    private var lastTimerTick: Date = .distantPast
+    private var lastTimerTick = Locked(Date.distantPast)
 
     /// Called when one of the connected devices receives a packet outside of a session
     ///
@@ -50,7 +49,7 @@ open class RileyLinkPumpManager {
         return [
             "## RileyLinkPumpManager",
             "rileyLinkConnectionManager: \(String(reflecting: rileyLinkConnectionManager))",
-            "lastTimerTick: \(String(describing: lastTimerTick))",
+            "lastTimerTick: \(String(describing: lastTimerTick.value))",
             "",
             String(reflecting: rileyLinkDeviceProvider),
         ].joined(separator: "\n")
@@ -74,6 +73,8 @@ extension RileyLinkPumpManager {
             return
         }
 
+        device.assertOnSessionQueue()
+
         self.device(device, didReceivePacket: packet)
     }
 
@@ -82,12 +83,8 @@ extension RileyLinkPumpManager {
             return
         }
 
-        // TODO: Do we need a queue?
-        queue.async {
-            self.lastTimerTick = Date()
-
-            self.deviceTimerDidTick(device)
-        }
+        self.lastTimerTick.value = Date()
+        self.deviceTimerDidTick(device)
     }
     
     open func connectToRileyLink(_ device: RileyLinkDevice) {

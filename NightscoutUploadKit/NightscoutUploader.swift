@@ -6,7 +6,6 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import MinimedKit
 import Crypto
 
 public enum UploadError: Error {
@@ -14,13 +13,16 @@ public enum UploadError: Error {
     case missingTimezone
     case invalidResponse(reason: String)
     case unauthorized
+    case missingConfiguration
 }
 
-private let defaultNightscoutEntriesPath = "/api/v1/entries"
-private let defaultNightscoutTreatmentPath = "/api/v1/treatments"
-private let defaultNightscoutDeviceStatusPath = "/api/v1/devicestatus"
-private let defaultNightscoutAuthTestPath = "/api/v1/experiments/test"
-private let defaultNightscoutProfilePath = "/api/v1/profile"
+private enum Endpoint: String {
+    case entries = "/api/v1/entries"
+    case treatments = "/api/v1/treatments"
+    case deviceStatus = "/api/v1/devicestatus"
+    case authTest = "/api/v1/experiments/test"
+    case profile =  "/api/v1/profile"
+}
 
 public class NightscoutUploader {
 
@@ -47,54 +49,31 @@ public class NightscoutUploader {
         self.siteURL = siteURL
         self.apiSecret = APISecret
     }
+
+    private func url(with path: String, queryItems: [URLQueryItem]? = nil) -> URL? {
+        var components = URLComponents()
+        components.scheme = siteURL.scheme
+        components.host = siteURL.host
+        components.queryItems = queryItems
+        components.path = path
+        return components.url
+    }
+
+    private func url(for endpoint: Endpoint, queryItems: [URLQueryItem]? = nil) -> URL? {
+        return url(with: endpoint.rawValue, queryItems: queryItems)
+    }
     
-    // MARK: - Processing data from pump
-
-    /**
-     Enqueues pump history events for upload, with automatic retry management.
-     
-     - parameter events:    An array of timestamped history events. Only types with known Nightscout mappings will be uploaded.
-     - parameter source:    The device identifier to display in Nightscout
-     - parameter pumpModel: The pump model info associated with the events
-     */
-    public func processPumpEvents(_ events: [TimestampedHistoryEvent], source: String, pumpModel: PumpModel) {
-        for treatment in NightscoutPumpEvents.translate(events, eventSource: source) {
-            treatmentsQueue.append(treatment)
-        }
-        self.flushAll()
-    }
-
-    /**
-     Enqueues pump glucose events for upload, with automatic retry management.
-     
-     - parameter events:    An array of timestamped glucose events. Only sensor glucose data will be uploaded.
-     - parameter source:    The device identifier to display in Nightscout
-     */
-    public func processGlucoseEvents(_ events: [TimestampedGlucoseEvent], source: String) -> Date? {
-        for event in events {
-            if let entry = NightscoutEntry(event: event, device: source) {
-                entries.append(entry)
-            }
-        }
-        
-        var timestamp: Date? = nil
-        
-        if let lastEntry = entries.last {
-            timestamp = lastEntry.timestamp
-        }
-        
-        self.flushAll()
-        
-        return timestamp
-    }
-
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
     ///
     /// - parameter treatments:           An array of nightscout treatments.
     /// - parameter completionHandler:    A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
     public func upload(_ treatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
-        postToNS(treatments.map { $0.dictionaryRepresentation }, endpoint: defaultNightscoutTreatmentPath, completion: completionHandler)
+        guard let url = url(for: .treatments) else {
+            completionHandler(.failure(UploadError.missingConfiguration))
+            return
+        }
+        postToNS(treatments.map { $0.dictionaryRepresentation }, url: url, completion: completionHandler)
     }
 
     /// Attempts to modify nightscout treatments. This method will not retry if the network task failed.
@@ -102,6 +81,10 @@ public class NightscoutUploader {
     /// - parameter treatments:        An array of nightscout treatments. The id attribute must be set, identifying the treatment to update.  Treatments without id will be ignored.
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the modify.
     public func modifyTreatments(_ treatments:[NightscoutTreatment], completionHandler: @escaping (Error?) -> Void) {
+        guard let url = url(for: .treatments) else {
+            completionHandler(UploadError.missingConfiguration)
+            return
+        }
         dataAccessQueue.async {
             let modifyGroup = DispatchGroup()
             var errors = [Error]()
@@ -111,7 +94,7 @@ public class NightscoutUploader {
                     continue
                 }
                 modifyGroup.enter()
-                self.putToNS( treatment.dictionaryRepresentation, endpoint: defaultNightscoutTreatmentPath ) { (error) in
+                self.putToNS( treatment.dictionaryRepresentation, url: url ) { (error) in
                     if let error = error {
                         errors.append(error)
                     }
@@ -130,6 +113,7 @@ public class NightscoutUploader {
     /// - parameter id:                An array of nightscout treatment ids
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
     public func deleteTreatmentsById(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+
         dataAccessQueue.async {
             let deleteGroup = DispatchGroup()
             var errors = [Error]()
@@ -139,7 +123,7 @@ public class NightscoutUploader {
                     continue
                 }
                 deleteGroup.enter()
-                self.deleteFromNS(id, endpoint: defaultNightscoutTreatmentPath) { (error) in
+                self.deleteFromNS(id, endpoint: .treatments) { (error) in
                     if let error = error {
                         errors.append(error)
                     }
@@ -151,79 +135,43 @@ public class NightscoutUploader {
             completionHandler(errors.first)
         }
     }
+    
+    /// Attempts to delete treatments from nightscout by client identifier. This method will not retry if the network task failed.
+    ///
+    /// - parameter id:                An array of client assigned uuid strings
+    /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
+    public func deleteTreatmentsByClientId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+        guard ids.count > 0 else {
+            // Running this query with no ids ends up in deleting the entire treatments db. Likely not intended. :)
+            completionHandler(nil)
+            return
+        }
+        
+        let queryItems = ids.map { URLQueryItem(name: "find[_id][$in][]", value: $0)  }
+        
+        guard let url = url(for: .treatments, queryItems: queryItems) else {
+            completionHandler(UploadError.missingConfiguration)
+            return
+        }
+
+        dataAccessQueue.async {
+            self.callNS(nil, url: url, method: "DELETE") { (result) in
+                switch result {
+                case .success( _):
+                    completionHandler(nil)
+                case .failure(let error):
+                    completionHandler(error)
+                }
+            }
+        }
+    }
+
 
     public func uploadDeviceStatus(_ status: DeviceStatus) {
         deviceStatuses.append(status.dictionaryRepresentation)
         flushAll()
     }
     
-    //  Entries [ { sgv: 375,
-    //    date: 1432421525000,
-    //    dateString: '2015-05-23T22:52:05.000Z',
-    //    trend: 1,
-    //    direction: 'DoubleUp',
-    //    device: 'share2',
-    //    type: 'sgv' } ]
-    
-    public func uploadSGVFromMySentryPumpStatus(_ status: MySentryPumpStatusMessageBody, device: String) {
-        
-        var recordSGV = true
-        let glucose: Int = {
-            switch status.glucose {
-            case .active(glucose: let glucose):
-                return glucose
-            case .highBG:
-                return 401
-            case .weakSignal:
-                return DexcomSensorError.badRF.rawValue
-            case .meterBGNow, .calError:
-                return DexcomSensorError.sensorNotCalibrated.rawValue
-            case .lost, .missing, .ended, .unknown, .off, .warmup:
-                recordSGV = false
-                return DexcomSensorError.sensorNotActive.rawValue
-            }
-        }()
-        
-
-        // Create SGV entry from this mysentry packet
-        if (recordSGV) {
-            
-            guard let sensorDateComponents = status.glucoseDateComponents, let sensorDate = sensorDateComponents.date else {
-                return
-            }
-            
-            let previousSGV: Int?
-            let previousSGVNotActive: Bool?
-            
-            switch status.previousGlucose {
-            case .active(glucose: let previousGlucose):
-                previousSGV = previousGlucose
-                previousSGVNotActive = nil
-            default:
-                previousSGV = nil
-                previousSGVNotActive = true
-            }
-            let direction: String = {
-                switch status.glucoseTrend {
-                case .up:
-                    return "SingleUp"
-                case .upUp:
-                    return "DoubleUp"
-                case .down:
-                    return "SingleDown"
-                case .downDown:
-                    return "DoubleDown"
-                case .flat:
-                    return "Flat"
-                }
-            }()
-            
-            let entry = NightscoutEntry(glucose: glucose, timestamp: sensorDate, device: device, glucoseType: .Sensor, previousSGV: previousSGV, previousSGVNotActive: previousSGVNotActive, direction: direction)
-            entries.append(entry)
-        }
-        flushAll()
-    }
-
     public func uploadSGV(glucoseMGDL: Int, at date: Date, direction: String?, device: String) {
         let entry = NightscoutEntry(
             glucose: glucoseMGDL,
@@ -237,60 +185,44 @@ public class NightscoutUploader {
         entries.append(entry)
     }
     
-    public func handleMeterMessage(_ msg: MeterMessage) {
-        
-        // TODO: Should only accept meter messages from specified meter ids.
-        // Need to add an interface to allow user to specify linked meters.
-        
-        if msg.ackFlag {
-            return
-        }
-        
-        let date = Date()
-        
-        // Skip duplicates
-        if lastMeterMessageRxTime == nil || lastMeterMessageRxTime!.timeIntervalSinceNow.minutes < -3 {
-            let entry = NightscoutEntry(glucose: msg.glucose, timestamp: date, device: "Contour Next Link", glucoseType: .Meter)
-            entries.append(entry)
-            lastMeterMessageRxTime = date
-        }
-    }
-
     // MARK: - Profiles
 
     public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {
-        postToNS([profileSet.dictionaryRepresentation], endpoint:defaultNightscoutProfilePath, completion: completion)
+        guard let url = url(for: .profile) else {
+            completion(.failure(UploadError.missingConfiguration))
+            return
+        }
+
+        postToNS([profileSet.dictionaryRepresentation], url: url, completion: completion)
     }
     
     public func updateProfile(profileSet: ProfileSet, id: String, completion: @escaping (Error?) -> Void) {
+        guard let url = url(for: .profile) else {
+            completion(UploadError.missingConfiguration)
+            return
+        }
+        
         var rep = profileSet.dictionaryRepresentation
         rep["_id"] = id
-        putToNS(rep, endpoint: defaultNightscoutProfilePath, completion: completion)
+        putToNS(rep, url: url, completion: completion)
     }
 
     // MARK: - Uploading
     
-    func flushAll() {
+    public func flushAll() {
         flushDeviceStatuses()
         flushEntries()
         flushTreatments()
     }
 
-    func deleteFromNS(_ id: String, endpoint:String, completion: @escaping (Error?) -> Void)  {
-        let resource = "\(endpoint)/\(id)"
-        callNS(nil, endpoint: resource, method: "DELETE") { (result) in
-            switch result {
-            case .success( _):
-                completion(nil)
-            case .failure(let error):
-                completion(error)
-            }
+    fileprivate func deleteFromNS(_ id: String, endpoint: Endpoint, completion: @escaping (Error?) -> Void)  {
+        let resource = "\(endpoint.rawValue)/\(id)"
+        guard let url = url(with: resource) else {
+            completion(UploadError.missingConfiguration)
+            return
         }
-
-    }
-
-    func putToNS(_ json: Any, endpoint:String, completion: @escaping (Error?) -> Void) {
-        callNS(json, endpoint: endpoint, method: "PUT") { (result) in
+        
+        callNS(nil, url: url, method: "DELETE") { (result) in
             switch result {
             case .success( _):
                 completion(nil)
@@ -300,13 +232,24 @@ public class NightscoutUploader {
         }
     }
 
-    func postToNS(_ json: [Any], endpoint:String, completion: @escaping (Either<[String],Error>) -> Void) {
+    func putToNS(_ json: Any, url:URL, completion: @escaping (Error?) -> Void) {
+        callNS(json, url: url, method: "PUT") { (result) in
+            switch result {
+            case .success( _):
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
+
+    func postToNS(_ json: [Any], url:URL, completion: @escaping (Either<[String],Error>) -> Void) {
         if json.count == 0 {
             completion(.success([]))
             return
         }
 
-        callNS(json, endpoint: endpoint, method: "POST") { (result) in
+        callNS(json, url: url, method: "POST") { (result) in
             switch result {
             case .success(let postResponse):
                 guard let insertedEntries = postResponse as? [[String: Any]], insertedEntries.count == json.count else {
@@ -334,9 +277,8 @@ public class NightscoutUploader {
         }
     }
 
-    func callNS(_ json: Any?, endpoint:String, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
-        let uploadURL = siteURL.appendingPathComponent(endpoint)
-        var request = URLRequest(url: uploadURL)
+    func callNS(_ json: Any?, url:URL, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
+        var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -417,9 +359,13 @@ public class NightscoutUploader {
     }
     
     func flushDeviceStatuses() {
+        guard let url = url(for: .deviceStatus) else {
+            return
+        }
+
         let inFlight = deviceStatuses
         deviceStatuses = []
-        postToNS(inFlight as [Any], endpoint: defaultNightscoutDeviceStatusPath) { (result) in
+        postToNS(inFlight as [Any], url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading device status")
@@ -431,10 +377,14 @@ public class NightscoutUploader {
         }
     }
     
-    func flushEntries() {
+    public func flushEntries() {
+        guard let url = url(for: .entries) else {
+            return
+        }
+
         let inFlight = entries
         entries = []
-        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutEntriesPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout entries")
@@ -447,9 +397,13 @@ public class NightscoutUploader {
     }
     
     func flushTreatments() {
+        guard let url = url(for: .treatments) else {
+            return
+        }
+
         let inFlight = treatmentsQueue
         treatmentsQueue = []
-        postToNS(inFlight.map({$0.dictionaryRepresentation}), endpoint: defaultNightscoutTreatmentPath) { (result) in
+        postToNS(inFlight.map({$0.dictionaryRepresentation}), url: url) { (result) in
             switch result {
             case .failure(let error):
                 self.errorHandler?(error, "Uploading nightscout treatment records")
@@ -462,8 +416,10 @@ public class NightscoutUploader {
     }
     
     public func checkAuth(_ completion: @escaping (Error?) -> Void) {
-        
-        let testURL = siteURL.appendingPathComponent(defaultNightscoutAuthTestPath)
+        guard let testURL = url(for: .authTest) else {
+            completion(UploadError.missingConfiguration)
+            return
+        }
         
         var request = URLRequest(url: testURL)
         

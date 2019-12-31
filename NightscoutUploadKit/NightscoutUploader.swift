@@ -209,7 +209,7 @@ public class NightscoutUploader {
 
     // MARK: - Uploading
     
-    func flushAll() {
+    public func flushAll() {
         flushDeviceStatuses()
         flushEntries()
         flushTreatments()
@@ -377,7 +377,7 @@ public class NightscoutUploader {
         }
     }
     
-    func flushEntries() {
+    public func flushEntries() {
         guard let url = url(for: .entries) else {
             return
         }

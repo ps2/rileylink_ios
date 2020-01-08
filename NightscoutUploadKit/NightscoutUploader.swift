@@ -54,6 +54,7 @@ public class NightscoutUploader {
         var components = URLComponents()
         components.scheme = siteURL.scheme
         components.host = siteURL.host
+        components.port = siteURL.port
         components.queryItems = queryItems
         components.path = path
         return components.url

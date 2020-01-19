@@ -638,7 +638,7 @@ extension OmnipodPumpManager {
     }
 
     private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
-        if self.confirmationBeeps{
+        if self.confirmationBeeps {
             session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
         }
     }
@@ -937,7 +937,7 @@ extension OmnipodPumpManager {
                 switch result {
                 case .success(let session):
                     let status = try session.getStatus()
-                    // self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
@@ -967,7 +967,7 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     try session.testingCommands()
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    self.emitConfirmationBeep(session: session, beepConfigType: .beepBeepBeep)
                     completion(nil)
                 } catch let error {
                     completion(error)
@@ -1180,18 +1180,14 @@ extension OmnipodPumpManager: PumpManager {
                 state.suspendEngageState = .engaging
             })
 
-            // N.B. with a deliveryType of .all and a beepType other then .noBeep, the Pod will emit 3 beeps! Use .noBeep here & do beeping at end.
-            let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+            let beepType: BeepType = self.confirmationBeeps ? .beeeeeep : .noBeep
+            let result = session.cancelDelivery(deliveryType: .all, beepType: beepType)
             switch result {
             case .certainFailure(let error):
                 completion(error)
             case .uncertainFailure(let error):
                 completion(error)
             case .success:
-                // Do a separate single confirmation beep if appropriate. There are no in-progress deliveries to worry about after the cancel all.
-                if self.confirmationBeeps {
-                    session.beepConfig(beepConfigType: .beeeeeep, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: false)
-                }
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }

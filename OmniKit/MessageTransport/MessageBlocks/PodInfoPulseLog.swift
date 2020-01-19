@@ -1,5 +1,5 @@
 //
-//  PodInfoPulseLogRecent.swift
+//  PodInfoPulseLog.swift
 //  OmniKit
 //
 //  Created by Eelke Jager on 26/09/2018.

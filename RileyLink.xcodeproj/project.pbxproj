@@ -463,7 +463,7 @@
 		C1BB12A621CB5654009A29B5 /* PodInfoDataLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */; };
 		C1BB12A721CB5654009A29B5 /* PodInfoFault.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */; };
 		C1BB12A821CB5654009A29B5 /* PodInfoFaultEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE336D214ED01200888876 /* PodInfoFaultEvent.swift */; };
-		C1BB12A921CB5654009A29B5 /* PodInfoFlashLogRecent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoFlashLogRecent.swift */; };
+		C1BB12A921CB5654009A29B5 /* PodInfoPulseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoPulseLog.swift */; };
 		C1BB12AA21CB5654009A29B5 /* PodInfoResetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */; };
 		C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */; };
 		C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD476215BED3500A103D1 /* PodInfoTester.swift */; };
@@ -602,7 +602,7 @@
 		C1FFB02621343F0600C50C1D /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
 		D807D7D82289135D006BCDF0 /* BeepType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D72289135D006BCDF0 /* BeepType.swift */; };
 		D807D7DA228913EC006BCDF0 /* BeepConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D9228913EC006BCDF0 /* BeepConfigCommand.swift */; };
-		E95D0660215D76E40072157B /* PodInfoFlashLogRecent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoFlashLogRecent.swift */; };
+		E95D0660215D76E40072157B /* PodInfoPulseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoPulseLog.swift */; };
 		E993D18C217E455000E489BF /* LogEventErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E993D18B217E455000E489BF /* LogEventErrorCode.swift */; };
 		E9C06B262150371700B602AD /* PodInfoConfiguredAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */; };
 		E9C06B2821506A9200B602AD /* AcknowledgeAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */; };
@@ -1514,7 +1514,7 @@
 		C1FFB00C2133242C00C50C1D /* OmnipodPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OmnipodPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
 		D807D7D72289135D006BCDF0 /* BeepType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeepType.swift; sourceTree = "<group>"; };
 		D807D7D9228913EC006BCDF0 /* BeepConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeepConfigCommand.swift; sourceTree = "<group>"; };
-		E95D065F215D76E40072157B /* PodInfoFlashLogRecent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoFlashLogRecent.swift; sourceTree = "<group>"; };
+		E95D065F215D76E40072157B /* PodInfoPulseLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoPulseLog.swift; sourceTree = "<group>"; };
 		E993D18B217E455000E489BF /* LogEventErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEventErrorCode.swift; sourceTree = "<group>"; };
 		E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoConfiguredAlerts.swift; sourceTree = "<group>"; };
 		E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgeAlertsTests.swift; sourceTree = "<group>"; };
@@ -2586,7 +2586,7 @@
 				E9E54AB52156B2D500E319B8 /* PodInfoDataLog.swift */,
 				E9EDD474215AFFF300A103D1 /* PodInfoFault.swift */,
 				E9EE336D214ED01200888876 /* PodInfoFaultEvent.swift */,
-				E95D065F215D76E40072157B /* PodInfoFlashLogRecent.swift */,
+				E95D065F215D76E40072157B /* PodInfoPulseLog.swift */,
 				E9E54AB321542E8A00E319B8 /* PodInfoResetStatus.swift */,
 				C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */,
 				E9EDD476215BED3500A103D1 /* PodInfoTester.swift */,
@@ -3983,7 +3983,7 @@
 				C1BB12AF21CB5654009A29B5 /* StatusResponse.swift in Sources */,
 				C1BB12B721CB56E2009A29B5 /* Data.swift in Sources */,
 				C1BB129921CB5654009A29B5 /* AcknowledgeAlertCommand.swift in Sources */,
-				C1BB12A921CB5654009A29B5 /* PodInfoFlashLogRecent.swift in Sources */,
+				C1BB12A921CB5654009A29B5 /* PodInfoPulseLog.swift in Sources */,
 				C1BB12B621CB56D2009A29B5 /* PodProgressStatus.swift in Sources */,
 				C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */,
 				C1BB12A321CB5654009A29B5 /* PlaceholderMessageBlock.swift in Sources */,
@@ -4020,7 +4020,7 @@
 				C1FFAFB7213323E900C50C1D /* OmnipodPumpManager.swift in Sources */,
 				C1FFAFBB213323E900C50C1D /* MessageTransport.swift in Sources */,
 				E9C06B262150371700B602AD /* PodInfoConfiguredAlerts.swift in Sources */,
-				E95D0660215D76E40072157B /* PodInfoFlashLogRecent.swift in Sources */,
+				E95D0660215D76E40072157B /* PodInfoPulseLog.swift in Sources */,
 				C1FFAFD0213323E900C50C1D /* SetInsulinScheduleCommand.swift in Sources */,
 				C1FFAFC4213323E900C50C1D /* TempBasalExtraCommand.swift in Sources */,
 				C11166AE2180D834000EEAAB /* AlertSlot.swift in Sources */,

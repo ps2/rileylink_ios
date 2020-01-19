@@ -19,7 +19,7 @@ public struct PodInfoPulseLogRecent : PodInfo {
     public var podInfoType   : PodInfoResponseSubType = .pulseLogRecent
     public let data          : Data
     public let indexLastEntry: UInt16 // the last pulse entry
-    public var pulseLogEntry : [UInt32]
+    public var pulseLog      : [UInt32]
 
     public init(encodedData: Data) throws {
         if encodedData.count < 3 || ((encodedData.count - 3) & 0x3) != 0 {
@@ -33,12 +33,7 @@ public struct PodInfoPulseLogRecent : PodInfo {
         }
         self.data           = encodedData
         self.indexLastEntry = lastPumpEntry
-        self.pulseLogEntry  = Array(repeating: 0, count: nLogEntriesReturned)
-        var index = 0
-        while index < nLogEntriesReturned {
-            self.pulseLogEntry[index] = encodedData[(3+(index*4))...].toBigEndian(UInt32.self)
-            index += 1
-        }
+        self.pulseLog       = createPulseLog(encodedData: encodedData, nLogEntries: nLogEntriesReturned)
     }
 }
 
@@ -48,10 +43,10 @@ public struct PodInfoPulseLogPrevious : PodInfo {
     // DATA   0  1 2  3 4 5 6
     // 02 LL 51 NNNN XXXXXXXX ...
 
-    public var podInfoType   : PodInfoResponseSubType = .dumpOlderPulseLog
-    public let data          : Data
-    public let nEntries      : UInt16 // how many 32-bit pump log entries returned
-    public var pulseLogEntry : [UInt32]
+    public var podInfoType : PodInfoResponseSubType = .dumpOlderPulseLog
+    public let data        : Data
+    public let nEntries    : UInt16 // how many 32-bit pump log entries returned
+    public var pulseLog    : [UInt32]
 
     public init(encodedData: Data) throws {
         if encodedData.count < 3 || ((encodedData.count - 3) & 0x3) != 0 {
@@ -64,13 +59,48 @@ public struct PodInfoPulseLogPrevious : PodInfo {
         if (nLogEntriesReported > nLogEntriesCalculated) {
             throw MessageBlockError.notEnoughData // some entry count mismatch
         }
-        self.data           = encodedData
-        self.nEntries       = nLogEntriesReported
-        self.pulseLogEntry  = Array(repeating: 0, count: Int(nLogEntriesReported))
-        var index = 0
-        while index < nLogEntriesReported {
-            self.pulseLogEntry[index] = encodedData[(3+(index*4))...].toBigEndian(UInt32.self)
-            index += 1
-        }
+        self.data     = encodedData
+        self.nEntries = nLogEntriesReported
+        self.pulseLog = createPulseLog(encodedData: encodedData, nLogEntries: Int(nLogEntriesReported))
     }
+}
+
+private func createPulseLog(encodedData: Data, nLogEntries: Int) -> [UInt32] {
+    var pulseLog: [UInt32] = Array(repeating: 0, count: nLogEntries)
+    var index = 0
+    while index < nLogEntries {
+        pulseLog[index] = encodedData[(3+(index*4))...].toBigEndian(UInt32.self)
+        index += 1
+    }
+    return pulseLog
+}
+
+extension BinaryInteger {
+    var binaryDescription: String {
+        var binaryString = ""
+        var internalNumber = self
+        var counter = 0
+
+        for _ in (1...self.bitWidth) {
+            binaryString.insert(contentsOf: "\(internalNumber & 1)", at: binaryString.startIndex)
+            internalNumber >>= 1
+            counter += 1
+            if counter % 8 == 0 {
+                binaryString.insert(contentsOf: " ", at: binaryString.startIndex)
+            }
+        }
+        return binaryString
+    }
+}
+
+func pulseLogString(pulseLogEntries: [UInt32], lastPulseNumber: Int) -> String {
+    var str: String = "Pulse eeeeee0a pppliiib cccccccc dfgggggg\n"
+    var index = pulseLogEntries.count - 1
+    var pulseNumber = lastPulseNumber
+    while index >= 0 {
+        str += String(format: "%04d:", pulseNumber) + UInt32(pulseLogEntries[index]).binaryDescription + "\n"
+        index -= 1
+        pulseNumber -= 1
+    }
+    return str + "\n"
 }

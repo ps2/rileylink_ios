@@ -81,24 +81,6 @@ extension OmnipodPumpManagerError: LocalizedError {
     }
 }
 
-extension BinaryInteger {
-    var binaryDescription: String {
-        var binaryString = ""
-        var internalNumber = self
-        var counter = 0
-
-        for _ in (1...self.bitWidth) {
-            binaryString.insert(contentsOf: "\(internalNumber & 1)", at: binaryString.startIndex)
-            internalNumber >>= 1
-            counter += 1
-            if counter % 8 == 0 {
-                binaryString.insert(contentsOf: " ", at: binaryString.startIndex)
-            }
-        }
-        return binaryString
-    }
-}
-
 public class OmnipodPumpManager: RileyLinkPumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.lockedState = Locked(state)
@@ -1023,18 +1005,6 @@ extension OmnipodPumpManager {
         }
     }
 
-    private func pulseLogString(pulseLogEntries: [UInt32], lastPulseNumber: Int) -> String {
-        var str: String = "Pulse eeeeee0a pppliiib cccccccc dfgggggg\n"
-        var index = pulseLogEntries.count - 1
-        var pulseNumber = lastPulseNumber
-        while index >= 0 {
-            str += String(format: "%04d:", pulseNumber) + UInt32(pulseLogEntries[index]).binaryDescription + "\n"
-            index -= 1
-            pulseNumber -= 1
-        }
-        return str + "\n"
-    }
-
     public func readPulseLog(completion: @escaping (String?) -> Void) {
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
@@ -1057,17 +1027,17 @@ extension OmnipodPumpManager {
                     let podInfoResponse1 = try session.readPulseLogsRequest(podInfoResponseSubType: .pulseLogRecent)
                     let podInfoPulseLogRecent = podInfoResponse1.podInfo as! PodInfoPulseLogRecent
                     var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
-                    var result = self.pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLogEntry, lastPulseNumber: lastPulseNumber)
+                    var str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
 
                     // read up to the previous 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     let podInfoResponse2 = try session.readPulseLogsRequest(podInfoResponseSubType: .dumpOlderPulseLog)
                     let podInfoPulseLogPrevious = podInfoResponse2.podInfo as! PodInfoPulseLogPrevious
-                    lastPulseNumber -= podInfoPulseLogRecent.pulseLogEntry.count
-                    result += self.pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLogEntry, lastPulseNumber: lastPulseNumber)
+                    lastPulseNumber -= podInfoPulseLogRecent.pulseLog.count
+                    str += pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLog, lastPulseNumber: lastPulseNumber)
 
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
-                    completion(result)
+                    completion(str)
                 } catch let error {
                     completion(String(describing: error))
                 }

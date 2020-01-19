@@ -94,4 +94,21 @@ extension CommandResponseViewController {
             return LocalizedString("Play Test Beeps…", comment: "Progress message for play test beeps.")
         }
     }
+
+    static func readPulseLog(pumpManager: OmnipodPumpManager) -> T {
+        return T { (completionHandler) -> String in
+            pumpManager.readPulseLog() { (error) in
+                let response: String
+                if let error = error {
+                    response = String(describing: error)
+                } else {
+                    response = self.successText
+                }
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            }
+            return LocalizedString("Reading Pulse Log…", comment: "Progress message for reading pulse log.")
+        }
+    }
 }

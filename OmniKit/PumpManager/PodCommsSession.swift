@@ -610,18 +610,20 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    public func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
+    @discardableResult
+    public func readPulseLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
         let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
         let messageResponse = try transport.sendMessage(message)
 
         if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.default("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
+            log.default("Pod pulse log: %@", String(describing: podInfoResponseMessageBlock))
+            return podInfoResponseMessageBlock
         } else if let fault = messageResponse.fault {
             handlePodFault(fault: fault)
             throw PodCommsError.podFault(fault: fault)
         } else {
-            log.error("Unexpected Pod flash log response: %@", String(describing: messageResponse.messageBlocks[0]))
+            log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
             throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
         }
     }

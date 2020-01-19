@@ -81,7 +81,6 @@ extension OmnipodPumpManagerError: LocalizedError {
     }
 }
 
-
 public class OmnipodPumpManager: RileyLinkPumpManager {
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.lockedState = Locked(state)
@@ -1006,38 +1005,44 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func readFlashLog(completion: @escaping (Error?) -> Void) {
-        // use hasSetupPod to be able to read the flash log from a faulted Pod
+    public func readPulseLog(completion: @escaping (String?) -> Void) {
+        // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(OmnipodPumpManagerError.noPodPaired)
+            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
-            self.log.info("Skipping Read Flash Log due to bolus still in progress.")
-            completion(PodCommsError.unfinalizedBolus)
+            self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
+            completion(String(describing: PodCommsError.unfinalizedBolus))
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        self.podComms.runSession(withName: "Read Flash Log", using: rileyLinkSelector) { (result) in
+        self.podComms.runSession(withName: "Read Pulse Log", using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
-                    // read up to the most recent 50 entries from flash log
+                    // read the most recent 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    try session.readFlashLogsRequest(podInfoResponseSubType: .flashLogRecent)
+                    let podInfoResponse1 = try session.readPulseLogsRequest(podInfoResponseSubType: .pulseLogRecent)
+                    let podInfoPulseLogRecent = podInfoResponse1.podInfo as! PodInfoPulseLogRecent
+                    var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
+                    var str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
 
-                    // read up to the previous 50 entries from flash log
+                    // read up to the previous 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    try session.readFlashLogsRequest(podInfoResponseSubType: .dumpOlderFlashlog)
+                    let podInfoResponse2 = try session.readPulseLogsRequest(podInfoResponseSubType: .dumpOlderPulseLog)
+                    let podInfoPulseLogPrevious = podInfoResponse2.podInfo as! PodInfoPulseLogPrevious
+                    lastPulseNumber -= podInfoPulseLogRecent.pulseLog.count
+                    str += pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLog, lastPulseNumber: lastPulseNumber)
 
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
-                    completion(nil)
+                    completion(str)
                 } catch let error {
-                    completion(error)
+                    completion(String(describing: error))
                 }
             case .failure(let error):
-                completion(error)
+                completion(String(describing: error))
             }
         }
     }

@@ -45,6 +45,16 @@ class PodSetupCompleteViewController: SetupTableViewController {
         if let replaceVC = navigationController as? PodReplacementNavigationController {
             replaceVC.completeSetup()
         }
+        if pumpManager.confirmationBeeps {
+            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error emitting completion confirmation beep", comment: "The alert title for emitting completion beep error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            })
+        }
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {

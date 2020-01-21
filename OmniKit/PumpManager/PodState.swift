@@ -42,11 +42,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     
     public let address: UInt32
     fileprivate var nonceState: NonceState
-    public var activatedAt: Date?
 
-    public var expiresAt: Date? {
-        return activatedAt?.addingTimeInterval(Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow)
-    }
+    public var activatedAt: Date?
+    public var expiresAt: Date?  // set based on StatusResponse timeActive and can change with Pod clock drift and/or system time change
+
+    public var setupUnitsDelivered: Double?
 
     public let piVersion: String
     public let pmVersion: String
@@ -144,11 +144,22 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
     
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        let now = Date()
+        let activatedAtComputed = now - response.timeActive
         if activatedAt == nil {
-            self.activatedAt = Date() - response.timeActive
+            self.activatedAt = activatedAtComputed
+        }
+        let expiresAtComputed = activatedAtComputed + Pod.nominalPodLife
+        if expiresAt == nil {
+            self.expiresAt = expiresAtComputed
+        } else if expiresAtComputed < self.expiresAt! || expiresAtComputed > (self.expiresAt! + TimeInterval(minutes: 1)) {
+            // The computed expiresAt time is earlier than or more than a minute later than the current expiresAt time,
+            // so use the computed expiresAt time instead to handle Pod clock drift and/or system time changes issues.
+            // The more than a minute later test prevents oscillation of expiresAt based on the timing of the responses.
+            self.expiresAt = expiresAtComputed
         }
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: Date())
+        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now, setupUnitsDelivered: setupUnitsDelivered)
         activeAlertSlots = response.alerts
     }
 
@@ -246,6 +257,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
         if let activatedAt = rawValue["activatedAt"] as? Date {
             self.activatedAt = activatedAt
+            if let expiresAt = rawValue["expiresAt"] as? Date {
+                self.expiresAt = expiresAt
+            } else {
+                self.expiresAt = activatedAt + Pod.nominalPodLife
+            }
+        }
+
+        if let setupUnitsDelivered = rawValue["setupUnitsDelivered"] as? Double {
+            self.setupUnitsDelivered = setupUnitsDelivered
         }
 
         if let suspended = rawValue["suspended"] as? Bool {
@@ -390,6 +410,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             rawValue["activatedAt"] = activatedAt
         }
 
+        if let expiresAt = expiresAt {
+            rawValue["expiresAt"] = expiresAt
+        }
+
+        if let setupUnitsDelivered = setupUnitsDelivered {
+            rawValue["setupUnitsDelivered"] = setupUnitsDelivered
+        }
+
+
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:
                 configuredAlerts.map { slot, alarm in (String(describing: slot.rawValue), alarm.rawValue) })
@@ -407,6 +436,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* address: \(String(format: "%04X", address))",
             "* activatedAt: \(String(reflecting: activatedAt))",
             "* expiresAt: \(String(reflecting: expiresAt))",
+            "* setupUnitsDelivered: \(String(reflecting: setupUnitsDelivered))",
             "* piVersion: \(piVersion)",
             "* pmVersion: \(pmVersion)",
             "* lot: \(lot)",

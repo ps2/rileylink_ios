@@ -171,21 +171,22 @@ class PodMessageTransport: MessageTransport {
                 
                 do {
                     candidatePacket = try Packet(rfPacket: rfPacket)
+                    log.default("Received packet (%d): %@", rfPacket.rssi, rfPacket.data.hexadecimalString)
                 } catch PacketError.insufficientData {
-                    log.debug("Insufficient packet data: %@", rfPacket.data.hexadecimalString)
+                    log.default("Insufficient packet data: %@", rfPacket.data.hexadecimalString)
                     continue
                 } catch let error {
-                    log.debug("Packet error: %@", String(describing: error))
+                    log.default("Packet error: %@", String(describing: error))
                     continue
                 }
 
                 guard candidatePacket.address == packet.address else {
-                    log.debug("Address %@ does not match %@", String(describing: candidatePacket.address), String(describing: packet.address))
+                    log.default("Address %@ does not match %@", String(describing: candidatePacket.address), String(describing: packet.address))
                     continue
                 }
                 
                 guard candidatePacket.sequenceNum == ((packet.sequenceNum + 1) & 0b11111) else {
-                    log.debug("Sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
+                    log.default("Sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
                     continue
                 }
                 
@@ -236,17 +237,16 @@ class PodMessageTransport: MessageTransport {
             
             guard responsePacket.packetType != .ack else {
                 messageLogger?.didReceive(responsePacket.data)
-                log.debug("Pod responded with ack instead of response: %@", String(describing: responsePacket))
+                log.default("Pod responded with ack instead of response: %@", String(describing: responsePacket))
                 throw PodCommsError.podAckedInsteadOfReturningResponse
             }
             
             // Assemble fragmented message from multiple packets
-            let response =  try { () throws -> Message in
+            let response = try { () throws -> Message in
                 var responseData = responsePacket.data
                 while true {
                     do {
                         let msg = try Message(encodedData: responseData)
-                        log.debug("Recv(Hex): %@", responseData.hexadecimalString)
                         messageLogger?.didReceive(responseData)
                         return msg
                     } catch MessageError.notEnoughData {
@@ -254,18 +254,26 @@ class PodMessageTransport: MessageTransport {
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))
                         
                         guard conPacket.packetType == .con else {
-                            log.debug("Expected CON packet, received; %@", String(describing: conPacket))
+                            log.default("Expected CON packet, received; %@", String(describing: conPacket))
                             throw PodCommsError.unexpectedPacketType(packetType: conPacket.packetType)
                         }
                         responseData += conPacket.data
+                    } catch MessageError.invalidCrc {
+                        // throw the error without any logging for a garbage message
+                        throw MessageError.invalidCrc
+                    } catch let error {
+                        // log any other non-garbage messages that generate errors
+                        log.debug("Error Recv(Hex): %@", responseData.hexadecimalString)
+                        messageLogger?.didReceive(responseData)
+                        throw error
                     }
                 }
-                }()
+            }()
 
             ackUntilQuiet()
             
             guard response.messageBlocks.count > 0 else {
-                log.debug("Empty response")
+                log.default("Empty response")
                 throw PodCommsError.emptyResponse
             }
             
@@ -273,8 +281,7 @@ class PodMessageTransport: MessageTransport {
                 incrementMessageNumber()
             }
             
-            log.debug("Recv: %@", String(describing: response))
-            return response            
+            return response
         } catch let error {
             log.error("Error during communication with POD: %@", String(describing: error))
             throw error

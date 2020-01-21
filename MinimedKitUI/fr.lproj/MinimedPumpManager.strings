@@ -61,6 +61,9 @@
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Configuration de la Pompe";
 
+/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
+"V47-Nq-7ew.title" = "Configuration de la Pompe";
+
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Entrez la région des pompes";
 

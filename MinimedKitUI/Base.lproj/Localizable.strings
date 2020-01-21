@@ -1,6 +1,3 @@
-/* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@ dB";
-
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -80,6 +77,12 @@
 /* Progress message for enabling diagnostic LEDs */
 "Enabled Diagnostic LEDs" = "Enabled Diagnostic LEDs";
 
+/* The alert title for a resume error */
+"Error Resuming" = "Error Resuming";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Error Suspending";
+
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Fetch Enlite Glucose";
 
@@ -97,6 +100,9 @@
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
+
+/* The title of the cell showing the pump firmware version */
+"Firmware Version" = "Firmware Version";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Get Pump Model";
@@ -124,6 +130,9 @@
 
 /* The title of the cell showing the last idle */
 "On Idle" = "On Idle";
+
+/* Pump find device instruction */
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Preferred Data Source";
@@ -155,6 +164,9 @@
 
 /* Progress message for reading pump status */
 "Reading pump status…" = "Reading pump status…";
+
+/* The title of the cell showing the pump region */
+"Region" = "Region";
 
 /* Button title to retry sentry setup */
 "Retry" = "Retry";
@@ -193,3 +205,5 @@
 /* The detail text for an unknown pump model */
 "Unknown" = "Unknown";
 
+/* The title of the cell showing uptime */
+"Uptime" = "Uptime";

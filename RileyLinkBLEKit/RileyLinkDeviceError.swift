@@ -26,7 +26,7 @@ extension RileyLinkDeviceError: LocalizedError {
         case .invalidResponse(let response):
             return String(format: LocalizedString("Response %@ is invalid", comment: "Invalid response error description (1: response)"), String(describing: response))
         case .writeSizeLimitExceeded(let maxLength):
-            return String(format: LocalizedString("Data exceededs maximum size of %@ bytes", comment: "Write size limit exceeded error description (1: size limit)"), NumberFormatter.localizedString(from: NSNumber(value: maxLength), number: .none))
+            return String(format: LocalizedString("Data exceeded maximum size of %@ bytes", comment: "Write size limit exceeded error description (1: size limit)"), NumberFormatter.localizedString(from: NSNumber(value: maxLength), number: .none))
         case .responseTimeout:
             return LocalizedString("Pump did not respond in time", comment: "Response timeout error description")
         case .unsupportedCommand(let command):

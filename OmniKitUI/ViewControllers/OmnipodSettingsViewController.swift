@@ -16,9 +16,9 @@ public class ConfirmationBeepsTableViewCell: TextButtonTableViewCell {
 
     public func updateTextLabel(enabled: Bool) {
         if enabled {
-            self.textLabel?.text = LocalizedString("Disable Bolus Beeps", comment: "Title text for button to disable bolus beeps")
+            self.textLabel?.text = LocalizedString("Disable Confirmation Beeps", comment: "Title text for button to disable confirmation beeps")
         } else {
-            self.textLabel?.text = LocalizedString("Enable Bolus Beeps", comment: "Title text for button to enable bolus beeps")
+            self.textLabel?.text = LocalizedString("Enable Confirmation Beeps", comment: "Title text for button to enable confirmation beeps")
         }
     }
     
@@ -68,7 +68,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
     lazy var confirmationBeepsTableViewCell: ConfirmationBeepsTableViewCell = {
         let cell = ConfirmationBeepsTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.updateTextLabel(enabled: pumpManager.bolusBeeps)
+        cell.updateTextLabel(enabled: pumpManager.confirmationBeeps)
         return cell
     }()
 
@@ -182,8 +182,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum ActionsRow: Int, CaseIterable {
         case suspendResume = 0
-        case testCommand
+        case readPodStatus
         case playTestBeeps
+        case testCommand
         case replacePod
     }
     
@@ -310,6 +311,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch actions[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
+            case .readPodStatus:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Read Pod Status", comment: "The title of the command to read the pod status")
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .testCommand:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
@@ -464,6 +470,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             case .suspendResume:
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .readPodStatus:
+                let vc = CommandResponseViewController.readPodStatus(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
             case .testCommand:
                 let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
@@ -551,7 +561,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume, .replacePod:
                 break
-            case .testCommand, .playTestBeeps:
+            case .readPodStatus, .playTestBeeps, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .configuration:
@@ -594,12 +604,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     private func confirmationBeepsTapped() {
-        let confirmationBeeps: Bool = pumpManager.bolusBeeps
+        let confirmationBeeps: Bool = pumpManager.confirmationBeeps
         
         func done() {
             DispatchQueue.main.async { [weak self] in
                 if let self = self {
-                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.bolusBeeps)
+                    self.confirmationBeepsTableViewCell.updateTextLabel(enabled: self.pumpManager.confirmationBeeps)
                     self.confirmationBeepsTableViewCell.isLoading = false
                 }
             }
@@ -607,20 +617,20 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
 
         confirmationBeepsTableViewCell.isLoading = true
         if confirmationBeeps {
-            pumpManager.setBolusBeeps(enabled: false, completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
-                        let title = LocalizedString("Error disabling bolus beeps", comment: "The alert title for disable bolus beeps error")
+                        let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }
                 done()
             })
         } else {
-            pumpManager.setBolusBeeps(enabled: true, completion: { (error) in
+            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
-                        let title = LocalizedString("Error enabling bolus beeps", comment: "The alert title for enable bolus beeps error")
+                        let title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
                         self.present(UIAlertController(with: error, title: title), animated: true)
                     }
                 }

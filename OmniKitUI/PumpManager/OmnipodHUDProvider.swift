@@ -105,7 +105,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             let lifetime = expiresAt.timeIntervalSince(activatedAt)
             podLifeView.setPodLifeCycle(startTime: activatedAt, lifetime: lifetime)
         } else {
-            podLifeView.setPodLifeCycle(startTime: Date(), lifetime: 0)
+            podLifeView.setPodLifeCycle(startTime: Date(), lifetime: Pod.nominalPodLife)
         }
     }
     

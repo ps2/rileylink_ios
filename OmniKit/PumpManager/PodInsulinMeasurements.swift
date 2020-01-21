@@ -15,11 +15,16 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
     public let delivered: Double
     public let reservoirVolume: Double?
     
-    public init(statusResponse: StatusResponse, validTime: Date) {
+    public init(statusResponse: StatusResponse, validTime: Date, setupUnitsDelivered: Double?) {
         self.validTime = validTime
-        self.delivered = statusResponse.insulin - Pod.primeUnits
         self.reservoirVolume = statusResponse.reservoirLevel
-    }
+        if let setupUnitsDelivered = setupUnitsDelivered {
+            self.delivered = statusResponse.insulin - setupUnitsDelivered
+        } else {
+            // subtract off the fixed setup command values as we don't have an actual value (yet)
+            self.delivered = max(statusResponse.insulin - Pod.primeUnits - Pod.cannulaInsertionUnits, 0)
+        }
+  }
     
     // RawRepresentable
     public init?(rawValue: RawValue) {

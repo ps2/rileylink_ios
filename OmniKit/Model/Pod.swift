@@ -13,10 +13,19 @@ public struct Pod {
     public static let pulseSize: Double = 0.05
 
     // Number of pulses required to deliver one unit of insulin
-    public static let pulsesPerUnit: Double = 20
+    public static let pulsesPerUnit: Double = 1 / Pod.pulseSize
 
-    // Units per second
-    public static let bolusDeliveryRate: Double = 0.025
+    // Seconds per pulse for boluses
+    public static let secondsPerBolusPulse: Double = 2
+
+    // Units per second for boluses
+    public static let bolusDeliveryRate: Double = Pod.pulseSize / Pod.secondsPerBolusPulse
+
+    // Seconds per pulse for priming/cannula insertion
+    public static let secondsPerPrimePulse: Double = 1
+
+    // Units per second for priming/cannula insertion
+    public static let primeDeliveryRate: Double = Pod.pulseSize / Pod.secondsPerPrimePulse
 
     // User configured time before expiration advisory (PDM allows 1-24 hours)
     public static let expirationAlertWindow = TimeInterval(hours: 2)
@@ -29,6 +38,9 @@ public struct Pod {
 
     // Total pod service time. A fault is triggered if this time is reached before pod deactivation.
     public static let serviceDuration = TimeInterval(hours: 80)
+
+    // Nomimal pod life (72 hours)
+    public static let nominalPodLife = Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow
 
     // Maximum reservoir level reading
     public static let maximumReservoirReading: Double = 50
@@ -45,8 +57,11 @@ public struct Pod {
     // Minimum duration of a single basal schedule entry
     public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
 
-    // Amount of insulin delivered for priming
+    // Amount of insulin delivered with 1 second between pulses for priming
     public static let primeUnits = 2.6
+
+    // Amount of insulin delivered with 1 second between pulses for cannula insertion
+    public static let cannulaInsertionUnits = 0.5
 
     // Default and limits for expiration reminder alerts
     public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)

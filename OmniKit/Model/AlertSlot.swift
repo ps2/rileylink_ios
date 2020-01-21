@@ -74,22 +74,27 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
     case autoOffAlarm(active: Bool, countdownDuration: TimeInterval)
 
     public var description: String {
+        var alertName: String
         switch self {
         case .waitingForPairingReminder:
             return LocalizedString("Waiting for pairing reminder", comment: "Description waiting for pairing reminder")
         case .finishSetupReminder:
             return LocalizedString("Finish setup ", comment: "Description for finish setup")
         case .expirationAlert:
-            return LocalizedString("Expiration alert", comment: "Description for expiration alert")
+            alertName = LocalizedString("Expiration alert", comment: "Description for expiration alert")
         case .expirationAdvisoryAlarm:
-            return LocalizedString("Pod expiration advisory alarm", comment: "Description for expiration advisory alarm")
+            alertName = LocalizedString("Pod expiration advisory alarm", comment: "Description for expiration advisory alarm")
         case .shutdownImminentAlarm:
-            return LocalizedString("Shutdown imminent alarm", comment: "Description for shutdown imminent alarm")
+            alertName = LocalizedString("Shutdown imminent alarm", comment: "Description for shutdown imminent alarm")
         case .lowReservoirAlarm:
-            return LocalizedString("Low reservoir advisory alarm", comment: "Description for low reservoir alarm")
+            alertName = LocalizedString("Low reservoir advisory alarm", comment: "Description for low reservoir alarm")
         case .autoOffAlarm:
-            return LocalizedString("Auto-off alarm", comment: "Description for auto-off alarm")
+            alertName = LocalizedString("Auto-off alarm", comment: "Description for auto-off alarm")
         }
+        if self.configuration.active == false {
+            alertName += LocalizedString(" (inactive)", comment: "Description for an inactive alert modifier")
+        }
+        return alertName
     }
 
     public var configuration: AlertConfiguration {

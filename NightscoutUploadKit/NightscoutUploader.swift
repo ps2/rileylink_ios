@@ -54,6 +54,7 @@ public class NightscoutUploader {
         var components = URLComponents()
         components.scheme = siteURL.scheme
         components.host = siteURL.host
+        components.port = siteURL.port
         components.queryItems = queryItems
         components.path = path
         return components.url
@@ -209,7 +210,7 @@ public class NightscoutUploader {
 
     // MARK: - Uploading
     
-    func flushAll() {
+    public func flushAll() {
         flushDeviceStatuses()
         flushEntries()
         flushTreatments()
@@ -377,7 +378,7 @@ public class NightscoutUploader {
         }
     }
     
-    func flushEntries() {
+    public func flushEntries() {
         guard let url = url(for: .entries) else {
             return
         }

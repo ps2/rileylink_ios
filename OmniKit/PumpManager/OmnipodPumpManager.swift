@@ -1185,18 +1185,14 @@ extension OmnipodPumpManager: PumpManager {
                 state.suspendEngageState = .engaging
             })
 
-            // N.B. with a deliveryType of .all and a beepType other then .noBeep, the Pod will emit 3 beeps! Use .noBeep here & do beeping at end.
-            let result = session.cancelDelivery(deliveryType: .all, beepType: .noBeep)
+            let beepType: BeepType = self.confirmationBeeps ? .beeeeeep : .noBeep
+            let result = session.cancelDelivery(deliveryType: .all, beepType: beepType)
             switch result {
             case .certainFailure(let error):
                 completion(error)
             case .uncertainFailure(let error):
                 completion(error)
             case .success:
-                // Do a separate single confirmation beep if appropriate. There are no in-progress deliveries to worry about after the cancel all.
-                if self.confirmationBeeps {
-                    session.beepConfig(beepConfigType: .beeeeeep, basalCompletionBeep: false, tempBasalCompletionBeep: false, bolusCompletionBeep: false)
-                }
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }

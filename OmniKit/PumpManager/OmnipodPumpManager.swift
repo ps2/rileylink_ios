@@ -199,6 +199,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
     private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
 
     public let log = OSLog(category: "OmnipodPumpManager")
+    
+    private var lastLoopRecommendation: Date?
 
     // MARK: - RileyLink Updates
 
@@ -1253,6 +1255,15 @@ extension OmnipodPumpManager: PumpManager {
     public func setMustProvideBLEHeartbeat(_ mustProvideBLEHeartbeat: Bool) {
         rileyLinkDeviceProvider.timerTickEnabled = self.state.isPumpDataStale || mustProvideBLEHeartbeat
     }
+    
+    // Called only from pumpDelegate notify block
+    private func recommendLoopIfNeeded(_ delegate: PumpManagerDelegate?) {
+        if lastLoopRecommendation == nil || lastLoopRecommendation!.timeIntervalSinceNow < .minutes(-4.5) {
+            self.log.default("Recommending Loop")
+            lastLoopRecommendation = Date()
+            delegate?.pumpManagerRecommendsLoop(self)
+        }
+    }
 
     public func assertCurrentPumpData() {
         let shouldFetchStatus = setStateWithResult { (state) -> Bool? in
@@ -1272,8 +1283,7 @@ extension OmnipodPumpManager: PumpManager {
                 self.pumpDelegate.notify({ (delegate) in
                     switch response {
                     case .success:
-                        self.log.default("Recommending Loop")
-                        delegate?.pumpManagerRecommendsLoop(self)
+                        self.recommendLoopIfNeeded(delegate)
                     case .failure(let error):
                         self.log.default("Not recommending Loop because pump data is stale: %@", String(describing: error))
                         if let error = error as? PumpManagerError {
@@ -1285,8 +1295,7 @@ extension OmnipodPumpManager: PumpManager {
         case false?:
             log.default("Skipping status update because pumpData is fresh")
             pumpDelegate.notify { (delegate) in
-                self.log.default("Recommending Loop")
-                delegate?.pumpManagerRecommendsLoop(self)
+                self.recommendLoopIfNeeded(delegate)
             }
         }
     }

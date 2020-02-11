@@ -926,32 +926,28 @@ extension OmnipodPumpManager {
             completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
-        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
-            self.log.info("Skipping read pod status due to unfinalized bolus in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
-            return
-        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
-            do {
-                switch result {
-                case .success(let session):
+            var str: String
+            switch result {
+            case .success(let session):
+                do {
                     let status = try session.getStatus()
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
-                    let statusString = self.podStatusString(status: status)
-                    completion(statusString)
-                case .failure(let error):
-                    completion(String(describing: error))
-                    throw error
+                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    completion(self.podStatusString(status: status))
+                    return
+                } catch let error {
+                    str = String(describing: error)
                 }
-            } catch let error {
-                self.log.error("Failed to read pod status: %{public}@", String(describing: error))
-                completion(String(describing: error))
+            case .failure(let error):
+                str = String(describing: error)
             }
+            self.log.error("Failed to read pod status: %{public}@", str)
+            completion(str)
         }
     }
 

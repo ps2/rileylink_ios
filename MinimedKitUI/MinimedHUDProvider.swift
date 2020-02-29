@@ -84,7 +84,7 @@ class MinimedHUDProvider: HUDProvider {
     }
 
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
-        return nil
+        return HUDTapAction.presentViewController(pumpManager.settingsViewController())
     }
 
     public var hudViewsRawState: HUDProvider.HUDViewsRawState {

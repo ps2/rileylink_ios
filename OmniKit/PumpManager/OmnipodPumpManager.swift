@@ -920,37 +920,36 @@ extension OmnipodPumpManager {
 
         return result
     }
-
+    
     public func readPodStatus(completion: @escaping (String?) -> Void) {
         guard self.hasActivePod else {
             completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
-        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
-            self.log.info("Skipping read pod status due to unfinalized bolus in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
-            return
-        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
+            
+            let reportError = { (errorStr: String) in
+                self.log.error("Failed to read pod status: %{public}@", errorStr)
+                completion(errorStr)
+            }
+            
             do {
                 switch result {
                 case .success(let session):
                     let status = try session.getStatus()
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
-                    let statusString = self.podStatusString(status: status)
-                    completion(statusString)
+                    completion(self.podStatusString(status: status))
                 case .failure(let error):
-                    completion(String(describing: error))
                     throw error
                 }
+            } catch let error as LocalizedError {
+                reportError(error.localizedDescription)
             } catch let error {
-                self.log.error("Failed to read pod status: %{public}@", String(describing: error))
-                completion(String(describing: error))
+                reportError(String(describing: error))
             }
         }
     }

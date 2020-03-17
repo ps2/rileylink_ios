@@ -920,7 +920,7 @@ extension OmnipodPumpManager {
 
         return result
     }
-
+    
     public func readPodStatus(completion: @escaping (String?) -> Void) {
         guard self.hasActivePod else {
             completion(String(describing: OmnipodPumpManagerError.noPodPaired))
@@ -929,25 +929,28 @@ extension OmnipodPumpManager {
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
-            var str: String
-            switch result {
-            case .success(let session):
-                do {
+            
+            let reportError = { (errorStr: String) in
+                self.log.error("Failed to read pod status: %{public}@", errorStr)
+                completion(errorStr)
+            }
+            
+            do {
+                switch result {
+                case .success(let session):
                     let status = try session.getStatus()
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     completion(self.podStatusString(status: status))
-                    return
-                } catch let error {
-                    str = String(describing: error)
+                case .failure(let error):
+                    throw error
                 }
-            case .failure(let error):
-                str = String(describing: error)
+            } catch let error as LocalizedError {
+                reportError(error.localizedDescription)
+            } catch let error {
+                reportError(String(describing: error))
             }
-            self.log.error("Failed to read pod status: %{public}@", str)
-            completion(str)
         }
     }
 

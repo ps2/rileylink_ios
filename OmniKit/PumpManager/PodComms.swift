@@ -82,28 +82,19 @@ class PodComms: CustomDebugStringConvertible {
         )
     }
     
-    private func configurePod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
+    private func setupPod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
         commandSession.assertOnSessionQueue()
         
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
         transport.messageLogger = messageLogger
         
-        let dateComponents = ConfigurePodCommand.dateComponents(date: Date(), timeZone: timeZone)
-        let setupPod = ConfigurePodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
+        let dateComponents = SetupPodCommand.dateComponents(date: Date(), timeZone: timeZone)
+        let setupPod = SetupPodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
         
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
 
         let response: Message
-        do {
-            response = try transport.sendMessage(message)
-        } catch let error {
-            if case PodCommsError.podAckedInsteadOfReturningResponse = error {
-                // Pod already configured...
-                self.podState?.setupProgress = .podConfigured
-                return
-            }
-            throw error
-        }
+        response = try transport.sendMessage(message)
 
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))
@@ -122,7 +113,7 @@ class PodComms: CustomDebugStringConvertible {
         }
     }
     
-    func pair(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
+    func assignAddressAndSetupPod(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
     {
         deviceSelector { (device) in
             guard let device = device else {
@@ -143,7 +134,7 @@ class PodComms: CustomDebugStringConvertible {
                         return
                     }
 
-                    try self.configurePod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+                    try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
 
                     // Run a session now for any post-pairing commands
                     let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)

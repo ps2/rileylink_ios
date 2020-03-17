@@ -549,7 +549,7 @@ extension OmnipodPumpManager {
         case .success(true):
             self.log.default("Pairing pod before priming")
 
-            self.podComms.pair(using: deviceSelector, timeZone: .currentFixed, messageLogger: self) { (session) in
+            self.podComms.assignAddressAndSetupPod(using: deviceSelector, timeZone: .currentFixed, messageLogger: self) { (session) in
                 // Calls completion
                 configureAndPrimeSession(session)
             }

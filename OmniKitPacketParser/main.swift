@@ -81,10 +81,30 @@ class LoopIssueReportParser {
     // * 2018-12-27 01:46:56 +0000 send 1f0e41a6101f1a0e81ed50b102010a0101a000340034170d000208000186a00000000000000111
     func parseLine(_ line: String) {
         let components = line.components(separatedBy: .whitespaces)
-        if components.count == 6, let data = Data(hexadecimalString: components[5]), let message = try? Message(encodedData: data) {
+        if components.count == 6, let data = Data(hexadecimalString: components[5]) {
             let direction = components[4].padding(toLength: 7, withPad: " ", startingAt: 0)
+            guard direction.lowercased() == "send   " || direction.lowercased() == "receive" else {
+                return
+            }
             let date = components[1..<4].joined(separator: " ")
-            print("\(date) \(direction) \(message)")
+            do {
+                let message = try Message(encodedData: data)
+                print("\(date) \(direction) \(message)")
+            } catch let error as MessageError {
+                switch error {
+                case .notEnoughData:
+                    if data.count == 4 {
+                        // This is from a packet, not a message, and we don't have the full packet info here
+                        print("\(date) \(direction) ack \(components[5])")
+                    } else {
+                        print("Could not parse \(line)")
+                    }
+                default:
+                    print("Could not parse \(line): \(error.localizedDescription)")
+                }
+            } catch let error {
+                print("Could not parse \(line): \(error)")
+            }
         }
     }
 }
@@ -141,8 +161,8 @@ class RTLOmniLineParser {
                 } else if nextPacketNumber != packetNumber.nextPacketNumber(2) {
                     print("mismatched packet number: \(nextPacketNumber) != \(packetNumber.nextPacketNumber(2)) \(line)")
                 }
-            default:
-                break
+            case .ack:
+                print("Ack: \(line)")
             }
             do {
                 let message = try Message(encodedData: messageData)

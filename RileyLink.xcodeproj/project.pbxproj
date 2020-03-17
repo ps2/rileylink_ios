@@ -468,7 +468,7 @@
 		C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */; };
 		C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EDD476215BED3500A103D1 /* PodInfoTester.swift */; };
 		C1BB12AD21CB5654009A29B5 /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */; };
-		C1BB12AE21CB5654009A29B5 /* ConfigurePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */; };
+		C1BB12AE21CB5654009A29B5 /* SetupPodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* SetupPodCommand.swift */; };
 		C1BB12AF21CB5654009A29B5 /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAB213323E800C50C1D /* StatusResponse.swift */; };
 		C1BB12B021CB5654009A29B5 /* TempBasalExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */; };
 		C1BB12B121CB5654009A29B5 /* VersionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA4213323E800C50C1D /* VersionResponse.swift */; };
@@ -564,7 +564,7 @@
 		C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */; };
 		C1FFAFCB213323E900C50C1D /* BasalScheduleExtraCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */; };
 		C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */; };
-		C1FFAFCD213323E900C50C1D /* ConfigurePodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */; };
+		C1FFAFCD213323E900C50C1D /* SetupPodCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFAF213323E800C50C1D /* SetupPodCommand.swift */; };
 		C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */; };
 		C1FFAFCF213323E900C50C1D /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */; };
 		C1FFAFD0213323E900C50C1D /* SetInsulinScheduleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */; };
@@ -1490,7 +1490,7 @@
 		C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetStatusCommand.swift; sourceTree = "<group>"; };
 		C1FFAFAD213323E800C50C1D /* BasalScheduleExtraCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleExtraCommand.swift; sourceTree = "<group>"; };
 		C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancelDeliveryCommand.swift; sourceTree = "<group>"; };
-		C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurePodCommand.swift; sourceTree = "<group>"; };
+		C1FFAFAF213323E800C50C1D /* SetupPodCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupPodCommand.swift; sourceTree = "<group>"; };
 		C1FFAFB0213323E800C50C1D /* AssignAddressCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssignAddressCommand.swift; sourceTree = "<group>"; };
 		C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInsulinScheduleCommand.swift; sourceTree = "<group>"; };
@@ -2591,7 +2591,7 @@
 				C1FFAFA5213323E800C50C1D /* PodInfoResponse.swift */,
 				E9EDD476215BED3500A103D1 /* PodInfoTester.swift */,
 				C1FFAFB2213323E800C50C1D /* SetInsulinScheduleCommand.swift */,
-				C1FFAFAF213323E800C50C1D /* ConfigurePodCommand.swift */,
+				C1FFAFAF213323E800C50C1D /* SetupPodCommand.swift */,
 				C1FFAFAB213323E800C50C1D /* StatusResponse.swift */,
 				C1FFAFA6213323E800C50C1D /* TempBasalExtraCommand.swift */,
 				C1FFAFA4213323E800C50C1D /* VersionResponse.swift */,
@@ -3999,7 +3999,7 @@
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
 				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
 				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,
-				C1BB12AE21CB5654009A29B5 /* ConfigurePodCommand.swift in Sources */,
+				C1BB12AE21CB5654009A29B5 /* SetupPodCommand.swift in Sources */,
 				C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */,
 				C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */,
 				C1BB12A021CB5654009A29B5 /* ErrorResponse.swift in Sources */,
@@ -4043,7 +4043,7 @@
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,
 				D807D7DA228913EC006BCDF0 /* BeepConfigCommand.swift in Sources */,
-				C1FFAFCD213323E900C50C1D /* ConfigurePodCommand.swift in Sources */,
+				C1FFAFCD213323E900C50C1D /* SetupPodCommand.swift in Sources */,
 				E9EE3370214ED01200888876 /* PodInfoFaultEvent.swift in Sources */,
 				E9E54AB421542E8A00E319B8 /* PodInfoResetStatus.swift in Sources */,
 				E9EE336E214ED01200888876 /* PodInfo.swift in Sources */,

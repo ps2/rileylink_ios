@@ -175,6 +175,21 @@ public class PodCommsSession {
         }
     }
 
+    // pad the given message to be more than one packet using GetStatus sub-messages
+    private func padMessage(message: [MessageBlock]) -> [MessageBlock] {
+        let packetLen = PacketType.pdm.maxBodyLen()
+        let getStatusCommand = GetStatusCommand()
+        let getStatusLen = 3
+
+        var paddedMessage = message
+        var encodedLen = messageLength(message: message)
+        while encodedLen <= packetLen {
+            paddedMessage.append(getStatusCommand)
+            encodedLen += getStatusLen
+        }
+        return paddedMessage
+    }
+
     /// Performs a message exchange, handling nonce resync, pod faults
     ///
     /// - Parameters:
@@ -194,6 +209,10 @@ public class PodCommsSession {
         
         if blocksToSend.contains(where: { $0 as? NonceResyncableMessageBlock != nil }) {
             podState.advanceToNextNonce()
+            let padNonceMessages = false // edit to pad nonce messages
+            if (padNonceMessages) {
+                blocksToSend = padMessage(message: blocksToSend)
+            }
         }
         
         let messageNumber = transport.messageNumber

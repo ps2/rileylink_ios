@@ -1300,6 +1300,9 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+        let automatic: Bool = false // placeholder to be replaced when the PumpManager protocol is updated to support automatic boluses
+        let automaticBolusBeeps: Bool = false // edit to enable automatic bolus acknowledgement-only Confirmation Beeps
+
         guard self.hasActivePod else {
             completion(.failure(SetBolusError.certain(OmnipodPumpManagerError.noPodPaired)))
             return
@@ -1359,8 +1362,11 @@ extension OmnipodPumpManager: PumpManager {
             let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
             willRequest(dose)
 
-            let beep = self.confirmationBeeps
-            let result = session.bolus(units: enactUnits, acknowledgementBeep: beep, completionBeep: beep)
+            let acknowledgementBeep = self.confirmationBeeps && (!automatic || automaticBolusBeeps)
+            let completionBeep = self.confirmationBeeps && !automatic
+            // Use an alternate 0x3F TimeInterval for automatic boluses for later examinations of the MessageLog
+            let programReminderInterval: TimeInterval = automatic ? TimeInterval(minutes: 0x3F) : 0
+            let result = session.bolus(units: enactUnits, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
             session.dosesForStorage() { (doses) -> Bool in
                 return self.store(doses: doses, in: session)
             }

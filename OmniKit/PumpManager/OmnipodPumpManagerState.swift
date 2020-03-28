@@ -24,8 +24,6 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
 
-    public var messageLog = MessageLog()
-
     public var unstoredDoses: [UnfinalizedDose]
 
     public var expirationReminderDate: Date?
@@ -115,10 +113,6 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             rileyLinkConnectionManagerState: rileyLinkConnectionManagerState
         )
 
-        if let rawMessageLog = rawValue["messageLog"] as? MessageLog.RawValue, let messageLog = MessageLog(rawValue: rawMessageLog) {
-            self.messageLog = messageLog
-        }
-
         if let expirationReminderDate = rawValue["expirationReminderDate"] as? Date {
             self.expirationReminderDate = expirationReminderDate
         } else if let expiresAt = podState?.expiresAt {
@@ -139,7 +133,6 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "version": OmnipodPumpManagerState.version,
             "timeZone": timeZone.secondsFromGMT(),
             "basalSchedule": basalSchedule.rawValue,
-            "messageLog": messageLog.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
             "confirmationBeeps": confirmationBeeps,
         ]
@@ -193,7 +186,6 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* confirmationBeeps: \(String(describing: confirmationBeeps))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
-            String(reflecting: messageLog),
         ].joined(separator: "\n")
     }
 }

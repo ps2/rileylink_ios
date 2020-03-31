@@ -2,10 +2,10 @@
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
 /* The format string describing number of basal schedule entries: (1: number of entries) */
-"%1$@ basal schedule entries\n" = "%1$@ basaaliohjelman kirjaukset\n";
+"%1$@ basal schedule entries\n" = "%1$@ basaaliohjelman kirjausta\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
-"%1$@ Units of insulin remaining\n" = "%1$@ insuliiniyksiköitä jäljellä\n";
+"%1$@ Units of insulin remaining\n" = "%1$@ insuliiniyksikköä jäljellä\n";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -53,7 +53,7 @@
 "Connect" = "Yhdistä";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Yhdistämisen tila";
+"Connection State" = "Yhteyden tila";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
@@ -81,7 +81,7 @@
 "Error Resuming" = "Virhe jatkamisessa";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Virhe keskeytyksessä";
+"Error Suspending" = "Virhe pysäytyksessä";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Hae Enliten glukoosiarvo";
@@ -191,7 +191,7 @@
 "Succeeded" = "Onnistui";
 
 /* The format string describing pump suspended state: (1: suspended) */
-"Suspended: %1$@\n" = "Annostelu keskeytetty: %1$@\n";
+"Suspended: %1$@\n" = "Annostelu pysäytetty: %1$@\n";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Yritykset";
@@ -207,3 +207,4 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Toiminta-aika";
+

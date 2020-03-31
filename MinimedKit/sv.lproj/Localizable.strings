@@ -1,5 +1,5 @@
 /* Communications error for a bolus currently running */
-"A bolus is already in progress" = "En bolus pågår redan";
+"A bolus is already in progress" = "En bolusdos ges redan";
 
 /* The description of AlarmClockReminderPumpEvent */
 "AlarmClockReminder" = "AlarmClockReminder";
@@ -8,22 +8,22 @@
 "AlarmSensor" = "AlarmSensor";
 
 /* Describing the battery chemistry as Alkaline */
-"Alkaline" = "Alkaline";
+"Alkaline" = "Alkaliskt";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/timme";
+"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/h";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolus pågår";
+"Bolus in progress" = "Ger bolus";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas eller har en temporär basal.";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde.";
 
 /* Pump error code returned when command refused */
-"Command refused" = "Kommando avvisat";
+"Command refused" = "Kommandot avvisades";
 
 /* No comment provided by engineer. */
-"Comms with another pump detected" = "Kommunikation med annan pump upptäckt.";
+"Comms with another pump detected" = "Kommunikation med en annan pump upptäcktes.";
 
 /* Error description */
 "Decoding Error" = "Avkodingsfel";
@@ -38,13 +38,13 @@
 "Invalid response during %1$@: %2$@" = "Ogiltigt svar under %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
-"Lithium" = "Lithium";
+"Lithium" = "Litium";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Säkerställ att din RileyLink är nära och påslagen.";
+"Make sure your RileyLink is nearby and powered on" = "Säkerställ att din RileyLink är nära både telefonen och pumpen, och att den är laddad och påslagen";
 
 /* Pump error code describing max setting exceeded */
-"Max setting exceeded" = "Maxinställning överskriden";
+"Max setting exceeded" = "Inställt maxvärde överskridet";
 
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
@@ -53,16 +53,16 @@
 "Minimed 500/700 Series" = "Minimed 500/700 Series";
 
 /* Describing the North America pump region */
-"North America" = "North America";
+"North America" = "Nordamerika";
 
 /* No comment provided by engineer. */
-"Pump did not respond" = "Pump svarade inte";
+"Pump did not respond" = "Pumpen svarade inte";
 
 /* Error description */
 "Pump Error" = "Pumpfel";
 
 /* No comment provided by engineer. */
-"Pump is suspended" = "Pump är pausad";
+"Pump is suspended" = "Pumpen är pausad";
 
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "Pump svarade oväntat";
@@ -95,4 +95,4 @@
 "Unknown response during %1$@: %2$@" = "Okänt svar under %1$@: %2$@";
 
 /* Describing the worldwide pump region */
-"World-Wide" = "World-Wide";
+"World-Wide" = "Global";

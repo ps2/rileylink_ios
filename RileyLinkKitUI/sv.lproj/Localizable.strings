@@ -5,10 +5,10 @@
 "Connected" = "Ansluten";
 
 /* The in-progress connecting state */
-"Connecting" = "Asluter";
+"Connecting" = "Ansluter";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Status på anslutning";
+"Connection State" = "Anslutningsstatus";
 
 /* The title of the section describing the device */
 "Device" = "Enhet";
@@ -26,16 +26,16 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing current rileylink frequency */
-"Frequency" = "Frequency";
+"Frequency" = "Frekvens";
 
 /* The title of the cell showing device name */
 "Name" = "Namn";
 
 /* RileyLink setup description */
-"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink kommuicerar med pump via Bluetooth lågenergianslutning.";
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink kommunicerar med pumpen via Bluetooth lågenergianslutning.";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signalstyrka";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Körs sedan";

@@ -334,7 +334,9 @@ public class PodCommsSession {
         do {
             let statusResponse: StatusResponse = try send([beepConfigCommand])
             podState.updateFromStatusResponse(statusResponse)
-        } catch {} // never critical
+        } catch {
+            // This is swallowing errors, and making failed play test beeps command report "Succeeded"
+        }
     }
 
     private func markSetupProgressCompleted(statusResponse: StatusResponse) {

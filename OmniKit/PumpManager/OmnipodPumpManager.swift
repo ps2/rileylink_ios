@@ -195,6 +195,16 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             observer.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
         }
     }
+    
+    private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
+        var podAddress = "noPod"
+        if let podState = self.state.podState {
+            podAddress = String(format:"%04X", podState.address)
+        }
+        self.pumpDelegate.notify { (delegate) in
+            delegate?.deviceManager(self, logEventForDeviceIdentifier: podAddress, type: type, message: message, completion: nil)
+        }
+    }
 
     private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
 
@@ -431,7 +441,6 @@ extension OmnipodPumpManager {
             self.podComms.messageLogger = self
 
             state.podState = nil
-            state.messageLog.erase()
             state.expirationReminderDate = nil
         }
 
@@ -920,37 +929,36 @@ extension OmnipodPumpManager {
 
         return result
     }
-
+    
     public func readPodStatus(completion: @escaping (String?) -> Void) {
         guard self.hasActivePod else {
             completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
-        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
-            self.log.info("Skipping read pod status due to unfinalized bolus in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
-            return
-        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
+            
+            let reportError = { (errorStr: String) in
+                self.log.error("Failed to read pod status: %{public}@", errorStr)
+                completion(errorStr)
+            }
+            
             do {
                 switch result {
                 case .success(let session):
                     let status = try session.getStatus()
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
-                    let statusString = self.podStatusString(status: status)
-                    completion(statusString)
+                    completion(self.podStatusString(status: status))
                 case .failure(let error):
-                    completion(String(describing: error))
                     throw error
                 }
+            } catch let error as LocalizedError {
+                reportError(error.localizedDescription)
             } catch let error {
-                self.log.error("Failed to read pod status: %{public}@", String(describing: error))
-                completion(String(describing: error))
+                reportError(String(describing: error))
             }
         }
     }
@@ -1602,16 +1610,12 @@ extension OmnipodPumpManager: PumpManager {
 extension OmnipodPumpManager: MessageLogger {
     func didSend(_ message: Data) {
         log.default("didSend: %{public}@", message.hexadecimalString)
-        setState { (state) in
-            state.messageLog.record(MessageLogEntry(messageDirection: .send, timestamp: Date(), data: message))
-        }
+        self.logDeviceCommunication(message.hexadecimalString, type: .send)
     }
     
     func didReceive(_ message: Data) {
         log.default("didReceive: %{public}@", message.hexadecimalString)
-        setState { (state) in
-            state.messageLog.record(MessageLogEntry(messageDirection: .receive, timestamp: Date(), data: message))
-        }
+        self.logDeviceCommunication(message.hexadecimalString, type: .receive)
     }
 }
 

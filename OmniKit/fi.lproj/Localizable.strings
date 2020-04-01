@@ -1,3 +1,12 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (ei-aktiivinen)";
+
+/* The format string for minutes (1: number of minutes string) */
+"%1$@ minutes" = "%1$@ minuuttia";
+
+/* The format string for Alerts: (1: the alerts string) */
+"Alerts: %1$@\n" = "Hälytykset: %1$@\n";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Autom. pois -varoitus";
 
@@ -25,8 +34,11 @@
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktivoitu";
 
+/* The format string for Delivery Status: (1: delivery status string) */
+"Delivery Status: %1$@\n" = "Annostelun tila: %1$@\n";
+
 /* Description for Empty reservoir pod fault */
-"Empty reservoir" = "Tyhjä säiliö";
+"Empty reservoir" = "Säiliö tyhjä";
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Tyhjä vastaus pumpulta";
@@ -47,7 +59,10 @@
 "Internal pod fault %1$03d" = "Sisäinen pumpun vika %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "KeskeytettyBolus: %1$@ U (%2$@ U suunniteltu) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "KeskeytettyBolus: %1$@ U (%2$@ U ohjelmoitu) %3$@ %4$@ %5$@";
+
+/* The format string for Last Bolus Not Delivered: (1: bolus not delivered string) */
+"Last Bolus Not Delivered: %1$@ U\n" = "Viim. bolusta ei annosteltu: %1$@ U\n";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Säiliö lähes tyhjä -tiedotehälytys";
@@ -90,7 +105,7 @@
 "Pod already paired" = "Pumppu on jo yhdistetty";
 
 /* Error message shown when prime is attempted, but pod is already primed */
-"Pod already primed" = "Pumppu on jo täytetty";
+"Pod already primed" = "Pumppu on jo alustettu";
 
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Pumppu vanhenemassa -tiedotehälytys";
@@ -108,7 +123,7 @@
 "Pod is not in a state ready for cannula insertion." = "Pumppu ei ole valmis kanyylin asettamiseen.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pumppu ei ole valmis täyttöön.";
+"Pod is not in a state ready for priming." = "Pumppu ei ole valmis alustukseen.";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pumppu on pysäytetty";
@@ -130,7 +145,7 @@
 "Resume: %1$@ %2$@" = "Jatka: %1$@ %2$@";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Suunniteltu basaali";
+"Scheduled Basal" = "Ohjelmoitu basaali";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Mykistä hälytys";
@@ -176,3 +191,4 @@
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Odotetaan yhdistämismuistutusta";
+

@@ -2,7 +2,7 @@
 "Commands" = "Komennot";
 
 /* The connected state */
-"Connected" = "Yhteydessä";
+"Connected" = "Yhdistetty";
 
 /* The in-progress connecting state */
 "Connecting" = "Yhdistetään";

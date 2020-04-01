@@ -76,7 +76,7 @@ class PodMessageTransport: MessageTransport {
         }
     }
     
-    private var packetNumber: Int {
+    private(set) var packetNumber: Int {
         get {
             return state.packetNumber
         }
@@ -247,8 +247,12 @@ class PodMessageTransport: MessageTransport {
                 while true {
                     do {
                         let msg = try Message(encodedData: responseData)
-                        messageLogger?.didReceive(responseData)
-                        return msg
+                        if msg.sequenceNum == messageNumber {
+                            messageLogger?.didReceive(responseData)
+                            return msg
+                        } else {
+                            throw MessageError.invalidSequence
+                        }
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))

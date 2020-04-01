@@ -78,7 +78,9 @@ class PodComms: CustomDebugStringConvertible {
             piVersion: String(describing: config.piVersion),
             pmVersion: String(describing: config.pmVersion),
             lot: config.lot,
-            tid: config.tid
+            tid: config.tid,
+            packetNumber: transport.packetNumber,
+            messageNumber: transport.messageNumber
         )
     }
     
@@ -94,7 +96,15 @@ class PodComms: CustomDebugStringConvertible {
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
 
         let response: Message
-        response = try transport.sendMessage(message)
+        do {
+            response = try transport.sendMessage(message)
+        } catch let error {
+            if case PodCommsError.podAckedInsteadOfReturningResponse = error {
+                self.podState?.setupProgress = .podConfigured
+                return
+            }
+            throw error
+        }
 
         if let fault = response.fault {
             self.log.error("Pod Fault: %@", String(describing: fault))
@@ -105,12 +115,13 @@ class PodComms: CustomDebugStringConvertible {
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
-
-        self.podState?.setupProgress = .podConfigured
         
         guard config.setupState == .paired else {
             throw PodCommsError.invalidData
         }
+
+        self.podState?.setupProgress = .podConfigured
+        self.podState?.messageTransportState = MessageTransportState(packetNumber: transport.packetNumber, messageNumber: transport.messageNumber)
     }
     
     func assignAddressAndSetupPod(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)

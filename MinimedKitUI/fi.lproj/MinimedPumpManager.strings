@@ -14,7 +14,7 @@
 "c7t-pZ-WqY.text" = "Apuohjelmat";
 
 /* Class = "UILabel"; text = "Connect Devices"; ObjectID = "erq-yb-anx"; */
-"erq-yb-anx.text" = "Yhdistetyt laitteet";
+"erq-yb-anx.text" = "Yhdistä laitteet";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
 "Fps-h3-V4K.title" = "Pumpun kello";
@@ -26,7 +26,7 @@
 "fVG-pl-jT9.headerTitle" = "Pumpun tunniste";
 
 /* Class = "UILabel"; text = "Your pump is ready for use."; ObjectID = "g1m-3k-XI3"; */
-"g1m-3k-XI3.text" = "Pumppusi on käyttövalmis.";
+"g1m-3k-XI3.text" = "Pumppu on käyttövalmis.";
 
 /* Class = "UITextField"; placeholder = "Enter the 6-digit pump ID"; ObjectID = "HeG-VF-L5P"; */
 "HeG-VF-L5P.placeholder" = "Syötä 6-numeroinen pumpun tunniste";
@@ -72,3 +72,4 @@
 
 /* Class = "UITableViewSection"; headerTitle = "Main Menu"; ObjectID = "ZnF-zy-5gR"; */
 "ZnF-zy-5gR.headerTitle" = "Päävalikko";
+

@@ -327,22 +327,6 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testPodInfoTester() {
-        // 02DATAOFF 0  1  2  3  4
-        // 02 05 // 06 01 00 3F A8
-        do {
-            // Decode
-            let decoded = try PodInfoTester(encodedData: Data(hexadecimalString: "0601003FA8")!)
-            XCTAssertEqual(.hardcodedTestValues, decoded.podInfoType)
-            XCTAssertEqual(0x01, decoded.byte1)
-            XCTAssertEqual(0x00, decoded.byte2)
-            XCTAssertEqual(0x3F, decoded.byte3)
-            XCTAssertEqual(0xA8, decoded.byte4)
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
-    }
-    
     func testPodInfoPulseLogRecent() {
        //02 cb 50 0086 34212e00 39203100 3c212d00 41203000 44202c00 49212e00 4c212b00 51202f00 54212c00 59203080 5c202d80 61203080 00212e80 05213180 08202f80 0d203280 10202f80 15213180 18202f80 1d213180 20202e80 25213300 28203200 2d213500 30213100 35213400 38213100 3d203500 40203100 45213300 48203000 4d213200 50212f00 55203300 58203080 5d213280 60202f80 01203080 04202c80 09213180 0c213080 11213280 14203180 19213380 1c203180 21203280 24213200 29203500 2c213100 31213400"
         do {
@@ -379,22 +363,6 @@ class PodInfoTests: XCTestCase {
         }
     }
 
-    func testPodInfoResetStatus() {
-        // 02DATAOF  0  1  2  3
-        // 02 LL // 46 00 NN XX ...
-        // 02 7c // 46 00 79 1f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        do {
-            // Decode
-            let decoded = try PodInfoResetStatus(encodedData: Data(hexadecimalString: "4600791f00ee841f00ee84ff00ff00ffffffffffff0000ffffffffffffffffffffffff04060d10070000a62b0004e3db0000ffffffffffffff32cd50af0ff014eb01fe01fe06f9ff00ff0002fd649b14eb14eb07f83cc332cd05fa02fd58a700ffffffffffffffffffffffffffffffffffffffffffffffffffffffff")!)
-            XCTAssertEqual(.resetStatus, decoded.podInfoType)
-            XCTAssertEqual(0, decoded.zero)
-            XCTAssertEqual(121, decoded.numberOfBytes)
-            XCTAssertEqual(0x1f00ee84, decoded.podAddress)	// Pod address is in the first 4 bytes of the flash
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
-    }
-    
     func testPodFault12() {
         // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
         // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY

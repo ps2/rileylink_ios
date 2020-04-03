@@ -236,7 +236,7 @@ class PodMessageTransport: MessageTransport {
             }()
             
             guard responsePacket.packetType != .ack else {
-                messageLogger?.didReceive(responsePacket.data)
+                messageLogger?.didReceive(responsePacket.encoded())
                 log.default("Pod responded with ack instead of response: %@", String(describing: responsePacket))
                 throw PodCommsError.podAckedInsteadOfReturningResponse
             }
@@ -267,7 +267,7 @@ class PodMessageTransport: MessageTransport {
                         throw MessageError.invalidCrc
                     } catch let error {
                         // log any other non-garbage messages that generate errors
-                        log.debug("Error Recv(Hex): %@", responseData.hexadecimalString)
+                        log.error("Error (%{public}@) Recv(Hex): %@", String(describing: error), responseData.hexadecimalString)
                         messageLogger?.didReceive(responseData)
                         throw error
                     }

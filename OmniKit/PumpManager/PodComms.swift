@@ -100,6 +100,7 @@ class PodComms: CustomDebugStringConvertible {
             response = try transport.sendMessage(message)
         } catch let error {
             if case PodCommsError.podAckedInsteadOfReturningResponse = error {
+                self.log.default("Pod acked instead of returning response. Moving pod to configured state.")
                 self.podState?.setupProgress = .podConfigured
                 return
             }

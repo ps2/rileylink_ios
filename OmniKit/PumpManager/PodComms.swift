@@ -94,6 +94,10 @@ class PodComms: CustomDebugStringConvertible {
         let setupPod = SetupPodCommand(address: podState.address, dateComponents: dateComponents, lot: podState.lot, tid: podState.tid)
         
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
+        
+        defer {
+            self.podState?.messageTransportState = MessageTransportState(packetNumber: transport.packetNumber, messageNumber: transport.messageNumber)
+        }
 
         let response: Message
         do {
@@ -122,7 +126,6 @@ class PodComms: CustomDebugStringConvertible {
         }
 
         self.podState?.setupProgress = .podConfigured
-        self.podState?.messageTransportState = MessageTransportState(packetNumber: transport.packetNumber, messageNumber: transport.messageNumber)
     }
     
     func assignAddressAndSetupPod(using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)

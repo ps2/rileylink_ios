@@ -221,7 +221,7 @@ class PodMessageTransport: MessageTransport {
                 var firstPacket = true
                 log.debug("Send: %@", String(describing: message))
                 var dataRemaining = message.encoded()
-                log.debug("Send(Hex): %@", dataRemaining.hexadecimalString)
+                log.default("Send(Hex): %@", dataRemaining.hexadecimalString)
                 messageLogger?.didSend(dataRemaining)
                 while true {
                     let packetType: PacketType = firstPacket ? .pdm : .con
@@ -247,6 +247,7 @@ class PodMessageTransport: MessageTransport {
                 while true {
                     do {
                         let msg = try Message(encodedData: responseData)
+                        log.default("Recv(Hex): %@", responseData.hexadecimalString)
                         if msg.sequenceNum == messageNumber {
                             messageLogger?.didReceive(responseData)
                             return msg

@@ -41,7 +41,7 @@ extension PodCommsError: LocalizedError {
         case .emptyResponse:
             return LocalizedString("Empty response from pod", comment: "Error message shown when empty response from pod was received")
         case .podAckedInsteadOfReturningResponse:
-            return nil
+            return LocalizedString("Pod sent ack instead of response", comment: "Error message shown when pod sends ack instead of response")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:

@@ -270,7 +270,7 @@ public class PodCommsSession {
     public func prime() throws -> TimeInterval {
         let primeDuration = TimeInterval(seconds: 55)   // a bit longer than (Pod.primeUnits / Pod.primeDeliveryRate)
 
-        // Skip the fault config and alert setup commands if we've already done them before
+        // Must skip the fault config and alert setup commands if we've already done them before
         if podState.setupProgress != .startingPrime {
             // N.B. If the pod progress is not at least 3 (.pairingSuccess), the pod will not respond to the next two commands
 

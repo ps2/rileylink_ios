@@ -248,12 +248,14 @@ class PodMessageTransport: MessageTransport {
                     do {
                         let msg = try Message(encodedData: responseData)
                         log.default("Recv(Hex): %@", responseData.hexadecimalString)
-                        if msg.sequenceNum == messageNumber {
-                            messageLogger?.didReceive(responseData)
-                            return msg
-                        } else {
+                        guard msg.address == address else {
+                            throw MessageError.invalidAddress(address: msg.address)
+                        }
+                        guard msg.sequenceNum == messageNumber else {
                             throw MessageError.invalidSequence
                         }
+                        messageLogger?.didReceive(responseData)
+                        return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))

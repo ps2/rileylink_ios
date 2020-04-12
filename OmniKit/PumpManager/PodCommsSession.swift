@@ -27,6 +27,7 @@ public enum PodCommsError: Error {
     case podSuspended
     case podFault(fault: PodInfoFaultEvent)
     case commsError(error: Error)
+    case commandError(errorCode: UInt8)
 }
 
 extension PodCommsError: LocalizedError {
@@ -63,6 +64,8 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError:
             return nil
+        case .commandError(let errorCode):
+            return String(format: LocalizedString("Command error %1$u", comment: "Format string for command error code"), errorCode)
         }
     }
     
@@ -98,6 +101,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .commsError:
             return nil
+        case .commandError:
+            return nil
         }
     }
     
@@ -132,6 +137,8 @@ extension PodCommsError: LocalizedError {
         case .podFault:
             return nil
         case .commsError:
+            return nil
+        case .commandError:
             return nil
         }
     }
@@ -227,10 +234,10 @@ public class PodCommsSession {
                 if responseType == .errorResponse,
                     let sentNonce = sentNonce,
                     let errorResponse = response.messageBlocks[0] as? ErrorResponse,
-                    errorResponse.errorReponseType == .badNonce
+                    let nonceSearchKey = errorResponse.nonceSearchKey
                 {
-                    podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
-                    log.info("resyncNonce(syncWord: 0x%02x, sentNonce: 0x%04x, messageSequenceNum: %d) -> 0x%04x", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
+                    podState.resyncNonce(syncWord: nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
+                    log.info("resyncNonce(syncWord: 0x%02x, sentNonce: 0x%04x, messageSequenceNum: %d) -> 0x%04x", nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
                     
                     blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
                         if var resyncableBlock = block as? NonceResyncableMessageBlock {
@@ -242,6 +249,11 @@ public class PodCommsSession {
                         }
                     })
                     podState.advanceToNextNonce()
+                } else if responseType == .errorResponse,
+                    let errorResponse = response.messageBlocks[0] as? ErrorResponse,
+                    errorResponse.errorResponseCode != errorResponseCode_badNonce
+                {
+                    throw PodCommsError.commandError(errorCode: errorResponse.errorResponseCode)
                 } else if let fault = response.fault {
                     handlePodFault(fault: fault)
                     throw PodCommsError.podFault(fault: fault)

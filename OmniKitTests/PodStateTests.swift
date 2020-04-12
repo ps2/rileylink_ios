@@ -42,7 +42,7 @@ class PodStateTests: XCTestCase {
 
             XCTAssertEqual(9, sentMessage.sequenceNum)
 
-            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
+            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey!, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
             
             XCTAssertEqual(0x40ccdacb,  podState.currentNonce)
 

@@ -146,7 +146,7 @@ class PodMessageTransport: MessageTransport {
     /// Encodes and sends a packet to the pod, and receives and decodes its response
     ///
     /// - Parameters:
-    ///   - message: The packet to send
+    ///   - packet: The packet to send
     ///   - repeatCount: Number of times to repeat packet before listening for a response. 0 = send once and do not repeat.
     ///   - packetResponseTimeout: The amount of time to wait before retrying
     ///   - exchangeTimeout: The amount of time to continue retrying before giving up

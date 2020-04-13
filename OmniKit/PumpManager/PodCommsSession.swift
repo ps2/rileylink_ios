@@ -209,8 +209,8 @@ public class PodCommsSession {
         
         if blocksToSend.contains(where: { $0 as? NonceResyncableMessageBlock != nil }) {
             podState.advanceToNextNonce()
-            let padNonceMessages = false // edit to pad nonce messages
-            if (padNonceMessages) {
+            let padNonceMessages = false // edit to pad non deactivatePod nonce messages
+            if padNonceMessages && messageBlocks[0].blockType != .deactivatePod {
                 blocksToSend = padMessage(message: blocksToSend)
             }
         }

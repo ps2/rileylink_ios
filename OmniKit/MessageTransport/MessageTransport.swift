@@ -146,7 +146,7 @@ class PodMessageTransport: MessageTransport {
     /// Encodes and sends a packet to the pod, and receives and decodes its response
     ///
     /// - Parameters:
-    ///   - message: The packet to send
+    ///   - packet: The packet to send
     ///   - repeatCount: Number of times to repeat packet before listening for a response. 0 = send once and do not repeat.
     ///   - packetResponseTimeout: The amount of time to wait before retrying
     ///   - exchangeTimeout: The amount of time to continue retrying before giving up
@@ -180,13 +180,13 @@ class PodMessageTransport: MessageTransport {
                     continue
                 }
 
-                guard candidatePacket.address == packet.address else {
-                    log.default("Address %@ does not match %@", String(describing: candidatePacket.address), String(describing: packet.address))
+                guard candidatePacket.address == packet.address || candidatePacket.address == 0xFFFFFFFF else {
+                    log.default("Packet address 0x%x does not match 0x%x", candidatePacket.address, packet.address)
                     continue
                 }
                 
                 guard candidatePacket.sequenceNum == ((packet.sequenceNum + 1) & 0b11111) else {
-                    log.default("Sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
+                    log.default("Packet sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
                     continue
                 }
                 

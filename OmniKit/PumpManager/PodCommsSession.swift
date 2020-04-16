@@ -20,6 +20,7 @@ public enum PodCommsError: Error {
     case unexpectedPacketType(packetType: PacketType)
     case unexpectedResponse(response: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
+    case invalidAddress(address: UInt32, expectedAddress: UInt32)
     case noRileyLinkAvailable
     case unfinalizedBolus
     case unfinalizedTempBasal
@@ -63,43 +64,14 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError:
             return nil
+        case .invalidAddress(address: let address, expectedAddress: let expectedAddress):
+            return String(format: LocalizedString("Invalid address 0x%x. Expected 0x%x", comment: "Error message for when unexpected address is received (1: received address) (2: expected address)"), address, expectedAddress)
         }
     }
     
-    public var failureReason: String? {
-        switch self {
-        case .noPodPaired:
-            return nil
-        case .invalidData:
-            return nil
-        case .noResponse:
-            return nil
-        case .emptyResponse:
-            return nil
-        case .podAckedInsteadOfReturningResponse:
-            return nil
-        case .unexpectedPacketType:
-            return nil
-        case .unexpectedResponse:
-            return nil
-        case .unknownResponseType:
-            return nil
-        case .noRileyLinkAvailable:
-            return nil
-        case .unfinalizedBolus:
-            return nil
-        case .unfinalizedTempBasal:
-            return nil
-        case .nonceResyncFailed:
-            return nil
-        case .podSuspended:
-            return nil
-        case .podFault:
-            return nil
-        case .commsError:
-            return nil
-        }
-    }
+//    public var failureReason: String? {
+//        return nil
+//    }
     
     public var recoverySuggestion: String? {
         switch self {
@@ -112,7 +84,7 @@ extension PodCommsError: LocalizedError {
         case .emptyResponse:
             return nil
         case .podAckedInsteadOfReturningResponse:
-            return nil
+            return LocalizedString("Try again.", comment: "Recovery suggestion when ack received instead of response.")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:
@@ -133,6 +105,8 @@ extension PodCommsError: LocalizedError {
             return nil
         case .commsError:
             return nil
+        case .invalidAddress:
+            return LocalizedString("Crosstalk possible. Please move to a new location and try again.", comment: "Recovery suggestion when unexpected address received.")
         }
     }
 }

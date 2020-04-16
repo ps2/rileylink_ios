@@ -67,12 +67,16 @@ class PodComms: CustomDebugStringConvertible {
             throw PodCommsError.podFault(fault: fault)
         }
         
-        guard let config = response.messageBlocks[0] as? VersionResponse,
-            config.isAssignAddressVersionResponse == true
-        else {
+        guard let config = response.messageBlocks[0] as? VersionResponse else
+        {
             self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
+        }
+        
+        guard config.address == address else {
+            self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
+            throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
         }
 
         self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi!)
@@ -130,15 +134,15 @@ class PodComms: CustomDebugStringConvertible {
         }
         
         guard config.setupState == .paired else {
+            self.log.error("SetupPod response with incorrect setupState: %{public}@", String(describing: config.setupState))
             throw PodCommsError.invalidData
         }
 
-        guard config.address == podState.address && config.lot == podState.lot && config.tid == podState.tid else {
-            // Not the pod we thought we had, perhaps a nearby pairing pod and/or a pod swapout situation...
-            self.log.error("SetupPod expected pod address 0x%x lot %u tid %u, received pod address 0x%x lot %u tid %u!", podState.address, podState.lot, podState.tid, config.address, config.lot, config.tid)
-            throw PodCommsError.invalidData // could actually create a new podState for this response and continue
+        guard config.address == podState.address else {
+            self.log.error("SetupPod response with incorrect address: %{public}@", String(describing: response))
+            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: podState.address)
         }
-
+        
         self.podState?.setupProgress = .podConfigured
     }
     

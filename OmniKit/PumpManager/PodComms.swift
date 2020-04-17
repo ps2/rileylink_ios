@@ -49,7 +49,7 @@ class PodComms: CustomDebugStringConvertible {
         
         let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
         
-        // Create random address with 20 bits.  Can we use all 24 bits?
+        // Create random address with 20 bits to match PDM, could easily use 24 bits instead
         let address = 0x1f000000 | (arc4random() & 0x000fffff)
         
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
@@ -63,14 +63,23 @@ class PodComms: CustomDebugStringConvertible {
         let response = try transport.sendMessage(message)
 
         if let fault = response.fault {
-            self.log.error("Pod Fault: %@", String(describing: fault))
+            self.log.error("Pod Fault: %{public}@", String(describing: fault))
             throw PodCommsError.podFault(fault: fault)
         }
         
-        guard let config = response.messageBlocks[0] as? VersionResponse else {
+        guard let config = response.messageBlocks[0] as? VersionResponse else
+        {
+            self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
+        
+        guard config.address == address else {
+            self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
+            throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
+        }
+
+        self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi!)
         
         // Pairing state should be addressAssigned
         return PodState(
@@ -112,19 +121,28 @@ class PodComms: CustomDebugStringConvertible {
         }
 
         if let fault = response.fault {
-            self.log.error("Pod Fault: %@", String(describing: fault))
+            self.log.error("Pod Fault: %{public}@", String(describing: fault))
             throw PodCommsError.podFault(fault: fault)
         }
 
-        guard let config = response.messageBlocks[0] as? VersionResponse else {
+        guard let config = response.messageBlocks[0] as? VersionResponse,
+            config.isSetupPodVersionResponse == true
+        else {
+            self.log.error("setupPod unexpected response: %{public}@", String(describing: response))
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
         
         guard config.setupState == .paired else {
+            self.log.error("SetupPod response with incorrect setupState: %{public}@", String(describing: config.setupState))
             throw PodCommsError.invalidData
         }
 
+        guard config.address == podState.address else {
+            self.log.error("SetupPod response with incorrect address: %{public}@", String(describing: response))
+            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: podState.address)
+        }
+        
         self.podState?.setupProgress = .podConfigured
     }
     

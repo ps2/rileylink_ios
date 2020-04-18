@@ -79,7 +79,7 @@ class PodComms: CustomDebugStringConvertible {
             throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
         }
 
-        self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi!)
+        self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi ?? 0)
         
         // Pairing state should be addressAssigned
         return PodState(

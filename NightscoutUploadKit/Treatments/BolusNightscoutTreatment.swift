@@ -19,12 +19,12 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     let bolusType: BolusType
     let amount: Double
     let programmed: Double
-    let unabsorbed: Double
+    let unabsorbed: Double?
     let duration: TimeInterval
-    let carbs: Int
-    let ratio: Double
+    let carbs: Double?
+    let ratio: Double?
 
-    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, carbs: Int, ratio: Double, notes: String? = nil, id: String?) {
+    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double?, duration: TimeInterval, carbs: Double?, ratio: Double?, notes: String? = nil, id: String?) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
@@ -34,14 +34,41 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         self.ratio = ratio
         // Commenting out usage of surrogate ID until Nightscout supports it.
         super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, /* id: id, */
-                   eventType: (carbs > 0) ? "Meal Bolus" : "Correction Bolus")
+            eventType: ((carbs ?? 0) > 0) ? .mealBolus : .correctionBolus)
 
     }
-
+    
+    required public init?(_ entry: [String : Any]) {
+        guard
+            let bolusTypeRaw = entry["type"] as? String,
+            let bolusType = BolusType(rawValue: bolusTypeRaw),
+            let amount = entry["insulin"] as? Double,
+            let programmed = entry["programmed"] as? Double,
+            let durationMinutes = entry["duration"] as? Double
+        else {
+            return nil
+        }
+        
+        self.bolusType = bolusType
+        self.amount = amount
+        self.programmed = programmed
+        self.duration = TimeInterval(minutes: durationMinutes)
+        
+        self.carbs = entry["carbs"] as? Double
+        self.ratio = entry["ratio"] as? Double
+        
+        self.unabsorbed = entry["unabsorbed"] as? Double
+        
+        super.init(entry)
+    }
+    
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation
-        if carbs > 0 {
+        if let carbs = carbs, carbs > 0 {
             rval["carbs"] = carbs
+        }
+        
+        if let ratio = ratio {
             rval["ratio"] = ratio
         }
         rval["type"] = bolusType.rawValue

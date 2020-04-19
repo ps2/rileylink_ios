@@ -30,7 +30,26 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
         self.amount = amount
         
         // Commenting out usage of surrogate ID until supported by Nightscout
-        super.init(timestamp: timestamp, enteredBy: enteredBy, /*id: id,*/ eventType: "Temp Basal")
+        super.init(timestamp: timestamp, enteredBy: enteredBy, /*id: id,*/ eventType: .tempBasal)
+    }
+    
+    required public init?(_ entry: [String : Any]) {
+        guard
+            let rate = entry["rate"] as? Double,
+            let rateTypeRaw = entry["temp"] as? String,
+            let rateType = RateType(rawValue: rateTypeRaw),
+            let durationMinutes = entry["duration"] as? Double
+        else {
+            return nil
+        }
+        
+        self.rate = rate
+        self.temp = rateType
+        self.duration = TimeInterval(minutes: durationMinutes)
+        self.amount = entry["amount"] as? Double
+        self.absolute = entry["absolute"] as? Double
+        
+        super.init(entry)
     }
     
     override public var dictionaryRepresentation: [String: Any] {

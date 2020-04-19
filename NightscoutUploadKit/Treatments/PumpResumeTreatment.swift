@@ -11,7 +11,11 @@ import Foundation
 public class PumpResumeTreatment: NightscoutTreatment {
 
     public init(timestamp: Date, enteredBy: String) {
-        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: "Resume Pump")
+        super.init(timestamp: timestamp, enteredBy: enteredBy, eventType: .resumePump)
     }
-
+    
+    required public init?(_ entry: [String : Any]) {
+        super.init(entry)
+    }
+    
 }

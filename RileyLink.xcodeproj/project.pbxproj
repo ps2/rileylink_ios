@@ -296,6 +296,7 @@
 		C12EA23F198B436800309FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23E198B436800309FA4 /* UIKit.framework */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
+		C13515F6244CC69800AC8B95 /* GlucoseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13515F5244CC69800AC8B95 /* GlucoseEntry.swift */; };
 		C136AA3A23116E32008A320D /* OmniKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA2C23116E32008A320D /* OmniKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C136AA4223116E7B008A320D /* OmniKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA4123116E7B008A320D /* OmniKitPlugin.swift */; };
 		C136AA442311704A008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
@@ -1258,6 +1259,7 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
+		C13515F5244CC69800AC8B95 /* GlucoseEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseEntry.swift; sourceTree = "<group>"; };
 		C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmniKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		C136AA2C23116E32008A320D /* OmniKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmniKitPlugin.h; sourceTree = "<group>"; };
 		C136AA2D23116E32008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2410,6 +2412,7 @@
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
 				C1AF21EA1D4900880088C41D /* Treatments */,
 				C18EB741207EE20100EA002B /* NightscoutProfile.swift */,
+				C13515F5244CC69800AC8B95 /* GlucoseEntry.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -3919,6 +3922,7 @@
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
+				C13515F6244CC69800AC8B95 /* GlucoseEntry.swift in Sources */,
 				C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */,
 				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */,
@@ -3998,7 +4002,6 @@
 				C15500282308FA2F00345FCC /* BeepConfigCommand.swift in Sources */,
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
 				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
-				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,
 				C1BB12AE21CB5654009A29B5 /* SetupPodCommand.swift in Sources */,
 				C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */,
 				C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */,

@@ -348,7 +348,7 @@ public class NightscoutUploader {
                         return GlucoseEntry(
                             identifier: identifier,
                             sgv: sgv,
-                            date: Date(timeIntervalSince1970: epoch),
+                            date: Date(timeIntervalSince1970: epoch / 1000.0),
                             trend: trend,
                             direction: direction,
                             device: device,

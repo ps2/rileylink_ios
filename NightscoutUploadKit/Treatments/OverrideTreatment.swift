@@ -33,19 +33,17 @@ public class OverrideTreatment: NightscoutTreatment {
     
     required public init?(_ entry: [String : Any]) {
         guard
-            let durationType = entry["durationType"] as? String,
             let reason = entry["reason"] as? String
         else {
             return nil
         }
         
-        if durationType == "indefinite" {
+        if let durationMinutes = entry["duration"] as? Double {
+            self.duration = .finite(TimeInterval(minutes: durationMinutes))
+        } else if let durationType = entry["durationType"] as? String, durationType == "indefinite" {
             self.duration = .indefinite
         } else {
-            guard let durationMinutes = entry["duration"] as? Double else {
-                return nil
-            }
-            self.duration = .finite(TimeInterval(minutes: durationMinutes))
+            return nil
         }
         
         self.reason = reason

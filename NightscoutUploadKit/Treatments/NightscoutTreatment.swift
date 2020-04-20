@@ -33,7 +33,7 @@ public enum TreatmentType: String {
         case .temporaryOverride:
             return OverrideTreatment.self
         case .mealBolus:
-            return BolusNightscoutTreatment.self
+            return MealBolusNightscoutTreatment.self
         case .bloodGlucoseCheck:
             return BGCheckNightscoutTreatment.self
         case .suspendPump:

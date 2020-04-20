@@ -16,11 +16,11 @@ public class TempBasalNightscoutTreatment: NightscoutTreatment {
     }
     
     
-    let rate: Double
-    let amount: Double?
-    let absolute: Double?
-    let temp: RateType
-    let duration: TimeInterval
+    public let rate: Double
+    public let amount: Double?
+    public let absolute: Double?
+    public let temp: RateType
+    public let duration: TimeInterval
     
     public init(timestamp: Date, enteredBy: String, temp: RateType, rate: Double, absolute: Double?, duration: TimeInterval, amount: Double? = nil, id: String? = nil) {
         self.rate = rate

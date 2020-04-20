@@ -60,11 +60,11 @@ public class NightscoutTreatment: DictionaryRepresentable {
         case MGDL = "mg/dL"
     }
     
-    let timestamp: Date
-    let enteredBy: String
-    let notes: String?
-    let id: String?
-    let eventType: TreatmentType
+    public let timestamp: Date
+    public let enteredBy: String
+    public let notes: String?
+    public let id: String?
+    public let eventType: TreatmentType
 
 
     public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: TreatmentType) {

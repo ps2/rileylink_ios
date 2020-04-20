@@ -10,13 +10,13 @@ import Foundation
 
 public class MealBolusNightscoutTreatment: NightscoutTreatment {
     
-    let carbs: Double
-    let absorptionTime: TimeInterval?
-    let insulin: Double?
-    let glucose: Double?
-    let units: Units? // of glucose entry
-    let glucoseType: GlucoseType?
-    let foodType: String?
+    public let carbs: Double
+    public let absorptionTime: TimeInterval?
+    public let insulin: Double?
+    public let glucose: Double?
+    public let units: Units? // of glucose entry
+    public let glucoseType: GlucoseType?
+    public let foodType: String?
 
     public init(timestamp: Date, enteredBy: String, id: String?, carbs: Double, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Double? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
         self.carbs = carbs

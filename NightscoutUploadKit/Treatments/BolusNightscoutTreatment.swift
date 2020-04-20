@@ -16,13 +16,13 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         case DualWave = "dual"
     }
 
-    let bolusType: BolusType
-    let amount: Double
-    let programmed: Double
-    let unabsorbed: Double?
-    let duration: TimeInterval
-    let carbs: Double?
-    let ratio: Double?
+    public let bolusType: BolusType
+    public let amount: Double
+    public let programmed: Double
+    public let unabsorbed: Double?
+    public let duration: TimeInterval
+    public let carbs: Double?
+    public let ratio: Double?
 
     public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double?, duration: TimeInterval, carbs: Double?, ratio: Double?, notes: String? = nil, id: String?) {
         self.bolusType = bolusType

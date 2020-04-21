@@ -14,6 +14,7 @@ public enum UploadError: Error {
     case invalidResponse(reason: String)
     case unauthorized
     case missingConfiguration
+    case invalidParameters
 }
 
 private enum Endpoint: String {
@@ -22,6 +23,7 @@ private enum Endpoint: String {
     case deviceStatus = "/api/v1/devicestatus"
     case authTest = "/api/v1/experiments/test"
     case profile =  "/api/v1/profile"
+    case currentProfile =  "/api/v1/profile/current"
 }
 
 public class NightscoutUploader {
@@ -186,8 +188,121 @@ public class NightscoutUploader {
         entries.append(entry)
     }
     
-    // MARK: - Profiles
+    // MARK: - Fetching
+    
+    public func fetchCurrentProfile(completion: @escaping (Result<ProfileSet,Error>) -> Void) {
+        let profileURL = url(for: .currentProfile)!
+        getFromNS(url: profileURL) { (result) in
+            switch result {
+            case .failure(let error):
+                print("Error fetching current profile: \(error)")
+                completion(.failure(error))
+            case .success(let rawResponse):
+                guard let profileRaw = rawResponse as? ProfileSet.RawValue, let profileSet = ProfileSet(rawValue: profileRaw) else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Expected nightscout profile")))
+                    return
+                }
+                
+                completion(.success(profileSet))
+            }
+        }
+    }
+    
+    public func fetchDeviceStatus(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[DeviceStatus],Error>) -> Void) {
+        var components = URLComponents(url: url(for: .deviceStatus)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "find[created_at][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
+            URLQueryItem(name: "find[created_at][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
+            URLQueryItem(name: "count", value: String(maxCount))
+        ]
+        if let url = components.url {
+            getFromNS(url: url) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error fetching treatments: \(error)")
+                    completion(.failure(error))
+                case .success(let rawResponse):
+                    guard let returnedEntries = rawResponse as? [DeviceStatus.RawValue] else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of treatments")))
+                        return
+                    }
+                    
+                    let entries = returnedEntries.compactMap({ (entry: DeviceStatus.RawValue) -> DeviceStatus? in
+                        return DeviceStatus(rawValue: entry)
+                    })
+                    
+                    completion(.success(entries))
+                }
+            }
+        } else {
+            completion(.failure(UploadError.invalidParameters))
+        }
+    }
 
+    
+    public func fetchTreatments(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[NightscoutTreatment],Error>) -> Void) {
+        var components = URLComponents(url: url(for: .treatments)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "find[timestamp][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
+            URLQueryItem(name: "find[timestamp][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
+            URLQueryItem(name: "count", value: String(maxCount))
+        ]
+        if let url = components.url {
+            getFromNS(url: url) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error fetching treatments: \(error)")
+                    completion(.failure(error))
+                case .success(let rawResponse):
+                    guard let returnedEntries = rawResponse as? [[String: Any]] else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of treatments")))
+                        return
+                    }
+                    
+                    let entries = returnedEntries.compactMap({ (entry: [String: Any]) -> NightscoutTreatment? in
+                        return NightscoutTreatment.fromServer(entry)
+                    })
+                    
+                    completion(.success(entries))
+                }
+            }
+        } else {
+            completion(.failure(UploadError.invalidParameters))
+        }
+    }
+    
+    public func fetchGlucose(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[GlucoseEntry],Error>) -> Void) {
+        var components = URLComponents(url: url(for: .entries)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "find[dateString][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
+            URLQueryItem(name: "find[dateString][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
+            URLQueryItem(name: "count", value: String(maxCount))
+        ]
+        if let url = components.url {
+            getFromNS(url: url) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error fetching glucose: \(error)")
+                    completion(.failure(error))
+                case .success(let rawResponse):
+                    guard let returnedEntries = rawResponse as? [GlucoseEntry.RawValue] else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of glucose entries")))
+                        return
+                    }
+                    
+                    let entries = returnedEntries.compactMap{ GlucoseEntry(rawValue: $0) }
+                    completion(.success(entries))
+                }
+            }
+        } else {
+            completion(.failure(UploadError.invalidParameters))
+        }
+    }
+
+
+    // MARK: - Uploading
+    
+    
     public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {
         guard let url = url(for: .profile) else {
             completion(.failure(UploadError.missingConfiguration))
@@ -208,7 +323,6 @@ public class NightscoutUploader {
         putToNS(rep, url: url, completion: completion)
     }
 
-    // MARK: - Uploading
     
     public func flushAll() {
         flushDeviceStatuses()
@@ -284,111 +398,6 @@ public class NightscoutUploader {
         }
     }
     
-    public func fetchDeviceStatus(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[DeviceStatus],Error>) -> Void) {
-        var components = URLComponents(url: url(for: .deviceStatus)!, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "find[created_at][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
-            URLQueryItem(name: "find[created_at][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
-            URLQueryItem(name: "count", value: String(maxCount))
-        ]
-        if let url = components.url {
-            getFromNS(url: url) { (result) in
-                switch result {
-                case .failure(let error):
-                    print("Error fetching treatments: \(error)")
-                    completion(.failure(error))
-                case .success(let rawResponse):
-                    guard let returnedEntries = rawResponse as? [DeviceStatus.RawValue] else {
-                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of treatments")))
-                        return
-                    }
-                    
-                    let entries = returnedEntries.compactMap({ (entry: DeviceStatus.RawValue) -> DeviceStatus? in
-                        return DeviceStatus(rawValue: entry)
-                    })
-                    
-                    completion(.success(entries))
-                }
-            }
-        }
-    }
-
-    
-    public func fetchTreatments(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[NightscoutTreatment],Error>) -> Void) {
-        var components = URLComponents(url: url(for: .treatments)!, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "find[timestamp][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
-            URLQueryItem(name: "find[timestamp][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
-            URLQueryItem(name: "count", value: String(maxCount))
-        ]
-        if let url = components.url {
-            getFromNS(url: url) { (result) in
-                switch result {
-                case .failure(let error):
-                    print("Error fetching treatments: \(error)")
-                    completion(.failure(error))
-                case .success(let rawResponse):
-                    guard let returnedEntries = rawResponse as? [[String: Any]] else {
-                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of treatments")))
-                        return
-                    }
-                    
-                    let entries = returnedEntries.compactMap({ (entry: [String: Any]) -> NightscoutTreatment? in
-                        return NightscoutTreatment.fromServer(entry)
-                    })
-                    
-                    completion(.success(entries))
-                }
-            }
-        }
-    }
-    
-    public func fetchGlucose(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[GlucoseEntry],Error>) -> Void) {
-        var components = URLComponents(url: url(for: .entries)!, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "find[dateString][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
-            URLQueryItem(name: "find[dateString][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
-            URLQueryItem(name: "count", value: String(maxCount))
-        ]
-        if let url = components.url {
-            getFromNS(url: url) { (result) in
-                switch result {
-                case .failure(let error):
-                    print("Error fetching glucose: \(error)")
-                    completion(.failure(error))
-                case .success(let rawResponse):
-                    guard let returnedEntries = rawResponse as? [[String: Any]] else {
-                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of glucose entries")))
-                        return
-                    }
-                    
-                    let entries = returnedEntries.compactMap({ (entry: [String: Any]) -> GlucoseEntry? in
-                        guard
-                            let identifier = entry["_id"] as? String,
-                            let sgv =  entry["sgv"] as? Double,
-                            let epoch = entry["date"] as? Double,
-                            let trend = entry["trend"] as? Int,
-                            let direction = entry["direction"] as? String,
-                            let device = entry["device"] as? String,
-                            let type = entry["type"] as? String
-                        else {
-                            return nil
-                        }
-                        
-                        return GlucoseEntry(
-                            identifier: identifier,
-                            sgv: sgv,
-                            date: Date(timeIntervalSince1970: epoch / 1000.0),
-                            trend: trend,
-                            direction: direction,
-                            device: device,
-                            type: type)
-                    })
-                    completion(.success(entries))
-                }
-            }
-        }
-    }
 
     func callNS(_ json: Any?, url:URL, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
         var request = URLRequest(url: url)

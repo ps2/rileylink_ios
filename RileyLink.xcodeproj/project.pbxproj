@@ -494,6 +494,8 @@
 		C1E163D52135EC0100EB89AE /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
 		C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		C1E163D72135FF9A00EB89AE /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
+		C1E20945244EB9F0004EE886 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E20944244EB9F0004EE886 /* TemporaryScheduleOverride.swift */; };
+		C1E20948244EBC59004EE886 /* LoopSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E20947244EBC59004EE886 /* LoopSettings.swift */; };
 		C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */; };
 		C1EAD6B31C826B6D006DBA60 /* MySentryAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AE1C826B6D006DBA60 /* MySentryAlertType.swift */; };
 		C1EAD6B41C826B6D006DBA60 /* MessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */; };
@@ -1405,6 +1407,8 @@
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
+		C1E20944244EB9F0004EE886 /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
+		C1E20947244EBC59004EE886 /* LoopSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopSettings.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
@@ -2402,17 +2406,13 @@
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
-				C1AF21E91D4900300088C41D /* DeviceStatus */,
+				C1E20946244EBAAC004EE886 /* Models */,
 				C13D15591DAACE8400ADC044 /* Either.swift */,
 				43F348051D596270009933DC /* HKUnit.swift */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
-				546145C01DCEB47600DC6DEB /* NightscoutEntry.swift */,
 				C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */,
 				C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */,
 				43B0ADC81D1268B300AAD278 /* TimeFormat.swift */,
-				C1AF21EA1D4900880088C41D /* Treatments */,
-				C18EB741207EE20100EA002B /* NightscoutProfile.swift */,
-				C13515F5244CC69800AC8B95 /* GlucoseEntry.swift */,
 			);
 			path = NightscoutUploadKit;
 			sourceTree = "<group>";
@@ -2444,6 +2444,20 @@
 				C1BB128721CB5603009A29B5 /* main.swift */,
 			);
 			path = OmniKitPacketParser;
+			sourceTree = "<group>";
+		};
+		C1E20946244EBAAC004EE886 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C1AF21EA1D4900880088C41D /* Treatments */,
+				C1E20944244EB9F0004EE886 /* TemporaryScheduleOverride.swift */,
+				C13515F5244CC69800AC8B95 /* GlucoseEntry.swift */,
+				C18EB741207EE20100EA002B /* NightscoutProfile.swift */,
+				546145C01DCEB47600DC6DEB /* NightscoutEntry.swift */,
+				C1AF21E91D4900300088C41D /* DeviceStatus */,
+				C1E20947244EBC59004EE886 /* LoopSettings.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
@@ -3920,6 +3934,7 @@
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
+				C1E20945244EB9F0004EE886 /* TemporaryScheduleOverride.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
 				C13515F6244CC69800AC8B95 /* GlucoseEntry.swift in Sources */,
@@ -3952,6 +3967,7 @@
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
 				C121FE05233FA20E00630EB5 /* OverrideTreatment.swift in Sources */,
 				546145C11DCEB47600DC6DEB /* NightscoutEntry.swift in Sources */,
+				C1E20948244EBC59004EE886 /* LoopSettings.swift in Sources */,
 				C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

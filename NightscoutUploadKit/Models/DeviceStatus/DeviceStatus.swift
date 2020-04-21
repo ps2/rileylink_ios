@@ -66,10 +66,10 @@ public struct DeviceStatus {
     
     init?(rawValue: RawValue) {
         guard
+            let identifier = rawValue["_id"] as? String,
             let timestampStr = rawValue["created_at"] as? String,
             let timestamp = TimeFormat.dateFromTimestamp(timestampStr),
-            let device = rawValue["device"] as? String,
-            let identifier = rawValue["identifier"] as? String
+            let device = rawValue["device"] as? String
         else {
             return nil
         }

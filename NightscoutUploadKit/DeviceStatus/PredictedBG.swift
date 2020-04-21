@@ -10,24 +10,25 @@ import Foundation
 import HealthKit
 
 public struct PredictedBG {
-    let startDate: Date
-    let values: [Int]
-    let cob: [Int]?
-    let iob: [Int]?
+    typealias RawValue = [String: Any]
+    
+    public let startDate: Date
+    public let values: [Double]
+    public let cob: [Double]?
+    public let iob: [Double]?
 
     public init(startDate: Date, values: [HKQuantity], cob: [HKQuantity]? = nil, iob: [HKQuantity]? =
         nil) {
         self.startDate = startDate
         // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
-        self.values = values.map { Int(round($0.doubleValue(for: unit))) }
-        self.cob = cob?.map { Int(round($0.doubleValue(for: unit))) }
-        self.iob = iob?.map { Int(round($0.doubleValue(for: unit))) }
+        self.values = values.map { round($0.doubleValue(for: unit) * 100) / 100 }
+        self.cob = cob?.map { round($0.doubleValue(for: unit) * 100) / 100 }
+        self.iob = iob?.map { round($0.doubleValue(for: unit) * 100) / 100 }
     }
 
     public var dictionaryRepresentation: [String: Any] {
-
-        var rval = [String: Any]()
+        var rval = RawValue()
 
         rval["startDate"] =  TimeFormat.timestampStrFromDate(startDate)
         rval["values"] = values
@@ -41,5 +42,20 @@ public struct PredictedBG {
         }
 
         return rval
+    }
+    
+    init?(rawValue: RawValue) {
+        guard
+            let startDateRaw = rawValue["startDate"] as? String,
+            let startDate = TimeFormat.dateFromTimestamp(startDateRaw),
+            let values = rawValue["values"] as? [Double]
+        else {
+            return nil
+        }
+        
+        self.startDate = startDate
+        self.values = values        
+        self.cob = rawValue["COB"] as? [Double]
+        self.iob = rawValue["IOB"] as? [Double]
     }
 }

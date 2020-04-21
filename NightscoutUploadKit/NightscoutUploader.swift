@@ -284,6 +284,36 @@ public class NightscoutUploader {
         }
     }
     
+    public func fetchDeviceStatus(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[DeviceStatus],Error>) -> Void) {
+        var components = URLComponents(url: url(for: .deviceStatus)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "find[created_at][$gte]", value: TimeFormat.timestampStrFromDate(dateInterval.start)),
+            URLQueryItem(name: "find[created_at][$lte]", value: TimeFormat.timestampStrFromDate(dateInterval.end)),
+            URLQueryItem(name: "count", value: String(maxCount))
+        ]
+        if let url = components.url {
+            getFromNS(url: url) { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error fetching treatments: \(error)")
+                    completion(.failure(error))
+                case .success(let rawResponse):
+                    guard let returnedEntries = rawResponse as? [DeviceStatus.RawValue] else {
+                        completion(.failure(UploadError.invalidResponse(reason: "Expected array of treatments")))
+                        return
+                    }
+                    
+                    let entries = returnedEntries.compactMap({ (entry: DeviceStatus.RawValue) -> DeviceStatus? in
+                        return DeviceStatus(rawValue: entry)
+                    })
+                    
+                    completion(.success(entries))
+                }
+            }
+        }
+    }
+
+    
     public func fetchTreatments(dateInterval: DateInterval, maxCount: Int = 50, completion: @escaping (Result<[NightscoutTreatment],Error>) -> Void) {
         var components = URLComponents(url: url(for: .treatments)!, resolvingAgainstBaseURL: false)!
         components.queryItems = [

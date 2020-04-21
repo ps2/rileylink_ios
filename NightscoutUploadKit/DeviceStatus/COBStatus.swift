@@ -9,6 +9,8 @@
 import Foundation
 
 public struct COBStatus {
+    typealias RawValue = [String: Any]
+
     let cob: Double
     let timestamp: Date
 
@@ -25,5 +27,17 @@ public struct COBStatus {
 
         return rval
     }
-
+    
+    init?(rawValue: RawValue) {
+        guard
+            let timestampStr = rawValue["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr),
+            let cob = rawValue["cob"] as? Double
+        else {
+            return nil
+        }
+        
+        self.timestamp = timestamp
+        self.cob = cob
+    }
 }

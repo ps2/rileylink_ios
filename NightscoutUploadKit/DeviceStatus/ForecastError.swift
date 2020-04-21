@@ -10,8 +10,10 @@ import Foundation
 import HealthKit
 
 public struct ForecastError {
+    typealias RawValue = [String: Any]
+
     let velocity: Double
-    let measurementDuration: Double
+    let measurementDuration: TimeInterval
     
     public init(velocity: HKQuantity, measurementDuration: TimeInterval) {
         
@@ -28,5 +30,17 @@ public struct ForecastError {
         rval["measurementDuration"] = measurementDuration
         //rval["velocityUnits"] = "mg/dL/s"
         return rval
+    }
+    
+    init?(rawValue: RawValue) {
+        guard
+            let velocity = rawValue["velocity"] as? Double,
+            let measurementDuration = rawValue["measurementDuration"] as? TimeInterval
+        else {
+            return nil
+        }
+        
+        self.velocity = velocity
+        self.measurementDuration = measurementDuration
     }
 }

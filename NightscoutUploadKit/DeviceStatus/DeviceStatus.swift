@@ -9,15 +9,18 @@
 import Foundation
 
 public struct DeviceStatus {
-    let device: String
-    let timestamp: Date
-    let pumpStatus: PumpStatus?
-    let uploaderStatus: UploaderStatus?
-    let loopStatus: LoopStatus?
-    let radioAdapter: RadioAdapter?
-    let overrideStatus: OverrideStatus?
+    typealias RawValue = [String: Any]
+    
+    public let device: String
+    public let timestamp: Date
+    public let identifier: String?
+    public let pumpStatus: PumpStatus?
+    public let uploaderStatus: UploaderStatus?
+    public let loopStatus: LoopStatus?
+    public let radioAdapter: RadioAdapter?
+    public let overrideStatus: OverrideStatus?
 
-    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil, radioAdapter: RadioAdapter? = nil, overrideStatus: OverrideStatus? = nil) {
+    public init(device: String, timestamp: Date, pumpStatus: PumpStatus? = nil, uploaderStatus: UploaderStatus? = nil, loopStatus: LoopStatus? = nil, radioAdapter: RadioAdapter? = nil, overrideStatus: OverrideStatus? = nil, identifier: String? = nil) {
         self.device = device
         self.timestamp = timestamp
         self.pumpStatus = pumpStatus
@@ -25,6 +28,7 @@ public struct DeviceStatus {
         self.loopStatus = loopStatus
         self.radioAdapter = radioAdapter
         self.overrideStatus = overrideStatus
+        self.identifier = identifier
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -52,8 +56,45 @@ public struct DeviceStatus {
         if let override = overrideStatus {
             rval["override"] = override.dictionaryRepresentation
         }
+        
+        if let identifier = identifier {
+            rval["identifier"] = identifier
+        }
 
         return rval
+    }
+    
+    init?(rawValue: RawValue) {
+        guard
+            let timestampStr = rawValue["created_at"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr),
+            let device = rawValue["device"] as? String,
+            let identifier = rawValue["identifier"] as? String
+        else {
+            return nil
+        }
+        
+        self.timestamp = timestamp
+        self.device = device
+        self.identifier = identifier
+        
+        if let loopStatusRaw = rawValue["loop"] as? LoopStatus.RawValue {
+            loopStatus = LoopStatus(rawValue: loopStatusRaw)
+        } else {
+            loopStatus = nil
+        }
+        
+        // TODO: OverrideStatus not being parsed yet
+        self.overrideStatus = nil
+        
+        // TODO: PumpStatus not being parsed yet
+        self.pumpStatus = nil
+        
+        // TODO: UploaderStatus not being parsed yet
+        self.uploaderStatus = nil
+        
+        // TODO: RadioAdapter not being parsed yet
+        self.radioAdapter = nil
     }
 }
 

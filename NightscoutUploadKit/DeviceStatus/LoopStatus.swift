@@ -10,21 +10,23 @@ import Foundation
 import HealthKit
 
 public struct LoopStatus {
-    let name: String
-    let version: String
-    let timestamp: Date
+    typealias RawValue = [String: Any]
+    
+    public let name: String
+    public let version: String
+    public let timestamp: Date
 
-    let iob: IOBStatus?
-    let cob: COBStatus?
-    let predicted: PredictedBG?
-    let recommendedTempBasal: RecommendedTempBasal?
-    let recommendedBolus: Double?
-    let enacted: LoopEnacted?
-    let rileylinks: [RileyLinkStatus]?
-    let failureReason: Error?
-    let currentCorrectionRange: CorrectionRange?
-    let forecastError: ForecastError?
-    let testingDetails: [String: Any]?
+    public let iob: IOBStatus?
+    public let cob: COBStatus?
+    public let predicted: PredictedBG?
+    public let recommendedTempBasal: RecommendedTempBasal?
+    public let recommendedBolus: Double?
+    public let enacted: LoopEnacted?
+    public let rileylinks: [RileyLinkStatus]?
+    public let failureReason: String?
+    public let currentCorrectionRange: CorrectionRange?
+    public let forecastError: ForecastError?
+    public let testingDetails: [String: Any]?
 
     public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, recommendedTempBasal:RecommendedTempBasal? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil, currentCorrectionRange: CorrectionRange? = nil, forecastError: ForecastError? = nil, testingDetails: [String: Any]? = nil) {
         self.name = name
@@ -37,7 +39,7 @@ public struct LoopStatus {
         self.recommendedBolus = recommendedBolus
         self.enacted = enacted
         self.rileylinks = rileylinks
-        self.failureReason = failureReason
+        self.failureReason = String(describing: failureReason)
         self.currentCorrectionRange = currentCorrectionRange
         self.forecastError = forecastError
         self.testingDetails = testingDetails
@@ -75,7 +77,7 @@ public struct LoopStatus {
         }
         
         if let failureReason = failureReason {
-            rval["failureReason"] = String(describing: failureReason)
+            rval["failureReason"] = failureReason
         }
 
         if let rileylinks = rileylinks {
@@ -95,6 +97,76 @@ public struct LoopStatus {
         }
 
         return rval
+    }
+    
+    init?(rawValue: RawValue) {
+        guard
+            let name = rawValue["name"] as? String,
+            let version = rawValue["version"] as? String,
+            let timestampStr = rawValue["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr)
+        else {
+            return nil
+        }
+        
+        self.name = name
+        self.version = version
+        self.timestamp = timestamp
+        
+        if let iobRaw = rawValue["iob"] as? IOBStatus.RawValue {
+            self.iob = IOBStatus(rawValue: iobRaw)
+        } else {
+            self.iob = nil
+        }
+
+        if let cobRaw = rawValue["cob"] as? COBStatus.RawValue {
+            self.cob = COBStatus(rawValue: cobRaw)
+        } else {
+            self.cob = nil
+        }
+
+        if let predictedRaw = rawValue["predicted"] as? PredictedBG.RawValue {
+            predicted = PredictedBG(rawValue: predictedRaw)
+        } else {
+            predicted = nil
+        }
+        
+        if let recommendedTempBasalRaw = rawValue["recommendedTempBasal"] as? RecommendedTempBasal.RawValue {
+            recommendedTempBasal = RecommendedTempBasal(rawValue: recommendedTempBasalRaw)
+        } else {
+            recommendedTempBasal = nil
+        }
+        
+        recommendedBolus = rawValue["recommendedBolus"] as? Double
+        
+        if let enactedRaw = rawValue["enacted"] as? LoopEnacted.RawValue {
+            enacted = LoopEnacted(rawValue: enactedRaw)
+        } else {
+            enacted = nil
+        }
+        
+        if let rileylinksRaw = rawValue["rileylinks"] as? [RileyLinkStatus.RawValue] {
+            rileylinks = rileylinksRaw.compactMap { RileyLinkStatus(rawValue: $0 ) }
+        } else {
+            rileylinks = nil
+        }
+        
+        failureReason = rawValue["failureReason"] as? String
+        
+        if let currentCorrectionRangeRaw = rawValue["currentCorrectionRange"] as? CorrectionRange.RawValue {
+            currentCorrectionRange = CorrectionRange(rawValue: currentCorrectionRangeRaw)
+        } else {
+            currentCorrectionRange = nil
+        }
+        
+        if let forecastErrorRaw = rawValue["forecastError"] as? ForecastError.RawValue {
+            forecastError = ForecastError(rawValue: forecastErrorRaw)
+        } else {
+            forecastError = nil
+        }
+        
+        testingDetails = rawValue["testingDetails"] as? [String: Any]
+
     }
 }
 

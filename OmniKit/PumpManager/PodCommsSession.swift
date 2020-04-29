@@ -457,6 +457,12 @@ public class PodCommsSession {
     public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) -> CancelDeliveryResult {
         var message: [MessageBlock]
 
+        // If the pod hasn't completed its setup, attempting a cancel will either receive no response (pod progress state <= 2) or a $31
+        // pod fault (pod progress states 3 through 7). Return a noResponse error here if setup is not complete to avoid a possible pod fault.
+        guard podState.setupProgress == .completed {
+            return PodCommsError.noResponse
+        }
+
         // Special case handling for a non-silent cancel all which would normally emit 3 sets of beeps!
         if beepType != .noBeep && deliveryType == .all {
             // For this case use two cancel commands in a one message with the 1st command silently cancelling all but the basal
@@ -606,7 +612,7 @@ public class PodCommsSession {
 
     public func deactivatePod() throws {
 
-        if podState.fault == nil && !podState.isSuspended {
+        if podState.fault == nil && !podState.isSuspended && podState.setupProgress == .completed {
             let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
             switch result {
             case .certainFailure(let error):

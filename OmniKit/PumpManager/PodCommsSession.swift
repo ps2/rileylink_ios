@@ -606,7 +606,9 @@ public class PodCommsSession {
 
     public func deactivatePod() throws {
 
-        if podState.fault == nil && !podState.isSuspended {
+        // Don't try to cancel if the pod hasn't completed its setup as it will either receive no response
+        // (pod progress state <= 2) or a create a $31 pod fault (pod progress states 3 through 7).
+        if podState.setupProgress == .completed && podState.fault == nil && !podState.isSuspended {
             let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
             switch result {
             case .certainFailure(let error):

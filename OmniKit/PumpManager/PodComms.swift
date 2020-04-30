@@ -67,8 +67,9 @@ class PodComms: CustomDebugStringConvertible {
             throw PodCommsError.podFault(fault: fault)
         }
         
-        guard let config = response.messageBlocks[0] as? VersionResponse else
-        {
+        guard let config = response.messageBlocks[0] as? VersionResponse,
+            config.isAssignAddressVersionResponse == true
+        else {
             self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)
@@ -76,7 +77,7 @@ class PodComms: CustomDebugStringConvertible {
         
         guard config.address == address else {
             self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
-            throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
+            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
         }
 
         self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi ?? 0)

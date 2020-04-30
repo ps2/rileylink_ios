@@ -49,6 +49,8 @@ extension PodCommsError: LocalizedError {
             return LocalizedString("Unexpected response from pod", comment: "Error message shown when empty response from pod was received")
         case .unknownResponseType:
             return nil
+        case .invalidAddress(address: let address, expectedAddress: let expectedAddress):
+            return String(format: LocalizedString("Invalid address 0x%x. Expected 0x%x", comment: "Error message for when unexpected address is received (1: received address) (2: expected address)"), address, expectedAddress)
         case .noRileyLinkAvailable:
             return LocalizedString("No RileyLink available", comment: "Error message shown when no response from pod was received")
         case .unfinalizedBolus:
@@ -64,8 +66,6 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError:
             return nil
-        case .invalidAddress(address: let address, expectedAddress: let expectedAddress):
-            return String(format: LocalizedString("Invalid address 0x%x. Expected 0x%x", comment: "Error message for when unexpected address is received (1: received address) (2: expected address)"), address, expectedAddress)
         }
     }
     
@@ -84,13 +84,15 @@ extension PodCommsError: LocalizedError {
         case .emptyResponse:
             return nil
         case .podAckedInsteadOfReturningResponse:
-            return LocalizedString("Try again.", comment: "Recovery suggestion when ack received instead of response.")
+            return LocalizedString("Try again", comment: "Recovery suggestion when ack received instead of response")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:
             return nil
         case .unknownResponseType:
             return nil
+        case .invalidAddress:
+            return LocalizedString("Crosstalk possible. Please move to a new location and try again", comment: "Recovery suggestion when unexpected address received")
         case .noRileyLinkAvailable:
             return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion when no RileyLink is available")
         case .unfinalizedBolus:
@@ -105,8 +107,6 @@ extension PodCommsError: LocalizedError {
             return nil
         case .commsError:
             return nil
-        case .invalidAddress:
-            return LocalizedString("Crosstalk possible. Please move to a new location and try again.", comment: "Recovery suggestion when unexpected address received.")
         }
     }
 }

@@ -67,9 +67,8 @@ class PodComms: CustomDebugStringConvertible {
             throw PodCommsError.podFault(fault: fault)
         }
         
-        guard let config = response.messageBlocks[0] as? VersionResponse,
-            config.isAssignAddressVersionResponse == true
-        else {
+        guard let config = response.messageBlocks[0] as? VersionResponse else
+        {
             self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
             let responseType = response.messageBlocks[0].blockType
             throw PodCommsError.unexpectedResponse(response: responseType)

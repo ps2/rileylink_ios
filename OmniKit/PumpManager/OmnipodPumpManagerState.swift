@@ -18,6 +18,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public var podState: PodState?
 
+    public var pairingAttemptAddress: UInt32?
+
     public var timeZone: TimeZone
     
     public var basalSchedule: BasalSchedule
@@ -126,6 +128,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         }
 
         self.confirmationBeeps = rawValue["confirmationBeeps"] as? Bool ?? rawValue["bolusBeeps"] as? Bool ?? false
+        
+        if let pairingAttemptAddress = rawValue["pairingAttemptAddress"] as? UInt32 {
+            self.pairingAttemptAddress = pairingAttemptAddress
+        }
     }
     
     public var rawValue: RawValue {
@@ -147,6 +153,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         
         if let rileyLinkConnectionManagerState = rileyLinkConnectionManagerState {
             value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState.rawValue
+        }
+        
+        if let pairingAttemptAddress = pairingAttemptAddress {
+            value["pairingAttemptAddress"] = pairingAttemptAddress
         }
 
         return value
@@ -184,6 +194,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
             "* confirmationBeeps: \(String(describing: confirmationBeeps))",
+            "* pairingAttemptAddress: \(String(describing: pairingAttemptAddress))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")

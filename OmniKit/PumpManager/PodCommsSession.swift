@@ -80,11 +80,11 @@ extension PodCommsError: LocalizedError {
         case .invalidData:
             return nil
         case .noResponse:
-            return LocalizedString("Please bring your pod closer to the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
+            return LocalizedString("Please try repositioning the pod or the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
         case .emptyResponse:
             return nil
         case .podAckedInsteadOfReturningResponse:
-            return LocalizedString("Try again.", comment: "Recovery suggestion when ack received instead of response.")
+            return LocalizedString("Try again", comment: "Recovery suggestion when ack received instead of response.")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:

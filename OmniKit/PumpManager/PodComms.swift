@@ -62,21 +62,11 @@ class PodComms: CustomDebugStringConvertible {
         
         let response = try transport.sendMessage(message)
 
-        if let fault = response.fault {
-            self.log.error("Pod Fault: %{public}@", String(describing: fault))
-            throw PodCommsError.podFault(fault: fault)
-        }
-        
-        guard let config = response.messageBlocks[0] as? VersionResponse else
-        {
-            self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
-            let responseType = response.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType)
-        }
+        let config = try assignAddressResponse(response: response, log: self.log)
         
         guard config.address == address else {
             self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
-            throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
+            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
         }
 
         self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi ?? 0)
@@ -120,18 +110,7 @@ class PodComms: CustomDebugStringConvertible {
             throw error
         }
 
-        if let fault = response.fault {
-            self.log.error("Pod Fault: %{public}@", String(describing: fault))
-            throw PodCommsError.podFault(fault: fault)
-        }
-
-        guard let config = response.messageBlocks[0] as? VersionResponse,
-            config.isSetupPodVersionResponse == true
-        else {
-            self.log.error("setupPod unexpected response: %{public}@", String(describing: response))
-            let responseType = response.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType)
-        }
+        let config = try setupPodResponse(response: response, log: self.log)
         
         guard config.setupState == .paired else {
             self.log.error("SetupPod response with incorrect setupState: %{public}@", String(describing: config.setupState))

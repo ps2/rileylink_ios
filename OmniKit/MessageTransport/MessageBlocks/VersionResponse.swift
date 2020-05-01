@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 fileprivate let assignAddressVersionLength: UInt8 = 0x15
 fileprivate let setupPodVersionLength: UInt8 = 0x1B
@@ -104,12 +105,35 @@ public struct VersionResponse : MessageBlock {
             throw MessageBlockError.parseError
         }
     }
+}
 
-    public var isAssignAddressVersionResponse: Bool {
-        return self.data.count == assignAddressVersionLength + 2
+private func checkForFault(response: Message, log: OSLog) throws {
+    if let fault = response.fault {
+        log.error("Pod Fault: %{public}@", String(describing: fault))
+        throw PodCommsError.podFault(fault: fault)
     }
+}
 
-    public var isSetupPodVersionResponse: Bool {
-        return self.data.count == setupPodVersionLength + 2
+func assignAddressResponse(response: Message, log: OSLog) throws -> VersionResponse {
+    try checkForFault(response: response, log: log)
+    if let versionResponse = response.messageBlocks[0] as? VersionResponse,
+        versionResponse.data.count == assignAddressVersionLength + 2
+    {
+        return versionResponse
     }
+    log.error("unexpected AssignAddress response: %{public}@", String(describing: response))
+    let responseType = response.messageBlocks[0].blockType
+    throw PodCommsError.unexpectedResponse(response: responseType)
+}
+
+func setupPodResponse(response: Message, log: OSLog) throws -> VersionResponse {
+    try checkForFault(response: response, log: log)
+    if let versionResponse = response.messageBlocks[0] as? VersionResponse,
+        versionResponse.data.count == setupPodVersionLength + 2
+    {
+        return versionResponse
+    }
+    log.error("unexpected SetupPod response: %{public}@", String(describing: response))
+    let responseType = response.messageBlocks[0].blockType
+    throw PodCommsError.unexpectedResponse(response: responseType)
 }

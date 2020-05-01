@@ -33,7 +33,7 @@ public struct VersionResponse : MessageBlock {
 
     public let pmVersion: FirmwareVersion
     public let piVersion: FirmwareVersion
-    public let setupState: SetupState
+    public let podProgressStatus: PodProgressStatus
     public let lot: UInt32
     public let tid: UInt32
     public let gain: UInt8? // Only in the shorter assignAddress response
@@ -63,8 +63,8 @@ public struct VersionResponse : MessageBlock {
 
             pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 2..<5))
             piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 5..<8))
-            if let podProgress = SetupState(rawValue: encodedData[9]) {
-                self.setupState = podProgress
+            if let podProgress = PodProgressStatus(rawValue: encodedData[9]) {
+                self.podProgressStatus = podProgress
             } else {
                 throw MessageBlockError.parseError
             }
@@ -89,8 +89,8 @@ public struct VersionResponse : MessageBlock {
 
             pmVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 9..<12))
             piVersion = FirmwareVersion(encodedData: encodedData.subdata(in: 12..<15))
-            if let podProgress = SetupState(rawValue: encodedData[16]) {
-                self.setupState = podProgress
+            if let podProgress = PodProgressStatus(rawValue: encodedData[16]) {
+                self.podProgressStatus = podProgress
             } else {
                 throw MessageBlockError.parseError
             }

@@ -441,6 +441,7 @@
 		C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */; };
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1B44CA7224BDFDF00DE47E5 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
+		C1B73D65245F824400881A4F /* MinimedPumpManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
 		C1BB128821CB5603009A29B5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB128721CB5603009A29B5 /* main.swift */; };
 		C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA0213323E800C50C1D /* CRC8.swift */; };
@@ -1392,6 +1393,7 @@
 		C1B3831D1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
+		C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpManagerTests.swift; sourceTree = "<group>"; };
 		C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioAdapter.swift; sourceTree = "<group>"; };
 		C1BB128521CB5603009A29B5 /* OmniKitPacketParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OmniKitPacketParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BB128721CB5603009A29B5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -2038,6 +2040,7 @@
 				2F962EBE1E678BAA0070EFBD /* PumpOpsSynchronousTests.swift */,
 				54BC44B41DB7184D00340EED /* NSStringExtensions.swift */,
 				2F962EC01E6872170070EFBD /* TimestampedHistoryEventTests.swift */,
+				C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */,
 			);
 			path = MinimedKitTests;
 			sourceTree = "<group>";
@@ -3855,6 +3858,7 @@
 				545AEFB21DF5D7DB00DF9433 /* SensorDataLowGlucoseEventTests.swift in Sources */,
 				54BC44AB1DB7093700340EED /* SensorTimestampGlucoseEventTests.swift in Sources */,
 				43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */,
+				C1B73D65245F824400881A4F /* MinimedPumpManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3998,7 +4002,6 @@
 				C15500282308FA2F00345FCC /* BeepConfigCommand.swift in Sources */,
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
 				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
-				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,
 				C1BB12AE21CB5654009A29B5 /* SetupPodCommand.swift in Sources */,
 				C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */,
 				C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */,

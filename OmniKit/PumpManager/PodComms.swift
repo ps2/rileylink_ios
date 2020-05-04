@@ -76,7 +76,7 @@ class PodComms: CustomDebugStringConvertible {
         
         guard config.address == address else {
             self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
-            throw PodCommsError.invalidAddress(address: response.address, expectedAddress: address)
+            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
         }
 
         self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi ?? 0)

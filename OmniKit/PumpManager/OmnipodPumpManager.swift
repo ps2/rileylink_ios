@@ -1544,6 +1544,8 @@ extension OmnipodPumpManager: PumpManager {
         }
         return nil
     }
+    
+    public func setMaximumTempBasalRate(_ rate: Double) {}
 
     // This cannot be called from within the lockedState lock!
     func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {

@@ -1100,6 +1100,8 @@ extension MinimedPumpManager: PumpManager {
         }
         return nil
     }
+    
+    public func setMaximumTempBasalRate(_ rate: Double) { }
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {

@@ -107,21 +107,19 @@ public struct VersionResponse : MessageBlock {
 }
 
 func assignAddressResponse(response: Message) throws -> VersionResponse {
-    guard let assignAddressResponse = response.messageBlocks[0] as? VersionResponse else {
-        throw MessageError.validationFailed(description: "not a valid VersionResponse")
-    }
-    guard assignAddressResponse.data.count == assignAddressVersionLength + 2 else {
-        throw MessageError.validationFailed(description: "not a AssignAddress VersionResponse")
+    guard let assignAddressResponse = response.messageBlocks[0] as? VersionResponse,
+        assignAddressResponse.data.count == assignAddressVersionLength + 2
+    else {
+        throw MessageError.validationFailed(description: "invalid AssignAddress VersionResponse")
     }
     return assignAddressResponse
 }
 
 func setupPodResponse(response: Message) throws -> VersionResponse {
-    guard let setupPodResponse = response.messageBlocks[0] as? VersionResponse else {
-        throw MessageError.validationFailed(description: "not a valid VersionResponse")
-    }
-    guard setupPodResponse.data.count == setupPodVersionLength + 2 else {
-        throw MessageError.validationFailed(description: "not a SetupPod VersionResponse")
+    guard let setupPodResponse = response.messageBlocks[0] as? VersionResponse,
+        setupPodResponse.data.count == setupPodVersionLength + 2
+    else {
+        throw MessageError.validationFailed(description: "invalid SetupPod VersionResponse")
     }
     return setupPodResponse
 }

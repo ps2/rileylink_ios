@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import os.log
 
 fileprivate let assignAddressVersionLength: UInt8 = 0x15
 fileprivate let setupPodVersionLength: UInt8 = 0x1B

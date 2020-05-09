@@ -49,6 +49,14 @@ public struct AlertConfiguration {
     }
 }
 
+extension AlertConfiguration: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "AlertConfiguration(slot:\(slot), active:\(active), autoOffModifier:\(autoOffModifier), duration:\(duration), trigger:\(trigger), beepRepeat:\(beepRepeat), beepType:\(beepType))"
+    }
+}
+
+
+
 public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
     public typealias RawValue = [String: Any]
 

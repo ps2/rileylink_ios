@@ -3998,7 +3998,6 @@
 				C15500282308FA2F00345FCC /* BeepConfigCommand.swift in Sources */,
 				C1BB129521CB564D009A29B5 /* CRC16.swift in Sources */,
 				C1BB129D21CB5654009A29B5 /* CancelDeliveryCommand.swift in Sources */,
-				C1BB12AC21CB5654009A29B5 /* PodInfoTester.swift in Sources */,
 				C1BB12AE21CB5654009A29B5 /* SetupPodCommand.swift in Sources */,
 				C1BB12BC21CB577E009A29B5 /* LogEventErrorCode.swift in Sources */,
 				C1BB12AB21CB5654009A29B5 /* PodInfoResponse.swift in Sources */,

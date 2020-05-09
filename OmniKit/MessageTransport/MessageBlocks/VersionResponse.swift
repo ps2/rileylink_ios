@@ -113,3 +113,10 @@ public struct VersionResponse : MessageBlock {
         return self.data.count == setupPodVersionLength + 2
     }
 }
+
+extension VersionResponse: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "VersionResponse(lot:\(lot), tid:\(tid), address:\(Data(bigEndian: address).hexadecimalString), setupState:\(setupState), pmVersion:\(pmVersion), piVersion:\(piVersion))"
+    }
+}
+

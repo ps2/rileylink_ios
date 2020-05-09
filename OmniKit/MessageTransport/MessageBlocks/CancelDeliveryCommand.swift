@@ -81,3 +81,9 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
         self.beepType = beepType
     }
 }
+
+extension CancelDeliveryCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "CancelDeliveryCommand(nonce:\(Data(bigEndian: nonce).hexadecimalString), deliveryType:\(deliveryType), beepType:\(beepType))"
+    }
+}

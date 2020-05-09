@@ -75,3 +75,9 @@ public struct BolusExtraCommand : MessageBlock {
     }
 }
 
+
+extension BolusExtraCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "BolusExtraCommand(units:\(units), timeBetweenPulses:\(timeBetweenPulses), squareWaveUnits:\(squareWaveUnits), squareWaveDuration:\(squareWaveDuration), acknowledgementBeep:\(acknowledgementBeep), completionBeep:\(completionBeep), programReminderInterval:\(programReminderInterval))"
+    }
+}

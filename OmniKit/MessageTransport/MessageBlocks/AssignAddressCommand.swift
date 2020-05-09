@@ -36,3 +36,9 @@ public struct AssignAddressCommand : MessageBlock {
         self.address = address
     }
 }
+
+extension AssignAddressCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "AssignAddressCommand(address:\(Data(bigEndian: address).hexadecimalString))"
+    }
+}

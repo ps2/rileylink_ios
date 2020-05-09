@@ -84,3 +84,9 @@ public struct SetupPodCommand : MessageBlock {
         self.packetTimeoutLimit = packetTimeoutLimit
     }
 }
+
+extension SetupPodCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "SetupPodCommand(address:\(Data(bigEndian: address).hexadecimalString), dateComponents:\(dateComponents), lot:\(lot), tid:\(tid), packetTimeoutLimit:\(packetTimeoutLimit))"
+    }
+}

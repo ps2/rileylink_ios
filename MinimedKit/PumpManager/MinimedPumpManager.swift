@@ -443,9 +443,8 @@ extension MinimedPumpManager {
     }
     
     static func reconcilePendingDosesWith(_ events: [NewPumpEvent], reconciliationMappings: [Data:ReconciledDoseMapping], pendingDoses: [UnfinalizedDose]) ->
-        (reconciledEvents: [NewPumpEvent], reconciliationMappings: [Data:ReconciledDoseMapping], pendingDoses: [UnfinalizedDose]) {
+        (remainingEvents: [NewPumpEvent], reconciliationMappings: [Data:ReconciledDoseMapping], pendingDoses: [UnfinalizedDose]) {
             
-        var mergedPumpEvents: [NewPumpEvent] = []
         var newReconciliationMapping = reconciliationMappings
         
         var reconcilableEvents = events.filter { !newReconciliationMapping.keys.contains($0.raw) }
@@ -470,38 +469,29 @@ extension MinimedPumpManager {
             }
             return dose
         }
+            
+        // Remove reconciled events
+        let remainingPumpEvents = events.filter { (event) -> Bool in
+            return newReconciliationMapping[event.raw] == nil
+        }
         
-        // Update pump event data (sync id, start time, duration) using reconciled pending doses
-        let reconciledPendingDoses = allPending.filter { $0.isReconciledWithHistory }
-        var pendingDosesByUUID = Dictionary(uniqueKeysWithValues: reconciledPendingDoses.map({ ($0.uuid, $0) }))
-        let reconciledHistoryEvents = events.map({ (event) -> NewPumpEvent in
-            guard let mapping = newReconciliationMapping[event.raw], let pendingDose = pendingDosesByUUID[mapping.uuid] else {
-                return event
-            }
-            pendingDosesByUUID.removeValue(forKey: mapping.uuid)
-            // We want to be using pump event date for reconciled events, but NS won't let us update startTime
-            return event.replacingAttributes(raw: mapping.uuid.asRaw, date: pendingDose.startTime)
-        })
-        
-        mergedPumpEvents = reconciledHistoryEvents + allPending.filter { !$0.isReconciledWithHistory }.map { NewPumpEvent($0) }
-
-        return (reconciledEvents: mergedPumpEvents, reconciliationMappings: newReconciliationMapping, pendingDoses: allPending)
+        return (remainingEvents: remainingPumpEvents, reconciliationMappings: newReconciliationMapping, pendingDoses: allPending)
     }
 
     private func reconcilePendingDosesWith(_ events: [NewPumpEvent]) -> [NewPumpEvent] {
         // Must be called from the sessionQueue
-        var reconciledEvents: [NewPumpEvent]?
+        var remainingEvents: [NewPumpEvent]?
         lockedState.mutate { (state) in
             let allPending = (state.pendingDoses + [state.unfinalizedTempBasal, state.unfinalizedBolus]).compactMap({ $0 })
             let result = MinimedPumpManager.reconcilePendingDosesWith(events, reconciliationMappings: state.reconciliationMappings, pendingDoses: allPending)
             state.lastReconciliation = Date()
             
-            reconciledEvents = result.reconciledEvents
+            remainingEvents = result.remainingEvents
             
             // Pending doses and reconciliation mappings will not be kept past this threshold
             let expirationCutoff = Date().addingTimeInterval(.hours(-12))
             
-            state.reconciliationMappings = state.reconciliationMappings.filter { (key, value) -> Bool in
+            state.reconciliationMappings = result.reconciliationMappings.filter { (key, value) -> Bool in
                 return value.startTime >= expirationCutoff
             }
             
@@ -523,7 +513,7 @@ extension MinimedPumpManager {
                 return dose.startTime >= expirationCutoff
             }
         }
-        return reconciledEvents!
+        return remainingEvents!
     }
 
     /// Polls the pump for new history events and passes them to the loop manager
@@ -551,14 +541,18 @@ extension MinimedPumpManager {
                     
                     // Reconcile history with pending doses
                     let newPumpEvents = historyEvents.pumpEvents(from: model)
-                    let reconciledEvents = self.reconcilePendingDosesWith(newPumpEvents)
+                    
+                    // During reconciliation, some pump events may be reconciled as pending doses and removed
+                    let remainingHistoryEvents = self.reconcilePendingDosesWith(newPumpEvents)
 
                     self.pumpDelegate.notify({ (delegate) in
                         guard let delegate = delegate else {
                             preconditionFailure("pumpManagerDelegate cannot be nil")
                         }
+                        
+                        let pendingEvents = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent })
 
-                        delegate.pumpManager(self, hasNewPumpEvents: reconciledEvents, lastReconciliation: self.lastReconciliation, completion: { (error) in
+                        delegate.pumpManager(self, hasNewPumpEvents: remainingHistoryEvents + pendingEvents, lastReconciliation: self.lastReconciliation, completion: { (error) in
                             // Called on an unknown queue by the delegate
                             if error == nil {
                                 self.recents.lastAddedPumpEvents = Date()
@@ -571,6 +565,9 @@ extension MinimedPumpManager {
                                         state.unfinalizedTempBasal = nil
                                     }
                                     state.pendingDoses.removeAll(where: { (dose) -> Bool in
+                                        if dose.isReconciledWithHistory && dose.isFinished {
+                                            print("Removing stored, finished, reconciled dose: \(dose)")
+                                        }
                                         return dose.isReconciledWithHistory && dose.isFinished
                                     })
                                 })

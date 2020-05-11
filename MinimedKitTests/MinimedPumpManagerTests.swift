@@ -12,7 +12,7 @@ import LoopKit
 
 class MinimedPumpManagerTests: XCTestCase {
 
-    func testEventReconciliation() {
+    func testPendingDoseUpdatesWithActualDeliveryFromHistoryDose() {
         
         let bolusTime = Date().addingTimeInterval(-TimeInterval(minutes: 5));
         
@@ -45,12 +45,77 @@ class MinimedPumpManagerTests: XCTestCase {
         XCTAssertEqual(5.4, pendingBolus.programmedUnits)
         XCTAssertEqual(TimeInterval(minutes: 1), pendingBolus.duration)
         XCTAssertEqual(true, pendingBolus.isFinished)
-
-        // Should update event with uuid from pending
-        XCTAssertEqual(1, result.reconciledEvents.count)
-        let reconciledEvent = result.reconciledEvents.first!
-        XCTAssertEqual(pendingBolus.uuid.asRaw, reconciledEvent.raw)
-
-        XCTAssertEqual(1.0, reconciledEvent.dose!.deliveredUnits)
     }
+    
+    func testReconciledDosesShouldOnlyAppearInReturnedPendingDoses() {
+        
+        let bolusTime = Date().addingTimeInterval(-TimeInterval(minutes: 5));
+
+        // Shows up in history 2 seconds later
+        let bolusEventTime = bolusTime.addingTimeInterval(2)
+        
+        let bolusAmount = 1.5
+        
+        let bolusDuration = PumpModel.model523.bolusDeliveryTime(units: bolusAmount)
+
+        let unfinalizedBolus = UnfinalizedDose(bolusAmount: bolusAmount, startTime: bolusTime, duration: bolusDuration, isReconciledWithHistory: false)
+        
+        let eventDose = DoseEntry(type: .bolus, startDate: bolusEventTime, endDate: bolusEventTime.addingTimeInterval(bolusDuration), value: bolusAmount, unit: .units, deliveredUnits: bolusAmount)
+        
+        let bolusEvent = NewPumpEvent(
+            date: bolusEventTime,
+            dose: eventDose,
+            isMutable: false,
+            raw: Data(hexadecimalString: "abcdef")!,
+            title: "Test Bolus",
+            type: .bolus)
+        
+        let result = MinimedPumpManager.reconcilePendingDosesWith([bolusEvent], reconciliationMappings: [:], pendingDoses: [unfinalizedBolus])
+        
+        // Should mark pending bolus as reconciled
+        XCTAssertEqual(1, result.pendingDoses.count)
+        let pendingBolus = result.pendingDoses.first!
+        XCTAssertEqual(true, pendingBolus.isReconciledWithHistory)
+        
+        XCTAssertEqual(1, result.reconciliationMappings.count)
+        XCTAssertEqual(unfinalizedBolus.uuid, result.reconciliationMappings[bolusEvent.raw]?.uuid)
+        XCTAssertEqual(unfinalizedBolus.startTime, result.reconciliationMappings[bolusEvent.raw]?.startTime)
+
+        // Bolus should not be returned as history event
+        XCTAssert(result.remainingEvents.isEmpty)
+    }
+    
+    func testReconciledDosesShouldNotAppearInReturnedPumpEvents() {
+        
+        let bolusTime = Date().addingTimeInterval(-TimeInterval(minutes: 5));
+
+        // Shows up in history 2 seconds later
+        let bolusEventTime = bolusTime.addingTimeInterval(2)
+        
+        let bolusAmount = 1.5
+        
+        let bolusDuration = PumpModel.model523.bolusDeliveryTime(units: bolusAmount)
+
+        let eventDose = DoseEntry(type: .bolus, startDate: bolusEventTime, endDate: bolusEventTime.addingTimeInterval(bolusDuration), value: bolusAmount, unit: .units, deliveredUnits: bolusAmount)
+        
+        let bolusEvent = NewPumpEvent(
+            date: bolusEventTime,
+            dose: eventDose,
+            isMutable: false,
+            raw: Data(hexadecimalString: "abcdef")!,
+            title: "Test Bolus",
+            type: .bolus)
+        
+        
+        
+        let reconciliationMappings: [Data:ReconciledDoseMapping] = [
+            bolusEvent.raw : ReconciledDoseMapping(startTime: bolusTime, uuid: UUID(), eventRaw: bolusEvent.raw)
+        ]
+        
+        let result = MinimedPumpManager.reconcilePendingDosesWith([bolusEvent], reconciliationMappings: reconciliationMappings, pendingDoses: [])
+        
+        // Bolus should not be returned as history event
+        XCTAssert(result.remainingEvents.isEmpty)
+    }
+
 }

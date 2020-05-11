@@ -1184,3 +1184,15 @@ extension MinimedPumpManager: CGMManager {
         }
     }
 }
+
+// MARK: - DeviceAlertResponder implementation
+extension MinimedPumpManager {
+    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+}
+
+// MARK: - DeviceAlertSoundVendor implementation
+extension MinimedPumpManager {
+    public func getSoundBaseURL() -> URL? { return nil }
+    public func getSounds() -> [DeviceAlert.Sound] { return [] }
+}
+

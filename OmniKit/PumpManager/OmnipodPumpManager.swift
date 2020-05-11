@@ -1623,3 +1623,14 @@ extension OmnipodPumpManager: PodCommsDelegate {
     }
 }
 
+// MARK: - DeviceAlertResponder implementation
+extension OmnipodPumpManager {
+    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+}
+
+// MARK: - DeviceAlertSoundVendor implementation
+extension OmnipodPumpManager {
+    public func getSoundBaseURL() -> URL? { return nil }
+    public func getSounds() -> [DeviceAlert.Sound] { return [] }
+}
+

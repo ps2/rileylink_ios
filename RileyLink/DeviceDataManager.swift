@@ -123,4 +123,12 @@ extension DeviceDataManager: DeviceManagerDelegate {
             UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
         }
     }
+
+    func removeNotificationRequests(for manager: DeviceManager, identifiers: [String]) {
+        DispatchQueue.main.async {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+        }
+    }
+
+    func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?) {}
 }

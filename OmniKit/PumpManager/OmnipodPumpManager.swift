@@ -1576,6 +1576,8 @@ extension OmnipodPumpManager: PumpManager {
         }
         return nil
     }
+    
+    public func setMaximumTempBasalRate(_ rate: Double) {}
 
     // This cannot be called from within the lockedState lock!
     func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
@@ -1647,5 +1649,16 @@ extension OmnipodPumpManager: PodCommsDelegate {
             state.podState = podState
         }
     }
+}
+
+// MARK: - DeviceAlertResponder implementation
+extension OmnipodPumpManager {
+    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+}
+
+// MARK: - DeviceAlertSoundVendor implementation
+extension OmnipodPumpManager {
+    public func getSoundBaseURL() -> URL? { return nil }
+    public func getSounds() -> [DeviceAlert.Sound] { return [] }
 }
 

@@ -197,6 +197,10 @@ public class NightscoutUploader {
         postToNS([profileSet.dictionaryRepresentation], url: url, completion: completion)
     }
     
+    public func uploadProfiles(_ profileSets: [ProfileSet], completion: @escaping (Result<Bool, Error>) -> Void)  {
+        postToNS(profileSets.map { $0.dictionaryRepresentation }, endpoint: .profile, completion: completion)
+    }
+
     public func updateProfile(profileSet: ProfileSet, id: String, completion: @escaping (Error?) -> Void) {
         guard let url = url(for: .profile) else {
             completion(UploadError.missingConfiguration)
@@ -240,6 +244,27 @@ public class NightscoutUploader {
                 completion(nil)
             case .failure(let error):
                 completion(error)
+            }
+        }
+    }
+
+    fileprivate func postToNS(_ json: [Any], endpoint: Endpoint, completion: @escaping (Result<Bool, Error>) -> Void)  {
+        guard !json.isEmpty else {
+            completion(.success(false))
+            return
+        }
+
+        guard let url = url(for: endpoint) else {
+            completion(.failure(UploadError.missingConfiguration))
+            return
+        }
+
+        postToNS(json, url: url) { result in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success:
+                completion(.success(true))
             }
         }
     }
@@ -378,6 +403,10 @@ public class NightscoutUploader {
         }
     }
     
+    public func uploadDeviceStatuses(_ deviceStatuses: [DeviceStatus], completion: @escaping (Result<Bool, Error>) -> Void) {
+        postToNS(deviceStatuses.map { $0.dictionaryRepresentation }, endpoint: .deviceStatus, completion: completion)
+    }
+
     public func flushEntries() {
         guard let url = url(for: .entries) else {
             return
@@ -397,6 +426,10 @@ public class NightscoutUploader {
         }
     }
     
+    public func uploadEntries(_ entries: [NightscoutEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        postToNS(entries.map { $0.dictionaryRepresentation }, endpoint: .entries, completion: completion)
+    }
+
     func flushTreatments() {
         guard let url = url(for: .treatments) else {
             return

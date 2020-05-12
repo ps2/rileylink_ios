@@ -69,14 +69,6 @@ public struct Pod {
     public static let expirationReminderAlertMaxTimeBeforeExpiration = TimeInterval.hours(24)
 }
 
-public enum SetupState: UInt8 {
-    case sleeping = 0
-    case readyToPair = 1
-    case addressAssigned = 2
-    case paired = 3
-    case pairingExpired = 14
-}
-
 // DeliveryStatus used in StatusResponse and PodInfoFaults
 public enum DeliveryStatus: UInt8, CustomStringConvertible {
     case suspended = 0

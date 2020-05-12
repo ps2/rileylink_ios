@@ -245,7 +245,7 @@ public class PodCommsSession {
             // We started prime, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(status)
-            if status.podProgressStatus == .priming || status.podProgressStatus == .readyForBasalSchedule {
+            if status.podProgressStatus == .priming || status.podProgressStatus == .primingCompleted {
                 podState.setupProgress = .priming
                 return podState.primeFinishTime?.timeIntervalSinceNow ?? primeDuration
             }
@@ -272,7 +272,7 @@ public class PodCommsSession {
             // We started basal schedule programming, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(status)
-            if status.podProgressStatus == .readyForCannulaInsertion {
+            if status.podProgressStatus == .basalInitialized {
                 podState.setupProgress = .initialBasalScheduleSet
                 return
             }
@@ -331,7 +331,7 @@ public class PodCommsSession {
         if podState.setupProgress == .startingInsertCannula || podState.setupProgress == .cannulaInserting {
             // We started cannula insertion, but didn't get confirmation somehow, so check status
             let status: StatusResponse = try send([GetStatusCommand()])
-            if status.podProgressStatus == .cannulaInserting {
+            if status.podProgressStatus == .insertingCannula {
                 podState.setupProgress = .cannulaInserting
                 podState.updateFromStatusResponse(status)
                 return insertionWait // Not sure when it started, wait full time to be sure

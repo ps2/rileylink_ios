@@ -132,3 +132,15 @@ extension DeviceDataManager: DeviceManagerDelegate {
 
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?) {}
 }
+
+// MARK: - DeviceAlertPresenter
+extension DeviceDataManager: DeviceAlertPresenter {
+    func issueAlert(_ alert: DeviceAlert) {
+    }
+    
+    func removePendingAlert(identifier: DeviceAlert.Identifier) {
+    }
+    
+    func removeDeliveredAlert(identifier: DeviceAlert.Identifier) {
+    }
+}

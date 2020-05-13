@@ -116,7 +116,7 @@ public struct VersionResponse : MessageBlock {
 
 extension VersionResponse: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "VersionResponse(lot:\(lot), tid:\(tid), address:\(Data(bigEndian: address).hexadecimalString), setupState:\(setupState), pmVersion:\(pmVersion), piVersion:\(piVersion))"
+        return "VersionResponse(lot:\(lot), tid:\(tid), gain:\(gain?.description ?? "NA"), rssi:\(rssi?.description ?? "NA") address:\(Data(bigEndian: address).hexadecimalString), podProgressStatus:\(podProgressStatus), pmVersion:\(pmVersion), piVersion:\(piVersion))"
     }
 }
 

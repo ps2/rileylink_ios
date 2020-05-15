@@ -69,42 +69,9 @@ extension PodCommsError: LocalizedError {
         }
     }
     
-    public var failureReason: String? {
-        switch self {
-        case .noPodPaired:
-            return nil
-        case .invalidData:
-            return nil
-        case .noResponse:
-            return nil
-        case .emptyResponse:
-            return nil
-        case .podAckedInsteadOfReturningResponse:
-            return nil
-        case .unexpectedPacketType:
-            return nil
-        case .unexpectedResponse:
-            return nil
-        case .unknownResponseType:
-            return nil
-        case .noRileyLinkAvailable:
-            return nil
-        case .unfinalizedBolus:
-            return nil
-        case .unfinalizedTempBasal:
-            return nil
-        case .nonceResyncFailed:
-            return nil
-        case .podSuspended:
-            return nil
-        case .podFault:
-            return nil
-        case .commsError:
-            return nil
-        case .commandError:
-            return nil
-        }
-    }
+//    public var failureReason: String? {
+//        return nil
+//    }
     
     public var recoverySuggestion: String? {
         switch self {

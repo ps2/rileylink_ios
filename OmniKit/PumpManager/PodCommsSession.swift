@@ -65,7 +65,7 @@ extension PodCommsError: LocalizedError {
         case .commsError:
             return nil
         case .commandError(let errorCode):
-            return String(format: LocalizedString("Command error %1$u", comment: "Format string for command error code"), errorCode)
+            return String(format: LocalizedString("Command error %1$u", comment: "Format string for command error code (1: error code number)"), errorCode)
         }
     }
     

@@ -975,6 +975,8 @@ extension PumpOpsSession {
     ///     - PumpOpsError.deviceError
     ///     - PumpOpsError.noResponse
     ///     - PumpOpsError.unknownResponse
+    ///     - HistoryPageError.invalidCRC
+    ///     - HistoryPageError.unknownEventType
     public func getHistoryEvents(since startDate: Date) throws -> ([TimestampedHistoryEvent], PumpModel) {
         try wakeup()
 

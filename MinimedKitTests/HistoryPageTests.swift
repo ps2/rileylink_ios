@@ -420,7 +420,7 @@ class HistoryPageTests: XCTestCase {
         XCTAssertEqual(bgMeter.timestamp, DateComponents(gregorianYear: 2018, month: 8, day: 11, hour: 7, minute: 52, second: 49))
 
     }
-
+    
     func testHistoryTimeShift() throws {
         let model = PumpModel.model523
 

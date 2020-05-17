@@ -499,6 +499,7 @@ extension OmnipodPumpManager {
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
         let mockFaultDuringPairing = false
+        let mockCommsErrorDuringPairing = true
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
             let fault: PodInfoFaultEvent? = self.setStateWithResult({ (state) in
@@ -507,6 +508,8 @@ extension OmnipodPumpManager {
             })
             if mockFaultDuringPairing {
                 completion(.failure(PodCommsError.podFault(fault: fault!)))
+            } else if mockCommsErrorDuringPairing {
+                completion(.failure(PodCommsError.noResponse))
             } else {
                 let mockPrimeDuration = TimeInterval(.seconds(3))
                 completion(.success(mockPrimeDuration))

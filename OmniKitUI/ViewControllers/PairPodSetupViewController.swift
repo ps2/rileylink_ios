@@ -12,6 +12,9 @@ import LoopKitUI
 import RileyLinkKit
 import OmniKit
 import os.log
+import AudioToolbox
+
+fileprivate let SystemSound_alarm: SystemSoundID = 1304
 
 class PairPodSetupViewController: SetupTableViewController {
     
@@ -77,6 +80,7 @@ class PairPodSetupViewController: SetupTableViewController {
     private enum State {
         case initial
         case pairing
+        case pairingRetry
         case priming(finishTime: TimeInterval)
         case fault
         case ready
@@ -97,6 +101,11 @@ class PairPodSetupViewController: SetupTableViewController {
                 footerView.primaryButton.setPairTitle()
                 lastError = nil
                 loadingText = LocalizedString("Pairing…", comment: "The text of the loading label when pairing")
+            case .pairingRetry:
+                activityIndicator.state = .indeterminantProgress
+                footerView.primaryButton.isEnabled = false
+                footerView.primaryButton.setPairTitle()
+                // continue displaying the loadingText which includes includes a message to reposition the RL
             case .priming(let finishTime):
                 activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
@@ -133,6 +142,32 @@ class PairPodSetupViewController: SetupTableViewController {
                 }
             }
             
+            if let podCommsError = lastError as? PodCommsError,
+                case PodCommsError.noResponse = podCommsError
+            {
+                switch continueState {
+                case .pairing:
+                    // Received a no response error for the initial pairing attempt.
+                    // Replicate the PDM by beeping and displaying a reposition suggestion
+                    // to the user and keep trying to pair (by calling pair() again).
+                    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+                    AudioServicesPlayAlertSound(SystemSound_alarm)
+                    loadingText = LocalizedString("Communications error! Please reposition the RileyLink or the pod.\n\nPairing...", comment: "The text string to reposition while continuing to pair after a communications error")
+                    self.continueState = .pairingRetry
+                    pair()
+                    return
+                case .pairingRetry:
+                    // Received a no response error after the second pairing attempt.
+                    // Replicate the PDM by beeping and prompting the user to move
+                    // to a new location and then to try again.
+                    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+                    AudioServicesPlayAlertSound(SystemSound_alarm)
+                    errorText = LocalizedString("Communications error! Please move to a new area and try again.\n\n", comment: "The text string to move to a new area and try again after pairing fails due to a communications error")
+                default:
+                    break
+                }
+            }
+
             loadingText = errorText
             
             // If we have an error, update the continue state
@@ -156,6 +191,7 @@ class PairPodSetupViewController: SetupTableViewController {
     override func continueButtonPressed(_ sender: Any) {
         switch continueState {
         case .initial:
+            self.continueState = .pairing
             pair()
         case .ready:
             super.continueButtonPressed(sender)
@@ -183,7 +219,6 @@ class PairPodSetupViewController: SetupTableViewController {
     // MARK: -
     
     private func pair() {
-        self.continueState = .pairing
 
         pumpManager.pairAndPrime() { (result) in
             DispatchQueue.main.async {

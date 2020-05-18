@@ -135,7 +135,7 @@ class PairPodSetupViewController: SetupTableViewController {
             
             if let commsError = lastError as? PodCommsError, commsError.possibleWeakCommsCause {
                 if previouslyEncounteredWeakComms {
-                    errorStrings.append(LocalizedString("If problem persists, move to a new area and try again", comment: "Additional pairing recovery suggestion on multiple pairing failures"))
+                    errorStrings.append(LocalizedString("If the problem persists, move to a new area and try again", comment: "Additional pairing recovery suggestion on multiple pairing failures"))
                 } else {
                     previouslyEncounteredWeakComms = true
                 }

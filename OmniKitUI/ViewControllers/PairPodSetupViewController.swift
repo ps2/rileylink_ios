@@ -17,6 +17,8 @@ class PairPodSetupViewController: SetupTableViewController {
     
     var rileyLinkPumpManager: RileyLinkPumpManager!
     
+    var previouslyEncounteredWeakComms: Bool = false
+    
     var pumpManager: OmnipodPumpManager! {
         didSet {
             if oldValue == nil && pumpManager != nil {
@@ -123,17 +125,23 @@ class PairPodSetupViewController: SetupTableViewController {
                 return
             }
             
-            var errorText = lastError?.localizedDescription
+            var errorStrings: [String]
             
             if let error = lastError as? LocalizedError {
-                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ") + "."
-                
-                if !localizedText.isEmpty {
-                    errorText = localizedText
+                errorStrings = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap { $0 }
+            } else {
+                errorStrings = [lastError?.localizedDescription].compactMap { $0 }
+            }
+            
+            if let commsError = lastError as? PodCommsError, commsError.possibleWeakCommsCause {
+                if previouslyEncounteredWeakComms {
+                    errorStrings.append(LocalizedString("If the problem persists, move to a new area and try again", comment: "Additional pairing recovery suggestion on multiple pairing failures"))
+                } else {
+                    previouslyEncounteredWeakComms = true
                 }
             }
             
-            loadingText = errorText
+            loadingText = errorStrings.joined(separator: ". ") + "."
             
             // If we have an error, update the continue state
             if let podCommsError = lastError as? PodCommsError,
@@ -203,6 +211,17 @@ class PairPodSetupViewController: SetupTableViewController {
                     self.lastError = error
                 }
             }
+        }
+    }
+}
+
+private extension PodCommsError {
+    var possibleWeakCommsCause: Bool {
+        switch self {
+        case .invalidData, .noResponse:
+            return true
+        default:
+            return false
         }
     }
 }

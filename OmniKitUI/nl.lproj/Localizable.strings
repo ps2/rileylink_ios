@@ -76,7 +76,7 @@
 
 /* Button title for pod deactivation
    Button title to deactivate pod */
-"Deactivate Pod" = "Deactibeer pod";
+"Deactivate Pod" = "Deactiveer pod";
 
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Verwijder Omnipod";

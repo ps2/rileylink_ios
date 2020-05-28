@@ -1102,6 +1102,25 @@ extension MinimedPumpManager: PumpManager {
     }
     
     public func setMaximumTempBasalRate(_ rate: Double) { }
+
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            guard let session = session else {
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                return
+            }
+
+            do {
+                let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
+                try session.setBasalSchedule(newSchedule, for: .standard)
+
+                completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: session.pump.timeZone)!))
+            } catch let error {
+                self.log.error("Save basal profile failed: %{public}@", String(describing: error))
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {

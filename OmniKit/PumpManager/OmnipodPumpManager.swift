@@ -1547,6 +1547,17 @@ extension OmnipodPumpManager: PumpManager {
     
     public func setMaximumTempBasalRate(_ rate: Double) {}
 
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
+        setBasalSchedule(newSchedule) { (error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.state.timeZone)!))
+            }
+        }
+    }
+
     // This cannot be called from within the lockedState lock!
     func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
         session.assertOnSessionQueue()

@@ -480,13 +480,10 @@ extension MinimedPumpManager {
 
     private func reconcilePendingDosesWith(_ events: [NewPumpEvent]) -> [NewPumpEvent] {
         // Must be called from the sessionQueue
-        var remainingEvents: [NewPumpEvent]?
-        lockedState.mutate { (state) in
+        return setStateWithResult { (state) -> [NewPumpEvent] in
             let allPending = (state.pendingDoses + [state.unfinalizedTempBasal, state.unfinalizedBolus]).compactMap({ $0 })
             let result = MinimedPumpManager.reconcilePendingDosesWith(events, reconciliationMappings: state.reconciliationMappings, pendingDoses: allPending)
             state.lastReconciliation = Date()
-            
-            remainingEvents = result.remainingEvents
             
             // Pending doses and reconciliation mappings will not be kept past this threshold
             let expirationCutoff = Date().addingTimeInterval(.hours(-12))
@@ -512,8 +509,27 @@ extension MinimedPumpManager {
                 }
                 return dose.startTime >= expirationCutoff
             }
+            
+            if var runningTempBasal = state.unfinalizedTempBasal {
+                // Look for following temp basal cancel event
+                if let tempBasalCancellation = result.remainingEvents.first(where: { (event) -> Bool in
+                    if let dose = event.dose,
+                        dose.type == .tempBasal,
+                        dose.startDate > runningTempBasal.startTime,
+                        dose.startDate < runningTempBasal.finishTime,
+                        dose.unitsPerHour == 0
+                    {
+                        return true
+                    }
+                    return false
+                }) {
+                    runningTempBasal.finishTime = tempBasalCancellation.date
+                    state.unfinalizedTempBasal = runningTempBasal
+                    state.suspendState = .resumed(tempBasalCancellation.date)
+                }
+            }
+            return result.remainingEvents
         }
-        return remainingEvents!
     }
 
     /// Polls the pump for new history events and passes them to the loop manager

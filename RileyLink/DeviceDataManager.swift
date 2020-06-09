@@ -133,11 +133,11 @@ extension DeviceDataManager: DeviceManagerDelegate {
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?) {}
 }
 
-// MARK: - DeviceAlertPresenter
-extension DeviceDataManager: DeviceAlertPresenter {
-    func issueAlert(_ alert: DeviceAlert) {
+// MARK: - AlertPresenter
+extension DeviceDataManager: AlertPresenter {
+    func issueAlert(_ alert: Alert) {
     }
     
-    func retractAlert(identifier: DeviceAlert.Identifier) {
+    func retractAlert(identifier: Alert.Identifier) {
     }
 }

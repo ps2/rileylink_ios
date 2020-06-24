@@ -42,6 +42,11 @@ extension MySentryPumpStatusMessageBody: SensorDisplayable {
         return true
     }
 
+    // TODO Placeholder. This functionality will come with LOOP-1311
+    public var glucoseValueType: GlucoseValueType? {
+        return nil
+    }
+    
     var batteryPercentage: Int {
         return batteryRemainingPercent
     }

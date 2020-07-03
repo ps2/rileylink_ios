@@ -90,7 +90,7 @@ public struct LoopSettings {
         }
         
         minimumBGGuard = rawValue["minimumBGGuard"] as? Double
-        
+         
         if let preMealTargetRangeRaw = rawValue["preMealTargetRange"] as? [Double], preMealTargetRangeRaw.count == 2 {
             preMealTargetRange = ClosedRange(uncheckedBounds: (lower: preMealTargetRangeRaw[0], upper: preMealTargetRangeRaw[1]))
         } else {

@@ -24,8 +24,8 @@ public class ProfileSet {
     public struct ScheduleItem {
         typealias RawValue = [String: Any]
 
-        let offset: TimeInterval
-        let value: Double
+        public let offset: TimeInterval
+        public let value: Double
         
         public init(offset: TimeInterval, value: Double) {
             self.offset = offset
@@ -58,13 +58,13 @@ public class ProfileSet {
     public struct Profile {
         typealias RawValue = [String: Any]
 
-        let timeZone : TimeZone
-        let dia : TimeInterval
-        let sensitivity : [ScheduleItem]
-        let carbratio : [ScheduleItem]
-        let basal : [ScheduleItem]
-        let targetLow : [ScheduleItem]
-        let targetHigh : [ScheduleItem]
+        public let timeZone : TimeZone
+        public let dia : TimeInterval
+        public let sensitivity : [ScheduleItem]
+        public let carbratio : [ScheduleItem]
+        public let basal : [ScheduleItem]
+        public let targetLow : [ScheduleItem]
+        public let targetHigh : [ScheduleItem]
 
         public init(timeZone: TimeZone, dia: TimeInterval, sensitivity: [ScheduleItem], carbratio: [ScheduleItem], basal: [ScheduleItem], targetLow: [ScheduleItem], targetHigh: [ScheduleItem]) {
             self.timeZone = timeZone
@@ -116,12 +116,12 @@ public class ProfileSet {
 
     }
     
-    let startDate : Date
-    let units: String
-    let enteredBy: String
-    let defaultProfile: String
-    let store: ProfileStore
-    let settings: LoopSettings
+    public let startDate : Date
+    public let units: String
+    public let enteredBy: String
+    public let defaultProfile: String
+    public let store: ProfileStore
+    public let settings: LoopSettings
     
     public init(startDate: Date, units: String, enteredBy: String, defaultProfile: String, store: ProfileStore, settings: LoopSettings) {
         self.startDate = startDate

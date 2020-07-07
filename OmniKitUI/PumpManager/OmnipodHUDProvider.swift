@@ -29,7 +29,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             if oldValue?.lastInsulinMeasurements != podState?.lastInsulinMeasurements {
                 updateReservoirView()
             }
-                        
+            
             if oldValue != nil && podState == nil {
                 updateReservoirView()
             }

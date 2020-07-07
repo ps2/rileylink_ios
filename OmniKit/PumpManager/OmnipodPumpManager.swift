@@ -261,7 +261,8 @@ extension OmnipodPumpManager {
             device: device(for: state),
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
-            bolusState: bolusState(for: state)
+            bolusState: bolusState(for: state),
+            pumpStatusHighlight: pumpStatusHighlight(for: state)
         )
     }
 
@@ -340,6 +341,17 @@ extension OmnipodPumpManager {
         }
         return .none
     }
+    
+    private func pumpStatusHighlight(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
+        guard state.podState?.fault != nil else {
+            return nil
+        }
+
+        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
+                                                     icon: UIImage(systemName: "exclamationmark.circle.fill")!,
+                                                     color: .systemRed)
+    }
+        
 
     // Thread-safe
     public var hasActivePod: Bool {

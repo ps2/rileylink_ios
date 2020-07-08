@@ -348,8 +348,8 @@ extension OmnipodPumpManager {
         }
 
         return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
-                                                     icon: UIImage(systemName: "exclamationmark.circle.fill")!,
-                                                     color: .systemRed)
+                                                     imageSystemName: "exclamationmark.circle.fill",
+                                                     state: .critical)
     }
         
 

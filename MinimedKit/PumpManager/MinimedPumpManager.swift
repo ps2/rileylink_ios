@@ -364,6 +364,7 @@ extension MinimedPumpManager {
                     date: date,
                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(glucose)),
                     isDisplayOnly: false,
+                    wasUserEntered: false,
                     syncIdentifier: status.glucoseSyncIdentifier ?? UUID().uuidString,
                     device: self.device
                 )
@@ -1113,6 +1114,25 @@ extension MinimedPumpManager: PumpManager {
     }
     
     public func setMaximumTempBasalRate(_ rate: Double) { }
+
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            guard let session = session else {
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                return
+            }
+
+            do {
+                let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
+                try session.setBasalSchedule(newSchedule, for: .standard)
+
+                completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: session.pump.timeZone)!))
+            } catch let error {
+                self.log.error("Save basal profile failed: %{public}@", String(describing: error))
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {
@@ -1184,7 +1204,7 @@ extension MinimedPumpManager: CGMManager {
                         .map {
                             let glucoseEvent = $0.glucoseEvent as! SensorValueGlucoseEvent
                             let quantity = HKQuantity(unit: unit, doubleValue: Double(glucoseEvent.sgv))
-                            return NewGlucoseSample(date: $0.date, quantity: quantity, isDisplayOnly: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
+                            return NewGlucoseSample(date: $0.date, quantity: quantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
                     }
 
                     completion(.newData(glucoseValues))
@@ -1196,14 +1216,14 @@ extension MinimedPumpManager: CGMManager {
     }
 }
 
-// MARK: - DeviceAlertResponder implementation
+// MARK: - AlertResponder implementation
 extension MinimedPumpManager {
-    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) { }
 }
 
-// MARK: - DeviceAlertSoundVendor implementation
+// MARK: - AlertSoundVendor implementation
 extension MinimedPumpManager {
     public func getSoundBaseURL() -> URL? { return nil }
-    public func getSounds() -> [DeviceAlert.Sound] { return [] }
+    public func getSounds() -> [Alert.Sound] { return [] }
 }
 

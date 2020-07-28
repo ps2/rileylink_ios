@@ -33,8 +33,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         return OmnipodHUDProvider(pumpManager: self)
     }
     
-    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
-        return OmnipodHUDProvider.createHUDViews(rawValue: rawValue)
+    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {
+        return OmnipodHUDProvider.createHUDView(rawValue: rawValue)
     }
 
 }
@@ -68,12 +68,12 @@ extension OmnipodPumpManager {
 extension OmnipodPumpManager {
 
     public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
-        setBasalSchedule(newSchedule) { (error) in
-            if let error = error {
+        syncBasalRateSchedule(items: viewController.scheduleItems) { result in
+            switch result {
+            case .success(let schedule):
+                completion(.success(scheduleItems: schedule.items, timeZone: schedule.timeZone))
+            case .failure(let error):
                 completion(.failure(error))
-            } else {
-                completion(.success(scheduleItems: viewController.scheduleItems, timeZone: self.state.timeZone))
             }
         }
     }

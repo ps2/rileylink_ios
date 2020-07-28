@@ -272,7 +272,8 @@ extension OmnipodPumpManager {
             device: device(for: state),
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
-            bolusState: bolusState(for: state)
+            bolusState: bolusState(for: state),
+            pumpStatusHighlight: pumpStatusHighlight(for: state)
         )
     }
 
@@ -351,6 +352,17 @@ extension OmnipodPumpManager {
         }
         return .none
     }
+    
+    private func pumpStatusHighlight(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
+        guard state.podState?.fault != nil else {
+            return nil
+        }
+
+        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
+                                                     imageName: "exclamationmark.circle.fill",
+                                                     state: .critical)
+    }
+        
 
     // Thread-safe
     public var hasActivePod: Bool {
@@ -1579,6 +1591,17 @@ extension OmnipodPumpManager: PumpManager {
     
     public func setMaximumTempBasalRate(_ rate: Double) {}
 
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
+        setBasalSchedule(newSchedule) { (error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.state.timeZone)!))
+            }
+        }
+    }
+
     // This cannot be called from within the lockedState lock!
     func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
         session.assertOnSessionQueue()
@@ -1651,14 +1674,14 @@ extension OmnipodPumpManager: PodCommsDelegate {
     }
 }
 
-// MARK: - DeviceAlertResponder implementation
+// MARK: - AlertResponder implementation
 extension OmnipodPumpManager {
-    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) { }
 }
 
-// MARK: - DeviceAlertSoundVendor implementation
+// MARK: - AlertSoundVendor implementation
 extension OmnipodPumpManager {
     public func getSoundBaseURL() -> URL? { return nil }
-    public func getSounds() -> [DeviceAlert.Sound] { return [] }
+    public func getSounds() -> [Alert.Sound] { return [] }
 }
 

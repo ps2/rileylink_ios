@@ -31,8 +31,8 @@ extension MinimedPumpManager: PumpManagerUI {
         return MinimedHUDProvider(pumpManager: self)
     }
     
-    public static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView] {
-        return MinimedHUDProvider.createHUDViews(rawValue: rawValue)
+    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {
+        return MinimedHUDProvider.createHUDView(rawValue: rawValue)
     }
 }
 
@@ -80,19 +80,11 @@ extension MinimedPumpManager {
 // MARK: - BasalScheduleTableViewControllerSyncSource
 extension MinimedPumpManager {
     public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
-            guard let session = session else {
-                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
-                return
-            }
-
-            do {
-                let newSchedule = BasalSchedule(repeatingScheduleValues: viewController.scheduleItems)
-                try session.setBasalSchedule(newSchedule, for: .standard)
-
-                completion(.success(scheduleItems: viewController.scheduleItems, timeZone: session.pump.timeZone))
-            } catch let error {
-                self.log.error("Save basal profile failed: %{public}@", String(describing: error))
+        syncBasalRateSchedule(items: viewController.scheduleItems) { result in
+            switch result {
+            case .success(let schedule):
+                completion(.success(scheduleItems: schedule.items, timeZone: schedule.timeZone))
+            case .failure(let error):
                 completion(.failure(error))
             }
         }

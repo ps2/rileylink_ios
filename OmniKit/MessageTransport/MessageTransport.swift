@@ -146,7 +146,7 @@ class PodMessageTransport: MessageTransport {
     /// Encodes and sends a packet to the pod, and receives and decodes its response
     ///
     /// - Parameters:
-    ///   - message: The packet to send
+    ///   - packet: The packet to send
     ///   - repeatCount: Number of times to repeat packet before listening for a response. 0 = send once and do not repeat.
     ///   - packetResponseTimeout: The amount of time to wait before retrying
     ///   - exchangeTimeout: The amount of time to continue retrying before giving up
@@ -248,12 +248,14 @@ class PodMessageTransport: MessageTransport {
                     do {
                         let msg = try Message(encodedData: responseData)
                         log.default("Recv(Hex): %@", responseData.hexadecimalString)
-                        if msg.sequenceNum == messageNumber {
-                            messageLogger?.didReceive(responseData)
-                            return msg
-                        } else {
+                        guard msg.address == address else {
+                            throw MessageError.invalidAddress(address: msg.address)
+                        }
+                        guard msg.sequenceNum == messageNumber else {
                             throw MessageError.invalidSequence
                         }
+                        messageLogger?.didReceive(responseData)
+                        return msg
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))

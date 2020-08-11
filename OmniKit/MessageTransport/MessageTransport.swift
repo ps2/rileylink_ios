@@ -180,13 +180,13 @@ class PodMessageTransport: MessageTransport {
                     continue
                 }
 
-                guard candidatePacket.address == packet.address else {
-                    log.default("Address %@ does not match %@", String(describing: candidatePacket.address), String(describing: packet.address))
+                guard candidatePacket.address == packet.address || candidatePacket.address == 0xFFFFFFFF else {
+                    log.default("Packet address 0x%x does not match 0x%x", candidatePacket.address, packet.address)
                     continue
                 }
                 
                 guard candidatePacket.sequenceNum == ((packet.sequenceNum + 1) & 0b11111) else {
-                    log.default("Sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
+                    log.default("Packet sequence %@ does not match %@", String(describing: candidatePacket.sequenceNum), String(describing: ((packet.sequenceNum + 1) & 0b11111)))
                     continue
                 }
                 

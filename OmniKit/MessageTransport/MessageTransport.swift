@@ -282,9 +282,7 @@ class PodMessageTransport: MessageTransport {
                 throw PodCommsError.emptyResponse
             }
             
-            if response.messageBlocks[0].blockType != .errorResponse {
-                incrementMessageNumber()
-            }
+            incrementMessageNumber()
             
             return response
         } catch let error {

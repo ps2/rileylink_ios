@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 import UIKit
 import LoopKit
 import LoopKitUI
@@ -15,11 +15,11 @@ import OmniKit
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()        
     }
     
-    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
         let settings = OmnipodSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
@@ -29,8 +29,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
     
-    public func hudProvider() -> HUDProvider? {
-        return OmnipodHUDProvider(pumpManager: self)
+    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
+        return OmnipodHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

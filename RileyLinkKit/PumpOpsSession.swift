@@ -455,9 +455,8 @@ extension PumpOpsSession {
     /// - Parameters:
     ///   - unitsPerHour: The new basal rate, in Units per hour
     ///   - duration: The duration of the rate
-    /// - Returns: The pump message body describing the new basal rate
-    /// - Throws: PumpCommandError
-    public func setTempBasal(_ unitsPerHour: Double, duration: TimeInterval) throws -> ReadTempBasalCarelinkMessageBody {
+    /// - Returns: A result containing the pump message body describing the new basal rate or an error
+    public func setTempBasal(_ unitsPerHour: Double, duration: TimeInterval) -> Result<ReadTempBasalCarelinkMessageBody,PumpCommandError> {
         var lastError: PumpCommandError?
         
         let message = PumpMessage(settings: settings, type: .changeTempBasal, body: ChangeTempBasalCarelinkMessageBody(unitsPerHour: unitsPerHour, duration: duration))
@@ -488,9 +487,9 @@ extension PumpOpsSession {
                 let response: ReadTempBasalCarelinkMessageBody = try session.getResponse(to: PumpMessage(settings: settings, type: .readTempBasal), responseType: .readTempBasal)
 
                 if response.timeRemaining == duration && response.rateType == .absolute {
-                    return response
+                    return .success(response)
                 } else {
-                    throw PumpCommandError.arguments(PumpOpsError.rfCommsFailure("Could not verify TempBasal on attempt \(attempt). "))
+                    return .failure(PumpCommandError.arguments(PumpOpsError.rfCommsFailure("Could not verify TempBasal on attempt \(attempt). ")))
                 }
             } catch let error as PumpCommandError {
                 lastError = error
@@ -500,8 +499,8 @@ extension PumpOpsSession {
                 lastError = .command(.noResponse(during: "Set temp basal"))
             }
         }
-
-        throw lastError!
+        
+        return .failure(lastError!)
     }
 
     public func readTempBasal() throws -> Double {
@@ -560,53 +559,26 @@ extension PumpOpsSession {
     public func setNormalBolus(units: Double, cancelExistingTemp: Bool = false) throws {
         let pumpModel: PumpModel
 
-        do {
-            try wakeup()
-            pumpModel = try getPumpModel()
+        try wakeup()
+        pumpModel = try getPumpModel()
 
-            let status = try getPumpStatus()
+        let status = try getPumpStatus()
 
-            if status.bolusing {
-                throw PumpOpsError.bolusInProgress
-            }
-
-            if status.suspended {
-                throw PumpOpsError.pumpSuspended
-            }
-
-            if cancelExistingTemp {
-                _ = try setTempBasal(0, duration: 0)
-            }
-        } catch let error as PumpOpsError {
-            throw SetBolusError.certain(error)
-        } catch let error as PumpCommandError {
-            switch error {
-            case .command(let error):
-                throw SetBolusError.certain(error)
-            case .arguments(let error):
-                throw SetBolusError.certain(error)
-            }
-        } catch {
-            assertionFailure()
-            return
+        if status.bolusing {
+            throw PumpOpsError.bolusInProgress
         }
 
-        do {
-            let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, insulinBitPackingScale: pumpModel.insulinBitPackingScale))
-
-            let _: PumpAckMessageBody = try runCommandWithArguments(message)
-        } catch let error as PumpOpsError {
-            throw SetBolusError.certain(error)
-        } catch let error as PumpCommandError {
-            switch error {
-            case .command(let error):
-                throw SetBolusError.certain(error)
-            case .arguments(let error):
-                throw SetBolusError.uncertain(error)
-            }
-        } catch {
-            assertionFailure()
+        if status.suspended {
+            throw PumpOpsError.pumpSuspended
         }
+
+        if cancelExistingTemp {
+            _ = setTempBasal(0, duration: 0)
+        }
+
+        let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, insulinBitPackingScale: pumpModel.insulinBitPackingScale))
+
+        let _: PumpAckMessageBody = try runCommandWithArguments(message)
         return
     }
 

@@ -574,6 +574,7 @@ public class PodCommsSession {
     }
     
     // use cancelDelivery with .none to get status as well as to validate & advance the nonce
+    // Throws PodCommsError
     @discardableResult
     public func cancelNone() throws -> StatusResponse {
         var statusResponse: StatusResponse
@@ -591,6 +592,7 @@ public class PodCommsSession {
         return statusResponse
     }
 
+    // Throws PodCommsError
     @discardableResult
     public func getStatus() throws -> StatusResponse {
         if useCancelNoneForStatus {

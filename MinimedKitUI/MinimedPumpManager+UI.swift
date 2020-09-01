@@ -23,7 +23,14 @@ extension MinimedPumpManager: PumpManagerUI {
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
-
+    
+    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+        // Return settings for now. No uncertainty handling atm.
+        let settings = MinimedPumpSettingsViewController(pumpManager: self)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
+        return nav
+    }
+    
     public var smallImage: UIImage? {
         return state.smallPumpImage
     }

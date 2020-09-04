@@ -1,8 +1,14 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "O aplikacji";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Dodaj konto";
+
+/* Title text for button to set up a new minimed pump */
+"Add Minimed Pump" = "Add Minimed Pump";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API Secret";
@@ -48,3 +54,4 @@
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Wysyłaj do Nightscout";
+

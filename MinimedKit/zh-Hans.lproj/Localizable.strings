@@ -16,6 +16,9 @@
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "大剂量输注中";
 
+/* Describing the Canada pump region */
+"Canada" = "Canada";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "确认胰岛素泵是否处于暂停或者充盈状态，或者正在执行百分比模式临时基础率。";
 
@@ -33,6 +36,9 @@
 
 /* Describing the pump history insulin data source */
 "Event History" = "历史事件";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "History page does not exist";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "无效响应 %1$@: %2$@";

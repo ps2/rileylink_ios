@@ -16,6 +16,9 @@
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "ボーラス注入中";
 
+/* Describing the Canada pump region */
+"Canada" = "Canada";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "ポンプが停止、プライミング中、または基礎レートが一時的に変更になっていないことを確認してください";
 
@@ -33,6 +36,9 @@
 
 /* Describing the pump history insulin data source */
 "Event History" = "イベント履歴";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "History page does not exist";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "%1$@ で反応が無効: %2$@";
@@ -96,3 +102,4 @@
 
 /* Describing the worldwide pump region */
 "World-Wide" = "World-Wide";
+

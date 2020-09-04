@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the section describing commands */
 "Commands" = "命令";
 
@@ -39,3 +42,4 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Uptime";
+

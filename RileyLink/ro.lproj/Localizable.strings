@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Despre";
 
@@ -51,5 +54,4 @@
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "Încărcare în Nightscout";
-
 

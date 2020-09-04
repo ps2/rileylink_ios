@@ -1,11 +1,5 @@
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ jednostek pozostaje w %2$@";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Podawanie insuliny zostało zatrzymane. Deaktywuj i zdejmij PODa";
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
 
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
@@ -20,17 +14,26 @@
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ J/godzina";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
 
 /* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
 "%@+ U" = "%@+ J";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@J";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ jednostek pozostaje w %2$@";
+
+/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Podawanie insuliny zostało zatrzymane. Deaktywuj i zdejmij PODa";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Czas aktywny";
@@ -90,14 +93,29 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Wyłącz dźwięki bolusa";
 
+/* Title text for button to disable confirmation beeps */
+"Disable Confirmation Beeps" = "Disable Confirmation Beeps";
+
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Włącz dźwięki bolusa";
+
+/* Title text for button to enable confirmation beeps */
+"Enable Confirmation Beeps" = "Enable Confirmation Beeps";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Błąd wyłączania dźwięków bolusa";
 
+/* The alert title for disable confirmation beeps error */
+"Error disabling confirmation beeps" = "Error disabling confirmation beeps";
+
+/* The alert title for emitting completion beep error */
+"Error emitting completion confirmation beep" = "Error emitting completion confirmation beep";
+
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Błąd włączania dźwięków bolusa";
+
+/* The alert title for enable confirmation beeps error */
+"Error enabling confirmation beeps" = "Error enabling confirmation beeps";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Błąd wznawiania";
@@ -177,6 +195,18 @@
 /* The text of the loading label when priming */
 "Priming…" = "Napełnianie…";
 
+/* The title of the command to read the pod status */
+"Read Pod Status" = "Read Pod Status";
+
+/* Progress message for reading Pod status. */
+"Read Pod Status…" = "Read Pod Status…";
+
+/* The title of the command to read the pulse log */
+"Read Pulse Log" = "Read Pulse Log";
+
+/* Progress message for reading pulse log. */
+"Reading Pulse Log…" = "Reading Pulse Log…";
+
 /* Label describing time remaining view */
 "Remaining" = "Pozostało";
 
@@ -221,6 +251,9 @@
 /* Progress message for testing commands. */
 "Testing Commands…" = "Testowanie poleceń…";
 
+/* The title of the cell showing the pod TID */
+"TID" = "TID";
+
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Zbyt dużo wpisów";
 
@@ -229,3 +262,4 @@
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Nieznana";
+

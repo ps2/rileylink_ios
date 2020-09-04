@@ -1,6 +1,9 @@
 /* Description for an inactive alert modifier */
 " (inactive)" = " (ei-aktiivinen)";
 
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The format string for minutes (1: number of minutes string) */
 "%1$@ minutes" = "%1$@ minuuttia";
 
@@ -31,6 +34,9 @@
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Varma";
 
+/* Recovery suggestion when unexpected address received */
+"Crosstalk possible. Please move to a new location and try again" = "Crosstalk possible. Please move to a new location and try again";
+
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktivoitu";
 
@@ -60,6 +66,9 @@
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "KeskeytettyBolus: %1$@ U (%2$@ U ohjelmoitu) %3$@ %4$@ %5$@";
+
+/* Error message for when unexpected address is received (1: received address) (2: expected address) */
+"Invalid address 0x%x. Expected 0x%x" = "Invalid address 0x%1$x. Expected 0x%2$x";
 
 /* The format string for Last Bolus Not Delivered: (1: bolus not delivered string) */
 "Last Bolus Not Delivered: %1$@ U\n" = "Viim. bolusta ei annosteltu: %1$@ U\n";
@@ -92,6 +101,9 @@
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsedButin33 */
+"oneNotUsedButin33" = "oneNotUsedButin33";
+
 /* Pod status after pairing */
 "Paired" = "Yhdistetty";
 
@@ -100,6 +112,12 @@
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Yhdistä uusi pumppu";
+
+/* Recovery suggestion when no response is received from pod */
+"Please try repositioning the pod or the RileyLink and try again" = "Please try repositioning the pod or the RileyLink and try again";
+
+/* The format string for Pod Active: (1: Pod active time string) */
+"Pod Active: %1$@\n" = "Pod Active: %1$@\n";
 
 /* Error message shown when user cannot pair because pod is already paired */
 "Pod already paired" = "Pumppu on jo yhdistetty";
@@ -116,6 +134,9 @@
 /* Description for Pod expired pod fault */
 "Pod expired" = "Pumppu vanhentunut";
 
+/* Inform the user that there is a pod fault. */
+"Pod Fault" = "Pod Fault";
+
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Pumppuvirhe: %1$@";
 
@@ -127,6 +148,9 @@
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pumppu on pysäytetty";
+
+/* Error message shown when pod sends ack instead of response */
+"Pod sent ack instead of response" = "Pod sent ack instead of response";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Pumpun asennusaika umpeutui";
@@ -140,6 +164,9 @@
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Valmis kanyylin asetukseen";
+
+/* The format string for Reservoir Level: (1: reservoir level string) */
+"Reservoir Level: %1$@ U\n" = "Reservoir Level: %1$@ U\n";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Jatka: %1$@ %2$@";
@@ -171,8 +198,20 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TilapBasaali: %1$@ U/h %2$@ %3$@ %4$@ U %5$@";
 
+/* Pod state threeNotUsedButin33 */
+"threeNotUsedButin33" = "threeNotUsedButin33";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Aika vaihtaa pumppu! Pumppu vanhenee %1$@";
+
+/* The format string for Total Insulin Delivered: (1: total insulin delivered string) */
+"Total Insulin Delivered: %1$@ U\n" = "Total Insulin Delivered: %1$@ U\n";
+
+/* Recovery suggestion when ack received instead of response */
+"Try again" = "Try again";
+
+/* Pod state twoNotUsedButin33 */
+"twoNotUsedButin33" = "twoNotUsedButin33";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Epävarma";

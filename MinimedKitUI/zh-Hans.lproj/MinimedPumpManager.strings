@@ -61,11 +61,11 @@
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "泵设置";
 
-/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
-"V47-Nq-7ew.title" = "泵设置";
-
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "输入泵区域";
+
+/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
+"V47-Nq-7ew.title" = "泵设置";
 
 /* Class = "UILabel"; text = "Loop will listen for status messages sent by your pump. Follow the steps below on your pump to enable these messages:"; ObjectID = "yLn-Ya-p1R"; */
 "yLn-Ya-p1R.text" = "Loop将监听泵的状态信息，并按照如下步骤操作胰岛素泵来开启此功能";

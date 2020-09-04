@@ -61,11 +61,11 @@
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Configuration de la Pompe";
 
-/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
-"V47-Nq-7ew.title" = "Configuration de la Pompe";
-
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Entrez la région des pompes";
+
+/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
+"V47-Nq-7ew.title" = "Configuration de la Pompe";
 
 /* Class = "UILabel"; text = "Loop will listen for status messages sent by your pump. Follow the steps below on your pump to enable these messages:"; ObjectID = "yLn-Ya-p1R"; */
 "yLn-Ya-p1R.text" = "Loop écoutera les messages d’état envoyés par votre pompe. Suivez les étapes ci-dessous sur votre pompe pour activer ces messages:";

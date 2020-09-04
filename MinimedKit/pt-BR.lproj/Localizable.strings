@@ -16,6 +16,9 @@
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus em andamento";
 
+/* Describing the Canada pump region */
+"Canada" = "Canada";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Verifique se a bomba não está suspensa ou em preparação ou tem uma basal temporária percentual";
 
@@ -33,6 +36,9 @@
 
 /* Describing the pump history insulin data source */
 "Event History" = "Histórico de Eventos";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "History page does not exist";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Resposta inválida durante %1$@: %2$@";
@@ -96,3 +102,4 @@
 
 /* Describing the worldwide pump region */
 "World-Wide" = "Mundial";
+

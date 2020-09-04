@@ -1,8 +1,14 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Om";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Legg til konto";
+
+/* Title text for button to set up a new minimed pump */
+"Add Minimed Pump" = "Add Minimed Pump";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API Secret";

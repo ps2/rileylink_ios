@@ -1,0 +1,107 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (inactive)";
+
+/* Description for auto-off alarm */
+"Auto-off alarm" = "Auto-off alarm";
+
+/* Pod state when running below fifty units */
+"Below 50 units" = "Below 50 units";
+
+/* Delivery status when bolusing */
+"Bolusing" = "Bolusing";
+
+/* Delivery status when bolusing and temp basal is running */
+"Bolusing with temp basal" = "Bolusing with temp basal";
+
+/* Pod state when inserting cannula */
+"Cannula inserting" = "Cannula inserting";
+
+/* Pod state when pod has been deactivated */
+"Deactivated" = "Deactivated";
+
+/* Description for Empty reservoir pod fault */
+"Empty reservoir" = "Empty reservoir";
+
+/* Pod state error event logged shutting down */
+"Error event logged, shutting down" = "Error event logged, shutting down";
+
+/* Description for expiration alert */
+"Expiration alert" = "Expiration alert";
+
+/* Description for finish setup */
+"Finish setup " = "Finish setup ";
+
+/* Pod inititialized */
+"Initialized" = "Initialized";
+
+/* The format string for Internal pod fault (1: The fault code value) */
+"Internal pod fault %1$03d" = "Internal pod fault %1$03d";
+
+/* Description for low reservoir alarm */
+"Low reservoir advisory alarm" = "Low reservoir advisory alarm";
+
+/* Pod alert state when no alerts are active */
+"No alerts" = "No alerts";
+
+/* Delivery status when basal is running
+   Pod state when running above fifty units */
+"Normal" = "Normal";
+
+/* Description for Occlusion detected pod fault */
+"Occlusion detected" = "Occlusion detected";
+
+/* Pod state oneNotUsedButin33 */
+"oneNotUsedButin33" = "oneNotUsedButin33";
+
+/* Pod status after pairing */
+"Paired" = "Paired";
+
+/* Description for expiration advisory alarm */
+"Pod expiration advisory alarm" = "Pod expiration advisory alarm";
+
+/* Description for Pod expired pod fault */
+"Pod expired" = "Pod expired";
+
+/* Pod state when prime or cannula insertion has not completed in the time allotted */
+"Pod setup window expired" = "Pod setup window expired";
+
+/* Delivery status when pod is priming
+   Pod status when priming */
+"Priming" = "Priming";
+
+/* Pod state when ready for basal programming */
+"Ready for basal programming" = "Ready for basal programming";
+
+/* Pod state when ready for cannula insertion */
+"Ready to insert cannula" = "Ready to insert cannula";
+
+/* Delivery status when basal is running */
+"Scheduled Basal" = "Scheduled Basal";
+
+/* Description for shutdown imminent alarm */
+"Shutdown imminent alarm" = "Shutdown imminent alarm";
+
+/* Delivery status when insulin delivery is suspended */
+"Suspended" = "Suspended";
+
+/* Pod tank fill completed */
+"Tank fill completed" = "Tank fill completed";
+
+/* Pod power to motor activated */
+"Tank power activated" = "Tank power activated";
+
+/* Delivery status when temp basal is running */
+"Temp basal running" = "Temp basal running";
+
+/* Pod state threeNotUsedButin33 */
+"threeNotUsedButin33" = "threeNotUsedButin33";
+
+/* Pod state twoNotUsedButin33 */
+"twoNotUsedButin33" = "twoNotUsedButin33";
+
+/* The format string for Unknown pod fault (1: The fault code value) */
+"Unknown pod fault %1$03d" = "Unknown pod fault %1$03d";
+
+/* Description waiting for pairing reminder */
+"Waiting for pairing reminder" = "Waiting for pairing reminder";
+

@@ -61,11 +61,11 @@
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Impostazione Microinfusore";
 
-/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
-"V47-Nq-7ew.title" = "Impostazione Microinfusore";
-
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Inserisci la provenienza del microinfusore";
+
+/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
+"V47-Nq-7ew.title" = "Impostazione Microinfusore";
 
 /* Class = "UILabel"; text = "Loop will listen for status messages sent by your pump. Follow the steps below on your pump to enable these messages:"; ObjectID = "yLn-Ya-p1R"; */
 "yLn-Ya-p1R.text" = "Loop sara' in attesa di messaggi di stato inviati dal microinfusore. Segui i successivi passaggi per abilitare questi messaggi:";

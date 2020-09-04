@@ -19,8 +19,14 @@
 /* Invalid response error description (1: response) */
 "Response %@ is invalid" = "Antwort %@ ist ungültig";
 
+/* Timeout error description */
+"RileyLink did not respond in time" = "RileyLink did not respond in time";
+
 /* Unsupported command error description */
 "RileyLink firmware does not support the %@ command" = "RileyLink Firmware unterstützt den Befehl %@ nicht";
+
+/* Not ready error description */
+"RileyLink is not connected" = "RileyLink is not connected";
 
 /* Failure reason: unknown peripheral characteristic */
 "The RileyLink was temporarily disconnected" = "Verbindung zu RileyLink wurde vorübergehend unterbrochen";

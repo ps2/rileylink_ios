@@ -50,6 +50,9 @@
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Tukos havaittu";
 
+/* Pod state oneNotUsedButin33 */
+"oneNotUsedButin33" = "oneNotUsedButin33";
+
 /* Pod status after pairing */
 "Paired" = "Yhdistetty";
 
@@ -89,6 +92,12 @@
 
 /* Delivery status when temp basal is running */
 "Temp basal running" = "Tilapäinen basaali käytössä";
+
+/* Pod state threeNotUsedButin33 */
+"threeNotUsedButin33" = "threeNotUsedButin33";
+
+/* Pod state twoNotUsedButin33 */
+"twoNotUsedButin33" = "twoNotUsedButin33";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Tuntematon pumpun virhe %1$03d";

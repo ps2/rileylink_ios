@@ -1,11 +1,5 @@
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Việc tiêm Insulin đã dừng. Hủy kích hoạt và thay pod.";
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
 
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
@@ -20,17 +14,26 @@
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/giờ";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
 
 /* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
 "%@+ U" = "%@+ U";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
+
+/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Việc tiêm Insulin đã dừng. Hủy kích hoạt và thay pod.";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Thời gian Hoạt động";
@@ -75,7 +78,7 @@
 "Deactivate" = "Hủy kích hoạt";
 
 /* Button title for pod deactivation
- Button title to deactivate pod */
+   Button title to deactivate pod */
 "Deactivate Pod" = "Hủy kích hoạt Pod";
 
 /* Button title to delete Omnipod PumpManager */
@@ -90,14 +93,29 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Vô hiệu tiếng Beep liều bolus";
 
+/* Title text for button to disable confirmation beeps */
+"Disable Confirmation Beeps" = "Disable Confirmation Beeps";
+
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Bật tiếng Beep liều bolus";
+
+/* Title text for button to enable confirmation beeps */
+"Enable Confirmation Beeps" = "Enable Confirmation Beeps";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Lỗi trong việc vô hiệu tiếng beep liều bolus";
 
+/* The alert title for disable confirmation beeps error */
+"Error disabling confirmation beeps" = "Error disabling confirmation beeps";
+
+/* The alert title for emitting completion beep error */
+"Error emitting completion confirmation beep" = "Error emitting completion confirmation beep";
+
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Lỗi trong việc bật tiếng beep liều bolus";
+
+/* The alert title for enable confirmation beeps error */
+"Error enabling confirmation beeps" = "Error enabling confirmation beeps";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Lỗi khi đang tái thực hiện";
@@ -177,11 +195,23 @@
 /* The text of the loading label when priming */
 "Priming…" = "Đang mồi…";
 
+/* The title of the command to read the pod status */
+"Read Pod Status" = "Read Pod Status";
+
+/* Progress message for reading Pod status. */
+"Read Pod Status…" = "Read Pod Status…";
+
+/* The title of the command to read the pulse log */
+"Read Pulse Log" = "Read Pulse Log";
+
+/* Progress message for reading pulse log. */
+"Reading Pulse Log…" = "Reading Pulse Log…";
+
 /* Label describing time remaining view */
 "Remaining" = "Đang còn lại";
 
 /* Label indicating pod replacement necessary
- The title of the command to replace pod */
+   The title of the command to replace pod */
 "Replace Pod" = "Thay thế Pod";
 
 /* The title of the command to replace pod when there is a pod fault */
@@ -194,7 +224,7 @@
 "Retry Pod Deactivation" = "Hủy kích hoạt pod lại";
 
 /* Title of button to save delivery limit settings
- Title of button to sync basal profile when no pod paired */
+   Title of button to sync basal profile when no pod paired */
 "Save" = "Lưu";
 
 /* The detail text of the basal row when pod is running scheduled basal */
@@ -221,6 +251,9 @@
 /* Progress message for testing commands. */
 "Testing Commands…" = "Thử nghiệm câu lệnh…";
 
+/* The title of the cell showing the pod TID */
+"TID" = "TID";
+
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Quá nhiều mục";
 
@@ -229,3 +262,4 @@
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Không xác định";
+

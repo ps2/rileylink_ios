@@ -1,8 +1,14 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "情報";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "アカウントを追加";
+
+/* Title text for button to set up a new minimed pump */
+"Add Minimed Pump" = "Add Minimed Pump";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "APIシークレット";

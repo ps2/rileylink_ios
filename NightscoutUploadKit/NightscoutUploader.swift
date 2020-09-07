@@ -137,11 +137,11 @@ public class NightscoutUploader {
         }
     }
     
-    /// Attempts to delete treatments from nightscout by client identifier. This method will not retry if the network task failed.
+    /// Attempts to delete treatments from nightscout by objectId. This method will not retry if the network task failed.
     ///
-    /// - parameter id:                An array of client assigned uuid strings
+    /// - parameter id:                An array of nightscout objectId strings
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
-    public func deleteTreatmentsByClientId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+    public func deleteTreatmentsByObjectId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
         guard ids.count > 0 else {
             // Running this query with no ids ends up in deleting the entire treatments db. Likely not intended. :)
             completionHandler(nil)

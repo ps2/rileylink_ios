@@ -546,10 +546,10 @@ extension OmnipodPumpManager {
                     let primeFinishedAt = try session.prime()
                     completion(.success(primeFinishedAt))
                 } catch let error {
-                    completion(.failure(error))
+                    completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(PumpManagerError.communication(error)))
             }
         }
 
@@ -559,7 +559,7 @@ extension OmnipodPumpManager {
             }
 
             guard podState.setupProgress.primingNeeded else {
-                return .failure(OmnipodPumpManagerError.podAlreadyPrimed)
+                return .failure(PumpManagerError.deviceState(OmnipodPumpManagerError.podAlreadyPrimed))
             }
 
             // If still need configuring, run pair()
@@ -636,7 +636,7 @@ extension OmnipodPumpManager {
         })
 
         if let error = preError {
-            completion(.failure(error))
+            completion(.failure(PumpManagerError.deviceState(error)))
             return
         }
 
@@ -664,10 +664,10 @@ extension OmnipodPumpManager {
                     }
                     completion(.success(finishWait))
                 } catch let error {
-                    completion(.failure(error))
+                    completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(PumpManagerError.communication(error)))
             }
         }
         #endif

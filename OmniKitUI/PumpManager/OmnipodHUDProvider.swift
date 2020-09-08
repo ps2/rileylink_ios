@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import LoopKit
 import LoopKitUI
 import OmniKit
@@ -48,9 +49,15 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         }
     }
     
-    public init(pumpManager: OmnipodPumpManager) {
+    private let insulinTintColor: Color
+    
+    private let guidanceColors: GuidanceColors
+    
+    public init(pumpManager: OmnipodPumpManager, insulinTintColor: Color, guidanceColors: GuidanceColors) {
         self.pumpManager = pumpManager
         self.podState = pumpManager.state.podState
+        self.insulinTintColor = insulinTintColor
+        self.guidanceColors = guidanceColors
         super.init()
         self.pumpManager.addPodStateObserver(self, queue: .main)
     }
@@ -87,7 +94,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         if podState?.fault != nil {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
-            return HUDTapAction.presentViewController(pumpManager.settingsViewController())
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors))
         }
     }
     

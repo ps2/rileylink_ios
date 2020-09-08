@@ -6,6 +6,7 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 import UIKit
+import SwiftUI
 import MinimedKit
 import MinimedKitUI
 import RileyLinkBLEKit
@@ -18,9 +19,15 @@ import OmniKitUI
 class MainViewController: RileyLinkSettingsViewController {
     
     let deviceDataManager: DeviceDataManager
+    
+    let insulinTintColor: Color
+    
+    let guidanceColors: GuidanceColors
 
-    init(deviceDataManager: DeviceDataManager) {
+    init(deviceDataManager: DeviceDataManager, insulinTintColor: Color, guidanceColors: GuidanceColors) {
         self.deviceDataManager = deviceDataManager
+        self.insulinTintColor = insulinTintColor
+        self.guidanceColors = guidanceColors
         let rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceDataManager.rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: deviceDataManager.rileyLinkConnectionManager)
 
         super.init(rileyLinkPumpManager: rileyLinkPumpManager, devicesSectionIndex: Section.rileyLinks.rawValue, style: .grouped)
@@ -173,7 +180,7 @@ class MainViewController: RileyLinkSettingsViewController {
             show(vc, sender: indexPath)
         case .pump:
             if let pumpManager = deviceDataManager.pumpManager {
-                var settings = pumpManager.settingsViewController()
+                var settings = pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
                 settings.completionDelegate = self
                 present(settings, animated: true)
             } else {
@@ -217,7 +224,7 @@ extension MainViewController: CompletionDelegate {
 extension MainViewController: PumpManagerSetupViewControllerDelegate {
     func pumpManagerSetupViewController(_ pumpManagerSetupViewController: PumpManagerSetupViewController, didSetUpPumpManager pumpManager: PumpManagerUI) {
         deviceDataManager.pumpManager = pumpManager
-        show(pumpManager.settingsViewController(), sender: nil)
+        show(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors), sender: nil)
         tableView.reloadSections(IndexSet([Section.pump.rawValue]), with: .none)
     }
 }

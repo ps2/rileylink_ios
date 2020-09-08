@@ -5,6 +5,7 @@
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
+import SwiftUI
 import UIKit
 import LoopKit
 import LoopKitUI
@@ -13,11 +14,11 @@ import MinimedKit
 
 extension MinimedPumpManager: PumpManagerUI {
 
-    static public func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
@@ -27,8 +28,8 @@ extension MinimedPumpManager: PumpManagerUI {
         return state.smallPumpImage
     }
     
-    public func hudProvider() -> HUDProvider? {
-        return MinimedHUDProvider(pumpManager: self)
+    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

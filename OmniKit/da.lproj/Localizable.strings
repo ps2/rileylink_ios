@@ -23,19 +23,19 @@
 "Bolus: %1$@U %2$@ %3$@ %4$@" = "Bolus: %1$@E %2$@ %3$@ %4$@";
 
 /* Delivery status when bolusing */
-"Bolusing" = "Indgiver Bolus";
+"Bolusing" = "Indgiver bolus";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Indgiver Bolus med midlertidig basal";
+"Bolusing with temp basal" = "Indgiver bolus med midlertidig basal";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Indfører Kanyle";
+"Cannula inserting" = "Indfører kanyle";
 
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Sikker";
 
 /* Recovery suggestion when unexpected address received */
-"Crosstalk possible. Please move to a new location and try again" = "Krydstale muligt. Gå til en ny placering, og prøv igen";
+"Crosstalk possible. Please move to a new location and try again" = "Crosstalk muligt. Gå til en ny placering, og prøv igen";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktiveret";
@@ -47,7 +47,7 @@
 "Empty reservoir" = "Tomt reservoir";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Tom svar fra pod";
+"Empty response from pod" = "Ingen svar fra pod";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Fejl hændelse logget, lukker ned";
@@ -71,7 +71,7 @@
 "Invalid address 0x%x. Expected 0x%x" = "Ugyldig adresse 0x%1$x. Forventet 0x%2$x";
 
 /* The format string for Last Bolus Not Delivered: (1: bolus not delivered string) */
-"Last Bolus Not Delivered: %1$@ U\n" = "Sidste Bolus ikke leveret: %1$@ U\n";
+"Last Bolus Not Delivered: %1$@ U\n" = "Sidste bolus ikke leveret: %1$@ U\n";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Lavt reservoir alarm";
@@ -135,10 +135,10 @@
 "Pod expired" = "Pod udløbet";
 
 /* Inform the user that there is a pod fault. */
-"Pod Fault" = "Pod Fejl";
+"Pod Fault" = "Pod fejl";
 
 /* Format string for pod fault code */
-"Pod Fault: %1$@" = "Pod Fejl: %1$@";
+"Pod Fault: %1$@" = "Pod fejl: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
 "Pod is not in a state ready for cannula insertion." = "Pod er ikke klar til kanyle indførsel.";
@@ -166,13 +166,13 @@
 "Ready to insert cannula" = "Klar til kanyle indførsel";
 
 /* The format string for Reservoir Level: (1: reservoir level string) */
-"Reservoir Level: %1$@ U\n" = "Reservoir Niveau: %1$@ U\n";
+"Reservoir Level: %1$@ U\n" = "Reservoir niveau: %1$@ U\n";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Fortsæt: %1$@ %2$@";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Planlagt Basal";
+"Scheduled Basal" = "Planlagt basal";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Afbryd forestående alarm";
@@ -205,7 +205,7 @@
 "Time to replace your pod! Your pod will expire in %1$@" = "Tid til udskiftning af pod! Din pod udløber om %1$@";
 
 /* The format string for Total Insulin Delivered: (1: total insulin delivered string) */
-"Total Insulin Delivered: %1$@ U\n" = "Total Insulin Leveret: %1$@ U\n";
+"Total Insulin Delivered: %1$@ U\n" = "Total insulin leveret: %1$@ U\n";
 
 /* Recovery suggestion when ack received instead of response */
 "Try again" = "Prøv igen";

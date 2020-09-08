@@ -14,7 +14,7 @@
 "Bolusing with temp basal" = "Bolusing med temp basal";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Indfører Kanyle";
+"Cannula inserting" = "Indfører kanyle";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktiveret";

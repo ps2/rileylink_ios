@@ -23,7 +23,7 @@
 "Awake Until" = "Vågen indtil";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal rater";
+"Basal Rates" = "Basalrate";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batteri: %1$@ volt\n";

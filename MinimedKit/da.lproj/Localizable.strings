@@ -11,7 +11,7 @@
 "Alkaline" = "Alkaline";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basal Profil %1$@: %2$@ E/time";
+"Basal Profile %1$@: %2$@ U/hour" = "Basal profil %1$@: %2$@ E/time";
 
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus i gang";
@@ -32,7 +32,7 @@
 "Decoding Error" = "Undersøger fejl";
 
 /* Error description */
-"Device Error" = "Enheds Fejl";
+"Device Error" = "Enheds fejl";
 
 /* Describing the pump history insulin data source */
 "Event History" = "Hændelses log";
@@ -65,7 +65,7 @@
 "Pump did not respond" = "Pumpe svarede ikke";
 
 /* Error description */
-"Pump Error" = "Pumpe Fejl";
+"Pump Error" = "Pumpe fejl";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pumpe er afbrudt";
@@ -83,13 +83,13 @@
 "RileyLink radio tune failed" = "RileyLink radio indstilling fejlede";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Midlertidig Basal: %1$.3f E/time";
+"Temporary Basal: %1$.3f U/hour" = "Midlertidig basal: %1$.3f E/time";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
-"Temporary Basal: %1$d min" = "Midlertidig Basal: %1$d min";
+"Temporary Basal: %1$d min" = "Midlertidig basal: %1$d min";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
-"Temporary Basal: %1$d%%" = "Midlertidig Basal: %1$d%%";
+"Temporary Basal: %1$d%%" = "Midlertidig basal: %1$d%%";
 
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Ukendt pumpe fejlkode: %1$@";

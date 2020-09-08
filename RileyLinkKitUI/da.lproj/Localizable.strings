@@ -38,7 +38,7 @@
 "RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink tillader kommunikation med pumpen vha Bluetooth Lav Energi.";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
-"Signal Strength" = "Signal Styrke";
+"Signal Strength" = "Signal styrke";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Oppetid";

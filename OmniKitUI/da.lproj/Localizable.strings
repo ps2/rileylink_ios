@@ -36,7 +36,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
-"Active Time" = "Aktiv Tid";
+"Active Time" = "Aktiv tid";
 
 /* The title of the cell showing alarm status */
 "Alarms" = "Alarmer";
@@ -48,22 +48,22 @@
 "Are you sure you want to stop using Omnipod?" = "Er du sikker på at du vil stoppe med at bruge Omnipod?";
 
 /* The title text for the address assigned to the pod */
-"Assigned Address" = "Tildelt Adresse";
+"Assigned Address" = "Tildelt adresse";
 
 /* The title of the cell showing pod basal status */
-"Basal Delivery" = "Basal Indgivelse";
+"Basal Delivery" = "Basal indgivelse";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rater";
+"Basal Rates" = "Basalrate";
 
 /* The title of the cell showing pod bolus status */
-"Bolus Delivery" = "Bolus Indgivelse";
+"Bolus Delivery" = "Bolus indgivelse";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuller";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Skift Tidszone";
+"Change Time Zone" = "Skift tidszone";
 
 /* Progress message for changing pod time. */
 "Changing time…" = "Skifter tiden…";
@@ -79,7 +79,7 @@
 
 /* Button title for pod deactivation
    Button title to deactivate pod */
-"Deactivate Pod" = "Deaktiver Pod";
+"Deactivate Pod" = "Deaktiver pod";
 
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Slet Omnipod";
@@ -88,7 +88,7 @@
 "Delivery Limits" = "Indgivelsesgrænser";
 
 /* The title of the device information section in settings */
-"Device Information" = "Enheds Information";
+"Device Information" = "Enheds information";
 
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Deaktiver bolus bip";
@@ -124,7 +124,7 @@
 "Error Suspending" = "Fejl under udsættelse";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Udløbs Påmindelse";
+"Expiration Reminder" = "Udløbs påmindelse";
 
 /* The title of the cell showing the pod expiration after expiry */
 "Expired" = "Udløbet";
@@ -151,10 +151,10 @@
 "Insert Cannula" = "Indfør kanyle";
 
 /* The title of the cell showing delivered insulin */
-"Insulin Delivered" = "Indført Insulin";
+"Insulin Delivered" = "Indført insulin";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
-"Invalid entry" = "fejlagtig indtastning";
+"Invalid entry" = "Fejlagtig indtastning";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
@@ -166,7 +166,7 @@
 "Pair" = "Par";
 
 /* The title of the command to pair new pod */
-"Pair New Pod" = "Par ny Pod";
+"Pair New Pod" = "Par ny pod";
 
 /* The text of the loading label when pairing */
 "Pairing…" = "Parres…";
@@ -175,19 +175,19 @@
 "PI Version" = "PI Version";
 
 /* The title of the command to play test beeps */
-"Play Test Beeps" = "Afspil Test Bip";
+"Play Test Beeps" = "Afspil test bip";
 
 /* Progress message for play test beeps. */
-"Play Test Beeps…" = "Afspiller Test Bip…";
+"Play Test Beeps…" = "Afspiller test bip…";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM Version";
 
 /* Label describing pod age view */
-"Pod Age" = "Pod Alder";
+"Pod Age" = "Pod alder";
 
 /* Title of the pod settings view controller */
-"Pod Settings" = "Pod Indstillinger";
+"Pod Settings" = "Pod indstillinger";
 
 /* The text of the loading label when pod is primed */
 "Primed" = "Klargjort";
@@ -199,13 +199,13 @@
 "Read Pod Status" = "Læs pod-status";
 
 /* Progress message for reading Pod status. */
-"Read Pod Status…" = "Læs Pod-status…";
+"Read Pod Status…" = "Læs pod-status…";
 
 /* The title of the command to read the pulse log */
 "Read Pulse Log" = "Læs pulslog";
 
 /* Progress message for reading pulse log. */
-"Reading Pulse Log…" = "Læser Pulslog…";
+"Reading Pulse Log…" = "Læser pulslog…";
 
 /* Label describing time remaining view */
 "Remaining" = "Tilbage";
@@ -215,13 +215,13 @@
 "Replace Pod" = "Udskift Pod";
 
 /* The title of the command to replace pod when there is a pod fault */
-"Replace Pod Now" = "Udskift Pod Nu";
+"Replace Pod Now" = "Udskift pod nu";
 
 /* The title of the cell showing reservoir status */
 "Reservoir" = "Reservoir";
 
 /* Button title for retrying pod deactivation */
-"Retry Pod Deactivation" = "Forsøg Pod Deaktivering igen";
+"Retry Pod Deactivation" = "Forsøg pod deaktivering igen";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -240,16 +240,16 @@
 "Suspended" = "Udsat";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Skift fra Omnipod Pumper";
+"Switch from Omnipod Pumps" = "Skift fra Omnipod pumpe";
 
 /* Title of button to sync basal profile from pod */
-"Sync With Pod" = "Synkroniser med Pod";
+"Sync With Pod" = "Synkroniser med pod";
 
 /* The title of the command to run the test command */
-"Test Command" = "Test Kommando";
+"Test Command" = "Test kommando";
 
 /* Progress message for testing commands. */
-"Testing Commands…" = "Tester Kommandoer…";
+"Testing Commands…" = "Tester kommandoer…";
 
 /* The title of the cell showing the pod TID */
 "TID" = "TID";

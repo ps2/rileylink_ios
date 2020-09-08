@@ -5,10 +5,10 @@
 "About" = "Om";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Tilføj Konto";
+"Add Account" = "Tilføj konto";
 
 /* Title text for button to set up a new minimed pump */
-"Add Minimed Pump" = "Tilføj Minimed Pumpe";
+"Add Minimed Pump" = "Tilføj MiniMed pumpe";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API kodeord";
@@ -17,7 +17,7 @@
 "Configuration" = "Konfiguration";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Slet Konto";
+"Delete Account" = "Slet konto";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Indtast det 6-cifrede pumpe ID";

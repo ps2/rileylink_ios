@@ -2,10 +2,10 @@
 "0MV-2k-Dty.title" = "RileyLink Indstilling";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Find Enhed";
+"1fp-45-qWK.text" = "Find enhed";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
-"A6i-Cb-baR.text" = "Andre Enheder";
+"A6i-Cb-baR.text" = "Andre enheder";
 
 /* Class = "UILabel"; text = "Do not change the time using your pumpʼs menu."; ObjectID = "Bdb-j4-WcR"; */
 "Bdb-j4-WcR.text" = "Juster ikke uret i pumpens menu.";
@@ -14,10 +14,10 @@
 "c7t-pZ-WqY.text" = "Tilbehør";
 
 /* Class = "UILabel"; text = "Connect Devices"; ObjectID = "erq-yb-anx"; */
-"erq-yb-anx.text" = "Tilslut Enheder";
+"erq-yb-anx.text" = "Tilslut enheder";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
-"Fps-h3-V4K.title" = "Pumpe Ur";
+"Fps-h3-V4K.title" = "Pumpe ur";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N)."; ObjectID = "fVG-pl-jT9"; */
 "fVG-pl-jT9.footerTitle" = "Pumpens ID er den 6-cifrede nummeriske del af serienummeret (mærket SN eller S/N).";
@@ -41,35 +41,35 @@
 "IQ5-53-x9s.text" = "Loop vil holde din pumpes ur synkroniseret med din telefon, i den tidszone du er i nu.";
 
 /* Class = "UITableViewController"; title = "Pump Settings"; ObjectID = "iQZ-kT-QUm"; */
-"iQZ-kT-QUm.title" = "Pumpe Indstillinger";
+"iQZ-kT-QUm.title" = "Pumpe indstillinger";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "Pumpe region og farve er angivet som de sidste 3 bogstaver i modelnummeret (mærket REF).";
 
 /* Class = "UITableViewSection"; headerTitle = "Region and Color"; ObjectID = "lGI-LD-xR7"; */
-"lGI-LD-xR7.headerTitle" = "Region og Farve";
+"lGI-LD-xR7.headerTitle" = "Region og farve";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Indstilling Komplet";
+"Nwf-TJ-KmJ.title" = "Indstilling komplet";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Pumpe Udsendelser";
+"oBL-lh-SHI.title" = "Pumpe udsendelser";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "Tændt";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
-"OZk-Db-KCs.title" = "Pumpe Indstilling";
+"OZk-Db-KCs.title" = "Pumpe indstilling";
 
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Angiv pumpe region";
 
 /* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
-"V47-Nq-7ew.title" = "Pumpe Indstilling";
+"V47-Nq-7ew.title" = "Pumpe indstilling";
 
 /* Class = "UILabel"; text = "Loop will listen for status messages sent by your pump. Follow the steps below on your pump to enable these messages:"; ObjectID = "yLn-Ya-p1R"; */
 "yLn-Ya-p1R.text" = "Loop vil lytte efter status beskeder fra pumpen. Følg nedenstående skridt på pumpen, for at aktivere disse beskeder:";
 
 /* Class = "UITableViewSection"; headerTitle = "Main Menu"; ObjectID = "ZnF-zy-5gR"; */
-"ZnF-zy-5gR.headerTitle" = "Hoved Menu";
+"ZnF-zy-5gR.headerTitle" = "Hoved menu";
 

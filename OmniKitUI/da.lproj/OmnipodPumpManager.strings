@@ -32,7 +32,7 @@
 "EUt-xk-Rmp.headerTitle" = "Klargør pod";
 
 /* Class = "UILabel"; text = "Please deactivate the pod. When deactivation is complete, remove pod from body."; ObjectID = "GK7-jb-tyY"; */
-"GK7-jb-tyY.text" = "Venligst deaktiver pod. Når deaktivering er komplet, fjernes den fra kroppen.";
+"GK7-jb-tyY.text" = "Venligst deaktiver pod. Når deaktivering er færdig, fjernes den fra kroppen.";
 
 /* Class = "UINavigationItem"; title = "Insert Cannula"; ObjectID = "HwT-30-f0y"; */
 "HwT-30-f0y.title" = "Indfør kanyle";

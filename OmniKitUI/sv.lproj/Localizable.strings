@@ -9,7 +9,7 @@
 "%@ U (Finished)" = "%@ E (Klar)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%@ E av %@ E (%@)";
+"%@ U of %@ U (%@)" = "%1$@ E of %2$@ E (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ E/h";
@@ -66,7 +66,7 @@
 "Change Time Zone" = "Ändra tidszon";
 
 /* Progress message for changing pod time. */
-"Changing time…" = "Ändra tid…";
+"Changing time…" = "Ändrar tid…";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfiguration";
@@ -85,7 +85,7 @@
 "Delete Omnipod" = "Radera Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Maxdosvärde";
+"Delivery Limits" = "Maxdoser";
 
 /* The title of the device information section in settings */
 "Device Information" = "Enhetsinformation";
@@ -94,28 +94,28 @@
 "Disable Bolus Beeps" = "Stäng av bolusljud";
 
 /* Title text for button to disable confirmation beeps */
-"Disable Confirmation Beeps" = "Disable Confirmation Beeps";
+"Disable Confirmation Beeps" = "Stäng av bekräftelsepip";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Slå på bolusljud";
 
 /* Title text for button to enable confirmation beeps */
-"Enable Confirmation Beeps" = "Enable Confirmation Beeps";
+"Enable Confirmation Beeps" = "Sätt på bekräftelsepip";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Fel vid avstängning av bolusljud";
 
 /* The alert title for disable confirmation beeps error */
-"Error disabling confirmation beeps" = "Error disabling confirmation beeps";
+"Error disabling confirmation beeps" = "Fel vid avstängning av bekräftelsepip";
 
 /* The alert title for emitting completion beep error */
-"Error emitting completion confirmation beep" = "Error emitting completion confirmation beep";
+"Error emitting completion confirmation beep" = "Fel vid sändning av bekräftelsepip";
 
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Fel vid aktivering av bolusljud";
 
 /* The alert title for enable confirmation beeps error */
-"Error enabling confirmation beeps" = "Error enabling confirmation beeps";
+"Error enabling confirmation beeps" = "Fel vid aktivering av bekräftelsepip";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Fel vid återupptagande";
@@ -196,16 +196,16 @@
 "Priming…" = "Podden fylls...";
 
 /* The title of the command to read the pod status */
-"Read Pod Status" = "Read Pod Status";
+"Read Pod Status" = "Läs Podd-status";
 
 /* Progress message for reading Pod status. */
-"Read Pod Status…" = "Read Pod Status…";
+"Read Pod Status…" = "Läs Podd-status…";
 
 /* The title of the command to read the pulse log */
-"Read Pulse Log" = "Read Pulse Log";
+"Read Pulse Log" = "Läs pulslogg";
 
 /* Progress message for reading pulse log. */
-"Reading Pulse Log…" = "Reading Pulse Log…";
+"Reading Pulse Log…" = "Läser pulslogg…";
 
 /* Label describing time remaining view */
 "Remaining" = "Återstår";
@@ -258,7 +258,7 @@
 "Too many entries" = "För många inmatningar";
 
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Kunde inte deaktivera podden. Var god fortsätt genom att parkoppla en ny podd.";
+"Unable to deactivate pod. Please continue and pair a new one." = "Kunde inte inaktivera podden. Var god fortsätt genom att parkoppla en ny podd.";
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Okänd";

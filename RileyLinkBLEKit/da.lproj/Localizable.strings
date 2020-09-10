@@ -29,7 +29,7 @@
 "RileyLink is not connected" = "RileyLink er ikke tilsluttet";
 
 /* Failure reason: unknown peripheral characteristic */
-"The RileyLink was temporarily disconnected" = "RileyLinket var midlertidigt afbrudt";
+"The RileyLink was temporarily disconnected" = "RileyLink'en blev midlertidigt afbrudt";
 
 /* Error description */
 "Unknown characteristic" = "Ukendt karakteristika";

@@ -56,7 +56,7 @@
 "Expiration alert" = "Udløbs advarsel";
 
 /* Description for finish setup */
-"Finish setup " = "Afslut indstilling";
+"Finish setup " = "Afslut indstilling ";
 
 /* Pod inititialized */
 "Initialized" = "Initialiseret";
@@ -96,7 +96,7 @@
 "Normal" = "Normal";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Blokkering opdaget";
+"Occlusion detected" = "Okklusion opdaget";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -108,7 +108,7 @@
 "Paired" = "Parret";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "Venligst flyt pod’en tættere på din RileyLink og prøv igen";
+"Please bring your pod closer to the RileyLink and try again" = "Flyt pod’en tættere på din RileyLink og prøv igen";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Venligst par med en ny pod";
@@ -147,7 +147,7 @@
 "Pod is not in a state ready for priming." = "Pod er ikke klar til ‘klargøring’.";
 
 /* Error message action could not be performed because pod is suspended */
-"Pod is suspended" = "Pod er pauset";
+"Pod is suspended" = "Pod er stoppet";
 
 /* Error message shown when pod sends ack instead of response */
 "Pod sent ack instead of response" = "Pod sendt ack i stedet for svar";
@@ -181,7 +181,7 @@
 "Suspend: %1$@ %2$@" = "Pause: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Pauset";
+"Suspended" = "Stoppet";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Reservoir påfyldning komplet";

@@ -35,7 +35,7 @@
 "Device Error" = "Enheds fejl";
 
 /* Describing the pump history insulin data source */
-"Event History" = "Hændelses log";
+"Event History" = "Hændelseshistorik";
 
 /* Pump error code when invalid history page is requested */
 "History page does not exist" = "Historik side findes ikke";
@@ -47,13 +47,13 @@
 "Lithium" = "Lithium";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er i nærheden, og tændt";
+"Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er tæt på, og tændt";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max indstilling overskredet";
 
 /* Pump title (1: model number) */
-"Minimed %@" = "Miniet %@";
+"Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 Serier";
@@ -101,5 +101,5 @@
 "Unknown response during %1$@: %2$@" = "Ukendt svar under %1$@: %2$@";
 
 /* Describing the worldwide pump region */
-"World-Wide" = "Verden (World-Wide)";
+"World-Wide" = "World-Wide";
 

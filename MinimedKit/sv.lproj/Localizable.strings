@@ -1,5 +1,5 @@
 /* Communications error for a bolus currently running */
-"A bolus is already in progress" = "En bolusdos ges redan";
+"A bolus is already in progress" = "En bolus pågår redan";
 
 /* The description of AlarmClockReminderPumpEvent */
 "AlarmClockReminder" = "AlarmClockReminder";
@@ -11,16 +11,16 @@
 "Alkaline" = "Alkaliskt";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/h";
+"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/timme";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Ger bolus";
+"Bolus in progress" = "Bolus pågår";
 
 /* Describing the Canada pump region */
 "Canada" = "Canada";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde.";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Kommandot avvisades";
@@ -29,7 +29,7 @@
 "Comms with another pump detected" = "Kommunikation med en annan pump upptäcktes.";
 
 /* Error description */
-"Decoding Error" = "Avkodingsfel";
+"Decoding Error" = "Avkodningsfel";
 
 /* Error description */
 "Device Error" = "Enhetsfel";
@@ -38,7 +38,7 @@
 "Event History" = "Händelsehistorik";
 
 /* Pump error code when invalid history page is requested */
-"History page does not exist" = "History page does not exist";
+"History page does not exist" = "Sidan med händelsehistorik finns inte";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Ogiltigt svar under %1$@: %2$@";
@@ -56,7 +56,7 @@
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
-"Minimed 500/700 Series" = "Minimed 500/700 Series";
+"Minimed 500/700 Series" = "Minimed 500/700 - serien";
 
 /* Describing the North America pump region */
 "North America" = "Nordamerika";

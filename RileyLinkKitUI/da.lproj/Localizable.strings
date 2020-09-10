@@ -35,7 +35,7 @@
 "Name" = "Navn";
 
 /* RileyLink setup description */
-"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink tillader kommunikation med pumpen vha Bluetooth Lav Energi.";
+"RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink tillader kommunikation med pumpen via Bluetooth Low Energy.";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signal styrke";

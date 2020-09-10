@@ -63,7 +63,7 @@
 "Delete Pump" = "Slette pumpe";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Dosegrense";
+"Delivery Limits" = "Leveringsgrenser";
 
 /* The title of the section describing the device */
 "Device" = "Enhet";

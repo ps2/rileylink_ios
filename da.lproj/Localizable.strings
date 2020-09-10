@@ -8,10 +8,10 @@
 "Below 50 units" = "Under 50 enheder";
 
 /* Delivery status when bolusing */
-"Bolusing" = "Bolusing";
+"Bolusing" = "Bolus afgives";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolusing med temp basal";
+"Bolusing with temp basal" = "Bolus afgives med temp basal";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Indfører kanyle";

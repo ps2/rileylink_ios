@@ -14,7 +14,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Instructions on selecting battery chemistry type */
-"Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure.";
+"Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Alkaliska och litiumbatterier tappar spänning med olika hastighet. Alkaliska tenderar att ha ett linjärt spänningsfall över tiden, medan litiumcellsbatterier tenderar att behålla spänning fram till halva deras livslängd. Under normal användning, i en icke-MySentry-kompatibel Minimed (x22/x15) insulinpump som kör Loop, varar alkaliska batterier cirka 4 till 5 dagar. Litiumbatterier håller mellan 1-2 veckor. Detta val kommer att använda olika spänningsfall beroende på batterityp och varna användaren när ett batteri har cirka 8 till 10 timmar kvar av sin livslängd.";
 
 /* Confirmation message for deleting a pump */
 "Are you sure you want to delete this pump?" = "Säkert att du vill radera den här pumpen?";
@@ -29,7 +29,7 @@
 "Battery: %1$@ volts\n" = "Batteri: %1$@ volt\n";
 
 /* The label indicating the best radio frequency */
-"Best Frequency" = "Besta frekvensen";
+"Best Frequency" = "Bästa frekvensen";
 
 /* The format string describing pump bolusing state: (1: bolusing) */
 "Bolusing: %1$@\n" = "Ger bolus: %1$@\n";
@@ -87,7 +87,7 @@
 "Error Suspending" = "Fel vid försök till paus";
 
 /* The title of the command to fetch recent glucose */
-"Fetch Enlite Glucose" = "Hämta Enlite Glukos";
+"Fetch Enlite Glucose" = "Hämta Enlite glukosvärde";
 
 /* The title of the command to fetch recent history */
 "Fetch Recent History" = "Hämta senaste historik";
@@ -102,7 +102,7 @@
 "Fetching pump model…" = "Hämtar pumpmodell…";
 
 /* The title of the cell showing firmware version */
-"Firmware" = "Firmware";
+"Firmware" = "Mjukvara";
 
 /* The title of the cell showing the pump firmware version */
 "Firmware Version" = "Firmware";
@@ -114,7 +114,7 @@
 "Get Statistics…" = "Hämtar statistik…";
 
 /* Instructions on selecting an insulin data source */
-"Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option.";
+"Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Mängd doserat insulin kan bestämmas från pumpen antingen genom att tolka händelsehistoriken eller genom att jämföra reservoarvolymen över tid. Att läsa av händelsehistoriken ger ett mer korrekt status-diagram och mer aktuella behandlingsdata för uppladdning till Nightscout, men laddar ur batteriet snabbare och ökar risken för andel radiofel jämfört med avläsning av endast reservoarvolym. Om det valda alternativet av någon anledning inte kan användas, försöker systemet med det andra alternativet.";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Senast vaken";
@@ -123,7 +123,7 @@
 "Listening Off" = "Avlyssning av";
 
 /* The title of the command to pair with mysentry */
-"MySentry Pair" = "MySentry Pair";
+"MySentry Pair" = "MySentry parkoppling";
 
 /* The title of the cell showing device name */
 "Name" = "Namn";
@@ -209,5 +209,5 @@
 "Unknown" = "Okänd";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Körs sedan";
 

@@ -60,3 +60,9 @@ public struct BeepConfigCommand : MessageBlock {
         return data
     }
 }
+
+extension BeepConfigCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "BeepConfigCommand(beepConfigType:\(beepConfigType), basalIntervalBeep:\(basalIntervalBeep), tempBasalCompletionBeep:\(tempBasalCompletionBeep), tempBasalIntervalBeep:\(tempBasalIntervalBeep), bolusCompletionBeep:\(bolusCompletionBeep), , bolusIntervalBeep:\(bolusIntervalBeep))"
+    }
+}

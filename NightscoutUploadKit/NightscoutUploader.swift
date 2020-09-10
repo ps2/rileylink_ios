@@ -54,6 +54,7 @@ public class NightscoutUploader {
         var components = URLComponents()
         components.scheme = siteURL.scheme
         components.host = siteURL.host
+        components.port = siteURL.port
         components.queryItems = queryItems
         components.path = path
         return components.url
@@ -307,12 +308,9 @@ public class NightscoutUploader {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(apiSecret.sha1, forHTTPHeaderField: "api-secret")
         
-        print("**** \(method) \(request)")
-
         do {
             if let json = json {
                 let sendData = try JSONSerialization.data(withJSONObject: json, options: [])
-                print("**** Sending \(String(data: sendData, encoding: .utf8))")
                 let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
                     if let error = error {
                         completion(.failure(error))
@@ -336,7 +334,6 @@ public class NightscoutUploader {
                     }
 
                     do {
-                        print("**** Received \(String(data: data, encoding: .utf8))")
                         let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
                         completion(.success(json))
                     } catch {

@@ -10,6 +10,7 @@ import Foundation
 import LoopKit
 import LoopKitUI
 import MinimedKit
+import SwiftUI
 
 class MinimedHUDProvider: HUDProvider {
 
@@ -30,10 +31,16 @@ class MinimedHUDProvider: HUDProvider {
     }
 
     private let pumpManager: MinimedPumpManager
+    
+    private let insulinTintColor: Color
+    
+    private let guidanceColors: GuidanceColors
 
-    public init(pumpManager: MinimedPumpManager) {
+    public init(pumpManager: MinimedPumpManager, insulinTintColor: Color, guidanceColors: GuidanceColors) {
         self.pumpManager = pumpManager
         self.state = pumpManager.state
+        self.insulinTintColor = insulinTintColor
+        self.guidanceColors = guidanceColors
         pumpManager.stateObservers.insert(self, queue: .main)
     }
 
@@ -69,7 +76,7 @@ class MinimedHUDProvider: HUDProvider {
     }
 
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
-        return nil
+        return HUDTapAction.presentViewController(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors))
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {

@@ -11,6 +11,7 @@ import Foundation
 public enum MessageError: Error {
     case notEnoughData
     case invalidCrc
+    case invalidSequence
     case parsingError(offset: Int, data: Data, error: Error)
     case unknownValue(value: UInt8, typeDescription: String)
     case validationFailed(description: String)
@@ -29,6 +30,8 @@ extension MessageError: LocalizedError {
             return String(format: LocalizedString("Unknown Value (%1$@) for type %2$@", comment: "Format string for description of MessageError unknownValue. (1: value) (2: Type)"), String(describing: value), typeDescription)
         case .validationFailed(let description):
             return String(format: LocalizedString("Validation failed: %1$@", comment: "Format string for description of MessageError validationFailed. (1: description of validation failure)"), description)
+        case .invalidSequence:
+            return LocalizedString("Unexpected message sequence number", comment: "Description for MessageError invalidSequence")
         }
     }
 }

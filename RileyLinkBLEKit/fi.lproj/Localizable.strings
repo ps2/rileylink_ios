@@ -19,11 +19,18 @@
 /* Invalid response error description (1: response) */
 "Response %@ is invalid" = "Vastaus %@ on virheellinen";
 
+/* Timeout error description */
+"RileyLink did not respond in time" = "RileyLink ei vastannut ajoissa";
+
 /* Unsupported command error description */
 "RileyLink firmware does not support the %@ command" = "RileyLink-laiteohelmisto ei tue %@ komentoa";
+
+/* Not ready error description */
+"RileyLink is not connected" = "RileyLink ei ole yhdistetty";
 
 /* Failure reason: unknown peripheral characteristic */
 "The RileyLink was temporarily disconnected" = "Yhteys RileyLinkiin oli tilapäisesti poikki";
 
 /* Error description */
-"Unknown characteristic" = "Tuntematon tunnus";
+"Unknown characteristic" = "Tuntematon ominaisuus";
+

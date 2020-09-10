@@ -36,7 +36,7 @@ extension MinimedPumpManager: PumpManagerUI {
     }
     
     public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
-        return MinimedHUDProvider(pumpManager: self)
+        return MinimedHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

@@ -16,6 +16,9 @@
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus käynnissä";
 
+/* Describing the Canada pump region */
+"Canada" = "Kanada";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Tarkista, että pumppu ei ole pysäytetty, vakiotäytöllä tai basaalityypiksi ei ole valittu prosentteja";
 
@@ -33,6 +36,9 @@
 
 /* Describing the pump history insulin data source */
 "Event History" = "Tapahtumahistoria";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "Historiasivua ei ole olemassa";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Virheellinen vastaus %1$@: %2$@";
@@ -80,7 +86,7 @@
 "Temporary Basal: %1$.3f U/hour" = "Tilapäinen basaali: %1$.3f U/h";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
-"Temporary Basal: %1$d min" = "Tilapäinen basaalil: %1$d min";
+"Temporary Basal: %1$d min" = "Tilapäinen basaali: %1$d min";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
 "Temporary Basal: %1$d%%" = "Tilapäinen basaali: %1$d%%";
@@ -96,3 +102,4 @@
 
 /* Describing the worldwide pump region */
 "World-Wide" = "Maailmanlaajuinen";
+

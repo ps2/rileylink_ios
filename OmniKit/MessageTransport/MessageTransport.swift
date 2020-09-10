@@ -76,7 +76,7 @@ class PodMessageTransport: MessageTransport {
         }
     }
     
-    private var packetNumber: Int {
+    private(set) var packetNumber: Int {
         get {
             return state.packetNumber
         }
@@ -221,7 +221,7 @@ class PodMessageTransport: MessageTransport {
                 var firstPacket = true
                 log.debug("Send: %@", String(describing: message))
                 var dataRemaining = message.encoded()
-                log.debug("Send(Hex): %@", dataRemaining.hexadecimalString)
+                log.default("Send(Hex): %@", dataRemaining.hexadecimalString)
                 messageLogger?.didSend(dataRemaining)
                 while true {
                     let packetType: PacketType = firstPacket ? .pdm : .con
@@ -236,7 +236,7 @@ class PodMessageTransport: MessageTransport {
             }()
             
             guard responsePacket.packetType != .ack else {
-                messageLogger?.didReceive(responsePacket.data)
+                messageLogger?.didReceive(responsePacket.encoded())
                 log.default("Pod responded with ack instead of response: %@", String(describing: responsePacket))
                 throw PodCommsError.podAckedInsteadOfReturningResponse
             }
@@ -247,8 +247,13 @@ class PodMessageTransport: MessageTransport {
                 while true {
                     do {
                         let msg = try Message(encodedData: responseData)
-                        messageLogger?.didReceive(responseData)
-                        return msg
+                        log.default("Recv(Hex): %@", responseData.hexadecimalString)
+                        if msg.sequenceNum == messageNumber {
+                            messageLogger?.didReceive(responseData)
+                            return msg
+                        } else {
+                            throw MessageError.invalidSequence
+                        }
                     } catch MessageError.notEnoughData {
                         log.debug("Sending ACK for CON")
                         let conPacket = try self.exchangePackets(packet: makeAckPacket(), repeatCount: 3, preambleExtension:TimeInterval(milliseconds: 40))
@@ -263,7 +268,7 @@ class PodMessageTransport: MessageTransport {
                         throw MessageError.invalidCrc
                     } catch let error {
                         // log any other non-garbage messages that generate errors
-                        log.debug("Error Recv(Hex): %@", responseData.hexadecimalString)
+                        log.error("Error (%{public}@) Recv(Hex): %@", String(describing: error), responseData.hexadecimalString)
                         messageLogger?.didReceive(responseData)
                         throw error
                     }

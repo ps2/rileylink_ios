@@ -184,6 +184,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case suspendResume = 0
         case readPodStatus
         case playTestBeeps
+        case readPulseLog
         case testCommand
         case replacePod
     }
@@ -316,14 +317,19 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = LocalizedString("Read Pod Status", comment: "The title of the command to read the pod status")
                 cell.accessoryType = .disclosureIndicator
                 return cell
-            case .testCommand:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
-                cell.accessoryType = .disclosureIndicator
-                return cell
             case .playTestBeeps:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = LocalizedString("Play Test Beeps", comment: "The title of the command to play test beeps")
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .readPulseLog:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Read Pulse Log", comment: "The title of the command to read the pulse log")
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .testCommand:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .replacePod:
@@ -474,12 +480,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = CommandResponseViewController.readPodStatus(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
-            case .testCommand:
-                let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
-                vc.title = sender?.textLabel?.text
-                show(vc, sender: indexPath)
             case .playTestBeeps:
                 let vc = CommandResponseViewController.playTestBeeps(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
+            case .readPulseLog:
+                let vc = CommandResponseViewController.readPulseLog(pumpManager: pumpManager)
+                vc.title = sender?.textLabel?.text
+                show(vc, sender: indexPath)
+            case .testCommand:
+                let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
             case .replacePod:
@@ -561,7 +571,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch ActionsRow(rawValue: indexPath.row)! {
             case .suspendResume, .replacePod:
                 break
-            case .readPodStatus, .playTestBeeps, .testCommand:
+            case .readPodStatus, .playTestBeeps, .readPulseLog, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .configuration:

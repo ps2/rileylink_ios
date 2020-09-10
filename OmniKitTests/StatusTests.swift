@@ -25,7 +25,6 @@ class StatusTests: XCTestCase {
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-        
     }
 
     func testStatusResponse46UnitsLeft() {
@@ -59,7 +58,6 @@ class StatusTests: XCTestCase {
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-        
     }
     
     func testStatusRequestCommandFaultEvents() {
@@ -75,26 +73,5 @@ class StatusTests: XCTestCase {
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
-        
     }
- 
-    func testStatusRequestCommandResetStatus() {
-        // 0e 01 46
-        do {
-            // Encode
-            let encoded = GetStatusCommand(podInfoType: .resetStatus)
-            XCTAssertEqual("0e0146", encoded.data.hexadecimalString)
-            
-            // Decode
-            let decoded = try GetStatusCommand(encodedData: Data(hexadecimalString: "0e0146")!)
-            XCTAssertEqual(.resetStatus, decoded.podInfoType)
-        } catch (let error) {
-            XCTFail("message decoding threw error: \(error)")
-        }
-        
-    }
-    
 }
-
-
-

@@ -1,5 +1,5 @@
 //
-//  MealBolusNightscoutTreatment.swift
+//  CarbCorrectionNightscoutTreatment.swift
 //  RileyLink
 //
 //  Created by Pete Schwamb on 3/10/16.
@@ -8,25 +8,27 @@
 
 import Foundation
 
-public class MealBolusNightscoutTreatment: NightscoutTreatment {
+public class CarbCorrectionNightscoutTreatment: NightscoutTreatment {
     
     let carbs: Int
     let absorptionTime: TimeInterval?
-    let insulin: Double?
     let glucose: Int?
     let units: Units? // of glucose entry
     let glucoseType: GlucoseType?
     let foodType: String?
+    let userEnteredAt: Date?
+    let userLastModifiedAt: Date?
 
-    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Int, absorptionTime: TimeInterval? = nil, glucose: Int? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil, syncIdentifier: String? = nil, userEnteredAt: Date? = nil, userLastModifiedAt: Date? = nil) {
         self.carbs = carbs
         self.absorptionTime = absorptionTime
         self.glucose = glucose
         self.glucoseType = glucoseType
         self.units = units
-        self.insulin = insulin
         self.foodType = foodType
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Meal Bolus")
+        self.userEnteredAt = userEnteredAt
+        self.userLastModifiedAt = userLastModifiedAt
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Carb Correction", syncIdentifier: syncIdentifier)
     }
     
     override public var dictionaryRepresentation: [String: Any] {
@@ -35,7 +37,6 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
         if let absorptionTime = absorptionTime {
             rval["absorptionTime"] = absorptionTime.minutes
         }
-        rval["insulin"] = insulin
         if let glucose = glucose {
             rval["glucose"] = glucose
             rval["glucoseType"] = glucoseType?.rawValue
@@ -43,6 +44,12 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
         }
         if let foodType = foodType {
             rval["foodType"] = foodType
+        }
+        if let userEnteredAt = userEnteredAt {
+            rval["userEnteredAt"] = TimeFormat.timestampStrFromDate(userEnteredAt)
+        }
+        if let userLastModifiedAt = userLastModifiedAt {
+            rval["userLastModifiedAt"] = TimeFormat.timestampStrFromDate(userLastModifiedAt)
         }
         return rval
     }

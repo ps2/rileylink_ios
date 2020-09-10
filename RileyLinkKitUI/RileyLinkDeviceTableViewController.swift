@@ -284,10 +284,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
             case .uptime:
-                cell.textLabel?.text = NSLocalizedString("Uptime", comment: "The title of the cell showing uptime")
+                cell.textLabel?.text = LocalizedString("Uptime", comment: "The title of the cell showing uptime")
                 cell.setDetailAge(uptime)
             case .frequency:
-                cell.textLabel?.text = NSLocalizedString("Frequency", comment: "The title of the cell showing current rileylink frequency")
+                cell.textLabel?.text = LocalizedString("Frequency", comment: "The title of the cell showing current rileylink frequency")
                 cell.setDetailFrequency(frequency, formatter: frequencyFormatter)
             }
         case .commands:

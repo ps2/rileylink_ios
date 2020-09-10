@@ -113,7 +113,7 @@ private extension BasalScheduleEntry {
         var buffer = Data(count: type(of: self).rawValueLength)
 
         var rate = UInt16(clamping: Int(self.rate * 40))
-        buffer.replaceSubrange(0..<2, with: UnsafeBufferPointer(start: &rate, count: 1))
+        buffer.replaceSubrange(0..<2, with: Data(bytes: &rate, count: rate.bitWidth / 8))
         buffer[2] = UInt8(clamping: Int(timeOffset.minutes / 30))
 
         return buffer

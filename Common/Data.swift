@@ -30,22 +30,22 @@ extension Data {
 
     mutating func append<T: FixedWidthInteger>(_ newElement: T) {
         var element = newElement.littleEndian
-        append(UnsafeBufferPointer(start: &element, count: 1))
+        append(Data(bytes: &element, count: element.bitWidth / 8))
     }
 
     mutating func appendBigEndian<T: FixedWidthInteger>(_ newElement: T) {
         var element = newElement.bigEndian
-        append(UnsafeBufferPointer(start: &element, count: 1))
+        append(Data(bytes: &element, count: element.bitWidth / 8))
     }
 
     init<T: FixedWidthInteger>(_ value: T) {
         var value = value.littleEndian
-        self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
+        self.init(bytes: &value, count: value.bitWidth / 8)
     }
     
     init<T: FixedWidthInteger>(bigEndian value: T) {
         var value = value.bigEndian
-        self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
+        self.init(bytes: &value, count: value.bitWidth / 8)
     }
 }
 

@@ -131,8 +131,30 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             return "\(String(describing: doseType).capitalized) \(startTime)"
         }
     }
+    
+    public mutating func reconcile(with event: NewPumpEvent) {
+        isReconciledWithHistory = true
+        if let dose = event.dose {
+            switch dose.type {
+            case .bolus:
+                if programmedUnits == nil {
+                    programmedUnits = units
+                }
+                let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)
+                
+                if doseDuration > 0 && doseDuration < duration {
+                    duration = doseDuration
+                }
+                if let deliveredUnits = dose.deliveredUnits {
+                    units = deliveredUnits
+                }
+            default:
+                break
+            }
+        }
+    }
 
-    // RawRepresentable
+    // MARK: - RawRepresentable
     public init?(rawValue: RawValue) {
         guard
             let rawDoseType = rawValue["doseType"] as? Int,
@@ -192,11 +214,15 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     }
 }
 
+// MARK: - UnfinalizedDose
+
 extension UnfinalizedDose {
     var newPumpEvent: NewPumpEvent {
         return NewPumpEvent(self)
     }
 }
+
+// MARK: - NewPumpEvent
 
 extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
@@ -206,11 +232,13 @@ extension NewPumpEvent {
         self.init(date: dose.startTime, dose: entry, isMutable: !dose.isFinished || !dose.isReconciledWithHistory, raw: raw, title: title)
     }
     
-    func replacingAttributes(raw newRaw: Data, date newDate: Date, duration newDuration: TimeInterval, mutable: Bool) -> NewPumpEvent {
-        let newDose = dose?.replacingAttributes(startDate: newDate, duration: newDuration)
-        return NewPumpEvent(date: newDate, dose: newDose, isMutable: mutable, raw: newRaw, title: title, type: type)
+    func replacingAttributes(raw newRaw: Data, date newDate: Date) -> NewPumpEvent {
+        let newDose = dose?.replacingAttributes(startDate: newDate)
+        return NewPumpEvent(date: newDate, dose: newDose, isMutable: isMutable, raw: newRaw, title: title, type: type)
     }
 }
+
+// MARK: - DoseEntry
 
 extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
@@ -226,7 +254,7 @@ extension DoseEntry {
         }
     }
     
-    func replacingAttributes(startDate newStartDate: Date, duration newDuration: TimeInterval) -> DoseEntry {
+    func replacingAttributes(startDate newStartDate: Date) -> DoseEntry {
         let value: Double
         switch unit {
         case .units:
@@ -234,7 +262,8 @@ extension DoseEntry {
         case .unitsPerHour:
             value = unitsPerHour
         }
-        let newEndDate = newStartDate.addingTimeInterval(newDuration)
+        let duration = endDate.timeIntervalSince(startDate)
+        let newEndDate = newStartDate.addingTimeInterval(duration)
         return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier)
     }
 }

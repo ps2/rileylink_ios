@@ -91,7 +91,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return active
     }
     
-    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32) {
+    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.piVersion = piVersion
@@ -103,7 +103,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.suspendState = .resumed(Date())
         self.fault = nil
         self.activeAlertSlots = .none
-        self.messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
+        self.messageTransportState = MessageTransportState(packetNumber: packetNumber, messageNumber: messageNumber)
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
         self.configuredAlerts = [.slot7: .waitingForPairingReminder]

@@ -20,6 +20,7 @@ public enum PodCommsError: Error {
     case unexpectedPacketType(packetType: PacketType)
     case unexpectedResponse(response: MessageBlockType)
     case unknownResponseType(rawType: UInt8)
+    case invalidAddress(address: UInt32, expectedAddress: UInt32)
     case noRileyLinkAvailable
     case unfinalizedBolus
     case unfinalizedTempBasal
@@ -41,13 +42,15 @@ extension PodCommsError: LocalizedError {
         case .emptyResponse:
             return LocalizedString("Empty response from pod", comment: "Error message shown when empty response from pod was received")
         case .podAckedInsteadOfReturningResponse:
-            return nil
+            return LocalizedString("Pod sent ack instead of response", comment: "Error message shown when pod sends ack instead of response")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:
             return LocalizedString("Unexpected response from pod", comment: "Error message shown when empty response from pod was received")
         case .unknownResponseType:
             return nil
+        case .invalidAddress(address: let address, expectedAddress: let expectedAddress):
+            return String(format: LocalizedString("Invalid address 0x%x. Expected 0x%x", comment: "Error message for when unexpected address is received (1: received address) (2: expected address)"), address, expectedAddress)
         case .noRileyLinkAvailable:
             return LocalizedString("No RileyLink available", comment: "Error message shown when no response from pod was received")
         case .unfinalizedBolus:
@@ -66,40 +69,9 @@ extension PodCommsError: LocalizedError {
         }
     }
     
-    public var failureReason: String? {
-        switch self {
-        case .noPodPaired:
-            return nil
-        case .invalidData:
-            return nil
-        case .noResponse:
-            return nil
-        case .emptyResponse:
-            return nil
-        case .podAckedInsteadOfReturningResponse:
-            return nil
-        case .unexpectedPacketType:
-            return nil
-        case .unexpectedResponse:
-            return nil
-        case .unknownResponseType:
-            return nil
-        case .noRileyLinkAvailable:
-            return nil
-        case .unfinalizedBolus:
-            return nil
-        case .unfinalizedTempBasal:
-            return nil
-        case .nonceResyncFailed:
-            return nil
-        case .podSuspended:
-            return nil
-        case .podFault:
-            return nil
-        case .commsError:
-            return nil
-        }
-    }
+//    public var failureReason: String? {
+//        return nil
+//    }
     
     public var recoverySuggestion: String? {
         switch self {
@@ -108,17 +80,19 @@ extension PodCommsError: LocalizedError {
         case .invalidData:
             return nil
         case .noResponse:
-            return LocalizedString("Please bring your pod closer to the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
+            return LocalizedString("Please try repositioning the pod or the RileyLink and try again", comment: "Recovery suggestion when no response is received from pod")
         case .emptyResponse:
             return nil
         case .podAckedInsteadOfReturningResponse:
-            return nil
+            return LocalizedString("Try again", comment: "Recovery suggestion when ack received instead of response")
         case .unexpectedPacketType:
             return nil
         case .unexpectedResponse:
             return nil
         case .unknownResponseType:
             return nil
+        case .invalidAddress:
+            return LocalizedString("Crosstalk possible. Please move to a new location and try again", comment: "Recovery suggestion when unexpected address received")
         case .noRileyLinkAvailable:
             return LocalizedString("Make sure your RileyLink is nearby and powered on", comment: "Recovery suggestion when no RileyLink is available")
         case .unfinalizedBolus:
@@ -334,7 +308,9 @@ public class PodCommsSession {
         do {
             let statusResponse: StatusResponse = try send([beepConfigCommand])
             podState.updateFromStatusResponse(statusResponse)
-        } catch {} // never critical
+        } catch {
+            // This is swallowing errors, and making failed play test beeps command report "Succeeded"
+        }
     }
 
     private func markSetupProgressCompleted(statusResponse: StatusResponse) {
@@ -477,12 +453,21 @@ public class PodCommsSession {
         }
     }
     
+    // cancelDelivery() implements a smart interface to the Pod's cancel delivery command
     public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) -> CancelDeliveryResult {
+        var message: [MessageBlock]
 
-        let cancelDelivery = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
-
+        // Special case handling for a non-silent cancel all which would normally emit 3 sets of beeps!
+        if beepType != .noBeep && deliveryType == .all {
+            // For this case use two cancel commands in a one message with the 1st command silently cancelling all but the basal
+            // and the 2nd command cancelling only the basal with the specified beepType so there will only be a single beep sequence.
+            message = [CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .allButBasal, beepType: .noBeep),
+                       CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .basal, beepType: beepType)]
+        } else {
+            message = [CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)]
+        }
         do {
-            let status: StatusResponse = try send([cancelDelivery])
+            let status: StatusResponse = try send(message)
             let now = Date()
             if deliveryType.contains(.basal) {
                 podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
@@ -603,25 +588,29 @@ public class PodCommsSession {
         return statusResponse
     }
 
-    public func readFlashLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws {
+    @discardableResult
+    public func readPulseLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
         let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
         let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
         let messageResponse = try transport.sendMessage(message)
 
         if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.default("Pod flash log: %@", String(describing: podInfoResponseMessageBlock))
+            log.default("Pod pulse log: %@", String(describing: podInfoResponseMessageBlock))
+            return podInfoResponseMessageBlock
         } else if let fault = messageResponse.fault {
             handlePodFault(fault: fault)
             throw PodCommsError.podFault(fault: fault)
         } else {
-            log.error("Unexpected Pod flash log response: %@", String(describing: messageResponse.messageBlocks[0]))
+            log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
             throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
         }
     }
 
     public func deactivatePod() throws {
 
-        if podState.fault == nil && !podState.isSuspended {
+        // Don't try to cancel if the pod hasn't completed its setup as it will either receive no response
+        // (pod progress state <= 2) or a create a $31 pod fault (pod progress states 3 through 7).
+        if podState.setupProgress == .completed && podState.fault == nil && !podState.isSuspended {
             let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
             switch result {
             case .certainFailure(let error):

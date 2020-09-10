@@ -21,10 +21,8 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
     case faultEvents                 = 0x02
     case dataLog                     = 0x03
     case fault                       = 0x05
-    case hardcodedTestValues         = 0x06
-    case resetStatus                 = 0x46 // including state, initialization time, any faults
-    case flashLogRecent              = 0x50 // dumps up to 50 entries data from the flash log
-    case dumpOlderFlashlog           = 0x51 // like 0x50, but dumps entries before the last 50
+    case pulseLogRecent              = 0x50 // dumps up to 50 entries data from the pulse log
+    case dumpOlderPulseLog           = 0x51 // like 0x50, but dumps entries before the last 50
     
     public var podInfoType: PodInfo.Type {
         switch self {
@@ -38,14 +36,10 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
             return PodInfoDataLog.self
         case .fault:
             return PodInfoFault.self
-        case .hardcodedTestValues:
-            return PodInfoTester.self
-        case .resetStatus:
-            return PodInfoResetStatus.self
-        case .flashLogRecent:
-            return PodInfoFlashLogRecent.self
-        case .dumpOlderFlashlog:
-            return PodInfoFlashLogPrevious.self
+        case .pulseLogRecent:
+            return PodInfoPulseLogRecent.self
+        case .dumpOlderPulseLog:
+            return PodInfoPulseLogPrevious.self
         }
     }
 }

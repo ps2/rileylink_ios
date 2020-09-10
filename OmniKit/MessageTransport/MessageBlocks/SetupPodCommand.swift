@@ -1,5 +1,5 @@
 //
-//  ConfigurePodCommand.swift
+//  Setup PodCommand.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/17/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ConfigurePodCommand : MessageBlock {
+public struct SetupPodCommand : MessageBlock {
     
     public let blockType: MessageBlockType = .setupPod
     
@@ -82,5 +82,11 @@ public struct ConfigurePodCommand : MessageBlock {
         self.lot = lot
         self.tid = tid
         self.packetTimeoutLimit = packetTimeoutLimit
+    }
+}
+
+extension SetupPodCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "SetupPodCommand(address:\(Data(bigEndian: address).hexadecimalString), dateComponents:\(dateComponents), lot:\(lot), tid:\(tid), packetTimeoutLimit:\(packetTimeoutLimit))"
     }
 }

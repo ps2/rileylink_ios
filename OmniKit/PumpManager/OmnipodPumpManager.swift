@@ -354,13 +354,36 @@ extension OmnipodPumpManager {
     }
     
     private func pumpStatusHighlight(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
-        guard state.podState?.fault != nil else {
-            return nil
+        guard let podState = state.podState else {
+            return PumpManagerStatus.PumpStatusHighlight(
+                localizedMessage: NSLocalizedString("No Pod", comment: "Status highlight that when no pod is paired."),
+                imageName: "exclamationmark.circle.fill",
+                state: .warning)
         }
-
-        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
+        
+        if podState.fault != nil {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
                                                      imageName: "exclamationmark.circle.fill",
                                                      state: .critical)
+        }
+        
+        if let reservoir = podState.lastInsulinMeasurements, let volume = reservoir.reservoirVolume {
+            if volume <= 0 {
+                return PumpManagerStatus.PumpStatusHighlight(
+                    localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
+                    imageName: "exclamationmark.circle.fill",
+                    state: .critical)
+            }
+        }
+        
+        if case .suspended = podState.suspendState {
+            return PumpManagerStatus.PumpStatusHighlight(
+                localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+                imageName: "pause.circle.fill",
+                state: .warning)
+        }
+        
+        return nil
     }
         
 

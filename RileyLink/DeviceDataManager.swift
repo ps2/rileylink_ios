@@ -58,6 +58,7 @@ extension DeviceDataManager: RileyLinkConnectionManagerDelegate {
 }
 
 extension DeviceDataManager: PumpManagerDelegate {
+    
     func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval) {
         log.debug("didAdjustPumpClockBy %@", adjustment)
     }
@@ -90,9 +91,9 @@ extension DeviceDataManager: PumpManagerDelegate {
     func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void) {
     }
     
-    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: PumpManagerResult<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)>) -> Void) {
+    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>) -> Void) {
     }
-    
+
     func pumpManagerRecommendsLoop(_ pumpManager: PumpManager) {
     }
     

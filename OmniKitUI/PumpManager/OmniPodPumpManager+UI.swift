@@ -24,7 +24,16 @@ extension OmnipodPumpManager: PumpManagerUI {
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
+
+    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+        
+        // Return settings for now; uncertainty recovery not implemented yet
+        let settings = OmnipodSettingsViewController(pumpManager: self)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
+        return nav
+    }
     
+
     public var smallImage: UIImage? {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }

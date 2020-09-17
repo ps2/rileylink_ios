@@ -821,10 +821,11 @@ extension MinimedPumpManager: PumpManager {
     /**
      Ensures pump data is current by either waking and polling, or ensuring we're listening to sentry packets.
      */
-    public func assertCurrentPumpData() {
+    public func ensureCurrentPumpData(completion: (() -> Void)?) {
         rileyLinkDeviceProvider.assertIdleListening(forcingRestart: true)
 
         guard isPumpDataStale else {
+            completion?()
             return
         }
 
@@ -836,12 +837,15 @@ extension MinimedPumpManager: PumpManager {
                 self.log.error("No devices found while fetching pump data")
                 self.pumpDelegate.notify({ (delegate) in
                     delegate?.pumpManager(self, didError: error)
+                    completion?()
                 })
                 return
             }
 
             self.pumpOps.runSession(withName: "Get Pump Status", using: device) { (session) in
                 do {
+                    defer { completion?() }
+                    
                     let status = try session.getCurrentPumpStatus()
                     guard var date = status.clock.date else {
                         assertionFailure("Could not interpret a valid date from \(status.clock) in the system calendar")

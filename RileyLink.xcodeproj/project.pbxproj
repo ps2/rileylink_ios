@@ -432,7 +432,7 @@
 		C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */; };
 		C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */; };
 		C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */; };
-		C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */; };
+		C1AF21F31D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EE1D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift */; };
 		C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */; };
 		C1B3830E1CD0665D00CE7782 /* NightscoutUploadKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B383151CD0665D00CE7782 /* NightscoutUploadKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */; };
@@ -1397,7 +1397,7 @@
 		C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGCheckNightscoutTreatment.swift; sourceTree = "<group>"; };
-		C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1AF21EE1D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbCorrectionNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutUploadKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutUploadKit.h; sourceTree = "<group>"; };
@@ -2635,7 +2635,7 @@
 			children = (
 				C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */,
 				C1AF21EB1D4901220088C41D /* BolusNightscoutTreatment.swift */,
-				C1AF21EE1D4901220088C41D /* MealBolusNightscoutTreatment.swift */,
+				C1AF21EE1D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift */,
 				C1AF21EC1D4901220088C41D /* NightscoutTreatment.swift */,
 				C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */,
 				C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */,
@@ -4191,7 +4191,7 @@
 				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
 				C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */,
 				C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */,
-				C1AF21F31D4901220088C41D /* MealBolusNightscoutTreatment.swift in Sources */,
+				C1AF21F31D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift in Sources */,
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
 				C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */,
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,

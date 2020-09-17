@@ -20,13 +20,13 @@
 "Response %@ is invalid" = "Antwoord %@ is ongeldig";
 
 /* Timeout error description */
-"RileyLink did not respond in time" = "RileyLink did not respond in time";
+"RileyLink did not respond in time" = "RileyLink heeft niet op tijd gereageerd";
 
 /* Unsupported command error description */
 "RileyLink firmware does not support the %@ command" = "De RileyLink firmware ondersteund niet het %@ commando";
 
 /* Not ready error description */
-"RileyLink is not connected" = "RileyLink is not connected";
+"RileyLink is not connected" = "RileyLink is niet verbonden";
 
 /* Failure reason: unknown peripheral characteristic */
 "The RileyLink was temporarily disconnected" = "The RileyLink was tijdelijk niet verbonden";

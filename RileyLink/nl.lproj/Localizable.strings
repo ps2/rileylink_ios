@@ -8,7 +8,7 @@
 "Add Account" = "Voeg account toe";
 
 /* Title text for button to set up a new minimed pump */
-"Add Minimed Pump" = "Add Minimed Pump";
+"Add Minimed Pump" = "Minimed pomp toevoegen";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API Secret";
@@ -35,16 +35,16 @@
 "Pump ID" = "Pomp ID";
 
 /* Title text for section listing configured pumps */
-"Pumps" = "Pumps";
+"Pumps" = "Pomp";
 
 /* The default placeholder string for a credential */
 "Required" = "Vereist";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink Testing";
+"RileyLink Testing" = "RileyLink Testen";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
+"Setup Omnipod" = "Omnipod instellen";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Webpagina URL";

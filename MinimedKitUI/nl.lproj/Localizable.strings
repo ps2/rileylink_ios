@@ -105,7 +105,7 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware Version";
+"Firmware Version" = "Firmware versie";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Lees pompmodel";
@@ -135,7 +135,7 @@
 "On Idle" = "Inactief";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "Ga naar het zoekscherm op je pomp en selecteer \"Apparaatzoeken\".\n\nHoofd Menu >\nGebruiksvoorzieningen >\nVerbind apparaten >\nAndere apparaten >\nAan >\nZoek Apparaat";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Voorkeur databron";
@@ -169,7 +169,7 @@
 "Reading pump status…" = "Lees pomp gegevens…";
 
 /* The title of the cell showing the pump region */
-"Region" = "Region";
+"Region" = "Regio";
 
 /* Button title to retry sentry setup */
 "Retry" = "Opnieuw proberen";
@@ -209,5 +209,5 @@
 "Unknown" = "Onbekend";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Actief";
 

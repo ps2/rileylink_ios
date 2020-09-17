@@ -20,7 +20,7 @@
 "Response %@ is invalid" = "Respons %@ ogiltig";
 
 /* Timeout error description */
-"RileyLink did not respond in time" = "RileyLink:en svarade inte i tid";
+"RileyLink did not respond in time" = "Din RileyLink svarade inte i tid";
 
 /* Unsupported command error description */
 "RileyLink firmware does not support the %@ command" = "RileyLink-enhetens firmware stöder inte kommandot %@";

@@ -81,7 +81,7 @@
 "Enabled Diagnostic LEDs" = "Diagnostiska LED på";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fel vid återgång";
+"Error Resuming" = "Fel vid vid återuppta insulintillförsel";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Fel vid försök till paus";
@@ -132,10 +132,10 @@
 "No response" = "Inget svar";
 
 /* The title of the cell showing the last idle */
-"On Idle" = "On Idle";
+"On Idle" = "I viloläge";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "På din pump, gå till skärmen Hitta enhet och välj 'Hitta enhet'.\n\nHuvudmeny >\nTillbehör >\nAnslut enheter >\nAndra enheter >\nPå >\nHitta enhet";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Föredragen datakälla";

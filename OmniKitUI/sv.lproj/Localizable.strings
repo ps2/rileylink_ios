@@ -94,31 +94,31 @@
 "Disable Bolus Beeps" = "Stäng av bolusljud";
 
 /* Title text for button to disable confirmation beeps */
-"Disable Confirmation Beeps" = "Stäng av bekräftelsepip";
+"Disable Confirmation Beeps" = "Stäng av bekräftelseljud";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Slå på bolusljud";
 
 /* Title text for button to enable confirmation beeps */
-"Enable Confirmation Beeps" = "Sätt på bekräftelsepip";
+"Enable Confirmation Beeps" = "Sätt på bekräftelseljud";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Fel vid avstängning av bolusljud";
 
 /* The alert title for disable confirmation beeps error */
-"Error disabling confirmation beeps" = "Fel vid avstängning av bekräftelsepip";
+"Error disabling confirmation beeps" = "Fel vid avstängning av bekräftelseljud";
 
 /* The alert title for emitting completion beep error */
-"Error emitting completion confirmation beep" = "Fel vid sändning av bekräftelsepip";
+"Error emitting completion confirmation beep" = "Fel vid sändning av bekräftelseljud";
 
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Fel vid aktivering av bolusljud";
 
 /* The alert title for enable confirmation beeps error */
-"Error enabling confirmation beeps" = "Fel vid aktivering av bekräftelsepip";
+"Error enabling confirmation beeps" = "Fel vid aktivering av bekräftelseljud";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fel vid återupptagande";
+"Error Resuming" = "Fel vid återuppta insulintillförsel";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Fel vid försök till paus";
@@ -193,7 +193,7 @@
 "Primed" = "Podden är fylld";
 
 /* The text of the loading label when priming */
-"Priming…" = "Podden fylls...";
+"Priming…" = "Podden fylls…";
 
 /* The title of the command to read the pod status */
 "Read Pod Status" = "Läs Podd-status";

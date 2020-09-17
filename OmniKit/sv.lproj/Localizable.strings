@@ -41,7 +41,7 @@
 "Deactivated" = "Inaktiverad";
 
 /* The format string for Delivery Status: (1: delivery status string) */
-"Delivery Status: %1$@\n" = "Delivery Status: %1$@\n";
+"Delivery Status: %1$@\n" = "Status på insulintillförsel: %1$@\n";
 
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Tom reservoar";
@@ -86,7 +86,7 @@
 "No pod paired" = "Ingen parkopplad";
 
 /* Error message shown when no response from pod was received */
-"No response from pod" = "Inget svar från pod";
+"No response from pod" = "Inget svar från podd";
 
 /* Error message shown when no response from pod was received */
 "No RileyLink available" = "Ingen RileyLink tillgänglig";
@@ -138,7 +138,7 @@
 "Pod Fault" = "Podd-fel";
 
 /* Format string for pod fault code */
-"Pod Fault: %1$@" = "Poddfel: %1$@";
+"Pod Fault: %1$@" = "Podd-fel: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
 "Pod is not in a state ready for cannula insertion." = "Podd är inte färdig att föra in kanyl.";

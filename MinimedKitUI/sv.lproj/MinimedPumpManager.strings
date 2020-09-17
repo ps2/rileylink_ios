@@ -32,7 +32,7 @@
 "HeG-VF-L5P.placeholder" = "Ange ditt 6-siffriga pump-ID";
 
 /* Class = "UILabel"; text = "Review your pump settings below. You can change these settings at any time in Loopʼs Settings screen."; ObjectID = "HfQ-fG-8vO"; */
-"HfQ-fG-8vO.text" = "Se över dina pumpinställingar nedan. Du kan närsomhelst ändra dessa i Loops inställningar.";
+"HfQ-fG-8vO.text" = "Se över dina pumpinställningar nedan. Du kan närsomhelst ändra dessa i Loops inställningar.";
 
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
 "HuY-fE-vM8.text" = "Om du reser till annan tidszon under en längre tid, kan du ändra tidszonen närsomhelst i Loops inställningar.";

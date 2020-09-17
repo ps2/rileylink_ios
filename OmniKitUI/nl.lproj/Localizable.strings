@@ -94,28 +94,28 @@
 "Disable Bolus Beeps" = "Stop gebruik Bolus Piepjes";
 
 /* Title text for button to disable confirmation beeps */
-"Disable Confirmation Beeps" = "Disable Confirmation Beeps";
+"Disable Confirmation Beeps" = "Schakel bevestigingsbeeps uit";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Pas Bolus Piepjes gebruik toe";
 
 /* Title text for button to enable confirmation beeps */
-"Enable Confirmation Beeps" = "Enable Confirmation Beeps";
+"Enable Confirmation Beeps" = "Schakel bevestigingsbeeps in";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Fout in stoppen gebruik bolus piepjes";
 
 /* The alert title for disable confirmation beeps error */
-"Error disabling confirmation beeps" = "Error disabling confirmation beeps";
+"Error disabling confirmation beeps" = "Fout bij het uitschakelen van bevestigingspiepen";
 
 /* The alert title for emitting completion beep error */
-"Error emitting completion confirmation beep" = "Error emitting completion confirmation beep";
+"Error emitting completion confirmation beep" = "Fout bij het uitzenden van voltooiingspiep";
 
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Fout in toepassen gebruik bolus piepjes";
 
 /* The alert title for enable confirmation beeps error */
-"Error enabling confirmation beeps" = "Error enabling confirmation beeps";
+"Error enabling confirmation beeps" = "Fout bij het uitschakelen van bevestigingspiepen";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Fout met hervatten";
@@ -196,16 +196,16 @@
 "Priming…" = "Klaar maken…";
 
 /* The title of the command to read the pod status */
-"Read Pod Status" = "Read Pod Status";
+"Read Pod Status" = "Lees pompstatus";
 
 /* Progress message for reading Pod status. */
-"Read Pod Status…" = "Read Pod Status…";
+"Read Pod Status…" = "Lees pompstatus…";
 
 /* The title of the command to read the pulse log */
-"Read Pulse Log" = "Read Pulse Log";
+"Read Pulse Log" = "Lees Pulse Log";
 
 /* Progress message for reading pulse log. */
-"Reading Pulse Log…" = "Reading Pulse Log…";
+"Reading Pulse Log…" = "Lezen Pulse Log…";
 
 /* Label describing time remaining view */
 "Remaining" = "Resterend";

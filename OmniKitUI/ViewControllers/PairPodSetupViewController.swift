@@ -126,6 +126,7 @@ class PairPodSetupViewController: SetupTableViewController {
             }
             
             var errorStrings: [String]
+            var errorText: String
             
             if let error = lastError as? LocalizedError {
                 errorStrings = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap { $0 }
@@ -140,8 +141,16 @@ class PairPodSetupViewController: SetupTableViewController {
                     previouslyEncounteredWeakComms = true
                 }
             }
+
+            errorText = errorStrings.joined(separator: ". ")
             
-            loadingText = errorStrings.joined(separator: ". ") + "."
+            if !errorText.isEmpty {
+                errorText += "."
+            } else if let error = lastError {
+                // We have an error but no error text, generate a string to describe the error
+                errorText = String(describing: error)
+            }
+            loadingText = errorText
             
             // If we have an error, update the continue state
             if let podCommsError = lastError as? PodCommsError,

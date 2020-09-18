@@ -27,15 +27,11 @@ extension CommandResponseViewController {
                     }).joined(separator: "\n")
 
                     if messageWithRecovery.isEmpty {
-                        if error.localizedDescription.isEmpty {
-                            response = String(describing: error)
-                        } else {
-                            response = error.localizedDescription
-                        }
+                        response = error.localizedDescription
                     } else {
                         response = messageWithRecovery
                     }
-                } else if let localizedError = error as? LocalizedError, !localizedError.localizedDescription.isEmpty {
+                } else if let localizedError = error as? LocalizedError {
                     response = localizedError.localizedDescription
                 } else if let error = error {
                     response = String(describing: error)
@@ -65,7 +61,7 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.testingCommands() { (error) in
                 let response: String
-                if let localizedError = error as? LocalizedError, !localizedError.localizedDescription.isEmpty {
+                if let localizedError = error as? LocalizedError {
                     response = localizedError.localizedDescription
                 } else if error != nil {
                     response = String(describing: error)
@@ -84,7 +80,7 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.playTestBeeps() { (error) in
                 let response: String
-                if let localizedError = error as? LocalizedError, !localizedError.localizedDescription.isEmpty {
+                if let localizedError = error as? LocalizedError {
                     response = localizedError.localizedDescription
                 } else if error != nil {
                     response = String(describing: error)

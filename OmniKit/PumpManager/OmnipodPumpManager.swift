@@ -1038,11 +1038,19 @@ extension OmnipodPumpManager {
             completion(String(describing: OmnipodPumpManagerError.noPodPaired))
             return
         }
+#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
             completion(String(describing: PodCommsError.unfinalizedBolus))
             return
         }
+#else
+        if self.state.podState?.isFaulted == false && self.state.podState?.unfinalizedBolus?.isFinished == false {
+            self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
+            completion(String(describing: PodCommsError.unfinalizedBolus))
+            return
+        }
+#endif
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Read Pulse Log", using: rileyLinkSelector) { (result) in

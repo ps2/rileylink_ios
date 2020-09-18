@@ -112,6 +112,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             loadingText = errorText
             
             // If we have an error, update the continue state
+#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
             if let podCommsError = lastError as? PodCommsError,
                 case PodCommsError.podFault = podCommsError
             {
@@ -119,6 +120,18 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             } else if lastError != nil {
                 continueState = .initial
             }
+#else
+            if let podCommsError = lastError as? PodCommsError {
+                switch podCommsError {
+                case .podFault, .activationTimeExceeded:
+                    continueState = .fault
+                default:
+                    continueState = .initial
+                }
+            } else if lastError != nil {
+                continueState = .initial
+            }
+#endif
         }
     }
 

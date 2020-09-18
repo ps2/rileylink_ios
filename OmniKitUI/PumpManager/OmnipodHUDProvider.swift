@@ -30,9 +30,15 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
                 updateReservoirView()
             }
             
+#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
             if oldValue?.fault != podState?.fault {
                 updateFaultDisplay()
             }
+#else
+            if oldValue?.isFaulted != podState?.isFaulted {
+                updateFaultDisplay()
+            }
+#endif
             
             if oldValue != nil && podState == nil {
                 updateReservoirView()
@@ -89,11 +95,19 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private func updateFaultDisplay() {
         if let podLifeView = podLifeView {
+#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
             if podState?.fault != nil {
                 podLifeView.alertState = .fault
             } else {
                 podLifeView.alertState = .none
             }
+#else
+            if let podState = self.podState, podState.isFaulted {
+                podLifeView.alertState = .fault
+            } else {
+                podLifeView.alertState = .none
+            }
+#endif
         }
     }
     
@@ -124,11 +138,19 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
+#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
         if podState?.fault != nil {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
             return HUDTapAction.presentViewController(pumpManager.settingsViewController())
         }
+#else
+        if let podState = self.podState, podState.isFaulted {
+            return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
+        } else {
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController())
+        }
+#endif
     }
     
     func hudDidAppear() {

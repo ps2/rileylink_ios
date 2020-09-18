@@ -504,11 +504,6 @@ public class PodCommsSession {
         }
         do {
             let status: StatusResponse = try send(message)
-            let now = Date()
-            if deliveryType.contains(.basal) {
-                podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
-                podState.suspendState = .suspended(now)
-            }
 
             let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.insulinNotDelivered)
 

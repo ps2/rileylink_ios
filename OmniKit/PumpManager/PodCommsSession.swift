@@ -452,6 +452,42 @@ public class PodCommsSession {
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
         }
     }
+
+    @discardableResult
+    private func handleCancelDosing(deliveryType: CancelDeliveryCommand.DeliveryType, bolusNotDelivered: Double) -> UnfinalizedDose? {
+        var canceledDose: UnfinalizedDose? = nil
+        let now = Date()
+
+        if deliveryType.contains(.basal) {
+            podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: now, scheduledCertainty: .certain)
+            podState.suspendState = .suspended(now)
+        }
+
+        if let unfinalizedTempBasal = podState.unfinalizedTempBasal,
+            let finishTime = unfinalizedTempBasal.finishTime,
+            deliveryType.contains(.tempBasal),
+            finishTime > now
+        {
+            podState.unfinalizedTempBasal?.cancel(at: now)
+            if !deliveryType.contains(.basal) {
+                podState.suspendState = .resumed(now)
+            }
+            canceledDose = podState.unfinalizedTempBasal
+            log.info("Interrupted temp basal: %@", String(describing: canceledDose))
+        }
+
+        if let unfinalizedBolus = podState.unfinalizedBolus,
+            let finishTime = unfinalizedBolus.finishTime,
+            deliveryType.contains(.bolus),
+            finishTime > now
+        {
+            podState.unfinalizedBolus?.cancel(at: now, withRemaining: bolusNotDelivered)
+            canceledDose = podState.unfinalizedBolus
+            log.info("Interrupted bolus: %@", String(describing: canceledDose))
+        }
+
+        return canceledDose
+    }
     
     // cancelDelivery() implements a smart interface to the Pod's cancel delivery command
     public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) -> CancelDeliveryResult {
@@ -474,30 +510,7 @@ public class PodCommsSession {
                 podState.suspendState = .suspended(now)
             }
 
-            var canceledDose: UnfinalizedDose? = nil
-
-            if let unfinalizedTempBasal = podState.unfinalizedTempBasal,
-                let finishTime = unfinalizedTempBasal.finishTime,
-                deliveryType.contains(.tempBasal),
-                finishTime > now
-            {
-                podState.unfinalizedTempBasal?.cancel(at: now)
-                if !deliveryType.contains(.basal) {
-                    podState.suspendState = .resumed(now)
-                }
-                canceledDose = podState.unfinalizedTempBasal
-                log.info("Interrupted temp basal: %@", String(describing: canceledDose))
-            }
-
-            if let unfinalizedBolus = podState.unfinalizedBolus,
-                let finishTime = unfinalizedBolus.finishTime,
-                deliveryType.contains(.bolus),
-                finishTime > now
-            {
-                podState.unfinalizedBolus?.cancel(at: now, withRemaining: status.insulinNotDelivered)
-                canceledDose = podState.unfinalizedBolus
-                log.info("Interrupted bolus: %@", String(describing: canceledDose))
-            }
+            let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.insulinNotDelivered)
 
             podState.updateFromStatusResponse(status)
 
@@ -617,6 +630,19 @@ public class PodCommsSession {
                 throw error
             default:
                 break
+            }
+        }
+
+        if let fault = podState.fault {
+            // Be sure to clean up the dosing info in case cancelDelivery() wasn't called
+            // (or if it was called and it had a fault return) & then read the pulse log.
+            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.insulinNotDelivered)
+            do {
+                // read the most recent pulse log entries for later analysis, but don't throw on error
+                let podInfoCommand = GetStatusCommand(podInfoType: .pulseLogRecent)
+                let _: PodInfoResponse = try send([podInfoCommand])
+            } catch let error {
+                log.error("Read pulse log failed: %@", String(describing: error))
             }
         }
 

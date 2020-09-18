@@ -64,8 +64,8 @@ extension PodCommsError: LocalizedError {
         case .podFault(let fault):
             let faultDescription = String(describing: fault.currentStatus)
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
-        case .commsError:
-            return nil
+        case .commsError(let error):
+            return error.localizedDescription
         }
     }
     

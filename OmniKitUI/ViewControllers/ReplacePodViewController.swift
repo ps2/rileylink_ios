@@ -140,13 +140,18 @@ class ReplacePodViewController: SetupTableViewController {
             var errorText = lastError?.localizedDescription
             
             if let error = lastError as? LocalizedError {
-                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ") + "."
+                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ")
                 
                 if !localizedText.isEmpty {
-                    errorText = localizedText
+                    errorText = localizedText + "."
                 }
             }
             
+            // If we have an error but no error text, generate a string to describe the error
+            if let error = lastError, (errorText == nil || errorText!.isEmpty) {
+                errorText = String(describing: error)
+            }
+
             tableView.beginUpdates()
             loadingLabel.text = errorText
             

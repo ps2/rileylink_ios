@@ -59,10 +59,8 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.testingCommands() { (error) in
                 let response: String
-                if let localizedError = error as? LocalizedError {
-                    response = localizedError.localizedDescription
-                } else if error != nil {
-                    response = String(describing: error)
+                if let error = error {
+                    response = error.localizedDescription
                 } else {
                     response = self.successText
                 }
@@ -78,10 +76,8 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.playTestBeeps() { (error) in
                 let response: String
-                if let localizedError = error as? LocalizedError {
-                    response = localizedError.localizedDescription
-                } else if error != nil {
-                    response = String(describing: error)
+                if let error = error {
+                    response = error.localizedDescription
                 } else {
                     response = self.successText
                 }
@@ -104,3 +100,4 @@ extension CommandResponseViewController {
         }
     }
 }
+

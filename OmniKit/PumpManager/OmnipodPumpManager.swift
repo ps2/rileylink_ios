@@ -947,9 +947,10 @@ extension OmnipodPumpManager {
         return result
     }
     
-    public func readPodStatus(completion: @escaping (String?) -> Void) {
-        guard self.hasActivePod else {
-            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
+    public func readPodStatus(completion: @escaping (String) -> Void) {
+        // use hasSetupPod to be able to read pod info from a faulted Pod
+        guard self.hasSetupPod else {
+            completion(PodCommsError.noPodPaired.errorDescription!)
             return
         }
 
@@ -970,7 +971,7 @@ extension OmnipodPumpManager {
                     })
                     completion(self.podStatusString(status: status))
                 case .failure(let error):
-                    throw error
+                    reportError(String(describing: error))
                 }
             } catch let error as LocalizedError {
                 reportError(error.localizedDescription)
@@ -1032,15 +1033,26 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func readPulseLog(completion: @escaping (String?) -> Void) {
+    public func readPulseLog(completion: @escaping (String) -> Void) {
+
+        let errString = { (error: Error) -> String in
+            if let localizedError = error as? LocalizedError {
+                return localizedError.localizedDescription
+            }
+            if let podCommsError = error as? PodCommsError, podCommsError.errorDescription != nil {
+                return podCommsError.errorDescription!
+            }
+            return (String(describing: error))
+        }
+
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
+            completion(errString(PodCommsError.noPodPaired))
             return
         }
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
+            completion(errString(PodCommsError.unfinalizedBolus))
             return
         }
 
@@ -1066,10 +1078,10 @@ extension OmnipodPumpManager {
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
                     completion(str)
                 } catch let error {
-                    completion(String(describing: error))
+                    completion(errString(error))
                 }
             case .failure(let error):
-                completion(String(describing: error))
+                completion(errString(error))
             }
         }
     }

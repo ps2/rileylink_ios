@@ -31,10 +31,8 @@ extension CommandResponseViewController {
                     } else {
                         response = messageWithRecovery
                     }
-                } else if let localizedError = error as? LocalizedError {
-                    response = localizedError.localizedDescription
                 } else if let error = error {
-                    response = String(describing: error)
+                    response = error.localizedDescription
                 } else {
                     response = self.successText
                 }

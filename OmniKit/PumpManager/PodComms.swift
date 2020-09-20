@@ -11,13 +11,11 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
-#if !SKIP_RSSI_CHECKS
 fileprivate let enforceRssiLimits = true    // whether to enforce RSSI limit checking
 fileprivate let maxRssiAllowed = 59         // maximum RSSI limit allowed when RSSI limit checking is enabled
 fileprivate let minRssiAllowed = 30         // minimum RSSI limit allowed when RSSI limit checking is enabled
 fileprivate let numRssiRetries = 2          // number of automatic retries if received RSSI value is out of range
 fileprivate let rssiTesting = false         // whether to display message with RSSI value for testing without pairing
-#endif
 
 protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
@@ -63,16 +61,9 @@ class PodComms: CustomDebugStringConvertible {
             }
         }
 
-#if !SKIP_AUTO_PACKET_RETRY
         var didRetry = false
-#endif
-#if !SKIP_RSSI_CHECKS
         var rssiRetries = numRssiRetries
-#endif
         while true {
-#if SKIP_AUTO_PACKET_RETRY
-            let response = try transport.sendMessage(message)
-#else
             let response: Message
             do {
                 response = try transport.sendMessage(message)
@@ -94,7 +85,6 @@ class PodComms: CustomDebugStringConvertible {
                 }
                 throw error
             }
-#endif
 
             if let fault = response.fault {
                 log.error("Pod Fault: %{public}@", String(describing: fault))
@@ -116,19 +106,16 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
             }
 
-#if !SKIP_POD_VERIFICATION
             // If we previously had podState, verify that we are still dealing with the same pod
             if let podState = self.podState, (podState.lot != config.lot || podState.tid != config.tid) {
                 // Have a new pod, could be a pod change w/o deactivation (or we're picking up some other pairing pod!)
                 log.error("Received pod response for [lot %u tid %u], expected [lot %u tid %u]", config.lot, config.tid, podState.lot, podState.tid)
                 throw PodCommsError.podChange
             }
-#endif
 
             if let rssi = config.rssi, let gain = config.gain {
                 let rssiStr = String(format: "Receiver Low Gain: %d.\nReceived Signal Strength Indicator: %d", gain, rssi)
                 log.default("%s", rssiStr)
-#if !SKIP_RSSI_CHECKS
                 if rssiTesting {
                     throw PodCommsError.debugFault(str: rssiStr)
                 }
@@ -149,7 +136,6 @@ class PodComms: CustomDebugStringConvertible {
                         throw PodCommsError.rssiTooHigh
                     }
                 }
-#endif
             }
 
             if self.podState == nil {
@@ -166,7 +152,6 @@ class PodComms: CustomDebugStringConvertible {
                 // podState setupProgress state should be addressAssigned
             }
 
-#if !SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
             // Now that we have podState, check for an activation timeout condition that can be noted in setupProgress
             guard config.podProgressStatus != .activationTimeExceeded else {
                 // The 2 hour window for the initial pairing has expired
@@ -174,7 +159,6 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.activationTimeExceeded
             }
 
-#endif
             if config.podProgressStatus == .pairingCompleted {
                 log.info("Version Response %{public}@ indicates pairing is complete, moving pod to configured state", String(describing: config))
                 self.podState?.setupProgress = .podConfigured

@@ -46,3 +46,9 @@ public struct FaultConfigCommand : NonceResyncableMessageBlock {
         return data
     }
 }
+
+extension FaultConfigCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "FaultConfigCommand(nonce:\(Data(bigEndian: nonce).hexadecimalString), tab5Sub16:\(tab5Sub16), tab5Sub17:\(tab5Sub17))"
+    }
+}

@@ -8,12 +8,24 @@
 
 import Foundation
 
-public struct HistoryPage {
-    
-    public enum HistoryPageError: Error {
-        case invalidCRC
-        case unknownEventType(eventType: UInt8)
+
+public enum HistoryPageError: Error {
+    case invalidCRC
+    case unknownEventType(eventType: UInt8)
+}
+
+extension HistoryPageError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidCRC:
+            return LocalizedString("History page failed crc check", comment: "Error description for history page failing crc check")
+        case .unknownEventType(let eventType):
+            return String(format: LocalizedString("Unknown history record type: %$1@", comment: "Format string for error description for an unknown record type in a history page. (1: event type number)"), eventType)
+        }
     }
+}
+
+public struct HistoryPage {
     
     public let events: [PumpEvent]
 

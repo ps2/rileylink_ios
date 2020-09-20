@@ -161,10 +161,10 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(00, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(false, decoded.faultAccessingTables)
             XCTAssertEqual(LogEventErrorCode(rawValue: 0), decoded.logEventErrorType)
-            XCTAssertEqual(.readyForBasalSchedule, decoded.logEventErrorPodProgressStatus)
+            XCTAssertEqual(.primingCompleted, decoded.logEventErrorPodProgressStatus)
             XCTAssertEqual(2, decoded.receiverLowGain)
             XCTAssertEqual(46, decoded.radioRSSI)
-            XCTAssertEqual(.readyForBasalSchedule, decoded.previousPodProgressStatus)
+            XCTAssertEqual(.primingCompleted, decoded.previousPodProgressStatus)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -179,7 +179,7 @@ class PodInfoTests: XCTestCase {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a0")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
-            XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
+            XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
             XCTAssertEqual(0, decoded.insulinNotDelivered, accuracy: 0.01)
             XCTAssertEqual(6, decoded.podMessageCounter)
@@ -190,10 +190,10 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(false, decoded.faultAccessingTables)
             XCTAssertEqual(LogEventErrorCode(rawValue: 0), decoded.logEventErrorType)
-            XCTAssertEqual(.pairingSuccess, decoded.logEventErrorPodProgressStatus)
+            XCTAssertEqual(.pairingCompleted, decoded.logEventErrorPodProgressStatus)
             XCTAssertEqual(2, decoded.receiverLowGain)
             XCTAssertEqual(34, decoded.radioRSSI)
-            XCTAssertEqual(.pairingSuccess, decoded.previousPodProgressStatus)
+            XCTAssertEqual(.pairingCompleted, decoded.previousPodProgressStatus)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -208,7 +208,7 @@ class PodInfoTests: XCTestCase {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a0200000823080000")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
-            XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
+            XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
             XCTAssertEqual(0, decoded.insulinNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)
@@ -237,7 +237,7 @@ class PodInfoTests: XCTestCase {
             // Decode
             let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407eb6a0e0c03ff0e1400002817080000")!)
             XCTAssertEqual(.faultEvents, decoded.podInfoType)
-            XCTAssertEqual(.errorEventLoggedShuttingDown, decoded.podProgressStatus)
+            XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
             XCTAssertEqual(0, decoded.insulinNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)

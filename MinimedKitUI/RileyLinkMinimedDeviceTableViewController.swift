@@ -316,7 +316,7 @@ public class RileyLinkMinimedDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = LocalizedString("Signal Strength", comment: "The title of the cell showing BLE signal strength (RSSI)")
                 cell.setDetailRSSI(bleRSSI, formatter: integerFormatter)
             case .uptime:
-                cell.textLabel?.text = NSLocalizedString("Uptime", comment: "The title of the cell showing uptime")
+                cell.textLabel?.text = LocalizedString("Uptime", comment: "The title of the cell showing uptime")
                 cell.setDetailAge(uptime)
             case .idleStatus:
                 cell.textLabel?.text = LocalizedString("On Idle", comment: "The title of the cell showing the last idle")

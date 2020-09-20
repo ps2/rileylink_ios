@@ -36,7 +36,7 @@ public struct CancelDeliveryCommand : NonceResyncableMessageBlock {
     public struct DeliveryType: OptionSet, Equatable {
         public let rawValue: UInt8
         
-        public static let none          = DeliveryType(rawValue: 0)
+        public static let none          = DeliveryType()
         public static let basal         = DeliveryType(rawValue: 1 << 0)
         public static let tempBasal     = DeliveryType(rawValue: 1 << 1)
         public static let bolus         = DeliveryType(rawValue: 1 << 2)

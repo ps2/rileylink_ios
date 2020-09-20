@@ -534,6 +534,7 @@ extension OmnipodPumpManager {
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
         let mockFaultDuringPairing = false
+        let mockCommsErrorDuringPairing = true
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
             let fault: PodInfoFaultEvent? = self.setStateWithResult({ (state) in
@@ -542,6 +543,8 @@ extension OmnipodPumpManager {
             })
             if mockFaultDuringPairing {
                 completion(.failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault!))))
+            } else if mockCommsErrorDuringPairing {
+                completion(.failure(PumpManagerError.communication(PodCommsError.noResponse)))
             } else {
                 let mockPrimeDuration = TimeInterval(.seconds(3))
                 completion(.success(mockPrimeDuration))
@@ -698,7 +701,7 @@ extension OmnipodPumpManager {
 
     private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
         if self.confirmationBeeps {
-            session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
+            let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
         }
     }
 
@@ -978,9 +981,10 @@ extension OmnipodPumpManager {
         return result
     }
     
-    public func readPodStatus(completion: @escaping (String?) -> Void) {
-        guard self.hasActivePod else {
-            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
+    public func readPodStatus(completion: @escaping (String) -> Void) {
+        // use hasSetupPod to be able to read pod info from a faulted Pod
+        guard self.hasSetupPod else {
+            completion(PodCommsError.noPodPaired.errorDescription!)
             return
         }
 
@@ -1001,12 +1005,10 @@ extension OmnipodPumpManager {
                     })
                     completion(self.podStatusString(status: status))
                 case .failure(let error):
-                    throw error
+                    reportError(String(describing: error))
                 }
-            } catch let error as LocalizedError {
-                reportError(error.localizedDescription)
             } catch let error {
-                reportError(String(describing: error))
+                reportError(error.localizedDescription)
             }
         }
     }
@@ -1053,25 +1055,29 @@ extension OmnipodPumpManager {
                 let basalCompletionBeep = self.confirmationBeeps
                 let tempBasalCompletionBeep = self.confirmationBeeps && tempBasalConfirmationBeeps
                 let bolusCompletionBeep = self.confirmationBeeps
-                session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-                // Don't bother emitting another beep sequence to approximate the PDM "Check alarms" function as the Pod beeping is
-                // asynchronous to the UI which will have already printed Succeeded before the first beep sequence is done playing
-                completion(nil)
+                let result = session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                
+                switch result {
+                case .success:
+                    completion(nil)
+                case .failure(let error):
+                    completion(error)
+                }
             case .failure(let error):
                 completion(error)
             }
         }
     }
 
-    public func readPulseLog(completion: @escaping (String?) -> Void) {
+    public func readPulseLog(completion: @escaping (String) -> Void) {
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(String(describing: OmnipodPumpManagerError.noPodPaired))
+            completion(PodCommsError.noPodPaired.localizedDescription)
             return
         }
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
+            completion(PodCommsError.unfinalizedBolus.localizedDescription)
             return
         }
 
@@ -1097,10 +1103,10 @@ extension OmnipodPumpManager {
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
                     completion(str)
                 } catch let error {
-                    completion(String(describing: error))
+                    completion(error.localizedDescription)
                 }
             case .failure(let error):
-                completion(String(describing: error))
+                completion(error.localizedDescription)
             }
         }
     }
@@ -1124,7 +1130,7 @@ extension OmnipodPumpManager {
                 let bolusCompletionBeep = enabled
 
                 // enable/disable Pod completion beeps for any in-progress insulin delivery
-                session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
                 completion(nil)
             case .failure(let error):
                 completion(error)

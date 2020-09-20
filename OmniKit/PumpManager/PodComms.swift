@@ -129,8 +129,8 @@ class PodComms: CustomDebugStringConvertible {
             throw PodCommsError.unexpectedResponse(response: responseType)
         }
         
-        guard config.setupState == .paired else {
-            self.log.error("SetupPod response with incorrect setupState: %{public}@", String(describing: config.setupState))
+        guard config.podProgressStatus == .pairingCompleted else {
+            self.log.error("setupPod unexpected pod progress value of %{public}@", String(describing: config.podProgressStatus))
             throw PodCommsError.invalidData
         }
 

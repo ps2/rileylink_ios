@@ -12,6 +12,7 @@ public enum MessageError: Error {
     case notEnoughData
     case invalidCrc
     case invalidSequence
+    case invalidAddress(address: UInt32)
     case parsingError(offset: Int, data: Data, error: Error)
     case unknownValue(value: UInt8, typeDescription: String)
     case validationFailed(description: String)

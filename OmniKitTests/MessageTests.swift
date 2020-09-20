@@ -105,7 +105,7 @@ class MessageTests: XCTestCase {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff04170115020700020700020e0000a5ad00053030971f08686301fd")!)
             let config = message.messageBlocks[0] as! VersionResponse
-            XCTAssertEqual(.pairingExpired, config.setupState)
+            XCTAssertEqual(.activationTimeExceeded, config.podProgressStatus)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

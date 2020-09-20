@@ -32,7 +32,7 @@ extension CommandResponseViewController {
                         response = messageWithRecovery
                     }
                 } else if let error = error {
-                    response = String(describing: error)
+                    response = error.localizedDescription
                 } else {
                     response = self.successText
                 }
@@ -94,3 +94,4 @@ extension CommandResponseViewController {
         }
     }
 }
+

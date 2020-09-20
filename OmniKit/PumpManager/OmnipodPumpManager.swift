@@ -1035,24 +1035,14 @@ extension OmnipodPumpManager {
 
     public func readPulseLog(completion: @escaping (String) -> Void) {
 
-        let errString = { (error: Error) -> String in
-            if let localizedError = error as? LocalizedError {
-                return localizedError.localizedDescription
-            }
-            if let podCommsError = error as? PodCommsError, podCommsError.errorDescription != nil {
-                return podCommsError.errorDescription!
-            }
-            return (String(describing: error))
-        }
-
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(errString(PodCommsError.noPodPaired))
+            completion(PodCommsError.noPodPaired.localizedDescription)
             return
         }
         if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
-            completion(errString(PodCommsError.unfinalizedBolus))
+            completion(PodCommsError.unfinalizedBolus.localizedDescription)
             return
         }
 
@@ -1078,10 +1068,10 @@ extension OmnipodPumpManager {
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
                     completion(str)
                 } catch let error {
-                    completion(errString(error))
+                    completion(error.localizedDescription)
                 }
             case .failure(let error):
-                completion(errString(error))
+                completion(error.localizedDescription)
             }
         }
     }

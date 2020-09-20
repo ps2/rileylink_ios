@@ -69,8 +69,14 @@ extension CommandResponseViewController {
     static func playTestBeeps(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
             pumpManager.playTestBeeps() { (error) in
+                let response: String
+                if let error = error {
+                    response = error.localizedDescription
+                } else {
+                    response = LocalizedString("Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your pod, it's likely that the piezo speaker in your pod is broken.", comment: "Success message for play test beeps.")
+                }
                 DispatchQueue.main.async {
-                    completionHandler(error?.localizedDescription ?? self.successText)
+                    completionHandler(response)
                 }
             }
             return LocalizedString("Play Test Beeps…", comment: "Progress message for play test beeps.")

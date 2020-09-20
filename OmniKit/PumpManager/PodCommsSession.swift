@@ -298,18 +298,19 @@ public class PodCommsSession {
     }
 
     // emits the specified beep type and sets the completion beep flags, doesn't throw
-    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) {
-        guard self.podState.fault == nil else {
+    public func beepConfig(beepConfigType: BeepConfigType, basalCompletionBeep: Bool, tempBasalCompletionBeep: Bool, bolusCompletionBeep: Bool) -> Result<StatusResponse, Error> {
+        if let fault = self.podState.fault {
             log.info("Skip beep config with faulted pod")
-            return
+            return .failure(PodCommsError.podFault(fault: fault))
         }
         
         let beepConfigCommand = BeepConfigCommand(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
         do {
             let statusResponse: StatusResponse = try send([beepConfigCommand])
             podState.updateFromStatusResponse(statusResponse)
-        } catch {
-            // This is swallowing errors, and making failed play test beeps command report "Succeeded"
+            return .success(statusResponse)
+        } catch let error {
+            return .failure(error)
         }
     }
 

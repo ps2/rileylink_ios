@@ -666,7 +666,7 @@ extension OmnipodPumpManager {
 
     private func emitConfirmationBeep(session: PodCommsSession, beepConfigType: BeepConfigType) {
         if self.confirmationBeeps {
-            session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
+            let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: true, tempBasalCompletionBeep: tempBasalConfirmationBeeps, bolusCompletionBeep: true)
         }
     }
 
@@ -1021,10 +1021,14 @@ extension OmnipodPumpManager {
                 let basalCompletionBeep = self.confirmationBeeps
                 let tempBasalCompletionBeep = self.confirmationBeeps && tempBasalConfirmationBeeps
                 let bolusCompletionBeep = self.confirmationBeeps
-                session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-                // Don't bother emitting another beep sequence to approximate the PDM "Check alarms" function as the Pod beeping is
-                // asynchronous to the UI which will have already printed Succeeded before the first beep sequence is done playing
-                completion(nil)
+                let result = session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                
+                switch result {
+                case .success:
+                    completion(nil)
+                case .failure(let error):
+                    completion(error)
+                }
             case .failure(let error):
                 completion(error)
             }
@@ -1032,7 +1036,6 @@ extension OmnipodPumpManager {
     }
 
     public func readPulseLog(completion: @escaping (String) -> Void) {
-
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
             completion(PodCommsError.noPodPaired.localizedDescription)
@@ -1093,7 +1096,7 @@ extension OmnipodPumpManager {
                 let bolusCompletionBeep = enabled
 
                 // enable/disable Pod completion beeps for any in-progress insulin delivery
-                session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
                 completion(nil)
             case .failure(let error):
                 completion(error)

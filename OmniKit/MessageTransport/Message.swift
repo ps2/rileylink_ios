@@ -93,10 +93,10 @@ struct Message {
         if messageBlocks.count > 0 && messageBlocks[0].blockType == .podInfoResponse,
             let infoResponse = messageBlocks[0] as? PodInfoResponse,
             infoResponse.podInfoResponseSubType == .detailedStatus,
-            let fault = infoResponse.podInfo as? DetailedStatus,
-            fault.currentStatus.faultType != .noFaults
+            let detailedStatus = infoResponse.podInfo as? DetailedStatus,
+            detailedStatus.currentStatus.faultType != .noFaults
         {
-            return fault
+            return detailedStatus
         } else {
             return nil
         }

@@ -1,6 +1,10 @@
 language: objective-c
 osx_image: xcode11
 
+cache:
+  directories:
+  - Carthage
+
 before_script:
     - carthage bootstrap
 

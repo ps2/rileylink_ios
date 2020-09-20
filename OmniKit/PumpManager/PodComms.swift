@@ -11,11 +11,6 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
-fileprivate let enforceRssiLimits = true    // whether to enforce RSSI limit checking
-fileprivate let maxRssiAllowed = 59         // maximum RSSI limit allowed when RSSI limit checking is enabled
-fileprivate let minRssiAllowed = 30         // minimum RSSI limit allowed when RSSI limit checking is enabled
-fileprivate let numRssiRetries = 2          // number of automatic retries if received RSSI value is out of range
-fileprivate let rssiTesting = false         // whether to display message with RSSI value for testing without pairing
 
 protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
@@ -49,7 +44,29 @@ class PodComms: CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
-    // Handles all the common work to send and verify the version response for the two pairing commands, AssignAddress and SetupPod
+    /// Handles all the common work to send and verify the version response for the two pairing commands, AssignAddress and SetupPod.
+    ///  Has side effects of creating pod state, assigning startingPacketNumber, and updating pod state.
+    ///
+    /// - parameter address: Address being assigned to the pod
+    /// - parameter transport: PodMessageTransport used to send messages
+    /// - parameter message: Message to send; must be an AssignAddress or SetupPod
+    ///
+    /// - returns: The VersionResponse from the pod
+    ///
+    /// - Throws:
+    ///     - PodCommsError.noResponse
+    ///     - PodCommsError.podAckedInsteadOfReturningResponse
+    ///     - PodCommsError.unexpectedPacketType
+    ///     - PodCommsError.emptyResponse
+    ///     - PodCommsError.unexpectedResponse
+    ///     - PodCommsError.podChange
+    ///     - PodCommsError.rssiTooLow
+    ///     - PodCommsError.rssiTooHigh
+    ///     - PodCommsError.activationTimeExceeded
+    ///     - MessageError.invalidCrc
+    ///     - MessageError.invalidSequence
+    ///     - MessageError.invalidAddress
+    ///     - RileyLinkDeviceError
     private func sendPairMessage(address: UInt32, transport: PodMessageTransport, message: Message) throws -> VersionResponse {
 
         defer {
@@ -62,7 +79,8 @@ class PodComms: CustomDebugStringConvertible {
         }
 
         var didRetry = false
-        var rssiRetries = numRssiRetries
+        
+        var rssiRetries = 2
         while true {
             let response: Message
             do {
@@ -113,28 +131,26 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.podChange
             }
 
+            // Checking RSSI
+            let maxRssiAllowed = 59         // maximum RSSI limit allowed
+            let minRssiAllowed = 30         // minimum RSSI limit allowed
             if let rssi = config.rssi, let gain = config.gain {
                 let rssiStr = String(format: "Receiver Low Gain: %d.\nReceived Signal Strength Indicator: %d", gain, rssi)
                 log.default("%s", rssiStr)
-                if rssiTesting {
-                    throw PodCommsError.debugFault(str: rssiStr)
+                rssiRetries -= 1
+                if rssi < minRssiAllowed {
+                    log.default("RSSI value %d is less than minimum allowed value of %d, %d retries left", rssi, minRssiAllowed, rssiRetries)
+                    if rssiRetries > 0 {
+                        continue
+                    }
+                    throw PodCommsError.rssiTooLow
                 }
-                if enforceRssiLimits {
-                    rssiRetries -= 1
-                    if rssi < minRssiAllowed {
-                        log.default("RSSI value %d is less than minimum allowed value of %d, %d retries left", rssi, minRssiAllowed, rssiRetries)
-                        if rssiRetries > 0 {
-                            continue
-                        }
-                        throw PodCommsError.rssiTooLow
+                if rssi > maxRssiAllowed {
+                    log.default("RSSI value %d is more than maximum allowed value of %d, %d retries left", rssi, maxRssiAllowed, rssiRetries)
+                    if rssiRetries > 0 {
+                        continue
                     }
-                    if rssi > maxRssiAllowed {
-                        log.default("RSSI value %d is more than maximum allowed value of %d, %d retries left", rssi, maxRssiAllowed, rssiRetries)
-                        if rssiRetries > 0 {
-                            continue
-                        }
-                        throw PodCommsError.rssiTooHigh
-                    }
+                    throw PodCommsError.rssiTooHigh
                 }
             }
 

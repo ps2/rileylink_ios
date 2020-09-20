@@ -153,15 +153,6 @@ class PairPodSetupViewController: SetupTableViewController {
             loadingText = errorText
             
             // If we have an error, update the continue state
-#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
-            if let podCommsError = lastError as? PodCommsError,
-                case PodCommsError.podFault = podCommsError
-            {
-                continueState = .fault
-            } else if lastError != nil {
-                continueState = .initial
-            }
-#else
             if let podCommsError = lastError as? PodCommsError {
                 switch podCommsError {
                 case .podFault, .activationTimeExceeded:
@@ -172,7 +163,6 @@ class PairPodSetupViewController: SetupTableViewController {
             } else if lastError != nil {
                 continueState = .initial
             }
-#endif
         }
     }
     
@@ -240,13 +230,8 @@ class PairPodSetupViewController: SetupTableViewController {
 private extension PodCommsError {
     var possibleWeakCommsCause: Bool {
         switch self {
-#if SKIP_RSSI_CHECKS
-        case .invalidData, .noResponse:
-            return true
-#else
         case .invalidData, .noResponse, .invalidAddress, .rssiTooLow, .rssiTooHigh, .unexpectedPacketType:
             return true
-#endif
         default:
             return false
         }

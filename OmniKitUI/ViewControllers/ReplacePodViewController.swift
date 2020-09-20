@@ -50,15 +50,11 @@ class ReplacePodViewController: SetupTableViewController {
             let podState = pumpManager.state.podState
 
             if let podFault = podState?.fault {
-#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
-                self.replacementReason = .fault(podFault.currentStatus)
-#else
                 if podFault.podProgressStatus == .activationTimeExceeded {
                     self.replacementReason = .activationTimeout
                 } else {
                     self.replacementReason = .fault(podFault.currentStatus)
                 }
-#endif
             } else if podState?.setupProgress.primingNeeded == true {
                 self.replacementReason = .canceledPairingBeforeApplication
             } else if podState?.setupProgress.needsCannulaInsertion == true {

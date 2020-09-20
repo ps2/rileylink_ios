@@ -334,18 +334,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 return cell
             case .replacePod:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
-#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
-                if podState == nil {
-                    cell.textLabel?.text = LocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
-                } else if podState?.fault != nil {
-                    cell.textLabel?.text = LocalizedString("Replace Pod Now", comment: "The title of the command to replace pod when there is a pod fault")
-                } else if let podState = podState, podState.unfinishedPairing {
-                    cell.textLabel?.text = LocalizedString("Finish pod setup", comment: "The title of the command to finish pod setup")
-                } else {
-                    cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
-                    cell.tintColor = .deleteColor
-                }
-#else
                 if podState == nil {
                     cell.textLabel?.text = LocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 } else if let podState = podState, podState.isFaulted {
@@ -356,7 +344,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
                     cell.tintColor = .deleteColor
                 }
-#endif
 
                 cell.isEnabled = true
                 return cell
@@ -506,17 +493,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 show(vc, sender: indexPath)
             case .replacePod:
                 let vc: UIViewController
-#if SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
-                if podState == nil || podState!.setupProgress.primingNeeded {
-                    vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
-                } else if podState?.fault != nil {
-                    vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
-                } else if let podState = podState, podState.unfinishedPairing {
-                    vc = PodReplacementNavigationController.instantiateInsertCannulaFlow(pumpManager)
-                } else {
-                    vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
-                }
-#else
                 if podState == nil || podState!.setupProgress.primingNeeded {
                     vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
                 } else if let podState = podState, podState.isFaulted {
@@ -526,7 +502,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 } else {
                     vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
                 }
-#endif
                 if var completionNotifying = vc as? CompletionNotifying {
                     completionNotifying.completionDelegate = self
                 }

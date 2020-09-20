@@ -907,26 +907,27 @@ extension OmnipodPumpManager {
         #endif
     }
 
-    private func podStatusString(status: StatusResponse) -> String {
-        var result, str: String
-        var delivered: Double
+    private func podInfoString(status: PodInfoFaultEvent) -> String {
 
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.day, .hour, .minute]
-        if let timeStr = formatter.string(from: status.timeActive) {
-            str = timeStr
-        } else {
-            str = String(format: LocalizedString("%1$@ minutes", comment: "The format string for minutes (1: number of minutes string)"), String(describing: Int(status.timeActive / 60)))
+        func timeStr(time: TimeInterval) -> String {
+            let formatter = DateComponentsFormatter()
+            formatter.unitsStyle = .full
+            formatter.allowedUnits = [.day, .hour, .minute]
+
+            if let str = formatter.string(from: time) {
+                return str
+            }
+            return String(format: LocalizedString("%1$@ minutes", comment: "The format string for minutes (1: number of minutes string)"), String(describing: Int(time / 60)))
         }
-        result = String(format: LocalizedString("Pod Active: %1$@\n", comment: "The format string for Pod Active: (1: Pod active time string)"), str)
 
+        var result = String(format: LocalizedString("Pod Active: %1$@\n", comment: "The format string for Pod Active: (1: Pod active time string)"), timeStr(time: status.timeActive))
         result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
+        let delivered: Double
         if let lastInsulinMeasurements = self.state.podState?.lastInsulinMeasurements {
-            delivered = lastInsulinMeasurements.delivered
+            delivered = lastInsulinMeasurements.delivered // report the adjusted total without the priming & cannula insertion amounts
         } else {
-            delivered = status.insulin
+            delivered = status.totalInsulinDelivered // report the raw non-adjusted pod value
         }
         result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), delivered.twoDecimals)
 
@@ -934,15 +935,29 @@ extension OmnipodPumpManager {
 
         result += String(format: LocalizedString("Last Bolus Not Delivered: %1$@ U\n", comment: "The format string for Last Bolus Not Delivered: (1: bolus not delivered string)"), status.insulinNotDelivered.twoDecimals)
 
+        let alertString: String
         if let podState = self.state.podState,
             podState.activeAlerts.startIndex != podState.activeAlerts.endIndex
         {
             // generate a more helpful string with the actual alert names
-            str = String(describing: podState.activeAlerts)
+            alertString = String(describing: podState.activeAlerts)
         } else {
-            str = String(describing: status.alerts)
+            alertString = String(describing: status.unacknowledgedAlerts)
         }
-        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), str)
+        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), alertString)
+
+        result += String(format: LocalizedString("Receiver Low Gain: %1$u\n", comment: "The format string for Receiver Low Gain: (1: Receiver Low Gain value)"), status.receiverLowGain)
+
+        result += String(format: LocalizedString("Received Signal Strength Indicator: %1$u\n", comment: "The format string for Received Signal Strength Indicator: (1: RSSI value)"), status.radioRSSI)
+
+        if status.currentStatus.faultType != .noFaults {
+            result += "\n" // since we have a fault, report the additional fault related information in a separate section
+            result += String(format: LocalizedString("Fault: %1$@\n", comment: "The format string for a fault: (1: The fault description)"), status.currentStatus.localizedDescription)
+            result += String(format: LocalizedString("Previous pod progress: %1$@\n", comment: "The format string for previous pod progress: (1: previous pod progress string)"), String(describing: status.previousPodProgressStatus))
+            if let faultEventTimeSinceActivation = status.faultEventTimeSinceActivation {
+                result += String(format: LocalizedString("Fault time: %1$@\n", comment: "The format string for fault time: (1: fault time string)"), timeStr(time: faultEventTimeSinceActivation))
+            }
+        }
 
         return result
     }
@@ -965,13 +980,16 @@ extension OmnipodPumpManager {
             do {
                 switch result {
                 case .success(let session):
-                    let status = try session.getStatus()
+                    // use a type 2 (.faultEvents) readPodInfo request to get detailed pod information
+                    let podInfoResponse = try session.readPodInfo(podInfoResponseSubType: .faultEvents)
+                    let podInfoType2 = podInfoResponse.podInfo as! PodInfoFaultEvent
+                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
-                    completion(self.podStatusString(status: status))
+                    completion(self.podInfoString(status: podInfoType2))
                 case .failure(let error):
-                    reportError(String(describing: error))
+                    reportError(error.localizedDescription)
                 }
             } catch let error {
                 reportError(error.localizedDescription)
@@ -1054,14 +1072,14 @@ extension OmnipodPumpManager {
                 do {
                     // read the most recent 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse1 = try session.readPulseLogsRequest(podInfoResponseSubType: .pulseLogRecent)
+                    let podInfoResponse1 = try session.readPodInfo(podInfoResponseSubType: .pulseLogRecent)
                     let podInfoPulseLogRecent = podInfoResponse1.podInfo as! PodInfoPulseLogRecent
                     var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
                     var str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
 
                     // read up to the previous 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse2 = try session.readPulseLogsRequest(podInfoResponseSubType: .dumpOlderPulseLog)
+                    let podInfoResponse2 = try session.readPodInfo(podInfoResponseSubType: .dumpOlderPulseLog)
                     let podInfoPulseLogPrevious = podInfoResponse2.podInfo as! PodInfoPulseLogPrevious
                     lastPulseNumber -= podInfoPulseLogRecent.pulseLog.count
                     str += pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLog, lastPulseNumber: lastPulseNumber)

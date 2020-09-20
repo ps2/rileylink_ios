@@ -596,21 +596,10 @@ public class PodCommsSession {
     }
 
     @discardableResult
-    public func readPulseLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
-        let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
-        let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
-        let messageResponse = try transport.sendMessage(message)
-
-        if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.default("Pod pulse log: %@", String(describing: podInfoResponseMessageBlock))
-            return podInfoResponseMessageBlock
-        } else if let fault = messageResponse.fault {
-            handlePodFault(fault: fault)
-            throw PodCommsError.podFault(fault: fault)
-        } else {
-            log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
-            throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
-        }
+    public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
+        let podInfoCommand = GetStatusCommand(podInfoType: podInfoResponseSubType)
+        let podInfoResponseMessageBlock: PodInfoResponse = try send([podInfoCommand])
+        return podInfoResponseMessageBlock
     }
 
     public func deactivatePod() throws {

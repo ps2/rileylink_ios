@@ -1043,7 +1043,7 @@ extension OmnipodPumpManager {
         }
         if self.state.podState?.isFaulted == false && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
-            completion(String(describing: PodCommsError.unfinalizedBolus))
+            completion(PodCommsError.unfinalizedBolus.localizedDescription)
             return
         }
 

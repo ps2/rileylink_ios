@@ -15,9 +15,7 @@ class ReplacePodViewController: SetupTableViewController {
 
     enum PodReplacementReason {
         case normal
-#if !SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
         case activationTimeout
-#endif
         case fault(_ faultCode: FaultEventCode)
         case canceledPairingBeforeApplication
         case canceledPairing
@@ -29,10 +27,8 @@ class ReplacePodViewController: SetupTableViewController {
             switch replacementReason {
             case .normal:
                 break // Text set in interface builder
-#if !SKIP_ACTIVATION_TIME_EXCEEDED_CHECKING
             case .activationTimeout:
                 instructionsLabel.text = LocalizedString("Activation time exceeded. The pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that didn't complete activation in time.")
-#endif
             case .fault(let faultCode):
                 instructionsLabel.text = String(format: LocalizedString("%1$@. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Format string providing instructions for replacing pod due to a fault. (1: The fault description)"), faultCode.localizedDescription)
             case .canceledPairingBeforeApplication:

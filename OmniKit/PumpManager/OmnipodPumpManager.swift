@@ -1096,7 +1096,7 @@ extension OmnipodPumpManager {
                 let bolusCompletionBeep = enabled
 
                 // enable/disable Pod completion beeps for any in-progress insulin delivery
-                session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+                let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
                 completion(nil)
             case .failure(let error):
                 completion(error)

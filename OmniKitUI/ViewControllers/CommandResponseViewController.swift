@@ -46,9 +46,9 @@ extension CommandResponseViewController {
 
     static func readPodStatus(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            pumpManager.readPodStatus() { (resultStr) in
+            pumpManager.readPodStatus() { (response) in
                 DispatchQueue.main.async {
-                    completionHandler(resultStr)
+                    completionHandler(response)
                 }
             }
             return LocalizedString("Read Pod Status…", comment: "Progress message for reading Pod status.")
@@ -73,7 +73,7 @@ extension CommandResponseViewController {
                 if let error = error {
                     response = error.localizedDescription
                 } else {
-                    response = LocalizedString("Play test beeps command sent successfully. If you did not hear any beeps from your pod, it's possible that the piezo speaker is broken.", comment: "Success message for play test beeps.")
+                    response = LocalizedString("Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your pod, it's likely that the piezo speaker in your pod is broken.", comment: "Success message for play test beeps.")
                 }
                 DispatchQueue.main.async {
                     completionHandler(response)
@@ -85,9 +85,9 @@ extension CommandResponseViewController {
 
     static func readPulseLog(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            pumpManager.readPulseLog() { (resultStr) in
+            pumpManager.readPulseLog() { (response) in
                 DispatchQueue.main.async {
-                    completionHandler(resultStr)
+                    completionHandler(response)
                 }
             }
             return LocalizedString("Reading Pulse Log…", comment: "Progress message for reading pulse log.")

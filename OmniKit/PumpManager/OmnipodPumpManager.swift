@@ -973,10 +973,8 @@ extension OmnipodPumpManager {
                 case .failure(let error):
                     reportError(String(describing: error))
                 }
-            } catch let error as LocalizedError {
-                reportError(error.localizedDescription)
             } catch let error {
-                reportError(String(describing: error))
+                reportError(error.localizedDescription)
             }
         }
     }

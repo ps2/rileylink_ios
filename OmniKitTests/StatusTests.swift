@@ -64,12 +64,12 @@ class StatusTests: XCTestCase {
         // 0e 01 02
         do {
             // Encode
-            let encoded = GetStatusCommand(podInfoType: .faultEvents)
+            let encoded = GetStatusCommand(podInfoType: .detailedStatus)
             XCTAssertEqual("0e0102", encoded.data.hexadecimalString)
             
             // Decode
             let decoded = try GetStatusCommand(encodedData: Data(hexadecimalString: "0e0102")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

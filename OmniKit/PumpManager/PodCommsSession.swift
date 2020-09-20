@@ -26,7 +26,7 @@ public enum PodCommsError: Error {
     case unfinalizedTempBasal
     case nonceResyncFailed
     case podSuspended
-    case podFault(fault: PodInfoFaultEvent)
+    case podFault(fault: DetailedStatus)
     case commsError(error: Error)
 }
 
@@ -137,7 +137,7 @@ public class PodCommsSession {
         self.transport.delegate = self
     }
 
-    private func handlePodFault(fault: PodInfoFaultEvent) {
+    private func handlePodFault(fault: DetailedStatus) {
         if self.podState.fault == nil {
             self.podState.fault = fault // save the first fault returned
         }
@@ -593,6 +593,16 @@ public class PodCommsSession {
         let statusResponse: StatusResponse = try send([GetStatusCommand()])
         podState.updateFromStatusResponse(statusResponse)
         return statusResponse
+    }
+    
+    @discardableResult
+    public func getDetailedStatus() throws -> DetailedStatus {
+        let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)])
+        
+        guard let faultEvent = infoResponse.podInfo as? DetailedStatus else {
+            throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
+        }
+        return faultEvent
     }
 
     @discardableResult

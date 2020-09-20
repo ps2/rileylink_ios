@@ -89,11 +89,12 @@ struct Message {
         return data
     }
     
-    var fault: PodInfoFaultEvent? {
+    var fault: DetailedStatus? {
         if messageBlocks.count > 0 && messageBlocks[0].blockType == .podInfoResponse,
             let infoResponse = messageBlocks[0] as? PodInfoResponse,
-            infoResponse.podInfoResponseSubType == .faultEvents,
-            let fault = infoResponse.podInfo as? PodInfoFaultEvent
+            infoResponse.podInfoResponseSubType == .detailedStatus,
+            let fault = infoResponse.podInfo as? DetailedStatus,
+            fault.currentStatus.faultType != .noFaults
         {
             return fault
         } else {

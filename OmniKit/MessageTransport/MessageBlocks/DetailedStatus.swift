@@ -101,7 +101,7 @@ extension DetailedStatus: CustomDebugStringConvertible {
     public typealias RawValue = Data
     public var debugDescription: String {
         return [
-            "## PodInfoFaultEvent",
+            "## DetailedStatus",
             "* rawHex: \(data.hexadecimalString)",
             "* podProgressStatus: \(podProgressStatus)",
             "* deliveryStatus: \(deliveryStatus.description)",

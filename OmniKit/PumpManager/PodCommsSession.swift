@@ -598,8 +598,11 @@ public class PodCommsSession {
     @discardableResult
     public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
         let podInfoCommand = GetStatusCommand(podInfoType: podInfoResponseSubType)
-        let podInfoResponseMessageBlock: PodInfoResponse = try send([podInfoCommand])
-        return podInfoResponseMessageBlock
+        let podInfoResponse: PodInfoResponse = try send([podInfoCommand])
+        if let podInfoType2 = podInfoResponse.podInfo as? PodInfoFaultEvent {
+            podState.updateFromStatusResponse(podInfoType2)
+        }
+        return podInfoResponse
     }
 
     public func deactivatePod() throws {

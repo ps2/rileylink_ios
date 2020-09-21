@@ -49,7 +49,7 @@ class ReplacePodViewController: SetupTableViewController {
                 if podFault.podProgressStatus == .activationTimeExceeded {
                     self.replacementReason = .activationTimeout
                 } else {
-                    self.replacementReason = .fault(podFault.currentStatus)
+                    self.replacementReason = .fault(podFault.faultEventCode)
                 }
             } else if podState?.setupProgress.primingNeeded == true {
                 self.replacementReason = .canceledPairingBeforeApplication

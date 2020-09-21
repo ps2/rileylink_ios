@@ -19,7 +19,7 @@ public struct DetailedStatus : PodInfo, Equatable {
     public let insulinNotDelivered: Double
     public let podMessageCounter: UInt8
     public let totalInsulinDelivered: Double
-    public let currentStatus: FaultEventCode
+    public let faultEventCode: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval?
     public let reservoirLevel: Double?
     public let timeActive: TimeInterval
@@ -52,7 +52,7 @@ public struct DetailedStatus : PodInfo, Equatable {
         
         self.totalInsulinDelivered = Pod.pulseSize * Double((Int(encodedData[6]) << 8) | Int(encodedData[7]))
         
-        self.currentStatus = FaultEventCode(rawValue: encodedData[8])
+        self.faultEventCode = FaultEventCode(rawValue: encodedData[8])
         
         let minutesSinceActivation = encodedData[9...10].toBigEndian(UInt16.self)
         if minutesSinceActivation != 0xffff {
@@ -108,7 +108,7 @@ extension DetailedStatus: CustomDebugStringConvertible {
             "* insulinNotDelivered: \(insulinNotDelivered.twoDecimals) U",
             "* podMessageCounter: \(podMessageCounter)",
             "* totalInsulinDelivered: \(totalInsulinDelivered.twoDecimals) U",
-            "* currentStatus: \(currentStatus.description)",
+            "* faultEventCode: \(faultEventCode.description)",
             "* faultEventTimeSinceActivation: \(faultEventTimeSinceActivation?.stringValue ?? "none")",
             "* reservoirLevel: \(reservoirLevel?.twoDecimals ?? "50+") U",
             "* timeActive: \(timeActive.stringValue)",

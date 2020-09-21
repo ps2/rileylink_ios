@@ -320,7 +320,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         
         if let rawFault = rawValue["fault"] as? DetailedStatus.RawValue,
            let fault = DetailedStatus(rawValue: rawFault),
-           fault.currentStatus.faultType != .noFaults
+           fault.faultEventCode.faultType != .noFaults
         {
             self.fault = fault
         } else {

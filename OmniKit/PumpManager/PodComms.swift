@@ -11,6 +11,7 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
+
 protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
@@ -24,6 +25,8 @@ class PodComms: CustomDebugStringConvertible {
     weak var messageLogger: MessageLogger?
 
     public let log = OSLog(category: "PodComms")
+
+    private var startingPacketNumber = 0
 
     // Only valid to access on the session serial queue
     private var podState: PodState? {
@@ -41,52 +44,168 @@ class PodComms: CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
-    private func assignAddress(address: UInt32, commandSession: CommandSession) throws -> PodState {
-        commandSession.assertOnSessionQueue()
-        
-        self.log.debug("Attempting pairing with address %{public}@", String(format: "%04X", address))
+    /// Handles all the common work to send and verify the version response for the two pairing commands, AssignAddress and SetupPod.
+    ///  Has side effects of creating pod state, assigning startingPacketNumber, and updating pod state.
+    ///
+    /// - parameter address: Address being assigned to the pod
+    /// - parameter transport: PodMessageTransport used to send messages
+    /// - parameter message: Message to send; must be an AssignAddress or SetupPod
+    ///
+    /// - returns: The VersionResponse from the pod
+    ///
+    /// - Throws:
+    ///     - PodCommsError.noResponse
+    ///     - PodCommsError.podAckedInsteadOfReturningResponse
+    ///     - PodCommsError.unexpectedPacketType
+    ///     - PodCommsError.emptyResponse
+    ///     - PodCommsError.unexpectedResponse
+    ///     - PodCommsError.podChange
+    ///     - PodCommsError.rssiTooLow
+    ///     - PodCommsError.rssiTooHigh
+    ///     - PodCommsError.activationTimeExceeded
+    ///     - MessageError.invalidCrc
+    ///     - MessageError.invalidSequence
+    ///     - MessageError.invalidAddress
+    ///     - RileyLinkDeviceError
+    private func sendPairMessage(address: UInt32, transport: PodMessageTransport, message: Message) throws -> VersionResponse {
 
-        let messageTransportState = MessageTransportState(packetNumber: 0, messageNumber: 0)
+        defer {
+            log.debug("sendPairMessage saving current transport packet #%d", transport.packetNumber)
+            if self.podState != nil {
+                self.podState!.messageTransportState = MessageTransportState(packetNumber: transport.packetNumber, messageNumber: transport.messageNumber)
+            } else {
+                self.startingPacketNumber = transport.packetNumber
+            }
+        }
+
+        var didRetry = false
         
+        var rssiRetries = 2
+        while true {
+            let response: Message
+            do {
+                response = try transport.sendMessage(message)
+            } catch let error {
+                if let podCommsError = error as? PodCommsError {
+                    switch podCommsError {
+                    // These errors can happen some times when the responses are not seen for a long
+                    // enough time. Automatically retrying using the already incremented packet # can
+                    // clear this condition without requiring any user interaction for a pairing failure.
+                    case .podAckedInsteadOfReturningResponse, .noResponse:
+                        if didRetry == false {
+                            didRetry = true
+                            log.debug("sendPairMessage to retry using updated packet #%d", transport.packetNumber)
+                            continue // the transport packet # is already advanced for the retry
+                        }
+                    default:
+                        break
+                    }
+                }
+                throw error
+            }
+
+            if let fault = response.fault {
+                log.error("Pod Fault: %{public}@", String(describing: fault))
+                if let podState = self.podState, podState.fault == nil {
+                    self.podState!.fault = fault
+                }
+                throw PodCommsError.podFault(fault: fault)
+            }
+
+            guard let config = response.messageBlocks[0] as? VersionResponse else {
+                log.error("sendPairMessage unexpected response: %{public}@", String(describing: response))
+                let responseType = response.messageBlocks[0].blockType
+                throw PodCommsError.unexpectedResponse(response: responseType)
+            }
+
+            guard config.address == address else {
+                log.error("sendPairMessage unexpected address return of %{public}@ instead of expected %{public}@",
+                  String(format: "04X", config.address), String(format: "%04X", address))
+                throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
+            }
+
+            // If we previously had podState, verify that we are still dealing with the same pod
+            if let podState = self.podState, (podState.lot != config.lot || podState.tid != config.tid) {
+                // Have a new pod, could be a pod change w/o deactivation (or we're picking up some other pairing pod!)
+                log.error("Received pod response for [lot %u tid %u], expected [lot %u tid %u]", config.lot, config.tid, podState.lot, podState.tid)
+                throw PodCommsError.podChange
+            }
+
+            // Checking RSSI
+            let maxRssiAllowed = 59         // maximum RSSI limit allowed
+            let minRssiAllowed = 30         // minimum RSSI limit allowed
+            if let rssi = config.rssi, let gain = config.gain {
+                let rssiStr = String(format: "Receiver Low Gain: %d.\nReceived Signal Strength Indicator: %d", gain, rssi)
+                log.default("%s", rssiStr)
+                rssiRetries -= 1
+                if rssi < minRssiAllowed {
+                    log.default("RSSI value %d is less than minimum allowed value of %d, %d retries left", rssi, minRssiAllowed, rssiRetries)
+                    if rssiRetries > 0 {
+                        continue
+                    }
+                    throw PodCommsError.rssiTooLow
+                }
+                if rssi > maxRssiAllowed {
+                    log.default("RSSI value %d is more than maximum allowed value of %d, %d retries left", rssi, maxRssiAllowed, rssiRetries)
+                    if rssiRetries > 0 {
+                        continue
+                    }
+                    throw PodCommsError.rssiTooHigh
+                }
+            }
+
+            if self.podState == nil {
+                log.default("Creating PodState for address %{public}@ [lot %u tid %u], packet #%d, message #%d", String(format: "%04X", config.address), config.lot, config.tid, transport.packetNumber, transport.messageNumber)
+                self.podState = PodState(
+                    address: config.address,
+                    piVersion: String(describing: config.piVersion),
+                    pmVersion: String(describing: config.pmVersion),
+                    lot: config.lot,
+                    tid: config.tid,
+                    packetNumber: transport.packetNumber,
+                    messageNumber: transport.messageNumber
+                )
+                // podState setupProgress state should be addressAssigned
+            }
+
+            // Now that we have podState, check for an activation timeout condition that can be noted in setupProgress
+            guard config.podProgressStatus != .activationTimeExceeded else {
+                // The 2 hour window for the initial pairing has expired
+                self.podState?.setupProgress = .activationTimeout
+                throw PodCommsError.activationTimeExceeded
+            }
+
+            if config.podProgressStatus == .pairingCompleted {
+                log.info("Version Response %{public}@ indicates pairing is complete, moving pod to configured state", String(describing: config))
+                self.podState?.setupProgress = .podConfigured
+            }
+
+            return config
+        }
+    }
+
+    private func assignAddress(address: UInt32, commandSession: CommandSession) throws {
+        commandSession.assertOnSessionQueue()
+
+        let packetNumber, messageNumber: Int
+        if let podState = self.podState {
+            packetNumber = podState.messageTransportState.packetNumber
+            messageNumber = podState.messageTransportState.messageNumber
+        } else {
+            packetNumber = self.startingPacketNumber
+            messageNumber = 0
+        }
+
+        log.debug("Attempting pairing with address %{public}@ using packet #%d", String(format: "%04X", address), packetNumber)
+        let messageTransportState = MessageTransportState(packetNumber: packetNumber, messageNumber: messageNumber)
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: address, state: messageTransportState)
         transport.messageLogger = messageLogger
         
-        // Assign Address
+        // Create the Assign Address command message
         let assignAddress = AssignAddressCommand(address: address)
-        
         let message = Message(address: 0xffffffff, messageBlocks: [assignAddress], sequenceNum: transport.messageNumber)
-        
-        let response = try transport.sendMessage(message)
 
-        if let fault = response.fault {
-            self.log.error("Pod Fault: %{public}@", String(describing: fault))
-            throw PodCommsError.podFault(fault: fault)
-        }
-        
-        guard let config = response.messageBlocks[0] as? VersionResponse else
-        {
-            self.log.error("assignAddress unexpected response: %{public}@", String(describing: response))
-            let responseType = response.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType)
-        }
-        
-        guard config.address == address else {
-            self.log.error("assignAddress response with incorrect address: %{public}@", String(describing: response))
-            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: address)
-        }
-
-        self.log.default("Assigned address 0x%x to pod lot %u tid %u, signal strength %u", config.address, config.lot, config.tid, config.rssi ?? 0)
-        
-        // Pairing state should be addressAssigned
-        return PodState(
-            address: address,
-            piVersion: String(describing: config.piVersion),
-            pmVersion: String(describing: config.pmVersion),
-            lot: config.lot,
-            tid: config.tid,
-            packetNumber: transport.packetNumber,
-            messageNumber: transport.messageNumber
-        )
+        _ = try sendPairMessage(address: address, transport: transport, message: message)
     }
     
     private func setupPod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
@@ -100,46 +219,23 @@ class PodComms: CustomDebugStringConvertible {
         
         let message = Message(address: 0xffffffff, messageBlocks: [setupPod], sequenceNum: transport.messageNumber)
         
-        defer {
-            self.podState?.messageTransportState = MessageTransportState(packetNumber: transport.packetNumber, messageNumber: transport.messageNumber)
-        }
-
-        let response: Message
+        let versionResponse: VersionResponse
         do {
-            response = try transport.sendMessage(message)
+            versionResponse = try sendPairMessage(address: podState.address, transport: transport, message: message)
         } catch let error {
             if case PodCommsError.podAckedInsteadOfReturningResponse = error {
-                self.log.default("Pod acked instead of returning response. Moving pod to configured state.")
+                log.default("SetupPod acked instead of returning response. Moving pod to configured state.")
                 self.podState?.setupProgress = .podConfigured
                 return
             }
+            log.error("SetupPod returns error %{public}@", String(describing: error))
             throw error
         }
 
-        if let fault = response.fault {
-            self.log.error("Pod Fault: %{public}@", String(describing: fault))
-            throw PodCommsError.podFault(fault: fault)
-        }
-
-        guard let config = response.messageBlocks[0] as? VersionResponse,
-            config.isSetupPodVersionResponse == true
-        else {
-            self.log.error("setupPod unexpected response: %{public}@", String(describing: response))
-            let responseType = response.messageBlocks[0].blockType
-            throw PodCommsError.unexpectedResponse(response: responseType)
-        }
-        
-        guard config.podProgressStatus == .pairingCompleted else {
-            self.log.error("setupPod unexpected pod progress value of %{public}@", String(describing: config.podProgressStatus))
+        guard versionResponse.isSetupPodVersionResponse else {
+            log.error("SetupPod unexpected VersionResponse type: %{public}@", String(describing: versionResponse))
             throw PodCommsError.invalidData
         }
-
-        guard config.address == podState.address else {
-            self.log.error("SetupPod response with incorrect address: %{public}@", String(describing: response))
-            throw PodCommsError.invalidAddress(address: config.address, expectedAddress: podState.address)
-        }
-        
-        self.podState?.setupProgress = .podConfigured
     }
     
     func assignAddressAndSetupPod(address: UInt32, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
@@ -155,7 +251,7 @@ class PodComms: CustomDebugStringConvertible {
                     self.configureDevice(device, with: commandSession)
                     
                     if self.podState == nil {
-                        self.podState = try self.assignAddress(address: address, commandSession: commandSession)
+                        try self.assignAddress(address: address, commandSession: commandSession)
                     }
                     
                     guard self.podState != nil else {
@@ -163,7 +259,15 @@ class PodComms: CustomDebugStringConvertible {
                         return
                     }
 
-                    try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+                    if self.podState!.setupProgress != .podConfigured {
+                        try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+                    }
+
+                    guard self.podState!.setupProgress == .podConfigured else {
+                        self.log.error("Unexpected podStatus setupProgress value of %{public}@", String(describing: self.podState!.setupProgress))
+                        throw PodCommsError.invalidData
+                    }
+                    self.startingPacketNumber = 0
 
                     // Run a session now for any post-pairing commands
                     let transport = PodMessageTransport(session: commandSession, address: self.podState!.address, state: self.podState!.messageTransportState)

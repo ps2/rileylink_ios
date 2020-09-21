@@ -153,10 +153,13 @@ class PairPodSetupViewController: SetupTableViewController {
             loadingText = errorText
             
             // If we have an error, update the continue state
-            if let podCommsError = lastError as? PodCommsError,
-                case PodCommsError.podFault = podCommsError
-            {
-                continueState = .fault
+            if let podCommsError = lastError as? PodCommsError {
+                switch podCommsError {
+                case .podFault, .activationTimeExceeded:
+                    continueState = .fault
+                default:
+                    continueState = .initial
+                }
             } else if lastError != nil {
                 continueState = .initial
             }
@@ -227,7 +230,7 @@ class PairPodSetupViewController: SetupTableViewController {
 private extension PodCommsError {
     var possibleWeakCommsCause: Bool {
         switch self {
-        case .invalidData, .noResponse:
+        case .invalidData, .noResponse, .invalidAddress, .rssiTooLow, .rssiTooHigh, .unexpectedPacketType:
             return true
         default:
             return false

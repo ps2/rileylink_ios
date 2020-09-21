@@ -124,7 +124,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.normal, decoded.deliveryStatus)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
-            XCTAssertEqual(.noFaults, decoded.currentStatus.faultType)
+            XCTAssertEqual(.noFaults, decoded.faultEventCode.faultType)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(8100, decoded.timeActive)
@@ -153,7 +153,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
             XCTAssertEqual(0000, decoded.insulinNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
-            XCTAssertEqual(.primeOpenCountTooLow, decoded.currentStatus.faultType)
+            XCTAssertEqual(.primeOpenCountTooLow, decoded.faultEventCode.faultType)
             XCTAssertEqual(60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(TimeInterval(minutes: 1), decoded.timeActive)
@@ -183,7 +183,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
             XCTAssertEqual(0, decoded.insulinNotDelivered, accuracy: 0.01)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(.command1AParseUnexpectedFailed, decoded.currentStatus.faultType)
+            XCTAssertEqual(.command1AParseUnexpectedFailed, decoded.faultEventCode.faultType)
             XCTAssertEqual(0000*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(0, decoded.timeActive) // timeActive converts minutes to seconds
@@ -213,7 +213,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0, decoded.insulinNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)
             XCTAssertEqual(101.7, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.basalOverInfusionPulse, decoded.currentStatus.faultType)
+            XCTAssertEqual(.basalOverInfusionPulse, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(2559 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("1 day plus 18:39", decoded.faultEventTimeSinceActivation?.stringValue)
@@ -242,7 +242,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0, decoded.insulinNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)
             XCTAssertEqual(101.35, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.currentStatus.faultType)
+            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(3596 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("2 days plus 11:56", decoded.faultEventTimeSinceActivation?.stringValue)
@@ -271,7 +271,7 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0.05, decoded.insulinNotDelivered)
             XCTAssertEqual(2, decoded.podMessageCounter)
             XCTAssertEqual(11.8, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.currentStatus.faultType)
+            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(616 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("10:16", decoded.faultEventTimeSinceActivation?.stringValue)

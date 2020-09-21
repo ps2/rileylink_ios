@@ -70,6 +70,15 @@ extension CommandResponseViewController {
         result += String(format: LocalizedString("RSSI: %1$@\n", comment: "The format string for RSSI: (1: RSSI value)"), String(describing: status.radioRSSI))
 
         result += String(format: LocalizedString("Receiver Low Gain: %1$@\n", comment: "The format string for receiverLowGain: (1: receiverLowGain)"), String(describing: status.receiverLowGain))
+        
+        if status.currentStatus.faultType != .noFaults {
+            result += "\n" // since we have a fault, report the additional fault related information in a separate section
+            result += String(format: LocalizedString("Fault: %1$@\n", comment: "The format string for a fault: (1: The fault description)"), status.currentStatus.localizedDescription)
+            result += String(format: LocalizedString("Previous pod progress: %1$@\n", comment: "The format string for previous pod progress: (1: previous pod progress string)"), String(describing: status.previousPodProgressStatus))
+            if let faultEventTimeSinceActivation = status.faultEventTimeSinceActivation, let faultTimeStr = formatter.string(from: faultEventTimeSinceActivation) {
+                result += String(format: LocalizedString("Fault time: %1$@\n", comment: "The format string for fault time: (1: fault time string)"), faultTimeStr)
+            }
+        }
 
         return result
     }

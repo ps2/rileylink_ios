@@ -207,7 +207,7 @@ public class PodCommsSession {
         let messageNumber = transport.messageNumber
 
         var sentNonce: UInt32?
-      
+
         while (triesRemaining > 0) {
             triesRemaining -= 1
 
@@ -221,7 +221,7 @@ public class PodCommsSession {
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
 
             let response = try transport.sendMessage(message)
-
+            
             // Simulate fault
             //let podInfoResponse = try PodInfoResponse(encodedData: Data(hexadecimalString: "0216020d0000000000ab6a038403ff03860000285708030d0000")!)
             //let response = Message(address: podState.address, messageBlocks: [podInfoResponse], sequenceNum: message.sequenceNum)

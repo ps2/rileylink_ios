@@ -29,6 +29,10 @@ public enum PodCommsError: Error {
     case podFault(fault: PodInfoFaultEvent)
     case commsError(error: Error)
     case commandError(errorCode: UInt8)
+    case podChange
+    case activationTimeExceeded
+    case rssiTooLow
+    case rssiTooHigh
 }
 
 extension PodCommsError: LocalizedError {
@@ -69,6 +73,14 @@ extension PodCommsError: LocalizedError {
             return error.localizedDescription
         case .commandError(let errorCode):
             return String(format: LocalizedString("Command error %1$u", comment: "Format string for command error code (1: error code number)"), errorCode)
+        case .podChange:
+            return LocalizedString("Unexpected pod change", comment: "Format string for unexpected pod change")
+        case .activationTimeExceeded:
+            return LocalizedString("Activation time exceeded", comment: "Format string for activation time exceeded")
+        case .rssiTooLow: // occurs when RileyLink is too far from pod for reliable pairing, but can sometimes occur at other distances & positions
+            return LocalizedString("Poor signal strength", comment: "Format string for poor pod signal strength")
+        case .rssiTooHigh: // only occurs when RileyLink is too close to the pod for reliable pairing
+            return LocalizedString("Signal strength too high", comment: "Format string for pod signal strength too high")
         }
     }
     
@@ -112,6 +124,14 @@ extension PodCommsError: LocalizedError {
             return nil
         case .commandError:
             return nil
+        case .podChange:
+            return LocalizedString("Please bring only original pod in range or deactivate original pod", comment: "Recovery suggestion on unexpected pod change")
+        case .activationTimeExceeded:
+            return nil
+        case .rssiTooLow:
+            return LocalizedString("Please reposition the RileyLink relative to the pod", comment: "Recovery suggestion when pairing signal strength is too low")
+        case .rssiTooHigh:
+            return LocalizedString("Please reposition the RileyLink further from the pod", comment: "Recovery suggestion when pairing signal strength is too high")
         }
     }
 }
@@ -142,7 +162,8 @@ public class PodCommsSession {
         self.transport.delegate = self
     }
 
-    private func handlePodFault(fault: PodInfoFaultEvent) {
+    // Will throw either PodCommsError.podFault or PodCommsError.activationTimeExceeded
+    private func throwPodFault(fault: PodInfoFaultEvent) throws {
         if self.podState.fault == nil {
             self.podState.fault = fault // save the first fault returned
         }
@@ -152,6 +173,11 @@ public class PodCommsSession {
             podState.unfinalizedTempBasal?.cancel(at: now)
             podState.unfinalizedBolus?.cancel(at: now, withRemaining: fault.insulinNotDelivered)
         }
+        if fault.podProgressStatus == .activationTimeExceeded {
+            // avoids a confusing "No fault" error when activation time is exceeded
+            throw PodCommsError.activationTimeExceeded
+        }
+        throw PodCommsError.podFault(fault: fault)
     }
 
     /// Performs a message exchange, handling nonce resync, pod faults
@@ -181,7 +207,7 @@ public class PodCommsSession {
         let messageNumber = transport.messageNumber
 
         var sentNonce: UInt32?
-
+      
         while (triesRemaining > 0) {
             triesRemaining -= 1
 
@@ -195,7 +221,7 @@ public class PodCommsSession {
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
 
             let response = try transport.sendMessage(message)
-            
+
             // Simulate fault
             //let podInfoResponse = try PodInfoResponse(encodedData: Data(hexadecimalString: "0216020d0000000000ab6a038403ff03860000285708030d0000")!)
             //let response = Message(address: podState.address, messageBlocks: [podInfoResponse], sequenceNum: message.sequenceNum)
@@ -206,8 +232,7 @@ public class PodCommsSession {
             }
 
             if let fault = response.fault {
-                handlePodFault(fault: fault)
-                throw PodCommsError.podFault(fault: fault)
+                try throwPodFault(fault: fault) // always throws
             }
 
             let responseType = response.messageBlocks[0].blockType
@@ -627,12 +652,10 @@ public class PodCommsSession {
             log.default("Pod pulse log: %@", String(describing: podInfoResponseMessageBlock))
             return podInfoResponseMessageBlock
         } else if let fault = messageResponse.fault {
-            handlePodFault(fault: fault)
-            throw PodCommsError.podFault(fault: fault)
-        } else {
-            log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
-            throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
+            try throwPodFault(fault: fault) // always throws
         }
+        log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
+        throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
     }
 
     public func deactivatePod() throws {

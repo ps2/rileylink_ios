@@ -33,9 +33,17 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     var statusError: Error?
     
-    var podState: PodState?
+    var podState: PodState? {
+        didSet {
+            refreshButton.isHidden = !refreshAvailable
+        }
+    }
     
     var pumpManagerStatus: PumpManagerStatus?
+    
+    var refreshAvailable: Bool {
+        return podState != nil
+    }
     
     private var bolusProgressTimer: Timer?
     
@@ -137,7 +145,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
         
-        refreshPodStatus()
+        if self.podState != nil {
+            refreshPodStatus()
+        } else {
+            refreshButton.isHidden = true
+        }
     }
 
     @objc func doneTapped(_ sender: Any) {
@@ -176,8 +188,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             }
         }
 
-        if let configSectionIdx = self.sections.firstIndex(of: .configuration) {
-            self.tableView.reloadRows(at: [IndexPath(row: ConfigurationRow.reminder.rawValue, section: configSectionIdx)], with: .none)
+        if let configSectionIdx = self.sections.firstIndex(of: .configuration),
+            let replacePodRowIdx = self.configurationRows.firstIndex(of: .replacePod)
+        {
+            self.tableView.reloadRows(at: [IndexPath(row: replacePodRowIdx, section: configSectionIdx)], with: .none)
         }
         
         super.viewWillAppear(animated)
@@ -371,7 +385,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             }
         case .configuration:
 
-            switch ConfigurationRow(rawValue: indexPath.row)! {
+            switch configurationRows[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
             case .reminder:

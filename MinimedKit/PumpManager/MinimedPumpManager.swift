@@ -1144,7 +1144,7 @@ extension MinimedPumpManager: CGMManager {
         return nil
     }
 
-    public var sensorState: SensorDisplayable? {
+    public var glucoseDisplay: GlucoseDisplayable? {
         return recents.sensorState
     }
 

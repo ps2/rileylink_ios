@@ -228,17 +228,17 @@ public class PodCommsSession {
         throw PodCommsError.nonceResyncFailed
     }
 
-    // Returns time at which prime is expected to finish.
+    // Returns the time interval from now when the prime is expected to finish.
     public func prime() throws -> TimeInterval {
-        //4c00 00c8 0102
 
         let primeDuration = TimeInterval(seconds: 55)   // a bit more than (Pod.primeUnits / Pod.primeDeliveryRate)
-        
-        // Skip following alerts if we've already done them before
-        if podState.setupProgress != .startingPrime {
-            
-            // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
+
+        // Can only do the fault config command if we haven't starting priming or the pod will fault!
+        if podState.setupProgress == .podConfigured || podState.setupProgress == .addressAssigned {
+            // FaultConfigCommand sets internal pod variables to effectively disable $6x faults which occur more often with a 0 TBR
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
+
+            // Set up an alert for a reminder beep every 5 minutes for an hour until the setup process finishes as per the PDM
             let finishSetupReminder = PodAlert.finishSetupReminder
             try configureAlerts([finishSetupReminder])
         } else {

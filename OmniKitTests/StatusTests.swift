@@ -37,7 +37,7 @@ class StatusTests: XCTestCase {
             XCTAssertEqual(.fiftyOrLessUnits, decoded.podProgressStatus)
             XCTAssertEqual(129.45, decoded.insulin, accuracy: 0.01)
             XCTAssertEqual(46.00, decoded.reservoirLevel)
-            XCTAssertEqual(2.2, decoded.insulinNotDelivered)
+            XCTAssertEqual(2.2, decoded.bolusNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
             //XCTAssert(,decoded.alarms)
         } catch (let error) {

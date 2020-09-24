@@ -80,7 +80,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
-    var configuredAlerts: [AlertSlot: PodAlert]
+    public var configuredAlerts: [AlertSlot: PodAlert]
 
     public var activeAlerts: [AlertSlot: PodAlert] {
         var active = [AlertSlot: PodAlert]()
@@ -425,7 +425,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let setupUnitsDelivered = setupUnitsDelivered {
             rawValue["setupUnitsDelivered"] = setupUnitsDelivered
         }
-
 
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:

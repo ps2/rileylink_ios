@@ -44,7 +44,7 @@ extension CommandResponseViewController {
         }
     }
     
-    private static func podStatusString(status: DetailedStatus) -> String {
+    private static func podStatusString(status: DetailedStatus, configuredAlerts: [AlertSlot: PodAlert]) -> String {
         var result, str: String
 
         let formatter = DateComponentsFormatter()
@@ -65,7 +65,14 @@ extension CommandResponseViewController {
 
         result += String(format: LocalizedString("Last Bolus Not Delivered: %1$@ U\n", comment: "The format string for Last Bolus Not Delivered: (1: bolus not delivered string)"), status.bolusNotDelivered.twoDecimals)
 
-        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), String(describing: status.unacknowledgedAlerts))
+        let alertsDescription = status.unacknowledgedAlerts.map { (slot) -> String in
+            if let podAlert = configuredAlerts[slot] {
+                return String(describing: podAlert)
+            } else {
+                return String(describing: slot)
+            }
+        }
+        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), alertsDescription.joined(separator: ", "))
 
         result += String(format: LocalizedString("RSSI: %1$@\n", comment: "The format string for RSSI: (1: RSSI value)"), String(describing: status.radioRSSI))
 
@@ -89,7 +96,8 @@ extension CommandResponseViewController {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let status):
-                        completionHandler(podStatusString(status: status))
+                        let configuredAlerts = pumpManager.state.podState!.configuredAlerts
+                        completionHandler(podStatusString(status: status, configuredAlerts: configuredAlerts))
                     case .failure(let error):
                         completionHandler(error.localizedDescription)
                     }

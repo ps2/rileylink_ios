@@ -582,7 +582,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 break
             }
         case .configuration:
-            switch ConfigurationRow(rawValue: indexPath.row)! {
+            switch configurationRows[indexPath.row] {
             case .suspendResume:
                 suspendResumeTapped()
                 tableView.deselectRow(at: indexPath, animated: true)

@@ -173,7 +173,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         activeAlertSlots = response.alerts
     }
 
-    public mutating func updateFromStatusResponse(_ response: DetailedStatus) {
+    public mutating func updateFromDetailedStatusResponse(_ response: DetailedStatus) {
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)

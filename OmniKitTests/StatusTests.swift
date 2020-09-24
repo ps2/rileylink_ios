@@ -33,7 +33,7 @@ class StatusTests: XCTestCase {
             // Decode
             let decoded = try StatusResponse(encodedData: Data(hexadecimalString: "1d19050ec82c08376f9801dc")!)
             XCTAssertEqual(TimeInterval(minutes: 3547), decoded.timeActive)
-            XCTAssertEqual(.normal, decoded.deliveryStatus)
+            XCTAssertEqual(.scheduledBasal, decoded.deliveryStatus)
             XCTAssertEqual(.fiftyOrLessUnits, decoded.podProgressStatus)
             XCTAssertEqual(129.45, decoded.insulin, accuracy: 0.01)
             XCTAssertEqual(46.00, decoded.reservoirLevel)

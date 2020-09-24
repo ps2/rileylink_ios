@@ -121,7 +121,7 @@ class PodInfoTests: XCTestCase {
             let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
             XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.aboveFiftyUnits, decoded.podProgressStatus)
-            XCTAssertEqual(.normal, decoded.deliveryStatus)
+            XCTAssertEqual(.scheduledBasal, decoded.deliveryStatus)
             XCTAssertEqual(0000, decoded.bolusNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
             XCTAssertEqual(.noFaults, decoded.faultEventCode.faultType)

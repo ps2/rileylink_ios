@@ -71,7 +71,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             let reservoirView = reservoirView,
             let podState = podState
         {
-            let reservoirVolume = lastInsulinMeasurements.reservoirVolume
+            let reservoirVolume = lastInsulinMeasurements.reservoirLevel
 
             let reservoirLevel = reservoirVolume?.asReservoirPercentage()
 
@@ -160,7 +160,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         }
         
         if let lastInsulinMeasurements = podState?.lastInsulinMeasurements {
-            rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
+            rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirLevel
             rawValue["validTime"] = lastInsulinMeasurements.validTime
         }
         

@@ -627,7 +627,7 @@ public class PodCommsSession {
         guard let detailedStatus = infoResponse.podInfo as? DetailedStatus else {
             throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
         }
-        podState.updateFromStatusResponse(detailedStatus)
+        podState.updateFromDetailedStatusResponse(detailedStatus)
         return detailedStatus
     }
 

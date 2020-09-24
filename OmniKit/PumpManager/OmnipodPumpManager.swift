@@ -149,8 +149,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
                 observer.podStateDidUpdate(newValue.podState)
             }
 
-            if oldValue.podState?.lastInsulinMeasurements?.reservoirVolume != newValue.podState?.lastInsulinMeasurements?.reservoirVolume {
-                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirVolume {
+            if oldValue.podState?.lastInsulinMeasurements?.reservoirLevel != newValue.podState?.lastInsulinMeasurements?.reservoirLevel {
+                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirLevel {
                     self.pumpDelegate.notify({ (delegate) in
                         self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirVolume))
                         delegate?.pumpManager(self, didReadReservoirValue: reservoirVolume, at: lastInsulinMeasurements.validTime) { _ in }

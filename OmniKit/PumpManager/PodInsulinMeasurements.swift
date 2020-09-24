@@ -13,11 +13,11 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
     
     public let validTime: Date
     public let delivered: Double
-    public let reservoirVolume: Double?
+    public let reservoirLevel: Double?
     
     public init(insulinDelivered: Double, reservoirLevel: Double?, setupUnitsDelivered: Double?, validTime: Date) {
         self.validTime = validTime
-        self.reservoirVolume = reservoirLevel
+        self.reservoirLevel = reservoirLevel
         if let setupUnitsDelivered = setupUnitsDelivered {
             self.delivered = insulinDelivered - setupUnitsDelivered
         } else {
@@ -36,7 +36,7 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
         }
         self.validTime = validTime
         self.delivered = delivered
-        self.reservoirVolume = rawValue["reservoirVolume"] as? Double
+        self.reservoirLevel = rawValue["reservoirLevel"] as? Double
     }
     
     public var rawValue: RawValue {
@@ -45,8 +45,8 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
             "delivered": delivered
             ]
         
-        if let reservoirVolume = reservoirVolume {
-            rawValue["reservoirVolume"] = reservoirVolume
+        if let reservoirLevel = reservoirLevel {
+            rawValue["reservoirLevel"] = reservoirLevel
         }
         
         return rawValue

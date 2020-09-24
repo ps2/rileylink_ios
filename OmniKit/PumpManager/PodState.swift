@@ -148,9 +148,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: seed)
     }
     
-    public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+    private mutating func updatePodTimes(timeActive: TimeInterval) -> Date {
         let now = Date()
-        let activatedAtComputed = now - response.timeActive
+        let activatedAtComputed = now - timeActive
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
         }
@@ -163,9 +163,21 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             // The more than a minute later test prevents oscillation of expiresAt based on the timing of the responses.
             self.expiresAt = expiresAtComputed
         }
+        return now
+    }
+
+    public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now, setupUnitsDelivered: setupUnitsDelivered)
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.alerts
+    }
+
+    public mutating func updateFromStatusResponse(_ response: DetailedStatus) {
+        let now = updatePodTimes(timeActive: response.timeActive)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
+        activeAlertSlots = response.unacknowledgedAlerts
     }
 
     public mutating func registerConfiguredAlert(slot: AlertSlot, alert: PodAlert) {
@@ -184,7 +196,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
     }
     
-    private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
+    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus) {
         finalizeFinishedDoses()
 
         if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {

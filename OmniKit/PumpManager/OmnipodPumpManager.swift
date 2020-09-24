@@ -919,8 +919,12 @@ extension OmnipodPumpManager {
             do {
                 switch result {
                 case .success(let session):
-                    let faultStatus = try session.getDetailedStatus()
-                    completion(.success(faultStatus))
+                    let detailedStatus = try session.getDetailedStatus()
+                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
+                    session.dosesForStorage({ (doses) -> Bool in
+                        self.store(doses: doses, in: session)
+                    })
+                    completion(.success(detailedStatus))
                 case .failure(let error):
                     completion(.failure(error))
                 }

@@ -69,7 +69,7 @@ public struct Pod {
     public static let expirationReminderAlertMaxTimeBeforeExpiration = TimeInterval.hours(24)
 }
 
-// DeliveryStatus used in StatusResponse and PodInfoFaults
+// DeliveryStatus used in StatusResponse and DetailedStatus
 public enum DeliveryStatus: UInt8, CustomStringConvertible {
     case suspended = 0
     case normal = 1

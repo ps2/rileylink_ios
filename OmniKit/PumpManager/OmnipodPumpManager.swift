@@ -473,14 +473,14 @@ extension OmnipodPumpManager {
     
     // MARK: Testing
     #if targetEnvironment(simulator)
-    private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: PodInfoFaultEvent? = nil, startDate: Date? = nil, mockFault: Bool) {
+    private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: DetailedStatus? = nil, startDate: Date? = nil, mockFault: Bool) {
         let start = startDate ?? Date()
         var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
         podState.setupProgress = .podConfigured
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
         
-        let fault = mockFault ? try? PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
+        let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
         podState.fault = fault
 
         self.podComms = PodComms(podState: podState)
@@ -502,7 +502,7 @@ extension OmnipodPumpManager {
         let mockCommsErrorDuringPairing = true
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
-            let fault: PodInfoFaultEvent? = self.setStateWithResult({ (state) in
+            let fault: DetailedStatus? = self.setStateWithResult({ (state) in
                 state.podState?.setupProgress = .priming
                 return state.podState?.fault
             })
@@ -599,7 +599,7 @@ extension OmnipodPumpManager {
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + mockDelay) {
             let result = self.setStateWithResult({ (state) -> PumpManagerResult<TimeInterval> in
                 // Mock fault
-                //            let fault = try! PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
+                //            let fault = try! DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
                 //            self.state.podState?.fault = fault
                 //            return .failure(PodCommsError.podFault(fault: fault))
 
@@ -908,75 +908,26 @@ extension OmnipodPumpManager {
         #endif
     }
 
-    private func podStatusString(status: StatusResponse) -> String {
-        var result, str: String
-        var delivered: Double
-
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .full
-        formatter.allowedUnits = [.day, .hour, .minute]
-        if let timeStr = formatter.string(from: status.timeActive) {
-            str = timeStr
-        } else {
-            str = String(format: LocalizedString("%1$@ minutes", comment: "The format string for minutes (1: number of minutes string)"), String(describing: Int(status.timeActive / 60)))
-        }
-        result = String(format: LocalizedString("Pod Active: %1$@\n", comment: "The format string for Pod Active: (1: Pod active time string)"), str)
-
-        result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
-
-        if let lastInsulinMeasurements = self.state.podState?.lastInsulinMeasurements {
-            delivered = lastInsulinMeasurements.delivered
-        } else {
-            delivered = status.insulin
-        }
-        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), delivered.twoDecimals)
-
-        result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
-
-        result += String(format: LocalizedString("Last Bolus Not Delivered: %1$@ U\n", comment: "The format string for Last Bolus Not Delivered: (1: bolus not delivered string)"), status.insulinNotDelivered.twoDecimals)
-
-        if let podState = self.state.podState,
-            podState.activeAlerts.startIndex != podState.activeAlerts.endIndex
-        {
-            // generate a more helpful string with the actual alert names
-            str = String(describing: podState.activeAlerts)
-        } else {
-            str = String(describing: status.alerts)
-        }
-        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), str)
-
-        return result
-    }
-    
-    public func readPodStatus(completion: @escaping (String) -> Void) {
+    public func readPodStatus(completion: @escaping (Result<DetailedStatus, Error>) -> Void) {
         // use hasSetupPod to be able to read pod info from a faulted Pod
         guard self.hasSetupPod else {
-            completion(PodCommsError.noPodPaired.errorDescription!)
+            completion(.failure(PodCommsError.noPodPaired))
             return
         }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
-            
-            let reportError = { (errorStr: String) in
-                self.log.error("Failed to read pod status: %{public}@", errorStr)
-                completion(errorStr)
-            }
-            
             do {
                 switch result {
                 case .success(let session):
-                    let status = try session.getStatus()
+                    let faultStatus = try session.getDetailedStatus()
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    session.dosesForStorage({ (doses) -> Bool in
-                        self.store(doses: doses, in: session)
-                    })
-                    completion(self.podStatusString(status: status))
+                    completion(.success(faultStatus))
                 case .failure(let error):
-                    reportError(String(describing: error))
+                    completion(.failure(error))
                 }
             } catch let error {
-                reportError(error.localizedDescription)
+                completion(.failure(error))
             }
         }
     }
@@ -1043,7 +994,7 @@ extension OmnipodPumpManager {
             completion(PodCommsError.noPodPaired.localizedDescription)
             return
         }
-        if self.state.podState?.fault == nil && self.state.podState?.unfinalizedBolus?.isFinished == false {
+        if self.state.podState?.isFaulted == false && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
             completion(PodCommsError.unfinalizedBolus.localizedDescription)
             return

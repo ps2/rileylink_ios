@@ -394,6 +394,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
     public var localizedDescription: String {
         if let faultType = faultType {
             switch faultType {
+            case .noFaults:
+                return LocalizedString("No faults", comment: "Description for Fault Event Code .noFaults")
             case .reservoirEmpty:
                 return LocalizedString("Empty reservoir", comment: "Description for Empty reservoir pod fault")
             case .exceededMaximumPodLife80Hrs:

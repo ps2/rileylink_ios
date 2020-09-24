@@ -209,7 +209,12 @@ class PodMessageTransport: MessageTransport {
     /// - Returns: The received message response
     /// - Throws:
     ///     - PodCommsError.noResponse
+    ///     - PodCommsError.podAckedInsteadOfReturningResponse
+    ///     - PodCommsError.unexpectedPacketType
+    ///     - PodCommsError.emptyResponse
     ///     - MessageError.invalidCrc
+    ///     - MessageError.invalidSequence
+    ///     - MessageError.invalidAddress
     ///     - RileyLinkDeviceError
     func sendMessage(_ message: Message) throws -> Message {
         

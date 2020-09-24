@@ -30,7 +30,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
                 updateReservoirView()
             }
             
-            if oldValue?.fault != podState?.fault {
+            if oldValue?.isFaulted != podState?.isFaulted {
                 updateFaultDisplay()
             }
             
@@ -89,7 +89,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private func updateFaultDisplay() {
         if let podLifeView = podLifeView {
-            if podState?.fault != nil {
+            if let podState = self.podState, podState.isFaulted {
                 podLifeView.alertState = .fault
             } else {
                 podLifeView.alertState = .none
@@ -124,7 +124,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
-        if podState?.fault != nil {
+        if let podState = self.podState, podState.isFaulted {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
             return HUDTapAction.presentViewController(pumpManager.settingsViewController())

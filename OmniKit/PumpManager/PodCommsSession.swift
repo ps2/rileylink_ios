@@ -26,7 +26,7 @@ public enum PodCommsError: Error {
     case unfinalizedTempBasal
     case nonceResyncFailed
     case podSuspended
-    case podFault(fault: PodInfoFaultEvent)
+    case podFault(fault: DetailedStatus)
     case commsError(error: Error)
     case podChange
     case activationTimeExceeded
@@ -66,7 +66,7 @@ extension PodCommsError: LocalizedError {
         case .podSuspended:
             return LocalizedString("Pod is suspended", comment: "Error message action could not be performed because pod is suspended")
         case .podFault(let fault):
-            let faultDescription = String(describing: fault.currentStatus)
+            let faultDescription = String(describing: fault.faultEventCode)
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError(let error):
             return error.localizedDescription
@@ -158,7 +158,7 @@ public class PodCommsSession {
     }
 
     // Will throw either PodCommsError.podFault or PodCommsError.activationTimeExceeded
-    private func throwPodFault(fault: PodInfoFaultEvent) throws {
+    private func throwPodFault(fault: DetailedStatus) throws {
         if self.podState.fault == nil {
             self.podState.fault = fault // save the first fault returned
         }
@@ -166,7 +166,7 @@ public class PodCommsSession {
         if fault.deliveryStatus == .suspended {
             let now = Date()
             podState.unfinalizedTempBasal?.cancel(at: now)
-            podState.unfinalizedBolus?.cancel(at: now, withRemaining: fault.insulinNotDelivered)
+            podState.unfinalizedBolus?.cancel(at: now, withRemaining: fault.bolusNotDelivered)
         }
         if fault.podProgressStatus == .activationTimeExceeded {
             // avoids a confusing "No fault" error when activation time is exceeded
@@ -531,7 +531,7 @@ public class PodCommsSession {
         do {
             let status: StatusResponse = try send(message)
 
-            let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.insulinNotDelivered)
+            let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.bolusNotDelivered)
 
             podState.updateFromStatusResponse(status)
 
@@ -619,6 +619,16 @@ public class PodCommsSession {
         podState.updateFromStatusResponse(statusResponse)
         return statusResponse
     }
+    
+    @discardableResult
+    public func getDetailedStatus() throws -> DetailedStatus {
+        let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)])
+        
+        guard let faultEvent = infoResponse.podInfo as? DetailedStatus else {
+            throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
+        }
+        return faultEvent
+    }
 
     @discardableResult
     public func readPulseLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
@@ -655,7 +665,7 @@ public class PodCommsSession {
         if let fault = podState.fault {
             // Be sure to clean up the dosing info in case cancelDelivery() wasn't called
             // (or if it was called and it had a fault return) & then read the pulse log.
-            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.insulinNotDelivered)
+            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
             do {
                 // read the most recent pulse log entries for later analysis, but don't throw on error
                 let podInfoCommand = GetStatusCommand(podInfoType: .pulseLogRecent)

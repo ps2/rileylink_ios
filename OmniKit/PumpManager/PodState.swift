@@ -76,11 +76,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return false
     }
 
-    public var fault: PodInfoFaultEvent?
+    public var fault: DetailedStatus?
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
-    var configuredAlerts: [AlertSlot: PodAlert]
+    public var configuredAlerts: [AlertSlot: PodAlert]
 
     public var activeAlerts: [AlertSlot: PodAlert] {
         var active = [AlertSlot: PodAlert]()
@@ -318,8 +318,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.finalizedDoses = []
         }
         
-        if let rawFault = rawValue["fault"] as? PodInfoFaultEvent.RawValue {
-            self.fault = PodInfoFaultEvent(rawValue: rawFault)
+        if let rawFault = rawValue["fault"] as? DetailedStatus.RawValue,
+           let fault = DetailedStatus(rawValue: rawFault),
+           fault.faultEventCode.faultType != .noFaults
+        {
+            self.fault = fault
         } else {
             self.fault = nil
         }
@@ -422,7 +425,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let setupUnitsDelivered = setupUnitsDelivered {
             rawValue["setupUnitsDelivered"] = setupUnitsDelivered
         }
-
 
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:

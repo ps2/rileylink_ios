@@ -18,7 +18,7 @@ public protocol PodInfo {
 public enum PodInfoResponseSubType: UInt8, Equatable {
     case normal                      = 0x00
     case configuredAlerts            = 0x01
-    case faultEvents                 = 0x02
+    case detailedStatus              = 0x02 // Returned on any pod fault
     case dataLog                     = 0x03
     case fault                       = 0x05
     case pulseLogRecent              = 0x50 // dumps up to 50 entries data from the pulse log
@@ -30,8 +30,8 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
             return StatusResponse.self as! PodInfo.Type
         case .configuredAlerts:
             return PodInfoConfiguredAlerts.self
-        case .faultEvents:
-            return PodInfoFaultEvent.self
+        case .detailedStatus:
+            return DetailedStatus.self
         case .dataLog:
             return PodInfoDataLog.self
         case .fault:

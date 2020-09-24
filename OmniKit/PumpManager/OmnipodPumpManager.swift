@@ -745,6 +745,7 @@ extension OmnipodPumpManager {
 
             do {
                 let alerts = try session.acknowledgeAlerts(alerts: alertsToAcknowledge)
+                self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                 completion(alerts)
             } catch {
                 completion(nil)
@@ -1033,9 +1034,9 @@ extension OmnipodPumpManager {
     }
 
     public func setConfirmationBeeps(enabled: Bool, completion: @escaping (Error?) -> Void) {
-        self.confirmationBeeps = enabled // set here to allow changes on a faulted Pod
         self.log.default("Set Confirmation Beeps to %s", String(describing: enabled))
         guard self.hasActivePod else {
+            self.confirmationBeeps = enabled // set here to allow changes on a faulted Pod
             completion(nil)
             return
         }
@@ -1051,8 +1052,15 @@ extension OmnipodPumpManager {
                 let bolusCompletionBeep = enabled
 
                 // enable/disable Pod completion beeps for any in-progress insulin delivery
-                let _ = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
-                completion(nil)
+                let result = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: basalCompletionBeep, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
+
+                switch result {
+                case .success:
+                    self.confirmationBeeps = enabled
+                    completion(nil)
+                case .failure(let error):
+                    completion(error)
+                }
             case .failure(let error):
                 completion(error)
             }

@@ -624,10 +624,11 @@ public class PodCommsSession {
     public func getDetailedStatus() throws -> DetailedStatus {
         let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)])
         
-        guard let faultEvent = infoResponse.podInfo as? DetailedStatus else {
+        guard let detailedStatus = infoResponse.podInfo as? DetailedStatus else {
             throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
         }
-        return faultEvent
+        podState.updateFromDetailedStatusResponse(detailedStatus)
+        return detailedStatus
     }
 
     @discardableResult

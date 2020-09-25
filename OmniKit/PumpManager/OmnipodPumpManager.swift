@@ -149,8 +149,8 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
                 observer.podStateDidUpdate(newValue.podState)
             }
 
-            if oldValue.podState?.lastInsulinMeasurements?.reservoirVolume != newValue.podState?.lastInsulinMeasurements?.reservoirVolume {
-                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirVolume {
+            if oldValue.podState?.lastInsulinMeasurements?.reservoirLevel != newValue.podState?.lastInsulinMeasurements?.reservoirLevel {
+                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirLevel {
                     self.pumpDelegate.notify({ (delegate) in
                         self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirVolume))
                         delegate?.pumpManager(self, didReadReservoirValue: reservoirVolume, at: lastInsulinMeasurements.validTime) { _ in }
@@ -920,9 +920,12 @@ extension OmnipodPumpManager {
             do {
                 switch result {
                 case .success(let session):
-                    let faultStatus = try session.getDetailedStatus()
+                    let detailedStatus = try session.getDetailedStatus()
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    completion(.success(faultStatus))
+                    session.dosesForStorage({ (doses) -> Bool in
+                        self.store(doses: doses, in: session)
+                    })
+                    completion(.success(detailedStatus))
                 case .failure(let error):
                     completion(.failure(error))
                 }

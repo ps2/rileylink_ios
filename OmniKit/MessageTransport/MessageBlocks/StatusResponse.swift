@@ -9,42 +9,6 @@
 import Foundation
 
 public struct StatusResponse : MessageBlock {
-    
-    public enum DeliveryStatus: UInt8, CustomStringConvertible {
-        case suspended = 0
-        case normal = 1
-        case tempBasalRunning = 2
-        case priming = 4
-        case bolusInProgress = 5
-        case bolusAndTempBasal = 6
-        
-        public var bolusing: Bool {
-            return self == .bolusInProgress || self == .bolusAndTempBasal
-        }
-        
-        public var tempBasalRunning: Bool {
-            return self == .tempBasalRunning || self == .bolusAndTempBasal
-        }
-
-        
-        public var description: String {
-            switch self {
-            case .suspended:
-                return LocalizedString("Suspended", comment: "Delivery status when insulin delivery is suspended")
-            case .normal:
-                return LocalizedString("Scheduled Basal", comment: "Delivery status when basal is running")
-            case .tempBasalRunning:
-                return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
-            case .priming:
-                return LocalizedString("Priming", comment: "Delivery status when pod is priming")
-            case .bolusInProgress:
-                return LocalizedString("Bolusing", comment: "Delivery status when bolusing")
-            case .bolusAndTempBasal:
-                return LocalizedString("Bolusing with temp basal", comment: "Delivery status when bolusing and temp basal is running")
-            }
-        }
-    }
-        
     public let blockType: MessageBlockType = .statusResponse
     public let length: UInt8 = 10
     public let deliveryStatus: DeliveryStatus

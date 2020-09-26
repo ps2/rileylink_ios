@@ -150,10 +150,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             }
 
             if oldValue.podState?.lastInsulinMeasurements?.reservoirLevel != newValue.podState?.lastInsulinMeasurements?.reservoirLevel {
-                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirVolume = lastInsulinMeasurements.reservoirLevel {
+                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirLevel = lastInsulinMeasurements.reservoirLevel {
                     self.pumpDelegate.notify({ (delegate) in
-                        self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirVolume))
-                        delegate?.pumpManager(self, didReadReservoirValue: reservoirVolume, at: lastInsulinMeasurements.validTime) { _ in }
+                        self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirLevel))
+                        delegate?.pumpManager(self, didReadReservoirValue: reservoirLevel, at: lastInsulinMeasurements.validTime) { _ in }
                     })
                 }
             }
@@ -1010,15 +1010,23 @@ extension OmnipodPumpManager {
                 do {
                     // read the most recent 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse1 = try session.readPulseLogsRequest(podInfoResponseSubType: .pulseLogRecent)
-                    let podInfoPulseLogRecent = podInfoResponse1.podInfo as! PodInfoPulseLogRecent
+                    let podInfoResponse1 = try session.readPodInfo(podInfoResponseSubType: .pulseLogRecent)
+                    guard let podInfoPulseLogRecent = podInfoResponse1.podInfo as? PodInfoPulseLogRecent else {
+                        self.log.error("Unable to decode for PulseLogRecent: %s", String(describing: podInfoResponse1))
+                        completion(PodCommsError.unexpectedResponse(response: .podInfoResponse).localizedDescription)
+                        return
+                    }
                     var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
                     var str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
 
                     // read up to the previous 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse2 = try session.readPulseLogsRequest(podInfoResponseSubType: .dumpOlderPulseLog)
-                    let podInfoPulseLogPrevious = podInfoResponse2.podInfo as! PodInfoPulseLogPrevious
+                    let podInfoResponse2 = try session.readPodInfo(podInfoResponseSubType: .pulseLogPrevious)
+                    guard let podInfoPulseLogPrevious = podInfoResponse2.podInfo as? PodInfoPulseLogPrevious else {
+                        self.log.error("Unable to decode for PulseLogPrevious: %s", String(describing: podInfoResponse1))
+                        completion(PodCommsError.unexpectedResponse(response: .podInfoResponse).localizedDescription)
+                        return
+                    }
                     lastPulseNumber -= podInfoPulseLogRecent.pulseLog.count
                     str += pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLog, lastPulseNumber: lastPulseNumber)
 

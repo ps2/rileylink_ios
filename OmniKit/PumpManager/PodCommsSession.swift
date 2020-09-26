@@ -632,19 +632,9 @@ public class PodCommsSession {
     }
 
     @discardableResult
-    public func readPulseLogsRequest(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
-        let blocksToSend = [GetStatusCommand(podInfoType: podInfoResponseSubType)]
-        let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: transport.messageNumber)
-        let messageResponse = try transport.sendMessage(message)
-
-        if let podInfoResponseMessageBlock = messageResponse.messageBlocks[0] as? PodInfoResponse {
-            log.default("Pod pulse log: %@", String(describing: podInfoResponseMessageBlock))
-            return podInfoResponseMessageBlock
-        } else if let fault = messageResponse.fault {
-            try throwPodFault(fault: fault) // always throws
-        }
-        log.error("Unexpected Pod pulse log response: %@", String(describing: messageResponse.messageBlocks[0]))
-        throw PodCommsError.unexpectedResponse(response: messageResponse.messageBlocks[0].blockType)
+    public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
+        let podInfoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: podInfoResponseSubType)])
+        return podInfoResponse
     }
 
     public func deactivatePod() throws {
@@ -667,10 +657,10 @@ public class PodCommsSession {
             // Be sure to clean up the dosing info in case cancelDelivery() wasn't called
             // (or if it was called and it had a fault return) & then read the pulse log.
             handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
+            podState.updateFromDetailedStatusResponse(fault)
             do {
                 // read the most recent pulse log entries for later analysis, but don't throw on error
-                let podInfoCommand = GetStatusCommand(podInfoType: .pulseLogRecent)
-                let _: PodInfoResponse = try send([podInfoCommand])
+                try readPodInfo(podInfoResponseSubType: .pulseLogRecent)
             } catch let error {
                 log.error("Read pulse log failed: %@", String(describing: error))
             }

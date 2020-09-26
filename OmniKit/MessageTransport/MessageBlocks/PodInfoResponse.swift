@@ -13,7 +13,7 @@ public struct PodInfoResponse : MessageBlock {
     public let blockType              : MessageBlockType = .podInfoResponse
     public let podInfoResponseSubType : PodInfoResponseSubType
     public let podInfo                : PodInfo
-    public var data                   : Data
+    public let data                   : Data
 
     public init(encodedData: Data) throws {
         let len = encodedData.count

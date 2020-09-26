@@ -61,7 +61,9 @@ public struct Pod {
     public static let primeUnits = 2.6
 
     // Amount of insulin delivered with 1 second between pulses for cannula insertion
-    public static let cannulaInsertionUnits = 0.5
+    public static let cannulaInsertionUnitsBase = 0.5
+    public static let cannulaInsertionUnitsExtra = 0.0 // edit to add a fixed additional amount of insulin during cannula insertion
+    public static let cannulaInsertionUnits = cannulaInsertionUnitsBase + cannulaInsertionUnitsExtra
 
     // Default and limits for expiration reminder alerts
     public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)

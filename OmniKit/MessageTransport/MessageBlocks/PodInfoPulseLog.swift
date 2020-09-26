@@ -21,7 +21,7 @@ public struct PodInfoPulseLogRecent : PodInfo {
     public let data          : Data
 
     public init(encodedData: Data) throws {
-        guard let podInfoType = PodInfoResponseSubType.init(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
+        guard let podInfoType = PodInfoResponseSubType(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
             throw MessageError.unknownValue(value: encodedData[0], typeDescription: "pulseLogRecent")
         }
         let logStartByteOffset = 3 // starting byte offset of the pulse log in DATA
@@ -48,7 +48,7 @@ public struct PodInfoPulseLogPrevious : PodInfo {
     public let data        : Data
 
     public init(encodedData: Data) throws {
-        guard let podInfoType = PodInfoResponseSubType.init(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
+        guard let podInfoType = PodInfoResponseSubType(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
             throw MessageError.unknownValue(value: encodedData[0], typeDescription: "pulseLogPrevious")
         }
         let logStartByteOffset = 3 // starting byte offset of the pulse log in DATA

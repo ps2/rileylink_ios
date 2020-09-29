@@ -28,7 +28,7 @@ public enum PodCommsError: Error {
     case podSuspended
     case podFault(fault: PodInfoFaultEvent)
     case commsError(error: Error)
-    case invalidMessage(errorCode: UInt8)
+    case rejectedMessage(errorCode: UInt8)
     case podChange
     case activationTimeExceeded
     case rssiTooLow
@@ -71,7 +71,7 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError(let error):
             return error.localizedDescription
-        case .invalidMessage(let errorCode):
+        case .rejectedMessage(let errorCode):
             return String(format: LocalizedString("Command error %1$u", comment: "Format string for invalid message error code (1: error code number)"), errorCode)
         case .podChange:
             return LocalizedString("Unexpected pod change", comment: "Format string for unexpected pod change")
@@ -122,7 +122,7 @@ extension PodCommsError: LocalizedError {
             return nil
         case .commsError:
             return nil
-        case .invalidMessage:
+        case .rejectedMessage:
             return nil
         case .podChange:
             return LocalizedString("Please bring only original pod in range or deactivate original pod", comment: "Recovery suggestion on unexpected pod change")
@@ -190,7 +190,7 @@ public class PodCommsSession {
     ///     - PodCommsError.noResponse
     ///     - PodCommsError.podFault
     ///     - PodCommsError.unexpectedResponse
-    ///     - PodCommsError.illegalMessage
+    ///     - PodCommsError.rejectedMessage
     ///     - PodCommsError.nonceResyncFailed
     ///     - MessageError
     ///     - RileyLinkDeviceError
@@ -261,7 +261,7 @@ public class PodCommsSession {
                 break
             case .nonretryableError(let errorCode, let faultEventCode, let podProgress):
                 log.error("Command error: code %u, %{public}@, pod progress %{public}@", errorCode, String(describing: faultEventCode), String(describing: podProgress))
-                throw PodCommsError.invalidMessage(errorCode: errorCode)
+                throw PodCommsError.rejectedMessage(errorCode: errorCode)
             }
         }
         throw PodCommsError.nonceResyncFailed
@@ -451,8 +451,8 @@ public class PodCommsSession {
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
-        } catch PodCommsError.invalidMessage(let errorCode) {
-            return DeliveryCommandResult.certainFailure(error: PodCommsError.invalidMessage(errorCode: errorCode))
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             self.log.debug("Uncertain result bolusing")
             // Attempt to verify bolus
@@ -489,8 +489,8 @@ public class PodCommsSession {
             return DeliveryCommandResult.success(statusResponse: status)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
-        } catch PodCommsError.invalidMessage(let errorCode) {
-            return DeliveryCommandResult.certainFailure(error: PodCommsError.invalidMessage(errorCode: errorCode))
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -557,8 +557,8 @@ public class PodCommsSession {
 
         } catch PodCommsError.nonceResyncFailed {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.nonceResyncFailed)
-        } catch PodCommsError.invalidMessage(let errorCode) {
-            return CancelDeliveryResult.certainFailure(error: PodCommsError.invalidMessage(errorCode: errorCode))
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return CancelDeliveryResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: Date(), scheduledCertainty: .uncertain)
             return CancelDeliveryResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -597,8 +597,8 @@ public class PodCommsSession {
             return status
         } catch PodCommsError.nonceResyncFailed {
             throw PodCommsError.nonceResyncFailed
-        } catch PodCommsError.invalidMessage(let errorCode) {
-            throw PodCommsError.invalidMessage(errorCode: errorCode)
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            throw PodCommsError.rejectedMessage(errorCode: errorCode)
         } catch let error {
             podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .uncertain)
             throw error

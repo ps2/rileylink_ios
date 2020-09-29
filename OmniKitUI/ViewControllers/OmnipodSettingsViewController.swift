@@ -394,6 +394,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.titleLabel.text = LocalizedString("Expiration Reminder", comment: "The title of the cell showing the pod expiration reminder date")
                     cell.date = reminderDate
                     cell.datePicker.datePickerMode = .dateAndTime
+                    #if swift(>=5.2)
+                        if #available(iOS 14.0, *) {
+                            cell.datePicker.preferredDatePickerStyle = .wheels
+                        }
+                    #endif
                     cell.datePicker.maximumDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertMinTimeBeforeExpiration)
                     cell.datePicker.minimumDate = podState.expiresAt?.addingTimeInterval(-Pod.expirationReminderAlertMaxTimeBeforeExpiration)
                     cell.datePicker.minuteInterval = 1

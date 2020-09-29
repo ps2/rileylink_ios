@@ -182,7 +182,7 @@ public class PodCommsSession {
         let getStatusLen = 3
 
         var paddedMessage = message
-        var encodedLen = messageLength(message: message)
+        var encodedLen = Message.messageLength(message: message)
         while encodedLen <= packetLen {
             paddedMessage.append(getStatusCommand)
             encodedLen += getStatusLen

@@ -98,13 +98,13 @@ struct Message {
             return nil
         }
     }
-}
 
-// returns the encoded length of a message
-public func messageLength(message: [MessageBlock]) -> Int {
-    let message = Message(address: 0, messageBlocks: message, sequenceNum: 0)
-    let encodedData = message.encoded()
-    return encodedData.count
+    // returns the encoded length of a message
+    static func messageLength(message: [MessageBlock]) -> Int {
+        let message = Message(address: 0, messageBlocks: message, sequenceNum: 0)
+        let encodedData = message.encoded()
+        return encodedData.count
+    }
 }
 
 extension Message: CustomDebugStringConvertible {

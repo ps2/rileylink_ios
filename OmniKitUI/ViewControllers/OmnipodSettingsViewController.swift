@@ -223,7 +223,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private class func sectionList(_ podState: PodState?) -> [Section] {
         if let podState = podState {
             if podState.unfinishedPairing {
-                return [.rileyLinks, .diagnostics]
+                return [.configuration, .rileyLinks]
             } else {
                 return [.status, .configuration, .rileyLinks, .podDetails, .diagnostics]
             }

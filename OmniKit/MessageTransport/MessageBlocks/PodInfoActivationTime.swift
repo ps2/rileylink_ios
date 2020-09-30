@@ -21,9 +21,8 @@ public struct PodInfoActivationTime : PodInfo {
     public let data: Data
     
     public init(encodedData: Data) throws {
-        
-        guard let podInfoType = PodInfoResponseSubType(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
-            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "activationTime")
+        guard encodedData[0] == self.podInfoType.rawValue else {
+            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "PodInfoResponseSubType")
         }
         guard encodedData.count >= 16 else {
             throw MessageBlockError.notEnoughData

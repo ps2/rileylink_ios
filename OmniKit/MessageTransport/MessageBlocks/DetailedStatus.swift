@@ -34,9 +34,8 @@ public struct DetailedStatus : PodInfo, Equatable {
     public let data: Data
     
     public init(encodedData: Data) throws {
-        
-        guard let podInfoType = PodInfoResponseSubType(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
-            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "detailedStatus")
+        guard encodedData[0] == self.podInfoType.rawValue else {
+            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "PodInfoResponseSubType")
         }
         guard encodedData.count >= 21 else {
             throw MessageBlockError.notEnoughData

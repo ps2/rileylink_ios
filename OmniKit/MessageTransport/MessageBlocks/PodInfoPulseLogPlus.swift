@@ -25,8 +25,8 @@ public struct PodInfoPulseLogPlus : PodInfo {
     public let data          : Data
 
     public init(encodedData: Data) throws {
-        guard let podInfoType = PodInfoResponseSubType(rawValue: encodedData[0]), podInfoType == self.podInfoType else {
-            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "pulseLogPlus")
+        guard encodedData[0] == self.podInfoType.rawValue else {
+            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "PodInfoResponseSubType")
         }
         guard encodedData[6] == MemoryLayout<UInt32>.size else {
             throw MessageError.unknownValue(value: encodedData[6], typeDescription: "pulseLog entry size")

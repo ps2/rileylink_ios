@@ -16,12 +16,11 @@ public struct PodInfoResponse : MessageBlock {
     public let data                   : Data
 
     public init(encodedData: Data) throws {
-        let len = encodedData.count
-        if let subType = PodInfoResponseSubType(rawValue: encodedData[2]) {
-            self.podInfoResponseSubType = subType
-        } else {
+        guard let subType = PodInfoResponseSubType(rawValue: encodedData[2]) else {
             throw MessageError.unknownValue(value: encodedData[2], typeDescription: "PodInfoResponseSubType")
         }
+        self.podInfoResponseSubType = subType
+        let len = encodedData.count
         podInfo = try podInfoResponseSubType.podInfoType.init(encodedData: encodedData.subdata(in: 2..<len))
         self.data = encodedData
     }

@@ -33,6 +33,8 @@ extension MessageError: LocalizedError {
             return String(format: LocalizedString("Validation failed: %1$@", comment: "Format string for description of MessageError validationFailed. (1: description of validation failure)"), description)
         case .invalidSequence:
             return LocalizedString("Unexpected message sequence number", comment: "Description for MessageError invalidSequence")
+        case .invalidAddress(address: let address):
+            return String(format: LocalizedString("Invalid address: (%1$@)", comment: "Description for MessageError invalidSequence"), String(format: "%08x", address))
         }
     }
 }

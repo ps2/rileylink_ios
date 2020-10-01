@@ -28,6 +28,7 @@ public enum PodCommsError: Error {
     case podSuspended
     case podFault(fault: DetailedStatus)
     case commsError(error: Error)
+    case rejectedMessage(errorCode: UInt8)
     case podChange
     case activationTimeExceeded
     case rssiTooLow
@@ -70,6 +71,8 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError(let error):
             return error.localizedDescription
+        case .rejectedMessage(let errorCode):
+            return String(format: LocalizedString("Command error %1$u", comment: "Format string for invalid message error code (1: error code number)"), errorCode)
         case .podChange:
             return LocalizedString("Unexpected pod change", comment: "Format string for unexpected pod change")
         case .activationTimeExceeded:
@@ -118,6 +121,8 @@ extension PodCommsError: LocalizedError {
         case .podFault:
             return nil
         case .commsError:
+            return nil
+        case .rejectedMessage:
             return nil
         case .podChange:
             return LocalizedString("Please bring only original pod in range or deactivate original pod", comment: "Recovery suggestion on unexpected pod change")
@@ -182,9 +187,12 @@ public class PodCommsSession {
     ///   - expectFollowOnMessage: If true, the pod will expect another message within 4 minutes, or will alarm with an 0x33 (51) fault.
     /// - Returns: The received message response
     /// - Throws:
-    ///     - PodCommsError.nonceResyncFailed
     ///     - PodCommsError.noResponse
-    ///     - MessageError.invalidCrc
+    ///     - PodCommsError.podFault
+    ///     - PodCommsError.unexpectedResponse
+    ///     - PodCommsError.rejectedMessage
+    ///     - PodCommsError.nonceResyncFailed
+    ///     - MessageError
     ///     - RileyLinkDeviceError
     func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], expectFollowOnMessage: Bool = false) throws -> T {
         
@@ -221,33 +229,39 @@ public class PodCommsSession {
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %@", String(describing: responseMessageBlock))
                 return responseMessageBlock
-            } else {
-                let responseType = response.messageBlocks[0].blockType
-                
-                if responseType == .errorResponse,
-                    let sentNonce = sentNonce,
-                    let errorResponse = response.messageBlocks[0] as? ErrorResponse,
-                    errorResponse.errorReponseType == .badNonce
-                {
-                    podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
-                    log.info("resyncNonce(syncWord: 0x%02x, sentNonce: 0x%04x, messageSequenceNum: %d) -> 0x%04x", errorResponse.nonceSearchKey, sentNonce, message.sequenceNum, podState.currentNonce)
-                    
-                    blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
-                        if var resyncableBlock = block as? NonceResyncableMessageBlock {
-                            log.info("Replaced old nonce 0x%04x with resync nonce 0x%04x", resyncableBlock.nonce, podState.currentNonce)
-                            resyncableBlock.nonce = podState.currentNonce
-                            return resyncableBlock
-                        } else {
-                            return block
-                        }
-                    })
-                    podState.advanceToNextNonce()
-                } else if let fault = response.fault {
-                    try throwPodFault(fault: fault) // always throws
-                } else {
-                    log.error("Unexpected response: %@", String(describing: response.messageBlocks[0]))
+            }
+
+            if let fault = response.fault {
+                try throwPodFault(fault: fault) // always throws
+            }
+
+            let responseType = response.messageBlocks[0].blockType
+            guard let errorResponse = response.messageBlocks[0] as? ErrorResponse else {
+                log.error("Unexpected response: %{public}@", String(describing: response.messageBlocks[0]))
+                throw PodCommsError.unexpectedResponse(response: responseType)
+            }
+
+            switch errorResponse.errorResponseType {
+            case .badNonce(let nonceResyncKey):
+                guard let sentNonce = sentNonce else {
+                    log.error("Unexpected bad nonce response: %{public}@", String(describing: response.messageBlocks[0]))
                     throw PodCommsError.unexpectedResponse(response: responseType)
                 }
+                podState.resyncNonce(syncWord: nonceResyncKey, sentNonce: sentNonce, messageSequenceNum: message.sequenceNum)
+                log.info("resyncNonce(syncWord: 0x%02x, sentNonce: 0x%04x, messageSequenceNum: %d) -> 0x%04x", nonceResyncKey, sentNonce, message.sequenceNum, podState.currentNonce)
+                blocksToSend = blocksToSend.map({ (block) -> MessageBlock in
+                    if var resyncableBlock = block as? NonceResyncableMessageBlock {
+                        log.info("Replaced old nonce 0x%04x with resync nonce 0x%04x", resyncableBlock.nonce, podState.currentNonce)
+                        resyncableBlock.nonce = podState.currentNonce
+                        return resyncableBlock
+                    }
+                    return block
+                })
+                podState.advanceToNextNonce()
+                break
+            case .nonretryableError(let errorCode, let faultEventCode, let podProgress):
+                log.error("Command error: code %u, %{public}@, pod progress %{public}@", errorCode, String(describing: faultEventCode), String(describing: podProgress))
+                throw PodCommsError.rejectedMessage(errorCode: errorCode)
             }
         }
         throw PodCommsError.nonceResyncFailed
@@ -437,6 +451,8 @@ public class PodCommsSession {
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             self.log.debug("Uncertain result bolusing")
             // Attempt to verify bolus
@@ -473,6 +489,8 @@ public class PodCommsSession {
             return DeliveryCommandResult.success(statusResponse: status)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -539,6 +557,8 @@ public class PodCommsSession {
 
         } catch PodCommsError.nonceResyncFailed {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.nonceResyncFailed)
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return CancelDeliveryResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: Date(), scheduledCertainty: .uncertain)
             return CancelDeliveryResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
@@ -577,6 +597,8 @@ public class PodCommsSession {
             return status
         } catch PodCommsError.nonceResyncFailed {
             throw PodCommsError.nonceResyncFailed
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            throw PodCommsError.rejectedMessage(errorCode: errorCode)
         } catch let error {
             podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .uncertain)
             throw error

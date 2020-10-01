@@ -32,9 +32,6 @@ public struct PodInfoConfiguredAlerts : PodInfo {
     }
     
     public init(encodedData: Data) throws {
-        guard encodedData[0] == self.podInfoType.rawValue else {
-            throw MessageError.unknownValue(value: encodedData[0], typeDescription: "PodInfoResponseSubType")
-        }
         guard encodedData.count >= 11 else {
             throw MessageBlockError.notEnoughData
         }

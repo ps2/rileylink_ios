@@ -44,7 +44,7 @@ extension CommandResponseViewController {
         }
     }
     
-    private static func podStatusString(status: DetailedStatus, configuredAlerts: [AlertSlot: PodAlert]) -> String {
+    private static func podStatusString(status: DetailedStatus, configuredAlerts: [AlertSlot: PodAlert], insulinMeasurements: PodInsulinMeasurements?) -> String {
         var result, str: String
 
         let formatter = DateComponentsFormatter()
@@ -59,7 +59,13 @@ extension CommandResponseViewController {
 
         result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
-        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), status.totalInsulinDelivered.twoDecimals)
+        let delivered: Double
+        if let insulinMeasurements = insulinMeasurements {
+            delivered = insulinMeasurements.delivered // report the adjusted total without the priming & cannula insertion amounts
+        } else {
+            delivered = status.totalInsulinDelivered // report the raw non-adjusted pod value
+        }
+        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), delivered.twoDecimals)
 
         result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
 
@@ -90,14 +96,14 @@ extension CommandResponseViewController {
         return result
     }
 
-    static func readPodStatus(pumpManager: OmnipodPumpManager) -> T {
+    static func readPodStatus(pumpManager: OmnipodPumpManager, insulinMeasurements: PodInsulinMeasurements?) -> T {
         return T { (completionHandler) -> String in
             pumpManager.readPodStatus() { (result) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let status):
                         let configuredAlerts = pumpManager.state.podState!.configuredAlerts
-                        completionHandler(podStatusString(status: status, configuredAlerts: configuredAlerts))
+                        completionHandler(podStatusString(status: status, configuredAlerts: configuredAlerts, insulinMeasurements: insulinMeasurements))
                     case .failure(let error):
                         completionHandler(error.localizedDescription)
                     }

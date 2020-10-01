@@ -15,7 +15,7 @@ public struct DetailedStatus : PodInfo, Equatable {
     // DATA   0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
     // 02 16 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
 
-    public var podInfoType: PodInfoResponseSubType = .detailedStatus
+    public let podInfoType: PodInfoResponseSubType = .detailedStatus
     public let podProgressStatus: PodProgressStatus
     public let deliveryStatus: DeliveryStatus
     public let bolusNotDelivered: Double

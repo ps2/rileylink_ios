@@ -19,11 +19,11 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(infoResponse.podInfoResponseSubType, .detailedStatus)
             let faultEvent = infoResponse.podInfo as! DetailedStatus
             XCTAssertEqual(faultEvent.faultAccessingTables, false)
-            XCTAssertEqual(faultEvent.self.podProgressStatus, .faultEventOccurred)
-            XCTAssertEqual(faultEvent.self.errorEventInfo?.insulinStateTableCorruption, false)
-            XCTAssertEqual(faultEvent.self.errorEventInfo?.internalVariable, 0x1)
-            XCTAssertEqual(faultEvent.self.errorEventInfo?.immediateBolusInProgress, false)
-            XCTAssertEqual(faultEvent.self.errorEventInfo?.podProgressStatus, .aboveFiftyUnits)
+            XCTAssertEqual(faultEvent.podProgressStatus, .faultEventOccurred)
+            XCTAssertEqual(faultEvent.errorEventInfo?.insulinStateTableCorruption, false)
+            XCTAssertEqual(faultEvent.errorEventInfo?.internalVariable, 1)
+            XCTAssertEqual(faultEvent.errorEventInfo?.immediateBolusInProgress, false)
+            XCTAssertEqual(faultEvent.errorEventInfo?.podProgressStatus, .aboveFiftyUnits)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
@@ -136,7 +136,6 @@ class PodInfoTests: XCTestCase {
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(false, decoded.faultAccessingTables)
             XCTAssertEqual(nil, decoded.errorEventInfo)
-            XCTAssertEqual(nil, decoded.previousPodProgressStatus)
             XCTAssertEqual(2, decoded.receiverLowGain)
             XCTAssertEqual(21, decoded.radioRSSI)
             XCTAssertEqual(nil, decoded.previousPodProgressStatus)

@@ -920,11 +920,15 @@ extension OmnipodPumpManager {
             do {
                 switch result {
                 case .success(let session):
-                    let detailedStatus = try session.getDetailedStatus()
+                    var detailedStatus = try session.getDetailedStatus()
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
+                    if let setupUnitsDelivered = self.state.podState?.setupUnitsDelivered {
+                        // return a totalInsulinDelivered w/o including the setupUnitsDelivered
+                        detailedStatus.totalInsulinDelivered -= setupUnitsDelivered
+                    }
                     completion(.success(detailedStatus))
                 case .failure(let error):
                     completion(.failure(error))

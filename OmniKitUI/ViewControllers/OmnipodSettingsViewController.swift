@@ -544,7 +544,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case .diagnostics:
             switch Diagnostics(rawValue: indexPath.row)! {
             case .readPodStatus:
-                let vc = CommandResponseViewController.readPodStatus(pumpManager: pumpManager, insulinMeasurements: self.podState?.lastInsulinMeasurements)
+                let vc = CommandResponseViewController.readPodStatus(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
             case .playTestBeeps:

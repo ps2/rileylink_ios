@@ -1147,6 +1147,11 @@ extension MinimedPumpManager: CGMManager {
     public var glucoseDisplay: GlucoseDisplayable? {
         return recents.sensorState
     }
+    
+    public var hasValidSensorSession: Bool {
+        // No tracking of session available
+        return true
+    }
 
     public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
         rileyLinkDeviceProvider.getDevices { (devices) in

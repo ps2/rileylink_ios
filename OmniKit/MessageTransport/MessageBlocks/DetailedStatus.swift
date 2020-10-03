@@ -20,7 +20,7 @@ public struct DetailedStatus : PodInfo, Equatable {
     public let deliveryStatus: DeliveryStatus
     public let bolusNotDelivered: Double
     public let podMessageCounter: UInt8
-    public var totalInsulinDelivered: Double
+    public let totalInsulinDelivered: Double
     public let faultEventCode: FaultEventCode
     public let faultEventTimeSinceActivation: TimeInterval?
     public let reservoirLevel: Double?

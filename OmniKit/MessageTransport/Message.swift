@@ -94,7 +94,7 @@ struct Message {
             let infoResponse = messageBlocks[0] as? PodInfoResponse,
             infoResponse.podInfoResponseSubType == .detailedStatus,
             let detailedStatus = infoResponse.podInfo as? DetailedStatus,
-            detailedStatus.faultEventCode.faultType != .noFaults || detailedStatus.podProgressStatus == .activationTimeExceeded
+            detailedStatus.isFaulted
         {
             return detailedStatus
         } else {

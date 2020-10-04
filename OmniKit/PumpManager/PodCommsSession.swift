@@ -162,17 +162,19 @@ public class PodCommsSession {
         self.transport.delegate = self
     }
 
-    // Will throw either PodCommsError.podFault or PodCommsError.activationTimeExceeded
-    private func throwPodFault(fault: DetailedStatus) throws {
+    // Handles updating PodState on first pod fault seen
+    private func handlePodFault(fault: DetailedStatus) {
         if self.podState.fault == nil {
             self.podState.fault = fault // save the first fault returned
+            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
+            podState.updateFromDetailedStatusResponse(fault)
         }
         log.error("Pod Fault: %@", String(describing: fault))
-        if fault.deliveryStatus == .suspended {
-            let now = Date()
-            podState.unfinalizedTempBasal?.cancel(at: now)
-            podState.unfinalizedBolus?.cancel(at: now, withRemaining: fault.bolusNotDelivered)
-        }
+    }
+
+    // Will throw either PodCommsError.podFault or PodCommsError.activationTimeExceeded
+    private func throwPodFault(fault: DetailedStatus) throws {
+        handlePodFault(fault: fault)
         if fault.podProgressStatus == .activationTimeExceeded {
             // avoids a confusing "No fault" error when activation time is exceeded
             throw PodCommsError.activationTimeExceeded
@@ -649,7 +651,12 @@ public class PodCommsSession {
         guard let detailedStatus = infoResponse.podInfo as? DetailedStatus else {
             throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
         }
-        podState.updateFromDetailedStatusResponse(detailedStatus)
+        if detailedStatus.isFaulted && self.podState.fault == nil {
+            // just detected that the pod has faulted, handle setting the fault state but don't throw
+            handlePodFault(fault: detailedStatus)
+        } else {
+            podState.updateFromDetailedStatusResponse(detailedStatus)
+        }
         return detailedStatus
     }
 
@@ -675,11 +682,9 @@ public class PodCommsSession {
             }
         }
 
-        if let fault = podState.fault {
-            // Be sure to clean up the dosing info in case cancelDelivery() wasn't called
-            // (or if it was called and it had a fault return) & then read the pulse log.
-            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
-            podState.updateFromDetailedStatusResponse(fault)
+        if podState.fault != nil {
+            // All the dosing cleanup from the fault should have already been
+            // handled in handlePodFault() when podState.fault was initialized.
             do {
                 // read the most recent pulse log entries for later analysis, but don't throw on error
                 try readPodInfo(podInfoResponseSubType: .pulseLogRecent)

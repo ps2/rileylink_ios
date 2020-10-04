@@ -59,7 +59,7 @@ extension CommandResponseViewController {
 
         result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
-        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), status.totalInsulinDelivered.twoDecimals)
+        result += String(format: LocalizedString("Pulses (incl. prime & insert): %1$@ U\n", comment: "The format string for total insulin pulses (1: total pulses in units)"), status.totalInsulinDelivered.twoDecimals)
 
         result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
 

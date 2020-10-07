@@ -33,6 +33,11 @@ class PodSetupCompleteViewController: SetupTableViewController {
         self.navigationItem.rightBarButtonItem = nil
 
         expirationReminderDateCell.datePicker.datePickerMode = .dateAndTime
+        #if swift(>=5.2)
+            if #available(iOS 14.0, *) {
+                expirationReminderDateCell.datePicker.preferredDatePickerStyle = .wheels
+            }
+        #endif
         expirationReminderDateCell.titleLabel.text = LocalizedString("Expiration Reminder", comment: "The title of the cell showing the pod expiration reminder date")
         expirationReminderDateCell.datePicker.minuteInterval = 1
         expirationReminderDateCell.delegate = self

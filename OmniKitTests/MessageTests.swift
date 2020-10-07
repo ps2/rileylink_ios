@@ -35,10 +35,10 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(nil, statusResponse.reservoirLevel)
             XCTAssertEqual(TimeInterval(minutes: 4261), statusResponse.timeActive)
 
-            XCTAssertEqual(.normal, statusResponse.deliveryStatus)
+            XCTAssertEqual(.scheduledBasal, statusResponse.deliveryStatus)
             XCTAssertEqual(.aboveFiftyUnits, statusResponse.podProgressStatus)
             XCTAssertEqual(6.3, statusResponse.insulin, accuracy: 0.01)
-            XCTAssertEqual(0, statusResponse.insulinNotDelivered)
+            XCTAssertEqual(0, statusResponse.bolusNotDelivered)
             XCTAssertEqual(3, statusResponse.podMessageCounter)
             XCTAssert(statusResponse.alerts.isEmpty)
 

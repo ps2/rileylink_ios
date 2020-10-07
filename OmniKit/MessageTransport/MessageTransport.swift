@@ -209,7 +209,12 @@ class PodMessageTransport: MessageTransport {
     /// - Returns: The received message response
     /// - Throws:
     ///     - PodCommsError.noResponse
+    ///     - PodCommsError.podAckedInsteadOfReturningResponse
+    ///     - PodCommsError.unexpectedPacketType
+    ///     - PodCommsError.emptyResponse
     ///     - MessageError.invalidCrc
+    ///     - MessageError.invalidSequence
+    ///     - MessageError.invalidAddress
     ///     - RileyLinkDeviceError
     func sendMessage(_ message: Message) throws -> Message {
         
@@ -284,9 +289,7 @@ class PodMessageTransport: MessageTransport {
                 throw PodCommsError.emptyResponse
             }
             
-            if response.messageBlocks[0].blockType != .errorResponse {
-                incrementMessageNumber()
-            }
+            incrementMessageNumber()
             
             return response
         } catch let error {

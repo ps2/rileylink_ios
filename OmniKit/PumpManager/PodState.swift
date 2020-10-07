@@ -18,6 +18,7 @@ public enum SetupProgress: Int {
     case startingInsertCannula
     case cannulaInserting
     case completed
+    case activationTimeout
     
     public var primingNeeded: Bool {
         return self.rawValue < SetupProgress.priming.rawValue
@@ -75,11 +76,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return false
     }
 
-    public var fault: PodInfoFaultEvent?
+    public var fault: DetailedStatus?
     public var messageTransportState: MessageTransportState
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
-    var configuredAlerts: [AlertSlot: PodAlert]
+    public var configuredAlerts: [AlertSlot: PodAlert]
 
     public var activeAlerts: [AlertSlot: PodAlert] {
         var active = [AlertSlot: PodAlert]()
@@ -129,6 +130,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return setupProgress == .completed
     }
 
+    public var isFaulted: Bool {
+        return fault != nil || setupProgress == .activationTimeout
+    }
+
     public mutating func advanceToNextNonce() {
         nonceState.advanceToNextNonce()
     }
@@ -143,9 +148,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         nonceState = NonceState(lot: lot, tid: tid, seed: seed)
     }
     
-    public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+    private mutating func updatePodTimes(timeActive: TimeInterval) -> Date {
         let now = Date()
-        let activatedAtComputed = now - response.timeActive
+        let activatedAtComputed = now - timeActive
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
         }
@@ -158,9 +163,21 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             // The more than a minute later test prevents oscillation of expiresAt based on the timing of the responses.
             self.expiresAt = expiresAtComputed
         }
+        return now
+    }
+
+    public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
-        lastInsulinMeasurements = PodInsulinMeasurements(statusResponse: response, validTime: now, setupUnitsDelivered: setupUnitsDelivered)
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.alerts
+    }
+
+    public mutating func updateFromDetailedStatusResponse(_ response: DetailedStatus) {
+        let now = updatePodTimes(timeActive: response.timeActive)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
+        activeAlertSlots = response.unacknowledgedAlerts
     }
 
     public mutating func registerConfiguredAlert(slot: AlertSlot, alert: PodAlert) {
@@ -179,7 +196,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
     }
     
-    private mutating func updateDeliveryStatus(deliveryStatus: StatusResponse.DeliveryStatus) {
+    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus) {
         finalizeFinishedDoses()
 
         if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {
@@ -313,8 +330,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.finalizedDoses = []
         }
         
-        if let rawFault = rawValue["fault"] as? PodInfoFaultEvent.RawValue {
-            self.fault = PodInfoFaultEvent(rawValue: rawFault)
+        if let rawFault = rawValue["fault"] as? DetailedStatus.RawValue,
+           let fault = DetailedStatus(rawValue: rawFault),
+           fault.faultEventCode.faultType != .noFaults
+        {
+            self.fault = fault
         } else {
             self.fault = nil
         }
@@ -417,7 +437,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let setupUnitsDelivered = setupUnitsDelivered {
             rawValue["setupUnitsDelivered"] = setupUnitsDelivered
         }
-
 
         if configuredAlerts.count > 0 {
             let rawConfiguredAlerts = Dictionary(uniqueKeysWithValues:

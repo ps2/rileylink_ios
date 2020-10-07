@@ -16,8 +16,8 @@ class PodInfoTests: XCTestCase {
         do {
             // Decode
             let infoResponse = try PodInfoResponse(encodedData: Data(hexadecimalString: "0216020d0000000000ab6a038403ff03860000285708030d0000")!)
-            XCTAssertEqual(infoResponse.podInfoResponseSubType, .faultEvents)
-            let faultEvent = infoResponse.podInfo as! PodInfoFaultEvent
+            XCTAssertEqual(infoResponse.podInfoResponseSubType, .detailedStatus)
+            let faultEvent = infoResponse.podInfo as! DetailedStatus
             XCTAssertEqual(faultEvent.faultAccessingTables, false)
             XCTAssertEqual(faultEvent.logEventErrorType, LogEventErrorCode(rawValue: 2))
         } catch (let error) {
@@ -118,13 +118,13 @@ class PodInfoTests: XCTestCase {
         // 02 16 // 02 08 01 0000 0a 0038 00 0000 03ff 0087 00 00 00 95 ff 0000
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "02080100000a003800000003ff008700000095ff0000")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.aboveFiftyUnits, decoded.podProgressStatus)
-            XCTAssertEqual(.normal, decoded.deliveryStatus)
-            XCTAssertEqual(0000, decoded.insulinNotDelivered)
+            XCTAssertEqual(.scheduledBasal, decoded.deliveryStatus)
+            XCTAssertEqual(0000, decoded.bolusNotDelivered)
             XCTAssertEqual(0x0a, decoded.podMessageCounter)
-            XCTAssertEqual(.noFaults, decoded.currentStatus.faultType)
+            XCTAssertEqual(.noFaults, decoded.faultEventCode.faultType)
             XCTAssertEqual(0000, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(8100, decoded.timeActive)
@@ -147,13 +147,13 @@ class PodInfoTests: XCTestCase {
         // 02 16 // 02 0f 00 0000 09 0034 5c 0001 03ff 0001 00 00 05 ae 05 6029
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.inactive, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
-            XCTAssertEqual(0000, decoded.insulinNotDelivered)
+            XCTAssertEqual(0000, decoded.bolusNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
-            XCTAssertEqual(.primeOpenCountTooLow, decoded.currentStatus.faultType)
+            XCTAssertEqual(.primeOpenCountTooLow, decoded.faultEventCode.faultType)
             XCTAssertEqual(60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(TimeInterval(minutes: 1), decoded.timeActive)
@@ -177,13 +177,13 @@ class PodInfoTests: XCTestCase {
         // 02 16 // 02 0d 00 0000 06 0000 8f 0000 03ff 0000 00 00 03 a2 03 86a0
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a0")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000600008f000003ff0000000003a20386a0")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
-            XCTAssertEqual(0, decoded.insulinNotDelivered, accuracy: 0.01)
+            XCTAssertEqual(0, decoded.bolusNotDelivered, accuracy: 0.01)
             XCTAssertEqual(6, decoded.podMessageCounter)
-            XCTAssertEqual(.command1AParseUnexpectedFailed, decoded.currentStatus.faultType)
+            XCTAssertEqual(.command1AParseUnexpectedFailed, decoded.faultEventCode.faultType)
             XCTAssertEqual(0000*60, decoded.faultEventTimeSinceActivation)
             XCTAssertEqual(nil, decoded.reservoirLevel)
             XCTAssertEqual(0, decoded.timeActive) // timeActive converts minutes to seconds
@@ -206,14 +206,14 @@ class PodInfoTests: XCTestCase {
         // 02 16 // 02 0d 00 0000 04 07f2 86 09ff 03ff 0a02 00 00 08 23 08 0000
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a0200000823080000")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000407f28609ff03ff0a0200000823080000")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
-            XCTAssertEqual(0, decoded.insulinNotDelivered)
+            XCTAssertEqual(0, decoded.bolusNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)
             XCTAssertEqual(101.7, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.basalOverInfusionPulse, decoded.currentStatus.faultType)
+            XCTAssertEqual(.basalOverInfusionPulse, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(2559 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("1 day plus 18:39", decoded.faultEventTimeSinceActivation?.stringValue)
@@ -229,20 +229,20 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testPodInfoFaultEventLogEventErrorCode2() {
+    func testPodInfoFaultEventCheckAboveThreshold() {
         // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
         // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
         // 02 16 // 02 0d 00 0000 04 07eb 6a 0e0c 03ff 0e14 00 00 28 17 08 0000
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d0000000407eb6a0e0c03ff0e1400002817080000")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000407eb6a0e0c03ff0e1400002817080000")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.faultEventOccurred, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
-            XCTAssertEqual(0, decoded.insulinNotDelivered)
+            XCTAssertEqual(0, decoded.bolusNotDelivered)
             XCTAssertEqual(4, decoded.podMessageCounter)
             XCTAssertEqual(101.35, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.currentStatus.faultType)
+            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(3596 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("2 days plus 11:56", decoded.faultEventTimeSinceActivation?.stringValue)
@@ -258,20 +258,20 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testPodInfoFaultEventIsulinNotDelivered() {
+    func testPodInfoFaultEventBolusNotDelivered() {
         // 02DATAOFF 0  1  2  3 4  5  6 7  8  910 1112 1314 15 16 17 18 19 2021
         // 02 16 // 02 0J 0K LLLL MM NNNN PP QQQQ RRRR SSSS TT UU VV WW 0X YYYY
         // 02 16 // 02 0f 00 0001 02 00ec 6a 0268 03ff 026b 00 00 28 a7 08 2023
         do {
             // Decode
-            let decoded = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020f0000010200ec6a026803ff026b000028a7082023")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            let decoded = try DetailedStatus(encodedData: Data(hexadecimalString: "020f0000010200ec6a026803ff026b000028a7082023")!)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
             XCTAssertEqual(.inactive, decoded.podProgressStatus)
             XCTAssertEqual(.suspended, decoded.deliveryStatus)
-            XCTAssertEqual(0.05, decoded.insulinNotDelivered)
+            XCTAssertEqual(0.05, decoded.bolusNotDelivered)
             XCTAssertEqual(2, decoded.podMessageCounter)
             XCTAssertEqual(11.8, decoded.totalInsulinDelivered, accuracy: 0.01)
-            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.currentStatus.faultType)
+            XCTAssertEqual(.occlusionCheckAboveThreshold, decoded.faultEventCode.faultType)
             XCTAssertEqual(0, decoded.unacknowledgedAlerts.rawValue)
             XCTAssertEqual(616 * 60, decoded.faultEventTimeSinceActivation) //09ff
             XCTAssertEqual("10:16", decoded.faultEventTimeSinceActivation?.stringValue)
@@ -287,33 +287,65 @@ class PodInfoTests: XCTestCase {
         }
     }
     
-    func testPodInfoDataLog() {
+    func testPodInfoPulseLogPlusPartial() {
         // 02DATAOFF 0  1  2 3  4 5  6  7  8
-        // 02 LL // 03 PP QQQQ SSSS 04 3c  ....
-        // 02 7c // 03 01 0001 0001 04 3c ....
+        // 02 LL // 03 PP QQQQ SSSS 04 3c XXXXXXXX ...
+        // 02 e4 // 03 00 0000 0003 04 3c 00622a80 01612980 00612480 01602680 00611f00 01601a00 00611f00 01602600 00602000 01602600 00602200 01612700 00602000 01602500 00602000 01612500 00612180 01612680 00612080 01612780 00612080 01602680 00612080 01602580 00612080 05612500 08602000 0d612600 10602200 15602800 18612100 1d602800 20602100 25612700 28612100 2d602800 30612200 35602800 38602400 3d602700 40612400 45612c80 48612680 4d602d80 00602780 05632b80 08612680 0d602c80 10612580 15602d80 18602300 1d612100 20612200 25612900 28602300
         do {
-            let decoded = try PodInfoDataLog(encodedData: Data(hexadecimalString: "030100010001043c")!)
-            XCTAssertEqual(.dataLog, decoded.podInfoType)
-            XCTAssertEqual(.failedFlashErase, decoded.faultEventCode.faultType)
-            XCTAssertEqual(0001*60, decoded.timeFaultEvent)
-            XCTAssertEqual(0001*60, decoded.timeActivation)
-            XCTAssertEqual(04, decoded.dataChunkSize)
-            XCTAssertEqual(60, decoded.dataChunkWords)
-            // TODO adding a datadump variable based on length LL
+            let decoded = try PodInfoPulseLogPlus(encodedData: Data(hexadecimalString: "030000000003043c00622a8001612980006124800160268000611f0001601a0000611f0001602600006020000160260000602200016127000060200001602500006020000161250000612180016126800061208001612780006120800160268000612080016025800061208005612500086020000d6126001060220015602800186121001d6028002060210025612700286121002d6028003061220035602800386024003d6027004061240045612c80486126804d602d800060278005632b80086126800d602c801061258015602d80186023001d612100206122002561290028602300")!)
+            XCTAssertEqual(.pulseLogPlus, decoded.podInfoType)
+            XCTAssertEqual(.noFaults, decoded.faultEventCode.faultType)
+            XCTAssertEqual(0000*60, decoded.timeFaultEvent)
+            XCTAssertEqual(0003*60, decoded.timeActivation)
+            XCTAssertEqual(4, decoded.entrySize)
+            XCTAssertEqual(0x3c, decoded.maxEntries)
+            XCTAssertEqual(0x00622a80, decoded.pulseLog[0])
+            XCTAssertEqual(0x01602600, decoded.pulseLog[9])
+            XCTAssertEqual(0x01612780, decoded.pulseLog[19])
+            XCTAssertEqual(0x15602800, decoded.pulseLog[29])
+            XCTAssertEqual(0x3d602700, decoded.pulseLog[39])
+            XCTAssertEqual(0x15602d80, decoded.pulseLog[49])
+            XCTAssertEqual(0x28602300, decoded.pulseLog[54])
+            XCTAssertEqual(55, decoded.nEntries) // a calculated value that is not directly in raw hex data
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
+    func testPodInfoPulseLogPlus() {
+        // 02DATAOFF 0  1  2 3  4 5  6  7  8
+        // 02 LL // 03 PP QQQQ SSSS 04 3c XXXXXXXX ...
+        // 02 f8 // 03 00 0000 0075 04 3c 54402600 59402d80 5c412480 61402d80 00412380 05402d80 08402780 0d402c80 10412480 15412b80 18412400 1d402800 20402400 25412c00 28412500 2d412b00 30402700 35412d00 38402600 3d412c00 40412500 45402c00 48402400 4d412c00 50412400 55412e00 58412680 5d402f80 60402680 01402f80 04402680 09412e80 0c402580 11402e80 14402780 19402e00 1c402400 21412d00 24402600 29412f00 2c412600 31643000 34622600 39623000 3c622600 41622f00 44622600 49622e00 4c632600 51632d00 54602800 59413080 5c412780 61403180 00402880 05413080 08402780 0d413180 10412680 15412f80
+        do {
+            let decoded = try PodInfoPulseLogPlus(encodedData: Data(hexadecimalString: "030000000075043c5440260059402d805c41248061402d800041238005402d80084027800d402c801041248015412b80184124001d4028002040240025412c00284125002d412b003040270035412d00384026003d412c004041250045402c00484024004d412c005041240055412e00584126805d402f806040268001402f800440268009412e800c40258011402e801440278019402e001c40240021412d002440260029412f002c4126003164300034622600396230003c62260041622f004462260049622e004c63260051632d0054602800594130805c412780614031800040288005413080084027800d4131801041268015412f80")!)
+            XCTAssertEqual(.pulseLogPlus, decoded.podInfoType)
+            XCTAssertEqual(.noFaults, decoded.faultEventCode.faultType)
+            XCTAssertEqual(0000*60, decoded.timeFaultEvent)
+            XCTAssertEqual(0x75*60, decoded.timeActivation)
+            XCTAssertEqual(4, decoded.entrySize)
+            XCTAssertEqual(0x3c, decoded.maxEntries)
+            XCTAssertEqual(0x54402600, decoded.pulseLog[0])
+            XCTAssertEqual(0x15412b80, decoded.pulseLog[9])
+            XCTAssertEqual(0x3d412c00, decoded.pulseLog[19])
+            XCTAssertEqual(0x01402f80, decoded.pulseLog[29])
+            XCTAssertEqual(0x29412f00, decoded.pulseLog[39])
+            XCTAssertEqual(0x51632d00, decoded.pulseLog[49])
+            XCTAssertEqual(0x15412f80, decoded.pulseLog[59])
+            XCTAssertEqual(0x3c, decoded.nEntries) // a calculated value
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }
     }
     
-    func testPodInfoFault() {
+    func testPodInfoActivationTime() {
         // 02DATAOFF 0  1  2 3  4 5 6 7  8 91011 1213141516
         // 02 11 // 05 PP QQQQ 00000000 00000000 MMDDYYHHMM
         // 02 11 // 05 92 0001 00000000 00000000 091912170e
         // 09-25-18 23:14 int values for datetime
         do {                                            
             // Decode
-            let decoded = try PodInfoFault(encodedData: Data(hexadecimalString: "059200010000000000000000091912170e")!)
-            XCTAssertEqual(.fault, decoded.podInfoType)
+            let decoded = try PodInfoActivationTime(encodedData: Data(hexadecimalString: "059200010000000000000000091912170e")!)
+            XCTAssertEqual(.activationTime, decoded.podInfoType)
             XCTAssertEqual(.badPumpReq2State, decoded.faultEventCode.faultType)
             XCTAssertEqual(0001*60, decoded.timeActivation)
             let decodedDateTime = decoded.dateTime
@@ -350,7 +382,7 @@ class PodInfoTests: XCTestCase {
         do {
             // Decode
             let decoded = try PodInfoPulseLogPrevious(encodedData: Data(hexadecimalString: "51003214602500196128001c6124002161280024612500296129002c60260031602a003460260039612a803c61268041602c800060278005632880086025800d6128801061258015612780186023801d6026802061228025602700286124002d2128003020270035202a00382027003d202a004020290045202c0048202a004d212c005021290055212c00582129805d202b806020288001202d8004212a8009202d800c21298011212a80142129801921801c212a8021212c8024202c0029212f002c212d003120310082")!)
-            XCTAssertEqual(.dumpOlderPulseLog, decoded.podInfoType)
+            XCTAssertEqual(.pulseLogPrevious, decoded.podInfoType)
             XCTAssertEqual(50, decoded.nEntries)
             XCTAssertEqual(0x14602500, decoded.pulseLog[0])
             XCTAssertEqual(0x39612a80, decoded.pulseLog[9])
@@ -369,7 +401,7 @@ class PodInfoTests: XCTestCase {
         // 02 16 // 02 0d 00 0000 00 0000 12 ffff 03ff 0000 00 00 87 92 07 0000
         do {
             // Decode
-            let faultEvent = try PodInfoFaultEvent(encodedData: Data(hexadecimalString: "020d00000000000012ffff03ff000000008792070000")!)
+            let faultEvent = try DetailedStatus(encodedData: Data(hexadecimalString: "020d00000000000012ffff03ff000000008792070000")!)
             XCTAssertEqual(faultEvent.faultAccessingTables, false)
             XCTAssertNil(faultEvent.faultEventTimeSinceActivation)
             

@@ -41,12 +41,34 @@ class PodStateTests: XCTestCase {
             let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "06031492c482f5")!)
 
             XCTAssertEqual(9, sentMessage.sequenceNum)
+            switch errorResponse.errorResponseType {
+            case .badNonce(let nonceResyncKey):
+                podState.resyncNonce(syncWord: nonceResyncKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
+                XCTAssertEqual(0x40ccdacb, podState.currentNonce)
+                break
+            default:
+                XCTFail("Unexpected non bad nonce response")
+                break
+            }
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
 
-            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
-            
-            XCTAssertEqual(0x40ccdacb,  podState.currentNonce)
+    func testErrorResponse() {
+        do {
+            let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "0603070008019a")!)
 
-
+            switch errorResponse.errorResponseType {
+            case .nonretryableError(let errorCode, let faultEventCode, let podProgress):
+                XCTAssertEqual(7, errorCode)
+                XCTAssertEqual(.noFaults, faultEventCode.faultType)
+                XCTAssertEqual(.aboveFiftyUnits, podProgress)
+                break
+            default:
+                XCTFail("Unexpected bad nonce response")
+                break
+            }
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

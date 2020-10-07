@@ -102,20 +102,27 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             var errorText = lastError?.localizedDescription
             
             if let error = lastError as? LocalizedError {
-                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ") + "."
+                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ")
                 
                 if !localizedText.isEmpty {
-                    errorText = localizedText
+                    errorText = localizedText + "."
                 }
             }
             
+            // If we have an error but no error text, generate a string to describe the error
+            if let error = lastError, (errorText == nil || errorText!.isEmpty) {
+                errorText = String(describing: error)
+            }
             loadingText = errorText
             
             // If we have an error, update the continue state
-            if let podCommsError = lastError as? PodCommsError,
-                case PodCommsError.podFault = podCommsError
-            {
-                continueState = .fault
+            if let podCommsError = lastError as? PodCommsError {
+                switch podCommsError {
+                case .podFault, .activationTimeExceeded:
+                    continueState = .fault
+                default:
+                    continueState = .initial
+                }
             } else if lastError != nil {
                 continueState = .initial
             }

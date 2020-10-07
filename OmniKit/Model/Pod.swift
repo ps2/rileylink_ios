@@ -61,7 +61,9 @@ public struct Pod {
     public static let primeUnits = 2.6
 
     // Amount of insulin delivered with 1 second between pulses for cannula insertion
-    public static let cannulaInsertionUnits = 0.5
+    public static let cannulaInsertionUnitsBase = 0.5
+    public static let cannulaInsertionUnitsExtra = 0.0 // edit to add a fixed additional amount of insulin during cannula insertion
+    public static let cannulaInsertionUnits = cannulaInsertionUnitsBase + cannulaInsertionUnitsExtra
 
     // Default and limits for expiration reminder alerts
     public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)
@@ -69,18 +71,10 @@ public struct Pod {
     public static let expirationReminderAlertMaxTimeBeforeExpiration = TimeInterval.hours(24)
 }
 
-public enum SetupState: UInt8 {
-    case sleeping = 0
-    case readyToPair = 1
-    case addressAssigned = 2
-    case paired = 3
-    case pairingExpired = 14
-}
-
-// DeliveryStatus used in StatusResponse and PodInfoFaults
+// DeliveryStatus used in StatusResponse and DetailedStatus
 public enum DeliveryStatus: UInt8, CustomStringConvertible {
     case suspended = 0
-    case normal = 1
+    case scheduledBasal = 1
     case tempBasalRunning = 2
     case priming = 4
     case bolusInProgress = 5
@@ -98,8 +92,8 @@ public enum DeliveryStatus: UInt8, CustomStringConvertible {
         switch self {
         case .suspended:
             return LocalizedString("Suspended", comment: "Delivery status when insulin delivery is suspended")
-        case .normal:
-            return LocalizedString("Normal", comment: "Delivery status when basal is running")
+        case .scheduledBasal:
+            return LocalizedString("Scheduled basal", comment: "Delivery status when scheduled basal is running")
         case .tempBasalRunning:
             return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
         case .priming:

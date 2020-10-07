@@ -33,11 +33,11 @@ class StatusTests: XCTestCase {
             // Decode
             let decoded = try StatusResponse(encodedData: Data(hexadecimalString: "1d19050ec82c08376f9801dc")!)
             XCTAssertEqual(TimeInterval(minutes: 3547), decoded.timeActive)
-            XCTAssertEqual(.normal, decoded.deliveryStatus)
-            XCTAssertEqual(.belowFiftyUnits, decoded.podProgressStatus)
+            XCTAssertEqual(.scheduledBasal, decoded.deliveryStatus)
+            XCTAssertEqual(.fiftyOrLessUnits, decoded.podProgressStatus)
             XCTAssertEqual(129.45, decoded.insulin, accuracy: 0.01)
             XCTAssertEqual(46.00, decoded.reservoirLevel)
-            XCTAssertEqual(2.2, decoded.insulinNotDelivered)
+            XCTAssertEqual(2.2, decoded.bolusNotDelivered)
             XCTAssertEqual(9, decoded.podMessageCounter)
             //XCTAssert(,decoded.alarms)
         } catch (let error) {
@@ -64,12 +64,12 @@ class StatusTests: XCTestCase {
         // 0e 01 02
         do {
             // Encode
-            let encoded = GetStatusCommand(podInfoType: .faultEvents)
+            let encoded = GetStatusCommand(podInfoType: .detailedStatus)
             XCTAssertEqual("0e0102", encoded.data.hexadecimalString)
             
             // Decode
             let decoded = try GetStatusCommand(encodedData: Data(hexadecimalString: "0e0102")!)
-            XCTAssertEqual(.faultEvents, decoded.podInfoType)
+            XCTAssertEqual(.detailedStatus, decoded.podInfoType)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

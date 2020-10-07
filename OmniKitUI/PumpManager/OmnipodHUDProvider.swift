@@ -31,10 +31,6 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
                 updateReservoirView()
             }
             
-            if oldValue?.isFaulted != podState?.isFaulted {
-                updateFaultDisplay()
-            }
-            
             if oldValue != nil && podState == nil {
                 updateReservoirView()
             }
@@ -86,30 +82,8 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             reservoirView.update(volume: reservoirVolume, at: lastInsulinMeasurements.validTime, level: reservoirLevel, reservoirAlertState: reservoirAlertState)
         }
     }
-    
-    private func updateFaultDisplay() {
-        if let podLifeView = podLifeView {
-            if let podState = self.podState, podState.isFaulted {
-                podLifeView.alertState = .fault
-            } else {
-                podLifeView.alertState = .none
-            }
-        }
-    }
-    
-    private func updatePodLifeView() {
-        guard let podLifeView = podLifeView else {
-            return
-        }
-        if let activatedAt = podState?.activatedAt, let expiresAt = podState?.expiresAt  {
-            let lifetime = expiresAt.timeIntervalSince(activatedAt)
-            podLifeView.setPodLifeCycle(startTime: activatedAt, lifetime: lifetime)
-        } else {
-            podLifeView.setPodLifeCycle(startTime: Date(), lifetime: Pod.nominalPodLife)
-        }
-    }
-    
-    public func createHUDViews() -> [BaseHUDView] {
+        
+    public func createHUDView() -> LevelHUDView? {
         self.reservoirView = OmnipodReservoirView.instantiate()
         self.updateReservoirView()
 

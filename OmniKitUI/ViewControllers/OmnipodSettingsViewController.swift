@@ -161,11 +161,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private func refreshPodStatus() {
-        refreshButton.isHidden = true
+        refreshButton.alpha = 0
         activityIndicator.startAnimating()
         pumpManager.refreshStatus { (_) in
             DispatchQueue.main.async {
-                self.refreshButton.isHidden = false
+                self.refreshButton.alpha = 1
                 self.activityIndicator.stopAnimating()
             }
         }
@@ -223,7 +223,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     private class func sectionList(_ podState: PodState?) -> [Section] {
         if let podState = podState {
             if podState.unfinishedPairing {
-                return [.rileyLinks, .diagnostics]
+                return [.configuration, .rileyLinks]
             } else {
                 return [.status, .configuration, .rileyLinks, .podDetails, .diagnostics]
             }

@@ -59,7 +59,7 @@ extension CommandResponseViewController {
 
         result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
-        result += String(format: LocalizedString("Total Insulin Delivered: %1$@ U\n", comment: "The format string for Total Insulin Delivered: (1: total insulin delivered string)"), status.totalInsulinDelivered.twoDecimals)
+        result += String(format: LocalizedString("Pulses (incl. prime & insert): %1$@ U\n", comment: "The format string for total insulin pulses (1: total pulses in units)"), status.totalInsulinDelivered.twoDecimals)
 
         result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
 
@@ -81,7 +81,9 @@ extension CommandResponseViewController {
         if status.faultEventCode.faultType != .noFaults {
             result += "\n" // since we have a fault, report the additional fault related information in a separate section
             result += String(format: LocalizedString("Fault: %1$@\n", comment: "The format string for a fault: (1: The fault description)"), status.faultEventCode.localizedDescription)
-            result += String(format: LocalizedString("Previous pod progress: %1$@\n", comment: "The format string for previous pod progress: (1: previous pod progress string)"), String(describing: status.previousPodProgressStatus))
+            if let previousPodProgressStatus = status.previousPodProgressStatus {
+                result += String(format: LocalizedString("Previous pod progress: %1$@\n", comment: "The format string for previous pod progress: (1: previous pod progress string)"), String(describing: previousPodProgressStatus))
+            }
             if let faultEventTimeSinceActivation = status.faultEventTimeSinceActivation, let faultTimeStr = formatter.string(from: faultEventTimeSinceActivation) {
                 result += String(format: LocalizedString("Fault time: %1$@\n", comment: "The format string for fault time: (1: fault time string)"), faultTimeStr)
             }

@@ -287,7 +287,6 @@
 		C1274F791D823A550002912B /* ChangeMeterIDPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */; };
 		C1274F801D82411C0002912B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F7C1D82411C0002912B /* MainViewController.swift */; };
 		C1274F861D8242BE0002912B /* PumpRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1274F851D8242BE0002912B /* PumpRegion.swift */; };
-		C127D924215C002B0031799D /* PodSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */; };
 		C127D925215C00320031799D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C127D927215C00420031799D /* PodCommsSession+LoopKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C127D926215C00420031799D /* PodCommsSession+LoopKit.swift */; };
 		C12EA23B198B436800309FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12EA23A198B436800309FA4 /* Foundation.framework */; };
@@ -1243,7 +1242,6 @@
 		C1274F781D823A550002912B /* ChangeMeterIDPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeMeterIDPumpEvent.swift; sourceTree = "<group>"; };
 		C1274F7C1D82411C0002912B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C1274F851D8242BE0002912B /* PumpRegion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpRegion.swift; sourceTree = "<group>"; };
-		C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodSettingsSetupViewController.swift; sourceTree = "<group>"; };
 		C127D926215C00420031799D /* PodCommsSession+LoopKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PodCommsSession+LoopKit.swift"; sourceTree = "<group>"; };
 		C12EA237198B436800309FA4 /* RileyLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RileyLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12EA23A198B436800309FA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2613,7 +2611,6 @@
 				C1FFB0082133242C00C50C1D /* OmnipodSettingsViewController.swift */,
 				C1F1A5E9215164FA00F0B820 /* PairPodSetupViewController.swift */,
 				C168C3FF21AEF8DE00ADE90E /* PodReplacementNavigationController.swift */,
-				C127D923215C002A0031799D /* PodSettingsSetupViewController.swift */,
 				C1F1A5ED2151FBA700F0B820 /* PodSetupCompleteViewController.swift */,
 				C168C40121AFACA600ADE90E /* ReplacePodViewController.swift */,
 			);
@@ -4090,7 +4087,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1F1A5EE2151FBA700F0B820 /* PodSetupCompleteViewController.swift in Sources */,
-				C127D924215C002B0031799D /* PodSettingsSetupViewController.swift in Sources */,
 				C1FFB01B21332DD900C50C1D /* TimeZone.swift in Sources */,
 				C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */,
 				C16C3D4421AC40AF00401105 /* OmnipodHUDProvider.swift in Sources */,

@@ -137,33 +137,31 @@ public class NightscoutUploader {
         }
     }
     
-    /// Attempts to delete treatments from nightscout by client identifier. This method will not retry if the network task failed.
+    /// Attempts to delete treatments from nightscout by objectId. This method will not retry if the network task failed.
     ///
-    /// - parameter id:                An array of client assigned uuid strings
+    /// - parameter id:                An array of nightscout objectId strings
     /// - parameter completionHandler: A closure to execute when the task completes. It has a single argument for any error that might have occurred during the deletion.
-    public func deleteTreatmentsByClientId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
-        guard ids.count > 0 else {
-            // Running this query with no ids ends up in deleting the entire treatments db. Likely not intended. :)
-            completionHandler(nil)
-            return
-        }
+    public func deleteTreatmentsByObjectId(_ ids:[String], completionHandler: @escaping (Error?) -> Void) {
+        let deleteGroup = DispatchGroup()
+        var errors = [Error]()
         
-        let queryItems = ids.map { URLQueryItem(name: "find[_id][$in][]", value: $0)  }
-        
-        guard let url = url(for: .treatments, queryItems: queryItems) else {
-            completionHandler(UploadError.missingConfiguration)
-            return
-        }
-
         dataAccessQueue.async {
-            self.callNS(nil, url: url, method: "DELETE") { (result) in
-                switch result {
-                case .success( _):
-                    completionHandler(nil)
-                case .failure(let error):
-                    completionHandler(error)
+            
+            for id in ids {
+                guard id != "NA" else {
+                    continue
+                }
+                deleteGroup.enter()
+                self.deleteFromNS(id, endpoint: .treatments) { (error) in
+                    if let error = error {
+                        errors.append(error)
+                    }
+                    deleteGroup.leave()
                 }
             }
+
+            _ = deleteGroup.wait(timeout: DispatchTime.distantFuture)
+            completionHandler(errors.first)
         }
     }
 
@@ -197,6 +195,10 @@ public class NightscoutUploader {
         postToNS([profileSet.dictionaryRepresentation], url: url, completion: completion)
     }
     
+    public func uploadProfiles(_ profileSets: [ProfileSet], completion: @escaping (Result<Bool, Error>) -> Void)  {
+        postToNS(profileSets.map { $0.dictionaryRepresentation }, endpoint: .profile, completion: completion)
+    }
+
     public func updateProfile(profileSet: ProfileSet, id: String, completion: @escaping (Error?) -> Void) {
         guard let url = url(for: .profile) else {
             completion(UploadError.missingConfiguration)
@@ -244,6 +246,27 @@ public class NightscoutUploader {
         }
     }
 
+    fileprivate func postToNS(_ json: [Any], endpoint: Endpoint, completion: @escaping (Result<Bool, Error>) -> Void)  {
+        guard !json.isEmpty else {
+            completion(.success(false))
+            return
+        }
+
+        guard let url = url(for: endpoint) else {
+            completion(.failure(UploadError.missingConfiguration))
+            return
+        }
+
+        postToNS(json, url: url) { result in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success:
+                completion(.success(true))
+            }
+        }
+    }
+
     func postToNS(_ json: [Any], url:URL, completion: @escaping (Either<[String],Error>) -> Void) {
         if json.count == 0 {
             completion(.success([]))
@@ -284,9 +307,8 @@ public class NightscoutUploader {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(apiSecret.sha1, forHTTPHeaderField: "api-secret")
-
+        
         do {
-
             if let json = json {
                 let sendData = try JSONSerialization.data(withJSONObject: json, options: [])
                 let task = URLSession.shared.uploadTask(with: request, from: sendData, completionHandler: { (data, response, error) in
@@ -378,6 +400,10 @@ public class NightscoutUploader {
         }
     }
     
+    public func uploadDeviceStatuses(_ deviceStatuses: [DeviceStatus], completion: @escaping (Result<Bool, Error>) -> Void) {
+        postToNS(deviceStatuses.map { $0.dictionaryRepresentation }, endpoint: .deviceStatus, completion: completion)
+    }
+
     public func flushEntries() {
         guard let url = url(for: .entries) else {
             return
@@ -397,6 +423,10 @@ public class NightscoutUploader {
         }
     }
     
+    public func uploadEntries(_ entries: [NightscoutEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        postToNS(entries.map { $0.dictionaryRepresentation }, endpoint: .entries, completion: completion)
+    }
+
     func flushTreatments() {
         guard let url = url(for: .treatments) else {
             return

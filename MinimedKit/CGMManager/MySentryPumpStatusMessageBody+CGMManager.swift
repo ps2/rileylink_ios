@@ -9,7 +9,7 @@
 import LoopKit
 
 
-extension MySentryPumpStatusMessageBody: SensorDisplayable {
+extension MySentryPumpStatusMessageBody: GlucoseDisplayable {
     public var isStateValid: Bool {
         switch glucose {
         case .active:
@@ -42,6 +42,11 @@ extension MySentryPumpStatusMessageBody: SensorDisplayable {
         return true
     }
 
+    // TODO Placeholder. This functionality will come with LOOP-1311
+    public var glucoseRangeCategory: GlucoseRangeCategory? {
+        return nil
+    }
+    
     var batteryPercentage: Int {
         return batteryRemainingPercent
     }

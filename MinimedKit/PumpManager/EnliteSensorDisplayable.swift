@@ -10,10 +10,15 @@ import Foundation
 import LoopKit
 
 
-struct EnliteSensorDisplayable: Equatable, SensorDisplayable {
+struct EnliteSensorDisplayable: Equatable, GlucoseDisplayable {
     public let isStateValid: Bool
     public let trendType: LoopKit.GlucoseTrend?
     public let isLocal: Bool
+    
+    // TODO Placeholder. This functionality will come with LOOP-1311
+    var glucoseRangeCategory: GlucoseRangeCategory? {
+        return nil
+    }
 
     public init(_ event: MinimedKit.RelativeTimestampedGlucoseEvent) {
         isStateValid = event.isStateValid

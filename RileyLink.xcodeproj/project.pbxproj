@@ -97,7 +97,6 @@
 		43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ACF20DF1CF700F941B3 /* MinimedPumpManagerSetupViewController.swift */; };
 		43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AD020DF1CF700F941B3 /* MinimedPumpSentrySetupViewController.swift */; };
 		43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AD120DF1CF700F941B3 /* MinimedPumpSetupCompleteViewController.swift */; };
-		43709AD820DF1CF800F941B3 /* MinimedPumpSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AD220DF1CF800F941B3 /* MinimedPumpSettingsSetupViewController.swift */; };
 		43709ADE20DF1D5400F941B3 /* MinimedPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43709AE020DF1D5400F941B3 /* MinimedPumpManager.storyboard */; };
 		43709AE120DF1F0D00F941B3 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431185AE1CF25A590059ED98 /* IdentifiableClass.swift */; };
 		43709AE220DF1FDD00F941B3 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */; };
@@ -943,7 +942,6 @@
 		43709ACF20DF1CF700F941B3 /* MinimedPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
 		43709AD020DF1CF700F941B3 /* MinimedPumpSentrySetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpSentrySetupViewController.swift; sourceTree = "<group>"; };
 		43709AD120DF1CF700F941B3 /* MinimedPumpSetupCompleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpSetupCompleteViewController.swift; sourceTree = "<group>"; };
-		43709AD220DF1CF800F941B3 /* MinimedPumpSettingsSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpSettingsSetupViewController.swift; sourceTree = "<group>"; };
 		43709ADF20DF1D5400F941B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MinimedPumpManager.storyboard; sourceTree = "<group>"; };
 		43709AEB20E0056F00F941B3 /* RileyLinkKitUI.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = RileyLinkKitUI.xcassets; sourceTree = "<group>"; };
 		43709AED20E008F300F941B3 /* SetupImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -1810,7 +1808,6 @@
 				43709ACE20DF1CF700F941B3 /* MinimedPumpIDSetupViewController.swift */,
 				43709AD020DF1CF700F941B3 /* MinimedPumpSentrySetupViewController.swift */,
 				43709ACD20DF1CF700F941B3 /* MinimedPumpClockSetupViewController.swift */,
-				43709AD220DF1CF800F941B3 /* MinimedPumpSettingsSetupViewController.swift */,
 				43709AD120DF1CF700F941B3 /* MinimedPumpSetupCompleteViewController.swift */,
 			);
 			path = Setup;
@@ -2571,16 +2568,13 @@
 				C1FFAFAE213323E800C50C1D /* CancelDeliveryCommand.swift */,
 				C1FFAFB3213323E800C50C1D /* ConfigureAlertsCommand.swift */,
 				C1FFAFA7213323E800C50C1D /* DeactivatePodCommand.swift */,
-				E9EE336D214ED01200888876 /* DetailedStatus.swift */,
 				C1FFAFB1213323E800C50C1D /* ErrorResponse.swift */,
 				C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */,
 				C1FFAFAC213323E800C50C1D /* GetStatusCommand.swift */,
 				C1FFAFA8213323E800C50C1D /* MessageBlock.swift */,
 				C1FFAFA9213323E800C50C1D /* PlaceholderMessageBlock.swift */,
 				E9EE336B214ED01200888876 /* PodInfo.swift */,
-				E9EDD474215AFFF300A103D1 /* PodInfoActivationTime.swift */,
 				E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */,
-				E9E54AB52156B2D500E319B8 /* PodInfoPulseLogPlus.swift */,
 				E9EDD474215AFFF300A103D1 /* PodInfoActivationTime.swift */,
 				E9EE336D214ED01200888876 /* DetailedStatus.swift */,
 				E95D065F215D76E40072157B /* PodInfoPulseLog.swift */,
@@ -3544,7 +3538,6 @@
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,
 				43709AC420DF1C8B00F941B3 /* PumpModel.swift in Sources */,
-				43709AD820DF1CF800F941B3 /* MinimedPumpSettingsSetupViewController.swift in Sources */,
 				43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */,
 				43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */,
 				C145BF9F2219F37200A977CB /* Comparable.swift in Sources */,

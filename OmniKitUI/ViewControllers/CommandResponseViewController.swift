@@ -59,7 +59,7 @@ extension CommandResponseViewController {
 
         result += String(format: LocalizedString("Delivery Status: %1$@\n", comment: "The format string for Delivery Status: (1: delivery status string)"), String(describing: status.deliveryStatus))
 
-        result += String(format: LocalizedString("Pulses (incl. prime & insert): %1$@ U\n", comment: "The format string for total insulin pulses (1: total pulses in units)"), status.totalInsulinDelivered.twoDecimals)
+        result += String(format: LocalizedString("Pulse Count: %1$d\n", comment: "The format string for Pulse Count (1: pulse count)"), Int(status.totalInsulinDelivered / Pod.pulseSize))
 
         result += String(format: LocalizedString("Reservoir Level: %1$@ U\n", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel?.twoDecimals ?? "50+")
 
@@ -72,7 +72,13 @@ extension CommandResponseViewController {
                 return String(describing: slot)
             }
         }
-        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), alertsDescription.joined(separator: ", "))
+        let alertString: String
+        if status.unacknowledgedAlerts.isEmpty {
+            alertString = String(describing: status.unacknowledgedAlerts)
+        } else {
+            alertString = alertsDescription.joined(separator: ", ")
+        }
+        result += String(format: LocalizedString("Alerts: %1$@\n", comment: "The format string for Alerts: (1: the alerts string)"), alertString)
 
         result += String(format: LocalizedString("RSSI: %1$@\n", comment: "The format string for RSSI: (1: RSSI value)"), String(describing: status.radioRSSI))
 

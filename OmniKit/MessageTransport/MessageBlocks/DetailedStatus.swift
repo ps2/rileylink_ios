@@ -203,3 +203,15 @@ public struct ErrorEventInfo: CustomStringConvertible, Equatable {
         self.podProgressStatus = PodProgressStatus(rawValue: rawValue & 0xF)!
     }
 }
+
+
+extension DetailedStatus {
+    var highlightText: String {
+        switch faultEventCode.faultType {
+        case .exceededMaximumPodLife80Hrs:
+            return LocalizedString("Pod Expired", comment: "Highlight string for pod expired (80hrs).")
+        default:
+            return LocalizedString("Pod Fault", comment: "Highlight string for pod faults.")
+        }
+    }
+}

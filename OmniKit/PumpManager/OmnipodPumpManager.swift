@@ -361,10 +361,11 @@ extension OmnipodPumpManager {
                 state: .warning)
         }
         
-        if podState.fault != nil {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
-                                                     imageName: "exclamationmark.circle.fill",
-                                                     state: .critical)
+        if let fault = podState.fault {
+            return PumpManagerStatus.PumpStatusHighlight(
+                localizedMessage: fault.highlightText,
+                imageName: "exclamationmark.circle.fill",
+                state: .critical)
         }
         
         if let reservoir = podState.lastInsulinMeasurements, let level = reservoir.reservoirLevel {

@@ -14,30 +14,31 @@ import RileyLinkBLEKit
 extension CommandResponseViewController {
     typealias T = CommandResponseViewController
     
-    private static let successText = LocalizedString("Succeeded", comment: "A message indicating a command succeeded")
-    
+    // Returns an appropriately formatted error string or "Succeeded" if no error
+    private static func resultString(error: Error?) -> String {
+        guard let error = error else {
+            return LocalizedString("Succeeded", comment: "A message indicating a command succeeded")
+        }
+
+        let errorStrings: [String]
+        if let error = error as? LocalizedError {
+            errorStrings = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap { $0 }
+        } else {
+            errorStrings = [error.localizedDescription].compactMap { $0 }
+        }
+        let errorText = errorStrings.joined(separator: ". ")
+
+        if errorText.isEmpty {
+            return String(describing: error)
+        }
+        return errorText + "."
+    }
+
     static func changeTime(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
             pumpManager.setTime() { (error) in
-                let response: String
-                if let error = error as? LocalizedError {
-                    let sentenceFormat = LocalizedString("%@.", comment: "Appends a full-stop to a statement")
-                    let messageWithRecovery = [error.failureReason, error.recoverySuggestion].compactMap({ $0 }).map({
-                        String(format: sentenceFormat, $0)
-                    }).joined(separator: "\n")
-
-                    if messageWithRecovery.isEmpty {
-                        response = error.localizedDescription
-                    } else {
-                        response = messageWithRecovery
-                    }
-                } else if let error = error {
-                    response = error.localizedDescription
-                } else {
-                    response = self.successText
-                }
                 DispatchQueue.main.async {
-                    completionHandler(response)
+                    completionHandler(resultString(error: error))
                 }
             }
             return LocalizedString("Changing time…", comment: "Progress message for changing pod time.")
@@ -107,7 +108,7 @@ extension CommandResponseViewController {
                         let configuredAlerts = pumpManager.state.podState!.configuredAlerts
                         completionHandler(podStatusString(status: status, configuredAlerts: configuredAlerts))
                     case .failure(let error):
-                        completionHandler(error.localizedDescription)
+                        completionHandler(resultString(error: error))
                     }
                 }
             }
@@ -119,7 +120,7 @@ extension CommandResponseViewController {
         return T { (completionHandler) -> String in
             pumpManager.testingCommands() { (error) in
                 DispatchQueue.main.async {
-                    completionHandler(error?.localizedDescription ?? self.successText)
+                    completionHandler(resultString(error: error))
                 }
             }
             return LocalizedString("Testing Commands…", comment: "Progress message for testing commands.")
@@ -131,9 +132,9 @@ extension CommandResponseViewController {
             pumpManager.playTestBeeps() { (error) in
                 let response: String
                 if let error = error {
-                    response = error.localizedDescription
+                    response = resultString(error: error)
                 } else {
-                    response = LocalizedString("Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your pod, it's likely that the piezo speaker in your pod is broken.", comment: "Success message for play test beeps.")
+                    response = LocalizedString("Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your pod, the piezo speaker in your pod may be broken or disabled.", comment: "Success message for play test beeps.")
                 }
                 DispatchQueue.main.async {
                     completionHandler(response)
@@ -145,9 +146,14 @@ extension CommandResponseViewController {
 
     static func readPulseLog(pumpManager: OmnipodPumpManager) -> T {
         return T { (completionHandler) -> String in
-            pumpManager.readPulseLog() { (response) in
+            pumpManager.readPulseLog() { (result) in
                 DispatchQueue.main.async {
-                    completionHandler(response)
+                    switch result {
+                    case .success(let pulseLogString):
+                        completionHandler(pulseLogString)
+                    case .failure(let error):
+                        completionHandler(resultString(error: error))
+                    }
                 }
             }
             return LocalizedString("Reading Pulse Log…", comment: "Progress message for reading pulse log.")
@@ -157,8 +163,7 @@ extension CommandResponseViewController {
 
 extension Double {
     var twoDecimals: String {
-        let reservoirLevel = self
-        return String(format: "%.2f", reservoirLevel)
+        return String(format: "%.2f", self)
     }
 }
 

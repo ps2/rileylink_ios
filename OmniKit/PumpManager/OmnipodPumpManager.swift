@@ -535,7 +535,7 @@ extension OmnipodPumpManager {
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
         let mockFaultDuringPairing = false
-        let mockCommsErrorDuringPairing = true
+        let mockCommsErrorDuringPairing = false
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
             let fault: DetailedStatus? = self.setStateWithResult({ (state) in
@@ -950,6 +950,11 @@ extension OmnipodPumpManager {
             completion(.failure(PodCommsError.noPodPaired))
             return
         }
+        if self.state.podState?.isFaulted == false && self.state.podState?.unfinalizedBolus?.isFinished == false {
+            self.log.info("Skipping Read Pod Status due to bolus still in progress.")
+            completion(.failure(PodCommsError.unfinalizedBolus))
+            return
+        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in
@@ -1027,15 +1032,15 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func readPulseLog(completion: @escaping (String) -> Void) {
+    public func readPulseLog(completion: @escaping (Result<String, Error>) -> Void) {
         // use hasSetupPod to be able to read the pulse log from a faulted Pod
         guard self.hasSetupPod else {
-            completion(PodCommsError.noPodPaired.localizedDescription)
+            completion(.failure(PodCommsError.noPodPaired))
             return
         }
         if self.state.podState?.isFaulted == false && self.state.podState?.unfinalizedBolus?.isFinished == false {
             self.log.info("Skipping Read Pulse Log due to bolus still in progress.")
-            completion(PodCommsError.unfinalizedBolus.localizedDescription)
+            completion(.failure(PodCommsError.unfinalizedBolus))
             return
         }
 
@@ -1046,33 +1051,21 @@ extension OmnipodPumpManager {
                 do {
                     // read the most recent 50 entries from the pulse log
                     self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse1 = try session.readPodInfo(podInfoResponseSubType: .pulseLogRecent)
-                    guard let podInfoPulseLogRecent = podInfoResponse1.podInfo as? PodInfoPulseLogRecent else {
-                        self.log.error("Unable to decode for PulseLogRecent: %s", String(describing: podInfoResponse1))
-                        completion(PodCommsError.unexpectedResponse(response: .podInfoResponse).localizedDescription)
-                        return
-                    }
-                    var lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
-                    var str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
-
-                    // read up to the previous 50 entries from the pulse log
-                    self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
-                    let podInfoResponse2 = try session.readPodInfo(podInfoResponseSubType: .pulseLogPrevious)
-                    guard let podInfoPulseLogPrevious = podInfoResponse2.podInfo as? PodInfoPulseLogPrevious else {
-                        self.log.error("Unable to decode for PulseLogPrevious: %s", String(describing: podInfoResponse1))
-                        completion(PodCommsError.unexpectedResponse(response: .podInfoResponse).localizedDescription)
-                        return
-                    }
-                    lastPulseNumber -= podInfoPulseLogRecent.pulseLog.count
-                    str += pulseLogString(pulseLogEntries: podInfoPulseLogPrevious.pulseLog, lastPulseNumber: lastPulseNumber)
-
+                    let podInfoResponse = try session.readPodInfo(podInfoResponseSubType: .pulseLogRecent)
                     self.emitConfirmationBeep(session: session, beepConfigType: .beeeeeep)
-                    completion(str)
+                    guard let podInfoPulseLogRecent = podInfoResponse.podInfo as? PodInfoPulseLogRecent else {
+                        self.log.error("Unable to decode PulseLogRecent: %s", String(describing: podInfoResponse))
+                        completion(.failure(PodCommsError.unexpectedResponse(response: .podInfoResponse)))
+                        return
+                    }
+                    let lastPulseNumber = Int(podInfoPulseLogRecent.indexLastEntry)
+                    let str = pulseLogString(pulseLogEntries: podInfoPulseLogRecent.pulseLog, lastPulseNumber: lastPulseNumber)
+                    completion(.success(str))
                 } catch let error {
-                    completion(error.localizedDescription)
+                    completion(.failure(error))
                 }
             case .failure(let error):
-                completion(error.localizedDescription)
+                completion(.failure(error))
             }
         }
     }

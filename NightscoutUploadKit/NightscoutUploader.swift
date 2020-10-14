@@ -55,7 +55,7 @@ public class NightscoutUploader {
         components.scheme = siteURL.scheme
         components.host = siteURL.host
         components.queryItems = queryItems
-        components.path = path
+        components.path = siteURL.path + path
         return components.url
     }
 

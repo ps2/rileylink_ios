@@ -352,6 +352,8 @@ extension MinimedPumpSettingsViewController: RadioSelectionTableViewControllerDe
                     }
                 }
             }
+        default:
+            break
         }
     }
 }

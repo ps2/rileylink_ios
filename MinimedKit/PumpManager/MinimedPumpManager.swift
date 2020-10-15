@@ -752,7 +752,7 @@ extension MinimedPumpManager: PumpManager {
             if let bolus = state.unfinalizedBolus, !bolus.isFinished {
                 bolusState = .inProgress(DoseEntry(bolus))
             } else {
-                bolusState = .none
+                bolusState = .noBolus
             }
         }
         

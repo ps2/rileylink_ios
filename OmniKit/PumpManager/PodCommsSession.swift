@@ -450,6 +450,7 @@ public class PodCommsSession {
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
+            podState.updateFromStatusResponse(statusResponse)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
@@ -464,6 +465,7 @@ public class PodCommsSession {
                 podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
                 return DeliveryCommandResult.uncertainFailure(error: podCommsError)
             }
+            podState.updateFromStatusResponse(status)
             if status.deliveryStatus.bolusing {
                 self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
                 podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
@@ -660,6 +662,10 @@ public class PodCommsSession {
             podState.updateFromDetailedStatusResponse(detailedStatus)
         }
         return detailedStatus
+    }
+
+    public func finalizeFinishedDoses() {
+        podState.finalizeFinishedDoses()
     }
 
     @discardableResult

@@ -1364,30 +1364,62 @@ extension OmnipodPumpManager: PumpManager {
                 state.bolusEngageState = .engaging
             })
 
-            var podStatus: StatusResponse
-
-            do {
-                podStatus = try session.getStatus()
-            } catch let error {
-                completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
-                return
-            }
-
             // If pod suspended, resume basal before bolusing
-            if podStatus.deliveryStatus == .suspended {
+            if case .some(.suspended) = self.state.podState?.suspendState {
                 do {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                     let beep = self.confirmationBeeps
-                    podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
+                    _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
                 } catch let error {
+                    self.log.error("enactBolus: error resuming suspended pod: %s", String(describing: error))
                     completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
                     return
                 }
             }
 
-            guard !podStatus.deliveryStatus.bolusing else {
-                completion(.failure(PumpManagerError.communication(PodCommsError.unfinalizedBolus)))
+            var doGetStatus = false
+            var doFinalizeFinishedDoses = false
+            let preError = self.setStateWithResult({ (state) -> PodCommsError? in
+                if case .some(.suspended) = state.podState?.suspendState {
+                    self.log.error("enactBolus: failing with suspended pod")
+                    return .podSuspended
+                }
+                if let unfinalizedBolus = state.podState?.unfinalizedBolus {
+                    if unfinalizedBolus.scheduledCertainty == .uncertain {
+                        self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
+                        doGetStatus = true
+                        return nil
+                    }
+                    if !unfinalizedBolus.isFinished {
+                        self.log.info("enactBolus: not enacting bolus because podState indicates unfinalized bolus in progress")
+                        return .unfinalizedBolus
+                    }
+                    self.log.info("enactBolus: replacing getStatus with FinalizeFinishedDoses")
+                    doFinalizeFinishedDoses = true
+                }
+                return nil
+            })
+
+            if let error = preError {
+                completion(.failure(PumpManagerError.deviceState(error)))
                 return
+            }
+
+            if doGetStatus {
+                let podStatus: StatusResponse
+                do {
+                    podStatus = try session.getStatus()
+                } catch let error {
+                    completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
+                    return
+                }
+
+                guard !podStatus.deliveryStatus.bolusing else {
+                    completion(.failure(PumpManagerError.communication(PodCommsError.unfinalizedBolus)))
+                    return
+                }
+            } else if doFinalizeFinishedDoses {
+                session.finalizeFinishedDoses()
             }
 
             let date = Date()

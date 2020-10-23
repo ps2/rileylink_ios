@@ -265,6 +265,26 @@ extension OmnipodPumpManager {
             return delegate?.pumpManagerMustProvideBLEHeartbeat(self) == true
         })
     }
+    
+    private func lifecycleProgress(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+        guard let podState = state.podState, let expiresAt = podState.expiresAt else {
+            return nil
+        }
+        
+        switch expiresAt.timeIntervalSinceNow {
+        case let remaining where remaining <= 0:
+            return PumpManagerStatus.PumpLifecycleProgress(
+                percentComplete: 1,
+                progressState: .critical)
+        case let remaining where remaining < .hours(24):
+            return PumpManagerStatus.PumpLifecycleProgress(
+                percentComplete: 1 - remaining / Pod.nominalPodLife,
+                progressState: .warning)
+        default:
+            // Do not display lifecycle progress when we have >= 24 hours left
+            return nil
+       }
+    }
 
     private func status(for state: OmnipodPumpManagerState) -> PumpManagerStatus {
         return PumpManagerStatus(
@@ -273,7 +293,8 @@ extension OmnipodPumpManager {
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
-            pumpStatusHighlight: pumpStatusHighlight(for: state)
+            pumpStatusHighlight: pumpStatusHighlight(for: state),
+            pumpLifecycleProgress: lifecycleProgress(for: state)
         )
     }
 
@@ -535,7 +556,7 @@ extension OmnipodPumpManager {
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
         let mockFaultDuringPairing = false
-        let mockCommsErrorDuringPairing = true
+        let mockCommsErrorDuringPairing = false
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
             let fault: DetailedStatus? = self.setStateWithResult({ (state) in

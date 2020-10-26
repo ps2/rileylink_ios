@@ -33,8 +33,6 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         }
     }
     
-    private var cancelErrorCount = 0
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,6 +59,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         case initial
         case startingInsertion
         case inserting(finishTime: CFTimeInterval)
+        case finish
         case fault
         case ready
     }
@@ -71,7 +70,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             case .initial:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
-                footerView.primaryButton.setConnectTitle()
+                footerView.primaryButton.setInsertCannulaTitle()
             case .startingInsertion:
                 activityIndicator.state = .indeterminantProgress
                 footerView.primaryButton.isEnabled = false
@@ -80,6 +79,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
                 lastError = nil
+            case .finish:
+                activityIndicator.state = .hidden
+                footerView.primaryButton.isEnabled = true
+                footerView.primaryButton.setFinishTitle()
             case .fault:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
@@ -115,18 +118,42 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             }
             loadingText = errorText
             
-            // If we have an error, update the continue state
+            // If we have an error, update the continue state depending on whether the cannula insertion was started
             if let podCommsError = lastError as? PodCommsError {
                 switch podCommsError {
                 case .podFault, .activationTimeExceeded:
                     continueState = .fault
                 default:
-                    continueState = .initial
+                    continueState = initialOrFinish
                 }
             } else if lastError != nil {
-                continueState = .initial
+                continueState = initialOrFinish
             }
         }
+    }
+
+    // true if pod setup progress has been verified as completed
+    private var setupIsCompleted: Bool {
+        if pumpManager.state.podState?.setupProgress == .completed {
+            return true
+        }
+        return false
+    }
+
+    // .finish (if cannula insertion has been started but its completion hasn't been verified) or else .initial
+    private var initialOrFinish: State {
+        if pumpManager.state.podState?.setupProgress == .cannulaInserting {
+            return .finish
+        }
+        return .initial
+    }
+
+    // .finish (if pod setup has been verifed to be complete) or else .ready
+    private var readyOrFinish: State {
+        if self.setupIsCompleted {
+            return .ready
+        }
+        return .finish
     }
 
     private func navigateToReplacePod() {
@@ -138,12 +165,16 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         case .initial:
             continueState = .startingInsertion
             insertCannula()
+        case .finish:
+            checkCannulaInsertionFinished()
+            if setupIsCompleted {
+                super.continueButtonPressed(sender)
+            }
         case .ready:
             super.continueButtonPressed(sender)
         case .fault:
             navigateToReplacePod()
-        case .startingInsertion,
-             .inserting:
+        case .startingInsertion, .inserting:
             break
         }
     }
@@ -156,6 +187,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     }
     
     private func insertCannula() {
+        guard let podState = pumpManager.state.podState, podState.setupProgress.needsCannulaInsertion else {
+            self.continueState = self.readyOrFinish
+            return
+        }
         pumpManager.insertCannula() { (result) in
             DispatchQueue.main.async {
                 switch(result) {
@@ -164,10 +199,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                     let delay = finishTime
                     if delay > 0 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                            self.continueState = .ready
+                            self.checkCannulaInsertionFinished() // now check if actually ready
                         }
                     } else {
-                        self.continueState = .ready
+                        self.continueState = self.readyOrFinish
                     }
                 case .failure(let error):
                     self.lastError = error
@@ -175,11 +210,26 @@ class InsertCannulaSetupViewController: SetupTableViewController {
             }
         }
     }
+
+    private func checkCannulaInsertionFinished() {
+        activityIndicator.state = .indeterminantProgress
+        self.pumpManager.checkCannulaInsertionFinished() { (error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.lastError = error
+                }
+                self.continueState = self.readyOrFinish
+            }
+        }
+    }
 }
 
 private extension SetupButton {
-    func setConnectTitle() {
+    func setInsertCannulaTitle() {
         setTitle(LocalizedString("Insert Cannula", comment: "Button title to insert cannula during setup"), for: .normal)
+    }
+    func setFinishTitle() {
+        setTitle(LocalizedString("Finish", comment: "Button title to finish setup"), for: .normal)
     }
     func setDeactivateTitle() {
         setTitle(LocalizedString("Deactivate", comment: "Button title to deactivate pod because of fault during setup"), for: .normal)

@@ -684,11 +684,6 @@ extension OmnipodPumpManager {
                     }
 
                     let finishWait = try session.insertCannula()
-
-                    DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + finishWait) {
-                        // Runs a new session
-                        self.checkCannulaInsertionFinished()
-                    }
                     completion(.success(finishWait))
                 } catch let error {
                     completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
@@ -706,18 +701,21 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func checkCannulaInsertionFinished() {
+    public func checkCannulaInsertionFinished(completion: @escaping (Error?) -> Void) {
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Check cannula insertion finished", using: deviceSelector) { (result) in
             switch result {
             case .success(let session):
                 do {
                     try session.checkInsertionCompleted()
+                    completion(nil)
                 } catch let error {
                     self.log.error("Failed to fetch pod status: %{public}@", String(describing: error))
+                    completion(error)
                 }
             case .failure(let error):
                 self.log.error("Failed to fetch pod status: %{public}@", String(describing: error))
+                completion(error)
             }
         }
     }

@@ -59,7 +59,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         case initial
         case startingInsertion
         case inserting(finishTime: CFTimeInterval)
-        case finish
+        case needsCheckInsertion
         case fault
         case ready
     }
@@ -79,10 +79,10 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 activityIndicator.state = .timedProgress(finishTime: CACurrentMediaTime() + finishTime)
                 footerView.primaryButton.isEnabled = false
                 lastError = nil
-            case .finish:
+            case .needsCheckInsertion:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
-                footerView.primaryButton.setFinishTitle()
+                footerView.primaryButton.setRecheckInsertionTitle()
             case .fault:
                 activityIndicator.state = .hidden
                 footerView.primaryButton.isEnabled = true
@@ -124,36 +124,28 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 case .podFault, .activationTimeExceeded:
                     continueState = .fault
                 default:
-                    continueState = initialOrFinish
+                    continueState = initialOrNeedsCannulaInsertionCheck
                 }
             } else if lastError != nil {
-                continueState = initialOrFinish
+                continueState = initialOrNeedsCannulaInsertionCheck
             }
         }
     }
 
-    // true if pod setup progress has been verified as completed
-    private var setupIsCompleted: Bool {
-        if pumpManager.state.podState?.setupProgress == .completed {
-            return true
-        }
-        return false
-    }
-
-    // .finish (if cannula insertion has been started but its completion hasn't been verified) or else .initial
-    private var initialOrFinish: State {
+    // .needsCheckInsertion (if cannula insertion has been started but its completion hasn't been verified) or else .initial
+    private var initialOrNeedsCannulaInsertionCheck: State {
         if pumpManager.state.podState?.setupProgress == .cannulaInserting {
-            return .finish
+            return .needsCheckInsertion
         }
         return .initial
     }
 
-    // .finish (if pod setup has been verifed to be complete) or else .ready
-    private var readyOrFinish: State {
-        if self.setupIsCompleted {
+    // .ready (if pod setup has been verifed to be complete) or else .needsCheckInsertion
+    private var readyOrNeedsCannulaInsertionCheck: State {
+        if pumpManager.state.podState?.setupProgress == .completed {
             return .ready
         }
-        return .finish
+        return .needsCheckInsertion
     }
 
     private func navigateToReplacePod() {
@@ -165,9 +157,9 @@ class InsertCannulaSetupViewController: SetupTableViewController {
         case .initial:
             continueState = .startingInsertion
             insertCannula()
-        case .finish:
+        case .needsCheckInsertion:
             checkCannulaInsertionFinished()
-            if setupIsCompleted {
+            if pumpManager.state.podState?.setupProgress == .completed {
                 super.continueButtonPressed(sender)
             }
         case .ready:
@@ -188,7 +180,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
     
     private func insertCannula() {
         guard let podState = pumpManager.state.podState, podState.setupProgress.needsCannulaInsertion else {
-            self.continueState = self.readyOrFinish
+            self.continueState = readyOrNeedsCannulaInsertionCheck
             return
         }
         pumpManager.insertCannula() { (result) in
@@ -202,7 +194,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                             self.checkCannulaInsertionFinished() // now check if actually ready
                         }
                     } else {
-                        self.continueState = self.readyOrFinish
+                        self.continueState = self.readyOrNeedsCannulaInsertionCheck
                     }
                 case .failure(let error):
                     self.lastError = error
@@ -218,7 +210,7 @@ class InsertCannulaSetupViewController: SetupTableViewController {
                 if let error = error {
                     self.lastError = error
                 }
-                self.continueState = self.readyOrFinish
+                self.continueState = self.readyOrNeedsCannulaInsertionCheck
             }
         }
     }
@@ -228,8 +220,8 @@ private extension SetupButton {
     func setInsertCannulaTitle() {
         setTitle(LocalizedString("Insert Cannula", comment: "Button title to insert cannula during setup"), for: .normal)
     }
-    func setFinishTitle() {
-        setTitle(LocalizedString("Finish", comment: "Button title to finish setup"), for: .normal)
+    func setRecheckInsertionTitle() {
+        setTitle(LocalizedString("Recheck Cannula Insertion", comment: "Button title to recheck cannula insertion during setup"), for: .normal)
     }
     func setDeactivateTitle() {
         setTitle(LocalizedString("Deactivate", comment: "Button title to deactivate pod because of fault during setup"), for: .normal)

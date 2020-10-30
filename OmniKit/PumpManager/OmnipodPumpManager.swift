@@ -1377,8 +1377,8 @@ extension OmnipodPumpManager: PumpManager {
                 }
             }
 
-            var doGetStatus = false
-            var doFinalizeFinishedDoses = false
+            var attemptUncertainBolusReconciliation = false
+            var finalizeFinishedDoses = false
             let preError = self.setStateWithResult({ (state) -> PodCommsError? in
                 if case .some(.suspended) = state.podState?.suspendState {
                     self.log.error("enactBolus: failing with suspended pod")
@@ -1387,15 +1387,14 @@ extension OmnipodPumpManager: PumpManager {
                 if let unfinalizedBolus = state.podState?.unfinalizedBolus {
                     if unfinalizedBolus.scheduledCertainty == .uncertain {
                         self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
-                        doGetStatus = true
+                        attemptUncertainBolusReconciliation = true
                         return nil
                     }
                     if !unfinalizedBolus.isFinished {
                         self.log.info("enactBolus: not enacting bolus because podState indicates unfinalized bolus in progress")
                         return .unfinalizedBolus
                     }
-                    self.log.info("enactBolus: replacing getStatus with FinalizeFinishedDoses")
-                    doFinalizeFinishedDoses = true
+                    finalizeFinishedDoses = true // call finalizeFinishDoses() to clean up the certain finalized bolus
                 }
                 return nil
             })
@@ -1405,7 +1404,7 @@ extension OmnipodPumpManager: PumpManager {
                 return
             }
 
-            if doGetStatus {
+            if attemptUncertainBolusReconciliation {
                 let podStatus: StatusResponse
                 do {
                     podStatus = try session.getStatus()
@@ -1418,7 +1417,7 @@ extension OmnipodPumpManager: PumpManager {
                     completion(.failure(PumpManagerError.communication(PodCommsError.unfinalizedBolus)))
                     return
                 }
-            } else if doFinalizeFinishedDoses {
+            } else if finalizeFinishedDoses {
                 session.finalizeFinishedDoses()
             }
 

@@ -6,43 +6,38 @@
 //
 
 public struct BLEFirmwareVersion {
-    private static let prefix = "ble_rfspy "
+    
+    enum Firmware: String {
+        case bleRFSpy = "ble_rfspy"
+        case nrfRileyLink = "nrf52_rileylink"
+    }
 
+    let firmware: Firmware
     let components: [Int]
-
     let versionString: String
 
     init?(versionString: String) {
-        guard
-            versionString.hasPrefix(BLEFirmwareVersion.prefix),
-            let versionIndex = versionString.index(versionString.startIndex, offsetBy: BLEFirmwareVersion.prefix.count, limitedBy: versionString.endIndex)
+        let components = versionString.split(separator: " ")
+        
+        guard let firmware = Firmware.init(rawValue: String(components[0])),
+              let versionIndex = versionString.index(versionString.startIndex, offsetBy: firmware.rawValue.count + 1, limitedBy: versionString.endIndex)
         else {
             return nil
         }
-
+        
         self.init(
+            firmware: firmware,
             components: versionString[versionIndex...].split(separator: ".").compactMap({ Int($0) }),
             versionString: versionString
         )
     }
 
-    init(components: [Int], versionString: String) {
+    init(firmware: Firmware, components: [Int], versionString: String) {
+        self.firmware = firmware
         self.components = components
         self.versionString = versionString
     }
 }
-
-
-extension BLEFirmwareVersion {
-    static var unknown: BLEFirmwareVersion {
-        return self.init(components: [0], versionString: "Unknown")
-    }
-
-    public var isUnknown: Bool {
-        return self == BLEFirmwareVersion.unknown
-    }
-}
-
 
 extension BLEFirmwareVersion: CustomStringConvertible {
     public var description: String {
@@ -60,10 +55,15 @@ extension BLEFirmwareVersion: Equatable {
 
 extension BLEFirmwareVersion {
     var responseType: PeripheralManager.ResponseType {
-        guard let major = components.first, major >= 2 else {
-            return .buffered
-        }
+        switch firmware {
+        case .bleRFSpy:
+            guard let major = components.first, major >= 2 else {
+                return .buffered
+            }
 
-        return .single
+            return .single
+        case .nrfRileyLink:
+            return .single
+        }
     }
 }

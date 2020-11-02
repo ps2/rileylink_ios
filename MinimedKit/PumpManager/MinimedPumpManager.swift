@@ -371,7 +371,7 @@ extension MinimedPumpManager {
                 )
 
                 cgmDelegate.notify { (delegate) in
-                    delegate?.cgmManager(self, didUpdateWith: .newData([sample]))
+                    delegate?.cgmManager(self, hasNew: .newData([sample]))
                 }
             }
         case .off:
@@ -383,7 +383,7 @@ extension MinimedPumpManager {
             // Anything else is an Enlite error
             // TODO: Provide info about status.glucose
             cgmDelegate.notify { (delegate) in
-                delegate?.cgmManager(self, didUpdateWith: .error(PumpManagerError.deviceState(nil)))
+                delegate?.cgmManager(self, hasNew: .error(PumpManagerError.deviceState(nil)))
             }
         }
         
@@ -768,7 +768,7 @@ extension MinimedPumpManager: PumpManager {
             if let bolus = state.unfinalizedBolus, !bolus.isFinished {
                 bolusState = .inProgress(DoseEntry(bolus))
             } else {
-                bolusState = .none
+                bolusState = .noBolus
             }
         }
         
@@ -1163,8 +1163,17 @@ extension MinimedPumpManager: CGMManager {
     public var glucoseDisplay: GlucoseDisplayable? {
         return recents.sensorState
     }
+    
+    public var cgmStatus: CGMManagerStatus {
+        return CGMManagerStatus(hasValidSensorSession: hasValidSensorSession)
+    }
+    
+    public var hasValidSensorSession: Bool {
+        // No tracking of session available
+        return true
+    }
 
-    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
+    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) {
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
                 completion(.error(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))

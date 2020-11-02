@@ -681,6 +681,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     }
                 }
             }
+        default:
+            break
         }
     }
 

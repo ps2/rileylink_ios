@@ -100,7 +100,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     func hudDidAppear() {
         updateReservoirView()
-        pumpManager.refreshStatus(userRequest: false)
+        pumpManager.refreshStatus(emitConfirmationBeep: false)
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {

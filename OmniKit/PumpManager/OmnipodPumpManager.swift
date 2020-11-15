@@ -722,18 +722,18 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func refreshStatus(userRequest: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
+    public func refreshStatus(emitConfirmationBeep: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         guard self.hasActivePod else {
             completion?(.failure(.deviceState(OmnipodPumpManagerError.noPodPaired)))
             return
         }
 
-        self.getPodStatus(storeDosesOnSuccess: false, userRequest: userRequest, completion: completion)
+        self.getPodStatus(storeDosesOnSuccess: false, emitConfirmationBeep: emitConfirmationBeep, completion: completion)
     }
 
     // MARK: - Pump Commands
 
-    private func getPodStatus(storeDosesOnSuccess: Bool, userRequest: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
+    private func getPodStatus(storeDosesOnSuccess: Bool, emitConfirmationBeep: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else {
             self.log.info("Skipping status request due to unfinalized bolus in progress.")
             completion?(.failure(PumpManagerError.deviceState(PodCommsError.unfinalizedBolus)))
@@ -746,7 +746,7 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     let status = try session.getStatus()
-                    if userRequest {
+                    if emitConfirmationBeep {
                         self.emitConfirmationBeep(session: session, beepConfigType: .bipBip)
                     }
                     if storeDosesOnSuccess {
@@ -1317,7 +1317,7 @@ extension OmnipodPumpManager: PumpManager {
             return // No active pod
         case true?:
             log.default("Fetching status because pumpData is too old")
-            getPodStatus(storeDosesOnSuccess: true, userRequest: false) { (response) in
+            getPodStatus(storeDosesOnSuccess: true, emitConfirmationBeep: false) { (response) in
                 self.pumpDelegate.notify({ (delegate) in
                     switch response {
                     case .success:

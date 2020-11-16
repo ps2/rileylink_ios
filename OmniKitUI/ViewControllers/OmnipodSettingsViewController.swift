@@ -146,7 +146,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         self.navigationItem.setRightBarButton(button, animated: false)
         
         if self.podState != nil {
-            refreshPodStatus()
+            refreshPodStatus(emitConfirmationBeep: false)
         } else {
             refreshButton.isHidden = true
         }
@@ -157,13 +157,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     @objc func refreshTapped(_ sender: Any) {
-        refreshPodStatus()
+        refreshPodStatus(emitConfirmationBeep: true)
     }
     
-    private func refreshPodStatus() {
+    private func refreshPodStatus(emitConfirmationBeep: Bool) {
         refreshButton.alpha = 0
         activityIndicator.startAnimating()
-        pumpManager.refreshStatus { (_) in
+        pumpManager.refreshStatus(emitConfirmationBeep: emitConfirmationBeep) { (_) in
             DispatchQueue.main.async {
                 self.refreshButton.alpha = 1
                 self.activityIndicator.stopAnimating()

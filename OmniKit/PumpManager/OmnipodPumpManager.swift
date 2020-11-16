@@ -950,12 +950,6 @@ extension OmnipodPumpManager {
             completion(.failure(PodCommsError.noPodPaired))
             return
         }
-        guard state.podState?.isFaulted == true || state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished != false else
-        {
-            self.log.info("Skipping Read Pod Status due to bolus still in progress.")
-            completion(.failure(PodCommsError.unfinalizedBolus))
-            return
-        }
 
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         podComms.runSession(withName: "Read pod status", using: rileyLinkSelector) { (result) in

@@ -167,15 +167,19 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        if unfinalizedBolus == nil && response.deliveryStatus.bolusing && response.podProgressStatus.readyForDelivery {
+            // Create the unfinalizedBolus since we currently bolusing in a ready state (possible Loop restart)
+            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain)
+        }
         let now = updatePodTimes(timeActive: response.timeActive)
-        updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.alerts
     }
 
     public mutating func updateFromDetailedStatusResponse(_ response: DetailedStatus) {
         let now = updatePodTimes(timeActive: response.timeActive)
-        updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.unacknowledgedAlerts
     }
@@ -196,14 +200,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
     }
     
-    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus, podProgressStatus: PodProgressStatus, bolusNotDelivered: Double) {
+    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus) {
         finalizeFinishedDoses()
 
-        // Add the unfinalizedBolus here if there isn't one and are currently bolusing in a ready state.
-        if unfinalizedBolus == nil && deliveryStatus.bolusing && podProgressStatus.readyForDelivery {
-            // Possible Loop restart right after a bolus was started but before the unfinalizedBolus was created.
-            unfinalizedBolus = UnfinalizedDose(bolusAmount: bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain)
-        } else if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {
+        if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {
             if deliveryStatus.bolusing {
                 // Bolus did schedule
                 unfinalizedBolus?.scheduledCertainty = .certain

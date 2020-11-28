@@ -13,6 +13,9 @@ let package = Package(
         .library(name: "RileyLinkKit",targets: ["RileyLinkKit"]),
         .library(name: "RileyLinkKitUI",targets: ["RileyLinkKitUI"]),
         .library(name: "MinimedKit",targets: ["MinimedKit"]),
+        .library(name: "MinimedKitPlugin",targets: ["MinimedKitPlugin"]),
+        .library(name: "OmniKitPlugin",targets: ["OmniKitPlugin"]),
+        .library(name: "NightscoutUploadKit",targets: ["NightscoutUploadKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/LoopKit/CGMBLEKit.git", .branch("package-experiment")),

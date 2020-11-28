@@ -2,5 +2,5 @@ language: swift
 osx_image: xcode12.2
 
 script:
-	- xcodebuild build -sdk iphonesimulator -scheme RileyLinkIOS-Package test -destination 'platform=iOS Simulator,name=iPhone 11' | xcpretty
+  - xcodebuild build -sdk iphonesimulator -scheme RileyLinkIOS-Package test -destination 'platform=iOS Simulator,name=iPhone 11' | xcpretty
 

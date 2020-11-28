@@ -30,3 +30,5 @@ DerivedData
 
 Carthage/
 .gitmodules
+.swiftpm
+/Packages

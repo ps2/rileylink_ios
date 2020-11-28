@@ -9,7 +9,7 @@
 import RileyLinkKit
 import RileyLinkBLEKit
 import LoopKit
-
+import Foundation
 
 public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     public typealias RawValue = PumpManager.RawStateValue

@@ -5,8 +5,8 @@
 //  Copyright © 2017 Pete Schwamb. All rights reserved.
 //
 
+import Foundation
 import RileyLinkBLEKit
-
 
 extension RileyLinkDevice.Status {
     public var firmwareDescription: String {

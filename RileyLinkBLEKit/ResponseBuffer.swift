@@ -4,7 +4,7 @@
 //
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
-
+import Foundation
 
 /// Represents a data buffer containing one or more responses
 struct ResponseBuffer<R: Response> {

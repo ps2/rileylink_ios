@@ -4,6 +4,7 @@
 //
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
+import Foundation
 
 
 public enum RileyLinkDeviceError: Error {

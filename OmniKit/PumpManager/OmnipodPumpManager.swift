@@ -310,7 +310,7 @@ extension OmnipodPumpManager {
                 model: "Eros",
                 hardwareVersion: nil,
                 firmwareVersion: podState.piVersion,
-                softwareVersion: String(OmniKitVersionNumber),
+                softwareVersion: nil,
                 localIdentifier: String(format:"%04X", podState.address),
                 udiDeviceIdentifier: nil
             )
@@ -321,7 +321,7 @@ extension OmnipodPumpManager {
                 model: "Eros",
                 hardwareVersion: nil,
                 firmwareVersion: nil,
-                softwareVersion: String(OmniKitVersionNumber),
+                softwareVersion: nil,
                 localIdentifier: nil,
                 udiDeviceIdentifier: nil
             )

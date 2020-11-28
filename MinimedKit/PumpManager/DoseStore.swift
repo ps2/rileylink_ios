@@ -6,8 +6,8 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
+import Foundation
 import LoopKit
-
 
 // Bridges support for MinimedKit data types
 extension Collection where Element == TimestampedHistoryEvent {

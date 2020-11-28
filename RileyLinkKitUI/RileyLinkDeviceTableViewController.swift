@@ -225,12 +225,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    private enum Section: Int, CaseCountable {
+    private enum Section: Int, CaseIterable {
         case device
         case commands
     }
 
-    private enum DeviceRow: Int, CaseCountable {
+    private enum DeviceRow: Int, CaseIterable {
         case customName
         case version
         case rssi
@@ -244,13 +244,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .device:
-            return DeviceRow.count
+            return DeviceRow.allCases.count
         case .commands:
             return 0
         }

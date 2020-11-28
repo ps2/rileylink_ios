@@ -4,6 +4,7 @@
 //
 //  Copyright © 2018 Pete Schwamb. All rights reserved.
 //
+import Foundation
 
 enum ResponseCode: UInt8 {
     case rxTimeout          = 0xaa

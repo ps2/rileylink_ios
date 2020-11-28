@@ -25,7 +25,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             model: state.pumpModel.rawValue,
             hardwareVersion: nil,
             firmwareVersion: state.pumpFirmwareVersion,
-            softwareVersion: String(MinimedKitVersionNumber),
+            softwareVersion: nil,
             localIdentifier: state.pumpID,
             udiDeviceIdentifier: nil
         )

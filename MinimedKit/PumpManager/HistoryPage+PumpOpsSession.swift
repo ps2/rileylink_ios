@@ -4,7 +4,7 @@
 //
 //  Copyright © 2017 Pete Schwamb. All rights reserved.
 //
-
+import Foundation
 
 extension HistoryPage {
     /// Returns TimestampedHistoryEvents from this page occuring after a given date

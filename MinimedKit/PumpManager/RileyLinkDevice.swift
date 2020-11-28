@@ -17,7 +17,7 @@ extension RileyLinkDevice.Status {
             model: pumpModel.rawValue,
             hardwareVersion: nil,
             firmwareVersion: radioFirmwareVersion?.description,
-            softwareVersion: String(MinimedKitVersionNumber),
+            softwareVersion: nil,
             localIdentifier: pumpID,
             udiDeviceIdentifier: nil
         )

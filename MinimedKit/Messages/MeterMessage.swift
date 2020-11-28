@@ -5,7 +5,7 @@
 //  Created by Pete Schwamb on 3/10/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
-
+import Foundation
 
 public struct MeterMessage: MessageBody, DictionaryRepresentable {
     

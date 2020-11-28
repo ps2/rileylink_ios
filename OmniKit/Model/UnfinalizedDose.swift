@@ -81,6 +81,11 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     public var isFinished: Bool {
         return progress >= 1
     }
+
+    public var isBolusPositivelyFinished: Bool {
+        // The pod faults if the time to deliver any pulse takes longer than 20% of nominal
+        return progress >= 1.2  // 20% longer to be positive that a bolus has completed (or the pod will have faulted)
+    }
     
     // Units per hour
     public var rate: Double {

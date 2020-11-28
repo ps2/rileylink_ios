@@ -146,7 +146,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         self.navigationItem.setRightBarButton(button, animated: false)
         
         if self.podState != nil {
-            refreshPodStatus()
+            refreshPodStatus(emitConfirmationBeep: false)
         } else {
             refreshButton.isHidden = true
         }
@@ -157,13 +157,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     @objc func refreshTapped(_ sender: Any) {
-        refreshPodStatus()
+        refreshPodStatus(emitConfirmationBeep: true)
     }
     
-    private func refreshPodStatus() {
+    private func refreshPodStatus(emitConfirmationBeep: Bool) {
         refreshButton.alpha = 0
         activityIndicator.startAnimating()
-        pumpManager.refreshStatus { (_) in
+        pumpManager.refreshStatus(emitConfirmationBeep: emitConfirmationBeep) { (_) in
             DispatchQueue.main.async {
                 self.refreshButton.alpha = 1
                 self.activityIndicator.stopAnimating()
@@ -249,7 +249,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case playTestBeeps
         case readPulseLog
         case testCommand
-        case enableDisableConfirmationBeeps
     }
     
     private var configurationRows: [ConfigurationRow] {
@@ -262,6 +261,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum ConfigurationRow: Int, CaseIterable {
         case suspendResume = 0
+        case enableDisableConfirmationBeeps
         case reminder
         case timeZoneOffset
         case replacePod
@@ -380,14 +380,14 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 cell.textLabel?.text = LocalizedString("Test Command", comment: "The title of the command to run the test command")
                 cell.accessoryType = .disclosureIndicator
                 return cell
-            case .enableDisableConfirmationBeeps:
-                return confirmationBeepsTableViewCell
             }
         case .configuration:
 
             switch configurationRows[indexPath.row] {
             case .suspendResume:
                 return suspendResumeTableViewCell
+            case .enableDisableConfirmationBeeps:
+                return confirmationBeepsTableViewCell
             case .reminder:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ExpirationReminderDateTableViewCell.className, for: indexPath) as! ExpirationReminderDateTableViewCell
                 if let podState = podState, let reminderDate = pumpManager.expirationReminderDate {
@@ -559,9 +559,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = CommandResponseViewController.testingCommands(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
-            case .enableDisableConfirmationBeeps:
-                confirmationBeepsTapped()
-                tableView.deselectRow(at: indexPath, animated: true)
             }
         case .status:
             switch StatusRow(rawValue: indexPath.row)! {
@@ -590,6 +587,9 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch configurationRows[indexPath.row] {
             case .suspendResume:
                 suspendResumeTapped()
+                tableView.deselectRow(at: indexPath, animated: true)
+            case .enableDisableConfirmationBeeps:
+                confirmationBeepsTapped()
                 tableView.deselectRow(at: indexPath, animated: true)
             case .reminder:
                 tableView.deselectRow(at: indexPath, animated: true)
@@ -640,14 +640,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             break
         case .diagnostics:
             switch Diagnostics(rawValue: indexPath.row)! {
-            case .enableDisableConfirmationBeeps:
-                break
             case .readPodStatus, .playTestBeeps, .readPulseLog, .testCommand:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .configuration:
             switch configurationRows[indexPath.row] {
-            case .reminder, .suspendResume:
+            case .suspendResume, .enableDisableConfirmationBeeps, .reminder:
                 break
             case .timeZoneOffset, .replacePod:
                 tableView.reloadRows(at: [indexPath], with: .fade)

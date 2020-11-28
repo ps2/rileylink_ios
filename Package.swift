@@ -27,16 +27,11 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "RileyLinkBLEKit",
-            dependencies: [ "LoopKit" ],
-            path: "RileyLinkBLEKit",
-            exclude: ["Info.plist"],
-            sources: ["RileyLinkBLEKit", "Common"]
+            dependencies: [ "LoopKit" ]
         ),
         .target(
             name: "RileyLinkKit",
-            dependencies: [ "RileyLinkBLEKit", "LoopKit"],
-            path: "RileyLinkKit",
-            exclude: ["Info.plist"]
+            dependencies: [ "RileyLinkBLEKit", "LoopKit"]
         ),
         .target(
             name: "RileyLinkKitUI",
@@ -45,34 +40,58 @@ let package = Package(
                 "LoopKit",
                 .product(name: "LoopKitUI", package: "LoopKit")
             ],
-            path: "RileyLinkKitUI",
             exclude: ["Info.plist"]
         ),
         .target(
             name: "MinimedKit",
             dependencies: [ "RileyLinkKit", "RileyLinkBLEKit", "LoopKit" ],
-            path: "MinimedKit",
+            exclude: ["Info.plist"]
+        ),
+        .target(
+            name: "MinimedKitUI",
+            dependencies: [ "MinimedKit" ],
+            exclude: ["Info.plist"]
+        ),
+        .target(
+            name: "MinimedKitPlugin",
+            dependencies: [ "MinimedKitUI" ],
             exclude: ["Info.plist"]
         ),
         .target(
             name: "OmniKit",
             dependencies: [ "RileyLinkKit", "RileyLinkBLEKit", "LoopKit" ],
-            path: "OmniKit",
             exclude: ["Info.plist"]
         ),
         .target(
             name: "OmniKitUI",
             dependencies: [ "OmniKit", "MKRingProgressView" ],
-            path: "OmniKitUI",
-            exclude: ["Info.plist"],
-            sources: ["OmniKitUI", "Common"]
+            exclude: ["Info.plist"]
+        ),
+        .target(
+            name: "OmniKitPlugin",
+            dependencies: [ "OmniKitUI" ],
+            exclude: ["Info.plist"]
+        ),
+        .target(
+            name: "NightscoutUploadKit",
+            dependencies: [ "LoopKit" ],
+            exclude: ["Info.plist"]
+        ),
+        .testTarget(
+            name: "MinimedKitTests",
+            dependencies: ["MinimedKit"]
+        ),
+        .testTarget(
+            name: "NightscoutUploadKitTests",
+            dependencies: ["NightscoutUploadKit"]
+        ),
+        .testTarget(
+            name: "OmniKitTests",
+            dependencies: ["OmniKit"]
         ),
         .testTarget(
             name: "RileyLinkBLEKitTests",
-            dependencies: ["RileyLinkBLEKit"],
-            path: "RileyLinkBLEKitTests",
-            exclude: ["Info.plist"],
-            sources: ["RileyLinkBLEKitTests", "Common"]
-        ),
+            dependencies: ["RileyLinkBLEKit"]
+        )
     ]
 )

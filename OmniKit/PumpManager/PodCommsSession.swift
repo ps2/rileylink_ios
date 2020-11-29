@@ -186,6 +186,7 @@ public class PodCommsSession {
     ///
     /// - Parameters:
     ///   - messageBlocks: The message blocks to send
+    ///   - confirmationBeepType: If specified, type of confirmation beep to append as a separate beep message block
     ///   - expectFollowOnMessage: If true, the pod will expect another message within 4 minutes, or will alarm with an 0x33 (51) fault.
     /// - Returns: The received message response
     /// - Throws:
@@ -196,12 +197,17 @@ public class PodCommsSession {
     ///     - PodCommsError.nonceResyncFailed
     ///     - MessageError
     ///     - RileyLinkDeviceError
-    func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], expectFollowOnMessage: Bool = false) throws -> T {
+    func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], confirmationBeepType: BeepConfigType? = nil, expectFollowOnMessage: Bool = false) throws -> T {
         
         var triesRemaining = 2  // Retries only happen for nonce resync
-        
         var blocksToSend = messageBlocks
         
+        // If a confirmation beep type was specified, append a beep config message block to emit the requested beep type
+        if let confirmationBeepType = confirmationBeepType {
+            let confirmationBeepBlock = BeepConfigCommand(beepConfigType: confirmationBeepType, basalCompletionBeep: true, tempBasalCompletionBeep: false, bolusCompletionBeep: true)
+            blocksToSend += [confirmationBeepBlock]
+        }
+
         if blocksToSend.contains(where: { $0 as? NonceResyncableMessageBlock != nil }) {
             podState.advanceToNextNonce()
         }
@@ -536,28 +542,18 @@ public class PodCommsSession {
         return canceledDose
     }
     
-    // cancelDelivery() implements a smart interface to the Pod's cancel delivery command
-    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType) -> CancelDeliveryResult {
-        var message: [MessageBlock]
+    // Cancel beeping can be done implemented using beepType (for a single delivery type) or a separate confirmation beep message block (for cancel all).
+    // N.B., Using the built-in cancel delivery command beepType method when cancelling all insulin delivery will emit 3 different sets of cancel beeps!!!
+    public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType = .noBeep, confirmationBeepType: BeepConfigType? = nil) -> CancelDeliveryResult {
 
-        // Special case handling for a non-silent cancel all which would normally emit 3 sets of beeps!
-        if beepType != .noBeep && deliveryType == .all {
-            // For this case use two cancel commands in a one message with the 1st command silently cancelling all but the basal
-            // and the 2nd command cancelling only the basal with the specified beepType so there will only be a single beep sequence.
-            message = [CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .allButBasal, beepType: .noBeep),
-                       CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .basal, beepType: beepType)]
-        } else {
-            message = [CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)]
-        }
         do {
-            let status: StatusResponse = try send(message)
+            let cancelDeliveryCommand = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
+            let status: StatusResponse = try send([cancelDeliveryCommand], confirmationBeepType: confirmationBeepType)
 
             let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.bolusNotDelivered)
-
             podState.updateFromStatusResponse(status)
 
             return CancelDeliveryResult.success(statusResponse: status, canceledDose: canceledDose)
-
         } catch PodCommsError.nonceResyncFailed {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.nonceResyncFailed)
         } catch PodCommsError.rejectedMessage(let errorCode) {
@@ -568,12 +564,12 @@ public class PodCommsSession {
         }
     }
 
-    public func testingCommands() throws {
-        try cancelNone() // reads status & verifies nonce by doing a cancel none
+    public func testingCommands(confirmationBeepType: BeepConfigType? = nil) throws {
+        try cancelNone(confirmationBeepType: confirmationBeepType) // reads status & verifies nonce by doing a cancel none
     }
     
-    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool, completionBeep: Bool) throws -> StatusResponse {
-        let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
+    public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool = false, completionBeep: Bool = false) throws -> StatusResponse {
+        let result = cancelDelivery(deliveryType: .all)
         switch result {
         case .certainFailure(let error):
             throw error
@@ -620,10 +616,10 @@ public class PodCommsSession {
     // use cancelDelivery with .none to get status as well as to validate & advance the nonce
     // Throws PodCommsError
     @discardableResult
-    public func cancelNone() throws -> StatusResponse {
+    public func cancelNone(confirmationBeepType: BeepConfigType? = nil) throws -> StatusResponse {
         var statusResponse: StatusResponse
 
-        let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, beepType: .noBeep)
+        let cancelResult: CancelDeliveryResult = cancelDelivery(deliveryType: .none, confirmationBeepType: confirmationBeepType)
         switch cancelResult {
         case .certainFailure(let error):
             throw error
@@ -638,18 +634,18 @@ public class PodCommsSession {
 
     // Throws PodCommsError
     @discardableResult
-    public func getStatus() throws -> StatusResponse {
+    public func getStatus(confirmationBeepType: BeepConfigType? = nil) throws -> StatusResponse {
         if useCancelNoneForStatus {
-            return try cancelNone() // functional replacement for getStatus()
+            return try cancelNone(confirmationBeepType: confirmationBeepType) // functional replacement for getStatus()
         }
-        let statusResponse: StatusResponse = try send([GetStatusCommand()])
+        let statusResponse: StatusResponse = try send([GetStatusCommand()], confirmationBeepType: confirmationBeepType)
         podState.updateFromStatusResponse(statusResponse)
         return statusResponse
     }
     
     @discardableResult
-    public func getDetailedStatus() throws -> DetailedStatus {
-        let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)])
+    public func getDetailedStatus(confirmationBeepType: BeepConfigType? = nil) throws -> DetailedStatus {
+        let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)], confirmationBeepType: confirmationBeepType)
         
         guard let detailedStatus = infoResponse.podInfo as? DetailedStatus else {
             throw PodCommsError.unexpectedResponse(response: .podInfoResponse)
@@ -668,17 +664,18 @@ public class PodCommsSession {
     }
 
     @discardableResult
-    public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType) throws -> PodInfoResponse {
-        let podInfoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: podInfoResponseSubType)])
+    public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType, confirmationBeepType: BeepConfigType? = nil) throws -> PodInfoResponse {
+        let podInfoCommand = GetStatusCommand(podInfoType: podInfoResponseSubType)
+        let podInfoResponse: PodInfoResponse = try send([podInfoCommand], confirmationBeepType: confirmationBeepType)
         return podInfoResponse
     }
 
     public func deactivatePod() throws {
 
         // Don't try to cancel if the pod hasn't completed its setup as it will either receive no response
-        // (pod progress state <= 2) or a create a $31 pod fault (pod progress states 3 through 7).
+        // (pod progress state <= 2) or creates a $31 pod fault (pod progress states 3 through 7).
         if podState.setupProgress == .completed && podState.fault == nil && !podState.isSuspended {
-            let result = cancelDelivery(deliveryType: .all, beepType: .noBeep)
+            let result = cancelDelivery(deliveryType: .all)
             switch result {
             case .certainFailure(let error):
                 throw error
@@ -714,9 +711,9 @@ public class PodCommsSession {
         }
     }
     
-    public func acknowledgeAlerts(alerts: AlertSet) throws -> [AlertSlot: PodAlert] {
+    public func acknowledgeAlerts(alerts: AlertSet, confirmationBeepType: BeepConfigType? = nil) throws -> [AlertSlot: PodAlert] {
         let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alerts: alerts)
-        let status: StatusResponse = try send([cmd])
+        let status: StatusResponse = try send([cmd], confirmationBeepType: confirmationBeepType)
         podState.updateFromStatusResponse(status)
         return podState.activeAlerts
     }

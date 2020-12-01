@@ -202,8 +202,8 @@ public class PodCommsSession {
         var triesRemaining = 2  // Retries only happen for nonce resync
         var blocksToSend = messageBlocks
         
-        // If a confirmation beep type was specified, append a beep config message block to emit the requested beep type
-        if let confirmationBeepType = confirmationBeepType {
+        // If a confirmation beep type was specified & pod isn't faulted, append a beep config message block to emit the requested beep type
+        if let confirmationBeepType = confirmationBeepType, podState.isFaulted == false {
             let confirmationBeepBlock = BeepConfigCommand(beepConfigType: confirmationBeepType, basalCompletionBeep: true, tempBasalCompletionBeep: false, bolusCompletionBeep: true)
             blocksToSend += [confirmationBeepBlock]
         }

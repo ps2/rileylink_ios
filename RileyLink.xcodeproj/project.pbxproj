@@ -263,6 +263,9 @@
 		C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C110A0E6221BBAEF0016560B /* GetPumpFirmwareVersionMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB4272216E5DFD00FAB378 /* GetPumpFirmwareVersionMessageBody.swift */; };
 		C11166AE2180D834000EEAAB /* AlertSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* AlertSlot.swift */; };
+		C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */; };
+		C11AA528258728CF00BDE12F /* ReservoirHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */; };
+		C11AA5392587294E00BDE12F /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
@@ -1218,6 +1221,8 @@
 		C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C10D9BD31C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C11166AD2180D834000EEAAB /* AlertSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSlot.swift; sourceTree = "<group>"; };
+		C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirHUDView.swift; sourceTree = "<group>"; };
+		C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReservoirHUDView.xib; sourceTree = "<group>"; };
 		C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaultConfigCommand.swift; sourceTree = "<group>"; };
 		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -1798,6 +1803,7 @@
 		4352A72620DEC9B700CAC200 /* MinimedKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C11AA524258728BD00BDE12F /* Views */,
 				C1FFAF4B212944F600C50C1D /* Localizable.strings */,
 				4352A72720DEC9B700CAC200 /* MinimedKitUI.h */,
 				4352A72820DEC9B700CAC200 /* Info.plist */,
@@ -2051,6 +2057,15 @@
 				C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */,
 			);
 			path = MinimedKitTests;
+			sourceTree = "<group>";
+		};
+		C11AA524258728BD00BDE12F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */,
+				C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C121985D1C8DE72500BC374C /* Messages */ = {
@@ -3231,6 +3246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C11AA528258728CF00BDE12F /* ReservoirHUDView.xib in Resources */,
 				43709ADE20DF1D5400F941B3 /* MinimedPumpManager.storyboard in Resources */,
 				C1FFAF4D212944F600C50C1D /* Localizable.strings in Resources */,
 				43709AC920DF1C9A00F941B3 /* MinimedKitUI.xcassets in Resources */,
@@ -3546,11 +3562,13 @@
 				7D2366F7212527DA0028B67D /* LocalizedString.swift in Sources */,
 				C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
+				C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */,
 				C16E611F22065B8E0069F357 /* TimeZone.swift in Sources */,
 				C16E61262208EC580069F357 /* MinimedHUDProvider.swift in Sources */,
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,
 				43709AC420DF1C8B00F941B3 /* PumpModel.swift in Sources */,
+				C11AA5392587294E00BDE12F /* NibLoadable.swift in Sources */,
 				43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */,
 				43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */,
 				C145BF9F2219F37200A977CB /* Comparable.swift in Sources */,

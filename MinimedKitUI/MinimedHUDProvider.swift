@@ -52,7 +52,7 @@ class MinimedHUDProvider: HUDProvider {
         }
     }
 
-    private weak var reservoirView: ReservoirVolumeHUDView?
+    private weak var reservoirView: ReservoirHUDView?
 
     private func updateReservoirView() {
         if let lastReservoirVolume = state.lastReservoirReading,
@@ -66,7 +66,7 @@ class MinimedHUDProvider: HUDProvider {
 
     public func createHUDView() -> LevelHUDView? {
 
-        reservoirView = ReservoirVolumeHUDView.instantiate()
+        reservoirView = ReservoirHUDView.instantiate()
 
         if visible {
             updateReservoirView()
@@ -96,16 +96,16 @@ class MinimedHUDProvider: HUDProvider {
             return nil
         }
 
-        let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
+        let reservoirHUDView = ReservoirHUDView.instantiate()
         if let rawLastReservoirReading = rawValue["lastReservoirReading"] as? ReservoirReading.RawValue,
             let lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
         {
             let reservoirLevel = (lastReservoirReading.units / pumpReservoirCapacity).clamped(to: 0...1.0)
-            reservoirVolumeHUDView.level = reservoirLevel
-            reservoirVolumeHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
+            reservoirHUDView.level = reservoirLevel
+            reservoirHUDView.setReservoirVolume(volume: lastReservoirReading.units, at: lastReservoirReading.validAt)
         }
         
-        return reservoirVolumeHUDView
+        return reservoirHUDView
     }
 }
 

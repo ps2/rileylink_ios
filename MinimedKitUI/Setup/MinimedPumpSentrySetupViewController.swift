@@ -43,7 +43,12 @@ class MinimedPumpSentrySetupViewController: SetupTableViewController {
         case .listening:
             break
         case .completed:
-            super.continueButtonPressed(sender)
+            if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
+                let pumpManager = pumpManager
+            {
+                super.continueButtonPressed(sender)
+                setupViewController.pumpManagerSetupComplete(pumpManager)
+            }
         }
     }
 

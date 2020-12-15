@@ -14,7 +14,7 @@ import OmniKit
 
 internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     var managerIdentifier: String {
-        return OmnipodPumpManager.managerIdentifier
+        return pumpManager.managerIdentifier
     }
     
     private var podState: PodState? {

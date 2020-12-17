@@ -14,7 +14,7 @@ import MinimedKit
 
 extension MinimedPumpManager: PumpManagerUI {
 
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)? {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 

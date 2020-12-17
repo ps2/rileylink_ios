@@ -15,7 +15,7 @@ import OmniKit
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)? {
         return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()        
     }
     

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Efz-Zc-c6G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Efz-Zc-c6G">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,9 +33,9 @@
         <!--Pump Setup-->
         <scene sceneID="DE5-PF-CAr">
             <objects>
-                <tableViewController title="Pump Setup" id="OZk-Db-KCs" customClass="MinimedPumpIDSetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="OZk-Db-KCs" customClass="MinimedPumpIDSetupViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="UjF-rv-Jio">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -204,7 +204,7 @@
         <!--Minimed Pump Manager Setup View Controller-->
         <scene sceneID="jXi-dE-5vJ">
             <objects>
-                <navigationController id="Efz-Zc-c6G" customClass="MinimedPumpManagerSetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="Efz-Zc-c6G" customClass="MinimedPumpManagerSetupViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="ipz-OL-c5W">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -220,7 +220,7 @@
         <!--Pump Broadcasts-->
         <scene sceneID="gBk-mx-lKc">
             <objects>
-                <tableViewController title="Pump Broadcasts" id="oBL-lh-SHI" customClass="MinimedPumpSentrySetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Broadcasts" id="oBL-lh-SHI" customClass="MinimedPumpSentrySetupViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="fgk-FG-Rvy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -397,7 +397,7 @@
         <!--Pump Clock-->
         <scene sceneID="msH-5j-B9a">
             <objects>
-                <tableViewController title="Pump Clock" id="Fps-h3-V4K" customClass="MinimedPumpClockSetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Clock" id="Fps-h3-V4K" customClass="MinimedPumpClockSetupViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="wTe-Tm-may">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -479,7 +479,7 @@
         <!--Setup Complete-->
         <scene sceneID="6DU-aU-yea">
             <objects>
-                <tableViewController title="Setup Complete" id="Nwf-TJ-KmJ" customClass="MinimedPumpSetupCompleteViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Setup Complete" id="Nwf-TJ-KmJ" customClass="MinimedPumpSetupCompleteViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="9iS-5C-fWH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -546,7 +546,7 @@
         <!--Minimed Pump Manager Setup View Controller-->
         <scene sceneID="axV-KT-VMd">
             <objects>
-                <navigationController storyboardIdentifier="DevelopmentPumpSetup" id="fUU-S6-XKY" customClass="MinimedPumpManagerSetupViewController" customModule="MinimedKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="DevelopmentPumpSetup" id="fUU-S6-XKY" customClass="MinimedPumpManagerSetupViewController" customModule="MinimedKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="grC-ov-Qu6">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -570,7 +570,7 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="e53-KL-ULn"/>
-        <segue reference="4L6-8d-6pa"/>
+        <segue reference="J82-Zy-jta"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="5xx Outline" width="204" height="126"/>

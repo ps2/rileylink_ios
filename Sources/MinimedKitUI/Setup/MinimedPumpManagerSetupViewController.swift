@@ -17,7 +17,7 @@ import RileyLinkKitUI
 public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewController {
 
     class func instantiateFromStoryboard() -> MinimedPumpManagerSetupViewController {
-        return UIStoryboard(name: "MinimedPumpManager", bundle: Bundle(for: MinimedPumpManagerSetupViewController.self)).instantiateInitialViewController() as! MinimedPumpManagerSetupViewController
+        return UIStoryboard(name: "MinimedPumpManager", bundle: Bundle.module).instantiateInitialViewController() as! MinimedPumpManagerSetupViewController
     }
 
     override public func viewDidLoad() {

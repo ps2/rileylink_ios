@@ -156,9 +156,8 @@ class PumpMenuItemTableViewCell: UITableViewCell {
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.firstLineHeadIndent = 15
 
-        let bundle = Bundle(for: type(of: self))
-        let textColor = UIColor(named: "Pump Screen Text", in: bundle, compatibleWith: traitCollection)!
-        let backgroundColor = UIColor(named: "Pump Screen Background", in: bundle, compatibleWith: traitCollection)!
+        let textColor = UIColor(named: "Pump Screen Text", in: Bundle.module, compatibleWith: traitCollection)!
+        let backgroundColor = UIColor(named: "Pump Screen Background", in: Bundle.module, compatibleWith: traitCollection)!
 
         textLabel?.backgroundColor = backgroundColor
         textLabel?.attributedText = NSAttributedString(

@@ -97,7 +97,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         tableView.register(AlarmsTableViewCell.self, forCellReuseIdentifier: AlarmsTableViewCell.className)
         tableView.register(ExpirationReminderDateTableViewCell.nib(), forCellReuseIdentifier: ExpirationReminderDateTableViewCell.className)
         
-        let podImage = UIImage(named: "PodLarge", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+        let podImage = UIImage(named: "PodLarge", in: Bundle.module, compatibleWith: nil)!
         let imageView = UIImageView(image: podImage)
         imageView.contentMode = .center
         imageView.frame.size.height += 18  // feels right

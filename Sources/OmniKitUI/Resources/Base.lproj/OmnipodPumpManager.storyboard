@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XLM-uO-pGZ">
     <device id="retina5_9" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <!--Omnipod Pump Manager Setup View Controller-->
         <scene sceneID="Bm8-mb-E1r">
             <objects>
-                <navigationController id="XLM-uO-pGZ" customClass="OmnipodPumpManagerSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="XLM-uO-pGZ" customClass="OmnipodPumpManagerSetupViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" largeTitles="YES" id="hv4-rC-Neh">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -27,7 +27,7 @@
         <!--Development Nav-->
         <scene sceneID="SnN-kJ-ZRu">
             <objects>
-                <navigationController storyboardIdentifier="DevelopmentPumpSetup" id="EeD-Yo-EZn" userLabel="Development Nav" customClass="OmnipodPumpManagerSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="DevelopmentPumpSetup" id="EeD-Yo-EZn" userLabel="Development Nav" customClass="OmnipodPumpManagerSetupViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="QCx-Ao-paS">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -65,9 +65,9 @@
         <!--Pair Pod-->
         <scene sceneID="okF-JR-4y4">
             <objects>
-                <tableViewController title="Pump Setup" id="91O-Un-vKc" userLabel="Pair Pod" customClass="PairPodSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="91O-Un-vKc" userLabel="Pair Pod" customClass="PairPodSetupViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="1wC-au-0ju">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -185,9 +185,9 @@
         <!--Insert Cannula-->
         <scene sceneID="xNW-i2-fPX">
             <objects>
-                <tableViewController title="Pump Setup" id="k1Y-x4-m0a" userLabel="Insert Cannula" customClass="InsertCannulaSetupViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="k1Y-x4-m0a" userLabel="Insert Cannula" customClass="InsertCannulaSetupViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="YEa-Yl-3uG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -303,9 +303,9 @@
         <!--Setup Complete-->
         <scene sceneID="hkh-fg-zc5">
             <objects>
-                <tableViewController title="Pump Setup" id="aNg-mm-Uuy" userLabel="Setup Complete" customClass="PodSetupCompleteViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="aNg-mm-Uuy" userLabel="Setup Complete" customClass="PodSetupCompleteViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="Mtx-27-ViY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -453,7 +453,7 @@
         <!--New Pod Flow-->
         <scene sceneID="TQ9-7N-bzE">
             <objects>
-                <navigationController storyboardIdentifier="NewPodFlow" id="WXk-8g-hpZ" userLabel="New Pod Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewPodFlow" id="WXk-8g-hpZ" userLabel="New Pod Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0HF-vr-EoV">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -469,7 +469,7 @@
         <!--Pod Replacement Flow-->
         <scene sceneID="7FS-NJ-Y6T">
             <objects>
-                <navigationController storyboardIdentifier="PodReplacementFlow" id="FeF-id-k7K" userLabel="Pod Replacement Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PodReplacementFlow" id="FeF-id-k7K" userLabel="Pod Replacement Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7oS-eK-uDH">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -485,7 +485,7 @@
         <!--Insert Cannula Flow-->
         <scene sceneID="m8o-hd-O7z">
             <objects>
-                <navigationController storyboardIdentifier="InsertCannulaFlow" id="3i0-qf-uVi" userLabel="Insert Cannula Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="InsertCannulaFlow" id="3i0-qf-uVi" userLabel="Insert Cannula Flow" customClass="PodReplacementNavigationController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wXV-5C-dcE">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -501,9 +501,9 @@
         <!--Replace Pod-->
         <scene sceneID="vTH-FF-uZG">
             <objects>
-                <tableViewController title="Pump Setup" id="ack-ra-XH6" userLabel="Replace Pod" customClass="ReplacePodViewController" customModule="OmniKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Pump Setup" id="ack-ra-XH6" userLabel="Replace Pod" customClass="ReplacePodViewController" customModule="OmniKitUI" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" id="D1s-eE-9wz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="672"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -629,9 +629,9 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="IS8-xY-rnN"/>
-        <segue reference="3Py-Xn-kuv"/>
-        <segue reference="UgK-me-FDG"/>
+        <segue reference="Hes-fA-jj2"/>
+        <segue reference="Q4k-oc-csy"/>
+        <segue reference="Hnx-w3-aQg"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="PodBottom" width="131.66667175292969" height="110"/>

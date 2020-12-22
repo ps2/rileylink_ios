@@ -21,7 +21,7 @@ import RileyLinkKitUI
 public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewController {
 
     class func instantiateFromStoryboard() -> OmnipodPumpManagerSetupViewController {
-        return UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: OmnipodPumpManagerSetupViewController.self)).instantiateInitialViewController() as! OmnipodPumpManagerSetupViewController
+        return UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle.module).instantiateInitialViewController() as! OmnipodPumpManagerSetupViewController
     }
 
     override public func viewDidLoad() {

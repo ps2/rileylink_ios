@@ -35,7 +35,7 @@ extension OmnipodPumpManager: PumpManagerUI {
     
 
     public var smallImage: UIImage? {
-        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+        return UIImage(named: "Pod", in: Bundle.module, compatibleWith: nil)!
     }
     
     public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {

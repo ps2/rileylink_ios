@@ -187,9 +187,9 @@ class MainViewController: RileyLinkSettingsViewController {
                 var setupViewController: PumpManagerSetupViewController & UIViewController & CompletionNotifying
                 switch PumpActionRow(rawValue: indexPath.row)! {
                 case .addMinimedPump:
-                    setupViewController = UIStoryboard(name: "MinimedPumpManager", bundle: Bundle(for: MinimedPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! MinimedPumpManagerSetupViewController
+                    setupViewController = UIStoryboard(name: "MinimedPumpManager", bundle: Bundle.module).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! MinimedPumpManagerSetupViewController
                 case .setupOmnipod:
-                    setupViewController = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle(for: OmnipodPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! OmnipodPumpManagerSetupViewController
+                    setupViewController = UIStoryboard(name: "OmnipodPumpManager", bundle: Bundle.module).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! OmnipodPumpManagerSetupViewController
                 }
                 if let rileyLinkManagerViewController = setupViewController as? RileyLinkManagerSetupViewController {
                     rileyLinkManagerViewController.rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceDataManager.rileyLinkConnectionManager.deviceProvider)

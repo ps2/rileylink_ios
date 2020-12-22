@@ -49,7 +49,12 @@ let package = Package(
         ),
         .target(
             name: "MinimedKitUI",
-            dependencies: [ "MinimedKit" ],
+            dependencies: [
+                "MinimedKit",
+                "LoopKit",
+                "RileyLinkKitUI",
+                .product(name: "LoopKitUI", package: "LoopKit")
+            ],
             exclude: ["Info.plist"]
         ),
         .target(

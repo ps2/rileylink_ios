@@ -91,9 +91,8 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
             switch InfoRow(rawValue: indexPath.row)! {
             case .image:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SetupImageTableViewCell.className, for: indexPath) as! SetupImageTableViewCell
-                let bundle = Bundle(for: type(of: self))
-                cell.mainImageView?.image = UIImage(named: "RileyLink", in: bundle, compatibleWith: cell.traitCollection)
-                cell.mainImageView?.tintColor = UIColor(named: "RileyLink Tint", in: bundle, compatibleWith: cell.traitCollection)
+                cell.mainImageView?.image = UIImage(named: "RileyLink", in: Bundle.module, compatibleWith: cell.traitCollection)
+                cell.mainImageView?.tintColor = UIColor(named: "RileyLink Tint", in: Bundle.module, compatibleWith: cell.traitCollection)
                 if #available(iOSApplicationExtension 13.0, *) {
                     cell.backgroundColor = .systemBackground
                 }

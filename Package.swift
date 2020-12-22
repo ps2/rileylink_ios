@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "RileyLinkIOS",
     defaultLocalization: "en",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v13), .watchOS(.v4)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "RileyLinkBLEKit",targets: ["RileyLinkBLEKit"]),
@@ -18,9 +18,6 @@ let package = Package(
         .library(name: "NightscoutUploadKit",targets: ["NightscoutUploadKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/LoopKit/CGMBLEKit.git", .branch("package-experiment")),
-        .package(url: "https://github.com/LoopKit/G4ShareSpy.git", .branch("package-experiment")),
-        .package(name: "ShareClient", url: "https://github.com/LoopKit/dexcom-share-client-swift.git", .branch("package-experiment")),
         .package(url: "https://github.com/LoopKit/LoopKit.git", .branch("package-experiment")),
         .package(url: "https://github.com/maxkonovalov/MKRingProgressView.git", .branch("master")),
         .package(url: "https://github.com/jernejstrasner/CCommonCrypto.git", .branch("master"))
@@ -67,7 +64,12 @@ let package = Package(
         ),
         .target(
             name: "OmniKitUI",
-            dependencies: [ "OmniKit", "MKRingProgressView" ],
+            dependencies: [
+                "OmniKit",
+                "MKRingProgressView",
+                "LoopKit",
+                "RileyLinkKitUI", 
+                .product(name: "LoopKitUI", package: "LoopKit") ],
             exclude: ["Info.plist"]
         ),
         .target(

@@ -86,12 +86,14 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             state.timeZone = timeZone
             state.lastValidFrequency = lastValidFrequency
             state.lastTuned = lastTuned
+            state.useMySentry = useMySentry
             return state
         }
         set {
             lastValidFrequency = newValue.lastValidFrequency
             lastTuned = newValue.lastTuned
             timeZone = newValue.timeZone
+            useMySentry = newValue.useMySentry
         }
     }
 

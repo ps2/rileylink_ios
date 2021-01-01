@@ -11,6 +11,7 @@ import Foundation
 public struct BatteryPumpEvent: TimestampedPumpEvent {
     public let length: Int
     public let rawData: Data
+    public let isPresent: Bool
     public let timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
@@ -21,6 +22,8 @@ public struct BatteryPumpEvent: TimestampedPumpEvent {
         }
 
         rawData = availableData.subdata(in: 0..<length)
+
+        isPresent = availableData[1] != 0
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
     }
@@ -28,6 +31,7 @@ public struct BatteryPumpEvent: TimestampedPumpEvent {
     public var dictionaryRepresentation: [String: Any] {
         return [
             "_type": "Battery",
+            "isPresent": isPresent,
         ]
     }
 }

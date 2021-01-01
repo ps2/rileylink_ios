@@ -10,18 +10,18 @@ import Foundation
 
 public class ReadRemainingInsulinMessageBody: CarelinkLongMessageBody {
 
-    public func getUnitsRemainingForStrokes(_ strokesPerUnit: Int) -> Double {
+    public func getUnitsRemaining(insulinBitPackingScale: Int) -> Double {
 
         let strokes: Data
 
-        switch strokesPerUnit {
+        switch insulinBitPackingScale {
         case let x where x > 10:
             strokes = rxData.subdata(in: 3..<5)
         default:
             strokes = rxData.subdata(in: 1..<3)
         }
 
-        return Double(Int(bigEndianBytes: strokes)) / Double(strokesPerUnit)
+        return Double(Int(bigEndianBytes: strokes)) / Double(insulinBitPackingScale)
     }
 
     public required init?(rxData: Data) {

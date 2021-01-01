@@ -25,7 +25,7 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
         rawData = availableData.subdata(in: 0..<length)
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
         
-        let rate = Double(availableData.subdata(in: 8..<10).to(UInt16.self)) / 40.0
+        let rate = Double(availableData[8..<10].to(UInt16.self)) / 40.0
         let offsetMinutes = Double(availableData[7]) * 30
 
         scheduleEntry = BasalScheduleEntry(
@@ -45,6 +45,6 @@ public struct BasalProfileStartPumpEvent: TimestampedPumpEvent {
     }
 
     public var description: String {
-        return String(format: NSLocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"), scheduleEntry.index, scheduleEntry.rate)
+        return String(format: LocalizedString("Basal Profile %1$@: %2$@ U/hour", comment: "The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate)"), scheduleEntry.index, scheduleEntry.rate)
     }
 }

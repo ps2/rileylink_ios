@@ -10,6 +10,7 @@ import Foundation
 
 
 public enum BasalProfile {
+    typealias RawValue = UInt8
 
     case standard
     case profileA
@@ -23,6 +24,17 @@ public enum BasalProfile {
             self = .profileB
         default:
             self = .standard
+        }
+    }
+
+    var rawValue: RawValue {
+        switch self {
+        case .standard:
+            return 0
+        case .profileA:
+            return 1
+        case .profileB:
+            return 2
         }
     }
 }
@@ -56,14 +68,14 @@ public class ReadSettingsCarelinkMessageBody: CarelinkLongMessageBody {
         let newer = rxData[0] == 25 // x23
 
         let maxBolusTicks: UInt8
-        let maxBasalTicks: Int
+        let maxBasalTicks: UInt16
         
         if newer {
             maxBolusTicks = rxData[7]
-            maxBasalTicks = Int(bigEndianBytes: rxData.subdata(in: 8..<10))
+            maxBasalTicks = rxData[8..<10].toBigEndian(UInt16.self)
         } else {
             maxBolusTicks = rxData[6]
-            maxBasalTicks = Int(bigEndianBytes: rxData.subdata(in: 7..<9))
+            maxBasalTicks = rxData[7..<9].toBigEndian(UInt16.self)
         }
         maxBolus = Double(maxBolusTicks) / type(of: self).maxBolusMultiplier
         maxBasal = Double(maxBasalTicks) / type(of: self).maxBasalMultiplier

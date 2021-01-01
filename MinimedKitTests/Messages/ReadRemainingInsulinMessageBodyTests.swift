@@ -16,7 +16,7 @@ class ReadRemainingInsulinMessageBodyTests: XCTestCase {
 
         let body = message?.messageBody as! ReadRemainingInsulinMessageBody
 
-        XCTAssertEqual(80.875, body.getUnitsRemainingForStrokes(PumpModel.model723.strokesPerUnit))
+        XCTAssertEqual(80.875, body.getUnitsRemaining(insulinBitPackingScale: PumpModel.model723.insulinBitPackingScale))
     }
 
     func testReservoir522() {
@@ -24,7 +24,7 @@ class ReadRemainingInsulinMessageBodyTests: XCTestCase {
 
         let body = message?.messageBody as! ReadRemainingInsulinMessageBody
 
-        XCTAssertEqual(135.0, body.getUnitsRemainingForStrokes(PumpModel.model522.strokesPerUnit))
+        XCTAssertEqual(135.0, body.getUnitsRemaining(insulinBitPackingScale: PumpModel.model522.insulinBitPackingScale))
     }
 
 }

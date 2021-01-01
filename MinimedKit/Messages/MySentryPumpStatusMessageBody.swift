@@ -158,8 +158,8 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         let batteryRemainingPercent: UInt8 = rxData[14]
         self.batteryRemainingPercent = Int(round(Double(batteryRemainingPercent) / 4.0 * 100))
         
-        let glucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[9], rxData[24] << 7])) >> 7
-        let previousGlucoseValue = Int(bigEndianBytes: Data(bytes: [rxData[10], rxData[24] << 6])) >> 7
+        let glucoseValue = Int(bigEndianBytes: Data([rxData[9], rxData[24] << 7])) >> 7
+        let previousGlucoseValue = Int(bigEndianBytes: Data([rxData[10], rxData[24] << 6])) >> 7
         
         glucose = SensorReading(glucose: glucoseValue)
         previousGlucose = SensorReading(glucose: previousGlucoseValue)
@@ -184,10 +184,11 @@ public struct MySentryPumpStatusMessageBody: MessageBody, DictionaryRepresentabl
         self.sensorRemainingHours = Int(sensorRemainingHours)
         
         let matchingHour: UInt8 = rxData[20]
-        nextSensorCalibrationDateComponents = DateComponents()
-        nextSensorCalibrationDateComponents?.hour = Int(matchingHour)
-        nextSensorCalibrationDateComponents?.minute = Int(rxData[21] as UInt8)
-        nextSensorCalibrationDateComponents?.calendar = calendar
+        var nextSensorCalibrationDateComponents = DateComponents()
+        nextSensorCalibrationDateComponents.hour = Int(matchingHour)
+        nextSensorCalibrationDateComponents.minute = Int(rxData[21])
+        nextSensorCalibrationDateComponents.calendar = calendar
+        self.nextSensorCalibrationDateComponents = nextSensorCalibrationDateComponents
     }
     
     public var dictionaryRepresentation: [String: Any] {

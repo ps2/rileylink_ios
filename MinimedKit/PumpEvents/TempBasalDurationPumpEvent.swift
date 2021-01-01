@@ -17,8 +17,8 @@ public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 7
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         guard length <= availableData.count else {
@@ -39,6 +39,6 @@ public struct TempBasalDurationPumpEvent: TimestampedPumpEvent {
     }
 
     public var description: String {
-        return String(format: NSLocalizedString("Temporary Basal: %1$d min", comment: "The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes)"), duration)
+        return String(format: LocalizedString("Temporary Basal: %1$d min", comment: "The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes)"), duration)
     }
 }

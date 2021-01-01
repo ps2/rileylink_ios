@@ -8,32 +8,34 @@
 
 import Foundation
 
-@objc public class RFPacket: NSObject {
-    @objc public let data: Data
-    @objc public let rssi: Int
-    
-    @objc public init(outgoingData: Data) {
-        self.data = outgoingData
-        rssi = 0
-    }
-    
-    @objc public init?(rfspyResponse: Data) {
-        guard rfspyResponse.count > 2 else {
+public struct RFPacket : CustomStringConvertible {
+    public let data: Data
+    let packetCounter: Int
+    public let rssi: Int
+
+    init?(rfspyResponse: Data) {
+        guard rfspyResponse.count >= 2 else {
             return nil
         }
+
+        let startIndex = rfspyResponse.startIndex
         
-        let rssiDec = Int(rfspyResponse[0])
+        let rssiDec = Int(rfspyResponse[startIndex])
         let rssiOffset = 73
         if rssiDec >= 128 {
             self.rssi = (rssiDec - 256) / 2 - rssiOffset
         } else {
             self.rssi = rssiDec / 2 - rssiOffset
         }
-        
-        self.data = rfspyResponse.subdata(in: 2..<rfspyResponse.count)
-        
-        super.init()
 
+        self.packetCounter = Int(rfspyResponse[startIndex.advanced(by: 1)])
+        
+        self.data = rfspyResponse.subdata(in: startIndex.advanced(by: 2)..<rfspyResponse.endIndex)
     }
+
+    public var description: String {
+        return String(format: "RFPacket(%1$@, %2$@, %3$@)", String(describing: rssi), String(describing: packetCounter), data.hexadecimalString)
+    }
+
 }
 

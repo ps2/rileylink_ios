@@ -1,7 +1,12 @@
 language: objective-c
-osx_image: xcode9
-xcode_sdk: iphonesimulator11
-xcode_project: RileyLink.xcodeproj
-xcode_scheme: RileyLink
+osx_image: xcode12.2
+
+cache:
+  directories:
+  - Carthage
+
+before_script:
+    - ./Scripts/carthage.sh bootstrap --cache-builds
+
 script:
-    - xcodebuild -project RileyLink.xcodeproj -scheme RileyLink build -destination 'name=iPhone SE' test
+    - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty

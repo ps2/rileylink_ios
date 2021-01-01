@@ -21,12 +21,13 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
     public let rateType: RateType
     public let rate: Double
     public let timestamp: DateComponents
+    public let wasRemotelyTriggered: Bool
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 8
         
-        func d(_ idx:Int) -> Int {
-            return Int(availableData[idx] as UInt8)
+        func d(_ idx: Int) -> Int {
+            return Int(availableData[idx])
         }
         
         guard length <= availableData.count else {
@@ -43,6 +44,8 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
         }
         
         timestamp = DateComponents(pumpEventData: availableData, offset: 2)
+        
+        wasRemotelyTriggered = availableData[5] & 0b01000000 != 0
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -50,15 +53,16 @@ public struct TempBasalPumpEvent: TimestampedPumpEvent {
             "_type": "TempBasal",
             "rate": rate,
             "temp": rateType.rawValue,
+            "wasRemotelyTriggered": wasRemotelyTriggered,
         ]
     }
 
     public var description: String {
         switch rateType {
         case .Absolute:
-            return String(format: NSLocalizedString("Temporary Basal: %1$.3f U/hour", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes)"), rate)
+            return String(format: LocalizedString("Temporary Basal: %1$.3f U/hour", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes)"), rate)
         case .Percent:
-            return String(format: NSLocalizedString("Temporary Basal: %1$d%%", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent)"), Int(rate))
+            return String(format: LocalizedString("Temporary Basal: %1$d%%", comment: "The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent)"), Int(rate))
         }
     }
 }

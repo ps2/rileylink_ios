@@ -14,11 +14,11 @@ import MinimedKit
 
 extension MinimedPumpManager: PumpManagerUI {
 
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
         return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
@@ -35,8 +35,8 @@ extension MinimedPumpManager: PumpManagerUI {
         return state.smallPumpImage
     }
     
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
-        return MinimedHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
+    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors, allowedInsulinTypes: allowedInsulinTypes)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

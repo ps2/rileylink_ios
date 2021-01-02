@@ -27,6 +27,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var duration: TimeInterval
     var isReconciledWithHistory: Bool
     var uuid: UUID
+    let insulinType: InsulinType?
 
     var finishTime: Date {
         get {
@@ -62,22 +63,24 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
+    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
         self.duration = duration
         self.programmedUnits = nil
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
         self.duration = duration
         self.programmedUnits = nil
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
@@ -88,14 +91,16 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = suspendStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.insulinType = nil
         self.uuid = UUID()
     }
 
-    init(resumeStartTime: Date, isReconciledWithHistory: Bool = false) {
+    init(resumeStartTime: Date, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .resume
         self.units = 0
         self.startTime = resumeStartTime
         self.duration = 0
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
@@ -188,6 +193,12 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         } else {
             self.uuid = UUID()
         }
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            self.insulinType = nil
+        }
 
         self.isReconciledWithHistory = rawValue["isReconciledWithHistory"] as? Bool ?? false
     }
@@ -208,6 +219,10 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
         if let scheduledTempRate = programmedTempRate {
             rawValue["scheduledTempRate"] = scheduledTempRate
+        }
+        
+        if let insulinType = insulinType {
+            rawValue["insulinType"] = insulinType.rawValue
         }
 
         return rawValue

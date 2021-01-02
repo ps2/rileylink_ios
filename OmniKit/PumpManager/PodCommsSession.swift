@@ -329,7 +329,7 @@ public class PodCommsSession {
         // Set basal schedule
         let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset)
         podState.setupProgress = .initialBasalScheduleSet
-        podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain))
+        podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain, insulinType: podState.insulinType))
     }
 
     @discardableResult
@@ -455,7 +455,7 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: units, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
-            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
+            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType)
             podState.updateFromStatusResponse(statusResponse)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
@@ -468,12 +468,12 @@ public class PodCommsSession {
             let podCommsError = error as? PodCommsError ?? PodCommsError.commsError(error: error)
             guard let status = try? getStatus() else {
                 self.log.debug("Status check failed; could not resolve bolus uncertainty")
-                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain)
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain, insulinType: podState.insulinType)
                 return DeliveryCommandResult.uncertainFailure(error: podCommsError)
             }
             if status.deliveryStatus.bolusing {
                 self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
-                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain)
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType)
                 return DeliveryCommandResult.success(statusResponse: status)
             } else {
                 self.log.debug("getStatus resolved bolus uncertainty (failed)")
@@ -493,7 +493,7 @@ public class PodCommsSession {
 
         do {
             let status: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
-            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain)
+            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain, insulinType: podState.insulinType)
             podState.updateFromStatusResponse(status)
             return DeliveryCommandResult.success(statusResponse: status)
         } catch PodCommsError.nonceResyncFailed {
@@ -501,7 +501,7 @@ public class PodCommsSession {
         } catch PodCommsError.rejectedMessage(let errorCode) {
             return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
-            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain)
+            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain, insulinType: podState.insulinType)
             return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
         }
     }
@@ -591,7 +591,7 @@ public class PodCommsSession {
             let status: StatusResponse = try send([basalScheduleCommand, basalExtraCommand])
             let now = Date()
             podState.suspendState = .resumed(now)
-            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: now, scheduledCertainty: .certain)
+            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: now, scheduledCertainty: .certain, insulinType: podState.insulinType)
             podState.updateFromStatusResponse(status)
             return status
         } catch PodCommsError.nonceResyncFailed {
@@ -599,7 +599,7 @@ public class PodCommsSession {
         } catch PodCommsError.rejectedMessage(let errorCode) {
             throw PodCommsError.rejectedMessage(errorCode: errorCode)
         } catch let error {
-            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .uncertain)
+            podState.unfinalizedResume = UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .uncertain, insulinType: podState.insulinType)
             throw error
         }
     }

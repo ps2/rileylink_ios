@@ -701,8 +701,13 @@ extension MinimedPumpManager {
             return state.useMySentry
         }
         set {
+            let oldValue = state.useMySentry
             setState { (state) in
                 state.useMySentry = newValue
+            }
+            if oldValue != newValue {
+                let useIdleListening = state.pumpModel.hasMySentry && state.useMySentry
+                self.rileyLinkDeviceProvider.idleListeningState = useIdleListening ? MinimedPumpManagerState.idleListeningEnabledDefaults : .disabled
             }
         }
     }

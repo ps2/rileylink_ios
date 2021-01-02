@@ -10,12 +10,23 @@ import UIKit
 import LoopKit
 import LoopKitUI
 import MinimedKit
+import RileyLinkKitUI
 
 
 extension MinimedPumpManager: PumpManagerUI {
 
     static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
-        return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+        let navVC = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+        let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { (confirmedType) in
+            navVC.insulinType = confirmedType
+            let nextViewController = navVC.storyboard?.instantiateViewController(identifier: "RileyLinkSetup") as! RileyLinkSetupTableViewController
+            navVC.pushViewController(nextViewController, animated: true)
+        }
+        let rootVC = UIHostingController(rootView: insulinSelectionView)
+        rootVC.title = "Insulin Type"
+        navVC.pushViewController(rootVC, animated: false)
+        navVC.navigationBar.backgroundColor = .secondarySystemBackground
+        return navVC
     }
 
     public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying) {

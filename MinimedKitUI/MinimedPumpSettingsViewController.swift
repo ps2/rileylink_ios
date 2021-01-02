@@ -100,6 +100,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case timeZoneOffset = 0
         case batteryChemistry
         case preferredInsulinDataSource
+        case insulinType
     }
 
     // MARK: UITableViewDataSource
@@ -199,6 +200,10 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 let diffString = timeZoneDiff != 0 ? formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff)) : ""
 
                 cell.detailTextLabel?.text = String(format: LocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
+            case .insulinType:
+                cell.prepareForReuse()
+                cell.textLabel?.text = "Insulin Type"
+                cell.detailTextLabel?.text = pumpManager.insulinType?.brandName
             }
 
             cell.accessoryType = .disclosureIndicator
@@ -256,6 +261,14 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 vc.delegate = self
 
                 show(vc, sender: sender)
+            case .insulinType:
+                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                    self.pumpManager.insulinType = newType
+                }
+                let vc = DismissibleHostingController(rootView: view)
+                vc.title = LocalizedString("Insulin Type", comment: "Controller title for insulin type selection screen")
+                
+                show(vc, sender: sender)
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
@@ -285,7 +298,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
-            case .timeZoneOffset:
+            case .timeZoneOffset, .insulinType:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             case .batteryChemistry:
                 break

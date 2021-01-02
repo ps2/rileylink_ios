@@ -541,12 +541,17 @@ extension MinimedPumpManager {
     ///   - completion: A closure called once upon completion
     ///   - error: An error describing why the fetch and/or store failed
     private func fetchPumpHistory(_ completion: @escaping (_ error: Error?) -> Void) {
+        guard let insulinType = insulinType else {
+            completion(PumpManagerError.configuration(nil))
+            return
+        }
+        
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
                 completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
-
+            
             self.pumpOps.runSession(withName: "Fetch Pump History", using: device) { (session) in
                 do {
                     guard let startDate = self.pumpDelegate.call({ (delegate) in
@@ -561,8 +566,16 @@ extension MinimedPumpManager {
                     // Reconcile history with pending doses
                     let newPumpEvents = historyEvents.pumpEvents(from: model)
                     
-                    // During reconciliation, some pump events may be reconciled as pending doses and removed
-                    let remainingHistoryEvents = self.reconcilePendingDosesWith(newPumpEvents)
+                    // During reconciliation, some pump events may be reconciled as pending doses and removed. Remaining events should be annotated with current insulinType
+                    let remainingHistoryEvents = self.reconcilePendingDosesWith(newPumpEvents).map { (event) -> NewPumpEvent in
+                        return NewPumpEvent(
+                            date: event.date,
+                            dose: event.dose?.annotated(with: insulinType),
+                            isMutable: event.isMutable,
+                            raw: event.raw,
+                            title: event.title,
+                            type: event.type)
+                    }
 
                     self.pumpDelegate.notify({ (delegate) in
                         guard let delegate = delegate else {
@@ -731,7 +744,14 @@ extension MinimedPumpManager: PumpManager {
     }
     
     public var insulinType: InsulinType? {
-        return .fiasp
+        get {
+            return state.insulinType
+        }
+        set {
+            setState { (state) in
+                state.insulinType = newValue
+            }
+        }
     }
     
     private func status(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents) -> PumpManagerStatus {

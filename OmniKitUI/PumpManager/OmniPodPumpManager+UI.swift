@@ -26,9 +26,7 @@ extension OmnipodPumpManager: PumpManagerUI {
         let rootVC = UIHostingController(rootView: insulinSelectionView)
         rootVC.title = "Insulin Type"
         navVC.pushViewController(rootVC, animated: false)
-        
         navVC.navigationBar.backgroundColor = .secondarySystemBackground
-
         return navVC
     }
     

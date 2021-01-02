@@ -614,7 +614,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = DismissibleHostingController(rootView: view)
                 vc.title = LocalizedString("Insulin Type", comment: "Controller title for insulin type selection screen")
                 show(vc, sender: sender)
-
             case .replacePod:
                 let vc: UIViewController
                 if podState == nil || podState!.setupProgress.primingNeeded {

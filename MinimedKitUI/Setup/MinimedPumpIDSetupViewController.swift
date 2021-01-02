@@ -75,7 +75,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
     var pumpManagerState: MinimedPumpManagerState? {
         get {
-            guard let pumpColor = pumpColor,
+            guard
+                let navVC = navigationController as? MinimedPumpManagerSetupViewController,
+                let insulinType = navVC.insulinType,
+                let pumpColor = pumpColor,
                 let pumpID = pumpID,
                 let pumpModel = pumpState?.pumpModel,
                 let pumpRegion = pumpRegionCode?.region,
@@ -92,7 +95,9 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone,
-                suspendState: .resumed(Date()))
+                suspendState: .resumed(Date()),
+                insulinType: insulinType
+            )
         }
     }
 

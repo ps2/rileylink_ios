@@ -70,21 +70,28 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
     }
     
-    public var progress: Double {
+    private var nominalProgress: Double {
         guard let duration = duration else {
             return 0
         }
         let elapsed = -startTime.timeIntervalSinceNow
-        return min(elapsed / duration, 1)
+        return elapsed / duration
+    }
+
+    // A value from 0 to 1 giving the nominal progress percentage for a bolus or a temp basal
+    public var progress: Double {
+        return min(nominalProgress, 1)
     }
     
+    // Is a bolus or a temp basal nominally finished
     public var isFinished: Bool {
         return progress >= 1
     }
 
+    // Has a bolus operation had enough time to positively finish
     public var isBolusPositivelyFinished: Bool {
-        // The pod faults if the time to deliver any pulse takes longer than 20% of nominal
-        return progress >= 1.2  // 20% longer to be positive that a bolus has completed (or the pod will have faulted)
+        // Pod faults if any pulse takes 20% or more of nominal to deliver
+        return nominalProgress >= 1.2
     }
     
     // Units per hour

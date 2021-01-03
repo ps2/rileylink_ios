@@ -802,7 +802,8 @@ extension MinimedPumpManager: PumpManager {
             device: hkDevice,
             pumpBatteryChargeRemaining: state.batteryPercentage,
             basalDeliveryState: basalDeliveryState,
-            bolusState: bolusState
+            bolusState: bolusState,
+            insulinType: state.insulinType
         )
     }
     

@@ -291,6 +291,7 @@ extension OmnipodPumpManager {
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
+            insulinType: state.insulinType,
             pumpStatusHighlight: pumpStatusHighlight(for: state),
             pumpLifecycleProgress: lifecycleProgress(for: state)
         )

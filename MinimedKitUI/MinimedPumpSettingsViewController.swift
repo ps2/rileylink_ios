@@ -191,7 +191,11 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 cell.detailTextLabel?.text = String(describing: pumpManager.preferredInsulinDataSource)
             case .useMySentry:
                 cell.textLabel?.text = LocalizedString("Use MySentry", comment: "The title text for the preferred MySentry setting config")
-                cell.detailTextLabel?.text = pumpManager.useMySentry ? "Yes" : "No"
+                if pumpManager.state.pumpModel.hasMySentry {
+                    cell.detailTextLabel?.text = pumpManager.useMySentry ? "Yes" : "No"
+                } else {
+                    cell.detailTextLabel?.text = "N/A"
+                }
             case .timeZoneOffset:
                 cell.textLabel?.text = LocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone")
 
@@ -274,11 +278,14 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 
                 show(vc, sender: sender)
             case .useMySentry:
-                let vc = RadioSelectionTableViewController.useMySentry(pumpManager.useMySentry)
-                vc.title = sender?.textLabel?.text
-                vc.delegate = self
-
-                show(vc, sender: sender)
+                if pumpManager.state.pumpModel.hasMySentry {
+                    let vc = RadioSelectionTableViewController.useMySentry(pumpManager.useMySentry)
+                    vc.title = sender?.textLabel?.text
+                    vc.delegate = self
+                    show(vc, sender: sender)
+                } else {
+                    break
+                }
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]

@@ -101,6 +101,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case batteryChemistry
         case preferredInsulinDataSource
         case insulinType
+        // This should always be last so it can be omitted for non-MySentry pumps:
         case useMySentry
     }
 
@@ -117,7 +118,8 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case .actions:
             return ActionsRow.allCases.count
         case .settings:
-            return SettingsRow.allCases.count
+            let settingsRowCount = pumpManager.state.pumpModel.hasMySentry ? SettingsRow.allCases.count : SettingsRow.allCases.count - 1
+            return settingsRowCount
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
         case .delete:

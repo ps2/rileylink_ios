@@ -280,14 +280,10 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
                 
                 show(vc, sender: sender)
             case .useMySentry:
-                if pumpManager.state.pumpModel.hasMySentry {
-                    let vc = RadioSelectionTableViewController.useMySentry(pumpManager.useMySentry)
-                    vc.title = sender?.textLabel?.text
-                    vc.delegate = self
-                    show(vc, sender: sender)
-                } else {
-                    break
-                }
+                let vc = RadioSelectionTableViewController.useMySentry(pumpManager.useMySentry)
+                vc.title = sender?.textLabel?.text
+                vc.delegate = self
+                show(vc, sender: sender)
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]

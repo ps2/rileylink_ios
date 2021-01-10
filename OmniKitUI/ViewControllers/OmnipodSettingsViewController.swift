@@ -264,6 +264,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         case enableDisableConfirmationBeeps
         case reminder
         case timeZoneOffset
+        case insulinType
         case replacePod
     }
     
@@ -420,6 +421,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     
                     cell.detailTextLabel?.text = String(format: LocalizedString("%1$@%2$@%3$@", comment: "The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00)"), localTimeZoneName, timeZoneDiff != 0 ? (timeZoneDiff < 0 ? "-" : "+") : "", diffString)
                 }
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .insulinType:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.prepareForReuse()
+                cell.textLabel?.text = "Insulin Type"
+                cell.detailTextLabel?.text = pumpManager.insulinType?.brandName
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .replacePod:
@@ -599,6 +607,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let vc = CommandResponseViewController.changeTime(pumpManager: pumpManager)
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
+            case .insulinType:
+                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                    self.pumpManager.insulinType = newType
+                }
+                let vc = DismissibleHostingController(rootView: view)
+                vc.title = LocalizedString("Insulin Type", comment: "Controller title for insulin type selection screen")
+                show(vc, sender: sender)
             case .replacePod:
                 let vc: UIViewController
                 if podState == nil || podState!.setupProgress.primingNeeded {
@@ -647,7 +662,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             switch configurationRows[indexPath.row] {
             case .suspendResume, .enableDisableConfirmationBeeps, .reminder:
                 break
-            case .timeZoneOffset, .replacePod:
+            case .timeZoneOffset, .replacePod, .insulinType:
                 tableView.reloadRows(at: [indexPath], with: .fade)
             }
         case .rileyLinks:

@@ -27,6 +27,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var duration: TimeInterval
     var isReconciledWithHistory: Bool
     var uuid: UUID
+    let insulinType: InsulinType?
 
     var finishTime: Date {
         get {
@@ -62,22 +63,24 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
+    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
         self.duration = duration
         self.programmedUnits = nil
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, isReconciledWithHistory: Bool = false) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
         self.duration = duration
         self.programmedUnits = nil
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
@@ -88,14 +91,16 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = suspendStartTime
         self.duration = 0
         self.isReconciledWithHistory = isReconciledWithHistory
+        self.insulinType = nil
         self.uuid = UUID()
     }
 
-    init(resumeStartTime: Date, isReconciledWithHistory: Bool = false) {
+    init(resumeStartTime: Date, insulinType: InsulinType, isReconciledWithHistory: Bool = false) {
         self.doseType = .resume
         self.units = 0
         self.startTime = resumeStartTime
         self.duration = 0
+        self.insulinType = insulinType
         self.isReconciledWithHistory = isReconciledWithHistory
         self.uuid = UUID()
     }
@@ -188,6 +193,12 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         } else {
             self.uuid = UUID()
         }
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            self.insulinType = nil
+        }
 
         self.isReconciledWithHistory = rawValue["isReconciledWithHistory"] as? Bool ?? false
     }
@@ -208,6 +219,10 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
         if let scheduledTempRate = programmedTempRate {
             rawValue["scheduledTempRate"] = scheduledTempRate
+        }
+        
+        if let insulinType = insulinType {
+            rawValue["insulinType"] = insulinType.rawValue
         }
 
         return rawValue
@@ -244,13 +259,13 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType)
         case .suspend:
             self = DoseEntry(suspendDate: dose.startTime)
         case .resume:
-            self = DoseEntry(resumeDate: dose.startTime)
+            self = DoseEntry(resumeDate: dose.startTime, insulinType: dose.insulinType)
         }
     }
     
@@ -264,7 +279,7 @@ extension DoseEntry {
         }
         let duration = endDate.timeIntervalSince(startDate)
         let newEndDate = newStartDate.addingTimeInterval(duration)
-        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier)
+        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier, insulinType: insulinType)
     }
 }
 

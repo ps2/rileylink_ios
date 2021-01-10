@@ -291,6 +291,7 @@ extension OmnipodPumpManager {
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
+            insulinType: state.insulinType,
             pumpStatusHighlight: pumpStatusHighlight(for: state),
             pumpLifecycleProgress: lifecycleProgress(for: state)
         )
@@ -530,7 +531,7 @@ extension OmnipodPumpManager {
     #if targetEnvironment(simulator)
     private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: DetailedStatus? = nil, startDate: Date? = nil, mockFault: Bool) {
         let start = startDate ?? Date()
-        var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid)
+        var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, insulinType: .novolog)
         podState.setupProgress = .podConfigured
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
@@ -551,6 +552,12 @@ extension OmnipodPumpManager {
 
     // Called on the main thread
     public func pairAndPrime(completion: @escaping (PumpManagerResult<TimeInterval>) -> Void) {
+        
+        guard let insulinType = insulinType else {
+            completion(.failure(.configuration(nil)))
+            return
+        }
+        
         #if targetEnvironment(simulator)
         // If we're in the simulator, create a mock PodState
         let mockFaultDuringPairing = false
@@ -623,7 +630,13 @@ extension OmnipodPumpManager {
                 }
             }
 
-            self.podComms.assignAddressAndSetupPod(address: self.state.pairingAttemptAddress!, using: deviceSelector, timeZone: .currentFixed, messageLogger: self) { (result) in
+            self.podComms.assignAddressAndSetupPod(
+                address: self.state.pairingAttemptAddress!,
+                using: deviceSelector,
+                timeZone: .currentFixed,
+                messageLogger: self,
+                insulinType: insulinType)
+            { (result) in
                 
                 if case .success = result {
                     self.lockedState.mutate { (state) in
@@ -649,6 +662,7 @@ extension OmnipodPumpManager {
 
     // Called on the main thread
     public func insertCannula(completion: @escaping (PumpManagerResult<TimeInterval>) -> Void) {
+        
         #if targetEnvironment(simulator)
         let mockDelay = TimeInterval(seconds: 3)
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + mockDelay) {
@@ -1145,6 +1159,20 @@ extension OmnipodPumpManager: PumpManager {
 
     public var lastReconciliation: Date? {
         return self.state.podState?.lastInsulinMeasurements?.validTime
+    }
+    
+    public var insulinType: InsulinType? {
+        get {
+            return self.state.insulinType
+        }
+        set {
+            if let insulinType = newValue {
+                self.setState { (state) in
+                    state.insulinType = insulinType
+                }
+                self.podComms.insulinType = insulinType
+            }
+        }
     }
 
     public var status: PumpManagerStatus {

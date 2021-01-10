@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopKit
 
 public enum SetupProgress: Int {
     case addressAssigned = 0
@@ -92,7 +93,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return active
     }
     
-    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0) {
+    public var insulinType: InsulinType
+    
+    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0, insulinType: InsulinType) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.piVersion = piVersion
@@ -108,6 +111,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
         self.configuredAlerts = [.slot7: .waitingForPairingReminder]
+        self.insulinType = insulinType
     }
     
     public var unfinishedPairing: Bool {
@@ -166,10 +170,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return now
     }
 
+    // Needs insulin type, as this function can create a bolus
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         if unfinalizedBolus == nil && response.deliveryStatus.bolusing && response.podProgressStatus.readyForDelivery {
             // Create the unfinalizedBolus since we currently bolusing in a ready state (possible Loop restart)
-            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain)
+            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType)
         }
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
@@ -385,6 +390,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
         
         self.primeFinishTime = rawValue["primeFinishTime"] as? Date
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            insulinType = .humalog
+        }
     }
     
     public var rawValue: RawValue {
@@ -399,7 +410,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,
-            "setupProgress": setupProgress.rawValue
+            "setupProgress": setupProgress.rawValue,
+            "insulinType": insulinType.rawValue
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -475,6 +487,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* setupProgress: \(setupProgress)",
             "* primeFinishTime: \(String(describing: primeFinishTime))",
             "* configuredAlerts: \(String(describing: configuredAlerts))",
+            "* insulinType: \(String(describing: insulinType))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

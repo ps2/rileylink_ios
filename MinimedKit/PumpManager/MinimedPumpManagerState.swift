@@ -108,8 +108,10 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var reconciliationMappings: [Data:ReconciledDoseMapping]
 
     public var lastReconciliation: Date?
+    
+    public var insulinType: InsulinType?
 
-    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, lastValidFrequency: Measurement<UnitFrequency>? = nil, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEvents: [Data:ReconciledDoseMapping]? = nil, lastReconciliation: Date? = nil) {
+    public init(batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, lastValidFrequency: Measurement<UnitFrequency>? = nil, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEvents: [Data:ReconciledDoseMapping]? = nil, lastReconciliation: Date? = nil, insulinType: InsulinType? = nil) {
         self.batteryChemistry = batteryChemistry
         self.preferredInsulinDataSource = preferredInsulinDataSource
         self.pumpColor = pumpColor
@@ -128,6 +130,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.pendingDoses = pendingDoses ?? []
         self.reconciliationMappings = recentlyReconciledEvents ?? [:]
         self.lastReconciliation = lastReconciliation
+        self.insulinType = insulinType
     }
 
     public init?(rawValue: RawValue) {
@@ -232,6 +235,14 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         
         let lastReconciliation = rawValue["lastReconciliation"] as? Date
         
+        let insulinType: InsulinType?
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
+            insulinType = InsulinType(rawValue: rawInsulinType)
+        } else {
+            insulinType = nil
+        }
+        
         self.init(
             batteryChemistry: batteryChemistry,
             preferredInsulinDataSource: insulinDataSource,
@@ -250,7 +261,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             unfinalizedTempBasal: unfinalizedTempBasal,
             pendingDoses: pendingDoses,
             recentlyReconciledEvents: recentlyReconciledEvents,
-            lastReconciliation: lastReconciliation
+            lastReconciliation: lastReconciliation,
+            insulinType: insulinType
         )
     }
 
@@ -277,6 +289,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
         value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
         value["lastReconciliation"] = lastReconciliation
+        value["insulinType"] = insulinType?.rawValue
 
         return value
     }
@@ -310,6 +323,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "timeZone: \(timeZone)",
             "recentlyReconciledEvents: \(reconciliationMappings.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uuid)" })",
             "lastReconciliation: \(String(describing: lastReconciliation))",
+            "insulinType: \(String(describing: insulinType))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

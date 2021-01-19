@@ -34,5 +34,5 @@ for COUNTER in $(seq 0 $(($SCRIPT_INPUT_FILE_COUNT - 1))); do
     echo "copy-frameworks resolved path: ${!SCRIPT_INPUT_VAR}"
 done
 
-echo "Copy Frameworks with Carthage, path = ${PATH}"
-carthage copy-frameworks
+echo "Copy Frameworks with Carthage"
+"${SRCROOT}/bin/carthage" copy-frameworks

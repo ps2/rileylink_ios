@@ -28,8 +28,8 @@ public struct DetailedStatus : PodInfo, Equatable {
     public let unacknowledgedAlerts: AlertSet
     public let faultAccessingTables: Bool
     public let errorEventInfo: ErrorEventInfo?
-    public let receiverLowGain: Int8
-    public let radioRSSI: Int8
+    public let receiverLowGain: UInt8
+    public let radioRSSI: UInt8
     public let previousPodProgressStatus: PodProgressStatus?
     public let unknownValue: Data
     public let data: Data
@@ -50,7 +50,7 @@ public struct DetailedStatus : PodInfo, Equatable {
         
         self.podMessageCounter = encodedData[5]
         
-        self.totalInsulinDelivered = Pod.pulseSize * Double((Int(encodedData[6]) << 8) | Int(encodedData[7]))
+        self.totalInsulinDelivered = Pod.pulseSize * Double(encodedData[6...7].toBigEndian(UInt16.self))
         
         self.faultEventCode = FaultEventCode(rawValue: encodedData[8])
         
@@ -81,8 +81,8 @@ public struct DetailedStatus : PodInfo, Equatable {
             self.errorEventInfo = ErrorEventInfo(rawValue: encodedData[17])
         }
         
-        self.receiverLowGain = Int8(encodedData[18] >> 6)
-        self.radioRSSI =  Int8(encodedData[18] & 0x3F)
+        self.receiverLowGain = UInt8(encodedData[18] >> 6)
+        self.radioRSSI =  UInt8(encodedData[18] & 0x3F)
         
         if encodedData[19] == 0xFF {
             self.previousPodProgressStatus = nil // this byte is not valid (no fault has occurred)
@@ -97,6 +97,42 @@ public struct DetailedStatus : PodInfo, Equatable {
 
     public var isFaulted: Bool {
         return faultEventCode.faultType != .noFaults || podProgressStatus == .activationTimeExceeded
+    }
+
+    // Returns an appropropriate PDM style Ref string for the Detailed Status.
+    // For most types, Ref: TT-VVVHH-IIIRR-FFF computed as {19|17}-{VV}{SSSS/60}-{NNNN/20}{RRRR/20}-PP
+    public var pdmRef: String? {
+        let TT, VVV, HH, III, RR, FFF: UInt8
+        let refStr = LocalizedString("Ref", comment: "PDM style 'Ref' string")
+
+        switch faultEventCode.faultType {
+        case .noFaults, .reservoirEmpty, .exceededMaximumPodLife80Hrs:
+            return nil      // no PDM Ref # generated for these cases
+        case .insulinDeliveryCommandError:
+            // This fault is treated as a PDM fault which uses an alternate Ref format
+            return String(format: "%s: 11-144-0018-00049", refStr) // all fixed values for this fault
+        case .occluded:
+            // Ref: 17-000HH-IIIRR-000
+            TT = 17         // Occlusion detected Ref type
+            VVV = 0         // no VVV value for an occlusion fault
+            FFF = 0         // no FFF value for an occlusion fault
+        default:
+            // Ref: 19-VVVHH-IIIRR-FFF
+            TT = 19         // pod fault Ref type
+            VVV = data[17]  // use the raw VV byte value
+            FFF = faultEventCode.rawValue
+        }
+
+        HH = UInt8(timeActive.hours)
+        III = UInt8(totalInsulinDelivered)
+
+        if let reservoirLevel = self.reservoirLevel {
+            RR = UInt8(reservoirLevel)
+        } else {
+            RR = 51         // value used for 50+ U
+        }
+
+        return String(format: "%s: %02d-%03d%02d-%03d%02d-%03d", refStr, TT, VVV, HH, III, RR, FFF)
     }
 }
 

@@ -88,6 +88,9 @@ extension CommandResponseViewController {
         if status.faultEventCode.faultType != .noFaults {
             result += "\n" // since we have a fault, report the additional fault related information in a separate section
             result += String(format: LocalizedString("Fault: %1$@\n", comment: "The format string for a fault: (1: The fault description)"), status.faultEventCode.localizedDescription)
+            if let refStr = status.pdmRef {
+                result += refStr + "\n" // add the PDM style Ref code info as a separate line
+            }
             if let previousPodProgressStatus = status.previousPodProgressStatus {
                 result += String(format: LocalizedString("Previous pod progress: %1$@\n", comment: "The format string for previous pod progress: (1: previous pod progress string)"), String(describing: previousPodProgressStatus))
             }

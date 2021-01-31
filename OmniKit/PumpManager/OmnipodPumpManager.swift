@@ -1350,7 +1350,7 @@ extension OmnipodPumpManager: PumpManager {
         }
     }
 
-    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         guard self.hasActivePod else {
             completion(.failure(PumpManagerError.configuration(OmnipodPumpManagerError.noPodPaired)))
             return
@@ -1431,10 +1431,10 @@ extension OmnipodPumpManager: PumpManager {
 
             let date = Date()
             let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
-            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units)
+            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units, insulinType: self.insulinType, automatic: automatic)
 
-            let beep = self.confirmationBeeps
-            let result = session.bolus(units: enactUnits, acknowledgementBeep: beep, completionBeep: beep)
+            let beep = self.confirmationBeeps && !automatic
+            let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: beep, completionBeep: beep)
             session.dosesForStorage() { (doses) -> Bool in
                 return self.store(doses: doses, in: session)
             }

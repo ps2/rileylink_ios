@@ -939,7 +939,7 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         let enactUnits = roundToSupportedBolusVolume(units: units)
 
         guard enactUnits > 0 else {
@@ -1012,7 +1012,7 @@ extension MinimedPumpManager: PumpManager {
                 let commsOffset = TimeInterval(seconds: -2)
                 let doseStart = Date().addingTimeInterval(commsOffset)
 
-                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType)
+                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: automatic)
                 self.setState({ (state) in
                     state.unfinalizedBolus = dose
                 })

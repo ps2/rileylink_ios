@@ -32,7 +32,7 @@ class ReplacePodViewController: SetupTableViewController {
             case .fault(let podFault):
                 var faultDescription = podFault.faultEventCode.localizedDescription
                 if let refString = podFault.pdmRef {
-                    faultDescription += String(format: " (%s)", refString)
+                    faultDescription += String(format: " (%@)", refString)
                 }
                 instructionsLabel.text = String(format: LocalizedString("%1$@. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Format string providing instructions for replacing pod due to a fault. (1: The fault description)"), faultDescription)
             case .canceledPairingBeforeApplication:

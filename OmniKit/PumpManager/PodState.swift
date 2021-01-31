@@ -170,11 +170,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return now
     }
 
-    // Needs insulin type, as this function can create a bolus
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         if unfinalizedBolus == nil && response.deliveryStatus.bolusing && response.podProgressStatus.readyForDelivery {
             // Create the unfinalizedBolus since we currently bolusing in a ready state (possible Loop restart)
-            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType)
+            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType, automatic: nil)
         }
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)

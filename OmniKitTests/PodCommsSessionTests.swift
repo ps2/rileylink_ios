@@ -99,7 +99,7 @@ class PodCommsSessionTests: XCTestCase, PodCommsSessionDelegate {
         // Try sending another bolus command: nonce should be 676940027
         XCTAssertEqual(545302454, lastPodStateUpdate!.currentNonce)
 
-        let _ = session.bolus(units: 2)
+        let _ = session.bolus(units: 2, automatic: false)
         let bolusTry3 = messageTransport.sentMessages[2].messageBlocks[0] as! SetInsulinScheduleCommand
         XCTAssertEqual(545302454, bolusTry3.nonce)
 

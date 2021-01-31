@@ -439,7 +439,7 @@ public class PodCommsSession {
     }
 
     
-    public func bolus(units: Double, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
+    public func bolus(units: Double, automatic: Bool, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
         
         let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerBolusPulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
@@ -455,7 +455,7 @@ public class PodCommsSession {
         let bolusExtraCommand = BolusExtraCommand(units: units, timeBetweenPulses: timeBetweenPulses, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
         do {
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
-            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType)
+            podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType, automatic: automatic)
             podState.updateFromStatusResponse(statusResponse)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
         } catch PodCommsError.nonceResyncFailed {
@@ -468,12 +468,12 @@ public class PodCommsSession {
             let podCommsError = error as? PodCommsError ?? PodCommsError.commsError(error: error)
             guard let status = try? getStatus() else {
                 self.log.debug("Status check failed; could not resolve bolus uncertainty")
-                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain, insulinType: podState.insulinType)
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain, insulinType: podState.insulinType, automatic: automatic)
                 return DeliveryCommandResult.uncertainFailure(error: podCommsError)
             }
             if status.deliveryStatus.bolusing {
                 self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
-                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType)
+                podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date().addingTimeInterval(commsOffset), scheduledCertainty: .certain, insulinType: podState.insulinType, automatic: automatic)
                 return DeliveryCommandResult.success(statusResponse: status)
             } else {
                 self.log.debug("getStatus resolved bolus uncertainty (failed)")

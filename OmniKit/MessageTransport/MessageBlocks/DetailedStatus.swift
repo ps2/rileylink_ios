@@ -119,7 +119,7 @@ public struct DetailedStatus : PodInfo, Equatable {
         default:
             // Ref: 19-VVVHH-IIIRR-FFF
             TT = 19         // pod fault Ref type
-            VVV = data[17]  // use the raw VV byte value
+            VVV = UInt8(data[17])  // use the raw VV byte value
             FFF = faultEventCode.rawValue
         }
 
@@ -132,7 +132,7 @@ public struct DetailedStatus : PodInfo, Equatable {
             RR = 51         // value used for 50+ U
         }
 
-        return String(format: "%s: %02d-%03d%02d-%03d%02d-%03d", refStr, TT, VVV, HH, III, RR, FFF)
+        return String(format: "%@:\u{00a0}%02d-%03d%02d-%03d%02d-%03d", refStr, TT, VVV, HH, III, RR, FFF)
     }
 }
 

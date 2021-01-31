@@ -61,6 +61,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var duration: TimeInterval?
     var scheduledCertainty: ScheduledCertainty
     var insulinType: InsulinType?
+    var automatic: Bool?
     
     var finishTime: Date? {
         get {
@@ -110,7 +111,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType) {
+    init(bolusAmount: Double, startTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType, automatic: Bool?) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
@@ -118,6 +119,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledCertainty = scheduledCertainty
         self.scheduledUnits = nil
         self.insulinType = insulinType
+        self.automatic = automatic
     }
     
     init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType) {
@@ -128,6 +130,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledCertainty = scheduledCertainty
         self.scheduledUnits = nil
         self.insulinType = insulinType
+        self.automatic = nil
     }
 
     init(suspendStartTime: Date, scheduledCertainty: ScheduledCertainty) {
@@ -135,6 +138,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.units = 0
         self.startTime = suspendStartTime
         self.scheduledCertainty = scheduledCertainty
+        self.automatic = nil
     }
 
     init(resumeStartTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType) {
@@ -143,6 +147,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = resumeStartTime
         self.scheduledCertainty = scheduledCertainty
         self.insulinType = insulinType
+        self.automatic = nil
     }
 
     public mutating func cancel(at date: Date, withRemaining remaining: Double? = nil) {
@@ -290,7 +295,7 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic)
         case .tempBasal:
             self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType)
         case .suspend:

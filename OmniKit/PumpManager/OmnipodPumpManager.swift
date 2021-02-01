@@ -444,6 +444,18 @@ extension OmnipodPumpManager {
         }
     }
 
+    // Thread-safe
+    public var automaticBolusBeeps: Bool {
+        get {
+            return state.automaticBolusBeeps
+        }
+        set {
+            setState { (state) in
+                state.automaticBolusBeeps = newValue
+            }
+        }
+    }
+
     // MARK: - Notifications
 
     static let podExpirationNotificationIdentifier = "Omnipod:\(LoopNotificationCategory.pumpExpired.rawValue)"
@@ -1433,8 +1445,14 @@ extension OmnipodPumpManager: PumpManager {
             let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
             let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units, insulinType: self.insulinType, automatic: automatic)
 
-            let beep = self.confirmationBeeps && !automatic
-            let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: beep, completionBeep: beep)
+            // Use an acknowledgement beep if Confirmation Beeps are enabled and this a manual bolus or Automatic Bolus Beeps are enabled
+            let acknowledgementBeep = self.confirmationBeeps && (!automatic || self.automaticBolusBeeps)
+            let completionBeep = self.confirmationBeeps && !automatic
+
+            // Use an alternate 0x3F TimeInterval for denote an automatic bolus in the Omnipod Communications Log
+            let programReminderInterval: TimeInterval = automatic ? TimeInterval(minutes: 0x3F) : 0
+
+            let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
             session.dosesForStorage() { (doses) -> Bool in
                 return self.store(doses: doses, in: session)
             }

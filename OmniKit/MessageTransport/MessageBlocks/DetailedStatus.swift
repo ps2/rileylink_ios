@@ -110,7 +110,7 @@ public struct DetailedStatus : PodInfo, Equatable {
             return nil      // no PDM Ref # generated for these cases
         case .insulinDeliveryCommandError:
             // This fault is treated as a PDM fault which uses an alternate Ref format
-            return String(format: "%s: 11-144-0018-00049", refStr) // all fixed values for this fault
+            return String(format: "%s:\u{00a0}11-144-0018-00049", refStr) // all fixed values for this fault
         case .occluded:
             // Ref: 17-000HH-IIIRR-000
             TT = 17         // Occlusion detected Ref type
@@ -119,7 +119,7 @@ public struct DetailedStatus : PodInfo, Equatable {
         default:
             // Ref: 19-VVVHH-IIIRR-FFF
             TT = 19         // pod fault Ref type
-            VVV = UInt8(data[17])  // use the raw VV byte value
+            VVV = data[17]  // use the raw VV byte value
             FFF = faultEventCode.rawValue
         }
 

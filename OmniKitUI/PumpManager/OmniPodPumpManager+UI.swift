@@ -31,8 +31,9 @@ extension OmnipodPumpManager: PumpManagerUI {
     }
     
     public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying) {
-        let settings = OmnipodSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
+        let rootView = PodSettingsView(viewModel: PodSettingsViewModel(pumpManager: self))
+        let rootVC =  DismissibleHostingController(rootView: rootView, guidanceColors: guidanceColors, insulinTintColor: insulinTintColor)
+        let nav = SettingsNavigationViewController(rootViewController: rootVC)
         return nav
     }
 

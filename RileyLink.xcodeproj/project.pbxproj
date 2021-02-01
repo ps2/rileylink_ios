@@ -490,6 +490,11 @@
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
 		C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
+		C1CB883A25C7957600782BAC /* PodSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CB883925C7957600782BAC /* PodSettingsViewModel.swift */; };
+		C1CB885C25C7958800782BAC /* PodSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CB885B25C7958800782BAC /* PodSettingsView.swift */; };
+		C1CB88AA25C7966F00782BAC /* PodLifeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CB88A925C7966F00782BAC /* PodLifeState.swift */; };
+		C1CB88BC25C79BC000782BAC /* ReservoirLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CB88BB25C79BC000782BAC /* ReservoirLevel.swift */; };
+		C1CB88F125C7A7F600782BAC /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CB88F025C7A7F600782BAC /* Image.swift */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
 		C1DD5167259FE54400DE27AE /* InsulinTypeConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */; };
@@ -1422,6 +1427,11 @@
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
+		C1CB883925C7957600782BAC /* PodSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodSettingsViewModel.swift; sourceTree = "<group>"; };
+		C1CB885B25C7958800782BAC /* PodSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodSettingsView.swift; sourceTree = "<group>"; };
+		C1CB88A925C7966F00782BAC /* PodLifeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodLifeState.swift; sourceTree = "<group>"; };
+		C1CB88BB25C79BC000782BAC /* ReservoirLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservoirLevel.swift; sourceTree = "<group>"; };
+		C1CB88F025C7A7F600782BAC /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
 		C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeConfirmation.swift; sourceTree = "<group>"; };
@@ -2017,6 +2027,7 @@
 				C1814B87225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift */,
 				C1814B89225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib */,
 				C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */,
+				C1CB885B25C7958800782BAC /* PodSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2477,6 +2488,24 @@
 			path = OmniKitPacketParser;
 			sourceTree = "<group>";
 		};
+		C1CB883825C7955600782BAC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C1CB883925C7957600782BAC /* PodSettingsViewModel.swift */,
+				C1CB88A925C7966F00782BAC /* PodLifeState.swift */,
+				C1CB88BB25C79BC000782BAC /* ReservoirLevel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C1CB88EF25C7A7EC00782BAC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C1CB88F025C7A7F600782BAC /* Image.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C1EAD6B81C826B92006DBA60 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -2630,6 +2659,8 @@
 		C1FFAFDA213323F900C50C1D /* OmniKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1CB88EF25C7A7EC00782BAC /* Extensions */,
+				C1CB883825C7955600782BAC /* ViewModels */,
 				C168C3FE21AEF85400ADE90E /* PumpManager */,
 				C1FFB0092133242C00C50C1D /* ViewControllers */,
 				C104A9BE217E6027006E3C3E /* Views */,
@@ -4131,9 +4162,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1CB88BC25C79BC000782BAC /* ReservoirLevel.swift in Sources */,
 				C1F1A5EE2151FBA700F0B820 /* PodSetupCompleteViewController.swift in Sources */,
 				C1FFB01B21332DD900C50C1D /* TimeZone.swift in Sources */,
 				C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */,
+				C1CB88F125C7A7F600782BAC /* Image.swift in Sources */,
 				C16C3D4421AC40AF00401105 /* OmnipodHUDProvider.swift in Sources */,
 				C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */,
 				C1814B88225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift in Sources */,
@@ -4144,10 +4177,13 @@
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
 				C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
+				C1CB885C25C7958800782BAC /* PodSettingsView.swift in Sources */,
+				C1CB883A25C7957600782BAC /* PodSettingsViewModel.swift in Sources */,
 				C1DD5167259FE54400DE27AE /* InsulinTypeConfirmation.swift in Sources */,
 				C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
 				C127D925215C00320031799D /* OSLog.swift in Sources */,
+				C1CB88AA25C7966F00782BAC /* PodLifeState.swift in Sources */,
 				C1F1A5EA215164FA00F0B820 /* PairPodSetupViewController.swift in Sources */,
 				C1FFB01E2133860E00C50C1D /* UIColor.swift in Sources */,
 				C14CD28E21B5872D00F259DB /* Data.swift in Sources */,

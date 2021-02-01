@@ -42,6 +42,9 @@ public struct Pod {
     // Nomimal pod life (72 hours)
     public static let nominalPodLife = Pod.serviceDuration - Pod.endOfServiceImminentWindow - Pod.expirationAdvisoryWindow
 
+    // Time from expiration until pod fault
+    public static let expirationWindow = TimeInterval(hours: 8)
+
     // Maximum reservoir level reading
     public static let maximumReservoirReading: Double = 50
 

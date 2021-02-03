@@ -110,7 +110,7 @@ public struct DetailedStatus : PodInfo, Equatable {
             return nil      // no PDM Ref # generated for these cases
         case .insulinDeliveryCommandError:
             // This fault is treated as a PDM fault which uses an alternate Ref format
-            return String(format: "%s:\u{00a0}11-144-0018-00049", refStr) // all fixed values for this fault
+            return String(format: "%@:\u{00a0}11-144-0018-00049", refStr) // all fixed values for this fault
         case .occluded:
             // Ref: 17-000HH-IIIRR-000
             TT = 17         // Occlusion detected Ref type

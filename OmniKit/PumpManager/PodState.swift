@@ -384,6 +384,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 .slot2: .shutdownImminentAlarm(0),
                 .slot3: .expirationAlert(0),
                 .slot4: .lowReservoirAlarm(0),
+                .slot5: .podSuspendedReminder(suspendTime: 0),
+                .slot6: .suspendTimeExpired(suspendTime: 0),
                 .slot7: .expirationAdvisoryAlarm(alarmTime: 0, duration: 0)
             ]
         }

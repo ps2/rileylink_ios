@@ -542,6 +542,50 @@ public class PodCommsSession {
         return canceledDose
     }
     
+    // Suspends insulin delivery and sets appriopriate alerts for the specified suspend time
+    public func suspendDelivery(suspendTime: TimeInterval, confirmationBeepType: BeepConfigType? = nil) -> CancelDeliveryResult {
+        do {
+            let cancelDeliveryCommand = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .noBeep)
+            // Provide suspended reminders beeps every 5 or 15 minutes before the specified suspend time
+            let podSuspendedReminder = PodAlert.podSuspendedReminder(suspendTime: suspendTime)
+            // Provide more agressive alarm beeping after the expected suspend time has passed
+            let suspendTimeExpired = PodAlert.suspendTimeExpired(suspendTime: suspendTime)
+            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: [podSuspendedReminder.configuration, suspendTimeExpired.configuration])
+
+            let status: StatusResponse = try send([cancelDeliveryCommand, configureAlerts], confirmationBeepType: confirmationBeepType)
+
+            podState.registerConfiguredAlert(slot: podSuspendedReminder.configuration.slot, alert: podSuspendedReminder)
+            podState.registerConfiguredAlert(slot: suspendTimeExpired.configuration.slot, alert: suspendTimeExpired)
+
+            let canceledDose = handleCancelDosing(deliveryType: .all, bolusNotDelivered: status.bolusNotDelivered)
+            podState.updateFromStatusResponse(status)
+
+            return CancelDeliveryResult.success(statusResponse: status, canceledDose: canceledDose)
+        } catch PodCommsError.nonceResyncFailed {
+            return CancelDeliveryResult.certainFailure(error: PodCommsError.nonceResyncFailed)
+        } catch PodCommsError.rejectedMessage(let errorCode) {
+            return CancelDeliveryResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
+        } catch let error {
+            podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: Date(), scheduledCertainty: .uncertain)
+            return CancelDeliveryResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+        }
+    }
+
+    // Cancels any suspend related alerts, should be called when resuming after using suspendDelivery()
+    @discardableResult
+    public func cancelSuspendAlerts() throws -> StatusResponse {
+        do {
+            // A suspendTime of 0 makes these alerts inactivate
+            let podSuspendedReminder = PodAlert.podSuspendedReminder(suspendTime: 0)
+            let suspendTimeExpired = PodAlert.suspendTimeExpired(suspendTime: 0)
+
+            let status = try configureAlerts([podSuspendedReminder, suspendTimeExpired])
+            return status
+        } catch let error {
+            throw error
+        }
+    }
+
     // Cancel beeping can be done implemented using beepType (for a single delivery type) or a separate confirmation beep message block (for cancel all).
     // N.B., Using the built-in cancel delivery command beepType method when cancelling all insulin delivery will emit 3 different sets of cancel beeps!!!
     public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType = .noBeep, confirmationBeepType: BeepConfigType? = nil) -> CancelDeliveryResult {

@@ -65,7 +65,7 @@ extension PumpOpsSession {
 
         let shortPowerMessage = PumpMessage(settings: settings, type: .powerOn)
 
-        if pump.pumpModel == nil || !(pump.pumpModel!.hasMySentry && pump.useMySentry) {
+        if pump.pumpModel == nil || !pump.pumpModel!.hasMySentry {
             // Older pumps have a longer sleep cycle between wakeups, so send an initial burst
             do {
                 let _: PumpAckMessageBody = try session.getResponse(to: shortPowerMessage, repeatCount: 255, timeout: .milliseconds(1), retryCount: 0)

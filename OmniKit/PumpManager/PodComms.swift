@@ -11,6 +11,7 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
+fileprivate var diagnosePairingRssi = false
 
 protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
@@ -69,9 +70,10 @@ class PodComms: CustomDebugStringConvertible {
     ///     - PodCommsError.emptyResponse
     ///     - PodCommsError.unexpectedResponse
     ///     - PodCommsError.podChange
+    ///     - PodCommsError.activationTimeExceeded
     ///     - PodCommsError.rssiTooLow
     ///     - PodCommsError.rssiTooHigh
-    ///     - PodCommsError.activationTimeExceeded
+    ///     - PodCommsError.diagnosticMessage
     ///     - MessageError.invalidCrc
     ///     - MessageError.invalidSequence
     ///     - MessageError.invalidAddress
@@ -140,12 +142,45 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.podChange
             }
 
+            // Could set up these Pod constant to be modifiable, but this would require this state to be added to persistent PodState
+            // and would be difficult to test since constants may be dependent on these values and we don't have any such pods with.
+            // So verify that these values are all as expected and fail if a pod has a different fundemental value than expected.
+            if let secondsPerBolusPulse = config.secondsPerBolusPulse, Pod.secondsPerBolusPulse != secondsPerBolusPulse  {
+                let mess = String(format: "Unexpected pod reported seconds per bolus pulse value of %.1f instead of %.1f", secondsPerBolusPulse, Pod.secondsPerBolusPulse)
+                log.info("%@", mess)
+                throw PodCommsError.diagnosticMessage(str: mess)
+            }
+            if let secondsPerPrimePulse = config.secondsPerPrimePulse, Pod.secondsPerPrimePulse != secondsPerPrimePulse  {
+                let mess = String(format: "Unexpected pod reported seconds per prime pulse value of %.1f instead of %.1f", secondsPerPrimePulse, Pod.secondsPerPrimePulse)
+                log.error("%@", mess)
+                throw PodCommsError.diagnosticMessage(str: mess)
+            }
+            if let serviceDuration = config.serviceDuration, Pod.serviceDuration != serviceDuration {
+                let mess = String(format: "Unexpected pod service duration hours value of %.0f instead of %.0f", serviceDuration.hours, Pod.serviceDuration.hours)
+                log.error("%@", mess)
+                throw PodCommsError.diagnosticMessage(str: mess)
+            }
+
+            // Adjust if the pod has different prime and cannula insertion bolus amounts
+            if let primeUnits = config.primeUnits, Pod.primeUnits != primeUnits {
+                log.info("Changed prime bolus from default %.2fU to %.2fU", Pod.primeUnits, primeUnits)
+                Pod.primeUnits = primeUnits
+            }
+            if let cannulaInsertionUnits = config.cannulaInsertionUnits, Pod.cannulaInsertionUnits != cannulaInsertionUnits {
+                log.info("Changed cannula insertion bolus from default %.2fU to %.2fU", Pod.cannulaInsertionUnits, cannulaInsertionUnits)
+                Pod.cannulaInsertionUnits = cannulaInsertionUnits
+            }
+
             // Checking RSSI
             let maxRssiAllowed = 59         // maximum RSSI limit allowed
             let minRssiAllowed = 30         // minimum RSSI limit allowed
             if let rssi = config.rssi, let gain = config.gain {
-                let rssiStr = String(format: "Receiver Low Gain: %d.\nReceived Signal Strength Indicator: %d", gain, rssi)
-                log.default("%s", rssiStr)
+                let rssiStr = String(format: "RSSI: %u.\nReceiver Low Gain: %u", rssi, gain)
+                log.default("%@", rssiStr)
+                if diagnosePairingRssi {
+                    throw PodCommsError.diagnosticMessage(str: rssiStr)
+                }
+
                 rssiRetries -= 1
                 if rssi < minRssiAllowed {
                     log.default("RSSI value %d is less than minimum allowed value of %d, %d retries left", rssi, minRssiAllowed, rssiRetries)

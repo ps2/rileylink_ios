@@ -55,6 +55,8 @@ class ReplacePodViewController: SetupTableViewController {
                 } else {
                     self.replacementReason = .fault(podFault)
                 }
+            } else if podState?.setupProgress == .activationTimeout {
+                self.replacementReason = .activationTimeout
             } else if podState?.setupProgress.primingNeeded == true {
                 self.replacementReason = .canceledPairingBeforeApplication
             } else if podState?.setupProgress.needsCannulaInsertion == true {

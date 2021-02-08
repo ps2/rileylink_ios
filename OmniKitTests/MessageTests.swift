@@ -96,6 +96,12 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(280468, config.tid)
             XCTAssertEqual("2.7.0", String(describing: config.piVersion))
             XCTAssertEqual("2.7.0", String(describing: config.pmVersion))
+            XCTAssertEqual(Pod.pulseSize, config.pulseSize)
+            XCTAssertEqual(Pod.secondsPerBolusPulse, config.secondsPerBolusPulse)
+            XCTAssertEqual(Pod.secondsPerPrimePulse, config.secondsPerPrimePulse)
+            XCTAssertEqual(Pod.primeUnits, config.primeUnits)
+            XCTAssertEqual(Pod.cannulaInsertionUnits, config.cannulaInsertionUnits)
+            XCTAssertEqual(Pod.serviceDuration, config.serviceDuration)
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

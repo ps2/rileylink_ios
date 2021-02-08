@@ -1153,7 +1153,7 @@ extension MinimedPumpManager: CGMManager {
         return recents.sensorState
     }
     
-    public var cgmStatus: CGMManagerStatus {
+    public var cgmManagerStatus: CGMManagerStatus {
         return CGMManagerStatus(hasValidSensorSession: hasValidSensorSession)
     }
     

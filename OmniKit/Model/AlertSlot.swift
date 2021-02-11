@@ -82,7 +82,7 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
     case autoOffAlarm(active: Bool, countdownDuration: TimeInterval)
 
     // pod suspended reminder, before suspendTime; short beep every 15 minutes if > 30 min, else every 5 minutes
-    case podSuspendedReminder(suspendTime: TimeInterval)
+    case podSuspendedReminder(active: Bool, suspendTime: TimeInterval)
 
     // pod suspend time expired alarm, after suspendTime; 2 sets of beeps every min for 3 minutes repeated every 15 minutes
     case suspendTimeExpired(suspendTime: TimeInterval)
@@ -135,32 +135,53 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
             return AlertConfiguration(alertType: .slot4, active: active, duration: 0, trigger: .unitsRemaining(units), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery60Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
         case .autoOffAlarm(let active, let countdownDuration):
             return AlertConfiguration(alertType: .slot0, active: active, autoOffModifier: true, duration: .minutes(15), trigger: .timeUntilAlert(countdownDuration), beepRepeat: .every1MinuteFor15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
-        case .podSuspendedReminder(let suspendTime):
-            let active = suspendTime != 0 // disable if suspendTime is 0
+        case .podSuspendedReminder(let active, let suspendTime):
+            // A suspendTime of 0 is an untimed suspend
+            let reminderInterval, duration: TimeInterval
+            let trigger: AlertTrigger
+            let beepRepeat: BeepRepeat
+            let beepType: BeepType
             if active {
-                let reminderInterval: TimeInterval
-                let beepRepeat: BeepRepeat
                 if suspendTime >= TimeInterval(minutes :30) {
-                    // Use 15-minute reminder beeps for longer scheduled suspend times as per PDM
+                    // Use 15-minute pod suspended reminder beeps for longer scheduled suspend times as per PDM.
                     reminderInterval = TimeInterval(minutes: 15)
                     beepRepeat = .every15Minutes
                 } else {
-                    // Use 5-minute reminder beeps for shorter scheduled suspend times
+                    // Use 5-minute pod suspended reminder beeps for shorter scheduled suspend times.
                     reminderInterval = TimeInterval(minutes: 5)
                     beepRepeat = .every5Minutes
                 }
-                let duration = suspendTime - reminderInterval
-                return AlertConfiguration(alertType: .slot5, duration: duration, trigger: .timeUntilAlert(reminderInterval), beepRepeat: beepRepeat, beepType: .beep)
+                if suspendTime == 0 {
+                    duration = 0 // Untimed suspend, no duration
+                } else if suspendTime > reminderInterval {
+                    duration = suspendTime - reminderInterval // End after suspendTime total time
+                } else {
+                    duration = .minutes(1) // Degenerate case, end ASAP
+                }
+                trigger = .timeUntilAlert(reminderInterval) // Start after reminderInterval has passed
+                beepType = .beep
             } else {
-                return AlertConfiguration(alertType: .slot5, active: false, duration: 0, trigger: .timeUntilAlert(.minutes(0)), beepRepeat: .once, beepType: .noBeep)
+                duration = 0
+                trigger = .timeUntilAlert(.minutes(0))
+                beepRepeat = .once
+                beepType = .noBeep
             }
+            return AlertConfiguration(alertType: .slot5, active: active, duration: duration, trigger: trigger, beepRepeat: beepRepeat, beepType: beepType)
         case .suspendTimeExpired(let suspendTime):
             let active = suspendTime != 0 // disable if suspendTime is 0
+            let trigger: AlertTrigger
+            let beepRepeat: BeepRepeat
+            let beepType: BeepType
             if active {
-                return AlertConfiguration(alertType: .slot6, duration: 0, trigger: .timeUntilAlert(suspendTime), beepRepeat: .every1MinuteFor3MinutesAndRepeatEvery15Minutes, beepType: .bipBeepBipBeepBipBeepBipBeep)
+                trigger = .timeUntilAlert(suspendTime)
+                beepRepeat = .every1MinuteFor3MinutesAndRepeatEvery15Minutes
+                beepType = .bipBeepBipBeepBipBeepBipBeep
             } else {
-                return AlertConfiguration(alertType: .slot6, active: false, duration: 0, trigger: .timeUntilAlert(.minutes(0)), beepRepeat: .once, beepType: .noBeep)
+                trigger = .timeUntilAlert(.minutes(0))
+                beepRepeat = .once
+                beepType = .noBeep
             }
+            return AlertConfiguration(alertType: .slot6, active: active, duration: 0, trigger: trigger, beepRepeat: beepRepeat, beepType: beepType)
         }
     }
 
@@ -207,10 +228,12 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
             }
             self = .autoOffAlarm(active: active, countdownDuration: TimeInterval(countdownDuration))
         case "podSuspendedReminder":
-            guard let suspendTime = rawValue["suspendTime"] as? Double else {
+            guard let active = rawValue["active"] as? Bool,
+                let suspendTime = rawValue["suspendTime"] as? Double else
+            {
                 return nil
             }
-            self = .podSuspendedReminder(suspendTime: suspendTime)
+            self = .podSuspendedReminder(active: active, suspendTime: suspendTime)
         case "suspendTimeExpired":
             guard let suspendTime = rawValue["suspendTime"] as? Double else {
                 return nil
@@ -264,7 +287,8 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
         case .autoOffAlarm(let active, let countdownDuration):
             rawValue["active"] = active
             rawValue["countdownDuration"] = countdownDuration
-        case .podSuspendedReminder(let suspendTime):
+        case .podSuspendedReminder(let active, let suspendTime):
+            rawValue["active"] = active
             rawValue["suspendTime"] = suspendTime
         case .suspendTimeExpired(let suspendTime):
             rawValue["suspendTime"] = suspendTime

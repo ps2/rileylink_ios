@@ -60,14 +60,14 @@ public struct VersionResponse : MessageBlock {
         switch responseLength {
         case assignAddressVersionLength:
             // This is the shorter 0x15 response for the 07 AssignAddress command.
-            // 01 15 020700 020700 02 02 0000a377 0003ab37 9f 1f00ee87
             // 0  1  2      5      8  9  10       14       18 19
             // 01 LL MXMYMZ IXIYIZ ID 0J LLLLLLLL TTTTTTTT GS IIIIIIII
+            // 01 15 020700 020700 02 02 0000a377 0003ab37 9f 1f00ee87
             //
             // LL = 0x15 (assignAddressVersionLength)
-            // PM = MX.MY.MZ
-            // PI = IX.IY.IZ
-            // ID = Product ID (should always be 02)
+            // PM MX.MY.MZ = 02.07.02 (for PM 2.7.0)
+            // PI IX.IY.IZ = 02.07.02 (for PI 2.7.0)
+            // ID = Product ID (always 02?)
             // 0J = Pod progress state (typically 02, could be 01)
             // LLLLLLLL = Lot
             // TTTTTTTT = Tid
@@ -97,20 +97,20 @@ public struct VersionResponse : MessageBlock {
 
         case setupPodVersionLength:
             // This is the longer 0x1B response for the 03 SetupPod command.
-            // 01 1b 1388 10 08 34 0a 50 020700 020700 02 03 0000a62b 00044794 1f00ee87
             // 0  1  2    4  5  6  7  8  9      12     15 16 17       21       25
-            // 01 LL MUTP EB EP PP CP PL MXMYMZ IXIYIZ ID 0J LLLLLLLL TTTTTTTT IIIIIIII
+            // 01 LL VVVV BR PR PP CP PL MXMYMZ IXIYIZ ID 0J LLLLLLLL TTTTTTTT IIIIIIII
+            // 01 1b 1388 10 08 34 0a 50 020700 020700 02 03 0000a62b 00044794 1f00ee87
             //
-            // LL = 0x1B (setupPodVersionMessageLength)
-            // MUTP = 0x1388 = 5000, # of micro Units of U100 insulin per tenth of pulse
-            // EB = 0x10 = 16, # of eighth secs per bolus pulse timing (2 seconds)
-            // EP = 0x08, # of eighth secs per pulse time for priming boluses (1 second)
+            // LL = 0x1b (setupPodVersionMessageLength)
+            // VVVV = 0x1388, pulse Volume in micro-units of U100 insulin per tenth of pulse (5000/100000 = 0.05U per pulse)
+            // BR = 0x10, Basic pulse Rate in # of eighth secs per pulse (16/8 = 2 seconds per pulse)
+            // PR = 0x08, Prime pulse Rate in # of eighth secs per pulse for priming boluses (8/8 = 1 second per priming pulse)
             // PP = 0x34 = 52, # of Prime Pulses (52 pulses x 0.05U/pulse = 2.6U)
             // CP = 0x0A = 10, # of Cannula insertion Pulses (10 pulses x 0.05U/pulse = 0.5U)
             // PL = 0x50 = 80, # of hours maximum Pod Life
-            // PM = MX.MY.MZ
-            // PI = IX.IY.IZ
-            // ID = Product ID (should always be 02)
+            // PM = MX.MY.MZ = 02.07.02 (for PM 2.7.0)
+            // PI = IX.IY.IZ = 02.07.02 (for PI 2.7.0)
+            // ID = Product ID (always 02?)
             // 0J = Pod progress state (should always be 03)
             // LLLLLLLL = Lot
             // TTTTTTTT = Tid

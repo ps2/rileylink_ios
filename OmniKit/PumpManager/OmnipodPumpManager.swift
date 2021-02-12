@@ -1156,6 +1156,8 @@ extension OmnipodPumpManager: PumpManager {
         return Pod.reservoirCapacity
     }
 
+    public var isOnboarded: Bool { state.isOnboarded }
+
     public var lastReconciliation: Date? {
         return self.state.podState?.lastInsulinMeasurements?.validTime
     }
@@ -1193,6 +1195,12 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     // MARK: Methods
+
+    public func completeOnboard() {
+        setState({ (state) in
+            state.isOnboarded = true
+        })
+    }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod else {

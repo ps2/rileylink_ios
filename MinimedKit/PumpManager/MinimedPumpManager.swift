@@ -714,6 +714,8 @@ extension MinimedPumpManager: PumpManager {
         return Double(state.pumpModel.reservoirCapacity)
     }
 
+    public var isOnboarded: Bool { state.isOnboarded }
+
     public var lastReconciliation: Date? {
         return state.lastReconciliation
     }
@@ -802,6 +804,12 @@ extension MinimedPumpManager: PumpManager {
     }
 
     // MARK: Methods
+
+    public func completeOnboard() {
+        setState({ (state) in
+            state.isOnboarded = true
+        })
+    }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         setSuspendResumeState(state: .suspend, completion: completion)

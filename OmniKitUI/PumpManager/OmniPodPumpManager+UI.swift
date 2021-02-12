@@ -15,17 +15,21 @@ import OmniKit
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)? {
-        return OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()        
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+        let setupViewController = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
+        setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
+        setupViewController.maxBolusUnits = settings.maxBolusUnits
+        setupViewController.basalSchedule = settings.basalSchedule
+        return .userInteractionRequired(setupViewController)
     }
     
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
         let settings = OmnipodSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
+        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 
-    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
         
         // Return settings for now; uncertainty recovery not implemented yet
         let settings = OmnipodSettingsViewController(pumpManager: self)
@@ -38,8 +42,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
     
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
-        return OmnipodHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
+    public func hudProvider(colorPalette: LoopUIColorPalette) -> HUDProvider? {
+        return OmnipodHUDProvider(pumpManager: self, colorPalette: colorPalette)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

@@ -14,17 +14,21 @@ import MinimedKit
 
 extension MinimedPumpManager: PumpManagerUI {
 
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)? {
-        return MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+        let setupViewController = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+        setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
+        setupViewController.maxBolusUnits = settings.maxBolusUnits
+        setupViewController.basalSchedule = settings.basalSchedule
+        return .userInteractionRequired(setupViewController)
     }
 
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
+        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
     
-    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
         // Return settings for now. No uncertainty handling atm.
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
@@ -35,8 +39,8 @@ extension MinimedPumpManager: PumpManagerUI {
         return state.smallPumpImage
     }
     
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
-        return MinimedHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors)
+    public func hudProvider(colorPalette: LoopUIColorPalette) -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self, colorPalette: colorPalette)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

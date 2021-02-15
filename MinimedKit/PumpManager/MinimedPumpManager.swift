@@ -629,8 +629,10 @@ extension MinimedPumpManager {
 
             delegate.pumpManager(self, hasNewPumpEvents: events, lastReconciliation: self.lastReconciliation, completion: { (error) in
                 // Called on an unknown queue by the delegate
-                self.log.error("Pump event storage failed: %{public}@", String(describing: error))
-                completion(MinimedPumpManagerError.storageFailure)
+                if let error = error {
+                    self.log.error("Pump event storage failed: %{public}@", String(describing: error))
+                    completion(MinimedPumpManagerError.storageFailure)
+                }
             })
 
         })

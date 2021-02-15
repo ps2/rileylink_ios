@@ -315,13 +315,6 @@ struct PodSettingsView: View  {
                 }
             }
 
-            Section(header: Text(LocalizedString("Support", comment: "Label for support disclosure row")).font(.headline).foregroundColor(Color.primary)) {
-                NavigationLink(destination: EmptyView()) {
-                    // Placeholder
-                    Text("Get Help with Omnipod 5").foregroundColor(Color.primary)
-                }
-            }
-
         }
         .alert(isPresented: $viewModel.alertIsPresented, content: { alert(for: viewModel.activeAlert!) })
         .insetGroupedListStyle()

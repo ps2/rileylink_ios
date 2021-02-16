@@ -632,6 +632,8 @@ extension MinimedPumpManager {
                 if let error = error {
                     self.log.error("Pump event storage failed: %{public}@", String(describing: error))
                     completion(MinimedPumpManagerError.storageFailure)
+                } else {
+                    completion(nil)
                 }
             })
 

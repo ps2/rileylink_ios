@@ -33,22 +33,22 @@ public struct VersionResponse : MessageBlock {
 
     public let pmVersion: FirmwareVersion
     public let piVersion: FirmwareVersion
-    public let podProgressStatus: PodProgressStatus
     public let lot: UInt32
     public let tid: UInt32
     public let address: UInt32
     public let productID: UInt8                     // always 2 (for PM = PI = 2.7.0), 2nd gen Omnipod?
+    public let podProgressStatus: PodProgressStatus
 
     // These values only included in the shorter 0x15 VersionResponse for the AssignAddress command.
     public let gain: UInt8?                         // 2-bit value, max gain is at 0, min gain is at 2
     public let rssi: UInt8?                         // 6-bit value, max rssi seen 61
 
     // These values only included in the longer 0x1B VersionResponse for the SetupPod command.
-    public let pulseSize: Double?                   // MUTP / 100,000, must be 0x1388 / 100,000 = 0.05U
-    public let secondsPerBolusPulse: Double?        // EB / 8, nominally 0x10 / 8 = 2
-    public let secondsPerPrimePulse: Double?        // EP / 8, nominally 0x08 / 8 = 1
-    public let primeUnits: Double?                  // PB * pulseSize, nominally 0x34 * 0.05U = 2.6U
-    public let cannulaInsertionUnits: Double?       // CB * pulseSize, nominally 0x0A * 0.05U = 0.5U
+    public let pulseSize: Double?                   // VVVV / 100,000, must be 0x1388 / 100,000 = 0.05U
+    public let secondsPerBolusPulse: Double?        // BR / 8, nominally 0x10 / 8 = 2 seconds per pulse
+    public let secondsPerPrimePulse: Double?        // PR / 8, nominally 0x08 / 8 = 1 seconds per priming pulse
+    public let primeUnits: Double?                  // PP * pulseSize, nominally 0x34 * 0.05U = 2.6U
+    public let cannulaInsertionUnits: Double?       // CP * pulseSize, nominally 0x0A * 0.05U = 0.5U
     public let serviceDuration: TimeInterval?       // PL hours, nominally 0x50 = 80 hours
 
     public let data: Data
@@ -67,8 +67,8 @@ public struct VersionResponse : MessageBlock {
             // LL = 0x15 (assignAddressVersionLength)
             // PM MX.MY.MZ = 02.07.02 (for PM 2.7.0)
             // PI IX.IY.IZ = 02.07.02 (for PI 2.7.0)
-            // ID = Product ID (always 02?)
-            // 0J = Pod progress state (typically 02, could be 01)
+            // ID = Product ID (always 02 for PM = PI = 2.7.0)
+            // 0J = Pod progress state (typically 02, but could be 01, for this particular response)
             // LLLLLLLL = Lot
             // TTTTTTTT = Tid
             // GS = ggssssss (Gain/RSSI)
@@ -110,8 +110,8 @@ public struct VersionResponse : MessageBlock {
             // PL = 0x50 = 80, # of hours maximum Pod Life
             // PM = MX.MY.MZ = 02.07.02 (for PM 2.7.0)
             // PI = IX.IY.IZ = 02.07.02 (for PI 2.7.0)
-            // ID = Product ID (always 02?)
-            // 0J = Pod progress state (should always be 03)
+            // ID = Product ID (always 02 for PM = PI = 2.7.0)
+            // 0J = Pod progress state (should be 03 for this particular response)
             // LLLLLLLL = Lot
             // TTTTTTTT = Tid
             // IIIIIIII = connection ID address
@@ -160,7 +160,7 @@ public struct VersionResponse : MessageBlock {
 
 extension VersionResponse: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "VersionResponse(lot:\(lot), tid:\(tid), gain:\(gain?.description ?? "NA"), rssi:\(rssi?.description ?? "NA") address:\(Data(bigEndian: address).hexadecimalString), podProgressStatus:\(podProgressStatus), pmVersion:\(pmVersion), piVersion:\(piVersion))"
+        return "VersionResponse(lot:\(lot), tid:\(tid), address:\(Data(bigEndian: address).hexadecimalString), pmVersion:\(pmVersion), piVersion:\(piVersion), productID:\(productID), podProgressStatus:\(podProgressStatus), gain:\(gain?.description ?? "NA"), rssi:\(rssi?.description ?? "NA"), pulseSize:\(pulseSize?.description ?? "NA"), secondsPerBolusPulse:\(secondsPerBolusPulse?.description ?? "NA"), secondsPerPrimePulse:\(secondsPerPrimePulse?.description ?? "NA"), primeUnits:\(primeUnits?.description ?? "NA"), cannulaInsertionUnits:\(cannulaInsertionUnits?.description ?? "NA"), serviceDuration:\(serviceDuration?.description ?? "NA"), )"
     }
 }
 

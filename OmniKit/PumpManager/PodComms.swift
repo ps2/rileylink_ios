@@ -160,15 +160,15 @@ class PodComms: CustomDebugStringConvertible {
                 log.error("%@", mess)
                 throw PodCommsError.diagnosticMessage(str: mess)
             }
-
-            // Adjust if the pod has different prime and cannula insertion bolus amounts
             if let primeUnits = config.primeUnits, Pod.primeUnits != primeUnits {
-                log.info("Changed prime bolus from default %.2fU to %.2fU", Pod.primeUnits, primeUnits)
-                Pod.primeUnits = primeUnits
+                let mess = String(format: "Unexpected prime bolus value of %.2fU instead of %.2fU", primeUnits, Pod.primeUnits)
+                log.error("%@", mess)
+                throw PodCommsError.diagnosticMessage(str: mess)
             }
             if let cannulaInsertionUnits = config.cannulaInsertionUnits, Pod.cannulaInsertionUnits != cannulaInsertionUnits {
-                log.info("Changed cannula insertion bolus from default %.2fU to %.2fU", Pod.cannulaInsertionUnits, cannulaInsertionUnits)
-                Pod.cannulaInsertionUnits = cannulaInsertionUnits
+                let mess = String(format: "Unexpected cannula insertion bolus value of %.2fU instead of  %.2fU", cannulaInsertionUnits, Pod.cannulaInsertionUnits)
+                log.error("%@", mess)
+                throw PodCommsError.diagnosticMessage(str: mess)
             }
 
             // Checking RSSI

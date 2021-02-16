@@ -301,7 +301,7 @@ public class PodCommsSession {
             }
         }
 
-        // Mark Pod.primeUnits (default 2.6U) bolus delivery with Pod.primeDeliveryRate (1) between pulses for prime
+        // Mark Pod.primeUnits (2.6U) bolus delivery with Pod.primeDeliveryRate (1) between pulses for prime
         
         let primeFinishTime = Date() + primeDuration
         podState.primeFinishTime = primeFinishTime
@@ -404,7 +404,7 @@ public class PodCommsSession {
             try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm])
         }
         
-        // Mark cannulaInsertionUnits (default 0.5U) bolus delivery with Pod.secondsPerPrimePulse (1) between pulses for cannula insertion
+        // Mark cannulaInsertionUnits (0.5U) bolus delivery with Pod.secondsPerPrimePulse (1) between pulses for cannula insertion
 
         let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerPrimePulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)

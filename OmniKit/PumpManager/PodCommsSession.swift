@@ -34,6 +34,7 @@ public enum PodCommsError: Error {
     case rssiTooLow
     case rssiTooHigh
     case diagnosticMessage(str: String)
+    case podIncompatible(str: String)
 }
 
 extension PodCommsError: LocalizedError {
@@ -83,6 +84,8 @@ extension PodCommsError: LocalizedError {
         case .rssiTooHigh: // only occurs when RileyLink is too close to the pod for reliable pairing
             return LocalizedString("Signal strength too high", comment: "Format string for pod signal strength too high")
         case .diagnosticMessage(let str):
+            return str
+        case .podIncompatible(let str):
             return str
         }
     }
@@ -137,6 +140,17 @@ extension PodCommsError: LocalizedError {
             return LocalizedString("Please reposition the RileyLink further from the pod", comment: "Recovery suggestion when pairing signal strength is too high")
         case .diagnosticMessage:
             return nil
+        case .podIncompatible:
+            return nil
+        }
+    }
+
+    public var isFaulted: Bool {
+        switch self {
+        case .podFault, .activationTimeExceeded, .podIncompatible:
+            return true
+        default:
+            return false
         }
     }
 }

@@ -74,6 +74,7 @@ class PodComms: CustomDebugStringConvertible {
     ///     - PodCommsError.rssiTooLow
     ///     - PodCommsError.rssiTooHigh
     ///     - PodCommsError.diagnosticMessage
+    ///     - PodCommsError.podIncompatible
     ///     - MessageError.invalidCrc
     ///     - MessageError.invalidSequence
     ///     - MessageError.invalidAddress
@@ -142,36 +143,7 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.podChange
             }
 
-            // Could set up these Pod constant to be modifiable, but this would require this state to be added to persistent PodState
-            // and would be difficult to test since constants may be dependent on these values and we don't have any such pods with.
-            // So verify that these values are all as expected and fail if a pod has a different fundemental value than expected.
-            if let secondsPerBolusPulse = config.secondsPerBolusPulse, Pod.secondsPerBolusPulse != secondsPerBolusPulse  {
-                let mess = String(format: "Unexpected pod reported seconds per bolus pulse value of %.1f instead of %.1f", secondsPerBolusPulse, Pod.secondsPerBolusPulse)
-                log.info("%@", mess)
-                throw PodCommsError.diagnosticMessage(str: mess)
-            }
-            if let secondsPerPrimePulse = config.secondsPerPrimePulse, Pod.secondsPerPrimePulse != secondsPerPrimePulse  {
-                let mess = String(format: "Unexpected pod reported seconds per prime pulse value of %.1f instead of %.1f", secondsPerPrimePulse, Pod.secondsPerPrimePulse)
-                log.error("%@", mess)
-                throw PodCommsError.diagnosticMessage(str: mess)
-            }
-            if let serviceDuration = config.serviceDuration, Pod.serviceDuration != serviceDuration {
-                let mess = String(format: "Unexpected pod service duration hours value of %.0f instead of %.0f", serviceDuration.hours, Pod.serviceDuration.hours)
-                log.error("%@", mess)
-                throw PodCommsError.diagnosticMessage(str: mess)
-            }
-            if let primeUnits = config.primeUnits, Pod.primeUnits != primeUnits {
-                let mess = String(format: "Unexpected prime bolus value of %.2fU instead of %.2fU", primeUnits, Pod.primeUnits)
-                log.error("%@", mess)
-                throw PodCommsError.diagnosticMessage(str: mess)
-            }
-            if let cannulaInsertionUnits = config.cannulaInsertionUnits, Pod.cannulaInsertionUnits != cannulaInsertionUnits {
-                let mess = String(format: "Unexpected cannula insertion bolus value of %.2fU instead of  %.2fU", cannulaInsertionUnits, Pod.cannulaInsertionUnits)
-                log.error("%@", mess)
-                throw PodCommsError.diagnosticMessage(str: mess)
-            }
-
-            // Checking RSSI
+            // Check the pod RSSI
             let maxRssiAllowed = 59         // maximum RSSI limit allowed
             let minRssiAllowed = 30         // minimum RSSI limit allowed
             if let rssi = config.rssi, let gain = config.gain {
@@ -218,6 +190,41 @@ class PodComms: CustomDebugStringConvertible {
                 // The 2 hour window for the initial pairing has expired
                 self.podState?.setupProgress = .activationTimeout
                 throw PodCommsError.activationTimeExceeded
+            }
+
+            // It's unlikely that Insulet will release an updated Eros pod using any different fundemental values,
+            // so just verify that the fundemental pod constants returned match the expected constant values in the Pod struct.
+            // To actually be able to handle different fundemental values in Loop things would need to be reworked to save
+            // these values in some persistent PodState and then make sure that everything properly works using these values.
+            var errorStrings: [String] = []
+            if let pulseSize = config.pulseSize, pulseSize != Pod.pulseSize  {
+                errorStrings.append(String(format: "Pod reported pulse size of %.3fU different than expected %.3fU", pulseSize, Pod.pulseSize))
+            }
+            if let secondsPerBolusPulse = config.secondsPerBolusPulse, secondsPerBolusPulse != Pod.secondsPerBolusPulse  {
+                errorStrings.append(String(format: "Pod reported seconds per pulse rate of %.1f different than expected %.1f", secondsPerBolusPulse, Pod.secondsPerBolusPulse))
+            }
+            if let secondsPerPrimePulse = config.secondsPerPrimePulse, secondsPerPrimePulse != Pod.secondsPerPrimePulse  {
+                errorStrings.append(String(format: "Pod reported seconds per prime pulse rate of %.1f different than expected %.1f", secondsPerPrimePulse, Pod.secondsPerPrimePulse))
+            }
+            if let primeUnits = config.primeUnits, primeUnits != Pod.primeUnits {
+                errorStrings.append(String(format: "Pod reported prime bolus of %.2fU different than expected %.2fU", primeUnits, Pod.primeUnits))
+            }
+            if let cannulaInsertionUnits = config.cannulaInsertionUnits, Pod.cannulaInsertionUnits != cannulaInsertionUnits {
+                errorStrings.append(String(format: "Pod reported cannula insertion bolus of %.2fU different than expected %.2fU", cannulaInsertionUnits, Pod.cannulaInsertionUnits))
+            }
+            if let serviceDuration = config.serviceDuration {
+                if serviceDuration < Pod.serviceDuration {
+                    errorStrings.append(String(format: "Pod reported service duration of %.0f hours shorter than expected %.0f", serviceDuration.hours, Pod.serviceDuration.hours))
+                } else if serviceDuration > Pod.serviceDuration {
+                    log.info("Pod reported service duration of %.0f hours limited to expected %.0f", serviceDuration.hours, Pod.serviceDuration.hours)
+                }
+            }
+
+            let errMess = errorStrings.joined(separator: ".\n")
+            if errMess.isEmpty == false {
+                log.error("%@", errMess)
+                self.podState?.setupProgress = .podIncompatible
+                throw PodCommsError.podIncompatible(str: errMess)
             }
 
             if config.podProgressStatus == .pairingCompleted {

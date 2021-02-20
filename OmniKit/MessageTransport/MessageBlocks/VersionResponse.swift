@@ -127,13 +127,8 @@ public struct VersionResponse : MessageBlock {
             tid = encodedData[21...].toBigEndian(UInt32.self)
             address = encodedData[25...].toBigEndian(UInt32.self)
 
-            // Verify that the pulseSize matches our expected value as the basic validity check as per PDM.
+            // These values should be verified elsewhere and appropriately handled.
             pulseSize = Double(encodedData[2...].toBigEndian(UInt16.self)) / 100000
-            guard pulseSize == Pod.pulseSize else {
-                throw MessageError.validationFailed(description: "pulseSize")
-            }
-
-            // These values will be verified &/or used in the pairing code.
             secondsPerBolusPulse = Double(encodedData[4]) / 8
             secondsPerPrimePulse = Double(encodedData[5]) / 8
             primeUnits = Double(encodedData[6]) * Pod.pulseSize

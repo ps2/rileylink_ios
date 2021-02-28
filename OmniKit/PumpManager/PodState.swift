@@ -20,6 +20,7 @@ public enum SetupProgress: Int {
     case cannulaInserting
     case completed
     case activationTimeout
+    case podIncompatible
     
     public var primingNeeded: Bool {
         return self.rawValue < SetupProgress.priming.rawValue
@@ -135,7 +136,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public var isFaulted: Bool {
-        return fault != nil || setupProgress == .activationTimeout
+        return fault != nil || setupProgress == .activationTimeout || setupProgress == .podIncompatible
     }
 
     public mutating func advanceToNextNonce() {

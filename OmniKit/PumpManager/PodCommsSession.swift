@@ -33,6 +33,8 @@ public enum PodCommsError: Error {
     case activationTimeExceeded
     case rssiTooLow
     case rssiTooHigh
+    case diagnosticMessage(str: String)
+    case podIncompatible(str: String)
 }
 
 extension PodCommsError: LocalizedError {
@@ -81,6 +83,10 @@ extension PodCommsError: LocalizedError {
             return LocalizedString("Poor signal strength", comment: "Format string for poor pod signal strength")
         case .rssiTooHigh: // only occurs when RileyLink is too close to the pod for reliable pairing
             return LocalizedString("Signal strength too high", comment: "Format string for pod signal strength too high")
+        case .diagnosticMessage(let str):
+            return str
+        case .podIncompatible(let str):
+            return str
         }
     }
     
@@ -132,6 +138,19 @@ extension PodCommsError: LocalizedError {
             return LocalizedString("Please reposition the RileyLink relative to the pod", comment: "Recovery suggestion when pairing signal strength is too low")
         case .rssiTooHigh:
             return LocalizedString("Please reposition the RileyLink further from the pod", comment: "Recovery suggestion when pairing signal strength is too high")
+        case .diagnosticMessage:
+            return nil
+        case .podIncompatible:
+            return nil
+        }
+    }
+
+    public var isFaulted: Bool {
+        switch self {
+        case .podFault, .activationTimeExceeded, .podIncompatible:
+            return true
+        default:
+            return false
         }
     }
 }
@@ -277,9 +296,7 @@ public class PodCommsSession {
 
     // Returns time at which prime is expected to finish.
     public func prime() throws -> TimeInterval {
-        //4c00 00c8 0102
-
-        let primeDuration = TimeInterval(seconds: 55)   // a bit more than (Pod.primeUnits / Pod.primeDeliveryRate)
+        let primeDuration: TimeInterval = .seconds(Pod.primeUnits / Pod.primeDeliveryRate) + 3 // as per PDM
         
         // Skip following alerts if we've already done them before
         if podState.setupProgress != .startingPrime {
@@ -298,7 +315,7 @@ public class PodCommsSession {
             }
         }
 
-        // Mark 2.6U delivery with 1 second between pulses for prime
+        // Mark Pod.primeUnits (2.6U) bolus delivery with Pod.primeDeliveryRate (1) between pulses for prime
         
         let primeFinishTime = Date() + primeDuration
         podState.primeFinishTime = primeFinishTime
@@ -370,7 +387,8 @@ public class PodCommsSession {
     }
 
     public func insertCannula() throws -> TimeInterval {
-        let insertionWait: TimeInterval = .seconds(Pod.cannulaInsertionUnits / Pod.primeDeliveryRate)
+        let cannulaInsertionUnits = Pod.cannulaInsertionUnits + Pod.cannulaInsertionUnitsExtra
+        let insertionWait: TimeInterval = .seconds(cannulaInsertionUnits / Pod.primeDeliveryRate)
 
         guard let activatedAt = podState.activatedAt else {
             throw PodCommsError.noPodPaired
@@ -400,14 +418,14 @@ public class PodCommsSession {
             try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm])
         }
         
-        // Mark 0.5U delivery with 1 second between pulses for cannula insertion
+        // Mark cannulaInsertionUnits (0.5U) bolus delivery with Pod.secondsPerPrimePulse (1) between pulses for cannula insertion
 
         let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerPrimePulse)
-        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: Pod.cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
+        let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
         
         podState.setupProgress = .startingInsertCannula
-        let bolusExtraCommand = BolusExtraCommand(units: Pod.cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
+        let bolusExtraCommand = BolusExtraCommand(units: cannulaInsertionUnits, timeBetweenPulses: timeBetweenPulses)
         let status2: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
         podState.updateFromStatusResponse(status2)
         

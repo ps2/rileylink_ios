@@ -1248,9 +1248,9 @@ extension OmnipodPumpManager: PumpManager {
                 state.suspendEngageState = .engaging
             })
 
-            // use confirmationBeepType here for confirmation beeps to avoid getting 3 beeps!
+            let suspendTime = TimeInterval(minutes: 15) // Place holder for future value from UI
             let beepType: BeepConfigType? = self.confirmationBeeps ? .beeeeeep : nil
-            let result = session.cancelDelivery(deliveryType: .all, confirmationBeepType: beepType)
+            let result = session.suspendDelivery(suspendTime: suspendTime, confirmationBeepType: beepType)
             switch result {
             case .certainFailure(let error):
                 completion(error)
@@ -1296,6 +1296,7 @@ extension OmnipodPumpManager: PumpManager {
                 let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                 let beep = self.confirmationBeeps
                 let _ = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
+                try session.cancelSuspendAlerts()
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }

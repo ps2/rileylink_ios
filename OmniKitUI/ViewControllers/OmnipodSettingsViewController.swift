@@ -269,7 +269,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
-        case activatedAt = 0
+        case activeTime = 0
         case expiresAt
         case bolus
         case basal
@@ -459,10 +459,13 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 
                 switch statusRow {
-                case .activatedAt:
+                case .activeTime:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
-                    cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
+                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod active time")
+                    // Since the podState doesn't actually keep the pod's reported time active value returned in each response,
+                    // use a calculation based on a computed activated at time that is based on the dynamically updated expiresAt time
+                    // to have a consistent value and behavior when the pod's internal active time varies from the true elapsed time.
+                    cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)
                     return cell
                 case .expiresAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)

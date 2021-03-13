@@ -48,11 +48,14 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             }
         }
     }
+
+    private let bluetoothProvider: BluetoothProvider
     
     private let colorPalette: LoopUIColorPalette
     
-    public init(pumpManager: OmnipodPumpManager, colorPalette: LoopUIColorPalette) {
+    public init(pumpManager: OmnipodPumpManager, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) {
         self.pumpManager = pumpManager
+        self.bluetoothProvider = bluetoothProvider
         self.podState = pumpManager.state.podState
         self.colorPalette = colorPalette
         super.init()
@@ -91,7 +94,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         if podState?.fault != nil {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
-            return HUDTapAction.presentViewController(pumpManager.settingsViewController(colorPalette: colorPalette))
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette))
         }
     }
     

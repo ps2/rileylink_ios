@@ -16,6 +16,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public static let version = 2
     
+    public var isOnboarded: Bool
+
     public var podState: PodState?
 
     public var pairingAttemptAddress: UInt32?
@@ -54,7 +56,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     // MARK: -
 
-    public init(podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, insulinType: InsulinType) {
+    public init(isOnboarded: Bool, podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, insulinType: InsulinType) {
+        self.isOnboarded = isOnboarded
         self.podState = podState
         self.timeZone = timeZone
         self.basalSchedule = basalSchedule
@@ -92,6 +95,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             basalSchedule = schedule
         }
         
+        let isOnboarded = rawValue["isOnboarded"] as? Bool ?? true // Backward compatibility
+
         let podState: PodState?
         if let podStateRaw = rawValue["podState"] as? PodState.RawValue {
             podState = PodState(rawValue: podStateRaw)
@@ -120,6 +125,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         }
 
         self.init(
+            isOnboarded: isOnboarded,
             podState: podState,
             timeZone: timeZone,
             basalSchedule: basalSchedule,
@@ -151,6 +157,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     public var rawValue: RawValue {
         var value: [String : Any] = [
             "version": OmnipodPumpManagerState.version,
+            "isOnboarded": isOnboarded,
             "timeZone": timeZone.secondsFromGMT(),
             "basalSchedule": basalSchedule.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
@@ -200,6 +207,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return [
             "## OmnipodPumpManagerState",
+            "* isOnboarded: \(isOnboarded)",
             "* timeZone: \(timeZone)",
             "* basalSchedule: \(String(describing: basalSchedule))",
             "* expirationReminderDate: \(String(describing: expirationReminderDate))",

@@ -63,7 +63,7 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
     }
 
     
-    private func updateColor() {
+    private func updateAlertLabelColor() {
         switch reservoirAlertState {
         case .lowReservoir, .empty:
             alertLabel?.backgroundColor = stateColors?.warning
@@ -74,7 +74,7 @@ public final class OmnipodReservoirView: LevelHUDView, NibLoadable {
 
     override public func stateColorsDidUpdate() {
         super.stateColorsDidUpdate()
-        updateColor()
+        updateAlertLabelColor()
     }
 
     

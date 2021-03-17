@@ -16,7 +16,7 @@ import RileyLinkBLEKit
 import RileyLinkKit
 import RileyLinkKitUI
 
-// PumpManagerSetupViewController
+// OmnipodPumpManagerSetupViewController
 public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewController {
     
     class func instantiateFromStoryboard() -> OmnipodPumpManagerSetupViewController {
@@ -83,13 +83,13 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
             if let deviceProvider = rileyLinkPumpManager?.rileyLinkDeviceProvider, let basalSchedule = basalSchedule, let insulinType = insulinType {
                 let connectionManagerState = rileyLinkPumpManager?.rileyLinkConnectionManagerState
                 let schedule = BasalSchedule(repeatingScheduleValues: basalSchedule.items)
-                let pumpManagerState = OmnipodPumpManagerState(podState: nil, timeZone: .currentFixed, basalSchedule: schedule, rileyLinkConnectionManagerState: connectionManagerState, insulinType: insulinType)
+                let pumpManagerState = OmnipodPumpManagerState(isOnboarded: false, podState: nil, timeZone: .currentFixed, basalSchedule: schedule, rileyLinkConnectionManagerState: connectionManagerState, insulinType: insulinType)
                 let pumpManager = OmnipodPumpManager(
                     state: pumpManagerState,
                     rileyLinkDeviceProvider: deviceProvider,
                     rileyLinkConnectionManager: rileyLinkPumpManager?.rileyLinkConnectionManager)
                 vc.pumpManager = pumpManager
-                setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+                pumpManagerCreateDelegate?.pumpManagerCreateNotifying(didCreatePumpManager: pumpManager)
             }
         case let vc as InsertCannulaSetupViewController:
             vc.pumpManager = pumpManager
@@ -102,8 +102,13 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
 
     override open func finishedSetup() {
         if let pumpManager = pumpManager {
-            let settings = OmnipodSettingsViewController(pumpManager: pumpManager)
-            setViewControllers([settings], animated: true)
+            pumpManager.completeOnboard()
+
+            let settings = PumpManagerSetupSettings(maxBasalRateUnitsPerHour: maxBasalRateUnitsPerHour, maxBolusUnits: maxBolusUnits, basalSchedule: basalSchedule)
+            pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
+            
+            let settingsViewController = OmnipodSettingsViewController(pumpManager: pumpManager)
+            setViewControllers([settingsViewController], animated: true)
         }
     }
 

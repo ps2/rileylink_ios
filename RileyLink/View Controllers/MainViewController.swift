@@ -184,7 +184,7 @@ class MainViewController: RileyLinkSettingsViewController {
                 settings.completionDelegate = self
                 present(settings, animated: true)
             } else {
-                var setupViewController: PumpManagerSetupViewController & UIViewController & CompletionNotifying
+                var setupViewController: UIViewController & PumpManagerOnboardNotifying & CompletionNotifying
                 switch PumpActionRow(rawValue: indexPath.row)! {
                 case .addMinimedPump:
                     setupViewController = UIStoryboard(name: "MinimedPumpManager", bundle: Bundle(for: MinimedPumpManagerSetupViewController.self)).instantiateViewController(withIdentifier: "DevelopmentPumpSetup") as! MinimedPumpManagerSetupViewController
@@ -221,9 +221,14 @@ extension MainViewController: CompletionDelegate {
     }
 }
 
-extension MainViewController: PumpManagerSetupViewControllerDelegate {
-    func pumpManagerSetupViewController(_ pumpManagerSetupViewController: PumpManagerSetupViewController, didSetUpPumpManager pumpManager: PumpManagerUI) {
+extension MainViewController: PumpManagerCreateDelegate {
+    func pumpManagerCreateNotifying(_ notifying: PumpManagerCreateNotifying, didCreatePumpManager pumpManager: PumpManagerUI) {
         deviceDataManager.pumpManager = pumpManager
+    }
+}
+
+extension MainViewController: PumpManagerOnboardDelegate {
+    func pumpManagerOnboardNotifying(_ notifying: PumpManagerOnboardNotifying, didOnboardPumpManager pumpManager: PumpManagerUI, withSettings settings: PumpManagerSetupSettings) {
         show(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors), sender: nil)
         tableView.reloadSections(IndexSet([Section.pump.rawValue]), with: .none)
     }

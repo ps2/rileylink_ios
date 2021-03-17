@@ -16,11 +16,18 @@ public protocol MinimedPumpManagerStateObserver: class {
 }
 
 public class MinimedPumpManager: RileyLinkPumpManager {
+    
+    public static let managerIdentifier = "Minimed500"
+    
+    public var managerIdentifier: String {
+        return MinimedPumpManager.managerIdentifier
+    }
+    
     public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
 
         self.hkDevice = HKDevice(
-            name: type(of: self).managerIdentifier,
+            name: MinimedPumpManager.managerIdentifier,
             manufacturer: "Medtronic",
             model: state.pumpModel.rawValue,
             hardwareVersion: nil,
@@ -722,8 +729,6 @@ extension MinimedPumpManager {
 // MARK: - PumpManager
 extension MinimedPumpManager: PumpManager {
     
-    public static let managerIdentifier: String = "Minimed500"
-
     public static let localizedTitle = LocalizedString("Minimed 500/700 Series", comment: "Generic title of the minimed pump manager")
 
     public var localizedTitle: String {
@@ -759,6 +764,8 @@ extension MinimedPumpManager: PumpManager {
     public var pumpReservoirCapacity: Double {
         return Double(state.pumpModel.reservoirCapacity)
     }
+
+    public var isOnboarded: Bool { state.isOnboarded }
 
     public var lastReconciliation: Date? {
         return state.lastReconciliation
@@ -860,6 +867,12 @@ extension MinimedPumpManager: PumpManager {
     }
 
     // MARK: Methods
+
+    public func completeOnboard() {
+        setState({ (state) in
+            state.isOnboarded = true
+        })
+    }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         guard let insulinType = insulinType else {
@@ -1237,7 +1250,7 @@ extension MinimedPumpManager: CGMManager {
         return recents.sensorState
     }
     
-    public var cgmStatus: CGMManagerStatus {
+    public var cgmManagerStatus: CGMManagerStatus {
         return CGMManagerStatus(hasValidSensorSession: hasValidSensorSession)
     }
     

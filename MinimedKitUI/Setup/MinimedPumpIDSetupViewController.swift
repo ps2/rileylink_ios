@@ -75,7 +75,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
     var pumpManagerState: MinimedPumpManagerState? {
         get {
-            guard let pumpColor = pumpColor,
+            guard
+                let navVC = navigationController as? MinimedPumpManagerSetupViewController,
+                let insulinType = navVC.insulinType,
+                let pumpColor = pumpColor,
                 let pumpID = pumpID,
                 let pumpModel = pumpState?.pumpModel,
                 let pumpRegion = pumpRegionCode?.region,
@@ -92,7 +95,9 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone,
-                suspendState: .resumed(Date()))
+                suspendState: .resumed(Date()),
+                insulinType: insulinType
+            )
         }
     }
 
@@ -312,7 +317,12 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             if isSentrySetUpNeeded {
                 performSegue(withIdentifier: "Sentry", sender: sender)
             } else {
-                super.continueButtonPressed(sender)
+                if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
+                    let pumpManager = pumpManager
+                {
+                    super.continueButtonPressed(sender)
+                    setupViewController.pumpManagerSetupComplete(pumpManager)
+                }
             }
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
 #if targetEnvironment(simulator)

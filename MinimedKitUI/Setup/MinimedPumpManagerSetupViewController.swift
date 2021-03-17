@@ -37,6 +37,8 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     }
 
     private(set) var pumpManager: MinimedPumpManager?
+    
+    internal var insulinType: InsulinType?
 
     /*
      1. RileyLink

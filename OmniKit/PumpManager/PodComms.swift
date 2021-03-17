@@ -11,6 +11,7 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
+fileprivate var diagnosePairingRssi = false
 
 protocol PodCommsDelegate: class {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
@@ -44,6 +45,15 @@ class PodComms: CustomDebugStringConvertible {
         self.messageLogger = nil
     }
     
+    var insulinType: InsulinType? {
+        get { podState?.insulinType }
+        set {
+            if let insulinType = newValue {
+                podState?.insulinType = insulinType
+            }
+        }
+    }
+    
     /// Handles all the common work to send and verify the version response for the two pairing commands, AssignAddress and SetupPod.
     ///  Has side effects of creating pod state, assigning startingPacketNumber, and updating pod state.
     ///
@@ -60,14 +70,16 @@ class PodComms: CustomDebugStringConvertible {
     ///     - PodCommsError.emptyResponse
     ///     - PodCommsError.unexpectedResponse
     ///     - PodCommsError.podChange
+    ///     - PodCommsError.activationTimeExceeded
     ///     - PodCommsError.rssiTooLow
     ///     - PodCommsError.rssiTooHigh
-    ///     - PodCommsError.activationTimeExceeded
+    ///     - PodCommsError.diagnosticMessage
+    ///     - PodCommsError.podIncompatible
     ///     - MessageError.invalidCrc
     ///     - MessageError.invalidSequence
     ///     - MessageError.invalidAddress
     ///     - RileyLinkDeviceError
-    private func sendPairMessage(address: UInt32, transport: PodMessageTransport, message: Message) throws -> VersionResponse {
+    private func sendPairMessage(address: UInt32, transport: PodMessageTransport, message: Message, insulinType: InsulinType) throws -> VersionResponse {
 
         defer {
             log.debug("sendPairMessage saving current transport packet #%d", transport.packetNumber)
@@ -131,12 +143,16 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.podChange
             }
 
-            // Checking RSSI
+            // Check the pod RSSI
             let maxRssiAllowed = 59         // maximum RSSI limit allowed
             let minRssiAllowed = 30         // minimum RSSI limit allowed
             if let rssi = config.rssi, let gain = config.gain {
-                let rssiStr = String(format: "Receiver Low Gain: %d.\nReceived Signal Strength Indicator: %d", gain, rssi)
-                log.default("%s", rssiStr)
+                let rssiStr = String(format: "RSSI: %u.\nReceiver Low Gain: %u", rssi, gain)
+                log.default("%@", rssiStr)
+                if diagnosePairingRssi {
+                    throw PodCommsError.diagnosticMessage(str: rssiStr)
+                }
+
                 rssiRetries -= 1
                 if rssi < minRssiAllowed {
                     log.default("RSSI value %d is less than minimum allowed value of %d, %d retries left", rssi, minRssiAllowed, rssiRetries)
@@ -163,7 +179,8 @@ class PodComms: CustomDebugStringConvertible {
                     lot: config.lot,
                     tid: config.tid,
                     packetNumber: transport.packetNumber,
-                    messageNumber: transport.messageNumber
+                    messageNumber: transport.messageNumber,
+                    insulinType: insulinType
                 )
                 // podState setupProgress state should be addressAssigned
             }
@@ -175,6 +192,41 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.activationTimeExceeded
             }
 
+            // It's unlikely that Insulet will release an updated Eros pod using any different fundemental values,
+            // so just verify that the fundemental pod constants returned match the expected constant values in the Pod struct.
+            // To actually be able to handle different fundemental values in Loop things would need to be reworked to save
+            // these values in some persistent PodState and then make sure that everything properly works using these values.
+            var errorStrings: [String] = []
+            if let pulseSize = config.pulseSize, pulseSize != Pod.pulseSize  {
+                errorStrings.append(String(format: "Pod reported pulse size of %.3fU different than expected %.3fU", pulseSize, Pod.pulseSize))
+            }
+            if let secondsPerBolusPulse = config.secondsPerBolusPulse, secondsPerBolusPulse != Pod.secondsPerBolusPulse  {
+                errorStrings.append(String(format: "Pod reported seconds per pulse rate of %.1f different than expected %.1f", secondsPerBolusPulse, Pod.secondsPerBolusPulse))
+            }
+            if let secondsPerPrimePulse = config.secondsPerPrimePulse, secondsPerPrimePulse != Pod.secondsPerPrimePulse  {
+                errorStrings.append(String(format: "Pod reported seconds per prime pulse rate of %.1f different than expected %.1f", secondsPerPrimePulse, Pod.secondsPerPrimePulse))
+            }
+            if let primeUnits = config.primeUnits, primeUnits != Pod.primeUnits {
+                errorStrings.append(String(format: "Pod reported prime bolus of %.2fU different than expected %.2fU", primeUnits, Pod.primeUnits))
+            }
+            if let cannulaInsertionUnits = config.cannulaInsertionUnits, Pod.cannulaInsertionUnits != cannulaInsertionUnits {
+                errorStrings.append(String(format: "Pod reported cannula insertion bolus of %.2fU different than expected %.2fU", cannulaInsertionUnits, Pod.cannulaInsertionUnits))
+            }
+            if let serviceDuration = config.serviceDuration {
+                if serviceDuration < Pod.serviceDuration {
+                    errorStrings.append(String(format: "Pod reported service duration of %.0f hours shorter than expected %.0f", serviceDuration.hours, Pod.serviceDuration.hours))
+                } else if serviceDuration > Pod.serviceDuration {
+                    log.info("Pod reported service duration of %.0f hours limited to expected %.0f", serviceDuration.hours, Pod.serviceDuration.hours)
+                }
+            }
+
+            let errMess = errorStrings.joined(separator: ".\n")
+            if errMess.isEmpty == false {
+                log.error("%@", errMess)
+                self.podState?.setupProgress = .podIncompatible
+                throw PodCommsError.podIncompatible(str: errMess)
+            }
+
             if config.podProgressStatus == .pairingCompleted {
                 log.info("Version Response %{public}@ indicates pairing is complete, moving pod to configured state", String(describing: config))
                 self.podState?.setupProgress = .podConfigured
@@ -184,7 +236,7 @@ class PodComms: CustomDebugStringConvertible {
         }
     }
 
-    private func assignAddress(address: UInt32, commandSession: CommandSession) throws {
+    private func assignAddress(address: UInt32, commandSession: CommandSession, insulinType: InsulinType) throws {
         commandSession.assertOnSessionQueue()
 
         let packetNumber, messageNumber: Int
@@ -205,10 +257,10 @@ class PodComms: CustomDebugStringConvertible {
         let assignAddress = AssignAddressCommand(address: address)
         let message = Message(address: 0xffffffff, messageBlocks: [assignAddress], sequenceNum: transport.messageNumber)
 
-        _ = try sendPairMessage(address: address, transport: transport, message: message)
+        _ = try sendPairMessage(address: address, transport: transport, message: message, insulinType: insulinType)
     }
     
-    private func setupPod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession) throws {
+    private func setupPod(podState: PodState, timeZone: TimeZone, commandSession: CommandSession, insulinType: InsulinType) throws {
         commandSession.assertOnSessionQueue()
         
         let transport = PodMessageTransport(session: commandSession, address: 0xffffffff, ackAddress: podState.address, state: podState.messageTransportState)
@@ -221,7 +273,7 @@ class PodComms: CustomDebugStringConvertible {
         
         let versionResponse: VersionResponse
         do {
-            versionResponse = try sendPairMessage(address: podState.address, transport: transport, message: message)
+            versionResponse = try sendPairMessage(address: podState.address, transport: transport, message: message, insulinType: insulinType)
         } catch let error {
             if case PodCommsError.podAckedInsteadOfReturningResponse = error {
                 log.default("SetupPod acked instead of returning response. Moving pod to configured state.")
@@ -238,7 +290,13 @@ class PodComms: CustomDebugStringConvertible {
         }
     }
     
-    func assignAddressAndSetupPod(address: UInt32, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, timeZone: TimeZone, messageLogger: MessageLogger?, _ block: @escaping (_ result: SessionRunResult) -> Void)
+    func assignAddressAndSetupPod(
+        address: UInt32,
+        using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void,
+        timeZone: TimeZone,
+        messageLogger: MessageLogger?,
+        insulinType: InsulinType,
+        _ block: @escaping (_ result: SessionRunResult) -> Void)
     {
         deviceSelector { (device) in
             guard let device = device else {
@@ -251,7 +309,7 @@ class PodComms: CustomDebugStringConvertible {
                     self.configureDevice(device, with: commandSession)
                     
                     if self.podState == nil {
-                        try self.assignAddress(address: address, commandSession: commandSession)
+                        try self.assignAddress(address: address, commandSession: commandSession, insulinType: insulinType)
                     }
                     
                     guard self.podState != nil else {
@@ -260,7 +318,7 @@ class PodComms: CustomDebugStringConvertible {
                     }
 
                     if self.podState!.setupProgress != .podConfigured {
-                        try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession)
+                        try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession, insulinType: insulinType)
                     }
 
                     guard self.podState!.setupProgress == .podConfigured else {

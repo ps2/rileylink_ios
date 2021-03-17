@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopKit
 
 public enum SetupProgress: Int {
     case addressAssigned = 0
@@ -19,6 +20,7 @@ public enum SetupProgress: Int {
     case cannulaInserting
     case completed
     case activationTimeout
+    case podIncompatible
     
     public var primingNeeded: Bool {
         return self.rawValue < SetupProgress.priming.rawValue
@@ -92,7 +94,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         return active
     }
     
-    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0) {
+    public var insulinType: InsulinType
+    
+    public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0, insulinType: InsulinType) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
         self.piVersion = piVersion
@@ -108,6 +112,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
         self.configuredAlerts = [.slot7: .waitingForPairingReminder]
+        self.insulinType = insulinType
     }
     
     public var unfinishedPairing: Bool {
@@ -131,7 +136,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public var isFaulted: Bool {
-        return fault != nil || setupProgress == .activationTimeout
+        return fault != nil || setupProgress == .activationTimeout || setupProgress == .podIncompatible
     }
 
     public mutating func advanceToNextNonce() {
@@ -167,6 +172,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
+        if unfinalizedBolus == nil && response.deliveryStatus.bolusing && response.podProgressStatus.readyForDelivery {
+            // Create the unfinalizedBolus since we currently bolusing in a ready state (possible Loop restart)
+            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType, automatic: nil)
+        }
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
@@ -376,11 +385,19 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 .slot2: .shutdownImminentAlarm(0),
                 .slot3: .expirationAlert(0),
                 .slot4: .lowReservoirAlarm(0),
+                .slot5: .podSuspendedReminder(active: false, suspendTime: 0),
+                .slot6: .suspendTimeExpired(suspendTime: 0),
                 .slot7: .expirationAdvisoryAlarm(alarmTime: 0, duration: 0)
             ]
         }
         
         self.primeFinishTime = rawValue["primeFinishTime"] as? Date
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            insulinType = .humalog
+        }
     }
     
     public var rawValue: RawValue {
@@ -395,7 +412,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "finalizedDoses": finalizedDoses.map( { $0.rawValue }),
             "alerts": activeAlertSlots.rawValue,
             "messageTransportState": messageTransportState.rawValue,
-            "setupProgress": setupProgress.rawValue
+            "setupProgress": setupProgress.rawValue,
+            "insulinType": insulinType.rawValue
             ]
         
         if let unfinalizedBolus = self.unfinalizedBolus {
@@ -471,6 +489,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* setupProgress: \(setupProgress)",
             "* primeFinishTime: \(String(describing: primeFinishTime))",
             "* configuredAlerts: \(String(describing: configuredAlerts))",
+            "* insulinType: \(String(describing: insulinType))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

@@ -263,6 +263,9 @@
 		C10D9BD71C8269D500378342 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C110A0E6221BBAEF0016560B /* GetPumpFirmwareVersionMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB4272216E5DFD00FAB378 /* GetPumpFirmwareVersionMessageBody.swift */; };
 		C11166AE2180D834000EEAAB /* AlertSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AD2180D834000EEAAB /* AlertSlot.swift */; };
+		C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */; };
+		C11AA528258728CF00BDE12F /* ReservoirHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */; };
+		C11AA5392587294E00BDE12F /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */; };
 		C121985F1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */; };
 		C12198611C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */; };
@@ -415,9 +418,10 @@
 		C184875E20BCDB0000ABE9E7 /* ForecastError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184875D20BCDB0000ABE9E7 /* ForecastError.swift */; };
 		C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */; };
 		C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18EB741207EE20100EA002B /* NightscoutProfile.swift */; };
+		C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */; };
 		C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492621D4A5A19008964FF /* IOBStatus.swift */; };
 		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
-		C1A492671D4A65D9008964FF /* RecommendedTempBasal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */; };
+		C1A492671D4A65D9008964FF /* TempBasalAdjustment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* TempBasalAdjustment.swift */; };
 		C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492681D4A66C0008964FF /* LoopEnacted.swift */; };
 		C1A721621EC3E0500080FAD7 /* PumpErrorMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */; };
 		C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */; };
@@ -439,6 +443,7 @@
 		C1B383361CD1BA8100CE7782 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */; };
 		C1B44CA7224BDFDF00DE47E5 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
 		C1B73D65245F824400881A4F /* MinimedPumpManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */; };
+		C1B9E0E0256AF052008E8B84 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1B9E0DE256AF052008E8B84 /* Localizable.strings */; };
 		C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */; };
 		C1BB128821CB5603009A29B5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB128721CB5603009A29B5 /* main.swift */; };
 		C1BB129421CB564D009A29B5 /* CRC8.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAFA0213323E800C50C1D /* CRC8.swift */; };
@@ -487,6 +492,8 @@
 		C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
+		C1DD5167259FE54400DE27AE /* InsulinTypeConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */; };
+		C1DD51D525A0BC6000DE27AE /* InsulinTypeConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD51D425A0BC6000DE27AE /* InsulinTypeConfirmation.swift */; };
 		C1E163D52135EC0100EB89AE /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
 		C1E163D62135ED0300EB89AE /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		C1E163D72135FF9A00EB89AE /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
@@ -1217,6 +1224,8 @@
 		C10D9BCA1C8269D500378342 /* MinimedKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimedKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C10D9BD31C8269D500378342 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C11166AD2180D834000EEAAB /* AlertSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSlot.swift; sourceTree = "<group>"; };
+		C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirHUDView.swift; sourceTree = "<group>"; };
+		C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReservoirHUDView.xib; sourceTree = "<group>"; };
 		C11F6B7D21C9646300752BBC /* FaultConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaultConfigCommand.swift; sourceTree = "<group>"; };
 		C121985E1C8DE77D00BC374C /* FindDeviceMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBodyTests.swift; sourceTree = "<group>"; };
 		C12198601C8DEB7B00BC374C /* DeviceLinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBodyTests.swift; sourceTree = "<group>"; };
@@ -1361,9 +1370,10 @@
 		C184875D20BCDB0000ABE9E7 /* ForecastError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastError.swift; sourceTree = "<group>"; };
 		C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableBolusWizardPumpEvent.swift; sourceTree = "<group>"; };
 		C18EB741207EE20100EA002B /* NightscoutProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfile.swift; sourceTree = "<group>"; };
+		C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDoseRecommendation.swift; sourceTree = "<group>"; };
 		C1A492621D4A5A19008964FF /* IOBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOBStatus.swift; sourceTree = "<group>"; };
 		C1A492641D4A5DEB008964FF /* BatteryStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryStatus.swift; sourceTree = "<group>"; };
-		C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTempBasal.swift; sourceTree = "<group>"; };
+		C1A492661D4A65D9008964FF /* TempBasalAdjustment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalAdjustment.swift; sourceTree = "<group>"; };
 		C1A492681D4A66C0008964FF /* LoopEnacted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopEnacted.swift; sourceTree = "<group>"; };
 		C1A7215F1EC29C0B0080FAD7 /* PumpOpsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsError.swift; sourceTree = "<group>"; };
 		C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpErrorMessageBody.swift; sourceTree = "<group>"; };
@@ -1386,6 +1396,23 @@
 		C1B383351CD1BA8100CE7782 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		C1B4A9581D1E6357003B8985 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpManagerTests.swift; sourceTree = "<group>"; };
+		C1B9E0DF256AF052008E8B84 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F1256AF058008E8B84 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C1B9E0F2256AF05B008E8B84 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F3256AF05D008E8B84 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F4256AF05F008E8B84 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F5256AF062008E8B84 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F6256AF064008E8B84 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F7256AF066008E8B84 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F8256AF068008E8B84 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0F9256AF06A008E8B84 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0FA256AF06D008E8B84 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0FB256AF06F008E8B84 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C1B9E0FC256AF071008E8B84 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0FD256AF074008E8B84 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0FE256AF076008E8B84 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E0FF256AF078008E8B84 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B9E100256AF07B008E8B84 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioAdapter.swift; sourceTree = "<group>"; };
 		C1BB128521CB5603009A29B5 /* OmniKitPacketParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OmniKitPacketParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BB128721CB5603009A29B5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -1397,6 +1424,8 @@
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
+		C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeConfirmation.swift; sourceTree = "<group>"; };
+		C1DD51D425A0BC6000DE27AE /* InsulinTypeConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeConfirmation.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
 		C1E535E91991E36700C2AC49 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
@@ -1780,6 +1809,7 @@
 		4352A72620DEC9B700CAC200 /* MinimedKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C11AA524258728BD00BDE12F /* Views */,
 				C1FFAF4B212944F600C50C1D /* Localizable.strings */,
 				4352A72720DEC9B700CAC200 /* MinimedKitUI.h */,
 				4352A72820DEC9B700CAC200 /* Info.plist */,
@@ -1986,6 +2016,7 @@
 				C104A9C6217E9F34006E3C3E /* PodLifeHUDView.xib */,
 				C1814B87225F0A3D008D2D8E /* ExpirationReminderDateTableViewCell.swift */,
 				C1814B89225FADFA008D2D8E /* ExpirationReminderDateTableViewCell.xib */,
+				C1DD5166259FE54400DE27AE /* InsulinTypeConfirmation.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2033,6 +2064,16 @@
 				C1B73D64245F824400881A4F /* MinimedPumpManagerTests.swift */,
 			);
 			path = MinimedKitTests;
+			sourceTree = "<group>";
+		};
+		C11AA524258728BD00BDE12F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */,
+				C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */,
+				C1DD51D425A0BC6000DE27AE /* InsulinTypeConfirmation.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C121985D1C8DE72500BC374C /* Messages */ = {
@@ -2361,13 +2402,14 @@
 				C178845E1D5166BE00405663 /* COBStatus.swift */,
 				C1A492641D4A5DEB008964FF /* BatteryStatus.swift */,
 				C1AF21E31D4865320088C41D /* LoopStatus.swift */,
-				C1A492661D4A65D9008964FF /* RecommendedTempBasal.swift */,
+				C1A492661D4A65D9008964FF /* TempBasalAdjustment.swift */,
 				C1A492681D4A66C0008964FF /* LoopEnacted.swift */,
 				C133CF921D5943780034B82D /* PredictedBG.swift */,
 				C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */,
 				C1BAD1171E63984C009BA1C6 /* RadioAdapter.swift */,
 				C184875B20BC232F00ABE9E7 /* CorrectionRange.swift */,
 				C184875D20BCDB0000ABE9E7 /* ForecastError.swift */,
+				C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */,
 			);
 			path = DeviceStatus;
 			sourceTree = "<group>";
@@ -2429,6 +2471,7 @@
 		C1BB128621CB5603009A29B5 /* OmniKitPacketParser */ = {
 			isa = PBXGroup;
 			children = (
+				C1B9E0DE256AF052008E8B84 /* Localizable.strings */,
 				C1BB128721CB5603009A29B5 /* main.swift */,
 			);
 			path = OmniKitPacketParser;
@@ -3212,6 +3255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C11AA528258728CF00BDE12F /* ReservoirHUDView.xib in Resources */,
 				43709ADE20DF1D5400F941B3 /* MinimedPumpManager.storyboard in Resources */,
 				C1FFAF4D212944F600C50C1D /* Localizable.strings in Resources */,
 				43709AC920DF1C9A00F941B3 /* MinimedKitUI.xcassets in Resources */,
@@ -3246,6 +3290,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1B9E0E0256AF052008E8B84 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3526,11 +3571,13 @@
 				7D2366F7212527DA0028B67D /* LocalizedString.swift in Sources */,
 				C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
+				C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */,
 				C16E611F22065B8E0069F357 /* TimeZone.swift in Sources */,
 				C16E61262208EC580069F357 /* MinimedHUDProvider.swift in Sources */,
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,
 				43709AC420DF1C8B00F941B3 /* PumpModel.swift in Sources */,
+				C11AA5392587294E00BDE12F /* NibLoadable.swift in Sources */,
 				43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */,
 				43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */,
 				C145BF9F2219F37200A977CB /* Comparable.swift in Sources */,
@@ -3539,6 +3586,7 @@
 				43709AE120DF1F0D00F941B3 /* IdentifiableClass.swift in Sources */,
 				4352A74320DED3F200CAC200 /* NumberFormatter.swift in Sources */,
 				4352A73220DEC9D600CAC200 /* CommandResponseViewController.swift in Sources */,
+				C1DD51D525A0BC6000DE27AE /* InsulinTypeConfirmation.swift in Sources */,
 				43709AC520DF1C8B00F941B3 /* RadioSelectionTableViewController.swift in Sources */,
 				4352A73920DECBAA00CAC200 /* RileyLinkMinimedDeviceTableViewController.swift in Sources */,
 				4352A74220DED3D200CAC200 /* CaseCountable.swift in Sources */,
@@ -3904,6 +3952,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
+				C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
@@ -3930,7 +3979,7 @@
 				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
 				492526711E4521FB00ACBA5F /* NoteNightscoutTreatment.swift in Sources */,
-				C1A492671D4A65D9008964FF /* RecommendedTempBasal.swift in Sources */,
+				C1A492671D4A65D9008964FF /* TempBasalAdjustment.swift in Sources */,
 				C178845F1D5166BE00405663 /* COBStatus.swift in Sources */,
 				43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */,
 				C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */,
@@ -4095,6 +4144,7 @@
 				C1F1A5EC2151F73F00F0B820 /* InsertCannulaSetupViewController.swift in Sources */,
 				C168C40221AFACA600ADE90E /* ReplacePodViewController.swift in Sources */,
 				C1FFB01A21332AFE00C50C1D /* IdentifiableClass.swift in Sources */,
+				C1DD5167259FE54400DE27AE /* InsulinTypeConfirmation.swift in Sources */,
 				C104A9C9217E9F6C006E3C3E /* PodLifeHUDView.swift in Sources */,
 				C1FFB0102133242C00C50C1D /* OmnipodSettingsViewController.swift in Sources */,
 				C127D925215C00320031799D /* OSLog.swift in Sources */,
@@ -4472,6 +4522,30 @@
 				7D9BF14E23371407005DCFD6 /* ro */,
 			);
 			name = OmnipodPumpManager.storyboard;
+			sourceTree = "<group>";
+		};
+		C1B9E0DE256AF052008E8B84 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C1B9E0DF256AF052008E8B84 /* da */,
+				C1B9E0F1256AF058008E8B84 /* zh-Hans */,
+				C1B9E0F2256AF05B008E8B84 /* en */,
+				C1B9E0F3256AF05D008E8B84 /* nl */,
+				C1B9E0F4256AF05F008E8B84 /* fi */,
+				C1B9E0F5256AF062008E8B84 /* fr */,
+				C1B9E0F6256AF064008E8B84 /* de */,
+				C1B9E0F7256AF066008E8B84 /* it */,
+				C1B9E0F8256AF068008E8B84 /* ja */,
+				C1B9E0F9256AF06A008E8B84 /* nb */,
+				C1B9E0FA256AF06D008E8B84 /* pl */,
+				C1B9E0FB256AF06F008E8B84 /* pt-BR */,
+				C1B9E0FC256AF071008E8B84 /* ro */,
+				C1B9E0FD256AF074008E8B84 /* ru */,
+				C1B9E0FE256AF076008E8B84 /* es */,
+				C1B9E0FF256AF078008E8B84 /* sv */,
+				C1B9E100256AF07B008E8B84 /* vi */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		C1FFAF4B212944F600C50C1D /* Localizable.strings */ = {

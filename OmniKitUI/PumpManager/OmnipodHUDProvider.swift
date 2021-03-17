@@ -53,11 +53,14 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private let guidanceColors: GuidanceColors
     
-    public init(pumpManager: OmnipodPumpManager, insulinTintColor: Color, guidanceColors: GuidanceColors) {
+    private let allowedInsulinTypes: [InsulinType]
+    
+    public init(pumpManager: OmnipodPumpManager, insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) {
         self.pumpManager = pumpManager
         self.podState = pumpManager.state.podState
         self.insulinTintColor = insulinTintColor
         self.guidanceColors = guidanceColors
+        self.allowedInsulinTypes = allowedInsulinTypes
         super.init()
         self.pumpManager.addPodStateObserver(self, queue: .main)
     }
@@ -94,13 +97,13 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         if let podState = self.podState, podState.isFaulted {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
-            return HUDTapAction.presentViewController(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors))
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors, allowedInsulinTypes: allowedInsulinTypes))
         }
     }
     
     func hudDidAppear() {
         updateReservoirView()
-        pumpManager.refreshStatus()
+        pumpManager.refreshStatus(emitConfirmationBeep: false)
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {

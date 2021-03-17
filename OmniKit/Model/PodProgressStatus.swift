@@ -43,7 +43,7 @@ public enum PodProgressStatus: UInt8, CustomStringConvertible, Equatable {
         case .reminderInitialized:
             return LocalizedString("Reminder initialized", comment: "Pod pairing reminder initialized")
         case .pairingCompleted:
-            return LocalizedString("Paired completed", comment: "Pod status when pairing completed")
+            return LocalizedString("Pairing completed", comment: "Pod status when pairing completed")
         case .priming:
             return LocalizedString("Priming", comment: "Pod status when priming")
         case .primingCompleted:

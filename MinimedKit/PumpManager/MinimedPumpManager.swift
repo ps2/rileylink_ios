@@ -33,7 +33,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
         super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
 
         // Pump communication
-        let idleListeningEnabled = state.pumpModel.hasMySentry
+        let idleListeningEnabled = state.pumpModel.hasMySentry && state.useMySentry
         self.pumpOps = pumpOps ?? PumpOps(pumpSettings: state.pumpSettings, pumpState: state.pumpState, delegate: self)
 
         self.rileyLinkDeviceProvider.idleListeningState = idleListeningEnabled ? MinimedPumpManagerState.idleListeningEnabledDefaults : .disabled
@@ -262,7 +262,8 @@ extension MinimedPumpManager {
     }
 
     /// - Throws: `PumpCommandError` specifying the failure sequence
-    private func runSuspendResumeOnSession(suspendResumeState: SuspendResumeMessageBody.SuspendResumeState, session: PumpOpsSession) throws {
+    private func runSuspendResumeOnSession(suspendResumeState: SuspendResumeMessageBody.SuspendResumeState, session: PumpOpsSession, insulinType: InsulinType) throws {
+        
         defer { self.recents.suspendEngageState = .stable }
         self.recents.suspendEngageState = suspendResumeState == .suspend ? .engaging : .disengaging
 
@@ -287,18 +288,18 @@ extension MinimedPumpManager {
                 
                 state.pendingDoses.append(UnfinalizedDose(suspendStartTime: Date()))
             } else {
-                state.pendingDoses.append(UnfinalizedDose(resumeStartTime: Date()))
+                state.pendingDoses.append(UnfinalizedDose(resumeStartTime: Date(), insulinType: insulinType))
             }
         }
     }
 
-    private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, completion: @escaping (MinimedPumpManagerError?) -> Void) {
+    private func setSuspendResumeState(state: SuspendResumeMessageBody.SuspendResumeState, insulinType: InsulinType, completion: @escaping (MinimedPumpManagerError?) -> Void) {
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
                 completion(MinimedPumpManagerError.noRileyLink)
                 return
             }
-
+            
             let sessionName: String = {
                 switch state {
                 case .suspend:
@@ -310,7 +311,7 @@ extension MinimedPumpManager {
 
             self.pumpOps.runSession(withName: sessionName, using: device) { (session) in
                 do {
-                    try self.runSuspendResumeOnSession(suspendResumeState: state, session: session)
+                    try self.runSuspendResumeOnSession(suspendResumeState: state, session: session, insulinType: insulinType)
                     self.storePendingPumpEvents({ (error) in
                         completion(error)
                     })
@@ -540,12 +541,17 @@ extension MinimedPumpManager {
     ///   - completion: A closure called once upon completion
     ///   - error: An error describing why the fetch and/or store failed
     private func fetchPumpHistory(_ completion: @escaping (_ error: Error?) -> Void) {
+        guard let insulinType = insulinType else {
+            completion(PumpManagerError.configuration(nil))
+            return
+        }
+        
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
                 completion(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
-
+            
             self.pumpOps.runSession(withName: "Fetch Pump History", using: device) { (session) in
                 do {
                     guard let startDate = self.pumpDelegate.call({ (delegate) in
@@ -560,8 +566,16 @@ extension MinimedPumpManager {
                     // Reconcile history with pending doses
                     let newPumpEvents = historyEvents.pumpEvents(from: model)
                     
-                    // During reconciliation, some pump events may be reconciled as pending doses and removed
-                    let remainingHistoryEvents = self.reconcilePendingDosesWith(newPumpEvents)
+                    // During reconciliation, some pump events may be reconciled as pending doses and removed. Remaining events should be annotated with current insulinType
+                    let remainingHistoryEvents = self.reconcilePendingDosesWith(newPumpEvents).map { (event) -> NewPumpEvent in
+                        return NewPumpEvent(
+                            date: event.date,
+                            dose: event.dose?.annotated(with: insulinType),
+                            isMutable: event.isMutable,
+                            raw: event.raw,
+                            title: event.title,
+                            type: event.type)
+                    }
 
                     self.pumpDelegate.notify({ (delegate) in
                         guard let delegate = delegate else {
@@ -615,8 +629,12 @@ extension MinimedPumpManager {
 
             delegate.pumpManager(self, hasNewPumpEvents: events, lastReconciliation: self.lastReconciliation, completion: { (error) in
                 // Called on an unknown queue by the delegate
-                self.log.error("Pump event storage failed: %{public}@", String(describing: error))
-                completion(MinimedPumpManagerError.storageFailure)
+                if let error = error {
+                    self.log.error("Pump event storage failed: %{public}@", String(describing: error))
+                    completion(MinimedPumpManagerError.storageFailure)
+                } else {
+                    completion(nil)
+                }
             })
 
         })
@@ -680,7 +698,24 @@ extension MinimedPumpManager {
             }
         }
     }
-    
+
+    /// Whether to use MySentry packets on capable pumps:
+    public var useMySentry: Bool {
+        get {
+            return state.useMySentry
+        }
+        set {
+            let oldValue = state.useMySentry
+            setState { (state) in
+                state.useMySentry = newValue
+            }
+            if oldValue != newValue {
+                let useIdleListening = state.pumpModel.hasMySentry && state.useMySentry
+                self.rileyLinkDeviceProvider.idleListeningState = useIdleListening ? MinimedPumpManagerState.idleListeningEnabledDefaults : .disabled
+            }
+        }
+    }
+
 }
 
 
@@ -727,6 +762,17 @@ extension MinimedPumpManager: PumpManager {
 
     public var lastReconciliation: Date? {
         return state.lastReconciliation
+    }
+    
+    public var insulinType: InsulinType? {
+        get {
+            return state.insulinType
+        }
+        set {
+            setState { (state) in
+                state.insulinType = newValue
+            }
+        }
     }
     
     private func status(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents) -> PumpManagerStatus {
@@ -777,7 +823,8 @@ extension MinimedPumpManager: PumpManager {
             device: hkDevice,
             pumpBatteryChargeRemaining: state.batteryPercentage,
             basalDeliveryState: basalDeliveryState,
-            bolusState: bolusState
+            bolusState: bolusState,
+            insulinType: state.insulinType
         )
     }
     
@@ -815,11 +862,21 @@ extension MinimedPumpManager: PumpManager {
     // MARK: Methods
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
-        setSuspendResumeState(state: .suspend, completion: completion)
+        guard let insulinType = insulinType else {
+            completion(PumpManagerError.configuration(nil))
+            return
+        }
+        
+        setSuspendResumeState(state: .suspend, insulinType: insulinType, completion: completion)
     }
 
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
-        setSuspendResumeState(state: .resume, completion: completion)
+        guard let insulinType = insulinType else {
+            completion(PumpManagerError.configuration(nil))
+            return
+        }
+        
+        setSuspendResumeState(state: .resume, insulinType: insulinType, completion: completion)
     }
 
     public func addStatusObserver(_ observer: PumpManagerStatusObserver, queue: DispatchQueue) {
@@ -903,11 +960,16 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         let enactUnits = roundToSupportedBolusVolume(units: units)
 
         guard enactUnits > 0 else {
             assertionFailure("Invalid zero unit bolus")
+            return
+        }
+        
+        guard let insulinType = insulinType else {
+            completion(.failure(.configuration(nil)))
             return
         }
 
@@ -953,7 +1015,7 @@ extension MinimedPumpManager: PumpManager {
 
             if case .suspended = self.state.suspendState {
                 do {
-                    try self.runSuspendResumeOnSession(suspendResumeState: .resume, session: session)
+                    try self.runSuspendResumeOnSession(suspendResumeState: .resume, session: session, insulinType: insulinType)
                 } catch let error {
                     self.recents.bolusEngageState = .stable
                     self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
@@ -971,7 +1033,7 @@ extension MinimedPumpManager: PumpManager {
                 let commsOffset = TimeInterval(seconds: -2)
                 let doseStart = Date().addingTimeInterval(commsOffset)
 
-                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime)
+                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: automatic)
                 self.setState({ (state) in
                     state.unfinalizedBolus = dose
                 })
@@ -989,8 +1051,14 @@ extension MinimedPumpManager: PumpManager {
     }
 
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
+        
+        guard let insulinType = insulinType else {
+            completion(.failure(.configuration(nil)))
+            return
+        }
+
         self.recents.bolusEngageState = .disengaging
-        setSuspendResumeState(state: .suspend) { (error) in
+        setSuspendResumeState(state: .suspend, insulinType: insulinType) { (error) in
             self.recents.bolusEngageState = .stable
             if let error = error {
                 completion(.failure(PumpManagerError.communication(error)))
@@ -1001,12 +1069,17 @@ extension MinimedPumpManager: PumpManager {
     }
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+        guard let insulinType = insulinType else {
+            completion(.failure(.configuration(nil)))
+            return
+        }
+
         pumpOps.runSession(withName: "Set Temp Basal", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
             }
-
+            
             self.recents.tempBasalEngageState = .engaging
 
             let result = session.setTempBasal(unitsPerHour, duration: duration)
@@ -1017,7 +1090,7 @@ extension MinimedPumpManager: PumpManager {
                 let endDate = now.addingTimeInterval(response.timeRemaining)
                 let startDate = endDate.addingTimeInterval(-duration)
 
-                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration)
+                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration, insulinType: insulinType)
                 
                 self.recents.tempBasalEngageState = .stable
                 

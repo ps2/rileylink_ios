@@ -74,6 +74,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
             }
 
             tableView.beginUpdates()
+    
 
             let insertedPaths = (oldValue.count..<devices.count).map { (index) -> IndexPath in
                 return IndexPath(row: index, section: devicesSectionIndex)

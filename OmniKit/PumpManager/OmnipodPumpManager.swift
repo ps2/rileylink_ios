@@ -80,6 +80,11 @@ extension OmnipodPumpManagerError: LocalizedError {
 }
 
 public class OmnipodPumpManager: RileyLinkPumpManager {
+    
+    public let managerIdentifier: String = "Omnipod"
+    
+    public let localizedTitle = LocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
+    
     public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil) {
         self.lockedState = Locked(state)
         self.lockedPodComms = Locked(PodComms(podState: state.podState))
@@ -300,7 +305,7 @@ extension OmnipodPumpManager {
     private func device(for state: OmnipodPumpManagerState) -> HKDevice {
         if let podState = state.podState {
             return HKDevice(
-                name: type(of: self).managerIdentifier,
+                name: managerIdentifier,
                 manufacturer: "Insulet",
                 model: "Eros",
                 hardwareVersion: nil,
@@ -311,7 +316,7 @@ extension OmnipodPumpManager {
             )
         } else {
             return HKDevice(
-                name: type(of: self).managerIdentifier,
+                name: managerIdentifier,
                 manufacturer: "Insulet",
                 model: "Eros",
                 hardwareVersion: nil,
@@ -1127,10 +1132,6 @@ extension OmnipodPumpManager {
 // MARK: - PumpManager
 extension OmnipodPumpManager: PumpManager {
 
-    public static let managerIdentifier: String = "Omnipod"
-
-    public static let localizedTitle = LocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
-
     public var supportedBolusVolumes: [Double] {
         // 0.05 units for rates between 0.05-30U/hr
         // 0 is not a supported bolus volume
@@ -1168,6 +1169,8 @@ extension OmnipodPumpManager: PumpManager {
     public var pumpReservoirCapacity: Double {
         return Pod.reservoirCapacity
     }
+
+    public var isOnboarded: Bool { state.isOnboarded }
 
     public var lastReconciliation: Date? {
         return self.state.podState?.lastInsulinMeasurements?.validTime
@@ -1220,6 +1223,12 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     // MARK: Methods
+
+    public func completeOnboard() {
+        setState({ (state) in
+            state.isOnboarded = true
+        })
+    }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod else {

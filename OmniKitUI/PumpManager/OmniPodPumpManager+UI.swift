@@ -16,7 +16,7 @@ import RileyLinkKitUI
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying) {
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
         let navVC = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { (confirmedType) in
             navVC.insulinType = confirmedType
@@ -27,16 +27,19 @@ extension OmnipodPumpManager: PumpManagerUI {
         rootVC.title = "Insulin Type"
         navVC.pushViewController(rootVC, animated: false)
         navVC.navigationBar.backgroundColor = .secondarySystemBackground
-        return navVC
+        navVC.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
+        navVC.maxBolusUnits = settings.maxBolusUnits
+        navVC.basalSchedule = settings.basalSchedule
+        return .userInteractionRequired(navVC)
     }
     
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
         let settings = OmnipodSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
+        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 
-    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
         
         // Return settings for now; uncertainty recovery not implemented yet
         let settings = OmnipodSettingsViewController(pumpManager: self)
@@ -49,8 +52,8 @@ extension OmnipodPumpManager: PumpManagerUI {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
     
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
-        return OmnipodHUDProvider(pumpManager: self, insulinTintColor: insulinTintColor, guidanceColors: guidanceColors, allowedInsulinTypes: allowedInsulinTypes)
+    public func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
+        return OmnipodHUDProvider(pumpManager: self, bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowedInsulinTypes: allowedInsulinTypes)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

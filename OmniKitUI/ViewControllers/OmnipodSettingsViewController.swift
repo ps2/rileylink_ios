@@ -789,7 +789,7 @@ extension OmnipodSettingsViewController: PodStateObserver {
             return
         }
 
-        let reloadRows: [StatusRow] = [.bolus, .basal, .reservoirLevel, .deliveredInsulin]
+        let reloadRows: [StatusRow] = [.activeTime, .bolus, .basal, .reservoirLevel, .deliveredInsulin]
         self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
 
         if oldState?.activeAlerts != state?.activeAlerts,

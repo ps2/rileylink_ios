@@ -115,7 +115,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.insulinType = insulinType
     }
     
-    public var unfinishedPairing: Bool {
+    public var unfinishedSetup: Bool {
         return setupProgress != .completed
     }
     

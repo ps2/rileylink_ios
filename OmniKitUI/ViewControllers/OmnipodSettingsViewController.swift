@@ -222,7 +222,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private class func sectionList(_ podState: PodState?) -> [Section] {
         if let podState = podState {
-            if podState.unfinishedPairing {
+            if podState.unfinishedSetup {
                 return [.configuration, .rileyLinks]
             } else {
                 return [.status, .configuration, .rileyLinks, .podDetails, .diagnostics]
@@ -252,7 +252,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     private var configurationRows: [ConfigurationRow] {
-        if podState == nil || podState?.unfinishedPairing == true {
+        if podState == nil || podState?.unfinishedSetup == true {
             return [.replacePod]
         } else {
             return ConfigurationRow.allCases
@@ -436,7 +436,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     cell.textLabel?.text = LocalizedString("Pair New Pod", comment: "The title of the command to pair new pod")
                 } else if let podState = podState, podState.isFaulted {
                     cell.textLabel?.text = LocalizedString("Replace Pod Now", comment: "The title of the command to replace pod when there is a pod fault")
-                } else if let podState = podState, podState.unfinishedPairing {
+                } else if let podState = podState, podState.unfinishedSetup {
                     cell.textLabel?.text = LocalizedString("Finish pod setup", comment: "The title of the command to finish pod setup")
                 } else {
                     cell.textLabel?.text = LocalizedString("Replace Pod", comment: "The title of the command to replace pod")
@@ -616,11 +616,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 show(vc, sender: sender)
             case .replacePod:
                 let vc: UIViewController
-                if podState == nil || podState!.setupProgress.primingNeeded {
-                    vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
-                } else if let podState = podState, podState.isFaulted {
+                if let podState = podState, podState.isFaulted {
                     vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)
-                } else if let podState = podState, podState.unfinishedPairing {
+                } else if podState == nil || podState!.setupProgress.primingNeeded {
+                    vc = PodReplacementNavigationController.instantiateNewPodFlow(pumpManager)
+                } else if let podState = podState, podState.unfinishedSetup {
                     vc = PodReplacementNavigationController.instantiateInsertCannulaFlow(pumpManager)
                 } else {
                     vc = PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager)

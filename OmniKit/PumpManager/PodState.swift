@@ -21,6 +21,10 @@ public enum SetupProgress: Int {
     case completed
     case activationTimeout
     case podIncompatible
+
+    public var primingNeverAttempted: Bool {
+        return self.rawValue < SetupProgress.startingPrime.rawValue
+    }
     
     public var primingNeeded: Bool {
         return self.rawValue < SetupProgress.priming.rawValue

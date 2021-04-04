@@ -6,7 +6,7 @@ cache:
   - Carthage
 
 before_script:
-    - ./Scripts/carthage.sh bootstrap --cache-builds
+    - travis_wait 30 ./bin/carthage bootstrap --use-xcframeworks --cache-builds
 
 script:
     - set -o pipefail && xcodebuild -project RileyLink.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty

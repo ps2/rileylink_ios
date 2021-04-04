@@ -194,8 +194,7 @@ class MainViewController: RileyLinkSettingsViewController {
                 if let rileyLinkManagerViewController = setupViewController as? RileyLinkManagerSetupViewController {
                     rileyLinkManagerViewController.rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceDataManager.rileyLinkConnectionManager.deviceProvider)
                 }
-                setupViewController.setupDelegate = self
-                setupViewController.completionDelegate = self
+                LoopUIColorPalette(guidan                setupViewController.completionDelegate = self
                 present(setupViewController, animated: true, completion: nil)
             }
         }
@@ -222,14 +221,35 @@ extension MainViewController: CompletionDelegate {
 }
 
 extension MainViewController: PumpManagerCreateDelegate {
-    func pumpManagerCreateNotifying(_ notifying: PumpManagerCreateNotifying, didCreatePumpManager pumpManager: PumpManagerUI) {
+    func pumpManagerCreateNotifying(didCreatePumpManager pumpManager: PumpManagerUI) {
         deviceDataManager.pumpManager = pumpManager
     }
 }
 
 extension MainViewController: PumpManagerOnboardDelegate {
-    func pumpManagerOnboardNotifying(_ notifying: PumpManagerOnboardNotifying, didOnboardPumpManager pumpManager: PumpManagerUI, withSettings settings: PumpManagerSetupSettings) {
-        show(pumpManager.settingsViewController(insulinTintColor: insulinTintColor, guidanceColors: guidanceColors), sender: nil)
+    func pumpManagerOnboardNotifying(didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings)
+    {
+        show(pumpManager.settingsViewController(bluetoothProvider: self, colorPalette: LoopUIColorPalette(guidanceColors: .init(), carbTintColor: .blue, glucoseTintColor: .green, insulinTintColor: .orange, chartColorPalette: .init(axisLine: .gray, axisLabel: .black, grid: .gray, glucoseTint: .green, insulinTint: .orange)), allowedInsulinTypes: []), sender: nil)
         tableView.reloadSections(IndexSet([Section.pump.rawValue]), with: .none)
+    }
+}
+
+extension MainViewController: BluetoothProvider {
+    var bluetoothAuthorization: BluetoothAuthorization {
+        return .authorized
+    }
+    
+    var bluetoothState: BluetoothState {
+        return .poweredOn
+    }
+    
+    func authorizeBluetooth(_ completion: @escaping (BluetoothAuthorization) -> Void) {
+        completion(.authorized)
+    }
+    
+    func addBluetoothObserver(_ observer: BluetoothObserver, queue: DispatchQueue) {
+    }
+    
+    func removeBluetoothObserver(_ observer: BluetoothObserver) {
     }
 }

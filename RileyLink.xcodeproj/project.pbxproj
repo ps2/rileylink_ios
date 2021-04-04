@@ -508,6 +508,7 @@
 		C1EC92C7261A777700002B1A /* LoopKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EC92C6261A777700002B1A /* LoopKit.xcframework */; };
 		C1EC92D9261A77B600002B1A /* LoopKitUI.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EC92D8261A77B600002B1A /* LoopKitUI.xcframework */; };
 		C1EC92EB261A77E300002B1A /* MKRingProgressView.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EC92EA261A77E300002B1A /* MKRingProgressView.xcframework */; };
+		C1EC93AB261A89AB00002B1A /* SwiftCharts.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EC93AA261A89AB00002B1A /* SwiftCharts.xcframework */; };
 		C1EF58881B3F93FE001C8C80 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF58871B3F93FE001C8C80 /* Config.m */; };
 		C1F0004C1EBE68A600F65163 /* DataFrameMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */; };
 		C1F000501EBE727C00F65163 /* BasalScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0004F1EBE727C00F65163 /* BasalScheduleTests.swift */; };
@@ -1437,6 +1438,7 @@
 		C1EC92C6261A777700002B1A /* LoopKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = LoopKit.xcframework; path = Carthage/Build/LoopKit.xcframework; sourceTree = "<group>"; };
 		C1EC92D8261A77B600002B1A /* LoopKitUI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = LoopKitUI.xcframework; path = Carthage/Build/LoopKitUI.xcframework; sourceTree = "<group>"; };
 		C1EC92EA261A77E300002B1A /* MKRingProgressView.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MKRingProgressView.xcframework; path = Carthage/Build/MKRingProgressView.xcframework; sourceTree = "<group>"; };
+		C1EC93AA261A89AB00002B1A /* SwiftCharts.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SwiftCharts.xcframework; path = Carthage/Build/SwiftCharts.xcframework; sourceTree = "<group>"; };
 		C1EF58861B3F93FE001C8C80 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		C1EF58871B3F93FE001C8C80 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
 		C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataFrameMessageBody.swift; sourceTree = "<group>"; };
@@ -1575,6 +1577,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1EC93AB261A89AB00002B1A /* SwiftCharts.xcframework in Frameworks */,
 				C1EC92D9261A77B600002B1A /* LoopKitUI.xcframework in Frameworks */,
 				432CF9061FF74CCB003AB446 /* RileyLinkKit.framework in Frameworks */,
 			);
@@ -2140,6 +2143,7 @@
 		C12EA239198B436800309FA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1EC93AA261A89AB00002B1A /* SwiftCharts.xcframework */,
 				C1EC92EA261A77E300002B1A /* MKRingProgressView.xcframework */,
 				C1EC92D8261A77B600002B1A /* LoopKitUI.xcframework */,
 				C1EC92C6261A777700002B1A /* LoopKit.xcframework */,

@@ -2902,7 +2902,6 @@
 				C136AA2623116E32008A320D /* Sources */,
 				C136AA2723116E32008A320D /* Frameworks */,
 				C136AA2823116E32008A320D /* Resources */,
-				C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -2926,7 +2925,6 @@
 				C136AA5A231187B0008A320D /* Sources */,
 				C136AA5B231187B0008A320D /* Frameworks */,
 				C136AA5C231187B0008A320D /* Resources */,
-				C136AA72231188FC008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3339,55 +3337,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/OmniKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/OmniKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		C136AA72231188FC008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/MinimedKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/MinimedKitUI.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		431CE76A1F98564100255374 /* Sources */ = {

@@ -1242,11 +1242,11 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
-		C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmniKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		C136AA2A23116E32008A320D /* OmniKitPlugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmniKitPlugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C136AA2C23116E32008A320D /* OmniKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmniKitPlugin.h; sourceTree = "<group>"; };
 		C136AA2D23116E32008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C136AA4123116E7B008A320D /* OmniKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniKitPlugin.swift; sourceTree = "<group>"; };
-		C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		C136AA5E231187B0008A320D /* MinimedKitPlugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKitPlugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C136AA60231187B0008A320D /* MinimedKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimedKitPlugin.h; sourceTree = "<group>"; };
 		C136AA61231187B0008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C136AA6623118817008A320D /* MinimedKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedKitPlugin.swift; sourceTree = "<group>"; };
@@ -2134,8 +2134,8 @@
 				C1FFAF80213323CC00C50C1D /* OmniKitTests.xctest */,
 				C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */,
 				C1BB128521CB5603009A29B5 /* OmniKitPacketParser */,
-				C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */,
-				C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */,
+				C136AA2A23116E32008A320D /* OmniKitPlugin.framework */,
+				C136AA5E231187B0008A320D /* MinimedKitPlugin.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2918,7 +2918,7 @@
 			);
 			name = OmniKitPlugin;
 			productName = OmniKitPlugin;
-			productReference = C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */;
+			productReference = C136AA2A23116E32008A320D /* OmniKitPlugin.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C136AA5D231187B0008A320D /* MinimedKitPlugin */ = {
@@ -2941,7 +2941,7 @@
 			);
 			name = MinimedKitPlugin;
 			productName = MinimedKitPlugin;
-			productReference = C136AA5E231187B0008A320D /* MinimedKitPlugin.loopplugin */;
+			productReference = C136AA5E231187B0008A320D /* MinimedKitPlugin.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C1B3830A1CD0665D00CE7782 /* NightscoutUploadKit */ = {
@@ -5185,7 +5185,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSION_INFO_PREFIX = "";
-				WRAPPER_EXTENSION = loopplugin;
 			};
 			name = Debug;
 		};
@@ -5227,7 +5226,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSION_INFO_PREFIX = "";
-				WRAPPER_EXTENSION = loopplugin;
 			};
 			name = Release;
 		};
@@ -5267,7 +5265,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSION_INFO_PREFIX = "";
-				WRAPPER_EXTENSION = loopplugin;
 			};
 			name = Debug;
 		};
@@ -5306,7 +5303,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSION_INFO_PREFIX = "";
-				WRAPPER_EXTENSION = loopplugin;
 			};
 			name = Release;
 		};

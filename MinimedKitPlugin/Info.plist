@@ -22,5 +22,13 @@
 	<string>3.0</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>PluginDependencies</key>
+	<array>
+		<string>RileyLinkKit</string>
+		<string>MinimedKit</string>
+		<string>MinimedKitUI</string>
+		<string>RilyLinkBLEKit</string>
+		<string>RileyLinkKitUI</string>
+	</array>
 </dict>
 </plist>

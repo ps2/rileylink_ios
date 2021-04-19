@@ -298,15 +298,17 @@ public class PodCommsSession {
     public func prime() throws -> TimeInterval {
         let primeDuration: TimeInterval = .seconds(Pod.primeUnits / Pod.primeDeliveryRate) + 3 // as per PDM
         
-        // Skip following alerts if we've already done them before
-        if podState.setupProgress != .startingPrime {
-            
-            // The following will set Tab5[$16] to 0 during pairing, which disables $6x faults.
+        // If priming has never been attempted on this pod, handle the pre-prime setup tasks.
+        // A FaultConfig can only be done before the prime bolus or the pod will generate an 049 fault.
+        if podState.setupProgress.primingNeverAttempted {
+            // This FaultConfig command will set Tab5[$16] to 0 during pairing, which disables $6x faults
             let _: StatusResponse = try send([FaultConfigCommand(nonce: podState.currentNonce, tab5Sub16: 0, tab5Sub17: 0)])
+
+            // Set up the finish pod setup reminder alert which beeps every 5 minutes for 1 hour
             let finishSetupReminder = PodAlert.finishSetupReminder
             try configureAlerts([finishSetupReminder])
         } else {
-            // We started prime, but didn't get confirmation somehow, so check status
+            // Not the first time through, check to see if prime bolus was successfully started
             let status: StatusResponse = try send([GetStatusCommand()])
             podState.updateFromStatusResponse(status)
             if status.podProgressStatus == .priming || status.podProgressStatus == .primingCompleted {
@@ -338,6 +340,7 @@ public class PodCommsSession {
             podState.updateFromStatusResponse(status)
             if status.podProgressStatus == .basalInitialized {
                 podState.setupProgress = .initialBasalScheduleSet
+                podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: Date(), scheduledCertainty: .certain, insulinType: podState.insulinType))
                 return
             }
         }

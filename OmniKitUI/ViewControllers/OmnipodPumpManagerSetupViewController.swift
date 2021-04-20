@@ -87,7 +87,7 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
                     rileyLinkDeviceProvider: deviceProvider,
                     rileyLinkConnectionManager: rileyLinkPumpManager?.rileyLinkConnectionManager)
                 vc.pumpManager = pumpManager
-                pumpManagerCreateDelegate?.pumpManagerCreateNotifying(didCreatePumpManager: pumpManager)
+                pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didCreatePumpManager: pumpManager)
             }
         case let vc as InsertCannulaSetupViewController:
             vc.pumpManager = pumpManager
@@ -103,7 +103,7 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
             pumpManager.completeOnboard()
 
             let settings = PumpManagerSetupSettings(maxBasalRateUnitsPerHour: maxBasalRateUnitsPerHour, maxBolusUnits: maxBolusUnits, basalSchedule: basalSchedule)
-            pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
+            pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
             
             let settingsViewController = OmnipodSettingsViewController(pumpManager: pumpManager)
             setViewControllers([settingsViewController], animated: true)

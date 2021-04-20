@@ -15,7 +15,7 @@ import OmniKit
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
         setupViewController.maxBolusUnits = settings.maxBolusUnits
@@ -23,7 +23,7 @@ extension OmnipodPumpManager: PumpManagerUI {
         return .userInteractionRequired(setupViewController)
     }
     
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> PumpManagerViewController {
         let settings = OmnipodSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav

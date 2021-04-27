@@ -18,7 +18,7 @@ let package = Package(
         .library(name: "NightscoutUploadKit",targets: ["NightscoutUploadKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/LoopKit/LoopKit.git", .branch("package-experiment")),
+        .package(url: "https://github.com/LoopKit/LoopKit.git", .branch("package-experiment2")),
         .package(url: "https://github.com/maxkonovalov/MKRingProgressView.git", .branch("master")),
         .package(url: "https://github.com/jernejstrasner/CCommonCrypto.git", .branch("master"))
     ],

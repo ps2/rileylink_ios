@@ -1,6 +1,6 @@
-language: swift
-osx_image: xcode12.2
+language: objective-c
+osx_image: xcode12.4
 
 script:
-  - xcodebuild build -sdk iphonesimulator -scheme RileyLinkIOS-Package test -destination 'platform=iOS Simulator,name=iPhone 11' | xcpretty
-
+    # Build Travis project and run tests
+    - xcodebuild -scheme RileyLinkIOS-Package -destination 'name=iPhone 8' test | xcpretty

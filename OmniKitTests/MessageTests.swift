@@ -39,7 +39,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(.aboveFiftyUnits, statusResponse.podProgressStatus)
             XCTAssertEqual(6.3, statusResponse.insulin, accuracy: 0.01)
             XCTAssertEqual(0, statusResponse.bolusNotDelivered)
-            XCTAssertEqual(3, statusResponse.podMessageCounter)
+            XCTAssertEqual(3, statusResponse.lastProgrammingMessageSeqNum)
             XCTAssert(statusResponse.alerts.isEmpty)
 
             XCTAssertEqual("1f00ee84300a1d18003f1800004297ff8128", msg.encoded().hexadecimalString)

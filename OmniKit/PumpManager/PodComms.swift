@@ -11,7 +11,7 @@ import RileyLinkBLEKit
 import LoopKit
 import os.log
 
-protocol PodCommsDelegate: class {
+protocol PodCommsDelegate: AnyObject {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
 

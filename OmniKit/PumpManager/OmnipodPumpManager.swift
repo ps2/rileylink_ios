@@ -22,7 +22,7 @@ public enum ReservoirAlertState {
     case empty
 }
 
-public protocol PodStateObserver: class {
+public protocol PodStateObserver: AnyObject {
     func podStateDidUpdate(_ state: PodState?)
 }
 
@@ -277,8 +277,7 @@ extension OmnipodPumpManager {
             device: device(for: state),
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
-            bolusState: bolusState(for: state),
-            pumpStatusHighlight: pumpStatusHighlight(for: state)
+            bolusState: bolusState(for: state)
         )
     }
 
@@ -358,17 +357,6 @@ extension OmnipodPumpManager {
         return .noBolus
     }
     
-    private func pumpStatusHighlight(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
-        guard state.podState?.fault != nil else {
-            return nil
-        }
-
-        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
-                                                     imageName: "exclamationmark.circle.fill",
-                                                     state: .critical)
-    }
-        
-
     // Thread-safe
     public var hasActivePod: Bool {
         // TODO: Should this check be done automatically before each session?

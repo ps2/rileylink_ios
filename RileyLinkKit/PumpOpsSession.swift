@@ -11,7 +11,7 @@ import LoopKit
 import RileyLinkBLEKit
 
 
-protocol PumpOpsSessionDelegate: class {
+protocol PumpOpsSessionDelegate: AnyObject {
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState)
     func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession)
 }

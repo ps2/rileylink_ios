@@ -11,7 +11,7 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
-public protocol MinimedPumpManagerStateObserver: class {
+public protocol MinimedPumpManagerStateObserver: AnyObject {
     func didUpdatePumpManagerState(_ state: MinimedPumpManagerState)
 }
 

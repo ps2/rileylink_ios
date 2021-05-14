@@ -50,6 +50,7 @@ extension MinimedPumpManager: PumpManagerUI {
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MinimedPumpManager {
+    
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
         pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
@@ -112,5 +113,21 @@ extension MinimedPumpManager {
 
     public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
+    }
+}
+
+// MARK: - PumpStatusIndicator
+extension MinimedPumpManager {
+    
+    public var pumpStatusHighlight: DeviceStatusHighlight? {
+        return nil
+    }
+    
+    public var pumpLifecycleProgress: DeviceLifecycleProgress? {
+        return nil
+    }
+    
+    public var pumpStatusBadge: DeviceStatusBadge? {
+        return nil
     }
 }

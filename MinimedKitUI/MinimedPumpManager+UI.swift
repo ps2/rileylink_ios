@@ -13,6 +13,9 @@ import MinimedKit
 
 
 extension MinimedPumpManager: PumpManagerUI {
+    public static var onboardingImage: UIImage? {
+        return UIImage.pumpImage(in: nil, isLargerModel: false, isSmallImage: true)
+    }
 
     static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()

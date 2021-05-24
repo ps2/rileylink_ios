@@ -684,6 +684,18 @@ extension MinimedPumpManager: PumpManager {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
     }
 
+    public static var onboardingMaximumBasalScheduleEntryCount: Int {
+        return PumpModel.model522.maximumBasalScheduleEntryCount
+    }
+
+    public static var onboardingSupportedBasalRates: [Double] {
+        return PumpModel.model522.supportedBasalRates
+    }
+
+    public static var onboardingSupportedBolusVolumes: [Double] {
+        return PumpModel.model522.supportedBolusVolumes
+    }
+
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing
      See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3

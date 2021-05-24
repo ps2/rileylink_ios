@@ -1105,6 +1105,21 @@ extension OmnipodPumpManager {
 
 // MARK: - PumpManager
 extension OmnipodPumpManager: PumpManager {
+    public static var onboardingMaximumBasalScheduleEntryCount: Int {
+        return Pod.maximumBasalScheduleEntryCount
+    }
+
+    public static var onboardingSupportedBasalRates: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        // 0 is not a supported scheduled basal rate
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
+
+    public static var onboardingSupportedBolusVolumes: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        // 0 is not a supported bolus volume
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
 
     public var supportedBolusVolumes: [Double] {
         // 0.05 units for rates between 0.05-30U/hr

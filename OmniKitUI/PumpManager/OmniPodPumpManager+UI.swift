@@ -15,6 +15,10 @@ import OmniKit
 
 extension OmnipodPumpManager: PumpManagerUI {
     
+    public static var onboardingImage: UIImage? {
+        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    }
+
     static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour

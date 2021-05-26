@@ -75,8 +75,9 @@ class MinimedHUDProvider: HUDProvider {
         return reservoirView
     }
 
-    public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
-        return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette))
+    public func didTapOnHUDView(_ view: BaseHUDView, allowDebugFeatures: Bool) -> HUDTapAction? {
+        let vc = pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures)
+        return HUDTapAction.presentViewController(vc)
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {

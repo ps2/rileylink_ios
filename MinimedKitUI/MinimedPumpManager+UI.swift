@@ -17,7 +17,7 @@ extension MinimedPumpManager: PumpManagerUI {
         return UIImage.pumpImage(in: nil, isLargerModel: false, isSmallImage: true)
     }
 
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
         setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
         setupViewController.maxBolusUnits = settings.maxBolusUnits
@@ -25,13 +25,13 @@ extension MinimedPumpManager: PumpManagerUI {
         return .userInteractionRequired(setupViewController)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> PumpManagerViewController {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
     
-    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
         // Return settings for now. No uncertainty handling atm.
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)

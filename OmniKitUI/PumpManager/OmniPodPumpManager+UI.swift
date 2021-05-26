@@ -19,7 +19,7 @@ extension OmnipodPumpManager: PumpManagerUI {
         return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
     }
 
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
         setupViewController.maxBolusUnits = settings.maxBolusUnits
@@ -27,13 +27,13 @@ extension OmnipodPumpManager: PumpManagerUI {
         return .userInteractionRequired(setupViewController)
     }
     
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> PumpManagerViewController {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController {
         let settings = OmnipodSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 
-    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
         
         // Return settings for now; uncertainty recovery not implemented yet
         let settings = OmnipodSettingsViewController(pumpManager: self)

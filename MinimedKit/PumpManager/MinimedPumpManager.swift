@@ -11,7 +11,7 @@ import RileyLinkKit
 import RileyLinkBLEKit
 import os.log
 
-public protocol MinimedPumpManagerStateObserver: class {
+public protocol MinimedPumpManagerStateObserver: AnyObject {
     func didUpdatePumpManagerState(_ state: MinimedPumpManagerState)
 }
 
@@ -733,6 +733,18 @@ extension MinimedPumpManager: PumpManager {
 
     public var localizedTitle: String {
         return String(format: LocalizedString("Minimed %@", comment: "Pump title (1: model number)"), state.pumpModel.rawValue)
+    }
+
+    public static var onboardingMaximumBasalScheduleEntryCount: Int {
+        return PumpModel.model522.maximumBasalScheduleEntryCount
+    }
+
+    public static var onboardingSupportedBasalRates: [Double] {
+        return PumpModel.model522.supportedBasalRates
+    }
+
+    public static var onboardingSupportedBolusVolumes: [Double] {
+        return PumpModel.model522.supportedBolusVolumes
     }
 
     /*

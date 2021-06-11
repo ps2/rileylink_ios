@@ -14,8 +14,12 @@ import RileyLinkKitUI
 
 
 extension MinimedPumpManager: PumpManagerUI {
+    
+    public static var onboardingImage: UIImage? {
+        return UIImage.pumpImage(in: nil, isLargerModel: false, isSmallImage: true)
+    }
 
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let navVC = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
         let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { (confirmedType) in
             navVC.insulinType = confirmedType
@@ -32,13 +36,13 @@ extension MinimedPumpManager: PumpManagerUI {
         return .userInteractionRequired(navVC)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
     
-    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
         // Return settings for now. No uncertainty handling atm.
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
@@ -60,6 +64,7 @@ extension MinimedPumpManager: PumpManagerUI {
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MinimedPumpManager {
+    
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
         pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
@@ -122,5 +127,21 @@ extension MinimedPumpManager {
 
     public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
+    }
+}
+
+// MARK: - PumpStatusIndicator
+extension MinimedPumpManager {
+    
+    public var pumpStatusHighlight: DeviceStatusHighlight? {
+        return nil
+    }
+    
+    public var pumpLifecycleProgress: DeviceLifecycleProgress? {
+        return nil
+    }
+    
+    public var pumpStatusBadge: DeviceStatusBadge? {
+        return nil
     }
 }

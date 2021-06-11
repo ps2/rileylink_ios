@@ -93,11 +93,11 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         return reservoirView
     }
     
-    public func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
+    public func didTapOnHUDView(_ view: BaseHUDView, allowDebugFeatures: Bool) -> HUDTapAction? {
         if let podState = self.podState, podState.isFaulted {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
-            return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowedInsulinTypes: allowedInsulinTypes))
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: allowedInsulinTypes))
         }
     }
     

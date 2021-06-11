@@ -1098,8 +1098,6 @@ extension OmnipodPumpManager: PumpManager {
         return Pod.maximumBasalScheduleEntryCount
     }
 
-<<<<<<< HEAD
-=======
     public static var onboardingSupportedBasalRates: [Double] {
         // 0.05 units for rates between 0.05-30U/hr
         // 0 is not a supported scheduled basal rate
@@ -1112,7 +1110,6 @@ extension OmnipodPumpManager: PumpManager {
         return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
     }
 
->>>>>>> tidepool/dev
     public var supportedBolusVolumes: [Double] {
         // 0.05 units for rates between 0.05-30U/hr
         // 0 is not a supported bolus volume

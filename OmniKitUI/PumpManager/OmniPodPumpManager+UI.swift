@@ -16,7 +16,11 @@ import RileyLinkKitUI
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+    public static var onboardingImage: UIImage? {
+        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    }
+
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let navVC = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { (confirmedType) in
             navVC.insulinType = confirmedType
@@ -33,7 +37,7 @@ extension OmnipodPumpManager: PumpManagerUI {
         return .userInteractionRequired(navVC)
     }
     
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
         let settings = OmnipodSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav

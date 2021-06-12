@@ -16,7 +16,11 @@ import RileyLinkKitUI
 
 extension OmnipodPumpManager: PumpManagerUI {
     
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+    public static var onboardingImage: UIImage? {
+        return UIImage(named: "Pod", in: Bundle(for: OmnipodSettingsViewController.self), compatibleWith: nil)!
+    }
+
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let navVC = OmnipodPumpManagerSetupViewController.instantiateFromStoryboard()
         let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { (confirmedType) in
             navVC.insulinType = confirmedType
@@ -33,13 +37,13 @@ extension OmnipodPumpManager: PumpManagerUI {
         return .userInteractionRequired(navVC)
     }
     
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
         let settings = OmnipodSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
 
-    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
         
         // Return settings for now; uncertainty recovery not implemented yet
         let settings = OmnipodSettingsViewController(pumpManager: self)
@@ -116,4 +120,26 @@ extension OmnipodPumpManager {
     public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
     }
+}
+
+// MARK: - PumpStatusIndicator
+extension OmnipodPumpManager {
+    public var pumpStatusHighlight: DeviceStatusHighlight? {
+        guard state.podState?.fault != nil else {
+            return nil
+        }
+
+        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
+                                                     imageName: "exclamationmark.circle.fill",
+                                                     state: .critical)
+    }
+    
+    public var pumpLifecycleProgress: DeviceLifecycleProgress? {
+        return nil
+    }
+    
+    public var pumpStatusBadge: DeviceStatusBadge? {
+        return nil
+    }
+
 }

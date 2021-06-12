@@ -20,7 +20,7 @@ public enum ReservoirAlertState {
     case empty
 }
 
-public protocol PodStateObserver: class {
+public protocol PodStateObserver: AnyObject {
     func podStateDidUpdate(_ state: PodState?)
 }
 
@@ -296,9 +296,7 @@ extension OmnipodPumpManager {
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
-            insulinType: state.insulinType,
-            pumpStatusHighlight: pumpStatusHighlight(for: state),
-            pumpLifecycleProgress: lifecycleProgress(for: state)
+            insulinType: state.insulinType
         )
     }
 
@@ -378,41 +376,6 @@ extension OmnipodPumpManager {
         return .noBolus
     }
     
-    private func pumpStatusHighlight(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
-        guard let podState = state.podState else {
-            return PumpManagerStatus.PumpStatusHighlight(
-                localizedMessage: NSLocalizedString("No Pod", comment: "Status highlight that when no pod is paired."),
-                imageName: "exclamationmark.circle.fill",
-                state: .warning)
-        }
-        
-        if let fault = podState.fault {
-            return PumpManagerStatus.PumpStatusHighlight(
-                localizedMessage: fault.highlightText,
-                imageName: "exclamationmark.circle.fill",
-                state: .critical)
-        }
-        
-        if let reservoir = podState.lastInsulinMeasurements, let level = reservoir.reservoirLevel {
-            if level <= 0 {
-                return PumpManagerStatus.PumpStatusHighlight(
-                    localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
-                    imageName: "exclamationmark.circle.fill",
-                    state: .critical)
-            }
-        }
-        
-        if case .suspended = podState.suspendState {
-            return PumpManagerStatus.PumpStatusHighlight(
-                localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
-                imageName: "pause.circle.fill",
-                state: .warning)
-        }
-        
-        return nil
-    }
-        
-
     // Thread-safe
     public var hasActivePod: Bool {
         // TODO: Should this check be done automatically before each session?
@@ -1131,6 +1094,21 @@ extension OmnipodPumpManager {
 
 // MARK: - PumpManager
 extension OmnipodPumpManager: PumpManager {
+    public static var onboardingMaximumBasalScheduleEntryCount: Int {
+        return Pod.maximumBasalScheduleEntryCount
+    }
+
+    public static var onboardingSupportedBasalRates: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        // 0 is not a supported scheduled basal rate
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
+
+    public static var onboardingSupportedBolusVolumes: [Double] {
+        // 0.05 units for rates between 0.05-30U/hr
+        // 0 is not a supported bolus volume
+        return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
 
     public var supportedBolusVolumes: [Double] {
         // 0.05 units for rates between 0.05-30U/hr

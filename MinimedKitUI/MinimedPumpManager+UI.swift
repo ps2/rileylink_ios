@@ -19,9 +19,9 @@ extension MinimedPumpManager: PumpManagerUI {
 
     static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let setupViewController = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
-        setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
-        setupViewController.maxBolusUnits = settings.maxBolusUnits
         setupViewController.basalSchedule = settings.basalSchedule
+        setupViewController.maxBolusUnits = settings.maxBolusUnits
+        setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
         return .userInteractionRequired(setupViewController)
     }
 

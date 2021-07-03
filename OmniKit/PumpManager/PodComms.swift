@@ -227,9 +227,9 @@ class PodComms: CustomDebugStringConvertible {
                 throw PodCommsError.podIncompatible(str: errMess)
             }
 
-            if config.podProgressStatus == .pairingCompleted {
-                log.info("Version Response %{public}@ indicates pairing is complete, moving pod to configured state", String(describing: config))
-                self.podState?.setupProgress = .podConfigured
+            if config.podProgressStatus == .pairingCompleted && self.podState?.setupProgress.isPaired == false {
+                log.info("Version Response %{public}@ indicates pairing is now complete", String(describing: config))
+                self.podState?.setupProgress = .podPaired
             }
 
             return config
@@ -276,8 +276,11 @@ class PodComms: CustomDebugStringConvertible {
             versionResponse = try sendPairMessage(address: podState.address, transport: transport, message: message, insulinType: insulinType)
         } catch let error {
             if case PodCommsError.podAckedInsteadOfReturningResponse = error {
-                log.default("SetupPod acked instead of returning response. Moving pod to configured state.")
-                self.podState?.setupProgress = .podConfigured
+                log.default("SetupPod acked instead of returning response.")
+                if self.podState?.setupProgress.isPaired == false {
+                    log.default("Moving pod to paired state.")
+                    self.podState?.setupProgress = .podPaired
+                }
                 return
             }
             log.error("SetupPod returns error %{public}@", String(describing: error))
@@ -317,11 +320,11 @@ class PodComms: CustomDebugStringConvertible {
                         return
                     }
 
-                    if self.podState!.setupProgress != .podConfigured {
+                    if self.podState!.setupProgress.isPaired == false {
                         try self.setupPod(podState: self.podState!, timeZone: timeZone, commandSession: commandSession, insulinType: insulinType)
                     }
 
-                    guard self.podState!.setupProgress == .podConfigured else {
+                    guard self.podState!.setupProgress.isPaired else {
                         self.log.error("Unexpected podStatus setupProgress value of %{public}@", String(describing: self.podState!.setupProgress))
                         throw PodCommsError.invalidData
                     }

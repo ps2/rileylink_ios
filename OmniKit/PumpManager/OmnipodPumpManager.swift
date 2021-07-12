@@ -1399,7 +1399,7 @@ extension OmnipodPumpManager: PumpManager {
 
             var getStatusNeeded = false
             var finalizeFinishedDosesNeeded = false
-            if disableCommsOptimizations || self.state.podState?.skipNextCommsOptimization == true {
+            if disableCommsOptimizations || automatic == false || self.state.podState?.skipNextCommsOptimization == true {
                 self.log.info("enactBolus: skipping getStatus comms optimization ")
                 getStatusNeeded = true
             } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {

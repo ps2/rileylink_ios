@@ -247,6 +247,7 @@ public class PodCommsSession {
 
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
 
+            self.podState.skipNextCommsOptimization = true // disable any comms optimizations until we get the expected response
             let response = try transport.sendMessage(message)
             
             // Simulate fault
@@ -255,6 +256,7 @@ public class PodCommsSession {
 
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %@", String(describing: responseMessageBlock))
+                self.podState.skipNextCommsOptimization = false // all good for possible comms optimizations
                 return responseMessageBlock
             }
 

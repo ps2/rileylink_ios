@@ -13,6 +13,7 @@ import RileyLinkBLEKit
 import UserNotifications
 import os.log
 
+fileprivate let disableCommsOptimizations = false
 
 public enum ReservoirAlertState {
     case ok
@@ -1398,16 +1399,19 @@ extension OmnipodPumpManager: PumpManager {
 
             var getStatusNeeded = false
             var finalizeFinishedDosesNeeded = false
-            if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
+            if disableCommsOptimizations || self.state.podState?.skipNextCommsOptimization == true {
+                self.log.info("enactBolus: skipping getStatus comms optimization ")
+                getStatusNeeded = true
+            } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
+                guard unfinalizedBolus.isFinished else {
+                    completion(.failure(PumpManagerError.deviceState(PodCommsError.unfinalizedBolus)))
+                    return
+                }
                 if unfinalizedBolus.scheduledCertainty == .uncertain {
                     self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
                     getStatusNeeded = true
-                } else if unfinalizedBolus.isFinished == false {
-                    self.log.info("enactBolus: not enacting bolus because podState indicates unfinalized bolus in progress")
-                    completion(.failure(PumpManagerError.deviceState(PodCommsError.unfinalizedBolus)))
-                    return
                 } else if unfinalizedBolus.isBolusPositivelyFinished == false {
-                    self.log.info("enactBolus: doing getStatus to verify if bolus completion")
+                    self.log.info("enactBolus: doing getStatus to verify if bolus complete")
                     getStatusNeeded = true
                 } else {
                     finalizeFinishedDosesNeeded = true // call finalizeFinishDoses() to clean up the certain & positively finalized bolus

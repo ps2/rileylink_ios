@@ -1374,8 +1374,6 @@ extension OmnipodPumpManager: PumpManager {
                 state.bolusEngageState = .engaging
             })
 
-            var podStatus: StatusResponse
-
             // If pod suspended, resume basal before bolusing to match existing Medtronic PumpManager behavior
             if case .some(.suspended) = self.state.podState?.suspendState {
                 do {
@@ -1388,7 +1386,7 @@ extension OmnipodPumpManager: PumpManager {
                     }
                 } catch let error {
                     self.log.error("enactBolus: error resuming suspended pod: %s", String(describing: error))
-                    completion(.communication(error as? LocalizedError)))
+                    completion(.communication(error as? LocalizedError))
                     return
                 }
             }
@@ -1425,10 +1423,6 @@ extension OmnipodPumpManager: PumpManager {
             } else if finalizeFinishedDosesNeeded {
                 session.finalizeFinishedDoses()
             }
-
-            let date = Date()
-            let endDate = date.addingTimeInterval(enactUnits / Pod.bolusDeliveryRate)
-            let dose = DoseEntry(type: .bolus, startDate: date, endDate: endDate, value: enactUnits, unit: .units, insulinType: self.insulinType, automatic: automatic)
 
             // Use an acknowledgement beep if Confirmation Beeps are enabled and this a manual bolus or Automatic Bolus Beeps are enabled
             let acknowledgementBeep = self.confirmationBeeps && (!automatic || self.automaticBolusBeeps)
@@ -1537,7 +1531,7 @@ extension OmnipodPumpManager: PumpManager {
 
             if case .some(.suspended) = self.state.podState?.suspendState {
                 self.log.info("Not enacting temp basal because podState indicates pod is suspended.")
-                completion(.failure(PumpManagerError.deviceState(PodCommsError.podSuspended)))
+                completion(.deviceState(PodCommsError.podSuspended))
                 return
             }
 
@@ -1548,7 +1542,6 @@ extension OmnipodPumpManager: PumpManager {
             }
 
             let status: StatusResponse
-            let canceledDose: UnfinalizedDose?
 
             let result = session.cancelDelivery(deliveryType: .tempBasal)
             switch result {
@@ -1559,9 +1552,8 @@ extension OmnipodPumpManager: PumpManager {
                 // TODO: Return PumpManagerError.uncertainDelivery and implement recovery
                 completion(.communication(error))
                 return
-            case .success(let cancelTempStatus, let dose):
+            case .success(let cancelTempStatus, let _):
                 status = cancelTempStatus
-                canceledDose = dose
             }
 
             guard !status.deliveryStatus.bolusing else {

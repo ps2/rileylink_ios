@@ -994,7 +994,7 @@ extension MinimedPumpManager: PumpManager {
         }
         
         guard let insulinType = insulinType else {
-            completion(.failure(.configuration(nil)))
+            completion(.configuration(nil))
             return
         }
 
@@ -1095,7 +1095,7 @@ extension MinimedPumpManager: PumpManager {
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(.failure(.configuration(nil)))
+            completion(.configuration(nil))
             return
         }
 

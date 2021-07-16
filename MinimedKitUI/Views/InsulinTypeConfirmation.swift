@@ -12,7 +12,7 @@ import LoopKitUI
 
 struct InsulinTypeConfirmation: View {
     
-    @State private var insulinType: InsulinType
+    @State private var insulinType: InsulinType?
     private var supportedInsulinTypes: [InsulinType]
     private var didConfirm: (InsulinType) -> Void
     
@@ -20,6 +20,14 @@ struct InsulinTypeConfirmation: View {
         self._insulinType = State(initialValue: initialValue)
         self.supportedInsulinTypes = supportedInsulinTypes
         self.didConfirm = didConfirm
+    }
+    
+    func continueWithType(_ insulinType: InsulinType?) {
+        if let insulinType = insulinType {
+            didConfirm(insulinType)
+        } else {
+            assertionFailure()
+        }
     }
     
     var body: some View {
@@ -35,7 +43,7 @@ struct InsulinTypeConfirmation: View {
             }
             .insetGroupedListStyle()
             
-            Button(action: { self.didConfirm(insulinType) }) {
+            Button(action: { self.continueWithType(insulinType) }) {
                 Text(LocalizedString("Continue", comment: "Text for continue button"))
                     .actionButtonStyle(.primary)
                     .padding()

@@ -608,7 +608,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 vc.title = sender?.textLabel?.text
                 show(vc, sender: indexPath)
             case .insulinType:
-                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases, allowUnsetInsulinType: false) { (newType) in
                     self.pumpManager.insulinType = newType
                 }
                 let vc = DismissibleHostingController(rootView: view)

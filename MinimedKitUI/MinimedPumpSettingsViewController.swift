@@ -268,7 +268,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
 
                 show(vc, sender: sender)
             case .insulinType:
-                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                let view = InsulinTypeSetting(initialValue: pumpManager.insulinType ?? .novolog, supportedInsulinTypes: InsulinType.allCases, allowUnsetInsulinType: false) { (newType) in
                     self.pumpManager.insulinType = newType
                 }
                 let vc = DismissibleHostingController(rootView: view)

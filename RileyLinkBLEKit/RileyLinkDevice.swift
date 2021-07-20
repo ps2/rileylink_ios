@@ -137,7 +137,7 @@ extension RileyLinkDevice {
     
     public func orangeAction(mode: Int) {
         add(log: "orangeAction: \(mode)")
-        manager.orangeAction(mode: RileyLinkOrangeMode(rawValue: UInt8(mode))!)
+        manager.orangeAction(mode: OrangeLinkCommand(rawValue: UInt8(mode))!)
     }
     
     public func orangeSetAction(index: Int, open: Bool) {
@@ -170,8 +170,8 @@ extension RileyLinkDevice {
         manager.findDevices()
     }
     
-    public func enableBLELEDs() {
-        manager.setLEDMode(mode: .on)
+    public func setDiagnosticeLEDModeForBLEChip(_ mode: RileyLinkLEDMode) {
+        manager.setLEDMode(mode: mode)
     }
 
     /// Asserts that the caller is currently on the session queue

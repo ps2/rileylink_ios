@@ -95,6 +95,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             cellForRow(.frequency)?.setDetailFrequency(frequency, formatter: frequencyFormatter)
         }
     }
+    
+    private var ledMode: RileyLinkLEDMode? {
+        didSet {
+            guard let ledMode = ledMode, isViewLoaded else {
+                return
+            }
+            cellForRow(.diagnosticLEDSMode)?.setLEDMode(ledMode)
+        }
+    }
 
     var rssiFetchTimer: Timer? {
         willSet {
@@ -102,15 +111,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
     
-    private lazy var frequencyFormatter: MeasurementFormatter = {
-        let formatter = MeasurementFormatter()
-        
-        formatter.numberFormatter = decimalFormatter
-        
-        return formatter
-    }()
-
-
     private var appeared = false
 
     public init(device: RileyLinkDevice) {
@@ -261,7 +261,19 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 self.log.error("Failed to get base frequency: %{public}@", String(describing: error))
             }
         }
-        
+    }
+    
+    func readDiagnosticLEDMode() {
+        device.runSession(withName: "Read diagnostic LED Mode") { (session) in
+            do {
+                let mode = try session.readDiagnosticLEDMode()
+                DispatchQueue.main.async {
+                    self.ledMode = mode
+                }
+            } catch let error {
+                self.log.error("Failed to read diagnostic LED Mode: %{public}@", String(describing: error))
+            }
+        }
     }
 
     // References to registered notification center observers
@@ -323,15 +335,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
         updateUptime()
         
-        updateBatteryLevel()
-        
-        writePSW()
-        
-        orangeReadSet()
-        
-        orangeReadVDC()
-        
-        orangeAction(index: 9)
+        switch device.hardwareType {
+        case .riley:
+            readDiagnosticLEDMode()
+        case .orange:
+            updateBatteryLevel()
+            writePSW()
+            orangeReadSet()
+            orangeReadVDC()
+            orangeAction(index: 9)
+        default:
+            break
+        }
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -364,22 +379,21 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     
     private lazy var integerFormatter = NumberFormatter()
 
-    private lazy var measurementFormatter: MeasurementFormatter = {
-        let formatter = MeasurementFormatter()
-
-        formatter.numberFormatter = decimalFormatter
-
-        return formatter
-    }()
-
     private lazy var decimalFormatter: NumberFormatter = {
         let decimalFormatter = NumberFormatter()
 
         decimalFormatter.numberStyle = .decimal
-        decimalFormatter.minimumSignificantDigits = 5
-
+        decimalFormatter.maximumFractionDigits = 2
         return decimalFormatter
     }()
+    
+    private lazy var frequencyFormatter: MeasurementFormatter = {
+        let formatter = MeasurementFormatter()
+        formatter.numberFormatter = decimalFormatter
+        return formatter
+    }()
+
+
 
     // MARK: - Table view data source
 
@@ -413,7 +427,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     private var deviceRows: [DeviceRow] = []
     
     private enum RileyLinkCommandRow: Int, CaseIterable {
-        case enableLED
+        case diagnosticLEDSMode
         case getStatistics
     }
     
@@ -424,8 +438,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case orangePro
     }
 
-    private enum ConfigureCommandRow: Int, CaseIterable {
-        case led
+    private enum OrangeConfigureCommandRow: Int, CaseIterable {
+        case orangeLED
         case vibration
     }
 
@@ -437,7 +451,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
         return tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
     }
-    
+
+    private func cellForRow(_ row: OrangeConfigureCommandRow) -> UITableViewCell? {
+        guard let sectionIndex = sections.firstIndex(of: Section.orangeLinkCommands) else
+        {
+            return nil
+        }
+        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
+    }
+
     private func cellForRow(_ row: OrangeLinkCommandRow) -> UITableViewCell? {
         guard let sectionIndex = sections.firstIndex(of: Section.orangeLinkCommands) else
         {
@@ -445,6 +467,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
         return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
     }
+    
+    private func cellForRow(_ row: RileyLinkCommandRow) -> UITableViewCell? {
+        guard let sectionIndex = sections.firstIndex(of: Section.rileyLinkCommands) else
+        {
+            return nil
+        }
+        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
+    }
+
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
@@ -463,7 +494,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .orangeLinkCommands:
             return OrangeLinkCommandRow.allCases.count
         case .configureCommand:
-            return ConfigureCommandRow.allCases.count
+            return OrangeConfigureCommandRow.allCases.count
         case .alert:
             return AlertRow.allCases.count
         }
@@ -501,8 +532,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 break
             }
         case .configureCommand:
-            switch ConfigureCommandRow(rawValue: sender.index)! {
-            case .led:
+            switch OrangeConfigureCommandRow(rawValue: sender.index)! {
+            case .orangeLED:
                 orangeAction(index: 0, open: sender.isOn)
                 ledOn = sender.isOn
             case .vibration:
@@ -597,10 +628,10 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             }
         case .rileyLinkCommands:
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
-            case .enableLED:
-                cell.textLabel?.text = LocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+            case .diagnosticLEDSMode:
+                cell.textLabel?.text = LocalizedString("Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
             case .getStatistics:
-                cell.textLabel?.text = LocalizedString("RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
+                cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
             }
         case .orangeLinkCommands:
             cell.accessoryType = .disclosureIndicator
@@ -627,8 +658,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.detailTextLabel?.text = nil
             }
         case .configureCommand:
-            switch ConfigureCommandRow(rawValue: indexPath.row)! {
-            case .led:
+            switch OrangeConfigureCommandRow(rawValue: indexPath.row)! {
+            case .orangeLED:
                 switchView.isHidden = false
                 switchView.isOn = ledOn
                 cell.accessoryType = .none
@@ -698,8 +729,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             var vc: CommandResponseViewController?
 
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
-            case .enableLED:
-                vc = .enableLEDs(device: device)
+            case .diagnosticLEDSMode:
+                let nextMode: RileyLinkLEDMode
+                switch ledMode {
+                case.on:
+                    nextMode = .off
+                default:
+                    nextMode = .on
+                }
+                vc = .setDiagnosticLEDMode(device: device, mode: nextMode)
             case .getStatistics:
                 vc = .getStatistics(device: device)
             }
@@ -880,6 +918,17 @@ private extension UITableViewCell {
             detailTextLabel?.text = formatter.string(from: frequency)
         } else {
             detailTextLabel?.text = ""
+        }
+    }
+    
+    func setLEDMode(_ mode: RileyLinkLEDMode) {
+        switch mode {
+        case .on:
+            detailTextLabel?.text = LocalizedString("On", comment: "Text indicating LED Mode is on")
+        case .off:
+            detailTextLabel?.text = LocalizedString("Off", comment: "Text indicating LED Mode is off")
+        case .auto:
+            detailTextLabel?.text = LocalizedString("Auto", comment: "Text indicating LED Mode is auto")
         }
     }
 

@@ -778,15 +778,6 @@ extension PumpOpsSession {
         }
     }
 
-    /// - Throws: PumpOpsError.deviceError
-    public func enableCCLEDs() throws {
-        do {
-            try session.enableCCLEDs()
-        } catch let error as LocalizedError {
-            throw PumpOpsError.deviceError(error)
-        }
-    }
-
     /// - Throws:
     ///     - PumpOpsError.deviceError
     ///     - RileyLinkDeviceError

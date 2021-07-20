@@ -146,10 +146,19 @@ public struct CommandSession {
 
     
     /// - Throws: RileyLinkDeviceError
-    public func enableCCLEDs() throws {
-        let enableBlue = SetLEDMode(.blue, mode: .auto)
+    public func setCCLEDMode(_ mode: RileyLinkLEDMode) throws {
+        let ccMode: RileyLinkLEDMode
+        
+        switch mode {
+        case .on:
+            ccMode = .auto
+        default:
+            ccMode = .off
+        }
+        
+        let enableBlue = SetLEDMode(.blue, mode: ccMode)
         _ = try writeCommand(enableBlue, timeout: 0)
-        let enableGreen = SetLEDMode(.green, mode: .auto)
+        let enableGreen = SetLEDMode(.green, mode: ccMode)
         _ = try writeCommand(enableGreen, timeout: 0)
     }
 
@@ -177,6 +186,11 @@ public struct CommandSession {
 
         return Measurement<UnitFrequency>(value: frequency, unit: .hertz).converted(to: .megahertz)
     }
+    
+    public func readDiagnosticLEDMode() throws -> RileyLinkLEDMode {
+        return try manager.readDiagnosticLEDMode()
+    }
+
 
     /// Sends data to the pump, listening for a reply
     ///

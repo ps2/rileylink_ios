@@ -47,16 +47,16 @@ enum SecureDFUCharacteristicUUID: String, CBUUIDRawValue {
 }
 
 
-enum RileyLinkOrangeMode: UInt8 {
-    case yellow  = 0x1
-    case red   = 0x2
-    case off = 0x3
-    case shake = 0x4
+enum OrangeLinkCommand: UInt8 {
+    case yellow   = 0x1
+    case red      = 0x2
+    case off      = 0x3
+    case shake    = 0x4
     case shakeOff = 0x5
-    case fw_hw = 0x9
+    case fw_hw    = 0x9
 }
 
-enum RileyLinkLEDMode: UInt8 {
+public enum RileyLinkLEDMode: UInt8 {
     case off  = 0x00
     case on   = 0x01
     case auto = 0x02
@@ -111,26 +111,22 @@ extension PeripheralManager.Configuration {
 }
 
 fileprivate extension CBPeripheral {
-    func getBatteryCharacteristic(_ uuid: BatteryServiceCharacteristicUUID, serviceUUID: RileyLinkServiceUUID = .battery) -> CBCharacteristic? {
-        guard let service = services?.itemWithUUID(serviceUUID.cbUUID) else {
+    func getBatteryCharacteristic(_ uuid: BatteryServiceCharacteristicUUID) -> CBCharacteristic? {
+        guard let service = services?.itemWithUUID(RileyLinkServiceUUID.battery.cbUUID) else {
             return nil
         }
 
         return service.characteristics?.itemWithUUID(uuid.cbUUID)
     }
-}
-
-fileprivate extension CBPeripheral {
-    func getOrangeCharacteristic(_ uuid: OrangeServiceCharacteristicUUID, serviceUUID: RileyLinkServiceUUID = .orange) -> CBCharacteristic? {
-        guard let service = services?.itemWithUUID(serviceUUID.cbUUID) else {
+    
+    func getOrangeCharacteristic(_ uuid: OrangeServiceCharacteristicUUID) -> CBCharacteristic? {
+        guard let service = services?.itemWithUUID(RileyLinkServiceUUID.orange.cbUUID) else {
             return nil
         }
 
         return service.characteristics?.itemWithUUID(uuid.cbUUID)
     }
-}
-
-fileprivate extension CBPeripheral {
+    
     func getCharacteristicWithUUID(_ uuid: MainServiceCharacteristicUUID, serviceUUID: RileyLinkServiceUUID = .main) -> CBCharacteristic? {
         guard let service = services?.itemWithUUID(serviceUUID.cbUUID) else {
             return nil
@@ -171,6 +167,25 @@ private let log = OSLog(category: "PeripheralManager+RileyLink")
 
 extension PeripheralManager {
     static let expectedMaxBLELatency: TimeInterval = 2
+    
+    func readDiagnosticLEDMode() throws -> RileyLinkLEDMode {
+        guard let characteristic = peripheral.getCharacteristicWithUUID(.ledMode) else {
+            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+        }
+        
+        do {
+            guard let data = try readValue(for: characteristic, timeout: 2) else {
+                // TODO: This is an "unknown value" issue, not a timeout
+                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+            }
+            guard let mode = RileyLinkLEDMode(rawValue: data[0]) else {
+                throw RileyLinkDeviceError.invalidResponse(data)
+            }
+            return mode
+        } catch let error as PeripheralManagerError {
+            throw RileyLinkDeviceError.peripheralManagerError(error)
+        }
+    }
 
     var timerTickEnabled: Bool {
         return peripheral.getCharacteristicWithUUID(.timerTick)?.isNotifying ?? false
@@ -388,7 +403,7 @@ extension PeripheralManager {
         }
     }
     
-    func orangeAction(mode: RileyLinkOrangeMode) {
+    func orangeAction(mode: OrangeLinkCommand) {
         if mode != .off, mode != .shakeOff {
             orangeWritePwd()
         }

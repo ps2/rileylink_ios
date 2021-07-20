@@ -34,14 +34,19 @@ extension CommandResponseViewController {
         }
     }
     
-    static func enableLEDs(device: RileyLinkDevice) -> T {
+    static func setDiagnosticLEDMode(device: RileyLinkDevice, mode: RileyLinkLEDMode) -> T {
         return T { (completionHandler) -> String in
-            device.enableBLELEDs()
-            device.runSession(withName: "Enable LEDs") { session in
+            device.setDiagnosticeLEDModeForBLEChip(mode)
+            device.runSession(withName: "Update diagnostic LED mode") { session in
                 let response: String
                 do {
-                    try session.enableCCLEDs()
-                    response = "OK"
+                    try session.setCCLEDMode(mode)
+                    switch mode {
+                    case .on:
+                        response = "Diagnostic mode enabled"
+                    default:
+                        response = "Diagnostic mode disabled"
+                    }
                 } catch let error {
                     response = String(describing: error)
                 }
@@ -51,7 +56,7 @@ extension CommandResponseViewController {
                 }
             }
 
-            return LocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
+            return LocalizedString("Updating diagnostic LEDs mode", comment: "Progress message for changing diagnostic LED mode")
         }
     }
 }

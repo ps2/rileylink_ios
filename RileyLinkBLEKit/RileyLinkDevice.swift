@@ -8,6 +8,15 @@
 import CoreBluetooth
 import os.log
 
+public enum RileyLinkHardwareType {
+    case riley
+    case orange
+    case ema
+    
+    var monitorsBattery: Bool {
+        return self == .orange
+    }
+}
 
 /// TODO: Should we be tracking the most recent "pump" RSSI?
 public class RileyLinkDevice {
@@ -44,6 +53,24 @@ public class RileyLinkDevice {
     public var ledOn: Bool = false
     public var vibrationOn: Bool = false
     public var voltage = ""
+    
+    public var hardwareType: RileyLinkHardwareType? {
+        guard let services = self.manager.peripheral.services else {
+            return nil
+        }
+        
+        if services.itemWithUUID(RileyLinkServiceUUID.secureDFU.cbUUID) != nil {
+            return .orange
+        } else {
+            return .riley
+        }
+        // TODO: detect emalink
+    }
+    
+    public var isOrangePro: Bool {
+        return hardwareType == .orange
+    }
+
 
     /// The queue used to serialize sessions and observe when they've drained
     private let sessionQueue: OperationQueue = {
@@ -78,11 +105,6 @@ extension RileyLinkDevice {
         return manager.peripheral.name
     }
     
-    public var isOrangePro: Bool {
-        //TODO: Determine Orange vs Riley
-        return true
-    }
-
     public var deviceURI: String {
         return "rileylink://\(name ?? peripheralIdentifier.uuidString)"
     }

@@ -129,7 +129,41 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         super.viewDidLoad()
 
         title = device.name
-
+        
+        switch device.hardwareType {
+        case .riley, .ema:
+            deviceRows = [
+                .customName,
+                .version,
+                .rssi,
+                .connection,
+                .uptime,
+                .frequency
+            ]
+            
+            sections = [
+                .device,
+                .rileyLinkCommands
+            ]
+        default:
+            deviceRows = [
+                .customName,
+                .version,
+                .rssi,
+                .connection,
+                .uptime,
+                .frequency,
+                .battery,
+                .orl,
+                .voltage
+            ]
+            
+            sections = [
+                .device,
+                .orangeLinkCommands
+            ]
+        }
+        
         self.observe()
     }
     
@@ -349,19 +383,22 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    private enum Section: Int, CaseCountable {
+    private enum Section: Int, CaseIterable {
         case device
         case alert
         case configureCommand
-        case commands
+        case orangeLinkCommands
+        case rileyLinkCommands
     }
     
-    private enum AlertRow: Int, CaseCountable {
+    private var sections: [Section] = []
+
+    private enum AlertRow: Int, CaseIterable {
         case battery
         case voltage
     }
 
-    private enum DeviceRow: Int, CaseCountable {
+    private enum DeviceRow: Int, CaseIterable {
         case customName
         case version
         case rssi
@@ -373,48 +410,70 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case voltage
     }
     
-    private enum CommandRow: Int, CaseCountable {
+    private var deviceRows: [DeviceRow] = []
+    
+    private enum RileyLinkCommandRow: Int, CaseIterable {
+        case enableLED
+        case getStatistics
+    }
+    
+    private enum OrangeLinkCommandRow: Int, CaseIterable {
         case yellow
         case red
         case shake
         case orangePro
     }
-    
-    private enum ConfigureCommandRow: Int, CaseCountable {
+
+    private enum ConfigureCommandRow: Int, CaseIterable {
         case led
         case vibration
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
-        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.device.rawValue))
+        guard let rowIndex = deviceRows.firstIndex(of: row),
+              let sectionIndex = sections.firstIndex(of: Section.device) else
+        {
+            return nil
+        }
+        return tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
     }
     
-    private func cellForRow(_ row: CommandRow) -> UITableViewCell? {
-        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.commands.rawValue))
+    private func cellForRow(_ row: OrangeLinkCommandRow) -> UITableViewCell? {
+        guard let sectionIndex = sections.firstIndex(of: Section.orangeLinkCommands) else
+        {
+            return nil
+        }
+        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return sections.count
     }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch Section(rawValue: section)! {
+        guard section < sections.count else {
+            return 0
+        }
+        
+        switch sections[section] {
         case .device:
-            return DeviceRow.count
-        case .commands:
-            return CommandRow.count - (device.isOrangePro ? 0 : 1)
+            return deviceRows.count
+        case .rileyLinkCommands:
+            return RileyLinkCommandRow.allCases.count
+        case .orangeLinkCommands:
+            return OrangeLinkCommandRow.allCases.count
         case .configureCommand:
-            return ConfigureCommandRow.count
+            return ConfigureCommandRow.allCases.count
         case .alert:
-            return AlertRow.count
+            return AlertRow.allCases.count
         }
     }
     
     @objc
     func switchAction(sender: RileyLinkSwitch) {
-        switch Section(rawValue: sender.section)! {
-        case .commands:
-            switch CommandRow(rawValue: sender.index)! {
+        switch sections[sender.section] {
+        case .orangeLinkCommands:
+            switch OrangeLinkCommandRow(rawValue: sender.index)! {
             case .yellow:
                 if sender.isOn {
                     orangeAction(index: 1)
@@ -481,9 +540,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         cell.accessoryType = .none
         cell.detailTextLabel?.text = nil
 
-        switch Section(rawValue: indexPath.section)! {
+        switch sections[indexPath.section] {
         case .device:
-            switch DeviceRow(rawValue: indexPath.row)! {
+            switch deviceRows[indexPath.row] {
             case .customName:
                 cell.textLabel?.text = LocalizedString("Name", comment: "The title of the cell showing device name")
                 cell.detailTextLabel?.text = device.name
@@ -536,11 +595,18 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("Low Voltage Alert", comment: "The title of the cell showing voltage level")
                 cell.detailTextLabel?.text = "\(value)"
             }
-        case .commands:
+        case .rileyLinkCommands:
+            switch RileyLinkCommandRow(rawValue: indexPath.row)! {
+            case .enableLED:
+                cell.textLabel?.text = LocalizedString("Enable Diagnostic LEDs", comment: "The title of the command to enable diagnostic LEDs")
+            case .getStatistics:
+                cell.textLabel?.text = LocalizedString("RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
+            }
+        case .orangeLinkCommands:
             cell.accessoryType = .disclosureIndicator
             cell.detailTextLabel?.text = nil
             
-            switch CommandRow(rawValue: indexPath.row)! {
+            switch OrangeLinkCommandRow(rawValue: indexPath.row)! {
             case .yellow:
                 switchView.isHidden = false
                 cell.accessoryType = .none
@@ -579,10 +645,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch Section(rawValue: section)! {
+        switch sections[section] {
         case .device:
             return LocalizedString("Device", comment: "The title of the section describing the device")
-        case .commands:
+        case .rileyLinkCommands:
+            return LocalizedString("Test Commands", comment: "The title of the section describing commands")
+        case .orangeLinkCommands:
             return LocalizedString("Test Commands", comment: "The title of the section describing commands")
         case .configureCommand:
             return LocalizedString("Configure Commands", comment: "The title of the section describing commands")
@@ -594,17 +662,15 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     // MARK: - UITableViewDelegate
 
     public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        switch Section(rawValue: indexPath.section)! {
+        switch sections[indexPath.section] {
         case .device:
-            switch DeviceRow(rawValue: indexPath.row)! {
+            switch deviceRows[indexPath.row] {
             case .customName:
                 return true
             default:
                 return false
             }
-        case .commands:
-            return device.peripheralState == .connected
-        case .configureCommand:
+        case .orangeLinkCommands, .configureCommand, .rileyLinkCommands:
             return device.peripheralState == .connected
         case .alert:
             return true
@@ -612,9 +678,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch Section(rawValue: indexPath.section)! {
+        switch sections[indexPath.section] {
         case .device:
-            switch DeviceRow(rawValue: indexPath.row)! {
+            switch deviceRows[indexPath.row] {
             case .customName:
                 let vc = TextFieldTableViewController()
                 if let cell = tableView.cellForRow(at: indexPath) {
@@ -628,8 +694,25 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             default:
                 break
             }
-        case .commands:
-            switch CommandRow(rawValue: indexPath.row)! {
+        case .rileyLinkCommands:
+            var vc: CommandResponseViewController?
+
+            switch RileyLinkCommandRow(rawValue: indexPath.row)! {
+            case .enableLED:
+                vc = .enableLEDs(device: device)
+            case .getStatistics:
+                vc = .getStatistics(device: device)
+            }
+            if let cell = tableView.cellForRow(at: indexPath) {
+                vc?.title = cell.textLabel?.text
+            }
+
+            if let vc = vc {
+                show(vc, sender: indexPath)
+            }
+
+        case .orangeLinkCommands:
+            switch OrangeLinkCommandRow(rawValue: indexPath.row)! {
             case .orangePro:
                 findDevices()
             default:
@@ -736,9 +819,9 @@ extension RileyLinkDeviceTableViewController: TextFieldTableViewControllerDelega
 
     public func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
         if let indexPath = tableView.indexPathForSelectedRow {
-            switch Section(rawValue: indexPath.section)! {
+            switch sections[indexPath.section] {
             case .device:
-                switch DeviceRow(rawValue: indexPath.row)! {
+                switch deviceRows[indexPath.row] {
                 case .customName:
                     device.setCustomName(controller.value!)
                 default:

@@ -98,7 +98,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     
     private var ledMode: RileyLinkLEDMode? {
         didSet {
-            guard let ledMode = ledMode, isViewLoaded else {
+            guard isViewLoaded else {
                 return
             }
             cellForRow(.diagnosticLEDSMode)?.setLEDMode(ledMode)
@@ -264,16 +264,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
     
     func readDiagnosticLEDMode() {
-        device.runSession(withName: "Read diagnostic LED Mode") { (session) in
-            do {
-                let mode = try session.readDiagnosticLEDMode()
-                DispatchQueue.main.async {
-                    self.ledMode = mode
-                }
-            } catch let error {
-                self.log.error("Failed to read diagnostic LED Mode: %{public}@", String(describing: error))
+        device.readDiagnosticLEDModeForBLEChip(completion: { ledMode in
+            DispatchQueue.main.async {
+                self.ledMode = ledMode
             }
-        }
+        })
     }
 
     // References to registered notification center observers
@@ -630,6 +625,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
                 cell.textLabel?.text = LocalizedString("Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
+                cell.setLEDMode(ledMode)
             case .getStatistics:
                 cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
             }
@@ -921,7 +917,7 @@ private extension UITableViewCell {
         }
     }
     
-    func setLEDMode(_ mode: RileyLinkLEDMode) {
+    func setLEDMode(_ mode: RileyLinkLEDMode?) {
         switch mode {
         case .on:
             detailTextLabel?.text = LocalizedString("On", comment: "Text indicating LED Mode is on")
@@ -929,6 +925,8 @@ private extension UITableViewCell {
             detailTextLabel?.text = LocalizedString("Off", comment: "Text indicating LED Mode is off")
         case .auto:
             detailTextLabel?.text = LocalizedString("Auto", comment: "Text indicating LED Mode is auto")
+        case .none:
+            detailTextLabel?.text = ""
         }
     }
 

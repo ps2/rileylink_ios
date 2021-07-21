@@ -168,22 +168,21 @@ private let log = OSLog(category: "PeripheralManager+RileyLink")
 extension PeripheralManager {
     static let expectedMaxBLELatency: TimeInterval = 2
     
-    func readDiagnosticLEDMode() throws -> RileyLinkLEDMode {
-        guard let characteristic = peripheral.getCharacteristicWithUUID(.ledMode) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
-        }
-        
-        do {
-            guard let data = try readValue(for: characteristic, timeout: 2) else {
-                // TODO: This is an "unknown value" issue, not a timeout
-                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+    func readDiagnosticLEDMode(completion: @escaping (RileyLinkLEDMode?) -> Void) {
+        perform { (manager) in
+            do {
+                guard
+                    let characteristic = self.peripheral.getCharacteristicWithUUID(.ledMode),
+                    let data = try self.readValue(for: characteristic, timeout: 2),
+                    let mode = RileyLinkLEDMode(rawValue: data[0]) else
+                {
+                    completion(nil)
+                    return
+                }
+                completion(mode)
+            } catch {
+                completion(nil)
             }
-            guard let mode = RileyLinkLEDMode(rawValue: data[0]) else {
-                throw RileyLinkDeviceError.invalidResponse(data)
-            }
-            return mode
-        } catch let error as PeripheralManagerError {
-            throw RileyLinkDeviceError.peripheralManagerError(error)
         }
     }
 
@@ -503,7 +502,7 @@ extension PeripheralManager {
                 add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeReadSet failed")
+                add(log: "orangeReadVDC failed")
             }
         }
     }

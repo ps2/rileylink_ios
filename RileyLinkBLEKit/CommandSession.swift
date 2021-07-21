@@ -187,11 +187,6 @@ public struct CommandSession {
         return Measurement<UnitFrequency>(value: frequency, unit: .hertz).converted(to: .megahertz)
     }
     
-    public func readDiagnosticLEDMode() throws -> RileyLinkLEDMode {
-        return try manager.readDiagnosticLEDMode()
-    }
-
-
     /// Sends data to the pump, listening for a reply
     ///
     /// - Parameters:

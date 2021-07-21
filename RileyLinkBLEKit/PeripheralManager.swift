@@ -151,8 +151,10 @@ extension PeripheralManager {
     }
 
     private func assertConfiguration() {
-        perform { (_) in
-            // Intentionally empty to trigger configuration if necessary
+        if peripheral.state == .connected {
+            perform { (_) in
+                // Intentionally empty to trigger configuration if necessary
+            }
         }
     }
 
@@ -416,7 +418,7 @@ extension PeripheralManager: CBPeripheralDelegate {
         }
         
         if let value = characteristic.value {
-            add(log: value.hexadecimalString)
+            add(log: "didUpdateValueFor:\(characteristic): \(value.hexadecimalString)")
         }
 
         var notifyDelegate = false

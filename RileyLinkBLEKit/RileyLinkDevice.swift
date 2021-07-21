@@ -173,6 +173,10 @@ extension RileyLinkDevice {
     public func setDiagnosticeLEDModeForBLEChip(_ mode: RileyLinkLEDMode) {
         manager.setLEDMode(mode: mode)
     }
+    
+    public func readDiagnosticLEDModeForBLEChip(completion: @escaping (RileyLinkLEDMode?) -> Void) {
+        manager.readDiagnosticLEDMode(completion: completion)
+    }
 
     /// Asserts that the caller is currently on the session queue
     public func assertOnSessionQueue() {
@@ -241,6 +245,9 @@ extension RileyLinkDevice {
 
 
 // MARK: - Command session management
+// CommandSessions are a way to serialize access to the RileyLink command/response facility.
+// All commands that send data out on the RL data characteristic need to be in a command session.
+// Accessing other characteristics on the RileyLink can be done without a command session.
 extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
@@ -285,28 +292,32 @@ extension RileyLinkDevice {
     public func assertIdleListening(forceRestart: Bool = false) {
         os_unfair_lock_lock(&lock)
         guard case .enabled(timeout: let timeout, channel: let channel) = self.idleListeningState else {
+            self.log.debug("Already listening")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
+            self.log.debug("Cannot listen; disconnected or central manager powered off")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard forceRestart || (self.lastIdle ?? .distantPast).timeIntervalSinceNow < -timeout else {
+            self.log.debug("Not listening: not forcing, and lastIdle too recent.")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard !self.isIdleListeningPending else {
+            self.log.debug("Not listening: idle listening is pending.")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         self.isIdleListeningPending = true
         os_unfair_lock_unlock(&lock)
-        self.log.debug("Enqueuing idle listening")
+        self.log.debug("Enqueuing idle listening, forceRestart = %@", "\(forceRestart)")
 
         self.manager.startIdleListening(idleTimeout: timeout, channel: channel) { (error) in
             os_unfair_lock_lock(&self.lock)
@@ -317,6 +328,7 @@ extension RileyLinkDevice {
                 os_unfair_lock_unlock(&self.lock)
             } else {
                 self.lastIdle = Date()
+                self.log.debug("Started idle listening at %@", "\(self.lastIdle!)")
                 os_unfair_lock_unlock(&self.lock)
                 NotificationCenter.default.post(name: .DeviceDidStartIdle, object: self)
             }
@@ -382,7 +394,7 @@ extension RileyLinkDevice {
 
 extension RileyLinkDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateNotificationStateFor characteristic: CBCharacteristic) {
-        add(log: "didUpdate: \(characteristic.uuid.uuidString)")
+        add(log: "didUpdateNotificationStateFor: \(characteristic.uuid.uuidString)")
 //        switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
 //        case .orange, .orangeNotif:
 //            manager.writePsw = true
@@ -393,7 +405,9 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
         log.debug("Did didUpdateNotificationStateFor %@", characteristic)
     }
     
-    // This is called from the central's queue
+    // If PeripheralManager receives a response on the data queue, without an outstanding request,
+    // it will pass the update to this method, which is called on the central's queue.
+    // This is how idle listen responses are handled
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
         log.debug("Did UpdateValueFor %@", characteristic)
         add(log: "Did UpdateValueFor: \(characteristic.uuid.uuidString), value: \(characteristic.value?.hexadecimalString ?? "")")
@@ -418,7 +432,10 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
 
                     if let response = response {
                         switch response.code {
-                        case .rxTimeout, .commandInterrupted, .zeroData, .invalidParam, .unknownCommand:
+                        case .commandInterrupted:
+                            self.log.debug("Received commandInterrupted during idle; assuming device is still listening.")
+                            return
+                        case .rxTimeout, .zeroData, .invalidParam, .unknownCommand:
                             self.log.debug("Idle error received: %@", String(describing: response.code))
                         case .success:
                             if let packet = response.packet {
@@ -436,20 +453,13 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                 } else {
                     self.log.error("Skipping parsing characteristic value update due to missing BLE firmware version")
                 }
-
-                self.resetBatteryAlert()
-                self.orangeReadVDC()
                 self.assertIdleListening(forceRestart: true)
             }
         case .responseCount?:
             // PeripheralManager.Configuration.valueUpdateMacros is responsible for handling this response.
-            self.resetBatteryAlert()
-            self.orangeReadVDC()
             break
         case .timerTick?:
             NotificationCenter.default.post(name: .DeviceTimerDidTick, object: self)
-            self.resetBatteryAlert()
-            self.orangeReadVDC()
             assertIdleListening(forceRestart: false)
         case .customName?, .firmwareVersion?, .ledMode?, .none:
             break

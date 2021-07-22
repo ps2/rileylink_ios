@@ -43,9 +43,6 @@ public class RileyLinkDevice {
     // Confined to `lock`
     private var isTimerTickEnabled = true
     
-    // Confined to `lock`
-    private var logs = ""
-
     /// Serializes access to device state
     private var lock = os_unfair_lock()
     
@@ -136,37 +133,37 @@ extension RileyLinkDevice {
     }
     
     public func orangeAction(mode: Int) {
-        add(log: "orangeAction: \(mode)")
+        log.debug("orangeAction: %@", "\(mode)")
         manager.orangeAction(mode: OrangeLinkCommand(rawValue: UInt8(mode))!)
     }
     
     public func orangeSetAction(index: Int, open: Bool) {
-        add(log: "orangeSetAction: \(index), \(open)")
+        log.debug("orangeSetAction: %@, %@", "\(index)", "\(open)")
         manager.setAction(index: index, open: open)
     }
     
     public func orangeWritePwd() {
-        add(log: "orangeWritePwd")
+        log.debug("orangeWritePwd")
         manager.orangeWritePwd()
     }
     
     public func orangeClose() {
-        add(log: "orangeClose")
+        log.debug("orangeClose")
         manager.orangeClose()
     }
     
     public func orangeReadSet() {
-        add(log: "orangeReadSet")
+        log.debug("orangeReadSet")
         manager.orangeReadSet()
     }
     
     public func orangeReadVDC() {
-        add(log: "orangeReadVDC")
+        log.debug("orangeReadVDC")
         manager.orangeReadVDC()
     }
     
     public func findDevices() {
-        add(log: "findDevices")
+        log.debug("findDevices")
         manager.findDevices()
     }
     
@@ -292,32 +289,27 @@ extension RileyLinkDevice {
     public func assertIdleListening(forceRestart: Bool = false) {
         os_unfair_lock_lock(&lock)
         guard case .enabled(timeout: let timeout, channel: let channel) = self.idleListeningState else {
-            self.log.debug("Already listening")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard case .connected = self.manager.peripheral.state, case .poweredOn? = self.manager.central?.state else {
-            self.log.debug("Cannot listen; disconnected or central manager powered off")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard forceRestart || (self.lastIdle ?? .distantPast).timeIntervalSinceNow < -timeout else {
-            self.log.debug("Not listening: not forcing, and lastIdle too recent.")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         guard !self.isIdleListeningPending else {
-            self.log.debug("Not listening: idle listening is pending.")
             os_unfair_lock_unlock(&lock)
             return
         }
 
         self.isIdleListeningPending = true
         os_unfair_lock_unlock(&lock)
-        self.log.debug("Enqueuing idle listening, forceRestart = %@", "\(forceRestart)")
 
         self.manager.startIdleListening(idleTimeout: timeout, channel: channel) { (error) in
             os_unfair_lock_lock(&self.lock)
@@ -328,7 +320,7 @@ extension RileyLinkDevice {
                 os_unfair_lock_unlock(&self.lock)
             } else {
                 self.lastIdle = Date()
-                self.log.debug("Started idle listening at %@", "\(self.lastIdle!)")
+                self.log.debug("Started idle listening")
                 os_unfair_lock_unlock(&self.lock)
                 NotificationCenter.default.post(name: .DeviceDidStartIdle, object: self)
             }
@@ -394,7 +386,6 @@ extension RileyLinkDevice {
 
 extension RileyLinkDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateNotificationStateFor characteristic: CBCharacteristic) {
-        add(log: "didUpdateNotificationStateFor: \(characteristic.uuid.uuidString)")
 //        switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
 //        case .orange, .orangeNotif:
 //            manager.writePsw = true
@@ -410,7 +401,6 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     // This is how idle listen responses are handled
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
         log.debug("Did UpdateValueFor %@", characteristic)
-        add(log: "Did UpdateValueFor: \(characteristic.uuid.uuidString), value: \(characteristic.value?.hexadecimalString ?? "")")
         switch MainServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
         case .data?:
             guard let value = characteristic.value, value.count > 0 else {
@@ -561,15 +551,6 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
 
 extension RileyLinkDevice: CustomDebugStringConvertible {
     
-    public func add(log: String) {
-        os_unfair_lock_lock(&lock)
-        if self.logs.count > 10000 {
-            self.logs.removeLast(1000)
-        }
-        self.logs.append("\(Date())\n\(log)\n")
-        os_unfair_lock_unlock(&lock)
-    }
-    
     public var debugDescription: String {
         os_unfair_lock_lock(&lock)
         let lastIdle = self.lastIdle
@@ -587,9 +568,7 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
             "* radioFirmware: \(String(describing: radioFirmwareVersion))",
             "* bleFirmware: \(String(describing: bleFirmwareVersion))",
             "* peripheralManager: \(manager)",
-            "* sessionQueue.operationCount: \(sessionQueue.operationCount)",
-            "* logs: \(logs)",
-            "* manager logs: \(manager.logString)"
+            "* sessionQueue.operationCount: \(sessionQueue.operationCount)"
         ].joined(separator: "\n")
     }
 }

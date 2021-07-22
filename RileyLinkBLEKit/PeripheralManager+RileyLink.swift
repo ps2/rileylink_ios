@@ -283,7 +283,7 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.writeSizeLimitExceeded
     func writeCommand<C: Command>(_ command: C, timeout: TimeInterval, responseType: ResponseType) throws -> C.ResponseType {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         let value = try command.writableData()
@@ -317,7 +317,7 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.writeSizeLimitExceeded
     fileprivate func writeCommandWithoutResponse<C: Command>(_ command: C, timeout: TimeInterval) throws {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.data) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         let value = try command.writableData()
@@ -344,13 +344,12 @@ extension PeripheralManager {
     ///     - RileyLinkDeviceError.peripheralManagerError
     func readBluetoothFirmwareVersion(timeout: TimeInterval) throws -> String {
         guard let characteristic = peripheral.getCharacteristicWithUUID(.firmwareVersion) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
 
         do {
             guard let data = try readValue(for: characteristic, timeout: timeout) else {
-                // TODO: This is an "unknown value" issue, not a timeout
-                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+                throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.emptyValue)
             }
 
             guard let version = String(bytes: data, encoding: .utf8) else {
@@ -370,13 +369,12 @@ extension PeripheralManager {
     
     func readBatteryLevel(timeout: TimeInterval) throws -> String {
         guard let characteristic = peripheral.getBatteryCharacteristic(.battery_level) else {
-            throw RileyLinkDeviceError.peripheralManagerError(.unknownCharacteristic)
+            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
         
         do {
             guard let data = try readValue(for: characteristic, timeout: timeout) else {
-                // TODO: This is an "unknown value" issue, not a timeout
-                throw RileyLinkDeviceError.peripheralManagerError(.timeout)
+                throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.emptyValue)
             }
             
             let battery_level = "\(data[0])"
@@ -393,11 +391,10 @@ extension PeripheralManager {
                 return
             }
             
-            add(log: "setOrangeNotifyOn: \(characteristicNotif.uuid.uuidString)")
             do {
                 try setNotifyValue(true, for: characteristicNotif, timeout: 2)
             } catch {
-                add(log: "setOrangeNotifyOn Error: \(error.localizedDescription)")
+                log.error("setOrangeNotifyOn failed: %@", error.localizedDescription)
             }
         }
     }
@@ -412,10 +409,9 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xbb, mode.rawValue])
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeAction failed")
+                log.debug("orangeAction failed")
             }
         }
         if mode == .off, mode == .shakeOff {
@@ -430,10 +426,9 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xdd, 0x04])
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "findDevices failed")
+                log.debug("findDevices failed")
             }
         }
     }
@@ -454,10 +449,9 @@ extension PeripheralManager {
                     setDatas[3] = open ? 1 : 0
                 }
                 let value = Data(setDatas)
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "setAction failed")
+                log.debug("setAction failed")
             }
         }
     }
@@ -469,10 +463,9 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xAA])
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeWritePwd failed")
+                log.debug("orangeWritePwd failed")
             }
         }
     }
@@ -484,10 +477,10 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xdd, 0x01])
-                add(log: "write: \(value.hexadecimalString)")
+                log.debug("orangeReadSet write: %@", value.hexadecimalString)
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeReadSet failed")
+                log.debug("orangeReadSet failed")
             }
         }
     }
@@ -499,10 +492,9 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xdd, 0x03])
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeReadVDC failed")
+                log.debug("orangeReadVDC failed")
             }
         }
     }
@@ -514,10 +506,9 @@ extension PeripheralManager {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xcc])
-                add(log: "write: \(value.hexadecimalString)")
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                add(log: "orangeClose failed")
+                log.debug("orangeClose failed")
             }
         }
     }
@@ -581,7 +572,15 @@ extension PeripheralManager {
                 peripheral.writeValue(data, for: characteristic, type: type)
             }
         } catch let error as PeripheralManagerError {
-            throw RileyLinkDeviceError.peripheralManagerError(error)
+            // If the write succeeded, but we get no response, BLE comms are working but RL command channel is hung
+            if case .timeout(let unmetConditions) = error,
+               let firstUnmetCondition = unmetConditions.first,
+               case .valueUpdate = firstUnmetCondition
+            {
+                throw RileyLinkDeviceError.commandsBlocked
+            } else {
+                throw RileyLinkDeviceError.peripheralManagerError(error)
+            }
         }
 
         guard let response = capturedResponse else {

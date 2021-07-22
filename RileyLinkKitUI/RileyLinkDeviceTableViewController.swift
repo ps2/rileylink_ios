@@ -131,7 +131,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         title = device.name
         
         switch device.hardwareType {
-        case .riley, .ema:
+        case .riley, .ema, .none:
             deviceRows = [
                 .customName,
                 .version,
@@ -145,7 +145,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 .device,
                 .rileyLinkCommands
             ]
-        default:
+        case .orange:
             deviceRows = [
                 .customName,
                 .version,
@@ -160,6 +160,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             
             sections = [
                 .device,
+                .configureCommand,
                 .orangeLinkCommands
             ]
         }

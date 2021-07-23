@@ -47,7 +47,7 @@ enum SecureDFUCharacteristicUUID: String, CBUUIDRawValue {
 }
 
 
-enum OrangeLinkCommand: UInt8 {
+public enum OrangeLinkCommand: UInt8 {
     case yellow   = 0x1
     case red      = 0x2
     case off      = 0x3
@@ -377,9 +377,7 @@ extension PeripheralManager {
                 throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.emptyValue)
             }
             
-            let battery_level = "\(data[0])"
-            
-            return battery_level
+            return "\(data[0])"
         } catch let error as PeripheralManagerError {
             throw RileyLinkDeviceError.peripheralManagerError(error)
         }
@@ -399,8 +397,8 @@ extension PeripheralManager {
         }
     }
     
-    func orangeAction(mode: OrangeLinkCommand) {
-        if mode != .off, mode != .shakeOff {
+    func orangeAction(_ command: OrangeLinkCommand) {
+        if command != .off, command != .shakeOff {
             orangeWritePwd()
         }
         perform { [self] (manager) in
@@ -408,13 +406,13 @@ extension PeripheralManager {
                 guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                let value = Data([0xbb, mode.rawValue])
+                let value = Data([0xbb, command.rawValue])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
                 log.debug("orangeAction failed")
             }
         }
-        if mode == .off, mode == .shakeOff {
+        if command == .off, command == .shakeOff {
             orangeClose()
         }
     }

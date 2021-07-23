@@ -56,16 +56,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
     
-    private var fw_hw: String? {
-        didSet {
-            guard isViewLoaded else {
-                return
-            }
-            
-            cellForRow(.orl)?.detailTextLabel?.text = fw_hw
-        }
-    }
-    
     private var uptime: TimeInterval? {
         didSet {
             guard isViewLoaded else {
@@ -152,17 +142,21 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 .rssi,
                 .connection,
                 .uptime,
-                .frequency,
                 .battery,
-                .orl,
                 .voltage
             ]
             
-            sections = [
-                .device,
-                .configureCommand,
-                .orangeLinkCommands
-            ]
+            if device.hasOrangeLinkService {
+                sections = [
+                    .device,
+                    .configureCommand,
+                    .orangeLinkCommands
+                ]
+            } else {
+                sections = [
+                    .device
+                ]
+            }
         }
         
         self.observe()
@@ -175,8 +169,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     func updateDeviceStatus() {
         device.getStatus { (status) in
             DispatchQueue.main.async {
-                self.firmwareVersion = status.firmwareDescription
-                self.fw_hw = status.fw_hw
+                self.firmwareVersion = status.version
                 self.ledOn = status.ledOn
                 self.vibrationOn = status.vibrationOn
                 self.voltage = status.voltage
@@ -232,9 +225,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
     
-    func orangeAction(index: Int) {
-        device.runSession(withName: "Orange Action \(index)") { (session) in
-            self.device.orangeAction(mode: index)
+    func orangeAction(_ command: OrangeLinkCommand) {
+        device.runSession(withName: "Orange Action \(String(describing: index))") { (session) in
+            self.device.orangeAction(command)
         }
     }
     
@@ -327,7 +320,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         
         updateRSSI()
         
-        updateFrequency()
+        if deviceRows.contains(.frequency) {
+            updateFrequency()
+        }
 
         updateUptime()
         
@@ -339,7 +334,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             writePSW()
             orangeReadSet()
             orangeReadVDC()
-            orangeAction(index: 9)
+            orangeAction(.fw_hw)
         default:
             break
         }
@@ -348,11 +343,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if redOn || yellowOn {
-            orangeAction(index: 3)
+            orangeAction(.off)
         }
         
         if shakeOn {
-            orangeAction(index: 5)
+            orangeAction(.shakeOff)
         }
     }
     
@@ -389,8 +384,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         return formatter
     }()
 
-
-
     // MARK: - Table view data source
 
     private enum Section: Int, CaseIterable {
@@ -416,7 +409,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case uptime
         case frequency
         case battery
-        case orl
         case voltage
     }
     
@@ -503,25 +495,25 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             switch OrangeLinkCommandRow(rawValue: sender.index)! {
             case .yellow:
                 if sender.isOn {
-                    orangeAction(index: 1)
+                    orangeAction(.yellow)
                 } else {
-                    orangeAction(index: 3)
+                    orangeAction(.off)
                 }
                 yellowOn = sender.isOn
                 redOn = false
             case .red:
                 if sender.isOn {
-                    orangeAction(index: 2)
+                    orangeAction(.red)
                 } else {
-                    orangeAction(index: 3)
+                    orangeAction(.off)
                 }
                 yellowOn = false
                 redOn = sender.isOn
             case .shake:
                 if sender.isOn {
-                    orangeAction(index: 4)
+                    orangeAction(.shake)
                 } else {
-                    orangeAction(index: 5)
+                    orangeAction(.shakeOff)
                 }
                 shakeOn = sender.isOn
             default:
@@ -592,9 +584,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             case .battery:
                 cell.textLabel?.text = NSLocalizedString("Battery level", comment: "The title of the cell showing battery level")
                 cell.setDetailBatteryLevel(battery)
-            case .orl:
-                cell.textLabel?.text = NSLocalizedString("ORL", comment: "The title of the cell showing ORL")
-                cell.detailTextLabel?.text = fw_hw
             case .voltage:
                 cell.textLabel?.text = NSLocalizedString("Voltage", comment: "The title of the cell showing ORL")
                 cell.detailTextLabel?.text = voltage

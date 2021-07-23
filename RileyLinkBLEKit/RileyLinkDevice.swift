@@ -29,6 +29,27 @@ public class RileyLinkDevice {
 
     // Confined to `manager.queue`
     private var radioFirmwareVersion: RadioFirmwareVersion?
+    
+    public var rlFirmwareDescription: String {
+        let versions = [radioFirmwareVersion, bleFirmwareVersion].compactMap { (version: CustomStringConvertible?) -> String? in
+            if let version = version {
+                return String(describing: version)
+            } else {
+                return nil
+            }
+        }
+
+        return versions.joined(separator: " / ")
+    }
+
+    private var version: String {
+        switch hardwareType {
+        case .riley, .ema, .none:
+            return rlFirmwareDescription
+        case .orange:
+            return orangeLinkFirmwareHardwareVersion
+        }
+    }
 
     // Confined to `lock`
     private var idleListeningState: IdleListeningState = .disabled
@@ -46,10 +67,14 @@ public class RileyLinkDevice {
     /// Serializes access to device state
     private var lock = os_unfair_lock()
     
-    private var fw_hw = "FW/HW"
+    private var orangeLinkFirmwareHardwareVersion = "v1.x"
     public var ledOn: Bool = false
     public var vibrationOn: Bool = false
     public var voltage = ""
+    
+    public var hasOrangeLinkService: Bool {
+        return self.manager.peripheral.services?.itemWithUUID(RileyLinkServiceUUID.orange.cbUUID) != nil
+    }
     
     public var hardwareType: RileyLinkHardwareType? {
         guard let services = self.manager.peripheral.services else {
@@ -64,11 +89,6 @@ public class RileyLinkDevice {
         // TODO: detect emalink
     }
     
-    public var isOrangePro: Bool {
-        return hardwareType == .orange
-    }
-
-
     /// The queue used to serialize sessions and observe when they've drained
     private let sessionQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -132,9 +152,9 @@ extension RileyLinkDevice {
         return ""
     }
     
-    public func orangeAction(mode: Int) {
-        log.debug("orangeAction: %@", "\(mode)")
-        manager.orangeAction(mode: OrangeLinkCommand(rawValue: UInt8(mode))!)
+    public func orangeAction(_ command: OrangeLinkCommand) {
+        log.debug("orangeAction: %@", "\(command)")
+        manager.orangeAction(command)
     }
     
     public func orangeSetAction(index: Int, open: Bool) {
@@ -208,13 +228,9 @@ extension RileyLinkDevice {
         public let lastIdle: Date?
 
         public let name: String?
-
-        public let bleFirmwareVersion: BLEFirmwareVersion?
-
-        public let radioFirmwareVersion: RadioFirmwareVersion?
         
-        public let fw_hw: String?
-        
+        public let version: String
+
         public var ledOn: Bool = false
         public var vibrationOn: Bool = false
         public var voltage = ""
@@ -229,9 +245,7 @@ extension RileyLinkDevice {
             completion(Status(
                 lastIdle: lastIdle,
                 name: self.name,
-                bleFirmwareVersion: self.bleFirmwareVersion,
-                radioFirmwareVersion: self.radioFirmwareVersion,
-                fw_hw: self.fw_hw,
+                version: self.version,
                 ledOn: self.ledOn,
                 vibrationOn: self.vibrationOn,
                 voltage: self.voltage
@@ -461,7 +475,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
             if data.first == 0xbb {
                 guard let data = characteristic.value, data.count > 6 else { return }
                 if data[1] == 0x09, data[2] == 0xaa {
-                    fw_hw = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
+                    orangeLinkFirmwareHardwareVersion = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
                     NotificationCenter.default.post(name: .DeviceFW_HWChange, object: self)
                 }
             } else if data.first == 0xdd {

@@ -690,6 +690,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             switch OrangeLinkCommandRow(rawValue: indexPath.row)! {
             case .findDevice:
                 device.findDevice()
+                tableView.deselectRow(at: indexPath, animated: true)
             default:
                 break
             }

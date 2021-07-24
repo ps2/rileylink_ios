@@ -367,7 +367,7 @@ extension PeripheralManager {
 // MARK: - Lower-level helper operations
 extension PeripheralManager {
     
-    func readBatteryLevel(timeout: TimeInterval) throws -> String {
+    func readBatteryLevel(timeout: TimeInterval) throws -> Int {
         guard let characteristic = peripheral.getBatteryCharacteristic(.battery_level) else {
             throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
         }
@@ -377,7 +377,7 @@ extension PeripheralManager {
                 throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.emptyValue)
             }
             
-            return "\(data[0])"
+            return Int(data[0])
         } catch let error as PeripheralManagerError {
             throw RileyLinkDeviceError.peripheralManagerError(error)
         }

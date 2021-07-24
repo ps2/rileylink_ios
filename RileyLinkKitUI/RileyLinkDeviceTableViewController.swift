@@ -66,7 +66,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
     
-    private var battery: String? {
+    private var battery: Int? {
         didSet {
             guard isViewLoaded else {
                 return
@@ -539,7 +539,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     var shakeOn = false
     private var ledOn: Bool = false
     private var vibrationOn: Bool = false
-    var voltage = ""
+    var voltage: Float?
 
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: RileyLinkCell
@@ -586,7 +586,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 cell.setDetailBatteryLevel(battery)
             case .voltage:
                 cell.textLabel?.text = NSLocalizedString("Voltage", comment: "The title of the cell showing ORL")
-                cell.detailTextLabel?.text = voltage
+                cell.setVoltage(voltage)
             }
         case .alert:
             switch AlertRow(rawValue: indexPath.row)! {
@@ -891,9 +891,9 @@ private extension UITableViewCell {
         }
     }
     
-    func setDetailBatteryLevel(_ batteryLevel: String?) {
-        if let unwrappedBatteryLevel = batteryLevel {
-            detailTextLabel?.text = unwrappedBatteryLevel + " %"
+    func setDetailBatteryLevel(_ batteryLevel: Int?) {
+        if let batteryLevel = batteryLevel {
+            detailTextLabel?.text = "\(batteryLevel)" + " %"
         } else {
             detailTextLabel?.text = ""
         }
@@ -919,5 +919,12 @@ private extension UITableViewCell {
             detailTextLabel?.text = ""
         }
     }
-
+    
+    func setVoltage(_ voltage: Float?) {
+        if let voltage = voltage {
+            detailTextLabel?.text = String(format: "%.1f%", voltage)
+        } else {
+            detailTextLabel?.text = ""
+        }
+    }
 }

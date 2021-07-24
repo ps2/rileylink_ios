@@ -70,7 +70,8 @@ public class RileyLinkDevice {
     private var orangeLinkFirmwareHardwareVersion = "v1.x"
     public var ledOn: Bool = false
     public var vibrationOn: Bool = false
-    public var voltage = ""
+    public var voltage: Float?
+    public var batteryLevel: Int?
     
     public var hasOrangeLinkService: Bool {
         return self.manager.peripheral.services?.itemWithUUID(RileyLinkServiceUUID.orange.cbUUID) != nil
@@ -145,11 +146,13 @@ extension RileyLinkDevice {
         manager.setCustomName(name)
     }
     
-    public func getBatterylevel() -> String {
-        do {
-            return try manager.readBatteryLevel(timeout: 1)
-        } catch {}
-        return ""
+    public func getBatterylevel() -> Int? {
+        if let batteryLevel = try? manager.readBatteryLevel(timeout: 1) {
+            NotificationCenter.default.post(name: .DeviceBatteryLevelUpdated, object: self)
+            return batteryLevel
+        } else {
+            return nil
+        }
     }
     
     public func orangeAction(_ command: OrangeLinkCommand) {
@@ -231,9 +234,10 @@ extension RileyLinkDevice {
         
         public let version: String
 
-        public var ledOn: Bool = false
-        public var vibrationOn: Bool = false
-        public var voltage = ""
+        public let ledOn: Bool
+        public let vibrationOn: Bool
+        public let voltage: Float?
+        public let battery: Int?
     }
 
     public func getStatus(_ completion: @escaping (_ status: Status) -> Void) {
@@ -248,7 +252,8 @@ extension RileyLinkDevice {
                 version: self.version,
                 ledOn: self.ledOn,
                 vibrationOn: self.vibrationOn,
-                voltage: self.voltage
+                voltage: self.voltage,
+                battery: self.batteryLevel
             ))
         }
     }
@@ -489,7 +494,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     guard var data = characteristic.value, data.count > 4 else { return }
                     data = Data(data[3...4])
                     let int = UInt16(bigEndian: data.withUnsafeBytes { $0.load(as: UInt16.self) })
-                    voltage = String(format: "%.1f%", Float(int) / 1000)
+                    voltage = Float(int) / 1000
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                     
                     guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "voltage_date")).addingTimeInterval(60 * 60),
@@ -498,10 +503,10 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "voltage_date")
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         let value = UserDefaults.standard.double(forKey: "voltage_alert_value")
-                        if (Double(self.voltage) ?? 100) <= value {
+                        if Double(self.voltage!) <= value {
                             let content = UNMutableNotificationContent()
                             content.title = "Low Voltage"
-                            content.subtitle = self.voltage
+                            content.subtitle = String(format: "%.1f%", self.voltage!)
                             let request = UNNotificationRequest.init(identifier: "Orange Low Voltage", content: content, trigger: nil)
                             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
                         }
@@ -512,21 +517,22 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
             break
         }
     }
-    
+
     func resetBatteryAlert() {
-        guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "battery_date")).addingTimeInterval(60 * 60) else { return }
+        guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "battery_alerted_at")).addingTimeInterval(60 * 60) else { return }
         if UserDefaults.standard.integer(forKey: "battery_alert_value") != 0 {
             manager.queue.async {
-                UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "battery_date")
-                let batteryLevel = self.getBatterylevel()
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                    let value = UserDefaults.standard.integer(forKey: "battery_alert_value")
-                    if (Int(batteryLevel) ?? 100) <= value {
-                        let content = UNMutableNotificationContent()
-                        content.title = "Low Battery"
-                        content.subtitle = batteryLevel
-                        let request = UNNotificationRequest.init(identifier: "Orange Low Battery", content: content, trigger: nil)
-                        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "battery_alerted_at")
+                if let batteryLevel = self.getBatterylevel() {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        let value = UserDefaults.standard.integer(forKey: "battery_alert_value")
+                        if batteryLevel <= value {
+                            let content = UNMutableNotificationContent()
+                            content.title = "Low Battery"
+                            content.subtitle = "\(batteryLevel)"
+                            let request = UNNotificationRequest.init(identifier: "Orange Low Battery", content: content, trigger: nil)
+                            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                        }
                     }
                 }
             }
@@ -609,4 +615,6 @@ extension Notification.Name {
     public static let DeviceTimerDidTick = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.TimerTickDidChange")
     
     public static let DeviceStatusUpdated = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.DeviceStatusUpdated")
+
+    public static let DeviceBatteryLevelUpdated = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.BatteryLevelUpdated")
 }

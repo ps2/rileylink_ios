@@ -233,6 +233,36 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             delegate?.pumpManagerBLEHeartbeatDidFire(self)
         }
     }
+    
+    public var rileyLinkBatteryAlertLevel: Int? {
+        get {
+            return state.rileyLinkBatteryAlertLevel
+        }
+        set {
+            setState { state in
+                state.rileyLinkBatteryAlertLevel = newValue
+            }
+        }
+    }
+    
+    public override func device(_ device: RileyLinkDevice, didUpdateBattery level: Int) {
+        let repeatInterval: TimeInterval = .hours(1)
+        
+        if let alertLevel = state.rileyLinkBatteryAlertLevel,
+           level <= alertLevel,
+           state.lastRileyLinkBatteryAlertDate.addingTimeInterval(repeatInterval) < Date()
+        {
+            self.setState { state in
+                state.lastRileyLinkBatteryAlertDate = Date()
+            }
+            self.pumpDelegate.notify { delegate in
+                let identifier = Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: "lowRLBattery")
+                let alertBody = String(format: LocalizedString("\"%1$@\" has a low battery", comment: "Format string for low battery alert body for RileyLink. (1: device name)"), device.name ?? "unnamed")
+                let content = Alert.Content(title: LocalizedString("Low RileyLink Battery", comment: "Title for RileyLink low battery alert"), body: alertBody, acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledge button label for RileyLink low battery alert"))
+                delegate?.issueAlert(Alert(identifier: identifier, foregroundContent: content, backgroundContent: content, trigger: .immediate))
+            }
+        }
+    }
 
     // MARK: - CustomDebugStringConvertible
 
@@ -1317,6 +1347,8 @@ extension OmnipodPumpManager: PumpManager {
             }
             return state.isPumpDataStale
         }
+        
+        checkRileyLinkBattery()
 
         switch shouldFetchStatus {
         case .none:
@@ -1341,6 +1373,14 @@ extension OmnipodPumpManager: PumpManager {
             pumpDelegate.notify { (delegate) in
                 completion?()
                 self.recommendLoopIfNeeded(delegate)
+            }
+        }
+    }
+    
+    private func checkRileyLinkBattery() {
+        rileyLinkDeviceProvider.getDevices { devices in
+            for device in devices {
+                device.updateBatteryLevel()
             }
         }
     }

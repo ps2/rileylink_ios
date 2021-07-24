@@ -381,6 +381,8 @@ extension MinimedPumpManager {
         let timeZone = state.timeZone
         pumpDateComponents.timeZone = timeZone
         glucoseDateComponents?.timeZone = timeZone
+        
+        checkRileyLinkBattery()
 
         // The pump sends the same message 3x, so ignore it if we've already seen it.
         guard status != recents.latestPumpStatusFromMySentry, let pumpDate = pumpDateComponents.date else {

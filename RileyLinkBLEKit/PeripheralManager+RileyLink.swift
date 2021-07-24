@@ -168,12 +168,32 @@ private let log = OSLog(category: "PeripheralManager+RileyLink")
 extension PeripheralManager {
     static let expectedMaxBLELatency: TimeInterval = 2
     
+    func readBatteryLevel(completion: @escaping (Int?) -> Void) {
+        perform { (manager) in
+            guard let characteristic = self.peripheral.getBatteryCharacteristic(.battery_level) else {
+                completion(nil)
+                return
+            }
+            
+            do {
+                guard let data = try self.readValue(for: characteristic, timeout: PeripheralManager.expectedMaxBLELatency) else {
+                    completion(nil)
+                    return
+                }
+                
+                completion(Int(data[0]))
+            } catch {
+                completion(nil)
+            }
+        }
+    }
+    
     func readDiagnosticLEDMode(completion: @escaping (RileyLinkLEDMode?) -> Void) {
         perform { (manager) in
             do {
                 guard
                     let characteristic = self.peripheral.getCharacteristicWithUUID(.ledMode),
-                    let data = try self.readValue(for: characteristic, timeout: 2),
+                    let data = try self.readValue(for: characteristic, timeout: PeripheralManager.expectedMaxBLELatency),
                     let mode = RileyLinkLEDMode(rawValue: data[0]) else
                 {
                     completion(nil)
@@ -367,22 +387,6 @@ extension PeripheralManager {
 // MARK: - Lower-level helper operations
 extension PeripheralManager {
     
-    func readBatteryLevel(timeout: TimeInterval) throws -> Int {
-        guard let characteristic = peripheral.getBatteryCharacteristic(.battery_level) else {
-            throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.unknownCharacteristic)
-        }
-        
-        do {
-            guard let data = try readValue(for: characteristic, timeout: timeout) else {
-                throw RileyLinkDeviceError.peripheralManagerError(PeripheralManagerError.emptyValue)
-            }
-            
-            return Int(data[0])
-        } catch let error as PeripheralManagerError {
-            throw RileyLinkDeviceError.peripheralManagerError(error)
-        }
-    }
-    
     func setOrangeNotifyOn() throws {
         perform { [self] (manager) in
             guard let characteristicNotif = peripheral.getOrangeCharacteristic(.orangeNotif) else {
@@ -417,7 +421,7 @@ extension PeripheralManager {
         }
     }
     
-    func findDevices() {
+    func findDevice() {
         perform { [self] (manager) in
             do {
                 guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
@@ -426,7 +430,7 @@ extension PeripheralManager {
                 let value = Data([0xdd, 0x04])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                log.debug("findDevices failed")
+                log.debug("findDevice failed")
             }
         }
     }

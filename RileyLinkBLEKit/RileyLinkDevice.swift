@@ -146,12 +146,16 @@ extension RileyLinkDevice {
         manager.setCustomName(name)
     }
     
-    public func getBatterylevel() -> Int? {
-        if let batteryLevel = try? manager.readBatteryLevel(timeout: 1) {
-            NotificationCenter.default.post(name: .DeviceBatteryLevelUpdated, object: self)
-            return batteryLevel
-        } else {
-            return nil
+    public func updateBatteryLevel() {
+        manager.readBatteryLevel { value in
+            if let batteryLevel = value {
+                NotificationCenter.default.post(
+                    name: .DeviceBatteryLevelUpdated,
+                    object: self,
+                    userInfo: [RileyLinkDevice.batteryLevelKey: batteryLevel]
+                )
+                self.batteryLevel = batteryLevel
+            }
         }
     }
     
@@ -185,9 +189,9 @@ extension RileyLinkDevice {
         manager.orangeReadVDC()
     }
     
-    public func findDevices() {
-        log.debug("findDevices")
-        manager.findDevices()
+    public func findDevice() {
+        log.debug("findDevice")
+        manager.findDevice()
     }
     
     public func setDiagnosticeLEDModeForBLEChip(_ mode: RileyLinkLEDMode) {
@@ -496,46 +500,10 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     let int = UInt16(bigEndian: data.withUnsafeBytes { $0.load(as: UInt16.self) })
                     voltage = Float(int) / 1000
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
-                    
-                    guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "voltage_date")).addingTimeInterval(60 * 60),
-                          UserDefaults.standard.double(forKey: "voltage_alert_value") != 0 else { return }
-                    
-                    UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "voltage_date")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        let value = UserDefaults.standard.double(forKey: "voltage_alert_value")
-                        if Double(self.voltage!) <= value {
-                            let content = UNMutableNotificationContent()
-                            content.title = "Low Voltage"
-                            content.subtitle = String(format: "%.1f%", self.voltage!)
-                            let request = UNNotificationRequest.init(identifier: "Orange Low Voltage", content: content, trigger: nil)
-                            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-                        }
-                    }
                 }
             }
         default:
             break
-        }
-    }
-
-    func resetBatteryAlert() {
-        guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "battery_alerted_at")).addingTimeInterval(60 * 60) else { return }
-        if UserDefaults.standard.integer(forKey: "battery_alert_value") != 0 {
-            manager.queue.async {
-                UserDefaults.standard.setValue(Date().timeIntervalSince1970, forKey: "battery_alerted_at")
-                if let batteryLevel = self.getBatterylevel() {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        let value = UserDefaults.standard.integer(forKey: "battery_alert_value")
-                        if batteryLevel <= value {
-                            let content = UNMutableNotificationContent()
-                            content.title = "Low Battery"
-                            content.subtitle = "\(batteryLevel)"
-                            let request = UNNotificationRequest.init(identifier: "Orange Low Battery", content: content, trigger: nil)
-                            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -598,6 +566,8 @@ extension RileyLinkDevice {
     public static let notificationPacketKey = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.NotificationPacket"
 
     public static let notificationRSSIKey = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.NotificationRSSI"
+    
+    public static let batteryLevelKey = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.BatteryLevel"
 }
 
 

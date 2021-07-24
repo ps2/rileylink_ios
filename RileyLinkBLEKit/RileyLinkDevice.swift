@@ -476,7 +476,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                 guard let data = characteristic.value, data.count > 6 else { return }
                 if data[1] == 0x09, data[2] == 0xaa {
                     orangeLinkFirmwareHardwareVersion = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
-                    NotificationCenter.default.post(name: .DeviceFW_HWChange, object: self)
+                    NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 }
             } else if data.first == 0xdd {
                 guard let data = characteristic.value, data.count > 2 else { return }
@@ -484,13 +484,13 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     guard let data = characteristic.value, data.count > 5 else { return }
                     ledOn = (data[3] != 0)
                     vibrationOn = (data[4] != 0)
-                    NotificationCenter.default.post(name: .DeviceFW_HWChange, object: self)
+                    NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 } else if data[1] == 0x03 {
                     guard var data = characteristic.value, data.count > 4 else { return }
                     data = Data(data[3...4])
                     let int = UInt16(bigEndian: data.withUnsafeBytes { $0.load(as: UInt16.self) })
                     voltage = String(format: "%.1f%", Float(int) / 1000)
-                    NotificationCenter.default.post(name: .DeviceFW_HWChange, object: self)
+                    NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                     
                     guard Date() > Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "voltage_date")).addingTimeInterval(60 * 60),
                           UserDefaults.standard.double(forKey: "voltage_alert_value") != 0 else { return }
@@ -608,5 +608,5 @@ extension Notification.Name {
 
     public static let DeviceTimerDidTick = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.TimerTickDidChange")
     
-    public static let DeviceFW_HWChange = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.DeviceFW_HWChange")
+    public static let DeviceStatusUpdated = Notification.Name(rawValue: "com.rileylink.RileyLinkBLEKit.DeviceStatusUpdated")
 }

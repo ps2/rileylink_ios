@@ -301,7 +301,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             center.addObserver(forName: .DeviceDidStartIdle, object: device, queue: mainQueue) { [weak self] (note) in
             self?.updateDeviceStatus()
         },
-            center.addObserver(forName: .DeviceFW_HWChange, object: device, queue: mainQueue) { [weak self] (note) in
+            center.addObserver(forName: .DeviceStatusUpdated, object: device, queue: mainQueue) { [weak self] (note) in
             self?.updateDeviceStatus()
         },
         ]

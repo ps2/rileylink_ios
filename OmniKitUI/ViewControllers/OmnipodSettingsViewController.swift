@@ -213,10 +213,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     
     private enum Section: Int, CaseIterable {
         case status = 0
-        case podDetails
-        case diagnostics
         case configuration
         case rileyLinks
+        case diagnostics
+        case podDetails
         case deletePumpManager
     }
     
@@ -225,7 +225,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             if podState.unfinishedSetup {
                 return [.configuration, .rileyLinks]
             } else {
-                return [.status, .configuration, .rileyLinks, .podDetails, .diagnostics]
+                return [.status, .configuration, .rileyLinks, .diagnostics, .podDetails]
             }
         } else {
             return [.configuration, .rileyLinks, .deletePumpManager]
@@ -700,8 +700,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
 
     private func confirmationBeepsTapped() {
-        let confirmationBeeps: Bool = pumpManager.confirmationBeeps
-        
         func done() {
             DispatchQueue.main.async { [weak self] in
                 if let self = self {
@@ -712,27 +710,21 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
         }
 
         confirmationBeepsTableViewCell.isLoading = true
-        if confirmationBeeps {
-            pumpManager.setConfirmationBeeps(enabled: false, completion: { (error) in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        let title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
-                        self.present(UIAlertController(with: error, title: title), animated: true)
+        let confirmationBeeps = !pumpManager.confirmationBeeps
+        pumpManager.setConfirmationBeeps(enabled: confirmationBeeps, completion: { (error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    let title: String
+                    if confirmationBeeps {
+                        title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
+                    } else {
+                        title = LocalizedString("Error disabling confirmation beeps", comment: "The alert title for disable confirmation beeps error")
                     }
+                    self.present(UIAlertController(with: error, title: title), animated: true)
                 }
-                done()
-            })
-        } else {
-            pumpManager.setConfirmationBeeps(enabled: true, completion: { (error) in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        let title = LocalizedString("Error enabling confirmation beeps", comment: "The alert title for enable confirmation beeps error")
-                        self.present(UIAlertController(with: error, title: title), animated: true)
-                    }
-                }
-                done()
-            })
-        }
+            }
+            done()
+        })
     }
 }
 

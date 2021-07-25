@@ -27,8 +27,6 @@ public protocol PodStateObserver: AnyObject {
 public enum OmnipodPumpManagerError: Error {
     case noPodPaired
     case podAlreadyPaired
-    case podAlreadyPrimed
-    case notReadyForPrime
     case notReadyForCannulaInsertion
 }
 
@@ -37,12 +35,8 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return LocalizedString("No pod paired", comment: "Error message shown when no pod is paired")
-        case .podAlreadyPrimed:
-            return LocalizedString("Pod already primed", comment: "Error message shown when prime is attempted, but pod is already primed")
         case .podAlreadyPaired:
             return LocalizedString("Pod already paired", comment: "Error message shown when user cannot pair because pod is already paired")
-        case .notReadyForPrime:
-            return LocalizedString("Pod is not in a state ready for priming.", comment: "Error message when prime fails because the pod is in an unexpected state")
         case .notReadyForCannulaInsertion:
             return LocalizedString("Pod is not in a state ready for cannula insertion.", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
         }
@@ -52,11 +46,7 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return nil
-        case .podAlreadyPrimed:
-            return nil
         case .podAlreadyPaired:
-            return nil
-        case .notReadyForPrime:
             return nil
         case .notReadyForCannulaInsertion:
             return nil
@@ -67,11 +57,7 @@ extension OmnipodPumpManagerError: LocalizedError {
         switch self {
         case .noPodPaired:
             return LocalizedString("Please pair a new pod", comment: "Recover suggestion shown when no pod is paired")
-        case .podAlreadyPrimed:
-            return nil
         case .podAlreadyPaired:
-            return nil
-        case .notReadyForPrime:
             return nil
         case .notReadyForCannulaInsertion:
             return nil
@@ -507,7 +493,7 @@ extension OmnipodPumpManager {
     private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: DetailedStatus? = nil, startDate: Date? = nil, mockFault: Bool) {
         let start = startDate ?? Date()
         var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, insulinType: .novolog)
-        podState.setupProgress = .podConfigured
+        podState.setupProgress = .podPaired
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
         
@@ -554,13 +540,13 @@ extension OmnipodPumpManager {
         }
         #else
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
-        let configureAndPrimeSession = { (result: PodComms.SessionRunResult) in
+        let primeSession = { (result: PodComms.SessionRunResult) in
             switch result {
             case .success(let session):
                 // We're on the session queue
                 session.assertOnSessionQueue()
 
-                self.log.default("Beginning pod configuration and prime")
+                self.log.default("Beginning pod prime")
 
                 // Clean up any previously un-stored doses if needed
                 let unstoredDoses = self.state.unstoredDoses
@@ -581,21 +567,16 @@ extension OmnipodPumpManager {
             }
         }
 
-        let needsPairing = setStateWithResult({ (state) -> PumpManagerResult<Bool> in
+        let needsPairing = setStateWithResult({ (state) -> Bool in
             guard let podState = state.podState else {
-                return .success(true) // Needs pairing
+                return true // Needs pairing
             }
 
-            guard podState.setupProgress.primingNeeded else {
-                return .failure(PumpManagerError.deviceState(OmnipodPumpManagerError.podAlreadyPrimed))
-            }
-
-            // If still need configuring, run pair()
-            return .success(podState.setupProgress == .addressAssigned)
+            // Return true if not yet paired
+            return podState.setupProgress.isPaired == false
         })
 
-        switch needsPairing {
-        case .success(true):
+        if needsPairing {
             self.log.default("Pairing pod before priming")
             
             // Create random address with 20 bits to match PDM, could easily use 24 bits instead
@@ -620,17 +601,15 @@ extension OmnipodPumpManager {
                 }
                 
                 // Calls completion
-                configureAndPrimeSession(result)
+                primeSession(result)
             }
-        case .success(false):
+        } else {
             self.log.default("Pod already paired. Continuing.")
 
-            self.podComms.runSession(withName: "Configure and prime pod", using: deviceSelector) { (result) in
+            self.podComms.runSession(withName: "Prime pod", using: deviceSelector) { (result) in
                 // Calls completion
-                configureAndPrimeSession(result)
+                primeSession(result)
             }
-        case .failure(let error):
-            completion(.failure(error))
         }
         #endif
     }

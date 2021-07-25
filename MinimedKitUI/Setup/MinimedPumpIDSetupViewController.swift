@@ -87,6 +87,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             else {
                 return nil
             }
+            
             return MinimedPumpManagerState(
                 isOnboarded: false,
                 useMySentry: true,

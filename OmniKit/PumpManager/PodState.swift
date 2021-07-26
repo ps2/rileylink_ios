@@ -104,6 +104,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     
     public var insulinType: InsulinType
     
+    public var skipNextCommsOptimization: Bool
+
     public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0, insulinType: InsulinType) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
@@ -121,6 +123,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.setupProgress = .addressAssigned
         self.configuredAlerts = [.slot7: .waitingForPairingReminder]
         self.insulinType = insulinType
+        self.skipNextCommsOptimization = true // skip any initial comms optimizations
     }
     
     public var unfinishedSetup: Bool {
@@ -180,19 +183,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
-        if unfinalizedBolus == nil && response.deliveryStatus.bolusing && response.podProgressStatus.readyForDelivery {
-            // Create the unfinalizedBolus since we currently bolusing in a ready state (possible Loop restart)
-            unfinalizedBolus = UnfinalizedDose(bolusAmount: response.bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType, automatic: nil)
-        }
         let now = updatePodTimes(timeActive: response.timeActive)
-        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.alerts
     }
 
     public mutating func updateFromDetailedStatusResponse(_ response: DetailedStatus) {
         let now = updatePodTimes(timeActive: response.timeActive)
-        updateDeliveryStatus(deliveryStatus: response.deliveryStatus)
+        updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
         lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.unacknowledgedAlerts
     }
@@ -213,7 +212,20 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
     }
     
-    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus) {
+    private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus, podProgressStatus: PodProgressStatus, bolusNotDelivered: Double) {
+
+        // See if the pod deliveryStatus indicates an active bolus or temp basal that the PodState isn't tracking (possible Loop restart)
+        if deliveryStatus.bolusing && unfinalizedBolus == nil { // active bolus that Loop doesn't know about?
+            skipNextCommsOptimization = true // forces a get status before the next bolus command is sent
+            if podProgressStatus.readyForDelivery {
+                // Create an unfinalizedBolus with the remaining bolus amount to capture what we can.
+                unfinalizedBolus = UnfinalizedDose(bolusAmount: bolusNotDelivered, startTime: Date(), scheduledCertainty: .certain, insulinType: insulinType, automatic: nil)
+            }
+        }
+        if deliveryStatus.tempBasalRunning && unfinalizedTempBasal == nil { // active temp basal that Loop doesn't know about?
+            skipNextCommsOptimization = true // forces a cancel TB before the next temp basal command is sent
+        }
+
         finalizeFinishedDoses()
 
         if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {
@@ -406,6 +418,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             insulinType = .humalog
         }
+
+        self.skipNextCommsOptimization = true
     }
     
     public var rawValue: RawValue {

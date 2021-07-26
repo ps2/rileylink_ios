@@ -1410,9 +1410,12 @@ extension OmnipodPumpManager: PumpManager {
                 }
             }
 
-            var getStatusNeeded = false
+            var getStatusNeeded = false // initializing to true effectively disables the bolus comms getStatus optimization
             var finalizeFinishedDosesNeeded = false
-            if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
+            if automatic == false || self.state.podState?.skipNextCommsOptimization == true {
+                self.log.info("enactBolus: skipping getStatus comms optimization")
+                getStatusNeeded = true
+            } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
                 if unfinalizedBolus.scheduledCertainty == .uncertain {
                     self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
                     getStatusNeeded = true
@@ -1421,7 +1424,7 @@ extension OmnipodPumpManager: PumpManager {
                     completion(.deviceState(PodCommsError.unfinalizedBolus))
                     return
                 } else if unfinalizedBolus.isBolusPositivelyFinished == false {
-                    self.log.info("enactBolus: doing getStatus to verify if bolus completion")
+                    self.log.info("enactBolus: doing getStatus to verify bolus completion")
                     getStatusNeeded = true
                 } else {
                     finalizeFinishedDosesNeeded = true // call finalizeFinishDoses() to clean up the certain & positively finalized bolus

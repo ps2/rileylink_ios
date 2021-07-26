@@ -13,8 +13,6 @@ import RileyLinkBLEKit
 import UserNotifications
 import os.log
 
-fileprivate let disableCommsOptimizations = false
-
 public enum ReservoirAlertState {
     case ok
     case lowReservoir
@@ -1397,9 +1395,9 @@ extension OmnipodPumpManager: PumpManager {
                 }
             }
 
-            var getStatusNeeded = false
+            var getStatusNeeded = false // initializing to true effectively disables the bolus comms getStatus optimization
             var finalizeFinishedDosesNeeded = false
-            if disableCommsOptimizations || automatic == false || self.state.podState?.skipNextCommsOptimization == true {
+            if automatic == false || self.state.podState?.skipNextCommsOptimization == true {
                 self.log.info("enactBolus: skipping getStatus comms optimization ")
                 getStatusNeeded = true
             } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {

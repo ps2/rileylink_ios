@@ -269,7 +269,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
-        case activatedAt = 0
+        case activeTime = 0
         case expiresAt
         case bolus
         case basal
@@ -459,10 +459,16 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 
                 switch statusRow {
-                case .activatedAt:
+                case .activeTime:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
+                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod active time")
+                    // Since the podState doesn't actually keep the pod's active time value reported in each response,
+                    // use the following calculation to compute an active time value based on the true elapsed time.
                     cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
+                    // To show the actual pod's active time value which should then always match the value displayed in
+                    // "Read Pod Status", use the following alternate calculation based on the dynamically updated expiresAt time
+                    // to have a consistent value & behavior when the pod's internal active time varies from the true elapsed time.
+                    // cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)
                     return cell
                 case .expiresAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -784,7 +790,7 @@ extension OmnipodSettingsViewController: PodStateObserver {
             return
         }
 
-        let reloadRows: [StatusRow] = [.bolus, .basal, .reservoirLevel, .deliveredInsulin]
+        let reloadRows: [StatusRow] = [.activeTime, .bolus, .basal, .reservoirLevel, .deliveredInsulin]
         self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
 
         if oldState?.activeAlerts != state?.activeAlerts,

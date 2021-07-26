@@ -11,7 +11,7 @@ import LoopKit
 
 public enum SetupProgress: Int {
     case addressAssigned = 0
-    case podConfigured
+    case podPaired
     case startingPrime
     case priming
     case settingInitialBasalSchedule
@@ -21,6 +21,10 @@ public enum SetupProgress: Int {
     case completed
     case activationTimeout
     case podIncompatible
+
+    public var isPaired: Bool {
+        return self.rawValue >= SetupProgress.podPaired.rawValue
+    }
 
     public var primingNeverAttempted: Bool {
         return self.rawValue < SetupProgress.startingPrime.rawValue

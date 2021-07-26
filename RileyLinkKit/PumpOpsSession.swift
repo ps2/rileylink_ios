@@ -646,54 +646,6 @@ extension PumpOpsSession {
     public func getStatistics() throws -> RileyLinkStatistics {
         return try session.getRileyLinkStatistics()
     }
-
-    public func discoverCommands(in range: CountableClosedRange<UInt8>, _ updateHandler: (_ messages: [String]) -> Void) {
-
-        let codes = range.compactMap { MessageType(rawValue: $0) }
-
-        for code in codes {
-            var messages = [String]()
-
-            do {
-                messages.append(contentsOf: [
-                    "## Command \(code)",
-                ])
-
-                try wakeup()
-
-                // Try the short command message, without any arguments.
-                let shortMessage = PumpMessage(settings: settings, type: code)
-                let _: PumpAckMessageBody = try session.getResponse(to: shortMessage)
-
-                messages.append(contentsOf: [
-                    "Succeeded",
-                    ""
-                ])
-
-                // Check history?
-
-            } catch PumpOpsError.unexpectedResponse(let response, from: _) {
-                messages.append(contentsOf: [
-                    "Unexpected response:",
-                    response.txData.hexadecimalString,
-                ])
-            } catch PumpOpsError.unknownResponse(rx: let response, during: _) {
-                messages.append(contentsOf: [
-                    "Unknown response:",
-                    response.hexadecimalString,
-                    ])
-            } catch let error {
-                messages.append(contentsOf: [
-                    String(describing: error),
-                    "",
-                ])
-            }
-
-            updateHandler(messages)
-
-            Thread.sleep(until: Date(timeIntervalSinceNow: 2))
-        }
-    }
 }
 
 
@@ -821,15 +773,6 @@ extension PumpOpsSession {
         let chanbw = mode.rawValue
         do {
             try session.updateRegister(.mdmcfg4, value: chanbw | drate_e)
-        } catch let error as LocalizedError {
-            throw PumpOpsError.deviceError(error)
-        }
-    }
-
-    /// - Throws: PumpOpsError.deviceError
-    public func enableCCLEDs() throws {
-        do {
-            try session.enableCCLEDs()
         } catch let error as LocalizedError {
             throw PumpOpsError.deviceError(error)
         }

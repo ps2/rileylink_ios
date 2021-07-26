@@ -8,10 +8,11 @@
 import CoreBluetooth
 
 
-public enum PeripheralManagerError: Error {
+enum PeripheralManagerError: Error {
     case cbPeripheralError(Error)
     case notReady
-    case timeout
+    case timeout([PeripheralManager.CommandCondition])
+    case emptyValue
     case unknownCharacteristic
 }
 
@@ -22,11 +23,13 @@ extension PeripheralManagerError: LocalizedError {
         case .cbPeripheralError(let error):
             return error.localizedDescription
         case .notReady:
-            return LocalizedString("RileyLink is not connected", comment: "Not ready error description")
+            return LocalizedString("RileyLink is not connected", comment: "PeripheralManagerError.notReady error description")
         case .timeout:
-            return LocalizedString("RileyLink did not respond in time", comment: "Timeout error description")
+            return LocalizedString("RileyLink did not respond in time", comment: "PeripheralManagerError.timeout error description")
+        case .emptyValue:
+            return LocalizedString("Characteristic value was empty", comment: "PeripheralManagerError.emptyValue error description")
         case .unknownCharacteristic:
-            return LocalizedString("Unknown characteristic", comment: "Error description")
+            return LocalizedString("Unknown characteristic", comment: "PeripheralManagerError.unknownCharacteristic error description")
         }
     }
 

@@ -176,7 +176,7 @@ class MainViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
-            let vc = RileyLinkDeviceTableViewController(device: device)
+            let vc = RileyLinkDeviceTableViewController(device: device, batteryAlertLevel: nil, batteryAlertLevelChanged: nil)
             show(vc, sender: indexPath)
         case .pump:
             if let pumpManager = deviceDataManager.pumpManager {

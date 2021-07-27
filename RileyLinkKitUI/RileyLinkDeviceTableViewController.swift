@@ -391,8 +391,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     }
 
     private enum OrangeConfigureCommandRow: Int, CaseIterable {
-        case orangeLED
-        case vibration
+        case connectionLED
+        case connectionVibrate
     }
 
     private func cellForRow(_ row: DeviceRow) -> UITableViewCell? {
@@ -485,11 +485,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             }
         case .configureCommand:
             switch OrangeConfigureCommandRow(rawValue: sender.index)! {
-            case .orangeLED:
-                device.orangeSetAction(index: 0, open: sender.isOn)
+            case .connectionLED:
+                device.setOrangeConfig(.connectionLED, isOn: sender.isOn)
                 ledOn = sender.isOn
-            case .vibration:
-                device.orangeSetAction(index: 1, open: sender.isOn)
+            case .connectionVibrate:
+                device.setOrangeConfig(.connectionVibrate, isOn: sender.isOn)
                 vibrationOn = sender.isOn
             }
         default:
@@ -593,12 +593,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             }
         case .configureCommand:
             switch OrangeConfigureCommandRow(rawValue: indexPath.row)! {
-            case .orangeLED:
+            case .connectionLED:
                 switchView.isHidden = false
                 switchView.isOn = ledOn
                 cell.accessoryType = .none
                 cell.textLabel?.text = NSLocalizedString("Enable Connection State LED", comment: "The title of the cell showing Stop Vibrator")
-            case .vibration:
+            case .connectionVibrate:
                 switchView.isHidden = false
                 switchView.isOn = vibrationOn
                 cell.accessoryType = .none

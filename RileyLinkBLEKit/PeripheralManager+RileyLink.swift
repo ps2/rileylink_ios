@@ -18,9 +18,10 @@ extension CBUUIDRawValue where RawValue == String {
 
 
 enum RileyLinkServiceUUID: String, CBUUIDRawValue {
-    case main    = "0235733B-99C5-4197-B856-69219C2A3845"
-    case battery = "180F"
-    case orange  = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+    case main
+            = "0235733B-99C5-4197-B856-69219C2A3845"
+    case battery   = "180F"
+    case orange    = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
     case secureDFU = "FE59"
 }
 
@@ -38,12 +39,12 @@ enum BatteryServiceCharacteristicUUID: String, CBUUIDRawValue {
 }
 
 enum OrangeServiceCharacteristicUUID: String, CBUUIDRawValue {
-    case orange         = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-    case orangeNotif    = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+    case orangeRX = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+    case orangeTX = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 }
 
 enum SecureDFUCharacteristicUUID: String, CBUUIDRawValue {
-    case control        = "8EC90001-F315-4F60-9FB8-838830DAEA50"
+    case control = "8EC90001-F315-4F60-9FB8-838830DAEA50"
 }
 
 
@@ -54,6 +55,18 @@ public enum OrangeLinkCommand: UInt8 {
     case shake    = 0x4
     case shakeOff = 0x5
     case fw_hw    = 0x9
+}
+
+public enum OrangeLinkRequestType: UInt8 {
+    case fctStartLoop = 0xaa // Fct_StartLoop
+    case fctHeader = 0xbb    // Fct_PutReq
+    case fctStopLoop = 0xcc  // Fct_StopLoop
+    case cfgHeader = 0xdd    // Cfg_PutReq
+}
+
+public enum OrangeLinkConfigurationSetting: UInt8 {
+    case connectionLED     = 0x00
+    case connectionVibrate = 0x01
 }
 
 public enum RileyLinkLEDMode: UInt8 {
@@ -79,8 +92,8 @@ extension PeripheralManager.Configuration {
                     BatteryServiceCharacteristicUUID.battery_level.cbUUID
                 ],
                 RileyLinkServiceUUID.orange.cbUUID: [
-                    OrangeServiceCharacteristicUUID.orange.cbUUID,
-                    OrangeServiceCharacteristicUUID.orangeNotif.cbUUID,
+                    OrangeServiceCharacteristicUUID.orangeRX.cbUUID,
+                    OrangeServiceCharacteristicUUID.orangeTX.cbUUID,
                 ],
                 RileyLinkServiceUUID.secureDFU.cbUUID: [
                     SecureDFUCharacteristicUUID.control.cbUUID,
@@ -92,7 +105,7 @@ extension PeripheralManager.Configuration {
                     MainServiceCharacteristicUUID.responseCount.cbUUID
                 ],
                 RileyLinkServiceUUID.orange.cbUUID: [
-                    OrangeServiceCharacteristicUUID.orangeNotif.cbUUID,
+                    OrangeServiceCharacteristicUUID.orangeTX.cbUUID,
                 ]
             ],
             valueUpdateMacros: [
@@ -389,7 +402,7 @@ extension PeripheralManager {
     
     func setOrangeNotifyOn() throws {
         perform { [self] (manager) in
-            guard let characteristicNotif = peripheral.getOrangeCharacteristic(.orangeNotif) else {
+            guard let characteristicNotif = peripheral.getOrangeCharacteristic(.orangeTX) else {
                 return
             }
             
@@ -407,10 +420,10 @@ extension PeripheralManager {
         }
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                let value = Data([0xbb, command.rawValue])
+                let value = Data([OrangeLinkRequestType.fctHeader.rawValue, command.rawValue])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
                 log.debug("orangeAction failed")
@@ -424,10 +437,10 @@ extension PeripheralManager {
     func findDevice() {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                let value = Data([0xdd, 0x04])
+                let value = Data([OrangeLinkRequestType.cfgHeader.rawValue, 0x04])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
                 log.debug("findDevice failed")
@@ -435,25 +448,16 @@ extension PeripheralManager {
         }
     }
     
-    
-    
-    func setAction(index: Int, open: Bool) {
+    func setOrangeConfig(_ config: OrangeLinkConfigurationSetting, isOn: Bool) {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                if index == 0 {
-                    setDatas[2] = 0
-                    setDatas[3] = open ? 1 : 0
-                } else if index == 1 {
-                    setDatas[2] = 1
-                    setDatas[3] = open ? 1 : 0
-                }
-                let value = Data(setDatas)
+                let value = Data([OrangeLinkRequestType.cfgHeader.rawValue, 0x02, config.rawValue, isOn ? 1 : 0])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
-                log.debug("setAction failed")
+                log.debug("setOrangeConfig failed")
             }
         }
     }
@@ -461,7 +465,7 @@ extension PeripheralManager {
     func orangeWritePwd() {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xAA])
@@ -475,10 +479,10 @@ extension PeripheralManager {
     func orangeReadSet() {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                let value = Data([0xdd, 0x01])
+                let value = Data([OrangeLinkRequestType.cfgHeader.rawValue, 0x01])
                 log.debug("orangeReadSet write: %@", value.hexadecimalString)
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
@@ -490,10 +494,10 @@ extension PeripheralManager {
     func orangeReadVDC() {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
-                let value = Data([0xdd, 0x03])
+                let value = Data([OrangeLinkRequestType.cfgHeader.rawValue, 0x03])
                 try writeValue(value, for: characteristic, type: .withResponse, timeout: PeripheralManager.expectedMaxBLELatency)
             } catch (_) {
                 log.debug("orangeReadVDC failed")
@@ -504,7 +508,7 @@ extension PeripheralManager {
     func orangeClose() {
         perform { [self] (manager) in
             do {
-                guard let characteristic = peripheral.getOrangeCharacteristic(.orange) else {
+                guard let characteristic = peripheral.getOrangeCharacteristic(.orangeRX) else {
                     throw PeripheralManagerError.unknownCharacteristic
                 }
                 let value = Data([0xcc])

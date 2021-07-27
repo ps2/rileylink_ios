@@ -164,9 +164,9 @@ extension RileyLinkDevice {
         manager.orangeAction(command)
     }
     
-    public func orangeSetAction(index: Int, open: Bool) {
-        log.debug("orangeSetAction: %@, %@", "\(index)", "\(open)")
-        manager.setAction(index: index, open: open)
+    public func setOrangeConfig(_ config: OrangeLinkConfigurationSetting, isOn: Bool) {
+        log.debug("setOrangeConfig: %@, %@", "\(String(describing: config))", "\(isOn)")
+        manager.setOrangeConfig(config, isOn: isOn)
     }
     
     public func orangeWritePwd() {
@@ -479,7 +479,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
         }
         
         switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
-        case .orange, .orangeNotif:
+        case .orangeRX, .orangeTX:
             guard let data = characteristic.value, !data.isEmpty else { return }
             if data.first == 0xbb {
                 guard let data = characteristic.value, data.count > 6 else { return }
@@ -487,7 +487,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                     orangeLinkFirmwareHardwareVersion = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 }
-            } else if data.first == 0xdd {
+            } else if data.first == OrangeLinkRequestType.cfgHeader.rawValue {
                 guard let data = characteristic.value, data.count > 2 else { return }
                 if data[1] == 0x01 {
                     guard let data = characteristic.value, data.count > 5 else { return }

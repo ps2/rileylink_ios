@@ -213,6 +213,36 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             delegate?.pumpManagerBLEHeartbeatDidFire(self)
         }
     }
+    
+    public var rileyLinkBatteryAlertLevel: Int? {
+        get {
+            return state.rileyLinkBatteryAlertLevel
+        }
+        set {
+            setState { state in
+                state.rileyLinkBatteryAlertLevel = newValue
+            }
+        }
+    }
+    
+    public override func device(_ device: RileyLinkDevice, didUpdateBattery level: Int) {
+        let repeatInterval: TimeInterval = .hours(1)
+        
+        if let alertLevel = state.rileyLinkBatteryAlertLevel,
+           level <= alertLevel,
+           state.lastRileyLinkBatteryAlertDate.addingTimeInterval(repeatInterval) < Date()
+        {
+            self.setState { state in
+                state.lastRileyLinkBatteryAlertDate = Date()
+            }
+            self.pumpDelegate.notify { delegate in
+                let identifier = Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: "lowRLBattery")
+                let alertBody = String(format: LocalizedString("\"%1$@\" has a low battery", comment: "Format string for low battery alert body for RileyLink. (1: device name)"), device.name ?? "unnamed")
+                let content = Alert.Content(title: LocalizedString("Low RileyLink Battery", comment: "Title for RileyLink low battery alert"), body: alertBody, acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Acknowledge button label for RileyLink low battery alert"))
+                delegate?.issueAlert(Alert(identifier: identifier, foregroundContent: content, backgroundContent: content, trigger: .immediate))
+            }
+        }
+    }
 
     // MARK: - CustomDebugStringConvertible
 
@@ -351,6 +381,8 @@ extension MinimedPumpManager {
         let timeZone = state.timeZone
         pumpDateComponents.timeZone = timeZone
         glucoseDateComponents?.timeZone = timeZone
+        
+        checkRileyLinkBattery()
 
         // The pump sends the same message 3x, so ignore it if we've already seen it.
         guard status != recents.latestPumpStatusFromMySentry, let pumpDate = pumpDateComponents.date else {
@@ -400,7 +432,15 @@ extension MinimedPumpManager {
             self?.updateReservoirVolume(status.reservoirRemainingUnits, at: pumpDate, withTimeLeft: TimeInterval(minutes: Double(status.reservoirRemainingMinutes)))
         }
     }
-
+    
+    private func checkRileyLinkBattery() {
+        rileyLinkDeviceProvider.getDevices { devices in
+            for device in devices {
+                device.updateBatteryLevel()
+            }
+        }
+    }
+    
     /**
      Store a new reservoir volume and notify observers of new pump data.
 
@@ -985,7 +1025,7 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
         let enactUnits = roundToSupportedBolusVolume(units: units)
 
         guard enactUnits > 0 else {
@@ -994,7 +1034,7 @@ extension MinimedPumpManager: PumpManager {
         }
         
         guard let insulinType = insulinType else {
-            completion(.failure(.configuration(nil)))
+            completion(.configuration(nil))
             return
         }
 
@@ -1002,13 +1042,13 @@ extension MinimedPumpManager: PumpManager {
         pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
 
             guard let session = session else {
-                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                completion(.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
 
             if let unfinalizedBolus = self.state.unfinalizedBolus {
                 guard unfinalizedBolus.isFinished else {
-                    completion(.failure(PumpManagerError.deviceState(MinimedPumpManagerError.bolusInProgress)))
+                    completion(.deviceState(MinimedPumpManagerError.bolusInProgress))
                     return
                 }
                 
@@ -1033,7 +1073,7 @@ extension MinimedPumpManager: PumpManager {
                 } catch let error {
                     self.recents.bolusEngageState = .stable
                     self.log.error("Failed to fetch pump status: %{public}@", String(describing: error))
-                    completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
+                    completion(.communication(error as? LocalizedError))
                     return
                 }
             }
@@ -1044,7 +1084,7 @@ extension MinimedPumpManager: PumpManager {
                 } catch let error {
                     self.recents.bolusEngageState = .stable
                     self.log.error("Failed to resume pump for bolus: %{public}@", String(describing: error))
-                    completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
+                    completion(.communication(error as? LocalizedError))
                     return
                 }
             }
@@ -1065,12 +1105,12 @@ extension MinimedPumpManager: PumpManager {
                 self.recents.bolusEngageState = .stable
 
                 self.storePendingPumpEvents({ (error) in
-                    completion(.success(DoseEntry(dose)))
+                    completion(nil)
                 })
             } catch let error {
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
                 self.recents.bolusEngageState = .stable
-                completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
+                completion(.communication(error as? LocalizedError))
             }
         }
     }
@@ -1093,15 +1133,15 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(.failure(.configuration(nil)))
+            completion(.configuration(nil))
             return
         }
 
         pumpOps.runSession(withName: "Set Temp Basal", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
-                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                completion(.connection(MinimedPumpManagerError.noRileyLink))
                 return
             }
             
@@ -1144,12 +1184,12 @@ extension MinimedPumpManager: PumpManager {
                 })
 
                 self.storePendingPumpEvents({ (error) in
-                    completion(.success(DoseEntry(dose)))
+                    completion(nil)
                 })
 
                 // Continue below
             case .failure(let error):
-                completion(.failure(PumpManagerError.communication(error)))
+                completion(.communication(error))
 
                 // If we got a command-refused error, we might be suspended or bolusing, so update the state accordingly
                 if case .arguments(.pumpError(.commandRefused)) = error {

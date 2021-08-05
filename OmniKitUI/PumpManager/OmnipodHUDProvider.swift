@@ -53,11 +53,14 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     
     private let colorPalette: LoopUIColorPalette
     
-    public init(pumpManager: OmnipodPumpManager, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) {
+    private let allowedInsulinTypes: [InsulinType]
+    
+    public init(pumpManager: OmnipodPumpManager, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) {
         self.pumpManager = pumpManager
         self.bluetoothProvider = bluetoothProvider
         self.podState = pumpManager.state.podState
         self.colorPalette = colorPalette
+        self.allowedInsulinTypes = allowedInsulinTypes
         super.init()
         self.pumpManager.addPodStateObserver(self, queue: .main)
     }
@@ -67,7 +70,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
             let reservoirView = reservoirView,
             let podState = podState
         {
-            let reservoirVolume = lastInsulinMeasurements.reservoirVolume
+            let reservoirVolume = lastInsulinMeasurements.reservoirLevel
 
             let reservoirLevel = reservoirVolume?.asReservoirPercentage()
 
@@ -91,17 +94,16 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     public func didTapOnHUDView(_ view: BaseHUDView, allowDebugFeatures: Bool) -> HUDTapAction? {
-        if podState?.fault != nil {
+        if let podState = self.podState, podState.isFaulted {
             return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
         } else {
-            let vc = pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures)
-            return HUDTapAction.presentViewController(vc)
+            return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: allowedInsulinTypes))
         }
     }
     
     func hudDidAppear() {
         updateReservoirView()
-        pumpManager.refreshStatus()
+        pumpManager.refreshStatus(emitConfirmationBeep: false)
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {
@@ -112,7 +114,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         }
         
         if let lastInsulinMeasurements = podState?.lastInsulinMeasurements {
-            rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirVolume
+            rawValue["reservoirVolume"] = lastInsulinMeasurements.reservoirLevel
             rawValue["validTime"] = lastInsulinMeasurements.validTime
         }
         

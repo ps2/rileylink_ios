@@ -17,6 +17,8 @@ class PairPodSetupViewController: SetupTableViewController {
     
     var rileyLinkPumpManager: RileyLinkPumpManager!
     
+    var previouslyEncounteredWeakComms: Bool = false
+    
     var pumpManager: OmnipodPumpManager! {
         didSet {
             if oldValue == nil && pumpManager != nil {
@@ -123,23 +125,50 @@ class PairPodSetupViewController: SetupTableViewController {
                 return
             }
             
-            var errorText = lastError?.localizedDescription
+            var errorStrings: [String]
+            var errorText: String
             
             if let error = lastError as? LocalizedError {
-                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ") + "."
-                
-                if !localizedText.isEmpty {
-                    errorText = localizedText
-                }
+                errorStrings = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap { $0 }
+            } else {
+                errorStrings = [lastError?.localizedDescription].compactMap { $0 }
             }
             
+            var podCommsError: PodCommsError? = nil
+            if let pumpManagerError = lastError as? PumpManagerError {
+                switch pumpManagerError {
+                case .communication(let error):
+                    podCommsError = error as? PodCommsError
+                default:
+                    break
+                }
+            }
+
+            if let podCommsError = podCommsError, podCommsError.possibleWeakCommsCause {
+                if previouslyEncounteredWeakComms {
+                    errorStrings.append(LocalizedString("If the problem persists, move to a new area and try again", comment: "Additional pairing recovery suggestion on multiple pairing failures"))
+                } else {
+                    previouslyEncounteredWeakComms = true
+                }
+            }
+
+            errorText = errorStrings.joined(separator: ". ")
+            
+            if !errorText.isEmpty {
+                errorText += "."
+            } else if let error = lastError {
+                // We have an error but no error text, generate a string to describe the error
+                errorText = String(describing: error)
+            }
             loadingText = errorText
             
-            // If we have an error, update the continue state
-            if let podCommsError = lastError as? PodCommsError,
-                case PodCommsError.podFault = podCommsError
-            {
-                continueState = .fault
+            // If we have an error, update the continue state appropriately
+            if let podCommsError = podCommsError {
+                if podCommsError.isFaulted {
+                    continueState = .fault
+                } else {
+                    continueState = .initial
+                }
             } else if lastError != nil {
                 continueState = .initial
             }
@@ -203,6 +232,17 @@ class PairPodSetupViewController: SetupTableViewController {
                     self.lastError = error
                 }
             }
+        }
+    }
+}
+
+private extension PodCommsError {
+    var possibleWeakCommsCause: Bool {
+        switch self {
+        case .invalidData, .noResponse, .invalidAddress, .rssiTooLow, .rssiTooHigh, .unexpectedPacketType:
+            return true
+        default:
+            return false
         }
     }
 }

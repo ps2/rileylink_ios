@@ -10,22 +10,35 @@ import UIKit
 import LoopKit
 import LoopKitUI
 import MinimedKit
+import RileyLinkKitUI
 
 
 extension MinimedPumpManager: PumpManagerUI {
+    
     public static var onboardingImage: UIImage? {
         return UIImage.pumpImage(in: nil, isLargerModel: false, isSmallImage: true)
     }
 
-    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
-        let setupViewController = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
-        setupViewController.basalSchedule = settings.basalSchedule
-        setupViewController.maxBolusUnits = settings.maxBolusUnits
-        setupViewController.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
-        return .userInteractionRequired(setupViewController)
+    static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+        let navVC = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+        let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { [weak navVC] (confirmedType) in
+            if let navVC = navVC {
+                navVC.insulinType = confirmedType
+                let nextViewController = navVC.storyboard?.instantiateViewController(identifier: "RileyLinkSetup") as! RileyLinkSetupTableViewController
+                navVC.pushViewController(nextViewController, animated: true)
+            }
+        }
+        let rootVC = UIHostingController(rootView: insulinSelectionView)
+        rootVC.title = "Insulin Type"
+        navVC.pushViewController(rootVC, animated: false)
+        navVC.navigationBar.backgroundColor = .secondarySystemBackground
+        navVC.maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour
+        navVC.maxBolusUnits = settings.maxBolusUnits
+        navVC.basalSchedule = settings.basalSchedule
+        return .userInteractionRequired(navVC)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
         let settings = MinimedPumpSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
@@ -42,8 +55,8 @@ extension MinimedPumpManager: PumpManagerUI {
         return state.smallPumpImage
     }
     
-    public func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> HUDProvider? {
-        return MinimedHUDProvider(pumpManager: self, bluetoothProvider: bluetoothProvider, colorPalette: colorPalette)
+    public func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
+        return MinimedHUDProvider(pumpManager: self, bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowedInsulinTypes: allowedInsulinTypes)
     }
     
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

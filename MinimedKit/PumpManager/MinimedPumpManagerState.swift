@@ -49,7 +49,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var isOnboarded: Bool
 
-    public var batteryChemistry: BatteryChemistryType
+    public var batteryChemistry: BatteryChemistryType = .alkaline
 
     public var batteryPercentage: Double?
 
@@ -61,7 +61,9 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
     public var lastValidFrequency: Measurement<UnitFrequency>?
 
-    public var preferredInsulinDataSource: InsulinDataSource
+    public var preferredInsulinDataSource: InsulinDataSource = .pumpHistory
+
+    public var useMySentry: Bool
 
     public let pumpColor: PumpColor
 
@@ -78,7 +80,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             return PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion)
         }
     }
-
+    
     public var pumpState: PumpState {
         get {
             var state = PumpState()
@@ -86,6 +88,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             state.timeZone = timeZone
             state.lastValidFrequency = lastValidFrequency
             state.lastTuned = lastTuned
+            state.useMySentry = useMySentry
             return state
         }
         set {
@@ -104,17 +107,23 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var unfinalizedTempBasal: UnfinalizedDose?
 
     // Doses we're tracking that haven't shown up in history yet
-    public var pendingDoses: [UnfinalizedDose]
+    public var pendingDoses: [UnfinalizedDose] = []
 
     // Maps
-    public var reconciliationMappings: [Data:ReconciledDoseMapping]
+    public var reconciliationMappings: [Data:ReconciledDoseMapping] = [:]
 
     public var lastReconciliation: Date?
-
-    public init(isOnboarded: Bool, batteryChemistry: BatteryChemistryType = .alkaline, preferredInsulinDataSource: InsulinDataSource = .pumpHistory, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, lastValidFrequency: Measurement<UnitFrequency>? = nil, batteryPercentage: Double? = nil, lastReservoirReading: ReservoirReading? = nil, unfinalizedBolus: UnfinalizedDose? = nil, unfinalizedTempBasal: UnfinalizedDose? = nil, pendingDoses: [UnfinalizedDose]? = nil, recentlyReconciledEvents: [Data:ReconciledDoseMapping]? = nil, lastReconciliation: Date? = nil) {
+    
+    public var insulinType: InsulinType?
+    
+    public var rileyLinkBatteryAlertLevel: Int?
+    
+    public var lastRileyLinkBatteryAlertDate: Date = .distantPast
+    
+    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType)
+    {
         self.isOnboarded = isOnboarded
-        self.batteryChemistry = batteryChemistry
-        self.preferredInsulinDataSource = preferredInsulinDataSource
+        self.useMySentry = useMySentry
         self.pumpColor = pumpColor
         self.pumpID = pumpID
         self.pumpModel = pumpModel
@@ -123,38 +132,35 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.timeZone = timeZone
         self.suspendState = suspendState
-        self.lastValidFrequency = lastValidFrequency
-        self.batteryPercentage = batteryPercentage
-        self.lastReservoirReading = lastReservoirReading
-        self.unfinalizedBolus = unfinalizedBolus
-        self.unfinalizedTempBasal = unfinalizedTempBasal
-        self.pendingDoses = pendingDoses ?? []
-        self.reconciliationMappings = recentlyReconciledEvents ?? [:]
-        self.lastReconciliation = lastReconciliation
+        self.insulinType = insulinType
     }
 
     public init?(rawValue: RawValue) {
         guard
             let version = rawValue["version"] as? Int,
-            let batteryChemistryRaw = rawValue["batteryChemistry"] as? BatteryChemistryType.RawValue,
-            let insulinDataSourceRaw = rawValue["insulinDataSource"] as? InsulinDataSource.RawValue,
-            let pumpColorRaw = rawValue["pumpColor"] as? PumpColor.RawValue,
+            let useMySentry = rawValue["useMySentry"] as? Bool,
             let pumpID = rawValue["pumpID"] as? String,
-            let pumpModelNumber = rawValue["pumpModel"] as? PumpModel.RawValue,
-            let pumpRegionRaw = rawValue["pumpRegion"] as? PumpRegion.RawValue,
-            let timeZoneSeconds = rawValue["timeZone"] as? Int,
 
+            let batteryChemistryRaw = rawValue["batteryChemistry"] as? BatteryChemistryType.RawValue,
             let batteryChemistry = BatteryChemistryType(rawValue: batteryChemistryRaw),
+            
+            let insulinDataSourceRaw = rawValue["insulinDataSource"] as? InsulinDataSource.RawValue,
             let insulinDataSource = InsulinDataSource(rawValue: insulinDataSourceRaw),
+            
+            let pumpColorRaw = rawValue["pumpColor"] as? PumpColor.RawValue,
             let pumpColor = PumpColor(rawValue: pumpColorRaw),
+            
+            let pumpModelNumber = rawValue["pumpModel"] as? PumpModel.RawValue,
             let pumpModel = PumpModel(rawValue: pumpModelNumber),
+            
+            let pumpRegionRaw = rawValue["pumpRegion"] as? PumpRegion.RawValue,
             let pumpRegion = PumpRegion(rawValue: pumpRegionRaw),
+            
+            let timeZoneSeconds = rawValue["timeZone"] as? Int,
             let timeZone = TimeZone(secondsFromGMT: timeZoneSeconds)
         else {
             return nil
         }
-        
-        var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? = nil
         
         // Migrate
         if version == 1
@@ -162,17 +168,26 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             if let oldRileyLinkPumpManagerStateRaw = rawValue["rileyLinkPumpManagerState"] as? [String : Any],
                 let connectedPeripheralIDs = oldRileyLinkPumpManagerStateRaw["connectedPeripheralIDs"] as? [String]
             {
-                rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(autoConnectIDs: Set(connectedPeripheralIDs))
+                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(autoConnectIDs: Set(connectedPeripheralIDs))
             }
         } else {
             if let rawState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionManagerState.RawValue {
-                rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
+                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
             }
         }
+        
+        
+        self.useMySentry = useMySentry
+        self.pumpID = pumpID
+        self.batteryChemistry = batteryChemistry
+        self.preferredInsulinDataSource = insulinDataSource
+        self.pumpColor = pumpColor
+        self.pumpModel = pumpModel
+        self.pumpRegion = pumpRegion
+        self.timeZone = timeZone
 
-        let isOnboarded = rawValue["isOnboarded"] as? Bool ?? true // Backward compatibility
+        isOnboarded = rawValue["isOnboarded"] as? Bool ?? true // Backward compatibility
 
-        let suspendState: SuspendState
         if let isPumpSuspended = rawValue["isPumpSuspended"] as? Bool {
             // migrate
             if isPumpSuspended {
@@ -186,46 +201,32 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             return nil
         }
         
-        let lastValidFrequency: Measurement<UnitFrequency>?
         if let frequencyRaw = rawValue["lastValidFrequency"] as? Double {
             lastValidFrequency = Measurement<UnitFrequency>(value: frequencyRaw, unit: .megahertz)
         } else {
             lastValidFrequency = nil
         }
         
-        let pumpFirmwareVersion = (rawValue["pumpFirmwareVersion"] as? String) ?? ""
-        let batteryPercentage = rawValue["batteryPercentage"] as? Double
+        pumpFirmwareVersion = (rawValue["pumpFirmwareVersion"] as? String) ?? ""
+        batteryPercentage = rawValue["batteryPercentage"] as? Double
         
-        let lastReservoirReading: ReservoirReading?
         if let rawLastReservoirReading = rawValue["lastReservoirReading"] as? ReservoirReading.RawValue {
             lastReservoirReading = ReservoirReading(rawValue: rawLastReservoirReading)
-        } else {
-            lastReservoirReading = nil
         }
 
-        let unfinalizedBolus: UnfinalizedDose?
-        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
-        {
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue {
             unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
-        } else {
-            unfinalizedBolus = nil
         }
 
-        let unfinalizedTempBasal: UnfinalizedDose?
-        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue
-        {
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue {
             unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
-        } else {
-            unfinalizedTempBasal = nil
         }
 
-        let pendingDoses: [UnfinalizedDose]
         if let rawPendingDoses = rawValue["pendingDoses"] as? [UnfinalizedDose.RawValue] {
             pendingDoses = rawPendingDoses.compactMap( { UnfinalizedDose(rawValue: $0) } )
         } else {
             pendingDoses = []
         }
-
 
         let recentlyReconciledEvents: [Data:ReconciledDoseMapping]
         if let rawRecentlyReconciledEvents = rawValue["recentlyReconciledEvents"] as? [ReconciledDoseMapping.RawValue] {
@@ -234,30 +235,17 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         } else {
             recentlyReconciledEvents = [:]
         }
+        reconciliationMappings = recentlyReconciledEvents
         
-        let lastReconciliation = rawValue["lastReconciliation"] as? Date
+        lastReconciliation = rawValue["lastReconciliation"] as? Date
         
-        self.init(
-            isOnboarded: isOnboarded,
-            batteryChemistry: batteryChemistry,
-            preferredInsulinDataSource: insulinDataSource,
-            pumpColor: pumpColor,
-            pumpID: pumpID,
-            pumpModel: pumpModel,
-            pumpFirmwareVersion: pumpFirmwareVersion,
-            pumpRegion: pumpRegion,
-            rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
-            timeZone: timeZone,
-            suspendState: suspendState,
-            lastValidFrequency: lastValidFrequency,
-            batteryPercentage: batteryPercentage,
-            lastReservoirReading: lastReservoirReading,
-            unfinalizedBolus: unfinalizedBolus,
-            unfinalizedTempBasal: unfinalizedTempBasal,
-            pendingDoses: pendingDoses,
-            recentlyReconciledEvents: recentlyReconciledEvents,
-            lastReconciliation: lastReconciliation
-        )
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
+            insulinType = InsulinType(rawValue: rawInsulinType)
+        }
+        
+        rileyLinkBatteryAlertLevel = rawValue["rileyLinkBatteryAlertLevel"] as? Int
+        lastRileyLinkBatteryAlertDate = rawValue["lastRileyLinkBatteryAlertDate"] as? Date ?? Date.distantPast
+
     }
 
     public var rawValue: RawValue {
@@ -277,6 +265,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             "recentlyReconciledEvents": reconciliationMappings.values.map { $0.rawValue },
         ]
 
+        value["useMySentry"] = useMySentry
         value["batteryPercentage"] = batteryPercentage
         value["lastReservoirReading"] = lastReservoirReading?.rawValue
         value["lastValidFrequency"] = lastValidFrequency?.converted(to: .megahertz).value
@@ -284,6 +273,9 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
         value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
         value["lastReconciliation"] = lastReconciliation
+        value["insulinType"] = insulinType?.rawValue
+        value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
+        value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
 
         return value
     }
@@ -305,6 +297,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "suspendState: \(suspendState)",
             "lastValidFrequency: \(String(describing: lastValidFrequency))",
             "preferredInsulinDataSource: \(preferredInsulinDataSource)",
+            "useMySentry: \(useMySentry)",
             "pumpColor: \(pumpColor)",
             "pumpID: ✔︎",
             "pumpModel: \(pumpModel.rawValue)",
@@ -318,6 +311,9 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "timeZone: \(timeZone)",
             "recentlyReconciledEvents: \(reconciliationMappings.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uuid)" })",
             "lastReconciliation: \(String(describing: lastReconciliation))",
+            "insulinType: \(String(describing: insulinType))",
+            "rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
+            "lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

@@ -9,42 +9,6 @@
 import Foundation
 
 public struct StatusResponse : MessageBlock {
-    
-    public enum DeliveryStatus: UInt8, CustomStringConvertible {
-        case suspended = 0
-        case normal = 1
-        case tempBasalRunning = 2
-        case priming = 4
-        case bolusInProgress = 5
-        case bolusAndTempBasal = 6
-        
-        public var bolusing: Bool {
-            return self == .bolusInProgress || self == .bolusAndTempBasal
-        }
-        
-        public var tempBasalRunning: Bool {
-            return self == .tempBasalRunning || self == .bolusAndTempBasal
-        }
-
-        
-        public var description: String {
-            switch self {
-            case .suspended:
-                return LocalizedString("Suspended", comment: "Delivery status when insulin delivery is suspended")
-            case .normal:
-                return LocalizedString("Scheduled Basal", comment: "Delivery status when basal is running")
-            case .tempBasalRunning:
-                return LocalizedString("Temp basal running", comment: "Delivery status when temp basal is running")
-            case .priming:
-                return LocalizedString("Priming", comment: "Delivery status when pod is priming")
-            case .bolusInProgress:
-                return LocalizedString("Bolusing", comment: "Delivery status when bolusing")
-            case .bolusAndTempBasal:
-                return LocalizedString("Bolusing with temp basal", comment: "Delivery status when bolusing and temp basal is running")
-            }
-        }
-    }
-        
     public let blockType: MessageBlockType = .statusResponse
     public let length: UInt8 = 10
     public let deliveryStatus: DeliveryStatus
@@ -52,8 +16,8 @@ public struct StatusResponse : MessageBlock {
     public let timeActive: TimeInterval
     public let reservoirLevel: Double?
     public let insulin: Double
-    public let insulinNotDelivered: Double
-    public let podMessageCounter: UInt8
+    public let bolusNotDelivered: Double
+    public let lastProgrammingMessageSeqNum: UInt8 // updated by pod for 03, 08, $11, $19, $1A, $1C, $1E & $1F command messages
     public let alerts: AlertSet
     
     
@@ -84,9 +48,9 @@ public struct StatusResponse : MessageBlock {
         let lowInsulinBits = Int(encodedData[4] >> 7)
         self.insulin = Double(highInsulinBits | midInsulinBits | lowInsulinBits) / Pod.pulsesPerUnit
         
-        self.podMessageCounter = (encodedData[4] >> 3) & 0xf
+        self.lastProgrammingMessageSeqNum = (encodedData[4] >> 3) & 0xf
         
-        self.insulinNotDelivered = Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5])) / Pod.pulsesPerUnit
+        self.bolusNotDelivered = Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5])) / Pod.pulsesPerUnit
 
         self.alerts = AlertSet(rawValue: ((encodedData[6] & 0x7f) << 1) | (encodedData[7] >> 7))
         
@@ -101,7 +65,7 @@ public struct StatusResponse : MessageBlock {
 
 extension StatusResponse: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "StatusResponse(deliveryStatus:\(deliveryStatus), progressStatus:\(podProgressStatus), timeActive:\(timeActive.stringValue), reservoirLevel:\(String(describing: reservoirLevel)), delivered:\(insulin), undelivered:\(insulinNotDelivered), seq:\(podMessageCounter), alerts:\(alerts))"
+        return "StatusResponse(deliveryStatus:\(deliveryStatus), progressStatus:\(podProgressStatus), timeActive:\(timeActive.stringValue), reservoirLevel:\(String(describing: reservoirLevel)), delivered:\(insulin), bolusNotDelivered:\(bolusNotDelivered), lastProgrammingMessageSeqNum:\(lastProgrammingMessageSeqNum), alerts:\(alerts))"
     }
 }
 

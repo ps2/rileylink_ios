@@ -91,16 +91,20 @@ class LoopIssueReportParser {
                 let message = try Message(encodedData: data)
                 print("\(date) \(direction) \(message)")
             } catch let error as MessageError {
-                switch error {
-                case .notEnoughData:
-                    if data.count == 4 {
-                        // This is from a packet, not a message, and we don't have the full packet info here
-                        print("\(date) \(direction) ack \(components[7])")
-                    } else {
-                        print("Could not parse \(line)")
+                if let packet = try? Packet(encodedData: data) {
+                    print("\(date) \(direction) packet \(packet)")
+                } else {
+                    switch error {
+                    case .notEnoughData:
+                        if data.count == 4 {
+                            // This is from a packet, not a message, and we don't have the full packet info here
+                            print("\(date) \(direction) ack \(components[7])")
+                        } else {
+                            print("Could not parse \(line)")
+                        }
+                    default:
+                        print("Could not parse \(line): \(error.localizedDescription)")
                     }
-                default:
-                    print("Could not parse \(line): \(error.localizedDescription)")
                 }
             } catch let error {
                 print("Could not parse \(line): \(error)")

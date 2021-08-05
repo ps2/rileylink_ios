@@ -51,7 +51,7 @@ class PeripheralManager: NSObject {
 
     // Confined to `queue`
     private var needsConfiguration = true
-
+    
     weak var delegate: PeripheralManagerDelegate? {
         didSet {
             queue.sync {
@@ -59,7 +59,7 @@ class PeripheralManager: NSObject {
             }
         }
     }
-
+    
     // Called from RileyLinkDeviceManager.managerQueue
     init(peripheral: CBPeripheral, configuration: Configuration, centralManager: CBCentralManager, queue: DispatchQueue) {
         self.peripheral = peripheral
@@ -95,6 +95,8 @@ extension PeripheralManager {
 
 protocol PeripheralManagerDelegate: AnyObject {
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic)
+    
+    func peripheralManager(_ manager: PeripheralManager, didUpdateNotificationStateFor characteristic: CBCharacteristic)
 
     func peripheralManager(_ manager: PeripheralManager, didReadRSSI RSSI: NSNumber, error: Error?)
 
@@ -145,8 +147,10 @@ extension PeripheralManager {
     }
 
     private func assertConfiguration() {
-        perform { (_) in
-            // Intentionally empty to trigger configuration if necessary
+        if peripheral.state == .connected {
+            perform { (_) in
+                // Intentionally empty to trigger configuration if necessary
+            }
         }
     }
 
@@ -220,7 +224,7 @@ extension PeripheralManager {
         }
 
         guard signaled else {
-            throw PeripheralManagerError.timeout
+            throw PeripheralManagerError.timeout(commandConditions)
         }
 
         if let error = commandError {
@@ -284,18 +288,6 @@ extension PeripheralManager {
         return characteristic.value
     }
 
-    /// - Throws: PeripheralManagerError
-    func wait(for characteristic: CBCharacteristic, timeout: TimeInterval) throws -> Data {
-        try runCommand(timeout: timeout) {
-            addCondition(.valueUpdate(characteristic: characteristic, matching: nil))
-        }
-
-        guard let value = characteristic.value else {
-            throw PeripheralManagerError.timeout
-        }
-
-        return value
-    }
 
     /// - Throws: PeripheralManagerError
     func writeValue(_ value: Data, for characteristic: CBCharacteristic, type: CBCharacteristicWriteType, timeout: TimeInterval) throws {
@@ -374,11 +366,12 @@ extension PeripheralManager: CBPeripheralDelegate {
         }
 
         commandLock.unlock()
+        delegate?.peripheralManager(self, didUpdateNotificationStateFor: characteristic)
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
-
+        
         if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
             if case .write(characteristic: characteristic) = condition {
                 return true
@@ -399,7 +392,7 @@ extension PeripheralManager: CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
-
+        
         var notifyDelegate = false
 
         if let index = commandConditions.firstIndex(where: { (condition) -> Bool in
@@ -417,7 +410,7 @@ extension PeripheralManager: CBPeripheralDelegate {
             }
         } else if let macro = configuration.valueUpdateMacros[characteristic.uuid] {
             macro(self)
-        } else if commandConditions.isEmpty {
+        } else {
             notifyDelegate = true // execute after the unlock
         }
 
@@ -459,12 +452,12 @@ extension PeripheralManager: CBCentralManagerDelegate {
     }
 }
 
-
 extension PeripheralManager {
+    
     public override var debugDescription: String {
         var items = [
             "## PeripheralManager",
-            "peripheral: \(peripheral)",
+            "peripheral: \(peripheral)"
         ]
         queue.sync {
             items.append("needsConfiguration: \(needsConfiguration)")

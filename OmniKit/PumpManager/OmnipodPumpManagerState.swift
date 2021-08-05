@@ -34,6 +34,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var confirmationBeeps: Bool
 
+    public var automaticBolusBeeps: Bool
+
     // Temporal state not persisted
 
     internal enum EngageablePumpState: Equatable {
@@ -49,10 +51,17 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     internal var tempBasalEngageState: EngageablePumpState = .stable
 
     internal var lastPumpDataReportDate: Date?
+    
+    internal var insulinType: InsulinType
+    
+    public var rileyLinkBatteryAlertLevel: Int?
+    
+    public var lastRileyLinkBatteryAlertDate: Date = .distantPast
+
 
     // MARK: -
 
-    public init(isOnboarded: Bool, podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?) {
+    public init(isOnboarded: Bool, podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, insulinType: InsulinType) {
         self.isOnboarded = isOnboarded
         self.podState = podState
         self.timeZone = timeZone
@@ -60,6 +69,8 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.unstoredDoses = []
         self.confirmationBeeps = false
+        self.automaticBolusBeeps = false
+        self.insulinType = insulinType
     }
     
     public init?(rawValue: RawValue) {
@@ -112,13 +123,19 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         } else {
             rileyLinkConnectionManagerState = nil
         }
+        
+        var insulinType: InsulinType?
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
+            insulinType = InsulinType(rawValue: rawInsulinType)
+        }
 
         self.init(
             isOnboarded: isOnboarded,
             podState: podState,
             timeZone: timeZone,
             basalSchedule: basalSchedule,
-            rileyLinkConnectionManagerState: rileyLinkConnectionManagerState
+            rileyLinkConnectionManagerState: rileyLinkConnectionManagerState,
+            insulinType: insulinType ?? .novolog
         )
 
         if let expirationReminderDate = rawValue["expirationReminderDate"] as? Date {
@@ -135,9 +152,15 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
         self.confirmationBeeps = rawValue["confirmationBeeps"] as? Bool ?? rawValue["bolusBeeps"] as? Bool ?? false
         
+        self.automaticBolusBeeps = rawValue["automaticBolusBeeps"] as? Bool ?? false
+
         if let pairingAttemptAddress = rawValue["pairingAttemptAddress"] as? UInt32 {
             self.pairingAttemptAddress = pairingAttemptAddress
         }
+        
+        rileyLinkBatteryAlertLevel = rawValue["rileyLinkBatteryAlertLevel"] as? Int
+        lastRileyLinkBatteryAlertDate = rawValue["lastRileyLinkBatteryAlertDate"] as? Date ?? Date.distantPast
+
     }
     
     public var rawValue: RawValue {
@@ -148,24 +171,17 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "basalSchedule": basalSchedule.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
             "confirmationBeeps": confirmationBeeps,
+            "automaticBolusBeeps": automaticBolusBeeps,
+            "insulinType": insulinType.rawValue,
         ]
         
-        if let podState = podState {
-            value["podState"] = podState.rawValue
-        }
-
-        if let expirationReminderDate = expirationReminderDate {
-            value["expirationReminderDate"] = expirationReminderDate
-        }
+        value["podState"] = podState?.rawValue
+        value["expirationReminderDate"] = expirationReminderDate
+        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState?.rawValue
+        value["pairingAttemptAddress"] = pairingAttemptAddress
+        value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
+        value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
         
-        if let rileyLinkConnectionManagerState = rileyLinkConnectionManagerState {
-            value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState.rawValue
-        }
-        
-        if let pairingAttemptAddress = pairingAttemptAddress {
-            value["pairingAttemptAddress"] = pairingAttemptAddress
-        }
-
         return value
     }
 }
@@ -202,7 +218,11 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
             "* confirmationBeeps: \(String(describing: confirmationBeeps))",
+            "* automaticBolusBeeps: \(String(describing: automaticBolusBeeps))",
             "* pairingAttemptAddress: \(String(describing: pairingAttemptAddress))",
+            "* insulinType: \(String(describing: insulinType))",
+            "* rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
+            "* lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",
             String(reflecting: podState),
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")

@@ -15,7 +15,9 @@ class ReplacePodViewController: SetupTableViewController {
 
     enum PodReplacementReason {
         case normal
-        case fault(_ faultCode: FaultEventCode)
+        case activationTimeout
+        case podIncompatible
+        case fault(_ podFault: DetailedStatus)
         case canceledPairingBeforeApplication
         case canceledPairing
     }
@@ -26,8 +28,16 @@ class ReplacePodViewController: SetupTableViewController {
             switch replacementReason {
             case .normal:
                 break // Text set in interface builder
-            case .fault(let faultCode):
-                instructionsLabel.text = String(format: LocalizedString("%1$@. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Format string providing instructions for replacing pod due to a fault. (1: The fault description)"), faultCode.localizedDescription)
+            case .activationTimeout:
+                instructionsLabel.text = LocalizedString("Activation time exceeded. The pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that didn't complete activation in time.")
+            case .podIncompatible:
+                instructionsLabel.text = LocalizedString("Unable to use incompatible pod. The pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating an incompatible pod")
+            case .fault(let podFault):
+                var faultDescription = podFault.faultEventCode.localizedDescription
+                if let refString = podFault.pdmRef {
+                    faultDescription += String(format: " (%@)", refString)
+                }
+                instructionsLabel.text = String(format: LocalizedString("%1$@. Insulin delivery has stopped. Please deactivate and remove pod.", comment: "Format string providing instructions for replacing pod due to a fault. (1: The fault description)"), faultDescription)
             case .canceledPairingBeforeApplication:
                 instructionsLabel.text = LocalizedString("Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod.", comment: "Instructions when deactivating pod that has been paired, but not attached.")
             case .canceledPairing:
@@ -43,7 +53,15 @@ class ReplacePodViewController: SetupTableViewController {
             let podState = pumpManager.state.podState
 
             if let podFault = podState?.fault {
-                self.replacementReason = .fault(podFault.currentStatus)
+                if podFault.podProgressStatus == .activationTimeExceeded {
+                    self.replacementReason = .activationTimeout
+                } else {
+                    self.replacementReason = .fault(podFault)
+                }
+            } else if podState?.setupProgress == .activationTimeout {
+                self.replacementReason = .activationTimeout
+            } else if podState?.setupProgress == .podIncompatible {
+                self.replacementReason = .podIncompatible
             } else if podState?.setupProgress.primingNeeded == true {
                 self.replacementReason = .canceledPairingBeforeApplication
             } else if podState?.setupProgress.needsCannulaInsertion == true {
@@ -140,13 +158,18 @@ class ReplacePodViewController: SetupTableViewController {
             var errorText = lastError?.localizedDescription
             
             if let error = lastError as? LocalizedError {
-                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ") + "."
+                let localizedText = [error.errorDescription, error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ". ")
                 
                 if !localizedText.isEmpty {
-                    errorText = localizedText
+                    errorText = localizedText + "."
                 }
             }
             
+            // If we have an error but no error text, generate a string to describe the error
+            if let error = lastError, (errorText == nil || errorText!.isEmpty) {
+                errorText = String(describing: error)
+            }
+
             tableView.beginUpdates()
             loadingLabel.text = errorText
             

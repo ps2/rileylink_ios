@@ -197,6 +197,8 @@ public struct RateEntry {
     public static func makeEntries(rate: Double, duration: TimeInterval) -> [RateEntry] {
         let maxPulsesPerEntry: Double = 6400
         var entries = [RateEntry]()
+        // normalize rate to a pulseSize multiple to prevent possible infinite loop and subsequent malloc crash
+        //let rate = round(rate / Pod.pulseSize) * Pod.pulseSize
         
         var remainingSegments = Int(round(duration.minutes / 30))
         

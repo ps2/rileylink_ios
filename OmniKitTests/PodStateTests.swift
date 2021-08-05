@@ -12,7 +12,7 @@ import XCTest
 class PodStateTests: XCTestCase {
 
     func testNonceValues() {
-        var podState = PodState(address: 0x1f000000, piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771)
+        var podState = PodState(address: 0x1f000000, piVersion: "1.1.0", pmVersion: "1.1.0", lot: 42560, tid: 661771, insulinType: .novolog)
         
         XCTAssertEqual(podState.currentNonce, 0x8c61ee59)
         podState.advanceToNextNonce()
@@ -26,7 +26,7 @@ class PodStateTests: XCTestCase {
     func testResyncNonce() {
         do {
             let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a62b0002249da11f00ee860318")!)
-            var podState = PodState(address: 0x1f00ee86, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid)
+            var podState = PodState(address: 0x1f00ee86, piVersion: "1.1.0", pmVersion: "1.1.0", lot: config.lot, tid: config.tid, insulinType: .novolog)
 
             XCTAssertEqual(42539, config.lot)
             XCTAssertEqual(140445,  config.tid)
@@ -41,12 +41,34 @@ class PodStateTests: XCTestCase {
             let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "06031492c482f5")!)
 
             XCTAssertEqual(9, sentMessage.sequenceNum)
+            switch errorResponse.errorResponseType {
+            case .badNonce(let nonceResyncKey):
+                podState.resyncNonce(syncWord: nonceResyncKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
+                XCTAssertEqual(0x40ccdacb, podState.currentNonce)
+                break
+            default:
+                XCTFail("Unexpected non bad nonce response")
+                break
+            }
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
 
-            podState.resyncNonce(syncWord: errorResponse.nonceSearchKey, sentNonce: sentCommand.nonce, messageSequenceNum: sentMessage.sequenceNum)
-            
-            XCTAssertEqual(0x40ccdacb,  podState.currentNonce)
+    func testErrorResponse() {
+        do {
+            let errorResponse = try ErrorResponse(encodedData: Data(hexadecimalString: "0603070008019a")!)
 
-
+            switch errorResponse.errorResponseType {
+            case .nonretryableError(let errorCode, let faultEventCode, let podProgress):
+                XCTAssertEqual(7, errorCode)
+                XCTAssertEqual(.noFaults, faultEventCode.faultType)
+                XCTAssertEqual(.aboveFiftyUnits, podProgress)
+                break
+            default:
+                XCTFail("Unexpected bad nonce response")
+                break
+            }
         } catch (let error) {
             XCTFail("message decoding threw error: \(error)")
         }

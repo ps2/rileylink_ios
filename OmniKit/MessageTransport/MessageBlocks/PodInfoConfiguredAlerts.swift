@@ -8,15 +8,15 @@
 
 import Foundation
 
+// Type 1 Pod Info returns information about the currently configured alerts
 public struct PodInfoConfiguredAlerts : PodInfo {
     // CMD 1  2  3 4  5 6  7 8  910 1112 1314 1516 1718 1920
     // DATA   0  1 2  3 4  5 6  7 8  910 1112 1314 1516 1718
     // 02 13 01 XXXX VVVV VVVV VVVV VVVV VVVV VVVV VVVV VVVV
 
-    public var podInfoType : PodInfoResponseSubType = .configuredAlerts
+    public let podInfoType : PodInfoResponseSubType = .configuredAlerts
     public let word_278    : Data
     public let alertsActivations : [AlertActivation]
-
     public let data       : Data
 
     public struct AlertActivation {
@@ -32,10 +32,10 @@ public struct PodInfoConfiguredAlerts : PodInfo {
     }
     
     public init(encodedData: Data) throws {
-        if encodedData.count < 11 {
+        guard encodedData.count >= 11 else {
             throw MessageBlockError.notEnoughData
         }
-        self.podInfoType = PodInfoResponseSubType.init(rawValue: encodedData[0])!
+
         self.word_278 = encodedData[1...2]
         
         let numAlertTypes = 8

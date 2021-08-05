@@ -65,17 +65,20 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     
     private var pumpFirmwareVersion: String?
 
-    var maxBasalRateUnitsPerHour: Double?
+    var maxBasalRateUnitsPerHour: Double!
 
-    var maxBolusUnits: Double?
+    var maxBolusUnits: Double!
 
-    var basalSchedule: BasalRateSchedule?
+    var basalSchedule: BasalRateSchedule!
 
     private var isSentrySetUpNeeded: Bool = false
 
     var pumpManagerState: MinimedPumpManagerState? {
         get {
-            guard let pumpColor = pumpColor,
+            guard
+                let navVC = navigationController as? MinimedPumpManagerSetupViewController,
+                let insulinType = navVC.insulinType,
+                let pumpColor = pumpColor,
                 let pumpID = pumpID,
                 let pumpModel = pumpState?.pumpModel,
                 let pumpRegion = pumpRegionCode?.region,
@@ -84,8 +87,10 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             else {
                 return nil
             }
+            
             return MinimedPumpManagerState(
                 isOnboarded: false,
+                useMySentry: true,
                 pumpColor: pumpColor,
                 pumpID: pumpID,
                 pumpModel: pumpModel,
@@ -93,7 +98,9 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpRegion: pumpRegion,
                 rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone,
-                suspendState: .resumed(Date()))
+                suspendState: .resumed(Date()),
+                insulinType: insulinType
+            )
         }
     }
 
@@ -237,7 +244,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
         }
     }
 
-    private func readPumpState(with settings: PumpSettings) {
+    private func setupPump(with settings: PumpSettings) {
         continueState = .reading
 
         let pumpOps = PumpOps(pumpSettings: settings, pumpState: pumpState, delegate: self)
@@ -280,16 +287,15 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 }
 
                 // Settings
-                let settings = try session.getSettings()
-                let basalRateSchedule = try session.getBasalRateSchedule(for: .standard)
+                let newSchedule = BasalSchedule(repeatingScheduleValues: self.basalSchedule.items)
+                try session.setBasalSchedule(newSchedule, for: .standard)
+                try session.setMaxBolus(units: self.maxBolusUnits)
+                try session.setMaxBasalRate(unitsPerHour: self.maxBasalRateUnitsPerHour)
                 try session.selectBasalProfile(.standard)
                 try session.setTimeToNow(in: .current)
 
                 DispatchQueue.main.async {
                     self.isSentrySetUpNeeded = isSentrySetUpNeeded
-                    self.maxBasalRateUnitsPerHour = settings.maxBasal
-                    self.maxBolusUnits = settings.maxBolus
-                    self.basalSchedule = basalRateSchedule
 
                     if self.pumpState != nil {
                         self.continueState = .completed
@@ -314,16 +320,21 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             if isSentrySetUpNeeded {
                 performSegue(withIdentifier: "Sentry", sender: sender)
             } else {
-                super.continueButtonPressed(sender)
+                if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
+                    let pumpManager = pumpManager
+                {
+                    super.continueButtonPressed(sender)
+                    setupViewController.pumpManagerSetupComplete(pumpManager)
+                }
             }
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
 #if targetEnvironment(simulator)
             self.continueState = .completed
             self.pumpState = PumpState(timeZone: .currentFixed, pumpModel: PumpModel(rawValue:
-                "523")!)
+                "523")!, useMySentry: false)
             self.pumpFirmwareVersion = "2.4Mock"
 #else
-            readPumpState(with: PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion))
+            setupPump(with: PumpSettings(pumpID: pumpID, pumpRegion: pumpRegion))
 #endif
         }
     }

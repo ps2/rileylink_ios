@@ -12,6 +12,7 @@ public enum MessageError: Error {
     case notEnoughData
     case invalidCrc
     case invalidSequence
+    case invalidAddress(address: UInt32)
     case parsingError(offset: Int, data: Data, error: Error)
     case unknownValue(value: UInt8, typeDescription: String)
     case validationFailed(description: String)
@@ -32,6 +33,8 @@ extension MessageError: LocalizedError {
             return String(format: LocalizedString("Validation failed: %1$@", comment: "Format string for description of MessageError validationFailed. (1: description of validation failure)"), description)
         case .invalidSequence:
             return LocalizedString("Unexpected message sequence number", comment: "Description for MessageError invalidSequence")
+        case .invalidAddress(address: let address):
+            return String(format: LocalizedString("Invalid address: (%1$@)", comment: "Description for MessageError invalidSequence"), String(format: "%08x", address))
         }
     }
 }
@@ -107,13 +110,14 @@ struct Message {
         return data
     }
     
-    var fault: PodInfoFaultEvent? {
+    var fault: DetailedStatus? {
         if messageBlocks.count > 0 && messageBlocks[0].blockType == .podInfoResponse,
             let infoResponse = messageBlocks[0] as? PodInfoResponse,
-            infoResponse.podInfoResponseSubType == .faultEvents,
-            let fault = infoResponse.podInfo as? PodInfoFaultEvent
+            infoResponse.podInfoResponseSubType == .detailedStatus,
+            let detailedStatus = infoResponse.podInfo as? DetailedStatus,
+            detailedStatus.isFaulted
         {
-            return fault
+            return detailedStatus
         } else {
             return nil
         }

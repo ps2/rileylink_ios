@@ -154,10 +154,9 @@ class PairPodSetupViewController: SetupTableViewController {
             
             // If we have an error, update the continue state
             if let podCommsError = lastError as? PodCommsError {
-                switch podCommsError {
-                case .podFault, .activationTimeExceeded:
+                if podCommsError.isFaulted {
                     continueState = .fault
-                default:
+                } else {
                     continueState = .initial
                 }
             } else if lastError != nil {

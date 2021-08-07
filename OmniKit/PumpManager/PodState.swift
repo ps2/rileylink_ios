@@ -10,7 +10,7 @@ import Foundation
 
 public enum SetupProgress: Int {
     case addressAssigned = 0
-    case podConfigured
+    case podPaired
     case startingPrime
     case priming
     case settingInitialBasalSchedule
@@ -19,6 +19,15 @@ public enum SetupProgress: Int {
     case cannulaInserting
     case completed
     case activationTimeout
+    case podIncompatible
+
+    public var isPaired: Bool {
+        return self.rawValue >= SetupProgress.podPaired.rawValue
+    }
+
+    public var primingNeverAttempted: Bool {
+        return self.rawValue < SetupProgress.startingPrime.rawValue
+    }
     
     public var primingNeeded: Bool {
         return self.rawValue < SetupProgress.priming.rawValue
@@ -110,7 +119,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.configuredAlerts = [.slot7: .waitingForPairingReminder]
     }
     
-    public var unfinishedPairing: Bool {
+    public var unfinishedSetup: Bool {
         return setupProgress != .completed
     }
     
@@ -131,7 +140,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     public var isFaulted: Bool {
-        return fault != nil || setupProgress == .activationTimeout
+        return fault != nil || setupProgress == .activationTimeout || setupProgress == .podIncompatible
     }
 
     public mutating func advanceToNextNonce() {
@@ -376,6 +385,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 .slot2: .shutdownImminentAlarm(0),
                 .slot3: .expirationAlert(0),
                 .slot4: .lowReservoirAlarm(0),
+                .slot5: .podSuspendedReminder(active: false, suspendTime: 0),
+                .slot6: .suspendTimeExpired(suspendTime: 0),
                 .slot7: .expirationAdvisoryAlarm(alarmTime: 0, duration: 0)
             ]
         }

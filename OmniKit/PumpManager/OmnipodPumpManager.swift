@@ -1412,7 +1412,13 @@ extension OmnipodPumpManager: PumpManager {
 
             var getStatusNeeded = false // initializing to true effectively disables the bolus comms getStatus optimization
             var finalizeFinishedDosesNeeded = false
-            if automatic == false || self.state.podState?.skipNextCommsOptimization == true {
+
+            // Skip the getStatus comms optimization for a manual bolus,
+            // if there was a comms issue on the last message sent, or
+            // if the last delivery status hasn't been verified
+            if automatic == false || self.state.podState?.lastCommsOK == false ||
+                self.state.podState?.deliveryStatusVerified == false
+            {
                 self.log.info("enactBolus: skipping getStatus comms optimization")
                 getStatusNeeded = true
             } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {

@@ -1676,7 +1676,9 @@ extension OmnipodPumpManager: PodCommsDelegate {
 
 // MARK: - AlertResponder implementation
 extension OmnipodPumpManager {
-    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) { }
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
+        completion(nil)
+    }
 }
 
 // MARK: - AlertSoundVendor implementation

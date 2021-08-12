@@ -404,6 +404,7 @@ extension MinimedPumpManager {
                 let sample = NewGlucoseSample(
                     date: date,
                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(glucose)),
+                    trend: status.glucoseTrend.loopKitGlucoseTrend,
                     isDisplayOnly: false,
                     wasUserEntered: false,
                     syncIdentifier: status.glucoseSyncIdentifier ?? UUID().uuidString,
@@ -1342,7 +1343,7 @@ extension MinimedPumpManager: CGMManager {
                         .map {
                             let glucoseEvent = $0.glucoseEvent as! SensorValueGlucoseEvent
                             let quantity = HKQuantity(unit: unit, doubleValue: Double(glucoseEvent.sgv))
-                            return NewGlucoseSample(date: $0.date, quantity: quantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
+                            return NewGlucoseSample(date: $0.date, quantity: quantity, trend: glucoseEvent.trendType, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
                     }
 
                     completion(.newData(glucoseValues))
@@ -1365,3 +1366,19 @@ extension MinimedPumpManager {
     public func getSounds() -> [Alert.Sound] { return [] }
 }
 
+extension GlucoseTrend {
+    var loopKitGlucoseTrend: LoopKit.GlucoseTrend {
+        switch self {
+        case .flat:
+            return .flat
+        case .up:
+            return .up
+        case .upUp:
+            return .upUp
+        case .down:
+            return .down
+        case .downDown:
+            return .downDown
+        }
+    }
+}

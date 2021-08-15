@@ -62,20 +62,6 @@ extension CommandResponseViewController {
         }
     }
 
-    static func discoverCommands(ops: PumpOps?, device: RileyLinkDevice) -> T {
-        return T { (completionHandler) -> String in
-            ops?.runSession(withName: "Discover Commands", using: device) { (session) in
-                session.discoverCommands(in: 0xf0...0xff, { (results) in
-                    DispatchQueue.main.async {
-                        completionHandler(results.joined(separator: "\n"))
-                    }
-                })
-            }
-
-            return LocalizedString("Discovering commands…", comment: "Progress message for discovering commands.")
-        }
-    }
-    
     static func getStatistics(ops: PumpOps?, device: RileyLinkDevice) -> T {
         return T { (completionHandler) -> String in
             ops?.runSession(withName: "Get Statistics", using: device) { (session) in
@@ -248,27 +234,6 @@ extension CommandResponseViewController {
             }
 
             return LocalizedString("Reading basal schedule…", comment: "Progress message for reading basal schedule")
-        }
-    }
-
-    static func enableLEDs(ops: PumpOps?, device: RileyLinkDevice) -> T {
-        return T { (completionHandler) -> String in
-            device.enableBLELEDs()
-            ops?.runSession(withName: "Enable LEDs", using: device) { (session) in
-                let response: String
-                do {
-                    try session.enableCCLEDs()
-                    response = "OK"
-                } catch let error {
-                    response = String(describing: error)
-                }
-
-                DispatchQueue.main.async {
-                    completionHandler(response)
-                }
-            }
-
-            return LocalizedString("Enabled Diagnostic LEDs", comment: "Progress message for enabling diagnostic LEDs")
         }
     }
 

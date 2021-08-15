@@ -488,6 +488,7 @@
 		C1C73F1D1DE6306A0022FC89 /* BatteryChemistryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */; };
 		C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2366EF212527DA0028B67D /* LocalizedString.swift */; };
 		C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
+		C1CE65CC26C99AC100C870FF /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CE65CB26C99AC100C870FF /* CommandResponseViewController.swift */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
 		C1E163D52135EC0100EB89AE /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
@@ -1401,6 +1402,7 @@
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C659181E16BA9D0025CC58 /* CaseCountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaseCountable.swift; sourceTree = "<group>"; };
 		C1C73F1C1DE6306A0022FC89 /* BatteryChemistryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChemistryType.swift; sourceTree = "<group>"; };
+		C1CE65CB26C99AC100C870FF /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
 		C1E535E81991E36700C2AC49 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
@@ -1857,6 +1859,7 @@
 		43D5E78F1FAF7BFB004ACDB7 /* RileyLinkKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1CE65CB26C99AC100C870FF /* CommandResponseViewController.swift */,
 				43D5E7901FAF7BFB004ACDB7 /* RileyLinkKitUI.h */,
 				43D5E7911FAF7BFB004ACDB7 /* Info.plist */,
 				7D23679521252EBC0028B67D /* Localizable.strings */,
@@ -3606,6 +3609,7 @@
 				43709ABE20DF1C6400F941B3 /* RileyLinkManagerSetupViewController.swift in Sources */,
 				43D5E7A01FAF7CCA004ACDB7 /* NumberFormatter.swift in Sources */,
 				43709AE420DF20D500F941B3 /* OSLog.swift in Sources */,
+				C1CE65CC26C99AC100C870FF /* CommandResponseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

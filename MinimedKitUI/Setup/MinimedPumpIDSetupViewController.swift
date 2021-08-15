@@ -85,6 +85,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 return nil
             }
             return MinimedPumpManagerState(
+                useMySentry: true,
                 pumpColor: pumpColor,
                 pumpID: pumpID,
                 pumpModel: pumpModel,

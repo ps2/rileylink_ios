@@ -155,7 +155,7 @@ extension PodCommsError: LocalizedError {
     }
 }
 
-public protocol PodCommsSessionDelegate: class {
+public protocol PodCommsSessionDelegate: AnyObject {
     func podCommsSession(_ podCommsSession: PodCommsSession, didChange state: PodState)
 }
 

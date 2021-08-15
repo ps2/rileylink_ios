@@ -13,7 +13,7 @@ import os.log
 
 fileprivate var diagnosePairingRssi = false
 
-protocol PodCommsDelegate: class {
+protocol PodCommsDelegate: AnyObject {
     func podComms(_ podComms: PodComms, didChange podState: PodState)
 }
 

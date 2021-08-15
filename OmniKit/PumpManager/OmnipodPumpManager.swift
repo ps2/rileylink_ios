@@ -22,7 +22,7 @@ public enum ReservoirAlertState {
     case empty
 }
 
-public protocol PodStateObserver: class {
+public protocol PodStateObserver: AnyObject {
     func podStateDidUpdate(_ state: PodState?)
 }
 

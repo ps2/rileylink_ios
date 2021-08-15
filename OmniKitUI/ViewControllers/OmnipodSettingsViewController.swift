@@ -461,8 +461,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 switch statusRow {
                 case .activatedAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
-                    cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
+                    cell.textLabel?.text = LocalizedString("Activated At", comment: "The title of the cell showing the pod activated at time")
+                    cell.setDetailDate(podState.activatedAt, formatter: dateFormatter)
                     return cell
                 case .expiresAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -833,18 +833,6 @@ private extension UIAlertController {
     }
 }
 
-private extension TimeInterval {
-    func format(using units: NSCalendar.Unit) -> String? {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = units
-        formatter.unitsStyle = .full
-        formatter.zeroFormattingBehavior = .dropLeading
-        formatter.maximumUnitCount = 2
-        
-        return formatter.string(from: self)
-    }
-}
-
 class AlarmsTableViewCell: LoadingTableViewCell {
     
     private var defaultDetailColor: UIColor?
@@ -923,14 +911,6 @@ private extension UITableViewCell {
             detailTextLabel?.text = formatter.string(from: date)
         } else {
             detailTextLabel?.text = "-"
-        }
-    }
-    
-    func setDetailAge(_ age: TimeInterval?) {
-        if let age = age {
-            detailTextLabel?.text = fabs(age).format(using: [.day, .hour, .minute])
-        } else {
-            detailTextLabel?.text = ""
         }
     }
     

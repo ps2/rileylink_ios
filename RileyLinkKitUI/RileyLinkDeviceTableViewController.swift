@@ -100,6 +100,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
     }
     
+    private var hasPiezo: Bool = false
+    
     private var appeared = false
     
     private var batteryAlertLevel: Int? {
@@ -190,8 +192,8 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 self.vibrationOn = status.vibrationOn
                 self.voltage = status.voltage
                 self.battery = status.battery
+                self.hasPiezo = status.hasPiezo
                 self.tableView.reloadData()
-                self.log.debug("orange reload table")
             }
         }
     }
@@ -444,10 +446,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return deviceRows.count
         case .rileyLinkCommands:
             return RileyLinkCommandRow.allCases.count
-        case .orangeLinkCommands:
-            return OrangeLinkCommandRow.allCases.count
         case .configureCommand:
             return OrangeConfigureCommandRow.allCases.count
+        case .orangeLinkCommands:
+            let count = OrangeLinkCommandRow.allCases.count
+            return hasPiezo ? count : count-1
         case .alert:
             return AlertRow.allCases.count
         }

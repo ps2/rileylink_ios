@@ -68,10 +68,17 @@ public class RileyLinkDevice {
     private var lock = os_unfair_lock()
     
     private var orangeLinkFirmwareHardwareVersion = "v1.x"
-    public var ledOn: Bool = false
-    public var vibrationOn: Bool = false
-    public var voltage: Float?
-    public var batteryLevel: Int?
+    private var orangeLinkHardwareVersionMajorMinor: [Int]?
+    private var ledOn: Bool = false
+    private var vibrationOn: Bool = false
+    private var voltage: Float?
+    private var batteryLevel: Int?
+    private var hasPiezo: Bool {
+        if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] >= 2, olHW[1] >= 6 {
+            return true
+        }
+        return false
+    }
     
     public var hasOrangeLinkService: Bool {
         return self.manager.peripheral.services?.itemWithUUID(RileyLinkServiceUUID.orange.cbUUID) != nil
@@ -243,6 +250,7 @@ extension RileyLinkDevice {
         public let vibrationOn: Bool
         public let voltage: Float?
         public let battery: Int?
+        public let hasPiezo: Bool
     }
 
     public func getStatus(_ completion: @escaping (_ status: Status) -> Void) {
@@ -258,7 +266,8 @@ extension RileyLinkDevice {
                 ledOn: self.ledOn,
                 vibrationOn: self.vibrationOn,
                 voltage: self.voltage,
-                battery: self.batteryLevel
+                battery: self.batteryLevel,
+                hasPiezo: self.hasPiezo
             ))
         }
     }
@@ -505,6 +514,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                 guard data.count > 6 else { return }
                 if data[1] == 0x09, data[2] == 0xaa {
                     orangeLinkFirmwareHardwareVersion = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
+                    orangeLinkHardwareVersionMajorMinor = [Int(data[5]), Int(data[6])]
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 }
             } else if data.first == OrangeLinkRequestType.cfgHeader.rawValue {

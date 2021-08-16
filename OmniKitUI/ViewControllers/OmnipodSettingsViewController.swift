@@ -610,8 +610,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             let vc = RileyLinkDeviceTableViewController(
                 device: device,
                 batteryAlertLevel: pumpManager.rileyLinkBatteryAlertLevel,
-                batteryAlertLevelChanged: { value in
-                    self.pumpManager.rileyLinkBatteryAlertLevel = value
+                batteryAlertLevelChanged: { [weak self] value in
+                    self?.pumpManager.rileyLinkBatteryAlertLevel = value
                 }
             )
             

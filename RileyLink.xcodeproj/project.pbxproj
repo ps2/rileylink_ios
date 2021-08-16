@@ -1859,12 +1859,12 @@
 		43D5E78F1FAF7BFB004ACDB7 /* RileyLinkKitUI */ = {
 			isa = PBXGroup;
 			children = (
-				C1CE65CB26C99AC100C870FF /* CommandResponseViewController.swift */,
 				43D5E7901FAF7BFB004ACDB7 /* RileyLinkKitUI.h */,
 				43D5E7911FAF7BFB004ACDB7 /* Info.plist */,
 				7D23679521252EBC0028B67D /* Localizable.strings */,
 				43709AEB20E0056F00F941B3 /* RileyLinkKitUI.xcassets */,
 				C170C98D1CECD6F300F3D8E5 /* CBPeripheralState.swift */,
+				C1CE65CB26C99AC100C870FF /* CommandResponseViewController.swift */,
 				439731261CF21C3C00F474E5 /* RileyLinkDeviceTableViewCell.swift */,
 				C170C9981CECD80000F3D8E5 /* RileyLinkDeviceTableViewController.swift */,
 				435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */,

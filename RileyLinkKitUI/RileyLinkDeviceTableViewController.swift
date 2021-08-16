@@ -181,7 +181,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         device.readRSSI()
     }
 
-    // This does not trigger any BLE reads; it just gets status from the device in a safe manner
+    // This does not trigger any BLE reads; it just gets status from the device in a safe manner, and reloads the table
     func updateDeviceStatus() {
         device.getStatus { (status) in
             DispatchQueue.main.async {
@@ -191,6 +191,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 self.voltage = status.voltage
                 self.battery = status.battery
                 self.tableView.reloadData()
+                self.log.debug("orange reload table")
             }
         }
     }

@@ -495,10 +495,12 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
         case .customName, .firmwareVersion, .ledMode:
             break
         }
-        
-        switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
+    }
+
+    private func handleCharacteristicUpdate(_ characteristic: OrangeServiceCharacteristicUUID, value: Data?) {
+        switch characteristic {
         case .orangeRX, .orangeTX:
-            guard let data = characteristic.value, !data.isEmpty else { return }
+            guard let data = value, !data.isEmpty else { return }
             if data.first == 0xbb {
                 guard data.count > 6 else { return }
                 if data[1] == 0x09, data[2] == 0xaa {
@@ -521,7 +523,6 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
             }
         }
     }
-
 
     func peripheralManager(_ manager: PeripheralManager, didReadRSSI RSSI: NSNumber, error: Error?) {
         NotificationCenter.default.post(

@@ -590,7 +590,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 switchView.isHidden = false
                 switchView.isOn = shakeOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Test Vibrator", comment: "The title of the cell showing Test Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Test Vibration", comment: "The title of the cell showing Test Vibration")
             case .findDevice:
                 cell.textLabel?.text = NSLocalizedString("Find Device", comment: "The title of the cell for sounding device finding piezo")
                 cell.detailTextLabel?.text = nil
@@ -601,12 +601,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 switchView.isHidden = false
                 switchView.isOn = ledOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Enable Connection State LED", comment: "The title of the cell showing Stop Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Connection LED", comment: "The title of the cell for connection LED")
             case .connectionVibrate:
                 switchView.isHidden = false
                 switchView.isOn = vibrationOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Enable Connection State Vibrator", comment: "The title of the cell showing Stop Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Connection Vibration", comment: "The title of the cell for connection vibration")
             }
         }
 
@@ -618,13 +618,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .device:
             return LocalizedString("Device", comment: "The title of the section describing the device")
         case .rileyLinkCommands:
-            return LocalizedString("Test Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Test Commands", comment: "The title of the section for rileylink commands")
         case .orangeLinkCommands:
-            return LocalizedString("Test Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Test Commands", comment: "The title of the section for orangelink commands")
         case .configureCommand:
-            return LocalizedString("Configure Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Connection Monitoring", comment: "The title of the section for connection monitoring")
         case .alert:
-            return LocalizedString("Alert", comment: "The title of the section describing commands")
+            return LocalizedString("Alert", comment: "The title of the section for alerts")
         }
     }
 

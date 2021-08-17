@@ -103,7 +103,7 @@ struct GetVersionResponse: Response {
     let version: String
 
     init?(data: Data) {
-        guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
+        guard data.count > 1, let code = ResponseCode(rawValue: data[data.startIndex]) else {
             return nil
         }
 
@@ -131,7 +131,7 @@ struct GetStatisticsResponse: Response {
     let statistics: RileyLinkStatistics
 
     init?(data: Data) {
-        guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
+        guard data.count > 1, let code = ResponseCode(rawValue: data[data.startIndex]) else {
             return nil
         }
         
@@ -167,7 +167,7 @@ struct PacketResponse: Response {
     let packet: RFPacket?
 
     init?(data: Data) {
-        guard data.count > 0, let code = ResponseCode(rawValue: data[data.startIndex]) else {
+        guard data.count > 1, let code = ResponseCode(rawValue: data[data.startIndex]) else {
             return nil
         }
 

@@ -462,13 +462,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 case .activeTime:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                     cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod active time")
-                    // Since the podState doesn't actually keep the pod's active time value reported in each response,
-                    // use the following calculation to compute an active time value based on the true elapsed time.
                     cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
-                    // To show the actual pod's active time value which should then always match the value displayed in
-                    // "Read Pod Status", use the following alternate calculation based on the dynamically updated expiresAt time
-                    // to have a consistent value & behavior when the pod's internal active time varies from the true elapsed time.
-                    // cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)
                     return cell
                 case .expiresAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)

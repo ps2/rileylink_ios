@@ -268,8 +268,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
-        case activeTime = 0
-        case expiresAt
+        case expiresAt = 0
+        case podActiveClock
         case bolus
         case basal
         case alarms
@@ -340,11 +340,6 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
 
             switch statusRow {
-            case .activeTime:
-                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                cell.textLabel?.text = LocalizedString("Activated At", comment: "The title of the cell showing the pod activation time")
-                cell.setDetailDate(podState.activatedAt, formatter: dateFormatter)
-                return cell
             case .expiresAt:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 if let expiresAt = podState.expiresAt {
@@ -355,6 +350,11 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                     }
                 }
                 cell.setDetailDate(podState.expiresAt, formatter: dateFormatter)
+                return cell
+            case .podActiveClock:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = LocalizedString("Pod Active Clock", comment: "The title of the cell showing the pod active clock")
+                cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)
                 return cell
             case .bolus:
                 cell.textLabel?.text = LocalizedString("Bolus Delivery", comment: "The title of the cell showing pod bolus status")
@@ -770,7 +770,7 @@ extension OmnipodSettingsViewController: PodStateObserver {
             return
         }
 
-        let reloadRows: [StatusRow] = [.activeTime, .bolus, .basal, .reservoirLevel, .deliveredInsulin]
+        let reloadRows: [StatusRow] = [.podActiveClock, .bolus, .basal, .reservoirLevel, .deliveredInsulin]
         self.tableView.reloadRows(at: reloadRows.map({ IndexPath(row: $0.rawValue, section: statusIdx) }), with: .none)
 
         if oldState?.activeAlerts != state?.activeAlerts,
@@ -818,6 +818,19 @@ private extension UIAlertController {
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
     }
 }
+
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .short
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+
+        return formatter.string(from: self)
+    }
+}
+
 
 class AlarmsTableViewCell: LoadingTableViewCell {
     
@@ -897,6 +910,14 @@ private extension UITableViewCell {
             detailTextLabel?.text = formatter.string(from: date)
         } else {
             detailTextLabel?.text = "-"
+        }
+    }
+    
+    func setDetailAge(_ age: TimeInterval?) {
+        if let age = age {
+            detailTextLabel?.text = fabs(age).format(using: [.hour, .minute])
+        } else {
+            detailTextLabel?.text = ""
         }
     }
     

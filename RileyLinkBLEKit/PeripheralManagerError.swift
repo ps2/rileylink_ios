@@ -13,7 +13,8 @@ enum PeripheralManagerError: Error {
     case notReady
     case timeout([PeripheralManager.CommandCondition])
     case emptyValue
-    case unknownCharacteristic
+    case unknownCharacteristic(CBUUID)
+    case unknownService(CBUUID)
 }
 
 
@@ -28,8 +29,10 @@ extension PeripheralManagerError: LocalizedError {
             return LocalizedString("RileyLink did not respond in time", comment: "PeripheralManagerError.timeout error description")
         case .emptyValue:
             return LocalizedString("Characteristic value was empty", comment: "PeripheralManagerError.emptyValue error description")
-        case .unknownCharacteristic:
-            return LocalizedString("Unknown characteristic", comment: "PeripheralManagerError.unknownCharacteristic error description")
+        case .unknownCharacteristic(let cbuuid):
+            return String(format: LocalizedString("Unknown characteristic: %@", comment: "PeripheralManagerError.unknownCharacteristic error description"), cbuuid.uuidString)
+        case .unknownService(let cbuuid):
+            return String(format: LocalizedString("Unknown service: %@", comment: "PeripheralManagerError.unknownCharacteristic error description"), cbuuid.uuidString)
         }
     }
 

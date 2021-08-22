@@ -120,7 +120,7 @@ extension PeripheralManager {
                     try self.applyConfiguration()
                     self.log.default("Peripheral configuration completed")
                 } catch let error {
-                    self.log.error("Error applying peripheral configuration: %@", String(describing: error))
+                    self.log.error("Error applying peripheral configuration: %{public}@", String(describing: error))
                     // Will retry
                 }
 
@@ -133,7 +133,7 @@ extension PeripheralManager {
                         self.log.error("No delegate set for configuration")
                     }
                 } catch let error {
-                    self.log.error("Error applying delegate configuration: %@", String(describing: error))
+                    self.log.error("Error applying delegate configuration: %{public}@", String(describing: error))
                     // Will retry
                 }
             }

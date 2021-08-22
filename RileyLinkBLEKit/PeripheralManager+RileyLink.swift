@@ -565,7 +565,7 @@ extension PeripheralManager {
                         return false
                     default:
                         guard let response = R(data: value) else {
-                            log.error("Unable to parse response: %@", value.hexadecimalString)
+                            log.error("Unable to parse response: %{public}@", value.hexadecimalString)
                             // We don't recognize the contents. Keep listening.
                             return false
                         }

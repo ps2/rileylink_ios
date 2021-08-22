@@ -110,15 +110,11 @@ protocol PeripheralManagerDelegate: AnyObject {
 extension PeripheralManager {
     func configureAndRun(_ block: @escaping (_ manager: PeripheralManager) -> Void) -> (() -> Void) {
         return {
-            // TODO: Accessing self might be a race on initialization
-            if !self.needsConfiguration && self.peripheral.services == nil {
-                self.log.error("Configured peripheral has no services. Reconfiguring…")
-            }
-            
             if self.needsConfiguration || self.peripheral.services == nil {
+                self.log.default("Configuring peripheral %{public}@, needsConfiguration=%{public}@, has services = %{public}@", self.peripheral, String(describing: self.needsConfiguration), String(describing:  self.peripheral.services != nil))
                 do {
                     try self.applyConfiguration()
-                    self.log.default("Peripheral configuration completed")
+                    self.log.default("Peripheral configuration completed: %{public}@", self.peripheral)
                 } catch let error {
                     self.log.error("Error applying peripheral configuration: %{public}@", String(describing: error))
                     // Will retry
@@ -206,7 +202,7 @@ extension PeripheralManager {
         }
 
         guard commandConditions.isEmpty else {
-            throw PeripheralManagerError.notReady
+            throw PeripheralManagerError.busy
         }
 
         // Run

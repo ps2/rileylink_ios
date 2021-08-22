@@ -280,6 +280,7 @@ extension RileyLinkDevice {
 // Accessing other characteristics on the RileyLink can be done without a command session.
 extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
+        self.log.default("Scheduling session %{public}@", name)
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
             self?.log.default("======================== %{public}@ ===========================", name)
             let bleFirmwareVersion = self?.bleFirmwareVersion
@@ -395,7 +396,7 @@ extension RileyLinkDevice {
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        log.debug("didConnect %@", peripheral)
+        log.default("didConnect %{public}@", peripheral)
         if case .connected = peripheral.state {
             assertIdleListening(forceRestart: false)
             assertTimerTick()
@@ -406,12 +407,12 @@ extension RileyLinkDevice {
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        log.debug("didDisconnectPeripheral %@", peripheral)
+        log.default("didDisconnectPeripheral %{public}@", peripheral)
         NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self)
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        log.debug("didFailToConnect %@", peripheral)
+        log.default("didFailToConnect %{public}@", peripheral)
         NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self)
     }
 }

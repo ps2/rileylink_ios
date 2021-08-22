@@ -11,6 +11,7 @@ import CoreBluetooth
 enum PeripheralManagerError: Error {
     case cbPeripheralError(Error)
     case notReady
+    case busy
     case timeout([PeripheralManager.CommandCondition])
     case emptyValue
     case unknownCharacteristic(CBUUID)
@@ -25,6 +26,8 @@ extension PeripheralManagerError: LocalizedError {
             return error.localizedDescription
         case .notReady:
             return LocalizedString("RileyLink is not connected", comment: "PeripheralManagerError.notReady error description")
+        case .busy:
+            return LocalizedString("RileyLink is busy", comment: "PeripheralManagerError.busy error description")
         case .timeout:
             return LocalizedString("RileyLink did not respond in time", comment: "PeripheralManagerError.timeout error description")
         case .emptyValue:

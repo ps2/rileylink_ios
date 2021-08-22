@@ -120,7 +120,7 @@ extension PeripheralManager {
                     try self.applyConfiguration()
                     self.log.default("Peripheral configuration completed")
                 } catch let error {
-                    self.log.error("Error applying peripheral configuration: %@", String(describing: error))
+                    self.log.error("Error applying peripheral configuration: %{public}@", String(describing: error))
                     // Will retry
                 }
 
@@ -133,7 +133,7 @@ extension PeripheralManager {
                         self.log.error("No delegate set for configuration")
                     }
                 } catch let error {
-                    self.log.error("Error applying delegate configuration: %@", String(describing: error))
+                    self.log.error("Error applying delegate configuration: %{public}@", String(describing: error))
                     // Will retry
                 }
             }
@@ -159,21 +159,23 @@ extension PeripheralManager {
 
         for service in peripheral.services ?? [] {
             guard let characteristics = configuration.serviceCharacteristics[service.uuid] else {
-                // Not all services may have characteristics
+                // Not all services have characteristics
                 continue
             }
 
             try discoverCharacteristics(characteristics, for: service, timeout: discoveryTimeout)
         }
 
+        // Subscribe to notifying characteristics
         for (serviceUUID, characteristicUUIDs) in configuration.notifyingCharacteristics {
             guard let service = peripheral.services?.itemWithUUID(serviceUUID) else {
-                throw PeripheralManagerError.unknownCharacteristic
+                // Not all RL's have OrangeLink service
+                continue
             }
 
             for characteristicUUID in characteristicUUIDs {
                 guard let characteristic = service.characteristics?.itemWithUUID(characteristicUUID) else {
-                    throw PeripheralManagerError.unknownCharacteristic
+                    throw PeripheralManagerError.unknownCharacteristic(characteristicUUID)
                 }
 
                 guard !characteristic.isNotifying else {

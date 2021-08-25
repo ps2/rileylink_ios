@@ -269,8 +269,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
-        case activatedAt = 0
-        case expiresAt
+        case expiresAt = 0
+        case podActiveClock
         case bolus
         case basal
         case alarms
@@ -459,7 +459,7 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 
                 switch statusRow {
-                case .activatedAt:
+                case .podActiveClock:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                     cell.textLabel?.text = LocalizedString("Pod Active Clock", comment: "The title of the cell showing the pod active clock")
                     cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)

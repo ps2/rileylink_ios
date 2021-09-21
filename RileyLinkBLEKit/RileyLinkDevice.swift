@@ -427,8 +427,8 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     // it will pass the update to this method, which is called on the central's queue.
     // This is how idle listen responses are handled
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
-        guard let service = RileyLinkServiceUUID(rawValue: characteristic.service.uuid.uuidString) else {
-            log.debug("Update from characteristic on unknown service: %@", characteristic.service.uuid.uuidString)
+        guard let cbService = characteristic.service, let service = RileyLinkServiceUUID(rawValue: cbService.uuid.uuidString) else {
+            log.debug("Update from characteristic on unknown service: %@", String(describing: characteristic.service))
             return
         }
         

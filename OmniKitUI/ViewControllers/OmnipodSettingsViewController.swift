@@ -698,7 +698,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 }
             }
         case .suspend:
-            pumpManager.suspendDelivery { (error) in
+            let suspendTime: TimeInterval = .minutes(0) // untimed suspend with reminder beeps pending UI work
+            pumpManager.suspendDelivery(withSuspendReminders: suspendTime) { (error) in
                 if let error = error {
                     DispatchQueue.main.async {
                         let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")

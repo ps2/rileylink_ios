@@ -524,7 +524,7 @@ extension OmnipodPumpManager {
         let start = startDate ?? Date()
         var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, insulinType: .novolog)
         podState.setupProgress = .podPaired
-        podState.podActiveClock = start
+        podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
         
         let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil

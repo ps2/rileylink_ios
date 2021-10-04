@@ -99,7 +99,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             rssiFetchTimer?.invalidate()
         }
     }
-    
+
+    private var hasPiezo: Bool = false
+
     private var appeared = false
     
     private var batteryAlertLevel: Int? {
@@ -118,6 +120,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         super.init(style: .grouped)
 
         updateDeviceStatus()
+
+        NotificationCenter.default.addObserver(forName: .DeviceStatusUpdated, object: device, queue: .main)
+        { (notification) in
+            self.updateDeviceStatus()
+        }
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -176,6 +183,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         device.readRSSI()
     }
 
+    // This does not trigger any BLE reads; it just gets status from the device in a safe manner, and reloads the table
     func updateDeviceStatus() {
         device.getStatus { (status) in
             DispatchQueue.main.async {
@@ -184,6 +192,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 self.vibrationOn = status.vibrationOn
                 self.voltage = status.voltage
                 self.battery = status.battery
+                self.hasPiezo = status.hasPiezo
                 self.tableView.reloadData()
             }
         }
@@ -437,10 +446,11 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return deviceRows.count
         case .rileyLinkCommands:
             return RileyLinkCommandRow.allCases.count
-        case .orangeLinkCommands:
-            return OrangeLinkCommandRow.allCases.count
         case .configureCommand:
             return OrangeConfigureCommandRow.allCases.count
+        case .orangeLinkCommands:
+            let count = OrangeLinkCommandRow.allCases.count
+            return hasPiezo ? count : count-1
         case .alert:
             return AlertRow.allCases.count
         }
@@ -580,7 +590,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 switchView.isHidden = false
                 switchView.isOn = shakeOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Test Vibrator", comment: "The title of the cell showing Test Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Test Vibration", comment: "The title of the cell showing Test Vibration")
             case .findDevice:
                 cell.textLabel?.text = NSLocalizedString("Find Device", comment: "The title of the cell for sounding device finding piezo")
                 cell.detailTextLabel?.text = nil
@@ -591,12 +601,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 switchView.isHidden = false
                 switchView.isOn = ledOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Enable Connection State LED", comment: "The title of the cell showing Stop Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Connection LED", comment: "The title of the cell for connection LED")
             case .connectionVibrate:
                 switchView.isHidden = false
                 switchView.isOn = vibrationOn
                 cell.accessoryType = .none
-                cell.textLabel?.text = NSLocalizedString("Enable Connection State Vibrator", comment: "The title of the cell showing Stop Vibrator")
+                cell.textLabel?.text = NSLocalizedString("Connection Vibration", comment: "The title of the cell for connection vibration")
             }
         }
 
@@ -608,13 +618,13 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .device:
             return LocalizedString("Device", comment: "The title of the section describing the device")
         case .rileyLinkCommands:
-            return LocalizedString("Test Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Test Commands", comment: "The title of the section for rileylink commands")
         case .orangeLinkCommands:
-            return LocalizedString("Test Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Test Commands", comment: "The title of the section for orangelink commands")
         case .configureCommand:
-            return LocalizedString("Configure Commands", comment: "The title of the section describing commands")
+            return LocalizedString("Connection Monitoring", comment: "The title of the section for connection monitoring")
         case .alert:
-            return LocalizedString("Alert", comment: "The title of the section describing commands")
+            return LocalizedString("Alert", comment: "The title of the section for alerts")
         }
     }
 

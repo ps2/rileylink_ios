@@ -23,6 +23,8 @@ struct MinimedPumpManagerRecents: Equatable {
     internal var tempBasalEngageState: EngageablePumpState = .stable
 
     var lastAddedPumpEvents: Date = .distantPast
+    
+    var lastContinuousReservoir: Date = .distantPast
 
     var latestPumpStatus: PumpStatus? = nil
 
@@ -46,6 +48,7 @@ extension MinimedPumpManagerRecents: CustomDebugStringConvertible {
         tempBasalEngageState: \(tempBasalEngageState)
         lastAddedPumpEvents: \(lastAddedPumpEvents)
         latestPumpStatus: \(String(describing: latestPumpStatus))
+        lastContinuousReservoir: \(lastContinuousReservoir)
         latestPumpStatusFromMySentry: \(String(describing: latestPumpStatusFromMySentry))
         sensorState: \(String(describing: sensorState))
         """

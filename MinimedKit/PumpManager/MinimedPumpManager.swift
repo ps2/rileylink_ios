@@ -1257,6 +1257,33 @@ extension MinimedPumpManager: PumpManager {
             }
         }
     }
+
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            guard let session = session else {
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                return
+            }
+
+            do {
+                if let maxBasalRate = deliveryLimits.maximumBolus?.doubleValue(for: .internationalUnitsPerHour) {
+                    try session.setMaxBasalRate(unitsPerHour: maxBasalRate)
+                }
+
+                if let maxBolus = deliveryLimits.maximumBolus?.doubleValue(for: .internationalUnit()) {
+                    try session.setMaxBolus(units: maxBolus)
+                }
+
+                let settings = try session.getSettings()
+                let storedDeliveryLimits = DeliveryLimits(maximumBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: settings.maxBasal),
+                                                          maximumBolus: HKQuantity(unit: .internationalUnit(), doubleValue: settings.maxBolus))
+                completion(.success(storedDeliveryLimits))
+            } catch let error {
+                self.log.error("Save delivery limit settings failed: %{public}@", String(describing: error))
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {

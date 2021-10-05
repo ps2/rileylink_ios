@@ -1629,6 +1629,10 @@ extension OmnipodPumpManager: PumpManager {
         }
     }
 
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        completion(.success(deliveryLimits))
+    }
+
     // This cannot be called from within the lockedState lock!
     func store(doses: [UnfinalizedDose], in session: PodCommsSession) -> Bool {
         session.assertOnSessionQueue()

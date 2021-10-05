@@ -18,6 +18,10 @@ extension HKUnit {
         return HKUnit.moleUnit(with: .milli, molarMass: HKUnitMolarMassBloodGlucose).unitDivided(by: .liter())
     }()
 
+    public static let internationalUnitsPerHour: HKUnit = {
+        return HKUnit.internationalUnit().unitDivided(by: .hour())
+    }()
+
     var foundationUnit: Unit? {
         if self == HKUnit.milligramsPerDeciliter {
             return UnitConcentrationMass.milligramsPerDeciliter

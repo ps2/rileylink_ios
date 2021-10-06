@@ -269,8 +269,8 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
     }
     
     fileprivate enum StatusRow: Int, CaseIterable {
-        case activatedAt = 0
-        case expiresAt
+        case expiresAt = 0
+        case podActiveClock
         case bolus
         case basal
         case alarms
@@ -459,10 +459,10 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 
                 switch statusRow {
-                case .activatedAt:
+                case .podActiveClock:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-                    cell.textLabel?.text = LocalizedString("Active Time", comment: "The title of the cell showing the pod activated at time")
-                    cell.setDetailAge(podState.activatedAt?.timeIntervalSinceNow)
+                    cell.textLabel?.text = LocalizedString("Pod Active Clock", comment: "The title of the cell showing the pod active clock")
+                    cell.setDetailAge(podState.expiresAt?.addingTimeInterval(-Pod.nominalPodLife).timeIntervalSinceNow)
                     return cell
                 case .expiresAt:
                     let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -632,6 +632,12 @@ class OmnipodSettingsViewController: RileyLinkSettingsViewController {
             }
         case .rileyLinks:
             let device = devicesDataSource.devices[indexPath.row]
+            
+            guard device.hardwareType != nil else {
+                tableView.deselectRow(at: indexPath, animated: true)
+                return
+            }
+
             let vc = RileyLinkDeviceTableViewController(
                 device: device,
                 batteryAlertLevel: pumpManager.rileyLinkBatteryAlertLevel,
@@ -833,18 +839,6 @@ private extension UIAlertController {
     }
 }
 
-private extension TimeInterval {
-    func format(using units: NSCalendar.Unit) -> String? {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = units
-        formatter.unitsStyle = .full
-        formatter.zeroFormattingBehavior = .dropLeading
-        formatter.maximumUnitCount = 2
-        
-        return formatter.string(from: self)
-    }
-}
-
 class AlarmsTableViewCell: LoadingTableViewCell {
     
     private var defaultDetailColor: UIColor?
@@ -897,9 +891,19 @@ class AlarmsTableViewCell: LoadingTableViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
         updateColor()
     }
-
 }
 
+private extension TimeInterval {
+    func format(using units: NSCalendar.Unit) -> String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .short
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.maximumUnitCount = 2
+
+        return formatter.string(from: self)
+    }
+}
 
 private extension UITableViewCell {
     
@@ -928,12 +932,12 @@ private extension UITableViewCell {
     
     func setDetailAge(_ age: TimeInterval?) {
         if let age = age {
-            detailTextLabel?.text = fabs(age).format(using: [.day, .hour, .minute])
+            detailTextLabel?.text = fabs(age).format(using: [.hour, .minute])
         } else {
             detailTextLabel?.text = ""
         }
     }
-    
+
     func setDetailBasal(suspended: Bool, dose: UnfinalizedDose?) {
         if suspended {
             detailTextLabel?.text = LocalizedString("Suspended", comment: "The detail text of the basal row when pod is suspended")

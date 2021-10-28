@@ -798,6 +798,10 @@ extension MinimedPumpManager: PumpManager {
         return state.pumpModel.supportedBolusVolumes
     }
 
+    public var supportedMaximumBolusVolumes: [Double] {
+        return state.pumpModel.supportedBolusVolumes
+    }
+
     public var maximumBasalScheduleEntryCount: Int {
         return state.pumpModel.maximumBasalScheduleEntryCount
     }

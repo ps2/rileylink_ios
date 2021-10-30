@@ -38,7 +38,7 @@ extension OmnipodPumpManagerError: LocalizedError {
         case .podAlreadyPaired:
             return LocalizedString("Pod already paired", comment: "Error message shown when user cannot pair because pod is already paired")
         case .notReadyForCannulaInsertion:
-            return LocalizedString("Pod is not in a state ready for cannula insertion.", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
+            return LocalizedString("Pod is not in a state ready for cannula insertion", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
         }
     }
     
@@ -525,7 +525,7 @@ extension OmnipodPumpManager {
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
         
-        let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
+        let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!) : nil
         podState.fault = fault
 
         self.podComms = PodComms(podState: podState)
@@ -647,12 +647,14 @@ extension OmnipodPumpManager {
         
         #if targetEnvironment(simulator)
         let mockDelay = TimeInterval(seconds: 3)
+        let mockFaultDuringInsertCannula = false
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + mockDelay) {
             let result = self.setStateWithResult({ (state) -> PumpManagerResult<TimeInterval> in
-                // Mock fault
-                //            let fault = try! DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
-                //            self.state.podState?.fault = fault
-                //            return .failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault)))
+                if mockFaultDuringInsertCannula {
+                    let fault = try! DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
+                    state.podState?.fault = fault
+                    return .failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault)))
+                }
 
                 // Mock success
                 state.podState?.setupProgress = .completed

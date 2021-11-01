@@ -1276,7 +1276,7 @@ extension MinimedPumpManager: PumpManager {
             }
 
             do {
-                if let maxBasalRate = deliveryLimits.maximumBolus?.doubleValue(for: .internationalUnitsPerHour) {
+                if let maxBasalRate = deliveryLimits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour) {
                     try session.setMaxBasalRate(unitsPerHour: maxBasalRate)
                 }
 

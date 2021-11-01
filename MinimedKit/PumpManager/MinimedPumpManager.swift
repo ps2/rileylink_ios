@@ -784,6 +784,10 @@ extension MinimedPumpManager: PumpManager {
         return PumpModel.model522.supportedBolusVolumes
     }
 
+    public static var onboardingSupportedMaximumBolusVolumes: [Double] {
+        return onboardingSupportedBolusVolumes
+    }
+
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing
      See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3

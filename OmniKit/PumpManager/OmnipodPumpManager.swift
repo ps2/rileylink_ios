@@ -1213,7 +1213,8 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
-        suspendDelivery(withSuspendReminders: 0, completion: completion) // untimed with suspend reminder beeps
+        let suspendTime: TimeInterval = .minutes(0) // untimed suspend with reminder beeps
+        suspendDelivery(withSuspendReminders: suspendTime, completion: completion)
     }
 
     // A nil suspendReminder is untimed with no reminders beeps, a suspendReminder of 0 is untimed using reminders beeps, otherwise it

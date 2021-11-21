@@ -1405,6 +1405,7 @@ extension OmnipodPumpManager: PumpManager {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                     let beep = self.confirmationBeeps
                     let podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
+                    try session.cancelSuspendAlerts()
                     guard podStatus.deliveryStatus.bolusing == false else {
                         completion(.deviceState(PodCommsError.unfinalizedBolus))
                         return

@@ -1112,10 +1112,18 @@ extension OmnipodPumpManager: PumpManager {
         return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
     }
 
+    public static var onboardingSupportedMaximumBolusVolumes: [Double] {
+        return onboardingSupportedBolusVolumes
+    }
+
     public var supportedBolusVolumes: [Double] {
         // 0.05 units for rates between 0.05-30U/hr
         // 0 is not a supported bolus volume
         return (1...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    }
+
+    public var supportedMaximumBolusVolumes: [Double] {
+        supportedBolusVolumes
     }
 
     public var supportedBasalRates: [Double] {
@@ -1627,6 +1635,10 @@ extension OmnipodPumpManager: PumpManager {
                 completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.state.timeZone)!))
             }
         }
+    }
+
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        completion(.success(deliveryLimits))
     }
 
     // This cannot be called from within the lockedState lock!

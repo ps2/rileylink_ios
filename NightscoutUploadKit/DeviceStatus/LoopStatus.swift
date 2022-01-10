@@ -21,12 +21,12 @@ public struct LoopStatus {
     let recommendedBolus: Double?
     let enacted: LoopEnacted?
     let rileylinks: [RileyLinkStatus]?
-    let failureReason: Error?
+    let failureReason: String?
     let currentCorrectionRange: CorrectionRange?
     let forecastError: ForecastError?
     let testingDetails: [String: Any]?
 
-    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, automaticDoseRecommendation: AutomaticDoseRecommendation? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: Error? = nil, currentCorrectionRange: CorrectionRange? = nil, forecastError: ForecastError? = nil, testingDetails: [String: Any]? = nil) {
+    public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, automaticDoseRecommendation: AutomaticDoseRecommendation? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: String? = nil, currentCorrectionRange: CorrectionRange? = nil, forecastError: ForecastError? = nil, testingDetails: [String: Any]? = nil) {
         self.name = name
         self.version = version
         self.timestamp = timestamp
@@ -75,7 +75,7 @@ public struct LoopStatus {
         }
         
         if let failureReason = failureReason {
-            rval["failureReason"] = String(describing: failureReason)
+            rval["failureReason"] = failureReason
         }
 
         if let rileylinks = rileylinks {

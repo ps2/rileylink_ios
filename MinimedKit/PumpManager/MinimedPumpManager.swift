@@ -404,7 +404,9 @@ extension MinimedPumpManager {
                 let sample = NewGlucoseSample(
                     date: date,
                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(glucose)),
+                    condition: nil,
                     trend: status.glucoseTrend.loopKitGlucoseTrend,
+                    trendRate: nil,
                     isDisplayOnly: false,
                     wasUserEntered: false,
                     syncIdentifier: status.glucoseSyncIdentifier ?? UUID().uuidString,
@@ -782,6 +784,10 @@ extension MinimedPumpManager: PumpManager {
         return PumpModel.model522.supportedBolusVolumes
     }
 
+    public static var onboardingSupportedMaximumBolusVolumes: [Double] {
+        return onboardingSupportedBolusVolumes
+    }
+
     /*
      It takes a MM pump about 40s to deliver 1 Unit while bolusing
      See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
@@ -793,6 +799,10 @@ extension MinimedPumpManager: PumpManager {
     }
 
     public var supportedBolusVolumes: [Double] {
+        return state.pumpModel.supportedBolusVolumes
+    }
+
+    public var supportedMaximumBolusVolumes: [Double] {
         return state.pumpModel.supportedBolusVolumes
     }
 
@@ -1257,6 +1267,33 @@ extension MinimedPumpManager: PumpManager {
             }
         }
     }
+
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            guard let session = session else {
+                completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
+                return
+            }
+
+            do {
+                if let maxBasalRate = deliveryLimits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour) {
+                    try session.setMaxBasalRate(unitsPerHour: maxBasalRate)
+                }
+
+                if let maxBolus = deliveryLimits.maximumBolus?.doubleValue(for: .internationalUnit()) {
+                    try session.setMaxBolus(units: maxBolus)
+                }
+
+                let settings = try session.getSettings()
+                let storedDeliveryLimits = DeliveryLimits(maximumBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: settings.maxBasal),
+                                                          maximumBolus: HKQuantity(unit: .internationalUnit(), doubleValue: settings.maxBolus))
+                completion(.success(storedDeliveryLimits))
+            } catch let error {
+                self.log.error("Save delivery limit settings failed: %{public}@", String(describing: error))
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {
@@ -1298,7 +1335,7 @@ extension MinimedPumpManager: CGMManager {
     }
     
     public var cgmManagerStatus: CGMManagerStatus {
-        return CGMManagerStatus(hasValidSensorSession: hasValidSensorSession)
+        return CGMManagerStatus(hasValidSensorSession: hasValidSensorSession, device: device)
     }
     
     public var hasValidSensorSession: Bool {
@@ -1337,7 +1374,7 @@ extension MinimedPumpManager: CGMManager {
                         .map {
                             let glucoseEvent = $0.glucoseEvent as! SensorValueGlucoseEvent
                             let quantity = HKQuantity(unit: unit, doubleValue: Double(glucoseEvent.sgv))
-                            return NewGlucoseSample(date: $0.date, quantity: quantity, trend: glucoseEvent.trendType, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
+                            return NewGlucoseSample(date: $0.date, quantity: quantity, condition: nil, trend: glucoseEvent.trendType, trendRate: glucoseEvent.trendRate, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: glucoseEvent.glucoseSyncIdentifier ?? UUID().uuidString, device: self.device)
                     }
 
                     completion(.newData(glucoseValues))

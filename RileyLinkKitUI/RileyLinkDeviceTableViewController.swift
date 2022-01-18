@@ -165,7 +165,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             sections = [
                 .device,
                 .alert,
-                .emaLinkCommands
+                .rileyLinkCommands
             ]
         case .orange:
             deviceRows = [
@@ -379,7 +379,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case configureCommand
         case orangeLinkCommands
         case rileyLinkCommands
-        case emaLinkCommands
     }
     
     private var sections: [Section] = []
@@ -403,11 +402,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
     
     private enum RileyLinkCommandRow: Int, CaseIterable {
         case diagnosticLEDSMode
-        case getStatistics
-    }
-
-    private enum EmaLinkCommandRow: Int, CaseIterable {
-        case logicLEDSMode
         case getStatistics
     }
 
@@ -456,14 +450,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
     }
 
-    private func cellForRow(_ row: EmaLinkCommandRow) -> UITableViewCell? {
-        guard let sectionIndex = sections.firstIndex(of: Section.emaLinkCommands) else
-        {
-            return nil
-        }
-        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
-    }
-
     public override func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -478,8 +464,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return deviceRows.count
         case .rileyLinkCommands:
             return RileyLinkCommandRow.allCases.count
-        case .emaLinkCommands:
-            return EmaLinkCommandRow.allCases.count
         case .configureCommand:
             return OrangeConfigureCommandRow.allCases.count
         case .orangeLinkCommands:
@@ -600,15 +584,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .rileyLinkCommands:
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
-                cell.textLabel?.text = LocalizedString("Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
-                cell.setLEDMode(ledMode)
-            case .getStatistics:
-                cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
-            }
-        case .emaLinkCommands:
-            switch EmaLinkCommandRow(rawValue: indexPath.row)! {
-            case .logicLEDSMode:
-                cell.textLabel?.text = LocalizedString("Invert LED Logic", comment: "The title of the command to invert BLE connection LED logic")
+                cell.textLabel?.text = LocalizedString("Diagnostic LEDs On/Off", comment: "The title of the command to update diagnostic LEDs")
                 cell.setLEDMode(ledMode)
             case .getStatistics:
                 cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
@@ -661,8 +637,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             return LocalizedString("Device", comment: "The title of the section describing the device")
         case .rileyLinkCommands:
             return LocalizedString("Test Commands", comment: "The title of the section for rileylink commands")
-        case .emaLinkCommands:
-            return LocalizedString("Test Commands", comment: "The title of the section for emalink commands")
         case .orangeLinkCommands:
             return LocalizedString("Test Commands", comment: "The title of the section for orangelink commands")
         case .configureCommand:
@@ -694,8 +668,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             }
         case .rileyLinkCommands:
             return device.peripheralState == .connected
-        case .emaLinkCommands:
-            return device.peripheralState == .connected
         case .alert:
             return true
         }
@@ -724,30 +696,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
                 let nextMode: RileyLinkLEDMode
-                switch ledMode {
-                case.on:
-                    nextMode = .off
-                default:
-                    nextMode = .on
-                }
-                vc = .setDiagnosticLEDMode(device: device, mode: nextMode)
-            case .getStatistics:
-                vc = .getStatistics(device: device)
-            }
-            if let cell = tableView.cellForRow(at: indexPath) {
-                vc?.title = cell.textLabel?.text
-            }
-
-            if let vc = vc {
-                show(vc, sender: indexPath)
-            }
-
-        case .emaLinkCommands:
-            var vc: CommandResponseViewController?
-
-            switch EmaLinkCommandRow(rawValue: indexPath.row)! {
-            case .logicLEDSMode:
-                let nextMode: RileyLinkLEDMode
+        
                 switch ledMode {
                 case.on:
                     nextMode = .off

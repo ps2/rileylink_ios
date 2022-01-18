@@ -137,7 +137,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         title = device.name
         
         switch device.hardwareType {
-        case .riley, .ema, .none:
+        case .riley, .none:
             deviceRows = [
                 .customName,
                 .version,
@@ -149,6 +149,22 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             
             sections = [
                 .device,
+                .rileyLinkCommands
+            ]
+        case .ema:
+            deviceRows = [
+                .customName,
+                .version,
+                .rssi,
+                .connection,
+                .uptime,
+                .frequency,
+                .battery
+            ]
+
+            sections = [
+                .device,
+                .alert,
                 .rileyLinkCommands
             ]
         case .orange:
@@ -297,6 +313,9 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         switch device.hardwareType {
         case .riley:
             readDiagnosticLEDMode()
+        case .ema:
+            device.updateBatteryLevel()
+            readDiagnosticLEDMode()
         case .orange:
             device.updateBatteryLevel()
             device.orangeWritePwd()
@@ -385,7 +404,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case diagnosticLEDSMode
         case getStatistics
     }
-    
+
     private enum OrangeLinkCommandRow: Int, CaseIterable {
         case yellow
         case red
@@ -430,7 +449,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         }
         return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: sectionIndex))
     }
-
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
@@ -566,7 +584,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .rileyLinkCommands:
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
-                cell.textLabel?.text = LocalizedString("Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
+                cell.textLabel?.text = LocalizedString("Toggle Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
                 cell.setLEDMode(ledMode)
             case .getStatistics:
                 cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")

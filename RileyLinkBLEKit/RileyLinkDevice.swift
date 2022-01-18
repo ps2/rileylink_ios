@@ -14,7 +14,10 @@ public enum RileyLinkHardwareType {
     case ema
     
     var monitorsBattery: Bool {
-        return self == .orange
+        if self == .riley {
+            return false
+        }
+        return true
     }
 }
 
@@ -74,9 +77,11 @@ public class RileyLinkDevice {
     private var voltage: Float?
     private var batteryLevel: Int?
     private var hasPiezo: Bool {
-        if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] >= 2, olHW[1] >= 6 {
+        if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] == 1, olHW[1] >= 1 {
             return true
-        }
+        } else if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] == 2, olHW[1] == 6 {
+            return true
+       }
         return false
     }
     
@@ -89,13 +94,20 @@ public class RileyLinkDevice {
             return nil
         }
         
+        guard let bleComponents = self.bleFirmwareVersion else {
+            return nil
+        }
+
         if services.itemWithUUID(RileyLinkServiceUUID.secureDFU.cbUUID) != nil {
             return .orange
+        } else if bleComponents.components[0] == 3 {
+            // this returns true for riley with ema firmware, but that is OK
+            return .ema
         } else {
+            // as long as riley ble remains at 2.x with ema at 3.x this will work
             return .riley
         }
-        // TODO: detect emalink
-    }
+      }
     
     /// The queue used to serialize sessions and observe when they've drained
     private let sessionQueue: OperationQueue = {

@@ -584,7 +584,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
         case .rileyLinkCommands:
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
-                cell.textLabel?.text = LocalizedString("Diagnostic LEDs On/Off", comment: "The title of the command to update diagnostic LEDs")
+                cell.textLabel?.text = LocalizedString("Toggle Diagnostic LEDs", comment: "The title of the command to update diagnostic LEDs")
                 cell.setLEDMode(ledMode)
             case .getStatistics:
                 cell.textLabel?.text = LocalizedString("Get RileyLink Statistics", comment: "The title of the command to fetch RileyLink statistics")
@@ -696,7 +696,6 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
             switch RileyLinkCommandRow(rawValue: indexPath.row)! {
             case .diagnosticLEDSMode:
                 let nextMode: RileyLinkLEDMode
-        
                 switch ledMode {
                 case.on:
                     nextMode = .off

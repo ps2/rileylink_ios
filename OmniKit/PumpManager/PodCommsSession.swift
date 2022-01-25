@@ -764,6 +764,7 @@ public class PodCommsSession {
         return podInfoResponse
     }
 
+    // Can be called a second time to deactivate a given pod
     public func deactivatePod() throws {
 
         // Don't try to cancel if the pod hasn't completed its setup as it will either receive no response
@@ -780,6 +781,7 @@ public class PodCommsSession {
             }
         }
 
+        // if faulted read the most recent pulse log entries
         if podState.fault != nil {
             // All the dosing cleanup from the fault should have already been
             // handled in handlePodFault() when podState.fault was initialized.
@@ -791,13 +793,12 @@ public class PodCommsSession {
             }
         }
 
-        let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
-
         do {
+            let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
             let _: StatusResponse = try send([deactivatePod])
         } catch let error as PodCommsError {
             switch error {
-            case .podFault, .unexpectedResponse:
+            case .podFault, .activationTimeExceeded, .unexpectedResponse:
                 break
             default:
                 throw error

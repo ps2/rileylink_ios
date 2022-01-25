@@ -1456,7 +1456,7 @@ extension OmnipodPumpManager: PumpManager {
             let acknowledgementBeep = self.confirmationBeeps && (!automatic || self.automaticBolusBeeps)
             let completionBeep = self.confirmationBeeps && !automatic
 
-            // Use an alternate 0x3F TimeInterval for denote an automatic bolus in the Omnipod Communications Log
+            // Use a maximum programReminderInterval value of 0x3F to denote an automatic bolus in the communication log
             let programReminderInterval: TimeInterval = automatic ? TimeInterval(minutes: 0x3F) : 0
 
             let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)

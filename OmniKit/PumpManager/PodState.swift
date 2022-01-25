@@ -420,7 +420,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
             self.insulinType = insulinType
         } else {
-            insulinType = .humalog
+            insulinType = .novolog
         }
 
         self.deliveryStatusVerified = false

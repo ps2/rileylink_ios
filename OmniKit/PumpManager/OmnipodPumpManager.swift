@@ -1580,30 +1580,46 @@ extension OmnipodPumpManager: PumpManager {
                 return
             }
 
-            let status: StatusResponse
+            // resuming a normal basal is denoted by a 0 duration temp basal which simply cancels any existing temp basal
+            let resumingNormalBasal = duration < .ulpOfOne
 
-            let result = session.cancelDelivery(deliveryType: .tempBasal)
-            switch result {
-            case .certainFailure(let error):
-                completion(.communication(error))
-                return
-            case .uncertainFailure(let error):
-                // TODO: Return PumpManagerError.uncertainDelivery and implement recovery
-                completion(.communication(error))
-                return
-            case .success(let cancelTempStatus, _):
-                status = cancelTempStatus
-            }
+            // Skip the Cancel TB comms optimization if the last message had any
+            // comms issues or if the last delivery status hasn't been verified OK
+            let skipCancelTBCommsOptimization = self.state.podState?.lastCommsOK == false ||
+                self.state.podState?.deliveryStatusVerified == false
 
-            guard !status.deliveryStatus.bolusing else {
-                completion(.communication(PodCommsError.unfinalizedBolus))
-                return
-            }
+            // Do the cancel TB command if we are resuming a normal basal,
+            // we currently have a temp basal running,
+            // or we are skipping the cancel TB comms optimization
+            if resumingNormalBasal || self.state.podState?.unfinalizedTempBasal != nil || skipCancelTBCommsOptimization {
+                let status: StatusResponse
 
-            guard status.deliveryStatus != .suspended else {
-                self.log.info("Canceling temp basal because status return indicates pod is suspended.")
-                completion(.communication(PodCommsError.podSuspended))
-                return
+                let result = session.cancelDelivery(deliveryType: .tempBasal)
+                switch result {
+                case .certainFailure(let error):
+                    completion(.communication(error))
+                    return
+                case .uncertainFailure(let error):
+                    // TODO: Return PumpManagerError.uncertainDelivery and implement recovery
+                    completion(.communication(error))
+                    return
+                case .success(let cancelTempStatus, _):
+                    status = cancelTempStatus
+                }
+
+                guard !status.deliveryStatus.bolusing else {
+                    self.log.info("Canceling temp basal because status return indicates bolus in progress.")
+                    completion(.communication(PodCommsError.unfinalizedBolus))
+                    return
+                }
+
+                guard status.deliveryStatus != .suspended else {
+                    self.log.info("Canceling temp basal because status return indicates pod is suspended!")
+                    completion(.communication(PodCommsError.podSuspended))
+                    return
+                }
+            } else {
+                self.log.info("Skipped Cancel TB command before enacting temp basal")
             }
 
             defer {
@@ -1612,8 +1628,7 @@ extension OmnipodPumpManager: PumpManager {
                 })
             }
 
-            if duration < .ulpOfOne {
-                // 0 duration temp basals are used to cancel any existing temp basal
+            if resumingNormalBasal {
                 self.setState({ (state) in
                     state.tempBasalEngageState = .disengaging
                 })

@@ -1580,18 +1580,16 @@ extension OmnipodPumpManager: PumpManager {
                 return
             }
 
-            // resuming a normal basal is denoted by a 0 duration temp basal which simply cancels any existing temp basal
-            let resumingNormalBasal = duration < .ulpOfOne
+            // A resume scheduled basal delivery request is denoted by a 0 duration that cancels any existing temp basal.
+            let resumingScheduledBasal = duration < .ulpOfOne
 
-            // Skip the Cancel TB comms optimization if the last message had any
-            // comms issues or if the last delivery status hasn't been verified OK
-            let skipCancelTBCommsOptimization = self.state.podState?.lastCommsOK == false ||
+            // Did the last message have comms issues or is the last delivery status not yet verified?
+            let uncertainDeliveryStatus = self.state.podState?.lastCommsOK == false ||
                 self.state.podState?.deliveryStatusVerified == false
 
-            // Do the cancel TB command if we are resuming a normal basal,
-            // we currently have a temp basal running,
-            // or we are skipping the cancel TB comms optimization
-            if resumingNormalBasal || self.state.podState?.unfinalizedTempBasal != nil || skipCancelTBCommsOptimization {
+            // Do the cancel temp basal command if currently running a temp basal OR
+            // if resuming scheduled basal delivery OR if the delivery status is uncertain.
+            if self.state.podState?.unfinalizedTempBasal != nil || resumingScheduledBasal || uncertainDeliveryStatus {
                 let status: StatusResponse
 
                 let result = session.cancelDelivery(deliveryType: .tempBasal)
@@ -1628,7 +1626,7 @@ extension OmnipodPumpManager: PumpManager {
                 })
             }
 
-            if resumingNormalBasal {
+            if resumingScheduledBasal {
                 self.setState({ (state) in
                     state.tempBasalEngageState = .disengaging
                 })

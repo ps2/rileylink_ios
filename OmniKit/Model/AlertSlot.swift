@@ -364,3 +364,12 @@ public struct AlertSet: RawRepresentable, Collection, CustomStringConvertible, E
         }
     }
 }
+
+// Returns true if there are any active suspend related alerts
+public func hasActiveSuspendAlert(configuredAlerts: [AlertSlot : PodAlert]) -> Bool {
+    // slot5 is for podSuspendedReminder and slot6 is for suspendTimeExpired
+    if configuredAlerts.contains(where: { ($0.key == .slot5 || $0.key == .slot6) && $0.value.configuration.active }) {
+        return true
+    }
+    return false
+}

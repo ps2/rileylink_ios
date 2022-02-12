@@ -317,15 +317,15 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
     override func continueButtonPressed(_ sender: Any) {
         if case .completed = continueState {
+            if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
+                let pumpManager = pumpManager // create mdt 1
+            {
+                setupViewController.pumpManagerSetupComplete(pumpManager)
+            }
             if isSentrySetUpNeeded {
                 performSegue(withIdentifier: "Sentry", sender: sender)
             } else {
-                if let setupViewController = navigationController as? MinimedPumpManagerSetupViewController,
-                    let pumpManager = pumpManager
-                {
-                    super.continueButtonPressed(sender)
-                    setupViewController.pumpManagerSetupComplete(pumpManager)
-                }
+                super.continueButtonPressed(sender)
             }
         } else if case .readyToRead = continueState, let pumpID = pumpID, let pumpRegion = pumpRegionCode?.region {
 #if targetEnvironment(simulator)

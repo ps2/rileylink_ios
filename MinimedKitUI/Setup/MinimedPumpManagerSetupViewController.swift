@@ -64,22 +64,6 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     override public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         super.navigationController(navigationController, willShow: viewController, animated: animated)
 
-        // Read state values
-        let viewControllers = navigationController.viewControllers
-        let count = navigationController.viewControllers.count
-
-        if count >= 2 {
-            switch viewControllers[count - 2] {
-            case let vc as MinimedPumpIDSetupViewController:
-                pumpManager = vc.pumpManager
-                maxBasalRateUnitsPerHour = vc.maxBasalRateUnitsPerHour
-                maxBolusUnits = vc.maxBolusUnits
-                basalSchedule = vc.basalSchedule
-            default:
-                break
-            }
-        }
-
         if let setupViewController = viewController as? SetupTableViewController {
             setupViewController.delegate = self
         }
@@ -124,7 +108,8 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
         }
     }
 
-    public func pumpManagerSetupComplete(_ pumpManager: PumpManagerUI) {
+    public func pumpManagerSetupComplete(_ pumpManager: MinimedPumpManager) {
+        self.pumpManager = pumpManager
         pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didCreatePumpManager: pumpManager)
     }
 

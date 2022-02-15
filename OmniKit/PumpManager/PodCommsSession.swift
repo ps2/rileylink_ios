@@ -123,7 +123,7 @@ extension PodCommsError: LocalizedError {
         case .nonceResyncFailed:
             return nil
         case .podSuspended:
-            return nil
+            return LocalizedString("Resume delivery", comment: "Recovery suggestion when pod is suspended")
         case .podFault:
             return nil
         case .commsError:
@@ -247,6 +247,7 @@ public class PodCommsSession {
 
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
 
+            self.podState.lastCommsOK = false // mark last comms as not OK until we get the expected response
             let response = try transport.sendMessage(message)
             
             // Simulate fault
@@ -255,6 +256,7 @@ public class PodCommsSession {
 
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %@", String(describing: responseMessageBlock))
+                self.podState.lastCommsOK = true // message successfully sent and expected response received
                 return responseMessageBlock
             }
 
@@ -353,10 +355,10 @@ public class PodCommsSession {
     }
 
     @discardableResult
-    private func configureAlerts(_ alerts: [PodAlert]) throws -> StatusResponse {
+    private func configureAlerts(_ alerts: [PodAlert], confirmationBeepType: BeepConfigType? = nil) throws -> StatusResponse {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
-        let status: StatusResponse = try send([configureAlerts])
+        let status: StatusResponse = try send([configureAlerts], confirmationBeepType: confirmationBeepType)
         for alert in alerts {
             podState.registerConfiguredAlert(slot: alert.configuration.slot, alert: alert)
         }
@@ -564,38 +566,49 @@ public class PodCommsSession {
     }
     
     // Suspends insulin delivery and sets appropriate podSuspendedReminder & suspendTimeExpired alerts.
-    // An expected suspend time of 0 is an untimed suspend which only uses podSuspendedReminder alert beeps.
-    // An expected suspend time of > 0 and <= 5 minutes will only use suspendTimeExpired alert beeps.
-    public func suspendDelivery(suspendTime: TimeInterval = 0, confirmationBeepType: BeepConfigType? = nil) -> CancelDeliveryResult {
+    // A nil suspendReminder is an untimed suspend with no suspend reminders.
+    // A suspendReminder of 0 is an untimed suspend which only uses podSuspendedReminder alert beeps.
+    // A suspendReminder of 1-5 minutes will only use suspendTimeExpired alert beeps.
+    // A suspendReminder of > 5 min will have periodic podSuspendedReminder beeps followed by suspendTimeExpired alerts.
+    public func suspendDelivery(suspendReminder: TimeInterval? = nil, confirmationBeepType: BeepConfigType? = nil) -> CancelDeliveryResult {
         do {
             var alertConfigurations: [AlertConfiguration] = []
+            var podSuspendedReminderAlert: PodAlert? = nil
+            var suspendTimeExpiredAlert: PodAlert? = nil
+            let suspendTime: TimeInterval = suspendReminder != nil ? suspendReminder! : 0
+
+            let cancelDeliveryCommand = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .noBeep)
+            var commandsToSend: [MessageBlock] = [cancelDeliveryCommand]
 
             // podSuspendedReminder provides a periodic pod suspended reminder beep until the specified suspend time.
-            let podSuspendedReminder = PodAlert.podSuspendedReminder(active: true, suspendTime: suspendTime)
-            let usePodSuspendedReminder = suspendTime == 0 || suspendTime > .minutes(5) // untimed or long enough suspend
-            if usePodSuspendedReminder {
-               alertConfigurations += [podSuspendedReminder.configuration]
+            if suspendReminder != nil && (suspendTime == 0 || suspendTime > .minutes(5)) {
+                // using reminder beeps for an untimed or long enough suspend time requiring pod suspended reminders
+                podSuspendedReminderAlert = PodAlert.podSuspendedReminder(active: true, suspendTime: suspendTime)
+                alertConfigurations += [podSuspendedReminderAlert!.configuration]
             }
 
             // suspendTimeExpired provides suspend time expired alert beeping after the expected suspend time has passed.
-            let suspendTimeExpired = PodAlert.suspendTimeExpired(suspendTime: suspendTime)
-            let useSuspendTimeExpired = suspendTime > 0 // timed suspend
-            if useSuspendTimeExpired {
-                alertConfigurations += [suspendTimeExpired.configuration]
+            if suspendTime > 0 {
+                // a timed suspend using a suspend time expired alert
+                suspendTimeExpiredAlert = PodAlert.suspendTimeExpired(suspendTime: suspendTime)
+                alertConfigurations += [suspendTimeExpiredAlert!.configuration]
             }
 
-            let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: alertConfigurations)
-            let cancelDeliveryCommand = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: .all, beepType: .noBeep)
-            let status: StatusResponse = try send([cancelDeliveryCommand, configureAlerts], confirmationBeepType: confirmationBeepType)
+            // append a ConfigureAlert command if we have any reminder alerts for this suspend
+            if alertConfigurations.count != 0 {
+                let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: alertConfigurations)
+                commandsToSend += [configureAlerts]
+            }
 
+            let status: StatusResponse = try send(commandsToSend, confirmationBeepType: confirmationBeepType)
             let canceledDose = handleCancelDosing(deliveryType: .all, bolusNotDelivered: status.bolusNotDelivered)
             podState.updateFromStatusResponse(status)
 
-            if usePodSuspendedReminder {
-                podState.registerConfiguredAlert(slot: podSuspendedReminder.configuration.slot, alert: podSuspendedReminder)
+            if let alert = podSuspendedReminderAlert {
+                podState.registerConfiguredAlert(slot: alert.configuration.slot, alert: alert)
             }
-            if useSuspendTimeExpired {
-                podState.registerConfiguredAlert(slot: suspendTimeExpired.configuration.slot, alert: suspendTimeExpired)
+            if let alert = suspendTimeExpiredAlert {
+                podState.registerConfiguredAlert(slot: alert.configuration.slot, alert: alert)
             }
 
             return CancelDeliveryResult.success(statusResponse: status, canceledDose: canceledDose)
@@ -751,6 +764,7 @@ public class PodCommsSession {
         return podInfoResponse
     }
 
+    // Can be called a second time to deactivate a given pod
     public func deactivatePod() throws {
 
         // Don't try to cancel if the pod hasn't completed its setup as it will either receive no response
@@ -767,6 +781,7 @@ public class PodCommsSession {
             }
         }
 
+        // if faulted read the most recent pulse log entries
         if podState.fault != nil {
             // All the dosing cleanup from the fault should have already been
             // handled in handlePodFault() when podState.fault was initialized.
@@ -778,13 +793,12 @@ public class PodCommsSession {
             }
         }
 
-        let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
-
         do {
+            let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
             let _: StatusResponse = try send([deactivatePod])
         } catch let error as PodCommsError {
             switch error {
-            case .podFault, .unexpectedResponse:
+            case .podFault, .activationTimeExceeded, .unexpectedResponse:
                 break
             default:
                 throw error

@@ -65,7 +65,7 @@ struct Message {
         }
         
         self.expectFollowOnMessage = (b9 & 0b10000000) != 0
-        self.sequenceNum = Int((b9 >> 2) & 0b11111)
+        self.sequenceNum = Int((b9 >> 2) & 0b1111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
         let msgWithoutCrc = encodedData.prefix(encodedData.count - 2)
         guard msgWithoutCrc.crc16() == crc else {
@@ -100,7 +100,7 @@ struct Message {
             cmdData.append(cmd.data)
         }
         
-        let b9: UInt8 = ((expectFollowOnMessage ? 1 : 0) << 7) + (UInt8(sequenceNum & 0b11111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
+        let b9: UInt8 = ((expectFollowOnMessage ? 1 : 0) << 7) + (UInt8(sequenceNum & 0b1111) << 2) + UInt8((cmdData.count >> 8) & 0b11)
         bytes.append(b9)
         bytes.append(UInt8(cmdData.count & 0xff))
         

@@ -38,7 +38,7 @@ extension OmnipodPumpManagerError: LocalizedError {
         case .podAlreadyPaired:
             return LocalizedString("Pod already paired", comment: "Error message shown when user cannot pair because pod is already paired")
         case .notReadyForCannulaInsertion:
-            return LocalizedString("Pod is not in a state ready for cannula insertion.", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
+            return LocalizedString("Pod is not in a state ready for cannula insertion", comment: "Error message when cannula insertion fails because the pod is in an unexpected state")
         }
     }
     
@@ -525,7 +525,7 @@ extension OmnipodPumpManager {
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)
         
-        let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!) : nil
+        let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!) : nil
         podState.fault = fault
 
         self.podComms = PodComms(podState: podState)
@@ -647,12 +647,14 @@ extension OmnipodPumpManager {
         
         #if targetEnvironment(simulator)
         let mockDelay = TimeInterval(seconds: 3)
+        let mockFaultDuringInsertCannula = false
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + mockDelay) {
             let result = self.setStateWithResult({ (state) -> PumpManagerResult<TimeInterval> in
-                // Mock fault
-                //            let fault = try! DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
-                //            self.state.podState?.fault = fault
-                //            return .failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault)))
+                if mockFaultDuringInsertCannula {
+                    let fault = try! DetailedStatus(encodedData: Data(hexadecimalString: "020d0000000e00c36a020703ff020900002899080082")!)
+                    state.podState?.fault = fault
+                    return .failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault)))
+                }
 
                 // Mock success
                 state.podState?.setupProgress = .completed
@@ -1219,6 +1221,13 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
+        let suspendTime: TimeInterval = .minutes(0) // untimed suspend with reminder beeps
+        suspendDelivery(withSuspendReminders: suspendTime, completion: completion)
+    }
+
+    // A nil suspendReminder is untimed with no reminders beeps, a suspendReminder of 0 is untimed using reminders beeps, otherwise it
+    // specifies a suspend duration implemented using an appropriate combination of suspended reminder and suspend time expired beeps.
+    public func suspendDelivery(withSuspendReminders suspendReminder: TimeInterval? = nil, completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod else {
             completion(OmnipodPumpManagerError.noPodPaired)
             return
@@ -1245,9 +1254,8 @@ extension OmnipodPumpManager: PumpManager {
                 state.suspendEngageState = .engaging
             })
 
-            let suspendTime = TimeInterval(minutes: 15) // Place holder for future value from UI
             let beepType: BeepConfigType? = self.confirmationBeeps ? .beeeeeep : nil
-            let result = session.suspendDelivery(suspendTime: suspendTime, confirmationBeepType: beepType)
+            let result = session.suspendDelivery(suspendReminder: suspendReminder, confirmationBeepType: beepType)
             switch result {
             case .certainFailure(let error):
                 completion(error)
@@ -1386,26 +1394,45 @@ extension OmnipodPumpManager: PumpManager {
                 state.bolusEngageState = .engaging
             })
 
-            // If pod suspended, resume basal before bolusing to match existing Medtronic PumpManager behavior
+            // Initialize to true to match existing Medtronic PumpManager behavior for any
+            // manual boluses or to false to never auto resume a suspended pod for any bolus.
+            let autoResumeOnManualBolus = true
+
             if case .some(.suspended) = self.state.podState?.suspendState {
+                // Pod suspended, only auto resume for a manual bolus if autoResumeOnManualBolus is true
+                if automatic || autoResumeOnManualBolus == false {
+                    self.log.error("enactBolus: returning pod suspended error for %@ bolus", automatic ? "automatic" : "manual")
+                    completion(.deviceState(PodCommsError.podSuspended))
+                    return
+                }
                 do {
                     let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
                     let beep = self.confirmationBeeps
                     let podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: beep, completionBeep: beep)
+                    try session.cancelSuspendAlerts()
                     guard podStatus.deliveryStatus.bolusing == false else {
                         completion(.deviceState(PodCommsError.unfinalizedBolus))
                         return
                     }
                 } catch let error {
-                    self.log.error("enactBolus: error resuming suspended pod: %s", String(describing: error))
+                    self.log.error("enactBolus: error resuming suspended pod: %@", String(describing: error))
                     completion(.communication(error as? LocalizedError))
                     return
                 }
             }
 
-            var getStatusNeeded = false
+            var getStatusNeeded = false // initializing to true effectively disables the bolus comms getStatus optimization
             var finalizeFinishedDosesNeeded = false
-            if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
+
+            // Skip the getStatus comms optimization for a manual bolus,
+            // if there was a comms issue on the last message sent, or
+            // if the last delivery status hasn't been verified
+            if automatic == false || self.state.podState?.lastCommsOK == false ||
+                self.state.podState?.deliveryStatusVerified == false
+            {
+                self.log.info("enactBolus: skipping getStatus comms optimization")
+                getStatusNeeded = true
+            } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
                 if unfinalizedBolus.scheduledCertainty == .uncertain {
                     self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
                     getStatusNeeded = true
@@ -1414,7 +1441,7 @@ extension OmnipodPumpManager: PumpManager {
                     completion(.deviceState(PodCommsError.unfinalizedBolus))
                     return
                 } else if unfinalizedBolus.isBolusPositivelyFinished == false {
-                    self.log.info("enactBolus: doing getStatus to verify if bolus completion")
+                    self.log.info("enactBolus: doing getStatus to verify bolus completion")
                     getStatusNeeded = true
                 } else {
                     finalizeFinishedDosesNeeded = true // call finalizeFinishDoses() to clean up the certain & positively finalized bolus
@@ -1440,7 +1467,7 @@ extension OmnipodPumpManager: PumpManager {
             let acknowledgementBeep = self.confirmationBeeps && (!automatic || self.automaticBolusBeeps)
             let completionBeep = self.confirmationBeeps && !automatic
 
-            // Use an alternate 0x3F TimeInterval for denote an automatic bolus in the Omnipod Communications Log
+            // Use a maximum programReminderInterval value of 0x3F to denote an automatic bolus in the communication log
             let programReminderInterval: TimeInterval = automatic ? TimeInterval(minutes: 0x3F) : 0
 
             let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)

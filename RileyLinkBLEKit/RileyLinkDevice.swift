@@ -14,7 +14,10 @@ public enum RileyLinkHardwareType {
     case ema
     
     var monitorsBattery: Bool {
-        return self == .orange
+        if self == .riley {
+            return false
+        }
+        return true
     }
 }
 
@@ -68,10 +71,19 @@ public class RileyLinkDevice {
     private var lock = os_unfair_lock()
     
     private var orangeLinkFirmwareHardwareVersion = "v1.x"
-    public var ledOn: Bool = false
-    public var vibrationOn: Bool = false
-    public var voltage: Float?
-    public var batteryLevel: Int?
+    private var orangeLinkHardwareVersionMajorMinor: [Int]?
+    private var ledOn: Bool = false
+    private var vibrationOn: Bool = false
+    private var voltage: Float?
+    private var batteryLevel: Int?
+    private var hasPiezo: Bool {
+        if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] == 1, olHW[1] >= 1 {
+            return true
+        } else if let olHW = orangeLinkHardwareVersionMajorMinor, olHW[0] == 2, olHW[1] == 6 {
+            return true
+       }
+        return false
+    }
     
     public var hasOrangeLinkService: Bool {
         return self.manager.peripheral.services?.itemWithUUID(RileyLinkServiceUUID.orange.cbUUID) != nil
@@ -82,13 +94,20 @@ public class RileyLinkDevice {
             return nil
         }
         
+        guard let bleComponents = self.bleFirmwareVersion else {
+            return nil
+        }
+
         if services.itemWithUUID(RileyLinkServiceUUID.secureDFU.cbUUID) != nil {
             return .orange
+        } else if bleComponents.components[0] == 3 {
+            // this returns true for riley with ema firmware, but that is OK
+            return .ema
         } else {
+            // as long as riley ble remains at 2.x with ema at 3.x this will work
             return .riley
         }
-        // TODO: detect emalink
-    }
+      }
     
     /// The queue used to serialize sessions and observe when they've drained
     private let sessionQueue: OperationQueue = {
@@ -149,12 +168,13 @@ extension RileyLinkDevice {
     public func updateBatteryLevel() {
         manager.readBatteryLevel { value in
             if let batteryLevel = value {
+                self.batteryLevel = batteryLevel
                 NotificationCenter.default.post(
                     name: .DeviceBatteryLevelUpdated,
                     object: self,
                     userInfo: [RileyLinkDevice.batteryLevelKey: batteryLevel]
                 )
-                self.batteryLevel = batteryLevel
+                NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
             }
         }
     }
@@ -242,6 +262,7 @@ extension RileyLinkDevice {
         public let vibrationOn: Bool
         public let voltage: Float?
         public let battery: Int?
+        public let hasPiezo: Bool
     }
 
     public func getStatus(_ completion: @escaping (_ status: Status) -> Void) {
@@ -257,7 +278,8 @@ extension RileyLinkDevice {
                 ledOn: self.ledOn,
                 vibrationOn: self.vibrationOn,
                 voltage: self.voltage,
-                battery: self.batteryLevel
+                battery: self.batteryLevel,
+                hasPiezo: self.hasPiezo
             ))
         }
     }
@@ -270,6 +292,7 @@ extension RileyLinkDevice {
 // Accessing other characteristics on the RileyLink can be done without a command session.
 extension RileyLinkDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
+        self.log.default("Scheduling session %{public}@", name)
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
             self?.log.default("======================== %{public}@ ===========================", name)
             let bleFirmwareVersion = self?.bleFirmwareVersion
@@ -385,7 +408,7 @@ extension RileyLinkDevice {
     }
 
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        log.debug("didConnect %@", peripheral)
+        log.default("didConnect %{public}@", peripheral)
         if case .connected = peripheral.state {
             assertIdleListening(forceRestart: false)
             assertTimerTick()
@@ -396,12 +419,12 @@ extension RileyLinkDevice {
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        log.debug("didDisconnectPeripheral %@", peripheral)
+        log.default("didDisconnectPeripheral %{public}@", peripheral)
         NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self)
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        log.debug("didFailToConnect %@", peripheral)
+        log.default("didFailToConnect %{public}@", peripheral)
         NotificationCenter.default.post(name: .DeviceConnectionStateDidChange, object: self)
     }
 }
@@ -409,13 +432,6 @@ extension RileyLinkDevice {
 
 extension RileyLinkDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateNotificationStateFor characteristic: CBCharacteristic) {
-//        switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
-//        case .orange, .orangeNotif:
-//            manager.writePsw = true
-//            orangeWritePwd()
-//        default:
-//            break
-//        }
         log.debug("Did didUpdateNotificationStateFor %@", characteristic)
     }
     
@@ -423,10 +439,35 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     // it will pass the update to this method, which is called on the central's queue.
     // This is how idle listen responses are handled
     func peripheralManager(_ manager: PeripheralManager, didUpdateValueFor characteristic: CBCharacteristic) {
-        log.debug("Did UpdateValueFor %@", characteristic)
-        switch MainServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
-        case .data?:
-            guard let value = characteristic.value, value.count > 0 else {
+        let characteristicService: CBService? = characteristic.service
+        guard let cbService = characteristicService, let service = RileyLinkServiceUUID(rawValue: cbService.uuid.uuidString) else {
+            log.debug("Update from characteristic on unknown service: %@", String(describing: characteristic.service))
+            return
+        }
+
+        switch service {
+        case .main:
+            guard let mainCharacteristic = MainServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) else {
+                log.debug("Update from unknown characteristic %@ on main service.", characteristic.uuid.uuidString)
+                return
+            }
+            handleCharacteristicUpdate(mainCharacteristic, value: characteristic.value)
+
+        case .orange:
+            guard let orangeCharacteristic = OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) else {
+                log.debug("Update from unknown characteristic %@ on orange service.", characteristic.uuid.uuidString)
+                return
+            }
+            handleCharacteristicUpdate(orangeCharacteristic, value: characteristic.value)
+        default:
+            return
+        }
+    }
+
+    private func handleCharacteristicUpdate(_ characteristic: MainServiceCharacteristicUUID, value: Data?) {
+        switch characteristic {
+        case .data:
+            guard let value = value, value.count > 0 else {
                 return
             }
 
@@ -468,42 +509,42 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                 }
                 self.assertIdleListening(forceRestart: true)
             }
-        case .responseCount?:
+        case .responseCount:
             // PeripheralManager.Configuration.valueUpdateMacros is responsible for handling this response.
             break
-        case .timerTick?:
+        case .timerTick:
             NotificationCenter.default.post(name: .DeviceTimerDidTick, object: self)
             assertIdleListening(forceRestart: false)
-        case .customName?, .firmwareVersion?, .ledMode?, .none:
+        case .customName, .firmwareVersion, .ledMode:
             break
         }
-        
-        switch OrangeServiceCharacteristicUUID(rawValue: characteristic.uuid.uuidString) {
+    }
+
+    private func handleCharacteristicUpdate(_ characteristic: OrangeServiceCharacteristicUUID, value: Data?) {
+        switch characteristic {
         case .orangeRX, .orangeTX:
-            guard let data = characteristic.value, !data.isEmpty else { return }
+            guard let data = value, !data.isEmpty else { return }
             if data.first == 0xbb {
-                guard let data = characteristic.value, data.count > 6 else { return }
+                guard data.count > 6 else { return }
                 if data[1] == 0x09, data[2] == 0xaa {
                     orangeLinkFirmwareHardwareVersion = "FW\(data[3]).\(data[4])/HW\(data[5]).\(data[6])"
+                    orangeLinkHardwareVersionMajorMinor = [Int(data[5]), Int(data[6])]
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 }
             } else if data.first == OrangeLinkRequestType.cfgHeader.rawValue {
-                guard let data = characteristic.value, data.count > 2 else { return }
+                guard data.count > 2 else { return }
                 if data[1] == 0x01 {
-                    guard let data = characteristic.value, data.count > 5 else { return }
+                    guard data.count > 5 else { return }
                     ledOn = (data[3] != 0)
                     vibrationOn = (data[4] != 0)
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 } else if data[1] == 0x03 {
-                    guard var data = characteristic.value, data.count > 4 else { return }
-                    data = Data(data[3...4])
-                    let int = UInt16(bigEndian: data.withUnsafeBytes { $0.load(as: UInt16.self) })
+                    guard data.count > 4 else { return }
+                    let int = UInt16(bigEndian: Data(data[3...4]).withUnsafeBytes { $0.load(as: UInt16.self) })
                     voltage = Float(int) / 1000
                     NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
                 }
             }
-        default:
-            break
         }
     }
 

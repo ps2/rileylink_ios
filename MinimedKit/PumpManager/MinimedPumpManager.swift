@@ -144,6 +144,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
                     setState { (state) in
                         state.batteryPercentage = newBatteryPercentage
                     }
+                    checkPumpBattery(oldBatteryPercentage: oldBatteryPercentage, newBatteryPercentage: newBatteryPercentage)
                 }
             }
             if oldStatus != status {
@@ -440,6 +441,36 @@ extension MinimedPumpManager {
         rileyLinkDeviceProvider.getDevices { devices in
             for device in devices {
                 device.updateBatteryLevel()
+            }
+        }
+    }
+    
+    private static var pumpBatteryLowAlertIdentifier: Alert.Identifier {
+        return Alert.Identifier(managerIdentifier: managerIdentifier, alertIdentifier: "PumpBatteryLow")
+    }
+
+    private var pumpBatteryLowAlert: Alert {
+        let title = NSLocalizedString("Pump Battery Low", comment: "The notification title for a low pump battery")
+        let body = NSLocalizedString("Change the pump battery immediately", comment: "The notification alert describing a low pump battery")
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Dismiss", comment: "Default alert dismissal"))
+        return Alert(identifier: Self.pumpBatteryLowAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
+    }
+    
+    private var batteryReplacementDetectionThreshold: Double { 0.5 }
+
+    private func checkPumpBattery(oldBatteryPercentage: Double?, newBatteryPercentage: Double?) {
+        guard let newBatteryPercentage = newBatteryPercentage else {
+            return
+        }
+        if oldBatteryPercentage != newBatteryPercentage, newBatteryPercentage == 0 {
+            pumpDelegate.notify { (delegate) in
+                delegate?.issueAlert(self.pumpBatteryLowAlert)
+            }
+        }
+        
+        if let oldBatteryPercentage = oldBatteryPercentage, newBatteryPercentage - oldBatteryPercentage >= batteryReplacementDetectionThreshold {
+            pumpDelegate.notify { (delegate) in
+                delegate?.retractAlert(identifier: Self.pumpBatteryLowAlertIdentifier)
             }
         }
     }

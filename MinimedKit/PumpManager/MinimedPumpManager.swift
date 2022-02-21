@@ -499,12 +499,85 @@ extension MinimedPumpManager {
         updateBLEHeartbeatPreference()
     }
 
+    private static var pumpReservoirEmptyAlertIdentifier: Alert.Identifier {
+        return Alert.Identifier(managerIdentifier: managerIdentifier, alertIdentifier: "PumpReservoirEmpty")
+    }
+
+    private var pumpReservoirEmptyAlert: Alert {
+        let title = NSLocalizedString("Pump Reservoir Empty", comment: "The notification title for an empty pump reservoir")
+        let body = NSLocalizedString("Change the pump reservoir now", comment: "The notification alert describing an empty pump reservoir")
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Ok", comment: "Default alert dismissal"))
+        return Alert(identifier: Self.pumpReservoirEmptyAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
+    }
+
+    private static var pumpReservoirLowAlertIdentifier: Alert.Identifier {
+        return Alert.Identifier(managerIdentifier: managerIdentifier, alertIdentifier: "PumpReservoirLow")
+    }
+
+    private func pumpReservoirLowAlertForAmount(_ units: Double, andTimeRemaining remaining: TimeInterval?) -> Alert {
+        let title = NSLocalizedString("Pump Reservoir Low", comment: "The notification title for a low pump reservoir")
+
+        let unitsString = NumberFormatter.localizedString(from: NSNumber(value: units), number: .decimal)
+
+        let intervalFormatter = DateComponentsFormatter()
+        intervalFormatter.allowedUnits = [.hour, .minute]
+        intervalFormatter.maximumUnitCount = 1
+        intervalFormatter.unitsStyle = .full
+        intervalFormatter.includesApproximationPhrase = true
+        intervalFormatter.includesTimeRemainingPhrase = true
+
+        let body: String
+
+        if let remaining = remaining, let timeString = intervalFormatter.string(from: remaining) {
+            body = String(format: NSLocalizedString("%1$@ U left: %2$@", comment: "Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining)"), unitsString, timeString)
+        } else {
+            body = String(format: NSLocalizedString("%1$@ U left", comment: "Low reservoir alert format string. (1: Number of units remaining)"), unitsString)
+        }
+
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Ok", comment: "Default alert dismissal"))
+        return Alert(identifier: Self.pumpReservoirLowAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
+    }
+
+    private func evaluateReservoirAlerts(lastValue: ReservoirValue?, newValue: ReservoirValue, areStoredValuesContinuous: Bool) {
+        // Send notifications for low reservoir if necessary
+        if let previousVolume = lastValue?.unitVolume {
+            guard newValue.unitVolume > 0 else {
+                pumpDelegate.notify { (delegate) in
+                    delegate?.issueAlert(self.pumpReservoirEmptyAlert)
+                }
+                return
+            }
+
+            let warningThresholds: [Double] = [10, 20, 30]
+
+            for threshold in warningThresholds {
+                if newValue.unitVolume <= threshold && previousVolume > threshold {
+                    pumpDelegate.notify { (delegate) in
+                        delegate?.issueAlert(self.pumpReservoirLowAlertForAmount(newValue.unitVolume, andTimeRemaining: nil))
+                    }
+                    break
+                }
+            }
+
+            if newValue.unitVolume > previousVolume + 1 {
+                // TODO: report this as a pump event, or?                //self.analyticsServicesManager.reservoirWasRewound()
+
+                pumpDelegate.notify { (delegate) in
+                    delegate?.retractAlert(identifier: Self.pumpReservoirLowAlertIdentifier)
+                }
+            }
+        }
+
+    }
+
     /// Called on an unknown queue by the delegate
     private func pumpManagerDelegateDidProcessReservoirValue(_ result: Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>, at validDate: Date) {
         switch result {
         case .failure:
             break
-        case .success(let (_, _, areStoredValuesContinuous)):
+        case .success(let (newValue, lastValue, areStoredValuesContinuous)):
+            evaluateReservoirAlerts(lastValue: lastValue, newValue: newValue, areStoredValuesContinuous: areStoredValuesContinuous)
+
             if areStoredValuesContinuous {
                 recents.lastContinuousReservoir = validDate
             }

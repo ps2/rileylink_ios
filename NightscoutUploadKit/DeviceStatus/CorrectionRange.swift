@@ -10,15 +10,17 @@ import Foundation
 import HealthKit
 
 public struct CorrectionRange {
-    let minValue: Int
-    let maxValue: Int
+    typealias RawValue = [String: Any]
+
+    let minValue: Double
+    let maxValue: Double
     
     public init(minValue: HKQuantity, maxValue: HKQuantity) {
 
         // BG values in nightscout are in mg/dL.
         let unit = HKUnit.milligramsPerDeciliterUnit()
-        self.minValue = Int(round(minValue.doubleValue(for: unit)))
-        self.maxValue = Int(round(maxValue.doubleValue(for: unit)))
+        self.minValue = minValue.doubleValue(for: unit)
+        self.maxValue = maxValue.doubleValue(for: unit)
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -28,5 +30,17 @@ public struct CorrectionRange {
         rval["maxValue"] = maxValue
         
         return rval
+    }
+
+    init?(rawValue: RawValue) {
+        guard
+            let minValue = rawValue["minValue"] as? Double,
+            let maxValue = rawValue["maxValue"] as? Double
+        else {
+            return nil
+        }
+
+        self.minValue = minValue
+        self.maxValue = maxValue
     }
 }

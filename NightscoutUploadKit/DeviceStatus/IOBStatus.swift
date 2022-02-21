@@ -9,6 +9,8 @@
 import Foundation
 
 public struct IOBStatus {
+    typealias RawValue = [String: Any]
+
     let timestamp: Date
     let iob: Double? // basal iob + bolus iob: can be negative
     let basalIOB: Double? // does not include bolus iob
@@ -34,5 +36,19 @@ public struct IOBStatus {
         }
 
         return rval
+    }
+
+    init?(rawValue: RawValue) {
+        guard
+            let timestampStr = rawValue["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr)
+        else {
+            return nil
+        }
+
+        self.timestamp = timestamp
+
+        iob = rawValue["iob"] as? Double
+        basalIOB = rawValue["basaliob"] as? Double
     }
 }

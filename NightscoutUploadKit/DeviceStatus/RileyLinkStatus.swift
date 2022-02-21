@@ -9,6 +9,7 @@
 import Foundation
 
 public struct RileyLinkStatus {
+    typealias RawValue = [String: Any]
 
     public enum State: String {
         case Connected = "connected"
@@ -41,5 +42,28 @@ public struct RileyLinkStatus {
         }
 
         return rval
+    }
+
+    init?(rawValue: RawValue) {
+        guard
+            let name = rawValue["name"] as? String,
+            let stateRaw = rawValue["state"] as? State.RawValue,
+            let state = State(rawValue: stateRaw)
+        else {
+            return nil
+        }
+
+        self.name = name
+        self.state = state
+
+        version = rawValue["version"] as? String
+
+        if let lastIdleStr = rawValue["lastIdle"] as? String, let lastIdle = TimeFormat.dateFromTimestamp(lastIdleStr) {
+            self.lastIdle = lastIdle
+        } else {
+            self.lastIdle = nil
+        }
+
+        rssi = rawValue["rssi"] as? Double
     }
 }

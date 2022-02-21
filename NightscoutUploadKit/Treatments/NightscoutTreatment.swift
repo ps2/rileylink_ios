@@ -14,11 +14,48 @@ public protocol DictionaryRepresentable {
     }
 }
 
+public enum TreatmentType: String {
+    case correctionBolus = "Correction Bolus"
+    case carbCorrection = "Carb Correction"
+    case tempBasal = "Temp Basal"
+    case temporaryOverride = "Temporary Override"
+    case mealBolus = "Meal Bolus"
+    case bloodGlucoseCheck = "BG Check"
+    case suspendPump = "Suspend Pump"
+    case resumePump = "Resume Pump"
+    case note = "Note"
+
+    public var classType: NightscoutTreatment.Type {
+        switch self {
+        case .correctionBolus:
+            return BolusNightscoutTreatment.self
+        case .carbCorrection:
+            return CarbCorrectionNightscoutTreatment.self
+        case .tempBasal:
+            return TempBasalNightscoutTreatment.self
+        case .temporaryOverride:
+            return OverrideTreatment.self
+        case .mealBolus:
+            return MealBolusNightscoutTreatment.self
+        case .bloodGlucoseCheck:
+            return BGCheckNightscoutTreatment.self
+        case .suspendPump:
+            return PumpSuspendTreatment.self
+        case .resumePump:
+            return PumpResumeTreatment.self
+        case .note:
+            return NoteNightscoutTreatment.self
+        }
+    }
+}
+
 public class NightscoutTreatment: DictionaryRepresentable {
     
     public enum GlucoseType: String {
         case Meter
         case Sensor
+        case Finger
+        case Manual
     }
     
     public enum Units: String {
@@ -30,11 +67,11 @@ public class NightscoutTreatment: DictionaryRepresentable {
     let enteredBy: String
     let notes: String?
     let id: String?
-    let eventType: String?
+    let eventType: TreatmentType
     let syncIdentifier: String?
 
 
-    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: String? = nil, syncIdentifier: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: TreatmentType, syncIdentifier: String? = nil) {
         self.timestamp = timestamp
         self.enteredBy = enteredBy
         self.id = id
@@ -42,6 +79,27 @@ public class NightscoutTreatment: DictionaryRepresentable {
         self.eventType = eventType
         self.syncIdentifier = syncIdentifier
     }
+
+    required public init?(_ entry: [String: Any]) {
+        guard
+            let identifier = entry["_id"] as? String,
+            let eventTypeStr = entry["eventType"] as? String,
+            let eventType = TreatmentType(rawValue: eventTypeStr),
+            let timestampStr = entry["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr),
+            let enteredBy = entry["enteredBy"] as? String
+        else {
+            return nil
+        }
+
+        self.id = identifier
+        self.eventType = eventType
+        self.timestamp = timestamp
+        self.enteredBy = enteredBy
+        self.notes = entry["notes"] as? String
+        self.syncIdentifier = entry["syncIdentifier"] as? String
+    }
+
     
     public var dictionaryRepresentation: [String: Any] {
         var rval = [
@@ -55,13 +113,23 @@ public class NightscoutTreatment: DictionaryRepresentable {
         if let notes = notes {
             rval["notes"] = notes
         }
-        if let eventType = eventType {
-            rval["eventType"] = eventType
-        }
+        rval["eventType"] = eventType.rawValue
+
         // Not part of the normal NS model, but we store here to be able to match to client provided ids
         if let syncIdentifier = syncIdentifier {
             rval["syncIdentifier"] = syncIdentifier
         }
         return rval
+    }
+
+    public static func fromServer(_ entry: [String: Any]) -> NightscoutTreatment? {
+        guard
+            let eventTypeStr = entry["eventType"] as? String,
+            let eventType = TreatmentType(rawValue: eventTypeStr)
+        else {
+            return nil
+        }
+
+        return eventType.classType.init(entry)
     }
 }

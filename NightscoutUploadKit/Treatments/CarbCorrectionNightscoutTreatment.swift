@@ -28,8 +28,59 @@ public class CarbCorrectionNightscoutTreatment: NightscoutTreatment {
         self.foodType = foodType
         self.userEnteredAt = userEnteredAt
         self.userLastModifiedAt = userLastModifiedAt
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: "Carb Correction", syncIdentifier: syncIdentifier)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: .carbCorrection, syncIdentifier: syncIdentifier)
     }
+
+    required public init?(_ entry: [String : Any]) {
+        guard
+            let carbs = entry["carbs"] as? Int,
+            let absorptionTimeMinutes = entry["absorptionTime"] as? Double
+         else {
+            return nil
+         }
+
+        self.carbs = carbs
+        self.absorptionTime = TimeInterval(minutes: absorptionTimeMinutes)
+
+        self.glucose = entry["glucose"] as? Int
+
+        if let rawGlucoseType = entry["glucoseType"] as? GlucoseType.RawValue,
+           let glucoseType = GlucoseType(rawValue: rawGlucoseType)
+        {
+            self.glucoseType = glucoseType
+        } else {
+            self.glucoseType = nil
+        }
+
+        if let rawUnits = entry["units"] as? String,
+           let units = Units(rawValue: rawUnits)
+        {
+            self.units = units
+        } else {
+            self.units = nil
+        }
+
+        self.foodType = entry["foodType"] as? String
+
+        if let userEnteredAtRaw = entry["userEnteredAt"] as? String,
+           let userEnteredAt = TimeFormat.dateFromTimestamp(userEnteredAtRaw)
+        {
+            self.userEnteredAt = userEnteredAt
+        } else {
+            self.userEnteredAt = nil
+        }
+
+        if let userLastModifiedAtRaw = entry["userLastModifiedAt"] as? String,
+           let userLastModifiedAt = TimeFormat.dateFromTimestamp(userLastModifiedAtRaw)
+        {
+            self.userLastModifiedAt = userLastModifiedAt
+        } else {
+            self.userLastModifiedAt = nil
+        }
+
+        super.init(entry)
+     }
+
     
     override public var dictionaryRepresentation: [String: Any] {
         var rval = super.dictionaryRepresentation

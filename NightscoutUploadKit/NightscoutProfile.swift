@@ -11,11 +11,21 @@ fileprivate let timeZoneMap = (-18...18).reduce(into: [String: String]()) { (dic
     dict[from] = to
 }
 
+fileprivate let reverseTimeZoneMap = timeZoneMap.reduce(into: [String: String]()) { (dict, entry) in
+    dict[entry.value] = entry.key
+}
+
 public class ProfileSet {
+    typealias RawValue = [String: Any]
+
+    public typealias ProfileStore = [String: Profile]
+    typealias ProfileStoreRawValue = [String: Profile.RawValue]
     
     public struct ScheduleItem {
-        let offset: TimeInterval
-        let value: Double
+        typealias RawValue = [String: Any]
+
+        public let offset: TimeInterval
+        public let value: Double
         
         public init(offset: TimeInterval, value: Double) {
             self.offset = offset
@@ -31,20 +41,34 @@ public class ProfileSet {
             rep["timeAsSeconds"] = Int(offset)
             return rep
         }
+
+        init?(rawValue: RawValue) {
+            guard
+                let timeAsSeconds = rawValue["timeAsSeconds"] as? Double,
+                let value = rawValue["value"] as? Double
+            else {
+                return nil
+            }
+
+            self.offset = TimeInterval(timeAsSeconds)
+            self.value = value
+        }
     }
     
     public struct Profile {
-        let timezone : TimeZone
-        let dia : TimeInterval
-        let sensitivity : [ScheduleItem]
-        let carbratio : [ScheduleItem]
-        let basal : [ScheduleItem]
-        let targetLow : [ScheduleItem]
-        let targetHigh : [ScheduleItem]
-        let units: String
+        typealias RawValue = [String: Any]
+
+        public let timeZone: TimeZone
+        public let dia: TimeInterval
+        public let sensitivity: [ScheduleItem]
+        public let carbratio: [ScheduleItem]
+        public let basal: [ScheduleItem]
+        public let targetLow: [ScheduleItem]
+        public let targetHigh: [ScheduleItem]
+        public let units: String?
 
         public init(timezone: TimeZone, dia: TimeInterval, sensitivity: [ScheduleItem], carbratio: [ScheduleItem], basal: [ScheduleItem], targetLow: [ScheduleItem], targetHigh: [ScheduleItem], units: String) {
-            self.timezone = timezone
+            self.timeZone = timezone
             self.dia = dia
             self.sensitivity = sensitivity
             self.carbratio = carbratio
@@ -59,7 +83,7 @@ public class ProfileSet {
                 "dia": dia.hours,
                 "carbs_hr": "0",
                 "delay": "0",
-                "timezone": timeZoneMap[timezone.identifier] ?? timezone.identifier,
+                "timezone": timeZoneMap[timeZone.identifier] ?? timeZone.identifier,
                 "target_low": targetLow.map { $0.dictionaryRepresentation },
                 "target_high": targetHigh.map { $0.dictionaryRepresentation },
                 "sens": sensitivity.map { $0.dictionaryRepresentation },
@@ -68,16 +92,40 @@ public class ProfileSet {
                 ]
         }
 
+        init?(rawValue: RawValue) {
+            guard
+                let nsTimezoneIdentifier = rawValue["timezone"] as? String,
+                let timeZoneIdentifier = reverseTimeZoneMap[nsTimezoneIdentifier],
+                let timeZone = TimeZone(identifier: timeZoneIdentifier),
+                let diaHours = rawValue["dia"] as? Double,
+                let sensitivityRaw = rawValue["sens"] as? [ScheduleItem.RawValue],
+                let carbratioRaw = rawValue["carbratio"] as? [ScheduleItem.RawValue],
+                let basalRaw = rawValue["basal"] as? [ScheduleItem.RawValue],
+                let targetLowRaw = rawValue["target_low"] as? [ScheduleItem.RawValue],
+                let targetHighRaw = rawValue["target_high"] as? [ScheduleItem.RawValue]
+            else {
+                return nil
+            }
+
+            self.timeZone = timeZone
+            self.dia = TimeInterval(hours: diaHours)
+            self.sensitivity = sensitivityRaw.compactMap { ScheduleItem(rawValue: $0) }
+            self.carbratio = carbratioRaw.compactMap { ScheduleItem(rawValue: $0) }
+            self.basal = basalRaw.compactMap { ScheduleItem(rawValue: $0) }
+            self.targetLow = targetLowRaw.compactMap { ScheduleItem(rawValue: $0) }
+            self.targetHigh = targetHighRaw.compactMap { ScheduleItem(rawValue: $0) }
+            self.units = nil
+         }
     }
     
-    let startDate : Date
-    let units: String
-    let enteredBy: String
-    let defaultProfile: String
-    let store: [String: Profile]
-    let settings: LoopSettings
+    public let startDate : Date
+    public let units: String
+    public let enteredBy: String
+    public let defaultProfile: String
+    public let store: ProfileStore
+    public let settings: LoopSettings
     
-    public init(startDate: Date, units: String, enteredBy: String, defaultProfile: String, store: [String: Profile], settings: LoopSettings) {
+    public init(startDate: Date, units: String, enteredBy: String, defaultProfile: String, store: ProfileStore, settings: LoopSettings) {
         self.startDate = startDate
         self.units = units
         self.enteredBy = enteredBy
@@ -105,107 +153,26 @@ public class ProfileSet {
         
         return rval
     }
-}
 
-public struct TemporaryScheduleOverride {
-    let targetRange: ClosedRange<Double>?
-    let insulinNeedsScaleFactor: Double?
-    let symbol: String?
-    let duration: TimeInterval
-    let name: String?
-
-    public init(duration: TimeInterval, targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, name: String?) {
-        self.targetRange = targetRange
-        self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
-        self.symbol = symbol
-        self.duration = duration
-        self.name = name
-    }
-
-    public var dictionaryRepresentation: [String: Any] {
-        var rval: [String: Any] = [
-            "duration": duration,
-        ]
-
-        if let symbol = symbol {
-            rval["symbol"] = symbol
+    init?(rawValue: RawValue) {
+        guard
+            let startDateStr = rawValue["startDate"] as? String,
+            let startDate = TimeFormat.dateFromTimestamp(startDateStr),
+            let units = rawValue["units"] as? String,
+            let enteredBy = rawValue["enteredBy"] as? String,
+            let defaultProfile = rawValue["defaultProfile"] as? String,
+            let storeRaw = rawValue["store"] as? ProfileStoreRawValue,
+            let settingsRaw = rawValue["loopSettings"] as? LoopSettings.RawValue,
+            let settings = LoopSettings(rawValue: settingsRaw)
+        else {
+            return nil
         }
 
-        if let targetRange = targetRange {
-            rval["targetRange"] = [targetRange.lowerBound, targetRange.upperBound]
-        }
-
-        if let insulinNeedsScaleFactor = insulinNeedsScaleFactor {
-            rval["insulinNeedsScaleFactor"] = insulinNeedsScaleFactor
-        }
-        
-        if let name = name {
-            rval["name"] = name
-        }
-        
-        return rval
-    }
-}
-
-public struct LoopSettings {
-    let dosingEnabled: Bool
-    let overridePresets: [TemporaryScheduleOverride]
-    let scheduleOverride: TemporaryScheduleOverride?
-    let minimumBGGuard: Double?
-    let preMealTargetRange: ClosedRange<Double>?
-    let maximumBasalRatePerHour: Double?
-    let maximumBolus: Double?
-    let deviceToken: Data?
-    let bundleIdentifier: String?
-
-    public init(dosingEnabled: Bool, overridePresets: [TemporaryScheduleOverride], scheduleOverride: TemporaryScheduleOverride?, minimumBGGuard: Double?, preMealTargetRange: ClosedRange<Double>?, maximumBasalRatePerHour: Double?, maximumBolus: Double?,
-                deviceToken: Data?, bundleIdentifier: String?) {
-        self.dosingEnabled = dosingEnabled
-        self.overridePresets = overridePresets
-        self.scheduleOverride = scheduleOverride
-        self.minimumBGGuard = minimumBGGuard
-        self.preMealTargetRange = preMealTargetRange
-        self.maximumBasalRatePerHour = maximumBasalRatePerHour
-        self.maximumBolus = maximumBolus
-        self.deviceToken = deviceToken
-        self.bundleIdentifier = bundleIdentifier
-    }
-
-    public var dictionaryRepresentation: [String: Any] {
-
-        var rval: [String: Any] = [
-            "dosingEnabled": dosingEnabled,
-            "overridePresets": overridePresets.map { $0.dictionaryRepresentation },
-        ]
-
-        if let minimumBGGuard = minimumBGGuard {
-            rval["minimumBGGuard"] = minimumBGGuard
-        }
-
-        if let scheduleOverride = scheduleOverride {
-            rval["scheduleOverride"] = scheduleOverride.dictionaryRepresentation
-        }
-
-        if let preMealTargetRange = preMealTargetRange {
-            rval["preMealTargetRange"] = [preMealTargetRange.lowerBound, preMealTargetRange.upperBound]
-        }
-
-        if let maximumBasalRatePerHour = maximumBasalRatePerHour {
-            rval["maximumBasalRatePerHour"] = maximumBasalRatePerHour
-        }
-
-        if let maximumBolus = maximumBolus {
-            rval["maximumBolus"] = maximumBolus
-        }
-        
-        if let deviceToken = deviceToken {
-            rval["deviceToken"] = deviceToken.hexadecimalString
-        }
-        
-        if let bundleIdentifier = bundleIdentifier {
-            rval["bundleIdentifier"] = bundleIdentifier
-        }
-
-        return rval
+        self.startDate = startDate
+        self.units = units
+        self.enteredBy = enteredBy
+        self.defaultProfile = defaultProfile
+        self.store = storeRaw.compactMapValues { Profile(rawValue: $0) }
+        self.settings = settings
     }
 }

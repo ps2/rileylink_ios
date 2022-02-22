@@ -310,6 +310,10 @@
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C13F0436230B1DE6001413FF /* MKRingProgressView.framework */; };
 		C136AA76231234E1008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
+		C1398D1827C3F18200416AD6 /* GlucoseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1727C3F18200416AD6 /* GlucoseEntry.swift */; };
+		C1398D1A27C3F1BA00416AD6 /* LoopSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1927C3F1BA00416AD6 /* LoopSettings.swift */; };
+		C1398D1C27C3F28200416AD6 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1B27C3F28200416AD6 /* TemporaryScheduleOverride.swift */; };
+		C1398D1E27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1D27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift */; };
 		C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EAD6BA1C826B92006DBA60 /* Data.swift */; };
 		C13BD63E21402A88006D7F19 /* PodInsulinMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */; };
 		C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */; };
@@ -1267,6 +1271,10 @@
 		C136AA60231187B0008A320D /* MinimedKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimedKitPlugin.h; sourceTree = "<group>"; };
 		C136AA61231187B0008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C136AA6623118817008A320D /* MinimedKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedKitPlugin.swift; sourceTree = "<group>"; };
+		C1398D1727C3F18200416AD6 /* GlucoseEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseEntry.swift; sourceTree = "<group>"; };
+		C1398D1927C3F1BA00416AD6 /* LoopSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopSettings.swift; sourceTree = "<group>"; };
+		C1398D1B27C3F28200416AD6 /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
+		C1398D1D27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealBolusNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C13BD63D21402A88006D7F19 /* PodInsulinMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInsulinMeasurements.swift; sourceTree = "<group>"; };
 		C13BD642214033E5006D7F19 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C13D15591DAACE8400ADC044 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
@@ -2410,6 +2418,9 @@
 				C184875B20BC232F00ABE9E7 /* CorrectionRange.swift */,
 				C184875D20BCDB0000ABE9E7 /* ForecastError.swift */,
 				C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */,
+				C1398D1727C3F18200416AD6 /* GlucoseEntry.swift */,
+				C1398D1927C3F1BA00416AD6 /* LoopSettings.swift */,
+				C1398D1B27C3F28200416AD6 /* TemporaryScheduleOverride.swift */,
 			);
 			path = DeviceStatus;
 			sourceTree = "<group>";
@@ -2426,6 +2437,7 @@
 				492526701E4521FB00ACBA5F /* NoteNightscoutTreatment.swift */,
 				C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */,
 				C121FE04233FA20E00630EB5 /* OverrideTreatment.swift */,
+				C1398D1D27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift */,
 			);
 			path = Treatments;
 			sourceTree = "<group>";
@@ -3957,6 +3969,7 @@
 				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
+				C1398D1827C3F18200416AD6 /* GlucoseEntry.swift in Sources */,
 				C1AF21F01D4901220088C41D /* BolusNightscoutTreatment.swift in Sources */,
 				C1AF21F21D4901220088C41D /* BGCheckNightscoutTreatment.swift in Sources */,
 				C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */,
@@ -3967,6 +3980,7 @@
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
 				C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */,
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
+				C1398D1E27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
 				C184875E20BCDB0000ABE9E7 /* ForecastError.swift in Sources */,
 				431CE7991F9B0F0200255374 /* OSLog.swift in Sources */,
@@ -3975,6 +3989,7 @@
 				C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */,
 				7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
+				C1398D1C27C3F28200416AD6 /* TemporaryScheduleOverride.swift in Sources */,
 				43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */,
 				C13D155A1DAACE8400ADC044 /* Either.swift in Sources */,
 				C1AF21F11D4901220088C41D /* NightscoutTreatment.swift in Sources */,
@@ -3986,6 +4001,7 @@
 				C1B383281CD0668600CE7782 /* NightscoutUploader.swift in Sources */,
 				C121FE05233FA20E00630EB5 /* OverrideTreatment.swift in Sources */,
 				546145C11DCEB47600DC6DEB /* NightscoutEntry.swift in Sources */,
+				C1398D1A27C3F1BA00416AD6 /* LoopSettings.swift in Sources */,
 				C1AF21F41D4901220088C41D /* TempBasalNightscoutTreatment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,7 +28,35 @@ public class OverrideTreatment: NightscoutTreatment {
         self.correctionRange = correctionRange
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
         self.remoteAddress = remoteAddress
-        super.init(timestamp: startDate, enteredBy: enteredBy, id: id, eventType: "Temporary Override")
+        super.init(timestamp: startDate, enteredBy: enteredBy, id: id, eventType: .temporaryOverride)
+    }
+
+    required public init?(_ entry: [String : Any]) {
+        guard
+            let reason = entry["reason"] as? String
+        else {
+            return nil
+        }
+
+        if let durationMinutes = entry["duration"] as? Double {
+            self.duration = .finite(TimeInterval(minutes: durationMinutes))
+        } else if let durationType = entry["durationType"] as? String, durationType == "indefinite" {
+            self.duration = .indefinite
+        } else {
+            return nil
+        }
+
+        self.reason = reason
+        if let correctionRange = entry["correctionRange"] as? [Double], correctionRange.count >= 2 {
+            self.correctionRange = ClosedRange(uncheckedBounds: (lower: correctionRange[0], upper: correctionRange[1]))
+        } else {
+            self.correctionRange = nil
+        }
+
+        insulinNeedsScaleFactor = entry["insulinNeedsScaleFactor"] as? Double
+        remoteAddress = entry["remoteAddress"] as? String
+
+        super.init(entry)
     }
 
     override public var dictionaryRepresentation: [String: Any] {

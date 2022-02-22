@@ -9,6 +9,8 @@
 import Foundation
 
 public struct AutomaticDoseRecommendation {
+    typealias RawValue = [String: Any]
+
     let timestamp: Date
     let tempBasalAdjustment: TempBasalAdjustment?
     let bolusVolume: Double
@@ -27,5 +29,25 @@ public struct AutomaticDoseRecommendation {
         rval["tempBasalAdjustment"] = tempBasalAdjustment?.dictionaryRepresentation
         rval["bolusVolume"] = bolusVolume
         return rval
+    }
+
+    init?(rawValue: RawValue) {
+        guard
+            let timestampStr = rawValue["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr)
+        else {
+            return nil
+        }
+
+        if let tempBasalAdjustmentRaw = rawValue["tempBasalAdjustment"] as? TempBasalAdjustment.RawValue,
+           let tempBasalAdjustment = TempBasalAdjustment(rawValue: tempBasalAdjustmentRaw)
+        {
+            self.tempBasalAdjustment = tempBasalAdjustment
+        } else {
+            self.tempBasalAdjustment = nil
+        }
+
+        self.bolusVolume = rawValue["bolusVolume"] as? Double ?? 0
+        self.timestamp = timestamp
     }
 }

@@ -10,15 +10,15 @@ import Foundation
 public struct LoopSettings {
     typealias RawValue = [String: Any]
     
-    let dosingEnabled: Bool
-    let overridePresets: [TemporaryScheduleOverride]
-    let scheduleOverride: TemporaryScheduleOverride?
-    let minimumBGGuard: Double?
-    let preMealTargetRange: ClosedRange<Double>?
-    let maximumBasalRatePerHour: Double?
-    let maximumBolus: Double?
-    let deviceToken: Data?
-    let bundleIdentifier: String?
+    public let dosingEnabled: Bool
+    public let overridePresets: [TemporaryScheduleOverride]
+    public let scheduleOverride: TemporaryScheduleOverride?
+    public let minimumBGGuard: Double?
+    public let preMealTargetRange: ClosedRange<Double>?
+    public let maximumBasalRatePerHour: Double?
+    public let maximumBolus: Double?
+    public let deviceToken: Data?
+    public let bundleIdentifier: String?
 
     public init(dosingEnabled: Bool, overridePresets: [TemporaryScheduleOverride], scheduleOverride: TemporaryScheduleOverride?, minimumBGGuard: Double?, preMealTargetRange: ClosedRange<Double>?, maximumBasalRatePerHour: Double?, maximumBolus: Double?,
                 deviceToken: Data?, bundleIdentifier: String?) {

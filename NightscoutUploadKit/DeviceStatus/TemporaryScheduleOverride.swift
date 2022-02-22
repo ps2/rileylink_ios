@@ -11,11 +11,11 @@ import Foundation
 public struct TemporaryScheduleOverride {
     typealias RawValue = [String: Any]
     
-    let targetRange: ClosedRange<Double>?
-    let insulinNeedsScaleFactor: Double?
-    let symbol: String?
-    let duration: TimeInterval
-    let name: String?
+    public let targetRange: ClosedRange<Double>?
+    public let insulinNeedsScaleFactor: Double?
+    public let symbol: String?
+    public let duration: TimeInterval
+    public let name: String?
 
     public init(duration: TimeInterval, targetRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, symbol: String?, name: String?) {
         self.targetRange = targetRange

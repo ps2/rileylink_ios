@@ -21,34 +21,36 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     public let programmed: Double
     public let unabsorbed: Double?
     public let duration: TimeInterval
+    public let automatic: Bool
 
-    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, notes: String? = nil, id: String? = nil, syncIdentifier: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, automatic: Bool, notes: String? = nil, id: String? = nil, syncIdentifier: String? = nil) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
         self.unabsorbed = unabsorbed
         self.duration = duration
+        self.automatic = automatic
         super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: .correctionBolus, syncIdentifier: syncIdentifier)
     }
 
     required public init?(_ entry: [String : Any]) {
-         guard
-             let bolusTypeRaw = entry["type"] as? String,
-             let bolusType = BolusType(rawValue: bolusTypeRaw),
-             let amount = entry["insulin"] as? Double,
-             let programmed = entry["programmed"] as? Double,
-             let durationMinutes = entry["duration"] as? Double
-         else {
-             return nil
-         }
+        guard
+            let bolusTypeRaw = entry["type"] as? String,
+            let bolusType = BolusType(rawValue: bolusTypeRaw),
+            let amount = entry["insulin"] as? Double,
+            let programmed = entry["programmed"] as? Double,
+            let durationMinutes = entry["duration"] as? Double
+        else {
+            return nil
+        }
 
-         self.bolusType = bolusType
-         self.amount = amount
-         self.programmed = programmed
-         self.duration = TimeInterval(minutes: durationMinutes)
-         self.unabsorbed = entry["unabsorbed"] as? Double
-
-         super.init(entry)
+        self.bolusType = bolusType
+        self.amount = amount
+        self.programmed = programmed
+        self.duration = TimeInterval(minutes: durationMinutes)
+        self.unabsorbed = entry["unabsorbed"] as? Double
+        self.automatic = entry["automatic"] as? Bool ?? false
+        super.init(entry)
      }
 
     override public var dictionaryRepresentation: [String: Any] {
@@ -58,6 +60,7 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
         rval["programmed"] = programmed
         rval["unabsorbed"] = unabsorbed
         rval["duration"] = duration.minutes
+        rval["automatic"] = automatic
         return rval
     }
 }

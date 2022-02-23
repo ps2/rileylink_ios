@@ -476,10 +476,22 @@ extension OmnipodPumpManager {
         }
     }
 
+    private func clearExpirationReminder() {
+        pumpDelegate.notify { (delegate) in
+            delegate?.retractAlert(identifier: OmnipodPumpManager.podExpirationNotificationIdentifier)
+        }
+
+
+    }
+
     // MARK: - Pod comms
 
     // Does not support concurrent callers. Not thread-safe.
     private func forgetPod(completion: @escaping () -> Void) {
+
+        // Clear any possible expiration reminders
+        clearExpirationReminder()
+
         let resetPodState = { (_ state: inout OmnipodPumpManagerState) in
             self.podComms = PodComms(podState: nil)
             self.podComms.delegate = self

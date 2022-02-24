@@ -493,7 +493,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                             self.log.debug("Idle error received: %@", String(describing: response.code))
                         case .success:
                             if let packet = response.packet {
-                                self.log.debug("Idle packet received: %@", value.hexadecimalString)
+                                self.log.default("Idle packet received: %{public}@", String(describing: packet))
                                 NotificationCenter.default.post(
                                     name: .DevicePacketReceived,
                                     object: self,
@@ -502,7 +502,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                             }
                         }
                     } else {
-                        self.log.error("Unknown idle response: %@", value.hexadecimalString)
+                        self.log.error("Unknown idle response: %{public}@", value.hexadecimalString)
                     }
                 } else {
                     self.log.error("Skipping parsing characteristic value update due to missing BLE firmware version")

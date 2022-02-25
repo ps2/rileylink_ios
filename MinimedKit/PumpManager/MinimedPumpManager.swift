@@ -115,7 +115,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
     
 
     /// Temporal state of the manager
-    private var recents: MinimedPumpManagerRecents {
+    public var recents: MinimedPumpManagerRecents {
         get {
             return lockedRecents.value
         }
@@ -140,12 +140,21 @@ public class MinimedPumpManager: RileyLinkPumpManager {
                     newBatteryPercentage = nil
                 }
 
-                if oldBatteryPercentage != newBatteryPercentage {
-                    setState { (state) in
+                self.setState({ (state) in
+                    if oldBatteryPercentage != newBatteryPercentage {
                         state.batteryPercentage = newBatteryPercentage
+                        checkPumpBattery(oldBatteryPercentage: oldBatteryPercentage, newBatteryPercentage: newBatteryPercentage)
                     }
-                    checkPumpBattery(oldBatteryPercentage: oldBatteryPercentage, newBatteryPercentage: newBatteryPercentage)
-                }
+
+                    if let status = newValue.latestPumpStatus {
+                        if case .resumed = state.suspendState, status.suspended {
+                            state.suspendState = .suspended(Date())
+                        }
+                        if case .suspended = state.suspendState, !status.suspended {
+                            state.suspendState = .resumed(Date())
+                        }
+                    }
+                })
             }
             if oldStatus != status {
                 notifyStatusObservers(oldStatus: oldStatus)
@@ -436,6 +445,25 @@ extension MinimedPumpManager {
             self?.updateReservoirVolume(status.reservoirRemainingUnits, at: pumpDate, withTimeLeft: TimeInterval(minutes: Double(status.reservoirRemainingMinutes)))
         }
     }
+
+    public func buildPumpStatusHighlight(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents, andDate date: Date = Date()) -> PumpManagerStatus.PumpStatusHighlight? {
+
+        if case .suspended = state.suspendState {
+            return PumpManagerStatus.PumpStatusHighlight(
+                localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+                imageName: "pause.circle.fill",
+                state: .warning)
+        }
+        
+        if date.timeIntervalSince(lastSync(for: state, recents: recents) ?? .distantPast) > .minutes(12) {
+            return PumpManagerStatus.PumpStatusHighlight(
+                localizedMessage: NSLocalizedString("No Data", comment: "Status highlight when communications with the pod haven't happened recently."),
+                imageName: "exclamationmark.circle.fill",
+                state: .critical)
+        }
+        return nil
+    }
+
     
     private func checkRileyLinkBattery() {
         rileyLinkDeviceProvider.getDevices { devices in
@@ -928,8 +956,12 @@ extension MinimedPumpManager: PumpManager {
 
     public var isOnboarded: Bool { state.isOnboarded }
 
-    public var lastSync: Date? {
+    private func lastSync(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents) -> Date? {
         return [state.lastReconciliation, recents.lastContinuousReservoir].compactMap { $0 }.max()
+    }
+
+    public var lastSync: Date? {
+        return lastSync(for: state, recents: recents)
     }
     
     public var insulinType: InsulinType? {
@@ -1113,13 +1145,6 @@ extension MinimedPumpManager: PumpManager {
 
                         date = newDate
                     }
-
-                    self.setState({ (state) in
-                        if case .resumed = state.suspendState, status.suspended {
-                            state.suspendState = .suspended(Date())
-                        }
-                    })
-
                     self.recents.latestPumpStatus = status
 
                     self.updateReservoirVolume(status.reservoir, at: date, withTimeLeft: nil)
@@ -1186,8 +1211,14 @@ extension MinimedPumpManager: PumpManager {
                     return
                 }
             }
+            
 
             if case .suspended = self.state.suspendState {
+                guard automatic == false else {
+                    self.log.error("Not executing automatic bolus because pump is suspended")
+                    completion(.deviceState(MinimedPumpManagerError.pumpSuspended))
+                    return
+                }
                 do {
                     try self.runSuspendResumeOnSession(suspendResumeState: .resume, session: session, insulinType: insulinType)
                 } catch let error {
@@ -1217,6 +1248,14 @@ extension MinimedPumpManager: PumpManager {
                     completion(nil)
                 })
             } catch let error {
+                if case PumpOpsError.bolusInProgress = error {
+                    // Manually initiate bolus... TODO: mark state as bolusing, until it shows up in history
+                }
+                if case PumpOpsError.pumpSuspended = error {
+                    self.setState { state in
+                        state.suspendState = .suspended(Date())
+                    }
+                }
                 self.log.error("Failed to bolus: %{public}@", String(describing: error))
                 self.recents.bolusEngageState = .stable
                 completion(.communication(error as? LocalizedError))

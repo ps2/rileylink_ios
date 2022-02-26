@@ -208,6 +208,8 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             return
         }
 
+        log.debug("MinimedPacket received: %{public}@", String(describing: message))
+
         switch message.messageBody {
         case let body as MySentryPumpStatusMessageBody:
             self.updatePumpStatus(body, from: device)
@@ -442,7 +444,7 @@ extension MinimedPumpManager {
         
         // Sentry packets are sent in groups of 3, 5s apart. Wait 11s before allowing the loop data to continue to avoid conflicting comms.
         device.sessionQueueAsyncAfter(deadline: .now() + .seconds(11)) { [weak self] in
-            self?.updateReservoirVolume(status.reservoirRemainingUnits, at: pumpDate, withTimeLeft: TimeInterval(minutes: Double(status.reservoirRemainingMinutes)))
+            self?.refreshPumpData { _ in }
         }
     }
 
@@ -1104,12 +1106,19 @@ extension MinimedPumpManager: PumpManager {
         rileyLinkDeviceProvider.assertIdleListening(forcingRestart: true)
 
         guard isPumpDataStale else {
+            log.default("Pump data is not stale: lastSync = %{public}@", String(describing: self.lastSync))
             completion?(self.lastSync)
             return
         }
 
+        refreshPumpData(completion)
+
         log.default("Pump data is stale, fetching.")
 
+
+    }
+
+    private func refreshPumpData(_ completion: ((Date?) -> Void)?) {
         rileyLinkDeviceProvider.getDevices { (devices) in
             guard let device = devices.firstConnected else {
                 let error = PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
@@ -1124,7 +1133,7 @@ extension MinimedPumpManager: PumpManager {
             self.pumpOps.runSession(withName: "Get Pump Status", using: device) { (session) in
                 do {
                     defer { completion?(self.lastSync) }
-                    
+
                     let status = try session.getCurrentPumpStatus()
                     guard var date = status.clock.date else {
                         assertionFailure("Could not interpret a valid date from \(status.clock) in the system calendar")
@@ -1216,6 +1225,7 @@ extension MinimedPumpManager: PumpManager {
             if case .suspended = self.state.suspendState {
                 guard automatic == false else {
                     self.log.error("Not executing automatic bolus because pump is suspended")
+                    self.recents.bolusEngageState = .stable
                     completion(.deviceState(MinimedPumpManagerError.pumpSuspended))
                     return
                 }

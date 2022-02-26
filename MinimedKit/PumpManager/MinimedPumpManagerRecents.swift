@@ -8,7 +8,7 @@
 import Foundation
 import LoopKit
 
-struct MinimedPumpManagerRecents: Equatable {
+public struct MinimedPumpManagerRecents: Equatable {
 
     internal enum EngageablePumpState: Equatable {
         case engaging
@@ -40,7 +40,7 @@ struct MinimedPumpManagerRecents: Equatable {
 }
 
 extension MinimedPumpManagerRecents: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         return """
         ### MinimedPumpManagerRecents
         suspendEngageState: \(suspendEngageState)

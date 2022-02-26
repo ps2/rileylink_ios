@@ -58,23 +58,9 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     override public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         super.navigationController(navigationController, willShow: viewController, animated: animated)
 
-        // Read state values
-        let viewControllers = navigationController.viewControllers
-        let count = navigationController.viewControllers.count
-        
-        if count >= 2 {
-            switch viewControllers[count - 2] {
-            case let vc as PairPodSetupViewController:
-                pumpManager = vc.pumpManager
-            default:
-                break
-            }
-        }
-
         if let setupViewController = viewController as? SetupTableViewController {
             setupViewController.delegate = self
         }
-
 
         // Set state values
         switch viewController {
@@ -89,7 +75,10 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
                     rileyLinkDeviceProvider: deviceProvider,
                     rileyLinkConnectionManager: rileyLinkPumpManager?.rileyLinkConnectionManager)
                 vc.pumpManager = pumpManager
+                self.pumpManager = pumpManager
                 pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didCreatePumpManager: pumpManager)
+                pumpManager.completeOnboard()
+                pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didOnboardPumpManager: pumpManager)
             }
         case let vc as InsertCannulaSetupViewController:
             vc.pumpManager = pumpManager
@@ -102,10 +91,6 @@ public class OmnipodPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
 
     override open func finishedSetup() {
         if let pumpManager = pumpManager {
-            pumpManager.completeOnboard()
-
-            pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didOnboardPumpManager: pumpManager)
-            
             let settingsViewController = OmnipodSettingsViewController(pumpManager: pumpManager)
             setViewControllers([settingsViewController], animated: true)
         }

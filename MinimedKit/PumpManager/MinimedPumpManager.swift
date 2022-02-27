@@ -612,11 +612,9 @@ extension MinimedPumpManager {
                 recents.lastContinuousReservoir = validDate
             }
             if state.preferredInsulinDataSource == .pumpHistory || !areStoredValuesContinuous {
-                fetchPumpHistory { (error) in  // Can be centralQueue or sessionQueue
-                    self.pumpDelegate.notify { (delegate) in
-                        if let error = error as? PumpManagerError {
-                            delegate?.pumpManager(self, didError: error)
-                        }
+                fetchPumpHistory { (error) in
+                    if let error = error {
+                        self.log.error("Post-reservoir-store fetchPumpHistory failed: %{public}@", String(describing: error))
                     }
                 }
             }

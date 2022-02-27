@@ -391,8 +391,6 @@ extension PeripheralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         commandLock.lock()
 
-        log.debug("didUpdateValueFor %{public}@, error = %{public}@, value=%{public}@", characteristic, String(describing: error), characteristic.value?.hexadecimalString ?? "nil")
-        
         var notifyDelegate = false
 
         if let index = commandConditions.firstIndex(where: { (condition) -> Bool in

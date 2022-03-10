@@ -646,7 +646,6 @@ extension MinimedPumpManager {
                         return NewPumpEvent(
                             date: event.date,
                             dose: event.dose?.annotated(with: insulinType),
-                            isMutable: event.isMutable,
                             raw: event.raw,
                             title: event.title,
                             type: event.type)

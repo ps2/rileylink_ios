@@ -283,7 +283,7 @@ extension OmnipodPumpManager {
         })
     }
     
-    private func lifecycleProgress(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+    public func lifecycleProgress(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
         guard let podState = state.podState, let expiresAt = podState.expiresAt else {
             return nil
         }

@@ -81,7 +81,7 @@ extension OmnipodPumpManager {
     }
     
     public var pumpLifecycleProgress: DeviceLifecycleProgress? {
-        return nil
+        return lifecycleProgress(for: state)
     }
     
     public var pumpStatusBadge: DeviceStatusBadge? {

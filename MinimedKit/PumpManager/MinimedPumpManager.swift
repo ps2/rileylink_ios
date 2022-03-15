@@ -1170,7 +1170,9 @@ extension MinimedPumpManager: PumpManager {
         let enactUnits = roundToSupportedBolusVolume(units: units)
 
         guard enactUnits > 0 else {
-            assertionFailure("Invalid zero unit bolus")
+            let error = MinimedPumpManagerError.bolusTooSmall
+            self.log.error("Bolus entered was too small to deliver.")
+            completion(.communication(error as LocalizedError))
             return
         }
         

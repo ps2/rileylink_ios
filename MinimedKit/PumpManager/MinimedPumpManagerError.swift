@@ -15,6 +15,7 @@ public enum MinimedPumpManagerError: Error {
     case tuneFailed(LocalizedError)
     case commsError(LocalizedError)
     case storageFailure
+    case bolusTooSmall
 }
 
 
@@ -35,6 +36,8 @@ extension MinimedPumpManagerError: LocalizedError {
             return error.errorDescription
         case .storageFailure:
             return LocalizedString("Unable to store pump data", comment: "Error description when storage fails")
+        case .bolusTooSmall:
+            return LocalizedString("Bolus too small to deliver", comment: "Error description when entered bolus is below minimum deliverable amount")
         }
     }
 

@@ -1552,6 +1552,16 @@
 		E9EE3369214ED00400888876 /* BolusTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusTests.swift; sourceTree = "<group>"; };
 		E9EE336B214ED01200888876 /* PodInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfo.swift; sourceTree = "<group>"; };
 		E9EE336D214ED01200888876 /* DetailedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedStatus.swift; sourceTree = "<group>"; };
+		F5D9C04427DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
+		F5D9C04527DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
+		F5D9C04627DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04727DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04827DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04927DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04A27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04B27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04C27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5D9C04D27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3220,6 +3230,7 @@
 				fi,
 				"pt-BR",
 				ro,
+				tr,
 			);
 			mainGroup = C12EA22E198B436800309FA4;
 			productRefGroup = C12EA238198B436800309FA4 /* Products */;
@@ -4366,6 +4377,7 @@
 				7D9BF02D2336A2FB005DCFD6 /* fi */,
 				7D9BF0352336A304005DCFD6 /* pt-BR */,
 				7D9BF14D23371407005DCFD6 /* ro */,
+				F5D9C04427DAC30B002E48F6 /* tr */,
 			);
 			name = MinimedPumpManager.storyboard;
 			sourceTree = "<group>";
@@ -4390,6 +4402,7 @@
 				7D9BF0302336A2FB005DCFD6 /* fi */,
 				7D9BF0382336A304005DCFD6 /* pt-BR */,
 				7D9BF15123371408005DCFD6 /* ro */,
+				F5D9C04827DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4414,6 +4427,7 @@
 				7D9BF0312336A2FB005DCFD6 /* fi */,
 				7D9BF0392336A304005DCFD6 /* pt-BR */,
 				7D9BF15223371408005DCFD6 /* ro */,
+				F5D9C04927DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4438,6 +4452,7 @@
 				7D9BF02F2336A2FB005DCFD6 /* fi */,
 				7D9BF0372336A304005DCFD6 /* pt-BR */,
 				7D9BF15023371408005DCFD6 /* ro */,
+				F5D9C04727DAC30B002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4463,6 +4478,7 @@
 				7D9BF02E2336A2FB005DCFD6 /* fi */,
 				7D9BF0362336A304005DCFD6 /* pt-BR */,
 				7D9BF14F23371407005DCFD6 /* ro */,
+				F5D9C04627DAC30B002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4487,6 +4503,7 @@
 				7D9BF0332336A2FB005DCFD6 /* fi */,
 				7D9BF03B2336A305005DCFD6 /* pt-BR */,
 				7D9BF15423371408005DCFD6 /* ro */,
+				F5D9C04B27DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4511,6 +4528,7 @@
 				7D9BF0342336A2FB005DCFD6 /* fi */,
 				7D9BF03C2336A305005DCFD6 /* pt-BR */,
 				7D9BF15523371408005DCFD6 /* ro */,
+				F5D9C04C27DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4536,6 +4554,7 @@
 				7D9BF05D2336AE58005DCFD6 /* sv */,
 				7D9BF05F2336AE5A005DCFD6 /* vi */,
 				7D9BF14E23371407005DCFD6 /* ro */,
+				F5D9C04527DAC30B002E48F6 /* tr */,
 			);
 			name = OmnipodPumpManager.storyboard;
 			sourceTree = "<group>";
@@ -4560,6 +4579,7 @@
 				C1B9E0FE256AF076008E8B84 /* es */,
 				C1B9E0FF256AF078008E8B84 /* sv */,
 				C1B9E100256AF07B008E8B84 /* vi */,
+				F5D9C04D27DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4584,6 +4604,7 @@
 				7D9BF0322336A2FB005DCFD6 /* fi */,
 				7D9BF03A2336A305005DCFD6 /* pt-BR */,
 				7D9BF15323371408005DCFD6 /* ro */,
+				F5D9C04A27DAC30C002E48F6 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

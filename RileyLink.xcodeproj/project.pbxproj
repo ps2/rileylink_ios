@@ -2792,9 +2792,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4352A72E20DEC9B700CAC200 /* Build configuration list for PBXNativeTarget "MinimedKitUI" */;
 			buildPhases = (
+				4352A72220DEC9B700CAC200 /* Headers */,
 				4352A72020DEC9B700CAC200 /* Sources */,
 				4352A72120DEC9B700CAC200 /* Frameworks */,
-				4352A72220DEC9B700CAC200 /* Headers */,
 				4352A72320DEC9B700CAC200 /* Resources */,
 			);
 			buildRules = (
@@ -2812,9 +2812,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43722FC91CB9F7640038B7F2 /* Build configuration list for PBXNativeTarget "RileyLinkKit" */;
 			buildPhases = (
+				43722FAB1CB9F7630038B7F2 /* Headers */,
 				43722FA91CB9F7630038B7F2 /* Sources */,
 				43722FAA1CB9F7630038B7F2 /* Frameworks */,
-				43722FAB1CB9F7630038B7F2 /* Headers */,
 				43722FAC1CB9F7630038B7F2 /* Resources */,
 			);
 			buildRules = (
@@ -2849,9 +2849,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43D5E7971FAF7BFB004ACDB7 /* Build configuration list for PBXNativeTarget "RileyLinkKitUI" */;
 			buildPhases = (
+				43D5E78B1FAF7BFB004ACDB7 /* Headers */,
 				43D5E7891FAF7BFB004ACDB7 /* Sources */,
 				43D5E78A1FAF7BFB004ACDB7 /* Frameworks */,
-				43D5E78B1FAF7BFB004ACDB7 /* Headers */,
 				43D5E78C1FAF7BFB004ACDB7 /* Resources */,
 			);
 			buildRules = (
@@ -2868,9 +2868,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C10D9BD81C8269D600378342 /* Build configuration list for PBXNativeTarget "MinimedKit" */;
 			buildPhases = (
+				C10D9BBE1C8269D500378342 /* Headers */,
 				C10D9BBC1C8269D500378342 /* Sources */,
 				C10D9BBD1C8269D500378342 /* Frameworks */,
-				C10D9BBE1C8269D500378342 /* Headers */,
 				C10D9BBF1C8269D500378342 /* Resources */,
 			);
 			buildRules = (
@@ -3039,9 +3039,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1FFAF93213323CD00C50C1D /* Build configuration list for PBXNativeTarget "OmniKit" */;
 			buildPhases = (
+				C1FFAF75213323CC00C50C1D /* Headers */,
 				C1FFAF73213323CC00C50C1D /* Sources */,
 				C1FFAF74213323CC00C50C1D /* Frameworks */,
-				C1FFAF75213323CC00C50C1D /* Headers */,
 				C1FFAF76213323CC00C50C1D /* Resources */,
 			);
 			buildRules = (
@@ -3077,9 +3077,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1FFAFF0213323FA00C50C1D /* Build configuration list for PBXNativeTarget "OmniKitUI" */;
 			buildPhases = (
+				C1FFAFD6213323F900C50C1D /* Headers */,
 				C1FFAFD4213323F900C50C1D /* Sources */,
 				C1FFAFD5213323F900C50C1D /* Frameworks */,
-				C1FFAFD6213323F900C50C1D /* Headers */,
 				C1FFAFD7213323F900C50C1D /* Resources */,
 			);
 			buildRules = (

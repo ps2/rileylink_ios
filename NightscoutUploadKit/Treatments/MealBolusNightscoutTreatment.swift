@@ -17,17 +17,6 @@ public class MealBolusNightscoutTreatment: NightscoutTreatment {
     public let glucoseType: GlucoseType?
     public let foodType: String?
 
-    public init(timestamp: Date, enteredBy: String, id: String?, carbs: Double, absorptionTime: TimeInterval? = nil, insulin: Double? = nil, glucose: Double? = nil, glucoseType: GlucoseType? = nil, units: Units? = nil, foodType: String? = nil, notes: String? = nil) {
-        self.carbs = carbs
-        self.absorptionTime = absorptionTime
-        self.glucose = glucose
-        self.glucoseType = glucoseType
-        self.units = units
-        self.insulin = insulin
-        self.foodType = foodType
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: .mealBolus)
-    }
-
     required public init?(_ entry: [String : Any]) {
         guard let carbs = entry["carbs"] as? Double else {
             return nil

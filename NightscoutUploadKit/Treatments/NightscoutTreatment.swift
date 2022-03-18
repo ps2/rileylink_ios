@@ -69,15 +69,17 @@ public class NightscoutTreatment: DictionaryRepresentable {
     let id: String?
     let eventType: TreatmentType
     let syncIdentifier: String?
+    let insulinType: String?
 
 
-    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: TreatmentType, syncIdentifier: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, notes: String? = nil, id: String? = nil, eventType: TreatmentType, syncIdentifier: String? = nil, insulinType: String? = nil) {
         self.timestamp = timestamp
         self.enteredBy = enteredBy
         self.id = id
         self.notes = notes
         self.eventType = eventType
         self.syncIdentifier = syncIdentifier
+        self.insulinType = insulinType
     }
 
     required public init?(_ entry: [String: Any]) {
@@ -98,6 +100,7 @@ public class NightscoutTreatment: DictionaryRepresentable {
         self.enteredBy = enteredBy
         self.notes = entry["notes"] as? String
         self.syncIdentifier = entry["syncIdentifier"] as? String
+        self.insulinType = entry["insulinType"] as? String
     }
 
     
@@ -107,18 +110,14 @@ public class NightscoutTreatment: DictionaryRepresentable {
             "timestamp": TimeFormat.timestampStrFromDate(timestamp),
             "enteredBy": enteredBy,
         ]
-        if let id = id {
-            rval["_id"] = id
-        }
-        if let notes = notes {
-            rval["notes"] = notes
-        }
+        rval["_id"] = id
+        rval["notes"] = notes
         rval["eventType"] = eventType.rawValue
+        rval["insulinType"] = insulinType
 
         // Not part of the normal NS model, but we store here to be able to match to client provided ids
-        if let syncIdentifier = syncIdentifier {
-            rval["syncIdentifier"] = syncIdentifier
-        }
+        rval["syncIdentifier"] = syncIdentifier
+
         return rval
     }
 

@@ -35,7 +35,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 } else {
                     bolusEndDate = event.date.addingTimeInterval(model.bolusDeliveryTime(units: bolus.amount))
                 }
-                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount)
+                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount, isMutable: event.isMutable(atDate: now, forPump: model))
             case is SuspendPumpEvent:
                 dose = DoseEntry(suspendDate: event.date)
                 lastSuspend = dose
@@ -43,7 +43,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 dose = DoseEntry(resumeDate: event.date)
             case let temp as TempBasalPumpEvent:
                 if case .Absolute = temp.rateType {
-                    lastTempBasalAmount = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour)
+                    lastTempBasalAmount = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: event.isMutable(atDate: now, forPump: model))
                 }
             case let temp as TempBasalDurationPumpEvent:
                 if let amount = lastTempBasalAmount, amount.startDate == event.date {
@@ -52,7 +52,8 @@ extension Collection where Element == TimestampedHistoryEvent {
                         startDate: event.date,
                         endDate: event.date.addingTimeInterval(TimeInterval(minutes: Double(temp.duration))),
                         value: amount.unitsPerHour,
-                        unit: .unitsPerHour
+                        unit: .unitsPerHour,
+                        isMutable: event.isMutable(atDate: now, forPump: model)
                     )
                 }
             case let basal as BasalProfileStartPumpEvent:
@@ -62,7 +63,8 @@ extension Collection where Element == TimestampedHistoryEvent {
                     // Use the maximum-possible duration for a basal entry; its true duration will be reconciled against other entries.
                     endDate: event.date.addingTimeInterval(.hours(24)),
                     value: basal.scheduleEntry.rate,
-                    unit: .unitsPerHour
+                    unit: .unitsPerHour,
+                    isMutable: event.isMutable(atDate: now, forPump: model)
                 )
             case is RewindPumpEvent:
                 eventType = .rewind
@@ -102,7 +104,7 @@ extension Collection where Element == TimestampedHistoryEvent {
             }
 
             title = String(describing: event.pumpEvent)
-            events.append(NewPumpEvent(date: event.date, dose: dose, isMutable: event.isMutable(atDate: now, forPump: model), raw: event.pumpEvent.rawData, title: title, type: eventType))
+            events.append(NewPumpEvent(date: event.date, dose: dose, raw: event.pumpEvent.rawData, title: title, type: eventType))
         }
 
         return events

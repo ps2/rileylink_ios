@@ -23,14 +23,14 @@ public class BolusNightscoutTreatment: NightscoutTreatment {
     public let duration: TimeInterval
     public let automatic: Bool
 
-    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, automatic: Bool, notes: String? = nil, id: String? = nil, syncIdentifier: String? = nil) {
+    public init(timestamp: Date, enteredBy: String, bolusType: BolusType, amount: Double, programmed: Double, unabsorbed: Double, duration: TimeInterval, automatic: Bool, notes: String? = nil, id: String? = nil, syncIdentifier: String? = nil, insulinType: String?) {
         self.bolusType = bolusType
         self.amount = amount
         self.programmed = programmed
         self.unabsorbed = unabsorbed
         self.duration = duration
         self.automatic = automatic
-        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: .correctionBolus, syncIdentifier: syncIdentifier)
+        super.init(timestamp: timestamp, enteredBy: enteredBy, notes: notes, id: id, eventType: .correctionBolus, syncIdentifier: syncIdentifier, insulinType: insulinType)
     }
 
     required public init?(_ entry: [String : Any]) {

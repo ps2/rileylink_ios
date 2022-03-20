@@ -13,18 +13,27 @@ public struct GlucoseEntry {
     public var identifier: String
     public var sgv: Double
     public var date: Date
-    public var trend: Int
-    public var direction: String
+    public var trend: Int?
+    public var direction: String?
     public var device: String
     public var type: String
 
     init?(rawValue: RawValue) {
+        
+        //Dexcom changed the format of trend in 2021 so we accept both String/Int types
+        var trend: Int? = nil
+        if let intTrend = rawValue["trend"] as? Int {
+            trend = intTrend
+        } else if let stringTrend = rawValue["trend"] as? String, let intTrend = Int(stringTrend) {
+            trend = intTrend
+        }
+        
+        let direction: String? = rawValue["direction"] as? String
+        
         guard
             let identifier = rawValue["_id"] as? String,
             let sgv =  rawValue["sgv"] as? Double,
             let epoch = rawValue["date"] as? Double,
-            let trend = rawValue["trend"] as? Int,
-            let direction = rawValue["direction"] as? String,
             let device = rawValue["device"] as? String,
             let type = rawValue["type"] as? String
         else {

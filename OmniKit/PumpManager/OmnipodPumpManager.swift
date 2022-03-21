@@ -283,18 +283,18 @@ extension OmnipodPumpManager {
         })
     }
     
-    public func lifecycleProgress(for state: OmnipodPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+    public func lifecycleProgress(for state: OmnipodPumpManagerState) -> PumpLifecycleProgress? {
         guard let podState = state.podState, let expiresAt = podState.expiresAt else {
             return nil
         }
         
         switch expiresAt.timeIntervalSinceNow {
         case let remaining where remaining <= 0:
-            return PumpManagerStatus.PumpLifecycleProgress(
+            return PumpLifecycleProgress(
                 percentComplete: 1,
                 progressState: .critical)
         case let remaining where remaining < .hours(24):
-            return PumpManagerStatus.PumpLifecycleProgress(
+            return PumpLifecycleProgress(
                 percentComplete: 1 - remaining / Pod.nominalPodLife,
                 progressState: .warning)
         default:

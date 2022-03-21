@@ -8,6 +8,15 @@
 
 import Foundation
 
+public enum NightscoutSeverityLevel: Int {
+    case urgent = 2
+    case warn = 1
+    case info = 0
+    case low = -1
+    case lowest = -2
+    case none = -3
+}
+
 public struct PumpStatus {
     let clock: Date
     let pumpID: String
@@ -19,8 +28,10 @@ public struct PumpStatus {
     let bolusing: Bool?
     let reservoir: Double?
     let secondsFromGMT: Int?
+    let reservoirDisplayOverride: String?
+    let reservoirLevelOverride: NightscoutSeverityLevel?
 
-    public init(clock: Date, pumpID: String, manufacturer: String? = nil, model: String? = nil, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil) {
+    public init(clock: Date, pumpID: String, manufacturer: String? = nil, model: String? = nil, iob: IOBStatus? = nil, battery: BatteryStatus? = nil, suspended: Bool? = nil, bolusing: Bool? = nil, reservoir: Double? = nil, secondsFromGMT: Int? = nil, reservoirDisplayOverride: String?, reservoirLevelOverride: NightscoutSeverityLevel?) {
         self.clock = clock
         self.pumpID = pumpID
         self.manufacturer = manufacturer
@@ -31,6 +42,8 @@ public struct PumpStatus {
         self.bolusing = bolusing
         self.reservoir = reservoir
         self.secondsFromGMT = secondsFromGMT
+        self.reservoirDisplayOverride = reservoirDisplayOverride
+        self.reservoirLevelOverride = reservoirLevelOverride
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -38,38 +51,16 @@ public struct PumpStatus {
         
         rval["clock"] = TimeFormat.timestampStrFromDate(clock)
         rval["pumpID"] = pumpID
-
-        if let manufacturer = manufacturer {
-            rval["manufacturer"] = manufacturer
-        }
-
-        if let model = model {
-            rval["model"] = model
-        }
-
-        if let iob = iob {
-            rval["iob"] = iob.dictionaryRepresentation
-        }
-
-        if let battery = battery {
-            rval["battery"] = battery.dictionaryRepresentation
-        }
-        
-        if let suspended = suspended {
-            rval["suspended"] = suspended
-        }
-
-        if let bolusing = bolusing {
-            rval["bolusing"] = bolusing
-        }
-
-        if let reservoir = reservoir {
-            rval["reservoir"] = reservoir
-        }
-
-        if let secondsFromGMT = secondsFromGMT {
-            rval["secondsFromGMT"] = secondsFromGMT
-        }
+        rval["manufacturer"] = manufacturer
+        rval["model"] = model
+        rval["iob"] = iob?.dictionaryRepresentation
+        rval["battery"] = battery?.dictionaryRepresentation
+        rval["suspended"] = suspended
+        rval["bolusing"] = bolusing
+        rval["reservoir"] = reservoir
+        rval["secondsFromGMT"] = secondsFromGMT
+        rval["reservoir_display_override"] = reservoirDisplayOverride
+        rval["reservoir_level_override"] = reservoirLevelOverride?.rawValue
 
         return rval
     }

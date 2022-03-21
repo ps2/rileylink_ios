@@ -448,17 +448,17 @@ extension MinimedPumpManager {
         }
     }
 
-    public func buildPumpStatusHighlight(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents, andDate date: Date = Date()) -> PumpManagerStatus.PumpStatusHighlight? {
+    public func buildPumpStatusHighlight(for state: MinimedPumpManagerState, recents: MinimedPumpManagerRecents, andDate date: Date = Date()) -> PumpStatusHighlight? {
 
         if case .suspended = state.suspendState {
-            return PumpManagerStatus.PumpStatusHighlight(
+            return PumpStatusHighlight(
                 localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
                 imageName: "pause.circle.fill",
                 state: .warning)
         }
         
         if date.timeIntervalSince(lastSync(for: state, recents: recents) ?? .distantPast) > .minutes(12) {
-            return PumpManagerStatus.PumpStatusHighlight(
+            return PumpStatusHighlight(
                 localizedMessage: NSLocalizedString("No Data", comment: "Status highlight when communications with the pod haven't happened recently."),
                 imageName: "exclamationmark.circle.fill",
                 state: .critical)

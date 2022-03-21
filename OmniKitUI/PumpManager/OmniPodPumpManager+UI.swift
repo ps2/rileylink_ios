@@ -75,7 +75,7 @@ extension OmnipodPumpManager {
             return nil
         }
 
-        return PumpManagerStatus.PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
+        return PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
                                                      imageName: "exclamationmark.circle.fill",
                                                      state: .critical)
     }

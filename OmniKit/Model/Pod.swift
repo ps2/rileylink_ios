@@ -67,15 +67,6 @@ public struct Pod {
     // Minimum duration of a single basal schedule entry
     public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
 
-    // Max time between pulses for basal and temp basal extra timing command
-    public static let maxTimeBetweenPulses = TimeInterval(hours: 5)
-
-    // Near zero basal rate used for non-Eros pods for zero scheduled basal rates and temp basals
-    public static let nearZeroBasalRate = 0.01
-
-    // Special flag used for non-Eros pods for near zero basal rates pulse timing for $13 & $16 extra commands
-    public static let nearZeroBasalRateFlag: UInt32 = 0x80000000
-
     // Default amount for priming bolus using secondsPerPrimePulse timing.
     // Checked to verify it agrees with value returned by pod during the pairing process.
     public static let primeUnits = 2.6

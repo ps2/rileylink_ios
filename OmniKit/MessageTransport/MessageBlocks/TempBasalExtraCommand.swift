@@ -55,7 +55,7 @@ public struct TempBasalExtraCommand : MessageBlock {
         for entryIndex in (0..<numEntries) {
             let offset = 10 + entryIndex * 6
             let totalPulses = Double(encodedData[offset...].toBigEndian(UInt16.self)) / 10.0
-            let timerCounter = encodedData[(offset+2)...].toBigEndian(UInt32.self) & ~Pod.nearZeroBasalRateFlag
+            let timerCounter = encodedData[(offset+2)...].toBigEndian(UInt32.self) & ~nearZeroBasalRateFlag
             let delayBetweenPulses = TimeInterval(hundredthsOfMilliseconds: Double(timerCounter))
             entries.append(RateEntry(totalPulses: totalPulses, delayBetweenPulses: delayBetweenPulses))
         }

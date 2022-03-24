@@ -8,6 +8,15 @@
 
 import Foundation
 
+// Max time between pulses for scheduled basal and temp basal extra timing command
+let maxTimeBetweenPulses = TimeInterval(hours: 5)
+
+// Near zero basal rate used for non-Eros pods for zero scheduled basal rates and temp basals
+let nearZeroBasalRate = 0.01
+
+// Special flag used for non-Eros pods for near zero basal rates pulse timing for $13 & $16 extra commands
+let nearZeroBasalRateFlag: UInt32 = 0x80000000
+
 public struct BasalTableEntry {
     let segments: Int
     let pulses: Int
@@ -158,22 +167,24 @@ extension BasalDeliveryTable: CustomDebugStringConvertible {
     }
 }
 
-// Normalize basal rate by rounding down to pulse size boundary,
+// Round basal rate by rounding down to pulse size boundary,
 // but basal rates within a small delta will be rounded up.
-func normalizedBasalRate(rate: Double) -> Double
+// Rounds down to 0 for both non-Eros and Eros (temp basals).
+func roundToSupportedBasalRate(rate: Double) -> Double
 {
     let delta = 0.01
-    return Pod.supportedBasalRates.last(where: { $0 <= rate + delta }) ?? 0
+    let supportedBasalRates: [Double] = (0...600).map { Double($0) / Double(Pod.pulsesPerUnit) }
+    return supportedBasalRates.last(where: { $0 <= rate + delta }) ?? 0
 }
 
-// Return normalized basal rate for pulse timing purposes.
-// For non-Eros, returns the nearZeroBasalRate (0.01) for a zero basal rate.
-func normalizedBasalTimingRate(rate: Double) -> Double {
-    var nrate = normalizedBasalRate(rate: rate)
-    if nrate == 0.0 {
-        nrate = Pod.zeroBasalRate // will be an adjusted value for non-Eros cases
+// Return rounded basal rate for pulse timing purposes.
+// For non-Eros, returns nearZeroBasalRate (0.01) for a zero basal rate.
+func roundToSupportedBasalTimingRate(rate: Double) -> Double {
+    var rrate = roundToSupportedBasalRate(rate: rate)
+    if rrate == 0.0 {
+        rrate = Pod.zeroBasalRate // will be an adjusted value for non-Eros cases
     }
-    return nrate
+    return rrate
 }
 
 public struct RateEntry {
@@ -206,46 +217,46 @@ public struct RateEntry {
     }
     
     public var data: Data {
-        var ZZZZZZZZ = UInt32(delayBetweenPulses.hundredthsOfMilliseconds)
+        var delayBetweenPulsesInHundredthsOfMillisecondsWithFlag = UInt32(delayBetweenPulses.hundredthsOfMilliseconds)
 
         // non-Eros near zero basal rates use the nearZeroBasalRateFlag
-        if delayBetweenPulses == Pod.maxTimeBetweenPulses && totalPulses != 0 {
-            ZZZZZZZZ |= Pod.nearZeroBasalRateFlag
+        if delayBetweenPulses == maxTimeBetweenPulses && totalPulses != 0 {
+            delayBetweenPulsesInHundredthsOfMillisecondsWithFlag |= nearZeroBasalRateFlag
         }
 
         var data = Data()
         data.appendBigEndian(UInt16(round(totalPulses * 10)))
-        data.appendBigEndian(ZZZZZZZZ)
+        data.appendBigEndian(delayBetweenPulsesInHundredthsOfMillisecondsWithFlag)
         return data
     }
     
     public static func makeEntries(rate: Double, duration: TimeInterval) -> [RateEntry] {
         let maxPulsesPerEntry: Double = 6400 // PDM's cutoff on # of 1/10th pulses encoded in 2-byte value
         var entries = [RateEntry]()
-        let nrate = normalizedBasalTimingRate(rate: rate)
+        let rrate = roundToSupportedBasalTimingRate(rate: rate)
         
         var remainingSegments = Int(round(duration.minutes / 30))
         
-        let pulsesPerSegment = round(nrate / Pod.pulseSize) / 2
+        let pulsesPerSegment = round(rrate / Pod.pulseSize) / 2
         let maxSegmentsPerEntry = pulsesPerSegment > 0 ? Int(maxPulsesPerEntry / pulsesPerSegment) : 1
         
-        var remainingPulses = nrate * duration.hours / Pod.pulseSize
-        
+        var remainingPulses = rrate * duration.hours / Pod.pulseSize
+
         while (remainingSegments > 0) {
             let entry: RateEntry
-            if nrate == 0 {
+            if rrate == 0 {
                 // Eros zero TBR only, one rate entry per segment with no pulses
-                entry = RateEntry(totalPulses: 0, delayBetweenPulses: Pod.maxTimeBetweenPulses)
+                entry = RateEntry(totalPulses: 0, delayBetweenPulses: maxTimeBetweenPulses)
                 remainingSegments -= 1 // one rate entry per half hour
-            } else if nrate == Pod.nearZeroBasalRate {
+            } else if rrate == nearZeroBasalRate {
                 // Non-Eros near zero value temp or scheduled basal, one entry with 1/10 pulse per 1/2 hour of duration
-                entry = RateEntry(totalPulses: Double(remainingSegments) / 10, delayBetweenPulses: Pod.maxTimeBetweenPulses)
+                entry = RateEntry(totalPulses: Double(remainingSegments) / 10, delayBetweenPulses: maxTimeBetweenPulses)
                 remainingSegments = 0 // just a single entry
             } else {
                 let numSegments = min(maxSegmentsPerEntry, Int(round(remainingPulses / pulsesPerSegment)))
                 remainingSegments -= numSegments
                 let pulseCount = pulsesPerSegment * Double(numSegments)
-                let delayBetweenPulses = .hours(1) / nrate * Pod.pulseSize
+                let delayBetweenPulses = .hours(1) / rrate * Pod.pulseSize
                 entry = RateEntry(totalPulses: pulseCount, delayBetweenPulses: delayBetweenPulses)
                 remainingPulses -= pulseCount
             }

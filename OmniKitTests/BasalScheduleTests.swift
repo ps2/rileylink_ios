@@ -150,7 +150,7 @@ class BasalScheduleTests: XCTestCase {
         XCTAssertEqual("131a4002009600a7d8c0089d0105944905a001312d00044c0112a880", cmd2.data.hexadecimalString) // PDM
     }
     
-    func checkBasalScheduleExtraCommandDataWithLessPrecision(_ data: Data, _ expected: Data, line: UInt = #line) {
+    func checkBasalScheduleExtraCommandDataWithLessPrecision(_ expected: Data, _ data: Data, line: UInt = #line) {
         // The XXXXXXXX field is in thousands of a millisecond. Since we use TimeIntervals (floating point) for
         // recreating the offset, we can have small errors in reproducing the the encoded output, which we really
         // don't care about.
@@ -159,8 +159,8 @@ class BasalScheduleTests: XCTestCase {
             return TimeInterval(Double(data[6...].toBigEndian(UInt32.self)) / 1000000.0)
         }
         
-        let xxxxxxxx1 = extractXXXXXXXX(data)
-        let xxxxxxxx2 = extractXXXXXXXX(expected)
+        let xxxxxxxx1 = extractXXXXXXXX(expected)
+        let xxxxxxxx2 = extractXXXXXXXX(data)
         XCTAssertEqual(xxxxxxxx1, xxxxxxxx2, accuracy: 0.01, line: line)
         
         func blurXXXXXXXX(_ inStr: String) -> String {
@@ -169,7 +169,7 @@ class BasalScheduleTests: XCTestCase {
             return inStr.replacingCharacters(in: start..<end, with: "........")
         }
         print(blurXXXXXXXX(data.hexadecimalString))
-        XCTAssertEqual(blurXXXXXXXX(data.hexadecimalString), blurXXXXXXXX(expected.hexadecimalString), line: line)
+        XCTAssertEqual(blurXXXXXXXX(expected.hexadecimalString), blurXXXXXXXX(data.hexadecimalString), line: line)
     }
 
     func testBasalExtraEncoding1() {
@@ -385,6 +385,35 @@ class BasalScheduleTests: XCTestCase {
         XCTAssertEqual("1a2af36a23a3000291030ae80000000d280000111809700a180610052806100600072806001128100009e808", cmd1.data.hexadecimalString)
     }
     
+    func testFunkyRates() {
+        let entries = [
+            BasalScheduleEntry(rate:  1.325, startTime: 0),
+            BasalScheduleEntry(rate:  0.05, startTime: .hours(0.5)),
+            BasalScheduleEntry(rate:  1.699, startTime: .hours(2.0)),
+            BasalScheduleEntry(rate:  0.850001, startTime: .hours(2.5)),
+            BasalScheduleEntry(rate:  1.02499999, startTime: .hours(3.0)),
+            BasalScheduleEntry(rate:  0.650001, startTime: .hours(7.5)),
+            BasalScheduleEntry(rate:  0.50, startTime: .hours(8.5)),
+            BasalScheduleEntry(rate:  0.675, startTime: .hours(9.5)),
+            BasalScheduleEntry(rate:  0.59999, startTime: .hours(10.5)),
+            BasalScheduleEntry(rate:  0.666, startTime: .hours(11.5)),
+            BasalScheduleEntry(rate:  1.675, startTime: .hours(14.0)),
+            BasalScheduleEntry(rate:  0.849, startTime: .hours(16)),
+            ]
+
+        let schedule = BasalSchedule(entries: entries)
+
+        //      1a LL NNNNNNNN 00 CCCC HH SSSS PPPP napp napp napp napp napp napp napp napp napp napp napp napp napp napp napp
+        // PDM: 1a 2a f36a23a3 00 0291 03 0ae8 0000 000d 2800 0011 1809 700a 1806 1005 2806 1006 0007 2806 0011 2810 0009 e808
+
+        let hh       = 0x03
+        let ssss     = 0x0ae8
+        let offset = TimeInterval(minutes: Double((hh + 1) * 30)) - TimeInterval(seconds: Double(ssss / 8))
+
+        let cmd1 = SetInsulinScheduleCommand(nonce: 0xf36a23a3, basalSchedule: schedule, scheduleOffset: offset)
+        XCTAssertEqual("1a2af36a23a3000291030ae80000000d280000111809700a180610052806100600072806001128100009e808", cmd1.data.hexadecimalString)
+    }
+
     func testBasalScheduleExtraCommandRoundsToNearestSecond() {
         let schedule = BasalSchedule(entries: [BasalScheduleEntry(rate: 1.0, startTime: 0)])
         

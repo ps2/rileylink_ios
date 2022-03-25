@@ -67,7 +67,7 @@ class MinimedHUDProvider: HUDProvider {
         }
     }
 
-    public func createHUDView() -> LevelHUDView? {
+    public func createHUDView() -> BaseHUDView? {
 
         reservoirView = ReservoirHUDView.instantiate()
 
@@ -95,7 +95,7 @@ class MinimedHUDProvider: HUDProvider {
         return rawValue
     }
 
-    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {
+    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView? {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
             return nil
         }

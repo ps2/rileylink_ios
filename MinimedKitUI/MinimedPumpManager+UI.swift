@@ -59,7 +59,7 @@ extension MinimedPumpManager: PumpManagerUI {
         return MinimedHUDProvider(pumpManager: self, bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowedInsulinTypes: allowedInsulinTypes)
     }
     
-    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {
+    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView? {
         return MinimedHUDProvider.createHUDView(rawValue: rawValue)
     }
 }

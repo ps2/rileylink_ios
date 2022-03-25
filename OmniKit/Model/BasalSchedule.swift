@@ -16,7 +16,7 @@ public struct BasalScheduleEntry: RawRepresentable, Equatable {
     let startTime: TimeInterval
     
     public init(rate: Double, startTime: TimeInterval) {
-        self.rate = rate
+        self.rate = roundToSupportedBasalRate(rate: rate)
         self.startTime = startTime
     }
     

@@ -15,12 +15,14 @@ public struct LoopEnacted {
     let duration: TimeInterval
     let timestamp: Date
     let received: Bool
+    let bolusVolume: Double
 
-    public init(rate: Double, duration: TimeInterval, timestamp: Date, received: Bool) {
+    public init(rate: Double, duration: TimeInterval, timestamp: Date, received: Bool, bolusVolume: Double = 0) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
         self.received = received
+        self.bolusVolume = bolusVolume
     }
     
     public var dictionaryRepresentation: [String: Any] {
@@ -31,6 +33,7 @@ public struct LoopEnacted {
         rval["duration"] = duration / 60.0
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["received"] = received
+        rval["bolusVolume"] = bolusVolume
         return rval
     }
 
@@ -49,5 +52,6 @@ public struct LoopEnacted {
         self.duration = TimeInterval(minutes: durationMinutes)
         self.timestamp = timestamp
         self.received = received
+        self.bolusVolume = rawValue["bolusVolume"] as? Double ?? 0
     }
 }

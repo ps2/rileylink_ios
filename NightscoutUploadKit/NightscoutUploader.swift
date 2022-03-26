@@ -28,12 +28,6 @@ private enum Endpoint: String {
 
 public class NightscoutUploader {
 
-    enum DexcomSensorError: Int {
-        case sensorNotActive = 1
-        case sensorNotCalibrated = 5
-        case badRF = 12
-    }
-    
     public var siteURL: URL
     public var apiSecret: String
     

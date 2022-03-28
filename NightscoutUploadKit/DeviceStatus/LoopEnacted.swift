@@ -11,13 +11,13 @@ import Foundation
 public struct LoopEnacted {
     typealias RawValue = [String: Any]
 
-    let rate: Double
-    let duration: TimeInterval
+    let rate: Double?
+    let duration: TimeInterval?
     let timestamp: Date
     let received: Bool
     let bolusVolume: Double
 
-    public init(rate: Double, duration: TimeInterval, timestamp: Date, received: Bool, bolusVolume: Double = 0) {
+    public init(rate: Double?, duration: TimeInterval?, timestamp: Date, received: Bool, bolusVolume: Double = 0) {
         self.rate = rate
         self.duration = duration
         self.timestamp = timestamp
@@ -30,7 +30,9 @@ public struct LoopEnacted {
         var rval = [String: Any]()
 
         rval["rate"] = rate
-        rval["duration"] = duration / 60.0
+        if let duration = duration {
+            rval["duration"] = duration / 60.0
+        }
         rval["timestamp"] = TimeFormat.timestampStrFromDate(timestamp)
         rval["received"] = received
         rval["bolusVolume"] = bolusVolume

@@ -17,7 +17,7 @@ public struct ForecastError {
     
     public init(velocity: HKQuantity, measurementDuration: TimeInterval) {
         
-        let glucoseUnit = HKUnit.milligramsPerDeciliterUnit()
+        let glucoseUnit = HKUnit.milligramsPerDeciliter
         let velocityUnit = glucoseUnit.unitDivided(by: HKUnit.second())
 
         self.velocity = velocity.doubleValue(for: velocityUnit)

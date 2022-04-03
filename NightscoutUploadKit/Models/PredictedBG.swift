@@ -21,7 +21,7 @@ public struct PredictedBG {
         nil) {
         self.startDate = startDate
         // BG values in nightscout are in mg/dL.
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter
         self.values = values.map { round($0.doubleValue(for: unit) * 100) / 100 }
         self.cob = cob?.map { round($0.doubleValue(for: unit) * 100) / 100 }
         self.iob = iob?.map { round($0.doubleValue(for: unit) * 100) / 100 }

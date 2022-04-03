@@ -31,7 +31,7 @@ public class NightscoutUploader {
     public var siteURL: URL
     public var apiSecret: String
     
-    private(set) var entries = [NightscoutEntry]()
+    private(set) var entries = [GlucoseEntry]()
     private(set) var deviceStatuses = [[String: Any]]()
     private(set) var treatmentsQueue = [NightscoutTreatment]()
 
@@ -59,13 +59,13 @@ public class NightscoutUploader {
     private func url(for endpoint: Endpoint, queryItems: [URLQueryItem]? = nil) -> URL? {
         return url(with: endpoint.rawValue, queryItems: queryItems)
     }
-    
+
     /// Attempts to upload nightscout treatment objects.
     /// This method will not retry if the network task failed.
     ///
     /// - parameter treatments:           An array of nightscout treatments.
     /// - parameter completionHandler:    A closure to execute when the task completes. It has a single argument for any error that might have occurred during the upload.
-    public func upload(_ treatments: [NightscoutTreatment], completionHandler: @escaping (Either<[String],Error>) -> Void) {
+    public func upload(_ treatments: [NightscoutTreatment], completionHandler: @escaping (Result<[String],Error>) -> Void) {
         guard let url = url(for: .treatments) else {
             completionHandler(.failure(UploadError.missingConfiguration))
             return
@@ -167,19 +167,6 @@ public class NightscoutUploader {
         flushAll()
     }
     
-    public func uploadSGV(glucoseMGDL: Int, at date: Date, direction: String?, device: String) {
-        let entry = NightscoutEntry(
-            glucose: glucoseMGDL,
-            timestamp: date,
-            device: device,
-            glucoseType: .Sensor,
-            previousSGV: nil,
-            previousSGVNotActive: nil,
-            direction: direction
-        )
-        entries.append(entry)
-    }
-
     // MARK: - Fetching
 
     public func fetchCurrentProfile(completion: @escaping (Result<ProfileSet,Error>) -> Void) {
@@ -295,7 +282,7 @@ public class NightscoutUploader {
     
     // MARK: - Uploading
 
-    public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Either<[String],Error>) -> Void)  {
+    public func uploadProfile(profileSet: ProfileSet, completion: @escaping (Result<[String],Error>) -> Void)  {
         guard let url = url(for: .profile) else {
             completion(.failure(UploadError.missingConfiguration))
             return
@@ -376,7 +363,7 @@ public class NightscoutUploader {
         }
     }
 
-    func postToNS(_ json: [Any], url:URL, completion: @escaping (Either<[String],Error>) -> Void) {
+    func postToNS(_ json: [Any], url:URL, completion: @escaping (Result<[String],Error>) -> Void) {
         if json.count == 0 {
             completion(.success([]))
             return
@@ -410,13 +397,13 @@ public class NightscoutUploader {
         }
     }
 
-    func getFromNS(url: URL, completion: @escaping (Either<Any,Error>) -> Void) {
+    func getFromNS(url: URL, completion: @escaping (Result<Any,Error>) -> Void) {
         callNS(nil, url: url, method: "GET") { (result) in
             completion(result)
         }
     }
 
-    func callNS(_ json: Any?, url:URL, method:String, completion: @escaping (Either<Any,Error>) -> Void) {
+    func callNS(_ json: Any?, url:URL, method:String, completion: @escaping (Result<Any,Error>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -538,7 +525,8 @@ public class NightscoutUploader {
         }
     }
     
-    public func uploadEntries(_ entries: [NightscoutEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadEntries(_ entries: [GlucoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+        print("Uploading \(entries)")
         postToNS(entries.map { $0.dictionaryRepresentation }, endpoint: .entries, completion: completion)
     }
 

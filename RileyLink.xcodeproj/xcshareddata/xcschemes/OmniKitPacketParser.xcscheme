@@ -61,7 +61,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/pete/Downloads/XcodeLog.txt"
+            argument = "/Users/pete/Downloads/Loop-Report-2022-04-02-172756-0700.md"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

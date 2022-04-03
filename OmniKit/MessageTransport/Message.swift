@@ -52,7 +52,7 @@ struct Message {
         self.expectFollowOnMessage = expectFollowOnMessage
     }
     
-    init(encodedData: Data) throws {
+    init(encodedData: Data, checkCRC: Bool = true) throws {
         guard encodedData.count >= 10 else {
             throw MessageError.notEnoughData
         }
@@ -68,8 +68,10 @@ struct Message {
         self.sequenceNum = Int((b9 >> 2) & 0b1111)
         let crc = (UInt16(encodedData[encodedData.count-2]) << 8) + UInt16(encodedData[encodedData.count-1])
         let msgWithoutCrc = encodedData.prefix(encodedData.count - 2)
-        guard msgWithoutCrc.crc16() == crc else {
-            throw MessageError.invalidCrc
+        if checkCRC {
+            guard msgWithoutCrc.crc16() == crc else {
+                throw MessageError.invalidCrc
+            }
         }
         self.messageBlocks = try Message.decodeBlocks(data: Data(msgWithoutCrc.suffix(from: 6)))
     }

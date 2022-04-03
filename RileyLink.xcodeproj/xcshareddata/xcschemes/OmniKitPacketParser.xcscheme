@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1320"
+   LastUpgradeVersion = "1330"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -61,7 +61,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/pete/Downloads/XcodeLog.txt"
+            argument = "/Users/pete/Downloads/Loop-Report-2022-04-02-172756-0700.md"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

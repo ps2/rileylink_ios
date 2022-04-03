@@ -40,3 +40,9 @@ public struct AcknowledgeAlertCommand : NonceResyncableMessageBlock {
         return data
     }
 }
+
+extension AcknowledgeAlertCommand: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "AcknowledgeAlertCommand(blockType:\(blockType), length:\(length), alerts:\(alerts))"
+    }
+}

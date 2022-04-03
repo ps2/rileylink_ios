@@ -18,7 +18,7 @@ public struct CorrectionRange {
     public init(minValue: HKQuantity, maxValue: HKQuantity) {
 
         // BG values in nightscout are in mg/dL.
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter
         self.minValue = minValue.doubleValue(for: unit)
         self.maxValue = maxValue.doubleValue(for: unit)
     }

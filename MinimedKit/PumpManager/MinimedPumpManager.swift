@@ -1288,7 +1288,7 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
         guard let insulinType = insulinType else {
             completion(.configuration(nil))
             return
@@ -1310,7 +1310,7 @@ extension MinimedPumpManager: PumpManager {
                 let endDate = now.addingTimeInterval(response.timeRemaining)
                 let startDate = endDate.addingTimeInterval(-duration)
 
-                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration, insulinType: insulinType)
+                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration, insulinType: insulinType, automatic: automatic)
                 
                 self.recents.tempBasalEngageState = .stable
                 

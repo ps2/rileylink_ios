@@ -1024,8 +1024,9 @@ extension OmnipodPumpManager {
         self.podComms.runSession(withName: "Play Test Beeps", using: rileyLinkSelector) { (result) in
             switch result {
             case .success(let session):
-                let beep = self.confirmationBeeps
-                let result = session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep, basalCompletionBeep: beep, tempBasalCompletionBeep: false, bolusCompletionBeep: beep)
+                let enabled = self.confirmationBeeps
+                let result = session.beepConfig(beepConfigType: .bipBeepBipBeepBipBeepBipBeep,
+                  basalCompletionBeep: enabled, tempBasalCompletionBeep: enabled, bolusCompletionBeep: enabled)
                 
                 switch result {
                 case .success:
@@ -1092,7 +1093,8 @@ extension OmnipodPumpManager {
             case .success(let session):
                 // enable/disable Pod completion beeps for any in-progress insulin delivery
                 let beepConfigType: BeepConfigType = enabled ? .bipBip : .noBeep
-                let result = session.beepConfig(beepConfigType: beepConfigType, basalCompletionBeep: enabled, tempBasalCompletionBeep: false, bolusCompletionBeep: enabled)
+                let result = session.beepConfig(beepConfigType: beepConfigType,
+                  basalCompletionBeep: enabled, tempBasalCompletionBeep: enabled, bolusCompletionBeep: enabled)
 
                 switch result {
                 case .success:
@@ -1557,7 +1559,7 @@ extension OmnipodPumpManager: PumpManager {
         }
     }
 
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
         guard self.hasActivePod else {
             completion(.configuration(OmnipodPumpManagerError.noPodPaired))
             return
@@ -1649,7 +1651,9 @@ extension OmnipodPumpManager: PumpManager {
                     state.tempBasalEngageState = .engaging
                 })
 
-                let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: false, completionBeep: false)
+                 // Use beeps if confirmationBeeps are enabled and this is a manual temp basal
+                let beep = self.confirmationBeeps && !automatic
+                let result = session.setTempBasal(rate: rate, duration: duration, acknowledgementBeep: beep, completionBeep: beep, automatic: automatic)
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
                 }

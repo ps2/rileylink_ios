@@ -76,7 +76,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = automatic
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, automatic: Bool = true, isReconciledWithHistory: Bool = false) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, automatic: Bool, isReconciledWithHistory: Bool = false) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime

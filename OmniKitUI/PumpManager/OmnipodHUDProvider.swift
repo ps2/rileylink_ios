@@ -86,7 +86,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         }
     }
         
-    public func createHUDView() -> LevelHUDView? {
+    public func createHUDView() -> BaseHUDView? {
         self.reservoirView = OmnipodReservoirView.instantiate()
         self.updateReservoirView()
 

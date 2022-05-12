@@ -287,18 +287,19 @@ extension OmnipodPumpManager {
         guard let podState = state.podState, let expiresAt = podState.expiresAt else {
             return nil
         }
+        let eolDisplayActiveTime = expiresAt.timeIntervalSinceNow + Pod.timeRemainingWarningThreshold
         
         switch expiresAt.timeIntervalSinceNow {
         case let remaining where remaining <= 0:
             return PumpLifecycleProgress(
                 percentComplete: 1,
                 progressState: .critical)
-        case let remaining where remaining < .hours(24):
+        case let remaining where remaining < eolDisplayActiveTime:
             return PumpLifecycleProgress(
                 percentComplete: 1 - remaining / Pod.nominalPodLife,
                 progressState: .warning)
         default:
-            // Do not display lifecycle progress when we have >= 24 hours left
+            // Do not display lifecycle progress when we have >= 24 hours left until user selected warning time
             return nil
        }
     }

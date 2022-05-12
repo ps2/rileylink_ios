@@ -30,8 +30,8 @@ public struct Pod {
     // Units per second for priming/cannula insertion
     public static let primeDeliveryRate: Double = Pod.pulseSize / Pod.secondsPerPrimePulse
 
-    // User configured time before expiration advisory (PDM allows 1-24 hours)
-    public static let expirationAlertWindow = TimeInterval(hours: 2)
+    // Threshold used to display pod end of life warnings
+    public static let timeRemainingWarningThreshold = TimeInterval(days: 1)
 
     // Expiration advisory window: time after expiration alert, and end of service imminent alarm
     public static let expirationAdvisoryWindow = TimeInterval(hours: 7)

@@ -120,7 +120,7 @@ public struct GlucoseEntry {
         } else if let stringTrend = rawValue["trend"] as? String, let intTrend = Int(stringTrend) {
             self.trend = GlucoseTrend(rawValue: intTrend)
         } else {
-            return nil
+            self.trend = nil
         }
 
         if let sgv = rawValue["sgv"] as? Double {

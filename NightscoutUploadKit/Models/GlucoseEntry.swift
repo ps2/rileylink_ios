@@ -15,7 +15,7 @@ public struct GlucoseEntry {
         case sensor
     }
 
-    public enum GlucoseTrend: Int {
+    public enum GlucoseTrend: Int, CaseIterable {
         case upUpUp         = 1
         case upUp           = 2
         case up             = 3
@@ -25,6 +25,19 @@ public struct GlucoseEntry {
         case downDownDown   = 7
         case notComputable  = 8
         case rateOutOfRange = 9
+        
+        init?(direction: String) {
+            var directionToTrends = [String:GlucoseTrend]()
+            for trend in GlucoseTrend.allCases {
+                directionToTrends[trend.direction] = trend
+            }
+            
+            if let trend = directionToTrends[direction] {
+                self = trend
+            } else {
+                return nil
+            }
+        }
 
         public var direction: String {
             switch self {
@@ -119,6 +132,8 @@ public struct GlucoseEntry {
             self.trend = GlucoseTrend(rawValue: intTrend)
         } else if let stringTrend = rawValue["trend"] as? String, let intTrend = Int(stringTrend) {
             self.trend = GlucoseTrend(rawValue: intTrend)
+        } else if let directionString = rawValue["direction"] as? String {
+            self.trend = GlucoseTrend(direction: directionString)
         } else {
             self.trend = nil
         }

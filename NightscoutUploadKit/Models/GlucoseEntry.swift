@@ -27,16 +27,13 @@ public struct GlucoseEntry {
         case rateOutOfRange = 9
         
         init?(direction: String) {
-            var directionToTrends = [String:GlucoseTrend]()
             for trend in GlucoseTrend.allCases {
-                directionToTrends[trend.direction] = trend
+                if direction == trend.direction {
+                    self = trend
+                    return
+                }
             }
-            
-            if let trend = directionToTrends[direction] {
-                self = trend
-            } else {
-                return nil
-            }
+            return nil
         }
 
         public var direction: String {

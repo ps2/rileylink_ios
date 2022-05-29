@@ -127,10 +127,14 @@ public class MinimedPumpManagerSetupViewController: RileyLinkManagerSetupViewCon
     public func finishedSettingsDisplay() {
         completionDelegate?.completionNotifyingDidComplete(self)
     }
+    
+    public func didCancel() {
+        completionDelegate?.completionNotifyingDidComplete(self)
+    }
 }
 
 extension MinimedPumpManagerSetupViewController: SetupTableViewControllerDelegate {
     public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
-        completionDelegate?.completionNotifyingDidComplete(self)
+        didCancel()
     }
 }

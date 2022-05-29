@@ -15,11 +15,13 @@ struct InsulinTypeConfirmation: View {
     @State private var insulinType: InsulinType?
     private var supportedInsulinTypes: [InsulinType]
     private var didConfirm: (InsulinType) -> Void
+    private var didCancel: () -> Void
     
-    init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], didConfirm: @escaping (InsulinType) -> Void) {
+    init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], didConfirm: @escaping (InsulinType) -> Void, didCancel: @escaping () -> Void) {
         self._insulinType = State(initialValue: initialValue)
         self.supportedInsulinTypes = supportedInsulinTypes
         self.didConfirm = didConfirm
+        self.didCancel = didCancel
     }
     
     func continueWithType(_ insulinType: InsulinType?) {
@@ -49,13 +51,18 @@ struct InsulinTypeConfirmation: View {
                     .padding()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
+                    didCancel()
+                })
+            }
+        }
     }
 }
 
 struct InsulinTypeConfirmation_Previews: PreviewProvider {
     static var previews: some View {
-        InsulinTypeConfirmation(initialValue: .humalog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
-            
-        }
+        InsulinTypeConfirmation(initialValue: .humalog, supportedInsulinTypes: InsulinType.allCases, didConfirm: { (newType) in }, didCancel: {})
     }
 }

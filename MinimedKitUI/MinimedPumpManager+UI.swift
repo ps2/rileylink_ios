@@ -21,13 +21,19 @@ extension MinimedPumpManager: PumpManagerUI {
 
     static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let navVC = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
-        let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes) { [weak navVC] (confirmedType) in
+        let didConfirm: (InsulinType) -> Void = { [weak navVC] (confirmedType) in
             if let navVC = navVC {
                 navVC.insulinType = confirmedType
                 let nextViewController = navVC.storyboard?.instantiateViewController(identifier: "RileyLinkSetup") as! RileyLinkSetupTableViewController
                 navVC.pushViewController(nextViewController, animated: true)
             }
         }
+        let didCancel: () -> Void = { [weak navVC] in
+            if let navVC = navVC {
+                navVC.didCancel()
+            }
+        }
+        let insulinSelectionView = InsulinTypeConfirmation(initialValue: .novolog, supportedInsulinTypes: allowedInsulinTypes, didConfirm: didConfirm, didCancel: didCancel)
         let rootVC = UIHostingController(rootView: insulinSelectionView)
         rootVC.title = "Insulin Type"
         navVC.pushViewController(rootVC, animated: false)

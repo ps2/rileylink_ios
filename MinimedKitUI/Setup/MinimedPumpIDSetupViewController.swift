@@ -18,7 +18,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
     private enum RegionCode: String {
         case northAmerica = "NA"
-        case canada = "CA"
+        case canada = "CA/CM"
         case worldWide = "WW"
 
         var region: PumpRegion {

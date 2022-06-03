@@ -61,7 +61,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     var duration: TimeInterval?
     var scheduledCertainty: ScheduledCertainty
     var insulinType: InsulinType?
-    var automatic: Bool?
+    var automatic: Bool
     
     var finishTime: Date? {
         get {
@@ -80,14 +80,16 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return elapsed / duration
     }
 
-    // A value from 0 to 1 giving the nominal progress percentage for a bolus or a temp basal
-    public var progress: Double {
-        return min(nominalProgress, 1)
+    public func progress(at date: Date = Date()) -> Double {
+        guard let duration = duration else {
+            return 0
+        }
+        let elapsed = -startTime.timeIntervalSince(date)
+        return min(elapsed / duration, 1)
     }
-    
-    // Is a bolus or a temp basal nominally finished
-    public var isFinished: Bool {
-        return progress >= 1
+
+    public func isFinished(at date: Date = Date()) -> Bool {
+        return progress(at: date) >= 1
     }
 
     // Has a bolus operation had enough time to positively finish
@@ -111,7 +113,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType, automatic: Bool?) {
+    init(bolusAmount: Double, startTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType, automatic: Bool) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
@@ -122,7 +124,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = automatic
     }
     
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType, automatic: Bool) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
@@ -130,7 +132,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.scheduledCertainty = scheduledCertainty
         self.scheduledUnits = nil
         self.insulinType = insulinType
-        self.automatic = nil
+        self.automatic = automatic
     }
 
     init(suspendStartTime: Date, scheduledCertainty: ScheduledCertainty) {
@@ -138,7 +140,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.units = 0
         self.startTime = suspendStartTime
         self.scheduledCertainty = scheduledCertainty
-        self.automatic = nil
+        self.automatic = false
     }
 
     init(resumeStartTime: Date, scheduledCertainty: ScheduledCertainty, insulinType: InsulinType) {
@@ -147,7 +149,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.startTime = resumeStartTime
         self.scheduledCertainty = scheduledCertainty
         self.insulinType = insulinType
-        self.automatic = nil
+        self.automatic = false
     }
 
     public mutating func cancel(at date: Date, withRemaining remaining: Double? = nil) {
@@ -225,21 +227,24 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.units = units
         self.startTime = startTime
         self.scheduledCertainty = scheduledCertainty
-        
-        if let scheduledUnits = rawValue["scheduledUnits"] as? Double {
-            self.scheduledUnits = scheduledUnits
-        }
 
-        if let scheduledTempRate = rawValue["scheduledTempRate"] as? Double {
-            self.scheduledTempRate = scheduledTempRate
-        }
 
-        if let duration = rawValue["duration"] as? Double {
-            self.duration = duration
-        }
-        
+        self.scheduledUnits = rawValue["scheduledUnits"] as? Double
+        self.scheduledTempRate = rawValue["scheduledTempRate"] as? Double
+        self.duration = rawValue["duration"] as? Double
+
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
             self.insulinType = InsulinType(rawValue: rawInsulinType)
+        }
+
+        if let automatic = rawValue["automatic"] as? Bool {
+            self.automatic = automatic
+        } else {
+            if case .tempBasal = doseType {
+                self.automatic = true
+            } else {
+                self.automatic = false
+            }
         }
     }
     
@@ -248,25 +253,15 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             "doseType": doseType.rawValue,
             "units": units,
             "startTime": startTime,
-            "scheduledCertainty": scheduledCertainty.rawValue
+            "scheduledCertainty": scheduledCertainty.rawValue,
+            "automatic": automatic
         ]
-        
-        if let scheduledUnits = scheduledUnits {
-           rawValue["scheduledUnits"] = scheduledUnits
-        }
 
-        if let scheduledTempRate = scheduledTempRate {
-            rawValue["scheduledTempRate"] = scheduledTempRate
-        }
+        rawValue["scheduledUnits"] = scheduledUnits
+        rawValue["scheduledTempRate"] = scheduledTempRate
+        rawValue["duration"] = duration
+        rawValue["insulinType"] = insulinType?.rawValue
 
-        if let duration = duration {
-            rawValue["duration"] = duration
-        }
-        
-        if let insulinType = insulinType {
-            rawValue["insulinType"] = insulinType.rawValue
-        }
-        
         return rawValue
     }
 }

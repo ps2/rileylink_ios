@@ -20,12 +20,6 @@ enum DashSettingsViewAlert {
     case syncTimeError(OmnipodPumpManagerError)
 }
 
-public enum ReservoirLevelHighlightState: String, Equatable {
-    case normal
-    case warning
-    case critical
-}
-
 struct DashSettingsNotice {
     let title: String
     let description: String
@@ -234,7 +228,6 @@ class OmnipodSettingsViewModel: ObservableObject {
         lowReservoirAlertValue = Int(self.pumpManager.state.lowReservoirReminderValue)
         podCommState = self.pumpManager.podCommState
         beepPreference = self.pumpManager.beepPreference
-        podConnected = self.pumpManager.isConnected
         insulinType = self.pumpManager.insulinType
         podDetails = self.pumpManager.podDetails
         previousPodDetails = self.pumpManager.previousPodDetails

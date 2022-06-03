@@ -14,6 +14,7 @@ import Combine
 import LoopKit
 import LoopKitUI
 import OmniKit
+import RileyLinkBLEKit
 
 enum OmnipodUIScreen {
     case firstRunScreen
@@ -312,8 +313,20 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
     {
         if pumpManager == nil, let pumpManagerSettings = pumpManagerSettings {
             let basalSchedule = pumpManagerSettings.basalSchedule
-            let pumpManagerState = OmnipodPumpManagerState(podState: nil, timeZone: basalSchedule.timeZone, basalSchedule: BasalSchedule(repeatingScheduleValues: basalSchedule.items), insulinType: nil, maximumTempBasalRate: pumpManagerSettings.maxBasalRateUnitsPerHour)
-            self.pumpManager = OmnipodPumpManager(state: pumpManagerState)
+
+            let rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
+//            rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
+
+            let pumpManagerState = OmnipodPumpManagerState(
+                isOnboarded: false,
+                podState: nil,
+                timeZone: basalSchedule.timeZone,
+                basalSchedule: BasalSchedule(repeatingScheduleValues: basalSchedule.items),
+                rileyLinkConnectionManagerState: nil,
+                insulinType: nil,
+                maximumTempBasalRate: pumpManagerSettings.maxBasalRateUnitsPerHour)
+
+            self.pumpManager = OmnipodPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider)
         } else {
             guard let pumpManager = pumpManager else {
                 fatalError("Unable to create Omnipod PumpManager")

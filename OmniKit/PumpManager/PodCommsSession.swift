@@ -355,7 +355,7 @@ public class PodCommsSession {
     }
 
     @discardableResult
-    private func configureAlerts(_ alerts: [PodAlert], confirmationBeepType: BeepConfigType? = nil) throws -> StatusResponse {
+    public func configureAlerts(_ alerts: [PodAlert], confirmationBeepType: BeepConfigType? = nil) throws -> StatusResponse {
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
         let status: StatusResponse = try send([configureAlerts], confirmationBeepType: confirmationBeepType)

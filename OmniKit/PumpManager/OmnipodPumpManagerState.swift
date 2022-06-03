@@ -62,7 +62,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     internal var lastPumpDataReportDate: Date?
     
-    internal var insulinType: InsulinType
+    internal var insulinType: InsulinType?
 
     // Indicates that the user has completed initial configuration
     // which means they have configured any parameters, but may not have paired a pod yet.
@@ -72,7 +72,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public var lastRileyLinkBatteryAlertDate: Date = .distantPast
 
-    internal var maximumTempBasalRate: Double
+    public var maximumTempBasalRate: Double
 
     // From last status response
     public var reservoirLevel: ReservoirLevel? {
@@ -84,7 +84,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     // MARK: -
 
-    public init(isOnboarded: Bool, podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, insulinType: InsulinType, maximumTempBasalRate: Double) {
+    public init(isOnboarded: Bool, podState: PodState?, timeZone: TimeZone, basalSchedule: BasalSchedule, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, insulinType: InsulinType?, maximumTempBasalRate: Double) {
         self.isOnboarded = isOnboarded
         self.podState = podState
         self.timeZone = timeZone
@@ -236,7 +236,6 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "basalSchedule": basalSchedule.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
             "confirmationBeeps": confirmationBeeps.rawValue,
-            "insulinType": insulinType.rawValue,
             "activeAlerts": activeAlerts.map { $0.rawValue },
             "podAttachmentConfirmed": podAttachmentConfirmed,
             "acknowledgedTimeOffsetAlert": acknowledgedTimeOffsetAlert,
@@ -245,6 +244,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "maximumTempBasalRate": maximumTempBasalRate
         ]
         
+        value["insulinType"] = insulinType?.rawValue
         value["podState"] = podState?.rawValue
         value["scheduledExpirationReminderOffset"] = scheduledExpirationReminderOffset
         value["defaultExpirationReminderOffset"] = defaultExpirationReminderOffset

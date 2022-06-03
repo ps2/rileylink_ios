@@ -1,6 +1,6 @@
 //
 //  PendingCommand.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 1/18/22.
 //  Copyright © 2022 Pete Schwamb. All rights reserved.

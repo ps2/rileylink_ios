@@ -1,6 +1,6 @@
 //
 //  DeliveryUncertaintyRecoveryViewModel.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 8/25/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

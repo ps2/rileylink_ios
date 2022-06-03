@@ -1,6 +1,6 @@
 //
 //  OmnipodReservoirView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 10/22/18.
 //  Copyright © 2018 Pete Schwamb. All rights reserved.

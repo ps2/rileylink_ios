@@ -1,6 +1,6 @@
 //
 //  RoundedCard.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 2/9/21.
 //

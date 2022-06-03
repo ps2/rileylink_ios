@@ -1,6 +1,6 @@
 //
 //  InsertCannulaView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 2/5/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

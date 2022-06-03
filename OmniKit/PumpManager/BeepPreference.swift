@@ -1,6 +1,6 @@
 //
 //  BeepPreference.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 2/14/22.
 //  Copyright © 2022 LoopKit Authors. All rights reserved.

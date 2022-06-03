@@ -1,6 +1,6 @@
 //
 //  PairPodViewModel.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 3/2/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

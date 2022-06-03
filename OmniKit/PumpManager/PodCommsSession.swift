@@ -28,6 +28,8 @@ public enum PodCommsError: Error {
     case podSuspended
     case podFault(fault: DetailedStatus)
     case commsError(error: Error)
+    case unacknowledgedMessage(sequenceNumber: Int, error: Error)
+    case unacknowledgedCommandPending
     case rejectedMessage(errorCode: UInt8)
     case podChange
     case activationTimeExceeded
@@ -73,6 +75,10 @@ extension PodCommsError: LocalizedError {
             return String(format: LocalizedString("Pod Fault: %1$@", comment: "Format string for pod fault code"), faultDescription)
         case .commsError(let error):
             return error.localizedDescription
+        case .unacknowledgedMessage(_, let error):
+            return error.localizedDescription
+        case .unacknowledgedCommandPending:
+            return LocalizedString("Communication issue: Unacknowledged command pending.", comment: "Error message when command is rejected because an unacknowledged command is pending.")
         case .rejectedMessage(let errorCode):
             return String(format: LocalizedString("Command error %1$u", comment: "Format string for invalid message error code (1: error code number)"), errorCode)
         case .podChange:
@@ -127,6 +133,10 @@ extension PodCommsError: LocalizedError {
         case .podFault:
             return nil
         case .commsError:
+            return nil
+        case .unacknowledgedMessage:
+            return nil
+        case .unacknowledgedCommandPending:
             return nil
         case .rejectedMessage:
             return nil
@@ -186,6 +196,11 @@ public class PodCommsSession {
         if self.podState.fault == nil {
             self.podState.fault = fault // save the first fault returned
             handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
+            if let activatedAt = podState.activatedAt {
+                podState.activeTime = Date().timeIntervalSince(activatedAt)
+            } else {
+                podState.activeTime = fault.faultEventTimeSinceActivation
+            }
             podState.updateFromDetailedStatusResponse(fault)
         }
         log.error("Pod Fault: %@", String(describing: fault))
@@ -452,18 +467,22 @@ public class PodCommsSession {
     public enum DeliveryCommandResult {
         case success(statusResponse: StatusResponse)
         case certainFailure(error: PodCommsError)
-        case uncertainFailure(error: PodCommsError)
+        case unacknowledged(error: PodCommsError)
     }
 
     public enum CancelDeliveryResult {
         case success(statusResponse: StatusResponse, canceledDose: UnfinalizedDose?)
         case certainFailure(error: PodCommsError)
-        case uncertainFailure(error: PodCommsError)
+        case unacknowledged(error: PodCommsError)
     }
 
     
     public func bolus(units: Double, automatic: Bool, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
-        
+
+        guard podState.pendingCommand == nil else {
+            return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+        }
+
         let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerBolusPulse)
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
@@ -492,7 +511,7 @@ public class PodCommsSession {
             guard let status = try? getStatus() else {
                 self.log.debug("Status check failed; could not resolve bolus uncertainty")
                 podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .uncertain, insulinType: podState.insulinType, automatic: automatic)
-                return DeliveryCommandResult.uncertainFailure(error: podCommsError)
+                return DeliveryCommandResult.unacknowledged(error: podCommsError)
             }
             if status.deliveryStatus.bolusing {
                 self.log.debug("getStatus resolved bolus uncertainty (succeeded)")
@@ -505,27 +524,32 @@ public class PodCommsSession {
         }
     }
     
-    public func setTempBasal(rate: Double, duration: TimeInterval, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
-        
+    public func setTempBasal(rate: Double, duration: TimeInterval, isHighTemp: Bool, automatic: Bool, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
+
+        guard podState.pendingCommand == nil else {
+            return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+        }
+
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
         let tempBasalExtraCommand = TempBasalExtraCommand(rate: rate, duration: duration, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
 
-        guard podState.unfinalizedBolus?.isFinished != false else {
+        guard podState.unfinalizedBolus?.isFinished() != false else {
             return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
         }
 
+        let startTime = Date()
+
         do {
             let status: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
-            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .certain, insulinType: podState.insulinType)
+            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: startTime, duration: duration, isHighTemp: isHighTemp, automatic: automatic, scheduledCertainty: .certain, insulinType: podState.insulinType)
             podState.updateFromStatusResponse(status)
             return DeliveryCommandResult.success(statusResponse: status)
-        } catch PodCommsError.nonceResyncFailed {
-            return DeliveryCommandResult.certainFailure(error: PodCommsError.nonceResyncFailed)
-        } catch PodCommsError.rejectedMessage(let errorCode) {
-            return DeliveryCommandResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
+        } catch PodCommsError.unacknowledgedMessage(let seq, let error) {
+            podState.pendingCommand = PendingCommand.program(.tempBasal(unitsPerHour: rate, duration: duration, isHighTemp: isHighTemp, automatic: automatic), seq, startTime)
+            log.error("Unacknowledged temp basal: command seq = %d, error = %{public}@", seq, String(describing: error))
+            return DeliveryCommandResult.unacknowledged(error: .commsError(error: error))
         } catch let error {
-            podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: Date(), duration: duration, scheduledCertainty: .uncertain, insulinType: podState.insulinType)
-            return DeliveryCommandResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+            return DeliveryCommandResult.certainFailure(error: .commsError(error: error))
         }
     }
 
@@ -618,7 +642,7 @@ public class PodCommsSession {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: Date(), scheduledCertainty: .uncertain)
-            return CancelDeliveryResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+            return CancelDeliveryResult.unacknowledged(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
         }
     }
 
@@ -654,7 +678,7 @@ public class PodCommsSession {
             return CancelDeliveryResult.certainFailure(error: PodCommsError.rejectedMessage(errorCode: errorCode))
         } catch let error {
             podState.unfinalizedSuspend = UnfinalizedDose(suspendStartTime: Date(), scheduledCertainty: .uncertain)
-            return CancelDeliveryResult.uncertainFailure(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
+            return CancelDeliveryResult.unacknowledged(error: error as? PodCommsError ?? PodCommsError.commsError(error: error))
         }
     }
 
@@ -663,7 +687,7 @@ public class PodCommsSession {
         switch result {
         case .certainFailure(let error):
             throw error
-        case .uncertainFailure(let error):
+        case .unacknowledged(let error):
             throw error
         case .success:
             let scheduleOffset = timeZone.scheduleOffset(forDate: date)
@@ -718,7 +742,7 @@ public class PodCommsSession {
         switch cancelResult {
         case .certainFailure(let error):
             throw error
-        case .uncertainFailure(let error):
+        case .unacknowledged(let error):
             throw error
         case .success(let response, _):
             statusResponse = response
@@ -775,7 +799,7 @@ public class PodCommsSession {
             switch result {
             case .certainFailure(let error):
                 throw error
-            case .uncertainFailure(let error):
+            case .unacknowledged(let error):
                 throw error
             default:
                 break
@@ -797,6 +821,10 @@ public class PodCommsSession {
         do {
             let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
             let _: StatusResponse = try send([deactivatePod])
+
+            if podState.activeTime == nil, let activatedAt = podState.activatedAt {
+                podState.activeTime = Date().timeIntervalSince(activatedAt)
+            }
         } catch let error as PodCommsError {
             switch error {
             case .podFault, .activationTimeExceeded, .unexpectedResponse:

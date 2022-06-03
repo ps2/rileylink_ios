@@ -1,6 +1,6 @@
 //
 //  DashSettingsViewModel.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 3/8/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
@@ -231,9 +231,14 @@ class OmnipodSettingsViewModel: ObservableObject {
         insulinType = self.pumpManager.insulinType
         podDetails = self.pumpManager.podDetails
         previousPodDetails = self.pumpManager.previousPodDetails
+
+        // TODO:
+        podConnected = false
+
         pumpManager.addPodStateObserver(self, queue: DispatchQueue.main)
         pumpManager.addStatusObserver(self, queue: DispatchQueue.main)
-        
+
+
         // Trigger refresh
         pumpManager.getPodStatus() { _ in }
     }
@@ -539,19 +544,18 @@ extension OmnipodPumpManager {
         return max(0, Pod.serviceDuration - Pod.nominalPodLife + podTimeRemaining);
     }
     
-    private func podDetails(fromPodState podState: PodState, andDeviceName deviceName: String?) -> PodDetails {
+    private func podDetails(fromPodState podState: PodState) -> PodDetails {
         return PodDetails(
-            lotNumber: podState.lotNo,
-            sequenceNumber: podState.lotSeq,
-            firmwareVersion: podState.firmwareVersion,
-            bleFirmwareVersion: podState.bleFirmwareVersion,
-            deviceName: deviceName,
+            lotNumber: podState.lot,
+            sequenceNumber: podState.tid,
+            piVersion: podState.piVersion,
+            pmVersion: podState.pmVersion,
             totalDelivery: podState.lastInsulinMeasurements?.delivered,
             lastStatus: podState.lastInsulinMeasurements?.validTime,
             fault: podState.fault?.faultEventCode,
             activatedAt: podState.activatedAt,
             activeTime: podState.activeTime,
-            pdmRef: podState.pdmRef
+            pdmRef: podState.fault?.pdmRef
         )
     }
 
@@ -559,14 +563,14 @@ extension OmnipodPumpManager {
         guard let podState = state.podState else {
             return nil
         }
-        return podDetails(fromPodState: podState, andDeviceName: deviceBLEName)
+        return podDetails(fromPodState: podState)
     }
 
     public var previousPodDetails: PodDetails? {
         guard let podState = state.previousPodState else {
             return nil
         }
-        return podDetails(fromPodState: podState, andDeviceName: nil)
+        return podDetails(fromPodState: podState)
     }
 
 }

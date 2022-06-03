@@ -1,5 +1,5 @@
 //
-//  OmniBLESettingsView.swift
+//  OmnipodSettingsView.swift
 //  ViewDev
 //
 //  Created by Pete Schwamb on 3/8/20.
@@ -10,6 +10,7 @@ import SwiftUI
 import LoopKit
 import LoopKitUI
 import HealthKit
+import OmniKit
 
 struct OmnipodSettingsView: View  {
     

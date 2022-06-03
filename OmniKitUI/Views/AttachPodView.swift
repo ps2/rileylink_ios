@@ -1,6 +1,6 @@
 //
 //  AttachPodView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 2/23/21.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

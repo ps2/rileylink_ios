@@ -64,6 +64,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     internal var insulinType: InsulinType?
 
+    // Persistence for the pod state of the previous pod, for
+    // user review and manufacturer reporting.
+    public var previousPodState: PodState?
+
     // Indicates that the user has completed initial configuration
     // which means they have configured any parameters, but may not have paired a pod yet.
     public var initialConfigurationCompleted: Bool = false
@@ -226,6 +230,12 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             }
         }
 
+        if let prevPodStateRaw = rawValue["previousPodState"] as? PodState.RawValue {
+            previousPodState = PodState(rawValue: prevPodStateRaw)
+        } else {
+            previousPodState = nil
+        }
+
     }
     
     public var rawValue: RawValue {
@@ -253,6 +263,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         value["pairingAttemptAddress"] = pairingAttemptAddress
         value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
         value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
+        value["previousPodState"] = previousPodState?.rawValue
         
         return value
     }
@@ -303,6 +314,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
             "* lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",
             String(reflecting: podState),
+            "* PreviousPodState: \(String(reflecting: previousPodState))",
             String(reflecting: rileyLinkConnectionManagerState),
         ].joined(separator: "\n")
     }

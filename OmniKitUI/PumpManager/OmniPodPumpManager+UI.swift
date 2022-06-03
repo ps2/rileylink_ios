@@ -50,17 +50,11 @@ extension OmnipodPumpManager: PumpManagerUI {
 // MARK: - PumpStatusIndicator
 extension OmnipodPumpManager {
     public var pumpStatusHighlight: DeviceStatusHighlight? {
-        guard state.podState?.fault != nil else {
-            return nil
-        }
-
-        return PumpStatusHighlight(localizedMessage: LocalizedString("Pod Fault", comment: "Inform the user that there is a pod fault."),
-                                                     imageName: "exclamationmark.circle.fill",
-                                                     state: .critical)
+        buildPumpStatusHighlight(for: state)
     }
     
     public var pumpLifecycleProgress: DeviceLifecycleProgress? {
-        return lifecycleProgress(for: state)
+        return buildPumpLifecycleProgress(for: state)
     }
     
     public var pumpStatusBadge: DeviceStatusBadge? {

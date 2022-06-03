@@ -1,6 +1,6 @@
 //
 //  TimeView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 5/10/21.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  PodDetailsView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 4/14/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
@@ -13,9 +13,8 @@ import OmniKit
 public struct PodDetails {
     var lotNumber: UInt32
     var sequenceNumber: UInt32
-    var firmwareVersion: String
-    var bleFirmwareVersion: String
-    var deviceName: String?
+    var piVersion: String
+    var pmVersion: String
     var totalDelivery: Double?
     var lastStatus: Date?
     var fault: FaultEventCode?
@@ -89,16 +88,13 @@ struct PodDetailsView: View {
     
     var body: some View {
         List {
-            if let deviceName = podDetails.deviceName {
-                row(LocalizedString("Device Name", comment: "description label for device name pod details row"), value: deviceName)
-            }
             row(LocalizedString("Lot Number", comment: "description label for lot number pod details row"), value: String(describing: podDetails.lotNumber))
             row(LocalizedString("Sequence Number", comment: "description label for sequence number pod details row"), value: String(describing: podDetails.sequenceNumber))
-            row(LocalizedString("Firmware Version", comment: "description label for firmware version pod details row"), value: podDetails.firmwareVersion)
-            row(LocalizedString("BLE Firmware Version", comment: "description label for ble firmware version pod details row"), value: podDetails.bleFirmwareVersion)
+            row(LocalizedString("PI Version", comment: "description label for pi version pod details row"), value: podDetails.piVersion)
+            row(LocalizedString("PM Version", comment: "description label for ble firmware version pod details row"), value: podDetails.pmVersion)
             row(LocalizedString("Total Delivery", comment: "description label for total delivery pod details row"), value: totalDeliveryText)
             if let activeTime = podDetails.activeTime, let activatedAt = podDetails.activatedAt {
-                row(LocalizedString("Pod Activated", comment: "description label for activated at timne pod details row"), value: dateFormatter.string(from: activatedAt))
+                row(LocalizedString("Pod Activated", comment: "description label for activated at time pod details row"), value: dateFormatter.string(from: activatedAt))
                 row(LocalizedString("Active Time", comment: "description label for active time pod details row"), value: activeTimeText(activeTime))
             } else {
                 row(LocalizedString("Last Status", comment: "description label for last status date pod details row"), value: lastStatusText)
@@ -128,6 +124,6 @@ struct PodDetailsView: View {
 
 struct PodDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        PodDetailsView(podDetails: PodDetails(lotNumber: 0x1234, sequenceNumber: 0x1234, firmwareVersion: "1.1.1", bleFirmwareVersion: "2.2.2", deviceName: "PreviewPod", totalDelivery: 10, lastStatus: Date(), fault: FaultEventCode(rawValue: 0x67), activatedAt: Date().addingTimeInterval(.days(1))), title: "Device Details")
+        PodDetailsView(podDetails: PodDetails(lotNumber: 0x1234, sequenceNumber: 0x1234, piVersion: "1.1.1", pmVersion: "2.2.2", totalDelivery: 10, lastStatus: Date(), fault: FaultEventCode(rawValue: 0x67), activatedAt: Date().addingTimeInterval(.days(1))), title: "Device Details")
     }
 }

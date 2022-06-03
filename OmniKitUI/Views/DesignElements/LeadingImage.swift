@@ -1,6 +1,6 @@
 //
 //  LeadingImage.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 3/12/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.

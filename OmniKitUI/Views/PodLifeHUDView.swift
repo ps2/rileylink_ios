@@ -1,6 +1,6 @@
 //
 //  PodLifeHUDView.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Based on OmniKitUI/Views/PodLifeHUDView.swift
 //  Created by Pete Schwamb on 10/22/18.

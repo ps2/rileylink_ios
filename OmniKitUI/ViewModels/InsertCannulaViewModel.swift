@@ -1,6 +1,6 @@
 //
 //  InsertCannulaViewModel.swift
-//  OmniBLE
+//  OmniKit
 //
 //  Created by Pete Schwamb on 3/10/20.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
@@ -15,7 +15,7 @@ public protocol CannulaInserter {
     func checkCannulaInsertionFinished(completion: @escaping (OmnipodPumpManagerError?) -> Void)
 }
 
-extension OmnipodPumpManager: CannulaInserter { }
+extension OmnipodPumpManager: CannulaInserter {}
 
 class InsertCannulaViewModel: ObservableObject, Identifiable {
 

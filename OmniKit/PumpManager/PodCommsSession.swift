@@ -391,7 +391,7 @@ public class PodCommsSession {
         }
     }
 
-    public func insertCannula() throws -> TimeInterval {
+    public func insertCannula(optionalAlerts: [PodAlert] = []) throws -> TimeInterval {
         let cannulaInsertionUnits = Pod.cannulaInsertionUnits + Pod.cannulaInsertionUnitsExtra
         let insertionWait: TimeInterval = .seconds(cannulaInsertionUnits / Pod.primeDeliveryRate)
 
@@ -417,10 +417,10 @@ public class PodCommsSession {
             // Configure all the non-optional Pod Alarms
             let expirationTime = activatedAt + Pod.nominalPodLife
             let timeUntilExpirationAdvisory = expirationTime.timeIntervalSinceNow
-            let expirationAdvisoryAlarm = PodAlert.expirationAdvisoryAlarm(alarmTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
+            let expirationAdvisoryAlarm = PodAlert.expired(alertTime: timeUntilExpirationAdvisory, duration: Pod.expirationAdvisoryWindow)
             let endOfServiceTime = activatedAt + Pod.serviceDuration
-            let shutdownImminentAlarm = PodAlert.shutdownImminentAlarm((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
-            try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm])
+            let shutdownImminentAlarm = PodAlert.shutdownImminent((endOfServiceTime - Pod.endOfServiceImminentWindow).timeIntervalSinceNow)
+            try configureAlerts([expirationAdvisoryAlarm, shutdownImminentAlarm] + optionalAlerts)
         }
         
         // Mark cannulaInsertionUnits (0.5U) bolus delivery with Pod.secondsPerPrimePulse (1) between pulses for cannula insertion
@@ -658,10 +658,6 @@ public class PodCommsSession {
         }
     }
 
-    public func testingCommands(confirmationBeepType: BeepConfigType? = nil) throws {
-        try cancelNone(confirmationBeepType: confirmationBeepType) // reads status & verifies nonce by doing a cancel none
-    }
-    
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool = false, completionBeep: Bool = false) throws -> StatusResponse {
         let result = cancelDelivery(deliveryType: .all)
         switch result {

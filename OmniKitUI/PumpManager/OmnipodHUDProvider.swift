@@ -64,6 +64,18 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
         super.init()
         self.pumpManager.addPodStateObserver(self, queue: .main)
     }
+
+    private func updateReservoirView() {
+        guard let reservoirView = reservoirView,
+              let lastStatusDate = pumpManager.lastStatusDate,
+            let reservoirLevelHighlightState = pumpManager.reservoirLevelHighlightState else
+        {
+            return
+        }
+
+        reservoirView.update(level: pumpManager.reservoirLevel, at: lastStatusDate, reservoirLevelHighlightState: reservoirLevelHighlightState)
+    }
+
     
     private func updateReservoirView() {
         if let lastInsulinMeasurements = podState?.lastInsulinMeasurements,
@@ -94,13 +106,10 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider, PodStateObserver {
     }
     
     public func didTapOnHUDView(_ view: BaseHUDView, allowDebugFeatures: Bool) -> HUDTapAction? {
-        if let podState = self.podState, podState.isFaulted {
-            return HUDTapAction.presentViewController(PodReplacementNavigationController.instantiatePodReplacementFlow(pumpManager))
-        } else {
-            return HUDTapAction.presentViewController(pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: allowedInsulinTypes))
-        }
+        let vc = pumpManager.settingsViewController(bluetoothProvider: bluetoothProvider, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: allowedInsulinTypes)
+        return HUDTapAction.presentViewController(vc)
     }
-    
+
     func hudDidAppear() {
         updateReservoirView()
         pumpManager.refreshStatus(emitConfirmationBeep: false)

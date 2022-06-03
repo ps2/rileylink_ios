@@ -137,7 +137,7 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         return FaultEventType(rawValue: rawValue)
     }
     
-    init(rawValue: UInt8) {
+    public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
     

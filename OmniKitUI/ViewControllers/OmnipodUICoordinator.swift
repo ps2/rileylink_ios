@@ -180,13 +180,6 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             }
             let rileyLinkListDataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
 
-//            let device = devicesDataSource.devices[indexPath.row]
-//
-//            guard device.hardwareType != nil else {
-//                tableView.deselectRow(at: indexPath, animated: true)
-//                return
-//            }
-//
             let handleRileyLinkSelection = { [weak self] (device: RileyLinkDevice) in
                 if let self = self {
                     let vc = RileyLinkDeviceTableViewController(

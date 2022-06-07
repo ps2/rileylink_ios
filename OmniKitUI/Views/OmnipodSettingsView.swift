@@ -275,11 +275,11 @@ struct OmnipodSettingsView: View  {
                     }) {
                         Image(systemName: "speaker.wave.2.circle")
                             .imageScale(.large)
-                            .foregroundColor(viewModel.podConnected ? .accentColor : .secondary)
+                            .foregroundColor(viewModel.rileylinkConnected ? .accentColor : .secondary)
                             .padding(.top,5)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    .disabled(!viewModel.podConnected || sendingTestBeepsCommand)
+                    .disabled(!viewModel.rileylinkConnected || sendingTestBeepsCommand)
 
                     headerImage
 

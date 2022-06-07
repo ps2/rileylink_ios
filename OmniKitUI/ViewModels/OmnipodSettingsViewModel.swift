@@ -11,7 +11,7 @@ import LoopKit
 import LoopKitUI
 import HealthKit
 import OmniKit
-
+import Combine
 
 enum DashSettingsViewAlert {
     case suspendError(Error)
@@ -35,7 +35,7 @@ class OmnipodSettingsViewModel: ObservableObject {
 
     @Published var beepPreference: BeepPreference
 
-    @Published var podConnected: Bool
+    @Published var rileylinkConnected: Bool
 
     var activatedAtString: String {
         if let activatedAt = activatedAt {
@@ -212,6 +212,8 @@ class OmnipodSettingsViewModel: ObservableObject {
     var navigateTo: ((OmnipodUIScreen) -> Void)?
     
     private let pumpManager: OmnipodPumpManager
+
+    private lazy var cancellables = Set<AnyCancellable>()
     
     init(pumpManager: OmnipodPumpManager) {
         self.pumpManager = pumpManager
@@ -233,14 +235,29 @@ class OmnipodSettingsViewModel: ObservableObject {
         previousPodDetails = self.pumpManager.previousPodDetails
 
         // TODO:
-        podConnected = false
+        rileylinkConnected = false
 
         pumpManager.addPodStateObserver(self, queue: DispatchQueue.main)
         pumpManager.addStatusObserver(self, queue: DispatchQueue.main)
 
+        // Register for device notifications
+        NotificationCenter.default.publisher(for: .DeviceConnectionStateDidChange)
+            .sink { [weak self] _ in
+                self?.updateConnectionStatus()
+            }
+            .store(in: &cancellables)
 
         // Trigger refresh
         pumpManager.getPodStatus() { _ in }
+        updateConnectionStatus()
+    }
+
+    func updateConnectionStatus() {
+        pumpManager.rileyLinkConnectionManager?.deviceProvider.getDevices { (devices) in
+            DispatchQueue.main.async { [weak self] in
+                self?.rileylinkConnected = devices.firstConnected != nil
+            }
+        }
     }
     
     func changeTimeZoneTapped() {
@@ -474,7 +491,7 @@ extension OmnipodSettingsViewModel: PodStateObserver {
     }
 
     func podConnectionStateDidChange(isConnected: Bool) {
-        self.podConnected = isConnected
+        self.rileylinkConnected = isConnected
     }
 }
 

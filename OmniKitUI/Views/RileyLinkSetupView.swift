@@ -51,6 +51,7 @@ struct RileyLinkSetupView: View {
             Spacer()
             continueButton
                 .padding([.bottom, .horizontal])
+
         }
         .navigationTitle("RileyLink Setup")
         .onAppear { dataSource.isScanningEnabled = true }
@@ -87,6 +88,8 @@ struct RileyLinkSetupView: View {
     private var continueButton: some View {
         Button(LocalizedString("Continue", comment: "Text for continue button on PodSetupView"), action: nextAction)
             .buttonStyle(ActionButtonStyle())
+            .disabled(!dataSource.connecting)
+
     }
 
 }

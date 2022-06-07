@@ -327,7 +327,14 @@ class PodComms: CustomDebugStringConvertible {
             }
 
             device.runSession(withName: "Pair Pod") { (commandSession) in
+                // Synchronize access to podState
+                self.podStateLock.lock()
+                defer {
+                    self.podStateLock.unlock()
+                }
+
                 do {
+
                     self.configureDevice(device, with: commandSession)
                     
                     if self.podState == nil {
@@ -377,13 +384,14 @@ class PodComms: CustomDebugStringConvertible {
                 return
             }
 
-            // Synchronize access to podState
-            self.podStateLock.lock()
-            defer {
-                self.podStateLock.unlock()
-            }
-
             device.runSession(withName: name) { (commandSession) in
+
+                // Synchronize access to podState
+                self.podStateLock.lock()
+                defer {
+                    self.podStateLock.unlock()
+                }
+
                 guard self.podState != nil else {
                     block(.failure(PodCommsError.noPodPaired))
                     return

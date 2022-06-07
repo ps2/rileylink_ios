@@ -19,10 +19,10 @@ import RileyLinkBLEKit
 
 enum OmnipodUIScreen {
     case firstRunScreen
-    case rileyLinkSetup
     case expirationReminderSetup
     case lowReservoirReminderSetup
     case insulinTypeSelection
+    case rileyLinkSetup
     case pairPod
     case insertCannula
     case confirmAttachment
@@ -36,14 +36,14 @@ enum OmnipodUIScreen {
     func next() -> OmnipodUIScreen? {
         switch self {
         case .firstRunScreen:
-            return .rileyLinkSetup
-        case .rileyLinkSetup:
             return .expirationReminderSetup
         case .expirationReminderSetup:
             return .lowReservoirReminderSetup
         case .lowReservoirReminderSetup:
             return .insulinTypeSelection
         case .insulinTypeSelection:
+            return .rileyLinkSetup
+        case .rileyLinkSetup:
             return .pairPod
         case .pairPod:
             return .confirmAttachment

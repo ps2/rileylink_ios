@@ -70,6 +70,19 @@ class RileyLinkListDataSource: ObservableObject {
         }
     }
 
+    var connecting: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+
+        guard let connectionManager = rileyLinkPumpManager.rileyLinkConnectionManager else {
+            return false
+        }
+
+        return connectionManager.connectingCount > 0
+        #endif
+    }
+
 
     private var rssiFetchTimer: Timer? {
         willSet {

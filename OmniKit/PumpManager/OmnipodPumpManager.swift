@@ -617,18 +617,13 @@ extension OmnipodPumpManager {
             self.podComms.delegate = self
             self.podComms.messageLogger = self
 
-            state.podState = nil
+            state.updatePodStateFromPodComms(nil)
         }
 
-        // TODO: PodState shouldn't be mutated outside of the session queue
-        // TODO: Consider serializing the entire forget-pod path instead of relying on the UI to do it
+        podComms.forgetPod()
 
-        let state = mutateState { (state) in
-            state.podState?.finalizeFinishedDoses()
-        }
-
-        if let dosesToStore = state.podState?.dosesToStore {
-            store(doses: dosesToStore, completion: { error in
+        if let dosesToStore = self.state.podState?.dosesToStore {
+            self.store(doses: dosesToStore, completion: { error in
                 self.setState({ (state) in
                     if error != nil {
                         state.unstoredDoses.append(contentsOf: dosesToStore)
@@ -639,7 +634,7 @@ extension OmnipodPumpManager {
                 completion()
             })
         } else {
-            setState { (state) in
+            self.setState { (state) in
                 resetPodState(&state)
             }
 
@@ -659,10 +654,10 @@ extension OmnipodPumpManager {
         let fault = mockFault ? try? DetailedStatus(encodedData: Data(hexadecimalString: "020f0000000900345c000103ff0001000005ae056029")!) : nil
         podState.fault = fault
 
-        self.podComms = PodComms(podState: podState)
+        podComms = PodComms(podState: podState)
 
         setState({ (state) in
-            state.podState = podState
+            state.updatePodStateFromPodComms(podState)
         })
     }
     #endif
@@ -683,10 +678,11 @@ extension OmnipodPumpManager {
         let mockCommsErrorDuringPairing = false
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
             self.jumpStartPod(address: 0x1f0b3557, lot: 40505, tid: 6439, mockFault: mockFaultDuringPairing)
-            let fault: DetailedStatus? = self.setStateWithResult({ (state) in
-                state.podState?.setupProgress = .priming
-                return state.podState?.fault
-            })
+            self.podComms.mockPodStateChanges { podState in
+                podState.setupProgress = .priming
+            }
+            let fault: DetailedStatus? = self.state.podState?.fault
+
             if mockFaultDuringPairing {
                 completion(.failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault!))))
             } else if mockCommsErrorDuringPairing {
@@ -785,6 +781,7 @@ extension OmnipodPumpManager {
                     var podState = state.podState
                     podState?.fault = fault
                     state.updatePodStateFromPodComms(podState)
+                    return .failure(OmnipodPumpManagerError.communication(PodCommsError.podFault(fault: fault)))
                 }
 
                 // Mock success
@@ -1225,7 +1222,7 @@ extension OmnipodPumpManager: PumpManager {
                 self.setState { (state) in
                     state.insulinType = insulinType
                 }
-                self.podComms.insulinType = insulinType
+                //self.podComms.insulinType = insulinType
             }
         }
     }
@@ -2088,17 +2085,17 @@ extension OmnipodPumpManager: MessageLogger {
 }
 
 extension OmnipodPumpManager: PodCommsDelegate {
-    func podComms(_ podComms: PodComms, didChange podState: PodState) {
+    func podComms(_ podComms: PodComms, didChange podState: PodState?) {
         setState { (state) in
             // Check for any updates to bolus certainty, and log them
-            if let bolus = state.podState?.unfinalizedBolus, bolus.scheduledCertainty == .uncertain, !bolus.isFinished() {
-                if podState.unfinalizedBolus?.scheduledCertainty == .some(.certain) {
+            if let podState = state.podState, let bolus = podState.unfinalizedBolus, bolus.scheduledCertainty == .uncertain, !bolus.isFinished() {
+                if bolus.scheduledCertainty == .certain {
                     self.log.default("Resolved bolus uncertainty: did bolus")
                 } else if podState.unfinalizedBolus == nil {
                     self.log.default("Resolved bolus uncertainty: did not bolus")
                 }
             }
-            state.podState = podState
+            state.updatePodStateFromPodComms(podState)
         }
     }
 }

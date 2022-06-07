@@ -18,7 +18,12 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
     
     public var isOnboarded: Bool
 
-    public var podState: PodState?
+    private (set) public var podState: PodState?
+
+    // podState should only be modifiable by PodComms
+    mutating func updatePodStateFromPodComms(_ podState: PodState?) {
+        self.podState = podState
+    }
 
     public var pairingAttemptAddress: UInt32?
 

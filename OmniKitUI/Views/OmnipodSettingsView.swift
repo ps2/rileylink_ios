@@ -15,6 +15,8 @@ import OmniKit
 struct OmnipodSettingsView: View  {
     
     @ObservedObject var viewModel: OmnipodSettingsViewModel
+
+    @ObservedObject var rileyLinkListDataSource: RileyLinkListDataSource
     
     @State private var showingDeleteConfirmation = false
     
@@ -343,7 +345,25 @@ struct OmnipodSettingsView: View  {
                 }
             }
             .disabled(cancelingTempBasal)
-            
+
+            Section(header: HStack {
+                FrameworkLocalText("Devices", comment: "Header for devices section of RileyLinkSetupView")
+                Spacer()
+                ProgressView()
+            }) {
+                ForEach(rileyLinkListDataSource.devices) { device in
+                    Toggle(isOn: rileyLinkListDataSource.autoconnectBinding(for: device)) {
+                        HStack {
+                            Text(device.name ?? "Unknown")
+                            Spacer()
+                            Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+            .onAppear { rileyLinkListDataSource.isScanningEnabled = true }
+            .onDisappear { rileyLinkListDataSource.isScanningEnabled = false }
+
             Section() {
                 HStack {
                     FrameworkLocalText("Pod Activated", comment: "Label for pod insertion row")
@@ -583,4 +603,23 @@ struct OmnipodSettingsView: View  {
             return guidanceColors.critical
         }
     }
+
+    var decimalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+
+        return formatter
+    }()
+
+    private func formatRSSI(rssi: Int?) -> String {
+        if let rssi = rssi, let rssiStr = decimalFormatter.decibleString(from: rssi) {
+            return rssiStr
+        } else {
+            return ""
+        }
+    }
+
 }

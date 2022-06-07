@@ -158,7 +158,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         if let rileyLinkConnectionManagerStateRaw = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionManagerState.RawValue {
             rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rileyLinkConnectionManagerStateRaw)
         } else {
-            rileyLinkConnectionManagerState = nil
+            rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(autoConnectIDs: [])
         }
         
         var insulinType: InsulinType?
@@ -240,7 +240,6 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         } else {
             previousPodState = nil
         }
-
     }
     
     public var rawValue: RawValue {

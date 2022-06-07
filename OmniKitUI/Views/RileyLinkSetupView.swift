@@ -36,7 +36,11 @@ struct RileyLinkSetupView: View {
                     bodyText
                         .foregroundColor(.secondary)
                 }
-                Section(header: Text("Devices")) {
+                Section(header: HStack {
+                    FrameworkLocalText("Devices", comment: "Header for devices section of RileyLinkSetupView")
+                    Spacer()
+                    ProgressView()
+                }) {
                     ForEach(dataSource.devices) { device in
                         Toggle(isOn: dataSource.autoconnectBinding(for: device)) {
                             HStack {
@@ -53,7 +57,7 @@ struct RileyLinkSetupView: View {
                 .padding([.bottom, .horizontal])
 
         }
-        .navigationTitle("RileyLink Setup")
+        .navigationTitle(LocalizedString("RileyLink Setup", comment: "Navigation title for RileyLinkSetupView"))
         .onAppear { dataSource.isScanningEnabled = true }
         .onDisappear { dataSource.isScanningEnabled = false }
     }

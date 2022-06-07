@@ -177,7 +177,9 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             viewModel.navigateTo = { [weak self] (screen) in
                 self?.navigateTo(screen)
             }
-            let view = OmnipodSettingsView(viewModel: viewModel)
+            let rileyLinkListDataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
+
+            let view = OmnipodSettingsView(viewModel: viewModel, rileyLinkListDataSource: rileyLinkListDataSource)
             return hostingController(rootView: view)
         case .pairPod:
             pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didCreatePumpManager: pumpManager)

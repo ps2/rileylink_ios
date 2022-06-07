@@ -14,7 +14,7 @@ public struct StatusResponse : MessageBlock {
     public let deliveryStatus: DeliveryStatus
     public let podProgressStatus: PodProgressStatus
     public let timeActive: TimeInterval
-    public let reservoirLevel: Double?
+    public let reservoirLevel: Double
     public let insulin: Double
     public let bolusNotDelivered: Double
     public let lastProgrammingMessageSeqNum: UInt8 // updated by pod for 03, 08, $11, $19, $1A, $1C, $1E & $1F command messages
@@ -53,13 +53,8 @@ public struct StatusResponse : MessageBlock {
         self.bolusNotDelivered = Double((Int(encodedData[4] & 0x3) << 8) | Int(encodedData[5])) / Pod.pulsesPerUnit
 
         self.alerts = AlertSet(rawValue: ((encodedData[6] & 0x7f) << 1) | (encodedData[7] >> 7))
-        
-        let reservoirValue = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) / Pod.pulsesPerUnit
-        if reservoirValue <= Pod.maximumReservoirReading {
-                self.reservoirLevel = reservoirValue
-        } else {
-            self.reservoirLevel = nil
-        }
+
+        self.reservoirLevel = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) / Pod.pulsesPerUnit
     }
 }
 

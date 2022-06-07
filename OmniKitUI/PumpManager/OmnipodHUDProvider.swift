@@ -135,7 +135,7 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider {
             return
         }
 
-        refreshTimer = Timer(timeInterval: .seconds(30) , repeats: true) { [weak self] _ in
+        refreshTimer = Timer(timeInterval: .seconds(60) , repeats: true) { [weak self] _ in
             self?.refresh()
         }
         RunLoop.main.add(refreshTimer!, forMode: .default)

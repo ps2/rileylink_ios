@@ -14,10 +14,12 @@ import Combine
 import LoopKit
 import LoopKitUI
 import OmniKit
+import RileyLinkKit
 import RileyLinkBLEKit
 
 enum OmnipodUIScreen {
     case firstRunScreen
+    case rileyLinkSetup
     case expirationReminderSetup
     case lowReservoirReminderSetup
     case insulinTypeSelection
@@ -34,6 +36,8 @@ enum OmnipodUIScreen {
     func next() -> OmnipodUIScreen? {
         switch self {
         case .firstRunScreen:
+            return .rileyLinkSetup
+        case .rileyLinkSetup:
             return .expirationReminderSetup
         case .expirationReminderSetup:
             return .lowReservoirReminderSetup
@@ -102,6 +106,13 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                                         self.completionDelegate?.completionNotifyingDidComplete(self)
                                     })
             return hostingController(rootView: view)
+        case .rileyLinkSetup:
+            let dataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
+            let view = RileyLinkSetupView(
+                dataSource: dataSource,
+                nextAction: { [weak self] in self?.stepFinished() })
+            return hostingController(rootView: view)
+
         case .expirationReminderSetup:
             var view = ExpirationReminderSetupView(expirationReminderDefault: Int(pumpManager.defaultExpirationReminderOffset.hours))
             view.valueChanged = { [weak self] value in
@@ -320,7 +331,6 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             let basalSchedule = pumpManagerSettings.basalSchedule
 
             let rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
-//            rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
 
             let pumpManagerState = OmnipodPumpManagerState(
                 isOnboarded: false,
@@ -331,7 +341,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 insulinType: nil,
                 maximumTempBasalRate: pumpManagerSettings.maxBasalRateUnitsPerHour)
 
-            self.pumpManager = OmnipodPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider)
+            self.pumpManager = OmnipodPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
         } else {
             guard let pumpManager = pumpManager else {
                 fatalError("Unable to create Omnipod PumpManager")

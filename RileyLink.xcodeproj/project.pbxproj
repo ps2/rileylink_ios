@@ -290,6 +290,8 @@
 		C1328AEE284A825E0096C110 /* PumpManagerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1328AED284A825E0096C110 /* PumpManagerAlert.swift */; };
 		C1328AEF284A91170096C110 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73D20DED01700CAC200 /* HKUnit.swift */; };
 		C1328AF1284A94E00096C110 /* PendingCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1328AF0284A94E00096C110 /* PendingCommand.swift */; };
+		C1328AF3284F9C7B0096C110 /* RileyLinkSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1328AF2284F9C7B0096C110 /* RileyLinkSetupView.swift */; };
+		C1328AF5284FA63D0096C110 /* RileyLinkListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1328AF4284FA63D0096C110 /* RileyLinkListDataSource.swift */; };
 		C1330F431DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */; };
 		C133CF931D5943780034B82D /* PredictedBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133CF921D5943780034B82D /* PredictedBG.swift */; };
 		C136AA3A23116E32008A320D /* OmniKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA2C23116E32008A320D /* OmniKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1283,6 +1285,8 @@
 		C12EA25F198B436900309FA4 /* RileyLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RileyLinkTests.m; sourceTree = "<group>"; };
 		C1328AED284A825E0096C110 /* PumpManagerAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerAlert.swift; sourceTree = "<group>"; };
 		C1328AF0284A94E00096C110 /* PendingCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCommand.swift; sourceTree = "<group>"; };
+		C1328AF2284F9C7B0096C110 /* RileyLinkSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkSetupView.swift; sourceTree = "<group>"; };
+		C1328AF4284FA63D0096C110 /* RileyLinkListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkListDataSource.swift; sourceTree = "<group>"; };
 		C1330F421DBDA46400569064 /* ChangeSensorAlarmSilenceConfigPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSensorAlarmSilenceConfigPumpEvent.swift; sourceTree = "<group>"; };
 		C133CF921D5943780034B82D /* PredictedBG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PredictedBG.swift; sourceTree = "<group>"; };
 		C136AA2A23116E32008A320D /* OmniKitPlugin.loopplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OmniKitPlugin.loopplugin; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2116,6 +2120,7 @@
 				C1D9E358283D88F6003CA0D3 /* SetupCompleteView.swift */,
 				C1D9E34D283D88F5003CA0D3 /* TimeView.swift */,
 				C1D9E343283D88F5003CA0D3 /* UncertaintyRecoveredView.swift */,
+				C1328AF2284F9C7B0096C110 /* RileyLinkSetupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2613,6 +2618,7 @@
 				C1D9E37E283D9061003CA0D3 /* OmnipodSettingsViewModel.swift */,
 				C1D9E37F283D9061003CA0D3 /* PairPodViewModel.swift */,
 				C1D9E380283D9061003CA0D3 /* PodLifeState.swift */,
+				C1328AF4284FA63D0096C110 /* RileyLinkListDataSource.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -4311,6 +4317,7 @@
 				C1D9E363283D88F6003CA0D3 /* InsertCannulaView.swift in Sources */,
 				C1D9E384283D9061003CA0D3 /* OmnipodSettingsViewModel.swift in Sources */,
 				C1D9E388283D9061003CA0D3 /* DeliveryUncertaintyRecoveryViewModel.swift in Sources */,
+				C1328AF5284FA63D0096C110 /* RileyLinkListDataSource.swift in Sources */,
 				C1D9E368283D88F6003CA0D3 /* ExpirationReminderPickerView.swift in Sources */,
 				C1C9F88D283D945D00CFC769 /* LeadingImage.swift in Sources */,
 				C1D9E364283D88F6003CA0D3 /* DeactivatePodView.swift in Sources */,
@@ -4326,6 +4333,7 @@
 				C1D9E361283D88F6003CA0D3 /* ExpirationReminderSetupView.swift in Sources */,
 				C1FFB00E2133242C00C50C1D /* OmniPodPumpManager+UI.swift in Sources */,
 				C1D9E373283D88F6003CA0D3 /* ScheduledExpirationReminderEditView.swift in Sources */,
+				C1328AF3284F9C7B0096C110 /* RileyLinkSetupView.swift in Sources */,
 				C1C9F882283D921000CFC769 /* FrameworkLocalText.swift in Sources */,
 				C1D9E374283D88F6003CA0D3 /* SetupCompleteView.swift in Sources */,
 			);

@@ -120,8 +120,11 @@ public class RileyLinkDevice {
 
     private var sessionQueueOperationCountObserver: NSKeyValueObservation!
 
-    init(peripheralManager: PeripheralManager) {
+    public var rssi: Int?
+
+    init(peripheralManager: PeripheralManager, rssi: Int?) {
         self.manager = peripheralManager
+        self.rssi = rssi
         sessionQueue.underlyingQueue = peripheralManager.queue
 
         peripheralManager.delegate = self
@@ -141,7 +144,7 @@ extension RileyLinkDevice {
     public var name: String? {
         return manager.peripheral.name
     }
-    
+
     public var deviceURI: String {
         return "rileylink://\(name ?? peripheralIdentifier.uuidString)"
     }
@@ -549,6 +552,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
     }
 
     func peripheralManager(_ manager: PeripheralManager, didReadRSSI RSSI: NSNumber, error: Error?) {
+        self.rssi = Int(truncating: RSSI)
         NotificationCenter.default.post(
             name: .DeviceRSSIDidChange,
             object: self,

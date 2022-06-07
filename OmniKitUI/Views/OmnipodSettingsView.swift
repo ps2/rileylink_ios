@@ -11,12 +11,15 @@ import LoopKit
 import LoopKitUI
 import HealthKit
 import OmniKit
+import RileyLinkBLEKit
 
 struct OmnipodSettingsView: View  {
     
     @ObservedObject var viewModel: OmnipodSettingsViewModel
 
     @ObservedObject var rileyLinkListDataSource: RileyLinkListDataSource
+
+    var handleRileyLinkSelection: (RileyLinkDevice) -> Void
     
     @State private var showingDeleteConfirmation = false
     
@@ -29,7 +32,8 @@ struct OmnipodSettingsView: View  {
     @State private var sendingTestBeepsCommand = false;
 
     @State private var cancelingTempBasal = false
-    
+
+
     @Environment(\.guidanceColors) var guidanceColors
     @Environment(\.insulinTintColor) var insulinTintColor
     
@@ -358,6 +362,10 @@ struct OmnipodSettingsView: View  {
                             Spacer()
                             Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
                         }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            handleRileyLinkSelection(device)
+                        }
                     }
                 }
             }
@@ -520,7 +528,7 @@ struct OmnipodSettingsView: View  {
     var suspendOptionsActionSheet: ActionSheet {
         ActionSheet(
             title: FrameworkLocalText("Delivery Suspension Reminder", comment: "Title for suspend duration selection action sheet"),
-            message: FrameworkLocalText("How long would you like to suspend insulin delivery?", comment: "Message for suspend duration selection action sheet"),
+            message: FrameworkLocalText("When would you like Loop to remind you to resume delivery?", comment: "Message for suspend duration selection action sheet"),
             buttons: [
                 .default(FrameworkLocalText("30 minutes", comment: "Button text for 30 minute suspend duration"), action: { self.viewModel.suspendDelivery(duration: .minutes(30)) }),
                 .default(FrameworkLocalText("1 hour", comment: "Button text for 1 hour suspend duration"), action: { self.viewModel.suspendDelivery(duration: .hours(1)) }),

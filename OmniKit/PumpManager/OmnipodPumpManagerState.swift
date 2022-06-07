@@ -210,6 +210,10 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
         self.acknowledgedTimeOffsetAlert = rawValue["acknowledgedTimeOffsetAlert"] as? Bool ?? false
 
+        if let lastPumpDataReportDate = rawValue["lastPumpDataReportDate"] as? Date {
+            self.lastPumpDataReportDate = lastPumpDataReportDate
+        }
+
         if let pairingAttemptAddress = rawValue["pairingAttemptAddress"] as? UInt32 {
             self.pairingAttemptAddress = pairingAttemptAddress
         }
@@ -267,6 +271,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         value["pairingAttemptAddress"] = pairingAttemptAddress
         value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
         value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
+        value["lastPumpDataReportDate"] = lastPumpDataReportDate
         value["previousPodState"] = previousPodState?.rawValue
         
         return value

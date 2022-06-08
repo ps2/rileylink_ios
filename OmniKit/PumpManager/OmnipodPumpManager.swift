@@ -428,8 +428,7 @@ extension OmnipodPumpManager {
     }
 
     private var shouldBeepForAutomaticTempBasal: Bool {
-        let automaticTempBasalBeeps = true
-        return self.confirmationBeeps && self.extendedBeeps && automaticTempBasalBeeps
+        return self.confirmationBeeps && self.extendedBeeps
     }
 
     // Thread-safe

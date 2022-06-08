@@ -2086,16 +2086,43 @@ extension OmnipodPumpManager: MessageLogger {
 
 extension OmnipodPumpManager: PodCommsDelegate {
     func podComms(_ podComms: PodComms, didChange podState: PodState?) {
-        setState { (state) in
-            // Check for any updates to bolus certainty, and log them
-            if let podState = state.podState, let bolus = podState.unfinalizedBolus, bolus.scheduledCertainty == .uncertain, !bolus.isFinished() {
-                if bolus.scheduledCertainty == .certain {
-                    self.log.default("Resolved bolus uncertainty: did bolus")
-                } else if podState.unfinalizedBolus == nil {
-                    self.log.default("Resolved bolus uncertainty: did not bolus")
+        if let podState = podState {
+            let (newFault, oldAlerts, newAlerts) = setStateWithResult { (state) -> (DetailedStatus?,AlertSet,AlertSet) in
+                if (state.suspendEngageState == .engaging && podState.isSuspended) ||
+                   (state.suspendEngageState == .disengaging && !podState.isSuspended)
+                {
+                    state.suspendEngageState = .stable
                 }
+
+                let newFault: DetailedStatus?
+
+                // Check for new fault state
+                if state.podState?.fault == nil, let fault = podState.fault {
+                    newFault = fault
+                } else {
+                    newFault = nil
+                }
+
+                let oldAlerts: AlertSet = state.podState?.activeAlertSlots ?? AlertSet.none
+                let newAlerts: AlertSet = podState.activeAlertSlots
+
+                state.updatePodStateFromPodComms(podState)
+
+                return (newFault, oldAlerts, newAlerts)
             }
-            state.updatePodStateFromPodComms(podState)
+
+            if let newFault = newFault {
+                notifyPodFault(fault: newFault)
+            }
+
+            if oldAlerts != newAlerts {
+                self.alertsChanged(oldAlerts: oldAlerts, newAlerts: newAlerts)
+            }
+        } else {
+            // Resetting podState
+            mutateState { state in
+                state.updatePodStateFromPodComms(podState)
+            }
         }
     }
 }

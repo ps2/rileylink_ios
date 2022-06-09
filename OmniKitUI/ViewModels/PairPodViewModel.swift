@@ -40,7 +40,7 @@ class PairPodViewModel: ObservableObject, Identifiable {
         case ready
         case pairing
         case priming(finishTime: CFTimeInterval)
-        case error(DashPairingError)
+        case error(OmnipodPairingError)
         case finished
         
         var instructionsDisabled: Bool {
@@ -142,7 +142,7 @@ class PairPodViewModel: ObservableObject, Identifiable {
         }
     }
     
-    var error: DashPairingError? {
+    var error: OmnipodPairingError? {
         if case .error(let error) = state {
             return error
         }
@@ -184,7 +184,7 @@ class PairPodViewModel: ObservableObject, Identifiable {
             DispatchQueue.main.async {
                 switch status {
                 case .failure(let error):
-                    let pairingError = DashPairingError.pumpManagerError(error)
+                    let pairingError = OmnipodPairingError.pumpManagerError(error)
                     self.state = .error(pairingError)
                 case .success(let duration):
                     
@@ -219,7 +219,7 @@ class PairPodViewModel: ObservableObject, Identifiable {
 }
 
 // Pairing recovery suggestions
-enum DashPairingError : LocalizedError {
+enum OmnipodPairingError : LocalizedError {
     case pumpManagerError(PumpManagerError)
     
     var recoverySuggestion: String? {

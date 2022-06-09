@@ -1,6 +1,6 @@
 //
 //  ReservoirLevel.swift
-//  DashKit
+//  OmniKit
 //
 //  Created by Pete Schwamb on 5/31/19.
 //  Copyright © 2019 LoopKit Authors. All rights reserved.

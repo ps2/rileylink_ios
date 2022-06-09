@@ -572,7 +572,7 @@ struct OmnipodSettingsView: View  {
         }
     }
     
-    private func alert(for alert: DashSettingsViewAlert) -> SwiftUI.Alert {
+    private func alert(for alert: OmnipodSettingsViewAlert) -> SwiftUI.Alert {
         switch alert {
         case .suspendError(let error):
             return SwiftUI.Alert(

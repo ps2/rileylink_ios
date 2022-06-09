@@ -1,5 +1,5 @@
 //
-//  DashSettingsViewModel.swift
+//  OmnipodSettingsViewModel.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 3/8/20.
@@ -13,14 +13,14 @@ import HealthKit
 import OmniKit
 import Combine
 
-enum DashSettingsViewAlert {
+enum OmnipodSettingsViewAlert {
     case suspendError(Error)
     case resumeError(Error)
     case cancelManualBasalError(Error)
     case syncTimeError(OmnipodPumpManagerError)
 }
 
-struct DashSettingsNotice {
+struct OmnipodSettingsNotice {
     let title: String
     let description: String
 }
@@ -82,7 +82,7 @@ class OmnipodSettingsViewModel: ObservableObject {
 
     @Published var basalDeliveryRate: Double?
 
-    @Published var activeAlert: DashSettingsViewAlert? = nil {
+    @Published var activeAlert: OmnipodSettingsViewAlert? = nil {
         didSet {
             if activeAlert != nil {
                 alertIsPresented = true
@@ -145,9 +145,9 @@ class OmnipodSettingsViewModel: ObservableObject {
         }
     }
     
-    var notice: DashSettingsNotice? {
+    var notice: OmnipodSettingsNotice? {
         if pumpManager.isClockOffset {
-            return DashSettingsNotice(
+            return OmnipodSettingsNotice(
                 title: LocalizedString("Time Change Detected", comment: "title for time change detected notice"),
                 description: LocalizedString("The time on your pump is different from the current time. Your pump’s time controls your scheduled basal rates. You can review the time difference and configure your pump.", comment: "description for time change detected notice"))
         } else {

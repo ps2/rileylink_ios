@@ -1,5 +1,5 @@
 //
-//  DashSetupViewController.swift
+//  OmnipodUICoordinator.swift
 //  OmniKit
 //
 //  Created by Pete Schwamb on 2/16/20.
@@ -66,10 +66,6 @@ enum OmnipodUIScreen {
             return nil
         }
     }
-}
-
-protocol DashUINavigator: AnyObject {
-    func navigateTo(_ screen: OmnipodUIScreen)
 }
 
 class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, CompletionNotifying, UINavigationControllerDelegate {
@@ -337,6 +333,14 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
         }
     }
 
+    func navigateTo(_ screen: OmnipodUIScreen) {
+        screenStack.append(screen)
+        let viewController = viewControllerForScreen(screen)
+        viewController.isModalInPresentation = false
+        self.pushViewController(viewController, animated: true)
+        viewController.view.layoutSubviews()
+    }
+
     private func setupCanceled() {
         completionDelegate?.completionNotifyingDidComplete(self)
     }
@@ -436,14 +440,4 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
     }
 
     let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
-}
-
-extension OmnipodUICoordinator: DashUINavigator {
-    func navigateTo(_ screen: OmnipodUIScreen) {
-        screenStack.append(screen)
-        let viewController = viewControllerForScreen(screen)
-        viewController.isModalInPresentation = false
-        self.pushViewController(viewController, animated: true)
-        viewController.view.layoutSubviews()
-    }
 }

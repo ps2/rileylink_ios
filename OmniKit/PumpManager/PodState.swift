@@ -217,6 +217,54 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             unfinalizedTempBasal = nil
         }
     }
+
+    // Giving up on pod; we will assume commands failed/succeeded in the direction of positive net delivery
+    mutating func resolveAnyPendingCommandWithUncertainty() {
+        guard let pendingCommand = pendingCommand else {
+            return
+        }
+
+        switch pendingCommand {
+        case .program(let program, _, let commandDate):
+
+            if let dose = program.unfinalizedDose(at: commandDate, withCertainty: .uncertain, insulinType: insulinType) {
+                switch dose.doseType {
+                case .bolus:
+                    if dose.isFinished() {
+                        finalizedDoses.append(dose)
+                    } else {
+                        unfinalizedBolus = dose
+                    }
+                case .tempBasal:
+                    // Assume a high temp succeeded, but low temp failed
+                    if case .tempBasal(_, _, let isHighTemp, _) = program, isHighTemp {
+                        if dose.isFinished() {
+                            finalizedDoses.append(dose)
+                        } else {
+                            unfinalizedTempBasal = dose
+                        }
+                    }
+                case .resume:
+                    finalizedDoses.append(dose)
+                case .suspend:
+                    break // start program is never a suspend
+                }
+            }
+        case .stopProgram(let stopProgram, _, let commandDate):
+            // All stop programs result in reduced delivery, except for stopping a low temp, so we assume all stop
+            // commands failed, except for low temp
+
+
+            if stopProgram.contains(.tempBasal),
+                let tempBasal = unfinalizedTempBasal,
+                tempBasal.isHighTemp,
+                !tempBasal.isFinished(at: commandDate)
+            {
+                unfinalizedTempBasal?.cancel(at: commandDate)
+            }
+        }
+        self.pendingCommand = nil
+    }
     
     private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus, podProgressStatus: PodProgressStatus, bolusNotDelivered: Double) {
 

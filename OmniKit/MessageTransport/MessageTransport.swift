@@ -220,6 +220,7 @@ class PodMessageTransport: MessageTransport {
         
         messageNumber = message.sequenceNum
         incrementMessageNumber()
+        var sentFullMessage = false
 
         do {
             let responsePacket = try { () throws -> Packet in
@@ -233,6 +234,9 @@ class PodMessageTransport: MessageTransport {
                     let sendPacket = Packet(address: address, packetType: packetType, sequenceNum: self.packetNumber, data: dataRemaining)
                     dataRemaining = dataRemaining.subdata(in: sendPacket.data.count..<dataRemaining.count)
                     firstPacket = false
+                    if dataRemaining.count == 0 {
+                        sentFullMessage = true
+                    }
                     let response = try self.exchangePackets(packet: sendPacket)
                     if dataRemaining.count == 0 {
                         return response
@@ -293,8 +297,11 @@ class PodMessageTransport: MessageTransport {
             
             return response
         } catch let error {
-            log.error("Error during communication with POD: %@", String(describing: error))
-            throw error
+            if sentFullMessage {
+                throw PodCommsError.unacknowledgedMessage(sequenceNumber: message.sequenceNum, error: error)
+            } else {
+                throw PodCommsError.commsError(error: error)
+            }
         }
     }
 

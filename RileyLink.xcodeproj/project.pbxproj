@@ -424,6 +424,7 @@
 		C1A721621EC3E0500080FAD7 /* PumpErrorMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */; };
 		C1A721661EC4BCE30080FAD7 /* PartialDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */; };
 		C1ABE397224947C000570E82 /* PodCommsSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1ABE396224947C000570E82 /* PodCommsSessionTests.swift */; };
+		C1AE52F3285189D100D9102F /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73D20DED01700CAC200 /* HKUnit.swift */; };
 		C1AF21E21D4838C90088C41D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E11D4838C90088C41D /* DeviceStatus.swift */; };
 		C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E31D4865320088C41D /* LoopStatus.swift */; };
 		C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF21E51D48667F0088C41D /* UploaderStatus.swift */; };
@@ -4249,6 +4250,7 @@
 				C1FFAFC9213323E900C50C1D /* StatusResponse.swift in Sources */,
 				C1FFAFCE213323E900C50C1D /* AssignAddressCommand.swift in Sources */,
 				C1FFAFCC213323E900C50C1D /* CancelDeliveryCommand.swift in Sources */,
+				C1AE52F3285189D100D9102F /* HKUnit.swift in Sources */,
 				C16E190D224EA33000DD9B9D /* PodDoseProgressEstimator.swift in Sources */,
 				C11F6B7E21C9646300752BBC /* FaultConfigCommand.swift in Sources */,
 				C1FFAFCA213323E900C50C1D /* GetStatusCommand.swift in Sources */,

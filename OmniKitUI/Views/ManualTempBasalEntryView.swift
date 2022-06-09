@@ -33,9 +33,8 @@ struct ManualTempBasalEntryView: View {
         self.enactBasal = enactBasal
         self.didCancel = didCancel
         self.allowedRates = allowedRates
-        // This is to handle the temporary situation of devs/testers migrating from OmnipodPumpManagerState with no
-        // max temp basal set
-        if allowedRates.count == 1 && allowedRates[0] == 0.0 {
+        // This is to handle users migrating from OmnipodPumpManagerState with no max temp basal set
+        if allowedRates.count <= 1 {
             _showingMissingConfigAlert = State(initialValue: true)
         }
     }
@@ -148,7 +147,7 @@ struct ManualTempBasalEntryView: View {
     var missingConfigAlert: SwiftUI.Alert {
         return SwiftUI.Alert(
             title: Text(LocalizedString("Missing Config", comment: "Alert title for missing temp basal configuration")),
-            message: Text(LocalizedString("This PumpManager has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to therapy settings -> delivery limits and set a new maximum basal rate.", comment: "Alert format string for missing temp basal configuration."))
+            message: Text(LocalizedString("This Pump has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to Therapy Settings -> Delivery Limits and set a new Maximum Basal Rate.", comment: "Alert format string for missing temp basal configuration."))
         )
     }
 

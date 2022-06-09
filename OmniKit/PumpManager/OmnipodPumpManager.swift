@@ -1778,7 +1778,14 @@ extension OmnipodPumpManager: PumpManager {
     }
 
     public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
-        completion(.success(deliveryLimits))
+        mutateState { state in
+            if let rate = deliveryLimits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour) {
+                state.maximumTempBasalRate = rate
+                completion(.success(deliveryLimits))
+            } else {
+                completion(.failure(OmnipodPumpManagerError.invalidSetting))
+            }
+        }
     }
 
     // MARK: - Alerts

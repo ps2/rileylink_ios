@@ -34,7 +34,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
     public var confirmationBeeps: Bool
 
-    public var automaticBolusBeeps: Bool
+    public var extendedBeeps: Bool
 
     // Temporal state not persisted
 
@@ -69,7 +69,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
         self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
         self.unstoredDoses = []
         self.confirmationBeeps = false
-        self.automaticBolusBeeps = false
+        self.extendedBeeps = false
         self.insulinType = insulinType
     }
     
@@ -152,7 +152,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
 
         self.confirmationBeeps = rawValue["confirmationBeeps"] as? Bool ?? rawValue["bolusBeeps"] as? Bool ?? false
         
-        self.automaticBolusBeeps = rawValue["automaticBolusBeeps"] as? Bool ?? false
+        self.extendedBeeps = rawValue["extendedBeeps"] as? Bool ?? rawValue["automaticBolusBeeps"] as? Bool ?? false
 
         if let pairingAttemptAddress = rawValue["pairingAttemptAddress"] as? UInt32 {
             self.pairingAttemptAddress = pairingAttemptAddress
@@ -171,7 +171,7 @@ public struct OmnipodPumpManagerState: RawRepresentable, Equatable {
             "basalSchedule": basalSchedule.rawValue,
             "unstoredDoses": unstoredDoses.map { $0.rawValue },
             "confirmationBeeps": confirmationBeeps,
-            "automaticBolusBeeps": automaticBolusBeeps,
+            "extendedBeeps": extendedBeeps,
             "insulinType": insulinType.rawValue,
         ]
         
@@ -218,7 +218,7 @@ extension OmnipodPumpManagerState: CustomDebugStringConvertible {
             "* lastPumpDataReportDate: \(String(describing: lastPumpDataReportDate))",
             "* isPumpDataStale: \(String(describing: isPumpDataStale))",
             "* confirmationBeeps: \(String(describing: confirmationBeeps))",
-            "* automaticBolusBeeps: \(String(describing: automaticBolusBeeps))",
+            "* extendedBeeps: \(String(describing: extendedBeeps))",
             "* pairingAttemptAddress: \(String(describing: pairingAttemptAddress))",
             "* insulinType: \(String(describing: insulinType))",
             "* rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",

@@ -60,6 +60,9 @@ public struct Pod {
     // Would need to have this value based on productID to be able to share this with Eros.
     public static let supportedBasalRates: [Double] = (1...600).map { Double($0) / Double(pulsesPerUnit) }
 
+    // Supported temp basal rates
+    public static let supportedTempBasalRates: [Double] = (0...600).map { Double($0) / Double(pulsesPerUnit) }
+
     // The internal basal rate used for non-Eros pods
     // Would need to have this value based on productID to be able to share this file with Eros.
     public static let zeroBasalRate: Double = 0.0

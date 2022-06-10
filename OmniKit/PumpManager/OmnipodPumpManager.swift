@@ -470,7 +470,14 @@ extension OmnipodPumpManager {
 
     private func basalDeliveryState(for state: OmnipodPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
         guard let podState = state.podState else {
-            return .suspended(state.lastPumpDataReportDate ?? .distantPast)
+            return .active(.distantPast)
+        }
+
+        switch podCommState(for: state) {
+        case .fault:
+            return .active(.distantPast)
+        default:
+            break
         }
 
         switch state.suspendEngageState {
@@ -488,7 +495,7 @@ extension OmnipodPumpManager {
         case .disengaging:
             return .cancelingTempBasal
         case .stable:
-            if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished() {
+            if let tempBasal = podState.unfinalizedTempBasal {
                 return .tempBasal(DoseEntry(tempBasal))
             }
             switch podState.suspendState {

@@ -1440,6 +1440,7 @@ extension OmnipodPumpManager: PumpManager {
             log.default("Fetching status because pumpData is too old")
             getPodStatus() { (response) in
                 completion?(self.lastSync)
+                self.silenceAcknowledgedAlerts()
             }
         case false?:
             log.default("Skipping status update because pumpData is fresh")

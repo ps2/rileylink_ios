@@ -19,7 +19,7 @@ public struct PodInsulinMeasurements: RawRepresentable, Equatable {
         self.validTime = validTime
         self.reservoirLevel = reservoirLevel
         if let setupUnitsDelivered = setupUnitsDelivered {
-            self.delivered = insulinDelivered - setupUnitsDelivered
+            self.delivered = max(insulinDelivered - setupUnitsDelivered, 0)
         } else {
             // subtract off the fixed setup command values as we don't have an actual value (yet)
             self.delivered = max(insulinDelivered - Pod.primeUnits - Pod.cannulaInsertionUnits, 0)

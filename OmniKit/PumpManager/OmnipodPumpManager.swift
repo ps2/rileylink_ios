@@ -188,7 +188,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
         let oldStatus = status(for: oldValue)
         let newStatus = status(for: newValue)
 
-        if oldStatus != newStatus {
+        let oldHighlight = buildPumpStatusHighlight(for: oldValue)
+        let newHighlight = buildPumpStatusHighlight(for: newValue)
+
+        if oldStatus != newStatus || oldHighlight != newHighlight {
             notifyStatusObservers(oldStatus: oldStatus)
         }
 
@@ -624,6 +627,7 @@ extension OmnipodPumpManager {
             self.podComms.delegate = self
             self.podComms.messageLogger = self
 
+            state.previousPodState = state.podState
             state.updatePodStateFromPodComms(nil)
         }
 
@@ -1416,15 +1420,16 @@ extension OmnipodPumpManager: PumpManager {
     public func setMustProvideBLEHeartbeat(_ mustProvideBLEHeartbeat: Bool) {
         rileyLinkDeviceProvider.timerTickEnabled = self.state.isPumpDataStale || mustProvideBLEHeartbeat
     }
-    
+
     public func ensureCurrentPumpData(completion: ((Date?) -> Void)?) {
         let shouldFetchStatus = setStateWithResult { (state) -> Bool? in
             guard state.hasActivePod else {
                 return nil // No active pod
             }
+
             return state.isPumpDataStale
         }
-        
+
         checkRileyLinkBattery()
 
         switch shouldFetchStatus {
@@ -1433,23 +1438,16 @@ extension OmnipodPumpManager: PumpManager {
             return // No active pod
         case true?:
             log.default("Fetching status because pumpData is too old")
-            getPodStatus(storeDosesOnSuccess: true, emitConfirmationBeep: false) { (response) in
-                self.pumpDelegate.notify({ (delegate) in
-                    switch response {
-                    case .failure(let error):
-                        delegate?.pumpManager(self, didError: error)
-                    default:
-                        break
-                    }
-                    completion?(self.lastSync)
-                })
+            getPodStatus() { (response) in
+                completion?(self.lastSync)
             }
         case false?:
             log.default("Skipping status update because pumpData is fresh")
-            completion?(lastSync)
+            completion?(self.lastSync)
+            silenceAcknowledgedAlerts()
         }
     }
-    
+
     private func checkRileyLinkBattery() {
         rileyLinkDeviceProvider.getDevices { devices in
             for device in devices {

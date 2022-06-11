@@ -644,7 +644,6 @@ extension OmnipodPumpManager {
             self.setState { (state) in
                 resetPodState(&state)
             }
-
             completion()
         }
     }
@@ -1031,10 +1030,7 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     try session.deactivatePod()
-
-                    self.forgetPod(completion: {
-                        completion(nil)
-                    })
+                    completion(nil)
                 } catch let error {
                     completion(OmnipodPumpManagerError.communication(error))
                 }

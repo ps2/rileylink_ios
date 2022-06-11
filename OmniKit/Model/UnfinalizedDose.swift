@@ -62,7 +62,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     let startTime: Date
     var duration: TimeInterval?
     var scheduledCertainty: ScheduledCertainty
-    var isHighTemp: Bool = false    // Track this for situations where cancelling temp basal is unacknowledged, and recovery fails, and we have to assume the most possible delivery
+    var isHighTemp: Bool = false    // Track this for situations where cancelling temp basal is unacknowledged, and recovery fails, and we have to assume the greatest possible delivery
     var insulinType: InsulinType?
 
     var finishTime: Date? {

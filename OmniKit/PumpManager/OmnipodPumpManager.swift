@@ -1365,7 +1365,7 @@ extension OmnipodPumpManager: PumpManager {
         }
     }
 
-    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
         guard self.hasActivePod else {
             completion(.configuration(OmnipodPumpManagerError.noPodPaired))
             return
@@ -1400,8 +1400,8 @@ extension OmnipodPumpManager: PumpManager {
 
             if case .some(.suspended) = self.state.podState?.suspendState {
                 // Pod suspended, only auto resume for a manual bolus if autoResumeOnManualBolus is true
-                if automatic || autoResumeOnManualBolus == false {
-                    self.log.error("enactBolus: returning pod suspended error for %@ bolus", automatic ? "automatic" : "manual")
+                if activationType.isAutomatic || autoResumeOnManualBolus == false {
+                    self.log.error("enactBolus: returning pod suspended error for %@ bolus", activationType.isAutomatic ? "automatic" : "manual")
                     completion(.deviceState(PodCommsError.podSuspended))
                     return
                 }
@@ -1427,7 +1427,7 @@ extension OmnipodPumpManager: PumpManager {
             // Skip the getStatus comms optimization for a manual bolus,
             // if there was a comms issue on the last message sent, or
             // if the last delivery status hasn't been verified
-            if automatic == false || self.state.podState?.lastCommsOK == false ||
+            if activationType.isAutomatic == false || self.state.podState?.lastCommsOK == false ||
                 self.state.podState?.deliveryStatusVerified == false
             {
                 self.log.info("enactBolus: skipping getStatus comms optimization")
@@ -1464,13 +1464,13 @@ extension OmnipodPumpManager: PumpManager {
             }
 
             // Use an acknowledgement beep if Confirmation Beeps are enabled and this a manual bolus or Automatic Bolus Beeps are enabled
-            let acknowledgementBeep = self.confirmationBeeps && (!automatic || self.automaticBolusBeeps)
-            let completionBeep = self.confirmationBeeps && !automatic
+            let acknowledgementBeep = self.confirmationBeeps && (!activationType.isAutomatic || self.automaticBolusBeeps)
+            let completionBeep = self.confirmationBeeps && !activationType.isAutomatic
 
             // Use a maximum programReminderInterval value of 0x3F to denote an automatic bolus in the communication log
-            let programReminderInterval: TimeInterval = automatic ? TimeInterval(minutes: 0x3F) : 0
+            let programReminderInterval: TimeInterval = activationType.isAutomatic ? TimeInterval(minutes: 0x3F) : 0
 
-            let result = session.bolus(units: enactUnits, automatic: automatic, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
+            let result = session.bolus(units: enactUnits, automatic: activationType.isAutomatic, acknowledgementBeep: acknowledgementBeep, completionBeep: completionBeep, programReminderInterval: programReminderInterval)
             session.dosesForStorage() { (doses) -> Bool in
                 return self.store(doses: doses, in: session)
             }

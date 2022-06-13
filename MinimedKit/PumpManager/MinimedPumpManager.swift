@@ -993,7 +993,7 @@ extension MinimedPumpManager: PumpManager {
                 case .suspended(let date):
                     basalDeliveryState = .suspended(date)
                 case .resumed(let date):
-                    if let tempBasal = state.unfinalizedTempBasal, !tempBasal.isFinished {
+                    if let tempBasal = state.unfinalizedTempBasal {
                         basalDeliveryState = .tempBasal(DoseEntry(tempBasal))
                     } else {
                         basalDeliveryState = .active(date)
@@ -1165,7 +1165,7 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
         let enactUnits = roundToSupportedBolusVolume(units: units)
 
         guard enactUnits > 0 else {
@@ -1220,7 +1220,7 @@ extension MinimedPumpManager: PumpManager {
             
 
             if case .suspended = self.state.suspendState {
-                guard automatic == false else {
+                guard activationType.isAutomatic == false else {
                     self.log.error("Not executing automatic bolus because pump is suspended")
                     self.recents.bolusEngageState = .stable
                     completion(.deviceState(MinimedPumpManagerError.pumpSuspended))
@@ -1245,7 +1245,7 @@ extension MinimedPumpManager: PumpManager {
                 let commsOffset = TimeInterval(seconds: -2)
                 let doseStart = Date().addingTimeInterval(commsOffset)
 
-                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: automatic)
+                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: activationType.isAutomatic)
                 self.setState({ (state) in
                     state.unfinalizedBolus = dose
                 })

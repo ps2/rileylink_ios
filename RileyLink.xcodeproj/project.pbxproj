@@ -245,7 +245,6 @@
 		7D7076951FE09311004AC8EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D7076971FE09311004AC8EA /* Localizable.strings */; };
 		7D9BEFEF23369861005DCFD6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D9BEFF123369861005DCFD6 /* Localizable.strings */; };
 		7D9BF00123369910005DCFD6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D9BF00323369910005DCFD6 /* Localizable.strings */; };
-		7D9BF03D2336AE0B005DCFD6 /* OmnipodPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D9BF03F2336AE0B005DCFD6 /* OmnipodPumpManager.storyboard */; };
 		7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */; };
 		C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
@@ -1215,25 +1214,7 @@
 		7D9BF03A2336A305005DCFD6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7D9BF03B2336A305005DCFD6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7D9BF03C2336A305005DCFD6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		7D9BF03E2336AE0B005DCFD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OmnipodPumpManager.storyboard; sourceTree = "<group>"; };
-		7D9BF0412336AE28005DCFD6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0432336AE38005DCFD6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/OmnipodPumpManager.strings"; sourceTree = "<group>"; };
-		7D9BF0452336AE3D005DCFD6 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0472336AE3E005DCFD6 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0492336AE41005DCFD6 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF04B2336AE43005DCFD6 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF04D2336AE45005DCFD6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF04F2336AE47005DCFD6 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0512336AE49005DCFD6 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0532336AE4B005DCFD6 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0552336AE4E005DCFD6 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF0572336AE50005DCFD6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/OmnipodPumpManager.strings"; sourceTree = "<group>"; };
-		7D9BF0592336AE53005DCFD6 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF05B2336AE55005DCFD6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF05D2336AE58005DCFD6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF05F2336AE5A005DCFD6 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
 		7D9BF14D23371407005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
-		7D9BF14E23371407005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
 		7D9BF14F23371407005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF15023371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF15123371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1609,7 +1590,6 @@
 		E9EE336B214ED01200888876 /* PodInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfo.swift; sourceTree = "<group>"; };
 		E9EE336D214ED01200888876 /* DetailedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedStatus.swift; sourceTree = "<group>"; };
 		F5D9C04427DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
-		F5D9C04527DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
 		F5D9C04627DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5D9C04727DAC30B002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5D9C04827DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1619,7 +1599,6 @@
 		F5D9C04C27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5D9C04D27DAC30C002E48F6 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5E0BE2627E1DF280033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
-		F5E0BE2727E1DF280033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/OmnipodPumpManager.strings; sourceTree = "<group>"; };
 		F5E0BE2827E1DF280033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5E0BE2927E1DF280033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5E0BE2A27E1DF280033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2790,7 +2769,6 @@
 				C1FFAFDC213323F900C50C1D /* Info.plist */,
 				C1FFAFDB213323F900C50C1D /* OmniKitUI.h */,
 				C1FFB0072133242C00C50C1D /* OmniKitUI.xcassets */,
-				7D9BF03F2336AE0B005DCFD6 /* OmnipodPumpManager.storyboard */,
 				7D9BF00323369910005DCFD6 /* Localizable.strings */,
 			);
 			path = OmniKitUI;
@@ -3517,7 +3495,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D9BF03D2336AE0B005DCFD6 /* OmnipodPumpManager.storyboard in Resources */,
 				7D9BF00123369910005DCFD6 /* Localizable.strings in Resources */,
 				C1D9E367283D88F6003CA0D3 /* HUDAssets.xcassets in Resources */,
 				C1FFB00F2133242C00C50C1D /* OmniKitUI.xcassets in Resources */,
@@ -4694,33 +4671,6 @@
 				F5E0BE2E27E1DF290033557E /* he */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		7D9BF03F2336AE0B005DCFD6 /* OmnipodPumpManager.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7D9BF03E2336AE0B005DCFD6 /* Base */,
-				7D9BF0412336AE28005DCFD6 /* en */,
-				7D9BF0432336AE38005DCFD6 /* zh-Hans */,
-				7D9BF0452336AE3D005DCFD6 /* da */,
-				7D9BF0472336AE3E005DCFD6 /* nl */,
-				7D9BF0492336AE41005DCFD6 /* fi */,
-				7D9BF04B2336AE43005DCFD6 /* fr */,
-				7D9BF04D2336AE45005DCFD6 /* de */,
-				7D9BF04F2336AE47005DCFD6 /* it */,
-				7D9BF0512336AE49005DCFD6 /* ja */,
-				7D9BF0532336AE4B005DCFD6 /* nb */,
-				7D9BF0552336AE4E005DCFD6 /* pl */,
-				7D9BF0572336AE50005DCFD6 /* pt-BR */,
-				7D9BF0592336AE53005DCFD6 /* ru */,
-				7D9BF05B2336AE55005DCFD6 /* es */,
-				7D9BF05D2336AE58005DCFD6 /* sv */,
-				7D9BF05F2336AE5A005DCFD6 /* vi */,
-				7D9BF14E23371407005DCFD6 /* ro */,
-				F5D9C04527DAC30B002E48F6 /* tr */,
-				F5E0BE2727E1DF280033557E /* he */,
-			);
-			name = OmnipodPumpManager.storyboard;
 			sourceTree = "<group>";
 		};
 		C1B9E0DE256AF052008E8B84 /* Localizable.strings */ = {

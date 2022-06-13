@@ -1220,7 +1220,7 @@ extension MinimedPumpManager: PumpManager {
             
 
             if case .suspended = self.state.suspendState {
-                guard automatic == false else {
+                guard activationType.isAutomatic == false else {
                     self.log.error("Not executing automatic bolus because pump is suspended")
                     self.recents.bolusEngageState = .stable
                     completion(.deviceState(MinimedPumpManagerError.pumpSuspended))

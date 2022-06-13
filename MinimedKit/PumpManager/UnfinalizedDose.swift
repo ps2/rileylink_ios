@@ -292,7 +292,7 @@ extension DoseEntry {
         }
         let duration = endDate.timeIntervalSince(startDate)
         let newEndDate = newStartDate.addingTimeInterval(duration)
-        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier, insulinType: insulinType, isMutable: isMutable)
+        return DoseEntry(type: type, startDate: newStartDate, endDate: newEndDate, value: value, unit: unit, deliveredUnits: deliveredUnits, description: description, syncIdentifier: syncIdentifier, insulinType: insulinType, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 }
 

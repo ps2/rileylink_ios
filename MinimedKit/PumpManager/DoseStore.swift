@@ -35,15 +35,15 @@ extension Collection where Element == TimestampedHistoryEvent {
                 } else {
                     bolusEndDate = event.date.addingTimeInterval(model.bolusDeliveryTime(units: bolus.amount))
                 }
-                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount, isMutable: event.isMutable(atDate: now, forPump: model))
-            case is SuspendPumpEvent:
-                dose = DoseEntry(suspendDate: event.date)
+                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount, isMutable: event.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !bolus.wasRemotelyTriggered)
+            case let suspendEvent as SuspendPumpEvent:
+                dose = DoseEntry(suspendDate: event.date, wasProgrammedByPumpUI: !suspendEvent.wasRemotelyTriggered)
                 lastSuspend = dose
-            case is ResumePumpEvent:
-                dose = DoseEntry(resumeDate: event.date)
+            case let resumeEvent as ResumePumpEvent:
+                dose = DoseEntry(resumeDate: event.date, wasProgrammedByPumpUI: !resumeEvent.wasRemotelyTriggered)
             case let temp as TempBasalPumpEvent:
                 if case .Absolute = temp.rateType {
-                    lastTempBasalAmount = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: event.isMutable(atDate: now, forPump: model))
+                    lastTempBasalAmount = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: event.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !temp.wasRemotelyTriggered)
                 }
             case let temp as TempBasalDurationPumpEvent:
                 if let amount = lastTempBasalAmount, amount.startDate == event.date {

@@ -993,7 +993,7 @@ extension MinimedPumpManager: PumpManager {
                 case .suspended(let date):
                     basalDeliveryState = .suspended(date)
                 case .resumed(let date):
-                    if let tempBasal = state.unfinalizedTempBasal, !tempBasal.isFinished {
+                    if let tempBasal = state.unfinalizedTempBasal {
                         basalDeliveryState = .tempBasal(DoseEntry(tempBasal))
                     } else {
                         basalDeliveryState = .active(date)

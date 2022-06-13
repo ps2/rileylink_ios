@@ -141,7 +141,20 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             return "\(String(describing: doseType).capitalized) \(startTime)"
         }
     }
-    
+
+    public var eventTitle: String {
+        switch doseType {
+        case .bolus:
+            return NSLocalizedString("Bolus", comment: "Pump Event title for UnfinalizedDose with doseType of .bolus")
+        case .resume:
+            return NSLocalizedString("Resume", comment: "Pump Event title for UnfinalizedDose with doseType of .resume")
+        case .suspend:
+            return NSLocalizedString("Suspend", comment: "Pump Event title for UnfinalizedDose with doseType of .suspend")
+        case .tempBasal:
+            return NSLocalizedString("Temp Basal", comment: "Pump Event title for UnfinalizedDose with doseType of .tempBasal")
+        }
+    }
+
     public mutating func reconcile(with event: NewPumpEvent) {
         isReconciledWithHistory = true
         if let dose = event.dose {
@@ -252,12 +265,13 @@ extension UnfinalizedDose {
 
 // MARK: - NewPumpEvent
 
+
+
 extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
-        let title = String(describing: dose)
         let entry = DoseEntry(dose)
         let raw = dose.uuid.asRaw
-        self.init(date: dose.startTime, dose: entry, raw: raw, title: title)
+        self.init(date: dose.startTime, dose: entry, raw: raw, title: dose.eventTitle)
     }
     
     func replacingAttributes(raw newRaw: Data, date newDate: Date) -> NewPumpEvent {

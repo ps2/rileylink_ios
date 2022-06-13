@@ -48,6 +48,7 @@ extension Collection where Element == TimestampedHistoryEvent {
             case let temp as TempBasalPumpEvent:
                 if case .Absolute = temp.rateType {
                     lastTempBasal = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: event.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !temp.wasRemotelyTriggered)
+                    continue
                 }
             case let tempDuration as TempBasalDurationPumpEvent:
                 if let lastTemp = lastTempBasal, lastTemp.startDate == event.date {
@@ -109,7 +110,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 break
             }
 
-            title = String(describing: event.pumpEvent)
+            title = String(describing: type(of: event.pumpEvent))
             events.append(NewPumpEvent(date: event.date, dose: dose, raw: event.pumpEvent.rawData, title: title, type: eventType))
         }
 

@@ -29,9 +29,9 @@ public enum BeepPreference: Int, CaseIterable {
         case .silent:
             return LocalizedString("No confidence reminders are used.", comment: "Description for BeepPreference.silent")
         case .manualCommands:
-            return LocalizedString("Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, etc. When Loop automatically adjusts delivery, the pod will remain silent.", comment: "Description for BeepPreference.manualCommands")
+            return LocalizedString("Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used.", comment: "Description for BeepPreference.manualCommands")
         case .extended:
-            return LocalizedString("All manual delivery commands will beep, as well as automatic boluses.", comment: "Description for BeepPreference.extended")
+            return LocalizedString("Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate.", comment: "Description for BeepPreference.extended")
         }
     }
 
@@ -39,7 +39,15 @@ public enum BeepPreference: Int, CaseIterable {
         return self == .extended || self == .manualCommands
     }
 
-    var shouldBeepForAutomaticBolus: Bool {
+    var shouldBeepForAutomaticCommands: Bool {
         return self == .extended
+    }
+
+    func shouldBeepForCommand(automatic: Bool) -> Bool {
+        if automatic {
+            return shouldBeepForAutomaticCommands
+        } else {
+            return shouldBeepForManualCommand
+        }
     }
 }

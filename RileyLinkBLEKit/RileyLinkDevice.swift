@@ -32,6 +32,10 @@ public class RileyLinkDevice {
 
     // Confined to `manager.queue`
     private var radioFirmwareVersion: RadioFirmwareVersion?
+
+    public var isConnected: Bool {
+        return manager.peripheral.state == .connected
+    }
     
     public var rlFirmwareDescription: String {
         let versions = [radioFirmwareVersion, bleFirmwareVersion].compactMap { (version: CustomStringConvertible?) -> String? in

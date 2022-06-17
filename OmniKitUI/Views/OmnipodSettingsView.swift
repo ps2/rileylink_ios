@@ -360,7 +360,17 @@ struct OmnipodSettingsView: View  {
                         HStack {
                             Text(device.name ?? "Unknown")
                             Spacer()
-                            Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+
+                            if rileyLinkListDataSource.autoconnectBinding(for: device).wrappedValue {
+                                if device.isConnected {
+                                    Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+                                } else {
+                                    Image(systemName: "wifi.exclamationmark")
+                                        .imageScale(.large)
+                                        .foregroundColor(guidanceColors.warning)
+                                        .padding(.top,5)
+                                }
+                            }
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {

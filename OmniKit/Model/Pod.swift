@@ -49,6 +49,9 @@ public struct Pod {
     // Maximum reservoir level reading
     public static let maximumReservoirReading: Double = 50
 
+    // Reservoir level magic number indicating 50+ U remaining
+    public static let reservoirLevelAboveThresholdMagicNumber: Double = 51.15
+
     // Reservoir Capacity
     public static let reservoirCapacity: Double = 200
 
@@ -56,6 +59,9 @@ public struct Pod {
     // Eros minimum scheduled basal rate is 0.05 U/H while for Dash supports 0 U/H.
     // Would need to have this value based on productID to be able to share this with Eros.
     public static let supportedBasalRates: [Double] = (1...600).map { Double($0) / Double(pulsesPerUnit) }
+
+    // Supported temp basal rates
+    public static let supportedTempBasalRates: [Double] = (0...600).map { Double($0) / Double(pulsesPerUnit) }
 
     // The internal basal rate used for non-Eros pods
     // Would need to have this value based on productID to be able to share this file with Eros.
@@ -66,6 +72,9 @@ public struct Pod {
 
     // Minimum duration of a single basal schedule entry
     public static let minimumBasalScheduleEntryDuration = TimeInterval.minutes(30)
+
+    // Supported temp basal durations (30m to 12h)
+    public static let supportedTempBasalDurations: [TimeInterval] = (1...24).map { Double($0) * TimeInterval(minutes: 30) }
 
     // Default amount for priming bolus using secondsPerPrimePulse timing.
     // Checked to verify it agrees with value returned by pod during the pairing process.
@@ -78,9 +87,18 @@ public struct Pod {
     public static let cannulaInsertionUnitsExtra = 0.0 // edit to add a fixed additional amount of insulin during cannula insertion
 
     // Default and limits for expiration reminder alerts
-    public static let expirationReminderAlertDefaultTimeBeforeExpiration = TimeInterval.hours(2)
-    public static let expirationReminderAlertMinTimeBeforeExpiration = TimeInterval.hours(1)
-    public static let expirationReminderAlertMaxTimeBeforeExpiration = TimeInterval.hours(24)
+    public static let defaultExpirationReminderOffset = TimeInterval(hours: 2)
+    public static let expirationReminderAlertMinHoursBeforeExpiration = 1
+    public static let expirationReminderAlertMaxHoursBeforeExpiration = 24
+
+    // Threshold used to display pod end of life warnings
+    public static let timeRemainingWarningThreshold = TimeInterval(days: 1)
+
+    // Default low reservoir alert limit in Units
+    public static let defaultLowReservoirReminder: Double = 10
+
+    // Allowed Low Reservoir reminder values
+    public static let allowedLowReservoirReminderValues = Array(stride(from: 10, through: 50, by: 1))
 }
 
 // DeliveryStatus used in StatusResponse and DetailedStatus

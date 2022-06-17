@@ -299,7 +299,6 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                         self.completionDelegate?.completionNotifyingDidComplete(self)
                     }
                 }
-                pumpManager.addStatusObserver(model, queue: DispatchQueue.main)
                 pumpManager.getPodStatus() { _ in }
 
                 let handleRileyLinkSelection = { [weak self] (device: RileyLinkDevice) in
@@ -424,6 +423,11 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             viewController.isModalInPresentation = false
             setViewControllers([viewController], animated: false)
         }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 
     var customTraitCollection: UITraitCollection {

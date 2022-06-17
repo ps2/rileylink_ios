@@ -42,7 +42,6 @@ struct DeliveryUncertaintyRecoveryView: View {
                                     Image(systemName: "wifi.exclamationmark")
                                         .imageScale(.large)
                                         .foregroundColor(guidanceColors.warning)
-                                        .padding(.top,5)
                                 }
                             }
                         }
@@ -53,8 +52,14 @@ struct DeliveryUncertaintyRecoveryView: View {
                     }
                 }
             }
-            .onAppear { rileyLinkListDataSource.isScanningEnabled = true }
-            .onDisappear { rileyLinkListDataSource.isScanningEnabled = false }
+            .onAppear {
+                rileyLinkListDataSource.isScanningEnabled = true
+                model.respondToRecovery = true
+            }
+            .onDisappear {
+                rileyLinkListDataSource.isScanningEnabled = false
+                model.respondToRecovery = false
+            }
         }) {
             VStack {
                 Text(LocalizedString("Attemping to re-establish communication", comment: "Description string above progress indicator while attempting to re-establish communication from an unacknowledged command")).padding(.top)

@@ -13,6 +13,7 @@ class DeliveryUncertaintyRecoveryViewModel: PumpManagerStatusObserver {
     
     let appName: String
     let uncertaintyStartedAt: Date
+    var respondToRecovery: Bool
     
     var onDismiss: (() -> Void)?
     var didRecover: (() -> Void)?
@@ -21,10 +22,11 @@ class DeliveryUncertaintyRecoveryViewModel: PumpManagerStatusObserver {
     init(appName: String, uncertaintyStartedAt: Date) {
         self.appName = appName
         self.uncertaintyStartedAt = uncertaintyStartedAt
+        respondToRecovery = false
     }
 
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
-        if !status.deliveryIsUncertain {
+        if !status.deliveryIsUncertain && respondToRecovery {
             didRecover?()
         }
     }

@@ -459,7 +459,7 @@ extension MinimedPumpManager {
         
         if date.timeIntervalSince(lastSync(for: state, recents: recents) ?? .distantPast) > .minutes(12) {
             return PumpStatusHighlight(
-                localizedMessage: NSLocalizedString("No Data", comment: "Status highlight when communications with the pod haven't happened recently."),
+                localizedMessage: NSLocalizedString("Signal Loss", comment: "Status highlight when communications with the pod haven't happened recently."),
                 imageName: "exclamationmark.circle.fill",
                 state: .critical)
         }

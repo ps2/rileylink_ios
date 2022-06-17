@@ -18,23 +18,18 @@ class DeliveryUncertaintyRecoveryViewModel: PumpManagerStatusObserver {
     var didRecover: (() -> Void)?
     var onDeactivate: (() -> Void)?
     
-    private var finished = false
-    
     init(appName: String, uncertaintyStartedAt: Date) {
         self.appName = appName
         self.uncertaintyStartedAt = uncertaintyStartedAt
     }
 
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
-        if !finished {
-            if !status.deliveryIsUncertain {
-                didRecover?()
-            }
+        if !status.deliveryIsUncertain {
+            didRecover?()
         }
     }
     
     func podDeactivationChosen() {
-        finished = true
         self.onDeactivate?()
     }
 }

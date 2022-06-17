@@ -302,7 +302,21 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 pumpManager.addStatusObserver(model, queue: DispatchQueue.main)
                 pumpManager.getPodStatus() { _ in }
 
-                let view = DeliveryUncertaintyRecoveryView(model: model)
+                let handleRileyLinkSelection = { [weak self] (device: RileyLinkDevice) in
+                    if let self = self {
+                        let vc = RileyLinkDeviceTableViewController(
+                            device: device,
+                            batteryAlertLevel: self.pumpManager.rileyLinkBatteryAlertLevel,
+                            batteryAlertLevelChanged: { value in
+                                self.pumpManager.rileyLinkBatteryAlertLevel = value
+                            }
+                        )
+                        self.show(vc, sender: self)
+                    }
+                }
+
+                let dataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
+                let view = DeliveryUncertaintyRecoveryView(model: model, rileyLinkListDataSource: dataSource, handleRileyLinkSelection: handleRileyLinkSelection)
 
                 let hostedView = hostingController(rootView: view)
                 hostedView.navigationItem.title = LocalizedString("Unable To Reach Pod", comment: "Title for pending command recovery screen")

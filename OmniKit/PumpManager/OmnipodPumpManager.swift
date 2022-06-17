@@ -365,7 +365,7 @@ extension OmnipodPumpManager {
                     state: .warning)
             } else if date.timeIntervalSince(state.lastPumpDataReportDate ?? .distantPast) > .minutes(12) {
                 return PumpStatusHighlight(
-                    localizedMessage: NSLocalizedString("No Data", comment: "Status highlight when communications with the pod haven't happened recently."),
+                    localizedMessage: NSLocalizedString("Signal Loss", comment: "Status highlight when communications with the pod haven't happened recently."),
                     imageName: "exclamationmark.circle.fill",
                     state: .critical)
             } else if isRunningManualTempBasal(for: state) {
@@ -441,7 +441,8 @@ extension OmnipodPumpManager {
             pumpBatteryChargeRemaining: nil,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
-            insulinType: state.insulinType
+            insulinType: state.insulinType,
+            deliveryIsUncertain: state.podState?.pendingCommand != nil
         )
     }
 
@@ -1538,71 +1539,10 @@ extension OmnipodPumpManager: PumpManager {
                 state.bolusEngageState = .engaging
             })
 
-            // Initialize to true to match existing Medtronic PumpManager behavior for any
-            // manual boluses or to false to never auto resume a suspended pod for any bolus.
-            let autoResumeOnManualBolus = true
-
             if case .some(.suspended) = self.state.podState?.suspendState {
-                // Pod suspended, only auto resume for a manual bolus if autoResumeOnManualBolus is true
-                if activationType.isAutomatic || autoResumeOnManualBolus == false {
-                    self.log.error("enactBolus: returning pod suspended error for %@ bolus", activationType.isAutomatic ? "automatic" : "manual")
-                    completion(.deviceState(PodCommsError.podSuspended))
-                    return
-                }
-                do {
-                    let scheduleOffset = self.state.timeZone.scheduleOffset(forDate: Date())
-                    let podStatus = try session.resumeBasal(schedule: self.state.basalSchedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep)
-                    guard podStatus.deliveryStatus.bolusing == false else {
-                        completion(.deviceState(PodCommsError.unfinalizedBolus))
-                        return
-                    }
-                } catch let error {
-                    self.log.error("enactBolus: error resuming suspended pod: %@", String(describing: error))
-                    completion(.communication(error as? LocalizedError))
-                    return
-                }
-            }
-
-            var getStatusNeeded = false // initializing to true effectively disables the bolus comms getStatus optimization
-            var finalizeFinishedDosesNeeded = false
-
-            // Skip the getStatus comms optimization for a manual bolus,
-            // if there was a comms issue on the last message sent, or
-            // if the last delivery status hasn't been verified
-            if activationType.isAutomatic == false || self.state.podState?.lastCommsOK == false ||
-                self.state.podState?.deliveryStatusVerified == false
-            {
-                self.log.info("enactBolus: skipping getStatus comms optimization")
-                getStatusNeeded = true
-            } else if let unfinalizedBolus = self.state.podState?.unfinalizedBolus {
-                if unfinalizedBolus.scheduledCertainty == .uncertain {
-                    self.log.info("enactBolus: doing getStatus with uncertain bolus scheduled certainty")
-                    getStatusNeeded = true
-                } else if unfinalizedBolus.isFinished() == false {
-                    self.log.info("enactBolus: not enacting bolus because podState indicates unfinalized bolus in progress")
-                    completion(.deviceState(PodCommsError.unfinalizedBolus))
-                    return
-                } else if unfinalizedBolus.isBolusPositivelyFinished == false {
-                    self.log.info("enactBolus: doing getStatus to verify bolus completion")
-                    getStatusNeeded = true
-                } else {
-                    finalizeFinishedDosesNeeded = true // call finalizeFinishDoses() to clean up the certain & positively finalized bolus
-                }
-            }
-
-            if getStatusNeeded {
-                do {
-                    let podStatus = try session.getStatus()
-                    guard podStatus.deliveryStatus.bolusing == false else {
-                        completion(.deviceState(PodCommsError.unfinalizedBolus))
-                        return
-                    }
-                } catch let error {
-                    completion(.communication(error as? LocalizedError))
-                    return
-                }
-            } else if finalizeFinishedDosesNeeded {
-                session.finalizeFinishedDoses()
+                self.log.error("enactBolus: returning pod suspended error for bolus")
+                completion(.deviceState(PodCommsError.podSuspended))
+                return
             }
 
             // Use a maximum programReminderInterval value of 0x3F to denote an automatic bolus in the communication log
@@ -1730,13 +1670,9 @@ extension OmnipodPumpManager: PumpManager {
                 return
             }
 
-            // Did the last message have comms issues or is the last delivery status not yet verified?
-            let uncertainDeliveryStatus = self.state.podState?.lastCommsOK == false ||
-                self.state.podState?.deliveryStatusVerified == false
-
             // Do the cancel temp basal command if currently running a temp basal OR
-            // if resuming scheduled basal delivery OR if the delivery status is uncertain.
-            if self.state.podState?.unfinalizedTempBasal != nil || resumingScheduledBasal || uncertainDeliveryStatus {
+            // if resuming scheduled basal delivery.
+            if self.state.podState?.unfinalizedTempBasal != nil || resumingScheduledBasal {
                 let status: StatusResponse
 
                 // if resuming scheduled basal delivery & an acknowledgement beep is needed, use the cancel TB beep

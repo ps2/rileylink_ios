@@ -269,8 +269,6 @@ public class PodCommsSession {
 
             let message = Message(address: podState.address, messageBlocks: blocksToSend, sequenceNum: messageNumber, expectFollowOnMessage: expectFollowOnMessage)
 
-            self.podState.lastCommsOK = false // mark last comms as not OK until we get the expected response
-
             let response = try transport.sendMessage(message)
 
             // Simulate fault
@@ -279,7 +277,6 @@ public class PodCommsSession {
 
             if let responseMessageBlock = response.messageBlocks[0] as? T {
                 log.info("POD Response: %{public}@", String(describing: responseMessageBlock))
-                self.podState.lastCommsOK = true // message successfully sent and expected response received
                 return responseMessageBlock
             }
 

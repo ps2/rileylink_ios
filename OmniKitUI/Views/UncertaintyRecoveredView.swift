@@ -17,6 +17,7 @@ struct UncertaintyRecoveredView: View {
     var body: some View {
         GuidePage(content: {
             Text("\(self.appName) has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use \(self.appName) normally now.")
+                .fixedSize(horizontal: false, vertical: true)
                 .padding([.top, .bottom])
         }) {
             VStack {

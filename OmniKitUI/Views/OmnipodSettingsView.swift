@@ -368,7 +368,6 @@ struct OmnipodSettingsView: View  {
                                     Image(systemName: "wifi.exclamationmark")
                                         .imageScale(.large)
                                         .foregroundColor(guidanceColors.warning)
-                                        .padding(.top,5)
                                 }
                             }
                         }

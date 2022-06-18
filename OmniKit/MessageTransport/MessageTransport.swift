@@ -297,11 +297,11 @@ class PodMessageTransport: MessageTransport {
             
             return response
         } catch let error {
-            //if sentFullMessage {
+            if sentFullMessage {
                 throw PodCommsError.unacknowledgedMessage(sequenceNumber: message.sequenceNum, error: error)
-            //} else {
-            //    throw PodCommsError.commsError(error: error)
-            //}
+            } else {
+                throw PodCommsError.commsError(error: error)
+            }
         }
     }
 

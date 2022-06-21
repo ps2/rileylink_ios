@@ -918,7 +918,7 @@ extension OmnipodPumpManager {
     public func getPodStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
 
         guard state.hasActivePod else {
-            completion?(.failure(PumpManagerError.deviceState(PodCommsError.noPodPaired)))
+            completion?(.failure(PumpManagerError.configuration(OmnipodPumpManagerError.noPodPaired)))
             return
         }
         

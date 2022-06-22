@@ -913,21 +913,12 @@ extension OmnipodPumpManager {
         }
     }
 
-    public func refreshStatus(emitConfirmationBeep: Bool, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
-        guard self.hasActivePod else {
-            completion?(.failure(.deviceState(OmnipodPumpManagerError.noPodPaired)))
-            return
-        }
-
-        self.getPodStatus(storeDosesOnSuccess: false, emitConfirmationBeep: emitConfirmationBeep, completion: completion)
-    }
-
     // MARK: - Pump Commands
 
-    public func getPodStatus(storeDosesOnSuccess: Bool = true, emitConfirmationBeep: Bool = false, completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
-        guard state.podState?.unfinalizedBolus?.scheduledCertainty == .uncertain || state.podState?.unfinalizedBolus?.isFinished() != false else {
-            self.log.info("Skipping status request due to unfinalized bolus in progress.")
-            completion?(.failure(PumpManagerError.deviceState(PodCommsError.unfinalizedBolus)))
+    public func getPodStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
+
+        guard state.hasActivePod else {
+            completion?(.failure(PumpManagerError.configuration(OmnipodPumpManagerError.noPodPaired)))
             return
         }
         
@@ -937,11 +928,9 @@ extension OmnipodPumpManager {
             case .success(let session):
                 do {
                     let status = try session.getStatus()
-                    if storeDosesOnSuccess {
-                        session.dosesForStorage({ (doses) -> Bool in
-                            self.store(doses: doses, in: session)
-                        })
-                    }
+                    session.dosesForStorage({ (doses) -> Bool in
+                        self.store(doses: doses, in: session)
+                    })
                     completion?(.success(status))
                 } catch let error {
                     completion?(.failure(PumpManagerError.communication(error as? LocalizedError)))

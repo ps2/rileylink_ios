@@ -33,7 +33,7 @@ class HistoryPageTests: XCTestCase {
             let startDate = ISO8601DateFormatter().date(from: "2020-11-20T00:00:00Z")!
             let timeZone = TimeZone(secondsFromGMT: -21600)!
             
-            let (timestampedEvents, hasMoreEvents, _) = page.timestampedEvents(after: startDate, timeZone: timeZone, model: .model522)
+            let (timestampedEvents, _, _) = page.timestampedEvents(after: startDate, timeZone: timeZone, model: .model522)
             
             XCTAssertEqual(11, timestampedEvents.count)
 

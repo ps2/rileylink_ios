@@ -296,13 +296,6 @@
 		C136AA3A23116E32008A320D /* OmniKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA2C23116E32008A320D /* OmniKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C136AA4223116E7B008A320D /* OmniKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA4123116E7B008A320D /* OmniKitPlugin.swift */; };
 		C136AA442311704A008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
-		C136AA51231176D4008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
-		C136AA52231176D8008A320D /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610A20DDF55E002B996B /* LoopKitUI.framework */; };
-		C136AA53231176E8008A320D /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
-		C136AA54231176EC008A320D /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
-		C136AA55231176F0008A320D /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
-		C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; };
-		C136AA57231176FA008A320D /* OmniKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */; };
 		C136AA62231187B0008A320D /* MinimedKitPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = C136AA60231187B0008A320D /* MinimedKitPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C136AA6723118817008A320D /* MinimedKitPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C136AA6623118817008A320D /* MinimedKitPlugin.swift */; };
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
@@ -416,6 +409,26 @@
 		C18C8C531D64123400E043FB /* EnableBolusWizardPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */; };
 		C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18EB741207EE20100EA002B /* NightscoutProfile.swift */; };
 		C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */; };
+		C19C8BFE286521AD0056D5E4 /* MinimedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; };
+		C19C8BFF286521AD0056D5E4 /* MinimedKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C10D9BC11C8269D500378342 /* MinimedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C02286521AD0056D5E4 /* MinimedKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4352A72520DEC9B700CAC200 /* MinimedKitUI.framework */; };
+		C19C8C03286521AD0056D5E4 /* MinimedKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4352A72520DEC9B700CAC200 /* MinimedKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C07286521CD0056D5E4 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
+		C19C8C08286521CD0056D5E4 /* RileyLinkBLEKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C0B286521CD0056D5E4 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
+		C19C8C0C286521CD0056D5E4 /* RileyLinkKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C0F286521CD0056D5E4 /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
+		C19C8C10286521CD0056D5E4 /* RileyLinkKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C13286522020056D5E4 /* OmniKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */; };
+		C19C8C14286522020056D5E4 /* OmniKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAFD9213323F900C50C1D /* OmniKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C16286522050056D5E4 /* OmniKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; };
+		C19C8C17286522050056D5E4 /* OmniKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C1FFAF78213323CC00C50C1D /* OmniKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C18286522170056D5E4 /* RileyLinkBLEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; };
+		C19C8C19286522170056D5E4 /* RileyLinkBLEKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 431CE76F1F98564100255374 /* RileyLinkBLEKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C1A286522180056D5E4 /* RileyLinkKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; };
+		C19C8C1B286522180056D5E4 /* RileyLinkKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43722FAE1CB9F7630038B7F2 /* RileyLinkKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C19C8C1C286522190056D5E4 /* RileyLinkKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; };
+		C19C8C1D286522190056D5E4 /* RileyLinkKitUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D5E78E1FAF7BFB004ACDB7 /* RileyLinkKitUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492621D4A5A19008964FF /* IOBStatus.swift */; };
 		C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492641D4A5DEB008964FF /* BatteryStatus.swift */; };
 		C1A492671D4A65D9008964FF /* TempBasalAdjustment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A492661D4A65D9008964FF /* TempBasalAdjustment.swift */; };
@@ -846,6 +859,41 @@
 			remoteGlobalIDString = 4352A72420DEC9B700CAC200;
 			remoteInfo = MinimedKitUI;
 		};
+		C19C8C00286521AD0056D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C10D9BC01C8269D500378342;
+			remoteInfo = MinimedKit;
+		};
+		C19C8C04286521AD0056D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4352A72420DEC9B700CAC200;
+			remoteInfo = MinimedKitUI;
+		};
+		C19C8C09286521CD0056D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 431CE76E1F98564100255374;
+			remoteInfo = RileyLinkBLEKit;
+		};
+		C19C8C0D286521CD0056D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43722FAD1CB9F7630038B7F2;
+			remoteInfo = RileyLinkKit;
+		};
+		C19C8C11286521CD0056D5E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D5E78D1FAF7BFB004ACDB7;
+			remoteInfo = RileyLinkKitUI;
+		};
 		C1B3831E1CD0665D00CE7782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C12EA22F198B436800309FA4 /* Project object */;
@@ -899,6 +947,36 @@
 				C1B383211CD0665D00CE7782 /* NightscoutUploadKit.framework in Embed Frameworks */,
 				4352A72D20DEC9B700CAC200 /* MinimedKitUI.framework in Embed Frameworks */,
 				431CE7851F98564200255374 /* RileyLinkBLEKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C19C8C06286521AD0056D5E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C19C8C08286521CD0056D5E4 /* RileyLinkBLEKit.framework in Embed Frameworks */,
+				C19C8C10286521CD0056D5E4 /* RileyLinkKitUI.framework in Embed Frameworks */,
+				C19C8C0C286521CD0056D5E4 /* RileyLinkKit.framework in Embed Frameworks */,
+				C19C8BFF286521AD0056D5E4 /* MinimedKit.framework in Embed Frameworks */,
+				C19C8C03286521AD0056D5E4 /* MinimedKitUI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C19C8C15286522020056D5E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C19C8C19286522170056D5E4 /* RileyLinkBLEKit.framework in Embed Frameworks */,
+				C19C8C1D286522190056D5E4 /* RileyLinkKitUI.framework in Embed Frameworks */,
+				C19C8C1B286522180056D5E4 /* RileyLinkKit.framework in Embed Frameworks */,
+				C19C8C17286522050056D5E4 /* OmniKit.framework in Embed Frameworks */,
+				C19C8C14286522020056D5E4 /* OmniKitUI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1710,13 +1788,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C136AA57231176FA008A320D /* OmniKitUI.framework in Frameworks */,
-				C136AA53231176E8008A320D /* RileyLinkKit.framework in Frameworks */,
-				C136AA55231176F0008A320D /* RileyLinkKitUI.framework in Frameworks */,
-				C136AA51231176D4008A320D /* LoopKit.framework in Frameworks */,
-				C136AA52231176D8008A320D /* LoopKitUI.framework in Frameworks */,
-				C136AA56231176F7008A320D /* OmniKit.framework in Frameworks */,
-				C136AA54231176EC008A320D /* RileyLinkBLEKit.framework in Frameworks */,
+				C19C8C18286522170056D5E4 /* RileyLinkBLEKit.framework in Frameworks */,
+				C19C8C1C286522190056D5E4 /* RileyLinkKitUI.framework in Frameworks */,
+				C19C8C13286522020056D5E4 /* OmniKitUI.framework in Frameworks */,
+				C19C8C1A286522180056D5E4 /* RileyLinkKit.framework in Frameworks */,
+				C19C8C16286522050056D5E4 /* OmniKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1724,6 +1800,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C19C8C07286521CD0056D5E4 /* RileyLinkBLEKit.framework in Frameworks */,
+				C19C8C0F286521CD0056D5E4 /* RileyLinkKitUI.framework in Frameworks */,
+				C19C8C0B286521CD0056D5E4 /* RileyLinkKit.framework in Frameworks */,
+				C19C8BFE286521AD0056D5E4 /* MinimedKit.framework in Frameworks */,
+				C19C8C02286521AD0056D5E4 /* MinimedKitUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2901,7 +2982,6 @@
 				431CE7731F98564200255374 /* Sources */,
 				431CE7741F98564200255374 /* Frameworks */,
 				431CE7751F98564200255374 /* Resources */,
-				C136AA7723123A5D008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3016,7 +3096,6 @@
 				C10D9BC61C8269D500378342 /* Sources */,
 				C10D9BC71C8269D500378342 /* Frameworks */,
 				C10D9BC81C8269D500378342 /* Resources */,
-				C136AA7823123B8C008A320D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3064,7 +3143,7 @@
 				C136AA2623116E32008A320D /* Sources */,
 				C136AA2723116E32008A320D /* Frameworks */,
 				C136AA2823116E32008A320D /* Resources */,
-				C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */,
+				C19C8C15286522020056D5E4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3088,7 +3167,7 @@
 				C136AA5A231187B0008A320D /* Sources */,
 				C136AA5B231187B0008A320D /* Frameworks */,
 				C136AA5C231187B0008A320D /* Resources */,
-				C136AA72231188FC008A320D /* Copy Frameworks with Carthage */,
+				C19C8C06286521AD0056D5E4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3098,6 +3177,11 @@
 				C136AA6D231188F1008A320D /* PBXTargetDependency */,
 				C136AA6F231188F1008A320D /* PBXTargetDependency */,
 				C136AA71231188F1008A320D /* PBXTargetDependency */,
+				C19C8C01286521AD0056D5E4 /* PBXTargetDependency */,
+				C19C8C05286521AD0056D5E4 /* PBXTargetDependency */,
+				C19C8C0A286521CD0056D5E4 /* PBXTargetDependency */,
+				C19C8C0E286521CD0056D5E4 /* PBXTargetDependency */,
+				C19C8C12286521CD0056D5E4 /* PBXTargetDependency */,
 			);
 			name = MinimedKitPlugin;
 			productName = MinimedKitPlugin;
@@ -3130,7 +3214,6 @@
 				C1B383101CD0665D00CE7782 /* Sources */,
 				C1B383111CD0665D00CE7782 /* Frameworks */,
 				C1B383121CD0665D00CE7782 /* Resources */,
-				A9B839DC2280A178004E745E /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3186,7 +3269,6 @@
 				C1FFAF7C213323CC00C50C1D /* Sources */,
 				C1FFAF7D213323CC00C50C1D /* Frameworks */,
 				C1FFAF7E213323CC00C50C1D /* Resources */,
-				C14A538023123CF500C86755 /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3519,130 +3601,6 @@
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKitUI.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		A9B839DC2280A178004E745E /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKit.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n\n";
-		};
-		C136AA4323116F4D008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/OmniKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/OmniKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		C136AA72231188FC008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkKitUI.framework",
-				"$(BUILT_PRODUCTS_DIR)/RileyLinkBLEKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/MinimedKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/MinimedKitUI.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		C136AA7723123A5D008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		C136AA7823123B8C008A320D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/MKRingProgressView.framework",
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-		C14A538023123CF500C86755 /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4460,6 +4418,31 @@
 			isa = PBXTargetDependency;
 			target = 4352A72420DEC9B700CAC200 /* MinimedKitUI */;
 			targetProxy = C136AA70231188F1008A320D /* PBXContainerItemProxy */;
+		};
+		C19C8C01286521AD0056D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C10D9BC01C8269D500378342 /* MinimedKit */;
+			targetProxy = C19C8C00286521AD0056D5E4 /* PBXContainerItemProxy */;
+		};
+		C19C8C05286521AD0056D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4352A72420DEC9B700CAC200 /* MinimedKitUI */;
+			targetProxy = C19C8C04286521AD0056D5E4 /* PBXContainerItemProxy */;
+		};
+		C19C8C0A286521CD0056D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 431CE76E1F98564100255374 /* RileyLinkBLEKit */;
+			targetProxy = C19C8C09286521CD0056D5E4 /* PBXContainerItemProxy */;
+		};
+		C19C8C0E286521CD0056D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43722FAD1CB9F7630038B7F2 /* RileyLinkKit */;
+			targetProxy = C19C8C0D286521CD0056D5E4 /* PBXContainerItemProxy */;
+		};
+		C19C8C12286521CD0056D5E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D5E78D1FAF7BFB004ACDB7 /* RileyLinkKitUI */;
+			targetProxy = C19C8C11286521CD0056D5E4 /* PBXContainerItemProxy */;
 		};
 		C1B3831F1CD0665D00CE7782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -3115,7 +3115,6 @@
 				C12EA234198B436800309FA4 /* Frameworks */,
 				C12EA235198B436800309FA4 /* Resources */,
 				C10D9BB81C82614F00378342 /* Embed Frameworks */,
-				4352A74E20DEDD7C00CAC200 /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3586,27 +3585,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4352A74E20DEDD7C00CAC200 /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/LoopKitUI.framework",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LoopKitUI.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		431CE76A1F98564100255374 /* Sources */ = {

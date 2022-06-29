@@ -114,15 +114,14 @@ public struct GlucoseEntry {
 
         guard
             let id = rawValue["_id"] as? String,
-            let epoch = rawValue["date"] as? Double,
-            let device = rawValue["device"] as? String
+            let epoch = rawValue["date"] as? Double
         else {
             return nil
         }
 
         self.id = id
         self.date = Date(timeIntervalSince1970: epoch / 1000.0)
-        self.device = device
+        self.device = rawValue["device"] as? String
 
         //Dexcom changed the format of trend in 2021 so we accept both String/Int types
         if let intTrend = rawValue["trend"] as? Int {

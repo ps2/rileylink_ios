@@ -493,8 +493,15 @@ public class PodCommsSession {
         let bolusSchedule = SetInsulinScheduleCommand.DeliverySchedule.bolus(units: units, timeBetweenPulses: timeBetweenPulses)
         let bolusScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, deliverySchedule: bolusSchedule)
 
-        guard podState.unfinalizedBolus == nil else {
-            return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
+        if podState.unfinalizedBolus != nil {
+            var ongoingBolus = true
+            if let statusResponse: StatusResponse = try? send([GetStatusCommand()]) {
+                podState.updateFromStatusResponse(statusResponse)
+                ongoingBolus = podState.unfinalizedBolus != nil
+            }
+            guard !ongoingBolus else {
+                return DeliveryCommandResult.certainFailure(error: .unfinalizedBolus)
+            }
         }
 
         let startTime = Date()
@@ -843,13 +850,13 @@ public class PodCommsSession {
 
     public func recoverUnacknowledgedCommand(using status: StatusResponse) {
         if let pendingCommand = podState.pendingCommand {
-            self.log.debug("Recovering from unacknowledged command %{public}@, status = %{public}@", String(describing: pendingCommand), String(describing: status))
+            self.log.default("Recovering from unacknowledged command %{public}@, status = %{public}@", String(describing: pendingCommand), String(describing: status))
 
             if status.lastProgrammingMessageSeqNum == pendingCommand.sequence {
-                self.log.debug("Unacknowledged command was received")
+                self.log.default("Unacknowledged command was received by pump")
                 unacknowledgedCommandWasReceived(pendingCommand: pendingCommand, podStatus: status)
             } else {
-                self.log.debug("Unacknowledged command was not received")
+                self.log.default("Unacknowledged command was not received by pump")
                 podState.updateFromStatusResponse(status)
             }
             podState.pendingCommand = nil

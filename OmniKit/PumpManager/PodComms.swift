@@ -83,6 +83,7 @@ class PodComms: CustomDebugStringConvertible {
     ///     - PodCommsError.activationTimeExceeded
     ///     - PodCommsError.rssiTooLow
     ///     - PodCommsError.rssiTooHigh
+    ///     - PodCommsError.podFault
     ///     - PodCommsError.diagnosticMessage
     ///     - PodCommsError.podIncompatible
     ///     - MessageError.invalidCrc

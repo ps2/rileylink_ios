@@ -74,7 +74,7 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testParsingVersionResponse() {
+    func testParsingShortErosVersionResponse() {
         do {
             let config = try VersionResponse(encodedData: Data(hexadecimalString: "011502070002070002020000a64000097c279c1f08ced2")!)
             XCTAssertEqual(23, config.data.count)
@@ -83,7 +83,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(42560, config.lot)
             XCTAssertEqual(621607, config.tid)
             XCTAssertEqual(0x1f08ced2, config.address)
-            XCTAssertEqual(2, config.productId)
+            XCTAssertEqual(erosProductId, config.productId)
             XCTAssertEqual(.reminderInitialized, config.podProgressStatus)
             XCTAssertEqual(2, config.gain)
             XCTAssertEqual(0x1c, config.rssi)
@@ -98,7 +98,7 @@ class MessageTests: XCTestCase {
         }
     }
     
-    func testParsingLongVersionResponse() {
+    func testParsingLongErosVersionResponse() {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff041d011b13881008340a5002070002070002030000a62b000447941f00ee878352")!)
             let config = message.messageBlocks[0] as! VersionResponse
@@ -108,7 +108,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(42539, config.lot)
             XCTAssertEqual(280468, config.tid)
             XCTAssertEqual(0x1f00ee87, config.address)
-            XCTAssertEqual(2, config.productId)
+            XCTAssertEqual(erosProductId, config.productId)
             XCTAssertEqual(.pairingCompleted, config.podProgressStatus)
             XCTAssertNil(config.rssi)
             XCTAssertNil(config.gain)
@@ -132,7 +132,7 @@ class MessageTests: XCTestCase {
             XCTAssertEqual(0x0000a5ad, config.lot)
             XCTAssertEqual(0x00053030, config.tid)
             XCTAssertEqual(0x1f086863, config.address)
-            XCTAssertEqual(2, config.productId)
+            XCTAssertEqual(erosProductId, config.productId)
             XCTAssertEqual(.activationTimeExceeded, config.podProgressStatus)
             XCTAssertEqual(2, config.gain)
             XCTAssertEqual(0x17, config.rssi)

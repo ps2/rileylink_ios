@@ -123,6 +123,55 @@ class MessageTests: XCTestCase {
         }
     }
 
+    func testParsingShortDashVersionResponse() {
+        do {
+            let config = try VersionResponse(encodedData: Data(hexadecimalString: "0115031b0008080004020812a011000c175700ffffffff")!)
+            XCTAssertEqual(23, config.data.count)
+            XCTAssertEqual("3.27.0", String(describing: config.pmVersion))
+            XCTAssertEqual("8.8.0", String(describing: config.piVersion))
+            XCTAssertEqual(135438353, config.lot)
+            XCTAssertEqual(792407, config.tid)
+            XCTAssertEqual(0xFFFFFFFF, config.address)
+            XCTAssertEqual(dashProductId, config.productId)
+            XCTAssertEqual(.reminderInitialized, config.podProgressStatus)
+            XCTAssertEqual(0, config.gain)
+            XCTAssertEqual(0, config.rssi)
+            XCTAssertNil(config.pulseSize)
+            XCTAssertNil(config.secondsPerBolusPulse)
+            XCTAssertNil(config.secondsPerPrimePulse)
+            XCTAssertNil(config.primeUnits)
+            XCTAssertNil(config.cannulaInsertionUnits)
+            XCTAssertNil(config.serviceDuration)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
+    func testParsingLongDashVersionResponse() {
+        do {
+            let message = try Message(encodedData: Data(hexadecimalString: "ffffffff0c1d011b13881008340a50031b0008080004030812a011000c175717244389816c")!)
+            let config = message.messageBlocks[0] as! VersionResponse
+            XCTAssertEqual(29, config.data.count)
+            XCTAssertEqual("3.27.0", String(describing: config.pmVersion))
+            XCTAssertEqual("8.8.0", String(describing: config.piVersion))
+            XCTAssertEqual(135438353, config.lot)
+            XCTAssertEqual(792407, config.tid)
+            XCTAssertEqual(0x17244389, config.address)
+            XCTAssertEqual(dashProductId, config.productId)
+            XCTAssertEqual(.pairingCompleted, config.podProgressStatus)
+            XCTAssertNil(config.rssi)
+            XCTAssertNil(config.gain)
+            XCTAssertEqual(Pod.pulseSize, config.pulseSize)
+            XCTAssertEqual(Pod.secondsPerBolusPulse, config.secondsPerBolusPulse)
+            XCTAssertEqual(Pod.secondsPerPrimePulse, config.secondsPerPrimePulse)
+            XCTAssertEqual(Pod.primeUnits, config.primeUnits)
+            XCTAssertEqual(Pod.cannulaInsertionUnits, config.cannulaInsertionUnits)
+            XCTAssertEqual(Pod.serviceDuration, config.serviceDuration)
+        } catch (let error) {
+            XCTFail("message decoding threw error: \(error)")
+        }
+    }
+
     func testParsingConfigWithPairingExpired() {
         do {
             let message = try Message(encodedData: Data(hexadecimalString: "ffffffff04170115020700020700020e0000a5ad00053030971f08686301fd")!)

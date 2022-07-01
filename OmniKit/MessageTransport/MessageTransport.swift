@@ -15,6 +15,7 @@ protocol MessageLogger: AnyObject {
     // Comms logging
     func didSend(_ message: Data)
     func didReceive(_ message: Data)
+    func didError(_ message: String)
 }
 
 public struct MessageTransportState: Equatable, RawRepresentable {
@@ -298,6 +299,7 @@ class PodMessageTransport: MessageTransport {
             return response
         } catch let error {
             if sentFullMessage {
+                messageLogger?.didError("Unacknowledged message. seq:\(message.sequenceNum), error = \(error)")
                 throw PodCommsError.unacknowledgedMessage(sequenceNumber: message.sequenceNum, error: error)
             } else {
                 throw PodCommsError.commsError(error: error)

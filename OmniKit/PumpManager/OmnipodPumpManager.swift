@@ -2074,6 +2074,10 @@ extension OmnipodPumpManager: MessageLogger {
         log.default("didReceive: %{public}@", message.hexadecimalString)
         self.logDeviceCommunication(message.hexadecimalString, type: .receive)
     }
+
+    func didError(_ message: String) {
+        self.logDeviceCommunication(message, type: .error)
+    }
 }
 
 extension OmnipodPumpManager: PodCommsDelegate {

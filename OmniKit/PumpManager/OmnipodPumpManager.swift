@@ -216,9 +216,9 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
         if let podState = self.state.podState {
             podAddress = String(format:"%04X", podState.address)
         }
-        self.pumpDelegate.notify { (delegate) in
-            delegate?.deviceManager(self, logEventForDeviceIdentifier: podAddress, type: type, message: message, completion: nil)
-        }
+
+        // Not dispatching here; if delegate queue is blocked, timestamps will be delayed
+        self.pumpDelegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: podAddress, type: type, message: message, completion: nil)
     }
 
     private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
@@ -314,7 +314,7 @@ extension OmnipodPumpManager {
     }
     
     public func buildPumpStatusHighlight(for state: OmnipodPumpManagerState, andDate date: Date = Date()) -> PumpStatusHighlight? {
-        if state.podState?.pendingCommand != nil {
+        if state.podState?.needsCommsRecovery == true {
             return PumpStatusHighlight(localizedMessage: NSLocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
@@ -442,7 +442,7 @@ extension OmnipodPumpManager {
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
             insulinType: state.insulinType,
-            deliveryIsUncertain: state.podState?.pendingCommand != nil
+            deliveryIsUncertain: state.podState?.needsCommsRecovery == true
         )
     }
 

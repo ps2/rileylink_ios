@@ -285,7 +285,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             hostedView.navigationItem.title = LocalizedString("Setup Complete", comment: "Title for setup complete screen")
             return hostedView
         case .pendingCommandRecovery:
-            if let pendingCommand = pumpManager.state.podState?.pendingCommand {
+            if let pendingCommand = pumpManager.state.podState?.unacknowledgedCommand, pumpManager.state.podState?.needsCommsRecovery == true {
 
                 let model = DeliveryUncertaintyRecoveryViewModel(appName: appName, uncertaintyStartedAt: pendingCommand.commandDate)
                 model.didRecover = { [weak self] in
@@ -396,7 +396,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
     }
 
     private func determineInitialStep() -> OmnipodUIScreen {
-        if pumpManager.state.podState?.pendingCommand != nil {
+        if pumpManager.state.podState?.needsCommsRecovery == true {
             return .pendingCommandRecovery
         } else if pumpManager.podCommState == .activating {
             if pumpManager.podAttachmentConfirmed {

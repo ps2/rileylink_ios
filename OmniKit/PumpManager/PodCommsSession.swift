@@ -508,6 +508,7 @@ public class PodCommsSession {
         do {
             podState.unacknowledgedCommand = PendingCommand.program(.bolus(volume: units, automatic: automatic), transport.messageNumber, Date())
             let statusResponse: StatusResponse = try send([bolusScheduleCommand, bolusExtraCommand])
+            podState.unacknowledgedCommand = nil
             podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), scheduledCertainty: .certain, insulinType: podState.insulinType, automatic: automatic)
             podState.updateFromStatusResponse(statusResponse)
             return DeliveryCommandResult.success(statusResponse: statusResponse)
@@ -539,6 +540,7 @@ public class PodCommsSession {
         do {
             podState.unacknowledgedCommand = PendingCommand.program(.tempBasal(unitsPerHour: rate, duration: duration, isHighTemp: isHighTemp, automatic: automatic), transport.messageNumber, startTime)
             let status: StatusResponse = try send([tempBasalCommand, tempBasalExtraCommand])
+            podState.unacknowledgedCommand = nil
             podState.unfinalizedTempBasal = UnfinalizedDose(tempBasalRate: rate, startTime: startTime, duration: duration, isHighTemp: isHighTemp, automatic: automatic, scheduledCertainty: .certain, insulinType: podState.insulinType)
             podState.updateFromStatusResponse(status)
             return DeliveryCommandResult.success(statusResponse: status)
@@ -630,6 +632,7 @@ public class PodCommsSession {
 
             podState.unacknowledgedCommand = PendingCommand.stopProgram(.all, transport.messageNumber, Date())
             let status: StatusResponse = try send(commandsToSend, beepBlock: beepBlock)
+            podState.unacknowledgedCommand = nil
             let canceledDose = handleCancelDosing(deliveryType: .all, bolusNotDelivered: status.bolusNotDelivered)
             podState.updateFromStatusResponse(status)
 
@@ -679,6 +682,7 @@ public class PodCommsSession {
             podState.unacknowledgedCommand = PendingCommand.stopProgram(deliveryType, transport.messageNumber, Date())
             let cancelDeliveryCommand = CancelDeliveryCommand(nonce: podState.currentNonce, deliveryType: deliveryType, beepType: beepType)
             let status: StatusResponse = try send([cancelDeliveryCommand], beepBlock: beepBlock)
+            podState.unacknowledgedCommand = nil
 
             let canceledDose = handleCancelDosing(deliveryType: deliveryType, bolusNotDelivered: status.bolusNotDelivered)
             podState.updateFromStatusResponse(status)

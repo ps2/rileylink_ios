@@ -200,13 +200,13 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         configuredAlerts[slot] = alert
     }
 
-    public mutating func finalizeFinishedDoses() {
-        if let bolus = unfinalizedBolus, bolus.isFinished() {
+    public mutating func finalizeAllDoses() {
+        if let bolus = unfinalizedBolus {
             finalizedDoses.append(bolus)
             unfinalizedBolus = nil
         }
 
-        if let tempBasal = unfinalizedTempBasal, tempBasal.isFinished() {
+        if let tempBasal = unfinalizedTempBasal {
             finalizedDoses.append(tempBasal)
             unfinalizedTempBasal = nil
         }
@@ -270,48 +270,17 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             }
         }
 
-        finalizeFinishedDoses()
-
-        if let bolus = unfinalizedBolus, bolus.scheduledCertainty == .uncertain {
-            if deliveryStatus.bolusing {
-                // Bolus did schedule
-                unfinalizedBolus?.scheduledCertainty = .certain
-            } else {
-                // Bolus didn't happen
-                unfinalizedBolus = nil
-            }
+        if let bolus = unfinalizedBolus, !deliveryStatus.bolusing {
+            finalizedDoses.append(bolus)
+            unfinalizedBolus = nil
         }
 
-        if let tempBasal = unfinalizedTempBasal, tempBasal.scheduledCertainty == .uncertain {
-            if deliveryStatus.tempBasalRunning {
-                // Temp basal did schedule
-                unfinalizedTempBasal?.scheduledCertainty = .certain
-            } else {
-                // Temp basal didn't happen
-                unfinalizedTempBasal = nil
-            }
-        }
-
-        if let resume = unfinalizedResume, resume.scheduledCertainty == .uncertain {
-            if deliveryStatus != .suspended {
-                // Resume was enacted
-                unfinalizedResume?.scheduledCertainty = .certain
-            } else {
-                // Resume wasn't enacted
-                unfinalizedResume = nil
-            }
+        if let tempBasal = unfinalizedTempBasal, !deliveryStatus.tempBasalRunning {
+            finalizedDoses.append(tempBasal)
+            unfinalizedTempBasal = nil
         }
 
         if let suspend = unfinalizedSuspend {
-            if suspend.scheduledCertainty == .uncertain {
-                if deliveryStatus == .suspended {
-                    // Suspend was enacted
-                    unfinalizedSuspend?.scheduledCertainty = .certain
-                } else {
-                    // Suspend wasn't enacted
-                    unfinalizedSuspend = nil
-                }
-            }
 
             if let resume = unfinalizedResume, suspend.startTime < resume.startTime {
                 finalizedDoses.append(suspend)

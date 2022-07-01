@@ -54,7 +54,8 @@ class PodComms: CustomDebugStringConvertible {
 
     func forgetPod() {
         podStateLock.lock()
-        self.podState?.finalizeFinishedDoses()
+        self.podState?.resolveAnyPendingCommandWithUncertainty()
+        self.podState?.finalizeAllDoses()
         podStateLock.unlock()
     }
 

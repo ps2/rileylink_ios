@@ -799,10 +799,6 @@ public class PodCommsSession {
         return detailedStatus
     }
 
-    public func finalizeFinishedDoses() {
-        podState.finalizeFinishedDoses()
-    }
-
     @discardableResult
     public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType, beepBlock: MessageBlock? = nil) throws -> PodInfoResponse {
         let podInfoCommand = GetStatusCommand(podInfoType: podInfoResponseSubType)
@@ -815,20 +811,15 @@ public class PodCommsSession {
         switch pendingCommand {
         case .program(let program, _, let commandDate):
             if let dose = program.unfinalizedDose(at: commandDate, withCertainty: .certain, insulinType: podState.insulinType) {
-                if dose.isFinished() {
-                    podState.finalizedDoses.append(dose)
-                    if case .resume = dose.doseType {
-                        podState.suspendState = .resumed(commandDate)
-                    }
-                } else {
-                    switch dose.doseType {
-                    case .bolus:
-                        podState.unfinalizedBolus = dose
-                    case .tempBasal:
-                        podState.unfinalizedTempBasal = dose
-                    default:
-                        break
-                    }
+                switch dose.doseType {
+                case .bolus:
+                    podState.unfinalizedBolus = dose
+                case .tempBasal:
+                    podState.unfinalizedTempBasal = dose
+                case .resume:
+                    podState.suspendState = .resumed(commandDate)
+                default:
+                    break
                 }
                 podState.updateFromStatusResponse(podStatus)
             }
@@ -889,10 +880,13 @@ public class PodCommsSession {
 
         do {
             let deactivatePod = DeactivatePodCommand(nonce: podState.currentNonce)
-            let _: StatusResponse = try send([deactivatePod])
+            let status: StatusResponse = try send([deactivatePod])
 
-            podState.resolveAnyPendingCommandWithUncertainty()
-            podState.finalizeFinishedDoses()
+            if podState.pendingCommand != nil {
+                recoverUnacknowledgedCommand(using: status)
+            } else {
+                podState.updateFromStatusResponse(status)
+            }
 
             if podState.activeTime == nil, let activatedAt = podState.activatedAt {
                 podState.activeTime = Date().timeIntervalSince(activatedAt)

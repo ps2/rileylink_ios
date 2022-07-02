@@ -407,8 +407,8 @@ public class PodCommsSession {
     private func markSetupProgressCompleted(statusResponse: StatusResponse) {
         if (podState.setupProgress != .completed) {
             podState.setupProgress = .completed
-            podState.setupUnitsDelivered = statusResponse.insulin // stash the current insulin delivered value as the baseline
-            log.info("Total setup units delivered: %@", String(describing: statusResponse.insulin))
+            podState.setupUnitsDelivered = statusResponse.insulinDelivered // stash the current insulin delivered value as the baseline
+            log.info("Total setup units delivered: %@", String(describing: statusResponse.insulinDelivered))
         }
     }
 
@@ -831,7 +831,6 @@ public class PodCommsSession {
                 default:
                     break
                 }
-                podState.updateFromStatusResponse(podStatus)
             }
         case .stopProgram(let stopProgram, _, let commandDate, _):
 
@@ -845,7 +844,6 @@ public class PodCommsSession {
                 podState.finalizedDoses.append(UnfinalizedDose(suspendStartTime: commandDate, scheduledCertainty: .certain))
                 podState.suspendState = .suspended(commandDate)
             }
-            podState.updateFromStatusResponse(podStatus)
         }
     }
 
@@ -858,7 +856,6 @@ public class PodCommsSession {
                 unacknowledgedCommandWasReceived(pendingCommand: pendingCommand, podStatus: status)
             } else {
                 self.log.default("Unacknowledged command was not received by pump")
-                podState.updateFromStatusResponse(status)
             }
             podState.unacknowledgedCommand = nil
         }
@@ -894,9 +891,9 @@ public class PodCommsSession {
 
             if podState.unacknowledgedCommand != nil {
                 recoverUnacknowledgedCommand(using: status)
-            } else {
-                podState.updateFromStatusResponse(status)
             }
+
+            podState.updateFromStatusResponse(status)
 
             if podState.activeTime == nil, let activatedAt = podState.activatedAt {
                 podState.activeTime = Date().timeIntervalSince(activatedAt)

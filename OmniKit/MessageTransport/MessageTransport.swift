@@ -213,10 +213,8 @@ class PodMessageTransport: MessageTransport {
     ///     - PodCommsError.podAckedInsteadOfReturningResponse
     ///     - PodCommsError.unexpectedPacketType
     ///     - PodCommsError.emptyResponse
-    ///     - MessageError.invalidCrc
-    ///     - MessageError.invalidSequence
-    ///     - MessageError.invalidAddress
-    ///     - RileyLinkDeviceError
+    ///     - PodCommsError.unacknowledgedMessage
+    ///     - PodCommsError.commsError
     func sendMessage(_ message: Message) throws -> Message {
         
         messageNumber = message.sequenceNum
@@ -301,6 +299,8 @@ class PodMessageTransport: MessageTransport {
             if sentFullMessage {
                 messageLogger?.didError("Unacknowledged message. seq:\(message.sequenceNum), error = \(error)")
                 throw PodCommsError.unacknowledgedMessage(sequenceNumber: message.sequenceNum, error: error)
+            } else if let podCommsError = error as? PodCommsError {
+                throw podCommsError
             } else {
                 throw PodCommsError.commsError(error: error)
             }

@@ -15,7 +15,7 @@ public struct StatusResponse : MessageBlock {
     public let podProgressStatus: PodProgressStatus
     public let timeActive: TimeInterval
     public let reservoirLevel: Double
-    public let insulin: Double
+    public let insulinDelivered: Double
     public let bolusNotDelivered: Double
     public let lastProgrammingMessageSeqNum: UInt8 // updated by pod for 03, 08, $11, $19, $1A, $1C, $1E & $1F command messages
     public let alerts: AlertSet
@@ -46,7 +46,7 @@ public struct StatusResponse : MessageBlock {
         let highInsulinBits = Int(encodedData[2] & 0xf) << 9
         let midInsulinBits = Int(encodedData[3]) << 1
         let lowInsulinBits = Int(encodedData[4] >> 7)
-        self.insulin = Double(highInsulinBits | midInsulinBits | lowInsulinBits) / Pod.pulsesPerUnit
+        self.insulinDelivered = Double(highInsulinBits | midInsulinBits | lowInsulinBits) / Pod.pulsesPerUnit
         
         self.lastProgrammingMessageSeqNum = (encodedData[4] >> 3) & 0xf
         
@@ -56,11 +56,32 @@ public struct StatusResponse : MessageBlock {
 
         self.reservoirLevel = Double((Int(encodedData[8] & 0x3) << 8) + Int(encodedData[9])) / Pod.pulsesPerUnit
     }
+
+    public init(
+        deliveryStatus: DeliveryStatus,
+        podProgressStatus: PodProgressStatus,
+        timeActive: TimeInterval,
+        reservoirLevel: Double,
+        insulinDelivered: Double,
+        bolusNotDelivered: Double,
+        lastProgrammingMessageSeqNum: UInt8,
+        alerts: AlertSet)
+    {
+        self.deliveryStatus = deliveryStatus
+        self.podProgressStatus = podProgressStatus
+        self.timeActive = timeActive
+        self.reservoirLevel = reservoirLevel
+        self.insulinDelivered = insulinDelivered
+        self.bolusNotDelivered = bolusNotDelivered
+        self.lastProgrammingMessageSeqNum = lastProgrammingMessageSeqNum
+        self.alerts = alerts
+        self.data = Data()
+    }
 }
 
 extension StatusResponse: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "StatusResponse(deliveryStatus:\(deliveryStatus), progressStatus:\(podProgressStatus), timeActive:\(timeActive.stringValue), reservoirLevel:\(String(describing: reservoirLevel)), delivered:\(insulin), bolusNotDelivered:\(bolusNotDelivered), lastProgrammingMessageSeqNum:\(lastProgrammingMessageSeqNum), alerts:\(alerts))"
+        return "StatusResponse(deliveryStatus:\(deliveryStatus), progressStatus:\(podProgressStatus), timeActive:\(timeActive.stringValue), reservoirLevel:\(String(describing: reservoirLevel)), delivered:\(insulinDelivered), bolusNotDelivered:\(bolusNotDelivered), lastProgrammingMessageSeqNum:\(lastProgrammingMessageSeqNum), alerts:\(alerts))"
     }
 }
 

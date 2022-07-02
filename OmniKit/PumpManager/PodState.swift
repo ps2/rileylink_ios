@@ -67,12 +67,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     var activeAlertSlots: AlertSet
     public var lastInsulinMeasurements: PodInsulinMeasurements?
 
+    public var unacknowledgedCommand: PendingCommand?
+
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
     public var unfinalizedSuspend: UnfinalizedDose?
     public var unfinalizedResume: UnfinalizedDose?
-
-    public var pendingCommand: PendingCommand?
 
     var finalizedDoses: [UnfinalizedDose]
 
@@ -94,6 +94,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var primeFinishTime: Date?
     public var setupProgress: SetupProgress
     public var configuredAlerts: [AlertSlot: PodAlert]
+    public var insulinType: InsulinType
 
     public var activeAlerts: [AlertSlot: PodAlert] {
         var active = [AlertSlot: PodAlert]()
@@ -104,9 +105,15 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         }
         return active
     }
-    
-    public var insulinType: InsulinType
-    
+
+    // Allow a grace period while the unacknowledged command is first being sent.
+    public var needsCommsRecovery: Bool {
+        if let unacknowledgedCommand = unacknowledgedCommand, !unacknowledgedCommand.isInFlight {
+            return true
+        }
+        return false
+    }
+
     public init(address: UInt32, piVersion: String, pmVersion: String, lot: UInt32, tid: UInt32, packetNumber: Int = 0, messageNumber: Int = 0, insulinType: InsulinType) {
         self.address = address
         self.nonceState = NonceState(lot: lot, tid: tid)
@@ -185,7 +192,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
-        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulin, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
         activeAlertSlots = response.alerts
     }
 
@@ -214,12 +221,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
 
     // Giving up on pod; we will assume commands failed/succeeded in the direction of positive net delivery
     mutating func resolveAnyPendingCommandWithUncertainty() {
-        guard let pendingCommand = pendingCommand else {
+        guard let pendingCommand = unacknowledgedCommand else {
             return
         }
 
         switch pendingCommand {
-        case .program(let program, _, let commandDate):
+        case .program(let program, _, let commandDate, _):
 
             if let dose = program.unfinalizedDose(at: commandDate, withCertainty: .uncertain, insulinType: insulinType) {
                 switch dose.doseType {
@@ -244,7 +251,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                     break // start program is never a suspend
                 }
             }
-        case .stopProgram(let stopProgram, _, let commandDate):
+        case .stopProgram(let stopProgram, _, let commandDate, _):
             // All stop programs result in reduced delivery, except for stopping a low temp, so we assume all stop
             // commands failed, except for low temp
 
@@ -257,7 +264,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
                 unfinalizedTempBasal?.cancel(at: commandDate)
             }
         }
-        self.pendingCommand = nil
+        self.unacknowledgedCommand = nil
     }
     
     private mutating func updateDeliveryStatus(deliveryStatus: DeliveryStatus, podProgressStatus: PodProgressStatus, bolusNotDelivered: Double) {
@@ -339,6 +346,13 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             self.suspendState = suspendState
         } else {
             return nil
+        }
+
+        if let rawPendingCommand = rawValue["unacknowledgedCommand"] as? PendingCommand.RawValue {
+            // When loading from raw state, we know comms are no longer in progress; this helps recover from a crash
+            self.unacknowledgedCommand = PendingCommand(rawValue: rawPendingCommand)?.commsFinished
+        } else {
+            self.unacknowledgedCommand = nil
         }
 
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
@@ -449,7 +463,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "setupProgress": setupProgress.rawValue,
             "insulinType": insulinType.rawValue
             ]
-        
+
+        rawValue["unacknowledgedCommand"] = unacknowledgedCommand?.rawValue
+
         rawValue["unfinalizedBolus"] = unfinalizedBolus?.rawValue
 
         rawValue["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
@@ -493,6 +509,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* lot: \(lot)",
             "* tid: \(tid)",
             "* suspendState: \(suspendState)",
+            "* unacknowledgedCommand: \(String(describing: unacknowledgedCommand))",
             "* unfinalizedBolus: \(String(describing: unfinalizedBolus))",
             "* unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))",
             "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",

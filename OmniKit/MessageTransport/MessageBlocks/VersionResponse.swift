@@ -11,9 +11,6 @@ import Foundation
 fileprivate let assignAddressVersionLength: UInt8 = 0x15
 fileprivate let setupPodVersionLength: UInt8 = 0x1B
 
-let erosProductId: UInt8 = 2        // 2nd gen Eros Omnipod (PM=PI=2.x.y)
-let dashProductId: UInt8 = 4        // Dash NXP BLE (firmware 3.x.y) or TWI BOARD (firmware 4.x.y)
-
 public struct VersionResponse : MessageBlock {
     
     public struct FirmwareVersion : CustomStringConvertible {

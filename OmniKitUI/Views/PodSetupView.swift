@@ -48,7 +48,7 @@ struct PodSetupView: View {
     private var close: some View {
         HStack {
             Spacer()
-            closeButton
+            cancelButton
         }
         .padding(.top)
     }
@@ -81,8 +81,8 @@ struct PodSetupView: View {
         Text(LocalizedString("You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body.", comment: "bodyText for PodSetupView"))
     }
     
-    private var closeButton: some View {
-        Button(LocalizedString("Close", comment: "Close button title"), action: {
+    private var cancelButton: some View {
+        Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
             self.dismiss()
         })
     }

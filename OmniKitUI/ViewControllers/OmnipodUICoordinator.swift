@@ -105,9 +105,12 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
             return hostingController(rootView: view)
         case .rileyLinkSetup:
             let dataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
-            let view = RileyLinkSetupView(
+            var view = RileyLinkSetupView(
                 dataSource: dataSource,
                 nextAction: { [weak self] in self?.stepFinished() })
+            view.cancelButtonTapped = { [weak self] in
+                 self?.setupCanceled()
+            }
             return hostingController(rootView: view)
 
         case .expirationReminderSetup:
@@ -123,6 +126,9 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 }
                 self.stepFinished()
             }
+            view.cancelButtonTapped = { [weak self] in
+                self?.setupCanceled()
+            }
             let hostedView = hostingController(rootView: view)
             hostedView.navigationItem.title = LocalizedString("Expiration Reminder", comment: "Title for ExpirationReminderSetupView")
             return hostedView
@@ -135,7 +141,9 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 self?.pumpManager.initialConfigurationCompleted = true
                 self?.stepFinished()
             }
-
+            view.cancelButtonTapped = { [weak self] in
+                self?.setupCanceled()
+            }
             let hostedView = hostingController(rootView: view)
             hostedView.navigationItem.title = LocalizedString("Low Reservoir", comment: "Title for LowReservoirReminderSetupView")
             hostedView.navigationItem.backButtonDisplayMode = .generic

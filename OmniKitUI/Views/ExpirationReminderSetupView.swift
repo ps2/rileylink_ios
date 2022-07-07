@@ -14,6 +14,7 @@ struct ExpirationReminderSetupView: View {
     
     public var valueChanged: ((_ value: Int) -> Void)?
     public var continueButtonTapped: (() -> Void)?
+    public var cancelButtonTapped: (() -> Void)?
 
     var body: some View {
         GuidePage(content: {
@@ -38,6 +39,13 @@ struct ExpirationReminderSetupView: View {
             .padding()
         }
         .navigationBarTitle("Expiration Reminder", displayMode: .automatic)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
+                    cancelButtonTapped?()
+                })
+            }
+        }
     }
 }
 

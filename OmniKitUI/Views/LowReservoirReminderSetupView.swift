@@ -18,6 +18,7 @@ struct LowReservoirReminderSetupView: View {
     
     public var valueChanged: ((_ value: Int) -> Void)?
     public var continueButtonTapped: (() -> Void)?
+    public var cancelButtonTapped: (() -> Void)?
 
     var insulinQuantityFormatter = QuantityFormatter(for: .internationalUnit())
 
@@ -50,6 +51,13 @@ struct LowReservoirReminderSetupView: View {
             .padding()
         }
         .navigationBarTitle("Low Reservoir", displayMode: .automatic)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
+                    cancelButtonTapped?()
+                })
+            }
+        }
     }
     
     private var picker: some View {

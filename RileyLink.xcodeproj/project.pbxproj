@@ -2177,11 +2177,11 @@
 				C1D9E342283D88F5003CA0D3 /* PodLifeHUDView.swift */,
 				C1D9E354283D88F6003CA0D3 /* PodLifeHUDView.xib */,
 				C1D9E35A283D88F6003CA0D3 /* PodSetupView.swift */,
+				C1328AF2284F9C7B0096C110 /* RileyLinkSetupView.swift */,
 				C1D9E357283D88F6003CA0D3 /* ScheduledExpirationReminderEditView.swift */,
 				C1D9E358283D88F6003CA0D3 /* SetupCompleteView.swift */,
 				C1D9E34D283D88F5003CA0D3 /* TimeView.swift */,
 				C1D9E343283D88F5003CA0D3 /* UncertaintyRecoveredView.swift */,
-				C1328AF2284F9C7B0096C110 /* RileyLinkSetupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

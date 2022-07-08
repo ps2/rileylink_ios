@@ -11,6 +11,8 @@ import LoopKitUI
 import RileyLinkKitUI
 
 struct RileyLinkSetupView: View {
+    public var cancelButtonTapped: (() -> Void)?
+
     @Environment(\.dismissAction) private var dismiss
 
     let nextAction: () -> Void
@@ -58,6 +60,13 @@ struct RileyLinkSetupView: View {
 
         }
         .navigationTitle(LocalizedString("RileyLink Setup", comment: "Navigation title for RileyLinkSetupView"))
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
+                    cancelButtonTapped?()
+                })
+            }
+        }
         .onAppear { dataSource.isScanningEnabled = true }
         .onDisappear { dataSource.isScanningEnabled = false }
     }

@@ -74,7 +74,7 @@ extension AlertConfiguration {
         let yyyy = (Int(encodedData[2]) << 8) + (Int(encodedData[3])) & 0x3fff
 
         if encodedData[0] & 0b100 != 0 {
-            let volume = Double(yyyy * 2) * Pod.pulseSize
+            let volume = Double(yyyy * 2) / Pod.pulsesPerUnit
             self.trigger = .unitsRemaining(volume)
         } else {
             self.trigger = .timeUntilAlert(TimeInterval(minutes: Double(yyyy)))

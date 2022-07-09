@@ -209,7 +209,11 @@ public class PodCommsSession {
                 podState.activeTime = fault.faultEventTimeSinceActivation
             }
             handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
-            podState.updateFromDetailedStatusResponse(fault)
+            let derivedStatusResponse = StatusResponse(detailedStatus: fault)
+            if podState.unacknowledgedCommand != nil {
+                recoverUnacknowledgedCommand(using: derivedStatusResponse)
+            }
+            podState.updateFromStatusResponse(derivedStatusResponse)
         }
         log.error("Pod Fault: %@", String(describing: fault))
     }
@@ -786,10 +790,9 @@ public class PodCommsSession {
         let statusResponse: StatusResponse = try send([GetStatusCommand()], beepBlock: beepBlock)
 
         if podState.unacknowledgedCommand != nil {
-            self.recoverUnacknowledgedCommand(using: statusResponse)
-        } else {
-            podState.updateFromStatusResponse(statusResponse)
+            recoverUnacknowledgedCommand(using: statusResponse)
         }
+        podState.updateFromStatusResponse(statusResponse)
         return statusResponse
     }
 
@@ -804,7 +807,11 @@ public class PodCommsSession {
             // just detected that the pod has faulted, handle setting the fault state but don't throw
             handlePodFault(fault: detailedStatus)
         } else {
-            podState.updateFromDetailedStatusResponse(detailedStatus)
+            let derivedStatusResponse = StatusResponse(detailedStatus: detailedStatus)
+            if podState.unacknowledgedCommand != nil {
+                recoverUnacknowledgedCommand(using: derivedStatusResponse)
+            }
+            podState.updateFromStatusResponse(derivedStatusResponse)
         }
         return detailedStatus
     }

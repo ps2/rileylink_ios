@@ -525,6 +525,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* primeFinishTime: \(String(describing: primeFinishTime))",
             "* configuredAlerts: \(String(describing: configuredAlerts))",
             "* insulinType: \(String(describing: insulinType))",
+            "* pdmRef: \(String(describing: fault?.pdmRef))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

@@ -192,15 +192,19 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func updateFromStatusResponse(_ response: StatusResponse) {
         let now = updatePodTimes(timeActive: response.timeActive)
         updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
-        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.insulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
-        activeAlertSlots = response.alerts
-    }
 
-    public mutating func updateFromDetailedStatusResponse(_ response: DetailedStatus) {
-        let now = updatePodTimes(timeActive: response.timeActive)
-        updateDeliveryStatus(deliveryStatus: response.deliveryStatus, podProgressStatus: response.podProgressStatus, bolusNotDelivered: response.bolusNotDelivered)
-        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: response.totalInsulinDelivered, reservoirLevel: response.reservoirLevel, setupUnitsDelivered: setupUnitsDelivered, validTime: now)
-        activeAlertSlots = response.unacknowledgedAlerts
+        let setupUnits = setupUnitsDelivered != nil ? setupUnitsDelivered! : Pod.primeUnits + Pod.cannulaInsertionUnits
+
+        // Calculated new delivered value which will be a negative value until setup has completed OR after a pod reset fault
+        let calcDelivered = response.insulinDelivered - setupUnits
+
+        // insulinDelivered should never be a negative value or decrease from the previous saved delivered value
+        let prevDelivered = lastInsulinMeasurements != nil ? lastInsulinMeasurements!.delivered : 0
+        let insulinDelivered = max(calcDelivered, prevDelivered)
+
+        lastInsulinMeasurements = PodInsulinMeasurements(insulinDelivered: insulinDelivered, reservoirLevel: response.reservoirLevel, validTime: now)
+
+        activeAlertSlots = response.alerts
     }
 
     public mutating func registerConfiguredAlert(slot: AlertSlot, alert: PodAlert) {
@@ -521,6 +525,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* primeFinishTime: \(String(describing: primeFinishTime))",
             "* configuredAlerts: \(String(describing: configuredAlerts))",
             "* insulinType: \(String(describing: insulinType))",
+            "* pdmRef: \(String(describing: fault?.pdmRef))",
             "",
             fault != nil ? String(reflecting: fault!) : "fault: nil",
             "",

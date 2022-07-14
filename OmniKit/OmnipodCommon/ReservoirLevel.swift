@@ -25,10 +25,9 @@ public enum ReservoirLevel: RawRepresentable, Equatable {
     }
 
     public init(rawValue: RawValue) {
-        switch rawValue {
-        case Pod.reservoirLevelAboveThresholdMagicNumber:
+        if rawValue > Pod.maximumReservoirReading {
             self = .aboveThreshold
-        default:
+        } else {
             self = .valid(rawValue)
         }
     }

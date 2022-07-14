@@ -46,7 +46,7 @@ public struct PodInfoConfiguredAlerts : PodInfo {
         for alarmType in (0..<numAlertTypes) {
             let beepType = beepType.init(rawValue: UInt8(alarmType))
             let timeFromPodStart = encodedData[(3 + alarmType * 2)] // Double(encodedData[(5 + alarmType)] & 0x3f)
-            let unitsLeft = Double(encodedData[(4 + alarmType * 2)]) * Pod.pulseSize
+            let unitsLeft = Double(encodedData[(4 + alarmType * 2)]) / Pod.pulsesPerUnit
             activations.append(AlertActivation(beepType: beepType!, timeFromPodStart: timeFromPodStart, unitsLeft: unitsLeft))
         }
         alertsActivations = activations

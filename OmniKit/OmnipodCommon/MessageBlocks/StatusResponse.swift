@@ -77,6 +77,19 @@ public struct StatusResponse : MessageBlock {
         self.alerts = alerts
         self.data = Data()
     }
+
+    // convenience function to create a StatusResponse for a DetailedStatus
+    public init(detailedStatus: DetailedStatus) {
+        self.deliveryStatus = detailedStatus.deliveryStatus
+        self.podProgressStatus = detailedStatus.podProgressStatus
+        self.timeActive = detailedStatus.timeActive
+        self.reservoirLevel = detailedStatus.reservoirLevel
+        self.insulinDelivered = detailedStatus.totalInsulinDelivered
+        self.bolusNotDelivered = detailedStatus.bolusNotDelivered
+        self.lastProgrammingMessageSeqNum = detailedStatus.lastProgrammingMessageSeqNum
+        self.alerts = detailedStatus.unacknowledgedAlerts
+        self.data = Data()
+    }
 }
 
 extension StatusResponse: CustomDebugStringConvertible {

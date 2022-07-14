@@ -46,11 +46,11 @@ public struct DetailedStatus : PodInfo, Equatable {
         
         self.deliveryStatus = DeliveryStatus(rawValue: encodedData[2] & 0xf)!
         
-        self.bolusNotDelivered = Pod.pulseSize * Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4]))
+        self.bolusNotDelivered = Double((Int(encodedData[3] & 0x3) << 8) | Int(encodedData[4])) / Pod.pulsesPerUnit
         
         self.lastProgrammingMessageSeqNum = encodedData[5]
         
-        self.totalInsulinDelivered = Pod.pulseSize * Double(encodedData[6...7].toBigEndian(UInt16.self))
+        self.totalInsulinDelivered = Double(encodedData[6...7].toBigEndian(UInt16.self)) / Pod.pulsesPerUnit
         
         self.faultEventCode = FaultEventCode(rawValue: encodedData[8])
         
@@ -61,7 +61,7 @@ public struct DetailedStatus : PodInfo, Equatable {
             self.faultEventTimeSinceActivation = nil
         }
         
-        self.reservoirLevel = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) * Pod.pulseSize
+        self.reservoirLevel = Double((Int(encodedData[11] & 0x3) << 8) + Int(encodedData[12])) / Pod.pulsesPerUnit
         
         self.timeActive = TimeInterval(minutes: Double(encodedData[13...14].toBigEndian(UInt16.self)))
         
@@ -94,10 +94,9 @@ public struct DetailedStatus : PodInfo, Equatable {
             self.possibleFaultCallingAddress = nil
         } else {
             // For Eros faults, YYYY is always uninitialized data from the previous command/response at the same buffer offset.
-            self.possibleFaultCallingAddress = nil
             // For Dash faults, YYYY could be a calling address of the fault routine for the first return after a pod fault,
             // subsequent returns will be byte swapped data from previous command/response at the same buffer offset.
-            //self.possibleFaultCallingAddress = encodedData[20...21].toBigEndian(UInt16.self) // only potentially valid for Dash
+            self.possibleFaultCallingAddress = encodedData[20...21].toBigEndian(UInt16.self) // only potentially valid for Dash
         }
         
         self.data = Data(encodedData)
@@ -105,38 +104,6 @@ public struct DetailedStatus : PodInfo, Equatable {
 
     public var isFaulted: Bool {
         return faultEventCode.faultType != .noFaults || podProgressStatus == .activationTimeExceeded
-    }
-
-    // Returns an appropropriate PDM style Ref string for the Detailed Status.
-    // For most types, Ref: TT-VVVHH-IIIRR-FFF computed as {19|17}-{VV}{SSSS/60}-{NNNN/20}{RRRR/20}-PP
-    public var pdmRef: String? {
-        let TT, VVV, HH, III, RR, FFF: UInt8
-        let refStr = LocalizedString("Ref", comment: "PDM style 'Ref' string")
-
-        switch faultEventCode.faultType {
-        case .noFaults, .reservoirEmpty, .exceededMaximumPodLife80Hrs:
-            return nil      // no PDM Ref # generated for these cases
-        case .insulinDeliveryCommandError:
-            // This fault is treated as a PDM fault which uses an alternate Ref format
-            return String(format: "%@:\u{00a0}11-144-0018-00049", refStr) // all fixed values for this fault
-        case .occluded:
-            // Ref: 17-000HH-IIIRR-000
-            TT = 17         // Occlusion detected Ref type
-            VVV = 0         // no VVV value for an occlusion fault
-            FFF = 0         // no FFF value for an occlusion fault
-        default:
-            // Ref: 19-VVVHH-IIIRR-FFF
-            TT = 19         // pod fault Ref type
-            VVV = data[17]  // use the raw VV byte value
-            FFF = faultEventCode.rawValue
-        }
-
-        HH = UInt8(timeActive.hours)
-        III = UInt8(totalInsulinDelivered)
-
-        RR = UInt8(self.reservoirLevel) // special 51.15 value used for > 50U will become 51 as needed
-
-        return String(format: "%@:\u{00a0}%02d-%03d%02d-%03d%02d-%03d", refStr, TT, VVV, HH, III, RR, FFF)
     }
 }
 
@@ -251,17 +218,5 @@ public struct ErrorEventInfo: CustomStringConvertible, Equatable {
         self.occlusionType = Int((rawValue & 0x60) >> 5)
         self.immediateBolusInProgress = (rawValue & 0x10) != 0
         self.podProgressStatus = PodProgressStatus(rawValue: rawValue & 0xF)!
-    }
-}
-
-
-extension DetailedStatus {
-    var highlightText: String {
-        switch faultEventCode.faultType {
-        case .exceededMaximumPodLife80Hrs:
-            return LocalizedString("Pod Expired", comment: "Highlight string for pod expired (80hrs).")
-        default:
-            return LocalizedString("Pod Fault", comment: "Highlight string for pod faults.")
-        }
     }
 }

@@ -62,7 +62,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     let startTime: Date
     var duration: TimeInterval?
     var scheduledCertainty: ScheduledCertainty
-    var isHighTemp: Bool = false    // Track this for situations where cancelling temp basal is unacknowledged, and recovery fails, and we have to assume the greatest possible delivery
+    var isHighTemp: Bool = false    // Track this for situations where cancelling temp basal is unacknowledged, and recovery fails, and we have to assume the most possible delivery
     var insulinType: InsulinType?
 
     var finishTime: Date? {
@@ -72,14 +72,6 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         set {
             duration = newValue?.timeIntervalSince(startTime)
         }
-    }
-
-    private var nominalProgress: Double {
-        guard let duration = duration else {
-            return 0
-        }
-        let elapsed = -startTime.timeIntervalSinceNow
-        return elapsed / duration
     }
 
     public func progress(at date: Date = Date()) -> Double {
@@ -92,12 +84,6 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
     public func isFinished(at date: Date = Date()) -> Bool {
         return progress(at: date) >= 1
-    }
-
-    // Has a bolus operation had enough time to positively finish
-    public var isBolusPositivelyFinished: Bool {
-        // Pod faults if any pulse takes 20% or more of nominal to deliver
-        return nominalProgress >= 1.2
     }
 
     // Units per hour

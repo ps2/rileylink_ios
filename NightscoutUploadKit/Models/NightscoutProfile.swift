@@ -79,7 +79,7 @@ public class ProfileSet {
         }
 
         public var dictionaryRepresentation: [String: Any] {
-            return [
+            var rval: [String: Any] = [
                 "dia": dia.hours,
                 "carbs_hr": "0",
                 "delay": "0",
@@ -90,6 +90,8 @@ public class ProfileSet {
                 "basal": basal.map { $0.dictionaryRepresentation },
                 "carbratio": carbratio.map { $0.dictionaryRepresentation },
                 ]
+            rval["units"] = units
+            return rval
         }
 
         init?(rawValue: RawValue) {
@@ -114,7 +116,7 @@ public class ProfileSet {
             self.basal = basalRaw.compactMap { ScheduleItem(rawValue: $0) }
             self.targetLow = targetLowRaw.compactMap { ScheduleItem(rawValue: $0) }
             self.targetHigh = targetHighRaw.compactMap { ScheduleItem(rawValue: $0) }
-            self.units = nil
+            self.units = rawValue["units"] as? String
          }
     }
     

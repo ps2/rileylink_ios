@@ -17,11 +17,12 @@ public struct LoopSettings {
     public let preMealTargetRange: ClosedRange<Double>?
     public let maximumBasalRatePerHour: Double?
     public let maximumBolus: Double?
-    public let deviceToken: Data?
+    public let deviceToken: String?
     public let bundleIdentifier: String?
+    public let dosingStrategy: String?
 
     public init(dosingEnabled: Bool, overridePresets: [TemporaryScheduleOverride], scheduleOverride: TemporaryScheduleOverride?, minimumBGGuard: Double?, preMealTargetRange: ClosedRange<Double>?, maximumBasalRatePerHour: Double?, maximumBolus: Double?,
-                deviceToken: Data?, bundleIdentifier: String?) {
+                deviceToken: String?, bundleIdentifier: String?, dosingStrategy: String?) {
         self.dosingEnabled = dosingEnabled
         self.overridePresets = overridePresets
         self.scheduleOverride = scheduleOverride
@@ -31,6 +32,7 @@ public struct LoopSettings {
         self.maximumBolus = maximumBolus
         self.deviceToken = deviceToken
         self.bundleIdentifier = bundleIdentifier
+        self.dosingStrategy = dosingStrategy
     }
 
     public var dictionaryRepresentation: [String: Any] {
@@ -40,29 +42,17 @@ public struct LoopSettings {
             "overridePresets": overridePresets.map { $0.dictionaryRepresentation },
         ]
 
-        if let minimumBGGuard = minimumBGGuard {
-            rval["minimumBGGuard"] = minimumBGGuard
-        }
-
-        if let scheduleOverride = scheduleOverride {
-            rval["scheduleOverride"] = scheduleOverride.dictionaryRepresentation
-        }
+        rval["minimumBGGuard"] = minimumBGGuard
+        rval["scheduleOverride"] = scheduleOverride?.dictionaryRepresentation
 
         if let preMealTargetRange = preMealTargetRange {
             rval["preMealTargetRange"] = [preMealTargetRange.lowerBound, preMealTargetRange.upperBound]
         }
 
-        if let maximumBasalRatePerHour = maximumBasalRatePerHour {
-            rval["maximumBasalRatePerHour"] = maximumBasalRatePerHour
-        }
-
-        if let maximumBolus = maximumBolus {
-            rval["maximumBolus"] = maximumBolus
-        }
-
-        if let deviceToken = deviceToken {
-            rval["deviceToken"] = deviceToken.hexadecimalString
-        }
+        rval["maximumBasalRatePerHour"] = maximumBasalRatePerHour
+        rval["maximumBolus"] = maximumBolus
+        rval["deviceToken"] = deviceToken
+        rval["dosingStrategy"] = dosingStrategy
 
         if let bundleIdentifier = bundleIdentifier {
             rval["bundleIdentifier"] = bundleIdentifier
@@ -72,40 +62,34 @@ public struct LoopSettings {
     }
 
     init?(rawValue: RawValue) {
-         guard
-             let dosingEnabled = rawValue["dosingEnabled"] as? Bool,
-             let overridePresetsRaw = rawValue["overridePresets"] as? [TemporaryScheduleOverride.RawValue]
-         else {
-             return nil
-         }
+        guard
+            let dosingEnabled = rawValue["dosingEnabled"] as? Bool,
+            let overridePresetsRaw = rawValue["overridePresets"] as? [TemporaryScheduleOverride.RawValue]
+        else {
+            return nil
+        }
 
-         self.dosingEnabled = dosingEnabled
-         self.overridePresets = overridePresetsRaw.compactMap { TemporaryScheduleOverride(rawValue: $0) }
+        self.dosingEnabled = dosingEnabled
+        self.overridePresets = overridePresetsRaw.compactMap { TemporaryScheduleOverride(rawValue: $0) }
 
-         if let scheduleOverrideRaw = rawValue["scheduleOverride"] as? TemporaryScheduleOverride.RawValue {
-             scheduleOverride = TemporaryScheduleOverride(rawValue: scheduleOverrideRaw)
-         } else {
-             scheduleOverride = nil
-         }
+        if let scheduleOverrideRaw = rawValue["scheduleOverride"] as? TemporaryScheduleOverride.RawValue {
+            scheduleOverride = TemporaryScheduleOverride(rawValue: scheduleOverrideRaw)
+        } else {
+            scheduleOverride = nil
+        }
 
-         minimumBGGuard = rawValue["minimumBGGuard"] as? Double
+        minimumBGGuard = rawValue["minimumBGGuard"] as? Double
 
-         if let preMealTargetRangeRaw = rawValue["preMealTargetRange"] as? [Double], preMealTargetRangeRaw.count == 2 {
-             preMealTargetRange = ClosedRange(uncheckedBounds: (lower: preMealTargetRangeRaw[0], upper: preMealTargetRangeRaw[1]))
-         } else {
-             preMealTargetRange = nil
-         }
+        if let preMealTargetRangeRaw = rawValue["preMealTargetRange"] as? [Double], preMealTargetRangeRaw.count == 2 {
+            preMealTargetRange = ClosedRange(uncheckedBounds: (lower: preMealTargetRangeRaw[0], upper: preMealTargetRangeRaw[1]))
+        } else {
+            preMealTargetRange = nil
+        }
 
-         maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double
-
-         maximumBolus = rawValue["maximumBolus"] as? Double
-
-         if let deviceTokenHex = rawValue["deviceToken"] as? String, let deviceToken = Data(hexadecimalString: deviceTokenHex) {
-             self.deviceToken = deviceToken
-         } else {
-             self.deviceToken = nil
-         }
-
-         bundleIdentifier = rawValue["bundleIdentifier"] as? String
+        maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double
+        maximumBolus = rawValue["maximumBolus"] as? Double
+        deviceToken = rawValue["deviceToken"] as? String
+        bundleIdentifier = rawValue["bundleIdentifier"] as? String
+        dosingStrategy = rawValue["dosingStrategy"] as? String
      }
 }

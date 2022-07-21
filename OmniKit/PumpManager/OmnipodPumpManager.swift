@@ -725,10 +725,8 @@ extension OmnipodPumpManager {
             self.podComms.mockPodStateChanges { podState in
                 podState.setupProgress = .priming
             }
-            let fault: DetailedStatus? = self.state.podState?.fault
-
-            if mockFaultDuringPairing {
-                completion(.failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault!))))
+            if let fault = self.state.podState?.fault {
+                completion(.failure(PumpManagerError.deviceState(PodCommsError.podFault(fault: fault))))
             } else if mockCommsErrorDuringPairing {
                 completion(.failure(PumpManagerError.communication(PodCommsError.noResponse)))
             } else {
@@ -895,6 +893,9 @@ extension OmnipodPumpManager {
     }
 
     public func checkCannulaInsertionFinished(completion: @escaping (OmnipodPumpManagerError?) -> Void) {
+        #if targetEnvironment(simulator)
+        completion(nil)
+        #else
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Check cannula insertion finished", using: deviceSelector) { (result) in
             switch result {
@@ -911,6 +912,7 @@ extension OmnipodPumpManager {
                 completion(.communication(error))
             }
         }
+        #endif
     }
 
     // MARK: - Pump Commands
@@ -1040,10 +1042,7 @@ extension OmnipodPumpManager {
     public func deactivatePod(completion: @escaping (OmnipodPumpManagerError?) -> Void) {
         #if targetEnvironment(simulator)
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + .seconds(2)) {
-
-            self.forgetPod(completion: {
-                completion(nil)
-            })
+            completion(nil)
         }
         #else
         guard self.state.podState != nil else {

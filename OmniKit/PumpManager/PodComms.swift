@@ -189,8 +189,8 @@ class PodComms: CustomDebugStringConvertible {
                 log.default("Creating PodState for address %{public}@ [lot %u tid %u], packet #%d, message #%d", String(format: "%04X", config.address), config.lot, config.tid, transport.packetNumber, transport.messageNumber)
                 self.podState = PodState(
                     address: config.address,
-                    piVersion: String(describing: config.piVersion),
-                    pmVersion: String(describing: config.pmVersion),
+                    pmVersion: String(describing: config.firmwareVersion),
+                    piVersion: String(describing: config.iFirmwareVersion),
                     lot: config.lot,
                     tid: config.tid,
                     packetNumber: transport.packetNumber,

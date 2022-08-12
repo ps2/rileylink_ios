@@ -169,7 +169,10 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             }
 
             if oldValue.podState?.lastInsulinMeasurements?.reservoirLevel != newValue.podState?.lastInsulinMeasurements?.reservoirLevel {
-                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements, let reservoirLevel = lastInsulinMeasurements.reservoirLevel {
+                if let lastInsulinMeasurements = newValue.podState?.lastInsulinMeasurements,
+                   let reservoirLevel = lastInsulinMeasurements.reservoirLevel,
+                   reservoirLevel != Pod.reservoirLevelAboveThresholdMagicNumber
+                {
                     self.pumpDelegate.notify({ (delegate) in
                         self.log.info("DU: updating reservoir level %{public}@", String(describing: reservoirLevel))
                         delegate?.pumpManager(self, didReadReservoirValue: reservoirLevel, at: lastInsulinMeasurements.validTime) { _ in }
@@ -690,7 +693,7 @@ extension OmnipodPumpManager {
     #if targetEnvironment(simulator)
     private func jumpStartPod(address: UInt32, lot: UInt32, tid: UInt32, fault: DetailedStatus? = nil, startDate: Date? = nil, mockFault: Bool) {
         let start = startDate ?? Date()
-        var podState = PodState(address: address, piVersion: "jumpstarted", pmVersion: "jumpstarted", lot: lot, tid: tid, insulinType: .novolog)
+        var podState = PodState(address: address, pmVersion: "jumpstarted", piVersion: "jumpstarted", lot: lot, tid: tid, insulinType: .novolog)
         podState.setupProgress = .podPaired
         podState.activatedAt = start
         podState.expiresAt = start + .hours(72)

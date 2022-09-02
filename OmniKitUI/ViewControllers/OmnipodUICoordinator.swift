@@ -189,15 +189,15 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                     let vc = RileyLinkDeviceTableViewController(
                         device: device,
                         batteryAlertLevel: self.pumpManager.rileyLinkBatteryAlertLevel,
-                        batteryAlertLevelChanged: { value in
-                            self.pumpManager.rileyLinkBatteryAlertLevel = value
+                        batteryAlertLevelChanged: { [weak self] value in
+                            self?.pumpManager.rileyLinkBatteryAlertLevel = value
                         }
                     )
                     self.show(vc, sender: self)
                 }
             }
 
-            let view = OmnipodSettingsView(viewModel: viewModel, rileyLinkListDataSource: rileyLinkListDataSource, handleRileyLinkSelection: handleRileyLinkSelection)
+            let view = OmnipodSettingsView(viewModel: viewModel, rileyLinkListDataSource: rileyLinkListDataSource, handleRileyLinkSelection: handleRileyLinkSelection, supportedInsulinTypes: allowedInsulinTypes)
             return hostingController(rootView: view)
         case .pairPod:
             pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didCreatePumpManager: pumpManager)
@@ -314,8 +314,8 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                         let vc = RileyLinkDeviceTableViewController(
                             device: device,
                             batteryAlertLevel: self.pumpManager.rileyLinkBatteryAlertLevel,
-                            batteryAlertLevelChanged: { value in
-                                self.pumpManager.rileyLinkBatteryAlertLevel = value
+                            batteryAlertLevelChanged: { [weak self] value in
+                                self?.pumpManager.rileyLinkBatteryAlertLevel = value
                             }
                         )
                         self.show(vc, sender: self)

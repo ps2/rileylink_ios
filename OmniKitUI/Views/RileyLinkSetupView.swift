@@ -67,6 +67,7 @@ struct RileyLinkSetupView: View {
                 })
             }
         }
+        .navigationBarHidden(false)
         .onAppear { dataSource.isScanningEnabled = true }
         .onDisappear { dataSource.isScanningEnabled = false }
     }

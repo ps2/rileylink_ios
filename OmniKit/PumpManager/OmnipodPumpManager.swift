@@ -741,22 +741,22 @@ extension OmnipodPumpManager {
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         let primeSession = { (result: PodComms.SessionRunResult) in
             switch result {
-            case .success(let session):
+            case .success(let messageSender):
                 // We're on the session queue
-                session.assertOnSessionQueue()
+                messageSender.assertOnSessionQueue()
 
                 self.log.default("Beginning pod prime")
 
                 // Clean up any previously un-stored doses if needed
                 let unstoredDoses = self.state.unstoredDoses
-                if self.store(doses: unstoredDoses, in: session) {
+                if self.store(doses: unstoredDoses, in: messageSender) {
                     self.setState({ (state) in
                         state.unstoredDoses.removeAll()
                     })
                 }
 
                 do {
-                    let primeFinishedAt = try session.prime()
+                    let primeFinishedAt = try messageSender.prime()
                     completion(.success(primeFinishedAt))
                 } catch let error {
                     completion(.failure(PumpManagerError.communication(error as? LocalizedError)))
@@ -864,14 +864,14 @@ extension OmnipodPumpManager {
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName:  "Insert cannula", using: rileyLinkSelector) { (result) in
             switch result {
-            case .success(let session):
+            case .success(let messageSender):
                 do {
                     if self.state.podState?.setupProgress.needsInitialBasalSchedule == true {
                         let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
-                        try session.programInitialBasalSchedule(self.state.basalSchedule, scheduleOffset: scheduleOffset)
+                        try messageSender.programInitialBasalSchedule(self.state.basalSchedule, scheduleOffset: scheduleOffset)
 
-                        session.dosesForStorage() { (doses) -> Bool in
-                            return self.store(doses: doses, in: session)
+                        messageSender.dosesForStorage() { (doses) -> Bool in
+                            return self.store(doses: doses, in: messageSender)
                         }
                     }
 
@@ -883,7 +883,7 @@ extension OmnipodPumpManager {
                         .lowReservoir(self.state.lowReservoirReminderValue)
                     ]
 
-                    let finishWait = try session.insertCannula(optionalAlerts: alerts)
+                    let finishWait = try messageSender.insertCannula(optionalAlerts: alerts)
                     completion(.success(finishWait))
                 } catch let error {
                     completion(.failure(.communication(error)))
@@ -902,9 +902,9 @@ extension OmnipodPumpManager {
         let deviceSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Check cannula insertion finished", using: deviceSelector) { (result) in
             switch result {
-            case .success(let session):
+            case .success(let messageSender):
                 do {
-                    try session.checkInsertionCompleted()
+                    try messageSender.checkInsertionCompleted()
                     completion(nil)
                 } catch let error {
                     self.log.error("Failed to fetch pod status: %{public}@", String(describing: error))
@@ -1056,9 +1056,9 @@ extension OmnipodPumpManager {
         let rileyLinkSelector = self.rileyLinkDeviceProvider.firstConnectedDevice
         self.podComms.runSession(withName: "Deactivate pod", using: rileyLinkSelector) { (result) in
             switch result {
-            case .success(let session):
+            case .success(let messageSender):
                 do {
-                    try session.deactivatePod()
+                    try messageSender.deactivatePod()
                     completion(nil)
                 } catch let error {
                     completion(OmnipodPumpManagerError.communication(error))

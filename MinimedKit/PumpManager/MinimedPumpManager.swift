@@ -175,6 +175,11 @@ public class MinimedPumpManager: RileyLinkPumpManager {
         }
     }
 
+    private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
+        // Not dispatching here; if delegate queue is blocked, timestamps will be delayed
+        self.pumpDelegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: state.pumpID, type: type, message: message, completion: nil)
+    }
+
     private let cgmDelegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
     private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
 
@@ -1447,6 +1452,18 @@ extension MinimedPumpManager: PumpManager {
 }
 
 extension MinimedPumpManager: PumpOpsDelegate {
+    public func willSend(_ message: String) {
+        logDeviceCommunication(message, type: .send)
+    }
+
+    public func didReceive(_ message: String) {
+        logDeviceCommunication(message, type: .receive)
+    }
+
+    public func didError(_ message: String) {
+        logDeviceCommunication(message, type: .error)
+    }
+
     public func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
         setState { (pumpManagerState) in
             pumpManagerState.pumpState = state

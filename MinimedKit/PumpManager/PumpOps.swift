@@ -13,8 +13,7 @@ import os.log
 import LoopKit
 
 
-public protocol PumpOpsDelegate: AnyObject {
-    // TODO: Audit clients of this as its called on the session queue
+public protocol PumpOpsDelegate: AnyObject, CommsLogger {
     func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState)
 }
 
@@ -59,7 +58,8 @@ public class PumpOps {
 
     public func runSession(withName name: String, using device: RileyLinkDevice, _ block: @escaping (_ session: PumpOpsSession) -> Void) {
         device.runSession(withName: name) { (commandSession) in
-            let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState.value, session: commandSession, delegate: self)
+            let minimedPumpMessageSender = MinimedPumpMessageSender(commandSession: commandSession, commsLogger: self.delegate)
+            let session = PumpOpsSession(settings: self.pumpSettings, pumpState: self.pumpState.value, messageSender: minimedPumpMessageSender, delegate: self)
             self.sessionDevice = device
             if !commandSession.firmwareVersion.isUnknown {
                 self.configureDevice(device, with: session)

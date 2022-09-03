@@ -53,7 +53,6 @@
 		4352A71720DEC78B00CAC200 /* PumpState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434AB0941CBA0DF600422F4A /* PumpState.swift */; };
 		4352A71820DEC7B900CAC200 /* PumpMessage+PumpOpsSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435535DB1FB8B37E00CE5A23 /* PumpMessage+PumpOpsSession.swift */; };
 		4352A71920DEC7C100CAC200 /* BasalProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF58B11FF5A22200499C46 /* BasalProfile.swift */; };
-		4352A71A20DEC7CB00CAC200 /* CommandSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CCEF11FB953E800A6822B /* CommandSession.swift */; };
 		4352A71B20DEC7DC00CAC200 /* HistoryPage+PumpOpsSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4384C8C51FB92F8100D916E6 /* HistoryPage+PumpOpsSession.swift */; };
 		4352A71C20DEC8C100CAC200 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
 		4352A71D20DEC8CC00CAC200 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
@@ -352,6 +351,7 @@
 		C17884611D519F1E00405663 /* BatteryIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17884601D519F1E00405663 /* BatteryIndicator.swift */; };
 		C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C17EDC4F2134D0CC0031D9F0 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
+		C17F6F5828C3DB0500E27990 /* MinimedPumpMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F6F5728C3DB0500E27990 /* MinimedPumpMessageSender.swift */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -1043,7 +1043,6 @@
 		435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkPumpManager.swift; sourceTree = "<group>"; };
 		435D26B320DA0AAE00891C17 /* RileyLinkDevicesHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesHeaderView.swift; sourceTree = "<group>"; };
 		435D26B520DA0BCC00891C17 /* RileyLinkDevicesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDevicesTableViewDataSource.swift; sourceTree = "<group>"; };
-		436CCEF11FB953E800A6822B /* CommandSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandSession.swift; sourceTree = "<group>"; };
 		43709ABA20DF1C6400F941B3 /* RileyLinkSetupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkSetupTableViewController.swift; sourceTree = "<group>"; };
 		43709ABB20DF1C6400F941B3 /* RileyLinkManagerSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkManagerSetupViewController.swift; sourceTree = "<group>"; };
 		43709ABC20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkSettingsViewController.swift; sourceTree = "<group>"; };
@@ -1403,6 +1402,7 @@
 		C178845C1D4EF3D800405663 /* ReadPumpStatusMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadPumpStatusMessageBody.swift; sourceTree = "<group>"; };
 		C178845E1D5166BE00405663 /* COBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COBStatus.swift; sourceTree = "<group>"; };
 		C17884601D519F1E00405663 /* BatteryIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryIndicator.swift; sourceTree = "<group>"; };
+		C17F6F5728C3DB0500E27990 /* MinimedPumpMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpMessageSender.swift; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -2050,7 +2050,6 @@
 			isa = PBXGroup;
 			children = (
 				43BF58B11FF5A22200499C46 /* BasalProfile.swift */,
-				436CCEF11FB953E800A6822B /* CommandSession.swift */,
 				43D8708C20DE1C05006B549E /* DoseStore.swift */,
 				43D8708E20DE1C23006B549E /* EnliteSensorDisplayable.swift */,
 				4384C8C51FB92F8100D916E6 /* HistoryPage+PumpOpsSession.swift */,
@@ -2071,6 +2070,7 @@
 				43D8709420DE1C91006B549E /* RileyLinkDevice.swift */,
 				C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */,
 				C164A56122F1F0A6000E3FA5 /* UnfinalizedDose.swift */,
+				C17F6F5728C3DB0500E27990 /* MinimedPumpMessageSender.swift */,
 			);
 			path = PumpManager;
 			sourceTree = "<group>";
@@ -3852,7 +3852,6 @@
 				4352A71620DEC78B00CAC200 /* PumpSettings.swift in Sources */,
 				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,
 				54A840D11DB85D0600B1F202 /* UnknownGlucoseEvent.swift in Sources */,
-				4352A71A20DEC7CB00CAC200 /* CommandSession.swift in Sources */,
 				C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */,
 				43D8708F20DE1C23006B549E /* EnliteSensorDisplayable.swift in Sources */,
 				C1EAD6C61C826B92006DBA60 /* Data.swift in Sources */,
@@ -3871,6 +3870,7 @@
 				546A85D01DF7BB8B00733213 /* SensorPacketGlucoseEvent.swift in Sources */,
 				C1842BFD1C8FA45100DB42AC /* ResumePumpEvent.swift in Sources */,
 				C1EAD6CC1C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift in Sources */,
+				C17F6F5828C3DB0500E27990 /* MinimedPumpMessageSender.swift in Sources */,
 				C1842C141C8FA45100DB42AC /* ChangeMaxBasalPumpEvent.swift in Sources */,
 				C16A08311D389205001A200C /* JournalEntryMealMarkerPumpEvent.swift in Sources */,
 				C1842C101C8FA45100DB42AC /* ChangeReservoirWarningTimePumpEvent.swift in Sources */,

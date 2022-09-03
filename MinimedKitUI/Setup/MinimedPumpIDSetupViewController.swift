@@ -436,6 +436,12 @@ extension MinimedPumpIDSetupViewController: UITextFieldDelegate {
 
 
 extension MinimedPumpIDSetupViewController: PumpOpsDelegate {
+    // TODO: create PumpManager and report it to Loop before pump setup
+    // No pumpManager available yet, so no device logs.
+    func willSend(_ message: String) {}
+    func didReceive(_ message: String) {}
+    func didError(_ message: String) {}
+
     func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState) {
         DispatchQueue.main.async {
             self.pumpState = state

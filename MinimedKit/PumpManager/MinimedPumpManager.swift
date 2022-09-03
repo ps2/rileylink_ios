@@ -762,7 +762,7 @@ extension MinimedPumpManager {
                             preconditionFailure("pumpManagerDelegate cannot be nil")
                         }
                         
-                        let pendingEvents = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent })
+                        let pendingEvents = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent() })
 
                         delegate.pumpManager(self, hasNewPumpEvents: remainingHistoryEvents + pendingEvents, lastSync: self.lastSync, completion: { (error) in
                             // Called on an unknown queue by the delegate
@@ -796,9 +796,9 @@ extension MinimedPumpManager {
         }
     }
 
-    private func storePendingPumpEvents(_ completion: @escaping (_ error: MinimedPumpManagerError?) -> Void) {
+    private func storePendingPumpEvents(forceFinalization: Bool = false, _ completion: @escaping (_ error: MinimedPumpManagerError?) -> Void) {
         // Must be called from the sessionQueue
-        let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent })
+        let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent(forceFinalization: true) })
                 
         log.debug("Storing pending pump events: %{public}@", String(describing: events))
 
@@ -1446,6 +1446,14 @@ extension MinimedPumpManager: PumpManager {
             } catch let error {
                 self.log.error("Save delivery limit settings failed: %{public}@", String(describing: error))
                 completion(.failure(error))
+            }
+        }
+    }
+
+    public func deletePump(completion: @escaping () -> Void) {
+        storePendingPumpEvents(forceFinalization: true) { error in
+            self.notifyDelegateOfDeletion {
+                completion()
             }
         }
     }

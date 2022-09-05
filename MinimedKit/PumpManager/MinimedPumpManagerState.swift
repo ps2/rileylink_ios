@@ -98,7 +98,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         }
     }
 
-    public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
+    public var rileyLinkConnectionState: RileyLinkConnectionState?
 
     public var timeZone: TimeZone
 
@@ -120,7 +120,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     
     public var lastRileyLinkBatteryAlertDate: Date = .distantPast
     
-    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType)
+    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionState: RileyLinkConnectionState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType)
     {
         self.isOnboarded = isOnboarded
         self.useMySentry = useMySentry
@@ -129,7 +129,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.pumpModel = pumpModel
         self.pumpFirmwareVersion = pumpFirmwareVersion
         self.pumpRegion = pumpRegion
-        self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
+        self.rileyLinkConnectionState = rileyLinkConnectionState
         self.timeZone = timeZone
         self.suspendState = suspendState
         self.insulinType = insulinType
@@ -168,11 +168,11 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             if let oldRileyLinkPumpManagerStateRaw = rawValue["rileyLinkPumpManagerState"] as? [String : Any],
                 let connectedPeripheralIDs = oldRileyLinkPumpManagerStateRaw["connectedPeripheralIDs"] as? [String]
             {
-                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(autoConnectIDs: Set(connectedPeripheralIDs))
+                self.rileyLinkConnectionState = RileyLinkConnectionState(autoConnectIDs: Set(connectedPeripheralIDs))
             }
         } else {
-            if let rawState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionManagerState.RawValue {
-                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
+            if let rawState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionState.RawValue {
+                self.rileyLinkConnectionState = RileyLinkConnectionState(rawValue: rawState)
             }
         }
         
@@ -269,7 +269,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         value["batteryPercentage"] = batteryPercentage
         value["lastReservoirReading"] = lastReservoirReading?.rawValue
         value["lastValidFrequency"] = lastValidFrequency?.converted(to: .megahertz).value
-        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState?.rawValue
+        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionState?.rawValue
         value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
         value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
         value["lastSync"] = lastReconciliation
@@ -314,7 +314,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "insulinType: \(String(describing: insulinType))",
             "rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
             "lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",
-            String(reflecting: rileyLinkConnectionManagerState),
+            String(reflecting: rileyLinkConnectionState),
         ].joined(separator: "\n")
     }
 }

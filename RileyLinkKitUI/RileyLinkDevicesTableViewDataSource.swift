@@ -54,7 +54,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
 
     public var isScanningEnabled: Bool = false {
         didSet {
-            rileyLinkPumpManager.rileyLinkConnectionManager?.setScanningEnabled(isScanningEnabled)
+            rileyLinkPumpManager.rileyLinkDeviceProvider.setScanningEnabled(isScanningEnabled)
 
             if isScanningEnabled {
                 rssiFetchTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updateRSSI), userInfo: nil, repeats: true)
@@ -91,10 +91,7 @@ public class RileyLinkDevicesTableViewDataSource: NSObject {
     /// - Parameter device: The peripheral
     /// - Returns: The adjusted connection state
     private func preferenceStateForDevice(_ device: RileyLinkDevice) -> CBPeripheralState? {
-        guard let connectionManager = rileyLinkPumpManager.rileyLinkConnectionManager else {
-            return nil
-        }
-        let isAutoConnectDevice = connectionManager.shouldConnect(to: device.peripheralIdentifier.uuidString)
+        let isAutoConnectDevice = rileyLinkPumpManager.rileyLinkDeviceProvider.shouldConnect(to: device.peripheralIdentifier.uuidString)
         var state = device.peripheralState
 
         switch state {

@@ -23,7 +23,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
         return MinimedPumpManager.managerIdentifier
     }
     
-    public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, pumpOps: PumpOps? = nil) {
+    public init(state: MinimedPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, pumpOps: PumpOps? = nil) {
         self.lockedState = Locked(state)
 
         self.hkDevice = HKDevice(
@@ -37,7 +37,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             udiDeviceIdentifier: nil
         )
         
-        super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
+        super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider)
 
         // Pump communication
         let idleListeningEnabled = state.pumpModel.hasMySentry && state.useMySentry
@@ -48,16 +48,16 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
     public required convenience init?(rawState: PumpManager.RawStateValue) {
         guard let state = MinimedPumpManagerState(rawValue: rawState),
-            let connectionManagerState = state.rileyLinkConnectionManagerState else
+            let connectionManagerState = state.rileyLinkConnectionState else
         {
             return nil
         }
+
+        let deviceProvider = RileyLinkDeviceManager(autoConnectIDs: connectionManagerState.autoConnectIDs)
+
+        self.init(state: state, rileyLinkDeviceProvider: deviceProvider)
         
-        let rileyLinkConnectionManager = RileyLinkConnectionManager(state: connectionManagerState)
-        
-        self.init(state: state, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
-        
-        rileyLinkConnectionManager.delegate = self
+        deviceProvider.delegate = self
     }
 
     public private(set) var pumpOps: PumpOps!
@@ -191,13 +191,13 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
     // MARK: - RileyLink Updates
 
-    override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
+    override public var rileyLinkConnectionManagerState: RileyLinkConnectionState? {
         get {
-            return state.rileyLinkConnectionManagerState
+            return state.rileyLinkConnectionState
         }
         set {
             setState { (state) in
-                state.rileyLinkConnectionManagerState = newValue
+                state.rileyLinkConnectionState = newValue
             }
         }
     }

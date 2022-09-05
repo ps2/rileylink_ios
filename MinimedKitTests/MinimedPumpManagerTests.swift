@@ -117,14 +117,7 @@ class MinimedPumpManagerTests: XCTestCase {
     }
 
     class MockRileyLinkProvider: RileyLinkDeviceProvider {
-        func getDevices(_ completion: @escaping ([RileyLinkBLEKit.RLDevProtocol]) -> Void) {
-            <#code#>
-        }
-
-
-        init() {
-
-        }
+        var idleListeningState: RileyLinkBLEKit.RileyLinkBluetoothDevice.IdleListeningState
 
         var idleListeningEnabled: Bool
 
@@ -138,16 +131,35 @@ class MinimedPumpManagerTests: XCTestCase {
             <#code#>
         }
 
-        var idleListeningState: RileyLinkBLEKit.RileyLinkDevice.IdleListeningState
+        func getDevices(_ completion: @escaping ([RileyLinkBLEKit.RileyLinkDevice]) -> Void) {
+            <#code#>
+        }
 
-        var debugDescription: String = ""
+        func connect(_ device: RileyLinkBLEKit.RileyLinkDevice) {
+            <#code#>
+        }
+
+        func disconnect(_ device: RileyLinkBLEKit.RileyLinkDevice) {
+            <#code#>
+        }
+
+        func setScanningEnabled(_ enabled: Bool) {
+            <#code#>
+        }
+
+        var debugDescription: String
+
+
+        init() {
+
+        }
     }
 
     func testReportingBolusBeforeReconciliation() {
         let rlProvider = MockRileyLinkProvider()
-        let rlManagerState = RileyLinkConnectionManagerState(autoConnectIDs: [])
-        let state = MinimedPumpManagerState(isOnboarded: true, useMySentry: true, pumpColor: .blue, pumpID: "123456", pumpModel: .model523, pumpFirmwareVersion: "VER 2.4A1.1", pumpRegion: .northAmerica, rileyLinkConnectionManagerState: rlManagerState, timeZone: .currentFixed, suspendState: .resumed(Date()), insulinType: .novolog)
-        let manager = MinimedPumpManager(state: state, rileyLinkDeviceProvider: <#T##RileyLinkDeviceProvider#>)
+        let rlManagerState = RileyLinkConnectionState(autoConnectIDs: [])
+        let state = MinimedPumpManagerState(isOnboarded: true, useMySentry: true, pumpColor: .blue, pumpID: "123456", pumpModel: .model523, pumpFirmwareVersion: "VER 2.4A1.1", pumpRegion: .northAmerica, rileyLinkConnectionState: rlManagerState, timeZone: .currentFixed, suspendState: .resumed(Date()), insulinType: .novolog)
+        let manager = MinimedPumpManager(state: state, rileyLinkDeviceProvider: rlProvider)
     }
 
 }

@@ -96,7 +96,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 pumpModel: pumpModel,
                 pumpFirmwareVersion: pumpFirmwareVersion,
                 pumpRegion: pumpRegion,
-                rileyLinkConnectionManagerState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
+                rileyLinkConnectionState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone,
                 suspendState: .resumed(Date()),
                 insulinType: insulinType
@@ -112,7 +112,6 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
         return MinimedPumpManager(
             state: pumpManagerState,
             rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
-            rileyLinkConnectionManager: rileyLinkPumpManager.rileyLinkConnectionManager,
             pumpOps: self.pumpOps)
     }
 

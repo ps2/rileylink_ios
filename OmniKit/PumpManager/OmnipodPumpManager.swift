@@ -96,11 +96,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
     
     public let localizedTitle = LocalizedString("Omnipod", comment: "Generic title of the omnipod pump manager")
     
-    public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, rileyLinkConnectionManager: RileyLinkConnectionManager? = nil, dateGenerator: @escaping () -> Date = Date.init) {
+    public init(state: OmnipodPumpManagerState, rileyLinkDeviceProvider: RileyLinkDeviceProvider, dateGenerator: @escaping () -> Date = Date.init) {
         self.lockedState = Locked(state)
         self.lockedPodComms = Locked(PodComms(podState: state.podState))
         self.dateGenerator = dateGenerator
-        super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
+        super.init(rileyLinkDeviceProvider: rileyLinkDeviceProvider)
 
         self.podComms.delegate = self
         self.podComms.messageLogger = self
@@ -113,11 +113,11 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
             return nil
         }
 
-        let rileyLinkConnectionManager = RileyLinkConnectionManager(state: connectionManagerState)
+        let deviceProvider = RileyLinkDeviceManager(autoConnectIDs: connectionManagerState.autoConnectIDs)
 
-        self.init(state: state, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
+        self.init(state: state, rileyLinkDeviceProvider: deviceProvider)
 
-        rileyLinkConnectionManager.delegate = self
+        deviceProvider.delegate = self
     }
 
     private var podComms: PodComms {
@@ -230,7 +230,7 @@ public class OmnipodPumpManager: RileyLinkPumpManager {
     
     // MARK: - RileyLink Updates
 
-    override public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState? {
+    override public var rileyLinkConnectionManagerState: RileyLinkConnectionState? {
         get {
             return state.rileyLinkConnectionManagerState
         }

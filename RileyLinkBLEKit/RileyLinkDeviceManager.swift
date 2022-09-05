@@ -10,6 +10,31 @@ import os.log
 import LoopKit
 
 
+public protocol RileyLinkDeviceProviderDelegate : AnyObject {
+    func rileylinkDeviceProvider(_ rileylinkDeviceProvider: RileyLinkDeviceProvider, didChange state: RileyLinkConnectionState)
+}
+
+public protocol RileyLinkDeviceProvider: AnyObject {
+    typealias RawStateValue = [String : Any]
+
+    var delegate: RileyLinkDeviceProviderDelegate? { get set }
+
+    var idleListeningState: RileyLinkBluetoothDevice.IdleListeningState { get set }
+    var idleListeningEnabled: Bool { get }
+    var timerTickEnabled: Bool { get set }
+    var connectingCount: Int { get }
+
+    func deprioritize(_ device: RileyLinkDevice, completion: (() -> Void)?)
+    func assertIdleListening(forcingRestart: Bool)
+    func getDevices(_ completion: @escaping (_ devices: [RileyLinkDevice]) -> Void)
+    func connect(_ device: RileyLinkDevice)
+    func disconnect(_ device: RileyLinkDevice)
+    func setScanningEnabled(_ enabled: Bool)
+    func shouldConnect(to deviceID: String) -> Bool
+
+    var debugDescription: String { get }
+}
+
 public class RileyLinkDeviceManager: NSObject {
     private let log = OSLog(category: "RileyLinkDeviceManager")
 
@@ -20,6 +45,8 @@ public class RileyLinkDeviceManager: NSObject {
 
     internal let sessionQueue = DispatchQueue(label: "com.rileylink.RileyLinkBLEKit.RileyLinkDeviceManager.sessionQueue", qos: .unspecified)
 
+    public weak var delegate: RileyLinkDeviceProviderDelegate?
+
     // Isolated to centralQueue
     private var devices: [RileyLinkBluetoothDevice] = [] {
         didSet {
@@ -28,7 +55,15 @@ public class RileyLinkDeviceManager: NSObject {
     }
 
     // Isolated to centralQueue
-    private var autoConnectIDs: Set<String>
+    private var autoConnectIDs: Set<String> {
+        didSet {
+            delegate?.rileylinkDeviceProvider(self, didChange: RileyLinkConnectionState(autoConnectIDs: autoConnectIDs))
+        }
+    }
+
+    public var connectingCount: Int {
+        return self.autoConnectIDs.count
+    }
 
     // Isolated to centralQueue
     private var isScanningEnabled = false
@@ -194,19 +229,7 @@ extension RileyLinkDeviceManager: RileyLinkDeviceProvider {
             completion?()
         }
     }
-}
-
-extension Array where Element == RileyLinkBluetoothDevice {
-    mutating func deprioritize(_ element: Element) {
-        if let index = self.firstIndex(where: { $0 === element }) {
-            self.swapAt(index, self.count - 1)
-        }
-    }
-}
-
-
-// MARK: - Scanning
-extension RileyLinkDeviceManager {
+    
     public func setScanningEnabled(_ enabled: Bool) {
         centralQueue.async {
             self.isScanningEnabled = enabled
@@ -226,6 +249,18 @@ extension RileyLinkDeviceManager {
             for device in self.devices {
                 device.assertIdleListening(forceRestart: forcingRestart)
             }
+        }
+    }
+
+    public func shouldConnect(to deviceID: String) -> Bool {
+        return self.autoConnectIDs.contains(deviceID)
+    }
+}
+
+extension Array where Element == RileyLinkBluetoothDevice {
+    mutating func deprioritize(_ element: Element) {
+        if let index = self.firstIndex(where: { $0 === element }) {
+            self.swapAt(index, self.count - 1)
         }
     }
 }

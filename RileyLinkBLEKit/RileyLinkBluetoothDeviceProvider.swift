@@ -9,33 +9,7 @@ import CoreBluetooth
 import os.log
 import LoopKit
 
-
-public protocol RileyLinkDeviceProviderDelegate : AnyObject {
-    func rileylinkDeviceProvider(_ rileylinkDeviceProvider: RileyLinkDeviceProvider, didChange state: RileyLinkConnectionState)
-}
-
-public protocol RileyLinkDeviceProvider: AnyObject {
-    typealias RawStateValue = [String : Any]
-
-    var delegate: RileyLinkDeviceProviderDelegate? { get set }
-
-    var idleListeningState: RileyLinkBluetoothDevice.IdleListeningState { get set }
-    var idleListeningEnabled: Bool { get }
-    var timerTickEnabled: Bool { get set }
-    var connectingCount: Int { get }
-
-    func deprioritize(_ device: RileyLinkDevice, completion: (() -> Void)?)
-    func assertIdleListening(forcingRestart: Bool)
-    func getDevices(_ completion: @escaping (_ devices: [RileyLinkDevice]) -> Void)
-    func connect(_ device: RileyLinkDevice)
-    func disconnect(_ device: RileyLinkDevice)
-    func setScanningEnabled(_ enabled: Bool)
-    func shouldConnect(to deviceID: String) -> Bool
-
-    var debugDescription: String { get }
-}
-
-public class RileyLinkDeviceManager: NSObject {
+public class RileyLinkBluetoothDeviceProvider: NSObject {
     private let log = OSLog(category: "RileyLinkDeviceManager")
 
     // Isolated to centralQueue
@@ -129,7 +103,7 @@ public class RileyLinkDeviceManager: NSObject {
 
 
 // MARK: - Connecting
-extension RileyLinkDeviceManager {
+extension RileyLinkBluetoothDeviceProvider {
     public func getAutoConnectIDs(_ completion: @escaping (_ autoConnectIDs: Set<String>) -> Void) {
         centralQueue.async {
             completion(self.autoConnectIDs)
@@ -192,7 +166,7 @@ extension RileyLinkDeviceManager {
     }
 }
 
-extension RileyLinkDeviceManager: RileyLinkDeviceProvider {
+extension RileyLinkBluetoothDeviceProvider: RileyLinkDeviceProvider {
     public func connect(_ device: RileyLinkDevice) {
         centralQueue.async {
             self.autoConnectIDs.insert(device.peripheralIdentifier.uuidString)
@@ -267,7 +241,7 @@ extension Array where Element == RileyLinkBluetoothDevice {
 
 
 // MARK: - Delegate methods called on `centralQueue`
-extension RileyLinkDeviceManager: CBCentralManagerDelegate {
+extension RileyLinkBluetoothDeviceProvider: CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
         log.default("%@", #function)
 
@@ -336,7 +310,7 @@ extension RileyLinkDeviceManager: CBCentralManagerDelegate {
 }
 
 
-extension RileyLinkDeviceManager {
+extension RileyLinkBluetoothDeviceProvider {
     public override var debugDescription: String {
         var report = [
             "## RileyLinkDeviceManager",
@@ -360,7 +334,7 @@ extension Notification.Name {
     public static let ManagerDevicesDidChange = Notification.Name("com.rileylink.RileyLinkBLEKit.DevicesDidChange")
 }
 
-extension RileyLinkDeviceManager {
+extension RileyLinkBluetoothDeviceProvider {
     public static let autoConnectIDsStateKey = "com.rileylink.RileyLinkBLEKit.AutoConnectIDs"
 }
 

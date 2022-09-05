@@ -53,7 +53,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             return nil
         }
 
-        let deviceProvider = RileyLinkDeviceManager(autoConnectIDs: connectionManagerState.autoConnectIDs)
+        let deviceProvider = RileyLinkBluetoothDeviceProvider(autoConnectIDs: connectionManagerState.autoConnectIDs)
 
         self.init(state: state, rileyLinkDeviceProvider: deviceProvider)
         

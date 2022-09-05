@@ -23,7 +23,7 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
     }()
     
     public required init?(coder aDecoder: NSCoder) {
-        let deviceProvider = RileyLinkDeviceManager(autoConnectIDs: [])
+        let deviceProvider = RileyLinkBluetoothDeviceProvider(autoConnectIDs: [])
         rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: deviceProvider)
         super.init(coder: aDecoder)
     }

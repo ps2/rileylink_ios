@@ -36,7 +36,7 @@ class DeviceDataManager {
     init() {
         
         let connectionManagerState = UserDefaults.standard.rileyLinkConnectionManagerState
-        rileyLinkDeviceProvider = RileyLinkDeviceManager(autoConnectIDs: connectionManagerState?.autoConnectIDs ?? [])
+        rileyLinkDeviceProvider = RileyLinkBluetoothDeviceProvider(autoConnectIDs: connectionManagerState?.autoConnectIDs ?? [])
         rileyLinkDeviceProvider.delegate = self
         rileyLinkDeviceProvider.setScanningEnabled(true)
 

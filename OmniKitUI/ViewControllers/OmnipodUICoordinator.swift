@@ -371,7 +371,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
         if pumpManager == nil, let pumpManagerSettings = pumpManagerSettings {
             let basalSchedule = pumpManagerSettings.basalSchedule
 
-            let deviceProvider = RileyLinkDeviceManager(autoConnectIDs: [])
+            let deviceProvider = RileyLinkBluetoothDeviceProvider(autoConnectIDs: [])
 
             let pumpManagerState = OmnipodPumpManagerState(
                 isOnboarded: false,

@@ -283,7 +283,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
 
 extension MinimedPumpManagerState {
-    static let idleListeningEnabledDefaults: RileyLinkDevice.IdleListeningState = .enabled(timeout: .minutes(4), channel: 0)
+    static let idleListeningEnabledDefaults: RileyLinkBluetoothDevice.IdleListeningState = .enabled(timeout: .minutes(4), channel: 0)
 }
 
 

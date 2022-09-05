@@ -23,7 +23,7 @@ public class RileyLinkSetupTableViewController: SetupTableViewController {
     }()
     
     public required init?(coder aDecoder: NSCoder) {
-        let rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])        
+        let rileyLinkConnectionManager = RileyLinkConnectionManager()        
         rileyLinkPumpManager = RileyLinkPumpManager(rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
         
         rileyLinkConnectionManager.delegate = rileyLinkPumpManager

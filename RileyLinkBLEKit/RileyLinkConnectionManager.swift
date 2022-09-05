@@ -27,13 +27,9 @@ public class RileyLinkConnectionManager {
         }
     }
 
-    public var deviceProvider: RileyLinkDeviceProvider {
-        return rileyLinkDeviceManager
-    }
+    public private(set) var deviceProvider: RileyLinkDeviceProvider
     
     public weak var delegate: RileyLinkConnectionManagerDelegate?
-    
-    private let rileyLinkDeviceManager: RileyLinkDeviceManager
     
     private var autoConnectIDs: Set<String> {
         get {
@@ -45,13 +41,13 @@ public class RileyLinkConnectionManager {
     }
     
     public init(state: RileyLinkConnectionManagerState) {
-        self.rileyLinkDeviceManager = RileyLinkDeviceManager(autoConnectIDs: state.autoConnectIDs)
+        self.deviceProvider = RileyLinkDeviceManager(autoConnectIDs: state.autoConnectIDs)
         self.state = state
     }
     
-    public init(autoConnectIDs: Set<String>) {
-        self.rileyLinkDeviceManager = RileyLinkDeviceManager(autoConnectIDs: autoConnectIDs)
-        self.state = RileyLinkConnectionManagerState(autoConnectIDs: autoConnectIDs)
+    public init() {
+        self.deviceProvider = RileyLinkDeviceManager(autoConnectIDs: [])
+        self.state = RileyLinkConnectionManagerState(autoConnectIDs: [])
     }
     
     public convenience init?(rawValue: RawStateValue) {
@@ -72,28 +68,30 @@ public class RileyLinkConnectionManager {
     
     public func connect(_ device: RileyLinkDevice) {
         autoConnectIDs.insert(device.peripheralIdentifier.uuidString)
-        rileyLinkDeviceManager.connect(device)
+        deviceProvider.connect(device)
     }
     
     public func disconnect(_ device: RileyLinkDevice) {
         autoConnectIDs.remove(device.peripheralIdentifier.uuidString)
-        rileyLinkDeviceManager.disconnect(device)
+        deviceProvider.disconnect(device)
     }
 
     public func setScanningEnabled(_ enabled: Bool) {
-        rileyLinkDeviceManager.setScanningEnabled(enabled)
+        deviceProvider.setScanningEnabled(enabled)
     }
 }
 
 public protocol RileyLinkDeviceProvider: AnyObject {
-    func getDevices(_ completion: @escaping (_ devices: [RileyLinkDevice]) -> Void)
+    var idleListeningState: RileyLinkBluetoothDevice.IdleListeningState { get set }
     var idleListeningEnabled: Bool { get }
     var timerTickEnabled: Bool { get set }
+
     func deprioritize(_ device: RileyLinkDevice, completion: (() -> Void)?)
     func assertIdleListening(forcingRestart: Bool)
-    var idleListeningState: RileyLinkDevice.IdleListeningState { get set }
+    func getDevices(_ completion: @escaping (_ devices: [RileyLinkDevice]) -> Void)
+    func connect(_ device: RileyLinkDevice)
+    func disconnect(_ device: RileyLinkDevice)
+    func setScanningEnabled(_ enabled: Bool)
 
     var debugDescription: String { get }
 }
-
-extension RileyLinkDeviceManager: RileyLinkDeviceProvider {}

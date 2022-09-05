@@ -38,7 +38,7 @@ class DeviceDataManager {
         if let connectionManagerState = UserDefaults.standard.rileyLinkConnectionManagerState {
             rileyLinkConnectionManager = RileyLinkConnectionManager(state: connectionManagerState)
         } else {
-            rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
+            rileyLinkConnectionManager = RileyLinkConnectionManager()
         }
         rileyLinkConnectionManager.delegate = self
         rileyLinkConnectionManager.setScanningEnabled(true)

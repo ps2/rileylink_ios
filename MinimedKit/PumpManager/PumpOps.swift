@@ -25,7 +25,7 @@ public class PumpOps {
 
     public let pumpState: Locked<PumpState>
 
-    private let configuredDevices: Locked<Set<RileyLinkDevice>> = Locked(Set())
+    private let configuredDevices: Locked<Set<UUID>> = Locked(Set())
 
     // Isolated to RileyLinkDeviceManager.sessionQueue
     private var sessionDevice: RileyLinkDevice?
@@ -74,7 +74,7 @@ public class PumpOps {
 
     // Must be called from within the RileyLinkDevice sessionQueue
     private func configureDevice(_ device: RileyLinkDevice, with session: PumpOpsSession) {
-        guard !self.configuredDevices.value.contains(device) else {
+        guard !self.configuredDevices.value.contains(device.peripheralIdentifier) else {
             return
         }
 
@@ -92,7 +92,7 @@ public class PumpOps {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceRadioConfigDidChange, object: device)
         NotificationCenter.default.addObserver(self, selector: #selector(deviceRadioConfigDidChange(_:)), name: .DeviceConnectionStateDidChange, object: device)
         _ = configuredDevices.mutate { (value) in
-            value.insert(device)
+            value.insert(device.peripheralIdentifier)
         }
     }
 
@@ -105,7 +105,7 @@ public class PumpOps {
         NotificationCenter.default.removeObserver(self, name: .DeviceConnectionStateDidChange, object: device)
 
         _ = configuredDevices.mutate { (value) in
-            value.remove(device)
+            value.remove(device.peripheralIdentifier)
         }
     }
 }
@@ -114,7 +114,7 @@ public class PumpOps {
 extension PumpOps: PumpOpsSessionDelegate {
     func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession) {
         if let sessionDevice = self.sessionDevice {
-            self.configuredDevices.value = [sessionDevice]
+            self.configuredDevices.value = [sessionDevice.peripheralIdentifier]
         }
     }
     
@@ -136,7 +136,7 @@ extension PumpOps: CustomDebugStringConvertible {
             "### PumpOps",
             "pumpSettings: \(String(reflecting: pumpSettings))",
             "pumpState: \(String(reflecting: pumpState.value))",
-            "configuredDevices: \(configuredDevices.value.map({ $0.peripheralIdentifier.uuidString }))",
+            "configuredDevices: \(configuredDevices.value.map({ $0.uuidString }))",
         ].joined(separator: "\n")
     }
 }

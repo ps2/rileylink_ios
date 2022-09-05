@@ -71,7 +71,7 @@ extension RileyLinkPumpManager {
      */
     @objc private func receivedRileyLinkPacketNotification(_ note: Notification) {
         guard let device = note.object as? RileyLinkDevice,
-            let packet = note.userInfo?[RileyLinkDevice.notificationPacketKey] as? RFPacket
+            let packet = note.userInfo?[RileyLinkBluetoothDevice.notificationPacketKey] as? RFPacket
         else {
             return
         }
@@ -94,7 +94,7 @@ extension RileyLinkPumpManager {
 
     @objc private func receivedRileyLinkBatteryUpdate(_ note: Notification) {
         guard let device = note.object as? RileyLinkDevice,
-              let batteryLevel = note.userInfo?[RileyLinkDevice.batteryLevelKey] as? Int
+              let batteryLevel = note.userInfo?[RileyLinkBluetoothDevice.batteryLevelKey] as? Int
         else {
             return
         }

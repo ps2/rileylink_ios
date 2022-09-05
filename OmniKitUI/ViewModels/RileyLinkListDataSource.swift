@@ -96,6 +96,3 @@ class RileyLinkListDataSource: ObservableObject {
         }
     }
 }
-
-
-extension RileyLinkDevice: Identifiable {}

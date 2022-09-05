@@ -43,7 +43,7 @@ struct RileyLinkSetupView: View {
                     Spacer()
                     ProgressView()
                 }) {
-                    ForEach(dataSource.devices) { device in
+                    ForEach(dataSource.devices, id: \.peripheralIdentifier) { device in
                         Toggle(isOn: dataSource.autoconnectBinding(for: device)) {
                             HStack {
                                 Text(device.name ?? "Unknown")

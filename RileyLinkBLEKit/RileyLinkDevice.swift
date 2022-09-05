@@ -21,8 +21,65 @@ public enum RileyLinkHardwareType {
     }
 }
 
+public struct RileyLinkDeviceStatus {
+    public let lastIdle: Date?
+
+    public let name: String?
+
+    public let version: String
+
+    public let ledOn: Bool
+    public let vibrationOn: Bool
+    public let voltage: Float?
+    public let battery: Int?
+    public let hasPiezo: Bool
+}
+
+
+public protocol RileyLinkDevice {
+
+    var isConnected: Bool { get }
+    var rlFirmwareDescription: String { get }
+    var hasOrangeLinkService: Bool { get }
+    var hardwareType: RileyLinkHardwareType? { get }
+    var rssi: Int? { get }
+
+    var name: String? { get }
+    var deviceURI: String { get }
+    var peripheralIdentifier: UUID { get }
+    var peripheralState: CBPeripheralState { get }
+
+    func readRSSI()
+    func setCustomName(_ name: String)
+
+    func updateBatteryLevel()
+
+    func orangeAction(_ command: OrangeLinkCommand)
+    func setOrangeConfig(_ config: OrangeLinkConfigurationSetting, isOn: Bool)
+    func orangeWritePwd()
+    func orangeClose()
+    func orangeReadSet()
+    func orangeReadVDC()
+    func findDevice()
+    func setDiagnosticeLEDModeForBLEChip(_ mode: RileyLinkLEDMode)
+    func readDiagnosticLEDModeForBLEChip(completion: @escaping (RileyLinkLEDMode?) -> Void)
+    func assertOnSessionQueue()
+    func sessionQueueAsyncAfter(deadline: DispatchTime, execute: @escaping () -> Void)
+
+    func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void)
+    func getStatus(_ completion: @escaping (_ status: RileyLinkDeviceStatus) -> Void)
+}
+
+extension Array where Element == RileyLinkDevice {
+    public var firstConnected: Element? {
+        return self.first { (device) -> Bool in
+            return device.isConnected
+        }
+    }
+}
+
 /// TODO: Should we be tracking the most recent "pump" RSSI?
-public class RileyLinkDevice {
+public class RileyLinkBluetoothDevice: RileyLinkDevice {
     private let manager: PeripheralManager
 
     private let log = OSLog(category: "RileyLinkDevice")
@@ -148,7 +205,7 @@ public class RileyLinkDevice {
 
 
 // MARK: - Peripheral operations. Thread-safe.
-extension RileyLinkDevice {
+extension RileyLinkBluetoothDevice {
     public var name: String? {
         return manager.peripheral.name
     }
@@ -183,7 +240,7 @@ extension RileyLinkDevice {
                 NotificationCenter.default.post(
                     name: .DeviceBatteryLevelUpdated,
                     object: self,
-                    userInfo: [RileyLinkDevice.batteryLevelKey: batteryLevel]
+                    userInfo: [RileyLinkBluetoothDevice.batteryLevelKey: batteryLevel]
                 )
                 NotificationCenter.default.post(name: .DeviceStatusUpdated, object: self)
             }
@@ -249,8 +306,8 @@ extension RileyLinkDevice {
 }
 
 
-extension RileyLinkDevice: Equatable, Hashable {
-    public static func ==(lhs: RileyLinkDevice, rhs: RileyLinkDevice) -> Bool {
+extension RileyLinkBluetoothDevice: Equatable, Hashable {
+    public static func ==(lhs: RileyLinkBluetoothDevice, rhs: RileyLinkBluetoothDevice) -> Bool {
         return lhs === rhs
     }
 
@@ -261,28 +318,15 @@ extension RileyLinkDevice: Equatable, Hashable {
 
 
 // MARK: - Status management
-extension RileyLinkDevice {
-    public struct Status {
-        public let lastIdle: Date?
+extension RileyLinkBluetoothDevice {
 
-        public let name: String?
-        
-        public let version: String
-
-        public let ledOn: Bool
-        public let vibrationOn: Bool
-        public let voltage: Float?
-        public let battery: Int?
-        public let hasPiezo: Bool
-    }
-
-    public func getStatus(_ completion: @escaping (_ status: Status) -> Void) {
+    public func getStatus(_ completion: @escaping (_ status: RileyLinkDeviceStatus) -> Void) {
         os_unfair_lock_lock(&lock)
         let lastIdle = self.lastIdle
         os_unfair_lock_unlock(&lock)
 
         self.manager.queue.async {
-            completion(Status(
+            completion(RileyLinkDeviceStatus(
                 lastIdle: lastIdle,
                 name: self.name,
                 version: self.version,
@@ -301,7 +345,7 @@ extension RileyLinkDevice {
 // CommandSessions are a way to serialize access to the RileyLink command/response facility.
 // All commands that send data out on the RL data characteristic need to be in a command session.
 // Accessing other characteristics on the RileyLink can be done without a command session.
-extension RileyLinkDevice {
+extension RileyLinkBluetoothDevice {
     public func runSession(withName name: String, _ block: @escaping (_ session: CommandSession) -> Void) {
         self.log.default("Scheduling session %{public}@", name)
         sessionQueue.addOperation(manager.configureAndRun({ [weak self] (manager) in
@@ -321,7 +365,7 @@ extension RileyLinkDevice {
 
 
 // MARK: - Idle management
-extension RileyLinkDevice {
+extension RileyLinkBluetoothDevice {
     public enum IdleListeningState {
         case enabled(timeout: TimeInterval, channel: UInt8)
         case disabled
@@ -387,7 +431,7 @@ extension RileyLinkDevice {
 
 
 // MARK: - Timer tick management
-extension RileyLinkDevice {
+extension RileyLinkBluetoothDevice {
     func setTimerTickEnabled(_ enabled: Bool) {
         os_unfair_lock_lock(&lock)
         self.isTimerTickEnabled = enabled
@@ -408,7 +452,7 @@ extension RileyLinkDevice {
 
 
 // MARK: - CBCentralManagerDelegate Proxying
-extension RileyLinkDevice {
+extension RileyLinkBluetoothDevice {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if case .poweredOn = central.state {
             assertIdleListening(forceRestart: false)
@@ -441,7 +485,7 @@ extension RileyLinkDevice {
 }
 
 
-extension RileyLinkDevice: PeripheralManagerDelegate {
+extension RileyLinkBluetoothDevice: PeripheralManagerDelegate {
     func peripheralManager(_ manager: PeripheralManager, didUpdateNotificationStateFor characteristic: CBCharacteristic) {
         log.debug("Did didUpdateNotificationStateFor %@", characteristic)
     }
@@ -508,7 +552,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
                                 NotificationCenter.default.post(
                                     name: .DevicePacketReceived,
                                     object: self,
-                                    userInfo: [RileyLinkDevice.notificationPacketKey: packet]
+                                    userInfo: [RileyLinkBluetoothDevice.notificationPacketKey: packet]
                                 )
                             }
                         }
@@ -564,7 +608,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
         NotificationCenter.default.post(
             name: .DeviceRSSIDidChange,
             object: self,
-            userInfo: [RileyLinkDevice.notificationRSSIKey: RSSI]
+            userInfo: [RileyLinkBluetoothDevice.notificationRSSIKey: RSSI]
         )
     }
 
@@ -590,7 +634,7 @@ extension RileyLinkDevice: PeripheralManagerDelegate {
 }
 
 
-extension RileyLinkDevice: CustomDebugStringConvertible {
+extension RileyLinkBluetoothDevice: CustomDebugStringConvertible {
     
     public var debugDescription: String {
         os_unfair_lock_lock(&lock)
@@ -614,8 +658,8 @@ extension RileyLinkDevice: CustomDebugStringConvertible {
     }
 }
 
-
-extension RileyLinkDevice {
+// TODO: These notification keys are not specific to the bluetooth implementation. Move them somewhere more appropriate.
+extension RileyLinkBluetoothDevice {
     public static let notificationPacketKey = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.NotificationPacket"
 
     public static let notificationRSSIKey = "com.rileylink.RileyLinkBLEKit.RileyLinkDevice.NotificationRSSI"

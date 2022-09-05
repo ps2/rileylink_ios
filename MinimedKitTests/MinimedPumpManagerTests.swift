@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import RileyLinkBLEKit
 @testable import MinimedKit
 import LoopKit
 
@@ -113,6 +114,40 @@ class MinimedPumpManagerTests: XCTestCase {
         
         // Bolus should not be returned as history event
         XCTAssert(result.remainingEvents.isEmpty)
+    }
+
+    class MockRileyLinkProvider: RileyLinkDeviceProvider {
+        func getDevices(_ completion: @escaping ([RileyLinkBLEKit.RLDevProtocol]) -> Void) {
+            <#code#>
+        }
+
+
+        init() {
+
+        }
+
+        var idleListeningEnabled: Bool
+
+        var timerTickEnabled: Bool
+
+        func deprioritize(_ device: RileyLinkBLEKit.RileyLinkDevice, completion: (() -> Void)?) {
+            <#code#>
+        }
+
+        func assertIdleListening(forcingRestart: Bool) {
+            <#code#>
+        }
+
+        var idleListeningState: RileyLinkBLEKit.RileyLinkDevice.IdleListeningState
+
+        var debugDescription: String = ""
+    }
+
+    func testReportingBolusBeforeReconciliation() {
+        let rlProvider = MockRileyLinkProvider()
+        let rlManagerState = RileyLinkConnectionManagerState(autoConnectIDs: [])
+        let state = MinimedPumpManagerState(isOnboarded: true, useMySentry: true, pumpColor: .blue, pumpID: "123456", pumpModel: .model523, pumpFirmwareVersion: "VER 2.4A1.1", pumpRegion: .northAmerica, rileyLinkConnectionManagerState: rlManagerState, timeZone: .currentFixed, suspendState: .resumed(Date()), insulinType: .novolog)
+        let manager = MinimedPumpManager(state: state, rileyLinkDeviceProvider: <#T##RileyLinkDeviceProvider#>)
     }
 
 }

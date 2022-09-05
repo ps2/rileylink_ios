@@ -82,7 +82,7 @@ public class RileyLinkDeviceManager: NSObject {
             lockedTimerTickEnabled.value = newValue
             centralQueue.async {
                 for device in self.devices {
-                    if device.peripheralState == .connected {
+                    if device.isConnected {
                         device.setTimerTickEnabled(newValue)
                     }
                 }
@@ -103,7 +103,7 @@ extension RileyLinkDeviceManager {
     
     public func connect(_ device: RileyLinkDevice) {
         centralQueue.async {
-            self.autoConnectIDs.insert(device.manager.peripheral.identifier.uuidString)
+            self.autoConnectIDs.insert(device.peripheralIdentifier.uuidString)
 
             guard let peripheral = self.reloadPeripheral(for: device) else {
                 return
@@ -115,7 +115,7 @@ extension RileyLinkDeviceManager {
 
     public func disconnect(_ device: RileyLinkDevice) {
         centralQueue.async {
-            self.autoConnectIDs.remove(device.manager.peripheral.identifier.uuidString)
+            self.autoConnectIDs.remove(device.peripheralIdentifier.uuidString)
 
             guard let peripheral = self.reloadPeripheral(for: device) else {
                 return
@@ -133,25 +133,25 @@ extension RileyLinkDeviceManager {
     private func reloadPeripheral(for device: RileyLinkDevice) -> CBPeripheral? {
         dispatchPrecondition(condition: .onQueue(centralQueue))
 
-        guard let peripheral = central.retrievePeripherals(withIdentifiers: [device.manager.peripheral.identifier]).first else {
+        guard let peripheral = central.retrievePeripherals(withIdentifiers: [device.peripheralIdentifier]).first else {
             return nil
         }
 
-        device.manager.peripheral = peripheral
+        device.setPeripheral(peripheral)
         return peripheral
     }
 
     private var hasDiscoveredAllAutoConnectDevices: Bool {
         dispatchPrecondition(condition: .onQueue(centralQueue))
 
-        return autoConnectIDs.isSubset(of: devices.map { $0.manager.peripheral.identifier.uuidString })
+        return autoConnectIDs.isSubset(of: devices.map { $0.peripheralIdentifier.uuidString })
     }
 
     private func autoConnectDevices() {
         dispatchPrecondition(condition: .onQueue(centralQueue))
 
-        for device in devices where autoConnectIDs.contains(device.manager.peripheral.identifier.uuidString) {
-            log.info("Attempting reconnect to %@", device.manager.peripheral)
+        for device in devices where autoConnectIDs.contains(device.peripheralIdentifier.uuidString) {
+            log.info("Attempting reconnect to %@", String(describing: device))
             connect(device)
         }
     }
@@ -159,10 +159,10 @@ extension RileyLinkDeviceManager {
     private func addPeripheral(_ peripheral: CBPeripheral, rssi: Int? = nil) {
         dispatchPrecondition(condition: .onQueue(centralQueue))
 
-        var device: RileyLinkDevice! = devices.first(where: { $0.manager.peripheral.identifier == peripheral.identifier })
+        var device: RileyLinkDevice! = devices.first(where: { $0.peripheralIdentifier == peripheral.identifier })
 
         if let device = device {
-            device.manager.peripheral = peripheral
+            device.setPeripheral(peripheral)
         } else {
             device = RileyLinkDevice(peripheralManager: PeripheralManager(peripheral: peripheral, configuration: .rileyLink, centralManager: central, queue: sessionQueue), rssi: rssi)
             if peripheral.state == .connected {
@@ -200,7 +200,7 @@ extension RileyLinkDeviceManager {
 extension Array where Element == RileyLinkDevice {
     public var firstConnected: Element? {
         return self.first { (device) -> Bool in
-            return device.manager.peripheral.state == .connected
+            return device.isConnected
         }
     }
 
@@ -283,13 +283,13 @@ extension RileyLinkDeviceManager: CBCentralManagerDelegate {
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         // Notify the device so it can begin configuration
-        for device in devices where device.manager.peripheral.identifier == peripheral.identifier {
+        for device in devices where device.peripheralIdentifier == peripheral.identifier {
             device.centralManager(central, didConnect: peripheral)
         }
     }
 
     public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        for device in devices where device.manager.peripheral.identifier == peripheral.identifier {
+        for device in devices where device.peripheralIdentifier == peripheral.identifier {
             device.centralManager(central, didDisconnectPeripheral: peripheral, error: error)
         }
 
@@ -299,7 +299,7 @@ extension RileyLinkDeviceManager: CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         log.error("%@: %@: %@", #function, peripheral, String(describing: error))
 
-        for device in devices where device.manager.peripheral.identifier == peripheral.identifier {
+        for device in devices where device.peripheralIdentifier == peripheral.identifier {
             device.centralManager(central, didFailToConnect: peripheral, error: error)
         }
 

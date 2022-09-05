@@ -667,7 +667,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                 return false
             }
         case .rileyLinkCommands:
-            return device.peripheralState == .connected
+            return device.isConnected
         case .alert:
             return true
         }

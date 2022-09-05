@@ -105,11 +105,11 @@ extension RileyLinkPumpManager {
     }
     
     
-    open func connectToRileyLink(_ device: RileyLinkDevice) {
+    public func connectToRileyLink(_ device: RileyLinkDevice) {
         rileyLinkConnectionManager?.connect(device)
     }
 
-    open func disconnectFromRileyLink(_ device: RileyLinkDevice) {
+    public func disconnectFromRileyLink(_ device: RileyLinkDevice) {
         rileyLinkConnectionManager?.disconnect(device)
     }
     

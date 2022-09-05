@@ -23,7 +23,7 @@ public enum RileyLinkHardwareType {
 
 /// TODO: Should we be tracking the most recent "pump" RSSI?
 public class RileyLinkDevice {
-    let manager: PeripheralManager
+    private let manager: PeripheralManager
 
     private let log = OSLog(category: "RileyLinkDevice")
 
@@ -35,6 +35,10 @@ public class RileyLinkDevice {
 
     public var isConnected: Bool {
         return manager.peripheral.state == .connected
+    }
+
+    func setPeripheral(_ peripheral: CBPeripheral) {
+        manager.peripheral = peripheral
     }
     
     public var rlFirmwareDescription: String {

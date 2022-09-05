@@ -723,7 +723,7 @@ extension MinimedPumpManager {
     ///   - error: An error describing why the fetch and/or store failed
     private func fetchPumpHistory(_ completion: @escaping (_ error: Error?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(PumpManagerError.configuration(nil))
+            completion(PumpManagerError.configuration(MinimedPumpManagerError.insulinTypeNotConfigured))
             return
         }
         
@@ -798,7 +798,7 @@ extension MinimedPumpManager {
 
     private func storePendingPumpEvents(forceFinalization: Bool = false, _ completion: @escaping (_ error: MinimedPumpManagerError?) -> Void) {
         // Must be called from the sessionQueue
-        let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent(forceFinalization: true) })
+        let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent(forceFinalization: forceFinalization) })
                 
         log.debug("Storing pending pump events: %{public}@", String(describing: events))
 
@@ -1073,7 +1073,7 @@ extension MinimedPumpManager: PumpManager {
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(PumpManagerError.configuration(nil))
+            completion(PumpManagerError.configuration(MinimedPumpManagerError.insulinTypeNotConfigured))
             return
         }
         
@@ -1082,7 +1082,7 @@ extension MinimedPumpManager: PumpManager {
 
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(PumpManagerError.configuration(nil))
+            completion(PumpManagerError.configuration(MinimedPumpManagerError.insulinTypeNotConfigured))
             return
         }
         
@@ -1179,7 +1179,7 @@ extension MinimedPumpManager: PumpManager {
         }
         
         guard let insulinType = insulinType else {
-            completion(.configuration(nil))
+            completion(.configuration(MinimedPumpManagerError.insulinTypeNotConfigured))
             return
         }
 
@@ -1278,7 +1278,7 @@ extension MinimedPumpManager: PumpManager {
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
         
         guard let insulinType = insulinType else {
-            completion(.failure(.configuration(nil)))
+            completion(.failure(.configuration(MinimedPumpManagerError.insulinTypeNotConfigured)))
             return
         }
 
@@ -1295,7 +1295,7 @@ extension MinimedPumpManager: PumpManager {
     
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         guard let insulinType = insulinType else {
-            completion(.configuration(nil))
+            completion(.configuration(MinimedPumpManagerError.insulinTypeNotConfigured))
             return
         }
 

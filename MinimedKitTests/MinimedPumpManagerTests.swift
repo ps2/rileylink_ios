@@ -41,7 +41,7 @@ class MinimedPumpManagerTests: XCTestCase {
         pumpManager.pumpManagerDelegate = mockPumpManagerDelegate
     }
 
-    func testBolusWithNoRileyLink() {
+    func testBolusWithInvalidResponse() {
         let exp = expectation(description: "enactBolus callback")
         pumpManager.enactBolus(units: 2.3, activationType: .manualNoRecommendation) { error in
             XCTAssertNotNil(error)

@@ -41,7 +41,8 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
         // Pump communication
         let idleListeningEnabled = state.pumpModel.hasMySentry && state.useMySentry
-        self.pumpOps = pumpOps ?? PumpOps(pumpSettings: state.pumpSettings, pumpState: state.pumpState, delegate: self)
+
+        self.pumpOps = pumpOps ?? MinimedPumpOps(pumpSettings: state.pumpSettings, pumpState: state.pumpState, delegate: self)
 
         self.rileyLinkDeviceProvider.idleListeningState = idleListeningEnabled ? MinimedPumpManagerState.idleListeningEnabledDefaults : .disabled
     }

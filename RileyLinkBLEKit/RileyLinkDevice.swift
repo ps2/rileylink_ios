@@ -22,16 +22,24 @@ public enum RileyLinkHardwareType {
 
 public struct RileyLinkDeviceStatus {
     public let lastIdle: Date?
-
     public let name: String?
-
     public let version: String
-
     public let ledOn: Bool
     public let vibrationOn: Bool
     public let voltage: Float?
     public let battery: Int?
     public let hasPiezo: Bool
+
+    public init(lastIdle: Date?, name: String?, version: String, ledOn: Bool, vibrationOn: Bool, voltage: Float?, battery: Int?, hasPiezo: Bool) {
+        self.lastIdle = lastIdle
+        self.name = name
+        self.version = version
+        self.ledOn = ledOn
+        self.vibrationOn = vibrationOn
+        self.voltage = voltage
+        self.battery = battery
+        self.hasPiezo = hasPiezo
+    }
 }
 
 

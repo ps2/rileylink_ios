@@ -120,7 +120,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     
     public var lastRileyLinkBatteryAlertDate: Date = .distantPast
     
-    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionState: RileyLinkConnectionState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType)
+    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionState: RileyLinkConnectionState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType, lastTuned: Date?, lastValidFrequency: Measurement<UnitFrequency>?)
     {
         self.isOnboarded = isOnboarded
         self.useMySentry = useMySentry
@@ -133,6 +133,8 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.timeZone = timeZone
         self.suspendState = suspendState
         self.insulinType = insulinType
+        self.lastTuned = lastTuned
+        self.lastValidFrequency = lastValidFrequency
     }
 
     public init?(rawValue: RawValue) {

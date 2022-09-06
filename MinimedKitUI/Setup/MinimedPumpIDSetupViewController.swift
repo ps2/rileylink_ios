@@ -90,7 +90,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
             
             return MinimedPumpManagerState(
                 isOnboarded: false,
-                useMySentry: true,
+                useMySentry: pumpState?.useMySentry ?? true,
                 pumpColor: pumpColor,
                 pumpID: pumpID,
                 pumpModel: pumpModel,
@@ -99,7 +99,9 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
                 rileyLinkConnectionState: rileyLinkPumpManager.rileyLinkConnectionManagerState,
                 timeZone: timeZone,
                 suspendState: .resumed(Date()),
-                insulinType: insulinType
+                insulinType: insulinType,
+                lastTuned: pumpState?.lastTuned,
+                lastValidFrequency: pumpState?.lastValidFrequency
             )
         }
     }
@@ -111,8 +113,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
 
         return MinimedPumpManager(
             state: pumpManagerState,
-            rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider,
-            pumpOps: self.pumpOps)
+            rileyLinkDeviceProvider: rileyLinkPumpManager.rileyLinkDeviceProvider)
     }
 
     // MARK: -
@@ -246,7 +247,7 @@ class MinimedPumpIDSetupViewController: SetupTableViewController {
     private func setupPump(with settings: PumpSettings) {
         continueState = .reading
 
-        let pumpOps = PumpOps(pumpSettings: settings, pumpState: pumpState, delegate: self)
+        let pumpOps = MinimedPumpOps(pumpSettings: settings, pumpState: pumpState, delegate: self)
         self.pumpOps = pumpOps
         pumpOps.runSession(withName: "Pump ID Setup", using: rileyLinkPumpManager.rileyLinkDeviceProvider.firstConnectedDevice, { (session) in
             guard let session = session else {

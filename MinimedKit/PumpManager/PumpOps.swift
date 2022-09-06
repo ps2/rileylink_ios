@@ -17,13 +17,29 @@ public protocol PumpOpsDelegate: AnyObject, CommsLogger {
     func pumpOps(_ pumpOps: PumpOps, didChange state: PumpState)
 }
 
+public protocol PumpOps {
+    func runSession(withName name: String, using device: RileyLinkDevice, _ block: @escaping (_ session: PumpOpsSession) -> Void)
+}
 
-public class PumpOps {
+extension PumpOps {
+    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
+        deviceSelector { (device) in
+            guard let device = device else {
+                block(nil)
+                return
+            }
+
+            self.runSession(withName: name, using: device, block)
+        }
+    }
+}
+
+public class MinimedPumpOps: PumpOps {
     private let log = OSLog(category: "PumpOps")
 
-    public let pumpSettings: PumpSettings
+    private let pumpSettings: PumpSettings
 
-    public let pumpState: Locked<PumpState>
+    private let pumpState: Locked<PumpState>
 
     private let configuredDevices: Locked<Set<UUID>> = Locked(Set())
 
@@ -42,17 +58,6 @@ public class PumpOps {
             let pumpState = PumpState()
             self.pumpState = Locked(pumpState)
             self.delegate?.pumpOps(self, didChange: pumpState)
-        }
-    }
-
-    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
-        deviceSelector { (device) in
-            guard let device = device else {
-                block(nil)
-                return
-            }
-
-            self.runSession(withName: name, using: device, block)
         }
     }
 
@@ -111,26 +116,26 @@ public class PumpOps {
 }
 
 // Delivered on RileyLinkDeviceManager.sessionQueue
-extension PumpOps: PumpOpsSessionDelegate {
-    func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession) {
+extension MinimedPumpOps: PumpOpsSessionDelegate {
+    public func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession) {
         if let sessionDevice = self.sessionDevice {
             self.configuredDevices.value = [sessionDevice.peripheralIdentifier]
         }
     }
     
-    func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
+    public func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState) {
         self.pumpState.value = state
         delegate?.pumpOps(self, didChange: state)
         NotificationCenter.default.post(
             name: .PumpOpsStateDidChange,
             object: self,
-            userInfo: [PumpOps.notificationPumpStateKey: pumpState]
+            userInfo: [MinimedPumpOps.notificationPumpStateKey: pumpState]
         )
     }
 }
 
 
-extension PumpOps: CustomDebugStringConvertible {
+extension MinimedPumpOps: CustomDebugStringConvertible {
     public var debugDescription: String {
         return [
             "### PumpOps",
@@ -143,7 +148,7 @@ extension PumpOps: CustomDebugStringConvertible {
 
 
 /// Provide a notification contract that clients can use to inform RileyLink UI of changes to PumpOps.PumpState
-extension PumpOps {
+extension MinimedPumpOps {
     public static let notificationPumpStateKey = "com.rileylink.RileyLinkKit.PumpOps.PumpState"
 }
 

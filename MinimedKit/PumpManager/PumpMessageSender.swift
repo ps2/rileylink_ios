@@ -9,7 +9,7 @@
 import Foundation
 import RileyLinkBLEKit
 
-protocol PumpMessageSender {
+public protocol PumpMessageSender {
     /// - Throws: LocalizedError
     func resetRadioConfig() throws
 

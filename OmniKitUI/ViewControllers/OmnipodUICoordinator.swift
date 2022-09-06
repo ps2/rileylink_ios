@@ -371,7 +371,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
         if pumpManager == nil, let pumpManagerSettings = pumpManagerSettings {
             let basalSchedule = pumpManagerSettings.basalSchedule
 
-            let rileyLinkConnectionManager = RileyLinkConnectionManager(autoConnectIDs: [])
+            let deviceProvider = RileyLinkBluetoothDeviceProvider(autoConnectIDs: [])
 
             let pumpManagerState = OmnipodPumpManagerState(
                 isOnboarded: false,
@@ -382,7 +382,7 @@ class OmnipodUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 insulinType: nil,
                 maximumTempBasalRate: pumpManagerSettings.maxBasalRateUnitsPerHour)
 
-            self.pumpManager = OmnipodPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: rileyLinkConnectionManager.deviceProvider, rileyLinkConnectionManager: rileyLinkConnectionManager)
+            self.pumpManager = OmnipodPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: deviceProvider)
         } else {
             guard let pumpManager = pumpManager else {
                 fatalError("Unable to create Omnipod PumpManager")

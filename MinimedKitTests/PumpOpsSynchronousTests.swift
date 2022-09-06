@@ -350,7 +350,8 @@ class MockPumpMessageSender: PumpMessageSender {
 
             response = responseArray[numberOfResponsesReceived]
         } else {
-            response = PumpMessage(rxData: Data())!
+            let packet = MinimedPacket(encodedData: Data(hexadecimalString: "a969a39966b1566555b235")!)!
+            response = PumpMessage(rxData: packet.data)!
         }
 
         var encoded = MinimedPacket(outgoingData: response.txData).encodedData()

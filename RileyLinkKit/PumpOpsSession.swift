@@ -11,7 +11,7 @@ import LoopKit
 import RileyLinkBLEKit
 
 
-protocol PumpOpsSessionDelegate: AnyObject {
+public protocol PumpOpsSessionDelegate: AnyObject {
     func pumpOpsSession(_ session: PumpOpsSession, didChange state: PumpState)
     func pumpOpsSessionDidChangeRadioConfig(_ session: PumpOpsSession)
 }
@@ -29,7 +29,7 @@ public class PumpOpsSession {
 
     private unowned let delegate: PumpOpsSessionDelegate
     
-    internal init(settings: PumpSettings, pumpState: PumpState, messageSender: PumpMessageSender, delegate: PumpOpsSessionDelegate) {
+    public init(settings: PumpSettings, pumpState: PumpState, messageSender: PumpMessageSender, delegate: PumpOpsSessionDelegate) {
         self.settings = settings
         self.pump = pumpState
         self.messageSender = messageSender

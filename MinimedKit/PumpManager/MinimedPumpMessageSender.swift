@@ -81,7 +81,6 @@ struct MinimedPumpMessageSender: PumpMessageSender {
             let response = try sendAndListen(message, repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
 
             guard response.messageType == responseType, let body = response.messageBody as? T else {
-                commsLogger?.didError("Unexpected response: \(String(describing: response))")
                 if let body = response.messageBody as? PumpErrorMessageBody {
                     switch body.errorCode {
                     case .known(let code):

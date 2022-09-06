@@ -49,8 +49,8 @@ extension PumpOpsError: LocalizedError {
             return LocalizedString("Pump is suspended", comment: "")
         case .rfCommsFailure(let msg):
             return msg
-        case .unexpectedResponse:
-            return LocalizedString("Pump responded unexpectedly", comment: "")
+        case .unexpectedResponse(let response, _):
+            return String(format: LocalizedString("Unexpected response %1$@", comment: "Format string for an unexpectedResponse. (2: The response)"), String(describing: response))
         case .unknownPumpErrorCode(let code):
             return String(format: LocalizedString("Unknown pump error code: %1$@", comment: "The format string description of an unknown pump error code. (1: The specific error code raw value)"), String(describing: code))
         case .unknownPumpModel(let model):

@@ -239,7 +239,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         }
         reconciliationMappings = recentlyReconciledEvents
         
-        lastReconciliation = rawValue["lastSync"] as? Date
+        lastReconciliation = rawValue["lastReconciliation"] as? Date
         
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
             insulinType = InsulinType(rawValue: rawInsulinType)
@@ -274,7 +274,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         value["rileyLinkConnectionManagerState"] = rileyLinkConnectionState?.rawValue
         value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
         value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
-        value["lastSync"] = lastReconciliation
+        value["lastReconciliation"] = lastReconciliation
         value["insulinType"] = insulinType?.rawValue
         value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
         value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
@@ -312,7 +312,7 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pendingDoses: \(pendingDoses)",
             "timeZone: \(timeZone)",
             "recentlyReconciledEvents: \(reconciliationMappings.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uuid)" })",
-            "lastSync: \(String(describing: lastReconciliation))",
+            "lastReconciliation: \(String(describing: lastReconciliation))",
             "insulinType: \(String(describing: insulinType))",
             "rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
             "lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",

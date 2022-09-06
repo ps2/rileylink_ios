@@ -765,7 +765,7 @@ extension MinimedPumpManager {
                         
                         let pendingEvents = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent() })
 
-                        delegate.pumpManager(self, hasNewPumpEvents: remainingHistoryEvents + pendingEvents, lastSync: self.lastSync, completion: { (error) in
+                        delegate.pumpManager(self, hasNewPumpEvents: remainingHistoryEvents + pendingEvents, lastReconciliation: self.state.lastReconciliation, completion: { (error) in
                             // Called on an unknown queue by the delegate
                             if error == nil {
                                 self.recents.lastAddedPumpEvents = Date()
@@ -808,7 +808,7 @@ extension MinimedPumpManager {
                 preconditionFailure("pumpManagerDelegate cannot be nil")
             }
 
-            delegate.pumpManager(self, hasNewPumpEvents: events, lastSync: self.lastSync, completion: { (error) in
+            delegate.pumpManager(self, hasNewPumpEvents: events, lastReconciliation: self.state.lastReconciliation, completion: { (error) in
                 // Called on an unknown queue by the delegate
                 if let error = error {
                     self.log.error("Pump event storage failed: %{public}@", String(describing: error))
@@ -1185,7 +1185,7 @@ extension MinimedPumpManager: PumpManager {
         }
 
 
-        pumpOps.runSession(withName: "Bolus", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Bolus", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
 
             guard let session = session else {
                 completion(.connection(MinimedPumpManagerError.noRileyLink))
@@ -1300,7 +1300,7 @@ extension MinimedPumpManager: PumpManager {
             return
         }
 
-        pumpOps.runSession(withName: "Set Temp Basal", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Set Temp Basal", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.connection(MinimedPumpManagerError.noRileyLink))
                 return
@@ -1406,7 +1406,7 @@ extension MinimedPumpManager: PumpManager {
     public func setMaximumTempBasalRate(_ rate: Double) { }
 
     public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
-        pumpOps.runSession(withName: "Save Basal Profile", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Save Basal Profile", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return
@@ -1425,7 +1425,7 @@ extension MinimedPumpManager: PumpManager {
     }
 
     public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
-        pumpOps.runSession(withName: "Save Settings", using: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+        pumpOps.runSession(withName: "Save Settings", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
             guard let session = session else {
                 completion(.failure(PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)))
                 return

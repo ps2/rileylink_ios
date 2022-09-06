@@ -22,7 +22,7 @@ public protocol PumpOps {
 }
 
 extension PumpOps {
-    public func runSession(withName name: String, using deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
+    public func runSession(withName name: String, usingSelector deviceSelector: @escaping (_ completion: @escaping (_ device: RileyLinkDevice?) -> Void) -> Void, _ block: @escaping (_ session: PumpOpsSession?) -> Void) {
         deviceSelector { (device) in
             guard let device = device else {
                 block(nil)

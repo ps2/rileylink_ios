@@ -2053,7 +2053,7 @@ extension OmnipodPumpManager: PumpManager {
                 preconditionFailure("pumpManagerDelegate cannot be nil")
             }
 
-            delegate.pumpManager(self, hasNewPumpEvents: doses.map { NewPumpEvent($0) }, lastSync: lastSync, completion: { (error) in
+            delegate.pumpManager(self, hasNewPumpEvents: doses.map { NewPumpEvent($0) }, lastReconciliation: lastSync, completion: { (error) in
                 if let error = error {
                     self.log.error("Error storing pod events: %@", String(describing: error))
                 } else {

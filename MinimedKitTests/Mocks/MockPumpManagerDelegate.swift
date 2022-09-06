@@ -25,9 +25,10 @@ class MockPumpManagerDelegate: PumpManagerDelegate {
 
     func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError) {}
 
-    var reportedPumpEvents: [(events: [NewPumpEvent], lastSync: Date?)] = []
-    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastSync: Date?, completion: @escaping (Error?) -> Void) {
-        reportedPumpEvents.append((events: events, lastSync: lastSync))
+    var reportedPumpEvents: [(events: [NewPumpEvent], lastReconciliation: Date?)] = []
+    
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (Error?) -> Void) {
+        reportedPumpEvents.append((events: events, lastReconciliation: lastReconciliation))
     }
 
     func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>) -> Void) {}

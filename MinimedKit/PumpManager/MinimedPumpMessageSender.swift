@@ -93,9 +93,7 @@ struct MinimedPumpMessageSender: PumpMessageSender {
                 }
             }
             commsLogger?.didReceive(String(describing: response))
-            log.default("PersistentDeviceLog startsleep")
             usleep(200000) // 0.2s
-            log.default("PersistentDeviceLog endsleep")
             return body
         } catch {
             commsLogger?.didError(error.localizedDescription)

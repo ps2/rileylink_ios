@@ -461,14 +461,14 @@ extension MinimedPumpManager {
 
         if case .suspended = state.suspendState {
             return PumpStatusHighlight(
-                localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+                localizedMessage: LocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
                 imageName: "pause.circle.fill",
                 state: .warning)
         }
         
         if date.timeIntervalSince(lastSync(for: state, recents: recents) ?? .distantPast) > .minutes(12) {
             return PumpStatusHighlight(
-                localizedMessage: NSLocalizedString("Signal Loss", comment: "Status highlight when communications with the pod haven't happened recently."),
+                localizedMessage: LocalizedString("Signal Loss", comment: "Status highlight when communications with the pod haven't happened recently."),
                 imageName: "exclamationmark.circle.fill",
                 state: .critical)
         }
@@ -489,9 +489,9 @@ extension MinimedPumpManager {
     }
 
     private var pumpBatteryLowAlert: Alert {
-        let title = NSLocalizedString("Pump Battery Low", comment: "The notification title for a low pump battery")
-        let body = NSLocalizedString("Change the pump battery immediately", comment: "The notification alert describing a low pump battery")
-        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Dismiss", comment: "Default alert dismissal"))
+        let title = LocalizedString("Pump Battery Low", comment: "The notification title for a low pump battery")
+        let body = LocalizedString("Change the pump battery immediately", comment: "The notification alert describing a low pump battery")
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: LocalizedString("Dismiss", comment: "Default alert dismissal"))
         return Alert(identifier: Self.pumpBatteryLowAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
     }
     
@@ -543,9 +543,9 @@ extension MinimedPumpManager {
     }
 
     private var pumpReservoirEmptyAlert: Alert {
-        let title = NSLocalizedString("Pump Reservoir Empty", comment: "The notification title for an empty pump reservoir")
-        let body = NSLocalizedString("Change the pump reservoir now", comment: "The notification alert describing an empty pump reservoir")
-        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Ok", comment: "Default alert dismissal"))
+        let title = LocalizedString("Pump Reservoir Empty", comment: "The notification title for an empty pump reservoir")
+        let body = LocalizedString("Change the pump reservoir now", comment: "The notification alert describing an empty pump reservoir")
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: LocalizedString("Ok", comment: "Default alert dismissal"))
         return Alert(identifier: Self.pumpReservoirEmptyAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
     }
 
@@ -554,7 +554,7 @@ extension MinimedPumpManager {
     }
 
     private func pumpReservoirLowAlertForAmount(_ units: Double, andTimeRemaining remaining: TimeInterval?) -> Alert {
-        let title = NSLocalizedString("Pump Reservoir Low", comment: "The notification title for a low pump reservoir")
+        let title = LocalizedString("Pump Reservoir Low", comment: "The notification title for a low pump reservoir")
 
         let unitsString = NumberFormatter.localizedString(from: NSNumber(value: units), number: .decimal)
 
@@ -568,12 +568,12 @@ extension MinimedPumpManager {
         let body: String
 
         if let remaining = remaining, let timeString = intervalFormatter.string(from: remaining) {
-            body = String(format: NSLocalizedString("%1$@ U left: %2$@", comment: "Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining)"), unitsString, timeString)
+            body = String(format: LocalizedString("%1$@ U left: %2$@", comment: "Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining)"), unitsString, timeString)
         } else {
-            body = String(format: NSLocalizedString("%1$@ U left", comment: "Low reservoir alert format string. (1: Number of units remaining)"), unitsString)
+            body = String(format: LocalizedString("%1$@ U left", comment: "Low reservoir alert format string. (1: Number of units remaining)"), unitsString)
         }
 
-        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: NSLocalizedString("Ok", comment: "Default alert dismissal"))
+        let content = Alert.Content(title: title, body: body, acknowledgeActionButtonLabel: LocalizedString("Ok", comment: "Default alert dismissal"))
         return Alert(identifier: Self.pumpReservoirLowAlertIdentifier, foregroundContent: content, backgroundContent: content, trigger: .immediate)
     }
 
@@ -699,7 +699,7 @@ extension MinimedPumpManager {
             }
             
             if var runningTempBasal = state.unfinalizedTempBasal {
-                // Look for following temp basal cancel event
+                // Look for following temp basal cancel event in pump history
                 if let tempBasalCancellation = result.remainingEvents.first(where: { (event) -> Bool in
                     if let dose = event.dose,
                        dose.type == .tempBasal,
@@ -711,7 +711,7 @@ extension MinimedPumpManager {
                     }
                     return false
                 }) {
-                    runningTempBasal.finishTime = tempBasalCancellation.date
+                    runningTempBasal.cancel(at: tempBasalCancellation.date, pumpModel: state.pumpModel)
                     state.unfinalizedTempBasal = runningTempBasal
                     state.suspendState = .resumed(tempBasalCancellation.date)
                 }

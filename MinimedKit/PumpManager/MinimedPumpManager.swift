@@ -702,10 +702,10 @@ extension MinimedPumpManager {
                 // Look for following temp basal cancel event
                 if let tempBasalCancellation = result.remainingEvents.first(where: { (event) -> Bool in
                     if let dose = event.dose,
-                        dose.type == .tempBasal,
-                        dose.startDate > runningTempBasal.startTime,
-                        dose.startDate < runningTempBasal.finishTime,
-                        dose.unitsPerHour == 0
+                       dose.type == .tempBasal,
+                       dose.startDate > runningTempBasal.startTime,
+                       dose.startDate < runningTempBasal.finishTime,
+                       dose.startDate.timeIntervalSince(dose.endDate) == 0
                     {
                         return true
                     }

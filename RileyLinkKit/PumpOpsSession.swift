@@ -492,9 +492,9 @@ extension PumpOpsSession {
         }
 
         do {
-            sleep(5)
             let response: ReadTempBasalCarelinkMessageBody = try messageSender.getResponse(to: PumpMessage(settings: settings, type: .readTempBasal), responseType: .readTempBasal, repeatCount: 0, timeout: MinimedPumpMessageSender.standardPumpResponseWindow,  retryCount: 3)
-            if abs(response.timeRemaining - duration) < 5 && response.rateType == .absolute {
+            // Duration is always whole minute values
+            if response.timeRemaining == duration && response.rateType == .absolute {
                 return .success(true)
             } else {
                 // readTempBasal does not match what we attempted to command

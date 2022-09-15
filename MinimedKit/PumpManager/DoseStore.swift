@@ -76,7 +76,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                     )
                 }
             case let basal as BasalProfileStartPumpEvent:
-                title = LocalizedString("Scheduled Basal Start", comment: "Event title for starting scheduled basal")
+                title = LocalizedString("Scheduled Basal", comment: "Event title for starting scheduled basal")
                 dose = DoseEntry(
                     type: .basal,
                     startDate: event.date,

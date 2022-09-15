@@ -14,12 +14,11 @@ public class SuspendResumeMessageBody: CarelinkLongMessageBody {
         case suspend = 0x01
         case resume = 0x00
     }
-    
+
     public convenience init(state: SuspendResumeState) {
         let numArgs = 1
         let data = Data(hexadecimalString: String(format: "%02x%02x", numArgs, state.rawValue))!
         
         self.init(rxData: data)!
     }
-    
 }

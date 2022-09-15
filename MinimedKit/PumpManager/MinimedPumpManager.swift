@@ -219,10 +219,13 @@ public class MinimedPumpManager: RileyLinkPumpManager {
         switch message.messageBody {
         case let body as MySentryPumpStatusMessageBody:
             self.updatePumpStatus(body, from: device)
-        case is MySentryAlertMessageBody, is MySentryAlertClearedMessageBody:
+        case let body as MySentryAlertMessageBody:
+            self.log.default("MySentry Alert: %{public}@", String(describing: body))
+        case let body as MySentryAlertClearedMessageBody:
+            self.log.default("MySentry Alert Cleared: %{public}@", String(describing: body))
             break
-        case let body:
-            self.log.error("Unknown MySentry Message: %d: %{public}@", message.messageType.rawValue, body.txData.hexadecimalString)
+        default:
+            self.log.error("Unknown MySentry Message: %d: %{public}@", message.messageType.rawValue, message.txData.hexadecimalString)
         }
     }
 
@@ -743,6 +746,7 @@ extension MinimedPumpManager {
                     }
 
                     // Include events up to a minute before startDate, since pump event time and pending event time might be off
+                    self.log.default("Fetching history since %{public}@", String(describing: startDate.addingTimeInterval(.minutes(-1))))
                     let (historyEvents, model) = try session.getHistoryEvents(since: startDate.addingTimeInterval(.minutes(-1)))
                     
                     // Reconcile history with pending doses
@@ -764,6 +768,8 @@ extension MinimedPumpManager {
                         }
                         
                         let pendingEvents = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent() })
+
+                        self.log.default("Reporting new pump events: %{public}@", String(describing: remainingHistoryEvents + pendingEvents))
 
                         delegate.pumpManager(self, hasNewPumpEvents: remainingHistoryEvents + pendingEvents, lastReconciliation: self.state.lastReconciliation, completion: { (error) in
                             // Called on an unknown queue by the delegate
@@ -1311,12 +1317,10 @@ extension MinimedPumpManager: PumpManager {
             let result = session.setTempBasal(unitsPerHour, duration: duration)
             
             switch result {
-            case .success(let response):
+            case .success:
                 let now = Date()
-                let endDate = now.addingTimeInterval(response.timeRemaining)
-                let startDate = endDate.addingTimeInterval(-duration)
 
-                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: startDate, duration: duration, insulinType: insulinType)
+                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: insulinType)
                 
                 self.recents.tempBasalEngageState = .stable
                 
@@ -1325,14 +1329,14 @@ extension MinimedPumpManager: PumpManager {
                 // If we were successful, then we know we aren't suspended
                 self.setState({ (state) in
                     if case .suspended = state.suspendState {
-                        state.suspendState = .resumed(startDate)
+                        state.suspendState = .resumed(now)
                     } else if isResumingScheduledBasal {
-                        state.suspendState = .resumed(startDate)
+                        state.suspendState = .resumed(now)
                     }
                     
                     let pumpModel = state.pumpModel
                     
-                    state.unfinalizedTempBasal?.cancel(at: startDate, pumpModel: pumpModel)
+                    state.unfinalizedTempBasal?.cancel(at: now, pumpModel: pumpModel)
                     if let previousTempBasal = state.unfinalizedTempBasal {
                         state.pendingDoses.append(previousTempBasal)
                     }
@@ -1351,6 +1355,8 @@ extension MinimedPumpManager: PumpManager {
                 // Continue below
             case .failure(let error):
                 completion(.communication(error))
+
+                self.logDeviceCommunication("Set temp basal failed: \(error.localizedDescription)", type: .error)
 
                 // If we got a command-refused error, we might be suspended or bolusing, so update the state accordingly
                 if case .arguments(.pumpError(.commandRefused)) = error {

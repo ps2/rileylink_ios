@@ -89,8 +89,8 @@ public enum MessageType: UInt8 {
     case readCaptureEventEnabled      = 0xf1  // Body[1] encodes the bool state 0101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     case changeCaptureEventEnable     = 0xf2
     case readOtherDevicesStatus       = 0xf3
-    
-    var bodyType: MessageBody.Type {
+
+    var decodeType: DecodableMessageBody.Type {
         switch self {
         case .alert:
             return MySentryAlertMessageBody.self

@@ -1320,7 +1320,7 @@ extension MinimedPumpManager: PumpManager {
             case .success:
                 let now = Date()
 
-                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: insulinType)
+                let dose = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: insulinType, automatic: true)
                 
                 self.recents.tempBasalEngageState = .stable
                 

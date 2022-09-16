@@ -390,12 +390,12 @@ extension PumpOpsSession {
 // MARK: - Command messages
 extension PumpOpsSession {
     /// - Throws: `PumpCommandError` specifying the failure sequence
-    private func runCommandWithArguments<T: MessageBody>(_ message: PumpMessage, responseType: MessageType = .pumpAck) throws -> T {
+    private func runCommandWithArguments<T: MessageBody>(_ message: PumpMessage, responseType: MessageType = .pumpAck, retryCount: Int = 3) throws -> T {
         do {
             try wakeup()
 
             let shortMessage = PumpMessage(packetType: message.packetType, address: message.address.hexadecimalString, messageType: message.messageType, messageBody: CarelinkShortMessageBody())
-            let _: PumpAckMessageBody = try messageSender.getResponse(to: shortMessage, responseType: .pumpAck, repeatCount: 0, timeout: MinimedPumpMessageSender.standardPumpResponseWindow,  retryCount: 3)
+            let _: PumpAckMessageBody = try messageSender.getResponse(to: shortMessage, responseType: .pumpAck, repeatCount: 0, timeout: MinimedPumpMessageSender.standardPumpResponseWindow,  retryCount: retryCount)
         } catch let error as PumpOpsError {
             throw PumpCommandError.command(error)
         }
@@ -572,7 +572,7 @@ extension PumpOpsSession {
 
         let message = PumpMessage(settings: settings, type: .bolus, body: BolusCarelinkMessageBody(units: units, insulinBitPackingScale: pumpModel.insulinBitPackingScale))
 
-        let _: PumpAckMessageBody = try runCommandWithArguments(message)
+        let _: PumpAckMessageBody = try runCommandWithArguments(message, retryCount: 0)
         return
     }
 

@@ -93,6 +93,7 @@ struct MinimedPumpMessageSender: PumpMessageSender {
                 }
             }
             commsLogger?.didReceive(String(describing: response))
+            usleep(200000) // 0.2s
             return body
         } catch {
             commsLogger?.didError(error.localizedDescription)

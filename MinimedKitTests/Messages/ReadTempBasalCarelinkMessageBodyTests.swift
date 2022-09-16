@@ -14,7 +14,7 @@ class ReadTempBasalCarelinkMessageBodyTests: XCTestCase {
     
     func testReadTempBasal() {
         // 06 00 00 00 37 00 17  -> 1.375 U @ 23 min remaining
-        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000000001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)!
+        let message = PumpMessage(rxData: Data(hexadecimalString: "a7123456980600000037001700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!)!
         
         let body = message.messageBody as! ReadTempBasalCarelinkMessageBody
         

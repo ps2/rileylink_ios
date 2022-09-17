@@ -123,6 +123,30 @@ extension Collection where Element == TimestampedHistoryEvent {
                     dose = DoseEntry(resumeDate: event.date)
                 }
                 break
+            case is JournalEntryMealMarkerPumpEvent:
+                title = "Meal"
+                break
+            case is JournalEntryPumpLowBatteryPumpEvent:
+                title = "Low Battery"
+                break
+            case is JournalEntryPumpLowReservoirPumpEvent:
+                title = "Low Reservoir"
+                break
+            case is ChangeBasalProfilePumpEvent:
+                title = "Change Basal Schedule"
+                break
+            case is ChangeBasalProfilePatternPumpEvent:
+                title = "Change Basal Profile Schedule"
+                break
+            case is SelectBasalProfilePumpEvent:
+                title = "Select Profile"
+                break
+            case is ChangeTimePumpEvent:
+                title = "Change Time"
+                break
+            case is NewTimePumpEvent:
+                title = "New Time"
+                break
             default:
                 break
             }

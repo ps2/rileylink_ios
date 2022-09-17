@@ -214,7 +214,7 @@ public class MinimedPumpManager: RileyLinkPumpManager {
             return
         }
 
-        log.debug("MinimedPacket received: %{public}@", String(describing: message))
+        logDeviceCommunication("MySentry \(String(describing: message))", type: .receive)
 
         switch message.messageBody {
         case let body as MySentryPumpStatusMessageBody:

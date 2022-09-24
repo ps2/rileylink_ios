@@ -224,7 +224,7 @@ extension CommandResponseViewController {
                     let status = try session.getCurrentPumpStatus()
 
                     var str = String(format: LocalizedString("%1$@ Units of insulin remaining\n", comment: "The format string describing units of insulin remaining: (1: number of units)"), measurementFormatter.numberFormatter.string(from: NSNumber(value: status.reservoir))!)
-                    str += String(format: LocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), measurementFormatter.string(from: status.batteryVolts))
+                    str += String(format: LocalizedString("Battery: %1$@ volts\n", comment: "The format string describing pump battery voltage: (1: battery voltage)"), String(describing: status.batteryVolts.value))
                     str += String(format: LocalizedString("Suspended: %1$@\n", comment: "The format string describing pump suspended state: (1: suspended)"), String(describing: status.suspended))
                     str += String(format: LocalizedString("Bolusing: %1$@\n", comment: "The format string describing pump bolusing state: (1: bolusing)"), String(describing: status.bolusing))
                     

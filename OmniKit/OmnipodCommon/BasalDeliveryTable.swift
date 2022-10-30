@@ -17,6 +17,7 @@ let nearZeroBasalRate = 0.01
 // Special flag used for non-Eros pods for near zero basal rates pulse timing for $13 & $16 extra commands
 let nearZeroBasalRateFlag: UInt32 = 0x80000000
 
+
 public struct BasalTableEntry {
     let segments: Int
     let pulses: Int
@@ -231,7 +232,7 @@ public struct RateEntry {
     }
     
     public static func makeEntries(rate: Double, duration: TimeInterval) -> [RateEntry] {
-        let maxPulsesPerEntry: Double = 6400 // PDM's cutoff on # of 1/10th pulses encoded in 2-byte value
+        let maxPulsesPerEntry: Double = 0xffff / 10 // max # of 1/10th pulses encoded in a 2-byte value
         var entries = [RateEntry]()
         let rrate = roundToSupportedBasalTimingRate(rate: rate)
         

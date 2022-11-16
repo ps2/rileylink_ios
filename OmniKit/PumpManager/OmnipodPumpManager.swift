@@ -1229,6 +1229,10 @@ extension OmnipodPumpManager: PumpManager {
         // We do support rounding a 0 U/hr rate to 0
         return supportedBasalRates.last(where: { $0 <= unitsPerHour }) ?? 0
     }
+    
+    public func estimatedDuration(toDeliver bolusUnits: Double) -> TimeInterval {
+        TimeInterval(bolusUnits / Pod.bolusDeliveryRate)
+    }
 
     public var maximumBasalScheduleEntryCount: Int {
         return Pod.maximumBasalScheduleEntryCount

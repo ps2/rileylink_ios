@@ -1177,8 +1177,8 @@ extension MinimedPumpManager: PumpManager {
         }
     }
     
-    public func estimatedDuration(toDeliver bolusUnits: Double) -> TimeInterval {
-        self.state.pumpModel.bolusDeliveryTime(units: bolusUnits)
+    public func estimatedDuration(toBolus units: Double) -> TimeInterval {
+        self.state.pumpModel.bolusDeliveryTime(units: units)
     }
     
     public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
@@ -1252,7 +1252,7 @@ extension MinimedPumpManager: PumpManager {
                 }
             }
 
-            let deliveryTime = self.estimatedDuration(toDeliver: enactUnits)
+            let deliveryTime = self.estimatedDuration(toBolus: enactUnits)
 
             do {
                 try session.setNormalBolus(units: enactUnits)

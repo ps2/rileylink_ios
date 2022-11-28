@@ -11,12 +11,12 @@ import XCTest
 
 class BasalScheduleTests: XCTestCase {
     
-    func testBasalTableEntry() {
-        let entry = BasalTableEntry(segments: 2, pulses: 300, alternateSegmentPulse: false)
+    func testInsulinTableEntry() {
+        let entry = InsulinTableEntry(segments: 2, pulses: 300, alternateSegmentPulse: false)
         // $01 $2c $01 $2c = 1 + 44 + 1 + 44 = 90 = $5a
         XCTAssertEqual(0x5a, entry.checksum())
         
-        let entry2 = BasalTableEntry(segments: 2, pulses: 260, alternateSegmentPulse: true)
+        let entry2 = InsulinTableEntry(segments: 2, pulses: 260, alternateSegmentPulse: true)
         // $01 $04 $01 $04 = 1 + 4 + 1 + 5 = 1 = $0b
         XCTAssertEqual(0x0b, entry2.checksum())
     }
@@ -40,7 +40,7 @@ class BasalScheduleTests: XCTestCase {
         }
         
         // Encode
-        let scheduleEntry = BasalTableEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
+        let scheduleEntry = InsulinTableEntry(segments: 16, pulses: 0, alternateSegmentPulse: true)
         let table = BasalDeliveryTable(entries: [scheduleEntry, scheduleEntry, scheduleEntry])
         let deliverySchedule = SetInsulinScheduleCommand.DeliverySchedule.basalSchedule(currentSegment: 0x2b, secondsRemaining: 737, pulsesRemaining: 0, table: table)
         let cmd = SetInsulinScheduleCommand(nonce: 0x77a05551, deliverySchedule: deliverySchedule)

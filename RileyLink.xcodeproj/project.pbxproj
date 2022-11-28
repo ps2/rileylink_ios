@@ -656,6 +656,8 @@
 		D807D7D82289135D006BCDF0 /* BeepType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D72289135D006BCDF0 /* BeepType.swift */; };
 		D807D7DA228913EC006BCDF0 /* BeepConfigCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807D7D9228913EC006BCDF0 /* BeepConfigCommand.swift */; };
 		D82B0D19287D44C2009F3709 /* DetailedStatus+OmniKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82B0D18287D44C2009F3709 /* DetailedStatus+OmniKit.swift */; };
+		D897B06729347AC000FDB009 /* BolusDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D897B06629347AC000FDB009 /* BolusDeliveryTable.swift */; };
+		D897B06929347B1000FDB009 /* InsulinTableEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D897B06829347B1000FDB009 /* InsulinTableEntry.swift */; };
 		E95D0660215D76E40072157B /* PodInfoPulseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95D065F215D76E40072157B /* PodInfoPulseLog.swift */; };
 		E9C06B262150371700B602AD /* PodInfoConfiguredAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */; };
 		E9C06B2821506A9200B602AD /* AcknowledgeAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */; };
@@ -1670,6 +1672,8 @@
 		D807D7D72289135D006BCDF0 /* BeepType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeepType.swift; sourceTree = "<group>"; };
 		D807D7D9228913EC006BCDF0 /* BeepConfigCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeepConfigCommand.swift; sourceTree = "<group>"; };
 		D82B0D18287D44C2009F3709 /* DetailedStatus+OmniKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DetailedStatus+OmniKit.swift"; sourceTree = "<group>"; };
+		D897B06629347AC000FDB009 /* BolusDeliveryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BolusDeliveryTable.swift; sourceTree = "<group>"; };
+		D897B06829347B1000FDB009 /* InsulinTableEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinTableEntry.swift; sourceTree = "<group>"; };
 		E95D065F215D76E40072157B /* PodInfoPulseLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoPulseLog.swift; sourceTree = "<group>"; };
 		E9C06B252150371700B602AD /* PodInfoConfiguredAlerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodInfoConfiguredAlerts.swift; sourceTree = "<group>"; };
 		E9C06B2721506A9200B602AD /* AcknowledgeAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgeAlertsTests.swift; sourceTree = "<group>"; };
@@ -2456,8 +2460,10 @@
 				C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */,
 				C1C9F88F283D94CE00CFC769 /* BeepPreference.swift */,
 				D807D7D72289135D006BCDF0 /* BeepType.swift */,
+				D897B06629347AC000FDB009 /* BolusDeliveryTable.swift */,
 				C1FFAF9E213323E700C50C1D /* CRC16.swift */,
 				C13FD2F3215E7338005FC495 /* FaultEventCode.swift */,
+				D897B06829347B1000FDB009 /* InsulinTableEntry.swift */,
 				C1FFAF9C213323E700C50C1D /* Message.swift */,
 				C1FFAFA3213323E800C50C1D /* MessageBlocks */,
 				C1328AF0284A94E00096C110 /* PendingCommand.swift */,
@@ -4178,6 +4184,7 @@
 				C1328AEE284A825E0096C110 /* PumpManagerAlert.swift in Sources */,
 				E9E54AB62156B2D500E319B8 /* PodInfoPulseLogPlus.swift in Sources */,
 				C13BD643214033E5006D7F19 /* UnfinalizedDose.swift in Sources */,
+				D897B06929347B1000FDB009 /* InsulinTableEntry.swift in Sources */,
 				C1FFAFD1213323E900C50C1D /* ConfigureAlertsCommand.swift in Sources */,
 				C1FFAFBE213323E900C50C1D /* CRC16.swift in Sources */,
 				D807D7DA228913EC006BCDF0 /* BeepConfigCommand.swift in Sources */,
@@ -4194,6 +4201,7 @@
 				C1CB13A521383F1E00F9EEDA /* LocalizedString.swift in Sources */,
 				C13FD2F4215E7338005FC495 /* FaultEventCode.swift in Sources */,
 				C1FFAFBF213323E900C50C1D /* BasalSchedule.swift in Sources */,
+				D897B06729347AC000FDB009 /* BolusDeliveryTable.swift in Sources */,
 				C1BB12B421CB5697009A29B5 /* Packet+RFPacket.swift in Sources */,
 				E9C06B2A21506BF300B602AD /* AcknowledgeAlertCommand.swift in Sources */,
 				C1FFAFC9213323E900C50C1D /* StatusResponse.swift in Sources */,

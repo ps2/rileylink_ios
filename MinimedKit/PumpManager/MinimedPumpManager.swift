@@ -806,7 +806,7 @@ extension MinimedPumpManager {
     private func storePendingPumpEvents(forceFinalization: Bool = false, _ completion: @escaping (_ error: MinimedPumpManagerError?) -> Void) {
         // Must be called from the sessionQueue
         let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent(forceFinalization: forceFinalization) })
-                
+
         log.debug("Storing pending pump events: %{public}@", String(describing: events))
 
         self.pumpDelegate.notify({ (delegate) in
@@ -1463,7 +1463,7 @@ extension MinimedPumpManager: PumpManager {
 
     public func deletePump(completion: @escaping () -> Void) {
         storePendingPumpEvents(forceFinalization: true) { error in
-            self.notifyDelegateOfDeletion {
+            self.notifyDelegateOfDeactivation {
                 completion()
             }
         }

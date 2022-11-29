@@ -52,18 +52,36 @@ struct MinimedPumpSettingsView: View {
                             ProgressView()
                         }
                     }
-                    NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.pumpManager.state.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
-                        HStack {
-                            Text(LocalizedString("Insulin Type", comment: "Text for confidence reminders navigation link")).foregroundColor(Color.primary)
-                            if let currentTitle = viewModel.pumpManager.state.insulinType?.brandName {
-                                Spacer()
-                                Text(currentTitle)
-                                    .foregroundColor(.secondary)
-                            }
+                }
+            }
+
+            Section(header: SectionHeader(label: LocalizedString("Configuration", comment: "The title of the configuration section in MinimedPumpManager settings")))
+            {
+                LabeledValueView(label: LocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone"),
+                                 value: viewModel.pumpManager.state.pumpID)
+                NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.pumpManager.state.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
+                    HStack {
+                        Text(LocalizedString("Insulin Type", comment: "Text for confidence reminders navigation link")).foregroundColor(Color.primary)
+                        if let currentTitle = viewModel.pumpManager.state.insulinType?.brandName {
+                            Spacer()
+                            Text(currentTitle)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
+                LabeledValueView(label: LocalizedString("Pump Battery Type", comment: "The title text for the battery type value"),
+                                 value: viewModel.pumpManager.state.pumpID)
+                LabeledValueView(label: LocalizedString("Preferred Data Source", comment: "The title text for the preferred insulin data source config"),
+                                 value: viewModel.pumpManager.state.pumpID)
+                LabeledValueView(label: LocalizedString("Use MySentry", comment: "The title text for the preferred MySentry setting config"),
+                                 value: viewModel.pumpManager.state.pumpID)
+
             }
+
+            Section() {
+                deletePumpButton
+            }
+
         }
         .alert(item: $viewModel.activeAlert, content: { alert in
             switch alert {

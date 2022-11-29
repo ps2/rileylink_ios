@@ -582,6 +582,10 @@
 		C1F6EB8B1F89C41200CFE393 /* MinimedPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */; };
 		C1F6EB8D1F89C45500CFE393 /* MinimedPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */; };
 		C1F8B1DF223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */; };
+		C1FA3891293655F900951C0F /* MinimedPumpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA3890293655F900951C0F /* MinimedPumpSettingsView.swift */; };
+		C1FA38932936564000951C0F /* MinimedPumpSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA38922936564000951C0F /* MinimedPumpSettingsViewModel.swift */; };
+		C1FA3896293657C800951C0F /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA3895293657C800951C0F /* Image.swift */; };
+		C1FA38982936595E00951C0F /* MinimedPumpUICoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA38972936595E00951C0F /* MinimedPumpUICoordinator.swift */; };
 		C1FAC05628C6A45800754AE2 /* MockPumpManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAC05528C6A45800754AE2 /* MockPumpManagerDelegate.swift */; };
 		C1FAC05828C6A7E300754AE2 /* ReconciliationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAC05728C6A7E300754AE2 /* ReconciliationTests.swift */; };
 		C1FAC05C28C6A88500754AE2 /* MockRileyLinkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAC05B28C6A88500754AE2 /* MockRileyLinkProvider.swift */; };
@@ -1602,6 +1606,10 @@
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
 		C1F8B1DE223AB1DF00DD66CF /* MinimedDoseProgressEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedDoseProgressEstimator.swift; sourceTree = "<group>"; };
+		C1FA3890293655F900951C0F /* MinimedPumpSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpSettingsView.swift; sourceTree = "<group>"; };
+		C1FA38922936564000951C0F /* MinimedPumpSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpSettingsViewModel.swift; sourceTree = "<group>"; };
+		C1FA3895293657C800951C0F /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		C1FA38972936595E00951C0F /* MinimedPumpUICoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpUICoordinator.swift; sourceTree = "<group>"; };
 		C1FAC05528C6A45800754AE2 /* MockPumpManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerDelegate.swift; sourceTree = "<group>"; };
 		C1FAC05728C6A7E300754AE2 /* ReconciliationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconciliationTests.swift; sourceTree = "<group>"; };
 		C1FAC05B28C6A88500754AE2 /* MockRileyLinkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRileyLinkProvider.swift; sourceTree = "<group>"; };
@@ -1972,6 +1980,7 @@
 		4352A72620DEC9B700CAC200 /* MinimedKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1FA3894293657BE00951C0F /* Extensions */,
 				C11AA524258728BD00BDE12F /* Views */,
 				C1FFAF4B212944F600C50C1D /* Localizable.strings */,
 				4352A72720DEC9B700CAC200 /* MinimedKitUI.h */,
@@ -1985,6 +1994,7 @@
 				43709AC020DF1C8B00F941B3 /* PumpModel.swift */,
 				43709AC120DF1C8B00F941B3 /* RadioSelectionTableViewController.swift */,
 				C16E61252208EC580069F357 /* MinimedHUDProvider.swift */,
+				C1FA38972936595E00951C0F /* MinimedPumpUICoordinator.swift */,
 			);
 			path = MinimedKitUI;
 			sourceTree = "<group>";
@@ -2258,6 +2268,8 @@
 				C11AA525258728CF00BDE12F /* ReservoirHUDView.swift */,
 				C11AA526258728CF00BDE12F /* ReservoirHUDView.xib */,
 				C1DD51D425A0BC6000DE27AE /* InsulinTypeConfirmation.swift */,
+				C1FA3890293655F900951C0F /* MinimedPumpSettingsView.swift */,
+				C1FA38922936564000951C0F /* MinimedPumpSettingsViewModel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2772,6 +2784,14 @@
 				C1EAD6C41C826B92006DBA60 /* UnknownMessageBody.swift */,
 			);
 			path = Messages;
+			sourceTree = "<group>";
+		};
+		C1FA3894293657BE00951C0F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C1FA3895293657C800951C0F /* Image.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		C1FAC05D28C6AADE00754AE2 /* Mocks */ = {
@@ -3667,14 +3687,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D2366F7212527DA0028B67D /* LocalizedString.swift in Sources */,
+				C1FA3896293657C800951C0F /* Image.swift in Sources */,
 				C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
+				C1FA3891293655F900951C0F /* MinimedPumpSettingsView.swift in Sources */,
 				C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */,
+				C1FA38932936564000951C0F /* MinimedPumpSettingsViewModel.swift in Sources */,
 				C16E611F22065B8E0069F357 /* TimeZone.swift in Sources */,
 				C16E61262208EC580069F357 /* MinimedHUDProvider.swift in Sources */,
 				43709AD520DF1CF800F941B3 /* MinimedPumpManagerSetupViewController.swift in Sources */,
 				43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */,
 				43709AC420DF1C8B00F941B3 /* PumpModel.swift in Sources */,
+				C1FA38982936595E00951C0F /* MinimedPumpUICoordinator.swift in Sources */,
 				C11AA5392587294E00BDE12F /* NibLoadable.swift in Sources */,
 				43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */,
 				43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */,

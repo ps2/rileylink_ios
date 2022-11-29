@@ -52,19 +52,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
     
     private lazy var integerFormatter = NumberFormatter()
     
-    private func cellForRow(_ row: CommandsRow) -> UITableViewCell? {
-        return tableView.cellForRow(at: IndexPath(row: row.rawValue, section: Section.commands.rawValue))
-    }
-    
-    private var pumpState: PumpState? {
-        didSet {
-            if let cell = cellForRow(.tune) {
-                cell.setTuneInfo(lastValidFrequency: pumpState?.lastValidFrequency, lastTuned: pumpState?.lastTuned, measurementFormatter: measurementFormatter, dateFormatter: dateFormatter)
-            }
-        }
-    }
-
-    
     init(pumpManager: MinimedPumpManager, supportedInsulinTypes: [InsulinType]) {
         self.pumpManager = pumpManager
         self.supportedInsulinTypes = supportedInsulinTypes
@@ -95,21 +82,11 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         imageView.frame.size.height += 18  // feels right
         tableView.tableHeaderView = imageView
         
-        let center = NotificationCenter.default
-        let mainQueue = OperationQueue.main
-
-        center.addObserver(forName: .PumpOpsStateDidChange, object: pumpManager.pumpOps, queue: mainQueue) { [weak self] (note) in
-            if let state = note.userInfo?[MinimedPumpOps.notificationPumpStateKey] as? PumpState {
-                self?.pumpState = state
-            }
-        }
-
         pumpManager.addStatusObserver(self, queue: .main)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
         
-        self.pumpState = pumpManager.state.pumpState
     }
 
     @objc func doneTapped(_ sender: Any) {
@@ -143,7 +120,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         case actions
         case settings
         case rileyLinks
-        case commands
         case delete
     }
 
@@ -166,18 +142,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         // This should always be last so it can be omitted for non-MySentry pumps:
         case useMySentry
     }
-    
-    private enum CommandsRow: Int, CaseIterable {
-        case tune
-        case mySentryPair
-        case dumpHistory
-        case fetchGlucose
-        case getPumpModel
-        case pressDownButton
-        case readPumpStatus
-        case readBasalSchedule
-    }
-
 
     // MARK: UITableViewDataSource
 
@@ -196,8 +160,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             return settingsRowCount
         case .rileyLinks:
             return super.tableView(tableView, numberOfRowsInSection: section)
-        case .commands:
-            return CommandsRow.allCases.count
         case .delete:
             return 1
         }
@@ -209,8 +171,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             return LocalizedString("Configuration", comment: "The title of the configuration section in MinimedPumpManager settings")
         case .rileyLinks:
             return super.tableView(tableView, titleForHeaderInSection: section)
-        case .commands:
-            return LocalizedString("Commands", comment: "The title of the commands section in MinimedPumpManager settings")
         case .delete:
             return " "  // Use an empty string for more dramatic spacing
         case .info, .actions:
@@ -222,7 +182,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: section)! {
         case .rileyLinks:
             return super.tableView(tableView, viewForHeaderInSection: section)
-        case .info, .settings, .delete, .actions, .commands:
+        case .info, .settings, .delete, .actions:
             return nil
         }
     }
@@ -294,35 +254,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             return cell
         case .rileyLinks:
             return super.tableView(tableView, cellForRowAt: indexPath)
-        case .commands:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-
-            switch CommandsRow(rawValue: indexPath.row)! {
-            case .tune:
-                cell.setTuneInfo(lastValidFrequency: pumpState?.lastValidFrequency, lastTuned: pumpState?.lastTuned, measurementFormatter: measurementFormatter, dateFormatter: dateFormatter)
-            case .mySentryPair:
-                cell.textLabel?.text = LocalizedString("MySentry Pair", comment: "The title of the command to pair with mysentry")
-
-            case .dumpHistory:
-                cell.textLabel?.text = LocalizedString("Fetch Recent History", comment: "The title of the command to fetch recent history")
-
-            case .fetchGlucose:
-                cell.textLabel?.text = LocalizedString("Fetch Enlite Glucose", comment: "The title of the command to fetch recent glucose")
-                
-            case .getPumpModel:
-                cell.textLabel?.text = LocalizedString("Get Pump Model", comment: "The title of the command to get pump model")
-
-            case .pressDownButton:
-                cell.textLabel?.text = LocalizedString("Send Button Press", comment: "The title of the command to send a button press")
-
-            case .readPumpStatus:
-                cell.textLabel?.text = LocalizedString("Read Pump Status", comment: "The title of the command to read pump status")
-
-            case .readBasalSchedule:
-                cell.textLabel?.text = LocalizedString("Read Basal Schedule", comment: "The title of the command to read basal schedule")
-            
-            }
-            return cell
 
         case .delete:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
@@ -339,7 +270,7 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
         switch Section(rawValue: indexPath.section)! {
         case .info:
             return false
-        case .actions, .settings, .rileyLinks, .delete, .commands:
+        case .actions, .settings, .rileyLinks, .delete:
             return true
         }
     }
@@ -406,17 +337,6 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             )
 
             self.show(vc, sender: sender)
-        case .commands:
-            pumpManager.rileyLinkDeviceProvider.firstConnectedDevice { device in
-                DispatchQueue.main.async {
-                    if let device = device,
-                       let cell = tableView.cellForRow(at: indexPath),
-                       let title = cell.textLabel?.text
-                    {
-                        self.runCommand(CommandsRow(rawValue: indexPath.row)!, device: device, title: title)
-                    }
-                }
-            }
         case .delete:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.notifyDelegateOfDeactivation {
@@ -445,41 +365,11 @@ class MinimedPumpSettingsViewController: RileyLinkSettingsViewController {
             case .useMySentry:
                 break
             }
-        case .info, .actions, .rileyLinks, .delete, .commands:
+        case .info, .actions, .rileyLinks, .delete:
             break
         }
 
         return indexPath
-    }
-    
-    private func runCommand(_ command: CommandsRow, device: RileyLinkDevice, title: String) {
-        var vc: CommandResponseViewController?
-
-        switch command {
-        case .tune:
-            vc = .tuneRadio(ops: ops, device: device, measurementFormatter: measurementFormatter)
-        case .mySentryPair:
-            vc = .mySentryPair(ops: ops, device: device)
-        case .dumpHistory:
-            vc = .dumpHistory(ops: ops, device: device)
-        case .fetchGlucose:
-            vc = .fetchGlucose(ops: ops, device: device)
-        case .getPumpModel:
-            vc = .getPumpModel(ops: ops, device: device)
-        case .pressDownButton:
-            vc = .pressDownButton(ops: ops, device: device)
-        case .readPumpStatus:
-            vc = .readPumpStatus(ops: ops, device: device, measurementFormatter: measurementFormatter)
-        case .readBasalSchedule:
-            vc = .readBasalSchedule(ops: ops, device: device, integerFormatter: integerFormatter)
-        }
-        
-        vc?.title = title
-
-        if let vc = vc {
-            show(vc, sender: nil)
-        }
-
     }
 }
 

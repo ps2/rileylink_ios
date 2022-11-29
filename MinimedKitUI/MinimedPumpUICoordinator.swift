@@ -110,7 +110,7 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
 //                self?.stepFinished()
 //            }
 
-            let view = MinimedPumpSettingsView(viewModel: viewModel)
+            let view = MinimedPumpSettingsView(viewModel: viewModel, supportedInsulinTypes: allowedInsulinTypes)
             return hostingController(rootView: view)
         }
     }

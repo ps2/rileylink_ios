@@ -125,7 +125,7 @@ struct MinimedPumpSettingsView: View {
 
     private var doneButton: some View {
         Button("Done", action: {
-            viewModel.didFinish()
+            viewModel.doneButtonPressed()
         })
     }
 

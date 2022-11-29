@@ -37,6 +37,8 @@ class MinimedPumpSettingsViewModel: ObservableObject {
 
     var pumpManager: MinimedPumpManager
 
+    var didFinish: (() -> Void)?
+
     init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         self.basalDeliveryState = pumpManager.status.basalDeliveryState
@@ -52,7 +54,8 @@ class MinimedPumpSettingsViewModel: ObservableObject {
         
     }
 
-    func didFinish() {
+    func doneButtonPressed() {
+        self.didFinish?()
     }
 
     func suspendResumeButtonPressed(action: SuspendResumeAction) {

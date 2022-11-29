@@ -106,9 +106,9 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
         switch screen {
         case .settings:
             let viewModel = MinimedPumpSettingsViewModel(pumpManager: pumpManager)
-//            viewModel.didFinish = { [weak self] in
-//                self?.stepFinished()
-//            }
+            viewModel.didFinish = { [weak self] in
+                self?.stepFinished()
+            }
 
             let view = MinimedPumpSettingsView(viewModel: viewModel, supportedInsulinTypes: allowedInsulinTypes)
             return hostingController(rootView: view)
@@ -118,4 +118,21 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
     private func hostingController<Content: View>(rootView: Content) -> DismissibleHostingController {
         return DismissibleHostingController(rootView: rootView, colorPalette: colorPalette)
     }
+
+    private func stepFinished() {
+        if let nextStep = currentScreen.next() {
+            navigateTo(nextStep)
+        } else {
+            completionDelegate?.completionNotifyingDidComplete(self)
+        }
+    }
+
+    func navigateTo(_ screen: MinimedUIScreen) {
+        screenStack.append(screen)
+        let viewController = viewControllerForScreen(screen)
+        viewController.isModalInPresentation = false
+        self.pushViewController(viewController, animated: true)
+        viewController.view.layoutSubviews()
+    }
+
 }

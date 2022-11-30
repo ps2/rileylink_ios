@@ -9,6 +9,9 @@
 import Foundation
 import MinimedKit
 import LoopKit
+import SwiftUI
+import LoopKitUI
+import HealthKit
 
 
 enum MinimedSettingsViewAlert: Identifiable {
@@ -28,10 +31,17 @@ enum MinimedSettingsViewAlert: Identifiable {
     }
 }
 
+public enum ReservoirLevelHighlightState: String, Equatable {
+    case normal
+    case warning
+    case critical
+}
+
 class MinimedPumpSettingsViewModel: ObservableObject {
 
     @Published var suspendResumeTransitioning: Bool = false
     @Published var basalDeliveryState: PumpManagerStatus.BasalDeliveryState?
+    @Published var reservoirReading: ReservoirReading?
 
     @Published var activeAlert: MinimedSettingsViewAlert?
 
@@ -39,11 +49,27 @@ class MinimedPumpSettingsViewModel: ObservableObject {
 
     var didFinish: (() -> Void)?
 
+    let basalRateFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.minimumFractionDigits = 1
+        numberFormatter.minimumIntegerDigits = 1
+        return numberFormatter
+    }()
+
+    let reservoirVolumeFormatter = {
+        let formatter = QuantityFormatter(for: .internationalUnit())
+        formatter.numberFormatter.maximumFractionDigits = 1
+        return formatter
+    }()
+
     init(pumpManager: MinimedPumpManager) {
         self.pumpManager = pumpManager
         self.basalDeliveryState = pumpManager.status.basalDeliveryState
+        self.reservoirReading = pumpManager.state.lastReservoirReading
 
         self.pumpManager.addStatusObserver(self, queue: DispatchQueue.main)
+        pumpManager.stateObservers.insert(self, queue: .main)
     }
 
     var pumpImage: UIImage {
@@ -86,11 +112,98 @@ class MinimedPumpSettingsViewModel: ObservableObject {
     func didChangeInsulinType(_ newType: InsulinType?) {
         self.pumpManager.insulinType = newType
     }
+
+    var isScheduledBasal: Bool {
+        switch basalDeliveryState {
+        case .active(_), .initiatingTempBasal:
+            return true
+        case .tempBasal(_), .cancelingTempBasal, .suspending, .suspended(_), .resuming, .none:
+            return false
+        }
+    }
+
+    var isSuspendedOrResuming: Bool {
+        switch basalDeliveryState {
+        case .suspended, .resuming:
+            return true
+        default:
+            return false
+        }
+    }
+
+    func suspendResumeButtonColor(guidanceColors: GuidanceColors) -> Color {
+        switch basalDeliveryState {
+        case .suspending, .resuming:
+            return Color.secondary
+        case .suspended:
+            return guidanceColors.warning
+        default:
+            return .accentColor
+        }
+    }
+
+    var basalDeliveryRate: Double? {
+        switch basalDeliveryState {
+        case .suspending, .resuming, .suspended, .none, .initiatingTempBasal, .cancelingTempBasal:
+            return nil
+        case .active:
+            // return scheduled basal rate
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = pumpManager.state.timeZone
+            return pumpManager.state.basalSchedule.currentRate(using: calendar)
+        case .tempBasal(let dose):
+            return dose.unitsPerHour
+        }
+    }
+
+    var basalTransitioning: Bool {
+        switch basalDeliveryState {
+        case .suspending, .resuming, .initiatingTempBasal, .cancelingTempBasal:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var reservoirLevelHighlightState: ReservoirLevelHighlightState? {
+        guard let reservoirReading = reservoirReading else {
+            return nil
+        }
+
+        let value = reservoirReading.units
+
+        if value > pumpManager.lowReservoirWarningLevel {
+            return .normal
+        } else if value > 0 {
+            return .warning
+        } else {
+            return .critical
+        }
+    }
+
+    public var reservoirPercentage: Double? {
+        guard let reservoirReading = reservoirReading else {
+            return nil
+        }
+
+        return (reservoirReading.units / pumpManager.pumpReservoirCapacity).clamped(to: 0...1.0)
+    }
+
+    func reservoirText(for units: Double) -> String {
+        let quantity = HKQuantity(unit: .internationalUnit(), doubleValue: units)
+        return reservoirVolumeFormatter.string(from: quantity, for: .internationalUnit()) ?? ""
+    }
 }
 
 extension MinimedPumpSettingsViewModel: PumpManagerStatusObserver {
     public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
-        self.basalDeliveryState = status.basalDeliveryState
+        basalDeliveryState = status.basalDeliveryState
+    }
+}
+
+extension MinimedPumpSettingsViewModel: MinimedPumpManagerStateObserver {
+    func didUpdatePumpManagerState(_ state: MinimedKit.MinimedPumpManagerState) {
+        reservoirReading = state.lastReservoirReading
     }
 }
 
@@ -139,4 +252,3 @@ extension PumpManagerStatus.BasalDeliveryState {
     }
 
 }
-

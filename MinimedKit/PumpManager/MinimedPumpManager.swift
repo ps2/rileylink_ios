@@ -63,6 +63,9 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
     public private(set) var pumpOps: PumpOps!
 
+    // We issue notifications at 30, 20, and 10. Indicators turn warning color at 30.
+    public let lowReservoirWarningLevel = 30.0
+
     // MARK: - PumpManager
 
     public let stateObservers = WeakSynchronizedSet<MinimedPumpManagerStateObserver>()
@@ -587,7 +590,7 @@ extension MinimedPumpManager {
                 return
             }
 
-            let warningThresholds: [Double] = [10, 20, 30]
+            let warningThresholds: [Double] = [10, 20, lowReservoirWarningLevel]
 
             for threshold in warningThresholds {
                 if newValue.unitVolume <= threshold && previousVolume > threshold {
@@ -606,7 +609,6 @@ extension MinimedPumpManager {
                 }
             }
         }
-
     }
 
     /// Called on an unknown queue by the delegate
@@ -1149,6 +1151,13 @@ extension MinimedPumpManager: PumpManager {
                         throw PumpManagerError.configuration(MinimedPumpManagerError.noDate)
                     }
 
+                    // Initialize basal schedule, if unset
+                    if self.state.basalSchedule.entries.count == 0, let basalSchedule = try? session.getBasalSchedule() {
+                        self.setState { state in
+                            state.basalSchedule = basalSchedule
+                        }
+                    }
+
                     // Check if the clock should be reset
                     if abs(date.timeIntervalSinceNow) > .seconds(20) {
                         self.log.error("Pump clock is more than 20 seconds off. Resetting.")
@@ -1425,6 +1434,7 @@ extension MinimedPumpManager: PumpManager {
             do {
                 let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
                 try session.setBasalSchedule(newSchedule, for: .standard)
+
 
                 completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: session.pump.timeZone)!))
             } catch let error {

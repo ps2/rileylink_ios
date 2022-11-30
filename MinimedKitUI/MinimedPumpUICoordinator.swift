@@ -64,7 +64,9 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 suspendState: .resumed(Date()), // TODO
                 insulinType: .novolog, // TODO
                 lastTuned: nil,
-                lastValidFrequency: nil)
+                lastValidFrequency: nil,
+                basalSchedule: BasalSchedule(repeatingScheduleValues: pumpManagerSettings.basalSchedule.items)
+            )
 
             self.pumpManager = MinimedPumpManager(state: pumpManagerState, rileyLinkDeviceProvider: deviceProvider)
         } else {
@@ -85,6 +87,12 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationBar.prefersLargeTitles = true
+        delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -1471,6 +1471,25 @@ extension MinimedPumpManager: PumpManager {
         }
     }
 
+    public var isClockOffset: Bool {
+        let now = Date()
+        return TimeZone.current.secondsFromGMT(for: now) != state.timeZone.secondsFromGMT(for: now)
+    }
+
+    public func setTime(completion: @escaping (PumpManagerError?) -> Void) {
+        pumpOps.runSession(withName: "Set time", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            do {
+                guard let session = session else {
+                    throw PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
+                }
+                try session.setTimeToNow(in: .current)
+                completion(nil)
+            } catch let error {
+                completion(.communication(error as? LocalizedError))
+            }
+        }
+    }
+
     public func deletePump(completion: @escaping () -> Void) {
         storePendingPumpEvents(forceFinalization: true) { error in
             self.notifyDelegateOfDeactivation {

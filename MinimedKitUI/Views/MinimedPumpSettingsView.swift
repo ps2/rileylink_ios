@@ -22,6 +22,9 @@ struct MinimedPumpSettingsView: View {
 
     @State private var showingDeletionSheet = false
 
+    @State private var showSyncTimeOptions = false;
+
+
     init(viewModel: MinimedPumpSettingsViewModel, supportedInsulinTypes: [InsulinType]) {
         self.viewModel = viewModel
         self.supportedInsulinTypes = supportedInsulinTypes
@@ -46,8 +49,8 @@ struct MinimedPumpSettingsView: View {
                     HStack {
                         Button(basalDeliveryState.buttonLabelText) {
                             viewModel.suspendResumeButtonPressed(action: basalDeliveryState.shownAction)
-                        }.disabled(basalDeliveryState.isTransitioning)
-                        if basalDeliveryState.isTransitioning {
+                        }.disabled(viewModel.suspendResumeButtonEnabled)
+                        if viewModel.suspendResumeButtonEnabled {
                             Spacer()
                             ProgressView()
                         }
@@ -57,8 +60,6 @@ struct MinimedPumpSettingsView: View {
 
             Section(header: SectionHeader(label: LocalizedString("Configuration", comment: "The title of the configuration section in MinimedPumpManager settings")))
             {
-                LabeledValueView(label: LocalizedString("Change Time Zone", comment: "The title of the command to change pump time zone"),
-                                 value: viewModel.pumpManager.state.pumpID)
                 NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.pumpManager.state.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
                     HStack {
                         Text(LocalizedString("Insulin Type", comment: "Text for confidence reminders navigation link")).foregroundColor(Color.primary)
@@ -77,6 +78,37 @@ struct MinimedPumpSettingsView: View {
                                  value: viewModel.pumpManager.state.pumpID)
 
             }
+
+            Section() {
+                HStack {
+                    Text(LocalizedString("Pump Time", comment: "The title of the command to change pump time zone"))
+                    Spacer()
+                    if viewModel.isClockOffset {
+                        Image(systemName: "clock.fill")
+                            .foregroundColor(guidanceColors.warning)
+                    }
+                    TimeView(timeZone: viewModel.pumpManager.status.timeZone)
+                        .foregroundColor( viewModel.isClockOffset ? guidanceColors.warning : nil)
+                }
+                if viewModel.synchronizingTime {
+                    HStack {
+                        Text(LocalizedString("Adjusting Pump Time...", comment: "Text indicating ongoing pump time synchronization"))
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                    }
+                } else if self.viewModel.pumpManager.status.timeZone != TimeZone.currentFixed {
+                    Button(action: {
+                        showSyncTimeOptions = true
+                    }) {
+                        Text(LocalizedString("Sync to Current Time", comment: "The title of the command to change pump time zone"))
+                    }
+                    .actionSheet(isPresented: $showSyncTimeOptions) {
+                        syncPumpTimeActionSheet
+                    }
+                }
+            }
+
 
             Section {
                 LabeledValueView(label: LocalizedString("Pump ID", comment: "The title text for the pump ID config value"),
@@ -145,14 +177,17 @@ struct MinimedPumpSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-            } else if viewModel.basalTransitioning {
-                Image(systemName: "arrow.clockwise.circle.fill")
-                    .font(.system(size: 34))
-                    .fixedSize()
-                    .foregroundColor(.secondary)
-                Text(LocalizedString("...", comment: "Text shown in basal rate space when basal is changing"))
-                    .fontWeight(.bold)
-                    .fixedSize()
+            } else if viewModel.basalDeliveryState?.isTransitioning == true {
+                HStack(alignment: .center) {
+                    Image(systemName: "arrow.clockwise.circle.fill")
+                        .font(.system(size: 34))
+                        .fixedSize()
+                        .foregroundColor(.secondary)
+                    Text(LocalizedString("Changing", comment: "Text shown in basal rate space when basal is changing"))
+                        .fontWeight(.bold)
+                        .fixedSize()
+                        .foregroundColor(.secondary)
+                }
             } else {
                 HStack(alignment: .center) {
                     Image(systemName: "x.circle.fill")
@@ -198,9 +233,18 @@ struct MinimedPumpSettingsView: View {
         }
     }
 
-                         
-
-
+    var syncPumpTimeActionSheet: ActionSheet {
+        ActionSheet(
+            title: Text(LocalizedString("Time Change Detected", comment: "Title for pod sync time action sheet.")),
+            message: Text(LocalizedString("The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?", comment: "Message for pod sync time action sheet")),
+            buttons: [
+                .default(Text(LocalizedString("Yes, Sync to Current Time", comment: "Button text to confirm pump time sync"))) {
+                    self.viewModel.changeTimeZoneTapped()
+                },
+                .cancel(Text(LocalizedString("No, Keep Pump As Is", comment: "Button text to cancel pump time sync")))
+            ]
+        )
+    }
 
     private func errorText(_ error: Error) -> String {
         if let error = error as? LocalizedError {

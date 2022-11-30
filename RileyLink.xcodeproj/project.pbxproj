@@ -495,6 +495,7 @@
 		C1BB12BD21CB5796009A29B5 /* BasalDeliveryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9A213323E700C50C1D /* BasalDeliveryTable.swift */; };
 		C1BB12BE21CB57AA009A29B5 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */; };
 		C1BB14522937A98E004CE8DA /* MinimedReservoirView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */; };
+		C1BB145829380F1A004CE8DA /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145729380F1A004CE8DA /* TimeView.swift */; };
 		C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
@@ -1520,6 +1521,7 @@
 		C1BB128721CB5603009A29B5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Packet+RFPacket.swift"; sourceTree = "<group>"; };
 		C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedReservoirView.swift; sourceTree = "<group>"; };
+		C1BB145729380F1A004CE8DA /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
 		C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfileTests.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
@@ -2273,6 +2275,7 @@
 				C1FA3890293655F900951C0F /* MinimedPumpSettingsView.swift */,
 				C1FA38922936564000951C0F /* MinimedPumpSettingsViewModel.swift */,
 				C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */,
+				C1BB145729380F1A004CE8DA /* TimeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3706,6 +3709,7 @@
 				43709AD720DF1CF800F941B3 /* MinimedPumpSetupCompleteViewController.swift in Sources */,
 				43709AD620DF1CF800F941B3 /* MinimedPumpSentrySetupViewController.swift in Sources */,
 				C145BF9F2219F37200A977CB /* Comparable.swift in Sources */,
+				C1BB145829380F1A004CE8DA /* TimeView.swift in Sources */,
 				43709AE720DF22E400F941B3 /* UIColor.swift in Sources */,
 				43709AE320DF20D400F941B3 /* OSLog.swift in Sources */,
 				C1BB14522937A98E004CE8DA /* MinimedReservoirView.swift in Sources */,

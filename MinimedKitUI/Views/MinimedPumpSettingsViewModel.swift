@@ -17,7 +17,7 @@ import HealthKit
 enum MinimedSettingsViewAlert: Identifiable {
     case suspendError(Error)
     case resumeError(Error)
-    case syncTimeError(MinimedPumpManagerError)
+    case syncTimeError(PumpManagerError)
 
     var id: String {
         switch self {
@@ -44,6 +44,8 @@ class MinimedPumpSettingsViewModel: ObservableObject {
     @Published var reservoirReading: ReservoirReading?
 
     @Published var activeAlert: MinimedSettingsViewAlert?
+    @Published var suspendResumeButtonEnabled: Bool = false
+    @Published var synchronizingTime: Bool = false
 
     var pumpManager: MinimedPumpManager
 
@@ -89,19 +91,22 @@ class MinimedPumpSettingsViewModel: ObservableObject {
     }
 
     func suspendResumeButtonPressed(action: SuspendResumeAction) {
+        suspendResumeButtonEnabled = true
         switch action {
         case .resume:
             pumpManager.resumeDelivery { error in
-                if let error = error {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    self.suspendResumeButtonEnabled = false
+                    if let error = error {
                         self.activeAlert = .resumeError(error)
                     }
                 }
             }
         case .suspend:
             pumpManager.suspendDelivery { error in
-                if let error = error {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    self.suspendResumeButtonEnabled = false
+                    if let error = error {
                         self.activeAlert = .suspendError(error)
                     }
                 }
@@ -156,15 +161,6 @@ class MinimedPumpSettingsViewModel: ObservableObject {
         }
     }
 
-    var basalTransitioning: Bool {
-        switch basalDeliveryState {
-        case .suspending, .resuming, .initiatingTempBasal, .cancelingTempBasal:
-            return true
-        default:
-            return false
-        }
-    }
-
     public var reservoirLevelHighlightState: ReservoirLevelHighlightState? {
         guard let reservoirReading = reservoirReading else {
             return nil
@@ -193,6 +189,23 @@ class MinimedPumpSettingsViewModel: ObservableObject {
         let quantity = HKQuantity(unit: .internationalUnit(), doubleValue: units)
         return reservoirVolumeFormatter.string(from: quantity, for: .internationalUnit()) ?? ""
     }
+
+    var isClockOffset: Bool {
+        return pumpManager.isClockOffset
+    }
+
+    func changeTimeZoneTapped() {
+        synchronizingTime = true
+        pumpManager.setTime { (error) in
+            DispatchQueue.main.async {
+                self.synchronizingTime = false
+                if let error = error {
+                    self.activeAlert = .syncTimeError(error)
+                }
+            }
+        }
+    }
+
 }
 
 extension MinimedPumpSettingsViewModel: PumpManagerStatusObserver {

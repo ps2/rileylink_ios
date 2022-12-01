@@ -63,6 +63,9 @@ public class MinimedPumpManager: RileyLinkPumpManager {
 
     public private(set) var pumpOps: PumpOps!
 
+    // We issue notifications at 30, 20, and 10. Indicators turn warning color at 30.
+    public let lowReservoirWarningLevel = 30.0
+
     // MARK: - PumpManager
 
     public let stateObservers = WeakSynchronizedSet<MinimedPumpManagerStateObserver>()
@@ -587,7 +590,7 @@ extension MinimedPumpManager {
                 return
             }
 
-            let warningThresholds: [Double] = [10, 20, 30]
+            let warningThresholds: [Double] = [10, 20, lowReservoirWarningLevel]
 
             for threshold in warningThresholds {
                 if newValue.unitVolume <= threshold && previousVolume > threshold {
@@ -606,7 +609,6 @@ extension MinimedPumpManager {
                 }
             }
         }
-
     }
 
     /// Called on an unknown queue by the delegate
@@ -806,7 +808,7 @@ extension MinimedPumpManager {
     private func storePendingPumpEvents(forceFinalization: Bool = false, _ completion: @escaping (_ error: MinimedPumpManagerError?) -> Void) {
         // Must be called from the sessionQueue
         let events = (self.state.pendingDoses + [self.state.unfinalizedBolus, self.state.unfinalizedTempBasal]).compactMap({ $0?.newPumpEvent(forceFinalization: forceFinalization) })
-                
+
         log.debug("Storing pending pump events: %{public}@", String(describing: events))
 
         self.pumpDelegate.notify({ (delegate) in
@@ -1149,6 +1151,13 @@ extension MinimedPumpManager: PumpManager {
                         throw PumpManagerError.configuration(MinimedPumpManagerError.noDate)
                     }
 
+                    // Initialize basal schedule, if unset
+                    if self.state.basalSchedule.entries.count == 0, let basalSchedule = try? session.getBasalSchedule() {
+                        self.setState { state in
+                            state.basalSchedule = basalSchedule
+                        }
+                    }
+
                     // Check if the clock should be reset
                     if abs(date.timeIntervalSinceNow) > .seconds(20) {
                         self.log.error("Pump clock is more than 20 seconds off. Resetting.")
@@ -1426,6 +1435,7 @@ extension MinimedPumpManager: PumpManager {
                 let newSchedule = BasalSchedule(repeatingScheduleValues: scheduleItems)
                 try session.setBasalSchedule(newSchedule, for: .standard)
 
+
                 completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: session.pump.timeZone)!))
             } catch let error {
                 self.log.error("Save basal profile failed: %{public}@", String(describing: error))
@@ -1461,9 +1471,28 @@ extension MinimedPumpManager: PumpManager {
         }
     }
 
+    public var isClockOffset: Bool {
+        let now = Date()
+        return TimeZone.current.secondsFromGMT(for: now) != state.timeZone.secondsFromGMT(for: now)
+    }
+
+    public func setTime(completion: @escaping (PumpManagerError?) -> Void) {
+        pumpOps.runSession(withName: "Set time", usingSelector: rileyLinkDeviceProvider.firstConnectedDevice) { (session) in
+            do {
+                guard let session = session else {
+                    throw PumpManagerError.connection(MinimedPumpManagerError.noRileyLink)
+                }
+                try session.setTimeToNow(in: .current)
+                completion(nil)
+            } catch let error {
+                completion(.communication(error as? LocalizedError))
+            }
+        }
+    }
+
     public func deletePump(completion: @escaping () -> Void) {
         storePendingPumpEvents(forceFinalization: true) { error in
-            self.notifyDelegateOfDeletion {
+            self.notifyDelegateOfDeactivation {
                 completion()
             }
         }

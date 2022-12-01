@@ -11,6 +11,8 @@ import LoopKit
 import LoopKitUI
 import MinimedKit
 import RileyLinkBLEKit
+import RileyLinkKit
+import RileyLinkKitUI
 import SwiftUI
 
 enum MinimedUIScreen {
@@ -118,7 +120,22 @@ class MinimedUICoordinator: UINavigationController, PumpManagerOnboarding, Compl
                 self?.stepFinished()
             }
 
-            let view = MinimedPumpSettingsView(viewModel: viewModel, supportedInsulinTypes: allowedInsulinTypes)
+            let rileyLinkListDataSource = RileyLinkListDataSource(rileyLinkPumpManager: pumpManager)
+
+            let handleRileyLinkSelection = { [weak self] (device: RileyLinkDevice) in
+                if let self = self {
+                    let vc = RileyLinkDeviceTableViewController(
+                        device: device,
+                        batteryAlertLevel: self.pumpManager.rileyLinkBatteryAlertLevel,
+                        batteryAlertLevelChanged: { [weak self] value in
+                            self?.pumpManager.rileyLinkBatteryAlertLevel = value
+                        }
+                    )
+                    self.show(vc, sender: self)
+                }
+            }
+
+            let view = MinimedPumpSettingsView(viewModel: viewModel, supportedInsulinTypes: allowedInsulinTypes, handleRileyLinkSelection: handleRileyLinkSelection, rileyLinkListDataSource: rileyLinkListDataSource)
             return hostingController(rootView: view)
         }
     }

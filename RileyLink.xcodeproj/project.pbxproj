@@ -499,6 +499,7 @@
 		C1BB145A2938193A004CE8DA /* BatteryTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB14592938193A004CE8DA /* BatteryTypeSelectionView.swift */; };
 		C1BB145C2938238B004CE8DA /* DataSourceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145B2938238B004CE8DA /* DataSourceSelectionView.swift */; };
 		C1BB145E29383076004CE8DA /* UseMySentrySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145D29383076004CE8DA /* UseMySentrySelectionView.swift */; };
+		C1BB1460293835A8004CE8DA /* RileyLinkListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145F293835A8004CE8DA /* RileyLinkListDataSource.swift */; };
 		C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
@@ -1528,6 +1529,7 @@
 		C1BB14592938193A004CE8DA /* BatteryTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryTypeSelectionView.swift; sourceTree = "<group>"; };
 		C1BB145B2938238B004CE8DA /* DataSourceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceSelectionView.swift; sourceTree = "<group>"; };
 		C1BB145D29383076004CE8DA /* UseMySentrySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseMySentrySelectionView.swift; sourceTree = "<group>"; };
+		C1BB145F293835A8004CE8DA /* RileyLinkListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkListDataSource.swift; sourceTree = "<group>"; };
 		C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfileTests.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
@@ -2029,6 +2031,7 @@
 				43323EA91FA81C1B003FB0FA /* RileyLinkDevice.swift */,
 				4352A74020DED23000CAC200 /* RileyLinkDeviceManager.swift */,
 				435D26AF20DA08CE00891C17 /* RileyLinkPumpManager.swift */,
+				C1BB145F293835A8004CE8DA /* RileyLinkListDataSource.swift */,
 			);
 			path = RileyLinkKit;
 			sourceTree = "<group>";
@@ -3743,6 +3746,7 @@
 			files = (
 				7D2366F2212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43323EAA1FA81C1B003FB0FA /* RileyLinkDevice.swift in Sources */,
+				C1BB1460293835A8004CE8DA /* RileyLinkListDataSource.swift in Sources */,
 				43EBE4531EAD23CE0073A0B5 /* TimeInterval.swift in Sources */,
 				434AB0C71CBCB76400422F4A /* Data.swift in Sources */,
 				4352A74120DED23100CAC200 /* RileyLinkDeviceManager.swift in Sources */,

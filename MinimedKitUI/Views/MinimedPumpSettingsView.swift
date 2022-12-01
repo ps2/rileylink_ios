@@ -10,6 +10,8 @@ import Foundation
 import SwiftUI
 import LoopKitUI
 import LoopKit
+import RileyLinkKit
+import RileyLinkBLEKit
 
 struct MinimedPumpSettingsView: View {
 
@@ -17,6 +19,7 @@ struct MinimedPumpSettingsView: View {
     @Environment(\.insulinTintColor) var insulinTintColor
 
     @ObservedObject var viewModel: MinimedPumpSettingsViewModel
+    @ObservedObject var rileyLinkListDataSource: RileyLinkListDataSource
 
     var supportedInsulinTypes: [InsulinType]
 
@@ -24,10 +27,13 @@ struct MinimedPumpSettingsView: View {
 
     @State private var showSyncTimeOptions = false;
 
+    var handleRileyLinkSelection: (RileyLinkDevice) -> Void
 
-    init(viewModel: MinimedPumpSettingsViewModel, supportedInsulinTypes: [InsulinType]) {
+    init(viewModel: MinimedPumpSettingsViewModel, supportedInsulinTypes: [InsulinType], handleRileyLinkSelection: @escaping (RileyLinkDevice) -> Void, rileyLinkListDataSource: RileyLinkListDataSource) {
         self.viewModel = viewModel
         self.supportedInsulinTypes = supportedInsulinTypes
+        self.handleRileyLinkSelection = handleRileyLinkSelection
+        self.rileyLinkListDataSource = rileyLinkListDataSource
     }
 
     var body: some View {
@@ -96,13 +102,48 @@ struct MinimedPumpSettingsView: View {
                             Text((viewModel.mySentryConfig == .useMySentry ?
                                   LocalizedString("Yes", comment: "Value string for MySentry config when MySentry is being used") :
                                     LocalizedString("No", comment: "Value string for MySentry config when MySentry is not being used"))
-
                             )
                             .foregroundColor(.secondary)
                         }
                     }
                 }
             }
+
+            Section(header: HStack {
+                Text(LocalizedString("Devices", comment: "Header for devices section of RileyLinkSetupView"))
+                Spacer()
+                ProgressView()
+            }) {
+                ForEach(rileyLinkListDataSource.devices, id: \.peripheralIdentifier) { device in
+                    Toggle(isOn: rileyLinkListDataSource.autoconnectBinding(for: device)) {
+                        HStack {
+                            Text(device.name ?? "Unknown")
+                            Spacer()
+
+                            if rileyLinkListDataSource.autoconnectBinding(for: device).wrappedValue {
+                                if device.isConnected {
+                                    Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+                                } else {
+                                    Image(systemName: "wifi.exclamationmark")
+                                        .imageScale(.large)
+                                        .foregroundColor(guidanceColors.warning)
+                                }
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            handleRileyLinkSelection(device)
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                rileyLinkListDataSource.isScanningEnabled = true
+            }
+            .onDisappear {
+                rileyLinkListDataSource.isScanningEnabled = false
+            }
+
 
             Section() {
                 HStack {
@@ -279,6 +320,23 @@ struct MinimedPumpSettingsView: View {
         }
     }
 
+    var decimalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+
+        return formatter
+    }()
+
+    private func formatRSSI(rssi: Int?) -> String {
+        if let rssi = rssi, let rssiStr = decimalFormatter.decibleString(from: rssi) {
+            return rssiStr
+        } else {
+            return ""
+        }
+    }
 
     private var deletePumpButton: some View {
         Button(action: {

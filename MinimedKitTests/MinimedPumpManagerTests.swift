@@ -34,7 +34,8 @@ class MinimedPumpManagerTests: XCTestCase {
             suspendState: .resumed(Date()),
             insulinType: .novolog,
             lastTuned: nil,
-            lastValidFrequency: nil)
+            lastValidFrequency: nil,
+            basalSchedule: BasalSchedule(entries: []))
         let pumpOps = MockPumpOps(pumpState: state.pumpState, pumpSettings: state.pumpSettings)
         pumpManager = MinimedPumpManager(state: state, rileyLinkDeviceProvider: rlProvider, pumpOps: pumpOps)
         mockPumpManagerDelegate = MockPumpManagerDelegate()

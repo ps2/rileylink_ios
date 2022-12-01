@@ -21,6 +21,7 @@ extension MinimedPumpManager: PumpManagerUI {
 
     static public func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let navVC = MinimedPumpManagerSetupViewController.instantiateFromStoryboard()
+        navVC.supportedInsulinTypes = allowedInsulinTypes
         let didConfirm: (InsulinType) -> Void = { [weak navVC] (confirmedType) in
             if let navVC = navVC {
                 navVC.insulinType = confirmedType
@@ -45,16 +46,11 @@ extension MinimedPumpManager: PumpManagerUI {
     }
 
     public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
-        let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
-        return nav
+        return MinimedUICoordinator(pumpManager: self, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: allowedInsulinTypes)
     }
     
     public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
-        // Return settings for now. No uncertainty handling atm.
-        let settings = MinimedPumpSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
-        return nav
+        return MinimedUICoordinator(pumpManager: self, colorPalette: colorPalette, allowDebugFeatures: allowDebugFeatures, allowedInsulinTypes: [])
     }
     
     public var smallImage: UIImage? {

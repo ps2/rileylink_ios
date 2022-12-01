@@ -149,7 +149,7 @@ class OmnipodSettingsViewModel: ObservableObject {
         if pumpManager.isClockOffset {
             return OmnipodSettingsNotice(
                 title: LocalizedString("Time Change Detected", comment: "title for time change detected notice"),
-                description: LocalizedString("The time on your pump is different from the current time. Your pump’s time controls your scheduled basal rates. You can review the time difference and configure your pump.", comment: "description for time change detected notice"))
+                description: LocalizedString("The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump.", comment: "description for time change detected notice"))
         } else {
             return nil
         }
@@ -253,7 +253,7 @@ class OmnipodSettingsViewModel: ObservableObject {
     }
 
     func updateConnectionStatus() {
-        pumpManager.rileyLinkConnectionManager?.deviceProvider.getDevices { (devices) in
+        pumpManager.rileyLinkDeviceProvider.getDevices { (devices) in
             DispatchQueue.main.async { [weak self] in
                 self?.rileylinkConnected = devices.firstConnected != nil
             }

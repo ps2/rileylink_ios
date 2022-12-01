@@ -98,7 +98,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         }
     }
 
-    public var rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?
+    public var rileyLinkConnectionState: RileyLinkConnectionState?
 
     public var timeZone: TimeZone
 
@@ -119,8 +119,10 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
     public var rileyLinkBatteryAlertLevel: Int?
     
     public var lastRileyLinkBatteryAlertDate: Date = .distantPast
+
+    public var basalSchedule: BasalSchedule
     
-    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionManagerState: RileyLinkConnectionManagerState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType)
+    public init(isOnboarded: Bool, useMySentry: Bool, pumpColor: PumpColor, pumpID: String, pumpModel: PumpModel, pumpFirmwareVersion: String, pumpRegion: PumpRegion, rileyLinkConnectionState: RileyLinkConnectionState?, timeZone: TimeZone, suspendState: SuspendState, insulinType: InsulinType, lastTuned: Date?, lastValidFrequency: Measurement<UnitFrequency>?, basalSchedule: BasalSchedule)
     {
         self.isOnboarded = isOnboarded
         self.useMySentry = useMySentry
@@ -129,10 +131,13 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         self.pumpModel = pumpModel
         self.pumpFirmwareVersion = pumpFirmwareVersion
         self.pumpRegion = pumpRegion
-        self.rileyLinkConnectionManagerState = rileyLinkConnectionManagerState
+        self.rileyLinkConnectionState = rileyLinkConnectionState
         self.timeZone = timeZone
         self.suspendState = suspendState
         self.insulinType = insulinType
+        self.lastTuned = lastTuned
+        self.lastValidFrequency = lastValidFrequency
+        self.basalSchedule = basalSchedule
     }
 
     public init?(rawValue: RawValue) {
@@ -168,11 +173,11 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
             if let oldRileyLinkPumpManagerStateRaw = rawValue["rileyLinkPumpManagerState"] as? [String : Any],
                 let connectedPeripheralIDs = oldRileyLinkPumpManagerStateRaw["connectedPeripheralIDs"] as? [String]
             {
-                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(autoConnectIDs: Set(connectedPeripheralIDs))
+                self.rileyLinkConnectionState = RileyLinkConnectionState(autoConnectIDs: Set(connectedPeripheralIDs))
             }
         } else {
-            if let rawState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionManagerState.RawValue {
-                self.rileyLinkConnectionManagerState = RileyLinkConnectionManagerState(rawValue: rawState)
+            if let rawState = rawValue["rileyLinkConnectionManagerState"] as? RileyLinkConnectionState.RawValue {
+                self.rileyLinkConnectionState = RileyLinkConnectionState(rawValue: rawState)
             }
         }
         
@@ -237,7 +242,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         }
         reconciliationMappings = recentlyReconciledEvents
         
-        lastReconciliation = rawValue["lastSync"] as? Date
+        lastReconciliation = rawValue["lastReconciliation"] as? Date
         
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue {
             insulinType = InsulinType(rawValue: rawInsulinType)
@@ -246,6 +251,11 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         rileyLinkBatteryAlertLevel = rawValue["rileyLinkBatteryAlertLevel"] as? Int
         lastRileyLinkBatteryAlertDate = rawValue["lastRileyLinkBatteryAlertDate"] as? Date ?? Date.distantPast
 
+        if let rawBasalSchedule = rawValue["basalSchedule"] as? BasalSchedule.RawValue, let basalSchedule = BasalSchedule(rawValue: rawBasalSchedule) {
+            self.basalSchedule = basalSchedule
+        } else {
+            self.basalSchedule = BasalSchedule(entries: [])
+        }
     }
 
     public var rawValue: RawValue {
@@ -269,13 +279,14 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
         value["batteryPercentage"] = batteryPercentage
         value["lastReservoirReading"] = lastReservoirReading?.rawValue
         value["lastValidFrequency"] = lastValidFrequency?.converted(to: .megahertz).value
-        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionManagerState?.rawValue
+        value["rileyLinkConnectionManagerState"] = rileyLinkConnectionState?.rawValue
         value["unfinalizedBolus"] = unfinalizedBolus?.rawValue
         value["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
-        value["lastSync"] = lastReconciliation
+        value["lastReconciliation"] = lastReconciliation
         value["insulinType"] = insulinType?.rawValue
         value["rileyLinkBatteryAlertLevel"] = rileyLinkBatteryAlertLevel
         value["lastRileyLinkBatteryAlertDate"] = lastRileyLinkBatteryAlertDate
+        value["basalSchedule"] = basalSchedule.rawValue
 
         return value
     }
@@ -283,7 +294,7 @@ public struct MinimedPumpManagerState: RawRepresentable, Equatable {
 
 
 extension MinimedPumpManagerState {
-    static let idleListeningEnabledDefaults: RileyLinkDevice.IdleListeningState = .enabled(timeout: .minutes(4), channel: 0)
+    static let idleListeningEnabledDefaults: RileyLinkBluetoothDevice.IdleListeningState = .enabled(timeout: .minutes(4), channel: 0)
 }
 
 
@@ -310,11 +321,11 @@ extension MinimedPumpManagerState: CustomDebugStringConvertible {
             "pendingDoses: \(pendingDoses)",
             "timeZone: \(timeZone)",
             "recentlyReconciledEvents: \(reconciliationMappings.values.map { "\($0.eventRaw.hexadecimalString) -> \($0.uuid)" })",
-            "lastSync: \(String(describing: lastReconciliation))",
+            "lastReconciliation: \(String(describing: lastReconciliation))",
             "insulinType: \(String(describing: insulinType))",
             "rileyLinkBatteryAlertLevel: \(String(describing: rileyLinkBatteryAlertLevel))",
             "lastRileyLinkBatteryAlertDate \(String(describing: lastRileyLinkBatteryAlertDate))",
-            String(reflecting: rileyLinkConnectionManagerState),
+            String(reflecting: rileyLinkConnectionState),
         ].joined(separator: "\n")
     }
 }

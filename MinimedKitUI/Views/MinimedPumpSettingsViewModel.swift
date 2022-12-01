@@ -31,6 +31,24 @@ enum MinimedSettingsViewAlert: Identifiable {
     }
 }
 
+enum MySentryConfig: Int, Identifiable, CaseIterable {
+    var id: RawValue {
+        return self.rawValue
+    }
+
+    case useMySentry = 0
+    case doNotUseMySentry
+
+    var localizedDescription: String {
+        switch self {
+        case .useMySentry:
+            return LocalizedString("Use MySentry", comment: "Description for option to use MySentry")
+        case .doNotUseMySentry:
+            return LocalizedString("Do not use MySentry", comment: "Description for option to not use MySentry")
+        }
+    }
+}
+
 public enum ReservoirLevelHighlightState: String, Equatable {
     case normal
     case warning
@@ -42,6 +60,24 @@ class MinimedPumpSettingsViewModel: ObservableObject {
     @Published var suspendResumeTransitioning: Bool = false
     @Published var basalDeliveryState: PumpManagerStatus.BasalDeliveryState?
     @Published var reservoirReading: ReservoirReading?
+
+    @Published var batteryChemistryType: BatteryChemistryType {
+        didSet {
+            pumpManager.batteryChemistry = batteryChemistryType
+        }
+    }
+
+    @Published var preferredDataSource: InsulinDataSource {
+        didSet {
+            pumpManager.preferredInsulinDataSource = preferredDataSource
+        }
+    }
+
+    @Published var mySentryConfig: MySentryConfig {
+        didSet {
+            pumpManager.useMySentry = mySentryConfig == .useMySentry
+        }
+    }
 
     @Published var activeAlert: MinimedSettingsViewAlert?
     @Published var suspendResumeButtonEnabled: Bool = false
@@ -69,6 +105,9 @@ class MinimedPumpSettingsViewModel: ObservableObject {
         self.pumpManager = pumpManager
         self.basalDeliveryState = pumpManager.status.basalDeliveryState
         self.reservoirReading = pumpManager.state.lastReservoirReading
+        self.batteryChemistryType = pumpManager.batteryChemistry
+        self.preferredDataSource = pumpManager.preferredInsulinDataSource
+        self.mySentryConfig = pumpManager.useMySentry ? .useMySentry : .doNotUseMySentry
 
         self.pumpManager.addStatusObserver(self, queue: DispatchQueue.main)
         pumpManager.stateObservers.insert(self, queue: .main)
@@ -217,6 +256,9 @@ extension MinimedPumpSettingsViewModel: PumpManagerStatusObserver {
 extension MinimedPumpSettingsViewModel: MinimedPumpManagerStateObserver {
     func didUpdatePumpManagerState(_ state: MinimedKit.MinimedPumpManagerState) {
         reservoirReading = state.lastReservoirReading
+        batteryChemistryType = state.batteryChemistry
+        preferredDataSource = state.preferredInsulinDataSource
+        mySentryConfig = state.useMySentry ? .useMySentry : .doNotUseMySentry
     }
 }
 

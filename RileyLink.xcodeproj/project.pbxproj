@@ -496,6 +496,9 @@
 		C1BB12BE21CB57AA009A29B5 /* BasalSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FFAF9F213323E800C50C1D /* BasalSchedule.swift */; };
 		C1BB14522937A98E004CE8DA /* MinimedReservoirView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */; };
 		C1BB145829380F1A004CE8DA /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145729380F1A004CE8DA /* TimeView.swift */; };
+		C1BB145A2938193A004CE8DA /* BatteryTypeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB14592938193A004CE8DA /* BatteryTypeSelectionView.swift */; };
+		C1BB145C2938238B004CE8DA /* DataSourceSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145B2938238B004CE8DA /* DataSourceSelectionView.swift */; };
+		C1BB145E29383076004CE8DA /* UseMySentrySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BB145D29383076004CE8DA /* UseMySentrySelectionView.swift */; };
 		C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */; };
 		C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3578E1C927303009BDD4F /* MeterMessage.swift */; };
 		C1C357911C92733A009BDD4F /* MeterMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C357901C92733A009BDD4F /* MeterMessageTests.swift */; };
@@ -1522,6 +1525,9 @@
 		C1BB12B321CB5697009A29B5 /* Packet+RFPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Packet+RFPacket.swift"; sourceTree = "<group>"; };
 		C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedReservoirView.swift; sourceTree = "<group>"; };
 		C1BB145729380F1A004CE8DA /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
+		C1BB14592938193A004CE8DA /* BatteryTypeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryTypeSelectionView.swift; sourceTree = "<group>"; };
+		C1BB145B2938238B004CE8DA /* DataSourceSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceSelectionView.swift; sourceTree = "<group>"; };
+		C1BB145D29383076004CE8DA /* UseMySentrySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseMySentrySelectionView.swift; sourceTree = "<group>"; };
 		C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfileTests.swift; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
@@ -2276,6 +2282,9 @@
 				C1FA38922936564000951C0F /* MinimedPumpSettingsViewModel.swift */,
 				C1BB14512937A98E004CE8DA /* MinimedReservoirView.swift */,
 				C1BB145729380F1A004CE8DA /* TimeView.swift */,
+				C1BB14592938193A004CE8DA /* BatteryTypeSelectionView.swift */,
+				C1BB145B2938238B004CE8DA /* DataSourceSelectionView.swift */,
+				C1BB145D29383076004CE8DA /* UseMySentrySelectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3696,6 +3705,7 @@
 				C1FA3896293657C800951C0F /* Image.swift in Sources */,
 				C154EA7F2146F41900B24AF8 /* TimeInterval.swift in Sources */,
 				43709AD420DF1CF800F941B3 /* MinimedPumpIDSetupViewController.swift in Sources */,
+				C1BB145C2938238B004CE8DA /* DataSourceSelectionView.swift in Sources */,
 				C1FA3891293655F900951C0F /* MinimedPumpSettingsView.swift in Sources */,
 				C11AA527258728CF00BDE12F /* ReservoirHUDView.swift in Sources */,
 				C1FA38932936564000951C0F /* MinimedPumpSettingsViewModel.swift in Sources */,
@@ -3721,6 +3731,8 @@
 				4352A74220DED3D200CAC200 /* CaseCountable.swift in Sources */,
 				43709AC620DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift in Sources */,
 				43709AC720DF1C8B00F941B3 /* MinimedPumpManager+UI.swift in Sources */,
+				C1BB145A2938193A004CE8DA /* BatteryTypeSelectionView.swift in Sources */,
+				C1BB145E29383076004CE8DA /* UseMySentrySelectionView.swift in Sources */,
 				43709AE220DF1FDD00F941B3 /* UITableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

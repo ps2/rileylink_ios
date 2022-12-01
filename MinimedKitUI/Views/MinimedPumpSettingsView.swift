@@ -70,13 +70,38 @@ struct MinimedPumpSettingsView: View {
                         }
                     }
                 }
-                LabeledValueView(label: LocalizedString("Pump Battery Type", comment: "The title text for the battery type value"),
-                                 value: viewModel.pumpManager.state.pumpID)
-                LabeledValueView(label: LocalizedString("Preferred Data Source", comment: "The title text for the preferred insulin data source config"),
-                                 value: viewModel.pumpManager.state.pumpID)
-                LabeledValueView(label: LocalizedString("Use MySentry", comment: "The title text for the preferred MySentry setting config"),
-                                 value: viewModel.pumpManager.state.pumpID)
+                NavigationLink(destination: BatteryTypeSelectionView(batteryType: $viewModel.batteryChemistryType)) {
+                    HStack {
+                        Text("Pump Battery Type").foregroundColor(Color.primary)
+                        Spacer()
+                        Text(viewModel.batteryChemistryType.description)
+                            .foregroundColor(.secondary)
+                    }
+                }
 
+                NavigationLink(destination: DataSourceSelectionView(batteryType: $viewModel.preferredDataSource)) {
+                    HStack {
+                        Text("Preferred Data Source").foregroundColor(Color.primary)
+                        Spacer()
+                        Text(viewModel.preferredDataSource.description)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                if viewModel.pumpManager.state.pumpModel.hasMySentry {
+                    NavigationLink(destination: UseMySentrySelectionView(mySentryConfig: $viewModel.mySentryConfig)) {
+                        HStack {
+                            Text("Use MySentry").foregroundColor(Color.primary)
+                            Spacer()
+                            Text((viewModel.mySentryConfig == .useMySentry ?
+                                  LocalizedString("Yes", comment: "Value string for MySentry config when MySentry is being used") :
+                                    LocalizedString("No", comment: "Value string for MySentry config when MySentry is not being used"))
+
+                            )
+                            .foregroundColor(.secondary)
+                        }
+                    }
+                }
             }
 
             Section() {

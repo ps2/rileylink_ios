@@ -87,7 +87,6 @@
 		43709ABF20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ABC20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift */; };
 		43709AC420DF1C8B00F941B3 /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AC020DF1C8B00F941B3 /* PumpModel.swift */; };
 		43709AC520DF1C8B00F941B3 /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AC120DF1C8B00F941B3 /* RadioSelectionTableViewController.swift */; };
-		43709AC620DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AC220DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift */; };
 		43709AC720DF1C8B00F941B3 /* MinimedPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709AC320DF1C8B00F941B3 /* MinimedPumpManager+UI.swift */; };
 		43709AC920DF1C9A00F941B3 /* MinimedKitUI.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43709AC820DF1C9A00F941B3 /* MinimedKitUI.xcassets */; };
 		43709AD320DF1CF800F941B3 /* MinimedPumpClockSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43709ACD20DF1CF700F941B3 /* MinimedPumpClockSetupViewController.swift */; };
@@ -1066,7 +1065,6 @@
 		43709ABC20DF1C6400F941B3 /* RileyLinkSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkSettingsViewController.swift; sourceTree = "<group>"; };
 		43709AC020DF1C8B00F941B3 /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		43709AC120DF1C8B00F941B3 /* RadioSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioSelectionTableViewController.swift; sourceTree = "<group>"; };
-		43709AC220DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpSettingsViewController.swift; sourceTree = "<group>"; };
 		43709AC320DF1C8B00F941B3 /* MinimedPumpManager+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MinimedPumpManager+UI.swift"; sourceTree = "<group>"; };
 		43709AC820DF1C9A00F941B3 /* MinimedKitUI.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MinimedKitUI.xcassets; sourceTree = "<group>"; };
 		43709ACD20DF1CF700F941B3 /* MinimedPumpClockSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPumpClockSetupViewController.swift; sourceTree = "<group>"; };
@@ -2002,7 +2000,6 @@
 				43709ACC20DF1CC900F941B3 /* Setup */,
 				4352A73120DEC9D600CAC200 /* CommandResponseViewController.swift */,
 				43709AC320DF1C8B00F941B3 /* MinimedPumpManager+UI.swift */,
-				43709AC220DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift */,
 				43709AC020DF1C8B00F941B3 /* PumpModel.swift */,
 				43709AC120DF1C8B00F941B3 /* RadioSelectionTableViewController.swift */,
 				C16E61252208EC580069F357 /* MinimedHUDProvider.swift */,
@@ -3732,7 +3729,6 @@
 				C1DD51D525A0BC6000DE27AE /* InsulinTypeConfirmation.swift in Sources */,
 				43709AC520DF1C8B00F941B3 /* RadioSelectionTableViewController.swift in Sources */,
 				4352A74220DED3D200CAC200 /* CaseCountable.swift in Sources */,
-				43709AC620DF1C8B00F941B3 /* MinimedPumpSettingsViewController.swift in Sources */,
 				43709AC720DF1C8B00F941B3 /* MinimedPumpManager+UI.swift in Sources */,
 				C1BB145A2938193A004CE8DA /* BatteryTypeSelectionView.swift in Sources */,
 				C1BB145E29383076004CE8DA /* UseMySentrySelectionView.swift in Sources */,

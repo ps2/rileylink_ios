@@ -1263,35 +1263,39 @@ extension MinimedPumpManager: PumpManager {
 
             let deliveryTime = self.estimatedDuration(toBolus: enactUnits)
 
-            do {
-                try session.setNormalBolus(units: enactUnits)
+            var uncertainBolusError: PumpManagerError? = nil
 
-                // Between bluetooth and the radio and firmware, about 2s on average passes before we start tracking
-                let commsOffset = TimeInterval(seconds: -2)
-                let doseStart = Date().addingTimeInterval(commsOffset)
-
-                let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: activationType.isAutomatic)
-                self.setState({ (state) in
-                    state.unfinalizedBolus = dose
-                })
-                self.recents.bolusEngageState = .stable
-
-                self.storePendingPumpEvents({ (error) in
-                    completion(nil)
-                })
-            } catch let error {
-                if case PumpOpsError.bolusInProgress = error {
-                    // Manually initiate bolus... TODO: mark state as bolusing, until it shows up in history
-                }
-                if case PumpOpsError.pumpSuspended = error {
-                    self.setState { state in
-                        state.suspendState = .suspended(Date())
+            if let error = session.setNormalBolus(units: enactUnits) {
+                switch error {
+                case .certain(let certainError):
+                    self.log.error("Bolus failure: %{public}@", String(describing: certainError))
+                    if case PumpOpsError.pumpSuspended = certainError {
+                        self.setState { state in
+                            state.suspendState = .suspended(Date())
+                        }
                     }
+                    self.recents.bolusEngageState = .stable
+                    completion(.communication(certainError as? LocalizedError))
+                    return
+                case .uncertain(let uncertainError):
+                    uncertainBolusError = .communication(PumpOpsError.noResponse(during: "Bolusing"))
+                    self.log.error("Bolus uncertain failure: %{public}@", String(describing: uncertainError))
                 }
-                self.log.error("Failed to bolus: %{public}@", String(describing: error))
-                self.recents.bolusEngageState = .stable
-                completion(.communication(error as? LocalizedError))
             }
+
+            // Between bluetooth and the radio and firmware, about 2s on average passes before we start tracking
+            let commsOffset = TimeInterval(seconds: -2)
+            let doseStart = Date().addingTimeInterval(commsOffset)
+
+            let dose = UnfinalizedDose(bolusAmount: enactUnits, startTime: doseStart, duration: deliveryTime, insulinType: insulinType, automatic: activationType.isAutomatic)
+            self.setState({ (state) in
+                state.unfinalizedBolus = dose
+            })
+            self.recents.bolusEngageState = .stable
+
+            self.storePendingPumpEvents({ (error) in
+                completion(uncertainBolusError)
+            })
         }
     }
 

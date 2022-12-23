@@ -13,7 +13,7 @@ extension PumpMessage {
     ///   - settings: Pump settings used for determining address
     ///   - type: The message type
     ///   - body: The message body, defaulting to a 1-byte empty body
-    init(settings: PumpSettings, type: MessageType, body: MessageBody = CarelinkShortMessageBody()) {
-        self.init(packetType: .carelink, address: settings.pumpID, messageType: type, messageBody: body)
+    init(pumpID: String, type: MessageType, body: MessageBody = CarelinkShortMessageBody()) {
+        self.init(packetType: .carelink, address: pumpID, messageType: type, messageBody: body)
     }
 }

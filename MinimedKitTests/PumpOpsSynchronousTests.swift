@@ -42,7 +42,7 @@ class PumpOpsSynchronousTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        pumpID = "350535"
+        pumpID = "636781"
         pumpRegion = .worldWide
         pumpModel = PumpModel.model523
 
@@ -67,6 +67,80 @@ class PumpOpsSynchronousTests: XCTestCase {
     func setUpTestWithPumpModel(_ newPumpModel: PumpModel) {
         pumpModel = newPumpModel
         setUpSUT()
+    }
+
+    func makeMockResponse(_ messageType: MessageType, _ messageBody: MessageBody) -> PumpMessage {
+        return PumpMessage(packetType: .carelink, address: pumpID, messageType: messageType, messageBody: messageBody)
+    }
+
+    var ack: PumpMessage {
+        return PumpMessage(pumpID: pumpID, type: .pumpAck)
+    }
+
+    func testSetNormalBolus() {
+
+        mockMessageSender.responses = [
+            .readPumpStatus: [makeMockResponse(.readPumpStatus, ReadPumpStatusMessageBody(bolusing: false, suspended: false))],
+            .bolus: [ack, ack],
+        ]
+
+        let result = sut.setNormalBolus(units: 1)
+
+        XCTAssertNil(result)
+    }
+
+    func testSetNormalBolusWhileBolusing() {
+
+        mockMessageSender.responses = [
+            .readPumpStatus: [makeMockResponse(.readPumpStatus, ReadPumpStatusMessageBody(bolusing: true, suspended: false))],
+            .bolus: [ack, ack],
+        ]
+
+        let result = sut.setNormalBolus(units: 1)
+
+        XCTAssertNotNil(result)
+
+        if case SetBolusError.certain(PumpOpsError.bolusInProgress) = result! {
+             // pass
+        } else {
+             XCTFail("Expected bolus in progress error, got: \(result!)")
+        }
+    }
+
+    func testSetNormalBolusWhileSuspended() {
+
+        mockMessageSender.responses = [
+            .readPumpStatus: [makeMockResponse(.readPumpStatus, ReadPumpStatusMessageBody(bolusing: false, suspended: true))],
+            .bolus: [ack, ack],
+        ]
+
+        let result = sut.setNormalBolus(units: 1)
+
+        XCTAssertNotNil(result)
+
+        if case SetBolusError.certain(PumpOpsError.pumpSuspended) = result! {
+             // pass
+        } else {
+             XCTFail("Expected pump suspended error, got: \(result!)")
+        }
+    }
+
+    func testSetNormalBolusUncertain() {
+        mockMessageSender.responses = [
+            .readPumpStatus: [makeMockResponse(.readPumpStatus, ReadPumpStatusMessageBody(bolusing: false, suspended: false))],
+            .bolus: [ack], // Second ack missing will cause PumpOpsError.noReponse during second exchange
+        ]
+
+        let result = sut.setNormalBolus(units: 1)
+
+        XCTAssertNotNil(result)
+
+        switch result {
+        case .uncertain:
+            break
+        default:
+            XCTFail("Expected pump suspended error, got: \(result!)")
+        }
     }
     
     func testShouldContinueIfTimestampBeforeStartDateNotEncountered() {
@@ -344,12 +418,13 @@ class MockPumpMessageSender: PumpMessageSender {
             let nextNumberOfResponsesReceived = numberOfResponsesReceived + 1
             responsesHaveOccured[messageType] = nextNumberOfResponsesReceived
 
-            if numberOfResponsesReceived >= responseArray.count {
-                XCTFail()
+            if responseArray.count <= numberOfResponsesReceived {
+                throw PumpOpsError.noResponse(during: data)
             }
 
             response = responseArray[numberOfResponsesReceived]
         } else {
+            // .pumpAck from 636781 ?
             let packet = MinimedPacket(encodedData: Data(hexadecimalString: "a969a39966b1566555b235")!)!
             response = PumpMessage(rxData: packet.data)!
         }
@@ -426,7 +501,7 @@ class MockPumpMessageSender: PumpMessageSender {
         do {
             packet = try sendAndListen(MinimedPacket(outgoingData: message.txData).encodedData(), repeatCount: repeatCount, timeout: timeout, retryCount: retryCount)
         } catch let error as LocalizedError {
-            throw PumpOpsError.deviceError(error)
+            throw error
         }
 
         guard let rfPacket = packet else {

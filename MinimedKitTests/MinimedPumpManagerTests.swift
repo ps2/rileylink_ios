@@ -50,4 +50,17 @@ class MinimedPumpManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 2)
     }
+
+    func testBolusWithUncertainResponseIsReported() {
+        let exp = expectation(description: "enactBolus callback")
+        pumpManager.enactBolus(units: 2.3, activationType: .manualNoRecommendation) { error in
+            XCTAssertNotNil(error)
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 2)
+    }
+
+    func testBolusWithUncertainResponseIsRemovedIfMissingFromHistory() {
+        
+    }
 }

@@ -17,9 +17,40 @@ public protocol PumpOpsSessionDelegate: AnyObject {
 }
 
 public enum SetBolusError: Error {
-    case certain(Error)
-    case uncertain(Error)
+    case certain(PumpOpsError)
+    case uncertain(PumpOpsError)
 }
+
+extension SetBolusError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .certain(let error):
+            return error.errorDescription
+        case .uncertain(let error):
+            return String(format: LocalizedString("Bolus may have failed: %1$@", comment: "Format string for uncertain bolus. (1: the reported error during bolusing)"), error.localizedDescription)
+        }
+    }
+
+    public var recoverySuggestion: String? {
+        
+        switch self {
+        case .certain(let error):
+            return error.recoverySuggestion
+        case .uncertain:
+            return LocalizedString("Please check your pump bolus history to determine if the bolus was delivered.", comment: "recoverySuggestion for uncertain bolus")
+        }
+    }
+
+    public var helpAnchor: String? {
+        switch self {
+        case .certain(let error):
+            return error.errorDescription
+        case .uncertain:
+            return LocalizedString("Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports.", comment: "Help anchor for uncertain bolus")
+        }
+    }
+}
+
 
 public class PumpOpsSession {
 
@@ -599,7 +630,7 @@ extension PumpOpsSession {
                 return SetBolusError.certain(error)
             }
         } catch {
-            return SetBolusError.certain(error)
+            return SetBolusError.certain(PumpOpsError.rfCommsFailure(String(describing: error)))
         }
 
         do {

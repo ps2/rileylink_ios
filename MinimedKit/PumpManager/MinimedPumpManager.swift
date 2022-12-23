@@ -697,6 +697,13 @@ extension MinimedPumpManager {
                         break
                     }
                 }
+
+                // If bolus should have ended more than a minute ago, and is not showing in pump history, remove it
+                if dose.doseType == .bolus, dose.finishTime < Date().addingTimeInterval(.minutes(-1)), !dose.isReconciledWithHistory {
+                    log.default("Removing bolus that did not reconcile with history: %{public}@", String(describing: dose))
+                    return false
+                }
+
                 return dose.startTime >= expirationCutoff
             }
             
@@ -1275,10 +1282,10 @@ extension MinimedPumpManager: PumpManager {
                         }
                     }
                     self.recents.bolusEngageState = .stable
-                    completion(.communication(certainError as? LocalizedError))
+                    completion(.communication(certainError))
                     return
                 case .uncertain(let uncertainError):
-                    uncertainBolusError = .communication(PumpOpsError.noResponse(during: "Bolusing"))
+                    uncertainBolusError = .communication(error)
                     self.log.error("Bolus uncertain failure: %{public}@", String(describing: uncertainError))
                 }
             }

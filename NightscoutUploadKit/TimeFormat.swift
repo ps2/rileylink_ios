@@ -16,6 +16,11 @@ class TimeFormat: NSObject {
     }
 
     static func dateFromTimestamp(_ string: String) -> Date? {
-        return formatterISO8601.date(from: string)
+        if let result = formatterISO8601.date(from: string) {
+            return result
+        }
+            
+        //Nightscout is returning this format in some cases...  needs more research
+        return DateFormatter.ISO8601DateWithFractionalSecondsFormatter().date(from: string)
     }
 }

@@ -357,15 +357,7 @@ public class NightscoutUploader {
             throw UploadError.missingConfiguration
         }
         
-        let responseData = try await postToNS(payload, url: url)
-        guard let responseString = String(data: responseData, encoding: .utf8) else {
-            throw UploadError.unexpectedResult(description: "Missing response body")
-        }
-        
-        let expectedResponseString = "OK"
-        guard responseString == expectedResponseString else {
-            throw UploadError.unexpectedResult(description: "Expected return result of \(expectedResponseString) but received \(responseString)")
-        }
+        let _ = try await postToNS(payload, url: url)
     }
     
     // MARK: - Uploading

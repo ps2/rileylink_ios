@@ -6,8 +6,6 @@
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
-import Crypto
-
 public enum UploadError: Error {
     case httpError(status: Int, body: String)
     case missingTimezone

@@ -509,6 +509,7 @@
 		C1CB13A72138453B00F9EEDA /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */; };
 		C1D00EA11E8986F900B733B7 /* PumpResumeTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */; };
+		C1D563392969EDBB00BA15EC /* MockPumpMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D563382969EDBB00BA15EC /* MockPumpMessageSender.swift */; };
 		C1D9E35D283D88F6003CA0D3 /* PairPodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D9E341283D88F5003CA0D3 /* PairPodView.swift */; };
 		C1D9E35E283D88F6003CA0D3 /* PodLifeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D9E342283D88F5003CA0D3 /* PodLifeHUDView.swift */; };
 		C1D9E35F283D88F6003CA0D3 /* UncertaintyRecoveredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D9E343283D88F5003CA0D3 /* UncertaintyRecoveredView.swift */; };
@@ -1519,6 +1520,7 @@
 		C1CAB67428C696D800F6F715 /* RileyLinkBluetoothDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkBluetoothDevice.swift; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
+		C1D563382969EDBB00BA15EC /* MockPumpMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpMessageSender.swift; sourceTree = "<group>"; };
 		C1D9E341283D88F5003CA0D3 /* PairPodView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PairPodView.swift; sourceTree = "<group>"; };
 		C1D9E342283D88F5003CA0D3 /* PodLifeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodLifeHUDView.swift; sourceTree = "<group>"; };
 		C1D9E343283D88F5003CA0D3 /* UncertaintyRecoveredView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UncertaintyRecoveredView.swift; sourceTree = "<group>"; };
@@ -2764,6 +2766,7 @@
 		C1FAC05D28C6AADE00754AE2 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				C1D563382969EDBB00BA15EC /* MockPumpMessageSender.swift */,
 				C1FAC05528C6A45800754AE2 /* MockPumpManagerDelegate.swift */,
 				C1FAC05B28C6A88500754AE2 /* MockRileyLinkProvider.swift */,
 				C1FAC05E28C6AAF600754AE2 /* MockRileyLinkDevice.swift */,
@@ -3897,6 +3900,7 @@
 				4352A71F20DEC93300CAC200 /* PumpOpsSynchronousBuildFromFramesTests.swift in Sources */,
 				C1EAD6D81C826C43006DBA60 /* ReadSettingsCarelinkMessageBodyTests.swift in Sources */,
 				4352A74920DED81D00CAC200 /* Data.swift in Sources */,
+				C1D563392969EDBB00BA15EC /* MockPumpMessageSender.swift in Sources */,
 				C1FAC05C28C6A88500754AE2 /* MockRileyLinkProvider.swift in Sources */,
 				43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */,
 				546A85D21DF7BD5F00733213 /* SensorErrorGlucoseEventTests.swift in Sources */,

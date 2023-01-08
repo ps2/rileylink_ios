@@ -70,7 +70,7 @@ extension MinimedPumpManager: PumpManagerUI {
 extension MinimedPumpManager {
     
     public var pumpStatusHighlight: DeviceStatusHighlight? {
-        return buildPumpStatusHighlight(for: state, recents: recents)
+        return buildPumpStatusHighlight(for: state, recents: recents, andDate: dateGenerator())
     }
     
     public var pumpLifecycleProgress: DeviceLifecycleProgress? {

@@ -6,7 +6,7 @@
 //
 
 
-extension PumpMessage {
+public extension PumpMessage {
     /// Initializes a Carelink message using settings and a default body
     ///
     /// - Parameters:

@@ -300,13 +300,13 @@ public class NightscoutUploader {
     
     // MARK: - Loop Notifications
 
-    public func startOverride(overrideName: String, reasonDisplay: String, durationInMinutes: Int) async throws {
+    public func startOverride(overrideName: String, reasonDisplay: String, durationTime: TimeInterval) async throws {
 
         let jsonDict: [String: String] = [
             "reason": overrideName,
             "reasonDisplay": reasonDisplay,
             "eventType": "Temporary Override",
-            "duration": "\(durationInMinutes)",
+            "duration": "\(durationTime.minutes)",
             "notes": ""
         ]
         
@@ -334,12 +334,12 @@ public class NightscoutUploader {
         try await postNotification(payload: jsonDict)
     }
     
-    public func deliverCarbs(amountInGrams: Double, absorptionInHours: Double, consumedDate: Date? = nil, otp: String) async throws  {
+    public func deliverCarbs(amountInGrams: Double, absorptionTime: TimeInterval, consumedDate: Date? = nil, otp: String) async throws  {
 
         var jsonDict: [String: String] = [
             "eventType": "Remote Carbs Entry",
             "remoteCarbs": "\(amountInGrams)",
-            "remoteAbsorption": "\(absorptionInHours)",
+            "remoteAbsorption": "\(absorptionTime.hours)",
             "otp": otp
         ]
         

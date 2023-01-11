@@ -43,6 +43,7 @@ private enum Endpoint: String {
     case profile = "/api/v1/profile"
     case currentProfile = "/api/v1/profile/current"
     case notifications = "/api/v2/notifications/loop"
+    case remoteCommands = "/api/v2/remotecommands"
 }
 
 public class NightscoutUploader {
@@ -335,7 +336,7 @@ public class NightscoutUploader {
     }
     
     public func deliverCarbs(amountInGrams: Double, absorptionTime: TimeInterval, consumedDate: Date? = nil, otp: String) async throws  {
-
+        
         var jsonDict: [String: String] = [
             "eventType": "Remote Carbs Entry",
             "remoteCarbs": "\(amountInGrams)",
@@ -685,6 +686,191 @@ public class NightscoutUploader {
             }
         })
         task.resume()
+    }
+    
+    
+    //MARK: Remote Commands
+    
+    
+    @available(*, renamed: "fetchRemoteCommands(dateInterval:maxCount:commandState:)")
+    public func fetchRemoteCommands(earliestDate: Date, maxCount: Int = 50, commandState: NSRemoteCommandStatus.NSRemoteComandState? = nil, completion: @escaping (Result<[NSRemoteCommandPayload],Error>) -> Void) {
+        
+        var queryItems = [
+            URLQueryItem(name: "find[created_at][$gte]", value: TimeFormat.timestampStrFromDate(earliestDate)),
+            URLQueryItem(name: "count", value: String(maxCount))
+        ]
+        
+        if let commandState = commandState {
+            queryItems.append(URLQueryItem(name: "find[status.state][$eq]", value: commandState.rawValue))
+        }
+        
+        var components = URLComponents(url: url(for: .remoteCommands)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = queryItems
+
+        guard let url = components.url else {
+            completion(.failure(UploadError.invalidParameters))
+            return
+        }
+        
+        getFromNS(url: url) { (result) in
+            
+            switch result {
+            case .failure(let error):
+                //assertionFailure("Error fetching remote commands: \(error)")
+                completion(.failure(error))
+                return
+            case .success(let rawResponse):
+
+                guard let dictionaries = rawResponse as? Array<[String: AnyObject]> else {
+                    completion(.failure(UploadError.invalidResponse(reason: "Failed to convert remote command")))
+                    return
+                }
+                
+                do {
+                    var results = [NSRemoteCommandPayload]()
+                    for dictionary in dictionaries {
+                        let payload = try NSRemoteCommandPayload(dictionary: dictionary)
+                        results.append(payload)
+                    }
+                    completion(.success(results))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    public func fetchRemoteCommands(earliestDate: Date, maxCount: Int = 50, commandState: NSRemoteCommandStatus.NSRemoteComandState? = nil) async throws -> [NSRemoteCommandPayload] {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchRemoteCommands(earliestDate: earliestDate, maxCount: maxCount, commandState: commandState) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
+    public func fetchPendingRemoteCommands(earliestDate: Date, maxCount: Int = 50) async throws -> [NSRemoteCommandPayload] {
+        return try await withCheckedThrowingContinuation { continuation in
+            fetchRemoteCommands(earliestDate: earliestDate, maxCount: maxCount, commandState: .Pending) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
+    @available(*, renamed: "updateRemoteCommand(commandUpdate:commandID:status:)")
+    public func updateRemoteCommand(commandUpdate: NSRemoteCommandPayloadUpdate, commandID: String, completion: @escaping (Result<Any,Error>) -> Void) {
+        
+        var url = url(for: .remoteCommands)!
+        url.appendPathComponent(commandID)
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        if let url = components.url {
+            
+            let commandUpdateJSON: [String: Any]
+            do {
+                commandUpdateJSON = try commandUpdate.dictionaryRepresentation()
+            } catch {
+                completion(.failure(error))
+                return
+            }
+            
+            putToNS(commandUpdateJSON, url: url) { (error) in
+                if let error = error {
+                    print("Error updating remote command: \(error)")
+                    completion(.failure(error))
+                } else {
+                    completion(.success(Void()))
+                }
+            }
+        } else {
+            completion(.failure(UploadError.invalidParameters))
+        }
+    }
+    
+    public func updateRemoteCommand(commandUpdate: NSRemoteCommandPayloadUpdate, commandID: String) async throws -> Any {
+        return try await withCheckedThrowingContinuation { continuation in
+            updateRemoteCommand(commandUpdate: commandUpdate, commandID: commandID) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
+    @available(*, renamed: "uploadRemoteCommand(command:)")
+    public func uploadRemoteCommand(_ command: NSRemoteCommandPayload, completion: @escaping (Result<Any,Error>) -> Void) {
+        
+        let url = url(for: .remoteCommands)!
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        if let url = components.url {
+            
+            let commandJSON: [String: Any]
+            do {
+                commandJSON = try command.dictionaryRepresentation()
+            } catch {
+                completion(.failure(error))
+                return
+            }
+            
+            callNS(commandJSON, url: url, method: "POST") { (result) in
+                switch result {
+                case .failure(let error):
+                    print("Error updating remote command: \(error)")
+                    completion(.failure(error))
+                    return
+                case .success:
+                    completion(.success(Void()))
+                    return
+                }
+            }
+        } else {
+            completion(.failure(UploadError.invalidParameters))
+        }
+    }
+    
+    public func uploadRemoteCommand(_ command: NSRemoteCommandPayload) async throws -> Any {
+        return try await withCheckedThrowingContinuation { continuation in
+            uploadRemoteCommand(command) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
+    public func deleteRemoteCommands() async throws {
+
+        let endDate = Date()
+        let startDate = endDate.addingTimeInterval(-60*60*24*365)
+        
+        let queryItems = [
+            URLQueryItem(name: "find[created_at][$gte]", value: ISO8601DateFormatter.fractionalSecondsFormatter().string(from: startDate))
+        ]
+  
+        //TODO: DO'nt allow dleeted of things that are in-progress.
+//        if let commandState = commandState {
+//            queryItems.append(URLQueryItem(name: "find[status.state][$eq]", value: commandState.rawValue))
+//        }
+        
+        var components = URLComponents(url: url(for: .remoteCommands)!, resolvingAgainstBaseURL: false)!
+        components.queryItems = queryItems
+
+        guard let url = components.url else {
+            throw UploadError.invalidParameters
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(apiSecret.sha1, forHTTPHeaderField: "api-secret")
+        
+//        let sendData = try JSONSerialization.data(withJSONObject: json, options: [])
+        print(url)
+
+        let (data, urlResponse) = try await  URLSession.shared.data(for: request)
+
+        guard let httpResponse = urlResponse as? HTTPURLResponse else {
+            throw UploadError.invalidResponse(reason: "Response is not HTTPURLResponse")
+        }
+
+        if httpResponse.statusCode != 200 {
+            throw UploadError.httpError(status: httpResponse.statusCode, body:String(data: data, encoding: String.Encoding.utf8)!)
+        }
     }
 }
 

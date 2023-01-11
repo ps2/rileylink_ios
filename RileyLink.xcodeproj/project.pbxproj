@@ -238,6 +238,11 @@
 		7D9BF00123369910005DCFD6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D9BF00323369910005DCFD6 /* Localizable.strings */; };
 		7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */; };
 		A931862C2969EBED00A20253 /* String+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931862B2969EBED00A20253 /* String+Crypto.swift */; };
+		A92B02742958B92200092F67 /* NSRemoteCommandPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92B02732958B92200092F67 /* NSRemoteCommandPayload.swift */; };
+		A99538542960B2B6002A8634 /* NSRemoteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99538532960B2B6002A8634 /* NSRemoteAction.swift */; };
+		A99538562960B5B4002A8634 /* NSRemoteCommandPayloadUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99538552960B5B3002A8634 /* NSRemoteCommandPayloadUpdate.swift */; };
+		A99538582960B5F2002A8634 /* NSRemoteCommandStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99538572960B5F2002A8634 /* NSRemoteCommandStatus.swift */; };
+		A995385C2961F7FA002A8634 /* NSRemoteCommandAlternatePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = A995385B2961F7FA002A8634 /* NSRemoteCommandAlternatePayload.swift */; };
 		C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
@@ -1296,6 +1301,11 @@
 		7D9BF15523371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideStatus.swift; sourceTree = "<group>"; };
 		A931862B2969EBED00A20253 /* String+Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Crypto.swift"; sourceTree = "<group>"; };
+		A92B02732958B92200092F67 /* NSRemoteCommandPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRemoteCommandPayload.swift; sourceTree = "<group>"; };
+		A99538532960B2B6002A8634 /* NSRemoteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRemoteAction.swift; sourceTree = "<group>"; };
+		A99538552960B5B3002A8634 /* NSRemoteCommandPayloadUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRemoteCommandPayloadUpdate.swift; sourceTree = "<group>"; };
+		A99538572960B5F2002A8634 /* NSRemoteCommandStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRemoteCommandStatus.swift; sourceTree = "<group>"; };
+		A995385B2961F7FA002A8634 /* NSRemoteCommandAlternatePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRemoteCommandAlternatePayload.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2148,6 +2158,18 @@
 			path = GlucoseEvents;
 			sourceTree = "<group>";
 		};
+		A99538522960B289002A8634 /* RemoteCommands */ = {
+			isa = PBXGroup;
+			children = (
+				A92B02732958B92200092F67 /* NSRemoteCommandPayload.swift */,
+				A995385B2961F7FA002A8634 /* NSRemoteCommandAlternatePayload.swift */,
+				A99538532960B2B6002A8634 /* NSRemoteAction.swift */,
+				A99538552960B5B3002A8634 /* NSRemoteCommandPayloadUpdate.swift */,
+				A99538572960B5F2002A8634 /* NSRemoteCommandStatus.swift */,
+			);
+			path = RemoteCommands;
+			sourceTree = "<group>";
+		};
 		C104A9BE217E6027006E3C3E /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -2616,6 +2638,7 @@
 		C1B3830C1CD0665D00CE7782 /* NightscoutUploadKit */ = {
 			isa = PBXGroup;
 			children = (
+				A99538522960B289002A8634 /* RemoteCommands */,
 				C1AF21E91D4900300088C41D /* Models */,
 				43F348051D596270009933DC /* HKUnit.swift */,
 				C1B3830F1CD0665D00CE7782 /* Info.plist */,
@@ -4007,8 +4030,11 @@
 			files = (
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
 				C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
+				A99538542960B2B6002A8634 /* NSRemoteAction.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
 				43B0ADCC1D126E3000AAD278 /* ISO8601DateFormatter.swift in Sources */,
+				A99538562960B5B4002A8634 /* NSRemoteCommandPayloadUpdate.swift in Sources */,
+				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
 				C1398D1827C3F18200416AD6 /* GlucoseEntry.swift in Sources */,
@@ -4018,6 +4044,7 @@
 				C1AF21E61D48667F0088C41D /* UploaderStatus.swift in Sources */,
 				C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */,
 				A931862C2969EBED00A20253 /* String+Crypto.swift in Sources */,
+				A99538582960B5F2002A8634 /* NSRemoteCommandStatus.swift in Sources */,
 				C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */,
 				C1AF21F31D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift in Sources */,
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
@@ -4030,7 +4057,9 @@
 				43F348061D596270009933DC /* HKUnit.swift in Sources */,
 				C133CF931D5943780034B82D /* PredictedBG.swift in Sources */,
 				C1D00E9D1E8986A400B733B7 /* PumpSuspendTreatment.swift in Sources */,
+				A995385C2961F7FA002A8634 /* NSRemoteCommandAlternatePayload.swift in Sources */,
 				7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */,
+				A92B02742958B92200092F67 /* NSRemoteCommandPayload.swift in Sources */,
 				C1AF21E41D4865320088C41D /* LoopStatus.swift in Sources */,
 				C1398D1C27C3F28200416AD6 /* TemporaryScheduleOverride.swift in Sources */,
 				43EBE4541EAD23EC0073A0B5 /* TimeInterval.swift in Sources */,

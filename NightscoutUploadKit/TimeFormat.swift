@@ -10,6 +10,7 @@ import Foundation
 
 class TimeFormat: NSObject {
     private static var formatterISO8601 = ISO8601DateFormatter.defaultFormatter()
+    private static var fractionalSecondsFormatter = ISO8601DateFormatter.fractionalSecondsFormatter()
     
     static func timestampStrFromDate(_ date: Date) -> String {
         return formatterISO8601.string(from: date)
@@ -21,6 +22,6 @@ class TimeFormat: NSObject {
         }
             
         //Nightscout is returning this format in some cases...  needs more research
-        return ISO8601DateFormatter.fractionalSecondsFormatter().date(from: string)
+        return fractionalSecondsFormatter.date(from: string)
     }
 }

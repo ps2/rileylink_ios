@@ -114,10 +114,10 @@
 		43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */; };
 		43B0ADC01D0FC03200AAD278 /* NSDateComponentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */; };
 		43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */; };
-		43B0ADC41D12506A00AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
+		43B0ADC41D12506A00AAD278 /* ISO8601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* ISO8601DateFormatter.swift */; };
 		43B0ADC91D1268B300AAD278 /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC81D1268B300AAD278 /* TimeFormat.swift */; };
 		43B0ADCB1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */; };
-		43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */; };
+		43B0ADCC1D126E3000AAD278 /* ISO8601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0ADC31D12506A00AAD278 /* ISO8601DateFormatter.swift */; };
 		43BA719B202591A70058961E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BA719A202591A70058961E /* Response.swift */; };
 		43BA719D2026C9B00058961E /* ResponseBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BA719C2026C9B00058961E /* ResponseBuffer.swift */; };
 		43BF58B01FF594CB00499C46 /* SelectBasalProfileMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF58AF1FF594CB00499C46 /* SelectBasalProfileMessageBody.swift */; };
@@ -1071,7 +1071,7 @@
 		43A068EB1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ReadRemainingInsulinMessageBodyTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		43B0ADBF1D0FC03200AAD278 /* NSDateComponentsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponentsTests.swift; sourceTree = "<group>"; };
 		43B0ADC11D12454700AAD278 /* TimestampedHistoryEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampedHistoryEvent.swift; sourceTree = "<group>"; };
-		43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateFormatter.swift; sourceTree = "<group>"; };
+		43B0ADC31D12506A00AAD278 /* ISO8601DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormatter.swift; sourceTree = "<group>"; };
 		43B0ADC81D1268B300AAD278 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		43B0ADCA1D126B1100AAD278 /* SelectBasalProfilePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectBasalProfilePumpEvent.swift; sourceTree = "<group>"; };
 		43BA719A202591A70058961E /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -2702,7 +2702,7 @@
 			children = (
 				C1EAD6B91C826B92006DBA60 /* Int.swift */,
 				C1EAD6BB1C826B92006DBA60 /* NSDateComponents.swift */,
-				43B0ADC31D12506A00AAD278 /* NSDateFormatter.swift */,
+				43B0ADC31D12506A00AAD278 /* ISO8601DateFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3872,7 +3872,7 @@
 				C1842C171C8FA45100DB42AC /* ChangeCaptureEventEnablePumpEvent.swift in Sources */,
 				54BC44B91DB81D6100340EED /* GetGlucosePageMessageBody.swift in Sources */,
 				43D8709B20DE1CB6006B549E /* MinimedPumpManager.swift in Sources */,
-				43B0ADC41D12506A00AAD278 /* NSDateFormatter.swift in Sources */,
+				43B0ADC41D12506A00AAD278 /* ISO8601DateFormatter.swift in Sources */,
 				43CA932B1CB8CF76000026B5 /* ChangeTimeCarelinkMessageBody.swift in Sources */,
 				54B3F9021DFB984800B0ABFA /* DataEndGlucoseEvent.swift in Sources */,
 				C121989F1C8DFC2200BC374C /* BolusCarelinkMessageBody.swift in Sources */,
@@ -4008,7 +4008,7 @@
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
 				C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
-				43B0ADCC1D126E3000AAD278 /* NSDateFormatter.swift in Sources */,
+				43B0ADCC1D126E3000AAD278 /* ISO8601DateFormatter.swift in Sources */,
 				C184875C20BC232F00ABE9E7 /* CorrectionRange.swift in Sources */,
 				C1AF21E81D4866960088C41D /* PumpStatus.swift in Sources */,
 				C1398D1827C3F18200416AD6 /* GlucoseEntry.swift in Sources */,

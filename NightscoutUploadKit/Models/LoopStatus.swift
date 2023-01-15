@@ -12,21 +12,21 @@ import HealthKit
 public struct LoopStatus {
     typealias RawValue = [String: Any]
 
-    let name: String
-    let version: String
-    let timestamp: Date
+    public let name: String
+    public let version: String
+    public let timestamp: Date
 
     public let iob: IOBStatus?
     public let cob: COBStatus?
     public let predicted: PredictedBG?
-    let automaticDoseRecommendation: AutomaticDoseRecommendation?
-    let recommendedBolus: Double?
-    let enacted: LoopEnacted?
-    let rileylinks: [RileyLinkStatus]?
-    let failureReason: String?
-    let currentCorrectionRange: CorrectionRange?
-    let forecastError: ForecastError?
-    let testingDetails: [String: Any]?
+    public let automaticDoseRecommendation: AutomaticDoseRecommendation?
+    public let recommendedBolus: Double?
+    public let enacted: LoopEnacted?
+    public let rileylinks: [RileyLinkStatus]?
+    public let failureReason: String?
+    public let currentCorrectionRange: CorrectionRange?
+    public let forecastError: ForecastError?
+    public let testingDetails: [String: Any]?
 
     public init(name: String, version: String, timestamp: Date, iob: IOBStatus? = nil, cob: COBStatus? = nil, predicted: PredictedBG? = nil, automaticDoseRecommendation: AutomaticDoseRecommendation? = nil, recommendedBolus: Double? = nil, enacted: LoopEnacted? = nil, rileylinks: [RileyLinkStatus]? = nil, failureReason: String? = nil, currentCorrectionRange: CorrectionRange? = nil, forecastError: ForecastError? = nil, testingDetails: [String: Any]? = nil) {
         self.name = name

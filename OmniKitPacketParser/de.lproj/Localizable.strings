@@ -73,7 +73,7 @@
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Abgebrochener Bolus: %1$@ IE (%2$@ IE geplant) %3$@ %4$@ %5$@";
 
-/* Description for MessageError invalidSequence */
+/* Description for MessageError invalidAddress */
 "Invalid address: (%1$@)" = "Ungültige Adresse: (%1$@)";
 
 /* Description for MessageError invalidCrc */
@@ -127,9 +127,6 @@
 
 /* Pod status when pairing completed */
 "Pairing completed" = "Kopplung abgeschlossen";
-
-/* Description for MessageError parsingError */
-"Parsing Error: " = "Parsing-Fehler:";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Bitte bringe Deinen Pod näher an den RileyLink und versuche es erneut";

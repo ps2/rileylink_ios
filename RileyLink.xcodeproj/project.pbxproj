@@ -292,6 +292,7 @@
 		C136AA732311899D008A320D /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CE7941F9B0DAE00255374 /* OSLog.swift */; };
 		C136AA752311CFC3008A320D /* MKRingProgressView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C13F0436230B1DE6001413FF /* MKRingProgressView.framework */; };
 		C136AA76231234E1008A320D /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FB610B20DDF55F002B996B /* LoopKit.framework */; };
+		C1394BA9297E49630042F1A9 /* LoopKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1394BA7297E49630042F1A9 /* LoopKit.strings */; };
 		C1398D1827C3F18200416AD6 /* GlucoseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1727C3F18200416AD6 /* GlucoseEntry.swift */; };
 		C1398D1A27C3F1BA00416AD6 /* LoopSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1927C3F1BA00416AD6 /* LoopSettings.swift */; };
 		C1398D1C27C3F28200416AD6 /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D1B27C3F28200416AD6 /* TemporaryScheduleOverride.swift */; };
@@ -346,6 +347,7 @@
 		C17C5C0F21447383002A06F8 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43323EA61FA81A0F003FB0FA /* NumberFormatter.swift */; };
 		C17EDC4F2134D0CC0031D9F0 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345D1CD1DA16AF300BAAD22 /* TimeZone.swift */; };
 		C17F6F5828C3DB0500E27990 /* MinimedPumpMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F6F5728C3DB0500E27990 /* MinimedPumpMessageSender.swift */; };
+		C1821695297E55A7001EB097 /* RileyLink-InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1821693297E55A7001EB097 /* RileyLink-InfoPlist.strings */; };
 		C1842BBB1C8E184300DB42AC /* PumpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBA1C8E184300DB42AC /* PumpModel.swift */; };
 		C1842BBD1C8E7C6E00DB42AC /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */; };
 		C1842BBF1C8E855A00DB42AC /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */; };
@@ -1351,6 +1353,7 @@
 		C136AA60231187B0008A320D /* MinimedKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MinimedKitPlugin.h; sourceTree = "<group>"; };
 		C136AA61231187B0008A320D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C136AA6623118817008A320D /* MinimedKitPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedKitPlugin.swift; sourceTree = "<group>"; };
+		C1394BA8297E49630042F1A9 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1398D1727C3F18200416AD6 /* GlucoseEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseEntry.swift; sourceTree = "<group>"; };
 		C1398D1927C3F1BA00416AD6 /* LoopSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopSettings.swift; sourceTree = "<group>"; };
 		C1398D1B27C3F28200416AD6 /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
@@ -1397,6 +1400,8 @@
 		C178845E1D5166BE00405663 /* COBStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COBStatus.swift; sourceTree = "<group>"; };
 		C17884601D519F1E00405663 /* BatteryIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryIndicator.swift; sourceTree = "<group>"; };
 		C17F6F5728C3DB0500E27990 /* MinimedPumpMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimedPumpMessageSender.swift; sourceTree = "<group>"; };
+		C1821692297E55A7001EB097 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		C1821694297E55A7001EB097 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = "es.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C1842BBA1C8E184300DB42AC /* PumpModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpModel.swift; sourceTree = "<group>"; };
 		C1842BBC1C8E7C6E00DB42AC /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PumpEventType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -2383,6 +2388,8 @@
 				7D7076971FE09311004AC8EA /* Localizable.strings */,
 				C1EAD6EA1C8409A9006DBA60 /* RileyLink-Bridging-Header.h */,
 				C12EA242198B436800309FA4 /* RileyLink-Info.plist */,
+				C1821693297E55A7001EB097 /* RileyLink-InfoPlist.strings */,
+				C1394BA7297E49630042F1A9 /* LoopKit.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -3509,6 +3516,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C125729421220FEC0061BA2F /* MainStoryboard.storyboard in Resources */,
+				C1821695297E55A7001EB097 /* RileyLink-InfoPlist.strings in Resources */,
+				C1394BA9297E49630042F1A9 /* LoopKit.strings in Resources */,
 				C1FFAF72212FAAEF00C50C1D /* RileyLink.xcassets in Resources */,
 				C1FC49EC2135CB2D007D0788 /* LaunchScreen.storyboard in Resources */,
 				7D7076951FE09311004AC8EA /* Localizable.strings in Resources */,
@@ -4620,6 +4629,23 @@
 				F5E0BE2E27E1DF290033557E /* he */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		C1394BA7297E49630042F1A9 /* LoopKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C1394BA8297E49630042F1A9 /* pl */,
+				C1821692297E55A7001EB097 /* es */,
+			);
+			name = LoopKit.strings;
+			sourceTree = "<group>";
+		};
+		C1821693297E55A7001EB097 /* RileyLink-InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C1821694297E55A7001EB097 /* es */,
+			);
+			name = "RileyLink-InfoPlist.strings";
 			sourceTree = "<group>";
 		};
 		C1B9E0DE256AF052008E8B84 /* Localizable.strings */ = {

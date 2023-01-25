@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ E";
@@ -24,7 +27,7 @@
 "%@U" = "%@E";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ enheter igjen %2$@";
 
 /* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
 "%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Insulintilførsel har stoppet. Vennligst deaktiver og fjern pod.";
@@ -82,7 +85,7 @@
 "Delete Omnipod" = "Slett Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Leveransegrenser";
+"Delivery Limits" = "Leveringsgrenser";
 
 /* The title of the device information section in settings */
 "Device Information" = "Enhetsinformasjon";
@@ -134,6 +137,9 @@
 
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Levert insulin";
+
+/* Title for insulin type selection screen */
+"Insulin Type" = "Insulin Type";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Ugyldig oppføring";
@@ -199,6 +205,9 @@
 
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Tidsplan";
+
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Velg hvilken type insulin du skal bruke i denne podden.";
 
 /* The title of the status section in settings */
 "Status" = "Status";

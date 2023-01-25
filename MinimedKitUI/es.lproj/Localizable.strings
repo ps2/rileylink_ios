@@ -1,14 +1,8 @@
-/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
-"%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
-
 /* The format string describing number of basal schedule entries: (1: number of entries) */
 "%1$@ basal schedule entries\n" = "%1$@ entradas de configuración basal\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Unidades de insulina restantes\n";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Las baterías alcalinas y de litio se degradan en ritmos distintos. La alcalinas tienden a tener una baja de voltaje linear en el tiempo mientras que las de litio tienden a mantener un voltaje hasta que pasan la mitad de su tiempo de vida. Bajo condiciones normales en una micro-infusora no compatible con MySentry ( x22/x15) siendo utilizado con Loop, las baterías alcalinas durarán aproximadamente de 4 a 5 días. Las baterías de litio durarán de una a dos semanas. Esta selección utilizará diferentes rangos de decadencia para el voltaje de cada una de las bataerías y alertará al usuario cuando la batería tenga aproximadamente de 8 a 10 horas restantes de vida.";
@@ -98,9 +92,6 @@
 /* Progress message for fetching pump model. */
 "Fetching pump model…" = "Obtener modelo de microinfusora…";
 
-/* The title of the cell showing firmware version */
-"Firmware" = "Firmware";
-
 /* The title of the cell showing the pump firmware version */
 "Firmware Version" = "Firmware";
 
@@ -130,9 +121,6 @@
 
 /* The title of the cell showing the last idle */
 "On Idle" = "En Inactivo";
-
-/* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Fuente de Datos Preferida";
@@ -204,7 +192,4 @@
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Desconocido";
-
-/* The title of the cell showing uptime */
-"Uptime" = "Uptime";
 

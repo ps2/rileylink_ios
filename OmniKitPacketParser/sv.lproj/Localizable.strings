@@ -1,5 +1,14 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (inaktiv)";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Tid för aktivering överskriden";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-av larm";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Basal initierad";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Under 50 enheter";
@@ -14,7 +23,7 @@
 "Bolusing" = "Ger bolus";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Ger bolus med temporär basal";
+"Bolusing with temp basal" = "Ger bolus med pågående temporär basal";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Kanyl förs in";
@@ -26,10 +35,10 @@
 "Deactivated" = "Inaktiverad";
 
 /* Description for Empty reservoir pod fault */
-"Empty reservoir" = "Podfel, tom reservoarl";
+"Empty reservoir" = "Tom reservoar";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Inget svar från pod";
+"Empty response from pod" = "Inget svar från podd";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Felhändelse loggad, stänger ned";
@@ -37,17 +46,32 @@
 /* Description for expiration alert */
 "Expiration alert" = "Larm om utgångsdatum";
 
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Felhändelse inträffade";
+
 /* Description for finish setup */
-"Finish setup " = "Inställning färdig";
+"Finish setup " = "Gör färdigt podddinställningen ";
 
 /* Pod inititialized */
-"Initialized" = "Pod initialiserad";
+"Initialized" = "Initierad";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Kanyl förs in";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Internt podfel %1$03d";
+"Internal pod fault %1$03d" = "Internt poddfel %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "AvbrutenBolus:  %1$@ E (%2$@ E schemalagd) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "AvbrutenBolus: %1$@ E (%2$@ E schemalagd) %3$@ %4$@ %5$@";
+
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Ogiltig adress: (%1$@)";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "Ogiltigt CRC";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Låg reservoarvolym";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Larm vid låg reservoarvolym";
@@ -55,14 +79,20 @@
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Säkerställ att din RileyLink är nära och påslagen";
 
+/* Pod memory initialized */
+"Memory initialized" = "Minne initierat";
+
 /* Pod alert state when no alerts are active */
 "No alerts" = "Inga larm";
 
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Inga fel";
+
 /* Error message shown when no pod is paired */
-"No pod paired" = "Ingen parkopplad";
+"No pod paired" = "Ingen podd har parkopplats";
 
 /* Error message shown when no response from pod was received */
-"No response from pod" = "Inget svar från pod";
+"No response from pod" = "Inget svar från podd";
 
 /* Error message shown when no response from pod was received */
 "No RileyLink available" = "Ingen RileyLink tillgänglig";
@@ -71,63 +101,78 @@
    Pod state when running above fifty units */
 "Normal" = "Normal";
 
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Inte tillräckligt med data";
+
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Ocklusion upptäckt";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
+
 /* Pod status after pairing */
 "Paired" = "Parkopplad";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "För din pod närmare din RileyLink och försök igen";
+"Please bring your pod closer to the RileyLink and try again" = "För din podd närmare din RileyLink och försök igen";
 
 /* Recover suggestion shown when no pod is paired */
-"Please pair a new pod" = "Var god parkoppla ny pod";
+"Please pair a new pod" = "Var god parkoppla ny podd";
 
 /* Error message shown when user cannot pair because pod is already paired */
-"Pod already paired" = "Pod redan parkopplad";
+"Pod already paired" = "Podd redan parkopplad";
 
 /* Error message shown when prime is attempted, but pod is already primed */
-"Pod already primed" = "Pod redan fylld";
+"Pod already primed" = "Podd redan fylld";
 
 /* Description for expiration advisory alarm */
-"Pod expiration advisory alarm" = "Larm för utgångsdatum för pod";
+"Pod expiration advisory alarm" = "Larm för utgångsdatum för podd";
 
 /* The title for pod expiration notification */
-"Pod Expiration Notice" = "Notis om utgångsdatum för pod";
+"Pod Expiration Notice" = "Notis om utgångsdatum för podd";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Pod har utgått";
+"Pod expired" = "Poddens utgångsdatum passerat";
 
 /* Format string for pod fault code */
-"Pod Fault: %1$@" = "Podfel: %1$@";
+"Pod Fault: %1$@" = "Podd-fel: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Pod är inte klar för att föra in kanyl";
+"Pod is not in a state ready for cannula insertion." = "Podd är inte redo att föra in kanyl.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pod är inte klar för att fyllas";
+"Pod is not in a state ready for priming." = "Podd är inte klar för att fyllas.";
 
 /* Error message action could not be performed because pod is suspended */
-"Pod is suspended" = "Pod är pausad";
+"Pod is suspended" = "Podd är pausad";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "Tid för podinställning är överskriden";
+"Pod setup window expired" = "Tid för poddinställning har överskridits";
 
 /* Delivery status when pod is priming
    Pod status when priming */
-"Priming" = "Pod fylls på";
+"Priming" = "Podden fylls";
+
+/* Pod state when priming completed */
+"Priming completed" = "Podd har fyllts färdigt med insulin";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Klar för programmering av basal";
 
 /* Pod state when ready for cannula insertion */
-"Ready to insert cannula" = "Klar att föra in kanyl";
+"Ready to insert cannula" = "Redo att föra in kanyl";
+
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Påminnelse initierad";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Återuppta: %1$@ %2$@";
+
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "Schemalagd basal";
 
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Schemalagd basal";
@@ -142,37 +187,52 @@
 "Suspended" = "Pausad";
 
 /* Pod tank fill completed */
-"Tank fill completed" = "Pod har fyllts klart";
+"Tank fill completed" = "Pod har fyllts färdigt";
 
 /* Pod power to motor activated */
-"Tank power activated" = "Ström till motor för behållare aktiverad";
+"Tank power activated" = "Ström till motor för insulinreservoar aktiverad";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
-"Temp basal in progress" = "Temp basal pågår redan";
+"Temp basal in progress" = "Temporär basal pågår";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Temp basal pågår";
+"Temp basal running" = "Temporär basal pågår";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ E/timme %2$@ %3$@ %4$@ E %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
-"Time to replace your pod! Your pod will expire in %1$@" = "Byt din pod! Din pod går ut om %1$@";
+"Time to replace your pod! Your pod will expire in %1$@" = "Byt din podd! Din podd går ut om %1$@";
+
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Osäker";
 
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Oväntat meddelandesekvensnummer";
+
 /* Error message shown when empty response from pod was received */
-"Unexpected response from pod" = "Oväntat svar från din pod";
+"Unexpected response from pod" = "Oväntat svar från din podd";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Okänt podfel %1$03d";
+"Unknown pod fault %1$03d" = "Okänt poddfel %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Okänt värde (%1$@) av typ %2$@";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Validering misslyckades: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
-"Wait for existing bolus to finish, or cancel bolus" = "Vänta på att pågående bolus är färdig, eller avbryt bolus";
+"Wait for existing bolus to finish, or cancel bolus" = "Vänta tills pågående bolus är färdig, eller avbryt bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Vänta på nuvarande temporära basal, eller pausa för att avbryta";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Vänta tills nuvarande temporära basal är färdig, eller pausa för att avbryta";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Väntar på påminnelse för parkoppling";

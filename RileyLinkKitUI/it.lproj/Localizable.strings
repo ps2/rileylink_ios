@@ -22,12 +22,6 @@
 /* The in-progress disconnecting state */
 "Disconnecting" = "Disconnessione";
 
-/* The title of the cell showing firmware version */
-"Firmware" = "Firmware";
-
-/* The title of the cell showing current rileylink frequency */
-"Frequency" = "Frequency";
-
 /* The title of the cell showing device name */
 "Name" = "Nome";
 
@@ -36,7 +30,4 @@
 
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Potenza Segnale";
-
-/* The title of the cell showing uptime */
-"Uptime" = "Uptime";
 

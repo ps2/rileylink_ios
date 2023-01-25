@@ -46,9 +46,6 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Максимальное значение превышено";
 
-/* Pump title (1: model number) */
-"Minimed %@" = "Minimed %@";
-
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed серий 500/700";
 

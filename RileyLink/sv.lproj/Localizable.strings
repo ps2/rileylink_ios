@@ -1,8 +1,14 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Om";
 
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Lägg till konto";
+
+/* Title text for button to set up a new minimed pump */
+"Add Minimed Pump" = "Lägg till Minimed-pump";
 
 /* The title of the nightscout API secret credential */
 "API Secret" = "API Secret";
@@ -20,7 +26,7 @@
 "Fetch CGM" = "Hämta CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "https://min-nightscoutsida.herokuapp.com";
+"http://mysite.herokuapp.com" = "https://min_nightscoutsida.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -38,7 +44,7 @@
 "RileyLink Testing" = "RileyLink-testning";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Omnipod-konfiguration";
+"Setup Omnipod" = "Ställ in OmniPod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Nightscout-URL";
@@ -47,5 +53,5 @@
 "Tap to set" = "Tryck för att ange";
 
 /* The title text for the nightscout upload enabled switch cell */
-"Upload To Nightscout" = "Nightscout-uppladdning";
+"Upload To Nightscout" = "Ladda upp till Nightscout";
 

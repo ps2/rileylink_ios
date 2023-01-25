@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -6,7 +9,7 @@
 "%@ U (Finished)" = "%@ U (valmis)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%1$@ U of %2$@ U (%3$@)";
+"%@ U of %@ U (%@)" = "%1$@ U / %2$@ U (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/tunti";
@@ -21,7 +24,7 @@
 "%@+ U" = "%@+ U";
 
 /* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
+"%@U" = "%@ U";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ yksikköä jäljellä %2$@";
@@ -135,6 +138,9 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Annosteltu insuliini";
 
+/* Title for insulin type selection screen */
+"Insulin Type" = "Insuliinityyppi";
+
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Virheellinen merkintä";
 
@@ -200,6 +206,9 @@
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Ohjelmoitu";
 
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Valitse insuliinin tyyppi, jota käytät tässä pumpussa.";
+
 /* The title of the status section in settings */
 "Status" = "Tila";
 
@@ -222,7 +231,7 @@
 "Testing Commands…" = "Testataan komentoja…";
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
-"Too many entries" = "Liian monta basaalitasoa määritetty";
+"Too many entries" = "Liian monta basaalitasoa";
 
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "Pumpun deaktivointi ei onnistunut. Jatka ja yhdistä uusi pumppu.";

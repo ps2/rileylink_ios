@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Despre";
 
@@ -17,13 +20,13 @@
 "Delete Account" = "Șterge cont";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Introduceți ID-ul de pompă din 6 cifre";
+"Enter the 6-digit pump ID" = "Introduceți ID-ul pompei format din 6 cifre";
 
 /* The title text for the pull cgm Data cell */
-"Fetch CGM" = "Transferă din CGM";
+"Fetch CGM" = "Sincronizare CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
+"http://mysite.herokuapp.com" = "https://siteulmeu.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -35,13 +38,13 @@
 "Pumps" = "Pompe";
 
 /* The default placeholder string for a credential */
-"Required" = "Necesar";
+"Required" = "Obligatoriu";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink Testing";
+"RileyLink Testing" = "Testare RileyLink";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
+"Setup Omnipod" = "Configurare Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "URL site";

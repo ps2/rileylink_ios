@@ -1,36 +1,14 @@
-/* Format string for delivered insulin. (1: The localized amount)
-   Format string for insulin remaining in reservoir. (1: The localized amount) */
-"%@ U" = "%@ U";
-
 /* Format string for bolus progress when finished. (1: The localized amount) */
 "%@ U (Finished)" = "%@ U (Đã hoàn tất)";
 
-/* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%1$@ U of %2$@ U (%3$@)";
-
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/giờ";
-
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for bolus percent progress. (1: Percent progress) */
-"%@%%" = "%@%%";
-
-/* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
-"%@+ U" = "%@+ U";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
 
 /* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
 "%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Việc tiêm Insulin đã dừng. Hủy kích hoạt và thay pod.";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Thời gian Hoạt động";
@@ -138,12 +116,6 @@
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Lỗi nhập không hợp lệ";
 
-/* The title of the cell showing the pod lot id */
-"Lot" = "Lot";
-
-/* The detail text for bolus delivery when no bolus is being delivered */
-"None" = "None";
-
 /* Button title to pair with pod during setup */
 "Pair" = "Ghép đôi";
 
@@ -153,20 +125,11 @@
 /* The text of the loading label when pairing */
 "Pairing…" = "Đang ghép đôi…";
 
-/* The title of the cell showing the pod pi version */
-"PI Version" = "PI Version";
-
 /* The title of the command to play test beeps */
 "Play Test Beeps" = "Kiểm tra tiếng Beep";
 
 /* Progress message for play test beeps. */
 "Play Test Beeps…" = "Kiểm tra tiếng Beep…";
-
-/* The title of the cell showing the pod pm version */
-"PM Version" = "PM Version";
-
-/* Label describing pod age view */
-"Pod Age" = "Pod Age";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Các thiết lập cho pod";

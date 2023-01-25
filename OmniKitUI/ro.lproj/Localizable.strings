@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -27,7 +30,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ unități rămase la %2$@";
 
 /* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Administrarea insulinei a fost oprită. Trebuie să dezactivați și să detașati Pod-ul.";
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Administrarea insulinei a fost oprită. Va rugam să dezactivați și să detașați Pod-ul.";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -135,8 +138,11 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insulină livrată";
 
+/* Title for insulin type selection screen */
+"Insulin Type" = "Tip insulină";
+
 /* The error message shown when Loop's basal schedule has an unsupported rate */
-"Invalid entry" = "Rată invalidă";
+"Invalid entry" = "Intrare invalidă";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
@@ -145,13 +151,13 @@
 "None" = "Nimic";
 
 /* Button title to pair with pod during setup */
-"Pair" = "Asociază";
+"Pair" = "Împerechează";
 
 /* The title of the command to pair new pod */
-"Pair New Pod" = "Asociază un Pod nou";
+"Pair New Pod" = "Împerechează un Pod nou";
 
 /* The text of the loading label when pairing */
-"Pairing…" = "Se asociază…";
+"Pairing…" = "Se împerechează…";
 
 /* The title of the cell showing the pod pi version */
 "PI Version" = "Versiune PI";
@@ -200,8 +206,11 @@
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Planificare";
 
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Selectați tipul de insulină pe care o veți utiliza în acest pod.";
+
 /* The title of the status section in settings */
-"Status" = "Status";
+"Status" = "Stare";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Succes";
@@ -210,7 +219,7 @@
 "Suspended" = "Suspendat";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Schimbă de la pompele Omnipod";
+"Switch from Omnipod Pumps" = "Schimbă pompele Omnipod";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Sincronizează cu Pod-ul";
@@ -225,7 +234,7 @@
 "Too many entries" = "Prea multe înregistrări";
 
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și asociați unui Pod nou.";
+"Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și împerecheați un Pod nou.";
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Necunoscut";

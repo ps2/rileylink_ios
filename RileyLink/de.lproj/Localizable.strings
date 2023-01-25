@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Über";
 
@@ -20,7 +23,7 @@
 "Enter the 6-digit pump ID" = "Geben Sie die 6-stellige Pumpen-ID ein";
 
 /* The title text for the pull cgm Data cell */
-"Fetch CGM" = "CGM abrufen";
+"Fetch CGM" = "Hol CGM";
 
 /* The placeholder text for the nightscout site URL credential */
 "http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
@@ -38,10 +41,10 @@
 "Required" = "Erforderlich";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink Testen";
+"RileyLink Testing" = "RileyLink-Tests";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
+"Setup Omnipod" = "Omnipod einrichten";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Website URL";

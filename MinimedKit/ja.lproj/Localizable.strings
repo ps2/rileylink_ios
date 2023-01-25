@@ -46,14 +46,8 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "設定の制限を超えています";
 
-/* Pump title (1: model number) */
-"Minimed %@" = "Minimed %@";
-
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 シリーズ";
-
-/* Describing the North America pump region */
-"North America" = "North America";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "ポンプが反応しません";
@@ -93,7 +87,4 @@
 
 /* Format string for an unknown response. (1: The operation being performed) (2: The response data) */
 "Unknown response during %1$@: %2$@" = "反応が不明 %1$@: %2$@";
-
-/* Describing the worldwide pump region */
-"World-Wide" = "World-Wide";
 

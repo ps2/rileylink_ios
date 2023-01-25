@@ -1,14 +1,8 @@
-/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
-"%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
-
 /* The format string describing number of basal schedule entries: (1: number of entries) */
 "%1$@ basal schedule entries\n" = "%1$@ entradas de basal programadas\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Unidades de insulina restantes\n";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Baterias alcalinas e de lítio descarregam de formas diferentes. Baterias alcalinas tendem a perder voltagem linearmente, enquanto baterias de célula de lítio tendem a manter a voltagem até metade de sua vida útil. Em condições normais de uso do Loop em uma bomba Minimed que não utiliza o MySentry (x22/x15), baterias alcalinas devem durar entre 4 e 5 dias. Baterias de lítio duram entre 1 e 2 semanas. Essa seleção vai utilizar diferentes taxas de descarregamento para cada tipo de bateria e alertar o usuário quando a bateria estiver entre 8 e 10 horas de falhar.";
@@ -98,9 +92,6 @@
 /* Progress message for fetching pump model. */
 "Fetching pump model…" = "Buscando modelo da bomba...";
 
-/* The title of the cell showing firmware version */
-"Firmware" = "Firmware";
-
 /* The title of the cell showing the pump firmware version */
 "Firmware Version" = "Versão do Firmware";
 
@@ -177,9 +168,6 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Salvar na Bomba…";
-
-/* The title of the command to send a button press */
-"Send Button Press" = "Send Button Press";
 
 /* Progress message for sending button press to pump. */
 "Sending button press…" = "Enviando aperto do botão";

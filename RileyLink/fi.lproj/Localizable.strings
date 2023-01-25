@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* The title of the about section */
 "About" = "Tietoja";
 
@@ -8,7 +11,7 @@
 "Add Minimed Pump" = "Lisää Minimed-pumppu";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "API-salasana";
+"API Secret" = "API-salausavain";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Määritykset";
@@ -20,7 +23,7 @@
 "Enter the 6-digit pump ID" = "Syötä 6-numeroinen pumpun tunniste";
 
 /* The title text for the pull cgm Data cell */
-"Fetch CGM" = "Hae CGM-data";
+"Fetch CGM" = "Hae CGM-tiedot";
 
 /* The placeholder text for the nightscout site URL credential */
 "http://mysite.herokuapp.com" = "http://omaosoite.herokuapp.com";

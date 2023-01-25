@@ -1,11 +1,20 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@E";
+
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
 /* The format string describing number of basal schedule entries: (1: number of entries) */
-"%1$@ basal schedule entries\n" = "%1$@ basaal schemas\n";
+"%1$@ basal schedule entries\n" = "%1$@ basaal schema's\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Eenheden insuline resterend\n";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ eenheden resterend op %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -55,6 +64,9 @@
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Verbindingsstatus";
 
+/* Text for continue button */
+"Continue" = "Ga verder";
+
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
 "Delete Pump" = "Verwijder de pomp";
@@ -102,7 +114,7 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware Version";
+"Firmware Version" = "Firmware versie";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Lees pompmodel";
@@ -112,6 +124,9 @@
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "De toediening van insuline kan worden vastgesteld aan de hand van de pomp door de pomp historie te interpreteren of door het reservoir volume in de loop van de tijd te vergelijken. Het lezen van de pomp historie zorgt voor een meer accurate statusgrafiek en het uploaden van up-to-date behandelingsgegevens naar Nightscout. Dit gaat ten koste van de batterij en de mogelijkheid van een hogere radiofout snelheid vergeleken met het alleen lezen van het reservoir volume. Als de geselecteerde bron om welke reden dan ook niet kan worden gebruikt, probeert het systeem terug te vallen op de andere optie.";
+
+/* Text for confidence reminders navigation link */
+"Insulin Type" = "Insuline soort";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Laatst actief";
@@ -132,7 +147,7 @@
 "On Idle" = "Inactief";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "Ga naar het zoekscherm op je pomp en selecteer \"Apparaat zoeken\".\n\nHoofd Menu >\nGebruiksvoorzieningen >\nVerbind apparaten >\nAndere apparaten >\nAan >\nZoek Apparaat";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Voorkeur databron";
@@ -166,7 +181,7 @@
 "Reading pump status…" = "Lees pomp gegevens…";
 
 /* The title of the cell showing the pump region */
-"Region" = "Region";
+"Region" = "Regio";
 
 /* Button title to retry sentry setup */
 "Retry" = "Opnieuw proberen";
@@ -177,6 +192,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Opslaan in pomp…";
+
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pump." = "Selecteer welk type insuline je wilt gebruiken in deze pomp.";
 
 /* The title of the command to send a button press */
 "Send Button Press" = "Verstuur signaal induwen knop";
@@ -206,5 +224,5 @@
 "Unknown" = "Onbekend";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Actief";
 

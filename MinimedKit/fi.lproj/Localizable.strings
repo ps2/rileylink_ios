@@ -2,19 +2,22 @@
 "A bolus is already in progress" = "Bolus on jo käynnissä";
 
 /* The description of AlarmClockReminderPumpEvent */
-"AlarmClockReminder" = "HerätysKelloMuistutus";
+"AlarmClockReminder" = "AlarmClockReminder";
 
 /* The description of AlarmSensorPumpEvent */
-"AlarmSensor" = "HälytysSensori";
+"AlarmSensor" = "AlarmSensor";
 
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alkaliini";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basaaliprofiili %1$@: %2$@ U/h";
+"Basal Profile %1$@: %2$@ U/hour" = "Basaaliprofiili %1$@: %2$@ U/t";
 
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus käynnissä";
+
+/* Error description when failure due to bolus in progress */
+"Bolus in Progress" = "Bolus käynnissä";
 
 /* Describing the Canada pump region */
 "Canada" = "Kanada";
@@ -37,8 +40,14 @@
 /* Describing the pump history insulin data source */
 "Event History" = "Tapahtumahistoria";
 
+/* Error description for glucose page failing crc check */
+"Glucose page failed crc check" = "Glukoosisivun CRC-tarkistus epäonnistui";
+
 /* Pump error code when invalid history page is requested */
 "History page does not exist" = "Historiasivua ei ole olemassa";
+
+/* Error description for history page failing crc check */
+"History page failed crc check" = "Historiasivun CRC-tarkistus epäonnistui";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Virheellinen vastaus %1$@: %2$@";
@@ -58,6 +67,9 @@
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 -sarja";
 
+/* Error description when no rileylink connected */
+"No RileyLink Connected" = "RileyLink ei ole yhdistetty";
+
 /* Describing the North America pump region */
 "North America" = "Pohjois-Amerikka";
 
@@ -65,7 +77,7 @@
 "Pump did not respond" = "Pumppu ei vastannut";
 
 /* Error description */
-"Pump Error" = "Pumppuvirhe";
+"Pump Error" = "Pumpun virhe";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pumppu on pysäytetty";
@@ -83,7 +95,7 @@
 "RileyLink radio tune failed" = "RileyLink-radion viritys epäonnistui";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Tilapäinen basaali: %1$.3f U/h";
+"Temporary Basal: %1$.3f U/hour" = "Tilapäinen basaali: %1$.3f U/t";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
 "Temporary Basal: %1$d min" = "Tilapäinen basaali: %1$d min";
@@ -91,11 +103,20 @@
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
 "Temporary Basal: %1$d%%" = "Tilapäinen basaali: %1$d%%";
 
+/* Error description when storage fails */
+"Unable to store pump data" = "Pumpun tietoja ei voitu tallentaa";
+
+/* Format string for error description for an unknown record type in a glucose page. (1: event type number) */
+"Unknown glucose record type: %$1@" = "Tuntematon glukoositietuetyyppi: %$1 @";
+
+/* Format string for error description for an unknown record type in a history page. (1: event type number) */
+"Unknown history record type: %$1@" = "Tuntematon historiatietuetyyppi: %$1 @";
+
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Tuntematon pumpun virhekoodi: %1$@";
 
 /* No comment provided by engineer. */
-"Unknown pump model: %@" = "Tuntematon pumppumalli: %@";
+"Unknown pump model: %@" = "Tuntematon pumpun malli: %@";
 
 /* Format string for an unknown response. (1: The operation being performed) (2: The response data) */
 "Unknown response during %1$@: %2$@" = "Tuntematon vastaus %1$@: %2$@";

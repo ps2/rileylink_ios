@@ -1,3 +1,9 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -5,7 +11,10 @@
 "%1$@ basal schedule entries\n" = "%1$@ basale Zeitplaneinträge\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
-"%1$@ Units of insulin remaining\n" = "%1$@ Insulineinheiten verbleiben\n";
+"%1$@ Units of insulin remaining\n" = "%1$@ IE verbleiben";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ IE verbleibend bei %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -29,7 +38,7 @@
 "Best Frequency" = "Beste Frequenz";
 
 /* The format string describing pump bolusing state: (1: bolusing) */
-"Bolusing: %1$@\n" = "Bolusing: %1$@\n";
+"Bolusing: %1$@\n" = "Bolusabgabe: %1$@";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Abbrechen";
@@ -54,6 +63,9 @@
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Verbindungsstatus";
+
+/* Text for continue button */
+"Continue" = "Weiter";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
@@ -105,13 +117,16 @@
 "Firmware Version" = "Firmware Version";
 
 /* The title of the command to get pump model */
-"Get Pump Model" = "Pumpmodell erhalten";
+"Get Pump Model" = "Pumpmodell abrufen";
 
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Statistiken abrufen…";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Die Insulinabgabe kann von der Pumpe bestimmt werden, indem entweder die Ereignishistorie interpretiert wird oder das Reservoirvolumen über die Zeit verglichen wird. Das Lesen der Ereignishistorie ermöglicht eine genauere Statusgrafik und das Hochladen aktueller Behandlungsdaten in Nightscout, auf Kosten einer schnelleren Pumpenbatterieentleerung und der Möglichkeit einer höheren Funkfehlerrate im Vergleich zum Lesen des Reservoirvolumens. Wenn das ausgewählte Gerät aus irgendeinem Grund nicht verwendet werden kann, versucht das System, auf die andere Option zurückzugreifen.";
+
+/* Text for confidence reminders navigation link */
+"Insulin Type" = "Insulintyp";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Zuletzt aktiv";
@@ -132,7 +147,7 @@
 "On Idle" = "im Leerlauf";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "Gehen Sie auf Ihrer Pumpe auf den Bildschirm Gerät suchen und wählen Sie \"Gerät suchen\".\n\nHauptmenü >\nZubehör >\nGeräte verbinden >\nAndere Geräte >\nauf >\nGerät suchen\n";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Bevorzugte Datenquelle";
@@ -141,7 +156,7 @@
 "Pump" = "Pumpe";
 
 /* The title text for the battery type value */
-"Pump Battery Type" = "Typ Pumpenbatterie";
+"Pump Battery Type" = "Pumpenbatterietyp";
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
@@ -178,6 +193,9 @@
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "In der Pumpe abspeichern…";
 
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pump." = "Wählen Sie die Art des Insulins aus, die Sie in dieser Pumpe verwenden möchten.";
+
 /* The title of the command to send a button press */
 "Send Button Press" = "Sende-Taste drücken";
 
@@ -206,5 +224,5 @@
 "Unknown" = "Unbekannt";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Laufzeit";
 

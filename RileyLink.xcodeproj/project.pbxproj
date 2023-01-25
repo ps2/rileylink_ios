@@ -1323,6 +1323,7 @@
 		C12572912121EEEE0061BA2F /* SettingsImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsImageTableViewCell.swift; sourceTree = "<group>"; };
 		C125729321220FEC0061BA2F /* MainStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		C12616431B685F0A001FAD87 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C126DD162981EE69009A0A64 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C12716092378C2270093DAB7 /* ResumePumpEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumePumpEventTests.swift; sourceTree = "<group>"; };
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
@@ -1381,6 +1382,8 @@
 		C14FFC641D3D7E250049CF85 /* RemoteDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataManager.swift; sourceTree = "<group>"; };
 		C14FFC661D3D7E390049CF85 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		C14FFC681D3D7E560049CF85 /* KeychainManager+RileyLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "KeychainManager+RileyLink.swift"; sourceTree = "<group>"; };
+		C151BED32981EE6000F3A41F /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		C153EBB12981EE6C000BFE9E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C15AF2AC1D74929D0031FC9D /* ChangeBolusWizardSetupPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeBolusWizardSetupPumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2AE1D7498930031FC9D /* RestoreMystery54PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery54PumpEvent.swift; sourceTree = "<group>"; };
 		C15AF2B01D7498DD0031FC9D /* RestoreMystery55PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreMystery55PumpEvent.swift; sourceTree = "<group>"; };
@@ -1457,6 +1460,7 @@
 		C1842C281C908A3C00DB42AC /* NightscoutUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightscoutUploader.swift; sourceTree = "<group>"; };
 		C184875B20BC232F00ABE9E7 /* CorrectionRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRange.swift; sourceTree = "<group>"; };
 		C184875D20BCDB0000ABE9E7 /* ForecastError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastError.swift; sourceTree = "<group>"; };
+		C18700782981EE6100E06588 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableBolusWizardPumpEvent.swift; sourceTree = "<group>"; };
 		C18EB741207EE20100EA002B /* NightscoutProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfile.swift; sourceTree = "<group>"; };
 		C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDoseRecommendation.swift; sourceTree = "<group>"; };
@@ -1467,6 +1471,7 @@
 		C1A7215F1EC29C0B0080FAD7 /* PumpOpsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpOpsError.swift; sourceTree = "<group>"; };
 		C1A721611EC3E0500080FAD7 /* PumpErrorMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpErrorMessageBody.swift; sourceTree = "<group>"; };
 		C1A721651EC4BCE30080FAD7 /* PartialDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartialDecode.swift; sourceTree = "<group>"; };
+		C1AB0C542981EE5B0020FEE5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1ABE396224947C000570E82 /* PodCommsSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodCommsSessionTests.swift; sourceTree = "<group>"; };
 		C1AF21E11D4838C90088C41D /* DeviceStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		C1AF21E31D4865320088C41D /* LoopStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopStatus.swift; sourceTree = "<group>"; };
@@ -1525,6 +1530,7 @@
 		C1C9F88F283D94CE00CFC769 /* BeepPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeepPreference.swift; sourceTree = "<group>"; };
 		C1CAB67228C696A600F6F715 /* RileyLinkDeviceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkDeviceProvider.swift; sourceTree = "<group>"; };
 		C1CAB67428C696D800F6F715 /* RileyLinkBluetoothDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RileyLinkBluetoothDevice.swift; sourceTree = "<group>"; };
+		C1CB33F72981EE650019F1C3 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1D00E9C1E8986A400B733B7 /* PumpSuspendTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpSuspendTreatment.swift; sourceTree = "<group>"; };
 		C1D00EA01E8986F900B733B7 /* PumpResumeTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpResumeTreatment.swift; sourceTree = "<group>"; };
 		C1D563382969EDBB00BA15EC /* MockPumpMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpMessageSender.swift; sourceTree = "<group>"; };
@@ -1562,7 +1568,9 @@
 		C1D9E380283D9061003CA0D3 /* PodLifeState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodLifeState.swift; sourceTree = "<group>"; };
 		C1D9E381283D9061003CA0D3 /* DeactivatePodViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeactivatePodViewModel.swift; sourceTree = "<group>"; };
 		C1D9E382283D9061003CA0D3 /* DeliveryUncertaintyRecoveryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeliveryUncertaintyRecoveryViewModel.swift; sourceTree = "<group>"; };
+		C1DCAF512981EE5D00118AD3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1DD51D425A0BC6000DE27AE /* InsulinTypeConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeConfirmation.swift; sourceTree = "<group>"; };
+		C1E28AFC2981EE6600758EB3 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
 		C1EAD6AE1C826B6D006DBA60 /* MySentryAlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryAlertType.swift; sourceTree = "<group>"; };
 		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
@@ -4636,6 +4644,14 @@
 			children = (
 				C1394BA8297E49630042F1A9 /* pl */,
 				C1821692297E55A7001EB097 /* es */,
+				C1AB0C542981EE5B0020FEE5 /* da */,
+				C1DCAF512981EE5D00118AD3 /* de */,
+				C151BED32981EE6000F3A41F /* fi */,
+				C18700782981EE6100E06588 /* fr */,
+				C1CB33F72981EE650019F1C3 /* nb */,
+				C1E28AFC2981EE6600758EB3 /* nl */,
+				C126DD162981EE69009A0A64 /* ro */,
+				C153EBB12981EE6C000BFE9E /* sv */,
 			);
 			name = LoopKit.strings;
 			sourceTree = "<group>";

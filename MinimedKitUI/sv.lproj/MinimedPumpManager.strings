@@ -5,22 +5,22 @@
 "1fp-45-qWK.text" = "Hitta enhet";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
-"A6i-Cb-baR.text" = "Annan enhet";
+"A6i-Cb-baR.text" = "Andra enheter";
 
 /* Class = "UILabel"; text = "Do not change the time using your pumpʼs menu."; ObjectID = "Bdb-j4-WcR"; */
-"Bdb-j4-WcR.text" = "Ädra inte tiden i din pumps menyer.";
+"Bdb-j4-WcR.text" = "Ändra inte tiden i din pumps menyer.";
 
 /* Class = "UILabel"; text = "Utilities"; ObjectID = "c7t-pZ-WqY"; */
 "c7t-pZ-WqY.text" = "Tillbehör";
 
 /* Class = "UILabel"; text = "Connect Devices"; ObjectID = "erq-yb-anx"; */
-"erq-yb-anx.text" = "Anslut eheter";
+"erq-yb-anx.text" = "Anslut enheter";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
 "Fps-h3-V4K.title" = "Pumpklocka";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N)."; ObjectID = "fVG-pl-jT9"; */
-"fVG-pl-jT9.footerTitle" = "Ditt pump-ID är den 6-siffriga nemeriska delen av serienumret (markerat med SN eller S/N).";
+"fVG-pl-jT9.footerTitle" = "Ditt pump-ID är den 6-siffriga numeriska delen av serienumret (markerat med SN eller S/N).";
 
 /* Class = "UITableViewSection"; headerTitle = "Pump ID"; ObjectID = "fVG-pl-jT9"; */
 "fVG-pl-jT9.headerTitle" = "Pump-ID";
@@ -32,10 +32,10 @@
 "HeG-VF-L5P.placeholder" = "Ange ditt 6-siffriga pump-ID";
 
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
-"HuY-fE-vM8.text" = "Om du reser till annan tidszon under en längre tid, kan du ändra tidszonen närsomhelst i Loops iställningar.";
+"HuY-fE-vM8.text" = "Om du reser till annan tidszon under en längre tid, kan du närsomhelst ändra tidszonen i Loops inställningar.";
 
 /* Class = "UILabel"; text = "Loop will keep your pumpʼs clock synchronized with your phone in the time zone youʼre in now."; ObjectID = "IQ5-53-x9s"; */
-"IQ5-53-x9s.text" = "Loop kommer att synkronisera pumpens klocka med din telefon i tidszonen du befinner dig nu.";
+"IQ5-53-x9s.text" = "Loop kommer att synkronisera pumpens klocka med din telefon i den tidszon du nu befinner dig i.";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "Pumpregion och färg är märkta som de 3 sista siffrorna i modellnumret (markerad som REF).";

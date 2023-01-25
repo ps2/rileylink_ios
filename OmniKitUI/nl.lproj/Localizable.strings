@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ E";
@@ -39,10 +42,10 @@
 "Alarms" = "Alarmen";
 
 /* Confirmation message for shutting down a pod */
-"Are you sure you want to shutdown this pod?" = "Weet je zeker dat je pod wilt afsluiten";
+"Are you sure you want to shutdown this pod?" = "Weet je zeker dat je pod wilt afsluiten?";
 
 /* Confirmation message for removing Omnipod PumpManager */
-"Are you sure you want to stop using Omnipod?" = "Weet je zeker dat je wilt stoppen met gebruik Omnipod";
+"Are you sure you want to stop using Omnipod?" = "Weet je zeker dat je wilt stoppen met gebruik Omnipod?";
 
 /* The title text for the address assigned to the pod */
 "Assigned Address" = "Toegewezen adres";
@@ -135,6 +138,9 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Geleverde insuline";
 
+/* Title for insulin type selection screen */
+"Insulin Type" = "Insuline soort";
+
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Ongeldige mogelijkheid";
 
@@ -191,7 +197,7 @@
 "Reservoir" = "Reservoir";
 
 /* Button title for retrying pod deactivation */
-"Retry Pod Deactivation" = "Probeer pod deactivatie nog een keer";
+"Retry Pod Deactivation" = "Probeer pod deactiveren nog een keer";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -199,6 +205,9 @@
 
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Plan";
+
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Selecteer welk type insuline je wilt gebruiken in deze pod.";
 
 /* The title of the status section in settings */
 "Status" = "Status";
@@ -210,7 +219,7 @@
 "Suspended" = "Onderbroken";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Switch van Omnipod pompen";
+"Switch from Omnipod Pumps" = "Switch van Omnipod pomp";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Synchroniseer met pod";

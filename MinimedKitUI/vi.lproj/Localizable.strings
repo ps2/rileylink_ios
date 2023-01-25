@@ -1,14 +1,8 @@
-/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
-"%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
-
 /* The format string describing number of basal schedule entries: (1: number of entries) */
 "%1$@ basal schedule entries\n" = "%1$@ Lịch biểu liều nền\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Số unit insulin còn lại\n";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Pin kềm và pin lithium phân rã ở các mức độ khác nhau. Pin kềm có xu hướng giảm điện áp tuyến tính theo thời gian trong khi pin lithium có xu hướng duy trì điện áp cho đến khi hết nửa vòng đời. Trong điều kiện sử dụng bình thường trên bơm Minimed (loại X22 hay X15) khi chạy Loop, pin kiềm có thể dùng được trong khoảng 4 đến 5 ngày trong khi pin lithium dùng dc 2 tuần. Việc lựa chọn này được sử dụng theo các mức phân rã điện áp khác nhau cho mỗi loại pin hóa học và sẽ có cảnh báo đối với người dùng khi pin hỏng đạt khoảng từ 8-10 giờ.";
@@ -131,9 +125,6 @@
 /* The title of the cell showing the last idle */
 "On Idle" = "Đang chờ";
 
-/* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
-
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Nguồn dữ liệu được ưa thích";
 
@@ -164,9 +155,6 @@
 
 /* Progress message for reading pump status */
 "Reading pump status…" = "Đang đọc tình trạng bơm…";
-
-/* The title of the cell showing the pump region */
-"Region" = "Region";
 
 /* Button title to retry sentry setup */
 "Retry" = "Thử lại";

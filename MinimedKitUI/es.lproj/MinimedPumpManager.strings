@@ -46,9 +46,6 @@
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
 "Nwf-TJ-KmJ.title" = "Configuración Completa";
 
-/* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Pump Broadcasts";
-
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "Encendido";
 

@@ -19,12 +19,6 @@
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Obtener de CGM";
 
-/* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
-
-/* The title of the Nightscout service */
-"Nightscout" = "Nightscout";
-
 /* The title text for the pump ID config value */
 "Pump ID" = "ID de Microinfusora";
 
@@ -36,9 +30,6 @@
 
 /* Title for RileyLink Testing main view controller */
 "RileyLink Testing" = "Preubas de RileyLink";
-
-/* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "URL de sitio";

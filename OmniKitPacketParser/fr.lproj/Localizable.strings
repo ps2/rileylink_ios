@@ -1,8 +1,11 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = " (Inactif)";
+" (inactive)" = " (inactif)";
 
 /* Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Temps d'activation dépassé";
+"Activation time exceeded" = "Délai d'activation dépassé";
+
+/* Description for auto-off */
+"Auto-off" = "Arrêt automatique";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Alarme d’arrêt automatique";
@@ -11,7 +14,7 @@
 "Basal initialized" = "Basal initialisé";
 
 /* Pod state when running below fifty units */
-"Below 50 units" = "En dessous de 50 unités";
+"Below 50 units" = "en dessous de 50 unités";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus en cours";
@@ -23,7 +26,7 @@
 "Bolusing" = "Bolus en cours";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolus avec basal temporaire";
+"Bolusing with temp basal" = "Bolus en cours avec basale temporaire";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Canule en cours d'insertion";
@@ -38,19 +41,31 @@
 "Empty reservoir" = "Réservoir vide";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Pas de réponse du pod";
+"Empty response from pod" = "Réponse vide du pod";
 
 /* Pod state error event logged shutting down */
-"Error event logged, shutting down" = "Événement d’erreur enregistré, arrêt";
+"Error event logged, shutting down" = "Erreur enregistrée, arrêt en cours";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Avertissement d'expiration";
 
 /* Description for expiration alert */
-"Expiration alert" = "Alerte d’expiration";
+"Expiration alert" = "Alerte d'expiration";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Bolus étendu en cours";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Bolus étendu en cours avec basal temporaire";
 
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Une erreur s'est produite";
 
 /* Description for finish setup */
-"Finish setup " = "Terminer l’installation ";
+"Finish setup " = "Finir l'installation";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Terminer le paramétrage du rappel";
 
 /* Pod inititialized */
 "Initialized" = "Initialisé";
@@ -59,13 +74,13 @@
 "Inserting cannula" = "Insertion de la canule";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Code d'erreur du pod %1$03d";
+"Internal pod fault %1$03d" = "code d'erreur interne du Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu : %1$@ U (%2$@ U prévu) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U programmé) %3$@ %4$@ %5$@";
 
 /* Description for MessageError invalidAddress */
-"Invalid address: (%1$@)" = "Adresse invalide : (%1$@)";
+"Invalid address: (%1$@)" = "Adresse invalide: ( %1$@ )";
 
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "CRC invalide";
@@ -77,7 +92,7 @@
 "Low reservoir advisory alarm" = "Alarme de réservoir bas";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et sous tension";
+"Make sure your RileyLink is nearby and powered on" = "Assurez vous que votre RileyLink est à proximité et allumé";
 
 /* Pod memory initialized */
 "Memory initialized" = "Mémoire initialisée";
@@ -123,13 +138,13 @@
 "Please pair a new pod" = "Merci d'appairer un nouveau pod";
 
 /* Error message shown when user cannot pair because pod is already paired */
-"Pod already paired" = "Pod déjà jumelé";
+"Pod already paired" = "Pod déjà appairé";
 
 /* Error message shown when prime is attempted, but pod is already primed */
 "Pod already primed" = "Pod déjà amorcé";
 
 /* Description for expiration advisory alarm */
-"Pod expiration advisory alarm" = "Alerte d'expiration du pod";
+"Pod expiration advisory alarm" = "Alarme d'expiration du pod";
 
 /* The title for pod expiration notification */
 "Pod Expiration Notice" = "Notification de l'expiration du pod";
@@ -141,16 +156,16 @@
 "Pod Fault: %1$@" = "Erreur du pod: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Le pod n’est pas prêt pour l’insertion de la canule.";
+"Pod is not in a state ready for cannula insertion." = "Le pod n’est pas dans un état prêt pour l’insertion de la canule";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Le pod n’est pas prêt pour l’amorçage.";
+"Pod is not in a state ready for priming." = "Le pod n’est pas dans un état prêt pour l’amorçage";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Le pod est suspendu";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "La fenêtre de configuration du Pod a expiré";
+"Pod setup window expired" = "La fenêtre de mise en place du pod a expiré";
 
 /* Delivery status when pod is priming
    Pod status when priming */
@@ -160,7 +175,7 @@
 "Priming completed" = "Appairage terminé";
 
 /* Pod state when ready for basal programming */
-"Ready for basal programming" = "Prêt pour la programmation de la basale";
+"Ready for basal programming" = "Prêt pour la programmation de basale";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Prêt à insérer la canule";
@@ -175,22 +190,22 @@
 "Scheduled basal" = "Basale programmée";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basale programmée";
+"Scheduled Basal" = "Basal programmé";
 
 /* Description for shutdown imminent alarm */
-"Shutdown imminent alarm" = "Alarme d’arrêt imminent";
+"Shutdown imminent alarm" = "Alarme imminente d’arrêt";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Suspension : %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Suspendu";
+"Suspended" = "Suspendue";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Remplissage du réservoir terminé";
 
 /* Pod power to motor activated */
-"Tank power activated" = "Pompe du réservoir amorcée";
+"Tank power activated" = "Charge du réservoir activée";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Basale temporaire en cours";
@@ -205,7 +220,7 @@
 "threeNotUsed" = "threeNotUsed";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
-"Time to replace your pod! Your pod will expire in %1$@" = "Il est temps de remplacer votre pod ! Votre pod va expirer dans %1$@";
+"Time to replace your pod! Your pod will expire in %1$@" = "C’est le moment de remplacer votre pod ! Votre pod va expirer dans %1$@";
 
 /* Pod state twoNotUsed */
 "twoNotUsed" = "twoNotUsed";

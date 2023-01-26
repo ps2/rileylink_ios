@@ -2,22 +2,22 @@
 "%@ dB" = "%@ dB";
 
 /* The title of the about section */
-"About" = "Om";
+"About" = "About";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Tilføj konto";
+"Add Account" = "Add Account";
 
 /* Title text for button to set up a new minimed pump */
 "Add Minimed Pump" = "Tilføj MiniMed pumpe";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "API kodeord";
+"API Secret" = "API Secret";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfiguration";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Slet konto";
+"Delete Account" = "Slet Konto";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Indtast det 6-cifrede pumpe ID";
@@ -41,13 +41,13 @@
 "Required" = "Påkrævet";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "Testning Af RileyLink";
+"RileyLink Testing" = "RileyLink Testing";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Opsætning omnipod";
+"Setup Omnipod" = "Setup Omnipod";
 
 /* The title of the nightscout site URL credential */
-"Site URL" = "Web URL";
+"Site URL" = "Site URL";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Tryk for at gemme";

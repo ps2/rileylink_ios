@@ -11,7 +11,7 @@
 "%1$@ basal schedule entries\n" = "%1$@ basale Zeitplaneinträge\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
-"%1$@ Units of insulin remaining\n" = "%1$@ IE verbleiben";
+"%1$@ Units of insulin remaining\n" = "%1$@ Insulineinheiten verbleiben\n";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ IE verbleibend bei %2$@";
@@ -38,7 +38,7 @@
 "Best Frequency" = "Beste Frequenz";
 
 /* The format string describing pump bolusing state: (1: bolusing) */
-"Bolusing: %1$@\n" = "Bolusabgabe: %1$@";
+"Bolusing: %1$@\n" = "Bolusing: %1$@\n";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Abbrechen";
@@ -117,7 +117,7 @@
 "Firmware Version" = "Firmware Version";
 
 /* The title of the command to get pump model */
-"Get Pump Model" = "Pumpmodell abrufen";
+"Get Pump Model" = "Pumpmodell erhalten";
 
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Statistiken abrufen…";
@@ -147,7 +147,7 @@
 "On Idle" = "im Leerlauf";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "Gehen Sie auf Ihrer Pumpe auf den Bildschirm Gerät suchen und wählen Sie \"Gerät suchen\".\n\nHauptmenü >\nZubehör >\nGeräte verbinden >\nAndere Geräte >\nauf >\nGerät suchen\n";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Bevorzugte Datenquelle";
@@ -156,7 +156,7 @@
 "Pump" = "Pumpe";
 
 /* The title text for the battery type value */
-"Pump Battery Type" = "Pumpenbatterietyp";
+"Pump Battery Type" = "Typ Pumpenbatterie";
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
@@ -224,5 +224,12 @@
 "Unknown" = "Unbekannt";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Laufzeit";
+"Uptime" = "Uptime";
+
+/* Value string for MySentry config when MySentry is being used
+   Value string for MySentry config when MySentry is not being used */
+"Yes" = "Ja";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Ja, mit aktueller Zeit synchronisieren";
 

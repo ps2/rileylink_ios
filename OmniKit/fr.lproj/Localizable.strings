@@ -1,12 +1,24 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = " (Inactif)";
+" (inactive)" = " (inactif)";
+
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\"%1$@\" a un niveau de batterie bas";
 
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
+/* Format string for alert content body for lowReservoir pod alert. (1: reminder value) */
+"%1$@ insulin or less remaining in Pod. Change Pod soon." = "%1$@ insuline ou moins restant dans le pod. Remplacer le pod bientôt.";
+
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Temps d'activation dépassé";
+"Activation time exceeded" = "Délai d'activation dépassé";
+
+/* Description for auto-off */
+"Auto-off" = "Arrêt automatique";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Alarme d’arrêt automatique";
@@ -16,6 +28,9 @@
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "en dessous de 50 unités";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus en cours";
@@ -35,6 +50,12 @@
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Certain";
 
+/* Alert content body for podExpireImminent pod alert */
+"Change Pod now. Insulin delivery will stop in 1 hour." = "Remplacer le Pod maintenant. L'administration d'insuline s'arrêtera dans 1 heure.";
+
+/* Alert content body for podExpiring pod alert */
+"Change Pod now. Pod has been active for 72 hours." = "Remplacer le Pod maintenant. Le Pod est actif depuis 72 heures.";
+
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Erreur de commande %1$u";
 
@@ -48,16 +69,37 @@
 "Empty response from pod" = "Réponse vide du pod";
 
 /* Pod state error event logged shutting down */
-"Error event logged, shutting down" = "Événement d’erreur envoyé, arrêt en cours";
+"Error event logged, shutting down" = "Erreur enregistrée, arrêt en cours";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Avertissement d'expiration";
 
 /* Description for expiration alert */
 "Expiration alert" = "Alerte d'expiration";
 
+/* Title string for BeepPreference.extended */
+"Extended" = "Étendu";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Bolus étendu en cours";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Bolus étendu en cours avec basal temporaire";
+
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Une erreur s'est produite";
 
+/* Status highlight that when pod is deactivating. */
+"Finish Deactivation" = "Terminer la désactivation";
+
+/* Status highlight that when pod is activating. */
+"Finish Pairing" = "Terminer le jumelage";
+
 /* Description for finish setup */
 "Finish setup " = "Installation terminée";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Terminer le paramétrage du rappel";
 
 /* Pod inititialized */
 "Initialized" = "Initialisé";
@@ -65,23 +107,32 @@
 /* Pod state when inserting cannula */
 "Inserting cannula" = "Insertion de la canule";
 
+/* The default notification body for AlarmCodes */
+"Insulin delivery stopped. Change Pod now." = "L'administration d'insuline s'est arrêtée. Changez de Pod maintenant.";
+
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insuline suspendue";
 
+/* Error description for OmniBLEPumpManagerError.insulinTypeNotConfigured */
+"Insulin type not configured" = "Type d'insuline non configuré";
+
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "code d'erreur du pod %1$03d";
+"Internal pod fault %1$03d" = "code d'erreur interne du Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U programmé) %3$@ %4$@ %5$@";
 
 /* Error message for when unexpected address is received (1: received address) (2: expected address) */
 "Invalid address 0x%x. Expected 0x%x" = "Adresse invalide 0x%1$x. Attendu 0x%2$x";
 
 /* Description for MessageError invalidAddress */
-"Invalid address: (%1$@)" = "Adresse invalide : (%1$@)";
+"Invalid address: (%1$@)" = "Adresse invalide: ( %1$@ )";
 
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "CRC invalide";
+
+/* Error description for OmniBLEPumpManagerError.invalidSetting */
+"Invalid Setting" = "Paramètre invalide";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Réservoir bas";
@@ -219,10 +270,10 @@
 "Scheduled basal" = "Basal programmé";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basale programmée";
+"Scheduled Basal" = "Basal programmé";
 
 /* Description for shutdown imminent alarm */
-"Shutdown imminent alarm" = "Alarme d’arrêt imminent";
+"Shutdown imminent alarm" = "Alarme imminente d’arrêt";
 
 /* Format string for pod signal strength too high */
 "Signal strength too high" = "Force du signal trop élevée";
@@ -285,7 +336,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Attendez que le bolus en cours se termine, ou annulez le bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Attendez que la basale se termine pour quitter, ou mettez en suspens pour annuler";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Attendez que la basale temporaire se termine pour quitter, ou mettez en suspens pour annuler";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "En attente d'appairage";

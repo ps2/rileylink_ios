@@ -1,8 +1,17 @@
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\"%1$@\" a un niveau de batterie bas";
+
+/* Low reservoir alert format string. (1: Number of units remaining) */
+"%1$@ U left" = "%1$@ U restantes";
+
+/* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
+"%1$@ U left: %2$@" = "%1$@ U restantes: %2$@";
+
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "Un bolus est déjà en cours";
 
 /* The description of AlarmClockReminderPumpEvent */
-"AlarmClockReminder" = "Alarme de rappel";
+"AlarmClockReminder" = "AlarmClockReminder";
 
 /* The description of AlarmSensorPumpEvent */
 "AlarmSensor" = "AlarmSensor";
@@ -10,8 +19,15 @@
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alcaline";
 
+/* Title for PumpAlarmType.autoOff */
+"Auto-Off Alarm" = "Alarme d'arrêt automatique";
+
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Profil basal %1$@: %2$@ U/heure";
+
+/* Event title for bolus
+   Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus en cours";
@@ -19,11 +35,20 @@
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus en cours";
 
+/* Format string for uncertain bolus. (1: the reported error during bolusing) */
+"Bolus may have failed: %1$@" = "Le bolus a peut-être échoué : %1$@";
+
 /* Describing the Canada pump region */
 "Canada" = "Canada";
 
+/* The notification alert describing a low pump battery */
+"Change the pump battery immediately" = "Changer immédiatement la pile de la pompe";
+
+/* The notification alert describing an empty pump reservoir */
+"Change the pump reservoir now" = "Changer maintenant le réservoir de la pompe";
+
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Vérifiez que la pompe n’est pas suspendue ou amorcée, ou a un type basal temporaire de pour cent";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Vérifiez que la pompe n’est pas suspendue ou en amorçage, ou a un basal temporaire en pourcentage";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Commande refusée";
@@ -41,13 +66,22 @@
 "Event History" = "Historique des événements";
 
 /* Error description for glucose page failing crc check */
-"Glucose page failed crc check" = "Échec de la vérification (crc) de la page Glycémie";
+"Glucose page failed crc check" = "Échec de la vérification CRC de la page de glucose";
+
+/* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Go to pump settings and select insulin type" = "Accédez aux paramètres de la pompe et sélectionnez le type d'insuline";
 
 /* Pump error code when invalid history page is requested */
 "History page does not exist" = "La page d'historique n'existe pas";
 
 /* Error description for history page failing crc check */
-"History page failed crc check" = "Échec de la vérification (crc) de la page d'historique";
+"History page failed crc check" = "Échec de la vérification CRC de la page d'historique";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insuline suspendue";
+
+/* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Insulin Type is not configured" = "Type d'insuline";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Réponse invalide pendant %1$@: %2$@";
@@ -55,11 +89,14 @@
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Lithium";
 
+/* Help anchor for uncertain bolus */
+"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop a envoyé une commande de bolus à la pompe, mais n'a pas pu confirmer que la pompe a reçu la commande. Par sécurité, Loop considère que le bolus a été administré. Lorsque Loop récupère l'historique de la pompe, et que l'heure estimée de fin du bolus est dépassée, Loop met à jour ses enregistrements de livraison pour correspondre à ce que la pompe rapporte.";
+
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et sous tension";
+"Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et allumé";
 
 /* Pump error code describing max setting exceeded */
-"Max setting exceeded" = "Paramètre maximum dépassée";
+"Max setting exceeded" = "Réglage maximum dépassé";
 
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
@@ -94,14 +131,17 @@
 /* Error description */
 "RileyLink radio tune failed" = "La synthèse radio RileyLink a échoué";
 
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "Basal programmé";
+
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Basal Temporaire: %1$.3f U/heure";
+"Temporary Basal: %1$.3f U/hour" = "Basal temporaire: %1$.3f U/heure";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
-"Temporary Basal: %1$d min" = "Basal Temporaire: %1$d min";
+"Temporary Basal: %1$d min" = "Basal temporaire: %1$d min";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
-"Temporary Basal: %1$d%%" = "Basal Temporaire: %1$d%%";
+"Temporary Basal: %1$d%%" = "Basal temporaire: %1$d%%";
 
 /* Error description when storage fails */
 "Unable to store pump data" = "Impossible de stocker les données de la pompe";

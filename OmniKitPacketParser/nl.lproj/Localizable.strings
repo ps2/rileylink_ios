@@ -4,6 +4,9 @@
 /* Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Activeringstijd overschreden";
 
+/* Description for auto-off */
+"Auto-off" = "Automatische uitschakeling";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-uit alarm";
 
@@ -14,7 +17,7 @@
 "Below 50 units" = "Minder dan 50 eenheden";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
-"Bolus in progress" = "Bolus in uitvoering";
+"Bolus in progress" = "Bolus bezig";
 
 /* The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty) */
 "Bolus: %1$@U %2$@ %3$@ %4$@" = "Bolus: %1$@U %2$@ %3$@ %4$@";
@@ -35,28 +38,40 @@
 "Deactivated" = "Gedeactiveerd";
 
 /* Description for Empty reservoir pod fault */
-"Empty reservoir" = "Leeg reservoir";
+"Empty reservoir" = "Reservoir leeg";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Geen reactie van pod";
+"Empty response from pod" = "Lege/geen reactie van pod";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Fout geconstateerd, sluit af";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Vervaldatum melding";
+
 /* Description for expiration alert */
 "Expiration alert" = "Alarm vervaltijd";
 
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Er loopt een verlengde bolus";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Er loopt een verlengde bolus met tijdelijke basaalsnelheid";
+
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "Foutgebeurtenis opgetreden";
+"Fault event occurred" = "Er is een storing opgetreden";
 
 /* Description for finish setup */
-"Finish setup " = "Voltooi installatie ";
+"Finish setup " = "Voltooi installatie";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Voltooi instelling van herinnering";
 
 /* Pod inititialized */
-"Initialized" = "Geïnitialiseerd";
+"Initialized" = "Geinitialiseerd";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Canule inschieten";
+"Inserting cannula" = "Canule inbrengen";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Interne pod fout %1$03d";
@@ -71,7 +86,10 @@
 "Invalid CRC" = "Ongeldige CRC";
 
 /* Pod state when running with fifty or less units */
-"Low reservoir" = "Laag reservoir";
+"Low reservoir" = "Reservoir bijna leeg";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Reservoir Bijna Leeg Advies (%1$gE)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Reservoir bijna leeg alarm";
@@ -83,7 +101,7 @@
 "Memory initialized" = "Geheugen geïnitialiseerd";
 
 /* Pod alert state when no alerts are active */
-"No alerts" = "Geen meldingen";
+"No alerts" = "Geen foutmeldingen";
 
 /* Description for Fault Event Code .noFaults */
 "No faults" = "Geen fouten";
@@ -102,19 +120,22 @@
 "Normal" = "Normaal";
 
 /* Description for MessageError notEnoughData */
-"Not enough data" = "Niet genoeg gegevens";
+"Not enough data" = "Te weinig gegevens";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Occlusie gedetecteerd";
+"Occlusion detected" = "Afsluiting gedetecteerd";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
 /* Pod state oneNotUsed */
-"oneNotUsed" = "oneNotUsed";
+"oneNotUsed" = "eenNietGebruikt";
 
 /* Pod status after pairing */
 "Paired" = "Verbonden";
+
+/* Pod status when pairing completed */
+"Pairing completed" = "Koppeling Voltooid";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Breng de pod dichter bij de RileyLink en probeer opnieuw";
@@ -141,10 +162,10 @@
 "Pod Fault: %1$@" = "Pod fout: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor canule plaatsing.";
+"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor plaatsing canule.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pod is niet klaar voor priming.";
+"Pod is not in a state ready for priming." = "Pod is niet gereed voor het voorvullen.";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod is onderbroken";
@@ -152,12 +173,15 @@
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Insteltijd van de Pod is verlopen";
 
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Herinnering onderbroken Pod";
+
 /* Delivery status when pod is priming
    Pod status when priming */
-"Priming" = "Priming";
+"Priming" = "Voorvullen";
 
 /* Pod state when priming completed */
-"Priming completed" = "Priming voltooid";
+"Priming completed" = "Voorvullen voltooid";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Klaar voor programmeren basaal";
@@ -177,8 +201,14 @@
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Gepland basaal";
 
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Afsluiting nadert";
+
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Sluit af wegens dreigend alarm";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Opschortingstijd verstreken";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Onderbreek: %1$@ %2$@";
@@ -187,10 +217,10 @@
 "Suspended" = "Onderbroken";
 
 /* Pod tank fill completed */
-"Tank fill completed" = "Tank vulling voltooid";
+"Tank fill completed" = "Opslag vullen compleet";
 
 /* Pod power to motor activated */
-"Tank power activated" = "Tank power geactiveerd";
+"Tank power activated" = "Opslag power geactiveerd";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Tijdelijk basaal wordt uitgevoerd";
@@ -199,22 +229,22 @@
 "Temp basal running" = "Tijdelijk basaal werkend";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Tijdelijk basaal: %1$@ E/hour %2$@ %3$@ %4$@ E %5$";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Tijdelijk basaal: %1$@ E/uur %2$@ %3$@ %4$@ E %5$@";
 
 /* Pod state threeNotUsed */
-"threeNotUsed" = "threeNotUsed";
+"threeNotUsed" = "drieNietGebruikt";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Tijd om je pod te vervangen! Vervang je pod in %1$@";
 
 /* Pod state twoNotUsed */
-"twoNotUsed" = "twoNotUsed";
+"twoNotUsed" = "tweeNietGebruikt";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Onzeker";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Onverwacht berichtreeksnummer";
+"Unexpected message sequence number" = "Onverwacht volgnummer van bericht";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Onverwachte reactie van pod";
@@ -223,7 +253,7 @@
 "Unknown pod fault %1$03d" = "Onbekende pod fout %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Onbekende waarde (%1$@) voor type %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Onbekende Waarde (%1$@) voor type %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Validatie mislukt: %1$@";

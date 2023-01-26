@@ -1,9 +1,6 @@
 /* Bundle display name */
-"CFBundleDisplayName" = "";
-
-/* Get Info string */
-"CFBundleGetInfoString" = "";
+"CFBundleDisplayName" = "Rileylink";
 
 /* Bundle name */
-"CFBundleName" = "";
+"CFBundleName" = "Rileylink";
 

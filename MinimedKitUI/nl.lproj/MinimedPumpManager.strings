@@ -2,7 +2,7 @@
 "0MV-2k-Dty.title" = "RileyLink instellingen";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Zoek apparaat";
+"1fp-45-qWK.text" = "Zoek Apparaat";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
 "A6i-Cb-baR.text" = "Andere apparaten";
@@ -35,7 +35,7 @@
 "HuY-fE-vM8.text" = "Als je voor een langere periode in een andere tijdzone verblijft, dan kun je altijd de tijdzone van de pomp veranderen in het instellingenscherm van Loop.";
 
 /* Class = "UILabel"; text = "Loop will keep your pumpʼs clock synchronized with your phone in the time zone youʼre in now."; ObjectID = "IQ5-53-x9s"; */
-"IQ5-53-x9s.text" = "Loop zorgt ervoor dat de klok van uw pomp gesynchroniseerd blijft met uw telefoon in de tijdzone waarin u zich nu bevindt.";
+"IQ5-53-x9s.text" = "Loop zorgt ervoor dat de klok van je pomp gesynchroniseerd blijft met je telefoon in de tijdzone waarin je je nu bevindt.";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "De regio en kleur van de pomp worden aangeduid in de laatste 3 letters van het modelnummer (gelabeld als REF)";

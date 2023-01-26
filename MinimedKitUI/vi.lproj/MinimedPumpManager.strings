@@ -46,6 +46,12 @@
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
 "Nwf-TJ-KmJ.title" = "Cấu hình hoàn thành";
 
+/* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
+"oBL-lh-SHI.title" = "Pump Broadcasts";
+
+/* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
+"ojQ-ob-gBx.text" = "On";
+
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Cấu hình bơm";
 

@@ -1,12 +1,24 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = " (inaktiv)";
+" (inactive)" = "(inaktiv)";
+
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\" %1$@ \" har lavt batterinivå";
 
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
+/* Format string for alert content body for lowReservoir pod alert. (1: reminder value) */
+"%1$@ insulin or less remaining in Pod. Change Pod soon." = "%1$@ insulin eller mindre gjenstår i Pod. Bytt Pod snart.";
+
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Aktiveringstid utløpt";
+"Activation time exceeded" = "Aktiveringstiden er overskredet";
+
+/* Description for auto-off */
+"Auto-off" = "Auto-av";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Alarm for automatisk av";
@@ -16,6 +28,9 @@
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Under 50 enheter";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus pågår";
@@ -38,20 +53,53 @@
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Kommandofeil %1$u";
 
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Kommunikasjonsutgave";
+
+/* Description for BeepPreference.manualCommands */
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Tillitspåminnelser høres for kommandoer du starter, for eksempel bolus, avbryt bolus, suspendere, gjenoppta, lagre varslingspåminnelser osv. Når Loop automatisk justerer leveringen, brukes mistillitspåminnelser.";
+
+/* Description for BeepPreference.extended */
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Tillitspåminnelser vil høres når Loop automatisk justerer leveringen så vel som for kommandoer du starter.";
+
+/* The title for AlarmCode.other notification */
+"Critical Pod Error" = "Pod-feil";
+
+/* Recovery suggestion when unexpected address received */
+"Crosstalk possible. Please move to a new location" = "Crosstalk mulig. Vennligst flytt til et nytt sted";
+
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktivert";
 
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Tomt reservoar";
 
+/* The title for Empty Reservoir alarm notification */
+"Empty Reservoir" = "Tomt reservoar";
+
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Tomt svar fra pod";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "Aktivert";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Feil logget, avslutter";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Veiledning for utløpsalarm";
+
 /* Description for expiration alert */
 "Expiration alert" = "Utløpsalarm";
+
+/* Title string for BeepPreference.extended */
+"Extended" = "Forlenget";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Forlenget boluskjøring";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Forlenget boluskjøring med temp basal";
 
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Pod-feil";
@@ -111,6 +159,9 @@
 /* Error message shown when no pod is paired */
 "No pod paired" = "Ingen sammenkoblet pod";
 
+/* Error message for PodCommsError.noPodsFound */
+"No pods found" = "Ingen poder funnet";
+
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Ingen svar fra pod";
 
@@ -127,6 +178,16 @@
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Tilstoppelse oppdaget";
 
+/* The title for Occlusion alarm notification */
+"Occlusion Detected" = "Okklusjon oppdaget";
+
+/* Action button default text for PodAlerts */
+"Ok" = "Ok";
+
+/* Acknowledge button label for RileyLink low battery alert
+   Alert acknowledgment OK button */
+"OK" = "OK";
+
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
@@ -136,23 +197,29 @@
 /* Pod status after pairing */
 "Paired" = "Sammenkoblbet";
 
+/* Pod status when pairing completed */
+"Pairing completed" = "Sammenkobling fullført";
+
 /* Recovery suggestion on unexpected pod change */
-"Please bring only original pod in range or deactivate original pod" = "Vennligst ha bare den originale poden i området eller deaktiver den originale poden";
+"Please bring only original pod in range or deactivate original pod" = "Vennligst flytt kun original pod innen rekkevidde eller deaktiver original pod";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Prøv å sette pod og RileyLink nærmere hverandre og prøv så igjen";
+
+/* Alert content body for finishSetupReminder pod alert */
+"Please finish pairing your pod." = "Vennligst fullfør sammenkoblingen av poden.";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Vennligst koble til ny pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
-"Please reposition the RileyLink further from the pod" = "Vennligst flytt RileyLink lenger bort fra poden";
+"Please reposition the RileyLink further from the pod" = "Vennligst flytt RileyLink lenger fra poden";
 
 /* Recovery suggestion when pairing signal strength is too low */
-"Please reposition the RileyLink relative to the pod" = "Vennligst omposisjoner RileyLink i forhold til poden";
+"Please reposition the RileyLink relative to the pod" = "Vennligst flytt RileyLink i forhold til poden";
 
 /* Recovery suggestion when no response is received from pod */
-"Please try repositioning the pod or the RileyLink and try again" = "Prøv å flytte poden eller RileyLink, og prøv på nytt";
+"Please try repositioning the pod or the RileyLink and try again" = "Prøv å flytte poden eller RileyLink og prøv igjen";
 
 /* Error message shown when user cannot pair because pod is already paired */
 "Pod already paired" = "Pod er allerede sammenkoblet";
@@ -175,6 +242,9 @@
    The title for Pod Expired alarm notification */
 "Pod Expired" = "Pod utløpt";
 
+/* Format string for alert content body for userPodExpiration pod alert. (1: time until expiration) */
+"Pod expires in %1$@." = "Poden utløper om %1$@ .";
+
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Pod-feil: %1$@";
 
@@ -187,11 +257,20 @@
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod er suspendert";
 
+/* Status highlight message for occlusion alarm. */
+"Pod Occlusion" = "Pod Okklusjon";
+
+/* Alert content title for finishSetupReminder pod alert */
+"Pod Pairing Incomplete" = "Pod-sammenkobling ufullstendig";
+
 /* Error message shown when pod sends ack instead of response */
-"Pod sent ack instead of response" = "Pod sendte ack i stedet for respons";
+"Pod sent ack instead of response" = "Pod sendte ack i stedet for svar";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Tidsvindu for oppsett av pod er utløpt";
+
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Pod påminnelse er suspendert ";
 
 /* Format string for poor pod signal strength */
 "Poor signal strength" = "Dårlig signalstyrke";
@@ -201,7 +280,7 @@
 "Priming" = "Fyller";
 
 /* Pod state when priming completed */
-"Priming completed" = "Fylling ferdig";
+"Priming completed" = "Fylling fullført";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Klar for basal-programmering";
@@ -212,20 +291,45 @@
 /* Pod pairing reminder initialized */
 "Reminder initialized" = "Påminnelse initialisert";
 
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Gjenoppta";
+
+/* Recovery suggestion when pod is suspended */
+"Resume delivery" = "Gjenoppta levering";
+
+/* Alert content title for suspendEnded pod alert */
+"Resume Insulin" = "Gjenoppta insulintilførsel";
+
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Fortsett: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Programmert basalhastighet";
+"Scheduled basal" = "Planlagt basal";
 
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Planlagt basal";
 
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Avslutning nært forestående";
+
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Avslutt forestående alarm";
 
+/* Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Signaltap";
+
 /* Format string for pod signal strength too high */
-"Signal strength too high" = "Signalstyrke for høy";
+"Signal strength too high" = "Signalstyrken er for høy";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspendere";
+
+/* Alert content body for suspendInProgress pod alert
+   Alert content title for suspendInProgress pod alert */
+"Suspend In Progress Reminder" = "Suspend pågående påminnelse";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Suspenderingstiden er utløpt";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Pause: %1$@ %2$@";
@@ -233,11 +337,17 @@
 /* Delivery status when insulin delivery is suspended */
 "Suspended" = "Pauset";
 
+/* Alert notification body for suspendEnded pod alert user notification */
+"Suspension time is up. Open the app and resume." = "Suspensjonstiden er ute. Åpne appen og fortsett.";
+
 /* Pod tank fill completed */
 "Tank fill completed" = "Tankpåfylling komplett";
 
 /* Pod power to motor activated */
 "Tank power activated" = "Tank-motor aktivert";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Midlertidig basal";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Temp-basal pågår";
@@ -248,26 +358,38 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Temp-basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
 
+/* Alert content body for suspendEnded pod alert */
+"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Perioden med insulinsuspensjon er avsluttet.\n\nDu kan gjenoppta leveringen fra banneret på startskjermen eller fra skjermbildet for pumpeinnstillinger. Du vil bli påminnet igjen om 15 minutter.";
+
+/* Alert content body for timeOffsetChangeDetected pod alert */
+"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Klokken på pumpen er forskjellig fra gjeldende tid. Du kan se på pumpetiden og og synkronisere med gjeldende tid i innstillingene.";
+
 /* Pod state threeNotUsed */
-"threeNotUsed" = "threeNotUsed";
+"threeNotUsed" = "treNotUsed";
+
+/* Alert content title for timeOffsetChangeDetected pod alert */
+"Time Change Detected" = "Tidsendring oppdaget";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Det er på tide å bytte pod! Pod utløper om %1$@";
+
+/* Error message for PodCommsError.tooManyPodsFound */
+"Too many pods found" = "For mange pods funnet";
 
 /* Recovery suggestion when ack received instead of response */
 "Try again" = "Prøv igjen";
 
 /* Pod state twoNotUsed */
-"twoNotUsed" = "twoNotUsed";
+"twoNotUsed" = "toNotUsed";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Usikker";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Uventet sekvensnummer for melding";
+"Unexpected message sequence number" = "Uventet nummer for meldingssekvens";
 
 /* Format string for unexpected pod change */
-"Unexpected pod change" = "Uventet endring av pod";
+"Unexpected pod change" = "Uventet pod-endring";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Uventet svar fra pod";
@@ -276,10 +398,10 @@
 "Unknown pod fault %1$03d" = "Ukjent pod-feil %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Ukjent verdi (%1$@) for type %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Ukjent verdi (%1$@) for typen %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
-"Validation failed: %1$@" = "Validering feilet: %1$@";
+"Validation failed: %1$@" = "Valideringen mislyktes: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Vent til at eksisterende bolus skal bli ferdig, eller kanseler bolus";

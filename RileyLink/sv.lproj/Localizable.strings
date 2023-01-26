@@ -26,7 +26,7 @@
 "Fetch CGM" = "Hämta CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "https://min_nightscoutsida.herokuapp.com";
+"http://mysite.herokuapp.com" = "https://min-nightscoutsida.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -44,7 +44,7 @@
 "RileyLink Testing" = "RileyLink-testning";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Ställ in OmniPod";
+"Setup Omnipod" = "Omnipod-konfiguration";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Nightscout-URL";
@@ -53,5 +53,5 @@
 "Tap to set" = "Tryck för att ange";
 
 /* The title text for the nightscout upload enabled switch cell */
-"Upload To Nightscout" = "Ladda upp till Nightscout";
+"Upload To Nightscout" = "Nightscout-uppladdning";
 

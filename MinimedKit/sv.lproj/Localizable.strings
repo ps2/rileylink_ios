@@ -1,5 +1,5 @@
 /* Communications error for a bolus currently running */
-"A bolus is already in progress" = "En bolus pågår redan";
+"A bolus is already in progress" = "En bolusdos ges redan";
 
 /* The description of AlarmClockReminderPumpEvent */
 "AlarmClockReminder" = "AlarmClockReminder";
@@ -11,10 +11,10 @@
 "Alkaline" = "Alkaliskt";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/timme";
+"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/h";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolus pågår";
+"Bolus in progress" = "Ger bolus";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus pågår";
@@ -23,7 +23,7 @@
 "Canada" = "Canada";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde.";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Kommandot avvisades";
@@ -32,7 +32,7 @@
 "Comms with another pump detected" = "Kommunikation med en annan pump upptäcktes.";
 
 /* Error description */
-"Decoding Error" = "Avkodningsfel";
+"Decoding Error" = "Avkodingsfel";
 
 /* Error description */
 "Device Error" = "Enhetsfel";
@@ -65,7 +65,7 @@
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
-"Minimed 500/700 Series" = "Minimed 500/700 - serien";
+"Minimed 500/700 Series" = "Minimed 500/700 Series";
 
 /* Error description when no rileylink connected */
 "No RileyLink Connected" = "Ingen RileyLink ansluten";

@@ -30,13 +30,13 @@
 "%1$@ units remaining at %2$@" = "%1$@ tilbageværende enheder ved %2$@";
 
 /* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Insulinafgivelse er stoppet. Venligst deaktiver og fjern pod.";
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Insulin indgivelse er stoppet. Venligst deaktiver og fjern pod.";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
-"Active Time" = "Aktiv tid";
+"Active Time" = "Aktiv Tid";
 
 /* The title of the cell showing alarm status */
 "Alarms" = "Alarmer";
@@ -48,22 +48,22 @@
 "Are you sure you want to stop using Omnipod?" = "Er du sikker på at du vil stoppe med at bruge Omnipod?";
 
 /* The title text for the address assigned to the pod */
-"Assigned Address" = "Tildelt adresse";
+"Assigned Address" = "Tildelt Adresse";
 
 /* The title of the cell showing pod basal status */
-"Basal Delivery" = "Afgiver basal";
+"Basal Delivery" = "Basal Indgivelse";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basalrate";
+"Basal Rates" = "Basal Rater";
 
 /* The title of the cell showing pod bolus status */
-"Bolus Delivery" = "Afgiver bolus";
+"Bolus Delivery" = "Bolus Indgivelse";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuller";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Skift tidszone";
+"Change Time Zone" = "Skift Tidszone";
 
 /* Progress message for changing pod time. */
 "Changing time…" = "Skifter tiden…";
@@ -79,16 +79,16 @@
 
 /* Button title for pod deactivation
    Button title to deactivate pod */
-"Deactivate Pod" = "Deaktiver pod";
+"Deactivate Pod" = "Deaktiver Pod";
 
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Slet Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Insulin-grænser";
+"Delivery Limits" = "Indgivelsesgrænser";
 
 /* The title of the device information section in settings */
-"Device Information" = "Enheds information";
+"Device Information" = "Enheds Information";
 
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Deaktiver bolus bip";
@@ -109,7 +109,7 @@
 "Error Suspending" = "Fejl under udsættelse";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Udløbs påmindelse";
+"Expiration Reminder" = "Udløbs Påmindelse";
 
 /* The title of the cell showing the pod expiration after expiry */
 "Expired" = "Udløbet";
@@ -130,19 +130,19 @@
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Ufuldstændigt indstillet pod skal først deaktiveres, før der kan parres med en ny. Venligst deaktiver og fjern pod.";
 
 /* Instructions when deactivating pod that has been paired and possibly attached. */
-"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod." = "Ufuldstændigt indstillet pod skal først deaktiveres, før der kan parres med en ny. Venligst deaktiver og fjern pod.";
+"Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and remove pod." = "Ufuldstændigt indstillet pod skal først deaktiveres, før der kan parres med en ny. Venligst deaktiver og fjern pod";
 
 /* Button title to insert cannula during setup */
 "Insert Cannula" = "Indfør kanyle";
 
 /* The title of the cell showing delivered insulin */
-"Insulin Delivered" = "Indført insulin";
+"Insulin Delivered" = "Indført Insulin";
 
 /* Title for insulin type selection screen */
 "Insulin Type" = "Insulin type";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
-"Invalid entry" = "Fejlagtig indtastning";
+"Invalid entry" = "fejlagtig indtastning";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
@@ -154,7 +154,7 @@
 "Pair" = "Par";
 
 /* The title of the command to pair new pod */
-"Pair New Pod" = "Par ny pod";
+"Pair New Pod" = "Par ny Pod";
 
 /* The text of the loading label when pairing */
 "Pairing…" = "Parres…";
@@ -163,19 +163,19 @@
 "PI Version" = "PI Version";
 
 /* The title of the command to play test beeps */
-"Play Test Beeps" = "Afspil test bip";
+"Play Test Beeps" = "Afspil Test Bip";
 
 /* Progress message for play test beeps. */
-"Play Test Beeps…" = "Afspiller test bip…";
+"Play Test Beeps…" = "Afspiller Test Bip…";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM Version";
 
 /* Label describing pod age view */
-"Pod Age" = "Pod alder";
+"Pod Age" = "Pod Alder";
 
 /* Title of the pod settings view controller */
-"Pod Settings" = "Pod indstillinger";
+"Pod Settings" = "Pod Indstillinger";
 
 /* The text of the loading label when pod is primed */
 "Primed" = "Klargjort";
@@ -191,13 +191,13 @@
 "Replace Pod" = "Udskift Pod";
 
 /* The title of the command to replace pod when there is a pod fault */
-"Replace Pod Now" = "Udskift pod nu";
+"Replace Pod Now" = "Udskift Pod Nu";
 
 /* The title of the cell showing reservoir status */
 "Reservoir" = "Reservoir";
 
 /* Button title for retrying pod deactivation */
-"Retry Pod Deactivation" = "Forsøg pod deaktivering igen";
+"Retry Pod Deactivation" = "Forsøg Pod Deaktivering igen";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -219,16 +219,16 @@
 "Suspended" = "Udsat";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Skift fra Omnipod pumpe";
+"Switch from Omnipod Pumps" = "Skift fra Omnipod Pumper";
 
 /* Title of button to sync basal profile from pod */
-"Sync With Pod" = "Synkroniser med pod";
+"Sync With Pod" = "Synkroniser med Pod";
 
 /* The title of the command to run the test command */
-"Test Command" = "Test kommando";
+"Test Command" = "Test Kommando";
 
 /* Progress message for testing commands. */
-"Testing Commands…" = "Tester kommandoer…";
+"Testing Commands…" = "Tester Kommandoer…";
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "For mange indtastninger";

@@ -30,7 +30,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ unități rămase la %2$@";
 
 /* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Administrarea insulinei a fost oprită. Va rugam să dezactivați și să detașați Pod-ul.";
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Administrarea insulinei a fost oprită. Trebuie să dezactivați și să detașati Pod-ul.";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -142,7 +142,7 @@
 "Insulin Type" = "Tip insulină";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
-"Invalid entry" = "Intrare invalidă";
+"Invalid entry" = "Rată invalidă";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
@@ -151,13 +151,13 @@
 "None" = "Nimic";
 
 /* Button title to pair with pod during setup */
-"Pair" = "Împerechează";
+"Pair" = "Asociază";
 
 /* The title of the command to pair new pod */
-"Pair New Pod" = "Împerechează un Pod nou";
+"Pair New Pod" = "Asociază un Pod nou";
 
 /* The text of the loading label when pairing */
-"Pairing…" = "Se împerechează…";
+"Pairing…" = "Se asociază…";
 
 /* The title of the cell showing the pod pi version */
 "PI Version" = "Versiune PI";
@@ -210,7 +210,7 @@
 "Select the type of insulin that you will be using in this pod." = "Selectați tipul de insulină pe care o veți utiliza în acest pod.";
 
 /* The title of the status section in settings */
-"Status" = "Stare";
+"Status" = "Status";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Succes";
@@ -219,7 +219,7 @@
 "Suspended" = "Suspendat";
 
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Schimbă pompele Omnipod";
+"Switch from Omnipod Pumps" = "Schimbă de la pompele Omnipod";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Sincronizează cu Pod-ul";
@@ -234,7 +234,7 @@
 "Too many entries" = "Prea multe înregistrări";
 
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și împerecheați un Pod nou.";
+"Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și asociați unui Pod nou.";
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Necunoscut";

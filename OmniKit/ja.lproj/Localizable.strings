@@ -71,6 +71,9 @@
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "閉塞があります";
 
+/* Generic title of the omnipod pump manager */
+"Omnipod" = "Omnipod";
+
 /* Pod status after pairing */
 "Paired" = "ペアリングされました";
 

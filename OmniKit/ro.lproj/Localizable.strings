@@ -57,7 +57,7 @@
 "Fault event occurred" = "A survenit o defecțiune";
 
 /* Description for finish setup */
-"Finish setup " = "Finalizare setare ";
+"Finish setup " = "Finalizare setare";
 
 /* Pod inititialized */
 "Initialized" = "Inițializat";
@@ -69,7 +69,7 @@
 "Insulin Suspended" = "Livrarea insulinei suspendată";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Defecțiune internă Pod %1$03d";
+"Internal pod fault %1$03d" = "Defecțiune Pod internă %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BolusÎntrerupt: %1$@ U (%2$@ U planificat) %3$@ %4$@ %5$@";
@@ -109,7 +109,7 @@
 "No Pod" = "Niciun Pod";
 
 /* Error message shown when no pod is paired */
-"No pod paired" = "Niciun Pod împerecheat";
+"No pod paired" = "Niciun Pod asociat";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Nu s-a primit răspuns de la Pod";
@@ -125,7 +125,7 @@
 "Not enough data" = "Nu sunt suficiente date";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Ocluzie detectată";
+"Occlusion detected" = "Ocluziune detectată";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -134,7 +134,7 @@
 "oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
-"Paired" = "Împerecheat";
+"Paired" = "Asociat";
 
 /* Recovery suggestion on unexpected pod change */
 "Please bring only original pod in range or deactivate original pod" = "Vă rugăm să aduceți doar un pod original în rază de acțiune sau dezactivați pod-ul original";
@@ -143,7 +143,7 @@
 "Please bring your pod closer to the RileyLink and try again" = "Apropiați Pod-ul de RileyLink și încercați din nou";
 
 /* Recover suggestion shown when no pod is paired */
-"Please pair a new pod" = "Împerecheați un Pod nou";
+"Please pair a new pod" = "Asociați un Pod nou";
 
 /* Recovery suggestion when pairing signal strength is too high */
 "Please reposition the RileyLink further from the pod" = "Vă rugăm să poziționați RileyLink mai departe de pod";
@@ -155,7 +155,7 @@
 "Please try repositioning the pod or the RileyLink and try again" = "Vă rugăm să încercați să repoziționați pod-ul sau RileyLink și să încercați din nou";
 
 /* Error message shown when user cannot pair because pod is already paired */
-"Pod already paired" = "Pod deja împerecheat";
+"Pod already paired" = "Pod deja asociat";
 
 /* Error message shown when prime is attempted, but pod is already primed */
 "Pod already primed" = "Pod deja amorsat";
@@ -182,7 +182,7 @@
 "Pod is not in a state ready for cannula insertion." = "Pod-ul nu este pregătit pentru inserarea canulei.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pod-ul nu este pregătit pentru amorsare.";
+"Pod is not in a state ready for priming." = "Pod nu este pregătit pentru amorsare.";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod-ul este suspendat";
@@ -204,7 +204,7 @@
 "Priming completed" = "Amorsare terminată";
 
 /* Pod state when ready for basal programming */
-"Ready for basal programming" = "Pregătit pentru programarea ratelor bazale";
+"Ready for basal programming" = "Pregătit pentru programarea bazalelor";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Pregătit pentru inserarea canulei";
@@ -285,8 +285,8 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Așteptați finalizarea bolusului curent sau opriți bolusul";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Așteptați finalizarea bazalei temporare curente sau suspendați pentru a o opri";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Așteptați finalizarea bazalei temporare curente sau suspendați pentru oprirea ei";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Se așteaptă reamintirea de împerechere";
+"Waiting for pairing reminder" = "Se așteaptă reamintirea de asociere";
 

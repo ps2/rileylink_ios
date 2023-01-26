@@ -1,8 +1,14 @@
+/* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
+"%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
+
 /* The format string describing number of basal schedule entries: (1: number of entries) */
-"%1$@ basal schedule entries\n" = "基礎パターン入力 %1$@回\\n\n";
+"%1$@ basal schedule entries\n" = "基礎パターン入力 %1$@回\n\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
-"%1$@ Units of insulin remaining\n" = "インスリン 残り%1$@U\\n\n";
+"%1$@ Units of insulin remaining\n" = "インスリン 残り%1$@U\n\n";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "アルカリ電池とリチウム電池では消耗速度が異なります。アルカリは徐々に電力が落ちるのに対し、リチウムは電池生命の前半は電圧を保持します。MySentryに互換性のないMinimed (x22/x15)でループを使用する場合は、アルカリ電池は4～5日、リチウム電池は1～2週間使用できることが多いです。それぞれの電池の種類の電圧消耗速度を設定して、電池生命が約8～10時間になるとユーザに知らせます。";
@@ -17,13 +23,13 @@
 "Basal Rates" = "基礎レート";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
-"Battery: %1$@ volts\n" = "電池: %1$@ ボルト\\n\n";
+"Battery: %1$@ volts\n" = "電池: %1$@ ボルト\n\n";
 
 /* The label indicating the best radio frequency */
 "Best Frequency" = "最良周波数";
 
 /* The format string describing pump bolusing state: (1: bolusing) */
-"Bolusing: %1$@\n" = "ボーラス注入中: %1$@\\n\n";
+"Bolusing: %1$@\n" = "ボーラス注入中: %1$@\n\n";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "キャンセル";

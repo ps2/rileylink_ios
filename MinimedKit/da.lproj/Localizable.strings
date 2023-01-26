@@ -11,7 +11,7 @@
 "Alkaline" = "Alkaline";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basal profil %1$@: %2$@ E/time";
+"Basal Profile %1$@: %2$@ U/hour" = "Basal Profil %1$@: %2$@ E/time";
 
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus i gang";
@@ -23,7 +23,7 @@
 "Canada" = "Canada";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Tjek at pumpen ikke er suspenderet eller primer, eller har en procent midlertidig basal type";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Tjek at pumpen ikke er suspenderet eller under klargøring, eller har en procent midlertidig basal type";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Kommando nægtet";
@@ -32,13 +32,13 @@
 "Comms with another pump detected" = "Kommunikation med en anden pumpe opdaget.";
 
 /* Error description */
-"Decoding Error" = "Afkodningsfejl";
+"Decoding Error" = "Undersøger fejl";
 
 /* Error description */
-"Device Error" = "Enhedsfejl";
+"Device Error" = "Enheds Fejl";
 
 /* Describing the pump history insulin data source */
-"Event History" = "Hændelseshistorik";
+"Event History" = "Hændelses log";
 
 /* Error description for glucose page failing crc check */
 "Glucose page failed crc check" = "Glucose page failed crc check";
@@ -56,7 +56,7 @@
 "Lithium" = "Lithium";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er tæt på, og tændt";
+"Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er i nærheden, og tændt";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max indstilling overskredet";
@@ -71,19 +71,19 @@
 "No RileyLink Connected" = "Ingen RileyLink tilsluttet";
 
 /* Describing the North America pump region */
-"North America" = "Nordamerika";
+"North America" = "Nord Amerika";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpe svarede ikke";
 
 /* Error description */
-"Pump Error" = "Pumpefejl";
+"Pump Error" = "Pumpe Fejl";
 
 /* No comment provided by engineer. */
-"Pump is suspended" = "Pumpe er suspenderet";
+"Pump is suspended" = "Pumpe er afbrudt";
 
 /* No comment provided by engineer. */
-"Pump responded unexpectedly" = "Pumpe svarede uventet";
+"Pump responded unexpectedly" = "Pumpe reagerede uventet";
 
 /* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "PumpMessage(%1$@, %2$@, %3$@, %4$@)";
@@ -92,16 +92,16 @@
 "Reservoir" = "Reservoir";
 
 /* Error description */
-"RileyLink radio tune failed" = "RileyLink radio tune fejlede";
+"RileyLink radio tune failed" = "RileyLink radio indstilling fejlede";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Midlertidig basal: %1$.3f E/time";
+"Temporary Basal: %1$.3f U/hour" = "Midlertidig Basal: %1$.3f E/time";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
-"Temporary Basal: %1$d min" = "Midlertidig basal: %1$d min";
+"Temporary Basal: %1$d min" = "Midlertidig Basal: %1$d min";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
-"Temporary Basal: %1$d%%" = "Midlertidig basal: %1$d%%";
+"Temporary Basal: %1$d%%" = "Midlertidig Basal: %1$d%%";
 
 /* Error description when storage fails */
 "Unable to store pump data" = "Kan ikke gemme pumpedata";
@@ -116,11 +116,11 @@
 "Unknown pump error code: %1$@" = "Ukendt pumpe fejlkode: %1$@";
 
 /* No comment provided by engineer. */
-"Unknown pump model: %@" = "Ukendt pumpemodel %@";
+"Unknown pump model: %@" = "Unknown pumpe model %@";
 
 /* Format string for an unknown response. (1: The operation being performed) (2: The response data) */
-"Unknown response during %1$@: %2$@" = "Ukendt svar mens %1$@: %2$@";
+"Unknown response during %1$@: %2$@" = "Ukendt svar under %1$@: %2$@";
 
 /* Describing the worldwide pump region */
-"World-Wide" = "World-Wide";
+"World-Wide" = "Verden (World-Wide)";
 

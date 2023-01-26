@@ -1,0 +1,178 @@
+/* Description for expiration alert */
+"Expiration alert" = "Varovanie o expirácii";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Prebieha predĺžený bolus";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Prebieha predĺžený bolus s dočasným bazálom";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Vyskytla sa chybová udalosť";
+
+/* Description for finish setup */
+"Finish setup " = "Dokončiť nastavenie";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Dokončiť nastavenie pripomienky";
+
+/* Pod inititialized */
+"Initialized" = "Inicializované";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Kanyla sa zavádza";
+
+/* The format string for Internal pod fault (1: The fault code value) */
+"Internal pod fault %1$03d" = "Interná chyba podu %1$03d";
+
+/* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "PrerušenýBolus: %1$@ j (%2$@ j naplánované) %3$@ %4$@ %5$@";
+
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Neplatná adresa: ( %1$@ )";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "Neplatný CRC";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Nízka hladina v rezervoári";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Upozornenie na nízku hladinu v rezervoári (%1$gU)";
+
+/* Description for low reservoir alarm */
+"Low reservoir advisory alarm" = "Varovný alarm nízkej hladiny v rezervoári";
+
+/* Recovery suggestion when no RileyLink is available */
+"Make sure your RileyLink is nearby and powered on" = "Uistite sa, že je váš RileyLink v blízkosti a je zapnutý";
+
+/* Pod memory initialized */
+"Memory initialized" = "Pamäť inicializovaná";
+
+/* Pod alert state when no alerts are active */
+"No alerts" = "Žiadne upozornenia";
+
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Žiadne chyby";
+
+/* Error message shown when no pod is paired */
+"No pod paired" = "Nie je spárovaný žiadny pod";
+
+/* Error message shown when no response from pod was received */
+"No response from pod" = "Žiadna odpoveď z podu";
+
+/* Error message shown when no response from pod was received */
+"No RileyLink available" = "Nie je k dispozícii žiadny RileyLink";
+
+/* Delivery status when basal is running
+   Pod state when running above fifty units */
+"Normal" = "Normálny";
+
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Nedostatok dát";
+
+/* Description for Occlusion detected pod fault */
+"Occlusion detected" = "Zistená oklúzia";
+
+/* Generic title of the omnipod pump manager */
+"Omnipod" = "Omnipod";
+
+/* Pod status after pairing */
+"Paired" = "Spárované";
+
+/* Pod status when pairing completed */
+"Pairing completed" = "Párovanie je dokončené";
+
+/* Recovery suggestion when no response is received from pod */
+"Please bring your pod closer to the RileyLink and try again" = "Priblížte svoj pod k RileyLinku a skúste to znova";
+
+/* Recover suggestion shown when no pod is paired */
+"Please pair a new pod" = "Spárujte prosím nový pod";
+
+/* Error message shown when user cannot pair because pod is already paired */
+"Pod already paired" = "Pod je už spárovaný";
+
+/* Description for expiration advisory alarm */
+"Pod expiration advisory alarm" = "Varovný alarm Expirácia podu";
+
+/* The title for pod expiration notification */
+"Pod Expiration Notice" = "Oznámenie o expirácii podu";
+
+/* Description for Pod expired pod fault */
+"Pod expired" = "Pod expiroval";
+
+/* Format string for pod fault code */
+"Pod Fault: %1$@" = "Chyba podu: %1$@";
+
+/* Error message when cannula insertion fails because the pod is in an unexpected state */
+"Pod is not in a state ready for cannula insertion." = "Pod nie je v stave pripravený na zavedenie kanyly.";
+
+/* Error message action could not be performed because pod is suspended */
+"Pod is suspended" = "Pod pozastavený";
+
+/* Pod state when prime or cannula insertion has not completed in the time allotted */
+"Pod setup window expired" = "Čas pre nastavenie podu vypršal ";
+
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Pripomienka Pod pozastavený";
+
+/* Pod state when ready for basal programming */
+"Ready for basal programming" = "Pripravené na programovanie bazáu";
+
+/* Pod state when ready for cannula insertion */
+"Ready to insert cannula" = "Pripravené na zavedenie kanyly";
+
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Pripomienka bola inicializovaná";
+
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "Naplánovaný bazál ";
+
+/* Delivery status when basal is running */
+"Scheduled Basal" = "Naplánovaný bazál ";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Čas pozastavenia vypršal";
+
+/* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
+"Suspend: %1$@ %2$@" = "Pozastaviť: %1$@ %2$@";
+
+/* Delivery status when insulin delivery is suspended */
+"Suspended" = "Pozastavené";
+
+/* Error message shown when temp basal could not be set due to existing temp basal in progress */
+"Temp basal in progress" = "Dočasný bazál už prebieha";
+
+/* Delivery status when temp basal is running */
+"Temp basal running" = "Prebieha dočasný bazál";
+
+/* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "DočasBazál: %1$@ j/hod %2$@ %3$@ %4$@ j %5$@";
+
+/* The format string for pod expiration notification body (1: time until expiration) */
+"Time to replace your pod! Your pod will expire in %1$@" = "Je čas vymeniť pod! Váš pod expiruje za %1$@";
+
+/* String describing a dose that was possibly scheduled */
+"Uncertain" = "Neisté";
+
+/* Error message shown when empty response from pod was received */
+"Unexpected response from pod" = "Neočakávaná odpoveď z podu";
+
+/* The format string for Unknown pod fault (1: The fault code value) */
+"Unknown pod fault %1$03d" = "Neznáma chyba podu %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Neznáma hodnota ( %1$@ ) pre typ %2$@";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Overenie zlyhalo: %1$@";
+
+/* Recovery suggestion when operation could not be completed due to existing bolus in progress */
+"Wait for existing bolus to finish, or cancel bolus" = "Počkajte, kým sa dokončení existujúci bolus alebo bolus zrušte";
+
+/* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
+"Wait for existing temp basal to finish, or suspend to cancel" = "Počkajte, kým sa skončí existujúci dočasný bazál, alebo pozastavte pre zrušenie";
+
+/* Description waiting for pairing reminder */
+"Waiting for pairing reminder" = "Čaká sa na pripomienku pre párovanie";
+

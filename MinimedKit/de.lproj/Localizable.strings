@@ -2,16 +2,16 @@
 "A bolus is already in progress" = "Ein Bolus wird bereits abgegeben";
 
 /* The description of AlarmClockReminderPumpEvent */
-"AlarmClockReminder" = "Alarm Erinnerung";
+"AlarmClockReminder" = "AlarmClockReminder";
 
 /* The description of AlarmSensorPumpEvent */
-"AlarmSensor" = "Alarmsensor";
+"AlarmSensor" = "AlarmSensor";
 
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alkalisch";
 
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
-"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ IE/h";
+"Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/Stunde";
 
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus im Gang";
@@ -94,8 +94,11 @@
 /* Error description */
 "RileyLink radio tune failed" = "Einstellen des RileyLink Funksignals fehlgeschlagen";
 
+/* Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Signalverlust";
+
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
-"Temporary Basal: %1$.3f U/hour" = "Temporäre Basalrate: %1$.3f IE/h";
+"Temporary Basal: %1$.3f U/hour" = "Temporäre Basalrate: %1$.3f E/St";
 
 /* The format string description of a TempBasalDurationPumpEvent. (1: The duration of the temp basal in minutes) */
 "Temporary Basal: %1$d min" = "Temporäre Basalrate: %1$d min";

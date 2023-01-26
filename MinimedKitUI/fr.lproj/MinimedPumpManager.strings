@@ -17,7 +17,7 @@
 "erq-yb-anx.text" = "Connecter des dispositifs";
 
 /* Class = "UITableViewController"; title = "Pump Clock"; ObjectID = "Fps-h3-V4K"; */
-"Fps-h3-V4K.title" = "Horloge à Pompe";
+"Fps-h3-V4K.title" = "Horloge de la pompe";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N)."; ObjectID = "fVG-pl-jT9"; */
 "fVG-pl-jT9.footerTitle" = "L’ID de la pompe correspond à la partie numérique à 6 chiffres du numéro de série (étiquetée SN ou S/N).";
@@ -47,7 +47,7 @@
 "Nwf-TJ-KmJ.title" = "L’installation est terminée";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Transmissions de Pompes";
+"oBL-lh-SHI.title" = "Transmissions de la pompe";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "Éveillé";
@@ -56,7 +56,7 @@
 "OZk-Db-KCs.title" = "Configuration de la Pompe";
 
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
-"tGa-FP-JqD.text" = "Entrez la région des pompes";
+"tGa-FP-JqD.text" = "Entrez la région de la pompe";
 
 /* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
 "V47-Nq-7ew.title" = "Configuration de la Pompe";

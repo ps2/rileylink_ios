@@ -1,8 +1,14 @@
+/* Description for auto-off alarm */
+"Auto-off alarm" = "Auto-off alarm";
+
 /* Pod state when running below fifty units */
 "Below 50 units" = "Dưới 50 units";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Liều Bolus đang được thực hiện";
+
+/* The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty) */
+"Bolus: %1$@U %2$@ %3$@ %4$@" = "Bolus: %1$@U %2$@ %3$@ %4$@";
 
 /* Delivery status when bolusing */
 "Bolusing" = "Đang tiến hành bolus";
@@ -40,6 +46,9 @@
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Lỗi bên trong pod %1$03d";
 
+/* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@";
+
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Báo động ngăn chứa insulin thấp";
 
@@ -61,6 +70,12 @@
 /* Delivery status when basal is running
    Pod state when running above fifty units */
 "Normal" = "Bình thường";
+
+/* Description for Occlusion detected pod fault */
+"Occlusion detected" = "Occlusion detected";
+
+/* Generic title of the omnipod pump manager */
+"Omnipod" = "Omnipod";
 
 /* Pod status after pairing */
 "Paired" = "Đã được ghép đôi";

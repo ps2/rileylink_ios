@@ -65,13 +65,13 @@
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
-"Minimed 500/700 Series" = "Minimed seriile 500/700";
+"Minimed 500/700 Series" = "Minimed 500/700 Series";
 
 /* Error description when no rileylink connected */
 "No RileyLink Connected" = "Niciun RileyLink conectat";
 
 /* Describing the North America pump region */
-"North America" = "America de Nord";
+"North America" = "North America";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpa nu a răspuns";

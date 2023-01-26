@@ -1,6 +1,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* The title of the about section */
 "About" = "Om";
 
@@ -11,7 +14,7 @@
 "Add Minimed Pump" = "Legg til Minimed Pumpe";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "API kodeord";
+"API Secret" = "API Secret";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfigurasjon";
@@ -26,7 +29,7 @@
 "Fetch CGM" = "Hent CGM";
 
 /* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "http://minside.herokuapp.com";
+"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
 
 /* The title of the Nightscout service */
 "Nightscout" = "Nightscout";
@@ -41,7 +44,7 @@
 "Required" = "Påkrevd";
 
 /* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink-testing";
+"RileyLink Testing" = "RileyLink Testing";
 
 /* Title text for button to set up omnipod */
 "Setup Omnipod" = "Sett opp Omnipod";

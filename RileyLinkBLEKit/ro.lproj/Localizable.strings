@@ -1,11 +1,11 @@
 /* Write size limit exceeded error description (1: size limit) */
-"Data exceeded maximum size of %@ bytes" = "Datele depășesc numărul maxim de %@ bytes";
+"Data exceeded maximum size of %@ bytes" = "Datele depășesc cantitatea maximă de %@ bytes";
 
 /* Invalid input error description (1: input) */
-"Input %@ is invalid" = "Intrarea %@ este invalidă";
+"Input %@ is invalid" = "Introducerea %@ este invalidă";
 
 /* Recovery suggestion for unknown peripheral characteristic */
-"Make sure the device is nearby, and the issue should resolve automatically" = "Plasarea dispozitivul în apropiere ar trebui să rezolve problema";
+"Make sure the device is nearby, and the issue should resolve automatically" = "Plasarea dispozitivul în apropiere, ar trebui să rezolve problema";
 
 /* Timeout error description */
 "Peripheral did not respond in time" = "Dispozitivul periferic nu a răspuns în timp util";
@@ -23,7 +23,7 @@
 "RileyLink did not respond in time" = "RileyLink nu a răspuns în timp util";
 
 /* Unsupported command error description */
-"RileyLink firmware does not support the %@ command" = "Firmware-ul RileyLink nu permite comanda %@";
+"RileyLink firmware does not support the %@ command" = "Firmware-ul RileyLink nu sprijină %@ comanda";
 
 /* PeripheralManagerError.notReady error description */
 "RileyLink is not connected" = "RileyLink nu este conectat";

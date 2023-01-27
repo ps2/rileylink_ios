@@ -1,3 +1,6 @@
+/* PeripheralManagerError.emptyValue error description */
+"Characteristic value was empty" = "Karakteristieke waarde was leeg";
+
 /* Write size limit exceeded error description (1: size limit) */
 "Data exceeded maximum size of %@ bytes" = "Data overschrijdt maximale grootte van %@ bytes";
 
@@ -19,12 +22,30 @@
 /* Invalid response error description (1: response) */
 "Response %@ is invalid" = "Antwoord %@ is ongeldig";
 
+/* commandsBlocked error description */
+"RileyLink command did not respond" = "De RileyLink opdracht heeft niet gereageerd";
+
+/* PeripheralManagerError.timeout error description */
+"RileyLink did not respond in time" = "RileyLink reageerde niet op tijd";
+
 /* Unsupported command error description */
-"RileyLink firmware does not support the %@ command" = "De RileyLink firmware ondersteund niet het %@ commando";
+"RileyLink firmware does not support the %@ command" = "De RileyLink firmware ondersteunt niet het %@ commando";
+
+/* PeripheralManagerError.busy error description */
+"RileyLink is busy" = "RileyLink is bezet";
+
+/* PeripheralManagerError.notReady error description */
+"RileyLink is not connected" = "RileyLink is niet verbonden";
+
+/* commandsBlocked recovery suggestion */
+"RileyLink may need to be turned off and back on" = "RileyLink moet mogelijk uit- en weer ingeschakeld worden";
 
 /* Failure reason: unknown peripheral characteristic */
 "The RileyLink was temporarily disconnected" = "The RileyLink was tijdelijk niet verbonden";
 
 /* Error description */
 "Unknown characteristic" = "Onbekende eigenschap";
+
+/* PeripheralManagerError.unknownCharacteristic error description */
+"Unknown characteristic: %@" = "Onbekende eigenschap: %@";
 

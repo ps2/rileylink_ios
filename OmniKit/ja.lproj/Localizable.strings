@@ -7,9 +7,6 @@
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "ボーラスが進行中";
 
-/* The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty) */
-"ボーラス: %1$@U %2$@ %3$@ %4$@" = "Bolus: %1$@U %2$@ %3$@ %4$@";
-
 /* Delivery status when bolusing */
 "Bolusing" = "ボーラス注入中";
 
@@ -40,7 +37,7 @@
 /* Description for finish setup */
 "Finish setup " = "設定終了";
 
-/* Pod initialized */
+/* Pod inititialized */
 "Initialized" = "初期化完了";
 
 /* The format string for Internal pod fault (1: The fault code value) */
@@ -164,15 +161,4 @@
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "ポッドから予期せぬ反応";
-　
-/* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "不明なポッドエラー %1$03d";
 
-/* Recovery suggestion when operation could not be completed due to existing bolus in progress */
-"Wait for existing bolus to finish, or cancel bolus" = "進行中のボーラスが完了するのを待つか、ボーラスをキャンセルしてください。";
-
-/* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "進行中の一時基礎が完了するのを待つか、一時基礎を停止してください";
-
-/* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "ペアリングリマインダー待機中";

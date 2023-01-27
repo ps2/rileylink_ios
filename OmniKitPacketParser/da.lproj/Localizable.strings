@@ -1,5 +1,14 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (inaktiv)";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Aktiveringstid overskredet";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-sluk alarm";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Basal initialiseret";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Under 50 enheder";
@@ -37,11 +46,17 @@
 /* Description for expiration alert */
 "Expiration alert" = "Udløbs advarsel";
 
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Der opstod en fejlhændelse";
+
 /* Description for finish setup */
 "Finish setup " = "Afslut indstilling";
 
 /* Pod inititialized */
 "Initialized" = "Initialiseret";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Indsætter kanyle";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Intern pod fejl %1$03d";
@@ -49,14 +64,29 @@
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "AfbrudtBolus: %1$@ E (%2$@ E planlagt) %3$@ %4$@ %5$@";
 
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Ugyldig adresse: (%1$@)";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "Ugyldig CRC";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Lavt reservoir";
+
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Lavt reservoir alarm";
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er i nærheden og tændt";
 
+/* Pod memory initialized */
+"Memory initialized" = "Hukommelse initialiseret";
+
 /* Pod alert state when no alerts are active */
 "No alerts" = "Ingen alarmer";
+
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Ingen fejl";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "Ingen pod parret";
@@ -71,11 +101,17 @@
    Pod state when running above fifty units */
 "Normal" = "Normal";
 
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Ikke nok data";
+
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Blokkering opdaget";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
+
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
 "Paired" = "Parret";
@@ -120,14 +156,23 @@
    Pod status when priming */
 "Priming" = "Klargør";
 
+/* Pod state when priming completed */
+"Priming completed" = "Priming afsluttet";
+
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Klar til basal programmering";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Klar til kanyle indførsel";
 
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Påmindelse initialiseret";
+
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Fortsæt: %1$@ %2$@";
+
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "Planlagt basal";
 
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Planlagt Basal";
@@ -156,17 +201,32 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "MidlertidigBasal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Tid til udskiftning af pod! Din pod udløber om %1$@";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Usikker";
+
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Uventet meddelelsessekvensnummer";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Uventet svar fra pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Ukendt pod fejl %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Ukendt værdi (%1$@) for %2$@";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Validering mislykkedes: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Vent indtil eksisterende bolus er færdig, eller annuller bolus";
@@ -176,3 +236,4 @@
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Venter på parrings påmindelse";
+

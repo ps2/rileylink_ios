@@ -193,6 +193,15 @@
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Suspendido: %1$@\n";
 
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Suspendiendo";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Sincronizar con la hora actual";
+
+/* Title for pod sync time action sheet. */
+"Time Change Detected" = "Cambio de hora detectado";
+
 /* The label indicating the results of each frequency trial */
 "Trials" = "Pruebas";
 
@@ -202,8 +211,20 @@
 /* Progress message for tuning radio */
 "Tuning radio…" = "Sintonizando frecuencia de radio…";
 
+/* Units for showing temp basal rate */
+"U/hr" = "U/hora";
+
 /* The detail text for an unknown pump model */
 "Unknown" = "Desconocido";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Uptime";
+
+/* Description for option to use MySentry
+   navigation title for pump battery type selection */
+"Use MySentry" = "Usar MySentry";
+
+/* Value string for MySentry config when MySentry is being used
+   Value string for MySentry config when MySentry is not being used */
+"Yes" = "Sí";
+

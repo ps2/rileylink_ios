@@ -1,3 +1,6 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -90,29 +93,14 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Laita bolusäänet pois";
 
-/* Title text for button to disable confirmation beeps */
-"Disable Confirmation Beeps" = "Laita vahvistusäänet pois";
-
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Laita bolusäänet päälle";
-
-/* Title text for button to enable confirmation beeps */
-"Enable Confirmation Beeps" = "Laita vahvistusäänet päälle";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Virhe laitettaessa bolusäänet pois päältä";
 
-/* The alert title for disable confirmation beeps error */
-"Error disabling confirmation beeps" = "Virhe laitettaessa vahvistusäänet pois päältä";
-
-/* The alert title for emitting completion beep error */
-"Error emitting completion confirmation beep" = "Virhe lähetettäessä valmistumisen vahvistusääni";
-
 /* The alert title for enable bolus beeps error */
 "Error enabling bolus beeps" = "Virhe laitettaessa bolusäänet päälle";
-
-/* The alert title for enable confirmation beeps error */
-"Error enabling confirmation beeps" = "Virhe laitettaessa vahvistusäänet päälle";
 
 /* The alert title for a resume error */
 "Error Resuming" = "Virhe jatkamisessa";
@@ -149,6 +137,9 @@
 
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Annosteltu insuliini";
+
+/* Title for insulin type selection screen */
+"Insulin Type" = "Insuliinityyppi";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Virheellinen merkintä";
@@ -192,18 +183,6 @@
 /* The text of the loading label when priming */
 "Priming…" = "Alustetaan…";
 
-/* The title of the command to read the pod status */
-"Read Pod Status" = "Lue pumpun tila";
-
-/* Progress message for reading Pod status. */
-"Read Pod Status…" = "Luetaan pumpun tilaa…";
-
-/* The title of the command to read the pulse log */
-"Read Pulse Log" = "Lue pulssiloki";
-
-/* Progress message for reading pulse log. */
-"Reading Pulse Log…" = "Luetaan pulssilokia…";
-
 /* Label describing time remaining view */
 "Remaining" = "Jäljellä";
 
@@ -226,6 +205,9 @@
 
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Ohjelmoitu";
+
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Valitse insuliinin tyyppi, jota käytät tässä pumpussa.";
 
 /* The title of the status section in settings */
 "Status" = "Tila";

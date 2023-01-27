@@ -1,12 +1,3 @@
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Việc tiêm Insulin đã dừng. Hủy kích hoạt và thay pod.";
-
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -20,17 +11,26 @@
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/giờ";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
 
 /* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
 "%@+ U" = "%@+ U";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
+
+/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. Việc tiêm Insulin đã dừng. Hủy kích hoạt và thay pod.";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Thời gian Hoạt động";
@@ -75,7 +75,7 @@
 "Deactivate" = "Hủy kích hoạt";
 
 /* Button title for pod deactivation
- Button title to deactivate pod */
+   Button title to deactivate pod */
 "Deactivate Pod" = "Hủy kích hoạt Pod";
 
 /* Button title to delete Omnipod PumpManager */
@@ -181,7 +181,7 @@
 "Remaining" = "Đang còn lại";
 
 /* Label indicating pod replacement necessary
- The title of the command to replace pod */
+   The title of the command to replace pod */
 "Replace Pod" = "Thay thế Pod";
 
 /* The title of the command to replace pod when there is a pod fault */
@@ -194,7 +194,7 @@
 "Retry Pod Deactivation" = "Hủy kích hoạt pod lại";
 
 /* Title of button to save delivery limit settings
- Title of button to sync basal profile when no pod paired */
+   Title of button to sync basal profile when no pod paired */
 "Save" = "Lưu";
 
 /* The detail text of the basal row when pod is running scheduled basal */
@@ -229,3 +229,4 @@
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Không xác định";
+

@@ -1,12 +1,3 @@
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%2$@の時点で %1$@ U 残っています";
-
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@。インスリン注入が止まりました。ポッドを停止して取り外してください。.";
-
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -20,17 +11,26 @@
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/時";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
 
 /* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
 "%@+ U" = "%@+ U";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%2$@の時点で %1$@ U 残っています";
+
+/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@。インスリン注入が止まりました。ポッドを停止して取り外してください。.";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "アクティブ時間";
@@ -174,7 +174,7 @@
 /* The text of the loading label when pod is primed */
 "Primed" = "プライミング完了";
 
-/* The text of the loading label when priming */
+/* Pod pairing action button text while priming */
 "Priming..." = "プライミング中";
 
 /* Label describing time remaining view */
@@ -229,3 +229,4 @@
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "不明";
+

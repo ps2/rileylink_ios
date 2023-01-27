@@ -1,3 +1,9 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -6,6 +12,9 @@
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Insulineinheiten verbleiben\n";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ IE verbleibend bei %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -54,6 +63,9 @@
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Verbindungsstatus";
+
+/* Text for continue button */
+"Continue" = "Weiter";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
@@ -112,6 +124,9 @@
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Die Insulinabgabe kann von der Pumpe bestimmt werden, indem entweder die Ereignishistorie interpretiert wird oder das Reservoirvolumen über die Zeit verglichen wird. Das Lesen der Ereignishistorie ermöglicht eine genauere Statusgrafik und das Hochladen aktueller Behandlungsdaten in Nightscout, auf Kosten einer schnelleren Pumpenbatterieentleerung und der Möglichkeit einer höheren Funkfehlerrate im Vergleich zum Lesen des Reservoirvolumens. Wenn das ausgewählte Gerät aus irgendeinem Grund nicht verwendet werden kann, versucht das System, auf die andere Option zurückzugreifen.";
+
+/* Text for confidence reminders navigation link */
+"Insulin Type" = "Insulintyp";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Zuletzt aktiv";
@@ -178,6 +193,9 @@
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "In der Pumpe abspeichern…";
 
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pump." = "Wählen Sie die Art des Insulins aus, die Sie in dieser Pumpe verwenden möchten.";
+
 /* The title of the command to send a button press */
 "Send Button Press" = "Sende-Taste drücken";
 
@@ -207,4 +225,11 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Uptime";
+
+/* Value string for MySentry config when MySentry is being used
+   Value string for MySentry config when MySentry is not being used */
+"Yes" = "Ja";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Ja, mit aktueller Zeit synchronisieren";
 

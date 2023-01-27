@@ -26,7 +26,7 @@
 "Bolusing" = "Bolusabgabe";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Abgabe mit temporärer Basalrate";
+"Bolusing with temp basal" = "Bolus-Abgabe mit temporärer Basalrate";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Einsetzen der Kanüle";
@@ -52,6 +52,12 @@
 /* Description for expiration alert */
 "Expiration alert" = "Ablaufalarm";
 
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Verzögerter Bolus aktiv";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Verzögerter Bolus aktiv mit temporärer Basalrate";
+
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Fehlerereignis aufgetreten";
 
@@ -73,7 +79,7 @@
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Abgebrochener Bolus: %1$@ IE (%2$@ IE geplant) %3$@ %4$@ %5$@";
 
-/* Description for MessageError invalidSequence */
+/* Description for MessageError invalidAddress */
 "Invalid address: (%1$@)" = "Ungültige Adresse: (%1$@)";
 
 /* Description for MessageError invalidCrc */
@@ -122,14 +128,17 @@
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
+
 /* Pod status after pairing */
 "Paired" = "Gekoppelt";
 
 /* Pod status when pairing completed */
 "Pairing completed" = "Kopplung abgeschlossen";
 
-/* Description for MessageError parsingError */
-"Parsing Error: " = "Parsing-Fehler:";
+/* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
+"Parsing Error: %1$@ in (%2$@)" = "Parsing-Fehler: %1$@ in (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Bitte bringe Deinen Pod näher an den RileyLink und versuche es erneut";
@@ -225,8 +234,14 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ IE/h %2$@ %3$@ %4$@ IE %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Es ist Zeit Deinen Pod zu ersetzen! Dein Pod läuft ab in %1$@";
+
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Unsicher";

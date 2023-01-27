@@ -31,17 +31,11 @@
 /* Class = "UITextField"; placeholder = "Enter the 6-digit pump ID"; ObjectID = "HeG-VF-L5P"; */
 "HeG-VF-L5P.placeholder" = "Ingresa el número de ID de 6 dígitos de tu microinfusora";
 
-/* Class = "UILabel"; text = "Review your pump settings below. You can change these settings at any time in Loopʼs Settings screen."; ObjectID = "HfQ-fG-8vO"; */
-"HfQ-fG-8vO.text" = "Revisa la configuración de tu microinfusora debajo. Puedes cambiar esta configuración en cualquier momento en la pantalla de Configuración de Loop.";
-
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
 "HuY-fE-vM8.text" = "En caso de viajar a una zona horaria distinta por un periodo extendido de tiempo, podrás cambiar la zona horaria de la microinfusora en cualquier momento a través de la pantalla de Configuración de Loop.";
 
 /* Class = "UILabel"; text = "Loop will keep your pumpʼs clock synchronized with your phone in the time zone youʼre in now."; ObjectID = "IQ5-53-x9s"; */
 "IQ5-53-x9s.text" = "Loop mantendrá el reloj de tu microinfusora sincronizado con tu teléfono en la zona horaria en la que te encuentres ahora.";
-
-/* Class = "UITableViewController"; title = "Pump Settings"; ObjectID = "iQZ-kT-QUm"; */
-"iQZ-kT-QUm.title" = "Configuración de la Microinfusora";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "La región de la microinfusora y el color están indicados en las tres últimas letras del número de modelo (indicados como REF).";
@@ -61,11 +55,11 @@
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Configuración de Microinfusora";
 
-/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
-"V47-Nq-7ew.title" = "Configuración de Microinfusora";
-
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Ingresa la región de la Microinfusora";
+
+/* Class = "UINavigationItem"; title = "Pump Setup"; ObjectID = "V47-Nq-7ew"; */
+"V47-Nq-7ew.title" = "Configuración de Microinfusora";
 
 /* Class = "UILabel"; text = "Loop will listen for status messages sent by your pump. Follow the steps below on your pump to enable these messages:"; ObjectID = "yLn-Ya-p1R"; */
 "yLn-Ya-p1R.text" = "Loop escuchará mensajes de estado enviados por tu microinfusora. Sigue los pasos enlistados a continuación en tu microinfusora para habilitar estos mensajes:";

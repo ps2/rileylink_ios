@@ -31,14 +31,38 @@
 /* Error description */
 "Device Error" = "Error de Dispositivo";
 
+/* Default alert dismissal */
+"Dismiss" = "Ignorar";
+
+/* Title for PumpAlarmType.emptyReservoir */
+"Empty Reservoir" = "Reserva de bomba vacía";
+
 /* Describing the pump history insulin data source */
 "Event History" = "Historial de Eventos";
+
+/* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Go to pump settings and select insulin type" = "Vaya a la configuración de la bomba y seleccione el tipo de insulina";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "La página de historial no existe";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulina Suspendida";
+
+/* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Insulin Type is not configured" = "El tipo de insulina no está configurado";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Respuesta inválida durante %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Litio";
+
+/* Help anchor for uncertain bolus */
+"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop envió una orden de bolo a la bomba, pero no pudo confirmar que la bomba recibiera el comando. Por seguridad, Loop asumirá que el bolo fue administrado. Cuando Loop obtenga finalmente el historial de la bomba, y haya pasado la hora estimada de finalización del bolo, Loop actualizará sus registros de administración para que coincidan con lo que reporta la bomba.";
+
+/* Title for RileyLink low battery alert */
+"Low RileyLink Battery" = "Batería baja de RileyLink";
 
 /* Recovery suggestion */
 "Make sure your RileyLink is nearby and powered on" = "Asegúrate de que tu RileyLink esté cerca y encendido";
@@ -52,8 +76,29 @@
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed Serie 500/700";
 
+/* Title for PumpAlarmType.noDelivery */
+"No Delivery Alarm" = "No hay alarma de administración de insulina";
+
+/* Error description when no rileylink connected */
+"No RileyLink Connected" = "No hay un RileyLink conectado";
+
 /* Describing the North America pump region */
 "North America" = "Norte America";
+
+/* Default alert dismissal */
+"Ok" = "OK";
+
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
+
+/* Event title for percent based temp basal */
+"Percent Temp Basal" = "Porcentaje de insulina basal temporal";
+
+/* recoverySuggestion for uncertain bolus */
+"Please check your pump bolus history to determine if the bolus was delivered." = "Por favor compruebe el historial de bolos de su bomba para determinar si se administró la insulina de bolo.";
+
+/* The notification title for a low pump battery */
+"Pump Battery Low" = "Batería de la bomba baja";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "La microinfusora no respondió";
@@ -64,17 +109,47 @@
 /* No comment provided by engineer. */
 "Pump is suspended" = "La microinfusora está suspendida";
 
+/* Error description when failure due to pump suspended */
+"Pump is Suspended" = "La bomba está suspendida";
+
+/* The notification title for an empty pump reservoir */
+"Pump Reservoir Empty" = "Reserva de bomba vacía";
+
+/* The notification title for a low pump reservoir */
+"Pump Reservoir Low" = "Reserva de bomba baja";
+
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "La microinfusora respondió de forma inesperada";
 
 /* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "MensageMicroinfusadora(%1$@, %2$@, %3$@, %4$@)";
 
+/* Title for PumpAlarmType.reprogramError */
+"Reprogram Error" = "Error de reprogramación";
+
 /* Describing the reservoir insulin data source */
 "Reservoir" = "Reservorio";
 
+/* Event title for resume
+   Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Reanudar";
+
 /* Error description */
 "RileyLink radio tune failed" = "Sintonización de señal de radio de RileyLink falló";
+
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "Insulina basal programada";
+
+/* Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Pérdida de señal";
+
+/* Event title for suspend
+   Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspender";
+
+/* Event title for temporary basal rate start
+   Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Insulina basal temporal";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Basal Temporal: %1$.3f U/hora";
@@ -84,6 +159,12 @@
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
 "Temporary Basal: %1$d%%" = "Basal Temporal: %1$d%%";
+
+/* Error description when storage fails */
+"Unable to store pump data" = "No se pueden almacenar los datos de la bomba";
+
+/* Format string for an unexpectedResponse. (2: The response) */
+"Unexpected response %1$@" = "Respuesta inesperada %1$@";
 
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Error desconocido de código de microinfusora: %1$@";

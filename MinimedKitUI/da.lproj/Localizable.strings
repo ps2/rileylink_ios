@@ -1,3 +1,9 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@E";
+
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -6,6 +12,9 @@
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Udestående enheder insulin\n";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ enheder tilbage kl. %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -54,6 +63,9 @@
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Status på forbindelse";
+
+/* Text for continue button */
+"Continue" = "Fortsæt";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
@@ -113,6 +125,9 @@
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Levering af insulin kan blive bestemt fra pumpen ved enten at tolke på begivenheds historikken eller ved at sammenligne volumen af reservoiret over tid. Aflæsning af begivenheds historik kan give mere præcise status grafer og uploading af up-to-date behandlings data til Nightscout, ved bekostning af hurtigere dræning af pumpe batteriet, risiko for højere fejlrate i radiokommunikation i forhold til aflæsning af volumen af reservoiret. Hvis den valgte kilde ikke kan anvendes, af en eller anden grund, så vil systemet falde tilbage på den anden mulighed.";
 
+/* Text for confidence reminders navigation link */
+"Insulin Type" = "Insulin type";
+
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Senest vågen";
 
@@ -132,7 +147,7 @@
 "On Idle" = "Slumre";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" ="On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Foretrukne data kilde";
@@ -178,6 +193,9 @@
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Gem på pumpen";
 
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pump." = "Vælg den type insulin, du skal bruge i denne pumpe.";
+
 /* The title of the command to send a button press */
 "Send Button Press" = "Send knappe tryk";
 
@@ -207,3 +225,4 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Oppetid";
+

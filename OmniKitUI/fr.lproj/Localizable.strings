@@ -1,11 +1,14 @@
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ unités restantes à %2$@";
+/* No comment provided by engineer. */
+"—" = "—";
 
-/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+/* Format string for last status date on pod details screen */
+"%@ ago" = "Il y a %@";
 
-/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
-"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. La distribution d’insuline s’est arrêtée. Veuillez désactiver et remplacer le pod.";
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* No comment provided by engineer. */
+"%@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %@ normally now." = "La communication avec le pod sur votre corps a été rétablie.\n\nLes enregistrements d'administration d'insuline ont été mis à jour et devraient correspondre à ce qui a été effectivement administré.\n\nVous pouvez continuer à utiliser %@ normalement maintenant.";
 
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
@@ -20,20 +23,44 @@
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ U/heure";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* Format string for bolus percent progress. (1: Percent progress) */
 "%@%%" = "%@%%";
 
 /* Format string for reservoir reading when above or equal to maximum reading. (1: The localized amount) */
 "%@+ U" = "%@+ U";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
 
+/* Summary string for temporary basal rate configuration page */
+"%1$@ for %2$@" = "%1$@ pendant %2$@";
+
+/* Format string for main text of delivery uncertainty recovery page. (1: app name)(2: date of command)(3: app name) */
+"%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ n'a pas pu communiquer avec le pod sur votre corps depuis %2$@ . \n\nSans communication avec le pod, l'application ne peut pas continuer à envoyer des commandes pour l'administration d'insuline ou afficher des informations précises et récentes sur votre insuline active ou l'insuline administrée par le pod. \n\nSurveillez attentivement votre glycémie pendant les 6 prochaines heures ou plus, car il peut y avoir ou non de l'insuline active dans votre corps que %3$@ ne peut pas afficher.";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ unités restantes à %2$@";
+
+/* Format string providing instructions for replacing pod due to a fault. (1: The fault description) */
+"%1$@. Insulin delivery has stopped. Please deactivate and remove pod." = "%1$@. L'administration d’insuline s’est arrêtée. Veuillez désactiver et remplacer le pod.";
+
+/* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for reservoir level above max measurable threshold. (1: measurable reservoir threshold) (2: units) */
+"%1$@+ %2$@" = "%1$@+ %2$@";
+
+/* Format string for total delivery on pod details screen */
+"%g U" = "%g U";
+
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Heure d’activation";
+
+/* Section header for activity section */
+"Activity" = "Activité";
 
 /* The title of the cell showing alarm status */
 "Alarms" = "Alarmes";
@@ -41,11 +68,23 @@
 /* Confirmation message for shutting down a pod */
 "Are you sure you want to shutdown this pod?" = "Voulez-vous vraiment désactiver ce pod ?";
 
+/* No comment provided by engineer. */
+"Are you sure you want to skip Omnipod Onboarding?" = "Voulez-vous vraiment sauter l'intégration Omnipod?";
+
 /* Confirmation message for removing Omnipod PumpManager */
 "Are you sure you want to stop using Omnipod?" = "Voulez-vous vraiment arrêter d’utiliser Omnipod ?";
 
 /* The title text for the address assigned to the pod */
 "Assigned Address" = "Adresse assignée";
+
+/* Title for Attach Pod screen */
+"Attach Pod" = "Attacher le Pod";
+
+/* Description string above progress indicator while attempting to re-establish communication from an unacknowledged command */
+"Attemping to re-establish communication" = "Tenter de rétablir la communication";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Retour";
 
 /* The title of the cell showing pod basal status */
 "Basal Delivery" = "Débit basal";
@@ -54,10 +93,13 @@
 "Basal Rates" = "Débits basaux";
 
 /* The title of the cell showing pod bolus status */
-"Bolus Delivery" = "Débit de bolus";
+"Bolus Delivery" = "Administration bolus";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuler";
+
+/* Format string for the action string on pod status page when pod expired. (1: service time remaining) */
+"Change Pod now. Insulin delivery will stop in %1$@ or when no more insulin remains." = "Remplacer le Pod maintenant. L'administration d'insuline s'arrêtera dans %1$@ ou lorsqu'il ne restera plus d'insuline.";
 
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Changement de fuseau horaire";
@@ -70,6 +112,12 @@
 
 /* The title of the continue action in an action sheet */
 "Continue" = "Continuer";
+
+/* Unit for singular day in pod life remaining */
+"day" = "jour";
+
+/* Unit for plural days in pod life remaining */
+"days" = "jours";
 
 /* Button title to deactivate pod because of fault during setup */
 "Deactivate" = "Désactiver";
@@ -108,20 +156,41 @@
 /* The title of the cell showing the pod expiration reminder date */
 "Expiration Reminder" = "Rappel d’expiration";
 
+/* Label text for expiration reminder default row */
+"Expiration Reminder Default" = "Rappel d'expiration par défaut";
+
 /* The title of the cell showing the pod expiration after expiry */
 "Expired" = "Expiré";
 
 /* The title of the cell showing the pod expiration */
 "Expires" = "Expire";
 
+/* Alert title for failing to cancel manual basal error */
+"Failed to Cancel Manual Basal" = "Échec d'annulation du basal manuel";
+
+/* Alert title for time sync error */
+"Failed to Set Pump Time" = "Échec de réglage de l'heure de la pompe";
+
 /* Pod life HUD view label */
 "Fault" = "Erreur";
+
+/* Settings page link description when next lifecycle action is to finish deactivation */
+"Finish deactivation" = "Terminer la désactivation";
 
 /* The title of the command to finish pod setup */
 "Finish pod setup" = "Terminer l’installation du pod";
 
+/* Action button title to continue at Setup Complete */
+"Finish Setup" = "Terminer l'installation";
+
 /* Accessibility format string for (1: localized volume)(2: time) */
 "Greater than %1$@ units remaining at %2$@" = "Plus de %1$@ unités restantes à %2$@";
+
+/* Unit for singular hour in pod life remaining */
+"hour" = "heure";
+
+/* Unit for plural hours in pod life remaining */
+"hours" = "heures";
 
 /* Instructions when deactivating pod that has been paired, but not attached. */
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Le pod mal activé doit être désactivé avant d’en appairer un nouveau. Veuillez le désactiver et le jeter.";
@@ -132,14 +201,47 @@
 /* Button title to insert cannula during setup */
 "Insert Cannula" = "Insérer la canule";
 
+/* Insert cannula action button accessibility label while pairing */
+"Inserting. Please wait." = "Insertion en cours. Attendez.";
+
+/* Cannula insertion button text while inserting */
+"Inserting..." = "Insertion en cours...";
+
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insuline délivrée";
+
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Administration de l'insuline";
+
+/* The action string on pod status page when pod faulted */
+"Insulin delivery stopped. Change Pod now." = "L'administration d'insuline s'est arrêtée. Changez de Pod maintenant.";
+
+/* Header for insulin remaining on pod settings screen */
+"Insulin Remaining" = "Insuline restante";
+
+/* Title for insulin type selection screen */
+"Insulin Type" = "Type d'insuline";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Saisie invalide";
 
+/* Label text for step 2 of pair pod instructions */
+"Keep the RileyLink about 6 inches from the pod during pairing." = "Gardez le RileyLink à environ 6 pouces du pod pendant le jumelage.";
+
+/* description label for last status date pod details row */
+"Last Status" = "Dernier statut";
+
+/* Description text on manual temp basal action sheet */
+"Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop n'ajustera pas automatiquement votre administration d'insuline tant que le débit basal temporaire ne sera pas terminé ou annulé.";
+
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
+
+/* Unit for singular minute in pod life remaining */
+"minute" = "minute";
+
+/* Unit for plural minutes in pod life remaining */
+"minutes" = "minutes";
 
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Aucun";
@@ -166,16 +268,28 @@
 "PM Version" = "Version PM";
 
 /* Label describing pod age view */
-"Pod Age" = " âge pod";
+"Pod Age" = "Âge pod";
+
+/* Label for pod life state when time remaining */
+"Pod expires in" = "Péremption du Pod dans";
+
+/* Pairing action button accessibility label when pairing succeeded */
+"Pod paired successfully. Continue." = "Pod associé avec succès. Continuez.";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Réglages du pod";
+
+/* Label text for step one of attach pod instructions */
+"Prepare site." = "Préparer le site.";
+
+/* title for previous pod page */
+"Previous Pod" = "Pod précédent";
 
 /* The text of the loading label when pod is primed */
 "Primed" = "Amorcé";
 
 /* The text of the loading label when priming */
-"Priming…" = "Amorçage en cours";
+"Priming…" = "Amorçage en cours...";
 
 /* Label describing time remaining view */
 "Remaining" = "Restant";
@@ -190,6 +304,17 @@
 /* The title of the cell showing reservoir status */
 "Reservoir" = "Réservoir";
 
+/* Text for suspend resume button when insulin delivery is suspended */
+"Resume Insulin Delivery" = "Reprendre l'administration d'insuline";
+
+/* Text for suspend resume button when insulin delivery is resuming */
+"Resuming insulin delivery..." = "Reprise de l'administration d'insuline";
+
+/* Action button description for deactivate after failed attempt
+   Cannula insertion button text while showing error
+   Pod pairing action button text while showing error */
+"Retry" = "Réessayer";
+
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "Réessayez la désactivation du pod";
 
@@ -198,7 +323,17 @@
 "Save" = "Sauvegarder";
 
 /* The detail text of the basal row when pod is running scheduled basal */
-"Schedule" = "Programmé";
+"Schedule" = "Programme";
+
+/* Card title for scheduled reminder
+   Title for scheduled expiration reminder edit page */
+"Scheduled Reminder" = "Rappel programmé";
+
+/* Title text for insulin type confirmation page */
+"Select the type of insulin that you will be using in this pod." = "Choisir le type d'insuline utilisé avec le Pod";
+
+/* Error message for reservoir view during general pod fault */
+"Signal Loss" = "Perte de signal";
 
 /* The title of the status section in settings */
 "Status" = "Statut";
@@ -209,8 +344,11 @@
 /* The detail text of the basal row when pod is suspended */
 "Suspended" = "Suspendu";
 
+/* Text for suspend resume button when insulin delivery is suspending */
+"Suspending insulin delivery..." = "L'administration d'insuline est suspendue.";
+
 /* Title text for the button to delete Omnipod PumpManager */
-"Switch from Omnipod Pumps" = "Changer de pompes Omnipod";
+"Switch from Omnipod Pumps" = "Changer des pompes Omnipod";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Synchroniser avec le pod";
@@ -221,11 +359,62 @@
 /* Progress message for testing commands. */
 "Testing Commands…" = "Commandes de test en cours...";
 
+/* Footer text for scheduled reminder area */
+"This is a reminder that you scheduled when you paired your current Pod." = "Ceci est un rappel que vous avez cédulé quand vous avez jumelé votre Pod actuel.";
+
+/* Alert format string for missing temp basal configuration. */
+"This Pump has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to Therapy Settings -> Delivery Limits and set a new Maximum Basal Rate." = "Cette pompe n'a pas été configurée avec un taux basal maximal parce qu'il a été rajouté avant que le basal temporaire manuel soit une fonctionnalité. Prière d'aller dans Réglages de thérapie -> Limites d'administration et configurer un nouveau taux basal maximal.";
+
+/* Label for expiration reminder row
+   Label for scheduled expiration reminder row
+   Label for scheduled reminder value row */
+"Time" = "Heure";
+
+/* title for time change detected notice */
+"Time Change Detected" = "Changement d'heure détecté";
+
+/* No comment provided by engineer. */
+"Toggle sign" = "Basculer le signe";
+
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Trop d’entrées";
 
+/* description label for total delivery pod details row */
+"Total Delivery" = "Total dévlivré";
+
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Impossible de désactiver le pod. Veuillez continuer et en appairer un nouveau.";
+"Unable to deactivate pod. Please continue and pair a new one." = "Impossible de désactiver le Pod. Veuillez continuer et en jumeler un nouveau.";
+
+/* Title of delivery uncertainty recovery page */
+"Unable to Reach Pod" = "Incapable de joindre le Pod";
+
+/* Title for pending command recovery screen */
+"Unable To Reach Pod" = "Incapable de joindre le Pod";
+
+/* Alert format string for a failure to set temporary basal. (1: error description) */
+"Unable to set a temporary basal rate: %1$@" = "Impossible de définir un taux de basal temporaire: %1$@";
+
+/* Alert format string for a failure to set temporary basal with recovery suggestion. (1: error description) (2: recovery text) */
+"Unable to set a temporary basal rate: %1$@\n\n%2$@" = "Impossible de définir un taux de basal temporaire: %1$@\n\n%2$@";
+
+/* Label for pod life state when pod not fully activated */
+"Unfinished Activation" = "Activation non complétée";
+
+/* Label for pod life state when pod not fully deactivated */
+"Unfinished deactivation" = "Désactivation non complétée";
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Inconnu";
+
+/* Label text for step two of insert cannula instructions */
+"Wait until insertion is completed." = "Attendre la fin de l'insertion.";
+
+/* Button label for user to answer cannula was properly inserted */
+"Yes" = "Oui";
+
+/* bodyText for PodSetupView */
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Vous allez commencer le processus de configuration des rappels, du remplissage de votre Pod avec de l'insuline, du jumelage avec votre appareil et l'installation sur votre corps.";
+
+/* Format string for instructions for setup complete view. (1: app name) */
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Votre Pod est prêt à être utilisé.\n\n%1$@ va vous rappeler de changer votre Pod avant qu'il expire. Vous pouvez le changer à une durée si cela vous convient.";
+

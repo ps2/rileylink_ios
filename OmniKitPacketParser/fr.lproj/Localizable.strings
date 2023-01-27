@@ -1,5 +1,17 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (inactif)";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Délai d'activation dépassé";
+
+/* Description for auto-off */
+"Auto-off" = "Arrêt automatique";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Alarme d’arrêt automatique";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Basal initialisé";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "en dessous de 50 unités";
@@ -32,22 +44,49 @@
 "Empty response from pod" = "Réponse vide du pod";
 
 /* Pod state error event logged shutting down */
-"Error event logged, shutting down" = "Événement d’erreur envoyé, arrêt en cours";
+"Error event logged, shutting down" = "Erreur enregistrée, arrêt en cours";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Avertissement d'expiration";
 
 /* Description for expiration alert */
 "Expiration alert" = "Alerte d'expiration";
 
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Bolus étendu en cours";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Bolus étendu en cours avec basal temporaire";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Une erreur s'est produite";
+
 /* Description for finish setup */
-"Finish setup " = "Installation terminée";
+"Finish setup " = "Finir l'installation";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Terminer le paramétrage du rappel";
 
 /* Pod inititialized */
 "Initialized" = "Initialisé";
 
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Insertion de la canule";
+
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "code d'erreur du pod %1$03d";
+"Internal pod fault %1$03d" = "code d'erreur interne du Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U programmé) %3$@ %4$@ %5$@";
+
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Adresse invalide: ( %1$@ )";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "CRC invalide";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Réservoir bas";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarme de réservoir bas";
@@ -55,8 +94,14 @@
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Assurez vous que votre RileyLink est à proximité et allumé";
 
+/* Pod memory initialized */
+"Memory initialized" = "Mémoire initialisée";
+
 /* Pod alert state when no alerts are active */
 "No alerts" = "Pas d'alarme";
+
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Pas de défauts";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "Pas de pod appairé";
@@ -71,11 +116,17 @@
    Pod state when running above fifty units */
 "Normal" = "Normal";
 
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Pas assez de données";
+
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Occlusion détectée";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
+
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
 "Paired" = "Appairé";
@@ -120,17 +171,26 @@
    Pod status when priming */
 "Priming" = "Amorçage";
 
+/* Pod state when priming completed */
+"Priming completed" = "Appairage terminé";
+
 /* Pod state when ready for basal programming */
-"Ready for basal programming" = "Prêt pour la programmation de la basale";
+"Ready for basal programming" = "Prêt pour la programmation de basale";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Prêt à insérer la canule";
 
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Rappel initialisé";
+
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Reprise : %1$@ %2$@";
 
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "Basale programmée";
+
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basale programmée";
+"Scheduled Basal" = "Basal programmé";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Alarme imminente d’arrêt";
@@ -156,17 +216,32 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Basale temporaire: %1$@ U/heure %2$@ %3$@ %4$@ U %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "C’est le moment de remplacer votre pod ! Votre pod va expirer dans %1$@";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Incertain";
+
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Numero de séquence du message inattendu";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Reponse inattendue du pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Erreur de pod inconnue %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Valeur inconnue (%1$@) pour le type %2$@";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Échec de la validation: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Attendez que le bolus en cours se termine, ou annulez le bolus";
@@ -176,3 +251,4 @@
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "En attente d'appairage";
+

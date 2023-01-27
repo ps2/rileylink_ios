@@ -71,7 +71,7 @@
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "PumpMessage(%1$@, %2$@, %3$@, %4$@)";
 
 /* Describing the reservoir insulin data source */
-"Reservoir" = "Reservoir";
+"Reservoir" = "Rezervuar";
 
 /* Error description */
 "RileyLink radio tune failed" = "RileyLink radio tune failed";
@@ -96,3 +96,4 @@
 
 /* Describing the worldwide pump region */
 "World-Wide" = "World-Wide";
+

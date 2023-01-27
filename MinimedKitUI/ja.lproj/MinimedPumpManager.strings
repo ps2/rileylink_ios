@@ -31,17 +31,11 @@
 /* Class = "UITextField"; placeholder = "Enter the 6-digit pump ID"; ObjectID = "HeG-VF-L5P"; */
 "HeG-VF-L5P.placeholder" = "6桁のポンプIDを入力";
 
-/* Class = "UILabel"; text = "Review your pump settings below. You can change these settings at any time in Loopʼs Settings screen."; ObjectID = "HfQ-fG-8vO"; */
-"HfQ-fG-8vO.text" = "ポンプの設定を確認してください。この設定はループの設定画面でいつでも変更できます。";
-
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
 "HuY-fE-vM8.text" = "時差がある海外へ旅行に行く時は、ループの設定画面からいつでもポンプの日付時刻を変更出来ます。.";
 
 /* Class = "UILabel"; text = "Loop will keep your pumpʼs clock synchronized with your phone in the time zone youʼre in now."; ObjectID = "IQ5-53-x9s"; */
 "IQ5-53-x9s.text" = "ループはiPhoneと同期して、あなたが今いる場所のタイムゾーンにポンプの日付時刻を同期し続けます。";
-
-/* Class = "UITableViewController"; title = "Pump Settings"; ObjectID = "iQZ-kT-QUm"; */
-"iQZ-kT-QUm.title" = "ポンプ設定";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "ポンプのリージョンと色は型番 (REFで表示)の最終の3文字で表されています。";
@@ -72,3 +66,4 @@
 
 /* Class = "UITableViewSection"; headerTitle = "Main Menu"; ObjectID = "ZnF-zy-5gR"; */
 "ZnF-zy-5gR.headerTitle" = "メインメニュー";
+

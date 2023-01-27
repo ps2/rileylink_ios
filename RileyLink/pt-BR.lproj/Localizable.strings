@@ -19,12 +19,6 @@
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Buscar CGM";
 
-/* The placeholder text for the nightscout site URL credential */
-"http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";
-
-/* The title of the Nightscout service */
-"Nightscout" = "Nightscout";
-
 /* The title text for the pump ID config value */
 "Pump ID" = "ID da Bomba";
 
@@ -33,15 +27,6 @@
 
 /* The default placeholder string for a credential */
 "Required" = "Obrigatório";
-
-/* Title for RileyLink Testing main view controller */
-"RileyLink Testing" = "RileyLink Testing";
-
-/* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
-
-/* The title of the nightscout site URL credential */
-"Site URL" = "Site URL";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Toque para definir";

@@ -1,3 +1,12 @@
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\" %1$@ \" har lavt batterinivå";
+
+/* Low reservoir alert format string. (1: Number of units remaining) */
+"%1$@ U left" = "%1$@ E igjen";
+
+/* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
+"%1$@ U left: %2$@" = "%1$@ E gjenstår: %2$@";
+
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "En bolus pågår allerede";
 
@@ -10,11 +19,39 @@
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alkalisk";
 
+/* Title for PumpAlarmType.autoOff */
+"Auto-Off Alarm" = "Auto-av alarm";
+
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basalprofil  %1$@: %2$@ E/timen";
 
+/* Title for PumpAlarmType.batteryDepleted */
+"Battery Depleted" = "Batteriet er tomt";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue17 */
+"BatteryIssue17" = "BatteriIssue17";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue21 */
+"BatteryIssue21" = "BatteriIssue21";
+
+/* Event title for bolus
+   Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolus pågår";
+
+/* Error description when failure due to bolus in progress */
+"Bolus in Progress" = "Bolus pågår";
+
+/* Format string for uncertain bolus. (1: the reported error during bolusing) */
+"Bolus may have failed: %1$@" = "Bolus kan ha mislyktes: %1$@";
+
+/* Describing the Canada pump region */
+"Canada" = "Canada";
+
+/* Event title for temp basal cancel */
+"Cancel Temp Basal" = "Avbryt Temp Basal";
 
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Sjekk at pumpa ikke har stoppet tilførsel av insulin, at priming ikke foregår, eller har en  midlertidig prosentbasaltype pågående.";
@@ -34,11 +71,26 @@
 /* Describing the pump history insulin data source */
 "Event History" = "Hendelseshistorikk";
 
+/* Error description for glucose page failing crc check */
+"Glucose page failed crc check" = "Glukoseside mislyktes ved crc-sjekk";
+
+/* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Go to pump settings and select insulin type" = "Gå til pumpeinnstillinger og velg insulintype";
+
+/* Pump error code when invalid history page is requested */
+"History page does not exist" = "Historie siden eksisterer ikke";
+
+/* Error description for history page failing crc check */
+"History page failed crc check" = "Historikksiden mislyktes med crc kontroll";
+
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Ugyldig respons ved %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Lithium";
+
+/* Help anchor for uncertain bolus */
+"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop sendte en boluskommando til pumpen, men kunne ikke bekrefte at pumpen mottok kommandoen. For sikkerhets skyld vil Loop anta at bolusen ble levert. Når Loop til slutt henter historikk fra pumpen, og den estimerte bolussluttiden er passert, vil Loop oppdatere sine leveringsposter for å samsvare med det pumpen rapporterer.";
 
 /* Recovery suggestion */
 "Make sure your RileyLink is nearby and powered on" = "Kontroller at din RileyLink er i nærheten og er påslått";
@@ -52,8 +104,17 @@
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 series";
 
+/* Error description when no rileylink connected */
+"No RileyLink Connected" = "Ingen RileyLink tilkoblet";
+
 /* Describing the North America pump region */
 "North America" = "Nord Amerika";
+
+/* Default alert dismissal */
+"Ok" = "Ok";
+
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpa svarte ikke";
@@ -84,6 +145,15 @@
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in percent) */
 "Temporary Basal: %1$d%%" = "Midlertidig basaldose: %1$d%%";
+
+/* Error description when storage fails */
+"Unable to store pump data" = "Kan ikke lagre pumpedata";
+
+/* Format string for error description for an unknown record type in a glucose page. (1: event type number) */
+"Unknown glucose record type: %$1@" = "Ukjent glukoseopptakstype: %$1@";
+
+/* Format string for error description for an unknown record type in a history page. (1: event type number) */
+"Unknown history record type: %$1@" = "Ukjent historieopptakstype: %$1@";
 
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Ukjent feilkode fra pumpe: %1$@";

@@ -46,12 +46,6 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Configuração máxima excedida";
 
-/* Pump title (1: model number) */
-"Minimed %@" = "Minimed %@";
-
-/* Generic title of the minimed pump manager */
-"Minimed 500/700 Series" = "Minimed 500/700 Series";
-
 /* Describing the North America pump region */
 "North America" = "América do Norte";
 
@@ -96,3 +90,4 @@
 
 /* Describing the worldwide pump region */
 "World-Wide" = "Mundial";
+

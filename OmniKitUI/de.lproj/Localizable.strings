@@ -1,3 +1,12 @@
+/* Format string for last status date on pod details screen */
+"%@ ago" = "%@ vor";
+
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* No comment provided by engineer. */
+"%@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %@ normally now." = "%1$@ hat die Kommunikation mit dem Pod auf Ihrem Körper wiederhergestellt.\n\nDie Insulinabgabeaufzeichnungen wurden aktualisiert und sollten mit dem übereinstimmen, was tatsächlich geliefert wurde.\n\nSie können %2$@ jetzt normal weiter verwenden.";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ IE";
@@ -6,7 +15,7 @@
 "%@ U (Finished)" = "%@ IE (abgegeben)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%@ IE von %@ IE (%@)";
+"%@ U of %@ U (%@)" = "%1$@ IE von %2$@ IE (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ IE/Std.";
@@ -23,6 +32,9 @@
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@IE";
 
+/* Summary string for temporary basal rate configuration page */
+"%1$@ for %2$@" = "%1$@ für %2$@";
+
 /* Format string for main text of delivery uncertainty recovery page. (1: app name)(2: date of command)(3: app name) */
 "%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ konnte seit %2$@ nicht mehr mit Deinem Pod kommunizieren.\n\nOhne Kommunikation mit dem Pod kann die App keine Befehle für die Insulinabgabe senden oder genaue, aktuelle Informationen über Dein aktives Insulin oder das vom Pod abgegebene Insulin anzeigen.\n\nÜberwachen Deinen Blutzucker für die nächsten 6 oder mehr Stunden genau, da in Deinem Körper Insulin aktiv sein kann oder auch nicht, das %3$@ nicht anzeigen kann.";
 
@@ -35,6 +47,12 @@
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for reservoir level above max measurable threshold. (1: measurable reservoir threshold) (2: units) */
+"%1$@+ %2$@" = "%1$@+ %2$@";
+
+/* Format string for total delivery on pod details screen */
+"%g U" = "%g IE";
+
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Laufzeit";
 
@@ -46,6 +64,9 @@
 
 /* Confirmation message for shutting down a pod */
 "Are you sure you want to shutdown this pod?" = "Möchtest Du diesen Pod wirklich deaktivieren?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to skip Omnipod Onboarding?" = "Sind Sie sicher, dass Sie das Omnipod Onboarding überspringen wollen?";
 
 /* Confirmation message for removing Omnipod PumpManager */
 "Are you sure you want to stop using Omnipod?" = "Möchtest Du den Pod wirklich nicht mehr verwenden?";
@@ -205,7 +226,7 @@
 "Fault" = "Störung";
 
 /* Label text for step 1 of pair pod instructions */
-"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Keep the RileyLink about 6 inches from the pod during pairing." = "Fülle einen neuen Pod mit U-100 Insulin (lass die Nadelkappe des Pods geschlossen). Halte den RileyLink während der Kopplung etwa 14 cm vom Pod entfernt.";
+"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Listen for 2 beeps." = "Füllen Sie einen neuen Pod mit U-100-Insulin (Entfernen Sie nicht den Nadelverschluss). Warten Sie auf 2 Pieptöne.";
 
 /* Settings page link description when next lifecycle action is to finish deactivation */
 "Finish deactivation" = "Deaktivierung abschließen";
@@ -258,17 +279,20 @@
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Ungültiger Eintrag";
 
+/* Label text for step 2 of pair pod instructions */
+"Keep the RileyLink about 6 inches from the pod during pairing." = "Halten Sie den RileyLink während des Koppelns ca. 15 cm vom Pod entfernt.";
+
 /* description label for last status date pod details row */
 "Last Status" = "Letzter Status";
-
-/* Label text for step 2 of pair pod instructions */
-"Listen for 2 beeps." = "Höre auf zwei Beeps.";
 
 /* Description text on manual temp basal action sheet */
 "Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop passt Deine Insulinabgabe nicht automatisch an, bis die temporäre Basalrate beendet oder abgebrochen wurde.";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
+
+/* description label for lot number pod details row */
+"Lot Number" = "LOT Nummer";
 
 /* Label text for low reservoir value row
    Title for LowReservoirReminderSetupView */
@@ -426,6 +450,9 @@
 /* Label text for basal rate summary */
 "Rate" = "Rate";
 
+/* No comment provided by engineer. */
+"Ref: " = "Ref:";
+
 /* Label describing time remaining view */
 "Remaining" = "Verbleibend";
 
@@ -456,6 +483,9 @@
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "Pod-Deaktivierung wiederholen";
 
+/* bodyText for RileyLinkSetupView */
+"RileyLink allows for communication with the pump over Bluetooth" = "Der RileyLink ermöglicht die Kommunikation mit der Pumpe über Bluetooth";
+
 /* Navigation title for RileyLinkSetupView */
 "RileyLink Setup" = "RileyLink Einrichten";
 
@@ -473,6 +503,10 @@
 /* Title of insulin delivery section */
 "Scheduled Basal" = "Basalrate";
 
+/* Card title for scheduled reminder
+   Title for scheduled expiration reminder edit page */
+"Scheduled Reminder" = "Geplante Erinnerung";
+
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pod." = "Wähle die Insulinart aus, die Du in diesem Pod verwenden wirst.";
 
@@ -480,7 +514,7 @@
 "Sequence Number" = "Sequenznummer";
 
 /* Button text for setting manual temporary basal rate */
-"Set Temporary Basal" = "";
+"Set Temporary Basal" = "Temporäre Basalrate setzen";
 
 /* Title for setup complete screen */
 "Setup Complete" = "Einrichtung abgeschlossen";
@@ -513,7 +547,10 @@
 "Sync With Pod" = "Mit Pod synchronisieren";
 
 /* Label text for step one of insert cannula instructions */
-"Tap below to start cannula insertion." = "Tippe unten, um das Einbringen der Kanüle zu starten. ";
+"Tap below to start cannula insertion." = "Tippe unten, um das Einführen der Kanüle zu starten.";
+
+/* Navigation Title for ManualTempBasalEntryView */
+"Temporary Basal" = "Temporäre Basalrate";
 
 /* Alert title for a failure to set temporary basal */
 "Temporary Basal Failed" = "Temporary Basal fehlgeschlagen";
@@ -540,7 +577,7 @@
 "The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Die obigen Erinnerungen ertönen nicht, wenn sich Dein Gerät im Lautlos- oder Nicht-Stören-Modus befindet.\n\nEs gibt andere kritische Pod-Warnungen und -Alarme, die auch dann ertönen, wenn Dein Gerät auf Stumm oder „Nicht stören“ eingestellt ist.";
 
 /* description for time change detected notice */
-"The time on your pump is different from the current time. Your pump’s time controls your scheduled basal rates. You can review the time difference and configure your pump." = "Die Uhrzeit Der Pumpe weicht von der aktuellen Uhrzeit ab. Die Zeit der Pumpe steuert Deine geplanten Basalraten. Du kannst den Zeitunterschied überprüfen und Deine Pumpe konfigurieren.";
+"The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Die Uhrzeit Ihrer Pumpe weicht von der aktuellen Uhrzeit ab. Die Zeit Ihrer Pumpe steuert Ihre geplanten Therapieeinstellungen. Scrollen Sie nach unten zur Zeile Pumpenzeit, um den Zeitunterschied zu überprüfen und Ihre Pumpe zu konfigurieren.";
 
 /* Format string for recovery suggestion during deactivate pod. */
 "There was a problem communicating with the pod. If this problem persists, tap Discard Pod. You can then activate a new Pod." = "Bei der Kommunikation mit dem Pod ist ein Problem aufgetreten. Wenn dieses Problem weiterhin besteht, dann Wechsel den Pod aus. Du kannst dann einen neuen Pod aktivieren.";

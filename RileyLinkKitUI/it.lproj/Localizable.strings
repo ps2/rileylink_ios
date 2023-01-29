@@ -8,7 +8,7 @@
 "Alert" = "Avviso";
 
 /* Text indicating LED Mode is auto */
-"Auto" = "Automatico";
+"Auto" = "Auto";
 
 /* The title of the cell showing battery level */
 "Battery level" = "Livello Batteria";
@@ -53,13 +53,13 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing current rileylink frequency */
-"Frequency" = "Frequency";
+"Frequency" = "Frequenza";
 
 /* The title of the command to fetch RileyLink statistics */
 "Get RileyLink Statistics" = "Ottieni Statistiche RileyLink";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Ottenimento Statistiche in corso";
+"Get Statistics…" = "Ottieni Statistiche...";
 
 /* The title of the cell showing Lighten Red LED */
 "Lighten Red LED" = "Accensione LED Rosso";
@@ -100,7 +100,7 @@
 "Updating diagnostic LEDs mode" = "Aggiornamento modalità LED diagnostici";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Tempo Attività";
 
 /* The title of the cell showing ORL */
 "Voltage" = "Voltaggio";

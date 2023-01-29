@@ -7,6 +7,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Format string for alert content body for lowReservoir pod alert. (1: reminder value) */
 "%1$@ insulin or less remaining in Pod. Change Pod soon." = "%1$@ Insulin oder weniger verbleibend im Pod. Pod bald wechseln.";
 
@@ -113,8 +116,17 @@
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Fehlerereignis aufgetreten";
 
+/* Status highlight that when pod is deactivating. */
+"Finish Deactivation" = "Deaktivierung abgeschlossen";
+
+/* Status highlight that when pod is activating. */
+"Finish Pairing" = "Kopplung abgeschlossen";
+
 /* Description for finish setup */
 "Finish setup " = "Setup beenden";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Einrichtungserinnerung abgeschlossen";
 
 /* Pod inititialized */
 "Initialized" = "Initialisiert";

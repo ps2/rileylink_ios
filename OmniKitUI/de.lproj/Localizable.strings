@@ -1,3 +1,6 @@
+/* No comment provided by engineer. */
+"—" = "—";
+
 /* Format string for last status date on pod details screen */
 "%@ ago" = "%@ vor";
 
@@ -172,7 +175,7 @@
 "Disable Bolus Beeps" = "Deaktiviere Bolustöne";
 
 /* Pairing interface navigation bar button text for discard pod action */
-"Discard Pod" = "Pod ablegen";
+"Discard Pod" = "Pod verwerfen";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Aktiviere Bolustöne";

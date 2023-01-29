@@ -11,7 +11,7 @@
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
 /* The format string describing number of basal schedule entries: (1: number of entries) */
-"%1$@ basal schedule entries\n" = "%1$@ basaal schemas\n";
+"%1$@ basal schedule entries\n" = "%1$@ basaalschema-invoeren\n";
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Eenheden insuline resterend\n";
@@ -26,7 +26,7 @@
 "Adjusting Pump Time..." = "Pomptijd Aanpassen...";
 
 /* Instructions on selecting battery chemistry type */
-"Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Alkaline en Lithium batterijen werken na verloop van tijd minder goed. Alkaline heeft de neiging om in de loop van de tijd een lineair spanningsverlies te hebben, terwijl lithium batterijen de neiging  hebben om hun spanning te behouden tot halverwege hun levensduur. Bij normaal gebruik in een niet-MySentry-compatibele Minimed (x22 / x15) insulinepomp met Loop, gaan Alkaline batterijen ongeveer 4 tot 5 dagen mee. Lithiumbatterijen gaan tussen de 1 tot 2 weken mee. Deze selectie gebruikt verschillende leegloop snelheden voor batterijvoltage voor elk van de typen batterijen en waarschuwt de gebruiker wanneer een batterij ongeveer in 8 tot 10 uur leeg is.";
+"Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Alkaline en Lithium batterijen werken na verloop van tijd minder goed. Alkaline heeft de neiging om in de loop van de tijd een lineair spanningsverlies te hebben, terwijl lithium batterijen de neiging hebben om hun spanning te behouden tot halverwege hun levensduur. Bij normaal gebruik in een niet-MySentry-compatibele Minimed (x22/x15) insulinepomp met Loop, gaan Alkaline batterijen ongeveer 4 tot 5 dagen mee. Lithiumbatterijen gaan tussen de 1-2 weken mee. Deze selectie gebruikt verschillende leegloop snelheden voor batterijvoltage voor elk van de typen batterijen en waarschuwt de gebruiker wanneer een batterij ongeveer in 8 tot 10 uur leeg is.";
 
 /* Confirmation message for deleting a pump */
 "Are you sure you want to delete this pump?" = "Weet u zeker dat u deze pomp wilt verwijderen?";
@@ -41,7 +41,7 @@
 "Basal Rates" = "Basaalsnelheden";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
-"Battery: %1$@ volts\n" = "Batterij: %1$@ Volt\n";
+"Battery: %1$@ volts\n" = "Batterij: %1$@ volt\n";
 
 /* The label indicating the best radio frequency */
 "Best Frequency" = "Beste frequentie";
@@ -83,14 +83,14 @@
 "Connection State" = "Verbindingsstatus";
 
 /* Text for continue button */
-"Continue" = "Doorgaan";
+"Continue" = "Ga Verder";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
 "Delete Pump" = "Verwijder de pomp";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Insulinetoediening Limieten";
+"Delivery Limits" = "Toedieningslimieten";
 
 /* The title of the section describing the device */
 "Device" = "Apparaat";
@@ -159,10 +159,10 @@
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "De toediening van insuline kan worden vastgesteld aan de hand van de pomp, ofwel door de pomphistorie te bekijken ofwel door het reservoirvolume over een bepaalde tijd te vergelijken. Het lezen van de pomphistorie zorgt voor een meer accurate statusgrafiek en het uploaden van up-to-date behandelingsgegevens naar Nightscout. Dit gaat ten koste van de batterij en er bestaat een groter kans op fouten vanwege de draadloze verbinding vergeleken met het alleen lezen van het reservoirvolume. Als de geselecteerde bron om welke reden dan ook niet kan worden gebruikt, probeert het systeem terug te vallen op de andere optie.";
 
 /* Header for insulin remaining on pod settings screen */
-"Insulin Remaining" = "Resterende insuline";
+"Insulin Remaining" = "Resterende Insuline";
 
 /* Text for confidence reminders navigation link */
-"Insulin Type" = "Soort insuline";
+"Insulin Type" = "Insulinetype";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Laatst actief";
@@ -214,10 +214,10 @@
 "Pump Model" = "Pompmodel";
 
 /* Title of the pump settings view controller */
-"Pump Settings" = "Pomp instellingen";
+"Pump Settings" = "Pompinstellingen";
 
 /* The title of the command to change pump time zone */
-"Pump Time" = "Pomp Tijd";
+"Pump Time" = "Pomptijd";
 
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Lees basaal schema";
@@ -266,13 +266,19 @@
 "Signal Strength" = "Signaalsterkte";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Start Tijdelijk Basaal";
+"Starting Temp Basal" = "Tijdelijk Basaal Starten";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Geslaagd";
 
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Onderbreek Toediening";
+
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Onderbroken: %1$@\n";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Onderbreken";
 
 /* The title of the command to change pump time zone */
 "Sync to Current Time" = "Synchroniseren met huidige tijd";

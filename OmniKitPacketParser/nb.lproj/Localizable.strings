@@ -177,7 +177,7 @@
 "Pod setup window expired" = "Tidsvindu for oppsett av pod er utløpt";
 
 /* Description for pod suspended reminder */
-"Pod suspended reminder" = "Pod påminnelse er suspendert ";
+"Pod suspended reminder" = "Pod påminnelse er suspendert";
 
 /* Delivery status when pod is priming
    Pod status when priming */
@@ -226,10 +226,10 @@
 "Tank power activated" = "Tank-motor aktivert";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
-"Temp basal in progress" = "Temp-basal pågår";
+"Temp basal in progress" = "Midlertidig basal pågår";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Temp-basal kjører";
+"Temp basal running" = "Midlertidig basal kjører";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Temp-basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";

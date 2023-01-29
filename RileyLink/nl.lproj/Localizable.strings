@@ -8,7 +8,7 @@
 "About" = "Over";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Voeg account toe";
+"Add Account" = "Account Toevoegen";
 
 /* Title text for button to set up a new minimed pump */
 "Add Minimed Pump" = "Voeg Minimed-pomp toe";
@@ -47,7 +47,7 @@
 "RileyLink Testing" = "RileyLink Testing";
 
 /* Title text for button to set up omnipod */
-"Setup Omnipod" = "Setup Omnipod";
+"Setup Omnipod" = "Omnipod Instellen";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "Webpagina URL";

@@ -8,7 +8,7 @@
 "Input %@ is invalid" = "Inndata %@ er ikke gyldig";
 
 /* Recovery suggestion for unknown peripheral characteristic */
-"Make sure the device is nearby, and the issue should resolve automatically" = "Forsikre deg at enheten er i nærheten, så skal problemet løse seg selv automatisk.";
+"Make sure the device is nearby, and the issue should resolve automatically" = "Forsikre deg at enheten er i nærheten, så skal problemet automatisk løse seg selv.";
 
 /* Timeout error description */
 "Peripheral did not respond in time" = "Tilbehøret svarte ikke i tide";

@@ -49,3 +49,6 @@
 /* PeripheralManagerError.unknownCharacteristic error description */
 "Unknown characteristic: %@" = "Onbekende eigenschap: %@";
 
+/* PeripheralManagerError.unknownCharacteristic error description */
+"Unknown service: %@" = "Onbekende service: %@";
+

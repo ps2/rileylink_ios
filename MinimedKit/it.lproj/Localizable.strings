@@ -2,10 +2,10 @@
 "\"%1$@\" has a low battery" = "%1$@ ha la batteria quasi scarica";
 
 /* Low reservoir alert format string. (1: Number of units remaining) */
-"%1$@ U left" = "%1$@ Unita restate";
+"%1$@ U left" = "%1$@ U sinistra";
 
 /* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
-"%1$@ U left: %2$@" = "%1$@Unita' restate:%2$@";
+"%1$@ U left: %2$@" = "%1$@U sinistra:%2$@";
 
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "Un bolo è già in esecuzione";
@@ -32,10 +32,10 @@
 "Battery Out Limit" = "Batteria fuori limite";
 
 /* Title for PumpAlarmType.deviceResetBatteryIssue17 */
-"BatteryIssue17" = "Problema17 con la  batteria";
+"BatteryIssue17" = "Problema17 batteria";
 
 /* Title for PumpAlarmType.deviceResetBatteryIssue21 */
-"BatteryIssue21" = "Problema21 con la batteria ";
+"BatteryIssue21" = "Problema21 batteria";
 
 /* Event title for bolus
    Pump Event title for UnfinalizedDose with doseType of .bolus */
@@ -48,7 +48,7 @@
 "Bolus in Progress" = "Bolo in corso";
 
 /* Format string for uncertain bolus. (1: the reported error during bolusing) */
-"Bolus may have failed: %1$@" = "Il bolo puo' aver fallito:%1$@";
+"Bolus may have failed: %1$@" = "Il bolo potrebbe essere fallito: %1$@";
 
 /* Describing the Canada pump region */
 "Canada" = "Canada";
@@ -78,34 +78,34 @@
 "Device Error" = "Errore del Dispositivo";
 
 /* Title for deviceReset */
-"Device Reset" = "risettare il dispositivo";
+"Device Reset" = "Ripristino del Dispositivo";
 
 /* Default alert dismissal */
-"Dismiss" = "Dismettere";
+"Dismiss" = "Rimuovere";
 
 /* Title for PumpAlarmType.emptyReservoir */
-"Empty Reservoir" = "serbatoio vuoto";
+"Empty Reservoir" = "Serbatoio Vuoto";
 
 /* Describing the pump history insulin data source */
 "Event History" = "Storia degli Eventi";
 
 /* Error description for glucose page failing crc check */
-"Glucose page failed crc check" = "La pagina dati del Glucosio ha fallito il controllo crc";
+"Glucose page failed crc check" = "Il registro dati della Glicemia ha fallito il controllo crc";
 
 /* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
-"Go to pump settings and select insulin type" = "Andare nei settaggi del microinfusore e selezionareil tipo di insulina";
+"Go to pump settings and select insulin type" = "Andare nelle impostazioni del microinfusore e selezionare il tipo d'insulina";
 
 /* Pump error code when invalid history page is requested */
-"History page does not exist" = "La pagina storica dati e' inesistente";
+"History page does not exist" = "La pagina della storia non esiste";
 
 /* Error description for history page failing crc check */
-"History page failed crc check" = "La pagina storica dati ha fallito il controllo crc";
+"History page failed crc check" = "La pagina della cronologia non ha superato il controllo crc";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Erogazione Insulina sospesa.";
 
 /* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
-"Insulin Type is not configured" = "il tipo di insulina non e; stato configurato";
+"Insulin Type is not configured" = "Il tipo d'insulina non è stato configurato";
 
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Risposta non valida per %1$@: %2$@";
@@ -114,10 +114,10 @@
 "Lithium" = "Litio";
 
 /* Help anchor for uncertain bolus */
-"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "loop ha mandato al microinfusore un comando, ma non gli stao possibile confermare che il microinforse ha ricevuto il comando. Per salvezza Loop assume e dara' per scontato che il bolo e' stato dato. quando Loop eventualmente fara' scandaglio dei dati storici del microinfusore ed il tempo stimato per il termine del bolo sara' passato, allora Loop fara' un riepilogo di esame dei dati di erogazione per eguagliare i dati riportati dal microinfusore";
+"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop ha inviato un comando di bolo al microinfusore, ma non è stato in grado di confermare che il microinfusore abbia ricevuto il comando. Per sicurezza, Loop presume che il bolo sia stato erogato. Quando alla fine Loop recupera la cronologia dal microinfusore e l'ora prevista per la fine del bolo, Loop aggiorna i propri record di erogazione in modo che corrispondano a quanto riportato dal microinfusore.";
 
 /* Title for RileyLink low battery alert */
-"Low RileyLink Battery" = "Batteria del Releylink quasi scarica";
+"Low RileyLink Battery" = "Batteria Rileylink quasi scarica";
 
 /* Recovery suggestion */
 "Make sure your RileyLink is nearby and powered on" = "Assicurati che il tuo RileyLink sia nelle vicinanze e acceso";
@@ -135,7 +135,7 @@
 "No Delivery Alarm" = "Allarme di non erogazione";
 
 /* Error description when no rileylink connected */
-"No RileyLink Connected" = "Nessun Releylink connesso";
+"No RileyLink Connected" = "Nessun Rileylink Connesso";
 
 /* Describing the North America pump region */
 "North America" = "Nord America";

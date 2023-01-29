@@ -26,10 +26,10 @@
 "Bolusing" = "Bolussen";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolus met tijdelijk basaal";
+"Bolusing with temp basal" = "Bolussen met tijdelijk basaal";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Canule wordt geplaatst";
+"Cannula inserting" = "Canule ingebracht";
 
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Zeker";
@@ -53,10 +53,10 @@
 "Expiration alert" = "Alarm vervaltijd";
 
 /* Delivery status when extended bolus is running */
-"Extended bolus running" = "Er loopt een verlengde bolus";
+"Extended bolus running" = "Verlengde bolus werkend";
 
 /* Delivery status when extended bolus and temp basal is running */
-"Extended bolus running with temp basal" = "Er loopt een verlengde bolus met tijdelijke basaalsnelheid";
+"Extended bolus running with temp basal" = "Verlengde bolus werkend met tijdelijk basaal";
 
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Er is een storing opgetreden";
@@ -65,7 +65,7 @@
 "Finish setup " = "Voltooi installatie";
 
 /* Description for finish setup reminder */
-"Finish setup reminder" = "Voltooi instelling van herinnering";
+"Finish setup reminder" = "Voltooi Instellingen herinnering";
 
 /* Pod inititialized */
 "Initialized" = "Geinitialiseerd";
@@ -74,7 +74,7 @@
 "Inserting cannula" = "Canule inbrengen";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Interne pod fout %1$03d";
+"Internal pod fault %1$03d" = "Interne podfout %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "OnderbrokenBolus: %1$@ U (%2$@ Eenheden gepland) %3$@ %4$@ %5$@";
@@ -101,7 +101,7 @@
 "Memory initialized" = "Geheugen geïnitialiseerd";
 
 /* Pod alert state when no alerts are active */
-"No alerts" = "Geen foutmeldingen";
+"No alerts" = "Geen Waarschuwingen";
 
 /* Description for Fault Event Code .noFaults */
 "No faults" = "Geen fouten";
@@ -123,7 +123,7 @@
 "Not enough data" = "Te weinig gegevens";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Afsluiting gedetecteerd";
+"Occlusion detected" = "Verstopping gedetecteerd";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -162,7 +162,7 @@
 "Pod Fault: %1$@" = "Pod fout: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor plaatsing canule.";
+"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor inbrengen canule.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
 "Pod is not in a state ready for priming." = "Pod is niet gereed voor het voorvullen.";
@@ -187,7 +187,7 @@
 "Ready for basal programming" = "Klaar voor programmeren basaal";
 
 /* Pod state when ready for cannula insertion */
-"Ready to insert cannula" = "Gereed for canule plaatsing";
+"Ready to insert cannula" = "Gereed voor inbrengen canule";
 
 /* Pod pairing reminder initialized */
 "Reminder initialized" = "Herinnering geïnitialiseerd";
@@ -205,10 +205,10 @@
 "Shutdown imminent" = "Afsluiting nadert";
 
 /* Description for shutdown imminent alarm */
-"Shutdown imminent alarm" = "Sluit af wegens dreigend alarm";
+"Shutdown imminent alarm" = "Alarm voor naderende afsluiting";
 
 /* Description for suspend time expired */
-"Suspend time expired" = "Opschortingstijd verstreken";
+"Suspend time expired" = "Onderbrekingstijd verstreken";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Onderbreek: %1$@ %2$@";
@@ -226,7 +226,7 @@
 "Temp basal in progress" = "Tijdelijk basaal wordt uitgevoerd";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Tijdelijk basaal werkend";
+"Temp basal running" = "Werkend tijdelijk basaal";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Tijdelijk basaal: %1$@ E/uur %2$@ %3$@ %4$@ E %5$@";
@@ -250,7 +250,7 @@
 "Unexpected response from pod" = "Onverwachte reactie van pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Onbekende pod fout %1$03d";
+"Unknown pod fault %1$03d" = "Onbekende podfout %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
 "Unknown Value (%1$@) for type %2$@" = "Onbekende Waarde (%1$@) voor type %2$@";
@@ -262,7 +262,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Wacht op huidige bolus of maak bolus ongedaan";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht op huidig tijdelijk basaal of onderbreek om te annuleren";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot huidig tijdelijk basaal is voltooid, of onderbreek om te annuleren";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Wacht op herinnering om te verbinden";

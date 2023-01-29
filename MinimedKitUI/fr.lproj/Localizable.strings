@@ -52,6 +52,9 @@
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuler";
 
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Annulation du débit basal temporaire";
+
 /* The title of the command to change pump time */
 "Change Time" = "Changer l’heure";
 
@@ -155,14 +158,23 @@
 /* The title of the cell describing no radio awake data */
 "Listening Off" = "Écoute désactivée";
 
+/* Format string fof navigation bar title for MinimedPumpSettingsView (1: model number) */
+"Medtronic %1$@" = "Medtronic %1$@";
+
 /* The title of the command to pair with mysentry */
 "MySentry Pair" = "Appairage MySentry";
 
 /* The title of the cell showing device name */
 "Name" = "Nom";
 
+/* Value string for MySentry config when MySentry is not being used */
+"No" = "Non";
+
 /* Message display when no response from tuning pump */
 "No response" = "Pas de réponse";
+
+/* Button text to cancel pump time sync */
+"No, Keep Pump As Is" = "Non, garder la pompe telle quelle";
 
 /* The title of the cell showing the last idle */
 "On Idle" = "Au Repos";
@@ -204,6 +216,9 @@
 /* The title of the cell showing the pump region */
 "Region" = "Région";
 
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Reprise en cours";
+
 /* Button title to retry sentry setup */
 "Retry" = "Nouvel essai";
 
@@ -213,6 +228,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Enregistrer dans la pompe…";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Basal programmé";
 
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pump." = "Sélectionnez le type d'insuline que vous utiliserez dans cette pompe.";
@@ -226,11 +244,29 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Intensité du signal";
 
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Démarrer basal temporaire";
+
 /* A message indicating a command succeeded */
 "Succeeded" = "Réussi";
 
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Suspendre l'administration";
+
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Suspendu: %1$@\n";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Suspension en cours";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Synchroniser avec l'heure actuelle";
+
+/* Message for pod sync time action sheet */
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "L'heure de votre pompe est différente de l'heure actuelle. Voulez vous mettre à jour l'heure de votre pompe avec l'heure actuelle ?";
+
+/* Title for pod sync time action sheet. */
+"Time Change Detected" = "Changement d'heure détecté";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Essais";
@@ -241,9 +277,19 @@
 /* Progress message for tuning radio */
 "Tuning radio…" = "Regulation de la fréquence radio…";
 
+/* Units for showing temp basal rate */
+"U/hr" = "U/h";
+
 /* The detail text for an unknown pump model */
 "Unknown" = "Inconnu";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Temps de fonctionnement";
+
+/* Value string for MySentry config when MySentry is being used
+   Value string for MySentry config when MySentry is not being used */
+"Yes" = "Oui";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Oui, synchroniser avec l'heure actuelle";
 

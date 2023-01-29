@@ -23,7 +23,7 @@
 "RileyLink did not respond in time" = "RileyLink nu a răspuns în timp util";
 
 /* Unsupported command error description */
-"RileyLink firmware does not support the %@ command" = "Firmware-ul RileyLink nu sprijină %@ comanda";
+"RileyLink firmware does not support the %@ command" = "Firmware-ul RileyLink nu poate efectua %@ comanda";
 
 /* PeripheralManagerError.notReady error description */
 "RileyLink is not connected" = "RileyLink nu este conectat";

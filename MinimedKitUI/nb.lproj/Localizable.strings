@@ -61,6 +61,9 @@
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Endre tidssone";
 
+/* Text shown in basal rate space when basal is changing */
+"Changing" = "Endrer";
+
 /* Progress message for changing pump time. */
 "Changing time…" = "Endrer tid…";
 
@@ -92,11 +95,17 @@
 /* The title of the section describing the device */
 "Device" = "Enhet";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Enheter";
+
 /* The title of the command to discover commands */
 "Discover Commands" = "Oppdage kommandoer";
 
 /* Progress message for discovering commands. */
 "Discovering commands…" = "Oppdager kommandoer…";
+
+/* Description for option to not use MySentry */
+"Do not use MySentry" = "Ikke bruk MySentry";
 
 /* The title of the command to enable diagnostic LEDs */
 "Enable Diagnostic LEDs" = "Tilgjengeligjør diagnostiske LEDs";
@@ -120,7 +129,7 @@
 "Fetch Recent History" = "Hent nylig historikk";
 
 /* Progress message for fetching pump glucose. */
-"Fetching glucose…" = "Henter glukose…";
+"Fetching glucose…" = "Henter blodsukkerverdi…";
 
 /* Progress message for fetching pump history. */
 "Fetching history…" = "Henter historikk…";
@@ -140,8 +149,17 @@
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Hent statistikk…";
 
+/* Text shown in insulin delivery space when insulin suspended */
+"Insulin\nSuspended" = "Insulintilførsel\nStoppet";
+
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Insulintilførsel";
+
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Insulintilførsel kan hentes fra pumpa, enten ved å tolke hendelsehistorikken, eller ved å sammenligne reservoarvolumet over tid. Ved å lese hendelsehistorikken får man mer nøyaktig statuskurve og kan laste opp oppdaterte hendelser til Nightscout. Ulempen er høyere batteriforbruk i pumpa, og muligheten for større antall feil ved radiokommunikasjon - sammenlignet med å bare lese reservoarvolumet. Hvis den valgte kilden av noen grunn ikke kan brukes, vill systemet prøve den andre måten.";
+
+/* Header for insulin remaining on pod settings screen */
+"Insulin Remaining" = "Gjenværende insulin";
 
 /* Text for confidence reminders navigation link */
 "Insulin Type" = "Insulin Type";
@@ -152,6 +170,9 @@
 /* The title of the cell describing no radio awake data */
 "Listening Off" = "Radio inaktiv";
 
+/* Format string fof navigation bar title for MinimedPumpSettingsView (1: model number) */
+"Medtronic %1$@" = "Medtronic %1$@";
+
 /* Instructions on selecting setting for MySentry */
 "Medtronic pump models 523, 723, 554, and 754 have a feature called 'MySentry' that periodically broadcasts the reservoir and pump battery levels.  Listening for these broadcasts allows Loop to communicate with the pump less frequently, which can increase pump battery life.  However, when using this feature the RileyLink stays awake more of the time and uses more of its own battery.  Enabling this may lengthen pump battery life, while disabling it may lengthen RileyLink battery life. This setting is ignored for other pump models." = "Medtronic-pumpemodellene 523, 723, 554 og 754 har en funksjon kalt 'MySentry' som med jevne mellomrom kringkaster reservoar- og pumpebatterinivåene. Når du lytter til disse sendingene, kan Loop kommunisere med pumpen sjeldnere, noe som kan øke pumpens batterilevetid. Men når du bruker denne funksjonen, holder RileyLink seg våken mer av tiden og bruker mer av sitt eget batteri. Aktivering av dette kan forlenge pumpens batterilevetid, mens deaktivering kan forlenge RileyLink-batteriets levetid. Denne innstillingen ignoreres for andre pumpemodeller.";
 
@@ -161,8 +182,14 @@
 /* The title of the cell showing device name */
 "Name" = "Navn";
 
+/* Value string for MySentry config when MySentry is not being used */
+"No" = "Nei";
+
 /* Message display when no response from tuning pump */
 "No response" = "Ingen svar";
+
+/* Button text to cancel pump time sync */
+"No, Keep Pump As Is" = "Nei, behold pumpen som den er";
 
 /* The title of the cell showing the last idle */
 "On Idle" = "På Vent";
@@ -189,6 +216,9 @@
 /* Title of the pump settings view controller */
 "Pump Settings" = "Pumpeinnstillinger";
 
+/* The title of the command to change pump time zone */
+"Pump Time" = "Pumpetid";
+
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Les basalplan";
 
@@ -204,6 +234,12 @@
 /* The title of the cell showing the pump region */
 "Region" = "Region";
 
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Gjenoppta insulintilførsel";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Gjenopptar";
+
 /* Button title to retry sentry setup */
 "Retry" = "Prøv igjen";
 
@@ -213,6 +249,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Lagre til pumpe…";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Planlagt basal";
 
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pump." = "Velg hvilken type insulin du skal bruke i denne pumpen.";
@@ -226,14 +265,29 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signalstyrke";
 
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Starter midlertidig basal";
+
 /* A message indicating a command succeeded */
 "Succeeded" = "Vellykket";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Stopp insulintilførselen";
 
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Pauset: %1$@\n";
 
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Stopper";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Synkroniser til gjeldende tid";
+
 /* Message for pod sync time action sheet */
 "The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "Klokken på pumpen er forskjellig fra gjeldende tid. Vil du oppdatere tiden på pumpen til gjeldende tid?";
+
+/* Title for pod sync time action sheet. */
+"Time Change Detected" = "Tidsendring oppdaget";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Forsøk";
@@ -252,6 +306,10 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Oppetid";
+
+/* Description for option to use MySentry
+   navigation title for pump battery type selection */
+"Use MySentry" = "Bruk MySentry";
 
 /* Value string for MySentry config when MySentry is being used
    Value string for MySentry config when MySentry is not being used */

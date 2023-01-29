@@ -97,11 +97,11 @@
 "Toggle Diagnostic LEDs" = "Slå av/på diagnoselysdioder";
 
 /* Progress message for changing diagnostic LED mode */
-"Updating diagnostic LEDs mode" = "Oppdaterer innstillinger diagnoselysdioder";
+"Updating diagnostic LEDs mode" = "Oppdaterer innstillinger for diagnoselysdioder";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Oppetid";
 
 /* The title of the cell showing ORL */
-"Voltage" = "Spenning";
+"Voltage" = "Spenning (V)";
 

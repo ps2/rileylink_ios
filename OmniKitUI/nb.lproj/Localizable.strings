@@ -8,7 +8,7 @@
 "%@ dB" = "%@ dB";
 
 /* No comment provided by engineer. */
-"%@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %@ normally now." = "%1$@ har gjenopprettet kommunikasjonen med poden på kroppen din.\n\nInsulintilførselsjournaler er oppdatert og bør samsvare med det som faktisk ble levert. \n\n Du kan fortsette å bruke %2$@ normalt nå.";
+"%@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %@ normally now." = "%1$@ har gjenopprettet kommunikasjonen med pod på kroppen din.\n\nInsulintilførselsjournaler er oppdatert og bør samsvare med det som faktisk ble levert. \n\n Du kan fortsette å bruke %2$@ normalt nå.";
 
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
@@ -18,7 +18,7 @@
 "%@ U (Finished)" = "%@ E (Ferdig)";
 
 /* Format string for bolus progress. (1: The delivered amount) (2: The programmed amount) (3: the percent progress) */
-"%@ U of %@ U (%@)" = "%@ E av %@ E (%@)";
+"%@ U of %@ U (%@)" = "%1$@ E av%2$@ E (%3$@)";
 
 /* Format string for temp basal rate. (1: The localized amount) */
 "%@ U/hour" = "%@ E/time";
@@ -39,7 +39,7 @@
 "%1$@ for %2$@" = "%1$@ for %2$@";
 
 /* Format string for main text of delivery uncertainty recovery page. (1: app name)(2: date of command)(3: app name) */
-"%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ har ikke vært i stand til å kommunisere med poden på kroppen din siden %2$@.\n\nUten kommunikasjon med poden kan ikke appen fortsette å sende kommandoer for insulintilførsel eller vise nøyaktig, nylig informasjon om ditt aktive insulin eller insulinet som leveres av poden.\n\nOvervåk blodsukkeret ditt nøye de neste 6 timene eller mer, siden det kan være insulin som virker aktivt i kroppen din som %3$@ ikke kan vise.";
+"%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ har ikke vært i stand til å kommunisere med pod på kroppen din siden %2$@.\n\nUten kommunikasjon med pod kan ikke appen fortsette å sende kommandoer for insulintilførsel eller vise nøyaktig, nylig informasjon om ditt aktive insulin eller insulinet som leveres av pod.\n\nOvervåk blodsukkeret ditt nøye de neste 6 timene eller mer, siden det kan være insulin som virker aktivt i kroppen din som %3$@ ikke kan vise.";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
@@ -66,7 +66,7 @@
 "Alarms" = "Alarmer";
 
 /* Confirmation message for shutting down a pod */
-"Are you sure you want to shutdown this pod?" = "Er du sikker på at du vil avslutte denne poden?";
+"Are you sure you want to shutdown this pod?" = "Er du sikker på at du vil avslutte denne pod?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to skip Omnipod Onboarding?" = "Er du sikker på at du vil hoppe over Omnipod Onboarding?";
@@ -102,7 +102,7 @@
 "Cannula inserted successfully. Continue." = "Kanyle satt inn vellykket. Fortsett.";
 
 /* The action string on pod status page when pod expired */
-"Change Pod now. Insulin delivery will stop 8 hours after the Pod has expired or when no more insulin remains." = "Bytt pod nå. Insulintilførselen vil stoppe 8 timer etter at poden har utløpt eller når det ikke er mer insulin igjen.";
+"Change Pod now. Insulin delivery will stop 8 hours after the Pod has expired or when no more insulin remains." = "Bytt pod nå. Insulintilførselen vil stoppe 8 timer etter at pod har utløpt eller når det ikke er mer insulin igjen.";
 
 /* Format string for the action string on pod status page when pod expired. (1: service time remaining) */
 "Change Pod now. Insulin delivery will stop in %1$@ or when no more insulin remains." = "Bytt pod nå. Insulintilførselen vil stoppe om %1$@ eller når det ikke er mer insulin igjen.";
@@ -117,7 +117,7 @@
 "Check Cannula" = "Sjekk kanyle";
 
 /* Label text for step three of attach pod instructions */
-"Check Pod, apply to site, then confirm pod attachment." = "Sjekk pod, påfør på stedet, og bekreft deretter at poden er festet.";
+"Check Pod, apply to site, then confirm pod attachment." = "Sjekk pod, påfør på stedet, og bekreft deretter at pod er festet.";
 
 /* Insert cannula action button accessibility label checking insertion */
 "Checking Insertion" = "Kontrollerer innsetting";
@@ -129,7 +129,7 @@
 "Comms Recovered" = "Kommunikasjon gjenopprettet";
 
 /* No comment provided by engineer. */
-"Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Tillitspåminnelser er pip fra poden som kan brukes til å bekrefte valgte kommandoer.";
+"Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Tillitspåminnelser er pip fra pod som kan brukes til å bekrefte valgte kommandoer.";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfigurasjon";
@@ -283,7 +283,7 @@
 "Invalid entry" = "Ugyldig oppføring";
 
 /* Label text for step 2 of pair pod instructions */
-"Keep the RileyLink about 6 inches from the pod during pairing." = "Hold Rileylink ca. 15 cm fra poden under sammenkobling.";
+"Keep the RileyLink about 6 inches from the pod during pairing." = "Hold Rileylink ca. 15 cm fra Pod under sammenkobling.";
 
 /* description label for last status date pod details row */
 "Last Status" = "Siste status";
@@ -306,7 +306,7 @@
 "Low Reservoir Reminder" = "Påminnelse om lavt reservoar";
 
 /* The action string on pod status page when pod data is stale */
-"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Forsikre deg om at telefonen og poden er nær hverandre. Hvis kommunikasjonsproblemer vedvarer, flytter du til et nytt område.";
+"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Forsikre deg om at telefonen og pod er nær hverandre. Hvis kommunikasjonsproblemer vedvarer, flytter du til et nytt område.";
 
 /* Unit for singular minute in pod life remaining */
 "minute" = "minutt";
@@ -388,10 +388,10 @@
 "Play Test Beeps…" = "Spill test-toner...";
 
 /* Instructions for deactivate pod when pod not on body */
-"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Vennligst deaktiver poden. Når deaktiveringen er fullført, kan du pare en ny pod.";
+"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Vennligst deaktiver pod. Når deaktiveringen er fullført, kan du pare en ny pod.";
 
 /* Instructions for deactivate pod when pod is on body */
-"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Vennligst deaktiver poden. Når deaktiveringen er fullført, kan du fjerne den og pare en ny pod.";
+"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Vennligst deaktiver pod. Når deaktiveringen er fullført, kan du fjerne den og pare en ny pod.";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM Versjon";
@@ -403,7 +403,7 @@
 "Pod Age" = "Pod-alder";
 
 /* Deactivate pod action button accessibility label when deactivation complete */
-"Pod deactivated successfully. Continue." = "Poden ble deaktivert. Fortsette.";
+"Pod deactivated successfully. Continue." = "Pod ble deaktivert. Fortsett.";
 
 /* Error message for reservoir view during general pod fault */
 "Pod Error" = "Pod-feil";
@@ -415,7 +415,7 @@
 "Pod Expired" = "Pod utløpt";
 
 /* Label for pod life state when time remaining */
-"Pod expires in" = "Poden utløper om";
+"Pod expires in" = "Pod utløper om";
 
 /* description label for pod fault details */
 "Pod Fault Details" = "Pod-feildetaljer";
@@ -460,7 +460,7 @@
 "Remaining" = "Gjenstående";
 
 /* Label text for step two of attach pod instructions */
-"Remove the pod's needle cap and check cannula. Then remove paper backing." = "Fjern kanylehetten til poden og sjekk kanylen. Fjern deretter plasterbeskyttelsen.";
+"Remove the pod's needle cap and check cannula. Then remove paper backing." = "Fjern kanylehetten til pod og sjekk kanylen. Fjern deretter plasterbeskyttelsen.";
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */
@@ -511,7 +511,7 @@
 "Scheduled Reminder" = "Planlagt påminnelse";
 
 /* Title text for insulin type confirmation page */
-"Select the type of insulin that you will be using in this pod." = "Velg hvilken type insulin du skal bruke i denne poden.";
+"Select the type of insulin that you will be using in this pod." = "Velg hvilken type insulin du skal bruke i denne pod.";
 
 /* description label for sequence number pod details row */
 "Sequence Number" = "Sekvensnummer";
@@ -565,16 +565,16 @@
 "Testing Commands…" = "Tester kommandoer...";
 
 /* Footer text for omnipod reminders section */
-"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "Appen konfigurerer en påminnelse på poden for å varsle deg før poden utløper. Angi antall timer forhåndsvarsel du vil konfigurere når du parer en ny Pod.";
+"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "Appen konfigurerer en påminnelse på Pod for å varsle deg før Pod utløper. Angi antall timer forhåndsvarsel du vil konfigurere når du parer en ny Pod.";
 
 /* Description text on ExpirationReminderSetupView */
-"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Appen varsler deg før poden utløper.\n\nBla for å angi antall timer forhåndsvarsel du vil ha.";
+"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Appen varsler deg før pod utløper.\n\nBla for å angi antall timer forhåndsvarsel du vil ha.";
 
 /* Description text on LowReservoirReminderSetupView */
-"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Appen varsler deg når mengden insulin i poden når dette nivået (50-10 E).\n\nBla for å angi antall enheter du vil bli minnet på.";
+"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Appen varsler deg når mengden insulin i Pod når dette nivået (50-10 E).\n\nBla for å angi antall enheter du vil bli minnet på.";
 
 /* Footer text for low reservoir value row */
-"The App notifies you when the amount of insulin in the Pod reaches this level." = "Appen varsler deg når mengden insulin i poden når dette nivået.";
+"The App notifies you when the amount of insulin in the Pod reaches this level." = "Appen varsler deg når mengden insulin i Pod når dette nivået.";
 
 /* Description text for critical alerts */
 "The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Påminnelsene over vil ikke gi lyd hvis mobilen din er i Stille eller Ikke Forstyrr-modus.\n\nDet finnes andre kritiske Pod-varsler som vil gi lyd selv om mobilen din er i Stille eller Ikke Forstyrr-modus.";
@@ -639,8 +639,8 @@
 "Yes" = "Ja";
 
 /* bodyText for PodSetupView */
-"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Du vil nå starte prosessen med å konfigurere påminnelser, fylle pod'en med insulin, pare med telefonen og feste pod'en på kroppen.";
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Du vil nå starte prosessen med å konfigurere påminnelser, fylle Pod med insulin, pare med telefonen og feste Pod på kroppen.";
 
 /* Format string for instructions for setup complete view. (1: app name) */
-"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Din Pod er klar til bruk.\n\n%1$@ vil minne deg om å bytte pod'en før den utløper. Du kan endre dette til et tidspunkt som passer for deg.";
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Din Pod er klar til bruk.\n\n%1$@ vil minne deg om å bytte Pod før den utløper. Du kan endre dette til et tidspunkt som passer for deg.";
 

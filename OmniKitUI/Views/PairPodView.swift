@@ -80,7 +80,7 @@ struct PairPodView: View {
         }
         .animation(.default)
         .alert(isPresented: $cancelModalIsPresented) { cancelPairingModal }
-        .navigationBarTitle("Pair Pod", displayMode: .automatic)
+        .navigationBarTitle(LocalizedString("Pair Pod", comment: "Navigation bar title for PairPodView"), displayMode: .automatic)
         .navigationBarBackButtonHidden(self.viewModel.backButtonHidden)
         .navigationBarItems(trailing: self.viewModel.state.navBarVisible ? cancelButton : nil)
     }

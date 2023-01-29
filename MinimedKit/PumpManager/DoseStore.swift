@@ -100,7 +100,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 dose = DoseEntry(suspendDate: event.date)
                 isRewound = true
             case is PrimePumpEvent:
-                title = LocalizedString("Prime", comment: "Event title for rewind")
+                title = LocalizedString("Prime", comment: "Event title for rewind pump event")
                 eventType = .prime
 
                 if isRewound {
@@ -116,7 +116,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 }
                 break
             case let alarm as ClearAlarmPumpEvent:
-                title = "Clear Alarm"
+                title = LocalizedString("Clear Alarm", comment: "Event title for clear alarm pump event")
                 eventType = .alarmClear
 
                 if case .noDelivery = alarm.alarmType {
@@ -124,28 +124,28 @@ extension Collection where Element == TimestampedHistoryEvent {
                 }
                 break
             case is JournalEntryMealMarkerPumpEvent:
-                title = "Meal"
+                title = LocalizedString("Meal", comment: "Event title for JournalEntryMealMarkerPumpEvent")
                 break
             case is JournalEntryPumpLowBatteryPumpEvent:
-                title = "Low Battery"
+                title = LocalizedString("Low Battery", comment: "Event title for JournalEntryPumpLowBatteryPumpEvent")
                 break
             case is JournalEntryPumpLowReservoirPumpEvent:
-                title = "Low Reservoir"
+                title = LocalizedString("Low Reservoir", comment: "Event title for JournalEntryPumpLowReservoirPumpEvent")
                 break
             case is ChangeBasalProfilePumpEvent:
-                title = "Change Basal Schedule"
+                title = LocalizedString("Change Basal Schedule", comment: "Event title for ChangeBasalProfilePumpEvent")
                 break
             case is ChangeBasalProfilePatternPumpEvent:
-                title = "Change Basal Profile Schedule"
+                title = LocalizedString("Change Basal Profile Schedule", comment: "Event title for ChangeBasalProfilePatternPumpEvent")
                 break
             case is SelectBasalProfilePumpEvent:
-                title = "Select Profile"
+                title = LocalizedString("Select Profile", comment: "Event title for SelectBasalProfilePumpEvent")
                 break
             case is ChangeTimePumpEvent:
-                title = "Change Time"
+                title = LocalizedString("Change Time", comment: "Event title for ChangeTimePumpEvent")
                 break
             case is NewTimePumpEvent:
-                title = "New Time"
+                title = LocalizedString("New Time", comment: "Event title for NewTimePumpEvent")
                 break
             default:
                 break

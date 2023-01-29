@@ -18,7 +18,7 @@
 "Activation time exceeded" = "Tempo di attivazione superato";
 
 /* Description for auto-off */
-"Auto-off" = "spegnimento in automatico";
+"Auto-off" = "Spegnimento automatico";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Allarme spegnimento automatico";
@@ -39,16 +39,16 @@
 "Bolus: %1$@U %2$@ %3$@ %4$@" = "Bolo: %1$@U %2$@ %3$@ %4$@";
 
 /* Delivery status when bolusing */
-"Bolusing" = "Somministrazione in bolo in corso";
+"Bolusing" = "Bolo in corso";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Somministrazione in bolo con velocità basale temporanea";
+"Bolusing with temp basal" = "Bolo con basale temp";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Inserimento cannula in corso";
 
 /* String describing a dose that was certainly scheduled */
-"Certain" = "Certa";
+"Certain" = "Definita";
 
 /* Alert content body for podExpireImminent pod alert */
 "Change Pod now. Insulin delivery will stop in 1 hour." = "Cambia Pod ora. L'erogazione dell'insulina si interromperà tra 1 ora.";
@@ -66,7 +66,7 @@
 "Communication issue: Unacknowledged command pending." = "Problema di comunicazione:  Comando di conferma in pendenza";
 
 /* Description for BeepPreference.manualCommands */
-"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "I promemoria di fiducia suoneranno per i commandi inoltrati, come Boli, Cancellazione Boli,  Sospensioni, ripristini erogazione, ecc. Quando Loop invece regola in automatico l'erogazione allora non usera' alcun promemoria di fiducia.";
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "I promemoria di fiducia suoneranno per i comandi inoltrati come Boli, Cancellazione Boli,  Sospensioni, ripristini erogazione, ecc. Quando Loop invece regola in automatico l'erogazione allora non userà alcun promemoria di fiducia.";
 
 /* Description for BeepPreference.extended */
 "Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "I promemoria di fiducia suonano quando Loop regola automaticamente l'erogazione e per i comandi avviati dall'utente.";
@@ -75,7 +75,7 @@
 "Critical Pod Error" = "Errore critico Pod";
 
 /* Recovery suggestion when unexpected address received */
-"Crosstalk possible. Please move to a new location" = "È possibile che si verifichi una diafonia. Si prega di spostare in una nuova posizione";
+"Crosstalk possible. Please move to a new location" = "Possibile dialogo incrociato. Si prega di spostarsi in una nuova posizione";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Disattivato";
@@ -90,7 +90,7 @@
 "Empty Reservoir" = "Serbatoio vuoto";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Risposta senza contenuto da Pod";
+"Empty response from pod" = "Risposta senza contenuto dal Pod";
 
 /* Title string for BeepPreference.manualCommands */
 "Enabled" = "Abilitato";
@@ -99,25 +99,25 @@
 "Error event logged, shutting down" = "È stato rilevato un errore. Spegnimento in corso";
 
 /* Description for expiration advisory */
-"Expiration advisory" = "Avviso di scadenza";
+"Expiration advisory" = "Consultivo di scadenza";
 
 /* Description for expiration alert */
 "Expiration alert" = "Avviso di scadenza";
 
 /* Title string for BeepPreference.extended */
-"Extended" = "Esteso";
+"Extended" = "Prolungato";
 
 /* Delivery status when extended bolus is running */
-"Extended bolus running" = "Bolo prolungato incorso";
+"Extended bolus running" = "Bolo prolungato in esecuzione";
 
 /* Delivery status when extended bolus and temp basal is running */
-"Extended bolus running with temp basal" = "Bolo Esteso incorso con Basale Temporanea";
+"Extended bolus running with temp basal" = "Bolo prolungato in esecuzione con Basale Temporanea";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "E' successo un errore";
+"Fault event occurred" = "Si è verificato un errore";
 
 /* Status highlight that when pod is deactivating. */
-"Finish Deactivation" = "Deattivazione completata";
+"Finish Deactivation" = "Disattivazione completata";
 
 /* Status highlight that when pod is activating. */
 "Finish Pairing" = "Abbinamento completato";
@@ -126,7 +126,7 @@
 "Finish setup " = "Termina configurazione";
 
 /* Description for finish setup reminder */
-"Finish setup reminder" = "Settaggio Promemoria Terminato.\n";
+"Finish setup reminder" = "Promemoria configurazione completa";
 
 /* Pod inititialized */
 "Initialized" = "Inizializzato";
@@ -215,7 +215,7 @@
 "No pod paired" = "Nessun Pod abbinato";
 
 /* Error message for PodCommsError.noPodsFound */
-"No pods found" = "Nessun pod trovato";
+"No pods found" = "Nessun Pod trovato";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Nessuna risposta da Pod";
@@ -362,16 +362,16 @@
 "Resume delivery" = "ripristino erogazione";
 
 /* Alert content title for suspendEnded pod alert */
-"Resume Insulin" = "ripristinare insulina";
+"Resume Insulin" = "Riprendi l'insulina";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Riprendi: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Basale programmata";
+"Scheduled basal" = "Basale Programmata";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basale programmato";
+"Scheduled Basal" = "Basale Programmata";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Chiusura imminente";

@@ -14,7 +14,7 @@
 "Add Minimed Pump" = "Legg til Minimed Pumpe";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "API Secret";
+"API Secret" = "API Hemmelighet";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfigurasjon";

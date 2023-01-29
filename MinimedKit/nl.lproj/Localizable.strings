@@ -22,6 +22,15 @@
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basaal profiel %1$@: %2$@ E/uur";
 
+/* Title for PumpAlarmType.batteryDepleted */
+"Battery Depleted" = "Batterij helemaal leeg";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue17 */
+"BatteryIssue17" = "BatterijProbleem17";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue21 */
+"BatteryIssue21" = "BatterijProbleem21";
+
 /* Event title for bolus
    Pump Event title for UnfinalizedDose with doseType of .bolus */
 "Bolus" = "Bolus";
@@ -32,17 +41,23 @@
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus in uitvoering";
 
+/* Format string for uncertain bolus. (1: the reported error during bolusing) */
+"Bolus may have failed: %1$@" = "Bolus is mogelijk mislukt: %1$@";
+
 /* Describing the Canada pump region */
 "Canada" = "Canada";
 
 /* Event title for temp basal cancel */
 "Cancel Temp Basal" = "Annuleer Tijdelijk Basaal";
 
+/* The notification alert describing a low pump battery */
+"Change the pump battery immediately" = "Vervang de batterij van de pomp onmiddellijk";
+
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Vervang pompreservoir direct";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Controleer dat de pomp niet is onderbroken of aan het initialiseren, of dat er een tijdelijke basaal (in %) staat ingesteld";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Controleer dat de pomp niet is onderbroken of aan het initialiseren, of dat er een percentage tijdelijke basaal staat ingesteld";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Commando geweigerd";
@@ -56,14 +71,23 @@
 /* Error description */
 "Device Error" = "Apparaatfout";
 
+/* Title for deviceReset */
+"Device Reset" = "Apparaat resetten";
+
+/* Default alert dismissal */
+"Dismiss" = "Sluiten";
+
 /* Title for PumpAlarmType.emptyReservoir */
 "Empty Reservoir" = "Reservoir Leeg";
 
 /* Describing the pump history insulin data source */
-"Event History" = "Pomp historie";
+"Event History" = "Logboek";
 
 /* Error description for glucose page failing crc check */
 "Glucose page failed crc check" = "Glucose pagina is mislukt crc controle";
+
+/* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Go to pump settings and select insulin type" = "Ga naar pompinstellingen en selecteer insulinetype";
 
 /* Pump error code when invalid history page is requested */
 "History page does not exist" = "Geschiedenis pagina bestaat niet";
@@ -71,11 +95,23 @@
 /* Error description for history page failing crc check */
 "History page failed crc check" = "Geschiedenis pagina is mislukt crc controle";
 
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insuline Onderbroken";
+
+/* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
+"Insulin Type is not configured" = "Het insulinetype is niet geconfigureerd";
+
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Foutief antwoord gedurende %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Lithium";
+
+/* Help anchor for uncertain bolus */
+"Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop stuurde een boluscommando naar de pomp, maar kon niet bevestigen dat de pomp het commando ontving. Voor de zekerheid gaat Loop ervan uit dat de bolus is toegediend. Wanneer Loop uiteindelijk de geschiedenis van de pomp ophaalt en de geschatte eindtijd van de bolus is verstreken, zal Loop zijn gegevens over de toediening aanpassen aan wat de pomp rapporteert.";
+
+/* Title for RileyLink low battery alert */
+"Low RileyLink Battery" = "Batterij van RileyLink laag";
 
 /* Recovery suggestion */
 "Make sure your RileyLink is nearby and powered on" = "Wees er zeker van dat de RileyLink is in de buurt en aanstaat";
@@ -88,6 +124,9 @@
 
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 series";
+
+/* Title for PumpAlarmType.noDelivery */
+"No Delivery Alarm" = "Geen insulinetoediening alarm";
 
 /* Error description when no rileylink connected */
 "No RileyLink Connected" = "Geen RileyLink verbonden";
@@ -104,6 +143,9 @@
 /* Event title for percent based temp basal */
 "Percent Temp Basal" = "Percentage Tijdelijk Basaal";
 
+/* recoverySuggestion for uncertain bolus */
+"Please check your pump bolus history to determine if the bolus was delivered." = "Controleer je pompbolusgeschiedenis om te bepalen of de bolus is toegediend.";
+
 /* Event title for rewind */
 "Prime" = "Voorvullen";
 
@@ -119,6 +161,9 @@
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pomp is onderbroken";
 
+/* Error description when failure due to pump suspended */
+"Pump is Suspended" = "Pomp is Onderbroken";
+
 /* The notification title for an empty pump reservoir */
 "Pump Reservoir Empty" = "Pompreservoir leeg";
 
@@ -130,6 +175,9 @@
 
 /* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "Bericht Pomp (%1$@, %2$@, %3$@, %4$@)";
+
+/* Title for PumpAlarmType.reprogramError */
+"Reprogram Error" = "Herprogrammeringsfout";
 
 /* Describing the reservoir insulin data source */
 "Reservoir" = "Reservoir";
@@ -149,6 +197,10 @@
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Signaalverlies";
+
+/* Event title for suspend
+   Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Onderbreek";
 
 /* Event title for temporary basal rate start
    Pump Event title for UnfinalizedDose with doseType of .tempBasal */

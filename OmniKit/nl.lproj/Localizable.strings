@@ -1,6 +1,9 @@
 /* Description for an inactive alert modifier */
 " (inactive)" = " (Inactief)";
 
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\"%1$@\" batterij bijna leeg";
+
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
@@ -14,6 +17,9 @@
    Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Activeringstijd overschreden";
 
+/* Description for auto-off */
+"Auto-off" = "Automatisch uitschakelen";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-uit alarm";
 
@@ -22,6 +28,9 @@
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Minder dan 50 eenheden";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus bezig";
@@ -33,10 +42,10 @@
 "Bolusing" = "Bolussen";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolus met tijdelijk basaal";
+"Bolusing with temp basal" = "Bolussen met tijdelijk basaal";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Canule wordt geplaatst";
+"Cannula inserting" = "Canule wordt ingebracht";
 
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Zeker";
@@ -51,10 +60,13 @@
 "Command error %1$u" = "Commando fout %1$u";
 
 /* Description for BeepPreference.manualCommands */
-"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Vertrouwensherinneringen klinken voor opdrachten die je start, zoals bolussen, bolus annuleren, onderbreken, hervatten, meldingsherinneringen opslaan, enz. Wanneer Loop de toediening automatisch aanpast, worden er geen vertrouwensherinneringen gebruikt.";
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Bevestigingsherinneringen zijn hoorbaar voor opdrachten die je start, zoals bolussen, bolus annuleren, onderbreken, hervatten, meldingsherinneringen opslaan, enz. Wanneer Loop de toediening automatisch aanpast, zijn er geen bevestigingsherinneringen hoorbaar.";
 
 /* Description for BeepPreference.extended */
-"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Vertrouwensherinneringen klinken wanneer Loop de toediening automatisch aanpast, of voor voor opdrachten die je geeft.";
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Bevestigingsherinneringen zijn hoorbaar wanneer Loop de toediening automatisch aanpast, evenals voor opdrachten die je geeft.";
+
+/* The title for AlarmCode.other notification */
+"Critical Pod Error" = "Kritieke Podfout";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Gedeactiveerd";
@@ -77,20 +89,41 @@
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Fout geconstateerd, sluit af";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Vervaldatum melding";
+
 /* Description for expiration alert */
 "Expiration alert" = "Alarm vervaltijd";
+
+/* Title string for BeepPreference.extended */
+"Extended" = "Uitgebreid";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Verlengde bolus werkend";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Verlengde bolus werkend met tijdelijk basaal";
 
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Foutgebeurtenis opgetreden";
 
+/* Status highlight that when pod is deactivating. */
+"Finish Deactivation" = "Voltooi Deactivering";
+
+/* Status highlight that when pod is activating. */
+"Finish Pairing" = "Koppelen Voltooien";
+
 /* Description for finish setup */
 "Finish setup " = "Voltooi installatie";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Voltooi Instellingen herinnering";
 
 /* Pod inititialized */
 "Initialized" = "Geinitialiseerd";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Canule inschieten";
+"Inserting cannula" = "Canule inbrengen";
 
 /* The default notification body for AlarmCodes */
 "Insulin delivery stopped. Change Pod now." = "Insulinetoediening gestopt. Vervang Pod nu.";
@@ -98,8 +131,11 @@
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insuline Onderbroken";
 
+/* Error description for OmniBLEPumpManagerError.insulinTypeNotConfigured */
+"Insulin type not configured" = "Insulinetype niet ingesteld";
+
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "Interne pod fout %1$03d";
+"Internal pod fault %1$03d" = "Interne podfout %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "OnderbrokenBolus: %1$@ U (%2$@ Eenheden gepland) %3$@ %4$@ %5$@";
@@ -112,6 +148,9 @@
 
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "Ongeldige CRC";
+
+/* Error description for OmniBLEPumpManagerError.invalidSetting */
+"Invalid Setting" = "Ongeldige Instelling";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Reservoir Bijna Leeg";
@@ -129,7 +168,7 @@
 "Low RileyLink Battery" = "RileyLink-batterij laag";
 
 /* Recovery suggestion for PodCommsError.noPodsFound */
-"Make sure your pod is filled and nearby." = "Zorg ervoor dat je pod gevuld en binnen bereik is. ";
+"Make sure your pod is filled and nearby." = "Zorg ervoor dat je pod gevuld is en binnen bereik.";
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Zorg ervoor dat je RileyLink dichtbij is en aanstaat";
@@ -140,15 +179,18 @@
 /* Pod memory initialized */
 "Memory initialized" = "Geheugen geïnitialiseerd";
 
+/* Recovery suggestion for PodCommsError.tooManyPodsFound */
+"Move to a new area away from any other pods and try again." = "Ga naar een nieuwe plek, weg van andere pods, en probeer opnieuw.";
+
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
 "Multiple Command Alert" = "Meerdere commando's waarschuwing";
 
 /* Pod alert state when no alerts are active */
-"No alerts" = "Geen foutmeldingen";
+"No alerts" = "Geen Waarschuwingen";
 
 /* Description for BeepPreference.silent */
-"No confidence reminders are used." = "Er worden vertrouwensherinneringen gebruikt.";
+"No confidence reminders are used." = "Er worden geen bevestigingsherinneringen gebruikt.";
 
 /* Description for Fault Event Code .noFaults */
 "No faults" = "Geen fouten";
@@ -180,10 +222,10 @@
 "Not enough data" = "Onvoldoende data";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Afsluiting gedetecteerd";
+"Occlusion detected" = "Verstopping gedetecteerd";
 
 /* The title for Occlusion alarm notification */
-"Occlusion Detected" = "Blokkage gedetecteerd";
+"Occlusion Detected" = "Verstopping Gedetecteerd";
 
 /* Action button default text for PodAlerts */
 "Ok" = "OK";
@@ -196,7 +238,7 @@
 "Omnipod" = "Omnipod";
 
 /* Pod state oneNotUsed */
-"oneNotUsed" = "oneNotUsed";
+"oneNotUsed" = "eenNietGebruikt";
 
 /* Pod status after pairing */
 "Paired" = "Verbonden";
@@ -259,7 +301,7 @@
 "Pod Fault: %1$@" = "Pod fout: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor plaatsing canule.";
+"Pod is not in a state ready for cannula insertion." = "Pod is niet gereed voor inbrengen canule.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
 "Pod is not in a state ready for priming." = "Pod is niet gereed voor het voorvullen.";
@@ -268,7 +310,7 @@
 "Pod is suspended" = "Pod is onderbroken";
 
 /* Status highlight message for occlusion alarm. */
-"Pod Occlusion" = "Pod blokkage";
+"Pod Occlusion" = "Podverstopping";
 
 /* Alert content title for finishSetupReminder pod alert */
 "Pod Pairing Incomplete" = "Koppeling Pod Onvolledig";
@@ -296,7 +338,7 @@
 "Ready for basal programming" = "Klaar voor programmeren basaal";
 
 /* Pod state when ready for cannula insertion */
-"Ready to insert cannula" = "Gereed voor plaatsing canule";
+"Ready to insert cannula" = "Gereed voor inbrengen canule";
 
 /* Pod pairing reminder initialized */
 "Reminder initialized" = "Herinnering geïnitialiseerd";
@@ -308,7 +350,7 @@
 "Resume delivery" = "Hervat Toediening";
 
 /* Alert content title for suspendEnded pod alert */
-"Resume Insulin" = "Hervat Insulinetoediening";
+"Resume Insulin" = "Hervat Insuline";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Hervat: %1$@ %2$@";
@@ -320,16 +362,26 @@
 "Scheduled Basal" = "Gepland Basaal";
 
 /* Description for shutdown imminent */
-"Shutdown imminent" = "Uitschakeling nadert";
+"Shutdown imminent" = "Afsluiting nadert";
 
 /* Description for shutdown imminent alarm */
-"Shutdown imminent alarm" = "Sluit af wegens dreigend alarm";
+"Shutdown imminent alarm" = "Alarm voor naderende afsluiting";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Signaalverlies";
 
 /* Format string for pod signal strength too high */
 "Signal strength too high" = "Signaalsterkte te sterk";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Onderbreek";
+
+/* Alert content body for suspendInProgress pod alert
+   Alert content title for suspendInProgress pod alert */
+"Suspend In Progress Reminder" = "Onderbreking in Uitvoering Herinnering";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Onderbrekingstijd verstreken";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Onderbreek: %1$@ %2$@";
@@ -350,7 +402,7 @@
 "Temp basal in progress" = "Tijdelijk basaal wordt uitgevoerd";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Tijdelijk basaal werkend";
+"Temp basal running" = "Werkend tijdelijk basaal";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Tijdelijk basaal: %1$@ E/uur %2$@ %3$@ %4$@ E %5$@";
@@ -359,7 +411,7 @@
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "De tijd op je pomp is anders dan de huidige tijd. Je kunt de tijd op de pomp bekijken en synchroniseren met de huidige tijd in instellingen.";
 
 /* Pod state threeNotUsed */
-"threeNotUsed" = "threeNotUsed";
+"threeNotUsed" = "drieNietGebruikt";
 
 /* Alert content title for timeOffsetChangeDetected pod alert */
 "Time Change Detected" = "Tijdsverschil gedetecteerd";
@@ -374,7 +426,7 @@
 "Try again" = "Probeer opnieuw";
 
 /* Pod state twoNotUsed */
-"twoNotUsed" = "twoNotUsed";
+"twoNotUsed" = "tweeNietGebruikt";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Onzeker";
@@ -389,7 +441,7 @@
 "Unexpected response from pod" = "Onverwachte reactie van pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Onbekende pod fout %1$03d";
+"Unknown pod fault %1$03d" = "Onbekende podfout %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
 "Unknown Value (%1$@) for type %2$@" = "Onbekende waarde (%1$@) voor type %2$@";
@@ -401,7 +453,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Wacht op huidige bolus of maak bolus ongedaan";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht op huidig tijdelijk basaal of onderbreek om te annuleren";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot huidig tijdelijk basaal is voltooid, of onderbreek om te annuleren";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Wacht op herinnering om te verbinden";

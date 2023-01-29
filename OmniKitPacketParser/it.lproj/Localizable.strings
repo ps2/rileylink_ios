@@ -11,7 +11,7 @@
 "Auto-off alarm" = "Allarme spegnimento automatico";
 
 /* Pod state when basal initialized */
-"Basal initialized" = "Basale inizializzato";
+"Basal initialized" = "Basale inizializzata";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Inferiore a 50 unità";
@@ -23,16 +23,16 @@
 "Bolus: %1$@U %2$@ %3$@ %4$@" = "Bolo: %1$@U %2$@ %3$@ %4$@";
 
 /* Delivery status when bolusing */
-"Bolusing" = "Somministrazione in bolo in corso";
+"Bolusing" = "Bolo in corso";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Somministrazione in bolo con velocità basale temporanea";
+"Bolusing with temp basal" = "Bolo con basale temp";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Inserimento cannula in corso";
 
 /* String describing a dose that was certainly scheduled */
-"Certain" = "Certa";
+"Certain" = "Definita";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Disattivato";
@@ -41,7 +41,7 @@
 "Empty reservoir" = "Serbatoio vuoto";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Risposta senza contenuto da Pod";
+"Empty response from pod" = "Risposta senza contenuto dal Pod";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "È stato rilevato un errore. Spegnimento in corso";
@@ -56,10 +56,10 @@
 "Extended bolus running" = "Bolo prolungato in esecuzione";
 
 /* Delivery status when extended bolus and temp basal is running */
-"Extended bolus running with temp basal" = "Bolo Esteso incorso con Basale Temporanea";
+"Extended bolus running with temp basal" = "Bolo prolungato in esecuzione con Basale Temporanea";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "E' successo un errore";
+"Fault event occurred" = "Si è verificato un errore";
 
 /* Description for finish setup */
 "Finish setup " = "Termina configurazione";
@@ -77,7 +77,7 @@
 "Internal pod fault %1$03d" = "Errore interno Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BoloInterrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolo interrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
 
 /* Description for MessageError invalidAddress */
 "Invalid address: (%1$@)" = "Indirizzo non valido: ( %1$@ )";
@@ -129,7 +129,7 @@
 "Omnipod" = "Omnipod";
 
 /* Pod state oneNotUsed */
-"oneNotUsed" = "oneNotUsed  (unononusato)";
+"oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
 "Paired" = "Abbinato";
@@ -199,10 +199,10 @@
 "Resume: %1$@ %2$@" = "Riprendi: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Programma Basale";
+"Scheduled basal" = "Basale Programmata";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basale programmato";
+"Scheduled Basal" = "Basale Programmata";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Chiusura imminente";
@@ -235,22 +235,22 @@
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "VelocitàBasaleTemporanea: %1$@ U/ora %2$@ %3$@ %4$@ U %5$@";
 
 /* Pod state threeNotUsed */
-"threeNotUsed" = "threeNotUsed  ( trenonusato)";
+"threeNotUsed" = "threeNotUsed";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "È ora di sostituire Pod! Pod scadrà tra %1$@";
 
 /* Pod state twoNotUsed */
-"twoNotUsed" = "twoNotUsed  (duenonusato)";
+"twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
-"Uncertain" = "Non certa";
+"Uncertain" = "Incerto";
 
 /* Description for MessageError invalidSequence */
 "Unexpected message sequence number" = "Messaggio inatteso del numero progressivo";
 
 /* Error message shown when empty response from pod was received */
-"Unexpected response from pod" = "Risposta inaspettata da Pod";
+"Unexpected response from pod" = "Risposta inaspettata dal Pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Errore Pod sconosciuto %1$03d";

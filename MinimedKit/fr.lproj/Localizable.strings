@@ -25,6 +25,12 @@
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Profil basal %1$@: %2$@ U/heure";
 
+/* Title for PumpAlarmType.deviceResetBatteryIssue17 */
+"BatteryIssue17" = "Problème de batterie17";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue21 */
+"BatteryIssue21" = "Problème de batterie21";
+
 /* Event title for bolus
    Pump Event title for UnfinalizedDose with doseType of .bolus */
 "Bolus" = "Bolus";
@@ -40,6 +46,9 @@
 
 /* Describing the Canada pump region */
 "Canada" = "Canada";
+
+/* Event title for temp basal cancel */
+"Cancel Temp Basal" = "Annulation du débit basal temporaire";
 
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Changer immédiatement la pile de la pompe";
@@ -61,6 +70,9 @@
 
 /* Error description */
 "Device Error" = "Erreur de périphérique";
+
+/* Title for PumpAlarmType.emptyReservoir */
+"Empty Reservoir" = "Réservoir vide";
 
 /* Describing the pump history insulin data source */
 "Event History" = "Historique des événements";
@@ -92,6 +104,9 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop a envoyé une commande de bolus à la pompe, mais n'a pas pu confirmer que la pompe a reçu la commande. Par sécurité, Loop considère que le bolus a été administré. Lorsque Loop récupère l'historique de la pompe, et que l'heure estimée de fin du bolus est dépassée, Loop met à jour ses enregistrements de livraison pour correspondre à ce que la pompe rapporte.";
 
+/* Title for RileyLink low battery alert */
+"Low RileyLink Battery" = "Batterie RileyLink faible";
+
 /* Recovery suggestion */
 "Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et allumé";
 
@@ -110,6 +125,18 @@
 /* Describing the North America pump region */
 "North America" = "Amérique du Nord";
 
+/* Default alert dismissal */
+"Ok" = "Ok";
+
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
+
+/* recoverySuggestion for uncertain bolus */
+"Please check your pump bolus history to determine if the bolus was delivered." = "Veuillez vérifier l'historique des bolus de votre pompe pour vérifier si le bolus a été administré.";
+
+/* The notification title for a low pump battery */
+"Pump Battery Low" = "Batterie de la pompe faible";
+
 /* No comment provided by engineer. */
 "Pump did not respond" = "La pompe n’a pas répondu";
 
@@ -118,6 +145,15 @@
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "La pompe est suspendue";
+
+/* Error description when failure due to pump suspended */
+"Pump is Suspended" = "La pompe est suspendue";
+
+/* The notification title for an empty pump reservoir */
+"Pump Reservoir Empty" = "Réservoir de la pompe vide";
+
+/* The notification title for a low pump reservoir */
+"Pump Reservoir Low" = "Réservoir de la pompe bas";
 
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "La pompe a réagi de manière inattendue";
@@ -128,11 +164,26 @@
 /* Describing the reservoir insulin data source */
 "Reservoir" = "Réservoir";
 
+/* Event title for resume
+   Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Reprendre";
+
 /* Error description */
 "RileyLink radio tune failed" = "La synthèse radio RileyLink a échoué";
 
 /* Event title for starting scheduled basal */
 "Scheduled Basal" = "Basal programmé";
+
+/* Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Perte de signal";
+
+/* Event title for suspend
+   Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspendre";
+
+/* Event title for temporary basal rate start
+   Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Débit basal temporaire";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Basal temporaire: %1$.3f U/heure";
@@ -145,6 +196,12 @@
 
 /* Error description when storage fails */
 "Unable to store pump data" = "Impossible de stocker les données de la pompe";
+
+/* Format string for an unexpectedResponse. (2: The response) */
+"Unexpected response %1$@" = "Réponse inattendue %1$@";
+
+/* Title for PumpAlarmType.unknownType */
+"Unknown Alarm" = "Alarme inconnue";
 
 /* Format string for error description for an unknown record type in a glucose page. (1: event type number) */
 "Unknown glucose record type: %$1@" = "Type de glycémie inconnu : %$1@";

@@ -35,10 +35,10 @@
 "Are you sure you want to delete this Pump?" = "Sei sicuro di voler eliminare questo microinfusore?";
 
 /* The title of the cell describing an awake radio */
-"Awake Until" = "Attivo sino";
+"Awake Until" = "Attivo fino a";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Quantita' Basali";
+"Basal Rates" = "Velocità Basali";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batteria: %1$@ volts\n";
@@ -53,7 +53,7 @@
 "Cancel" = "Cancella";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Annullamento velocità basale temporanea in corso";
+"Canceling Temp Basal" = "Annullamento Basale Temp";
 
 /* The title of the command to change pump time */
 "Change Time" = "Cambia Orario";
@@ -68,7 +68,7 @@
 "Changing time…" = "Modifica Orario…";
 
 /* Instructions on selecting battery chemistry type */
-"Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Scegli il tipo di batteria che stai utilizzando nel microinfusore per avvisare meglio delle condizioni di batteria bassa.";
+"Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Seleziona il tipo di batteria che stai utilizzando nel microinfusore per ricevere più facilmente informazioni sulle condizioni della batteria.";
 
 /* The title of the section describing commands */
 "Commands" = "Comandi";
@@ -87,10 +87,10 @@
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
-"Delete Pump" = "Elimina Microinfusore";
+"Delete Pump" = "Cancella Microinfusore";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limiti di Consegna";
+"Delivery Limits" = "Limiti Erogazione";
 
 /* The title of the section describing the device */
 "Device" = "Dispositivo";
@@ -123,28 +123,28 @@
 "Error Syncing Time" = "Errore durante la sincronizzazione";
 
 /* The title of the command to fetch recent glucose */
-"Fetch Enlite Glucose" = "Sincronizzare Glicemie Enlite";
+"Fetch Enlite Glucose" = "Sincronizza Glicemie Enlite";
 
 /* The title of the command to fetch recent history */
-"Fetch Recent History" = "Sincronizzare Storia Recente";
+"Fetch Recent History" = "Sincronizza Storia Recente";
 
 /* Progress message for fetching pump glucose. */
-"Fetching glucose…" = "Recupero glicemie…";
+"Fetching glucose…" = "Sincronizza glicemie…";
 
 /* Progress message for fetching pump history. */
-"Fetching history…" = "Recupero della cronologia…";
+"Fetching history…" = "Sincronizza storia…";
 
 /* Progress message for fetching pump model. */
-"Fetching pump model…" = "Recupero modello microinfusore…";
+"Fetching pump model…" = "Sincronizza modello micro…";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware Version";
+"Firmware Version" = "Versione Firmware";
 
 /* The title of the command to get pump model */
-"Get Pump Model" = "Ottieni Modello del Microinfusore";
+"Get Pump Model" = "Ottieni Modello Microinfusore";
 
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Ottieni Statistiche…";
@@ -153,13 +153,13 @@
 "Insulin\nSuspended" = "Erogazione Insulina sospesa.";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Erogazione Insulina";
+"Insulin Delivery" = "Insulina Somministrata";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "L'insulina somministrata può essere determinata dalla pompa sia interpretando la cronologia eventi o confrontando il volume del serbatoio nel tempo. La lettura della cronologia degli eventi consente una statistica più accurata e trasmette dati sempre aggiornati a Nightscout, a discapito di un maggiore consumo di batteria e con la possibilità di incorrere in un maggior tasso di errore di comunicazione rispetto alla sola lettura del volume del serbatoio. Se la sorgente selezionata non può essere utilizzata per qualsiasi ragione, il sistema tenterà di ripiegare sull'altra opzione.";
 
 /* Header for insulin remaining on pod settings screen */
-"Insulin Remaining" = "Insulina rimanente";
+"Insulin Remaining" = "Insulina Rimanente";
 
 /* Text for confidence reminders navigation link */
 "Insulin Type" = "Tipo di Insulina";

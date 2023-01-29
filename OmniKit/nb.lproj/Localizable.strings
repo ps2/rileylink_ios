@@ -50,11 +50,20 @@
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Sikker";
 
+/* Alert content body for podExpireImminent pod alert */
+"Change Pod now. Insulin delivery will stop in 1 hour." = "Bytt pod nå. Insulintilførselen vil stoppe om 1 time.";
+
+/* Alert content body for podExpiring pod alert */
+"Change Pod now. Pod has been active for 72 hours." = "Bytt pod nå. Pod har vært aktiv i 72 timer.";
+
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Kommandofeil %1$u";
 
 /* Status highlight that delivery is uncertain. */
 "Comms Issue" = "Kommunikasjonsutgave";
+
+/* Error message when command is rejected because an unacknowledged command is pending. */
+"Communication issue: Unacknowledged command pending." = "Kommunikasjonsproblem: Ukjent kommando venter.";
 
 /* Description for BeepPreference.manualCommands */
 "Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Tillitspåminnelser høres for kommandoer du starter, for eksempel bolus, avbryt bolus, suspendere, gjenoppta, lagre varslingspåminnelser osv. Når Loop automatisk justerer leveringen, brukes mistillitspåminnelser.";
@@ -70,6 +79,9 @@
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktivert";
+
+/* Title string for BeepPreference.silent */
+"Disabled" = "Deaktivert";
 
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Tomt reservoar";
@@ -104,8 +116,17 @@
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Pod-feil";
 
+/* Status highlight that when pod is deactivating. */
+"Finish Deactivation" = "Fullfør deaktivering";
+
+/* Status highlight that when pod is activating. */
+"Finish Pairing" = "Fullfør sammenkobling";
+
 /* Description for finish setup */
 "Finish setup " = "Ferdigstill oppsett";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Fullfør oppsettpåminnelse";
 
 /* Pod inititialized */
 "Initialized" = "Klargjort";
@@ -113,8 +134,14 @@
 /* Pod state when inserting cannula */
 "Inserting cannula" = "Setter inn kanyle";
 
+/* The default notification body for AlarmCodes */
+"Insulin delivery stopped. Change Pod now." = "Insulintilførselen stoppet. Bytt pod nå.";
+
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insulintilførsel stoppet";
+
+/* Error description for OmniBLEPumpManagerError.insulinTypeNotConfigured */
+"Insulin type not configured" = "Insulintype ikke konfigurert";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Intern pod-feil %1$03d";
@@ -131,20 +158,48 @@
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "Ugyldig CRC";
 
+/* Error description for OmniBLEPumpManagerError.invalidSetting */
+"Invalid Setting" = "Ugyldig oppføring";
+
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Lite i reservoir";
+
+/* Alert content title for lowReservoir pod alert */
+"Low Reservoir" = "Lavt reservoar";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Påminnelse om lavt reservoar (%1$gE)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Anbefalt alarm for lavt reservoar";
 
+/* Title for RileyLink low battery alert */
+"Low RileyLink Battery" = "Lavt RileyLink-batteri";
+
+/* Recovery suggestion for PodCommsError.noPodsFound */
+"Make sure your pod is filled and nearby." = "Sørg for at pod er fylt og i nærheten.";
+
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Pass på at din RileyLink er slått på og er i nærheten";
+
+/* Status highlight when manual temp basal is running. */
+"Manual Basal" = "Manuell basal";
 
 /* Pod memory initialized */
 "Memory initialized" = "Minnet er initialisert";
 
+/* Recovery suggestion for PodCommsError.tooManyPodsFound */
+"Move to a new area away from any other pods and try again." = "Flytt til et nytt område vekk fra andre poder og prøv igjen.";
+
+/* Alert content body for multiCommand pod alert
+   Alert content title for multiCommand pod alert */
+"Multiple Command Alert" = "Alarm for fler-kommandoer";
+
 /* Pod alert state when no alerts are active */
 "No alerts" = "Ingen alarmer";
+
+/* Description for BeepPreference.silent */
+"No confidence reminders are used." = "Ingen aktive påminnelser.";
 
 /* Description for Fault Event Code .noFaults */
 "No faults" = "Ingen feil";
@@ -200,6 +255,9 @@
 /* Pod status when pairing completed */
 "Pairing completed" = "Sammenkobling fullført";
 
+/* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
+"Parsing Error: %1$@ in (%2$@)" = "Analysefeil: %1$@ in (%2$@)";
+
 /* Recovery suggestion on unexpected pod change */
 "Please bring only original pod in range or deactivate original pod" = "Vennligst flytt kun original pod innen rekkevidde eller deaktiver original pod";
 
@@ -207,19 +265,19 @@
 "Please bring your pod closer to the RileyLink and try again" = "Prøv å sette pod og RileyLink nærmere hverandre og prøv så igjen";
 
 /* Alert content body for finishSetupReminder pod alert */
-"Please finish pairing your pod." = "Vennligst fullfør sammenkoblingen av poden.";
+"Please finish pairing your pod." = "Vennligst fullfør sammenkoblingen av pod.";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Vennligst koble til ny pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
-"Please reposition the RileyLink further from the pod" = "Vennligst flytt RileyLink lenger fra poden";
+"Please reposition the RileyLink further from the pod" = "Vennligst flytt RileyLink lenger fra pod";
 
 /* Recovery suggestion when pairing signal strength is too low */
-"Please reposition the RileyLink relative to the pod" = "Vennligst flytt RileyLink i forhold til poden";
+"Please reposition the RileyLink relative to the pod" = "Vennligst flytt RileyLink i forhold til pod";
 
 /* Recovery suggestion when no response is received from pod */
-"Please try repositioning the pod or the RileyLink and try again" = "Prøv å flytte poden eller RileyLink og prøv igjen";
+"Please try repositioning the pod or the RileyLink and try again" = "Prøv å flytte pod eller RileyLink og prøv igjen";
 
 /* Error message shown when user cannot pair because pod is already paired */
 "Pod already paired" = "Pod er allerede sammenkoblet";
@@ -227,11 +285,17 @@
 /* Error message shown when prime is attempted, but pod is already primed */
 "Pod already primed" = "Pod er allerede fyllt";
 
+/* Status highlight message for other alarm. */
+"Pod Error" = "Pod-feil";
+
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Anbefalt utløpsalarm for pod";
 
 /* The title for pod expiration notification */
 "Pod Expiration Notice" = "Utløpsmelding for pod";
+
+/* Alert content title for userPodExpiration pod alert */
+"Pod Expiration Reminder" = "Pod utløpspåminnelse";
 
 /* Description for Pod expired pod fault */
 "Pod expired" = "Utløpt pod";
@@ -243,7 +307,7 @@
 "Pod Expired" = "Pod utløpt";
 
 /* Format string for alert content body for userPodExpiration pod alert. (1: time until expiration) */
-"Pod expires in %1$@." = "Poden utløper om %1$@ .";
+"Pod expires in %1$@." = "Pod utløper om %1$@ .";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Pod-feil: %1$@";
@@ -270,7 +334,7 @@
 "Pod setup window expired" = "Tidsvindu for oppsett av pod er utløpt";
 
 /* Description for pod suspended reminder */
-"Pod suspended reminder" = "Pod påminnelse er suspendert ";
+"Pod suspended reminder" = "Pod påminnelse er suspendert";
 
 /* Format string for poor pod signal strength */
 "Poor signal strength" = "Dårlig signalstyrke";
@@ -350,13 +414,13 @@
 "Temp Basal" = "Midlertidig basal";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
-"Temp basal in progress" = "Temp-basal pågår";
+"Temp basal in progress" = "Midlertidig basal pågår";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Temp-basal kjører";
+"Temp basal running" = "Midlertidig basal kjører";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Temp-basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Midlertidig basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
 
 /* Alert content body for suspendEnded pod alert */
 "The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Perioden med insulinsuspensjon er avsluttet.\n\nDu kan gjenoppta leveringen fra banneret på startskjermen eller fra skjermbildet for pumpeinnstillinger. Du vil bli påminnet igjen om 15 minutter.";

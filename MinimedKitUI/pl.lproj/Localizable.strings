@@ -55,6 +55,9 @@
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Status połączenia";
 
+/* Text for continue button */
+"Continue" = "Kontynuować";
+
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
 "Delete Pump" = "Usuń pompę";

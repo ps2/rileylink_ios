@@ -2,13 +2,13 @@
 "Characteristic value was empty" = "Karakteristieke waarde was leeg";
 
 /* Write size limit exceeded error description (1: size limit) */
-"Data exceeded maximum size of %@ bytes" = "Data overschrijdt maximale grootte van %@ bytes";
+"Data exceeded maximum size of %@ bytes" = "Gegevens overschrijden maximale grootte van %@ bytes";
 
 /* Invalid input error description (1: input) */
 "Input %@ is invalid" = "Invoer %@ is ongeldig";
 
 /* Recovery suggestion for unknown peripheral characteristic */
-"Make sure the device is nearby, and the issue should resolve automatically" = "Zorg ervoor dat het apparaat in de buurt is en het probleem zal automatisch worden opgelost.";
+"Make sure the device is nearby, and the issue should resolve automatically" = "Zorg ervoor dat het apparaat in de buurt is, wat het probleem automatisch zou moeten oplossen.";
 
 /* Timeout error description */
 "Peripheral did not respond in time" = "Apparaat reageerde niet op tijd";
@@ -20,19 +20,19 @@
 "Pump did not respond in time" = "Pomp reageerde niet op tijd";
 
 /* Invalid response error description (1: response) */
-"Response %@ is invalid" = "Antwoord %@ is ongeldig";
+"Response %@ is invalid" = "Reactie %@ is ongeldig";
 
 /* commandsBlocked error description */
-"RileyLink command did not respond" = "De RileyLink opdracht heeft niet gereageerd";
+"RileyLink command did not respond" = "Er was geen reactie van het RileyLink commando";
 
 /* PeripheralManagerError.timeout error description */
 "RileyLink did not respond in time" = "RileyLink reageerde niet op tijd";
 
 /* Unsupported command error description */
-"RileyLink firmware does not support the %@ command" = "De RileyLink firmware ondersteunt niet het %@ commando";
+"RileyLink firmware does not support the %@ command" = "De RileyLink firmware ondersteunt het %@ commando niet";
 
 /* PeripheralManagerError.busy error description */
-"RileyLink is busy" = "RileyLink is bezet";
+"RileyLink is busy" = "RileyLink is bezig";
 
 /* PeripheralManagerError.notReady error description */
 "RileyLink is not connected" = "RileyLink is niet verbonden";

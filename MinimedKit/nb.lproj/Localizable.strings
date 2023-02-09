@@ -152,7 +152,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Vennligst kontroller pumpens bolushistorikk for å finne ut om bolusen ble levert.";
 
-/* Event title for rewind */
+/* Event title for rewind pump event */
 "Prime" = "Prime";
 
 /* The notification title for a low pump battery */

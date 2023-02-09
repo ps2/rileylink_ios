@@ -61,8 +61,14 @@
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Changer le fuseau horaire";
 
+/* Text shown in basal rate space when basal is changing */
+"Changing" = "Changement en cours...";
+
 /* Progress message for changing pump time. */
 "Changing time…" = "Changement d’heure…";
+
+/* Instructions on selecting battery chemistry type */
+"Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Choisissez le type de batterie que vous utilisez dans votre pompe pour une meilleure alerte en cas de batterie faible.";
 
 /* The title of the section describing commands */
 "Commands" = "Commandes";
@@ -89,11 +95,17 @@
 /* The title of the section describing the device */
 "Device" = "Dispositif";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Dispositifs";
+
 /* The title of the command to discover commands */
 "Discover Commands" = "Découvrir les commandes";
 
 /* Progress message for discovering commands. */
 "Discovering commands…" = "Découverte des commandes…";
+
+/* Description for option to not use MySentry */
+"Do not use MySentry" = "Ne pas utiliser MySentry";
 
 /* The title of the command to enable diagnostic LEDs */
 "Enable Diagnostic LEDs" = "Activer les LEDs de diagnostique";
@@ -161,6 +173,9 @@
 /* Format string fof navigation bar title for MinimedPumpSettingsView (1: model number) */
 "Medtronic %1$@" = "Medtronic %1$@";
 
+/* Instructions on selecting setting for MySentry */
+"Medtronic pump models 523, 723, 554, and 754 have a feature called 'MySentry' that periodically broadcasts the reservoir and pump battery levels.  Listening for these broadcasts allows Loop to communicate with the pump less frequently, which can increase pump battery life.  However, when using this feature the RileyLink stays awake more of the time and uses more of its own battery.  Enabling this may lengthen pump battery life, while disabling it may lengthen RileyLink battery life. This setting is ignored for other pump models." = "Les modèles de pompe Medtronic 523, 723, 554 et 754 sont dotés d'une fonction appelée \"MySentry\" qui émet périodiquement les niveaux de batterie du réservoir et de la pompe.  Capter ces émissions permet à Loop de communiquer moins fréquemment avec la pompe, ce qui peut augmenter la durée de vie de la batterie de la pompe.  Cependant, lorsque cette fonction est utilisée, le RileyLink reste actif plus longtemps et utilise davantage sa propre batterie.  L'activation de cette fonction peut prolonger la durée de vie de la batterie de la pompe, tandis que sa désactivation peut prolonger la durée de vie de la batterie du RileyLink. Ce paramètre est ignoré pour les autres modèles de pompe.";
+
 /* The title of the command to pair with mysentry */
 "MySentry Pair" = "Appairage MySentry";
 
@@ -201,6 +216,9 @@
 /* Title of the pump settings view controller */
 "Pump Settings" = "Paramètres de la pompe";
 
+/* The title of the command to change pump time zone */
+"Pump Time" = "Heure de la pompe";
+
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Lire le programme basal";
 
@@ -215,6 +233,9 @@
 
 /* The title of the cell showing the pump region */
 "Region" = "Région";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Reprendre l'administration";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
 "Resuming" = "Reprise en cours";
@@ -285,6 +306,10 @@
 
 /* The title of the cell showing uptime */
 "Uptime" = "Temps de fonctionnement";
+
+/* Description for option to use MySentry
+   navigation title for pump battery type selection */
+"Use MySentry" = "Utiliser MySentry";
 
 /* Value string for MySentry config when MySentry is being used
    Value string for MySentry config when MySentry is not being used */

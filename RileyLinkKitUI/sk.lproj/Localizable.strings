@@ -93,3 +93,12 @@
 /* The title of the cell showing Test Vibration */
 "Test Vibration" = "Testovať vibrácie";
 
+/* The title of the command to update diagnostic LEDs */
+"Toggle Diagnostic LEDs" = "Prepnutie diagnostických LED diód";
+
+/* Progress message for changing diagnostic LED mode */
+"Updating diagnostic LEDs mode" = "Aktualizuje sa režim diagnostických LED diód";
+
+/* The title of the cell showing ORL */
+"Voltage" = "Napätie";
+

@@ -35,6 +35,9 @@
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@ j";
 
+/* Summary string for temporary basal rate configuration page */
+"%1$@ for %2$@" = "1 pre 2";
+
 /* Format string for main text of delivery uncertainty recovery page. (1: app name)(2: date of command)(3: app name) */
 "%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ sa nepodarilo komunikovať s podom na vašom tele od %2$@ . \n\nBez komunikácie s podom, nemôže aplikácia pokračovať v odosielaní príkazov na aplikáciu inzulínu, ani zobrazovať presné a aktuálne informácie o vašom aktívnom inzulíne alebo o inzulíne podávanom podom. \n\nPočas nasledujúcich 6 alebo viac hodín pozorne sledujte svoju glykémiu, pretože vo vašom tele môže alebo nemusí aktívne pôsobiť inzulín, ktorý %3$@ nedokáže zobraziť.";
 
@@ -213,6 +216,9 @@
 /* Alert title for suspend error */
 "Failed to Suspend Insulin Delivery" = "Pozastavenie podávania inzulínu zlyhalo";
 
+/* Alert title for error when updating confidence reminder preference */
+"Failed to update confidence reminder preference." = "Nepodarilo sa aktualizovať predvoľbu pripomenutia dôveryhodnosti.";
+
 /* Alert title for error when updating expiration reminder */
 "Failed to Update Expiration Reminder" = "Nepodarilo sa aktualizovať pripomenutie o expirácii";
 
@@ -292,6 +298,7 @@
 "Lot Number" = "Číslo šarže";
 
 /* Label text for low reservoir value row
+   Navigation bar title for LowReservoirReminderSetupView
    Title for LowReservoirReminderSetupView */
 "Low Reservoir" = "Nízka hladina v rezervoári";
 
@@ -352,7 +359,8 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Párovať nový pod";
 
-/* Pod pairing action button text while ready to pair
+/* Navigation bar title for PairPodView
+   Pod pairing action button text while ready to pair
    Settings page link description when next lifecycle action is to pair new pod
    Title for pod pairing screen */
 "Pair Pod" = "Párovať pod";
@@ -592,6 +600,9 @@
 
 /* title for time change detected notice */
 "Time Change Detected" = "Zistená zmena času ";
+
+/* No comment provided by engineer. */
+"Toggle sign" = "Značka prepnutia";
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Príliš veľa záznamov";

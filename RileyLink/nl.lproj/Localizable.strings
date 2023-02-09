@@ -20,7 +20,7 @@
 "Configuration" = "Configuratie";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Verwijder account";
+"Delete Account" = "Account Verwijderen";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Voer het 6-cijferige ID van de pomp in";

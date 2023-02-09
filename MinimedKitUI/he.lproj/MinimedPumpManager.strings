@@ -20,7 +20,7 @@
 "Fps-h3-V4K.title" = "Pump Clock";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N)."; ObjectID = "fVG-pl-jT9"; */
-"fVG-pl-jT9.footerTitle" = "The pump ID is the 6-digit numerical portion of the serial number (labeled as SN or S/N).";
+"fVG-pl-jT9.footerTitle" = "מספר זיהוי המשאבה הוא ששת הספרות של מספר הסידורי (רשום כ-SN או S/N)";
 
 /* Class = "UITableViewSection"; headerTitle = "Pump ID"; ObjectID = "fVG-pl-jT9"; */
 "fVG-pl-jT9.headerTitle" = "Pump ID";

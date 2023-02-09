@@ -125,6 +125,12 @@
 /* Cannula insertion button text while checking insertion */
 "Checking..." = "Vérification en cours...";
 
+/* Title for uncertainty recovered screen */
+"Comms Recovered" = "Communications récupérées";
+
+/* No comment provided by engineer. */
+"Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Les rappels de confiance sont des bips émis par le Pod qui peuvent être utilisés pour confirmer l'exécution des commandes sélectionnées.";
+
 /* The title of the configuration section in settings */
 "Configuration" = "Configuration";
 
@@ -292,6 +298,7 @@
 "Lot Number" = "Numéro de lot";
 
 /* Label text for low reservoir value row
+   Navigation bar title for LowReservoirReminderSetupView
    Title for LowReservoirReminderSetupView */
 "Low Reservoir" = "Réservoir bas";
 
@@ -352,7 +359,8 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Appairer un nouveau Pod";
 
-/* Pod pairing action button text while ready to pair
+/* Navigation bar title for PairPodView
+   Pod pairing action button text while ready to pair
    Settings page link description when next lifecycle action is to pair new pod
    Title for pod pairing screen */
 "Pair Pod" = "Appairer le Pod";
@@ -411,6 +419,9 @@
 /* Label for pod life state when time remaining */
 "Pod expires in" = "Péremption du Pod dans";
 
+/* description label for pod fault details */
+"Pod Fault Details" = "Détails de l'erreur du pod";
+
 /* Error message for reservoir view when pod occlusion checks failed */
 "Pod Occlusion" = "Occlusion du Pod";
 
@@ -419,6 +430,9 @@
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Réglages du pod";
+
+/* Title for PodSetupView */
+"Pod Setup" = "Configuration du Pod";
 
 /* Label text for step one of attach pod instructions */
 "Prepare site." = "Préparer le site.";
@@ -432,14 +446,23 @@
 /* Pairing action button accessibility label while priming */
 "Priming. Please wait." = "Amorçage. S'il vous plaît, attendez.";
 
+/* Pod pairing action button text while priming */
+"Priming..." = "Amorçage...";
+
 /* The text of the loading label when priming */
 "Priming…" = "Amorçage en cours...";
+
+/* Label text for basal rate summary */
+"Rate" = "Débit";
 
 /* No comment provided by engineer. */
 "Ref: " = "Réf :";
 
 /* Label describing time remaining view */
 "Remaining" = "Restant";
+
+/* Label text for step two of attach pod instructions */
+"Remove the pod's needle cap and check cannula. Then remove paper backing." = "Retirez le capuchon d'aiguille du pod et vérifiez la canule. Retirez ensuite le film en papier de l'autocollant.";
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */
@@ -492,6 +515,9 @@
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pod." = "Choisir le type d'insuline utilisé avec le Pod";
 
+/* description label for sequence number pod details row */
+"Sequence Number" = "Numéro de séquence";
+
 /* Button text for setting manual temporary basal rate */
 "Set Temporary Basal" = "Régler basal temporaire";
 
@@ -530,6 +556,9 @@
 
 /* Navigation Title for ManualTempBasalEntryView */
 "Temporary Basal" = "Basale temporaire";
+
+/* Alert title for a failure to set temporary basal */
+"Temporary Basal Failed" = "Échec mise en route basal temporaire";
 
 /* The title of the command to run the test command */
 "Test Command" = "Commande de test";

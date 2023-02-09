@@ -128,6 +128,9 @@
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
+
 /* Pod status after pairing */
 "Paired" = "Emparejado";
 
@@ -231,8 +234,14 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "BasalTemporal: %1$@ U/hora %2$@ %3$@ %4$@ U %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Es hora de reemplazar el pod! El pod expira en %1$@";
+
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Incierto";

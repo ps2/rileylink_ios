@@ -19,11 +19,17 @@
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alkalisch";
 
+/* Title for PumpAlarmType.autoOff */
+"Auto-Off Alarm" = "Auto-Aus Alarm";
+
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/Stunde";
 
 /* Title for PumpAlarmType.batteryDepleted */
 "Battery Depleted" = "Batterie leer";
+
+/* Title for PumpAlarmType.batteryOutLimitExceeded */
+"Battery Out Limit" = "Batteriewechsel Zeitlimit";
 
 /* Title for PumpAlarmType.deviceResetBatteryIssue17 */
 "BatteryIssue17" = "BatteryIssue17";
@@ -57,7 +63,7 @@
 "Change the pump reservoir now" = "Wechseln Sie jetzt das Pumpenreservoir";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Überprüfen, ob die Pumpe nicht unterbrochen wurde oder sich im Füllmodus befindet, oder prozentuell temporären Basalraten aktiviert sind";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Überprüfen Sie, ob die Pumpe nicht unterbrochen wurde oder sich im Füllmodus befindet, oder prozentual temporären Basalraten aktiviert sind";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Befehl verweigert";
@@ -146,6 +152,9 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Bitte überprüfen Sie den Bolusverlauf Ihrer Pumpe, um festzustellen, ob der Bolus abgegeben wurde.";
 
+/* Event title for rewind pump event */
+"Prime" = "Befüllen";
+
 /* The notification title for a low pump battery */
 "Pump Battery Low" = "Pumpenbatterie schwach";
 
@@ -183,6 +192,9 @@
    Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Fortsetzen";
 
+/* Event title for rewind */
+"Rewind" = "Zurückspulen";
+
 /* Error description */
 "RileyLink radio tune failed" = "Einstellen des RileyLink Funksignals fehlgeschlagen";
 
@@ -198,7 +210,7 @@
 
 /* Event title for temporary basal rate start
    Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Temp. Basalrate";
+"Temp Basal" = "Temporäre Basalrate";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Temporäre Basalrate: %1$.3f E/St";

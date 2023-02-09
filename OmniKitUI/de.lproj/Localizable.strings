@@ -39,7 +39,7 @@
 "%1$@ for %2$@" = "%1$@ für %2$@";
 
 /* Format string for main text of delivery uncertainty recovery page. (1: app name)(2: date of command)(3: app name) */
-"%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ konnte seit %2$@ nicht mehr mit Deinem Pod kommunizieren.\n\nOhne Kommunikation mit dem Pod kann die App keine Befehle für die Insulinabgabe senden oder genaue, aktuelle Informationen über Dein aktives Insulin oder das vom Pod abgegebene Insulin anzeigen.\n\nÜberwachen Deinen Blutzucker für die nächsten 6 oder mehr Stunden genau, da in Deinem Körper Insulin aktiv sein kann oder auch nicht, das %3$@ nicht anzeigen kann.";
+"%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nWithout communication with the pod, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered by the Pod.\n\nMonitor your glucose closely for the next 6 or more hours, as there may or may not be insulin actively working in your body that %3$@ cannot display." = "%1$@ konnte seit %2$@ nicht mehr mit Ihrem Pod kommunizieren.\n\nOhne Kommunikation mit dem Pod kann die App keine Befehle für die Insulinabgabe senden oder genaue, aktuelle Informationen über Ihr aktives Insulin oder das vom Pod abgegebene Insulin anzeigen.\n\nÜberwachen Sie Ihren Blutzucker für die nächsten 6 oder mehr Stunden genau, da in Ihrem Körper Insulin aktiv sein kann oder auch nicht, das %3$@ nicht anzeigen kann.";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ Einheiten verbleiben bei %2$@";
@@ -66,13 +66,13 @@
 "Alarms" = "Alarme";
 
 /* Confirmation message for shutting down a pod */
-"Are you sure you want to shutdown this pod?" = "Möchtest Du diesen Pod wirklich deaktivieren?";
+"Are you sure you want to shutdown this pod?" = "Möchten Sie diesen Pod wirklich deaktivieren?";
 
 /* No comment provided by engineer. */
 "Are you sure you want to skip Omnipod Onboarding?" = "Sind Sie sicher, dass Sie das Omnipod Onboarding überspringen wollen?";
 
 /* Confirmation message for removing Omnipod PumpManager */
-"Are you sure you want to stop using Omnipod?" = "Möchtest Du den Pod wirklich nicht mehr verwenden?";
+"Are you sure you want to stop using Omnipod?" = "Möchten Sie den Pod wirklich nicht mehr verwenden?";
 
 /* The title text for the address assigned to the pod */
 "Assigned Address" = "Zugewiesene Adresse";
@@ -289,7 +289,7 @@
 "Last Status" = "Letzter Status";
 
 /* Description text on manual temp basal action sheet */
-"Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop passt Deine Insulinabgabe nicht automatisch an, bis die temporäre Basalrate beendet oder abgebrochen wurde.";
+"Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop passt Ihre Insulinabgabe nicht automatisch an, bis die temporäre Basalrate beendet oder abgebrochen wurde.";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
@@ -298,6 +298,7 @@
 "Lot Number" = "LOT Nummer";
 
 /* Label text for low reservoir value row
+   Navigation bar title for LowReservoirReminderSetupView
    Title for LowReservoirReminderSetupView */
 "Low Reservoir" = "Niedriger Vorratsbehälter";
 
@@ -306,7 +307,7 @@
 "Low Reservoir Reminder" = "Erinnerung niedriger Vorratsbehälter";
 
 /* The action string on pod status page when pod data is stale */
-"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Stelle sicher, dass Dein Telefon und Dein Pod nah beieinander sind. Wenn die Kommunikationsprobleme bestehen bleiben, wechsel in einen anderen Bereich.";
+"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Stellen Sie sicher, dass sich Ihr iPhone und Ihr Pod nahe beieinander befinden. Wenn die Kommunikationsprobleme bestehen bleiben, dann gehen Sie an einen anderen Ort.";
 
 /* Unit for singular minute in pod life remaining */
 "minute" = "Minute";
@@ -358,7 +359,8 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Neuen Pod koppeln";
 
-/* Pod pairing action button text while ready to pair
+/* Navigation bar title for PairPodView
+   Pod pairing action button text while ready to pair
    Settings page link description when next lifecycle action is to pair new pod
    Title for pod pairing screen */
 "Pair Pod" = "Pod koppeln";
@@ -388,10 +390,10 @@
 "Play Test Beeps…" = "Testtöne abspielen…";
 
 /* Instructions for deactivate pod when pod not on body */
-"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Bitte deaktiviere den Pod. Wenn die Deaktivierung abgeschlossen ist, kannst Du einen neuen Pod koppeln.";
+"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Bitte deaktivieren Sie den Pod. Wenn die Deaktivierung abgeschlossen ist, können Sie einen neuen Pod koppeln.";
 
 /* Instructions for deactivate pod when pod is on body */
-"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Bitte deaktiviere den Pod. Wenn die Deaktivierung abgeschlossen ist, kannst Du ihn entfernen und einen neuen Pod koppeln.";
+"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Bitte deaktivieren Sie den Pod. Wenn die Deaktivierung abgeschlossen ist, können Sie ihn entfernen und einen neuen Pod koppeln.";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM-Version";
@@ -511,7 +513,7 @@
 "Scheduled Reminder" = "Geplante Erinnerung";
 
 /* Title text for insulin type confirmation page */
-"Select the type of insulin that you will be using in this pod." = "Wähle die Insulinart aus, die Du in diesem Pod verwenden wirst.";
+"Select the type of insulin that you will be using in this pod." = "Wähle Sie die Insulinart aus, die Sie für diesen Pod benutzen möchten.";
 
 /* description label for sequence number pod details row */
 "Sequence Number" = "Sequenznummer";
@@ -565,28 +567,28 @@
 "Testing Commands…" = "Teste Befehle…";
 
 /* Footer text for omnipod reminders section */
-"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "Die App konfiguriert eine Erinnerung auf dem Pod, um Dich vor Ablauf des Pods zu benachrichtigen. Lege die Stunden fest, die Du vor Ablauf des Pods erinnert werden möchtest.";
+"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "Die App konfiguriert eine Erinnerung auf dem Pod, um Sie vor Ablauf des Pods zu benachrichtigen. Legen Sie die Anzahl der Stunden fest, die Sie vor Ablauf des Pods benachrichtigt werden möchten.";
 
 /* Description text on ExpirationReminderSetupView */
-"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Die App benachrichtigt Dich vor Ablauf des Pods.\n\nScrolle, um die gewünschte Anzahl von Stunden im Voraus festzulegen.";
+"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Die App benachrichtigt Sie vor Ablauf des Pods.\n\nScrollen Sie, um die gewünschte Anzahl von Stunden im Voraus festzulegen.";
 
 /* Description text on LowReservoirReminderSetupView */
-"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Die App benachrichtigt Dich, wenn die Insulinmenge im Pod diesen Wert erreicht (50-10 IE).\n\nScrolle, um die Anzahl der Einheiten festzulegen, bei denen Du erinnert werden möchtest.";
+"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Die App benachrichtigt Sie, wenn die Insulinmenge im Pod diesen Wert erreicht (50-10 IE).\n\nScrollen Sie, um die Anzahl der Einheiten festzulegen, bei der Sie erinnert werden möchten.";
 
 /* Footer text for low reservoir value row */
-"The App notifies you when the amount of insulin in the Pod reaches this level." = "Die App benachrichtigt Dich, wenn die Insulinmenge im Pod diesen Wert erreicht.";
+"The App notifies you when the amount of insulin in the Pod reaches this level." = "Die App benachrichtigt Sie, wenn die Insulinmenge im Pod diesen Wert erreicht.";
 
 /* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Die obigen Erinnerungen ertönen nicht, wenn sich Dein Gerät im Lautlos- oder Nicht-Stören-Modus befindet.\n\nEs gibt andere kritische Pod-Warnungen und -Alarme, die auch dann ertönen, wenn Dein Gerät auf Stumm oder „Nicht stören“ eingestellt ist.";
+"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Die obigen Erinnerungen ertönen nicht, wenn sich Ihr Gerät im Lautlos- oder Nicht-Stören-Modus befindet.\n\nEs gibt andere kritische Pod-Warnungen und -Alarme, die auch dann ertönen, wenn Ihr Gerät auf Stumm oder „Nicht stören“ eingestellt ist.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Die Uhrzeit Ihrer Pumpe weicht von der aktuellen Uhrzeit ab. Die Zeit Ihrer Pumpe steuert Ihre geplanten Therapieeinstellungen. Scrollen Sie nach unten zur Zeile Pumpenzeit, um den Zeitunterschied zu überprüfen und Ihre Pumpe zu konfigurieren.";
 
 /* Format string for recovery suggestion during deactivate pod. */
-"There was a problem communicating with the pod. If this problem persists, tap Discard Pod. You can then activate a new Pod." = "Bei der Kommunikation mit dem Pod ist ein Problem aufgetreten. Wenn dieses Problem weiterhin besteht, dann Wechsel den Pod aus. Du kannst dann einen neuen Pod aktivieren.";
+"There was a problem communicating with the pod. If this problem persists, tap Discard Pod. You can then activate a new Pod." = "Es gab ein Problem bei der Kommunikation mit dem Pod. Wenn dieses Problem weiterhin besteht, tippen Sie auf \"Pod verwerfen\". Sie können dann einen neuen Pod aktivieren.";
 
 /* Footer text for scheduled reminder area */
-"This is a reminder that you scheduled when you paired your current Pod." = "Dies ist die Erinnerung, die Du beim Koppeln Deines aktuellen Pods eingeplant hast.";
+"This is a reminder that you scheduled when you paired your current Pod." = "Dies ist eine Erinnerung, die Sie beim Koppeln Ihres aktuellen Pods eingestellt haben.";
 
 /* Alert format string for missing temp basal configuration. */
 "This Pump has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to Therapy Settings -> Delivery Limits and set a new Maximum Basal Rate." = "Diese Pumpe wurde nicht mit einer maximalen Basalrate konfiguriert, da sie hinzugefügt wurde, bevor die Funktion  manuelle temporäre Basalrate existierte. Bitte gehe zu Therapieeinstellungen -> Abgabegrenzen und stelle eine neue maximale Basalrate ein.";
@@ -639,8 +641,8 @@
 "Yes" = "Ja";
 
 /* bodyText for PodSetupView */
-"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Beginne nun damit, die Erinnerungen zu konfigurieren, Deinen Pod mit Insulin zu füllen, ihn mit Deinem Gerät zu koppeln und ihn an Deinem Körper zu platzieren.";
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Beginnen Sie nun damit, die Erinnerungen zu konfigurieren, Ihren Pod mit Insulin zu füllen, ihn mit Ihrem Gerät zu koppeln und ihn an Ihrem Körper zu platzieren.";
 
 /* Format string for instructions for setup complete view. (1: app name) */
-"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Dein Pod ist einsatzbereit.\n\n%1$@ erinnert Dich daran, Deinen Pod zu wechseln, bevor er abläuft. Du kannst eine für Dich passende Zeit wählen.";
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Ihr Pod ist einsatzbereit.\n\n%1$@ erinnert Sie daran, Ihren Pod zu wechseln, bevor er abläuft. Sie können eine für sich passende Zeit wählen.";
 

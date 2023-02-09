@@ -50,7 +50,7 @@
 "Bolusing: %1$@\n" = "Bolo in corso: %1$@\n";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancella";
+"Cancel" = "Annulla";
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Annullamento Basale Temp";
@@ -217,7 +217,7 @@
 "Pump Settings" = "Impostazioni Microinfusore";
 
 /* The title of the command to change pump time zone */
-"Pump Time" = "Orario Microinfusore";
+"Pump Time" = "Orario Micro";
 
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Leggi programma basale";

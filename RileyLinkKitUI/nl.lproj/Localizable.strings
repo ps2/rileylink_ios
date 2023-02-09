@@ -68,7 +68,7 @@
 "Lighten Yellow LED" = "Gele LED Verlichten";
 
 /* The title of the cell showing battery level */
-"Low Battery Alert" = "Batterij Niveau Laag";
+"Low Battery Alert" = "Batterij Bijna Leeg Alarm";
 
 /* The title of the cell showing device name */
 "Name" = "Naam";
@@ -92,6 +92,12 @@
 
 /* The title of the cell showing Test Vibration */
 "Test Vibration" = "Test Trillingen";
+
+/* The title of the command to update diagnostic LEDs */
+"Toggle Diagnostic LEDs" = "Tokkel de Diagnostische LED's";
+
+/* Progress message for changing diagnostic LED mode */
+"Updating diagnostic LEDs mode" = "Diagnostische LED-modus aan het bijstellen";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Uptime";

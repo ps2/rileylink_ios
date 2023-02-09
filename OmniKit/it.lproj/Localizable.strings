@@ -11,7 +11,7 @@
 "%@%%" = "%@ %%";
 
 /* Format string for alert content body for lowReservoir pod alert. (1: reminder value) */
-"%1$@ insulin or less remaining in Pod. Change Pod soon." = "%1$@ insulina o meno rimanente in Pod. Cambia Pod presto.";
+"%1$@ insulin or less remaining in Pod. Change Pod soon." = "%1$@ insulina o meno rimanenti nel Pod. Cambia presto il Pod.";
 
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
@@ -177,7 +177,7 @@
 "Low RileyLink Battery" = "Batteria del Releylink scarica";
 
 /* Recovery suggestion for PodCommsError.noPodsFound */
-"Make sure your pod is filled and nearby." = "Assicurati che il tuo pod sia pieno e nelle vicinanze.";
+"Make sure your pod is filled and nearby." = "Assicurati che il tuo Pod sia pieno e nelle vicinanze.";
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Assicurati che RileyLink si trovi nelle vicinanze e sia acceso";
@@ -189,7 +189,7 @@
 "Memory initialized" = "Memoria inizializzata";
 
 /* Recovery suggestion for PodCommsError.tooManyPodsFound */
-"Move to a new area away from any other pods and try again." = "Spostati in una nuova area lontana da qualsiasi altro pod e riprova.";
+"Move to a new area away from any other pods and try again." = "Spostati in una nuova area lontana da qualsiasi altro Pod e riprova.";
 
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
@@ -265,19 +265,19 @@
 "Please bring your pod closer to the RileyLink and try again" = "Avvicina Pod a RileyLink e riprova";
 
 /* Alert content body for finishSetupReminder pod alert */
-"Please finish pairing your pod." = "Completa l'abbinamento del tuo pod.";
+"Please finish pairing your pod." = "Completa l'abbinamento del tuo Pod.";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Abbina nuovo Pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
-"Please reposition the RileyLink further from the pod" = "Si prega di riposizionare il RileyLink più lontano dal pod";
+"Please reposition the RileyLink further from the pod" = "Si prega di riposizionare il RileyLink più lontano dal Pod";
 
 /* Recovery suggestion when pairing signal strength is too low */
-"Please reposition the RileyLink relative to the pod" = "Si prega di riposizionare il RileyLink rispetto al pod";
+"Please reposition the RileyLink relative to the pod" = "Si prega di riposizionare il RileyLink rispetto al Pod";
 
 /* Recovery suggestion when no response is received from pod */
-"Please try repositioning the pod or the RileyLink and try again" = "Prova a riposizionare il pod o il RileyLink e riprova";
+"Please try repositioning the pod or the RileyLink and try again" = "Prova a riposizionare il Pod o il RileyLink e riprova";
 
 /* Error message shown when user cannot pair because pod is already paired */
 "Pod already paired" = "Pod già abbinato";
@@ -295,7 +295,7 @@
 "Pod Expiration Notice" = "Avviso di scadenza Pod";
 
 /* Alert content title for userPodExpiration pod alert */
-"Pod Expiration Reminder" = "Promemoria scadenza pod";
+"Pod Expiration Reminder" = "Promemoria scadenza Pod";
 
 /* Description for Pod expired pod fault */
 "Pod expired" = "Pod scaduto";
@@ -325,10 +325,10 @@
 "Pod Occlusion" = "Occlusione Pod";
 
 /* Alert content title for finishSetupReminder pod alert */
-"Pod Pairing Incomplete" = "Accoppiamento pod incompleto";
+"Pod Pairing Incomplete" = "Accoppiamento Pod incompleto";
 
 /* Error message shown when pod sends ack instead of response */
-"Pod sent ack instead of response" = "Pod ha inviato un ack invece di una risposta";
+"Pod sent ack instead of response" = "Pod ha inviato una conferma anziché una risposta";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Finestra di configurazione Pod scaduta";

@@ -100,7 +100,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 dose = DoseEntry(suspendDate: event.date)
                 isRewound = true
             case is PrimePumpEvent:
-                title = LocalizedString("Prime", comment: "Event title for rewind pump event")
+                title = LocalizedString("Prime", comment: "Event title for prime pump event")
                 eventType = .prime
 
                 if isRewound {

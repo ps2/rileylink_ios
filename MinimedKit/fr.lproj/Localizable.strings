@@ -25,6 +25,12 @@
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Profil basal %1$@: %2$@ U/heure";
 
+/* Title for PumpAlarmType.batteryDepleted */
+"Battery Depleted" = "Batterie épuisée";
+
+/* Title for PumpAlarmType.batteryOutLimitExceeded */
+"Battery Out Limit" = "Limite de sortie de batterie";
+
 /* Title for PumpAlarmType.deviceResetBatteryIssue17 */
 "BatteryIssue17" = "Problème de batterie17";
 
@@ -70,6 +76,12 @@
 
 /* Error description */
 "Device Error" = "Erreur de périphérique";
+
+/* Title for deviceReset */
+"Device Reset" = "Réinitialisation de l'appareil";
+
+/* Default alert dismissal */
+"Dismiss" = "Fermer";
 
 /* Title for PumpAlarmType.emptyReservoir */
 "Empty Reservoir" = "Réservoir vide";
@@ -119,6 +131,9 @@
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Serié Minimed 500/700";
 
+/* Title for PumpAlarmType.noDelivery */
+"No Delivery Alarm" = "Alarme: Pas d'administration";
+
 /* Error description when no rileylink connected */
 "No RileyLink Connected" = "Aucun RileyLink connecté";
 
@@ -131,8 +146,14 @@
 /* Acknowledge button label for RileyLink low battery alert */
 "OK" = "OK";
 
+/* Event title for percent based temp basal */
+"Percent Temp Basal" = "Pourcentage pour le débit basal temporaire";
+
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Veuillez vérifier l'historique des bolus de votre pompe pour vérifier si le bolus a été administré.";
+
+/* Event title for rewind pump event */
+"Prime" = "Purger";
 
 /* The notification title for a low pump battery */
 "Pump Battery Low" = "Batterie de la pompe faible";
@@ -161,12 +182,18 @@
 /* The format string describing a pump message. (1: The packet type)(2: The message type)(3: The message address)(4: The message data */
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "Message de pompe(%1$@, %2$@, %3$@, %4$@)";
 
+/* Title for PumpAlarmType.reprogramError */
+"Reprogram Error" = "Erreur de reprogrammation";
+
 /* Describing the reservoir insulin data source */
 "Reservoir" = "Réservoir";
 
 /* Event title for resume
    Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Reprendre";
+
+/* Event title for rewind */
+"Rewind" = "Retour du piston";
 
 /* Error description */
 "RileyLink radio tune failed" = "La synthèse radio RileyLink a échoué";

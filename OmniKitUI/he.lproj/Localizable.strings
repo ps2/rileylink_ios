@@ -1,3 +1,6 @@
+/* No comment provided by engineer. */
+"—" = "—";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -71,6 +74,12 @@
 /* The title of the continue action in an action sheet */
 "Continue" = "Continue";
 
+/* Unit for singular day in pod life remaining */
+"day" = "יום";
+
+/* Unit for plural days in pod life remaining */
+"days" = "ימים";
+
 /* Button title to deactivate pod because of fault during setup */
 "Deactivate" = "Deactivate";
 
@@ -123,6 +132,12 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "Greater than %1$@ units remaining at %2$@" = "Greater than %1$@ units remaining at %2$@";
 
+/* Unit for singular hour in pod life remaining */
+"hour" = "שעה";
+
+/* Unit for plural hours in pod life remaining */
+"hours" = "שעות";
+
 /* Instructions when deactivating pod that has been paired, but not attached. */
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod.";
 
@@ -140,6 +155,12 @@
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
+
+/* Unit for singular minute in pod life remaining */
+"minute" = "דקה";
+
+/* Unit for plural minutes in pod life remaining */
+"minutes" = "דקות";
 
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "None";
@@ -225,8 +246,38 @@
 "Too many entries" = "Too many entries";
 
 /* Instructions when pod cannot be deactivated */
-"Unable to deactivate pod. Please continue and pair a new one." = "Unable to deactivate pod. Please continue and pair a new one.";
+"Unable to deactivate pod. Please continue and pair a new one." = "לא ניתן להשבית את הפוד. אנא המשך והצמיד אחד חדש.";
+
+/* Title of delivery uncertainty recovery page */
+"Unable to Reach Pod" = "לא ניתן להשיג את פוד";
+
+/* Title for pending command recovery screen */
+"Unable To Reach Pod" = "לא ניתן להשיג את פוד";
+
+/* Alert format string for a failure to set temporary basal. (1: error description) */
+"Unable to set a temporary basal rate: %1$@" = "לא ניתן להגדיר בזאלי זמני:%1$@";
+
+/* Alert format string for a failure to set temporary basal with recovery suggestion. (1: error description) (2: recovery text) */
+"Unable to set a temporary basal rate: %1$@\n\n%2$@" = "לא ניתן להגדיר בזאלי זמני: %1$@ \n\n %2$@";
+
+/* Label for pod life state when pod not fully activated */
+"Unfinished Activation" = "הפעלה לא הושלמה";
+
+/* Label for pod life state when pod not fully deactivated */
+"Unfinished deactivation" = "השבתה לא הושלמה";
 
 /* The detail text for delivered insulin when no measurement is available */
-"Unknown" = "Unknown";
+"Unknown" = "לא ידוע";
+
+/* Label text for step two of insert cannula instructions */
+"Wait until insertion is completed." = "המתן עד להשלמת ההכנסה.";
+
+/* Button label for user to answer cannula was properly inserted */
+"Yes" = "כן";
+
+/* bodyText for PodSetupView */
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "כעת מתחילים בתהליך של הגדרת התזכורות שלך, מילוי הפוד שלך באינסולין, שיוך למכשיר שלך והנחתו על גופך.";
+
+/* Format string for instructions for setup complete view. (1: app name) */
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "הפוד שלך מוכן לשימוש. \n\n %1$@ יזכיר לך להחליף את הפוד שלך לפני שתוקפו יפוג. אתה יכול לשנות את זה לזמן שנוח לך.";
 

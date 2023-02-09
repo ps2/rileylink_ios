@@ -59,11 +59,29 @@
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Erreur de commande %1$u";
 
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Problème de com.";
+
+/* Error message when command is rejected because an unacknowledged command is pending. */
+"Communication issue: Unacknowledged command pending." = "Problème de communication : Commande en attente sans accusé de réception.";
+
+/* Description for BeepPreference.manualCommands */
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Les rappels de confiance retentiront pour les commandes que vous initiez, comme administrer ou annuler un bolus, suspendre, reprendre, enregistrer les rappels de notification, etc. Lorsque Loop ajuste automatiquement l'administration, aucun rappel de confiance n’est utilisé.";
+
+/* Description for BeepPreference.extended */
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Des rappels de confiance retentiront lorsque Loop ajustera automatiquement l'administration ainsi que pour les commandes que vous lancez.";
+
 /* The title for AlarmCode.other notification */
 "Critical Pod Error" = "Erreur critique du Pod";
 
+/* Recovery suggestion when unexpected address received */
+"Crosstalk possible. Please move to a new location" = "Interférences possibles. Veuillez vous déplacer vers un nouvel emplacement";
+
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Désactivé";
+
+/* Title string for BeepPreference.silent */
+"Disabled" = "Désactivé";
 
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Réservoir vide";
@@ -73,6 +91,9 @@
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Réponse vide du Pod";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "Activé";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Erreur enregistrée, arrêt en cours";
@@ -147,7 +168,7 @@
 "Low Reservoir" = "Réservoir bas";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Rappel de réservoir bas";
+"Low reservoir advisory (%1$gU)" = "Avis de réservoir bas (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarme de réservoir bas";
@@ -169,6 +190,10 @@
 
 /* Recovery suggestion for PodCommsError.tooManyPodsFound */
 "Move to a new area away from any other pods and try again." = "Déplacez-vous vers une nouvelle zone éloignée de tout autre Pod et réessayez.";
+
+/* Alert content body for multiCommand pod alert
+   Alert content title for multiCommand pod alert */
+"Multiple Command Alert" = "Alerte de commande multiple";
 
 /* Pod alert state when no alerts are active */
 "No alerts" = "Pas d'alarme";

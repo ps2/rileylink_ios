@@ -19,11 +19,17 @@
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alkaline";
 
+/* Title for PumpAlarmType.autoOff */
+"Auto-Off Alarm" = "Automatisch Uit Alarm";
+
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basaal profiel %1$@: %2$@ E/uur";
 
 /* Title for PumpAlarmType.batteryDepleted */
-"Battery Depleted" = "Batterij helemaal leeg";
+"Battery Depleted" = "Batterij Leeg";
+
+/* Title for PumpAlarmType.batteryOutLimitExceeded */
+"Battery Out Limit" = "Limiet Batterij Uit";
 
 /* Title for PumpAlarmType.deviceResetBatteryIssue17 */
 "BatteryIssue17" = "BatterijProbleem17";
@@ -36,13 +42,13 @@
 "Bolus" = "Bolus";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolus bezig";
+"Bolus in progress" = "Bolus in Uitvoering";
 
 /* Error description when failure due to bolus in progress */
-"Bolus in Progress" = "Bolus in uitvoering";
+"Bolus in Progress" = "Bolus in Uitvoering";
 
 /* Format string for uncertain bolus. (1: the reported error during bolusing) */
-"Bolus may have failed: %1$@" = "Bolus is mogelijk mislukt: %1$@";
+"Bolus may have failed: %1$@" = "Bolus mogelijk mislukt: %1$@";
 
 /* Describing the Canada pump region */
 "Canada" = "Canada";
@@ -57,7 +63,7 @@
 "Change the pump reservoir now" = "Vervang pompreservoir direct";
 
 /* Suggestions for diagnosing a command refused pump error */
-"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Controleer dat de pomp niet is onderbroken of aan het initialiseren, of dat er een percentage tijdelijke basaal staat ingesteld";
+"Check that the pump is not suspended or priming, or has a percent temp basal type" = "Controleer dat de pomp niet is onderbroken of aan het voorbereiden is, of dat er een percentage tijdelijke basaal staat ingesteld";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Commando geweigerd";
@@ -75,7 +81,7 @@
 "Device Reset" = "Apparaat resetten";
 
 /* Default alert dismissal */
-"Dismiss" = "Sluiten";
+"Dismiss" = "Afwijzen";
 
 /* Title for PumpAlarmType.emptyReservoir */
 "Empty Reservoir" = "Reservoir Leeg";
@@ -111,10 +117,10 @@
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop stuurde een boluscommando naar de pomp, maar kon niet bevestigen dat de pomp het commando ontving. Voor de zekerheid gaat Loop ervan uit dat de bolus is toegediend. Wanneer Loop uiteindelijk de geschiedenis van de pomp ophaalt en de geschatte eindtijd van de bolus is verstreken, zal Loop zijn gegevens over de toediening aanpassen aan wat de pomp rapporteert.";
 
 /* Title for RileyLink low battery alert */
-"Low RileyLink Battery" = "Batterij van RileyLink laag";
+"Low RileyLink Battery" = "Batterij RileyLink Bijna Leeg";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Wees er zeker van dat de RileyLink is in de buurt en aanstaat";
+"Make sure your RileyLink is nearby and powered on" = "Wees er zeker van dat de RileyLink in de buurt is en aanstaat";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max instelling overschreden";
@@ -126,7 +132,7 @@
 "Minimed 500/700 Series" = "Minimed 500/700 series";
 
 /* Title for PumpAlarmType.noDelivery */
-"No Delivery Alarm" = "Geen insulinetoediening alarm";
+"No Delivery Alarm" = "Geen Toedieningsalarm";
 
 /* Error description when no rileylink connected */
 "No RileyLink Connected" = "Geen RileyLink verbonden";
@@ -146,11 +152,11 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Controleer je pompbolusgeschiedenis om te bepalen of de bolus is toegediend.";
 
-/* Event title for rewind */
-"Prime" = "Voorvullen";
+/* Event title for rewind pump event */
+"Prime" = "Voorbereiden";
 
 /* The notification title for a low pump battery */
-"Pump Battery Low" = "Pompbatterij is laag";
+"Pump Battery Low" = "Pompbatterij Bijna Leeg";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pomp reageert niet";
@@ -222,7 +228,7 @@
 "Unexpected response %1$@" = "Onverwachte reactie %1$@";
 
 /* Title for PumpAlarmType.unknownType */
-"Unknown Alarm" = "Onbekende waarschuwing";
+"Unknown Alarm" = "Onbekendd Alarm";
 
 /* Format string for error description for an unknown record type in a glucose page. (1: event type number) */
 "Unknown glucose record type: %$1@" = "Onbekend glucoserecordtype: %$1 @";

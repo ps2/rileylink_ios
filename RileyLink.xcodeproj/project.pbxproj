@@ -1380,6 +1380,10 @@
 		C14303191C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBatteryCarelinkMessageBodyTests.swift; sourceTree = "<group>"; };
 		C145BF9D2219F2EC00A977CB /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		C145BFA3221BBA7E00A977CB /* SuspendResumeMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeMessageBody.swift; sourceTree = "<group>"; };
+		C147B997299581ED00BF55AC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		C147B998299581ED00BF55AC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = "he.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
+		C14952172995822A0095AA84 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		C14952182995822A0095AA84 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = "ru.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C14D2B041C9F5D5800C98E4C /* TempBasalDurationPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TempBasalDurationPumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14D2B081C9F5EDA00C98E4C /* ChangeTempBasalTypePumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ChangeTempBasalTypePumpEvent.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C14F71D326A675BC00FA09F0 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
@@ -1473,6 +1477,7 @@
 		C184875D20BCDB0000ABE9E7 /* ForecastError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastError.swift; sourceTree = "<group>"; };
 		C18700782981EE6100E06588 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C18886EC29830A5E004C982D /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = "nl.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
+		C18B7265299581C600F138D3 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = "da.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C18C8C521D64123400E043FB /* EnableBolusWizardPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableBolusWizardPumpEvent.swift; sourceTree = "<group>"; };
 		C18EB741207EE20100EA002B /* NightscoutProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfile.swift; sourceTree = "<group>"; };
 		C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDoseRecommendation.swift; sourceTree = "<group>"; };
@@ -1494,6 +1499,8 @@
 		C1AF21ED1D4901220088C41D /* BGCheckNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BGCheckNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1AF21EE1D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbCorrectionNightscoutTreatment.swift; sourceTree = "<group>"; };
 		C1AF21EF1D4901220088C41D /* TempBasalNightscoutTreatment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalNightscoutTreatment.swift; sourceTree = "<group>"; };
+		C1B267A32995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		C1B267A42995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = "tr.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C1B3830B1CD0665D00CE7782 /* NightscoutUploadKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NightscoutUploadKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B3830D1CD0665D00CE7782 /* NightscoutUploadKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NightscoutUploadKit.h; sourceTree = "<group>"; };
 		C1B3830F1CD0665D00CE7782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1532,6 +1539,9 @@
 		C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightscoutProfileTests.swift; sourceTree = "<group>"; };
 		C1BCB5C0298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1BCB5C1298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "it.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
+		C1C247922995823200371B88 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1C247932995823200371B88 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
+		C1C247942995823200371B88 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1C3578E1C927303009BDD4F /* MeterMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeterMessage.swift; sourceTree = "<group>"; };
 		C1C357901C92733A009BDD4F /* MeterMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeterMessageTests.swift; path = Messages/MeterMessageTests.swift; sourceTree = "<group>"; };
 		C1C6038C2983092100FC4128 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "de.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1594,6 +1604,7 @@
 		C1DEE898298309EA0008194D /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1E28AFC2981EE6600758EB3 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C1E5BEAC1D5E26F200BD4390 /* RileyLinkStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RileyLinkStatus.swift; sourceTree = "<group>"; };
+		C1E8ADD32995822300AB9EEB /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = "ro.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C1EAD6AE1C826B6D006DBA60 /* MySentryAlertType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySentryAlertType.swift; sourceTree = "<group>"; };
 		C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBody.swift; sourceTree = "<group>"; };
 		C1EAD6B01C826B6D006DBA60 /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageType.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1625,6 +1636,7 @@
 		C1F0004B1EBE68A600F65163 /* DataFrameMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataFrameMessageBody.swift; sourceTree = "<group>"; };
 		C1F0004F1EBE727C00F65163 /* BasalScheduleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTests.swift; sourceTree = "<group>"; };
 		C1F000511EBE73F400F65163 /* BasalSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalSchedule.swift; sourceTree = "<group>"; };
+		C1F490042995821600C8BD69 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = "pl.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
 		C1F6EB881F89C3E200CFE393 /* FourByteSixByteEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FourByteSixByteEncoding.swift; sourceTree = "<group>"; };
 		C1F6EB8A1F89C41200CFE393 /* MinimedPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacket.swift; sourceTree = "<group>"; };
 		C1F6EB8C1F89C45500CFE393 /* MinimedPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinimedPacketTests.swift; sourceTree = "<group>"; };
@@ -4503,6 +4515,7 @@
 				F5D9C04427DAC30B002E48F6 /* tr */,
 				F5E0BE2627E1DF280033557E /* he */,
 				C126BB1329830A83002CEE4F /* zh-Hans-CN */,
+				C1C247932995823200371B88 /* sk */,
 			);
 			name = MinimedPumpManager.storyboard;
 			sourceTree = "<group>";
@@ -4642,6 +4655,7 @@
 				F5D9C04B27DAC30C002E48F6 /* tr */,
 				F5E0BE2D27E1DF290033557E /* he */,
 				C126BB1429830A83002CEE4F /* zh-Hans-CN */,
+				C1C247942995823200371B88 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4689,6 +4703,9 @@
 				C153EBB12981EE6C000BFE9E /* sv */,
 				C1BCB5C0298309C4001C50FF /* it */,
 				C1DEE895298309EA0008194D /* sk */,
+				C147B997299581ED00BF55AC /* he */,
+				C14952172995822A0095AA84 /* ru */,
+				C1B267A32995824000BCB7C1 /* tr */,
 			);
 			name = LoopKit.strings;
 			sourceTree = "<group>";
@@ -4703,6 +4720,12 @@
 				C1DEE896298309EA0008194D /* sk */,
 				C11A2BD329830A3100AC5135 /* fr */,
 				C18886EC29830A5E004C982D /* nl */,
+				C18B7265299581C600F138D3 /* da */,
+				C147B998299581ED00BF55AC /* he */,
+				C1F490042995821600C8BD69 /* pl */,
+				C1E8ADD32995822300AB9EEB /* ro */,
+				C14952182995822A0095AA84 /* ru */,
+				C1B267A42995824000BCB7C1 /* tr */,
 			);
 			name = "RileyLink-InfoPlist.strings";
 			sourceTree = "<group>";
@@ -4758,6 +4781,7 @@
 				F5D9C04A27DAC30C002E48F6 /* tr */,
 				F5E0BE2C27E1DF280033557E /* he */,
 				C126BB1229830A83002CEE4F /* zh-Hans-CN */,
+				C1C247922995823200371B88 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

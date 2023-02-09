@@ -1,5 +1,17 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = "(etkin değil)";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Aktivasyon süresi aşıldı";
+
+/* Description for auto-off */
+"Auto-off" = "Otomatik kapanma";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Oto-kapanma alarmı";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Bazal başlatıldı";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "50 ünitenin altında";
@@ -34,14 +46,32 @@
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Hata olayı kaydedildi, kapatılıyor";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Süre sonu tavsiyesi";
+
 /* Description for expiration alert */
 "Expiration alert" = "Süre sonu uyarısı";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Yayma bolus çalışıyor";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Geçici bazal ile çalışan yayma bolus";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Hata meydana geldi";
 
 /* Description for finish setup */
 "Finish setup " = "Kurulumu bitir";
 
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Hatırlatıcı kurulumunu bitir";
+
 /* Pod inititialized */
 "Initialized" = "Başlatıldı";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Kanül yerleştiriliyor";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Dahili pod hatası %1$03d";
@@ -49,14 +79,32 @@
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "KesintiliBolus: %1$@ Ü (%2$@ Ü planlandı) %3$@ %4$@ %5$@";
 
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Geçersiz adres: (%1$@)";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "Geçersiz CRC";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Düşük rezervuar";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Düşük rezervuar tavsiyesi (%1$gU)";
+
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Düşük rezervuar uyarı alarmı";
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "RileyLink'inizin yakında olduğundan ve açık olduğundan emin olun";
 
+/* Pod memory initialized */
+"Memory initialized" = "Bellek başlatıldı";
+
 /* Pod alert state when no alerts are active */
 "No alerts" = "Uyarı yok";
+
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Hata yok";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "Eşleştirilmiş pod yok";
@@ -71,14 +119,26 @@
    Pod state when running above fifty units */
 "Normal" = "Normal";
 
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Yeterli veri yok";
+
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Tıkanma tespit edildi";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "birNotKullanıldı";
+
 /* Pod status after pairing */
 "Paired" = "Eşleştirilmiş";
+
+/* Pod status when pairing completed */
+"Pairing completed" = "Eşleştirme tamamlandı";
+
+/* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
+"Parsing Error: %1$@ in (%2$@)" = "Ayrıştırma Hatası: %1$@ içinde (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Lütfen podunuzu RileyLink'e yaklaştırın ve tekrar deneyin";
@@ -116,9 +176,15 @@
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Pod kurulum penceresinin süresi doldu";
 
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Pod askıya alındı hatırlatıcısı";
+
 /* Delivery status when pod is priming
    Pod status when priming */
-"Priming" = "Dolduruluyor";
+"Priming" = "Hazırlanıyor…";
+
+/* Pod state when priming completed */
+"Priming completed" = "Hazırlama tamamlandı";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Bazal programlama için hazır";
@@ -126,14 +192,26 @@
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Kanül yerleştirmeye hazır";
 
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Hatırlatıcı başlatıldı";
+
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Devam: %1$@ %2$@";
+
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "Programlanan Bazal";
 
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Programlanan Bazal";
 
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Yakında Kapanma";
+
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Kapanma yakın alarmı";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Askıya alma süresi doldu";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Askıya alma: %1$@ %2$@";
@@ -156,17 +234,32 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "GeçiciBazal: %1$@ Ü/saat %2$@ %3$@ %4$@ Ü %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "üçNotKullanıldı";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Pod'unuzu değiştirme zamanı! Pod'un süresi %1$@ içinde dolacak";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "ikiNotKullanıldı";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Belirsiz";
+
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Beklenmeyen mesaj sıra numarası";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Pod'dan beklenmeyen yanıt";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Bilinmeyen pod hatası %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "%2$@ tipi için Bilinmeyen Değer ( %1$@ )";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Doğrulama başarısız oldu: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Mevcut bolusun bitmesini bekleyin veya bolusu iptal edin";

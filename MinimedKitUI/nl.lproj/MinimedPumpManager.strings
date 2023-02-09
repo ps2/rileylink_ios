@@ -47,7 +47,7 @@
 "Nwf-TJ-KmJ.title" = "Configuratie Voltooid";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
-"oBL-lh-SHI.title" = "Pomp connectiviteit";
+"oBL-lh-SHI.title" = "Pomp Signalen";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
 "ojQ-ob-gBx.text" = "Aan";

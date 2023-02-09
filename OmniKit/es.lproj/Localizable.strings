@@ -86,6 +86,9 @@
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Reservorio vacío";
 
+/* The title for Empty Reservoir alarm notification */
+"Empty Reservoir" = "Depósito vacío";
+
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Respuesta vacía del pod";
 
@@ -109,6 +112,9 @@
 
 /* Delivery status when extended bolus and temp basal is running */
 "Extended bolus running with temp basal" = "Bolo extendido ejecutándose con basal temporal";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Se ha producido un fallo";
 
 /* Status highlight that when pod is deactivating. */
 "Finish Deactivation" = "Finalizar la desactivación";
@@ -239,6 +245,9 @@
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
+
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
 "Paired" = "Emparejado";
@@ -419,6 +428,9 @@
 /* Alert content body for timeOffsetChangeDetected pod alert */
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "La hora de la bomba es diferente de la hora actual. Puedes revisar la hora de la bomba y sincronizarla con la hora actual en los ajustes.";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* Alert content title for timeOffsetChangeDetected pod alert */
 "Time Change Detected" = "Cambio de hora detectado";
 
@@ -430,6 +442,9 @@
 
 /* Recovery suggestion when ack received instead of response */
 "Try again" = "Vuelva a intentarlo";
+
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Incierto";

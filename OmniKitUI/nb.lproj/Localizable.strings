@@ -298,6 +298,7 @@
 "Lot Number" = "Lot-nummer";
 
 /* Label text for low reservoir value row
+   Navigation bar title for LowReservoirReminderSetupView
    Title for LowReservoirReminderSetupView */
 "Low Reservoir" = "Lavt reservoar";
 
@@ -358,7 +359,8 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Koble sammen ny pod";
 
-/* Pod pairing action button text while ready to pair
+/* Navigation bar title for PairPodView
+   Pod pairing action button text while ready to pair
    Settings page link description when next lifecycle action is to pair new pod
    Title for pod pairing screen */
 "Pair Pod" = "Par Pod";

@@ -1,3 +1,12 @@
+/* Format string for low battery alert body for RileyLink. (1: device name) */
+"\"%1$@\" has a low battery" = "\"%1$@\" tiene batería baja";
+
+/* Low reservoir alert format string. (1: Number of units remaining) */
+"%1$@ U left" = "%1$@ U restantes";
+
+/* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
+"%1$@ U left: %2$@" = "%1$@ U restantes: %2$@";
+
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "Un bolo ya está en progreso";
 
@@ -10,11 +19,48 @@
 /* Describing the battery chemistry as Alkaline */
 "Alkaline" = "Alcalina";
 
+/* Title for PumpAlarmType.autoOff */
+"Auto-Off Alarm" = "Alarma de apagado automático";
+
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Perfil Basal %1$@: %2$@ U/hora";
 
+/* Title for PumpAlarmType.batteryDepleted */
+"Battery Depleted" = "Batería agotada";
+
+/* Title for PumpAlarmType.batteryOutLimitExceeded */
+"Battery Out Limit" = "Alerta de Batería Baja";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue17 */
+"BatteryIssue17" = "Problema de bateria 17";
+
+/* Title for PumpAlarmType.deviceResetBatteryIssue21 */
+"BatteryIssue21" = "Problema de bateria 21";
+
+/* Event title for bolus
+   Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolo";
+
 /* Pump error code when bolus is in progress */
 "Bolus in progress" = "Bolo en progreso";
+
+/* Error description when failure due to bolus in progress */
+"Bolus in Progress" = "Bolo en curso";
+
+/* Format string for uncertain bolus. (1: the reported error during bolusing) */
+"Bolus may have failed: %1$@" = "Es posible que el bolo haya fallado: %1$@";
+
+/* Describing the Canada pump region */
+"Canada" = "Canadá";
+
+/* Event title for temp basal cancel */
+"Cancel Temp Basal" = "Cancelar basal temporal";
+
+/* The notification alert describing a low pump battery */
+"Change the pump battery immediately" = "Cambie la batería de la bomba de inmediato";
+
+/* The notification alert describing an empty pump reservoir */
+"Change the pump reservoir now" = "Cambie el depósito de la bomba ahora";
 
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Revisa que la microinfusora no esté suspendida o en cebado, o que tenga una basal de tipo temporal";
@@ -31,6 +77,9 @@
 /* Error description */
 "Device Error" = "Error de Dispositivo";
 
+/* Title for deviceReset */
+"Device Reset" = "Reinicio del dispositivo";
+
 /* Default alert dismissal */
 "Dismiss" = "Ignorar";
 
@@ -40,11 +89,17 @@
 /* Describing the pump history insulin data source */
 "Event History" = "Historial de Eventos";
 
+/* Error description for glucose page failing crc check */
+"Glucose page failed crc check" = "La página de glucosa falló en la verificación de CRC";
+
 /* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
 "Go to pump settings and select insulin type" = "Vaya a la configuración de la bomba y seleccione el tipo de insulina";
 
 /* Pump error code when invalid history page is requested */
 "History page does not exist" = "La página de historial no existe";
+
+/* Error description for history page failing crc check */
+"History page failed crc check" = "La página de historial falló en la verificación de CRC";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insulina Suspendida";
@@ -97,6 +152,9 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Por favor compruebe el historial de bolos de su bomba para determinar si se administró la insulina de bolo.";
 
+/* Event title for rewind pump event */
+"Prime" = "Purgar";
+
 /* The notification title for a low pump battery */
 "Pump Battery Low" = "Batería de la bomba baja";
 
@@ -134,6 +192,9 @@
    Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Reanudar";
 
+/* Event title for rewind */
+"Rewind" = "Rebobinar";
+
 /* Error description */
 "RileyLink radio tune failed" = "Sintonización de señal de radio de RileyLink falló";
 
@@ -165,6 +226,15 @@
 
 /* Format string for an unexpectedResponse. (2: The response) */
 "Unexpected response %1$@" = "Respuesta inesperada %1$@";
+
+/* Title for PumpAlarmType.unknownType */
+"Unknown Alarm" = "Alarma desconocida";
+
+/* Format string for error description for an unknown record type in a glucose page. (1: event type number) */
+"Unknown glucose record type: %$1@" = "Tipo de registro de glucosa desconocido: %$1@";
+
+/* Format string for error description for an unknown record type in a history page. (1: event type number) */
+"Unknown history record type: %$1@" = "Tipo de registro histórico desconocido: %$1@";
 
 /* The format string description of an unknown pump error code. (1: The specific error code raw value) */
 "Unknown pump error code: %1$@" = "Error desconocido de código de microinfusora: %1$@";

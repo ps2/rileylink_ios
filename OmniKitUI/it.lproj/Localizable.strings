@@ -129,7 +129,7 @@
 "Comms Recovered" = "Comunicazioni recuperate";
 
 /* No comment provided by engineer. */
-"Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "I promemoria di fiducia sono segnali acustici emessi dal pod che possono essere utilizzati per confermare i comandi selezionati.";
+"Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "I promemoria di fiducia sono segnali acustici emessi dal Pod che possono essere utilizzati per confermare i comandi selezionati.";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Configurazione";
@@ -160,7 +160,7 @@
 "Deactivating..." = "Disattivazione...";
 
 /* Button title to delete Omnipod PumpManager */
-"Delete Omnipod" = "Cancella Omnipod";
+"Delete Omnipod" = "Elimina Omnipod";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Limiti Erogazione";
@@ -193,10 +193,10 @@
 "Error Suspending" = "Errore durante l’interruzione";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Promemoria di scadenza";
+"Expiration Reminder" = "Promemoria scadenza";
 
 /* Label text for expiration reminder default row */
-"Expiration Reminder Default" = "Promemoria di scadenza predefinito";
+"Expiration Reminder Default" = "Promemoria scadenza predef.";
 
 /* The title of the cell showing the pod expiration after expiry */
 "Expired" = "Scaduto";
@@ -211,7 +211,7 @@
 "Failed to Resume Insulin Delivery" = "Impossibile riprendere l'erogazione dell'insulina";
 
 /* Alert title for time sync error */
-"Failed to Set Pump Time" = "Impossibile Impostare Orario Microinfusore";
+"Failed to Set Pump Time" = "Impossibile impostare Orario Microinfusore";
 
 /* Alert title for suspend error */
 "Failed to Suspend Insulin Delivery" = "Impossibile Sospendere Erogazione Insulina";
@@ -271,7 +271,7 @@
 "Insulin Delivery" = "Erogazione Insulina";
 
 /* The action string on pod status page when pod faulted */
-"Insulin delivery stopped. Change Pod now." = "l' Erogazione di insulina si e' interrota. Cambiare Pod adesso.";
+"Insulin delivery stopped. Change Pod now." = "L'erogazione d'insulina si è interrotta. Cambiare Pod adesso.";
 
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Insulina Rimanente";
@@ -283,13 +283,13 @@
 "Invalid entry" = "Immissione non valida";
 
 /* Label text for step 2 of pair pod instructions */
-"Keep the RileyLink about 6 inches from the pod during pairing." = "Tieni il RileyLink a circa 15 cm dal pod durante l'accoppiamento.";
+"Keep the RileyLink about 6 inches from the pod during pairing." = "Tieni il RileyLink a circa 15 cm dal Pod durante l'accoppiamento.";
 
 /* description label for last status date pod details row */
 "Last Status" = "Ultimo stato";
 
 /* Description text on manual temp basal action sheet */
-"Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop non regolerà automaticamente l'erogazione di insulina fino a quando l'impostazione  della basale temporanea non sarà terminata o cancellata.";
+"Loop will not automatically adjust your insulin delivery until the temporary basal rate finishes or is canceled." = "Loop non regolerà automaticamente l'erogazione d'insulina fino a quando l'impostazione della basale temporanea non sarà terminata o cancellata.";
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lotto";
@@ -298,6 +298,7 @@
 "Lot Number" = "Numero di Lotto";
 
 /* Label text for low reservoir value row
+   Navigation bar title for LowReservoirReminderSetupView
    Title for LowReservoirReminderSetupView */
 "Low Reservoir" = "Livello Serbatoio Basso";
 
@@ -344,7 +345,7 @@
 "None" = "Nessuno";
 
 /* navigation title for notification settings */
-"Notification Settings" = "Impostazioni di notifica";
+"Notification Settings" = "Impostazioni";
 
 /* No comment provided by engineer. */
 "Numbers" = "Numeri";
@@ -358,7 +359,8 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Abbina nuovo Pod";
 
-/* Pod pairing action button text while ready to pair
+/* Navigation bar title for PairPodView
+   Pod pairing action button text while ready to pair
    Settings page link description when next lifecycle action is to pair new pod
    Title for pod pairing screen */
 "Pair Pod" = "Abbina Pod";
@@ -388,10 +390,10 @@
 "Play Test Beeps…" = "Emetti bip di prova...";
 
 /* Instructions for deactivate pod when pod not on body */
-"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Si prega di disattivare il pod. Al termine della disattivazione, è possibile associare un nuovo pod.";
+"Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Si prega di disattivare il Pod. Al termine della disattivazione, è possibile associare un nuovo Pod.";
 
 /* Instructions for deactivate pod when pod is on body */
-"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Si prega di disattivare il pod. Al termine della disattivazione, rimuovere il pod  e accoppiare un nuovo pod.";
+"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Si prega di disattivare il Pod. Al termine della disattivazione, è possibile rimuoverlo e accoppiare un nuovo Pod.";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Versione PM";
@@ -424,7 +426,7 @@
 "Pod Occlusion" = "Occlusione Pod";
 
 /* Pairing action button accessibility label when pairing succeeded */
-"Pod paired successfully. Continue." = "Il Pod è stato accoppiato con successo. Continua.";
+"Pod paired successfully. Continue." = "Pod accoppiato con successo. Continua.";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Impostazioni Pod";
@@ -451,7 +453,7 @@
 "Priming…" = "Caricamento in corso...";
 
 /* Label text for basal rate summary */
-"Rate" = "Tasso";
+"Rate" = "Velocità";
 
 /* No comment provided by engineer. */
 "Ref: " = "Rif:";
@@ -490,7 +492,7 @@
 "RileyLink allows for communication with the pump over Bluetooth" = "RileyLink consente la comunicazione con la pompa tramite Bluetooth";
 
 /* Navigation title for RileyLinkSetupView */
-"RileyLink Setup" = "Configurazione RileyLink";
+"RileyLink Setup" = "Configurazione";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -565,7 +567,7 @@
 "Testing Commands…" = "Prova Comandi...";
 
 /* Footer text for omnipod reminders section */
-"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "L'App puo' configurare un promemoria capace di avvisare in anticipo della scadenza del Pod.\n\nPer impostare  il numero di ore preferito per il preavviso dalla voce Omnipod della schermata principale usare i submenu' Configurazione>Impostazioni Notifiche>Notifica Scadenza  e sceglire il nomero di ore desiderato per l'avviso di scadenza.";
+"The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "L'App puo' configurare un promemoria capace di avvisare in anticipo della scadenza del Pod.\n\nPer impostare  il numero di ore preferito per il preavviso dalla voce Omnipod della schermata principale usare i submenu' Configurazione>Impostazioni Notifiche>Notifica Scadenza  e sceglire il numero di ore desiderato per l'avviso di scadenza.";
 
 /* Description text on ExpirationReminderSetupView */
 "The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "L'App ha la capacita' di avvisare in anticipo della scadenza del Pod.\n\nPer impostare il numero di ore di anticipo desiderato dalla voce Omnipod accedere ai submenu' Configurazioni>Impostazioni Notifiche>Scadenza Pod, scorrere nella lista ore ed impostare il numero di ore desiderato";

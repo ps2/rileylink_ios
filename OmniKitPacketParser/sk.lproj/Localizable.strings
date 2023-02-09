@@ -1,3 +1,51 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = "{neaktívne}";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Prekročený čas aktivácie";
+
+/* Description for auto-off */
+"Auto-off" = "Automatické vypnutie";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Bazál inciovaný";
+
+/* Pod state when running below fifty units */
+"Below 50 units" = "Menej ako 50 jednotiek";
+
+/* Error message shown when operation could not be completed due to existing bolus in progress */
+"Bolus in progress" = "Prebieha bolus";
+
+/* The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty) */
+"Bolus: %1$@U %2$@ %3$@ %4$@" = "\nBolus: %1$@U %2$@ %3$@ %4$@";
+
+/* Delivery status when bolusing */
+"Bolusing" = "Bolusovanie";
+
+/* Delivery status when bolusing and temp basal is running */
+"Bolusing with temp basal" = "Bolusovanie s dočasným bazálom";
+
+/* Pod state when inserting cannula */
+"Cannula inserting" = "Zavedenie kanyly";
+
+/* String describing a dose that was certainly scheduled */
+"Certain" = "Zaručené";
+
+/* Pod state when pod has been deactivated */
+"Deactivated" = "Deaktivované";
+
+/* Description for Empty reservoir pod fault */
+"Empty reservoir" = "Prázdna nádrž";
+
+/* Error message shown when empty response from pod was received */
+"Empty response from pod" = "Prázdna odpoveď z podu";
+
+/* Pod state error event logged shutting down */
+"Error event logged, shutting down" = "Zaprotokolovaná udalosť chyby, vypína sa";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Upozornenie na vypršanie platnosti";
+
 /* Description for expiration alert */
 "Expiration alert" = "Varovanie o expirácii";
 
@@ -77,6 +125,9 @@
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "jednoNepoužité";
+
 /* Pod status after pairing */
 "Paired" = "Spárované";
 
@@ -91,6 +142,9 @@
 
 /* Error message shown when user cannot pair because pod is already paired */
 "Pod already paired" = "Pod je už spárovaný";
+
+/* Error message shown when prime is attempted, but pod is already primed */
+"Pod already primed" = "Pumpa už bola pripravená";
 
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Varovný alarm Expirácia podu";
@@ -107,6 +161,9 @@
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
 "Pod is not in a state ready for cannula insertion." = "Pod nie je v stave pripravený na zavedenie kanyly.";
 
+/* Error message when prime fails because the pod is in an unexpected state */
+"Pod is not in a state ready for priming." = "Pumpu nie je v tomto stave možné pripraviť.";
+
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod pozastavený";
 
@@ -115,6 +172,13 @@
 
 /* Description for pod suspended reminder */
 "Pod suspended reminder" = "Pripomienka Pod pozastavený";
+
+/* Delivery status when pod is priming
+   Pod status when priming */
+"Priming" = "Pumpa sa pripravuje";
+
+/* Pod state when priming completed */
+"Priming completed" = "Príprava dokončená";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Pripravené na programovanie bazáu";
@@ -131,6 +195,12 @@
 /* Delivery status when basal is running */
 "Scheduled Basal" = "Naplánovaný bazál ";
 
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Vypnutie každú chvilu";
+
+/* Description for shutdown imminent alarm */
+"Shutdown imminent alarm" = "Varovanie bezprostredného vypnutia";
+
 /* Description for suspend time expired */
 "Suspend time expired" = "Čas pozastavenia vypršal";
 
@@ -139,6 +209,12 @@
 
 /* Delivery status when insulin delivery is suspended */
 "Suspended" = "Pozastavené";
+
+/* Pod tank fill completed */
+"Tank fill completed" = "Plnenie nádrže dokončené";
+
+/* Pod power to motor activated */
+"Tank power activated" = "Napájanie nádrže aktivované";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Dočasný bazál už prebieha";
@@ -149,11 +225,20 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "DočasBazál: %1$@ j/hod %2$@ %3$@ %4$@ j %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "triNepoužité";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Je čas vymeniť pod! Váš pod expiruje za %1$@";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "dveNepoužité";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Neisté";
+
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Neočakávané poradové číslo správy";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Neočakávaná odpoveď z podu";

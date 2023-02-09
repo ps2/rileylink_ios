@@ -54,7 +54,7 @@
 "Canada" = "Canada";
 
 /* Event title for temp basal cancel */
-"Cancel Temp Basal" = "Cancellare Basale temporanea";
+"Cancel Temp Basal" = "Annulla Basale temporanea";
 
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Cambiare immediatamente la batteria del microinfusore";
@@ -81,7 +81,7 @@
 "Device Reset" = "Ripristino del Dispositivo";
 
 /* Default alert dismissal */
-"Dismiss" = "Rimuovere";
+"Dismiss" = "OK";
 
 /* Title for PumpAlarmType.emptyReservoir */
 "Empty Reservoir" = "Serbatoio Vuoto";
@@ -152,7 +152,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Controllare la cronologia dei boli del microinfusore per determinare se il bolo è stato erogato.";
 
-/* Event title for rewind */
+/* Event title for rewind pump event */
 "Prime" = "Caricare ";
 
 /* The notification title for a low pump battery */

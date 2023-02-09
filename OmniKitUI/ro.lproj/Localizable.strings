@@ -74,6 +74,12 @@
 /* The title of the continue action in an action sheet */
 "Continue" = "Continuă";
 
+/* Unit for singular day in pod life remaining */
+"day" = "zi";
+
+/* Unit for plural days in pod life remaining */
+"days" = "zile";
+
 /* Button title to deactivate pod because of fault during setup */
 "Deactivate" = "Dezactivează";
 
@@ -126,6 +132,12 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "Greater than %1$@ units remaining at %2$@" = "Au rămas mai mult de %1$@ unități la %2$@";
 
+/* Unit for singular hour in pod life remaining */
+"hour" = "oră";
+
+/* Unit for plural hours in pod life remaining */
+"hours" = "ore";
+
 /* Instructions when deactivating pod that has been paired, but not attached. */
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Înainte de a asocia un Pod nou, trebuie să dezactivați orice Pod setat incomplet. Dezactivați și aruncați Pod-ul curent.";
 
@@ -146,6 +158,12 @@
 
 /* The title of the cell showing the pod lot id */
 "Lot" = "Lot";
+
+/* Unit for singular minute in pod life remaining */
+"minute" = "minut";
+
+/* Unit for plural minutes in pod life remaining */
+"minutes" = "minute";
 
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Nimic";
@@ -196,6 +214,11 @@
 /* The title of the cell showing reservoir status */
 "Reservoir" = "Rezervor";
 
+/* Action button description for deactivate after failed attempt
+   Cannula insertion button text while showing error
+   Pod pairing action button text while showing error */
+"Retry" = "Reîncearcă";
+
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "Reîncearcă dezactivarea Pod-ului";
 
@@ -236,6 +259,24 @@
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și asociați unui Pod nou.";
 
+/* Label for pod life state when pod not fully activated */
+"Unfinished Activation" = "Activare neterminată";
+
+/* Label for pod life state when pod not fully deactivated */
+"Unfinished deactivation" = "Dezactivare neterminată";
+
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Necunoscut";
+
+/* Label text for step two of insert cannula instructions */
+"Wait until insertion is completed." = "Așteptați până când inserarea este finalizată.";
+
+/* Button label for user to answer cannula was properly inserted */
+"Yes" = "Da";
+
+/* bodyText for PodSetupView */
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Veți începe acum procesul de configurare a memento-urilor, umplerea Pod-ului cu insulină, asocierea cu dispozitivul dumneavoastră și plasarea pe corp.";
+
+/* Format string for instructions for setup complete view. (1: app name) */
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Pod-ul dumneavoastră este gata de utilizare. \n\n %1$@ vă va reaminti să vă schimbați Pod-ul înainte de a expira. Puteți schimba într-un moment convenabil pentru dumneavoastră.";
 

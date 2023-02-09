@@ -26,7 +26,7 @@
 "Enter the 6-digit pump ID" = "Inserire 6-cifre ID micro";
 
 /* The title text for the pull cgm Data cell */
-"Fetch CGM" = "Sincronizza Sensore";
+"Fetch CGM" = "Sincronizza CGM";
 
 /* The placeholder text for the nightscout site URL credential */
 "http://mysite.herokuapp.com" = "http://mysite.herokuapp.com";

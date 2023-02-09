@@ -42,7 +42,7 @@
 "Bolusing" = "Bolusabgabe";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Abgabe mit temporärer Basalrate";
+"Bolusing with temp basal" = "Bolus-Abgabe mit temporärer Basalrate";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Einführen der Kanüle";
@@ -177,7 +177,7 @@
 "Low RileyLink Battery" = "Niedriger RileyLink Batteriestatus";
 
 /* Recovery suggestion for PodCommsError.noPodsFound */
-"Make sure your pod is filled and nearby." = "Stelle sicher, dass Dein Pod gefüllt und in der Nähe ist.";
+"Make sure your pod is filled and nearby." = "Stellen Sie sicher, dass Ihr Pod gefüllt und in der Nähe ist.";
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Stellen Sie sicher, dass sich Ihr RileyLink in der Nähe befindet und eingeschaltet ist";
@@ -218,7 +218,7 @@
 "No pods found" = "Keine Pods gefunden";
 
 /* Error message shown when no response from pod was received */
-"No response from pod" = "Keine Rückmeldung von Pod";
+"No response from pod" = "Keine Rückmeldung vom Pod";
 
 /* Error message shown when no response from pod was received */
 "No RileyLink available" = "Kein RileyLink verfügbar";
@@ -411,13 +411,13 @@
 "Tank power activated" = "Energieversorgung für den Podmotor aktiviert";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Temp. Basalrate";
+"Temp Basal" = "Temporäre Basalrate";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
-"Temp basal in progress" = "Eine temporäre Basalrate läuft bereits.";
+"Temp basal in progress" = "Temporäre Basalrate läuft bereits.";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Temporäre Basalrate läuft.";
+"Temp basal running" = "Temporäre Basalrate läuft";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ U/h %2$@ %3$@ %4$@ U %5$@";

@@ -1,5 +1,17 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = " (неактивный)";
+
+/* Pod state when activation not completed in the time allowed */
+"Activation time exceeded" = "Превышено время активации";
+
+/* Description for auto-off */
+"Auto-off" = "Авто отключение";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Авто отключение сигнала";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Базал инициализирован";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Менее 50 единиц";
@@ -14,7 +26,7 @@
 "Bolusing" = "Подается болюс";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Подача болюса при врем базале";
+"Bolusing with temp basal" = "Подача болюса при временном базале";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Установка катетера";
@@ -32,16 +44,34 @@
 "Empty response from pod" = "Пустой ответ от пода";
 
 /* Pod state error event logged shutting down */
-"Error event logged, shutting down" = "Ошибка внесена, отключение";
+"Error event logged, shutting down" = "Ошибка записана в лог, отключение";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Совет по истечению срока действия";
 
 /* Description for expiration alert */
 "Expiration alert" = "Оповещение об истечении срока";
 
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Подается пролонгированный болюс";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Пролонгированный болюс подается с ВБС";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Произошла неисправность";
+
 /* Description for finish setup */
 "Finish setup " = "Завершение настройки";
 
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Напоминание о завершении настройки";
+
 /* Pod inititialized */
 "Initialized" = "Активирован";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Ведение катетера";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Внутренняя ошибка пода %1$03d";
@@ -49,17 +79,35 @@
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Болюс прерван%1$@ ед (%2$@ ед намечено) %3$@ %4$@ %5$@";
 
+/* Description for MessageError invalidAddress */
+"Invalid address: (%1$@)" = "Неверный адрес: (%1$@)";
+
+/* Description for MessageError invalidCrc */
+"Invalid CRC" = "Неправильная контрольная сумма";
+
+/* Pod state when running with fifty or less units */
+"Low reservoir" = "Мало инсулина";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Предупреждение о низком уровне резервуара (%1$gU)";
+
 /* Description for low reservoir alarm */
-"Low reservoir advisory alarm" = "Оповещение о малом запасе инсулина в картридже";
+"Low reservoir advisory alarm" = "Оповещение о малом запасе инсулина в резервуаре";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Убедитесь, что RileyLink поблизости и включен";
+"Make sure your RileyLink is nearby and powered on" = "Убедитесь, что RileyLink находится поблизости и включен";
+
+/* Pod memory initialized */
+"Memory initialized" = "Память инициализирована";
 
 /* Pod alert state when no alerts are active */
 "No alerts" = "Активных оповещений нет";
 
+/* Description for Fault Event Code .noFaults */
+"No faults" = "Ошибок нет";
+
 /* Error message shown when no pod is paired */
-"No pod paired" = "Нет сопряжения с подом";
+"No pod paired" = "Нет сопряженного пода";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Нет ответа от пода";
@@ -71,14 +119,26 @@
    Pod state when running above fifty units */
 "Normal" = "Норма";
 
+/* Description for MessageError notEnoughData */
+"Not enough data" = "Недостаточно данных";
+
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Обнаружена закупорка";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Омнипод";
 
+/* Pod state oneNotUsed */
+"oneNotUsed" = "oneNotUsed";
+
 /* Pod status after pairing */
 "Paired" = "Сопряжен";
+
+/* Pod status when pairing completed */
+"Pairing completed" = "Сопряжение завершено";
+
+/* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
+"Parsing Error: %1$@ in (%2$@)" = "Ошибка синтаксического анализа: %1$@ в (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Поднесите Omnipod ближе к RileyLink и попробуйте снова";
@@ -93,13 +153,13 @@
 "Pod already primed" = "Omnipod уже заполнен";
 
 /* Description for expiration advisory alarm */
-"Pod expiration advisory alarm" = "Оповещение об окончании гарантийного срока Omnipod";
+"Pod expiration advisory alarm" = "Оповещение об окончании срока работы Omnipod";
 
 /* The title for pod expiration notification */
 "Pod Expiration Notice" = "Сообщение об окончании гарантийного срока Omnipod ";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Срок гарантии Omnipod истек";
+"Pod expired" = "Срок работы Omnipod истек";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Отказ Omnipod %1$@";
@@ -108,17 +168,23 @@
 "Pod is not in a state ready for cannula insertion." = "Omnipod не готов к установке катетера";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Omnipod не готов к первичному заполнению";
+"Pod is not in a state ready for priming." = "Omnipod не готов к прокачиванию инсулина";
 
 /* Error message action could not be performed because pod is suspended */
-"Pod is suspended" = "Omnipod остановлен";
+"Pod is suspended" = "Omnipod приостановлен";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "Время для окна настроек Omnipod истекло";
+"Pod setup window expired" = "Время для настройки Omnipod истекло";
+
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Напоминание о приостановленной подаче инсулина";
 
 /* Delivery status when pod is priming
    Pod status when priming */
-"Priming" = "Заполнение";
+"Priming" = "Прокачка инсулина";
+
+/* Pod state when priming completed */
+"Priming completed" = "Прокачивание инфузионного набора выполнено";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Готов к программированию базала";
@@ -126,14 +192,26 @@
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Готов к установке катетера";
 
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Напоминание инициализировано";
+
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Возобновление: %1$@ %2$@";
 
+/* Delivery status when scheduled basal is running */
+"Scheduled basal" = "База по расписанию";
+
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Основной базал";
+"Scheduled Basal" = "База по расписанию";
+
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Выключение неизбежно";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Оповещение о неизбежном выключении";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Время приостановки истекло";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Приостановка: %1$@ %2$@";
@@ -145,10 +223,10 @@
 "Tank fill completed" = "Заполнение танка Omnipod завершено";
 
 /* Pod power to motor activated */
-"Tank power activated" = "Питание танка активировано";
+"Tank power activated" = "Питание моторчика резервуара активировано";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
-"Temp basal in progress" = "Работает временный базал";
+"Temp basal in progress" = "Пока еще работает временный базал";
 
 /* Delivery status when temp basal is running */
 "Temp basal running" = "Подается временный базал";
@@ -156,24 +234,39 @@
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Врем базал: %1$@ ед/ч %2$@ %3$@ %4$@ ед %5$@";
 
+/* Pod state threeNotUsed */
+"threeNotUsed" = "threeNotUsed";
+
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "Пора заменить Pod - Срок годности истекает через %1$@";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "twoNotUsed";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Не подтверждено";
+
+/* Description for MessageError invalidSequence */
+"Unexpected message sequence number" = "Неожиданный порядковый номер сообщения";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Неожиданный отклик Omnipod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Неизвестная неполадка Omnipod";
+"Unknown pod fault %1$03d" = "Неизвестная неисправность Omnipod %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Неизвестное значение (%1$@) для типа %2$@";
+
+/* Format string for description of MessageError validationFailed. (1: description of validation failure) */
+"Validation failed: %1$@" = "Валидация не прошла: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Дождитесь окончания подачи болюса или отмените его";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Дождитесь окончания текущего врем базала или отмените";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Дождитесь окончания текущего ВБС или отмените";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Напоминание об ожидании сопряжения";
+"Waiting for pairing reminder" = "Все еще ожидается сопряжение";
 

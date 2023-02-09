@@ -110,7 +110,7 @@
 "No pod paired" = "Kein Pod gekoppelt";
 
 /* Error message shown when no response from pod was received */
-"No response from pod" = "Keine Rückmeldung von Pod";
+"No response from pod" = "Keine Rückmeldung vom Pod";
 
 /* Error message shown when no response from pod was received */
 "No RileyLink available" = "Kein RileyLink verfügbar";
@@ -141,7 +141,7 @@
 "Parsing Error: %1$@ in (%2$@)" = "Parsing-Fehler: %1$@ in (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "Bitte bringe Deinen Pod näher an den RileyLink und versuche es erneut";
+"Please bring your pod closer to the RileyLink and try again" = "Bitte bringen Sie Ihren Pod näher an Ihr RileyLink und versuchen Sie es erneut";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Bitte koppel einen neuen Pod";
@@ -229,7 +229,7 @@
 "Temp basal in progress" = "Temporäre Basalrate läuft bereits.";
 
 /* Delivery status when temp basal is running */
-"Temp basal running" = "Temporäre Basalrate läuft.";
+"Temp basal running" = "Temporäre Basalrate läuft";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ IE/h %2$@ %3$@ %4$@ IE %5$@";
@@ -238,7 +238,7 @@
 "threeNotUsed" = "threeNotUsed";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
-"Time to replace your pod! Your pod will expire in %1$@" = "Es ist Zeit Deinen Pod zu ersetzen! Dein Pod läuft ab in %1$@";
+"Time to replace your pod! Your pod will expire in %1$@" = "Es ist Zeit Ihren Pod zu wechseln! Der Pod läuft ab in %1$@";
 
 /* Pod state twoNotUsed */
 "twoNotUsed" = "twoNotUsed";

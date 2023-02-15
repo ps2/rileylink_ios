@@ -358,7 +358,7 @@ struct MinimedPumpSettingsView: View {
             ActionSheet(
                 title: Text(LocalizedString("Are you sure you want to delete this Pump?", comment: "Text to confirm delete this pump")),
                 buttons: [
-                    .destructive(Text(LocalizedString("Delete Pump"), comment: "Text to delete pump")) {
+                    .destructive(Text(LocalizedString("Delete Pump", comment: "Text to delete pump"))) {
                         viewModel.deletePump()
                     },
                     .cancel(),

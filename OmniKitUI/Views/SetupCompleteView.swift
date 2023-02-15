@@ -44,7 +44,7 @@ struct SetupCompleteView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Divider()
                 VStack(alignment: .leading) {
-                    Text("Scheduled Reminder")
+                    Text(LocalizedString("Scheduled Reminder", comment: "Title of SetupCompleteView"))
                     Divider()
                     NavigationLink(
                         destination: ScheduledExpirationReminderEditView(

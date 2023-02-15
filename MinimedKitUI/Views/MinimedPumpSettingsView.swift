@@ -85,6 +85,16 @@ struct MinimedPumpSettingsView: View {
                     }
                 }
 
+                HStack {
+                    Text("Pump Battery Remaining").foregroundColor(Color.primary)
+                    Spacer()
+                    if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
+                        Text(String("\(Int(round(chargeRemaining * 100)))%"))
+                    } else {
+                        Text(String("unknown"))
+                    }
+                }
+
                 NavigationLink(destination: DataSourceSelectionView(batteryType: $viewModel.preferredDataSource)) {
                     HStack {
                         Text("Preferred Data Source").foregroundColor(Color.primary)

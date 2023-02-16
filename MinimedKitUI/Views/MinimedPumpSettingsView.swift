@@ -85,16 +85,6 @@ struct MinimedPumpSettingsView: View {
                     }
                 }
 
-                HStack {
-                    Text(LocalizedString("Pump Battery Remaining", comment: "Text for medtronic pump battery percent remaining")).foregroundColor(Color.primary)
-                    Spacer()
-                    if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
-                        Text(String("\(Int(round(chargeRemaining * 100)))%"))
-                    } else {
-                        Text(String(LocalizedString("unknown", comment: "Text to indicate battery percentage is unknown")))
-                    }
-                }
-
                 NavigationLink(destination: DataSourceSelectionView(batteryType: $viewModel.preferredDataSource)) {
                     HStack {
                         Text(LocalizedString("Preferred Data Source", comment: "Text for medtronic pump preferred data source")).foregroundColor(Color.primary)
@@ -185,6 +175,15 @@ struct MinimedPumpSettingsView: View {
                 }
             }
 
+            HStack {
+                Text(LocalizedString("Pump Battery Remaining", comment: "Text for medtronic pump battery percent remaining")).foregroundColor(Color.primary)
+                Spacer()
+                if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
+                    Text(String("\(Int(round(chargeRemaining * 100)))%"))
+                } else {
+                    Text(String(LocalizedString("unknown", comment: "Text to indicate battery percentage is unknown")))
+                }
+            }
 
             Section {
                 LabeledValueView(label: LocalizedString("Pump ID", comment: "The title text for the pump ID config value"),

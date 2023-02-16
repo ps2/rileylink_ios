@@ -147,6 +147,15 @@ struct MinimedPumpSettingsView: View {
 
             Section() {
                 HStack {
+                    Text(LocalizedString("Pump Battery Remaining", comment: "Text for medtronic pump battery percent remaining")).foregroundColor(Color.primary)
+                    Spacer()
+                    if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
+                        Text(String("\(Int(round(chargeRemaining * 100)))%"))
+                    } else {
+                        Text(String(LocalizedString("unknown", comment: "Text to indicate battery percentage is unknown")))
+                    }
+                }
+                HStack {
                     Text(LocalizedString("Pump Time", comment: "The title of the command to change pump time zone"))
                     Spacer()
                     if viewModel.isClockOffset {
@@ -175,15 +184,6 @@ struct MinimedPumpSettingsView: View {
                 }
             }
 
-            HStack {
-                Text(LocalizedString("Pump Battery Remaining", comment: "Text for medtronic pump battery percent remaining")).foregroundColor(Color.primary)
-                Spacer()
-                if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
-                    Text(String("\(Int(round(chargeRemaining * 100)))%"))
-                } else {
-                    Text(String(LocalizedString("unknown", comment: "Text to indicate battery percentage is unknown")))
-                }
-            }
 
             Section {
                 LabeledValueView(label: LocalizedString("Pump ID", comment: "The title text for the pump ID config value"),

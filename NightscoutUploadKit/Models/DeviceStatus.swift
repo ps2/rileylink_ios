@@ -84,8 +84,11 @@ public struct DeviceStatus {
             loopStatus = nil
         }
 
-        // TODO: OverrideStatus not being parsed yet
-        self.overrideStatus = nil
+        if let overrideStatusRaw = rawValue["override"] as? OverrideStatus.RawValue {
+            overrideStatus = OverrideStatus(rawValue: overrideStatusRaw)
+        } else {
+            overrideStatus = nil
+        }
 
         // TODO: PumpStatus not being parsed yet
         self.pumpStatus = nil

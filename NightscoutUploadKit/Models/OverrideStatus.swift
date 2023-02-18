@@ -10,12 +10,15 @@ import Foundation
 import HealthKit
 
 public struct OverrideStatus {
-    let name: String?
-    let timestamp: Date
-    let active: Bool
-    let currentCorrectionRange: CorrectionRange?
-    let duration: TimeInterval?
-    let multiplier: Double?
+    
+    typealias RawValue = [String: Any]
+    
+    public let name: String?
+    public let timestamp: Date
+    public let active: Bool
+    public let currentCorrectionRange: CorrectionRange?
+    public let duration: TimeInterval?
+    public let multiplier: Double?
     
     
     public init(name: String? = nil, timestamp: Date, active: Bool, currentCorrectionRange: CorrectionRange? = nil, duration: TimeInterval? = nil, multiplier: Double? = nil) {
@@ -52,6 +55,27 @@ public struct OverrideStatus {
         return rval
     }
     
- 
-    
+    init?(rawValue: RawValue) {
+        
+        guard
+            let timestampStr = rawValue["timestamp"] as? String,
+            let timestamp = TimeFormat.dateFromTimestamp(timestampStr),
+            let active = rawValue["active"] as? Bool
+        else {
+            return nil
+        }
+
+        self.timestamp = timestamp
+        self.active = active
+        self.name = rawValue["name"] as? String
+
+        if let currentCorrectionRangeRaw = rawValue["currentCorrectionRange"] as? CorrectionRange.RawValue {
+            self.currentCorrectionRange = CorrectionRange(rawValue: currentCorrectionRangeRaw)
+        } else {
+            self.currentCorrectionRange = nil
+        }
+
+        duration = rawValue["duration"] as? TimeInterval
+        multiplier = rawValue["multiplier"] as? Double
+    }
 }

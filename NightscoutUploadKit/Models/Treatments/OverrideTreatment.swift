@@ -16,11 +16,11 @@ public class OverrideTreatment: NightscoutTreatment {
         case indefinite
     }
 
-    let correctionRange: ClosedRange<Double>?  // mg/dL
-    let insulinNeedsScaleFactor: Double?
-    let duration: Duration
-    let reason: String
-    let remoteAddress: String?
+    public let correctionRange: ClosedRange<Double>?  // mg/dL
+    public let insulinNeedsScaleFactor: Double?
+    public let duration: Duration
+    public let reason: String
+    public let remoteAddress: String?
 
     public init(startDate: Date, enteredBy: String, reason: String, duration: Duration, correctionRange: ClosedRange<Double>?, insulinNeedsScaleFactor: Double?, remoteAddress: String? = nil, id: String? = nil) {
         self.reason = reason
@@ -77,5 +77,14 @@ public class OverrideTreatment: NightscoutTreatment {
         }
 
         return rval
+    }
+    
+    public var endDate: Date? {
+        switch duration {
+        case .finite(let timeInterval):
+            return timestamp.addingTimeInterval(timeInterval)
+        case .indefinite:
+            return nil
+        }
     }
 }

@@ -164,7 +164,7 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
                 duration = 0
                 trigger = .timeUntilAlert(.minutes(0))
                 beepRepeat = .once
-                beepType = .noBeep
+                beepType = .noBeepCancel
             }
             return AlertConfiguration(alertType: .slot5, active: active, duration: duration, trigger: trigger, beepRepeat: beepRepeat, beepType: beepType)
         case .suspendTimeExpired(let suspendTime):
@@ -179,7 +179,7 @@ public enum PodAlert: CustomStringConvertible, RawRepresentable, Equatable {
             } else {
                 trigger = .timeUntilAlert(.minutes(0))
                 beepRepeat = .once
-                beepType = .noBeep
+                beepType = .noBeepCancel
             }
             return AlertConfiguration(alertType: .slot6, active: active, duration: 0, trigger: trigger, beepRepeat: beepRepeat, beepType: beepType)
         }

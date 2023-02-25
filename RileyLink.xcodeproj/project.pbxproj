@@ -238,6 +238,15 @@
 		7D9BF00123369910005DCFD6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D9BF00323369910005DCFD6 /* Localizable.strings */; };
 		7DEFE05322ED1C2400FCD378 /* OverrideStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */; };
 		A931862C2969EBED00A20253 /* String+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931862B2969EBED00A20253 /* String+Crypto.swift */; };
+		A99A115329AA2599007919CE /* RemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115229AA2599007919CE /* RemoteNotification.swift */; };
+		A99A115529AA2625007919CE /* BolusRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115429AA2625007919CE /* BolusRemoteNotification.swift */; };
+		A99A115729AA2659007919CE /* CarbRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115629AA2659007919CE /* CarbRemoteNotification.swift */; };
+		A99A115929AA26A1007919CE /* OverrideCancelRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115829AA26A1007919CE /* OverrideCancelRemoteNotification.swift */; };
+		A99A115B29AA26C1007919CE /* OverrideRemoteNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99A115A29AA26C1007919CE /* OverrideRemoteNotification.swift */; };
+		A9F9341C29AA75DA00FAE55D /* CarbRemoteNotificationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9341B29AA75DA00FAE55D /* CarbRemoteNotificationTestCase.swift */; };
+		A9F9341E29AAAB8A00FAE55D /* BolusRemoteNotificationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9341D29AAAB8A00FAE55D /* BolusRemoteNotificationTestCase.swift */; };
+		A9F9342029AAAEED00FAE55D /* OverrideRemoteNotificationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9341F29AAAEED00FAE55D /* OverrideRemoteNotificationTestCase.swift */; };
+		A9F9342229AAB14700FAE55D /* OverrideCancelRemoteNotificationTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9342129AAB14700FAE55D /* OverrideCancelRemoteNotificationTestCase.swift */; };
 		C104A9C3217E611F006E3C3E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FFC5A1D3D74F90049CF85 /* NibLoadable.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
@@ -1298,6 +1307,15 @@
 		7D9BF15523371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7DEFE05222ED1C2300FCD378 /* OverrideStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideStatus.swift; sourceTree = "<group>"; };
 		A931862B2969EBED00A20253 /* String+Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Crypto.swift"; sourceTree = "<group>"; };
+		A99A115229AA2599007919CE /* RemoteNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotification.swift; sourceTree = "<group>"; };
+		A99A115429AA2625007919CE /* BolusRemoteNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusRemoteNotification.swift; sourceTree = "<group>"; };
+		A99A115629AA2659007919CE /* CarbRemoteNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRemoteNotification.swift; sourceTree = "<group>"; };
+		A99A115829AA26A1007919CE /* OverrideCancelRemoteNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideCancelRemoteNotification.swift; sourceTree = "<group>"; };
+		A99A115A29AA26C1007919CE /* OverrideRemoteNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideRemoteNotification.swift; sourceTree = "<group>"; };
+		A9F9341B29AA75DA00FAE55D /* CarbRemoteNotificationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRemoteNotificationTestCase.swift; sourceTree = "<group>"; };
+		A9F9341D29AAAB8A00FAE55D /* BolusRemoteNotificationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusRemoteNotificationTestCase.swift; sourceTree = "<group>"; };
+		A9F9341F29AAAEED00FAE55D /* OverrideRemoteNotificationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideRemoteNotificationTestCase.swift; sourceTree = "<group>"; };
+		A9F9342129AAB14700FAE55D /* OverrideCancelRemoteNotificationTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideCancelRemoteNotificationTestCase.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2195,6 +2213,18 @@
 			path = GlucoseEvents;
 			sourceTree = "<group>";
 		};
+		A99A115129AA2576007919CE /* RemoteNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				A99A115429AA2625007919CE /* BolusRemoteNotification.swift */,
+				A99A115629AA2659007919CE /* CarbRemoteNotification.swift */,
+				A99A115829AA26A1007919CE /* OverrideCancelRemoteNotification.swift */,
+				A99A115A29AA26C1007919CE /* OverrideRemoteNotification.swift */,
+				A99A115229AA2599007919CE /* RemoteNotification.swift */,
+			);
+			path = RemoteNotifications;
+			sourceTree = "<group>";
+		};
 		C104A9BE217E6027006E3C3E /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -2620,6 +2650,7 @@
 		C1AF21E91D4900300088C41D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A99A115129AA2576007919CE /* RemoteNotifications */,
 				C1AF21EA1D4900880088C41D /* Treatments */,
 				C191D28E25B3844D00C26C0B /* AutomaticDoseRecommendation.swift */,
 				C1A492641D4A5DEB008964FF /* BatteryStatus.swift */,
@@ -2681,6 +2712,10 @@
 			children = (
 				C1B3831D1CD0665D00CE7782 /* Info.plist */,
 				C1BC259723135EDB00E80E3F /* NightscoutProfileTests.swift */,
+				A9F9341D29AAAB8A00FAE55D /* BolusRemoteNotificationTestCase.swift */,
+				A9F9341B29AA75DA00FAE55D /* CarbRemoteNotificationTestCase.swift */,
+				A9F9342129AAB14700FAE55D /* OverrideCancelRemoteNotificationTestCase.swift */,
+				A9F9341F29AAAEED00FAE55D /* OverrideRemoteNotificationTestCase.swift */,
 			);
 			path = NightscoutUploadKitTests;
 			sourceTree = "<group>";
@@ -4058,6 +4093,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A99A115B29AA26C1007919CE /* OverrideRemoteNotification.swift in Sources */,
 				C18EB742207EE20100EA002B /* NightscoutProfile.swift in Sources */,
 				C191D28F25B3844D00C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
 				7D2366F3212527DA0028B67D /* LocalizedString.swift in Sources */,
@@ -4072,12 +4108,16 @@
 				C1BAD1181E63984C009BA1C6 /* RadioAdapter.swift in Sources */,
 				A931862C2969EBED00A20253 /* String+Crypto.swift in Sources */,
 				C1E5BEAD1D5E26F200BD4390 /* RileyLinkStatus.swift in Sources */,
+				A99A115329AA2599007919CE /* RemoteNotification.swift in Sources */,
 				C1AF21F31D4901220088C41D /* CarbCorrectionNightscoutTreatment.swift in Sources */,
+				A99A115729AA2659007919CE /* CarbRemoteNotification.swift in Sources */,
 				C1A492691D4A66C0008964FF /* LoopEnacted.swift in Sources */,
 				C13B5EAE2331CD7900AA5599 /* Data.swift in Sources */,
+				A99A115929AA26A1007919CE /* OverrideCancelRemoteNotification.swift in Sources */,
 				C1A492651D4A5DEB008964FF /* BatteryStatus.swift in Sources */,
 				C1398D1E27C3F62100416AD6 /* MealBolusNightscoutTreatment.swift in Sources */,
 				C1A492631D4A5A19008964FF /* IOBStatus.swift in Sources */,
+				A99A115529AA2625007919CE /* BolusRemoteNotification.swift in Sources */,
 				C184875E20BCDB0000ABE9E7 /* ForecastError.swift in Sources */,
 				431CE7991F9B0F0200255374 /* OSLog.swift in Sources */,
 				43F348061D596270009933DC /* HKUnit.swift in Sources */,
@@ -4104,6 +4144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F9341C29AA75DA00FAE55D /* CarbRemoteNotificationTestCase.swift in Sources */,
+				A9F9341E29AAAB8A00FAE55D /* BolusRemoteNotificationTestCase.swift in Sources */,
+				A9F9342029AAAEED00FAE55D /* OverrideRemoteNotificationTestCase.swift in Sources */,
+				A9F9342229AAB14700FAE55D /* OverrideCancelRemoteNotificationTestCase.swift in Sources */,
 				C1BC259823135EDB00E80E3F /* NightscoutProfileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

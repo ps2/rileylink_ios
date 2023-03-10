@@ -1,3 +1,6 @@
+/* PeripheralManagerError.emptyValue error description */
+"Characteristic value was empty" = "Valoarea caracteristică era goală";
+
 /* Write size limit exceeded error description (1: size limit) */
 "Data exceeded maximum size of %@ bytes" = "Datele depășesc cantitatea maximă de %@ bytes";
 
@@ -27,6 +30,9 @@
 
 /* Unsupported command error description */
 "RileyLink firmware does not support the %@ command" = "Firmware-ul RileyLink nu poate efectua %@ comanda";
+
+/* PeripheralManagerError.busy error description */
+"RileyLink is busy" = "RileyLink-ul este ocupat";
 
 /* PeripheralManagerError.notReady error description */
 "RileyLink is not connected" = "RileyLink nu este conectat";

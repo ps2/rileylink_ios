@@ -1,5 +1,5 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = "(nieaktywny)";
+" (inactive)" = " (nieaktywny)";
 
 /* Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Przekroczono czas aktywacji";
@@ -256,7 +256,7 @@
 "Unknown pod fault %1$03d" = "Nieznany błąd PODa %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Nieznana wartość ( %1$@ ) dla typu %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Nieznana wartość (%1$@) dla typu %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Weryfikacja nie powiodła się: %1$@";

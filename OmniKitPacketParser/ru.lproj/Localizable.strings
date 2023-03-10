@@ -26,7 +26,7 @@
 "Bolusing" = "Подается болюс";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Подача болюса при временном базале";
+"Bolusing with temp basal" = "Подача болюса при подаче ВБС";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Установка катетера";
@@ -71,7 +71,7 @@
 "Initialized" = "Активирован";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Ведение катетера";
+"Inserting cannula" = "Введение катетера";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Внутренняя ошибка пода %1$03d";

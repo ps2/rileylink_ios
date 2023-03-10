@@ -1,6 +1,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* The title of the section for alerts */
 "Alert" = "Alertă";
 
@@ -27,6 +30,9 @@
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "Stare conexiune";
+
+/* The title of the cell for connection vibration */
+"Connection Vibration" = "Vibrare la conexiune";
 
 /* The title of the section describing the device */
 "Device" = "Dispozitiv";
@@ -80,8 +86,18 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Putere semnal";
 
+/* The title of the section for orangelink commands
+   The title of the section for rileylink commands */
+"Test Commands" = "Testați comenzile";
+
 /* The title of the cell showing Test Vibration */
 "Test Vibration" = "Testați vibrația";
+
+/* The title of the command to update diagnostic LEDs */
+"Toggle Diagnostic LEDs" = "Comutarea LED-urilor de diagnosticare";
+
+/* Progress message for changing diagnostic LED mode */
+"Updating diagnostic LEDs mode" = "Actualizarea modului de diagnostic al LED-urilor";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Durată de funcționare";

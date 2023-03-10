@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Communications récupérées";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Les rappels de confiance sont des bips émis par le Pod qui peuvent être utilisés pour confirmer l'exécution des commandes sélectionnées.";
 
 /* The title of the configuration section in settings */
@@ -509,7 +509,9 @@
 "Scheduled Basal" = "Basal programmé";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Rappel programmé";
 
 /* Title text for insulin type confirmation page */
@@ -577,9 +579,6 @@
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "L'application vous avertit quand la quantité d'insuline restante dans le pod atteint cette limite";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Les rappels ci-dessus ne sonneront pas si votre appareil est en mode Silencieux ou Ne pas déranger. \n\n Il existe d'autres alertes et alarmes critiques du Pod qui retentiront même si votre appareil est réglé sur le mode Silencieux ou Ne pas déranger.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "L'heure de votre pompe est différente de l'heure actuelle. L'heure de votre pompe contrôle les paramètres de votre traitement. Faites défiler jusqu'à la ligne Heure de Pompe pour vérifier le décalage de l'heure et configurer votre pompe.";

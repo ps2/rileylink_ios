@@ -31,7 +31,7 @@
 /* Confirmation message for deleting a pump */
 "Are you sure you want to delete this pump?" = "Sind Sie sicher dass sie diese Pumpe loeschen wollen?";
 
-/* No comment provided by engineer. */
+/* Text to confirm delete this pump */
 "Are you sure you want to delete this Pump?" = "Sind Sie sicher, dass Sie diese Pumpe löschen wollen?";
 
 /* The title of the cell describing an awake radio */
@@ -308,7 +308,8 @@
 "Uptime" = "Uptime";
 
 /* Description for option to use MySentry
-   navigation title for pump battery type selection */
+   navigation title for pump battery type selection
+   Text for medtronic pump to use MySentry */
 "Use MySentry" = "MySentry verwenden";
 
 /* Value string for MySentry config when MySentry is being used

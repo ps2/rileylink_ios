@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Comunicaciones recuperadas";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Los recordatorios de confianza son pitidos que emite el Pod que pueden utilizarse para tener certeza de los comandos seleccionados.";
 
 /* The title of the configuration section in settings */
@@ -509,7 +509,9 @@
 "Scheduled Basal" = "Insulina basal programada";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Recordatorio programado";
 
 /* Title text for insulin type confirmation page */
@@ -577,9 +579,6 @@
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "La aplicación le notifica cuando la cantidad de insulina en el Pod alcanza este nivel.";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Los recordatorios anteriores no sonarán si el dispositivo está en modo Silencio o No molestar.\n\nHay otras alertas y alarmas críticas del Pod que sonarán aunque su dispositivo esté en modo Silencio o No molestar.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "La hora de su bomba es diferente de la hora actual. La hora de su bomba controla los ajustes programados de su terapia. Desplácese hacia abajo hasta la fila que muestra la Hora de la Bomba para revisar la diferencia horaria y configurar su bomba.";

@@ -152,7 +152,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Controllare la cronologia dei boli del microinfusore per determinare se il bolo è stato erogato.";
 
-/* Event title for rewind pump event */
+/* Event title for prime pump event */
 "Prime" = "Caricare ";
 
 /* The notification title for a low pump battery */

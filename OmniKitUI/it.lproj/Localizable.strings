@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Comunicazioni recuperate";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "I promemoria di fiducia sono segnali acustici emessi dal Pod che possono essere utilizzati per confermare i comandi selezionati.";
 
 /* The title of the configuration section in settings */
@@ -509,7 +509,9 @@
 "Scheduled Basal" = "Basale Programmata";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Promemoria Programmato";
 
 /* Title text for insulin type confirmation page */
@@ -577,9 +579,6 @@
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "L'App avvisa quando la quantità di insulina nel Pod raggiunge questo determinato livello.";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "I promemoria sopra riportati non suoneranno se il tuo dispositivo è impostato in Modalità Silenziosa o Non Disturbare.\n\nMa ci sono altre notifiche ed allarmi importanti di Omnipod che suoneranno anche se il tuo dispositivo è impostato in Modalità Silenziosa o Non Disturbare.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "L'orario impostato nel microinfusore è diverso dall'orario corrente. L'orario del microinfusore detta e controlla le impostazioni della terapia programmata e va corretto: Nella riga dell'orario del microinfusore verificare la differenza di orario e configurare correttamente il microinfusore.";

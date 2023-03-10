@@ -17,6 +17,9 @@
    Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Aktiveringstiden overskredet";
 
+/* Description for auto-off */
+"Auto-off" = "Auto-sluk";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-sluk alarm";
 

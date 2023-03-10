@@ -8,7 +8,7 @@
 "A6i-Cb-baR.text" = "Inne urządzenia";
 
 /* Class = "UILabel"; text = "Do not change the time using your pumpʼs menu."; ObjectID = "Bdb-j4-WcR"; */
-"Bdb-j4-WcR.text" = "Nie zmieniaj godziny w ustawieniach czasu swojej pompy.";
+"Bdb-j4-WcR.text" = "Nie zmieniaj godziny w menu swojej pompy.";
 
 /* Class = "UILabel"; text = "Utilities"; ObjectID = "c7t-pZ-WqY"; */
 "c7t-pZ-WqY.text" = "Narzędzia";
@@ -32,10 +32,10 @@
 "HeG-VF-L5P.placeholder" = "Wprowadź 6-cyfrowe ID pompy";
 
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
-"HuY-fE-vM8.text" = "Jeśli podróżujesz do innej strefy czasowej na dłuższy okres, możesz zmienić strefę czasową pompy w dowolnym momencie w zakładce Ustawienia.";
+"HuY-fE-vM8.text" = "Jeśli podróżujesz do innej strefy czasowej, możesz ją zmienić w dowolnym momencie w zakładce Ustawienia.";
 
 /* Class = "UILabel"; text = "Loop will keep your pumpʼs clock synchronized with your phone in the time zone youʼre in now."; ObjectID = "IQ5-53-x9s"; */
-"IQ5-53-x9s.text" = "Loop będzie synchronizował zegar pompy ze strefą czasową ustawioną aktualnie w Twoim telefonie.";
+"IQ5-53-x9s.text" = "Loop będzie synchronizował zegar w pompie z aktualną strefą czasową ustawioną w Twoim telefonie.";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.footerTitle" = "Region i kolor pompy są oznaczone jako 3 ostatnie litery numeru modelu (który jest określony jako REF).";

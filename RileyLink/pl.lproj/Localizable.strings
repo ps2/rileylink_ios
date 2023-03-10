@@ -23,7 +23,7 @@
 "Delete Account" = "Usuń konto";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Wprowadź 6-cyfrowe ID pompy";
+"Enter the 6-digit pump ID" = "Wprowadź 6-cyfrowy numer pompy";
 
 /* The title text for the pull cgm Data cell */
 "Fetch CGM" = "Pobierz dane z CGM";

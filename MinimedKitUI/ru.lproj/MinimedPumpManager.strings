@@ -23,7 +23,7 @@
 "fVG-pl-jT9.footerTitle" = "ID помпы это 6-значная цифровая часть серийного номера (обозначаемого SN or S/N).";
 
 /* Class = "UITableViewSection"; headerTitle = "Pump ID"; ObjectID = "fVG-pl-jT9"; */
-"fVG-pl-jT9.headerTitle" = "идентификатор ID помпы";
+"fVG-pl-jT9.headerTitle" = "Идентификатор ID помпы";
 
 /* Class = "UILabel"; text = "Your pump is ready for use."; ObjectID = "g1m-3k-XI3"; */
 "g1m-3k-XI3.text" = "Помпа готова к работе.";
@@ -38,13 +38,13 @@
 "IQ5-53-x9s.text" = "Loop будет синхронизировать часы помпы с часами телефона в том часовом поясе, в котором вы сейчас находитесь.";
 
 /* Class = "UITableViewSection"; footerTitle = "The pump region and color are denoted as the last 3 letters of the the model number (labeled as REF)."; ObjectID = "lGI-LD-xR7"; */
-"lGI-LD-xR7.footerTitle" = "Регион помпы и ее цвет обозначаются тремя последними цифрами номера модели (маркируется как REF).";
+"lGI-LD-xR7.footerTitle" = "Регион помпы и ее цвет обозначаются тремя последними буквами номера модели (маркируется как REF).";
 
 /* Class = "UITableViewSection"; headerTitle = "Region and Color"; ObjectID = "lGI-LD-xR7"; */
 "lGI-LD-xR7.headerTitle" = "Регион и цвет";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Установка завершена";
+"Nwf-TJ-KmJ.title" = "Настройка завершена";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
 "oBL-lh-SHI.title" = "Помпа передает";

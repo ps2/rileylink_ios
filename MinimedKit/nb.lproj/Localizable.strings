@@ -56,14 +56,26 @@
 /* Event title for temp basal cancel */
 "Cancel Temp Basal" = "Avbryt Temp Basal";
 
+/* Event title for ChangeBasalProfilePatternPumpEvent */
+"Change Basal Profile Schedule" = "Endre basalprofilplan";
+
+/* Event title for ChangeBasalProfilePumpEvent */
+"Change Basal Schedule" = "Endre basal tidsplan";
+
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Bytt reservoar på pumpe nå";
 
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Bytt reservoar på pumpe nå";
 
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Endre tid";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Sjekk at pumpa ikke har stoppet tilførsel av insulin, at priming ikke foregår, eller har en  midlertidig prosentbasaltype pågående.";
+
+/* Event title for clear alarm pump event */
+"Clear Alarm" = "Fjern alarm";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Kommando avvist";
@@ -116,6 +128,12 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop sendte en boluskommando til pumpen, men kunne ikke bekrefte at pumpen mottok kommandoen. For sikkerhets skyld vil Loop anta at bolusen ble levert. Når Loop til slutt henter historikk fra pumpen, og den estimerte bolussluttiden er passert, vil Loop oppdatere sine leveringsposter for å samsvare med det pumpen rapporterer.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Lavt batterinivå";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Lavt reservoar";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Lavt RileyLink-batteri";
 
@@ -125,11 +143,17 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Maksinnstilling overskredet";
 
+/* Event title for JournalEntryMealMarkerPumpEvent */
+"Meal" = "Måltid";
+
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 series";
+
+/* Event title for NewTimePumpEvent */
+"New Time" = "Ny tid";
 
 /* Title for PumpAlarmType.noDelivery */
 "No Delivery Alarm" = "Ingen levering alarm";
@@ -152,7 +176,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Vennligst kontroller pumpens bolushistorikk for å finne ut om bolusen ble levert.";
 
-/* Event title for rewind pump event */
+/* Event title for prime pump event */
 "Prime" = "Prime";
 
 /* The notification title for a low pump battery */
@@ -200,6 +224,9 @@
 
 /* Event title for starting scheduled basal */
 "Scheduled Basal" = "Planlagt basal";
+
+/* Event title for SelectBasalProfilePumpEvent */
+"Select Profile" = "Velg profil";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Signaltap";

@@ -117,7 +117,7 @@
 "Check Cannula" = "Sprawdź kaniulę";
 
 /* Label text for step three of attach pod instructions */
-"Check Pod, apply to site, then confirm pod attachment." = "Sprawdź i załóż POD'a, następnie potwierdź założenie POD'a.";
+"Check Pod, apply to site, then confirm pod attachment." = "Przyklej POD'a, następnie potwierdź jego założenie";
 
 /* Insert cannula action button accessibility label checking insertion */
 "Checking Insertion" = "Sprawdzanie wkłucia";
@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Odzyskano komunikację";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Przypomnienia potwierdzające to sygnały dźwiękowe, z których można korzystać w celu potwierdzania wybranych poleceń.";
 
 /* The title of the configuration section in settings */
@@ -193,7 +193,7 @@
 "Error Suspending" = "Błąd wstrzymywania";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Przypomnienie o terminie ważności";
+"Expiration Reminder" = "Termin Ważności";
 
 /* Label text for expiration reminder default row */
 "Expiration Reminder Default" = "Domyślne przypomnienie o terminie ważności";
@@ -229,7 +229,7 @@
 "Fault" = "Usterka";
 
 /* Label text for step 1 of pair pod instructions */
-"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Listen for 2 beeps." = "Nowego POD'a napełnij minimum 100j insuliny (nie zdejmuj nasadki igły). Powinieneś usłyszeć dwa sygnały dźwiękowe.";
+"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Listen for 2 beeps." = "Napełnij nowego POD'a insuliną U-100 (minimum 80j). Pozostaw osłonkę igły. Powinieneś usłyszeć dwa sygnały dźwiękowe.";
 
 /* Settings page link description when next lifecycle action is to finish deactivation */
 "Finish deactivation" = "Zakończ dezaktywację";
@@ -307,7 +307,7 @@
 "Low Reservoir Reminder" = "Przypomnienie o niski poziomie w zbiorniczku";
 
 /* The action string on pod status page when pod data is stale */
-"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Upewnij się, że telefon i kapsuła znajdują się blisko siebie. Jeśli problemy z komunikacją nie ustąpią, przenieś się w inne miejsce.";
+"Make sure your phone and pod are close to each other. If communication issues persist, move to a new area." = "Upewnij się, że telefon i POD znajdują się blisko siebie. Jeśli problemy z komunikacją nie ustąpią, przenieś się w inne miejsce.";
 
 /* Unit for singular minute in pod life remaining */
 "minute" = "minuta";
@@ -393,7 +393,7 @@
 "Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Proszę dezaktywować POD'a. Po zakończeniu dezaktywacji możesz sparować nowego POD'a.";
 
 /* Instructions for deactivate pod when pod is on body */
-"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Proszę dezaktywować POD'a. Po zakończeniu dezaktywacji możesz ją usunąć i sparować nowego POD'a.";
+"Please deactivate the pod. When deactivation is complete, you may remove it and pair a new pod." = "Proszę dezaktywować POD'a. Po zakończeniu dezaktywacji usuń POD'a i sparuj nowego.";
 
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Wersja PM";
@@ -435,7 +435,7 @@
 "Pod Setup" = "Konfiguracja POD'a";
 
 /* Label text for step one of attach pod instructions */
-"Prepare site." = "Przygotuj stronę.";
+"Prepare site." = "Przygotuj miejsce";
 
 /* title for previous pod page */
 "Previous Pod" = "Poprzedni POD";
@@ -462,7 +462,7 @@
 "Remaining" = "Pozostało";
 
 /* Label text for step two of attach pod instructions */
-"Remove the pod's needle cap and check cannula. Then remove paper backing." = "Usuń nakładkę na igłę i sprawdzić kaniulę. Następnie usuń papierowe zabezpieczenie kleju.";
+"Remove the pod's needle cap and check cannula. Then remove paper backing." = "Usuń osłonę igły i sprawdź kaniulę. Następnie usuń papierowe zabezpieczenie kleju.";
 
 /* Label indicating pod replacement necessary
    The title of the command to replace pod */
@@ -498,6 +498,10 @@
    Title of button to sync basal profile when no pod paired */
 "Save" = "Zapisz";
 
+/* button title for saving low reservoir reminder while saving
+   button title for saving scheduled reminder while saving */
+"Saving..." = "Zapisywanie...";
+
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Harmonogram";
 
@@ -505,7 +509,9 @@
 "Scheduled Basal" = "Zaplanowana dawka podstawowa";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Zaplanowane przypomnienie";
 
 /* Title text for insulin type confirmation page */
@@ -566,16 +572,13 @@
 "The app configures a reminder on the pod to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure when pairing a new Pod." = "Aplikacja konfiguruje przypomnienie w POD, aby powiadomić Cię z wyprzedzeniem o wygaśnięciu ważności POD'a. Ustaw liczbę godzin wyprzedzenia, które chcesz skonfigurować podczas parowania nowego POD'a.";
 
 /* Description text on ExpirationReminderSetupView */
-"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Aplikacja powiadamia użytkownika z wyprzedzeniem o wygaśnięciu ważności POD'a.\n\nPrzewiń, aby ustawić liczbę godzin wyprzedzenia, którą chcesz mieć.";
+"The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Aplikacja z wyprzedzeniem powiadomi użytkownika o wygaśnięciu ważności POD'a.\n\nZaplanuj powiadomienie (wybierz liczbę godzin).";
 
 /* Description text on LowReservoirReminderSetupView */
-"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Aplikacja powiadomi Cię, gdy ilość insuliny w kapsułce osiągnie poziom (50-10 J). \n\nPrzewiń, aby ustawić liczbę jednostek, o których chcesz otrzymywać przypomnienia.";
+"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Aplikacja powiadomi Cię, gdy ilość insuliny w POD osiągnie poziom (50-10 J). \n\nUstaw liczbę jednostek, przy których chcesz otrzymywać przypomnienia.";
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Aplikacja powiadomi Cię, gdy ilość insuliny w POD osiągnie ten poziom.";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Powyższe przypomnienia nie będą się pojawiały, jeśli urządzenie jest w trybie cichym lub nie przeszkadzać. \n\nIstnieją inne krytyczne alerty i alarmy podów, które będą emitowane, nawet jeśli urządzenie jest ustawione w trybie cichym lub nie przeszkadzać.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Czas na pompie różni się od aktualnego czasu. Czas pompy steruje ustawieniami zaplanowanej terapii. Przewiń w dół do wiersza Czas pompy, aby przejrzeć różnicę czasu i skonfigurować pompę.";
@@ -585,6 +588,9 @@
 
 /* Footer text for scheduled reminder area */
 "This is a reminder that you scheduled when you paired your current Pod." = "To jest przypomnienie, które zaplanowałeś podczas parowania bieżącego Poda.";
+
+/* Alert format string for missing temp basal configuration. */
+"This Pump has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to Therapy Settings -> Delivery Limits and set a new Maximum Basal Rate." = "Limit podaży został ustawiony przed wprowadzeniem bazy tymczasowej. Wróć do ustawień terapii i ustaw nowy limit maksymalnej dawki podstawowej (bazy).";
 
 /* Label for expiration reminder row
    Label for scheduled expiration reminder row
@@ -634,8 +640,8 @@
 "Yes" = "Tak";
 
 /* bodyText for PodSetupView */
-"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Teraz rozpoczniesz proces konfigurowania przypomnień, napełniania Poda insuliną, parowania z urządzeniem i umieszczania go na ciele.";
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Rozpoczynasz proces konfigurowania przypomnień (dźwięków emitowanych przez POD'a), napełniania POD'a insuliną, parowania z telefonem i umieszczania go na ciele.";
 
 /* Format string for instructions for setup complete view. (1: app name) */
-"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Twój Pod jest gotowy do użycia. \n\n %1$@ przypomni Ci o zmianie kapsuły przed jej wygaśnięciem. Możesz to zmienić na dogodny dla Ciebie termin.";
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Twój POD jest gotowy do użycia. \n\n%1$@ przypomni Ci o zmianie POD'a przed jego wygaśnięciem. Możesz dokonać zmiany na dogodny dla Ciebie termin.";
 

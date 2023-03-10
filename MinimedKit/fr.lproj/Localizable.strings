@@ -152,8 +152,8 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Veuillez vérifier l'historique des bolus de votre pompe pour vérifier si le bolus a été administré.";
 
-/* Event title for rewind pump event */
-"Prime" = "Purger";
+/* Event title for prime pump event */
+"Prime" = "Purge";
 
 /* The notification title for a low pump battery */
 "Pump Battery Low" = "Batterie de la pompe faible";

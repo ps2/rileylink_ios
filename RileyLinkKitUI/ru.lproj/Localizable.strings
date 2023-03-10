@@ -35,10 +35,10 @@
 "Connection Vibration" = "Вибрация при разъединении";
 
 /* The title of the section describing the device */
-"Device" = "устройство";
+"Device" = "Устройство";
 
 /* The title of the devices table section in RileyLink settings */
-"Devices" = "устройства";
+"Devices" = "Устройства";
 
 /* The disconnected state */
 "Disconnected" = "Разъединено";

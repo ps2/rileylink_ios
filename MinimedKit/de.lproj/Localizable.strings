@@ -56,14 +56,26 @@
 /* Event title for temp basal cancel */
 "Cancel Temp Basal" = "Temporäre Basalrate abbrechen";
 
+/* Event title for ChangeBasalProfilePatternPumpEvent */
+"Change Basal Profile Schedule" = "Zeitplan für das Basalratenprofil ändern";
+
+/* Event title for ChangeBasalProfilePumpEvent */
+"Change Basal Schedule" = "Basalratenzeitplan ändern";
+
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Wechseln Sie sofort die Pumpenbatterie";
 
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Wechseln Sie jetzt das Pumpenreservoir";
 
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Zeit ändern";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Überprüfen Sie, ob die Pumpe nicht unterbrochen wurde oder sich im Füllmodus befindet, oder prozentual temporären Basalraten aktiviert sind";
+
+/* Event title for clear alarm pump event */
+"Clear Alarm" = "Alarm löschen";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Befehl verweigert";
@@ -116,6 +128,12 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop hat einen Bolusbefehl an die Pumpe gesendet, konnte aber nicht bestätigen, dass die Pumpe den Befehl erhalten hat. Zur Sicherheit geht Loop davon aus, dass der Bolus abgegeben wurde. Wenn Loop schließlich den Verlauf von der Pumpe abruft und die geschätzte Bolus-Endzeit überschritten ist, aktualisiert Loop seine Aufzeichnungen über die Abgabe, damit sie mit den Meldungen der Pumpe übereinstimmen.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Niedriger Batteriestatus";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Niedriges Reservoir";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Niedriger RileyLink Batteriestatus";
 
@@ -125,11 +143,17 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max Einstellung überschritten";
 
+/* Event title for JournalEntryMealMarkerPumpEvent */
+"Meal" = "Mahlzeit";
+
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 Serie";
+
+/* Event title for NewTimePumpEvent */
+"New Time" = "Neue Zeit";
 
 /* Title for PumpAlarmType.noDelivery */
 "No Delivery Alarm" = "Keine-Abgabe-Warunung";
@@ -152,7 +176,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Bitte überprüfen Sie den Bolusverlauf Ihrer Pumpe, um festzustellen, ob der Bolus abgegeben wurde.";
 
-/* Event title for rewind pump event */
+/* Event title for prime pump event */
 "Prime" = "Befüllen";
 
 /* The notification title for a low pump battery */
@@ -200,6 +224,9 @@
 
 /* Event title for starting scheduled basal */
 "Scheduled Basal" = "Geplante Basalrate";
+
+/* Event title for SelectBasalProfilePumpEvent */
+"Select Profile" = "Profil auswählen";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Signalverlust";

@@ -78,7 +78,7 @@ struct MinimedPumpSettingsView: View {
                 }
                 NavigationLink(destination: BatteryTypeSelectionView(batteryType: $viewModel.batteryChemistryType)) {
                     HStack {
-                        Text("Pump Battery Type").foregroundColor(Color.primary)
+                        Text(LocalizedString("Pump Battery Type", comment: "Text for medtronic pump battery type")).foregroundColor(Color.primary)
                         Spacer()
                         Text(viewModel.batteryChemistryType.description)
                             .foregroundColor(.secondary)
@@ -87,7 +87,7 @@ struct MinimedPumpSettingsView: View {
 
                 NavigationLink(destination: DataSourceSelectionView(batteryType: $viewModel.preferredDataSource)) {
                     HStack {
-                        Text("Preferred Data Source").foregroundColor(Color.primary)
+                        Text(LocalizedString("Preferred Data Source", comment: "Text for medtronic pump preferred data source")).foregroundColor(Color.primary)
                         Spacer()
                         Text(viewModel.preferredDataSource.description)
                             .foregroundColor(.secondary)
@@ -97,7 +97,7 @@ struct MinimedPumpSettingsView: View {
                 if viewModel.pumpManager.state.pumpModel.hasMySentry {
                     NavigationLink(destination: UseMySentrySelectionView(mySentryConfig: $viewModel.mySentryConfig)) {
                         HStack {
-                            Text("Use MySentry").foregroundColor(Color.primary)
+                            Text(LocalizedString("Use MySentry", comment: "Text for medtronic pump to use MySentry")).foregroundColor(Color.primary)
                             Spacer()
                             Text((viewModel.mySentryConfig == .useMySentry ?
                                   LocalizedString("Yes", comment: "Value string for MySentry config when MySentry is being used") :
@@ -146,6 +146,15 @@ struct MinimedPumpSettingsView: View {
 
 
             Section() {
+                HStack {
+                    Text(LocalizedString("Pump Battery Remaining", comment: "Text for medtronic pump battery percent remaining")).foregroundColor(Color.primary)
+                    Spacer()
+                    if let chargeRemaining = viewModel.pumpManager.status.pumpBatteryChargeRemaining {
+                        Text(String("\(Int(round(chargeRemaining * 100)))%"))
+                    } else {
+                        Text(String(LocalizedString("unknown", comment: "Text to indicate battery percentage is unknown")))
+                    }
+                }
                 HStack {
                     Text(LocalizedString("Pump Time", comment: "The title of the command to change pump time zone"))
                     Spacer()
@@ -346,9 +355,9 @@ struct MinimedPumpSettingsView: View {
                 .foregroundColor(.red)
         }).actionSheet(isPresented: $showingDeletionSheet) {
             ActionSheet(
-                title: Text("Are you sure you want to delete this Pump?"),
+                title: Text(LocalizedString("Are you sure you want to delete this Pump?", comment: "Text to confirm delete this pump")),
                 buttons: [
-                    .destructive(Text("Delete Pump")) {
+                    .destructive(Text(LocalizedString("Delete Pump", comment: "Text to delete pump"))) {
                         viewModel.deletePump()
                     },
                     .cancel(),

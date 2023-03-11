@@ -1,0 +1,27 @@
+/* Event title for ChangeBasalProfilePatternPumpEvent */
+"Change Basal Profile Schedule" = "Změnit profil bazálního rozvrhu";
+
+/* Event title for ChangeBasalProfilePumpEvent */
+"Change Basal Schedule" = "Změnit bazální rozvrh";
+
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Změnit čas";
+
+/* Event title for clear alarm pump event */
+"Clear Alarm" = "Vymazat alarm";
+
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Vybitá baterie";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Poloprázdný zásobník";
+
+/* Event title for JournalEntryMealMarkerPumpEvent */
+"Meal" = "Jídlo";
+
+/* Event title for NewTimePumpEvent */
+"New Time" = "Nový čas";
+
+/* Event title for SelectBasalProfilePumpEvent */
+"Select Profile" = "Vybrat profil";
+

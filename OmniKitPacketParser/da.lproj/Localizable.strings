@@ -46,6 +46,9 @@
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Fejlhændelse logget, lukker ned";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Påmindelse om udløb";
+
 /* Description for expiration alert */
 "Expiration alert" = "Udløbs advarsel";
 

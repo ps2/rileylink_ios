@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Kommunikation genoprettet";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Påmindelse om succesfulde aktiviteter er bip fra Pod'en, som kan bruges til at bekræfte valgte kommandoer.";
 
 /* The title of the configuration section in settings */
@@ -509,7 +509,9 @@
 "Scheduled Basal" = "Planlagt basal";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Planlagt påmindelse";
 
 /* Title text for insulin type confirmation page */
@@ -577,9 +579,6 @@
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Appen giver dig besked, når mængden af insulin i Pod'en når dette niveau.";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Påmindelserne ovenfor vil ikke fungere, hvis din enhed er i lydløs eller Forstyr ikke-tilstand.\n\nDer er andre kritiske Pod-advarsler og alarmer, der lyder, selvom din enhed er indstillet til lydløs eller Forstyr ikke-tilstand.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Tiden på din pumpe er forskellig fra den aktuelle tid. Din pumpes tid styrer dine planlagte behandlingsindstillinger. Gå til Pumpetid for at gennemgå tidsforskellen og konfigurere din pumpe.";

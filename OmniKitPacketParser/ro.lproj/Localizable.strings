@@ -4,6 +4,9 @@
 /* Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Timp de activare depășit";
 
+/* Description for auto-off */
+"Auto-off" = "Oprire automată";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Alarmă Auto-off";
 
@@ -43,14 +46,26 @@
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Eroare înregistrată în jurnal, se oprește";
 
+/* Description for expiration advisory */
+"Expiration advisory" = "Aviz de expirare";
+
 /* Description for expiration alert */
 "Expiration alert" = "Alertă expirare";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Bolus prelungit activat";
+
+/* Delivery status when extended bolus and temp basal is running */
+"Extended bolus running with temp basal" = "Bolus prelungit împreună cu bazală temporară";
 
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "A survenit o defecțiune";
 
 /* Description for finish setup */
 "Finish setup " = "Finalizare setare";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Memento pentru finalizarea configurării";
 
 /* Pod inititialized */
 "Initialized" = "Inițializat";
@@ -72,6 +87,9 @@
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Nivel scăzut rezervor";
+
+/* Format string for description for low reservoir advisory (1: reminder units) */
+"Low reservoir advisory (%1$gU)" = "Avertizare de rezervor scăzut (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarmă nivel scăzut rezervor";
@@ -116,6 +134,12 @@
 /* Pod status after pairing */
 "Paired" = "Asociat";
 
+/* Pod status when pairing completed */
+"Pairing completed" = "Asociere finalizată";
+
+/* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
+"Parsing Error: %1$@ in (%2$@)" = "Eroare de parsare: %1$@ în ( %2$@ )";
+
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Apropiați Pod-ul de RileyLink și încercați din nou";
 
@@ -152,6 +176,9 @@
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "Intervalul de timp în care se poate seta Pod-ul a expirat";
 
+/* Description for pod suspended reminder */
+"Pod suspended reminder" = "Memento pentru Pod-ul suspendat";
+
 /* Delivery status when pod is priming
    Pod status when priming */
 "Priming" = "Se amorsează";
@@ -172,13 +199,19 @@
 "Resume: %1$@ %2$@" = "Reluare: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Bazală planificată";
+"Scheduled basal" = "Bazala programată";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Bazală planificată";
+"Scheduled Basal" = "Bazală programată";
+
+/* Description for shutdown imminent */
+"Shutdown imminent" = "Oprirea iminentă";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Alarmă de oprire iminentă";
+
+/* Description for suspend time expired */
+"Suspend time expired" = "Timpul de suspendare a expirat";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Suspendare: %1$@ %2$@";

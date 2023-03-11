@@ -116,6 +116,12 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop, pompaya bir bolus komutu gönderdi, ancak pompanın komutu aldığını doğrulayamadı. Güvenlik için, Loop bolusun iletildiğini varsayar. Loop sonunda pompadan geçmişi aldığında ve tahmini bolus bitiş süresi geçtiğinde, Loop iletim kayıtlarını pompanın raporlarıyla eşleşecek şekilde günceller.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Düşük Pil";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Düşük Rezervuar";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Düşük RileyLink Pili";
 
@@ -124,6 +130,9 @@
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Maksimum ayar aşıldı";
+
+/* Event title for JournalEntryMealMarkerPumpEvent */
+"Meal" = "Öğün";
 
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
@@ -152,7 +161,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Bolusun iletilip iletilmediğini belirlemek için lütfen pompa bolus geçmişinizi kontrol edin.";
 
-/* Event title for rewind pump event */
+/* Event title for prime pump event */
 "Prime" = "Hazırlık";
 
 /* The notification title for a low pump battery */
@@ -200,6 +209,9 @@
 
 /* Event title for starting scheduled basal */
 "Scheduled Basal" = "Programlanan Bazal";
+
+/* Event title for SelectBasalProfilePumpEvent */
+"Select Profile" = "Profil Seç";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Sinyal Kaybı";

@@ -135,7 +135,7 @@
 "Inserting cannula" = "Wprowadzanie kaniuli";
 
 /* The default notification body for AlarmCodes */
-"Insulin delivery stopped. Change Pod now." = "Podawanie insuliny zostało zatrzymane. Wymień teraz POD'a.";
+"Insulin delivery stopped. Change Pod now." = "Podawanie insuliny zostało zatrzymane. Wymień POD'a.";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Podawanie insuliny zawieszone";
@@ -181,6 +181,9 @@
 
 /* Recovery suggestion when no RileyLink is available */
 "Make sure your RileyLink is nearby and powered on" = "Upewnij się, że RileyLink jest w pobliżu i jest włączony";
+
+/* Status highlight when manual temp basal is running. */
+"Manual Basal" = "Baza podstawowa";
 
 /* Pod memory initialized */
 "Memory initialized" = "Zainicjowano pamięć";
@@ -371,7 +374,7 @@
 "Scheduled Basal" = "Zaplanowana dawka podstawowa";
 
 /* Description for shutdown imminent */
-"Shutdown imminent" = "Nadchodzące wyłączenie";
+"Shutdown imminent" = "Informacja o zbliżającym się wyłączeniu";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Alarm o nadchodzącym wyłączeniu";
@@ -390,7 +393,7 @@
 "Suspend In Progress Reminder" = "Przypomnienie o  trwającym zawieszeniu";
 
 /* Description for suspend time expired */
-"Suspend time expired" = "Upłynął czas wstrzymania";
+"Suspend time expired" = "Upłynął czas zawieszenia";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Wstrzymaj: %1$@ %2$@";
@@ -399,7 +402,7 @@
 "Suspended" = "Wstrzymany";
 
 /* Alert notification body for suspendEnded pod alert user notification */
-"Suspension time is up. Open the app and resume." = "Czas wstrzymania dobiegł końca. Otwórz aplikację i wznów.";
+"Suspension time is up. Open the app and resume." = "Czas zawieszenie dobiegł końca. Otwórz Loop i wznów podawanie";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Napełnianie zbiornika zakończone";

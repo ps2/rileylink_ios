@@ -62,10 +62,10 @@
 "Get Statistics…" = "Pobieranie statystyk…";
 
 /* The title of the cell showing Lighten Red LED */
-"Lighten Red LED" = "Zapal czerwoną diodę LED";
+"Lighten Red LED" = "Włącz czerwoną diodę LED";
 
 /* The title of the cell showing Lighten Yellow LED */
-"Lighten Yellow LED" = "Zapal żółtą diodę LED";
+"Lighten Yellow LED" = "Włącz żółtą diodę LED";
 
 /* The title of the cell showing battery level */
 "Low Battery Alert" = "Ostrzeżenie o niskim stanie baterii";

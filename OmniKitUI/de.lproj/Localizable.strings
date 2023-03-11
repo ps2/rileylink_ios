@@ -128,7 +128,7 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Kommunikation wiederhergestellt";
 
-/* No comment provided by engineer. */
+/* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Vertrauenserinnerungen sind Pieptöne vom Pod, die verwendet werden können, um ausgewählte Befehle zu bestätigen.";
 
 /* The title of the configuration section in settings */
@@ -509,7 +509,9 @@
 "Scheduled Basal" = "Basalrate";
 
 /* Card title for scheduled reminder
-   Title for scheduled expiration reminder edit page */
+   Scheduled reminder card title on NotificationSettingsView
+   Title for scheduled expiration reminder edit page
+   Title of SetupCompleteView */
 "Scheduled Reminder" = "Geplante Erinnerung";
 
 /* Title text for insulin type confirmation page */
@@ -577,9 +579,6 @@
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Die App benachrichtigt Sie, wenn die Insulinmenge im Pod diesen Wert erreicht.";
-
-/* Description text for critical alerts */
-"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if you device is set to Silent or Do Not Disturb mode." = "Die obigen Erinnerungen ertönen nicht, wenn sich Ihr Gerät im Lautlos- oder Nicht-Stören-Modus befindet.\n\nEs gibt andere kritische Pod-Warnungen und -Alarme, die auch dann ertönen, wenn Ihr Gerät auf Stumm oder „Nicht stören“ eingestellt ist.";
 
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Die Uhrzeit Ihrer Pumpe weicht von der aktuellen Uhrzeit ab. Die Zeit Ihrer Pumpe steuert Ihre geplanten Therapieeinstellungen. Scrollen Sie nach unten zur Zeile Pumpenzeit, um den Zeitunterschied zu überprüfen und Ihre Pumpe zu konfigurieren.";

@@ -1,6 +1,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
 
@@ -19,11 +22,17 @@
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Text indicating ongoing pump time synchronization */
+"Adjusting Pump Time..." = "Reglarea timpului pompei...";
+
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Baterii alcaline și cele cu litiu se descarcă diferit. La cele alcaline, tensiunea scade proporțional cu descărcare, pe când cele cu litiu mențin tensiunea normală pană aproape de descărcare completă. În condiții normale pe pompele Minimed care nu sunt compatibile cu MySentry (x22/x15), rulând Loop, bateriile alcaline durează 4-5 zile. Bateriile cu litiu durează aproximativ 1-2 săptămâni. Prin această opțiune se alege modul de calcul al descărcării bateriilor în funcție de tipul lor, astfel încât utilizatorul să fie anunțat cu 8-10 ore înainte de descărcare completă.";
 
 /* Confirmation message for deleting a pump */
 "Are you sure you want to delete this pump?" = "Sigur vreți să ștergeți această pompă?";
+
+/* Text to confirm delete this pump */
+"Are you sure you want to delete this Pump?" = "Sunteți sigur că doriți să ștergeți această pompă?";
 
 /* The title of the cell describing an awake radio */
 "Awake Until" = "Activ până la";
@@ -43,14 +52,23 @@
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Anulare";
 
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Anularea bazalei temporare";
+
 /* The title of the command to change pump time */
 "Change Time" = "Ajustarea ceasului";
 
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Schimbarea fusului orar";
 
+/* Text shown in basal rate space when basal is changing */
+"Changing" = "Se modifică";
+
 /* Progress message for changing pump time. */
 "Changing time…" = "Se ajusteaza ceasul…";
+
+/* Instructions on selecting battery chemistry type */
+"Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Alegeți tipul de baterie pe care îl utilizați în pompă pentru o mai bună avertizare cu privire la condițiile scăzute ale bateriei.";
 
 /* The title of the section describing commands */
 "Commands" = "Comenzi";
@@ -77,11 +95,17 @@
 /* The title of the section describing the device */
 "Device" = "Dispozitiv";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Dispozitive";
+
 /* The title of the command to discover commands */
 "Discover Commands" = "Descoperă comenzi";
 
 /* Progress message for discovering commands. */
 "Discovering commands…" = "Descoperirea comenzilor…";
+
+/* Description for option to not use MySentry */
+"Do not use MySentry" = "Nu utilizați MySentry";
 
 /* The title of the command to enable diagnostic LEDs */
 "Enable Diagnostic LEDs" = "Aprinde LED-urile de diagnoză";
@@ -94,6 +118,9 @@
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Eroare la suspendarea livrării";
+
+/* The alert title for an error while synching time */
+"Error Syncing Time" = "Eroare la sincronizarea timpului";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Obține datelor de la Enlite";
@@ -122,8 +149,17 @@
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Obținerea statisticelor…";
 
+/* Text shown in insulin delivery space when insulin suspended */
+"Insulin\nSuspended" = "Administrarea insulinei suspendată";
+
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Administrarea insulinei";
+
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Livrarea insulinei poate fi determinată din interpretarea istoricului citit din pompă sau analizând nivelul rezervorului în timp. Citirea istoricului de evenimente permite o construcție mai exacta a graficului și uploadarea datelor actualizate în Nightscout cu prețul descărcării mai rapide a bateriei pompei si a probabilității mai mari de erori de transmisie radio, comparând cu citire numai a nivelului rezervorului. Dacă dintr-o cauză sau alta sistemul nu va reuși să folosească opțiunea aleasă, se va încerca revenirea la cealaltă posibilitate.";
+
+/* Header for insulin remaining on pod settings screen */
+"Insulin Remaining" = "Insulină rămasă";
 
 /* Text for confidence reminders navigation link */
 "Insulin Type" = "Tip insulină";
@@ -134,14 +170,26 @@
 /* The title of the cell describing no radio awake data */
 "Listening Off" = "Ascultare oprită";
 
+/* Format string fof navigation bar title for MinimedPumpSettingsView (1: model number) */
+"Medtronic %1$@" = "Medtronic %1$@";
+
+/* Instructions on selecting setting for MySentry */
+"Medtronic pump models 523, 723, 554, and 754 have a feature called 'MySentry' that periodically broadcasts the reservoir and pump battery levels.  Listening for these broadcasts allows Loop to communicate with the pump less frequently, which can increase pump battery life.  However, when using this feature the RileyLink stays awake more of the time and uses more of its own battery.  Enabling this may lengthen pump battery life, while disabling it may lengthen RileyLink battery life. This setting is ignored for other pump models." = "Modelele de pompe Medtronic 523, 723, 554 și 754 au o funcție numită \"MySentry\" care transmite periodic nivelul rezervorului și al bateriei pompei. Ascultarea acestor transmisiuni permite ca Loop să comunice mai rar cu pompa, ceea ce poate crește durata de viață a bateriei pompei. Cu toate acestea, atunci când se utilizează această funcție, RileyLink rămâne treaz mai mult timp și utilizează mai mult din propria baterie. Activarea acestei funcții poate prelungi durata de viață a bateriei pompei, în timp ce dezactivarea acesteia poate prelungi durata de viață a bateriei RileyLink. Această setare este ignorată pentru alte modele de pompe.";
+
 /* The title of the command to pair with mysentry */
 "MySentry Pair" = "Conectare MySentry";
 
 /* The title of the cell showing device name */
 "Name" = "Denumire";
 
+/* Value string for MySentry config when MySentry is not being used */
+"No" = "Nu";
+
 /* Message display when no response from tuning pump */
-"No response" = "Nici un raspuns";
+"No response" = "Niciun răspuns";
+
+/* Button text to cancel pump time sync */
+"No, Keep Pump As Is" = "Nu, păstrați pompa așa cum este";
 
 /* The title of the cell showing the last idle */
 "On Idle" = "în așteptare";
@@ -168,6 +216,9 @@
 /* Title of the pump settings view controller */
 "Pump Settings" = "Setările pompei";
 
+/* The title of the command to change pump time zone */
+"Pump Time" = "Ora pompei";
+
 /* The title of the command to read basal schedule */
 "Read Basal Schedule" = "Citirea programului bazalelor";
 
@@ -183,6 +234,12 @@
 /* The title of the cell showing the pump region */
 "Region" = "Regiune";
 
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Reia administrarea";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Se reia";
+
 /* Button title to retry sentry setup */
 "Retry" = "Reîncearcă";
 
@@ -192,6 +249,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Se salvează în pompă…";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Bazală programată";
 
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pump." = "Selectaţi tipul de insulină pe care o veţi utiliza în această pompă.";
@@ -205,11 +265,29 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Puterea semnalului";
 
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Pornire bazală temporară";
+
 /* A message indicating a command succeeded */
 "Succeeded" = "Succeeded";
 
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Suspendă administrarea";
+
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Suspendat: %1$@\n";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Se suspendă";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Sincronizați cu ora curentă";
+
+/* Message for pod sync time action sheet */
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "Ora de pe pompă este diferită de ora curentă. Puteți revizui ora pompei și să o sincronizați cu ora curentă în meniul setări.";
+
+/* Title for pod sync time action sheet. */
+"Time Change Detected" = "S-a detectat schimbarea orei";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Încercări";
@@ -220,9 +298,24 @@
 /* Progress message for tuning radio */
 "Tuning radio…" = "Se ajustează frecvența…";
 
+/* Units for showing temp basal rate */
+"U/hr" = "U/oră";
+
 /* The detail text for an unknown pump model */
 "Unknown" = "Necunoscut";
 
 /* The title of the cell showing uptime */
 "Uptime" = "Timp în funcțiune";
+
+/* Description for option to use MySentry
+   navigation title for pump battery type selection
+   Text for medtronic pump to use MySentry */
+"Use MySentry" = "Utilizați MySentry";
+
+/* Value string for MySentry config when MySentry is being used
+   Value string for MySentry config when MySentry is not being used */
+"Yes" = "Da";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Da, sincronizați cu ora curentă";
 

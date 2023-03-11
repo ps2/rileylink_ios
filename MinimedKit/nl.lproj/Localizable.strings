@@ -56,14 +56,26 @@
 /* Event title for temp basal cancel */
 "Cancel Temp Basal" = "Annuleer Tijdelijk Basaal";
 
+/* Event title for ChangeBasalProfilePatternPumpEvent */
+"Change Basal Profile Schedule" = "Basaalprofielschema aanpassen";
+
+/* Event title for ChangeBasalProfilePumpEvent */
+"Change Basal Schedule" = "Basaal Schema Aanpassen";
+
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Vervang de batterij van de pomp onmiddellijk";
 
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Vervang pompreservoir direct";
 
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Tijd Aanpassen";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Controleer dat de pomp niet is onderbroken of aan het voorbereiden is, of dat er een percentage tijdelijke basaal staat ingesteld";
+
+/* Event title for clear alarm pump event */
+"Clear Alarm" = "Alarm Wissen";
 
 /* Pump error code returned when command refused */
 "Command refused" = "Commando geweigerd";
@@ -81,7 +93,7 @@
 "Device Reset" = "Apparaat resetten";
 
 /* Default alert dismissal */
-"Dismiss" = "Afwijzen";
+"Dismiss" = "Sluiten";
 
 /* Title for PumpAlarmType.emptyReservoir */
 "Empty Reservoir" = "Reservoir Leeg";
@@ -90,7 +102,7 @@
 "Event History" = "Logboek";
 
 /* Error description for glucose page failing crc check */
-"Glucose page failed crc check" = "Glucose pagina is mislukt crc controle";
+"Glucose page failed crc check" = "Crc controle Glucosepagina mislukt";
 
 /* Recovery suggestion for MinimedPumpManagerError.insulinTypeNotConfigured */
 "Go to pump settings and select insulin type" = "Ga naar pompinstellingen en selecteer insulinetype";
@@ -99,7 +111,7 @@
 "History page does not exist" = "Geschiedenis pagina bestaat niet";
 
 /* Error description for history page failing crc check */
-"History page failed crc check" = "Geschiedenis pagina is mislukt crc controle";
+"History page failed crc check" = "Crc controle Geschiedenispagina mislukt";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insuline Onderbroken";
@@ -116,6 +128,12 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop stuurde een boluscommando naar de pomp, maar kon niet bevestigen dat de pomp het commando ontving. Voor de zekerheid gaat Loop ervan uit dat de bolus is toegediend. Wanneer Loop uiteindelijk de geschiedenis van de pomp ophaalt en de geschatte eindtijd van de bolus is verstreken, zal Loop zijn gegevens over de toediening aanpassen aan wat de pomp rapporteert.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Batterij Bijna Leeg";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Reservoir Bijna Leeg";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Batterij RileyLink Bijna Leeg";
 
@@ -125,11 +143,17 @@
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max instelling overschreden";
 
+/* Event title for JournalEntryMealMarkerPumpEvent */
+"Meal" = "Maaltijd";
+
 /* Pump title (1: model number) */
 "Minimed %@" = "Minimed %@";
 
 /* Generic title of the minimed pump manager */
 "Minimed 500/700 Series" = "Minimed 500/700 series";
+
+/* Event title for NewTimePumpEvent */
+"New Time" = "Nieuwe Tijd";
 
 /* Title for PumpAlarmType.noDelivery */
 "No Delivery Alarm" = "Geen Toedieningsalarm";
@@ -152,7 +176,7 @@
 /* recoverySuggestion for uncertain bolus */
 "Please check your pump bolus history to determine if the bolus was delivered." = "Controleer je pompbolusgeschiedenis om te bepalen of de bolus is toegediend.";
 
-/* Event title for rewind pump event */
+/* Event title for prime pump event */
 "Prime" = "Voorbereiden";
 
 /* The notification title for a low pump battery */
@@ -200,6 +224,9 @@
 
 /* Event title for starting scheduled basal */
 "Scheduled Basal" = "Gepland Basaal";
+
+/* Event title for SelectBasalProfilePumpEvent */
+"Select Profile" = "Profiel Selecteren";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Signaalverlies";

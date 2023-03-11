@@ -31,7 +31,7 @@
 /* Confirmation message for deleting a pump */
 "Are you sure you want to delete this pump?" = "Jesteś pewien, że chcesz usunąć tę pompę?";
 
-/* No comment provided by engineer. */
+/* Text to confirm delete this pump */
 "Are you sure you want to delete this Pump?" = "Czy na pewno chcesz usunąć tę pompę?";
 
 /* The title of the cell describing an awake radio */
@@ -174,7 +174,7 @@
 "Medtronic %1$@" = "Medtronic %1$@";
 
 /* Instructions on selecting setting for MySentry */
-"Medtronic pump models 523, 723, 554, and 754 have a feature called 'MySentry' that periodically broadcasts the reservoir and pump battery levels.  Listening for these broadcasts allows Loop to communicate with the pump less frequently, which can increase pump battery life.  However, when using this feature the RileyLink stays awake more of the time and uses more of its own battery.  Enabling this may lengthen pump battery life, while disabling it may lengthen RileyLink battery life. This setting is ignored for other pump models." = "Modele pomp firmy Medtronic 523, 723, 554 i 754 są wyposażone w funkcję o nazwie „MySentry”, która okresowo wysyła informacje o stanie baterii oraz o zbiorniku pompy. Odbiór tych informacji pozwala Loop na rzadszą komunikację z pompą, co może wydłużyć żywotność baterii pompy. Jednak podczas korzystania z tej funkcji RileyLink pracuje przez większą część czasu i zużywa więcej własnej baterii. Włączenie tej opcji może wydłużyć żywotność baterii pompy, a jej wyłączenie może wydłużyć żywotność baterii RileyLink. To ustawienie jest ignorowane w przypadku innych modeli pomp.";
+"Medtronic pump models 523, 723, 554, and 754 have a feature called 'MySentry' that periodically broadcasts the reservoir and pump battery levels.  Listening for these broadcasts allows Loop to communicate with the pump less frequently, which can increase pump battery life.  However, when using this feature the RileyLink stays awake more of the time and uses more of its own battery.  Enabling this may lengthen pump battery life, while disabling it may lengthen RileyLink battery life. This setting is ignored for other pump models." = "Modele pomp firmy Medtronic 523, 723, 554 i 754 są wyposażone w funkcję o nazwie „MySentry”, która okresowo wysyła informacje o stanie baterii i poziomie w zbiorniczku pompy. Odbiór tych informacji pozwala Loop na rzadszą komunikację z pompą, co może wydłużyć żywotność baterii pompy. Jednak podczas korzystania z tej funkcji RileyLink pracuje przez większą część czasu i zużywa więcej własnej baterii. Włączenie tej opcji może wydłużyć żywotność baterii pompy, a jej wyłączenie może wydłużyć żywotność baterii RileyLink. To ustawienie jest ignorowane w przypadku innych modeli pomp.";
 
 /* The title of the command to pair with mysentry */
 "MySentry Pair" = "Połącz z MySentry";
@@ -195,7 +195,7 @@
 "On Idle" = "Wstrzymany";
 
 /* Pump find device instruction */
-"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
+"On your pump, go to the Find Device screen and select \"Find Device\".\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device" = "W pompie przejdź do ekranu Znajdź urządzenie i wybierz opcję „Znajdź urządzenie”.\n\nMain Menu >\nUtilities >\nConnect Devices >\nOther Devices >\nOn >\nFind Device";
 
 /* The title text for the preferred insulin data source config */
 "Preferred Data Source" = "Preferowane źródło danych";
@@ -254,7 +254,7 @@
 "Scheduled Basal" = "Zaplanowana dawka podstawowa";
 
 /* Title text for insulin type confirmation page */
-"Select the type of insulin that you will be using in this pump." = "Wybierz rodzaj insuliny, której będziesz używać w tej pompie.";
+"Select the type of insulin that you will be using in this pump." = "Wybierz rodzaj insuliny, której będziesz używać w pompie.";
 
 /* The title of the command to send a button press */
 "Send Button Press" = "Wyślij polecenie wciśnięcia przycisku";
@@ -308,7 +308,8 @@
 "Uptime" = "Uptime";
 
 /* Description for option to use MySentry
-   navigation title for pump battery type selection */
+   navigation title for pump battery type selection
+   Text for medtronic pump to use MySentry */
 "Use MySentry" = "Użyj MySentry";
 
 /* Value string for MySentry config when MySentry is being used

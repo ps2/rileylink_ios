@@ -5293,6 +5293,7 @@
 					NSLocalizedString,
 					CFLocalizedString,
 					LocalizedString,
+					FrameworkLocalText,
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -5351,6 +5352,7 @@
 					NSLocalizedString,
 					CFLocalizedString,
 					LocalizedString,
+					FrameworkLocalText,
 				);
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";

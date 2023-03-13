@@ -81,6 +81,37 @@ class PodCommsSessionTests: XCTestCase {
 
     }
 
+    func testBolusFinishedEarlyOnPodIsMarkedNonMutable() {
+        let mockStart = Date()
+        podState.unfinalizedBolus = UnfinalizedDose(bolusAmount: 4.45, startTime: mockStart, scheduledCertainty: .certain, insulinType: .novolog)
+        let session = PodCommsSession(podState: podState, transport: mockTransport, delegate: self)
+
+        // Simulate a status request a bit before the bolus is expected to finish
+        let statusRequestTime = podState.unfinalizedBolus!.finishTime!.addingTimeInterval(-5)
+        session.mockCurrentDate = statusRequestTime
+
+        let statusResponse = StatusResponse(
+            deliveryStatus: .scheduledBasal,
+            podProgressStatus: .aboveFiftyUnits,
+            timeActive: .minutes(10),
+            reservoirLevel: Pod.reservoirLevelAboveThresholdMagicNumber,
+            insulinDelivered: 25,
+            bolusNotDelivered: 0,
+            lastProgrammingMessageSeqNum: 5,
+            alerts: AlertSet(slots: []))
+
+        mockTransport.addResponse(statusResponse)
+
+        let _ = try! session.getStatus()
+
+        XCTAssertEqual(1, lastPodStateUpdate!.finalizedDoses.count)
+
+        let finalizedBolus = lastPodStateUpdate!.finalizedDoses[0]
+
+        XCTAssertTrue(finalizedBolus.isFinished(at: statusRequestTime))
+        XCTAssertFalse(finalizedBolus.isMutable(at: statusRequestTime))
+    }
+
     func testSuccessfulBolus() {
         let session = PodCommsSession(podState: podState, transport: mockTransport, delegate: self)
 

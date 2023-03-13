@@ -40,8 +40,6 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider {
         didSet {
             if oldValue != visible && visible {
                 hudDidAppear()
-            } else if oldValue != visible && !visible {
-                stopRefreshTimer()
             }
         }
     }
@@ -70,7 +68,6 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider {
     func hudDidAppear() {
         updateReservoirView()
         refresh()
-        updateRefreshTimer()
     }
 
     public var hudViewRawState: HUDProvider.HUDViewRawState {
@@ -129,28 +126,6 @@ internal class OmnipodHUDProvider: NSObject, HUDProvider {
 
         reservoirView.update(level: pumpManager.reservoirLevel, at: lastStatusDate, reservoirLevelHighlightState: reservoirLevelHighlightState)
     }
-
-    private func ensureRefreshTimerRunning() {
-        guard refreshTimer == nil else {
-            return
-        }
-
-        refreshTimer = Timer(timeInterval: .seconds(60) , repeats: true) { [weak self] _ in
-            self?.refresh()
-        }
-        RunLoop.main.add(refreshTimer!, forMode: .default)
-    }
-
-    private func stopRefreshTimer() {
-        refreshTimer?.invalidate()
-        refreshTimer = nil
-    }
-
-    private func updateRefreshTimer() {
-        if visible {
-            ensureRefreshTimerRunning()
-        }
-    }
 }
 
 extension OmnipodHUDProvider: PodStateObserver {
@@ -159,7 +134,6 @@ extension OmnipodHUDProvider: PodStateObserver {
     }
 
     func podStateDidUpdate(_ state: PodState?) {
-        updateRefreshTimer()
         updateReservoirView()
     }
 }

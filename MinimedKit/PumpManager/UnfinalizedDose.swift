@@ -283,7 +283,8 @@ extension DoseEntry {
         case .bolus:
             self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: !dose.isReconciledWithHistory && !forceFinalization)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: !dose.isReconciledWithHistory && !forceFinalization)
+            let isMutable = !forceFinalization && (!dose.isReconciledWithHistory || !dose.isFinished)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.programmedTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: isMutable)
         case .suspend:
             self = DoseEntry(suspendDate: dose.startTime, isMutable: !dose.isReconciledWithHistory)
         case .resume:

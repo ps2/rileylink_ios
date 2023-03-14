@@ -88,9 +88,13 @@ public struct BolusNormalPumpEvent: TimestampedPumpEvent {
             unabsorbedInsulinTotal = 0
         }
         type = duration > 0 ? .square : .normal
-        
     }
-    
+
+    func isMutable(atDate date: Date = Date(), forPump model: PumpModel) -> Bool {
+        let deliveryFinishDate = date.addingTimeInterval(deliveryTime)
+        return model.appendsSquareWaveToHistoryOnStartOfDelivery && type == .square && deliveryFinishDate > date
+    }
+
     public var dictionaryRepresentation: [String: Any] {
         var dictionary: [String: Any] = [
             "_type": "BolusNormal",

@@ -29,36 +29,6 @@ class TimestampedHistoryEventTests: XCTestCase {
         historyPage522 = try! HistoryPage(pageData: hexData522, pumpModel: PumpModel.model522)
     }
     
-    func testEventIsntMutable() {
-        let data = Data(Array<UInt8>([7,6,5,4,3,2,1,0]))
-        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model523)!
-        
-        let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())
-        
-        XCTAssertFalse(sut.isMutable(forPump: .model522))
-    }
-    
-    func testEventIsNotMutableFor522() {
-        let data = Data(Array<UInt8>([7,6,5,4,3,2,1,0]))
-        let event = BatteryPumpEvent(availableData: data, pumpModel: PumpModel.model522)!
-        
-        let sut = TimestampedHistoryEvent(pumpEvent:event, date:Date())
-        
-        XCTAssertFalse(sut.isMutable(forPump: .model522))
-    }
-
-    func test523EventIsNotMutable() {
-        
-        let bolusEvent = getNormalBolusEvent()
-       
-        let timeStampDate = bolusEvent.timestamp.date!
-        let dateToCheck = timeStampDate.addingTimeInterval(bolusEvent.deliveryTime + 10) // beyond the delivery time
-        
-        let sut = TimestampedHistoryEvent(pumpEvent: bolusEvent, date: timeStampDate)
-        
-        XCTAssertFalse(sut.isMutable(atDate: dateToCheck, forPump: .model523))
-    }
-    
     func test523EventIsMutable() {
         
         let bolusEvent = getNormalBolusEvent()
@@ -68,7 +38,7 @@ class TimestampedHistoryEventTests: XCTestCase {
         let sut = TimestampedHistoryEvent(pumpEvent: bolusEvent, date: timeStampDate)
 
         // normal boluses on x23 are *not* mutable; they are just delayed append. Only square wave boluses are mutable
-        XCTAssertFalse(sut.isMutable(atDate: dateToCheck, forPump: .model523))
+        XCTAssertFalse(bolusEvent.isMutable(atDate: dateToCheck, forPump: .model523))
 
     }
 
@@ -80,17 +50,15 @@ class TimestampedHistoryEventTests: XCTestCase {
     func testSquareWaveIsMutableOnX23() {
         let squareBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080008000240209a24a1510")!, pumpModel: .model523)!
         let squareBolusTimestamp = squareBolus.timestamp.date!
-        let squareBolusTimestampedEvent = TimestampedHistoryEvent(pumpEvent: squareBolus, date: squareBolusTimestamp)
         let dateToCheckForSquareBolus = squareBolusTimestamp.addingTimeInterval(squareBolus.deliveryTime/2) // within the delivery time
-        XCTAssertTrue(squareBolusTimestampedEvent.isMutable(atDate: dateToCheckForSquareBolus, forPump: .model523))
+        XCTAssertTrue(squareBolus.isMutable(atDate: dateToCheckForSquareBolus, forPump: .model523))
     }
 
     func testSquareWaveIsNotMutableOnX23AfterDeliveryTime() {
         let squareBolus = BolusNormalPumpEvent(availableData: Data(hexadecimalString: "010080008000240209a24a1510")!, pumpModel: .model523)!
         let squareBolusTimestamp = squareBolus.timestamp.date!
-        let squareBolusTimestampedEvent = TimestampedHistoryEvent(pumpEvent: squareBolus, date: squareBolusTimestamp)
         let dateToCheckForSquareBolus = squareBolusTimestamp.addingTimeInterval(squareBolus.deliveryTime + 1) // 1s after delivery time
-        XCTAssertTrue(squareBolusTimestampedEvent.isMutable(atDate: dateToCheckForSquareBolus, forPump: .model523))
+        XCTAssertTrue(squareBolus.isMutable(atDate: dateToCheckForSquareBolus, forPump: .model523))
     }
     
     func getNormalBolusEvent() -> BolusNormalPumpEvent {

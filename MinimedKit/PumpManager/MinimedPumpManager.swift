@@ -828,7 +828,6 @@ extension MinimedPumpManager {
                     completion(nil)
                 }
             })
-
         })
     }
 

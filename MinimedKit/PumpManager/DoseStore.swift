@@ -42,7 +42,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 if !bolus.wasRemotelyTriggered {
                     automatic = false
                 }
-                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount, automatic: automatic, isMutable: event.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !bolus.wasRemotelyTriggered)
+                dose = DoseEntry(type: .bolus, startDate: event.date, endDate: bolusEndDate, value: bolus.programmed, unit: .units, deliveredUnits: bolus.amount, automatic: automatic, isMutable: bolus.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !bolus.wasRemotelyTriggered)
             case let suspendEvent as SuspendPumpEvent:
                 title = LocalizedString("Suspend", comment: "Event title for suspend")
                 dose = DoseEntry(suspendDate: event.date, wasProgrammedByPumpUI: !suspendEvent.wasRemotelyTriggered)
@@ -52,7 +52,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                 dose = DoseEntry(resumeDate: event.date, wasProgrammedByPumpUI: !resumeEvent.wasRemotelyTriggered)
             case let temp as TempBasalPumpEvent:
                 if case .Absolute = temp.rateType {
-                    lastTempBasal = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: event.isMutable(atDate: now, forPump: model), wasProgrammedByPumpUI: !temp.wasRemotelyTriggered)
+                    lastTempBasal = DoseEntry(type: .tempBasal, startDate: event.date, value: temp.rate, unit: .unitsPerHour, isMutable: false, wasProgrammedByPumpUI: !temp.wasRemotelyTriggered)
                     continue
                 } else {
                     title = LocalizedString("Percent Temp Basal", comment: "Event title for percent based temp basal")
@@ -64,14 +64,22 @@ extension Collection where Element == TimestampedHistoryEvent {
                     } else {
                         title = LocalizedString("Temp Basal", comment: "Event title for temporary basal rate start")
                     }
+
+                    // Temp basal events in mdt pump history are not mutable, but we report mutability to Loop as
+                    // indicating whether we will be mutating this DoseEntry in the future, and until this TempBasal
+                    // Is finished or canceled it is still mutable.
+
+                    let endDate = event.date.addingTimeInterval(TimeInterval(minutes: Double(tempDuration.duration)))
+                    let isMutable = endDate < now
+
                     dose = DoseEntry(
                         type: .tempBasal,
                         startDate: event.date,
-                        endDate: event.date.addingTimeInterval(TimeInterval(minutes: Double(tempDuration.duration))),
+                        endDate: endDate,
                         value: lastTemp.unitsPerHour,
                         unit: .unitsPerHour,
                         automatic: false, // If this was automatic dose, it should be set as such during reconciliation
-                        isMutable: event.isMutable(atDate: now, forPump: model),
+                        isMutable: isMutable,
                         wasProgrammedByPumpUI: lastTemp.wasProgrammedByPumpUI
                     )
                 }
@@ -84,7 +92,7 @@ extension Collection where Element == TimestampedHistoryEvent {
                     endDate: event.date.addingTimeInterval(.hours(24)),
                     value: basal.scheduleEntry.rate,
                     unit: .unitsPerHour,
-                    isMutable: event.isMutable(atDate: now, forPump: model)
+                    isMutable: false
                 )
             case is RewindPumpEvent:
                 title = LocalizedString("Rewind", comment: "Event title for rewind")

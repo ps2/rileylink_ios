@@ -402,8 +402,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Bad variable state in clear_Bolus_IST2_and_vars"
                 case .badStateInMaybeInc33D:
                     return "Bad variable state in maybe_inc_33D"
-                 case .valuesDoNotMatchOrAreGreaterThan0x97:
-                     return "Unknown fault code"
+                case .valuesDoNotMatchOrAreGreaterThan0x97:
+                    return "Unknown fault code"
                 }
             }()
         } else {

@@ -393,7 +393,7 @@ class PodInfoTests: XCTestCase {
             // Decode
             let decoded = try PodInfoActivationTime(encodedData: Data(hexadecimalString: "059200010000000000000000091912170e")!)
             XCTAssertEqual(.activationTime, decoded.podInfoType)
-            XCTAssertEqual(.badPumpReq2State, decoded.faultEventCode.faultType)
+            XCTAssertEqual(.tempPulseChanInactive, decoded.faultEventCode.faultType)
             XCTAssertEqual(TimeInterval(minutes: 0x0001), decoded.timeActivation)
             let decodedDateTime = decoded.dateTime
             XCTAssertEqual(2018, decodedDateTime.year)

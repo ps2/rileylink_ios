@@ -17,10 +17,12 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case failedFlashErase                     = 0x01
         case failedFlashStore                     = 0x02
         case tableCorruptionBasalSubcommand       = 0x03
+        case basalPulseTableCorruption            = 0x04
         case corruptionByte720                    = 0x05
         case dataCorruptionInTestRTCInterrupt     = 0x06
         case rtcInterruptHandlerInconsistentState = 0x07
         case valueGreaterThan8                    = 0x08
+        case invalidBeepRepeatPattern             = 0x09
         case bf0notEqualToBF1                     = 0x0A
         case tableCorruptionTempBasalSubcommand   = 0x0B
         case resetDueToCOP                        = 0x0D
@@ -46,21 +48,24 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case badTimerVariableState                = 0x21
         case unexpectedRTCModuleValueDuringReset  = 0x22
         case problemCalibrateTimer                = 0x23
+        case tickcntErrorRTC                      = 0x24
+        case tickFailure                          = 0x25
         case rtcInterruptHandlerUnexpectedCall    = 0x26
         case missing2hourAlertToFillTank          = 0x27
         case faultEventSetupPod                   = 0x28
-        case errorMainLoopHelper0                 = 0x29
-        case errorMainLoopHelper1                 = 0x2A
-        case errorMainLoopHelper2                 = 0x2B
-        case errorMainLoopHelper3                 = 0x2C
-        case errorMainLoopHelper4                 = 0x2D
-        case errorMainLoopHelper5                 = 0x2E
-        case errorMainLoopHelper6                 = 0x2F
-        case errorMainLoopHelper7                 = 0x30
+        case autoOff0                             = 0x29
+        case autoOff1                             = 0x2A
+        case autoOff2                             = 0x2B
+        case autoOff3                             = 0x2C
+        case autoOff4                             = 0x2D
+        case autoOff5                             = 0x2E
+        case autoOff6                             = 0x2F
+        case autoOff7                             = 0x30
         case insulinDeliveryCommandError          = 0x31
         case badValueStartupTest                  = 0x32
         case connectedPodCommandTimeout           = 0x33
         case resetFromUnknownCause                = 0x34
+        case vetoNotSet                           = 0x35
         case errorFlashInitialization             = 0x36
         case badPiezoValue                        = 0x37
         case unexpectedValueByte358               = 0x38
@@ -85,9 +90,10 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case problemFindingBestTrimValue          = 0x4C
         case badSetTPM1MultiCasesValue            = 0x4D
         case unexpectedRFErrorFlagDuringReset     = 0x4F
-        case badCheckSdrhAndByte11FState          = 0x51
-        case issueTXOKprocessInputBuffer          = 0x52
-        case wrongValueWord_107                   = 0x53
+        case timerPulseWidthModulatorOverflow     = 0x50
+        case tickcntError                         = 0x51
+        case badRfmXtalStart                      = 0x52
+        case badRxSensitivity                     = 0x53
         case packetFrameLengthTooLong             = 0x54
         case unexpectedIRQHighinTimerTick         = 0x55
         case unexpectedIRQLowinTimerTick          = 0x56
@@ -120,14 +126,15 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
         case immediateBolusOverInfusionPulse      = 0x89
         case extendedBolusOverInfusionPulse       = 0x8A
         case corruptionOfTables                   = 0x8B
-        case badInputToVerifyAndStartPump         = 0x8D
-        case badPumpReq5State                     = 0x8E
+        case unrecognizedPulse                    = 0x8D
+        case syncWithoutTempActive                = 0x8E
         case command1AParseUnexpectedFailed       = 0x8F
-        case badValueForTables                    = 0x90
-        case badPumpReq1State                     = 0x91
-        case badPumpReq2State                     = 0x92
-        case badPumpReq3State                     = 0x93
-        case badValueField6in0x1A                 = 0x95
+        case illegalChanParam                     = 0x90
+        case basalPulseChanInactive               = 0x91
+        case tempPulseChanInactive                = 0x92
+        case bolusPulseChanInactive               = 0x93
+        case intSemaphoreNotSet                   = 0x94
+        case illegalInterLockChan                 = 0x95
         case badStateInClearBolusIST2AndVars      = 0x96
         case badStateInMaybeInc33D                = 0x97
         case valuesDoNotMatchOrAreGreaterThan0x97 = 0x98
@@ -155,6 +162,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Flash store failed"
                 case .tableCorruptionBasalSubcommand:
                     return "Basal subcommand table corruption"
+                case .basalPulseTableCorruption:
+                    return "Basal pulse table corruption"
                 case .corruptionByte720:
                     return "Corruption in byte_720"
                 case .dataCorruptionInTestRTCInterrupt:
@@ -163,6 +172,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "RTC interrupt handler called with inconstent state"
                 case .valueGreaterThan8:
                     return "Value > 8"
+                case .invalidBeepRepeatPattern:
+                    return "Invalid beep repeat pattern"
                 case .bf0notEqualToBF1:
                     return "Corruption in byte_BF0"
                 case .tableCorruptionTempBasalSubcommand:
@@ -213,27 +224,31 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Unexpected RTC Modulo Register value during reset"
                 case .problemCalibrateTimer:
                     return "Problem in calibrate_timer_case_3"
+                case .tickcntErrorRTC:
+                    return "Tick count error RTC"
+                case .tickFailure:
+                    return "Tick failure"
                 case .rtcInterruptHandlerUnexpectedCall:
                     return "RTC interrupt handler unexpectedly called"
                 case .missing2hourAlertToFillTank:
                     return "Failed to set up 2 hour alert for tank fill operation"
                 case .faultEventSetupPod:
                     return "Bad arg or state in update_insulin_variables, verify_and_start_pump or main_loop_control_pump"
-                case .errorMainLoopHelper0:
+                case .autoOff0:
                     return "Alert #0 auto-off timeout"
-                case .errorMainLoopHelper1:
+                case .autoOff1:
                     return "Alert #1 auto-off timeout"
-                case .errorMainLoopHelper2:
+                case .autoOff2:
                     return "Alert #2 auto-off timeout"
-                case .errorMainLoopHelper3:
+                case .autoOff3:
                     return "Alert #3 auto-off timeout"
-                case .errorMainLoopHelper4:
+                case .autoOff4:
                     return "Alert #4 auto-off timeout"
-                case .errorMainLoopHelper5:
+                case .autoOff5:
                     return "Alert #5 auto-off timeout"
-                case .errorMainLoopHelper6:
+                case .autoOff6:
                     return "Alert #6 auto-off timeout"
-                case .errorMainLoopHelper7:
+                case .autoOff7:
                     return "Alert #7 auto-off timeout"
                 case .insulinDeliveryCommandError:
                     return "Incorrect pod state for command or error during insulin command setup"
@@ -243,6 +258,8 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Connected Pod command timeout"
                 case .resetFromUnknownCause:
                     return "Reset from unknown cause"
+                case .vetoNotSet:
+                    return "Veto not set"
                 case .errorFlashInitialization:
                     return "Flash initialization error"
                 case .badPiezoValue:
@@ -291,12 +308,14 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Bad set_TPM1_multi_cases value"
                 case .unexpectedRFErrorFlagDuringReset:
                     return "Unexpected TXSCR2 RF Tranmission Error Flag set during reset"
-                case .badCheckSdrhAndByte11FState:
-                    return "Bad check_SDIRH and byte_11F state before starting pump"
-                case .issueTXOKprocessInputBuffer:
+                case .timerPulseWidthModulatorOverflow:
+                    return "Timer pulse-width modulator overflow"
+                case .tickcntError:
+                    return "Bad tick count state before starting pump"
+                case .badRfmXtalStart:
                     return "TXOK issue in process_input_buffer"
-                case .wrongValueWord_107:
-                    return "Wrong word_107 value during input message processing"
+                case .badRxSensitivity:
+                    return "Bad Rx word_107 sensitivity value during input message processing"
                 case .packetFrameLengthTooLong:
                     return "Packet frame length too long"
                 case .unexpectedIRQHighinTimerTick:
@@ -361,22 +380,24 @@ public struct FaultEventCode: CustomStringConvertible, Equatable {
                     return "Extended bolus over infusion pulse"
                 case .corruptionOfTables:
                     return "Corruption of $283/$2E3/$315 tables"
-                case .badInputToVerifyAndStartPump:
-                    return "Bad input value to verify_and_start_pump"
-                case .badPumpReq5State:
-                    return "Pump req 5 with basal IST not set or temp basal IST set"
+                case .unrecognizedPulse:
+                    return "Bad pulse value to verify_and_start_pump"
+                case .syncWithoutTempActive:
+                    return "Pump sync req 5 with no temp basal active"
                 case .command1AParseUnexpectedFailed:
                     return "Command 1A parse routine unexpected failed"
-                case .badValueForTables:
-                    return "Bad value for $283/$2E3/$315 table specification"
-                case .badPumpReq1State:
-                    return "Pump request 1 with temp basal IST not set"
-                case .badPumpReq2State:
-                    return "Pump request 2 with temp basal IST not set"
-                case .badPumpReq3State:
-                    return "Pump request 3 and bolus IST not set when about to pulse"
-                case .badValueField6in0x1A:
+                case .illegalChanParam:
+                    return "Bad parameter for $283/$2E3/$315 channel table specification"
+                case .basalPulseChanInactive:
+                    return "Pump basal request with basal IST not set"
+                case .tempPulseChanInactive:
+                    return "Pump temp basal request with temp basal IST not set"
+                case .bolusPulseChanInactive:
+                    return "Pump bolus request and bolus IST not set"
+                case .intSemaphoreNotSet:
                     return "Bad table specifier field6 in 1A command"
+                case .illegalInterLockChan:
+                    return "Illegal interlock channel"
                 case .badStateInClearBolusIST2AndVars:
                     return "Bad variable state in clear_Bolus_IST2_and_vars"
                 case .badStateInMaybeInc33D:

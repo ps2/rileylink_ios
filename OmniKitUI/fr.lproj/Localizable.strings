@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Limites d’administration";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Information de l’appareil";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Désactiver les bips de bolus";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Jeter le Pod";
 
 /* Title text for button to enable bolus beeps */
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Insuline restante";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Type d'insuline";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Pas d'insuline";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Aucun Pod";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Aucun";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Paramètrage des notifications";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Version PM";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "Pod activé";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Pod expiré";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Pod expiré";
 
 /* Label for pod life state when time remaining */
@@ -597,7 +604,8 @@
    Label for scheduled reminder value row */
 "Time" = "Heure";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Changement d'heure détecté";
 
 /* No comment provided by engineer. */

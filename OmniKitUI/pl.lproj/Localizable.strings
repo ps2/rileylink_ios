@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Limity podaży";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Szczegóły urządzenia";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Wyłącz dźwięki bolusa";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Odrzuć POD'a";
 
 /* Title text for button to enable bolus beeps */
@@ -229,7 +231,7 @@
 "Fault" = "Usterka";
 
 /* Label text for step 1 of pair pod instructions */
-"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Listen for 2 beeps." = "Napełnij nowego POD'a insuliną U-100 (minimum 80j). Pozostaw osłonkę igły. Powinieneś usłyszeć dwa sygnały dźwiękowe.";
+"Fill a new pod with U-100 Insulin (leave Pod needle cap on). Listen for 2 beeps." = "Napełnij nowego POD'a insuliną U-100 (minimum 80j). Pozostaw niebieską osłonkę igły. Powinieneś usłyszeć dwa sygnały dźwiękowe.";
 
 /* Settings page link description when next lifecycle action is to finish deactivation */
 "Finish deactivation" = "Zakończ dezaktywację";
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Pozostała insulina";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Rodzaj insuliny";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Brak insuliny";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Brak POD'a";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Brak";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Ustawienia powiadomień";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Wersja PM";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "POD aktywowany";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Termin ważności POD'a upłynął";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Termin ważności POD'a upłynął";
 
 /* Label for pod life state when time remaining */
@@ -580,6 +587,9 @@
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Aplikacja powiadomi Cię, gdy ilość insuliny w POD osiągnie ten poziom.";
 
+/* Description text for critical alerts */
+"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if your device is set to Silent or Do Not Disturb mode." = "Powyższe przypomnienia nie będą się pojawiały, jeśli urządzenie jest w trybie cichym lub nie przeszkadzać. \n\nIstnieją inne krytyczne alerty i alarmy POD'ów, które będą emitowane, nawet jeśli urządzenie jest ustawione w trybie cichym lub nie przeszkadzać.";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Czas na pompie różni się od aktualnego czasu. Czas pompy steruje ustawieniami zaplanowanej terapii. Przewiń w dół do wiersza Czas pompy, aby przejrzeć różnicę czasu i skonfigurować pompę.";
 
@@ -597,7 +607,8 @@
    Label for scheduled reminder value row */
 "Time" = "Czas";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Wykryto zmianę czasu";
 
 /* No comment provided by engineer. */

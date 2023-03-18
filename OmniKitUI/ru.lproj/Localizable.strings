@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Пределы подачи";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Сведения об устройстве";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Отключить звуковой сигнал болюса";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Выбросить под";
 
 /* Title text for button to enable bolus beeps */
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Остаток инсулина";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Тип инсулина";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Нет инсулина";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Нет пода";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Не подан";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Настройки уведомлений";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Версия PM";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "Под активирован";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Под истек";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Срок пода истек";
 
 /* Label for pod life state when time remaining */
@@ -580,6 +587,9 @@
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Приложение уведомит Вас, когда количество инсулина в Pod достигнет этого уровня.";
 
+/* Description text for critical alerts */
+"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if your device is set to Silent or Do Not Disturb mode." = "Приведенные выше напоминания не будут звучать, если ваше устройство находится в режиме Тишина или Не беспокоить.\n\nЕсть и другие критические оповещения и сигналы тревоги Pod, которые будут звучать, даже если ваше устройство настроено в режим Тишина или Не беспокоить.";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Время на помпе отличается от текущего времени. Время вашей помпы контролирует ваши запланированные настройки терапии. Прокрутите вниз до строки времени помпы, чтобы просмотреть разницу во времени и настроить помпу.";
 
@@ -597,7 +607,8 @@
    Label for scheduled reminder value row */
 "Time" = "Время";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Обнаружено изменение времени";
 
 /* No comment provided by engineer. */

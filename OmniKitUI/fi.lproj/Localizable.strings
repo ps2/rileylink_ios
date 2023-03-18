@@ -138,7 +138,8 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Annosteltu insuliini";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Insuliinityyppi";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */

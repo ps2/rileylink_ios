@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Leveransegrenser";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Enhetsdetaljer";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Slå av lyd ved bolus";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Kast pod";
 
 /* Title text for button to enable bolus beeps */
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Gjenstående insulin";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Type insulin";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Ingen insulin";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Ingen pod";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Ingen";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Varslingsinnstillinger";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM Versjon";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "Pod aktivert";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Pod utløpt";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Pod utløpt";
 
 /* Label for pod life state when time remaining */
@@ -580,6 +587,9 @@
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Appen varsler deg når mengden insulin i Pod når dette nivået.";
 
+/* Description text for critical alerts */
+"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if your device is set to Silent or Do Not Disturb mode." = "Påminnelsene ovenfor vil ikke høres hvis enheten er i Stille- eller Ikke forstyrr-modus. \n\n Det er andre kritiske Pod-varsler og alarmer som vil høres selv om enheten er satt til Stille eller Ikke forstyrr-modus.";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Klokkeslettet på pumpen din er forskjellig fra gjeldende klokkeslett. Pumpens klokkeslett styrer de planlagte behandlingsinnstillingene. Bla ned til Pumpetid for å se over tidsforskjellen og konfigurere pumpen din.";
 
@@ -597,7 +607,8 @@
    Label for scheduled reminder value row */
 "Time" = "Tid";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Tidsendring oppdaget";
 
 /* No comment provided by engineer. */

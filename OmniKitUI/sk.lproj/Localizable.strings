@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Limity podávania";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Podrobnosti o zariadení";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Vypnúť pípanie pri boluse";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Zlikvidujte pod";
 
 /* Title text for button to enable bolus beeps */
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Zostávajúci inzulín";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Typ inzulínu";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Žiadny inzulín";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Žiadny pod";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Žiadny";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Nastavenia oznámení";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "Verzia PM";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "Pod aktivovaný";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Pod expiroval";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Pod expiroval";
 
 /* Label for pod life state when time remaining */
@@ -597,7 +604,8 @@
    Label for scheduled reminder value row */
 "Time" = "Čas";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Zistená zmena času ";
 
 /* No comment provided by engineer. */

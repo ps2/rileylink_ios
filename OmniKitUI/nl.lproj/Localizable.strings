@@ -57,7 +57,7 @@
 "%g U" = "%g E";
 
 /* The title of the cell showing the pod activated at time */
-"Active Time" = "Werkzame tijd";
+"Active Time" = "Werkzame Tijd";
 
 /* Section header for activity section */
 "Activity" = "Activiteit";
@@ -165,7 +165,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Toedieningslimieten";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Apparaatgegevens";
 
 /* The title of the device information section in settings */
@@ -174,7 +175,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Stop Gebruik Boluspiepjes";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Gooi Pod Weg";
 
 /* Title text for button to enable bolus beeps */
@@ -276,7 +278,8 @@
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Resterende Insuline";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Insulinetype";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -335,7 +338,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Geen insuline";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Geen Pod";
 
 /* Value text for no expiration reminder */
@@ -344,7 +348,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Geen";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Meldingsinstellingen";
 
 /* No comment provided by engineer. */
@@ -398,7 +403,8 @@
 /* The title of the cell showing the pod pm version */
 "PM Version" = "PM versie";
 
-/* description label for activated at time pod details row */
+/* description label for activated at time pod details row
+   Label for pod insertion row */
 "Pod Activated" = "Pod Geactiveerd";
 
 /* Label describing pod age view */
@@ -413,7 +419,8 @@
 /* Label for pod life state when within pod expiration window */
 "Pod expired" = "Pod is verlopen";
 
-/* Error message for reservoir view when pod expired */
+/* Error message for reservoir view when pod expired
+   Label for pod expiration row, past tense */
 "Pod Expired" = "Pod Verlopen";
 
 /* Label for pod life state when time remaining */
@@ -580,6 +587,9 @@
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "De App geeft een melding wanneer de hoeveelheid insuline in de Pod dit niveau bereikt.";
 
+/* Description text for critical alerts */
+"The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if your device is set to Silent or Do Not Disturb mode." = "Bovenstaande herinneringen zijn niet hoorbaar wanneer je apparaat in de modus Stil of Niet Storen staat.\n\nAndere kritieke Podmeldingen en Podalarmen gaan wel af, zelfs als je apparaat op de modus Stil of Niet Storen staat.";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "De tijd op je pomp is anders dan de huidige tijd. De tijd van je pomp bepaalt je geplande therapieinstellingen. Scroll omlaag naar de Pomptijd om het tijdsverschil te bekijken en je pomp te configureren.";
 
@@ -597,7 +607,8 @@
    Label for scheduled reminder value row */
 "Time" = "Tijd";
 
-/* title for time change detected notice */
+/* Title for pod sync time action sheet.
+   title for time change detected notice */
 "Time Change Detected" = "Tijdsverschil gedetecteerd";
 
 /* No comment provided by engineer. */

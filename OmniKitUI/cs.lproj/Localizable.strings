@@ -77,7 +77,8 @@
 /* Title text for delivery limits */
 "Delivery Limits" = "Limity podávání";
 
-/* title for device details page */
+/* Text for device details disclosure row
+   title for device details page */
 "Device Details" = "Podrobnosti o zařízení";
 
 /* The title of the device information section in settings */
@@ -86,7 +87,8 @@
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Zakázat pípání bolusu";
 
-/* Pairing interface navigation bar button text for discard pod action */
+/* Pairing interface navigation bar button text for discard pod action
+   Text for discard pod button */
 "Discard Pod" = "Vyřadit pod";
 
 /* Title text for button to enable bolus beeps */
@@ -95,7 +97,8 @@
 /* The action string on pod status page when pod faulted */
 "Insulin delivery stopped. Change Pod now." = "Podávání inzulínu bylo zastaveno. Vyměňte pod nyní.";
 
-/* Title for insulin type selection screen */
+/* Text for confidence reminders navigation link
+   Title for insulin type selection screen */
 "Insulin Type" = "Typ inzulínu";
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
@@ -148,7 +151,8 @@
 /* Error message for reservoir view when reservoir empty */
 "No Insulin" = "Žádný inzulín";
 
-/* Label for pod life state when no pod paired */
+/* Label for pod life state when no pod paired
+   Text shown in insulin remaining space when no pod is paired */
 "No Pod" = "Žádný pod";
 
 /* Value text for no expiration reminder */
@@ -157,7 +161,8 @@
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Žádný";
 
-/* navigation title for notification settings */
+/* navigation title for notification settings
+   Text for pod details disclosure row */
 "Notification Settings" = "Nastavení upozornění";
 
 /* No comment provided by engineer. */

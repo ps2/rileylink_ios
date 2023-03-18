@@ -1,6 +1,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* No comment provided by engineer. */
+"%@%" = "%1$@%2$";
+
 /* Unit format string for an value in percent */
 "%@%%" = "%@%%";
 
@@ -203,6 +206,9 @@
 /* The title of the section describing the pump */
 "Pump" = "Pomp";
 
+/* Text for medtronic pump battery percent remaining */
+"Pump Battery Remaining" = "Pompbatterij Resterend";
+
 /* The title text for the battery type value */
 "Pump Battery Type" = "Pompbatterijtype";
 
@@ -300,6 +306,9 @@
 
 /* Units for showing temp basal rate */
 "U/hr" = "E/uur";
+
+/* Text to indicate battery percentage is unknown */
+"unknown" = "onbekend";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Onbekend";

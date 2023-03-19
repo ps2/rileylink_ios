@@ -1,5 +1,5 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = "(nieaktywny)";
+" (inactive)" = " (nieaktywny)";
 
 /* Format string for low battery alert body for RileyLink. (1: device name) */
 "\"%1$@\" has a low battery" = "„ %1$@ ” ma słabą baterię";
@@ -168,7 +168,7 @@
 "Low Reservoir" = "Niski poziom w zbiorniczku";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Niski poziom insuliny w zbiorniku";
+"Low reservoir advisory (%1$gU)" = "Ostrzeżenie o niskim poziomie w zbiorniczku (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarm informujący o niskim poziomie w zbiorniku";
@@ -215,7 +215,7 @@
 "No pod paired" = "Brak sparowanego PODa";
 
 /* Error message for PodCommsError.noPodsFound */
-"No pods found" = "Nie znaleziono POD'ów";
+"No pods found" = "Nie znaleziono POD'a";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Brak odpowiedzi z PODa";
@@ -256,7 +256,7 @@
 "Pairing completed" = "Parowanie zakończone";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Błąd analizy: %1$@ w ( %2$@ )";
+"Parsing Error: %1$@ in (%2$@)" = "Błąd analizy: %1$@ w (%2$@)";
 
 /* Recovery suggestion on unexpected pod change */
 "Please bring only original pod in range or deactivate original pod" = "Używaj tylko oryginalny POD w zasięgu sygnału albo dezaktywuj oryginalny POD";
@@ -298,7 +298,7 @@
 "Pod Expiration Reminder" = "Przypomnienie o terminie ważności POD'a";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Termin ważności PODa upłynął";
+"Pod expired" = "Termin ważności POD'a upłynął";
 
 /* Alert content title for podExpireImminent pod alert
    Alert content title for podExpiring pod alert
@@ -362,7 +362,7 @@
 "Resume delivery" = "Wznów podawanie";
 
 /* Alert content title for suspendEnded pod alert */
-"Resume Insulin" = "Wznów podawanie insuliny";
+"Resume Insulin" = "Wznów insulinę";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Wznów: %1$@ %2$@";
@@ -399,7 +399,7 @@
 "Suspend: %1$@ %2$@" = "Wstrzymaj: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Wstrzymany";
+"Suspended" = "Wstrzymane";
 
 /* Alert notification body for suspendEnded pod alert user notification */
 "Suspension time is up. Open the app and resume." = "Czas zawieszenie dobiegł końca. Otwórz Loop i wznów podawanie";
@@ -462,7 +462,7 @@
 "Unknown pod fault %1$03d" = "Nieznany błąd PODa %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Nieznana wartość ( %1$@ ) dla typu %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Nieznana wartość (%1$@) dla typu %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Weryfikacja nie powiodła się: %1$@";

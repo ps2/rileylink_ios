@@ -1,0 +1,64 @@
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Unit format string for an value in percent */
+"%@%%" = "%@ %%";
+
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Úrovně bazálu";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Zrušit";
+
+/* The title of the command to change pump time */
+"Change Time" = "Změnit čas";
+
+/* The title of the command to change pump time zone */
+"Change Time Zone" = "Změnit časové pásmo";
+
+/* Progress message for changing pump time. */
+"Changing time…" = "Měním čas…";
+
+/* The title of the configuration section in settings */
+"Configuration" = "Konfigurace";
+
+/* Text for continue button */
+"Continue" = "Pokračovat";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Limity podávání";
+
+/* The title of the cell showing firmware version */
+"Firmware" = "Firmware";
+
+/* Progress message for getting statistics. */
+"Get Statistics…" = "Získávám statistiky…";
+
+/* Text for confidence reminders navigation link */
+"Insulin Type" = "Typ inzulínu";
+
+/* The title of the cell showing device name */
+"Name" = "Název";
+
+/* Value string for MySentry config when MySentry is not being used */
+"No" = "Ne";
+
+/* The title of the cell showing pump ID
+   The title text for the pump ID config value */
+"Pump ID" = "ID pumpy";
+
+/* Button title to retry sentry setup */
+"Retry" = "Zkusit znovu";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Plánovaný bazál";
+
+/* The title of the cell showing BLE signal strength (RSSI) */
+"Signal Strength" = "Síla signálu";
+
+/* A message indicating a command succeeded */
+"Succeeded" = "Úspěšně ukončeno";
+
+/* The title of the cell showing uptime */
+"Uptime" = "Doba provozu";
+

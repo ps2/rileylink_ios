@@ -123,7 +123,7 @@
 "Finish Pairing" = "Terminer le jumelage";
 
 /* Description for finish setup */
-"Finish setup " = "Installation terminée";
+"Finish setup " = "Finir l'installation";
 
 /* Description for finish setup reminder */
 "Finish setup reminder" = "Terminer le paramétrage du rappel";
@@ -180,7 +180,7 @@
 "Make sure your pod is filled and nearby." = "Assurez-vous que votre Pod est rempli et à proximité.";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Assurez vous que votre RileyLink est à proximité et allumé";
+"Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et allumé";
 
 /* Status highlight when manual temp basal is running. */
 "Manual Basal" = "Débit basal manuel";
@@ -189,7 +189,7 @@
 "Memory initialized" = "Mémoire initialisée";
 
 /* Recovery suggestion for PodCommsError.tooManyPodsFound */
-"Move to a new area away from any other pods and try again." = "Déplacez-vous vers une nouvelle zone éloignée de tout autre Pod et réessayez.";
+"Move to a new area away from any other pods and try again." = "Déplacez-vous vers un nouvel endroit éloigné de tout autre Pod et réessayez.";
 
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
@@ -202,7 +202,7 @@
 "No confidence reminders are used." = "Aucun rappel de confiance n'est utilisé.";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Aucun défaut";
+"No faults" = "Pas de défauts";
 
 /* Status highlight message for emptyReservoir alarm.
    Status highlight that a pump is out of insulin. */
@@ -237,7 +237,7 @@
 "Occlusion Detected" = "Occlusion détectée";
 
 /* Action button default text for PodAlerts */
-"Ok" = "OK";
+"Ok" = "Ok";
 
 /* Acknowledge button label for RileyLink low battery alert
    Alert acknowledgment OK button */
@@ -256,7 +256,7 @@
 "Pairing completed" = "Appairage terminé";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Erreur d'analyse : %1$@ dans ( %2$@ )";
+"Parsing Error: %1$@ in (%2$@)" = "Erreur d'analyse : %1$@ dans (%2$@)";
 
 /* Recovery suggestion on unexpected pod change */
 "Please bring only original pod in range or deactivate original pod" = "Veuillez rapprocher le Pod original ou désactiver le Pod d'origine";
@@ -265,10 +265,10 @@
 "Please bring your pod closer to the RileyLink and try again" = "Merci de rapprocher votre Pod du RileyLink et d'essayer à nouveau";
 
 /* Alert content body for finishSetupReminder pod alert */
-"Please finish pairing your pod." = "Veuiller terminer l'appairage de votre Pod.";
+"Please finish pairing your pod." = "Veuillez finir d'appairer votre Pod.";
 
 /* Recover suggestion shown when no pod is paired */
-"Please pair a new pod" = "Veuillez appairer un nouveau Pod";
+"Please pair a new pod" = "Merci d'appairer un nouveau Pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
 "Please reposition the RileyLink further from the pod" = "Veuillez repositionner le RileyLink plus loin du Pod";
@@ -286,13 +286,13 @@
 "Pod already primed" = "Pod déjà amorcé";
 
 /* Status highlight message for other alarm. */
-"Pod Error" = "Erreur Pod";
+"Pod Error" = "Erreur du Pod";
 
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Alarme d'expiration du Pod";
 
 /* The title for pod expiration notification */
-"Pod Expiration Notice" = "Notification de l'expiration du pod";
+"Pod Expiration Notice" = "Notification de l'expiration du Pod";
 
 /* Alert content title for userPodExpiration pod alert */
 "Pod Expiration Reminder" = "Rappel d'expiration du Pod";
@@ -328,7 +328,7 @@
 "Pod Pairing Incomplete" = "Appairage du Pod incomplet";
 
 /* Error message shown when pod sends ack instead of response */
-"Pod sent ack instead of response" = "Le Pod a envoyé un accusé de réception au lieu d'une réponse";
+"Pod sent ack instead of response" = "Le Pod a envoyé un ack au lieu d'une réponse";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
 "Pod setup window expired" = "La fenêtre de mise en place du Pod a expiré";
@@ -337,7 +337,7 @@
 "Pod suspended reminder" = "Rappel de la suspension du Pod";
 
 /* Format string for poor pod signal strength */
-"Poor signal strength" = "Force du signal faible";
+"Poor signal strength" = "Faible intensité du signal";
 
 /* Delivery status when pod is priming
    Pod status when priming */
@@ -383,7 +383,7 @@
 "Signal Loss" = "Perte de signal";
 
 /* Format string for pod signal strength too high */
-"Signal strength too high" = "Force du signal trop élevée";
+"Signal strength too high" = "Intensité du signal trop forte";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
 "Suspend" = "Suspendre";
@@ -399,7 +399,7 @@
 "Suspend: %1$@ %2$@" = "Suspension : %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Suspendue";
+"Suspended" = "Suspendu";
 
 /* Alert notification body for suspendEnded pod alert user notification */
 "Suspension time is up. Open the app and resume." = "La période de suspension est terminée. Ouvrez l'application et reprenez.";
@@ -423,7 +423,7 @@
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Basal temporaire: %1$@ U/heure %2$@ %3$@ %4$@ U %5$@";
 
 /* Alert content body for suspendEnded pod alert */
-"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "La période de suspension de l'insuline est terminée. \n\n Vous pouvez reprendre l'administration à partir de la bannière sur l'écran d'accueil ou à partir de l'écran des paramètres de votre pompe. Vous recevrez un nouveau rappel dans 15 minutes.";
+"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "La période de suspension de l'insuline est terminée. \n\nVous pouvez relancer l'administration à partir de la bannière sur l'écran d'accueil ou à partir de l'écran des paramètres de votre pompe. Vous recevrez un nouveau rappel dans 15 minutes.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "L'heure de votre pompe est différente de l'heure actuelle. Vous pouvez vérifier l'heure de la pompe et la synchroniser avec l'heure actuelle dans les paramètres.";
@@ -441,7 +441,7 @@
 "Too many pods found" = "Trop de Pods trouvés";
 
 /* Recovery suggestion when ack received instead of response */
-"Try again" = "Réessayer ";
+"Try again" = "Réessayer";
 
 /* Pod state twoNotUsed */
 "twoNotUsed" = "twoNotUsed";
@@ -450,10 +450,10 @@
 "Uncertain" = "Incertain";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Numero de séquence du message inattendu";
+"Unexpected message sequence number" = "Numéro de séquence du message inattendu";
 
 /* Format string for unexpected pod change */
-"Unexpected pod change" = "Changement de Pod inattendu";
+"Unexpected pod change" = "Changement inattendu du pod";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Reponse inattendue du Pod";
@@ -462,7 +462,7 @@
 "Unknown pod fault %1$03d" = "Erreur de Pod inconnue %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Valeur inconnue (%1$@) pour le type %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Valeur inconnue (%1$@) pour le type %2$@.";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Échec de la validation: %1$@";

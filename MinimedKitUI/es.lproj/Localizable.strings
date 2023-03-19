@@ -23,7 +23,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Text indicating ongoing pump time synchronization */
-"Adjusting Pump Time..." = "Ajustando el tiempo de bombeo...";
+"Adjusting Pump Time..." = "Ajustando la hora de la bomba...";
 
 /* Instructions on selecting battery chemistry type */
 "Alkaline and Lithium batteries decay at differing rates. Alkaline tend to have a linear voltage drop over time whereas lithium cell batteries tend to maintain voltage until halfway through their lifespan. Under normal usage in a Non-MySentry compatible Minimed (x22/x15) insulin pump running Loop, Alkaline batteries last approximately 4 to 5 days. Lithium batteries last between 1-2 weeks. This selection will use different battery voltage decay rates for each of the battery chemistry types and alert the user when a battery is approximately 8 to 10 hours from failure." = "Las baterías alcalinas y de litio se degradan en ritmos distintos. La alcalinas tienden a tener una baja de voltaje linear en el tiempo mientras que las de litio tienden a mantener un voltaje hasta que pasan la mitad de su tiempo de vida. Bajo condiciones normales en una micro-infusora no compatible con MySentry ( x22/x15) siendo utilizado con Loop, las baterías alcalinas durarán aproximadamente de 4 a 5 días. Las baterías de litio durarán de una a dos semanas. Esta selección utilizará diferentes rangos de decadencia para el voltaje de cada una de las bataerías y alertará al usuario cuando la batería tenga aproximadamente de 8 a 10 horas restantes de vida.";
@@ -38,7 +38,7 @@
 "Awake Until" = "Despierto hasta";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Perfil Basal";
+"Basal Rates" = "Tasas basales";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batería: %1$@ voltios\n";
@@ -53,10 +53,10 @@
 "Cancel" = "Cancelar";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Cancelando basal temporal";
+"Canceling Temp Basal" = "Cancelación de basal temporal";
 
 /* The title of the command to change pump time */
-"Change Time" = "Cambiar Hora";
+"Change Time" = "Cambiar hora";
 
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Cambiar Zona Horaria";
@@ -65,7 +65,7 @@
 "Changing" = "Cambiando";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Cambiando hora…";
+"Changing time…" = "Cambiando hora...";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Elija el tipo de batería que está utilizando en su bomba para una mejor alerta sobre las condiciones de batería baja.";
@@ -90,7 +90,7 @@
 "Delete Pump" = "Eliminar Microinfusora";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Límites de Dosificación";
+"Delivery Limits" = "Límites de Administración de Insulina";
 
 /* The title of the section describing the device */
 "Device" = "Dispositivo";
@@ -114,10 +114,10 @@
 "Enabled Diagnostic LEDs" = "Diagnóstico LEDs Habilitado";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error de reanudación";
+"Error Resuming" = "Error Reanudando";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error de suspensión";
+"Error Suspending" = "Error Suspendiendo";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Error de sincronización de tiempo";
@@ -141,7 +141,7 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware";
+"Firmware Version" = "Versión del programa";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Obtener modelo de Microinfusora";
@@ -153,7 +153,7 @@
 "Insulin\nSuspended" = "Insulina Suspendida";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Administración de Insulina";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "La entrega de insulina puede ser determinada por la microinfusora interpretando los eventos históricos o comparando el volúmen del reservorio sobre el tiempo. Leer los eventos históricos permite una gráfica de status mas exacta y permite subir tratamientos actualizados a Nightscout, con el costo de una menor duración de la batería y la posiblidad de mayores errores de radio comparado con leer solamente el volúmen del reservorio. Si la fuente seleccionada no puede ser utilizada por cualquier motivo, el sistema intentará utilizar la otra opción.";
@@ -208,13 +208,13 @@
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
-"Pump ID" = "ID de Microinfusadora";
+"Pump ID" = "ID de Bomba";
 
 /* The title of the cell showing the pump model number */
 "Pump Model" = "Modelo de Microinfusadora";
 
 /* Title of the pump settings view controller */
-"Pump Settings" = "Configuración de Microinfusora";
+"Pump Settings" = "Configuración de la bomba";
 
 /* The title of the command to change pump time zone */
 "Pump Time" = "Hora de la bomba";
@@ -235,10 +235,10 @@
 "Region" = "Región";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Resumir la administración";
+"Resume Delivery" = "Resumir la infusión";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Reanudando";
+"Resuming" = "Resumiendo";
 
 /* Button title to retry sentry setup */
 "Retry" = "Reintentar";
@@ -269,10 +269,10 @@
 "Starting Temp Basal" = "Inicio de basal temporal";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Éxito";
+"Succeeded" = "Logrado";
 
 /* Title text for button to suspend insulin delivery */
-"Suspend Delivery" = "Suspender la administración";
+"Suspend Delivery" = "Suspender la infusión";
 
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Suspendido: %1$@\n";
@@ -299,7 +299,7 @@
 "Tuning radio…" = "Sintonizando frecuencia de radio…";
 
 /* Units for showing temp basal rate */
-"U/hr" = "U/hora";
+"U/hr" = "U/hra";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Desconocido";

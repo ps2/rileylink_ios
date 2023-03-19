@@ -63,10 +63,10 @@
 "Change Basal Schedule" = "Endre basal tidsplan";
 
 /* The notification alert describing a low pump battery */
-"Change the pump battery immediately" = "Bytt reservoar på pumpe nå";
+"Change the pump battery immediately" = "Skift pumpebatteri umiddelbart";
 
 /* The notification alert describing an empty pump reservoir */
-"Change the pump reservoir now" = "Bytt reservoar på pumpe nå";
+"Change the pump reservoir now" = "Bytt pumpereservoar nå";
 
 /* Event title for ChangeTimePumpEvent */
 "Change Time" = "Endre tid";
@@ -99,7 +99,7 @@
 "Empty Reservoir" = "Tomt reservoar";
 
 /* Describing the pump history insulin data source */
-"Event History" = "Hendelseshistorikk";
+"Event History" = "Hendelseshistorie";
 
 /* Error description for glucose page failing crc check */
 "Glucose page failed crc check" = "Glukoseside mislyktes ved crc-sjekk";
@@ -114,7 +114,7 @@
 "History page failed crc check" = "Historikksiden mislyktes med crc kontroll";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Insulintilførsel stoppet";
+"Insulin Suspended" = "Insulintilførsel utsatt";
 
 /* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
 "Insulin Type is not configured" = "Insulintype ikke konfigurert";
@@ -138,7 +138,7 @@
 "Low RileyLink Battery" = "Lavt RileyLink-batteri";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Kontroller at din RileyLink er i nærheten og er påslått";
+"Make sure your RileyLink is nearby and powered on" = "Pass på at din RileyLink er slått på og er i nærheten";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Maksinnstilling overskredet";
@@ -168,7 +168,7 @@
 "Ok" = "Ok";
 
 /* Acknowledge button label for RileyLink low battery alert */
-"OK" = "OK";
+"OK" = "Ok";
 
 /* Event title for percent based temp basal */
 "Percent Temp Basal" = "Prosent midlertidig basal";
@@ -180,7 +180,7 @@
 "Prime" = "Prime";
 
 /* The notification title for a low pump battery */
-"Pump Battery Low" = "Pumpebatteri lavt";
+"Pump Battery Low" = "Lavt pumpebatteri";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpa svarte ikke";
@@ -195,10 +195,10 @@
 "Pump is Suspended" = "Pumpen satt på pause";
 
 /* The notification title for an empty pump reservoir */
-"Pump Reservoir Empty" = "Pumpereservoar tomt";
+"Pump Reservoir Empty" = "Pumpereservoar Tomt";
 
 /* The notification title for a low pump reservoir */
-"Pump Reservoir Low" = "Pumpereservoar lavt";
+"Pump Reservoir Low" = "Pumpereservoar Lavt";
 
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "Pumpen svarte uventet";
@@ -229,7 +229,7 @@
 "Select Profile" = "Velg profil";
 
 /* Status highlight when communications with the pod haven't happened recently. */
-"Signal Loss" = "Signaltap";
+"Signal Loss" = "Signal Tap";
 
 /* Event title for suspend
    Pump Event title for UnfinalizedDose with doseType of .suspend */

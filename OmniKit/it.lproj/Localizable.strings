@@ -2,7 +2,7 @@
 " (inactive)" = "(inattivo)";
 
 /* Format string for low battery alert body for RileyLink. (1: device name) */
-"\"%1$@\" has a low battery" = "\" %1$@ \" ha la batteria bassa";
+"\"%1$@\" has a low battery" = "%1$@ ha la batteria quasi scarica";
 
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
@@ -54,19 +54,19 @@
 "Change Pod now. Insulin delivery will stop in 1 hour." = "Cambia Pod ora. L'erogazione dell'insulina si interromperà tra 1 ora.";
 
 /* Alert content body for podExpiring pod alert */
-"Change Pod now. Pod has been active for 72 hours." = "Cambia Pod ora. Il pod è attivo da 72 ore.";
+"Change Pod now. Pod has been active for 72 hours." = "Cambia Pod ora. Il Pod è attivo da 72 ore.";
 
 /* Format string for invalid message error code (1: error code number) */
-"Command error %1$u" = "Errore di Comando";
+"Command error %1$u" = "Errore di comando %1$u";
 
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Problema di Comunicazioni";
+"Comms Issue" = "Problema di Comunicazione";
 
 /* Error message when command is rejected because an unacknowledged command is pending. */
-"Communication issue: Unacknowledged command pending." = "Problema di comunicazione:  Comando di conferma in pendenza";
+"Communication issue: Unacknowledged command pending." = "Problema di comunicazione:  comando di conferma in attesa.";
 
 /* Description for BeepPreference.manualCommands */
-"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "I promemoria di fiducia suoneranno per i comandi inoltrati come Boli, Cancellazione Boli,  Sospensioni, ripristini erogazione, ecc. Quando Loop invece regola in automatico l'erogazione allora non userà alcun promemoria di fiducia.";
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "I promemoria di fiducia suoneranno per i comandi inoltrati, come boli, cancellazione boli, sospensioni, ripristini erogazione, ecc. Quando Loop invece regola in automatico l'erogazione allora non userà alcun promemoria di fiducia.";
 
 /* Description for BeepPreference.extended */
 "Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "I promemoria di fiducia suonano quando Loop regola automaticamente l'erogazione e per i comandi avviati dall'utente.";
@@ -87,7 +87,7 @@
 "Empty reservoir" = "Serbatoio vuoto";
 
 /* The title for Empty Reservoir alarm notification */
-"Empty Reservoir" = "Serbatoio vuoto";
+"Empty Reservoir" = "Serbatoio Vuoto";
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Risposta senza contenuto dal Pod";
@@ -135,31 +135,31 @@
 "Inserting cannula" = "Inserimento Cannula";
 
 /* The default notification body for AlarmCodes */
-"Insulin delivery stopped. Change Pod now." = "L'erogazione dell'insulina si e' bloccata. cambiare il Pod ora.";
+"Insulin delivery stopped. Change Pod now." = "L'erogazione d'insulina si è interrotta. Cambiare Pod adesso.";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Erogazione Insulina sospesa.";
+"Insulin Suspended" = "Erogazione Insulina sospesa";
 
 /* Error description for OmniBLEPumpManagerError.insulinTypeNotConfigured */
-"Insulin type not configured" = "Tipo di Insulina non Configurato";
+"Insulin type not configured" = "Tipo d'insulina non Configurato";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Errore interno Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BoloInterrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolo Interrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
 
 /* Error message for when unexpected address is received (1: received address) (2: expected address) */
-"Invalid address 0x%x. Expected 0x%x" = "Indirizzo dati errato Ox%1$x.Ox aspettati%2$x";
+"Invalid address 0x%x. Expected 0x%x" = "Indirizzo non valido 0x %1$x . Previsto 0x %2$x";
 
 /* Description for MessageError invalidAddress */
-"Invalid address: (%1$@)" = "Indirizzo dati errato:(%1$@)";
+"Invalid address: (%1$@)" = "Indirizzo non valido: ( %1$@ )";
 
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "CRC non valido";
 
 /* Error description for OmniBLEPumpManagerError.invalidSetting */
-"Invalid Setting" = "Settaggio non valido";
+"Invalid Setting" = "Impostazione non valida";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Livello Serbatoio basso";
@@ -174,7 +174,7 @@
 "Low reservoir advisory alarm" = "Allarme di avviso livello serbatoio basso";
 
 /* Title for RileyLink low battery alert */
-"Low RileyLink Battery" = "Batteria del Releylink scarica";
+"Low RileyLink Battery" = "Batteria Rileylink quasi scarica";
 
 /* Recovery suggestion for PodCommsError.noPodsFound */
 "Make sure your pod is filled and nearby." = "Assicurati che il tuo Pod sia pieno e nelle vicinanze.";
@@ -183,7 +183,7 @@
 "Make sure your RileyLink is nearby and powered on" = "Assicurati che RileyLink si trovi nelle vicinanze e sia acceso";
 
 /* Status highlight when manual temp basal is running. */
-"Manual Basal" = "Basale manuale";
+"Manual Basal" = "Basale Manuale";
 
 /* Pod memory initialized */
 "Memory initialized" = "Memoria inizializzata";
@@ -193,20 +193,20 @@
 
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
-"Multiple Command Alert" = "Avviso di comando multiplo";
+"Multiple Command Alert" = "Avviso di comandi multiplo";
 
 /* Pod alert state when no alerts are active */
 "No alerts" = "Nessun avviso";
 
 /* Description for BeepPreference.silent */
-"No confidence reminders are used." = "Non vengono utilizzati promemoria di fiducia.";
+"No confidence reminders are used." = "Non vengono utilizzati promemoria sulla fiducia.";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Nessun difetto";
+"No faults" = "Nessun errore";
 
 /* Status highlight message for emptyReservoir alarm.
    Status highlight that a pump is out of insulin. */
-"No Insulin" = "No Insulina";
+"No Insulin" = "Insulina Terminata";
 
 /* Status highlight that when no pod is paired. */
 "No Pod" = "No Pod";
@@ -228,7 +228,7 @@
 "Normal" = "Normale";
 
 /* Description for MessageError notEnoughData */
-"Not enough data" = "Dati insufficienti";
+"Not enough data" = "Dati non sufficienti";
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Occlusione rilevata";
@@ -237,7 +237,7 @@
 "Occlusion Detected" = "Occlusione Rilevata";
 
 /* Action button default text for PodAlerts */
-"Ok" = "Ok";
+"Ok" = "OK";
 
 /* Acknowledge button label for RileyLink low battery alert
    Alert acknowledgment OK button */
@@ -247,7 +247,7 @@
 "Omnipod" = "Omnipod";
 
 /* Pod state oneNotUsed */
-"oneNotUsed" = "unononusato";
+"oneNotUsed" = "oneNotUsed";
 
 /* Pod status after pairing */
 "Paired" = "Abbinato";
@@ -356,10 +356,10 @@
 "Reminder initialized" = "Promemoria inizializzato";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
-"Resume" = "riprendere";
+"Resume" = "Riprendi";
 
 /* Recovery suggestion when pod is suspended */
-"Resume delivery" = "ripristino erogazione";
+"Resume delivery" = "Riprendi erogazione";
 
 /* Alert content title for suspendEnded pod alert */
 "Resume Insulin" = "Riprendi l'insulina";
@@ -380,7 +380,7 @@
 "Shutdown imminent alarm" = "Allarme di spegnimento imminente";
 
 /* Status highlight when communications with the pod haven't happened recently. */
-"Signal Loss" = "Perdita di segnale";
+"Signal Loss" = "Perdita Segnale";
 
 /* Format string for pod signal strength too high */
 "Signal strength too high" = "Potenza del segnale troppo alta";
@@ -402,7 +402,7 @@
 "Suspended" = "Sospeso";
 
 /* Alert notification body for suspendEnded pod alert user notification */
-"Suspension time is up. Open the app and resume." = "Il tempo della sospensione di insulina è scaduto. Aprire l'app e ripristinare  l'erogazione.";
+"Suspension time is up. Open the app and resume." = "Il tempo di sospensione è scaduto. Apri l'app e riprendi.";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Riempimento del serbatoio completato";
@@ -423,31 +423,31 @@
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "VelocitàBasaleTemporanea: %1$@ U/ora %2$@ %3$@ %4$@ U %5$@";
 
 /* Alert content body for suspendEnded pod alert */
-"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Il periodo di sospensione dell'insulina è terminato.\n\nÈ possibile riprendere la consegna dal banner nella schermata iniziale o dalla schermata delle impostazioni della pompa. Ti verrà ricordato di nuovo tra 15 minuti.";
+"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Il periodo di sospensione dell'insulina è terminato.\n\nSi puo'  ripristinare l'erogazione usando direttamente l'avviso nella schermata principale oppure dalla schermata delle impostazioni del microinfusore. Ogni 15 minuti ci sara' un avviso che ti ricordera' di ripristinare l'erogazione.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
-"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "l'orario del microinfure e' diverso da quello del tempo reale. Controllare l'orario del microinfusore e sincronizare nei settaggi con il l'orario attuale.";
+"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "l'orario del microinfusore e' diverso da quello del tempo reale. Controllare l'orario del microinfusore e sincronizzare il settaggio con il l'orario attuale.";
 
 /* Pod state threeNotUsed */
 "threeNotUsed" = "threeNotUsed";
 
 /* Alert content title for timeOffsetChangeDetected pod alert */
-"Time Change Detected" = "Cambio orario rilevato";
+"Time Change Detected" = "Rilevato Cambio di orario ";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
 "Time to replace your pod! Your pod will expire in %1$@" = "È ora di sostituire Pod! Pod scadrà tra %1$@";
 
 /* Error message for PodCommsError.tooManyPodsFound */
-"Too many pods found" = "Troppi pod trovati";
+"Too many pods found" = "Trovati Troppi Pods";
 
 /* Recovery suggestion when ack received instead of response */
-"Try again" = "Riprova";
+"Try again" = "Riprovare";
 
 /* Pod state twoNotUsed */
 "twoNotUsed" = "twoNotUsed";
 
 /* String describing a dose that was possibly scheduled */
-"Uncertain" = "Non certa";
+"Uncertain" = "Incerto";
 
 /* Description for MessageError invalidSequence */
 "Unexpected message sequence number" = "Notifica inaspettata di sequenza numerica ";
@@ -456,7 +456,7 @@
 "Unexpected pod change" = "Cambio pod imprevisto";
 
 /* Error message shown when empty response from pod was received */
-"Unexpected response from pod" = "Risposta inaspettata da Pod";
+"Unexpected response from pod" = "Risposta inaspettata dal Pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
 "Unknown pod fault %1$03d" = "Errore Pod sconosciuto %1$03d";

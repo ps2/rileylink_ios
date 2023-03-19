@@ -45,7 +45,7 @@
 "Bolusing with temp basal" = "Bolus-Abgabe mit temporärer Basalrate";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Einführen der Kanüle";
+"Cannula inserting" = "Einsetzen der Kanüle";
 
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Sicher";
@@ -60,16 +60,16 @@
 "Command error %1$u" = "Befehlsfehler %1$u";
 
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Kommunikationsproblem";
+"Comms Issue" = "Comms Problem";
 
 /* Error message when command is rejected because an unacknowledged command is pending. */
 "Communication issue: Unacknowledged command pending." = "Kommunikationsproblem: Unbestätigter Befehl steht noch aus.";
 
 /* Description for BeepPreference.manualCommands */
-"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Sicherheitstöne ertönen bei von Ihnen ausgelösten Befehlen, wie Bolus, Bolusabbruch, Unterbrechung, Wiederaufnahme, Erinnerung an die Speicherung von Benachrichtigungen usw. Wenn Loop die Abgabe automatisch anpasst, werden keine Sicherheitstöne verwendet.";
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Vertrauenserinnerungen ertönen für von Ihnen initiierte Befehle, wie Bolus, Bolus abbrechen, Unterbrechen, Fortsetzen, Benachrichtigungserinnerungen speichern usw. Wenn Loop die Abgabe automatisch anpasst, werden keine Vertrauenserinnerungen verwendet.";
 
 /* Description for BeepPreference.extended */
-"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Sicherheitstöne ertönen, wenn Loop die Abgabe automatisch anpasst, sowie für Befehle, die Sie initiieren.";
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Vertrauenserinnerungen ertönen, wenn Loop die Lieferung automatisch anpasst, sowie für von Ihnen initiierte Befehle.";
 
 /* The title for AlarmCode.other notification */
 "Critical Pod Error" = "Kritischer Pod-Fehler";
@@ -90,7 +90,7 @@
 "Empty Reservoir" = "Leeres Reservoir";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Rückmeldung leer von Pod";
+"Empty response from pod" = "Leere Antwort vom Pod";
 
 /* Title string for BeepPreference.manualCommands */
 "Enabled" = "Aktiviert";
@@ -123,7 +123,7 @@
 "Finish Pairing" = "Kopplung abgeschlossen";
 
 /* Description for finish setup */
-"Finish setup " = "Setup beenden";
+"Finish setup " = "Einrichtung abgeschlossen";
 
 /* Description for finish setup reminder */
 "Finish setup reminder" = "Einrichtungserinnerung abgeschlossen";
@@ -189,7 +189,7 @@
 "Memory initialized" = "Speicher initialisiert";
 
 /* Recovery suggestion for PodCommsError.tooManyPodsFound */
-"Move to a new area away from any other pods and try again." = "Begeben Sie sich in einen neuen Bereich, entfernt von anderen Pods, und versuchen Sie es erneut.";
+"Move to a new area away from any other pods and try again." = "Begeben Sie sich in einen anderen Bereich, entfernt von anderen Pods und versuchen Sie es erneut.";
 
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
@@ -262,13 +262,13 @@
 "Please bring only original pod in range or deactivate original pod" = "Bitte nur Original-Pod in Reichweite bringen oder Original-Pod deaktivieren";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "Bitte bringen Sie Ihren Pod näher an den RileyLink und versuchen Sie es erneut";
+"Please bring your pod closer to the RileyLink and try again" = "Bitte bringen Sie Ihren Pod näher an Ihr RileyLink und versuchen Sie es erneut";
 
 /* Alert content body for finishSetupReminder pod alert */
 "Please finish pairing your pod." = "Bitte schließen Sie die Kopplung Ihres Pods ab.";
 
 /* Recover suggestion shown when no pod is paired */
-"Please pair a new pod" = "Bitte koppeln Sie einen neuen Pod";
+"Please pair a new pod" = "Bitte koppel einen neuen Pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
 "Please reposition the RileyLink further from the pod" = "Bitte positionieren Sie den RileyLink weiter entfernt vom Pod";
@@ -313,13 +313,13 @@
 "Pod Fault: %1$@" = "Podfehler: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
-"Pod is not in a state ready for cannula insertion." = "Der Pod ist nicht bereit zum Einsetzen der Kanüle.";
+"Pod is not in a state ready for cannula insertion." = "Der Pod ist nicht bereit zum Einführen der Kanüle.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Der Pod ist nicht bereit zum Befüllen";
+"Pod is not in a state ready for priming." = "Der Pod ist nicht bereit zum Befüllen.";
 
 /* Error message action could not be performed because pod is suspended */
-"Pod is suspended" = "Pod ist unterbrochen";
+"Pod is suspended" = "Pod ist angehalten";
 
 /* Status highlight message for occlusion alarm. */
 "Pod Occlusion" = "Pod Verstopfung";
@@ -328,10 +328,10 @@
 "Pod Pairing Incomplete" = "Pod-Kopplung unvollständig";
 
 /* Error message shown when pod sends ack instead of response */
-"Pod sent ack instead of response" = "Pod Bestätigung anstelle von Antwort gesendet";
+"Pod sent ack instead of response" = "Pod sendet Bestätigung anstelle von Antwort";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "Das Zeitfenster für das Pod-Setup ist abgelaufen";
+"Pod setup window expired" = "Das Zeitfenster für die Pod-Einrichtung ist abgelaufen";
 
 /* Description for pod suspended reminder */
 "Pod suspended reminder" = "Erinnerung über abgelaufenen Pod ";
@@ -402,7 +402,7 @@
 "Suspended" = "Unterbrochen";
 
 /* Alert notification body for suspendEnded pod alert user notification */
-"Suspension time is up. Open the app and resume." = "Unterbrechungszeit ist abgelaufen. Öffne die App und fahre fort.";
+"Suspension time is up. Open the app and resume." = "Die Unterbrechungszeit ist abgelaufen. Öffnen Sie die App und fahren Sie fort.";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Befüllen des Pods erfolgreich";
@@ -420,22 +420,22 @@
 "Temp basal running" = "Temporäre Basalrate läuft";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ U/h %2$@ %3$@ %4$@ U %5$@";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "TempBasal: %1$@ IE/h %2$@ %3$@ %4$@ IE %5$@";
 
 /* Alert content body for suspendEnded pod alert */
-"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Der Zeitraum der Insulinaussetzung ist beendet.\n\nSie können die Insulinabgabe über das Banner auf dem Startbildschirm oder über den Bildschirm mit den Pumpeneinstellungen wieder aufnehmen. Sie werden in 15 Minuten erneut daran erinnert.";
+"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Die Insulinabschaltung ist beendet.\n\nSie können die Abgabe über das Banner auf dem Startbildschirm oder über den Bildschirm mit den Pumpeneinstellungen fortsetzen. Sie werden in 15 Minuten erneut erinnert.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
-"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Die Uhrzeit Ihrer Pumpe weicht von der aktuellen Uhrzeit ab. Sie können die Pumpenzeit überprüfen und in den Einstellungen mit der aktuellen Uhrzeit synchronisieren.";
+"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Die Uhrzeit Ihrer Pumpe weicht von der aktuellen Uhrzeit ab. Sie können die Uhrzeit der Pumpe überprüfen und in den Einstellungen mit der aktuellen Uhrzeit synchronisieren.";
 
 /* Pod state threeNotUsed */
 "threeNotUsed" = "threeNotUsed";
 
 /* Alert content title for timeOffsetChangeDetected pod alert */
-"Time Change Detected" = "Zeitänderung wurde erkannt";
+"Time Change Detected" = "Änderung der Uhrzeit erkannt";
 
 /* The format string for pod expiration notification body (1: time until expiration) */
-"Time to replace your pod! Your pod will expire in %1$@" = "Zeit, Ihren Pod zu ersetzen! Ihr Pod läuft ab in %1$@";
+"Time to replace your pod! Your pod will expire in %1$@" = "Es ist Zeit Ihren Pod zu wechseln! Der Pod läuft ab in %1$@";
 
 /* Error message for PodCommsError.tooManyPodsFound */
 "Too many pods found" = "Zu viele Pods in Reichweite";
@@ -468,11 +468,11 @@
 "Validation failed: %1$@" = "Überprüfung fehlgeschlagen: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
-"Wait for existing bolus to finish, or cancel bolus" = "Warten Sie, bis der aktuelle Bolus abgegeben wurde, oder brechen Sie den Bolus ab.";
+"Wait for existing bolus to finish, or cancel bolus" = "Warte, bis der aktuelle Bolus abgegeben wurde, oder unterbreche diesen.";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Warten Sie, bis die aktuelle temporäre Basalrate beendet wurde, oder unterbrechen Sie diese.";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Warten Sie, bis die aktuelle temporäre Basalrate beendet ist, oder unterbrechen Sie diese";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Warte auf die Erinnerung zum Koppeln";
+"Waiting for pairing reminder" = "Warten auf Kopplungserinnerung";
 

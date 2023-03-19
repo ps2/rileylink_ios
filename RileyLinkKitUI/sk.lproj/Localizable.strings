@@ -1,8 +1,8 @@
 /* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@dB";
+"%@ dB" = "%@ dB";
 
 /* Unit format string for an value in percent */
-"%@%%" = "%@%%";
+"%@%%" = "%@ %%";
 
 /* The title of the section for alerts */
 "Alert" = "Upozornenie";

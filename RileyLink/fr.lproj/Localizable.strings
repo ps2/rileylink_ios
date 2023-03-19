@@ -8,7 +8,7 @@
 "About" = "À propos";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Ajouter Compte";
+"Add Account" = "Ajouter un compte";
 
 /* Title text for button to set up a new minimed pump */
 "Add Minimed Pump" = "Ajouter une pompe Minimed";
@@ -35,13 +35,13 @@
 "Nightscout" = "Nightscout";
 
 /* The title text for the pump ID config value */
-"Pump ID" = "ID de la Pompe";
+"Pump ID" = "ID de la pompe";
 
 /* Title text for section listing configured pumps */
 "Pumps" = "Pompes";
 
 /* The default placeholder string for a credential */
-"Required" = "Requis";
+"Required" = "Obligatoire";
 
 /* Title for RileyLink Testing main view controller */
 "RileyLink Testing" = "Test Rileylink";
@@ -50,7 +50,7 @@
 "Setup Omnipod" = "Configuration Omnipod";
 
 /* The title of the nightscout site URL credential */
-"Site URL" = "URL du Site";
+"Site URL" = "URL du site";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Appuyez pour définir";

@@ -15,7 +15,7 @@
 
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Timp de activare depășit";
+"Activation time exceeded" = "Timpul de activare a fost depășit";
 
 /* Description for auto-off */
 "Auto-off" = "Oprire automată";
@@ -42,7 +42,7 @@
 "Bolusing" = "Bolus în derulare";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolus în derulare cu bazală temporară";
+"Bolusing with temp basal" = "Bolus în derulare cu rata bazală temporară";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Se inserează canula";
@@ -69,10 +69,10 @@
 "Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Mementourile de confirmare vor suna pentru comenzile pe care le inițiați, precum bolus, anualarea bolusului, suspendare, reluare, salvarea mementourilor de confirmare etc. Când Loop ajustează automat administrarea, nu sunt folosite mementouri de confirmare.";
 
 /* Description for BeepPreference.extended */
-"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Mementourile de confirmare vor suna atunci când Loop ajustează automat administrare, precum și pentru comenzile pe care le inițiați";
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Mementourile de confirmare vor suna atunci când Loop ajustează automat administrare, precum și pentru comenzile pe care le inițiați.";
 
 /* The title for AlarmCode.other notification */
-"Critical Pod Error" = "Eroare critică pod";
+"Critical Pod Error" = "Eroare critică Pod";
 
 /* Recovery suggestion when unexpected address received */
 "Crosstalk possible. Please move to a new location" = "Interferență posibilă. Vă rugăm să vă mutați într-o zonă nouă";
@@ -111,10 +111,10 @@
 "Extended bolus running" = "Bolus prelungit activat";
 
 /* Delivery status when extended bolus and temp basal is running */
-"Extended bolus running with temp basal" = "Bolus prelungit împreună cu bazală temporară";
+"Extended bolus running with temp basal" = "Bolus prelungit activ împreună cu bazală temporară";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "A survenit o defecțiune";
+"Fault event occurred" = "A avut loc un eveniment de eroare";
 
 /* Status highlight that when pod is deactivating. */
 "Finish Deactivation" = "Finalizați deactivarea";
@@ -138,7 +138,7 @@
 "Insulin delivery stopped. Change Pod now." = "Administrarea de insulină s-a oprit. Schimbați Pod-ul acum.";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Livrarea insulinei suspendată";
+"Insulin Suspended" = "Administrarea insulinei suspendată";
 
 /* Error description for OmniBLEPumpManagerError.insulinTypeNotConfigured */
 "Insulin type not configured" = "Tipul de insulină nu este configurat";
@@ -150,7 +150,7 @@
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "BolusÎntrerupt: %1$@ U (%2$@ U planificat) %3$@ %4$@ %5$@";
 
 /* Error message for when unexpected address is received (1: received address) (2: expected address) */
-"Invalid address 0x%x. Expected 0x%x" = "Adresă invalidă 0x%1$x. Se așteaptă 0x%2$x";
+"Invalid address 0x%x. Expected 0x%x" = "Adresă invalidă 0x%1$x. Se aștepta 0x%2$x";
 
 /* Description for MessageError invalidAddress */
 "Invalid address: (%1$@)" = "Adresă invalidă: (%1$@)";
@@ -162,7 +162,7 @@
 "Invalid Setting" = "Setare invalidă";
 
 /* Pod state when running with fifty or less units */
-"Low reservoir" = "Nivel scăzut rezervor";
+"Low reservoir" = "Rezervor scăzut";
 
 /* Alert content title for lowReservoir pod alert */
 "Low Reservoir" = "Rezervor scăzut";
@@ -259,7 +259,7 @@
 "Parsing Error: %1$@ in (%2$@)" = "Eroare de parsare: %1$@ în ( %2$@ )";
 
 /* Recovery suggestion on unexpected pod change */
-"Please bring only original pod in range or deactivate original pod" = "Vă rugăm să aduceți doar un pod original în rază de acțiune sau dezactivați pod-ul original";
+"Please bring only original pod in range or deactivate original pod" = "Vă rugăm să aduceți doar Pod-ul inițial în rază de acțiune sau dezactivați Pod-ul inițial";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Apropiați Pod-ul de RileyLink și încercați din nou";
@@ -298,13 +298,13 @@
 "Pod Expiration Reminder" = "Memento pentru expirarea Pod-ului";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Pod expirat";
+"Pod expired" = "Pod-ul a expirat.";
 
 /* Alert content title for podExpireImminent pod alert
    Alert content title for podExpiring pod alert
    Status highlight message for podExpired alarm.
    The title for Pod Expired alarm notification */
-"Pod Expired" = "Pod expirat";
+"Pod Expired" = "Pod Expirat";
 
 /* Format string for alert content body for userPodExpiration pod alert. (1: time until expiration) */
 "Pod expires in %1$@." = "Pod-ul expiră în %1$@.";
@@ -337,14 +337,14 @@
 "Pod suspended reminder" = "Memento pentru Pod-ul suspendat";
 
 /* Format string for poor pod signal strength */
-"Poor signal strength" = "Intensitate slabă a semnalului";
+"Poor signal strength" = "Putere slabă a semnalului";
 
 /* Delivery status when pod is priming
    Pod status when priming */
 "Priming" = "Se amorsează";
 
 /* Pod state when priming completed */
-"Priming completed" = "Amorsare terminată";
+"Priming completed" = "Inițiere finalizată";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Pregătit pentru programarea bazalelor";
@@ -368,10 +368,10 @@
 "Resume: %1$@ %2$@" = "Reluare: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Bazală planificată";
+"Scheduled basal" = "Bazala programată";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Bazală planificată";
+"Scheduled Basal" = "Bazală programată";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Oprirea iminentă";
@@ -383,7 +383,7 @@
 "Signal Loss" = "Pierdere de semnal";
 
 /* Format string for pod signal strength too high */
-"Signal strength too high" = "Intensitatea semnalului este prea mare";
+"Signal strength too high" = "Puterea semnalului este prea mare";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
 "Suspend" = "Suspendați";
@@ -441,7 +441,7 @@
 "Too many pods found" = "Au fost găsite prea multe Pod-uri";
 
 /* Recovery suggestion when ack received instead of response */
-"Try again" = "Încearcă din nou";
+"Try again" = "Încercați din nou";
 
 /* Pod state twoNotUsed */
 "twoNotUsed" = "twoNotUsed";
@@ -450,10 +450,10 @@
 "Uncertain" = "Doză neconfirmată";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Număr de ordine mesaj neașteptat";
+"Unexpected message sequence number" = "Mesaj neașteptat număr de ordine";
 
 /* Format string for unexpected pod change */
-"Unexpected pod change" = "Modificare pod neașteptată";
+"Unexpected pod change" = "Schimbare neașteptată a podului";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Răspuns neașteptat de la Pod";
@@ -462,10 +462,10 @@
 "Unknown pod fault %1$03d" = "Defecțiune Pod neidentificată %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Valoare necunoscută (%1$@) pentru tipul %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Valoare necunoscută ( %1$@ ) pentru tipul %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
-"Validation failed: %1$@" = "Validarea nu a reușit: %1$@";
+"Validation failed: %1$@" = "Validarea a eșuat: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Așteptați finalizarea bolusului curent sau opriți bolusul";
@@ -474,5 +474,5 @@
 "Wait for existing temp basal to finish, or suspend to cancel" = "Așteptați finalizarea bazalei temporare curente sau suspendați pentru oprirea ei";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Se așteaptă reamintirea de asociere";
+"Waiting for pairing reminder" = "Se așteaptă mementoul de asociere";
 

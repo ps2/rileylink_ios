@@ -8,7 +8,7 @@
 "About" = "אודות";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "הוסף חשבון";
+"Add Account" = "Add Account";
 
 /* Title text for button to set up a new minimed pump */
 "Add Minimed Pump" = "הוסף משאבת מינימד";
@@ -20,7 +20,7 @@
 "Configuration" = "Configuration";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "מחק חשבון";
+"Delete Account" = "Delete Account";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "הזן את מספר זיהוי המשאבה בן 6 הספרות";
@@ -41,16 +41,19 @@
 "Pumps" = "משאבות";
 
 /* The default placeholder string for a credential */
-"Required" = "שדה חובה";
+"Required" = "Required";
 
 /* Title for RileyLink Testing main view controller */
 "RileyLink Testing" = "בדיקת ריילילינק";
+
+/* Title text for button to set up omnipod */
+"Setup Omnipod" = "הגדרת אומניפוד";
 
 /* The title of the nightscout site URL credential */
 "Site URL" = "כתובת האתר";
 
 /* The empty-state text for a configuration value */
-"Tap to set" = "הקש כדי להגדיר";
+"Tap to set" = "Tap to set";
 
 /* The title text for the nightscout upload enabled switch cell */
 "Upload To Nightscout" = "העלה לנייטסקאוט";

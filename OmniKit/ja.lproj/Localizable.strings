@@ -1,8 +1,14 @@
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "アラーム自動オフ";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "50Uより下";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "ボーラス";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "ボーラスが進行中";
@@ -27,6 +33,9 @@
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "ポッドからの反応 - 空";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "有効";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "エラーイベントを保存、終了します";
@@ -70,6 +79,10 @@
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "閉塞があります";
+
+/* Acknowledge button label for RileyLink low battery alert
+   Alert acknowledgment OK button */
+"OK" = "OK";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";

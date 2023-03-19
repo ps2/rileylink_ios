@@ -62,6 +62,9 @@
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Pompa rezervuarını şimdi değiştirin";
 
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Saati Değiştir";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Pompanın askıya alınmadığını, dolum aşamasında olmadığını veya yüzde geçici bazal tipine sahip olmadığını kontrol edin.";
 

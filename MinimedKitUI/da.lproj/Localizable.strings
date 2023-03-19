@@ -17,7 +17,7 @@
 "%1$@ Units of insulin remaining\n" = "%1$@ enheder insulin tilbage\n";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ enheder tilbage kl. %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ enheder tilbage på %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -50,16 +50,16 @@
 "Bolusing: %1$@\n" = "Giver bolus: %1$@\n";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Afbryd";
+"Cancel" = "Annuller";
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Annuller midlertidig basal";
 
 /* The title of the command to change pump time */
-"Change Time" = "Ændre klokkeslæt";
+"Change Time" = "Ændre tid";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Ændre tidszone";
+"Change Time Zone" = "Skift tidszone";
 
 /* Text shown in basal rate space when basal is changing */
 "Changing" = "Ændrer";
@@ -80,7 +80,7 @@
 "Connect" = "Forbind";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Status på forbindelse";
+"Connection State" = "Tilslutningstilstand";
 
 /* Text for continue button */
 "Continue" = "Fortsæt";
@@ -90,7 +90,7 @@
 "Delete Pump" = "Fjern pumpe";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Mængdebegrænsning";
+"Delivery Limits" = "Insulingrænser";
 
 /* The title of the section describing the device */
 "Device" = "Enhed";
@@ -114,10 +114,10 @@
 "Enabled Diagnostic LEDs" = "Diagnoserings LED’er aktiveret";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fejl i genoptagelse";
+"Error Resuming" = "Fejl ved genoptagelse";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Fejl i suspendering";
+"Error Suspending" = "Fejl ved suspendering";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Fejl ved synkronisering af tid";
@@ -141,16 +141,16 @@
 "Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware version";
+"Firmware Version" = "Firmware-version";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Hent pumpemodel";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Hent statistik";
+"Get Statistics…" = "Hent statistik...";
 
 /* Text shown in insulin delivery space when insulin suspended */
-"Insulin\nSuspended" = "Insulin suspenderet";
+"Insulin\nSuspended" = "Insulin \nsuspenderet";
 
 /* Title of insulin delivery section */
 "Insulin Delivery" = "Insulintilførsel";
@@ -238,10 +238,10 @@
 "Resume Delivery" = "Fortsæt indgivelse";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Genoptager";
+"Resuming" = "Fortsætter";
 
 /* Button title to retry sentry setup */
-"Retry" = "Prøv igen";
+"Retry" = "Forsøg igen";
 
 /* The title of the command to fetch RileyLink statistics */
 "RileyLink Statistics" = "RileyLink statistik";
@@ -269,7 +269,7 @@
 "Starting Temp Basal" = "Starter midlertidig basal";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Lykkedes";
+"Succeeded" = "Gennemført";
 
 /* Title text for button to suspend insulin delivery */
 "Suspend Delivery" = "Afbryd insulintilførsel";
@@ -299,7 +299,7 @@
 "Tuning radio…" = "Indstiller radio...";
 
 /* Units for showing temp basal rate */
-"U/hr" = "E pr time";
+"U/hr" = "E/t";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Ukendt";

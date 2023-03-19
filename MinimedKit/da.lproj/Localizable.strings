@@ -63,10 +63,10 @@
 "Change Basal Schedule" = "Skift basalplan";
 
 /* The notification alert describing a low pump battery */
-"Change the pump battery immediately" = "Skift pumpebatteriet med det samme";
+"Change the pump battery immediately" = "Udskift pumpebatteri omgående";
 
 /* The notification alert describing an empty pump reservoir */
-"Change the pump reservoir now" = "Skift pumpebeholderen nu";
+"Change the pump reservoir now" = "Skift pumpereservoir nu";
 
 /* Event title for ChangeTimePumpEvent */
 "Change Time" = "Ændre tid";
@@ -99,7 +99,7 @@
 "Empty Reservoir" = "Tomt reservoir";
 
 /* Describing the pump history insulin data source */
-"Event History" = "Hændelseslog";
+"Event History" = "Hændelseshistorik";
 
 /* Error description for glucose page failing crc check */
 "Glucose page failed crc check" = "Glukoseside mislykkedes crc-kontrol";
@@ -180,7 +180,7 @@
 "Prime" = "Forbereder";
 
 /* The notification title for a low pump battery */
-"Pump Battery Low" = "Pumpebatteri lavt";
+"Pump Battery Low" = "Pumpebatteri lav";
 
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpe svarede ikke";
@@ -233,7 +233,7 @@
 
 /* Event title for suspend
    Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Pause";
+"Suspend" = "Suspender";
 
 /* Event title for temporary basal rate start
    Pump Event title for UnfinalizedDose with doseType of .tempBasal */

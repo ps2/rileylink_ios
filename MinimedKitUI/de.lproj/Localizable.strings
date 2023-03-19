@@ -38,7 +38,7 @@
 "Awake Until" = "Aktiv bis";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basalraten";
+"Basal Rates" = "Basalrate";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batterie: %1$@ Volt\n";
@@ -65,7 +65,7 @@
 "Changing" = "Wechselt";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Zeit ändern…";
+"Changing time…" = "Zeit ändern";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Wählen Sie den Batterietyp, den Sie in Ihrer Pumpe verwenden, um besser über einen niedrigen Batteriestand informiert zu werden.";
@@ -90,7 +90,7 @@
 "Delete Pump" = "Pumpe löschen";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Insulin Abgabelimits";
+"Delivery Limits" = "Abgabelimits";
 
 /* The title of the section describing the device */
 "Device" = "Gerät";
@@ -114,7 +114,7 @@
 "Enabled Diagnostic LEDs" = "Diagnostische LEDs aktiviert";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fehler beim Fortsetzen";
+"Error Resuming" = "Fehler beim Fortfahren";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "Fehler beim Unterbrechen";
@@ -147,13 +147,13 @@
 "Get Pump Model" = "Pumpmodell erhalten";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Statistiken abrufen…";
+"Get Statistics…" = "Lade Statistiken…";
 
 /* Text shown in insulin delivery space when insulin suspended */
 "Insulin\nSuspended" = "Insulinabgabe\nunterbrochen";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Insulinabgabe";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Die Insulinabgabe kann von der Pumpe bestimmt werden, indem entweder die Ereignishistorie interpretiert wird oder das Reservoirvolumen über die Zeit verglichen wird. Das Lesen der Ereignishistorie ermöglicht eine genauere Statusgrafik und das Hochladen aktueller Behandlungsdaten in Nightscout, auf Kosten einer schnelleren Pumpenbatterieentleerung und der Möglichkeit einer höheren Funkfehlerrate im Vergleich zum Lesen des Reservoirvolumens. Wenn das ausgewählte Gerät aus irgendeinem Grund nicht verwendet werden kann, versucht das System, auf die andere Option zurückzugreifen.";
@@ -269,7 +269,7 @@
 "Signal Strength" = "Signalstärke";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Temporäre Basalrate starten";
+"Starting Temp Basal" = "Starten der temporären Basalrate";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Erfolgreich";
@@ -311,7 +311,7 @@
 "Unknown" = "Unbekannt";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Betriebszeit";
 
 /* Description for option to use MySentry
    navigation title for pump battery type selection

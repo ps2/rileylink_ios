@@ -208,7 +208,7 @@
 "Shutdown imminent" = "Yakında Kapanma";
 
 /* Description for shutdown imminent alarm */
-"Shutdown imminent alarm" = "Kapanma yakın alarmı";
+"Shutdown imminent alarm" = "Yakında kapanma alarmı";
 
 /* Description for suspend time expired */
 "Suspend time expired" = "Askıya alma süresi doldu";

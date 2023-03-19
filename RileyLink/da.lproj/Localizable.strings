@@ -14,13 +14,13 @@
 "Add Minimed Pump" = "Tilføj MiniMed pumpe";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "API Secret";
+"API Secret" = "API kodeord";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfiguration";
 
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Slet Konto";
+"Delete Account" = "Slet konto";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Indtast det 6-cifrede pumpe ID";

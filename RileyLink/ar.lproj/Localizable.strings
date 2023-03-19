@@ -1,0 +1,12 @@
+/* The title of the nightscout API secret credential */
+"API Secret" = "API Secret";
+
+/* The title of the configuration section in settings */
+"Configuration" = "المعطيات";
+
+/* The title of the Nightscout service */
+"Nightscout" = "نايتسكاوت";
+
+/* The title of the nightscout site URL credential */
+"Site URL" = "رابط الموقع";
+

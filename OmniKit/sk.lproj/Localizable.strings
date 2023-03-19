@@ -1,3 +1,12 @@
+/* Description for an inactive alert modifier */
+" (inactive)" = "{neaktívne}";
+
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Unit format string for an value in percent */
+"%@%%" = "%@ %%";
+
 /* Format string for alert content body for lowReservoir pod alert. (1: reminder value) */
 "%1$@ insulin or less remaining in Pod. Change Pod soon." = "V podu zostáva %1$@ inzulínu alebo menej. Čoskoro vymeňte pod.";
 
@@ -5,11 +14,35 @@
    Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Čas aktivácie bol prekročený";
 
+/* Description for auto-off */
+"Auto-off" = "Automatické vypnutie";
+
+/* Pod state when basal initialized */
+"Basal initialized" = "Bazál inciovaný";
+
+/* Pod state when running below fifty units */
+"Below 50 units" = "Menej ako 50 jednotiek";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
+/* Error message shown when operation could not be completed due to existing bolus in progress */
+"Bolus in progress" = "Prebieha bolus";
+
+/* The format string describing a bolus. (1: The amount delivered)(2: Start time of the dose)(3: duration)(4: scheduled certainty) */
+"Bolus: %1$@U %2$@ %3$@ %4$@" = "\nBolus: %1$@U %2$@ %3$@ %4$@";
+
+/* Delivery status when bolusing */
+"Bolusing" = "Bolusovanie";
+
 /* Delivery status when bolusing and temp basal is running */
 "Bolusing with temp basal" = "Bolusovanie s dočasným bazálom";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Zavádzanie kanyly";
+
+/* String describing a dose that was certainly scheduled */
+"Certain" = "Zaručené";
 
 /* Alert content body for podExpireImminent pod alert */
 "Change Pod now. Insulin delivery will stop in 1 hour." = "Treba vymeniť pod. Podávanie inzulínu sa zastaví o 1 hodinu.";
@@ -29,8 +62,44 @@
 /* Recovery suggestion when unexpected address received */
 "Crosstalk possible. Please move to a new location" = "Možné presluchy. Presuňte sa na iné miesto";
 
+/* Pod state when pod has been deactivated */
+"Deactivated" = "Deaktivované";
+
+/* Description for Empty reservoir pod fault */
+"Empty reservoir" = "Prázdna nádrž";
+
+/* Error message shown when empty response from pod was received */
+"Empty response from pod" = "Prázdna odpoveď z podu";
+
+/* Pod state error event logged shutting down */
+"Error event logged, shutting down" = "Zaprotokolovaná udalosť chyby, vypína sa";
+
+/* Description for expiration advisory */
+"Expiration advisory" = "Upozornenie na vypršanie platnosti";
+
+/* Description for expiration alert */
+"Expiration alert" = "Varovanie o expirácii";
+
+/* Delivery status when extended bolus is running */
+"Extended bolus running" = "Prebieha predĺžený bolus";
+
 /* Delivery status when extended bolus and temp basal is running */
 "Extended bolus running with temp basal" = "Predĺžený bolus beží súčasne s dočasným bazálom";
+
+/* Pod state when fault event has occurred */
+"Fault event occurred" = "Vyskytla sa chybová udalosť";
+
+/* Description for finish setup */
+"Finish setup " = "Dokončiť nastavenie";
+
+/* Description for finish setup reminder */
+"Finish setup reminder" = "Dokončiť nastavenie pripomienky";
+
+/* Pod inititialized */
+"Initialized" = "Inicializované";
+
+/* Pod state when inserting cannula */
+"Inserting cannula" = "Kanyla sa zavádza";
 
 /* The default notification body for AlarmCodes */
 "Insulin delivery stopped. Change Pod now." = "Podávanie inzulínu sa zastavilo. Vymeňte modul teraz.";
@@ -118,6 +187,10 @@
 /* Error message shown when no response from pod was received */
 "No RileyLink available" = "Nie je k dispozícii žiadny RileyLink";
 
+/* Delivery status when basal is running
+   Pod state when running above fifty units */
+"Normal" = "Normálny";
+
 /* Description for MessageError notEnoughData */
 "Not enough data" = "Nedostatok dát";
 
@@ -133,6 +206,15 @@
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
+
+/* Pod state oneNotUsed */
+"oneNotUsed" = "jednoNepoužité";
+
+/* Pod status after pairing */
+"Paired" = "Spárované";
+
+/* Pod status when pairing completed */
+"Pairing completed" = "Párovanie je dokončené";
 
 /* Recovery suggestion on unexpected pod change */
 "Please bring only original pod in range or deactivate original pod" = "Prosím, majte iba pôvodný pod v dosahu alebo deaktivujte pôvodný pod";
@@ -161,8 +243,14 @@
 /* Error message shown when prime is attempted, but pod is already primed */
 "Pod already primed" = "Pod je už pripravený";
 
+/* Status highlight message for other alarm. */
+"Pod Error" = "Chyba podu";
+
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Oznámenie o expirácii podu";
+
+/* The title for pod expiration notification */
+"Pod Expiration Notice" = "Oznámenie o expirácii podu";
 
 /* Description for Pod expired pod fault */
 "Pod expired" = "Pod vypršal";
@@ -172,6 +260,9 @@
    Status highlight message for podExpired alarm.
    The title for Pod Expired alarm notification */
 "Pod Expired" = "Pod expiroval";
+
+/* Format string for pod fault code */
+"Pod Fault: %1$@" = "Chyba podu: %1$@";
 
 /* Error message when cannula insertion fails because the pod is in an unexpected state */
 "Pod is not in a state ready for cannula insertion." = "Pod nie je v stave pripravenom na zavedenie kanyly.";
@@ -213,6 +304,9 @@
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Pripravené na zavedenie kanyly";
 
+/* Pod pairing reminder initialized */
+"Reminder initialized" = "Pripomienka bola inicializovaná";
+
 /* Recovery suggestion when pod is suspended */
 "Resume delivery" = "Obnoviť podávanie inzulínu";
 
@@ -227,6 +321,9 @@
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Vypnutie každú chvilu";
+
+/* Description for shutdown imminent alarm */
+"Shutdown imminent alarm" = "Varovanie bezprostredného vypnutia";
 
 /* Status highlight when communications with the pod haven't happened recently. */
 "Signal Loss" = "Strata signálu";
@@ -243,6 +340,9 @@
 
 /* Description for suspend time expired */
 "Suspend time expired" = "Čas pozastavenia vypršal";
+
+/* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
+"Suspend: %1$@ %2$@" = "Pozastaviť: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
 "Suspended" = "Pozastavené";
@@ -265,11 +365,17 @@
 /* Delivery status when temp basal is running */
 "Temp basal running" = "Prebieha dočasný bazál";
 
+/* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "DočasBazál: %1$@ j/hod %2$@ %3$@ %4$@ j %5$@";
+
 /* Alert content body for suspendEnded pod alert */
 "The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Obdobie pozastavenia inzulínu sa skončilo.\n\nPodávanie inzulínu môžete obnoviť z bannera na domovskej obrazovke alebo z obrazovky nastavení pumpy. Pripomienka sa vám znova zobrazí o 15 minút.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Čas na pumpe sa líši od aktuálneho času. V nastaveniach môžete skontrolovať čas pumpy a synchronizovať sa s aktuálnym časom.";
+
+/* Pod state threeNotUsed */
+"threeNotUsed" = "triNepoužité";
 
 /* Alert content title for timeOffsetChangeDetected pod alert */
 "Time Change Detected" = "Zistila sa zmena času";
@@ -283,6 +389,9 @@
 /* Recovery suggestion when ack received instead of response */
 "Try again" = "Skúste znova";
 
+/* Pod state twoNotUsed */
+"twoNotUsed" = "dveNepoužité";
+
 /* String describing a dose that was possibly scheduled */
 "Uncertain" = "Neisté";
 
@@ -294,6 +403,12 @@
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Neočakávaná odpoveď z podu";
+
+/* The format string for Unknown pod fault (1: The fault code value) */
+"Unknown pod fault %1$03d" = "Neznáma chyba podu %1$03d";
+
+/* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
+"Unknown Value (%1$@) for type %2$@" = "Neznáma hodnota ( %1$@ ) pre typ %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Overenie zlyhalo: %1$@";

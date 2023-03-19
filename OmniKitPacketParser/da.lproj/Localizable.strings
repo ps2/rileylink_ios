@@ -41,7 +41,7 @@
 "Empty reservoir" = "Tomt reservoir";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Pod er tom";
+"Empty response from pod" = "Tomt svar fra Pod";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Fejlhændelse logget, lukker ned";
@@ -50,7 +50,7 @@
 "Expiration advisory" = "Påmindelse om udløb";
 
 /* Description for expiration alert */
-"Expiration alert" = "Udløbs advarsel";
+"Expiration alert" = "Udløbs-advarsel";
 
 /* Delivery status when extended bolus is running */
 "Extended bolus running" = "Forlænget bolus kører";
@@ -59,10 +59,10 @@
 "Extended bolus running with temp basal" = "Forlænget bolus med midlertidig basal";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "Der opstod en fejlhændelse";
+"Fault event occurred" = "Fejlhændelse indtraf";
 
 /* Description for finish setup */
-"Finish setup " = "Afslut indstilling";
+"Finish setup " = "Afslut opsætning";
 
 /* Description for finish setup reminder */
 "Finish setup reminder" = "Påmindelse om færdiggørelse af opsætning";
@@ -89,7 +89,7 @@
 "Low reservoir" = "Lavt reservoir";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Vejledning om lavt reservoir";
+"Low reservoir advisory (%1$gU)" = "Vejledning om lavt reservoir (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Lavt reservoir alarm";
@@ -141,7 +141,7 @@
 "Parsing Error: %1$@ in (%2$@)" = "Indlæsningfejl: %1$@ i %2$@";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "Flyt Pod’en tættere på din RileyLink og prøv igen";
+"Please bring your pod closer to the RileyLink and try again" = "Venligst flyt Pod’en tættere på din RileyLink og prøv igen";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Venligst par med en ny Pod";
@@ -168,7 +168,7 @@
 "Pod is not in a state ready for cannula insertion." = "Pod er ikke klar til kanyleindførsel.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pod er ikke parat til at blive klargjort";
+"Pod is not in a state ready for priming." = "Pod er ikke parat til klargøring.";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod er pauset";
@@ -187,7 +187,7 @@
 "Priming completed" = "Klargøring afsluttet";
 
 /* Pod state when ready for basal programming */
-"Ready for basal programming" = "Klar til programmering af basal";
+"Ready for basal programming" = "Klar til basal-indstilling";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Klar til kanyleindførsel";
@@ -217,13 +217,13 @@
 "Suspend: %1$@ %2$@" = "Pause: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Pauset";
+"Suspended" = "Suspenderet";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Reservoirpåfyldning færdig";
 
 /* Pod power to motor activated */
-"Tank power activated" = "Reservoirstrøm aktiveret";
+"Tank power activated" = "Reservoir-strøm aktiveret";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Midlertidig basal allerede i gang";
@@ -232,7 +232,7 @@
 "Temp basal running" = "Midlertidig basal i gang";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "MidlertidigBasal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Midlertidig basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
 
 /* Pod state threeNotUsed */
 "threeNotUsed" = "threeNotUsed";
@@ -253,20 +253,20 @@
 "Unexpected response from pod" = "Uventet svar fra Pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Ukendt Pod fejl %1$03d";
+"Unknown pod fault %1$03d" = "Ukendt Podfejl %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Ukendt værdi (%1$@) for %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Ukendt værdi (%1$@) for type %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Validering mislykkedes: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
-"Wait for existing bolus to finish, or cancel bolus" = "Vent indtil eksisterende bolus er færdig eller annuller bolus";
+"Wait for existing bolus to finish, or cancel bolus" = "Vent, indtil eksisterende bolus er færdig, eller annuller bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
 "Wait for existing temp basal to finish, or suspend to cancel" = "Vent, indtil den eksisterende midlertidige basal er færdig, eller pause for at annullere";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Venter på parringspåmindelse";
+"Waiting for pairing reminder" = "Venter på parrings-påmindelse";
 

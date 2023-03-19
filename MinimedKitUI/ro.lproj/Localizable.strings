@@ -53,22 +53,22 @@
 "Bolusing: %1$@\n" = "Se livrează: %1$@\n";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Anulare";
+"Cancel" = "Renunță";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Anularea bazalei temporare";
+"Canceling Temp Basal" = "Oprește bazala temporară";
 
 /* The title of the command to change pump time */
-"Change Time" = "Ajustarea ceasului";
+"Change Time" = "Schimbare oră";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Schimbarea fusului orar";
+"Change Time Zone" = "Schimbare fus orar";
 
 /* Text shown in basal rate space when basal is changing */
 "Changing" = "Se modifică";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Se ajusteaza ceasul…";
+"Changing time…" = "Se modifică ora…";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Alegeți tipul de baterie pe care îl utilizați în pompă pentru o mai bună avertizare cu privire la condițiile scăzute ale bateriei.";
@@ -83,7 +83,7 @@
 "Connect" = "Conectare";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Starea conexiunii";
+"Connection State" = "Stare conexiune";
 
 /* Text for continue button */
 "Continue" = "Continuă";
@@ -93,7 +93,7 @@
 "Delete Pump" = "Elimină pompa";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limitarea livrării";
+"Delivery Limits" = "Limite de livrare";
 
 /* The title of the section describing the device */
 "Device" = "Dispozitiv";
@@ -117,10 +117,10 @@
 "Enabled Diagnostic LEDs" = "LED-urile de diagnoza pornite";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Eroare la reluare livrării";
+"Error Resuming" = "Eroare în timpul reluării";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Eroare la suspendarea livrării";
+"Error Suspending" = "Eroare în timpul suspendării";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Eroare la sincronizarea timpului";
@@ -150,13 +150,13 @@
 "Get Pump Model" = "Obține modelul pompei";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Obținerea statisticelor…";
+"Get Statistics…" = "Obțineți statistici...";
 
 /* Text shown in insulin delivery space when insulin suspended */
 "Insulin\nSuspended" = "Administrarea insulinei suspendată";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Administrarea insulinei";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Livrarea insulinei poate fi determinată din interpretarea istoricului citit din pompă sau analizând nivelul rezervorului în timp. Citirea istoricului de evenimente permite o construcție mai exacta a graficului și uploadarea datelor actualizate în Nightscout cu prețul descărcării mai rapide a bateriei pompei si a probabilității mai mari de erori de transmisie radio, comparând cu citire numai a nivelului rezervorului. Dacă dintr-o cauză sau alta sistemul nu va reuși să folosească opțiunea aleasă, se va încerca revenirea la cealaltă posibilitate.";
@@ -165,7 +165,7 @@
 "Insulin Remaining" = "Insulină rămasă";
 
 /* Text for confidence reminders navigation link */
-"Insulin Type" = "Tip insulină";
+"Insulin Type" = "Tipul de insulină";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Ultima activitate";
@@ -183,7 +183,7 @@
 "MySentry Pair" = "Conectare MySentry";
 
 /* The title of the cell showing device name */
-"Name" = "Denumire";
+"Name" = "Nume";
 
 /* Value string for MySentry config when MySentry is not being used */
 "No" = "Nu";
@@ -214,13 +214,13 @@
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
-"Pump ID" = "ID-ul pompei";
+"Pump ID" = "ID pompă";
 
 /* The title of the cell showing the pump model number */
 "Pump Model" = "Modelul pompei";
 
 /* Title of the pump settings view controller */
-"Pump Settings" = "Setările pompei";
+"Pump Settings" = "Setări pompă";
 
 /* The title of the command to change pump time zone */
 "Pump Time" = "Ora pompei";
@@ -269,13 +269,13 @@
 "Sending button press…" = "Se trimite apăsarea butonului…";
 
 /* The title of the cell showing BLE signal strength (RSSI) */
-"Signal Strength" = "Puterea semnalului";
+"Signal Strength" = "Putere semnal";
 
 /* Title text for suspend resume button when temp basal starting */
 "Starting Temp Basal" = "Pornire bazală temporară";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Succeeded";
+"Succeeded" = "Succes";
 
 /* Title text for button to suspend insulin delivery */
 "Suspend Delivery" = "Suspendă administrarea";
@@ -314,7 +314,7 @@
 "Unknown" = "Necunoscut";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Timp în funcțiune";
+"Uptime" = "Durată de funcționare";
 
 /* Description for option to use MySentry
    navigation title for pump battery type selection

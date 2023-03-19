@@ -41,7 +41,7 @@
 "Awake Until" = "Aktywny od";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Dawka podstawowa";
+"Basal Rates" = "Dawka Podstawowa (Baza)";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Bateria: %1$@ V\n";
@@ -56,7 +56,7 @@
 "Cancel" = "Anuluj";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Anulowanie Tymczasowej Bazy";
+"Canceling Temp Basal" = "Anulowanie tymczasowej dawki podstawowej";
 
 /* The title of the command to change pump time */
 "Change Time" = "Zmień godzinę";
@@ -68,13 +68,13 @@
 "Changing" = "Zmiana";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Zmieniam godzinę…";
+"Changing time…" = "Zmiana czasu…";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Wybierz typ baterii używanej w pompie, aby lepiej ostrzegać o niskim stanie baterii.";
 
 /* The title of the section describing commands */
-"Commands" = "Komunikaty";
+"Commands" = "Komendy";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Konfiguracja";
@@ -86,14 +86,14 @@
 "Connection State" = "Status połączenia";
 
 /* Text for continue button */
-"Continue" = "Kontynuować";
+"Continue" = "Kontynuuj";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
 "Delete Pump" = "Usuń pompę";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limit podaży";
+"Delivery Limits" = "Limity podawania";
 
 /* The title of the section describing the device */
 "Device" = "Urządzenie";
@@ -117,10 +117,10 @@
 "Enabled Diagnostic LEDs" = "Diagnostyczne LEDy włączone";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Error Resuming";
+"Error Resuming" = "Błąd wznawiania";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Error Suspending";
+"Error Suspending" = "Błąd wstrzymywania";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Błąd synchronizacji czasu";
@@ -144,7 +144,7 @@
 "Firmware" = "Oprogramowanie";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Firmware Version";
+"Firmware Version" = "Wersja oprogramowania";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Pobierz model pompy";
@@ -156,7 +156,7 @@
 "Insulin\nSuspended" = "Podawanie insuliny zawieszone";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Podawanie insuliny";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Podaż insuliny jest ustalana dzięki pobieraniu danych z pompy. Może się to odbywać na dwa sposoby: poprzez interpretację historii zdarzeń lub poprzez porównywanie objętości zbiornika na insulinę w czasie. Interpretacja historii zdarzeń pozwala na dokładniejsze odwzorowanie wykresu statusu i wysyłanie aktualnych danych dotyczących leczenia do Nightscouta. Odbywa się to kosztem szybszego zużycia baterii i większym ryzykiem błędu transmisji radiowej względem drugiego sposobu, czyli porównywania objętości zbiornika na insulinę w czasie. Jeśli wybrany sposób z jakiegoś powodu nie może być użyty, system podejmie próbę powrotu do drugiej opcji.";
@@ -272,10 +272,10 @@
 "Signal Strength" = "Siła sygnału";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Uruchom tymczasową dawkę podstawową";
+"Starting Temp Basal" = "Rozpoczynanie tymczasowej dawki podstawowej";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Udało się!";
+"Succeeded" = "Zakończone powodzeniem";
 
 /* Title text for button to suspend insulin delivery */
 "Suspend Delivery" = "Wstrzymaj podawanie";
@@ -284,7 +284,7 @@
 "Suspended: %1$@\n" = "Zawieszona: %1$@\n";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
-"Suspending" = "Zawieszenie";
+"Suspending" = "Wstrzymywanie";
 
 /* The title of the command to change pump time zone */
 "Sync to Current Time" = "Synchronizuj z bieżącym czasem";

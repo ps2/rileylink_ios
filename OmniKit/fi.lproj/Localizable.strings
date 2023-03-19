@@ -4,6 +4,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Aktivointiaika ylitetty";
@@ -16,6 +19,9 @@
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Alle 50 yksikköä";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus vireillä";
@@ -38,6 +44,9 @@
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Komentovirhe %1$u";
 
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Yhteysongelma";
+
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Deaktivoitu";
 
@@ -46,6 +55,9 @@
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Tyhjä vastaus pumpulta";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "Käytössä";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Virhetapahtuma, suljetaan";
@@ -126,6 +138,10 @@
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Tukos havaittu";
+
+/* Acknowledge button label for RileyLink low battery alert
+   Alert acknowledgment OK button */
+"OK" = "OK";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -238,6 +254,9 @@
 
 /* Pod power to motor activated */
 "Tank power activated" = "Säiliön virta aktivoitu";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Tilapäinen basaali";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Tilapäinen basaali meneillään";

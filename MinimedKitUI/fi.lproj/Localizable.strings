@@ -1,6 +1,9 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@ U";
 
@@ -29,7 +32,7 @@
 "Awake Until" = "Hereillä asti";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basaalimäärät";
+"Basal Rates" = "Basaalitasot";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Paristo: %1$@ volttia\n";
@@ -42,6 +45,9 @@
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Kumoa";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Kumotaan tilapäinen basaali";
 
 /* The title of the command to change pump time */
 "Change Time" = "Muuta aika";
@@ -76,6 +82,9 @@
 
 /* The title of the section describing the device */
 "Device" = "Laite";
+
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Laitteet";
 
 /* The title of the command to discover commands */
 "Discover Commands" = "Hae komennot";
@@ -121,6 +130,9 @@
 
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Hae tilastotiedot…";
+
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Pumpun annostelemat insuliinimäärät on mahdollista määrittää joko tulkitsemalla tapahtumahistoriaa tai arvioimalla pumppusäiliön insuliinimäärää ajan kuluessa. Tapahtumahistorian lukeminen antaa tarkemman kuvan tilanteesta ja mahdollistaa ajantasaisen tiedonsiirron Nightscoutiin, mutta toisaalta tämä kuluttaa pumpun paristoa nopeammin ja lisää radiovirheiden todennäköisyyttä siihen verrattuna, että luettaisiin ainoastaan pumppusäiliössä olevan insuliinin määrää. Jos valittua lähdettä ei voida mistä tahansa syystä käyttää, järjestelmä pyrkii käyttämään toista vaihtoehtoa.";
@@ -183,6 +195,12 @@
 /* The title of the cell showing the pump region */
 "Region" = "Alue";
 
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Jatka annostelua";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Jatketaan";
+
 /* Button title to retry sentry setup */
 "Retry" = "Yritä uudelleen";
 
@@ -192,6 +210,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Tallenna pumppuun…";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Ohjelmoitu basaali";
 
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pump." = "Valitse insuliinin tyyppi, jota käytät tässä pumpussa.";
@@ -205,11 +226,20 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Signaalin vahvuus";
 
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Aloitetaan tilapäinen basaali";
+
 /* A message indicating a command succeeded */
 "Succeeded" = "Onnistui";
 
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Pysäytä annostelu";
+
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Annostelu pysäytetty: %1$@\n";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Pysäytetään";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Yritykset";
@@ -220,9 +250,12 @@
 /* Progress message for tuning radio */
 "Tuning radio…" = "Säädetään radiota…";
 
+/* Units for showing temp basal rate */
+"U/hr" = "U/h";
+
 /* The detail text for an unknown pump model */
 "Unknown" = "Tuntematon";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Toiminta-aika";
+"Uptime" = "Päällä";
 

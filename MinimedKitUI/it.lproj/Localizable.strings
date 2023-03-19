@@ -20,7 +20,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ unità rimanenti alle ore %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
 
 /* Text indicating ongoing pump time synchronization */
 "Adjusting Pump Time..." = "Regolazione Orario Microinfusore...";
@@ -38,7 +38,7 @@
 "Awake Until" = "Attivo fino a";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Velocità Basali";
+"Basal Rates" = "Velocità basali";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batteria: %1$@ volts\n";
@@ -59,13 +59,13 @@
 "Change Time" = "Cambia Orario";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Cambia Fuso Orario";
+"Change Time Zone" = "Cambia fuso orario";
 
 /* Text shown in basal rate space when basal is changing */
 "Changing" = "Modifica";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Modifica Orario…";
+"Changing time…" = "Modifica ora in corso";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Seleziona il tipo di batteria che stai utilizzando nel microinfusore per ricevere più facilmente informazioni sulle condizioni della batteria.";
@@ -80,7 +80,7 @@
 "Connect" = "Collegarsi";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Stato di Connessione";
+"Connection State" = "Stato Connessione";
 
 /* Text for continue button */
 "Continue" = "Continua";
@@ -114,10 +114,10 @@
 "Enabled Diagnostic LEDs" = "LED Diagnostici Abilitati";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Errore durante la ripresa";
+"Error Resuming" = "Errore durante la Ripresa";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Errore durante la sospensione";
+"Error Suspending" = "Errore durante l’interruzione";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Errore durante la sincronizzazione";
@@ -147,10 +147,10 @@
 "Get Pump Model" = "Ottieni Modello Microinfusore";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Ottieni Statistiche…";
+"Get Statistics…" = "Ottieni Statistiche...";
 
 /* Text shown in insulin delivery space when insulin suspended */
-"Insulin\nSuspended" = "Erogazione Insulina sospesa.";
+"Insulin\nSuspended" = "Erogazione Insulina sospesa";
 
 /* Title of insulin delivery section */
 "Insulin Delivery" = "Insulina Somministrata";
@@ -162,7 +162,7 @@
 "Insulin Remaining" = "Insulina Rimanente";
 
 /* Text for confidence reminders navigation link */
-"Insulin Type" = "Tipo di Insulina";
+"Insulin Type" = "Tipo d'insulina";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Ultimo risveglio";
@@ -189,7 +189,7 @@
 "No response" = "Nessuna risposta";
 
 /* Button text to cancel pump time sync */
-"No, Keep Pump As Is" = "No, mantieni la pompa così com'è";
+"No, Keep Pump As Is" = "No, mantienere la pompa così com'è";
 
 /* The title of the cell showing the last idle */
 "On Idle" = "Inattivo";
@@ -214,7 +214,7 @@
 "Pump Model" = "Modello Microinfusore";
 
 /* Title of the pump settings view controller */
-"Pump Settings" = "Impostazioni Microinfusore";
+"Pump Settings" = "impostazione del microinfusore";
 
 /* The title of the command to change pump time zone */
 "Pump Time" = "Orario Micro";
@@ -269,7 +269,7 @@
 "Starting Temp Basal" = "Attivazione velocità basale temporanea in corso";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Operazione eseguita con successo";
+"Succeeded" = "Effettuato con successo";
 
 /* Title text for button to suspend insulin delivery */
 "Suspend Delivery" = "Sospendi erogazione";
@@ -284,10 +284,10 @@
 "Sync to Current Time" = "Sincronizza con l'ora corrente";
 
 /* Message for pod sync time action sheet */
-"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "l'orario del microinfusore e' diverso da quello del tempo reale, desideri fare un controllo e cambiare l'orario del microinfusore con il tempo attuale?";
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "l'orario del microinfusore e' diverso da quello del tempo attuale. Vuoi fare un controllo e cambiare l'orario del microinfusore con il tempo attuale?";
 
 /* Title for pod sync time action sheet. */
-"Time Change Detected" = "Cambio orario rilevato";
+"Time Change Detected" = "Rilevato Cambio di orario ";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Prove";
@@ -299,13 +299,13 @@
 "Tuning radio…" = "Sintonizzazione radio…";
 
 /* Units for showing temp basal rate */
-"U/hr" = "U/hr";
+"U/hr" = "U/ora";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Sconosciuto";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Uptime";
+"Uptime" = "Tempo Attività";
 
 /* Description for option to use MySentry
    navigation title for pump battery type selection

@@ -56,14 +56,32 @@
 /* Format string for total delivery on pod details screen */
 "%g U" = "%g U";
 
+/* Button text for 1 hour suspend duration */
+"1 hour" = "1 oră";
+
+/* Button text for 1 hour 30 minute suspend duration */
+"1 hour 30 minutes" = "1 oră și 30 de minute";
+
+/* Button text for 2 hour suspend duration */
+"2 hours" = "2 ore";
+
+/* Button text for 30 minute suspend duration */
+"30 minutes" = "30 de minute";
+
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Timp activ";
 
 /* Section header for activity section */
 "Activity" = "Activitate";
 
+/* Text indicating ongoing pump time synchronization */
+"Adjusting Pump Time..." = "Reglarea timpului pompei...";
+
 /* The title of the cell showing alarm status */
 "Alarms" = "Alarme";
+
+/* Alert title for cancel pairing modal */
+"Are you sure you want to cancel Pod setup?" = "Sigur doriți să anulați configurarea Pod-ului?";
 
 /* Confirmation message for shutting down a pod */
 "Are you sure you want to shutdown this pod?" = "Sigur doriți să opriți acest Pod?";
@@ -98,6 +116,9 @@
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Renunță";
 
+/* Button title to cancel manual basal */
+"Cancel Manual Basal" = "Anulați bazala manuală";
+
 /* Insert cannula action button accessibility label when cannula insertion succeeded */
 "Cannula inserted successfully. Continue." = "Canula a fost introdusă cu succes. Continuați.";
 
@@ -120,7 +141,7 @@
 "Check Pod, apply to site, then confirm pod attachment." = "Verificați Pod-ul, puneți-l pe piele, după care confirmați că este lipit.";
 
 /* Insert cannula action button accessibility label checking insertion */
-"Checking Insertion" = "Se verifică introducerea";
+"Checking Insertion" = "Se verifică inserția";
 
 /* Cannula insertion button text while checking insertion */
 "Checking..." = "Se verifică...";
@@ -128,11 +149,20 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Comunicații reluate";
 
+/* Text for confidence reminders navigation link */
+"Confidence Reminders" = "Mementouri de confimare";
+
 /* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Memento-urile de confirmare sunt semnale sonore de la Pod care pot fi folosite pentru confirmarea comenzilor selectate.";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Configurare";
+
+/* Button title for confirm attachment option */
+"Confirm" = "Confirmați";
+
+/* Alert title for confirm pod attachment */
+"Confirm Pod Attachment" = "Confirmați atașarea Pod-ului";
 
 /* The title of the continue action in an action sheet */
 "Continue" = "Continuă";
@@ -153,6 +183,9 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "Dezactivează Pod";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "Dezactivat";
+
 /* Deactivate pod action button accessibility label while deactivating */
 "Deactivating." = "Se dezactivează.";
 
@@ -163,7 +196,7 @@
 "Delete Omnipod" = "Șterge Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limite administrare";
+"Delivery Limits" = "Limite de livrare";
 
 /* Text for device details disclosure row
    title for device details page */
@@ -172,15 +205,21 @@
 /* The title of the device information section in settings */
 "Device Information" = "Informații dispozitiv";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Dispozitive";
+
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Dezactivează beep-urile de bolus";
 
 /* Pairing interface navigation bar button text for discard pod action
    Text for discard pod button */
-"Discard Pod" = "Renunțați la pod";
+"Discard Pod" = "Renunțați la Pod";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Activează beep-urile de bolus";
+
+/* Accessibility label indicating an error occurred */
+"Error" = "Eroare";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Eroare la dezactivarea beep-urilor de bolus";
@@ -195,7 +234,7 @@
 "Error Suspending" = "Eroare în timpul suspendării";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Reamintire expirare";
+"Expiration Reminder" = "Memento de expirare";
 
 /* Label text for expiration reminder default row */
 "Expiration Reminder Default" = "Memento de expirare implicit";
@@ -251,6 +290,9 @@
 /* Unit for plural hours in pod life remaining */
 "hours" = "ore";
 
+/* Alert message body for confirm pod attachment */
+"If you cancel Pod setup, the current Pod will be deactivated and will be unusable." = "Dacă anulați configurarea Pod-ului, Pod-ul actual va fi dezactivat și va fi inutilizabil.";
+
 /* Instructions when deactivating pod that has been paired, but not attached. */
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Înainte de a asocia un Pod nou, trebuie să dezactivați orice Pod setat incomplet. Dezactivați și aruncați Pod-ul curent.";
 
@@ -260,23 +302,32 @@
 /* Button title to insert cannula during setup */
 "Insert Cannula" = "Inserează canula";
 
+/* Label text indicating insertion finished. */
+"Inserted" = "Inserată";
+
 /* Insert cannula action button accessibility label while pairing */
 "Inserting. Please wait." = "Se inserează. Vă rog așteptați.";
 
 /* Cannula insertion button text while inserting */
 "Inserting..." = "Se inserează canula...";
 
+/* Text shown in insulin delivery space when insulin suspended */
+"Insulin\nSuspended" = "Administrarea insulinei suspendată";
+
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insulină livrată";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Administrarea de insulină";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* The action string on pod status page when pod faulted */
 "Insulin delivery stopped. Change Pod now." = "Administrarea de insulină s-a oprit. Schimbați Pod-ul acum.";
 
+/* Message for suspend duration selection action sheet */
+"Insulin delivery will be stopped until you resume manually. When would you like Loop to remind you to resume delivery?" = "Administrarea de insulină va fi oprită până când veți relua manual. Când doriți ca Loop să vă reamintească să reluați administrarea?";
+
 /* Header for insulin remaining on pod settings screen */
-"Insulin Remaining" = "Insulina rămasă";
+"Insulin Remaining" = "Insulină rămasă";
 
 /* Text for confidence reminders navigation link
    Title for insulin type selection screen */
@@ -284,6 +335,9 @@
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Rată invalidă";
+
+/* Question to confirm the cannula is inserted properly */
+"Is the cannula inserted properly?" = "Canula este introdusă corect?";
 
 /* Label text for step 2 of pair pod instructions */
 "Keep the RileyLink about 6 inches from the pod during pairing." = "Țineți RileyLink-ul la aproximativ 15 cm de Pod în timpul asocierii.";
@@ -327,10 +381,13 @@
 "NA" = "NA";
 
 /* Text of continue button on ExpirationReminderSetupView */
-"Next" = "Continuă";
+"Next" = "Continuați";
 
 /* Button label for user to answer cannula was not properly inserted */
 "No" = "Nu";
+
+/* Text shown in insulin remaining space when no pod is paired */
+"No\nDelivery" = "Nicio\nAdministrare";
 
 /* No comment provided by engineer. */
 "No Error" = "Nicio eroare";
@@ -344,6 +401,12 @@
 
 /* Value text for no expiration reminder */
 "No Reminder" = "Niciun memento";
+
+/* Continue pairing button title of in pairing cancel modal */
+"No, Continue With Pod" = "Nu, continuați cu Pod-ul";
+
+/* Button text to cancel pump time sync */
+"No, Keep Pump As Is" = "Nu, păstrați pompa așa cum este";
 
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Nimic";
@@ -373,6 +436,9 @@
 /* Pairing action button accessibility label while ready to pair */
 "Pair pod." = "Asociază un Pod";
 
+/* Label text indicating pairing finished. */
+"Paired" = "Asociat";
+
 /* Pairing action button accessibility label while pairing */
 "Pairing." = "Se asociază.";
 
@@ -393,6 +459,9 @@
 
 /* Progress message for play test beeps. */
 "Play Test Beeps…" = "Beep-uri de test în desfășurare…";
+
+/* Alert message body for confirm pod attachment */
+"Please confirm that the Pod is securely attached to your body.\n\nThe cannula can be inserted only once with each Pod. Tap “Confirm” when Pod is attached." = "Vă rugăm să confirmați că Pod-ul este bine fixat de corpul dumneavoastră. \n\nCanula poate fi introdusă doar o singură dată cu fiecare Pod. Atingeți „Confirmați” când Pod-ul este fixat.";
 
 /* Instructions for deactivate pod when pod not on body */
 "Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Vă rugăm să dezactivați podul. Când dezactivarea este completă, puteți asocia un nou pod.";
@@ -423,6 +492,9 @@
    Label for pod expiration row, past tense */
 "Pod Expired" = "Pod Expirat";
 
+/* Label for pod expiration row */
+"Pod Expires" = "Pod-ul expiră";
+
 /* Label for pod life state when time remaining */
 "Pod expires in" = "Pod-ul expiră în";
 
@@ -447,6 +519,9 @@
 /* title for previous pod page */
 "Previous Pod" = "Pod-ul anterior";
 
+/* Text for previous pod information row */
+"Previous Pod Information" = "Informații despre Pod-ul anterior";
+
 /* The text of the loading label when pod is primed */
 "Primed" = "Pregătit.";
 
@@ -459,6 +534,9 @@
 /* The text of the loading label when priming */
 "Priming…" = "Pregătire în curs...";
 
+/* The title of the command to change pump time zone */
+"Pump Time" = "Ora pompei";
+
 /* Label text for basal rate summary */
 "Rate" = "Rată";
 
@@ -467,6 +545,12 @@
 
 /* Label describing time remaining view */
 "Remaining" = "Rămas";
+
+/* Title for remove pod modal */
+"Remove Pod from Body" = "Înlăturați Pod-ul de pe corp";
+
+/* Title for Omnipod PumpManager deletion action sheet. */
+"Remove Pump" = "Ștergeți pompa";
 
 /* Label text for step two of attach pod instructions */
 "Remove the pod's needle cap and check cannula. Then remove paper backing." = "Scoateți capacul acului de pe Pod și verificați canula. Apoi înlăturați eticheta de hârtie de pe spate.";
@@ -530,6 +614,9 @@
 /* Button text for setting manual temporary basal rate */
 "Set Temporary Basal" = "Setați bazala temporară";
 
+/* Button title to set temporary basal rate */
+"Set Temporary Basal Rate" = "Setați bazala temporară";
+
 /* Title for setup complete screen */
 "Setup Complete" = "Configurare finalizată";
 
@@ -540,10 +627,13 @@
 "Skip Omnipod Onboarding?" = "Săriți peste inițierea pompei Omnipod?";
 
 /* The title of the status section in settings */
-"Status" = "Status";
+"Status" = "Stare";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Succes";
+
+/* Title for suspend duration selection action sheet */
+"Suspend Delivery" = "Suspendă administrarea";
 
 /* Text for suspend resume button when insulin delivery active */
 "Suspend Insulin Delivery" = "Suspendați administrarea de insulină";
@@ -551,11 +641,20 @@
 /* The detail text of the basal row when pod is suspended */
 "Suspended" = "Suspendat";
 
+/* Label for suspended at time */
+"Suspended At" = "Suspendat la";
+
 /* Text for suspend resume button when insulin delivery is suspending */
 "Suspending insulin delivery..." = "Administrarea de insulină se suspendă...";
 
 /* Title text for the button to delete Omnipod PumpManager */
 "Switch from Omnipod Pumps" = "Schimbă de la pompele Omnipod";
+
+/* Label for PumpManager deletion button */
+"Switch to other insulin delivery device" = "Treceți la alt dispozitiv de administrare a insulinei";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Sincronizați cu ora curentă";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Sincronizează cu Pod-ul";
@@ -582,7 +681,7 @@
 "The App notifies you in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have." = "Aplicația vă notifică în avans de expirarea Pod.\n\nDerulați pentru a seta numărul de ore dorite pentru notificare.";
 
 /* Description text on LowReservoirReminderSetupView */
-"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Aplicația vă anunță când cantitatea de insulină din Pod atinge acest nivel (50-10 U). \n\n Derulați pentru a seta numărul de unități la care doriți să fiți notificat.";
+"The App notifies you when the amount of insulin in the Pod reaches this level (50-10 U).\n\nScroll to set the number of units at which you would like to be reminded." = "Aplicația vă anunță când cantitatea de insulină din Pod atinge acest nivel (50-10 U). \n\nDerulați pentru a seta numărul de unități la care doriți să fiți notificat.";
 
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "Aplicația vă notifică când cantitatea de insulină din Pod atinge acest nivel.";
@@ -590,8 +689,14 @@
 /* Description text for critical alerts */
 "The reminders above will not sound if your device is in Silent or Do Not Disturb mode.\n\nThere are other critical Pod alerts and alarms that will sound even if your device is set to Silent or Do Not Disturb mode." = "Mementourile de mai sus nu vor suna dacă dispozitivul este în modul Silențios sau Nu deranjați.\n\nExistă și alte alerte și alarme critice de Pod care vor suna chiar dacă dispozitivul este setat la modul Silențios sau Nu deranjați.";
 
+/* Message for pod sync time action sheet */
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "Ora de pe pompă este diferită de ora curentă. Puteți revizui ora pompei și să o sincronizați cu ora curentă în meniul setări.";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "Ora pompei este diferită de ora curentă. Ora pompei dvs. controlează setările de terapie programate. Derulați în jos la rândul Ora pompei pentru a revizui diferența de oră și a configura pompa dvs.";
+
+/* Description of proper cannula insertion */
+"The window on the top of the Pod should be colored pink when the cannula is properly inserted into the skin." = "Fereastra din partea superioară a Pod-ului trebuie să fie colorată în roz atunci când canula a fost introdusă corect în piele.";
 
 /* Format string for recovery suggestion during deactivate pod. */
 "There was a problem communicating with the pod. If this problem persists, tap Discard Pod. You can then activate a new Pod." = "A apărut o problemă la comunicarea cu podul. Dacă această problemă persistă, atingeți Renunțați la pod. Apoi puteți activa un nou Pod.";
@@ -609,13 +714,19 @@
 
 /* Title for pod sync time action sheet.
    title for time change detected notice */
-"Time Change Detected" = "Schimbare de timp detectată";
+"Time Change Detected" = "S-a detectat schimbarea orei";
+
+/* No comment provided by engineer. */
+"Toggle sign" = "Semn de comutare";
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Prea multe înregistrări";
 
 /* description label for total delivery pod details row */
 "Total Delivery" = "Administrare totală";
+
+/* Units for showing temp basal rate */
+"U/hr" = "U/oră";
 
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "Nu s-a putut dezactiva Pod-ul. Continuați și asociați un Pod nou.";
@@ -647,9 +758,18 @@
 /* Button label for user to answer cannula was properly inserted */
 "Yes" = "Da";
 
+/* Button title for confirm deactivation option */
+"Yes, Deactivate Pod" = "Da, dezactivați Pod-ul";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Da, sincronizați cu ora curentă";
+
 /* bodyText for PodSetupView */
 "You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Veți începe acum procesul de configurare a memento-urilor, umplerea Pod-ului cu insulină, asocierea cu dispozitivul dumneavoastră și amplasarea acestuia pe corp.";
 
 /* Format string for instructions for setup complete view. (1: app name) */
 "Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Pod-ul dumneavoastră este gata de utilizare. \n\n %1$@ vă va reaminti să vă schimbați Pod-ul înainte de a expira. Puteți schimba într-un moment convenabil pentru dumneavoastră.";
+
+/* Alert message body for confirm pod attachment */
+"Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“" = "Este posibil ca Podul dvs. să administreze în continuare insulină.\nScoateți-l din corpul dumneavoastră, apoi atingeți \"Continuați\".";
 

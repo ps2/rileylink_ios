@@ -1,3 +1,9 @@
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
 /* The format string for displaying a frequency tune trial. Extra spaces added for emphesis: (1: frequency in MHz)(2: success count)(3: total count)(4: average RSSI) */
 "%1$@  %2$@/%3$@  %4$@" = "%1$@  %2$@/%3$@  %4$@";
 
@@ -6,6 +12,9 @@
 
 /* The format string describing units of insulin remaining: (1: number of units) */
 "%1$@ Units of insulin remaining\n" = "%1$@ Số unit insulin còn lại\n";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units vẫn đang còn lúc %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -20,7 +29,7 @@
 "Awake Until" = "Giữ liên lạc cho đến khi";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Tỷ lệ liều nền";
+"Basal Rates" = "Lịch biểu tiêm liều nền";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Pin: %1$@ volts\n";
@@ -34,17 +43,20 @@
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Hủy bỏ";
 
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Đang hủy liều Basal tạm thời";
+
 /* The title of the command to change pump time */
 "Change Time" = "Thay đổi thời gian";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Đổi múi giờ";
+"Change Time Zone" = "Thay đổi múi giờ";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Đang thay đổi thời gian…";
+"Changing time…" = "Đang thay đổi giờ…";
 
 /* The title of the section describing commands */
-"Commands" = "Các câu lệnh";
+"Commands" = "Commands";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Cấu hình";
@@ -53,17 +65,23 @@
 "Connect" = "Kết nối";
 
 /* The title of the cell showing BLE connection state */
-"Connection State" = "Tình trạng Kết nối";
+"Connection State" = "Tình trạng kết nối";
+
+/* Text for continue button */
+"Continue" = "Tiếp tục";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
 "Delete Pump" = "Xóa bơm";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Giới hạn tiêm";
+"Delivery Limits" = "Giới hạn liều tiêm";
 
 /* The title of the section describing the device */
 "Device" = "Thiết bị";
+
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Thiết bị";
 
 /* The title of the command to discover commands */
 "Discover Commands" = "Phát hiện các dòng lệnh";
@@ -78,10 +96,10 @@
 "Enabled Diagnostic LEDs" = "Cho phép chuẩn đoán LEDs";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Lỗi khi thực hiện Tiếp tục lại";
+"Error Resuming" = "Lỗi khi đang tái thực hiện";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Lỗi khi thực hiện Tạm ngưng";
+"Error Suspending" = "Lỗi khi đang tạm ngưng";
 
 /* The title of the command to fetch recent glucose */
 "Fetch Enlite Glucose" = "Lấy dữ liệu đường huyết";
@@ -99,7 +117,7 @@
 "Fetching pump model…" = "Đang lấy model bơm…";
 
 /* The title of the cell showing firmware version */
-"Firmware" = "Chương trình cơ sở";
+"Firmware" = "Firmware";
 
 /* The title of the cell showing the pump firmware version */
 "Firmware Version" = "Chương trình cơ sở";
@@ -109,6 +127,9 @@
 
 /* Progress message for getting statistics. */
 "Get Statistics…" = "Lấy các thống kê…";
+
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Việc tiêm insulin có thể được quyết định từ bơm bằng cách kết hợp giải thuật dữ liệu của người sử dụng và so sánh với khối lượngngăn chứa insulin theo thời gian. Việc đọc các dữ liệu cũ sẽ đảm bảo biểu đồ đường huyết luôn được tính chính xác và tải dữ liệu điều trị cập nhật lên Nightscout, nhưng lại tăng việc tiêu hao pin cũng như lỗi giao tiếp tần số radio cao hơn việc chỉ đọc mỗi dữ liệu ngăn chứa insulin. Trong trường hợp nguồn dữ liệu không được lựa chọn vì bất kỳ lý do gì thì phần mềm sẽ quay sang lựa chọn khác.";
@@ -168,6 +189,12 @@
 /* The title of the cell showing the pump region */
 "Region" = "Region";
 
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Tiếp tục lại việc tiêm insulin";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Đang tiếp tục lại";
+
 /* Button title to retry sentry setup */
 "Retry" = "Thử lại";
 
@@ -178,6 +205,9 @@
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "Lưu vào bơm…";
 
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Đã lên chương trình cho liều Basal";
+
 /* The title of the command to send a button press */
 "Send Button Press" = "Gửi nút bấm";
 
@@ -187,11 +217,20 @@
 /* The title of the cell showing BLE signal strength (RSSI) */
 "Signal Strength" = "Cường độ tín hiệu";
 
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Đang bắt đầu liều Basal tạm thời";
+
 /* A message indicating a command succeeded */
 "Succeeded" = "Đã thành công";
 
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Tạm ngưng liều insulin";
+
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Đã tạm ngưng: %1$@\n";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Đang tạm ngưng";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Các thử nghiệm";
@@ -201,6 +240,9 @@
 
 /* Progress message for tuning radio */
 "Tuning radio…" = "Chuyển tần số radio…";
+
+/* Units for showing temp basal rate */
+"U/hr" = "U/giờ";
 
 /* The detail text for an unknown pump model */
 "Unknown" = "Không nhận ra";

@@ -1,8 +1,8 @@
 /* Class = "UITableViewController"; title = "RileyLink Setup"; ObjectID = "0MV-2k-Dty"; */
-"0MV-2k-Dty.title" = "Setare RileyLink";
+"0MV-2k-Dty.title" = "Configurarea RileyLink-ului";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Caută dispozitiv";
+"1fp-45-qWK.text" = "Caută dispozitivul";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
 "A6i-Cb-baR.text" = "Alte dispozitive";
@@ -29,7 +29,7 @@
 "g1m-3k-XI3.text" = "Pompa este gata de utilizare.";
 
 /* Class = "UITextField"; placeholder = "Enter the 6-digit pump ID"; ObjectID = "HeG-VF-L5P"; */
-"HeG-VF-L5P.placeholder" = "Introduceți ID-ul pompei format din 6 cifre";
+"HeG-VF-L5P.placeholder" = "Introduceți ID-ul de pompă din 6 cifre";
 
 /* Class = "UILabel"; text = "If you travel to a different time zone for an extended period of time, you can change the pumpʼs time zone at any time in Loopʼs Settings screen."; ObjectID = "HuY-fE-vM8"; */
 "HuY-fE-vM8.text" = "În cazul în care călătoriți într-un alt fus orar pentru o perioadă extinsă, puteți modifica fusul orar al pompei din ecranul de setări Loop.";
@@ -44,13 +44,13 @@
 "lGI-LD-xR7.headerTitle" = "Regiune și culoare";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Setup complet";
+"Nwf-TJ-KmJ.title" = "Configurare finalizată";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
 "oBL-lh-SHI.title" = "Transmisii pompă";
 
 /* Class = "UILabel"; text = "On"; ObjectID = "ojQ-ob-gBx"; */
-"ojQ-ob-gBx.text" = "Activ";
+"ojQ-ob-gBx.text" = "Pornit";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
 "OZk-Db-KCs.title" = "Setare pompă";

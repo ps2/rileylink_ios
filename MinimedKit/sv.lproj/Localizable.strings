@@ -1,3 +1,9 @@
+/* Low reservoir alert format string. (1: Number of units remaining) */
+"%1$@ U left" = "%1$@ E kvar";
+
+/* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
+"%1$@ U left: %2$@" = "%1$@ E kvar: %2$@";
+
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "En bolusdos ges redan";
 
@@ -13,14 +19,27 @@
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basalprofil %1$@: %2$@ E/h";
 
+/* Event title for bolus
+   Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Ger bolus";
+"Bolus in progress" = "Bolus pågår";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus pågår";
 
 /* Describing the Canada pump region */
 "Canada" = "Canada";
+
+/* The notification alert describing a low pump battery */
+"Change the pump battery immediately" = "Byt pumpbatteri nu";
+
+/* The notification alert describing an empty pump reservoir */
+"Change the pump reservoir now" = "Byt pumpreservoar nu";
+
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Ändra tid";
 
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Kontrollera att pumpen inte är pausad eller håller på att fyllas, eller har en temporär basal inställd med procentuellt värde.";
@@ -37,6 +56,9 @@
 /* Error description */
 "Device Error" = "Enhetsfel";
 
+/* Default alert dismissal */
+"Dismiss" = "Avfärda";
+
 /* Describing the pump history insulin data source */
 "Event History" = "Händelsehistorik";
 
@@ -49,14 +71,20 @@
 /* Error description for history page failing crc check */
 "History page failed crc check" = "Historiksidan misslyckades med kontroll av Crc";
 
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulintillförsel pausad";
+
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Ogiltigt svar under %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Litium";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Lågt batteri";
+
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Säkerställ att din RileyLink är nära både telefonen och pumpen, och att den är laddad och påslagen";
+"Make sure your RileyLink is nearby and powered on" = "Säkerställ att din RileyLink är nära och påslagen";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Inställt maxvärde överskridet";
@@ -73,6 +101,12 @@
 /* Describing the North America pump region */
 "North America" = "Nordamerika";
 
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
+
+/* The notification title for a low pump battery */
+"Pump Battery Low" = "Låg batterinivå i pump";
+
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumpen svarade inte";
 
@@ -81,6 +115,12 @@
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pumpen är pausad";
+
+/* The notification title for an empty pump reservoir */
+"Pump Reservoir Empty" = "Pumpreservoaren är tom";
+
+/* The notification title for a low pump reservoir */
+"Pump Reservoir Low" = "Pumpreservoaren har låg nivå";
 
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "Pump svarade oväntat";
@@ -93,6 +133,13 @@
 
 /* Error description */
 "RileyLink radio tune failed" = "RileyLink radiosignal misslyckad";
+
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "Schemalagd basal";
+
+/* Event title for temporary basal rate start
+   Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Temporär basal";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Temporär basal: %1$.3f E/timme";

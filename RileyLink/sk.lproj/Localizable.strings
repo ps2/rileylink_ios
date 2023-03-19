@@ -1,5 +1,5 @@
 /* Unit format string for an RSSI value in decibles */
-"%@ dB" = "%@dB";
+"%@ dB" = "%@ dB";
 
 /* Unit format string for an value in percent */
 "%@%%" = "%@ %%";
@@ -41,7 +41,7 @@
 "Pumps" = "Pumpy";
 
 /* The default placeholder string for a credential */
-"Required" = "Požadované";
+"Required" = "Povinné";
 
 /* Title for RileyLink Testing main view controller */
 "RileyLink Testing" = "Rileylink testovanie";

@@ -1,8 +1,14 @@
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-off alarm";
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Dưới 50 units";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Liều Bolus đang được thực hiện";
@@ -30,6 +36,9 @@
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Không có phản hồi từ pod";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "Được cấp quyền";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Lỗi đăng nhập, đang tắt";
@@ -73,6 +82,10 @@
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Occlusion detected";
+
+/* Acknowledge button label for RileyLink low battery alert
+   Alert acknowledgment OK button */
+"OK" = "OK";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";

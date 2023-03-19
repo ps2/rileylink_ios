@@ -65,13 +65,13 @@
 "Finish setup " = "Ferdigstill oppsett";
 
 /* Description for finish setup reminder */
-"Finish setup reminder" = "Fullfør oppsettpåminnelse";
+"Finish setup reminder" = "Fullfør varselinnstilling";
 
 /* Pod inititialized */
 "Initialized" = "Klargjort";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Setter inn kanyle";
+"Inserting cannula" = "Fører inn kanyle";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Intern pod-feil %1$03d";
@@ -89,7 +89,7 @@
 "Low reservoir" = "Lavt reservoar";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Råd om lavt reservoar (%1$gU)";
+"Low reservoir advisory (%1$gU)" = "Varsel om lavt reservoar (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Anbefalt alarm for lavt reservoar";
@@ -98,7 +98,7 @@
 "Make sure your RileyLink is nearby and powered on" = "Pass på at din RileyLink er slått på og er i nærheten";
 
 /* Pod memory initialized */
-"Memory initialized" = "Minnet initialisert";
+"Memory initialized" = "Minne initialisert";
 
 /* Pod alert state when no alerts are active */
 "No alerts" = "Ingen alarmer";
@@ -159,7 +159,7 @@
 "Pod Expiration Notice" = "Utløpsmelding for pod";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Utløpt pod";
+"Pod expired" = "Pod utløpt";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Pod-feil: %1$@";
@@ -211,13 +211,13 @@
 "Shutdown imminent alarm" = "Avslutt forestående alarm";
 
 /* Description for suspend time expired */
-"Suspend time expired" = "Suspenderingstiden er utløpt";
+"Suspend time expired" = "Utsettelse utløpt";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Pause: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Pauset";
+"Suspended" = "Suspendert";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Tankpåfylling komplett";
@@ -232,7 +232,7 @@
 "Temp basal running" = "Midlertidig basal kjører";
 
 /* The format string describing a temp basal. (1: The rate)(2: Start time)(3: duration)(4: volume)(5: scheduled certainty */
-"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Temp-basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
+"TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Midlertidig basal: %1$@ E/time %2$@ %3$@ %4$@ E %5$@";
 
 /* Pod state threeNotUsed */
 "threeNotUsed" = "treNotUsed";
@@ -247,7 +247,7 @@
 "Uncertain" = "Usikker";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Uventet nummer for meldingssekvens";
+"Unexpected message sequence number" = "Uventet meldings sekvensnummer";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Uventet svar fra pod";
@@ -256,10 +256,10 @@
 "Unknown pod fault %1$03d" = "Ukjent pod-feil %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Ukjent verdi (%1$@) for typen %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Ukjent verdi ( %1$@ ) for typen %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
-"Validation failed: %1$@" = "Validering mislyktes: %1$@";
+"Validation failed: %1$@" = "Valideringen mislyktes: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Vent til at eksisterende bolus skal bli ferdig, eller kanseler bolus";

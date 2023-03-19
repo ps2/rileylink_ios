@@ -1,5 +1,5 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = " (Inactief)";
+" (inactive)" = " (inactief)";
 
 /* Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Activeringstijd overschreden";
@@ -59,7 +59,7 @@
 "Extended bolus running with temp basal" = "Verlengde bolus met tijdelijk basaal actief";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "Er is een storing opgetreden";
+"Fault event occurred" = "Fout is opgetreden";
 
 /* Description for finish setup */
 "Finish setup " = "Voltooi installatie";
@@ -120,7 +120,7 @@
 "Normal" = "Normaal";
 
 /* Description for MessageError notEnoughData */
-"Not enough data" = "Te weinig gegevens";
+"Not enough data" = "Onvoldoende Gegevens";
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Verstopping gedetecteerd";
@@ -135,7 +135,7 @@
 "Paired" = "Gekoppeld";
 
 /* Pod status when pairing completed */
-"Pairing completed" = "Koppeling Voltooid";
+"Pairing completed" = "Koppelen voltooid";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
 "Parsing Error: %1$@ in (%2$@)" = "Parseerfout: %1$@ in (%2$@)";
@@ -159,7 +159,7 @@
 "Pod Expiration Notice" = "Pod vervaltijd aankondiging";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Pod verlopen";
+"Pod expired" = "Pod is verlopen";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Pod fout: %1$@";
@@ -202,7 +202,7 @@
 "Scheduled basal" = "Gepland basaal";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Gepland basaal";
+"Scheduled Basal" = "Ingesteld Basaal";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Afsluiting nadert";
@@ -256,7 +256,7 @@
 "Unknown pod fault %1$03d" = "Onbekende podfout %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Onbekende Waarde (%1$@) voor type %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Onbekende waarde (%1$@) voor type %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Validatie mislukt: %1$@";
@@ -265,7 +265,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Wacht tot huidige bolus is voltooid, of annuleer bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot huidig tijdelijk basaal is voltooid, of onderbreek om te annuleren";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot de huidig tijdelijk basaalsnelheid is voltooid, of onderbreek om te annuleren";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Wacht op herinnering om te verbinden";

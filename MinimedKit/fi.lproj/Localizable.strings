@@ -1,3 +1,9 @@
+/* Low reservoir alert format string. (1: Number of units remaining) */
+"%1$@ U left" = "%1$@ U jäljellä";
+
+/* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
+"%1$@ U left: %2$@" = "%1$@ U jäljellä: %2$@";
+
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "Bolus on jo käynnissä";
 
@@ -13,14 +19,27 @@
 /* The format string description of a BasalProfileStartPumpEvent. (1: The index of the profile)(2: The basal rate) */
 "Basal Profile %1$@: %2$@ U/hour" = "Basaaliprofiili %1$@: %2$@ U/h";
 
+/* Event title for bolus
+   Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolus käynnissä";
+"Bolus in progress" = "Bolus vireillä";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus käynnissä";
 
 /* Describing the Canada pump region */
 "Canada" = "Kanada";
+
+/* The notification alert describing a low pump battery */
+"Change the pump battery immediately" = "Vaihda pumpun paristo välittömästi";
+
+/* The notification alert describing an empty pump reservoir */
+"Change the pump reservoir now" = "Vaihda pumpun säiliö";
+
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Muuta aika";
 
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Tarkista, että pumppu ei ole pysäytetty, vakiotäytöllä tai basaalityypiksi ei ole valittu prosentteja";
@@ -37,6 +56,9 @@
 /* Error description */
 "Device Error" = "Laitevirhe";
 
+/* Default alert dismissal */
+"Dismiss" = "Ohita";
+
 /* Describing the pump history insulin data source */
 "Event History" = "Tapahtumahistoria";
 
@@ -49,14 +71,20 @@
 /* Error description for history page failing crc check */
 "History page failed crc check" = "Historiasivun CRC-tarkistus epäonnistui";
 
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insuliini pysäytetty";
+
 /* Format string for failure reason. (1: The operation being performed) (2: The response data) */
 "Invalid response during %1$@: %2$@" = "Virheellinen vastaus %1$@: %2$@";
 
 /* Describing the battery chemistry as Lithium */
 "Lithium" = "Litium";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Akku lähes tyhjä";
+
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Varmista, että RileyLink on riittävän lähellä ja se on kytketty päälle";
+"Make sure your RileyLink is nearby and powered on" = "Varmista, että RileyLink on riittävän lähellä ja kytketty päälle";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Maksimiasetus ylitetty";
@@ -73,14 +101,26 @@
 /* Describing the North America pump region */
 "North America" = "Pohjois-Amerikka";
 
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
+
+/* The notification title for a low pump battery */
+"Pump Battery Low" = "Pumpun paristo vähissä";
+
 /* No comment provided by engineer. */
 "Pump did not respond" = "Pumppu ei vastannut";
 
 /* Error description */
-"Pump Error" = "Pumppuvirhe";
+"Pump Error" = "Pumpun virhe";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pumppu on pysäytetty";
+
+/* The notification title for an empty pump reservoir */
+"Pump Reservoir Empty" = "Pumpun säiliö tyhjä";
+
+/* The notification title for a low pump reservoir */
+"Pump Reservoir Low" = "Pumpun säiliö vähissä";
 
 /* No comment provided by engineer. */
 "Pump responded unexpectedly" = "Pumppu vastasi epätavallisesti";
@@ -93,6 +133,13 @@
 
 /* Error description */
 "RileyLink radio tune failed" = "RileyLink-radion viritys epäonnistui";
+
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "Ohjelmoitu basaali";
+
+/* Event title for temporary basal rate start
+   Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Tilapäinen basaali";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "Tilapäinen basaali: %1$.3f U/h";

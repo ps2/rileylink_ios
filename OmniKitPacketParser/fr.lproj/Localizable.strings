@@ -74,7 +74,7 @@
 "Inserting cannula" = "Insertion de la canule";
 
 /* The format string for Internal pod fault (1: The fault code value) */
-"Internal pod fault %1$03d" = "code d'erreur interne du Pod %1$03d";
+"Internal pod fault %1$03d" = "Code d'erreur interne du Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
 "InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolus interrompu: %1$@ U (%2$@ U programmé) %3$@ %4$@ %5$@";
@@ -95,7 +95,7 @@
 "Low reservoir advisory alarm" = "Alarme de réservoir bas";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Assurez vous que votre RileyLink est à proximité et allumé";
+"Make sure your RileyLink is nearby and powered on" = "Assurez-vous que votre RileyLink est à proximité et allumé";
 
 /* Pod memory initialized */
 "Memory initialized" = "Mémoire initialisée";
@@ -107,7 +107,7 @@
 "No faults" = "Pas de défauts";
 
 /* Error message shown when no pod is paired */
-"No pod paired" = "Pas de Pod appairé";
+"No pod paired" = "Aucun pod appairé";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Pas de réponse du Pod";
@@ -138,7 +138,7 @@
 "Pairing completed" = "Appairage terminé";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Erreur d'analyse : %1$@ dans ( %2$@ )";
+"Parsing Error: %1$@ in (%2$@)" = "Erreur d'analyse : %1$@ dans (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Merci de rapprocher votre Pod du RileyLink et d'essayer à nouveau";
@@ -184,7 +184,7 @@
 "Priming" = "Amorçage";
 
 /* Pod state when priming completed */
-"Priming completed" = "Appairage terminé";
+"Priming completed" = "Amorçage terminé";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Prêt pour la programmation basal";
@@ -217,7 +217,7 @@
 "Suspend: %1$@ %2$@" = "Suspension : %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Suspendue";
+"Suspended" = "Suspendu";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Remplissage du réservoir terminé";
@@ -247,7 +247,7 @@
 "Uncertain" = "Incertain";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Numero de séquence du message inattendu";
+"Unexpected message sequence number" = "Numéro de séquence du message inattendu";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Reponse inattendue du Pod";
@@ -256,7 +256,7 @@
 "Unknown pod fault %1$03d" = "Erreur de Pod inconnue %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Valeur inconnue (%1$@) pour le type %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Valeur inconnue (%1$@) pour le type %2$@.";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Échec de la validation: %1$@";

@@ -42,7 +42,7 @@
 "Bolus" = "Болюс";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Подается болюс";
+"Bolus in progress" = "Подача болюса";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Подается болюс";
@@ -132,13 +132,13 @@
 "Low Battery" = "Батарейка садится";
 
 /* Event title for JournalEntryPumpLowReservoirPumpEvent */
-"Low Reservoir" = "Мало инсулина";
+"Low Reservoir" = "Мало инсулина в резервуаре";
 
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Низкий заряд батареи RileyLink";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Убедитесь, что RileyLink включен и находится поблизости";
+"Make sure your RileyLink is nearby and powered on" = "Убедитесь, что RileyLink находится поблизости и включен";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Максимальное значение превышено";
@@ -168,7 +168,7 @@
 "Ok" = "Ок";
 
 /* Acknowledge button label for RileyLink low battery alert */
-"OK" = "Ок";
+"OK" = "OK";
 
 /* Event title for percent based temp basal */
 "Percent Temp Basal" = "Проценты временного базала";
@@ -210,7 +210,7 @@
 "Reprogram Error" = "Ошибка перепрограммирования";
 
 /* Describing the reservoir insulin data source */
-"Reservoir" = "Резервуар";
+"Reservoir" = "Reservoir";
 
 /* Event title for resume
    Pump Event title for UnfinalizedDose with doseType of .resume */

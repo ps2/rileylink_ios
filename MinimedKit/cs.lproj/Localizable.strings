@@ -1,3 +1,6 @@
+/* Pump error code when bolus is in progress */
+"Bolus in progress" = "Probíhající bolus";
+
 /* Event title for ChangeBasalProfilePatternPumpEvent */
 "Change Basal Profile Schedule" = "Změnit profil bazálního rozvrhu";
 
@@ -22,6 +25,15 @@
 /* Event title for NewTimePumpEvent */
 "New Time" = "Nový čas";
 
+/* Acknowledge button label for RileyLink low battery alert */
+"OK" = "OK";
+
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "Plánovaný bazál";
+
 /* Event title for SelectBasalProfilePumpEvent */
 "Select Profile" = "Vybrat profil";
+
+/* Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Ztráta signálu";
 

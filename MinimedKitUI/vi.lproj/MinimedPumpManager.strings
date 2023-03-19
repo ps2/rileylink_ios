@@ -53,7 +53,7 @@
 "ojQ-ob-gBx.text" = "On";
 
 /* Class = "UITableViewController"; title = "Pump Setup"; ObjectID = "OZk-Db-KCs"; */
-"OZk-Db-KCs.title" = "Cấu hình bơm";
+"OZk-Db-KCs.title" = "Cấu hình cho bơm";
 
 /* Class = "UILabel"; text = "Enter the pump region"; ObjectID = "tGa-FP-JqD"; */
 "tGa-FP-JqD.text" = "Nhập khu vực của bơm";

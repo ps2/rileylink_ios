@@ -20,7 +20,7 @@
 "%1$@ Units of insulin remaining\n" = "%1$@ Eenheden insuline resterend\n";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ resterende eenheden om %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ eenheden over om %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
@@ -68,7 +68,7 @@
 "Changing" = "Verandering";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Tijd aan het aanpassen…";
+"Changing time…" = "Tijd Aanpassen...";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Kies het type batterij dat in de pomp wordt gebruikt, voor optimalisering van waarschuwing voor laag batterij niveau.";
@@ -117,10 +117,10 @@
 "Enabled Diagnostic LEDs" = "Diagnostische LEDs aangezet";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fout bij hervatten";
+"Error Resuming" = "Fout Bij Hervatten";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Fout bij onderbreken";
+"Error Suspending" = "Fout Bij Onderbreken";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Fout Synchroniseren Tijd";
@@ -150,10 +150,10 @@
 "Get Pump Model" = "Lees pompmodel";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Statistieken ophalen…";
+"Get Statistics…" = "Statistieken Ophalen...";
 
 /* Text shown in insulin delivery space when insulin suspended */
-"Insulin\nSuspended" = "Insulinetoediening onderbroken";
+"Insulin\nSuspended" = "Insuline\nOnderbroken";
 
 /* Title of insulin delivery section */
 "Insulin Delivery" = "Insulinetoediening";
@@ -241,13 +241,13 @@
 "Region" = "Regio";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Toediening Hervatten";
+"Resume Delivery" = "Hervat Toediening";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Hervatten";
+"Resuming" = "Hervat";
 
 /* Button title to retry sentry setup */
-"Retry" = "Opnieuw proberen";
+"Retry" = "Opnieuw Proberen";
 
 /* The title of the command to fetch RileyLink statistics */
 "RileyLink Statistics" = "RileyLink Statistieken";
@@ -257,7 +257,7 @@
 "Save to Pump…" = "Opslaan in Pomp…";
 
 /* Title of insulin delivery section */
-"Scheduled Basal" = "Gepland Basaal";
+"Scheduled Basal" = "Ingesteld Basaal";
 
 /* Title text for insulin type confirmation page */
 "Select the type of insulin that you will be using in this pump." = "Selecteer het type insuline dat je in deze pomp gaat gebruiken.";
@@ -287,13 +287,13 @@
 "Suspending" = "Onderbreken";
 
 /* The title of the command to change pump time zone */
-"Sync to Current Time" = "Synchroniseren met huidige tijd";
+"Sync to Current Time" = "Synchroniseer met de huidige tijd";
 
 /* Message for pod sync time action sheet */
 "The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "De tijd op je pomp is anders dan de huidige tijd. Wil je de tijd op je pomp bijwerken naar de huidige tijd?";
 
 /* Title for pod sync time action sheet. */
-"Time Change Detected" = "Tijdsverschil gedetecteerd";
+"Time Change Detected" = "Tijdsverschil Ontdekt";
 
 /* The label indicating the results of each frequency trial */
 "Trials" = "Pogingen";

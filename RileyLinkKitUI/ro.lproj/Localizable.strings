@@ -20,7 +20,7 @@
 "Connected" = "Conectat";
 
 /* The in-progress connecting state */
-"Connecting" = "Se conectează";
+"Connecting" = "Conectare";
 
 /* The title of the cell for connection LED */
 "Connection LED" = "LED de conectare";

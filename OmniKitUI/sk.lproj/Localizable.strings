@@ -153,6 +153,9 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "Deaktivovať pod";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "Deaktivované";
+
 /* Deactivate pod action button accessibility label while deactivating */
 "Deactivating." = "Deaktivuje sa.";
 
@@ -172,6 +175,9 @@
 /* The title of the device information section in settings */
 "Device Information" = "Informácie o zariadení";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Zariadenia";
+
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Vypnúť pípanie pri boluse";
 
@@ -181,6 +187,9 @@
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Povoliť pípanie pri boluse";
+
+/* Accessibility label indicating an error occurred */
+"Error" = "Chyba";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Chyba pri vypnutí bolusových pípnutí";
@@ -273,7 +282,7 @@
 "Insulin Delivery" = "Podávanie inzulínu";
 
 /* The action string on pod status page when pod faulted */
-"Insulin delivery stopped. Change Pod now." = "Podávanie inzulínu sa zastavilo. Ihneď vymeňte pod.";
+"Insulin delivery stopped. Change Pod now." = "Podávanie inzulínu sa zastavilo. Vymeňte modul teraz.";
 
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Zostávajúci inzulín";
@@ -373,6 +382,9 @@
 /* Pairing action button accessibility label while ready to pair */
 "Pair pod." = "Párovať pod.";
 
+/* Label text indicating pairing finished. */
+"Paired" = "Spárované";
+
 /* Pairing action button accessibility label while pairing */
 "Pairing." = "Párovanie.";
 
@@ -417,7 +429,7 @@
 "Pod Error" = "Chyba podu";
 
 /* Label for pod life state when within pod expiration window */
-"Pod expired" = "Pod expiroval";
+"Pod expired" = "Pod vypršal";
 
 /* Error message for reservoir view when pod expired
    Label for pod expiration row, past tense */
@@ -513,7 +525,7 @@
 "Schedule" = "Plán ";
 
 /* Title of insulin delivery section */
-"Scheduled Basal" = "Naplánovaný bazál ";
+"Scheduled Basal" = "Naplánovaný bazál";
 
 /* Card title for scheduled reminder
    Scheduled reminder card title on NotificationSettingsView
@@ -606,7 +618,7 @@
 
 /* Title for pod sync time action sheet.
    title for time change detected notice */
-"Time Change Detected" = "Zistená zmena času ";
+"Time Change Detected" = "Zistila sa zmena času";
 
 /* No comment provided by engineer. */
 "Toggle sign" = "Značka prepnutia";

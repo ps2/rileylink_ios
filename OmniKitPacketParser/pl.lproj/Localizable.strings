@@ -89,7 +89,7 @@
 "Low reservoir" = "Niski poziom w zbiorniczku";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Ostrzeżenie o niskim poziomie w zbiorniku (%1$gU)";
+"Low reservoir advisory (%1$gU)" = "Ostrzeżenie o niskim poziomie w zbiorniczku (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Alarm informujący o niskim poziomie w zbiorniku";
@@ -104,7 +104,7 @@
 "No alerts" = "Brak alertów";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Żadnych usterek";
+"No faults" = "Brak usterek";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "Brak sparowanego PODa";
@@ -138,7 +138,7 @@
 "Pairing completed" = "Parowanie zakończone";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Błąd analizy: %1$@ w ( %2$@ )";
+"Parsing Error: %1$@ in (%2$@)" = "Błąd analizy: %1$@ w (%2$@)";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Umieść PODa bliżej RileyLink i spróbuj ponownie";
@@ -159,7 +159,7 @@
 "Pod Expiration Notice" = "Powiadomienie o upływie terminu ważności PODa";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Termin ważności PODa upłynął";
+"Pod expired" = "Termin ważności POD'a upłynął";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Usterka PODa: 1$@";
@@ -205,7 +205,7 @@
 "Scheduled Basal" = "Zaplanowana dawka podstawowa";
 
 /* Description for shutdown imminent */
-"Shutdown imminent" = "Nadchodzące wyłączenie";
+"Shutdown imminent" = "Informacja o zbliżającym się wyłączeniu";
 
 /* Description for shutdown imminent alarm */
 "Shutdown imminent alarm" = "Alarm o nadchodzącym wyłączeniu";
@@ -217,7 +217,7 @@
 "Suspend: %1$@ %2$@" = "Wstrzymaj: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Wstrzymany";
+"Suspended" = "Wstrzymane";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Napełnianie zbiornika zakończone";

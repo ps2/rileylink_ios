@@ -1,5 +1,5 @@
 /* Format string for low battery alert body for RileyLink. (1: device name) */
-"\"%1$@\" has a low battery" = "\"%1$@\" heeft een bijna lege batterij";
+"\"%1$@\" has a low battery" = "\"%1$@\" batterij bijna leeg";
 
 /* Low reservoir alert format string. (1: Number of units remaining) */
 "%1$@ U left" = "%1$@ E over";
@@ -42,7 +42,7 @@
 "Bolus" = "Bolus";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolus in Uitvoering";
+"Bolus in progress" = "Bolus in uitvoering";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolus in Uitvoering";
@@ -63,10 +63,10 @@
 "Change Basal Schedule" = "Basaal Schema Aanpassen";
 
 /* The notification alert describing a low pump battery */
-"Change the pump battery immediately" = "Vervang de batterij van de pomp onmiddellijk";
+"Change the pump battery immediately" = "Vervang direct de batterij van de pomp";
 
 /* The notification alert describing an empty pump reservoir */
-"Change the pump reservoir now" = "Vervang pompreservoir direct";
+"Change the pump reservoir now" = "Vervang het pompreservoir nu";
 
 /* Event title for ChangeTimePumpEvent */
 "Change Time" = "Tijd Aanpassen";
@@ -138,7 +138,7 @@
 "Low RileyLink Battery" = "Batterij RileyLink Bijna Leeg";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Wees er zeker van dat de RileyLink in de buurt is en aanstaat";
+"Make sure your RileyLink is nearby and powered on" = "Zorg ervoor dat je RileyLink dichtbij is en aan staat";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Max instelling overschreden";
@@ -168,7 +168,7 @@
 "Ok" = "OK";
 
 /* Acknowledge button label for RileyLink low battery alert */
-"OK" = "OK";
+"OK" = "Ok";
 
 /* Event title for percent based temp basal */
 "Percent Temp Basal" = "Percentage Tijdelijk Basaal";
@@ -186,7 +186,7 @@
 "Pump did not respond" = "Pomp reageert niet";
 
 /* Error description */
-"Pump Error" = "Pomp foutmelding";
+"Pump Error" = "Pomp Foutmelding";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "Pomp is onderbroken";
@@ -195,7 +195,7 @@
 "Pump is Suspended" = "Pomp is Onderbroken";
 
 /* The notification title for an empty pump reservoir */
-"Pump Reservoir Empty" = "Pompreservoir leeg";
+"Pump Reservoir Empty" = "Pompreservoir Leeg";
 
 /* The notification title for a low pump reservoir */
 "Pump Reservoir Low" = "Pompreservoir Bijna Leeg";
@@ -223,7 +223,7 @@
 "RileyLink radio tune failed" = "Afstemmen van de RileyLink Radio mislukt";
 
 /* Event title for starting scheduled basal */
-"Scheduled Basal" = "Gepland Basaal";
+"Scheduled Basal" = "Ingesteld Basaal";
 
 /* Event title for SelectBasalProfilePumpEvent */
 "Select Profile" = "Profiel Selecteren";

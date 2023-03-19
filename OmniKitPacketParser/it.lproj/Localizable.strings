@@ -47,7 +47,7 @@
 "Error event logged, shutting down" = "È stato rilevato un errore. Spegnimento in corso";
 
 /* Description for expiration advisory */
-"Expiration advisory" = "Avviso di scadenza";
+"Expiration advisory" = "Consultivo di scadenza";
 
 /* Description for expiration alert */
 "Expiration alert" = "Avviso di scadenza";
@@ -71,13 +71,13 @@
 "Initialized" = "Inizializzato";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Inserimento cannula";
+"Inserting cannula" = "Inserimento Cannula";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Errore interno Pod %1$03d";
 
 /* The format string describing a bolus that was interrupted. (1: The amount delivered)(2: The amount scheduled)(3: Start time of the dose)(4: duration)(5: scheduled certainty) */
-"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolo interrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
+"InterruptedBolus: %1$@ U (%2$@ U scheduled) %3$@ %4$@ %5$@" = "Bolo Interrotto: %1$@ U (%2$@ U previste) %3$@ %4$@ %5$@";
 
 /* Description for MessageError invalidAddress */
 "Invalid address: (%1$@)" = "Indirizzo non valido: ( %1$@ )";
@@ -86,10 +86,10 @@
 "Invalid CRC" = "CRC non valido";
 
 /* Pod state when running with fifty or less units */
-"Low reservoir" = "Serbatoio basso";
+"Low reservoir" = "Livello Serbatoio basso";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Avviso serbatoio basso (%1$gU)";
+"Low reservoir advisory (%1$gU)" = "Notifica serbatoio basso (%1$gU)";
 
 /* Description for low reservoir alarm */
 "Low reservoir advisory alarm" = "Allarme di avviso livello serbatoio basso";
@@ -104,7 +104,7 @@
 "No alerts" = "Nessun avviso";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Nessun difetto";
+"No faults" = "Nessun errore";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "Nessun Pod abbinato";
@@ -120,7 +120,7 @@
 "Normal" = "Normale";
 
 /* Description for MessageError notEnoughData */
-"Not enough data" = "Dati insufficienti";
+"Not enough data" = "Dati non sufficienti";
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Occlusione rilevata";
@@ -138,7 +138,7 @@
 "Pairing completed" = "Abbinamento completato";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Errore di analisi: %1$@ in (%2$@)";
+"Parsing Error: %1$@ in (%2$@)" = "Errore di analisi: %1$@ in ( %2$@ )";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Avvicina Pod a RileyLink e riprova";
@@ -211,7 +211,7 @@
 "Shutdown imminent alarm" = "Allarme di spegnimento imminente";
 
 /* Description for suspend time expired */
-"Suspend time expired" = "Sospendi tempo scaduto";
+"Suspend time expired" = "il tempo della sospensione e' scaduto";
 
 /* The format string describing a suspend. (1: Time)(2: Scheduled certainty */
 "Suspend: %1$@ %2$@" = "Sospeso: %1$@ %2$@";
@@ -247,7 +247,7 @@
 "Uncertain" = "Incerto";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Messaggio inatteso del numero progressivo";
+"Unexpected message sequence number" = "Notifica inaspettata di sequenza numerica ";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Risposta inaspettata dal Pod";
@@ -256,7 +256,7 @@
 "Unknown pod fault %1$03d" = "Errore Pod sconosciuto %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Valore sconosciuto ( %1$@ ) per il tipo %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Valore sconosciuto%1$@per tipo%2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Convalida fallita: %1$@";

@@ -62,6 +62,9 @@
 /* The notification alert describing an empty pump reservoir */
 "Change the pump reservoir now" = "Changer maintenant le réservoir de la pompe";
 
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Changer l’heure";
+
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Vérifiez que la pompe n’est pas suspendue ou en amorçage, ou a un basal temporaire en pourcentage";
 
@@ -116,6 +119,12 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop a envoyé une commande de bolus à la pompe, mais n'a pas pu confirmer que la pompe a reçu la commande. Par sécurité, Loop considère que le bolus a été administré. Lorsque Loop récupère l'historique de la pompe, et que l'heure estimée de fin du bolus est dépassée, Loop met à jour ses enregistrements de livraison pour correspondre à ce que la pompe rapporte.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Batterie faible";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Réservoir bas";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Batterie RileyLink faible";
 
@@ -162,7 +171,7 @@
 "Pump did not respond" = "La pompe n’a pas répondu";
 
 /* Error description */
-"Pump Error" = "Erreur de pompe";
+"Pump Error" = "Erreur détectée";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "La pompe est suspendue";

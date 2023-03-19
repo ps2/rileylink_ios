@@ -5,7 +5,7 @@
 "%1$@ U left" = "%1$@ U sinistra";
 
 /* Low reservoir alert with time remaining format string. (1: Number of units remaining)(2: approximate time remaining) */
-"%1$@ U left: %2$@" = "%1$@U sinistra:%2$@";
+"%1$@ U left: %2$@" = "%1$@ U sinistra: %2$@";
 
 /* Communications error for a bolus currently running */
 "A bolus is already in progress" = "Un bolo è già in esecuzione";
@@ -42,7 +42,7 @@
 "Bolus" = "Bolo";
 
 /* Pump error code when bolus is in progress */
-"Bolus in progress" = "Bolo in esecuzione";
+"Bolus in progress" = "Bolo in corso";
 
 /* Error description when failure due to bolus in progress */
 "Bolus in Progress" = "Bolo in corso";
@@ -60,7 +60,10 @@
 "Change the pump battery immediately" = "Cambiare immediatamente la batteria del microinfusore";
 
 /* The notification alert describing an empty pump reservoir */
-"Change the pump reservoir now" = "Cambiare il serbatoio del microinfusore ora";
+"Change the pump reservoir now" = "Cambiare subito il serbatoio del microinfusore";
+
+/* Event title for ChangeTimePumpEvent */
+"Change Time" = "Cambia Orario";
 
 /* Suggestions for diagnosing a command refused pump error */
 "Check that the pump is not suspended or priming, or has a percent temp basal type" = "Verificare che il microinfusore non sia sospeso o che stia riavvolgendo o che abbia un tipo basale impostato su percentuale";
@@ -102,7 +105,7 @@
 "History page failed crc check" = "La pagina della cronologia non ha superato il controllo crc";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Erogazione Insulina sospesa.";
+"Insulin Suspended" = "Erogazione Insulina sospesa";
 
 /* Error description for MinimedPumpManagerError.insulinTypeNotConfigured */
 "Insulin Type is not configured" = "Il tipo d'insulina non è stato configurato";
@@ -116,11 +119,17 @@
 /* Help anchor for uncertain bolus */
 "Loop sent a bolus command to the pump, but was unable to confirm that the pump received the command. For safety, Loop will assume the bolus was delivered. When Loop eventually fetches history from the pump, and the estimated bolus finish time is passed, Loop will update its records of delivery to match what the pump reports." = "Loop ha inviato un comando di bolo al microinfusore, ma non è stato in grado di confermare che il microinfusore abbia ricevuto il comando. Per sicurezza, Loop presume che il bolo sia stato erogato. Quando alla fine Loop recupera la cronologia dal microinfusore e l'ora prevista per la fine del bolo, Loop aggiorna i propri record di erogazione in modo che corrispondano a quanto riportato dal microinfusore.";
 
+/* Event title for JournalEntryPumpLowBatteryPumpEvent */
+"Low Battery" = "Batteria Bassa";
+
+/* Event title for JournalEntryPumpLowReservoirPumpEvent */
+"Low Reservoir" = "Livello Serbatoio basso";
+
 /* Title for RileyLink low battery alert */
 "Low RileyLink Battery" = "Batteria Rileylink quasi scarica";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Assicurati che il tuo RileyLink sia nelle vicinanze e acceso";
+"Make sure your RileyLink is nearby and powered on" = "Assicurati che RileyLink si trovi nelle vicinanze e sia acceso";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Impostazione massima superata";
@@ -141,7 +150,7 @@
 "North America" = "Nord America";
 
 /* Default alert dismissal */
-"Ok" = "Ok";
+"Ok" = "OK";
 
 /* Acknowledge button label for RileyLink low battery alert */
 "OK" = "OK";
@@ -202,7 +211,7 @@
 "Scheduled Basal" = "Basale Programmata";
 
 /* Status highlight when communications with the pod haven't happened recently. */
-"Signal Loss" = "Perdita di segnale";
+"Signal Loss" = "Perdita Segnale";
 
 /* Event title for suspend
    Pump Event title for UnfinalizedDose with doseType of .suspend */

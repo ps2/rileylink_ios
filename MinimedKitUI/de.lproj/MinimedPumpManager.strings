@@ -1,5 +1,5 @@
 /* Class = "UITableViewController"; title = "RileyLink Setup"; ObjectID = "0MV-2k-Dty"; */
-"0MV-2k-Dty.title" = "RileyLink-Einstellungen";
+"0MV-2k-Dty.title" = "RileyLink Einrichten";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
 "1fp-45-qWK.text" = "Gerät finden";
@@ -44,7 +44,7 @@
 "lGI-LD-xR7.headerTitle" = "Region und Farbe";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Setup erfolgreich";
+"Nwf-TJ-KmJ.title" = "Einrichtung abgeschlossen";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
 "oBL-lh-SHI.title" = "Datenübertragung der Pumpe";

@@ -2,7 +2,7 @@
 " (inactive)" = " (inactiv)";
 
 /* Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Timp de activare depășit";
+"Activation time exceeded" = "Timpul de activare a fost depășit";
 
 /* Description for auto-off */
 "Auto-off" = "Oprire automată";
@@ -26,7 +26,7 @@
 "Bolusing" = "Bolus în derulare";
 
 /* Delivery status when bolusing and temp basal is running */
-"Bolusing with temp basal" = "Bolus în derulare cu bazală temporară";
+"Bolusing with temp basal" = "Bolus în derulare cu rata bazală temporară";
 
 /* Pod state when inserting cannula */
 "Cannula inserting" = "Se inserează canula";
@@ -56,10 +56,10 @@
 "Extended bolus running" = "Bolus prelungit activat";
 
 /* Delivery status when extended bolus and temp basal is running */
-"Extended bolus running with temp basal" = "Bolus prelungit împreună cu bazală temporară";
+"Extended bolus running with temp basal" = "Bolus prelungit activ împreună cu bazală temporară";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "A survenit o defecțiune";
+"Fault event occurred" = "A avut loc un eveniment de eroare";
 
 /* Description for finish setup */
 "Finish setup " = "Finalizare setare";
@@ -86,7 +86,7 @@
 "Invalid CRC" = "CRC invalid";
 
 /* Pod state when running with fifty or less units */
-"Low reservoir" = "Nivel scăzut rezervor";
+"Low reservoir" = "Rezervor scăzut";
 
 /* Format string for description for low reservoir advisory (1: reminder units) */
 "Low reservoir advisory (%1$gU)" = "Avertizare de rezervor scăzut (%1$gU)";
@@ -123,7 +123,7 @@
 "Not enough data" = "Nu sunt suficiente date";
 
 /* Description for Occlusion detected pod fault */
-"Occlusion detected" = "Ocluziune detectată";
+"Occlusion detected" = "Ocluzie detectată";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -159,7 +159,7 @@
 "Pod Expiration Notice" = "Notificare expirare Pod";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Pod expirat";
+"Pod expired" = "Pod-ul a expirat.";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Defecțiune Pod: %1$@";
@@ -184,7 +184,7 @@
 "Priming" = "Se amorsează";
 
 /* Pod state when priming completed */
-"Priming completed" = "Amorsare terminată";
+"Priming completed" = "Inițiere finalizată";
 
 /* Pod state when ready for basal programming */
 "Ready for basal programming" = "Pregătit pentru programarea bazalelor";
@@ -247,7 +247,7 @@
 "Uncertain" = "Doză neconfirmată";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Număr de ordine mesaj neașteptat";
+"Unexpected message sequence number" = "Mesaj neașteptat număr de ordine";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Răspuns neașteptat de la Pod";
@@ -256,10 +256,10 @@
 "Unknown pod fault %1$03d" = "Defecțiune Pod neidentificată %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Valoare necunoscută (%1$@) pentru tipul %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Valoare necunoscută ( %1$@ ) pentru tipul %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
-"Validation failed: %1$@" = "Validarea nu a reușit: %1$@";
+"Validation failed: %1$@" = "Validarea a eșuat: %1$@";
 
 /* Recovery suggestion when operation could not be completed due to existing bolus in progress */
 "Wait for existing bolus to finish, or cancel bolus" = "Așteptați finalizarea bolusului curent sau opriți bolusul";
@@ -268,5 +268,5 @@
 "Wait for existing temp basal to finish, or suspend to cancel" = "Așteptați finalizarea bazalei temporare curente sau suspendați pentru oprirea ei";
 
 /* Description waiting for pairing reminder */
-"Waiting for pairing reminder" = "Se așteaptă reamintirea de asociere";
+"Waiting for pairing reminder" = "Se așteaptă mementoul de asociere";
 

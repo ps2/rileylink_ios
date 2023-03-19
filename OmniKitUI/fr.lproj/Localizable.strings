@@ -56,20 +56,38 @@
 /* Format string for total delivery on pod details screen */
 "%g U" = "%g U";
 
+/* Button text for 1 hour suspend duration */
+"1 hour" = "1 heure";
+
+/* Button text for 1 hour 30 minute suspend duration */
+"1 hour 30 minutes" = "1 heure 30 minutes";
+
+/* Button text for 2 hour suspend duration */
+"2 hours" = "2 heures";
+
+/* Button text for 30 minute suspend duration */
+"30 minutes" = "30 minutes";
+
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Heure d’activation";
 
 /* Section header for activity section */
 "Activity" = "Activité";
 
+/* Text indicating ongoing pump time synchronization */
+"Adjusting Pump Time..." = "Ajustement de l'horloge de la pompe...";
+
 /* The title of the cell showing alarm status */
 "Alarms" = "Alarmes";
+
+/* Alert title for cancel pairing modal */
+"Are you sure you want to cancel Pod setup?" = "Voulez-vous vraiment annuler la configuration du Pod ?";
 
 /* Confirmation message for shutting down a pod */
 "Are you sure you want to shutdown this pod?" = "Voulez-vous vraiment désactiver ce Pod ?";
 
 /* No comment provided by engineer. */
-"Are you sure you want to skip Omnipod Onboarding?" = "Voulez-vous vraiment sauter l'intégration Omnipod?";
+"Are you sure you want to skip Omnipod Onboarding?" = "Voulez-vous vraiment sauter l'intégration Omnipod ?";
 
 /* Confirmation message for removing Omnipod PumpManager */
 "Are you sure you want to stop using Omnipod?" = "Voulez-vous vraiment arrêter d’utiliser Omnipod ?";
@@ -78,7 +96,7 @@
 "Assigned Address" = "Adresse assignée";
 
 /* Title for Attach Pod screen */
-"Attach Pod" = "Attacher le Pod";
+"Attach Pod" = "Appliquer le Pod";
 
 /* Description string above progress indicator while attempting to re-establish communication from an unacknowledged command */
 "Attemping to re-establish communication" = "Tenter de rétablir la communication";
@@ -97,6 +115,9 @@
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuler";
+
+/* Button title to cancel manual basal */
+"Cancel Manual Basal" = "Annulation du débit basal manuel";
 
 /* Insert cannula action button accessibility label when cannula insertion succeeded */
 "Cannula inserted successfully. Continue." = "La canule a été insérée correctement. Continuez";
@@ -128,11 +149,20 @@
 /* Title for uncertainty recovered screen */
 "Comms Recovered" = "Communications récupérées";
 
+/* Text for confidence reminders navigation link */
+"Confidence Reminders" = "Rappels de confiance";
+
 /* Help text for BeepPreferenceSelectionView */
 "Confidence reminders are beeps from the pod which can be used to acknowledge selected commands." = "Les rappels de confiance sont des bips émis par le Pod qui peuvent être utilisés pour confirmer l'exécution des commandes sélectionnées.";
 
 /* The title of the configuration section in settings */
 "Configuration" = "Configuration";
+
+/* Button title for confirm attachment option */
+"Confirm" = "Confirmer";
+
+/* Alert title for confirm pod attachment */
+"Confirm Pod Attachment" = "Confirmer l'application du Pod";
 
 /* The title of the continue action in an action sheet */
 "Continue" = "Continuer";
@@ -153,17 +183,20 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "Désactiver le Pod";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "Désactivé";
+
 /* Deactivate pod action button accessibility label while deactivating */
 "Deactivating." = "Désactivation.";
 
 /* Action button description while deactivating */
-"Deactivating..." = "Désactivation...";
+"Deactivating..." = "Désactivation en cours...";
 
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Supprimer Omnipod";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limites d’administration";
+"Delivery Limits" = "Limites d'Administration";
 
 /* Text for device details disclosure row
    title for device details page */
@@ -171,6 +204,9 @@
 
 /* The title of the device information section in settings */
 "Device Information" = "Information de l’appareil";
+
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Dispositifs";
 
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Désactiver les bips de bolus";
@@ -181,6 +217,9 @@
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Activer les bips de bolus";
+
+/* Accessibility label indicating an error occurred */
+"Error" = "Erreur";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Erreur lors de la désactivation des bips de bolus";
@@ -195,7 +234,7 @@
 "Error Suspending" = "Erreur lors de la suspension";
 
 /* The title of the cell showing the pod expiration reminder date */
-"Expiration Reminder" = "Rappel d’expiration";
+"Expiration Reminder" = "Rappel d'expiration";
 
 /* Label text for expiration reminder default row */
 "Expiration Reminder Default" = "Rappel d'expiration par défaut";
@@ -251,6 +290,9 @@
 /* Unit for plural hours in pod life remaining */
 "hours" = "heures";
 
+/* Alert message body for confirm pod attachment */
+"If you cancel Pod setup, the current Pod will be deactivated and will be unusable." = "Si vous annulez la configuration du Pod, le Pod actuel sera désactivé et sera inutilisable.";
+
 /* Instructions when deactivating pod that has been paired, but not attached. */
 "Incompletely set up pod must be deactivated before pairing with a new one. Please deactivate and discard pod." = "Le Pod mal activé doit être désactivé avant d’en appairer un nouveau. Veuillez le désactiver et le jeter.";
 
@@ -260,11 +302,17 @@
 /* Button title to insert cannula during setup */
 "Insert Cannula" = "Insérer la canule";
 
+/* Label text indicating insertion finished. */
+"Inserted" = "Inrérée";
+
 /* Insert cannula action button accessibility label while pairing */
 "Inserting. Please wait." = "Insertion en cours. Attendez.";
 
 /* Cannula insertion button text while inserting */
 "Inserting..." = "Insertion en cours...";
+
+/* Text shown in insulin delivery space when insulin suspended */
+"Insulin\nSuspended" = "Insuline\nSuspendue";
 
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insuline délivrée";
@@ -275,6 +323,9 @@
 /* The action string on pod status page when pod faulted */
 "Insulin delivery stopped. Change Pod now." = "L'administration d'insuline s'est arrêtée. Changez de Pod maintenant.";
 
+/* Message for suspend duration selection action sheet */
+"Insulin delivery will be stopped until you resume manually. When would you like Loop to remind you to resume delivery?" = "L'administration d'insuline sera interrompue jusqu'à ce que vous la repreniez manuellement. Quand voulez-vous que Loop vous rappelle de reprendre l'administration ?";
+
 /* Header for insulin remaining on pod settings screen */
 "Insulin Remaining" = "Insuline restante";
 
@@ -284,6 +335,9 @@
 
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Saisie invalide";
+
+/* Question to confirm the cannula is inserted properly */
+"Is the cannula inserted properly?" = "La canule est-elle insérée correctement?";
 
 /* Label text for step 2 of pair pod instructions */
 "Keep the RileyLink about 6 inches from the pod during pairing." = "Gardez le RileyLink à environ 6 pouces du Pod pendant le jumelage.";
@@ -332,6 +386,9 @@
 /* Button label for user to answer cannula was not properly inserted */
 "No" = "Non";
 
+/* Text shown in insulin remaining space when no pod is paired */
+"No\nDelivery" = "Pas d'administration";
+
 /* No comment provided by engineer. */
 "No Error" = "Pas d'erreur";
 
@@ -345,12 +402,18 @@
 /* Value text for no expiration reminder */
 "No Reminder" = "Pas de rappel";
 
+/* Continue pairing button title of in pairing cancel modal */
+"No, Continue With Pod" = "Non, continuez avec le Pod";
+
+/* Button text to cancel pump time sync */
+"No, Keep Pump As Is" = "Non, garder la pompe telle quelle";
+
 /* The detail text for bolus delivery when no bolus is being delivered */
 "None" = "Aucun";
 
 /* navigation title for notification settings
    Text for pod details disclosure row */
-"Notification Settings" = "Paramètrage des notifications";
+"Notification Settings" = "Paramétrage des notifications";
 
 /* No comment provided by engineer. */
 "Numbers" = "Nombres";
@@ -373,11 +436,14 @@
 /* Pairing action button accessibility label while ready to pair */
 "Pair pod." = "Appairer le pod.";
 
+/* Label text indicating pairing finished. */
+"Paired" = "Appairé";
+
 /* Pairing action button accessibility label while pairing */
 "Pairing." = "Appairage.";
 
 /* Pod pairing action button text while pairing */
-"Pairing..." = "Appairage...";
+"Pairing..." = "Appairage en cours...";
 
 /* The text of the loading label when pairing */
 "Pairing…" = "Appairage en cours...";
@@ -393,6 +459,9 @@
 
 /* Progress message for play test beeps. */
 "Play Test Beeps…" = "Bips de test en cours";
+
+/* Alert message body for confirm pod attachment */
+"Please confirm that the Pod is securely attached to your body.\n\nThe cannula can be inserted only once with each Pod. Tap “Confirm” when Pod is attached." = "Veuillez confirmer que le Pod est solidement attaché à votre corps. \n\n La canule ne peut être insérée qu'une seule fois avec chaque Pod. Appuyez sur \"Confirmer\" lorsque le Pod est appliqué.";
 
 /* Instructions for deactivate pod when pod not on body */
 "Please deactivate the pod. When deactivation is complete, you may pair a new pod." = "Veuillez désactiver le pod. Une fois la désactivation terminée, vous pouvez appairer un nouveau Pod.";
@@ -423,6 +492,9 @@
    Label for pod expiration row, past tense */
 "Pod Expired" = "Pod expiré";
 
+/* Label for pod expiration row */
+"Pod Expires" = "Péremption du Pod";
+
 /* Label for pod life state when time remaining */
 "Pod expires in" = "Péremption du Pod dans";
 
@@ -433,7 +505,7 @@
 "Pod Occlusion" = "Occlusion du Pod";
 
 /* Pairing action button accessibility label when pairing succeeded */
-"Pod paired successfully. Continue." = "Pod associé avec succès. Continuez.";
+"Pod paired successfully. Continue." = "Pod appairé avec succès. Continuez.";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Réglages du pod";
@@ -447,6 +519,9 @@
 /* title for previous pod page */
 "Previous Pod" = "Pod précédent";
 
+/* Text for previous pod information row */
+"Previous Pod Information" = "Informations sur le Pod précédent";
+
 /* The text of the loading label when pod is primed */
 "Primed" = "Amorcé";
 
@@ -459,6 +534,9 @@
 /* The text of the loading label when priming */
 "Priming…" = "Amorçage en cours...";
 
+/* The title of the command to change pump time zone */
+"Pump Time" = "Heure de la pompe";
+
 /* Label text for basal rate summary */
 "Rate" = "Débit";
 
@@ -467,6 +545,12 @@
 
 /* Label describing time remaining view */
 "Remaining" = "Restant";
+
+/* Title for remove pod modal */
+"Remove Pod from Body" = "Retirer le Pod du corps";
+
+/* Title for Omnipod PumpManager deletion action sheet. */
+"Remove Pump" = "Retirer la pompe";
 
 /* Label text for step two of attach pod instructions */
 "Remove the pod's needle cap and check cannula. Then remove paper backing." = "Retirez le capuchon d'aiguille du pod et vérifiez la canule. Retirez ensuite le film en papier de l'autocollant.";
@@ -485,7 +569,7 @@
 "Resume Insulin Delivery" = "Reprendre l'administration d'insuline";
 
 /* Text for suspend resume button when insulin delivery is resuming */
-"Resuming insulin delivery..." = "Reprise de l'administration d'insuline";
+"Resuming insulin delivery..." = "Reprise de l'administration d'insuline...";
 
 /* Action button description for deactivate after failed attempt
    Cannula insertion button text while showing error
@@ -507,7 +591,7 @@
 
 /* button title for saving low reservoir reminder while saving
    button title for saving scheduled reminder while saving */
-"Saving..." = "Sauvegarder...";
+"Saving..." = "Sauvegarde en cours...";
 
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Programme";
@@ -522,13 +606,16 @@
 "Scheduled Reminder" = "Rappel programmé";
 
 /* Title text for insulin type confirmation page */
-"Select the type of insulin that you will be using in this pod." = "Choisir le type d'insuline utilisé avec le Pod";
+"Select the type of insulin that you will be using in this pod." = "Sélectionnez le type d'insuline que vous utiliserez dans ce Pod.";
 
 /* description label for sequence number pod details row */
 "Sequence Number" = "Numéro de séquence";
 
 /* Button text for setting manual temporary basal rate */
 "Set Temporary Basal" = "Régler basal temporaire";
+
+/* Button title to set temporary basal rate */
+"Set Temporary Basal Rate" = "Régler basal temporaire";
 
 /* Title for setup complete screen */
 "Setup Complete" = "L’installation est terminée";
@@ -545,17 +632,29 @@
 /* A message indicating a command succeeded */
 "Succeeded" = "Réussi";
 
+/* Title for suspend duration selection action sheet */
+"Suspend Delivery" = "Suspendre l'administration";
+
 /* Text for suspend resume button when insulin delivery active */
 "Suspend Insulin Delivery" = "Suspendre l'administration d'insuline";
 
 /* The detail text of the basal row when pod is suspended */
 "Suspended" = "Suspendu";
 
+/* Label for suspended at time */
+"Suspended At" = "Suspendu à";
+
 /* Text for suspend resume button when insulin delivery is suspending */
-"Suspending insulin delivery..." = "L'administration d'insuline est suspendue.";
+"Suspending insulin delivery..." = "Suspension de l'administration d'insuline...";
 
 /* Title text for the button to delete Omnipod PumpManager */
 "Switch from Omnipod Pumps" = "Changer des pompes Omnipod";
+
+/* Label for PumpManager deletion button */
+"Switch to other insulin delivery device" = "Passer à un autre dispositif d'administration d'insuline";
+
+/* The title of the command to change pump time zone */
+"Sync to Current Time" = "Synchroniser avec l'heure actuelle";
 
 /* Title of button to sync basal profile from pod */
 "Sync With Pod" = "Synchroniser avec le Pod";
@@ -587,14 +686,20 @@
 /* Footer text for low reservoir value row */
 "The App notifies you when the amount of insulin in the Pod reaches this level." = "L'application vous avertit quand la quantité d'insuline restante dans le pod atteint cette limite";
 
+/* Message for pod sync time action sheet */
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "L'heure de votre pompe est différente de l'heure actuelle. Voulez vous mettre à jour l'heure de votre pompe avec l'heure actuelle ?";
+
 /* description for time change detected notice */
 "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump." = "L'heure de votre pompe est différente de l'heure actuelle. L'heure de votre pompe contrôle les paramètres de votre traitement. Faites défiler jusqu'à la ligne Heure de Pompe pour vérifier le décalage de l'heure et configurer votre pompe.";
+
+/* Description of proper cannula insertion */
+"The window on the top of the Pod should be colored pink when the cannula is properly inserted into the skin." = "La fenêtre située sur le dessus du Pod est colorée en rose lorsque la canule est correctement insérée dans la peau.";
 
 /* Format string for recovery suggestion during deactivate pod. */
 "There was a problem communicating with the pod. If this problem persists, tap Discard Pod. You can then activate a new Pod." = "Il y a eu un problème de communication avec le Pod. Si ce problème persiste, appuyez sur Jeter le pod. Vous pourrez ensuite activer un nouveau Pod.";
 
 /* Footer text for scheduled reminder area */
-"This is a reminder that you scheduled when you paired your current Pod." = "Ceci est un rappel que vous avez cédulé quand vous avez jumelé votre Pod actuel.";
+"This is a reminder that you scheduled when you paired your current Pod." = "Ceci est un rappel que vous avez programmé quand vous avez appairé votre Pod actuel.";
 
 /* Alert format string for missing temp basal configuration. */
 "This Pump has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please go to Therapy Settings -> Delivery Limits and set a new Maximum Basal Rate." = "Cette pompe n'a pas été configurée avec un débit basal maximal parce qu'il a été rajouté avant que le basal temporaire manuel soit une fonctionnalité. Prière d'aller dans Réglages de thérapie -> Limites d'administration et configurer un nouveau débit basal maximal.";
@@ -609,47 +714,59 @@
 "Time Change Detected" = "Changement d'heure détecté";
 
 /* No comment provided by engineer. */
-"Toggle sign" = "Basculer le signe";
+"Toggle sign" = "Bouton de bascule";
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Trop d’entrées";
 
 /* description label for total delivery pod details row */
-"Total Delivery" = "Total dévlivré";
+"Total Delivery" = "Total administré";
+
+/* Units for showing temp basal rate */
+"U/hr" = "U/h";
 
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "Impossible de désactiver le Pod. Veuillez continuer et en jumeler un nouveau.";
 
 /* Title of delivery uncertainty recovery page */
-"Unable to Reach Pod" = "Incapable de joindre le Pod";
+"Unable to Reach Pod" = "Impossible de joindre le Pod";
 
 /* Title for pending command recovery screen */
-"Unable To Reach Pod" = "Incapable de joindre le Pod";
+"Unable To Reach Pod" = "Impossible de joindre le Pod";
 
 /* Alert format string for a failure to set temporary basal. (1: error description) */
-"Unable to set a temporary basal rate: %1$@" = "Impossible de définir un débit de basal temporaire: %1$@";
+"Unable to set a temporary basal rate: %1$@" = "Impossible de définir un débit basal temporaire: %1$@";
 
 /* Alert format string for a failure to set temporary basal with recovery suggestion. (1: error description) (2: recovery text) */
-"Unable to set a temporary basal rate: %1$@\n\n%2$@" = "Impossible de définir un débit de basal temporaire: %1$@\n\n%2$@";
+"Unable to set a temporary basal rate: %1$@\n\n%2$@" = "Impossible de définir un débit basal temporaire: %1$@\n\n%2$@";
 
 /* Label for pod life state when pod not fully activated */
-"Unfinished Activation" = "Activation non complétée";
+"Unfinished Activation" = "Activation inachevée";
 
 /* Label for pod life state when pod not fully deactivated */
-"Unfinished deactivation" = "Désactivation non complétée";
+"Unfinished deactivation" = "Désactivation inachevée";
 
 /* The detail text for delivered insulin when no measurement is available */
 "Unknown" = "Inconnu";
 
 /* Label text for step two of insert cannula instructions */
-"Wait until insertion is completed." = "Attendre la fin de l'insertion.";
+"Wait until insertion is completed." = "Attendez que l'insertion soit terminée.";
 
 /* Button label for user to answer cannula was properly inserted */
 "Yes" = "Oui";
 
+/* Button title for confirm deactivation option */
+"Yes, Deactivate Pod" = "Oui, désactiver le Pod";
+
+/* Button text to confirm pump time sync */
+"Yes, Sync to Current Time" = "Oui, synchroniser avec l'heure actuelle";
+
 /* bodyText for PodSetupView */
-"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Vous allez commencer le processus de configuration des rappels, du remplissage de votre Pod avec de l'insuline, du jumelage avec votre appareil et l'installation sur votre corps.";
+"You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Vous allez maintenant commencer à configurer vos rappels, à remplir votre Pod d'insuline, à l'appairer et à le placer sur votre corps.";
 
 /* Format string for instructions for setup complete view. (1: app name) */
-"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Votre Pod est prêt à être utilisé.\n\n%1$@ va vous rappeler de changer votre Pod avant qu'il expire. Vous pouvez le changer à une durée si cela vous convient.";
+"Your Pod is ready for use.\n\n%1$@ will remind you to change your pod before it expires. You can change this to a time convenient for you." = "Votre Pod est prêt à l'emploi. \n\n %1$@ vous rappellera de le remplacer avant qu'il n'expire. Vous pouvez changer ce rappel qui vous convient.";
+
+/* Alert message body for confirm pod attachment */
+"Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“" = "Votre Pod peut encore délivrer de l'insuline.\nRetirez-le de votre corps, puis appuyez sur \"Continuer\".";
 

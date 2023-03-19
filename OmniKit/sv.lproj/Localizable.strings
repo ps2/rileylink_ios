@@ -4,9 +4,12 @@
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
 
+/* Unit format string for an value in percent */
+"%@%%" = "%@%%";
+
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Aktiveringstid överskriden";
+"Activation time exceeded" = "Tid för aktivering överskriden";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-av larm";
@@ -16,6 +19,9 @@
 
 /* Pod state when running below fifty units */
 "Below 50 units" = "Under 50 enheter";
+
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
 /* Error message shown when operation could not be completed due to existing bolus in progress */
 "Bolus in progress" = "Bolus pågår";
@@ -38,6 +44,9 @@
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Kommandofel %1$u";
 
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Kommandoproblem";
+
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Inaktiverad";
 
@@ -46,6 +55,9 @@
 
 /* Error message shown when empty response from pod was received */
 "Empty response from pod" = "Inget svar från pod";
+
+/* Title string for BeepPreference.manualCommands */
+"Enabled" = "På";
 
 /* Pod state error event logged shutting down */
 "Error event logged, shutting down" = "Felhändelse loggad, stänger ned";
@@ -63,7 +75,7 @@
 "Initialized" = "Pod initialiserad";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "För in kanyl";
+"Inserting cannula" = "Kanyl förs in";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insulintillförsel pausad";
@@ -81,7 +93,7 @@
 "Invalid address: (%1$@)" = "Ogiltig adress: (%1$@)";
 
 /* Description for MessageError invalidCrc */
-"Invalid CRC" = "Ogiltig CRC";
+"Invalid CRC" = "Ogiltigt CRC";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Låg reservoarvolym";
@@ -126,6 +138,10 @@
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Ocklusion upptäckt";
+
+/* Acknowledge button label for RileyLink low battery alert
+   Alert acknowledgment OK button */
+"OK" = "OK";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -239,6 +255,9 @@
 /* Pod power to motor activated */
 "Tank power activated" = "Ström till motor för behållare aktiverad";
 
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Temporär basal";
+
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Temp basal pågår redan";
 
@@ -276,7 +295,7 @@
 "Unknown pod fault %1$03d" = "Okänt podfel %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Okänt värde (%1$@) för typ %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Okänt värde (%1$@) av typ %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Validering misslyckades: %1$@";

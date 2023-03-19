@@ -1,6 +1,12 @@
 /* No comment provided by engineer. */
 "—" = "—";
 
+/* Unit format string for an RSSI value in decibles */
+"%@ dB" = "%@ dB";
+
+/* Format string for bolus percent progress. (1: Percent progress) */
+"%@%%" = "%@ %%";
+
 /* Back button text on DeliveryUncertaintyRecoveryView */
 "Back" = "Zpět";
 
@@ -64,6 +70,9 @@
 /* Button title for pod deactivation
    Button title to deactivate pod */
 "Deactivate Pod" = "Deaktivovat Pod";
+
+/* Label text showing pod is deactivated */
+"Deactivated" = "Deaktivováno";
 
 /* Deactivate pod action button accessibility label while deactivating */
 "Deactivating." = "Deaktivace.";

@@ -17,7 +17,7 @@
 "Commands" = "Komendy";
 
 /* The connected state */
-"Connected" = "Połączony";
+"Connected" = "Połączono";
 
 /* The in-progress connecting state */
 "Connecting" = "Łączenie";
@@ -75,10 +75,10 @@
 
 /* Detail text when battery alert disabled.
    Text indicating LED Mode is off */
-"Off" = "LED'y wyłączone";
+"Off" = "Wyłącz";
 
 /* Text indicating LED Mode is on */
-"On" = "LED'y włączone";
+"On" = "Włącz";
 
 /* RileyLink setup description */
 "RileyLink allows for communication with the pump over Bluetooth Low Energy." = "RileyLink będzie łączył się z pompą poprzez Bluetooth Low Energy.";

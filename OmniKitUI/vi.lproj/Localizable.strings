@@ -1,3 +1,6 @@
+/* Format string for last status date on pod details screen */
+"%@ ago" = "%@ trước đó";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -35,6 +38,9 @@
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "Thời gian Hoạt động";
 
+/* Section header for activity section */
+"Activity" = "Hoạt động";
+
 /* The title of the cell showing alarm status */
 "Alarms" = "Cảnh báo";
 
@@ -57,7 +63,7 @@
 "Bolus Delivery" = "Liều tiêm bolus";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Hủy";
+"Cancel" = "Hủy bỏ";
 
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Thay đổi múi giờ";
@@ -78,6 +84,9 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "Hủy kích hoạt Pod";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "Đã hủy kích hoạt";
+
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Xóa Omnipod";
 
@@ -87,11 +96,17 @@
 /* The title of the device information section in settings */
 "Device Information" = "Thông tin thiết bị";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "Thiết bị";
+
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "Vô hiệu tiếng Beep liều bolus";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "Bật tiếng Beep liều bolus";
+
+/* Accessibility label indicating an error occurred */
+"Error" = "Lỗi";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "Lỗi trong việc vô hiệu tiếng beep liều bolus";
@@ -135,6 +150,9 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "Insulin đã được tiêm";
 
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Insulin Delivery";
+
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "Lỗi nhập không hợp lệ";
 
@@ -149,6 +167,9 @@
 
 /* The title of the command to pair new pod */
 "Pair New Pod" = "Ghép đôi pod mới";
+
+/* Label text indicating pairing finished. */
+"Paired" = "Đã được ghép đôi";
 
 /* The text of the loading label when pairing */
 "Pairing…" = "Đang ghép đôi…";
@@ -167,6 +188,9 @@
 
 /* Label describing pod age view */
 "Pod Age" = "Pod Age";
+
+/* Label for pod life state when within pod expiration window */
+"Pod expired" = "Pod đã hết hạn";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Các thiết lập cho pod";
@@ -188,10 +212,18 @@
 "Replace Pod Now" = "Thay thế pod ngay";
 
 /* The title of the cell showing reservoir status */
-"Reservoir" = "Ngăn chứa insulin";
+"Reservoir" = "Reservoir";
+
+/* Action button description for deactivate after failed attempt
+   Cannula insertion button text while showing error
+   Pod pairing action button text while showing error */
+"Retry" = "Thử lại";
 
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "Hủy kích hoạt pod lại";
+
+/* Navigation title for RileyLinkSetupView */
+"RileyLink Setup" = "Cài đặt RileyLink";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -200,11 +232,20 @@
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "Kế hoạch";
 
+/* Title of insulin delivery section */
+"Scheduled Basal" = "Đã lên chương trình cho liều Basal";
+
+/* Title for setup complete screen */
+"Setup Complete" = "Cấu hình hoàn thành";
+
 /* The title of the status section in settings */
 "Status" = "Tình trạng";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Đã thành công";
+
+/* Title for suspend duration selection action sheet */
+"Suspend Delivery" = "Tạm ngưng liều insulin";
 
 /* The detail text of the basal row when pod is suspended */
 "Suspended" = "Đã tạm ngưng";
@@ -224,9 +265,12 @@
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "Quá nhiều mục";
 
+/* Units for showing temp basal rate */
+"U/hr" = "U/giờ";
+
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "Không thể hủy kích hoạt pod. Đề nghị tiếp tục và ghép đôi pod mới.";
 
 /* The detail text for delivered insulin when no measurement is available */
-"Unknown" = "Không xác định";
+"Unknown" = "Không nhận ra";
 

@@ -96,7 +96,7 @@
 "Dismiss" = "Ignorar";
 
 /* Title for PumpAlarmType.emptyReservoir */
-"Empty Reservoir" = "Reserva de bomba vacía";
+"Empty Reservoir" = "Depósito vacío";
 
 /* Describing the pump history insulin data source */
 "Event History" = "Historial de Eventos";
@@ -138,7 +138,7 @@
 "Low RileyLink Battery" = "Batería baja de RileyLink";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "Asegúrate de que tu RileyLink esté cerca y encendido";
+"Make sure your RileyLink is nearby and powered on" = "Asegúrese de que su RileyLink está cerca y encendido";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "Ajuste máximo excedido";
@@ -186,7 +186,7 @@
 "Pump did not respond" = "La microinfusora no respondió";
 
 /* Error description */
-"Pump Error" = "Error de microinfusora";
+"Pump Error" = "Error de la bomba";
 
 /* No comment provided by engineer. */
 "Pump is suspended" = "La microinfusora está suspendida";

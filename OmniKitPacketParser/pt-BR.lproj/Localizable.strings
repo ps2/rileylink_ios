@@ -139,7 +139,7 @@
 "Suspend: %1$@ %2$@" = "Suspender: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Suspenço";
+"Suspended" = "Suspenso";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Enchimento do tanque concluído";

@@ -20,7 +20,7 @@
 "Connected" = "Verbonden";
 
 /* The in-progress connecting state */
-"Connecting" = "Verbinden";
+"Connecting" = "Bezig met verbinden";
 
 /* The title of the cell for connection LED */
 "Connection LED" = "Verbindings-LED";
@@ -47,7 +47,7 @@
 "Disconnecting" = "Ontkoppelen";
 
 /* The title of the cell for sounding device finding piezo */
-"Find Device" = "Vind Apparaat";
+"Find Device" = "Zoek Apparaat";
 
 /* The title of the cell showing firmware version */
 "Firmware" = "Firmware";

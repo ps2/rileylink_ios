@@ -59,13 +59,13 @@
 "Change Time" = "Changer l’heure";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "Changer le fuseau horaire";
+"Change Time Zone" = "Changement de fuseau horaire";
 
 /* Text shown in basal rate space when basal is changing */
 "Changing" = "Changement en cours...";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Changement d’heure…";
+"Changing time…" = "Changement de l’heure...";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Choisissez le type de batterie que vous utilisez dans votre pompe pour une meilleure alerte en cas de batterie faible.";
@@ -90,7 +90,7 @@
 "Delete Pump" = "Supprimer la pompe";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limites d'administration";
+"Delivery Limits" = "Limites d'Administration";
 
 /* The title of the section describing the device */
 "Device" = "Dispositif";
@@ -208,7 +208,7 @@
 
 /* The title of the cell showing pump ID
    The title text for the pump ID config value */
-"Pump ID" = "Identifiant de la pompe";
+"Pump ID" = "ID de la pompe";
 
 /* The title of the cell showing the pump model number */
 "Pump Model" = "Modèle de pompe";
@@ -241,7 +241,7 @@
 "Resuming" = "Reprise en cours";
 
 /* Button title to retry sentry setup */
-"Retry" = "Nouvel essai";
+"Retry" = "Réessayer";
 
 /* The title of the command to fetch RileyLink statistics */
 "RileyLink Statistics" = "Statistiques RileyLink";
@@ -266,7 +266,7 @@
 "Signal Strength" = "Intensité du signal";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Démarrer basal temporaire";
+"Starting Temp Basal" = "Démarrage basal temporaire";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Réussi";
@@ -305,7 +305,7 @@
 "Unknown" = "Inconnu";
 
 /* The title of the cell showing uptime */
-"Uptime" = "Temps de fonctionnement";
+"Uptime" = "Temps fonctionnement";
 
 /* Description for option to use MySentry
    navigation title for pump battery type selection

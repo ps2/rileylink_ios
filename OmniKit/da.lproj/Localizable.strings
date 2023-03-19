@@ -2,7 +2,7 @@
 " (inactive)" = " (inaktiv)";
 
 /* Format string for low battery alert body for RileyLink. (1: device name) */
-"\"%1$@\" has a low battery" = "\"%1$@\" har et lavt batteriniveau";
+"\"%1$@\" has a low battery" = "\"%1$@\" har lavt batteri";
 
 /* Unit format string for an RSSI value in decibles */
 "%@ dB" = "%@ dB";
@@ -15,7 +15,7 @@
 
 /* Format string for activation time exceeded
    Pod state when activation not completed in the time allowed */
-"Activation time exceeded" = "Aktiveringstiden overskredet";
+"Activation time exceeded" = "Aktiveringstid overskredet";
 
 /* Description for auto-off */
 "Auto-off" = "Auto-sluk";
@@ -63,7 +63,7 @@
 "Comms Issue" = "Kommunikationsproblem";
 
 /* Error message when command is rejected because an unacknowledged command is pending. */
-"Communication issue: Unacknowledged command pending." = "Kommunikationsproblem: Ukendt kommando afventer.";
+"Communication issue: Unacknowledged command pending." = "Kommunikationsproblem: Uerkendt kommando afventer.";
 
 /* Description for BeepPreference.manualCommands */
 "Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Påmindelser om succesfulde handlinger vil lyde for de kommandoer du sætter igang, annulleret, suspenderet, genoptaget bolus, gemme notifikationspåmindelser etc. Når Loop automatisk justerer tilførslen, bliver påmindelser om succesfulde handlinger ikke benyttet.";
@@ -90,7 +90,7 @@
 "Empty Reservoir" = "Tomt reservoir";
 
 /* Error message shown when empty response from pod was received */
-"Empty response from pod" = "Tom svar fra Pod";
+"Empty response from pod" = "Tomt svar fra Pod";
 
 /* Title string for BeepPreference.manualCommands */
 "Enabled" = "Aktiveret";
@@ -99,7 +99,7 @@
 "Error event logged, shutting down" = "Fejlhændelse logget, lukker ned";
 
 /* Description for expiration advisory */
-"Expiration advisory" = "Udløbs-advarsel";
+"Expiration advisory" = "Påmindelse om udløb";
 
 /* Description for expiration alert */
 "Expiration alert" = "Udløbs-advarsel";
@@ -114,13 +114,13 @@
 "Extended bolus running with temp basal" = "Forlænget bolus med midlertidig basal";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "Der opstod en fejlhændelse";
+"Fault event occurred" = "Fejlhændelse indtraf";
 
 /* Status highlight that when pod is deactivating. */
-"Finish Deactivation" = "Afslutter deaktivering";
+"Finish Deactivation" = "Afslut deaktivering";
 
 /* Status highlight that when pod is activating. */
-"Finish Pairing" = "Afslutter parring";
+"Finish Pairing" = "Afslut parring";
 
 /* Description for finish setup */
 "Finish setup " = "Afslut opsætning";
@@ -159,7 +159,7 @@
 "Invalid CRC" = "Ugyldig CRC";
 
 /* Error description for OmniBLEPumpManagerError.invalidSetting */
-"Invalid Setting" = "Ugyldig indtastning";
+"Invalid Setting" = "Ugyldig indstilling";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Lavt reservoir";
@@ -180,7 +180,7 @@
 "Make sure your pod is filled and nearby." = "Sørg for din Pod er fyldt og i nærheden";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Sørg for at din RileyLink er i nærheden og tændt";
+"Make sure your RileyLink is nearby and powered on" = "Sørg for, at din RileyLink er i nærheden og tændt";
 
 /* Status highlight when manual temp basal is running. */
 "Manual Basal" = "Manual basal";
@@ -212,7 +212,7 @@
 "No Pod" = "Ingen Pod";
 
 /* Error message shown when no pod is paired */
-"No pod paired" = "Ingen pod parret";
+"No pod paired" = "Ingen Pod parret";
 
 /* Error message for PodCommsError.noPodsFound */
 "No pods found" = "Ingen Pods fundet";
@@ -262,10 +262,10 @@
 "Please bring only original pod in range or deactivate original pod" = "Hav kun den originale Pod tæt på eller deaktiver den original Pod";
 
 /* Recovery suggestion when no response is received from pod */
-"Please bring your pod closer to the RileyLink and try again" = "Flyt Pod’en tættere på din RileyLink og prøv igen";
+"Please bring your pod closer to the RileyLink and try again" = "Venligst flyt Pod’en tættere på din RileyLink og prøv igen";
 
 /* Alert content body for finishSetupReminder pod alert */
-"Please finish pairing your pod." = "Afslut parringen af din pod.";
+"Please finish pairing your pod." = "Afslut parringen af din Pod.";
 
 /* Recover suggestion shown when no pod is paired */
 "Please pair a new pod" = "Venligst par med en ny Pod";
@@ -289,7 +289,7 @@
 "Pod Error" = "Pod-fejl";
 
 /* Description for expiration advisory alarm */
-"Pod expiration advisory alarm" = "Pod udløbs-alarm";
+"Pod expiration advisory alarm" = "Pod udløbsalarm";
 
 /* The title for pod expiration notification */
 "Pod Expiration Notice" = "Pod udløbspåmindelse";
@@ -316,7 +316,7 @@
 "Pod is not in a state ready for cannula insertion." = "Pod er ikke klar til kanyleindførsel.";
 
 /* Error message when prime fails because the pod is in an unexpected state */
-"Pod is not in a state ready for priming." = "Pod er ikke klar til klargøring.";
+"Pod is not in a state ready for priming." = "Pod er ikke parat til klargøring.";
 
 /* Error message action could not be performed because pod is suspended */
 "Pod is suspended" = "Pod er pauset";
@@ -331,7 +331,7 @@
 "Pod sent ack instead of response" = "Pod sendt acknowledge i stedet for svar";
 
 /* Pod state when prime or cannula insertion has not completed in the time allotted */
-"Pod setup window expired" = "Pod indstillings-vindue udløbet";
+"Pod setup window expired" = "Pod indstillingsvindue udløbet";
 
 /* Description for pod suspended reminder */
 "Pod suspended reminder" = "Påmindelse om suspenderet Pod ";
@@ -347,7 +347,7 @@
 "Priming completed" = "Klargøring afsluttet";
 
 /* Pod state when ready for basal programming */
-"Ready for basal programming" = "Klar til basal-programmering";
+"Ready for basal programming" = "Klar til basal-indstilling";
 
 /* Pod state when ready for cannula insertion */
 "Ready to insert cannula" = "Klar til kanyleindførsel";
@@ -359,10 +359,10 @@
 "Resume" = "Genoptag";
 
 /* Recovery suggestion when pod is suspended */
-"Resume delivery" = "Genoptag insulintilførsel";
+"Resume delivery" = "Fortsæt indgivelse";
 
 /* Alert content title for suspendEnded pod alert */
-"Resume Insulin" = "Genoptag insulintilførsel";
+"Resume Insulin" = "Genoptag insulin";
 
 /* The format string describing a resume. (1: Time)(2: Scheduled certainty */
 "Resume: %1$@ %2$@" = "Fortsæt: %1$@ %2$@";
@@ -386,11 +386,11 @@
 "Signal strength too high" = "Signalstyrken er for høj";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Pause";
+"Suspend" = "Suspender";
 
 /* Alert content body for suspendInProgress pod alert
    Alert content title for suspendInProgress pod alert */
-"Suspend In Progress Reminder" = "Påmindelse for suspendering igang";
+"Suspend In Progress Reminder" = "Påmindelse om igangværende suspension";
 
 /* Description for suspend time expired */
 "Suspend time expired" = "Suspenderet tid udløbet";
@@ -399,7 +399,7 @@
 "Suspend: %1$@ %2$@" = "Pause: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "Pauset";
+"Suspended" = "Suspenderet";
 
 /* Alert notification body for suspendEnded pod alert user notification */
 "Suspension time is up. Open the app and resume." = "Suspensionstiden er udløbet. Åbn appen, og genoptag.";
@@ -411,7 +411,7 @@
 "Tank power activated" = "Reservoir-strøm aktiveret";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Midlertidig Basal";
+"Temp Basal" = "Midlertidig basal";
 
 /* Error message shown when temp basal could not be set due to existing temp basal in progress */
 "Temp basal in progress" = "Midlertidig basal allerede i gang";
@@ -426,7 +426,7 @@
 "The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "Perioden for suspension af insulin er afsluttet.\n\nDu kan genoptage afgivelsen fra den øverste del af startskærmen eller fra skærmen med pumpeindstillinger. Du vil blive mindet om dette igen om 15 minutter.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
-"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Tiden på din pumpe er forskellig fra den aktuelle tid. Din pumpes tid styrer dine planlagte behandlingsindstilinger. Gå til Pumpetid for at gennemgå tidsforskellen og konfigurere din pumpe.";
+"The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "Tiden på din pumpe er forskellig fra den aktuelle tid. Din pumpes tid styrer dine planlagte behandlingsindstillinger. Gå til Pumpetid for at gennemgå tidsforskellen og konfigurere din pumpe.";
 
 /* Pod state threeNotUsed */
 "threeNotUsed" = "threeNotUsed";
@@ -453,16 +453,16 @@
 "Unexpected message sequence number" = "Uventet meddelelsessekvensnummer";
 
 /* Format string for unexpected pod change */
-"Unexpected pod change" = "Uventet Pod-ændring";
+"Unexpected pod change" = "Uventet Pod-skifte";
 
 /* Error message shown when empty response from pod was received */
 "Unexpected response from pod" = "Uventet svar fra Pod";
 
 /* The format string for Unknown pod fault (1: The fault code value) */
-"Unknown pod fault %1$03d" = "Ukendt Pod-fejl %1$03d";
+"Unknown pod fault %1$03d" = "Ukendt Podfejl %1$03d";
 
 /* Format string for description of MessageError unknownValue. (1: value) (2: Type) */
-"Unknown Value (%1$@) for type %2$@" = "Ukendt værdi (%1$@) for %2$@";
+"Unknown Value (%1$@) for type %2$@" = "Ukendt værdi (%1$@) for type %2$@";
 
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Validering mislykkedes: %1$@";

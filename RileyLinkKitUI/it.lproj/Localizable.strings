@@ -2,7 +2,7 @@
 "%@ dB" = "%@ dB";
 
 /* Unit format string for an value in percent */
-"%@%%" = "%@%%";
+"%@%%" = "%@ %%";
 
 /* The title of the section for alerts */
 "Alert" = "Avviso";
@@ -17,10 +17,10 @@
 "Commands" = "Comandi";
 
 /* The connected state */
-"Connected" = "Collegato";
+"Connected" = "Connesso";
 
 /* The in-progress connecting state */
-"Connecting" = "In collegamento";
+"Connecting" = "In fase di Connessione";
 
 /* The title of the cell for connection LED */
 "Connection LED" = "Led di connessione";

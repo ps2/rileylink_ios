@@ -54,7 +54,7 @@
 "Change Pod now. Insulin delivery will stop in 1 hour." = "Cambie el Pod ahora. La administración de insulina se detendrá en una hora.";
 
 /* Alert content body for podExpiring pod alert */
-"Change Pod now. Pod has been active for 72 hours." = "Cambia de Pod ahora. Pod ha estado activo durante 72 horas.";
+"Change Pod now. Pod has been active for 72 hours." = "Cambie el Pod ahora. El Pod ha estado activo durante 72 horas.";
 
 /* Format string for invalid message error code (1: error code number) */
 "Command error %1$u" = "Error de comando %1$u";
@@ -66,10 +66,10 @@
 "Communication issue: Unacknowledged command pending." = "Problema de comunicación: Pendiente de confirmar comando.";
 
 /* Description for BeepPreference.manualCommands */
-"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Los recordatorios de confianza sonarán para los comandos que usted inicie, como bolo, cancelar bolo, suspender, reanudar, guardar recordatorios de notificación, etc. Cuando Loop ajusta automáticamente la administración, no se utilizan recordatorios de confianza.";
+"Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When Loop automatically adjusts delivery, no confidence reminders are used." = "Los recordatorios de confianza sonarán para los comandos que seleccione, como bolo, cancelar bolo, suspender, reanudar, guardar recordatorios de notificación, etc. Cuando Loop ajusta automáticamente la administración de insulina, no se utilizan recordatorios de confianza.";
 
 /* Description for BeepPreference.extended */
-"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Sonarán recordatorios de confianza cuando Loop ajuste automáticamente la entrega, así como para los comandos que inicies.";
+"Confidence reminders will sound when Loop automatically adjusts delivery as well as for commands you initiate." = "Recordatorios de confianza sonarán cuando Loop  automáticamente ajuste la administración de insulina, así como para los comandos que selecciones.";
 
 /* The title for AlarmCode.other notification */
 "Critical Pod Error" = "Error crítico del Pod";
@@ -159,7 +159,7 @@
 "Invalid CRC" = "CRC no válido";
 
 /* Error description for OmniBLEPumpManagerError.invalidSetting */
-"Invalid Setting" = "Configuración no Válida";
+"Invalid Setting" = "Configuración no válida";
 
 /* Pod state when running with fifty or less units */
 "Low reservoir" = "Reserva baja";
@@ -189,11 +189,11 @@
 "Memory initialized" = "Memoria inicializada";
 
 /* Recovery suggestion for PodCommsError.tooManyPodsFound */
-"Move to a new area away from any other pods and try again." = "Muévase a una nueva área lejos de otros pods y vuelva a intentarlo.";
+"Move to a new area away from any other pods and try again." = "Muévete a una nueva área lejos de cualquier otro Pod e inténtalo de nuevo.";
 
 /* Alert content body for multiCommand pod alert
    Alert content title for multiCommand pod alert */
-"Multiple Command Alert" = "Alerta de comando múltiple";
+"Multiple Command Alert" = "Alerta de comandos múltiples";
 
 /* Pod alert state when no alerts are active */
 "No alerts" = "No hay alertas";
@@ -202,7 +202,7 @@
 "No confidence reminders are used." = "No se utilizan recordatorios de confianza.";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Sin fallas";
+"No faults" = "Sin fallos";
 
 /* Status highlight message for emptyReservoir alarm.
    Status highlight that a pump is out of insulin. */
@@ -215,7 +215,7 @@
 "No pod paired" = "No hay pod emparejado";
 
 /* Error message for PodCommsError.noPodsFound */
-"No pods found" = "Se encontraron Pods";
+"No pods found" = "No se encontraron Pods";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Sin respuesta del pod";
@@ -253,13 +253,13 @@
 "Paired" = "Emparejado";
 
 /* Pod status when pairing completed */
-"Pairing completed" = "Emparejamiento completado";
+"Pairing completed" = "Emparejamiento completo";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
-"Parsing Error: %1$@ in (%2$@)" = "Error de análisis: %1$@ en ( %2$@ )";
+"Parsing Error: %1$@ in (%2$@)" = "Error de parseo: %1$@ en (%2$@)";
 
 /* Recovery suggestion on unexpected pod change */
-"Please bring only original pod in range or deactivate original pod" = "Por favor, traiga sólo el Pod en el rango o desactive el Pod original";
+"Please bring only original pod in range or deactivate original pod" = "Por favor, ponga solamente  el Pod original en rango o desactivelo";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Por favor, acerque su pod al RileyLink e inténtelo de nuevo";
@@ -307,7 +307,7 @@
 "Pod Expired" = "Pod caducado";
 
 /* Format string for alert content body for userPodExpiration pod alert. (1: time until expiration) */
-"Pod expires in %1$@." = "El Pod caduca en %1$@.";
+"Pod expires in %1$@." = "El Pod expira en %1$@.";
 
 /* Format string for pod fault code */
 "Pod Fault: %1$@" = "Error de pod: %1$@";
@@ -368,10 +368,10 @@
 "Resume: %1$@ %2$@" = "Reanudar: %1$@ %2$@";
 
 /* Delivery status when scheduled basal is running */
-"Scheduled basal" = "Basal programada";
+"Scheduled basal" = "Insulina basal programada";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basal programada";
+"Scheduled Basal" = "Insulina basal programada";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Cierre inminente";
@@ -402,7 +402,7 @@
 "Suspended" = "Suspendido";
 
 /* Alert notification body for suspendEnded pod alert user notification */
-"Suspension time is up. Open the app and resume." = "El tiempo de suspensión ha terminado. Abre la aplicación y reanúdala.";
+"Suspension time is up. Open the app and resume." = "El tiempo de suspensión ha terminado. Abra la aplicación y reanúdela.";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "Completado el llenado del depósito";

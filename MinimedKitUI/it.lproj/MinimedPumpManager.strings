@@ -1,8 +1,8 @@
 /* Class = "UITableViewController"; title = "RileyLink Setup"; ObjectID = "0MV-2k-Dty"; */
-"0MV-2k-Dty.title" = "Impostazioni RileyLink";
+"0MV-2k-Dty.title" = "Configurazione";
 
 /* Class = "UILabel"; text = "Find Device"; ObjectID = "1fp-45-qWK"; */
-"1fp-45-qWK.text" = "Trova Device";
+"1fp-45-qWK.text" = "Trova Dispositivo";
 
 /* Class = "UILabel"; text = "Other Devices"; ObjectID = "A6i-Cb-baR"; */
 "A6i-Cb-baR.text" = "Altri Device";
@@ -23,7 +23,7 @@
 "fVG-pl-jT9.footerTitle" = "L'ID del microinfusore e' il numero di 6 cifre del SN o S/N).";
 
 /* Class = "UITableViewSection"; headerTitle = "Pump ID"; ObjectID = "fVG-pl-jT9"; */
-"fVG-pl-jT9.headerTitle" = "ID Microinfusore";
+"fVG-pl-jT9.headerTitle" = "ID microinfusore";
 
 /* Class = "UILabel"; text = "Your pump is ready for use."; ObjectID = "g1m-3k-XI3"; */
 "g1m-3k-XI3.text" = "Il microinfusore e' pronto per l'uso.";
@@ -44,7 +44,7 @@
 "lGI-LD-xR7.headerTitle" = "Provenienza e colore";
 
 /* Class = "UITableViewController"; title = "Setup Complete"; ObjectID = "Nwf-TJ-KmJ"; */
-"Nwf-TJ-KmJ.title" = "Settaggio completato";
+"Nwf-TJ-KmJ.title" = "Impostazione completata";
 
 /* Class = "UITableViewController"; title = "Pump Broadcasts"; ObjectID = "oBL-lh-SHI"; */
 "oBL-lh-SHI.title" = "Trasmissione Microinfusore";

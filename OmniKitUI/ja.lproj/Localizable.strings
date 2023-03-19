@@ -1,3 +1,6 @@
+/* Format string for last status date on pod details screen */
+"%@ ago" = "%@ 前";
+
 /* Format string for delivered insulin. (1: The localized amount)
    Format string for insulin remaining in reservoir. (1: The localized amount) */
 "%@ U" = "%@ U";
@@ -34,6 +37,9 @@
 
 /* The title of the cell showing the pod activated at time */
 "Active Time" = "アクティブ時間";
+
+/* Section header for activity section */
+"Activity" = "アクティビティ";
 
 /* The title of the cell showing alarm status */
 "Alarms" = "アラーム";
@@ -78,6 +84,9 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "ポッドを無効にする";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "停止されました";
+
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "Omnipodを削除";
 
@@ -87,11 +96,17 @@
 /* The title of the device information section in settings */
 "Device Information" = "デバイス情報";
 
+/* Header for devices section of RileyLinkSetupView */
+"Devices" = "デバイス";
+
 /* Title text for button to disable bolus beeps */
 "Disable Bolus Beeps" = "ボーラス音をオフにする";
 
 /* Title text for button to enable bolus beeps */
 "Enable Bolus Beeps" = "ボーラス音をオンにする";
+
+/* Accessibility label indicating an error occurred */
+"Error" = "エラー";
 
 /* The alert title for disable bolus beeps error */
 "Error disabling bolus beeps" = "ボーラス音オフエラー";
@@ -135,6 +150,9 @@
 /* The title of the cell showing delivered insulin */
 "Insulin Delivered" = "インスリン注入済み";
 
+/* Title of insulin delivery section */
+"Insulin Delivery" = "Insulin Delivery";
+
 /* The error message shown when Loop's basal schedule has an unsupported rate */
 "Invalid entry" = "入力が無効です";
 
@@ -149,6 +167,9 @@
 
 /* The title of the command to pair new pod */
 "Pair New Pod" = "新しいポッドをペアリング";
+
+/* Label text indicating pairing finished. */
+"Paired" = "ペアリングされました";
 
 /* The text of the loading label when pairing */
 "Pairing…" = "ペアリングしています";
@@ -167,6 +188,9 @@
 
 /* Label describing pod age view */
 "Pod Age" = "ポッド経過時間";
+
+/* Label for pod life state when within pod expiration window */
+"Pod expired" = "ポッド期限切れ";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "ポッド設定";
@@ -188,10 +212,18 @@
 "Replace Pod Now" = "すぐにポッドを交換してください";
 
 /* The title of the cell showing reservoir status */
-"Reservoir" = "リザーバ";
+"Reservoir" = "Reservoir";
+
+/* Action button description for deactivate after failed attempt
+   Cannula insertion button text while showing error
+   Pod pairing action button text while showing error */
+"Retry" = "やり直す";
 
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "ポッドの停止をやり直す";
+
+/* Navigation title for RileyLinkSetupView */
+"RileyLink Setup" = "RileyLink 設定";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -200,11 +232,20 @@
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "パターン";
 
+/* Title of insulin delivery section */
+"Scheduled Basal" = "定期基礎";
+
+/* Title for setup complete screen */
+"Setup Complete" = "設定完了";
+
 /* The title of the status section in settings */
 "Status" = "ステータス";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "成功";
+
+/* Title for suspend duration selection action sheet */
+"Suspend Delivery" = "注入を一時停止";
 
 /* The detail text of the basal row when pod is suspended */
 "Suspended" = "一時停止";
@@ -223,6 +264,9 @@
 
 /* The error message shown when Loop's basal schedule has more entries than the pod can support */
 "Too many entries" = "入力過多";
+
+/* Units for showing temp basal rate */
+"U/hr" = "U/時";
 
 /* Instructions when pod cannot be deactivated */
 "Unable to deactivate pod. Please continue and pair a new one." = "ポッドの停止ができません。新しいポッドをペアリングしてください。";

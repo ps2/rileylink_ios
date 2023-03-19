@@ -23,7 +23,7 @@
 "%1$@ units remaining at %2$@" = "%1$@ enheter gjenstår ved %2$@";
 
 /* The format string for displaying an offset from a time zone: (1: GMT)(2: -)(3: 4:00) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
 
 /* Text indicating ongoing pump time synchronization */
 "Adjusting Pump Time..." = "Justerer pumpetid...";
@@ -41,7 +41,7 @@
 "Awake Until" = "Aktiv til";
 
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basaldoser";
+"Basal Rates" = "Basal-satser";
 
 /* The format string describing pump battery voltage: (1: battery voltage) */
 "Battery: %1$@ volts\n" = "Batteri: %1$@ volt\n";
@@ -56,7 +56,7 @@
 "Cancel" = "Avbryt";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Avbryter Temp Basal";
+"Canceling Temp Basal" = "Avbryter midlertidig basal";
 
 /* The title of the command to change pump time */
 "Change Time" = "Endre tid";
@@ -68,7 +68,7 @@
 "Changing" = "Endrer";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Endrer tid…";
+"Changing time…" = "Endrer tid...";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Velg typen batteri du bruker i pumpen for bedre å varsle om lavt batteri.";
@@ -93,7 +93,7 @@
 "Delete Pump" = "Slette pumpe";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Dosegrense";
+"Delivery Limits" = "Leveringsgrenser";
 
 /* The title of the section describing the device */
 "Device" = "Enhet";
@@ -117,10 +117,10 @@
 "Enabled Diagnostic LEDs" = "Tilgjengeligjort diagnostiske LEDs";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Gjenoppta feilet";
+"Error Resuming" = "Feil ved gjenopptagelse";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Pause feilet";
+"Error Suspending" = "Kunne ikke stoppe";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Feil ved synkroniseringstid";
@@ -144,19 +144,19 @@
 "Firmware" = "Fastvare";
 
 /* The title of the cell showing the pump firmware version */
-"Firmware Version" = "Fastvareversjon";
+"Firmware Version" = "Firmware versjon";
 
 /* The title of the command to get pump model */
 "Get Pump Model" = "Hent pumpemodell";
 
 /* Progress message for getting statistics. */
-"Get Statistics…" = "Hent statistikk…";
+"Get Statistics…" = "Henter statistikk…";
 
 /* Text shown in insulin delivery space when insulin suspended */
-"Insulin\nSuspended" = "Insulintilførsel\nStoppet";
+"Insulin\nSuspended" = "Insulintilførsel utsatt";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Insulintilførsel";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Insulintilførsel kan hentes fra pumpa, enten ved å tolke hendelsehistorikken, eller ved å sammenligne reservoarvolumet over tid. Ved å lese hendelsehistorikken får man mer nøyaktig statuskurve og kan laste opp oppdaterte hendelser til Nightscout. Ulempen er høyere batteriforbruk i pumpa, og muligheten for større antall feil ved radiokommunikasjon - sammenlignet med å bare lese reservoarvolumet. Hvis den valgte kilden av noen grunn ikke kan brukes, vill systemet prøve den andre måten.";
@@ -165,7 +165,7 @@
 "Insulin Remaining" = "Gjenværende insulin";
 
 /* Text for confidence reminders navigation link */
-"Insulin Type" = "Insulin Type";
+"Insulin Type" = "Insulintype";
 
 /* The title of the cell describing an awake radio */
 "Last Awake" = "Sist aktiv";
@@ -241,13 +241,13 @@
 "Region" = "Region";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Gjenoppta insulintilførsel";
+"Resume Delivery" = "Gjenoppta leveranse";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
 "Resuming" = "Gjenopptar";
 
 /* Button title to retry sentry setup */
-"Retry" = "Prøv igjen";
+"Retry" = "Prøv på nytt";
 
 /* The title of the command to fetch RileyLink statistics */
 "RileyLink Statistics" = "RileyLink statistikk";
@@ -272,19 +272,19 @@
 "Signal Strength" = "Signalstyrke";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Starter midlertidig basal";
+"Starting Temp Basal" = "Starter temp-basal";
 
 /* A message indicating a command succeeded */
-"Succeeded" = "Vellykket";
+"Succeeded" = "Suksess";
 
 /* Title text for button to suspend insulin delivery */
-"Suspend Delivery" = "Stopp insulintilførselen";
+"Suspend Delivery" = "Pause leveranse";
 
 /* The format string describing pump suspended state: (1: suspended) */
 "Suspended: %1$@\n" = "Pauset: %1$@\n";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
-"Suspending" = "Stopper";
+"Suspending" = "Pauser";
 
 /* The title of the command to change pump time zone */
 "Sync to Current Time" = "Synkroniser til gjeldende tid";

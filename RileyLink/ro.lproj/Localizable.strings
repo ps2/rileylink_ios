@@ -14,10 +14,10 @@
 "Add Minimed Pump" = "Adaugă pompă Minimed";
 
 /* The title of the nightscout API secret credential */
-"API Secret" = "Secret API";
+"API Secret" = "Secretul API";
 
 /* The title of the configuration section in settings */
-"Configuration" = "Configurație";
+"Configuration" = "Configurare";
 
 /* The title of the button to remove the credentials for a service */
 "Delete Account" = "Șterge cont";

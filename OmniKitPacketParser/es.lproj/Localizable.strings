@@ -59,7 +59,7 @@
 "Extended bolus running with temp basal" = "Bolo extendido ejecutándose con basal temporal";
 
 /* Pod state when fault event has occurred */
-"Fault event occurred" = "Se ha producido un evento de falla";
+"Fault event occurred" = "Se ha producido un fallo";
 
 /* Description for finish setup */
 "Finish setup " = "Fin de la configuración";
@@ -104,7 +104,7 @@
 "No alerts" = "No hay alertas";
 
 /* Description for Fault Event Code .noFaults */
-"No faults" = "Sin fallas";
+"No faults" = "Sin fallos";
 
 /* Error message shown when no pod is paired */
 "No pod paired" = "No hay pod emparejado";
@@ -120,7 +120,7 @@
 "Normal" = "Normal";
 
 /* Description for MessageError notEnoughData */
-"Not enough data" = "Datos insuficientes";
+"Not enough data" = "No hay suficientes datos";
 
 /* Description for Occlusion detected pod fault */
 "Occlusion detected" = "Oclusion detectada";
@@ -135,7 +135,7 @@
 "Paired" = "Emparejado";
 
 /* Pod status when pairing completed */
-"Pairing completed" = "Emparejamiento completado";
+"Pairing completed" = "Emparejamiento completo";
 
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
 "Parsing Error: %1$@ in (%2$@)" = "Error de parseo: %1$@ en (%2$@)";
@@ -177,7 +177,7 @@
 "Pod setup window expired" = "La pantalla de configuración del pod ha caducado";
 
 /* Description for pod suspended reminder */
-"Pod suspended reminder" = "Recordatorio de Pod suspendido";
+"Pod suspended reminder" = "Recordatorio de que el Pod está suspendido";
 
 /* Delivery status when pod is priming
    Pod status when priming */
@@ -202,7 +202,7 @@
 "Scheduled basal" = "Insulina basal programada";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Basal programada";
+"Scheduled Basal" = "Insulina basal programada";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Cierre inminente";

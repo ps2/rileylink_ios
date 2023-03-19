@@ -56,10 +56,10 @@
 "Cancel" = "Отмена";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Отмена ВБС";
+"Canceling Temp Basal" = "Отмена врем базала";
 
 /* The title of the command to change pump time */
-"Change Time" = "Изменить время";
+"Change Time" = "Смена времени";
 
 /* The title of the command to change pump time zone */
 "Change Time Zone" = "Изменить часовой пояс";
@@ -68,7 +68,7 @@
 "Changing" = "Изменение";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "Изменяется время…";
+"Changing time…" = "Выполняется изменение времени";
 
 /* Instructions on selecting battery chemistry type */
 "Choose the type of battery you are using in your pump for better alerting about low battery conditions." = "Выберите тип батарейки, используемой в помпе, для лучшего оповещения о низком заряде батареи.";
@@ -93,7 +93,7 @@
 "Delete Pump" = "Удалить помпу";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Лимит подачи";
+"Delivery Limits" = "Пределы подачи";
 
 /* The title of the section describing the device */
 "Device" = "Устройство";
@@ -117,10 +117,10 @@
 "Enabled Diagnostic LEDs" = "LED лампочки диагностики включены";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Ошибка при возобновлении";
+"Error Resuming" = "Ошибка возобновления";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Ошибка при остановке";
+"Error Suspending" = "Ошибка приостановки";
 
 /* The alert title for an error while synching time */
 "Error Syncing Time" = "Ошибка синхронизации времени";
@@ -156,7 +156,7 @@
 "Insulin\nSuspended" = "Подача инсулина остановлена";
 
 /* Title of insulin delivery section */
-"Insulin Delivery" = "Подача инсулина";
+"Insulin Delivery" = "Insulin Delivery";
 
 /* Instructions on selecting an insulin data source */
 "Insulin delivery can be determined from the pump by either interpreting the event history or comparing the reservoir volume over time. Reading event history allows for a more accurate status graph and uploading up-to-date treatment data to Nightscout, at the cost of faster pump battery drain and the possibility of a higher radio error rate compared to reading only reservoir volume. If the selected source cannot be used for any reason, the system will attempt to fall back to the other option." = "Подача инсулина может определяться с помпы путем интерпретации истории событий или сравнением изменения объемов резервуара за прошедшее время. Чтение истории событий позволяет вычертить более точный график состояния и загрузить в Nightscout актуальные данные лечения/назначений (за счет более быстрого истощения батареи помпы и более высокого процента ошибок радиосвязи) по сравнению со считыванием данных только об объеме резервуара.";
@@ -183,7 +183,7 @@
 "MySentry Pair" = "Сопряжение с MySentry ";
 
 /* The title of the cell showing device name */
-"Name" = "Название";
+"Name" = "Имя";
 
 /* Value string for MySentry config when MySentry is not being used */
 "No" = "Нет";
@@ -244,10 +244,10 @@
 "Resume Delivery" = "Возобновить подачу";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Возобновление";
+"Resuming" = "Возобновляется";
 
 /* Button title to retry sentry setup */
-"Retry" = "Повторить попытку";
+"Retry" = "Повторить";
 
 /* The title of the command to fetch RileyLink statistics */
 "RileyLink Statistics" = "Статистика RileyLink";
@@ -272,7 +272,7 @@
 "Signal Strength" = "Уровень сигнала";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Включить ВБС";
+"Starting Temp Basal" = "Время начала временного базала";
 
 /* A message indicating a command succeeded */
 "Succeeded" = "Успешно";
@@ -284,7 +284,7 @@
 "Suspended: %1$@\n" = "Приостановлено: %1$@\n";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
-"Suspending" = "Приостановка";
+"Suspending" = "Выполняется остановка";
 
 /* The title of the command to change pump time zone */
 "Sync to Current Time" = "Синхронизация с текущим временем";
@@ -305,7 +305,7 @@
 "Tuning radio…" = "Настраивается радиочастота…";
 
 /* Units for showing temp basal rate */
-"U/hr" = "Ед/ч";
+"U/hr" = "U/hr";
 
 /* Text to indicate battery percentage is unknown */
 "unknown" = "Неизвестно";

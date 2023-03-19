@@ -1,5 +1,5 @@
 /* Description for an inactive alert modifier */
-" (inactive)" = " (Inactief)";
+" (inactive)" = " (inactief)";
 
 /* Format string for low battery alert body for RileyLink. (1: device name) */
 "\"%1$@\" has a low battery" = "\"%1$@\" batterij bijna leeg";
@@ -18,7 +18,7 @@
 "Activation time exceeded" = "Activeringstijd overschreden";
 
 /* Description for auto-off */
-"Auto-off" = "Automatisch uitschakelen";
+"Auto-off" = "Automatische uitschakeling";
 
 /* Description for auto-off alarm */
 "Auto-off alarm" = "Auto-uit alarm";
@@ -45,7 +45,7 @@
 "Bolusing with temp basal" = "Bolussen met tijdelijk basaal";
 
 /* Pod state when inserting cannula */
-"Cannula inserting" = "Canule wordt ingebracht";
+"Cannula inserting" = "Canule ingebracht";
 
 /* String describing a dose that was certainly scheduled */
 "Certain" = "Zeker";
@@ -57,7 +57,7 @@
 "Change Pod now. Pod has been active for 72 hours." = "Vervang Pod nu. Pod is 72 uur in gebruik geweest.";
 
 /* Format string for invalid message error code (1: error code number) */
-"Command error %1$u" = "Commando fout %1$u";
+"Command error %1$u" = "Opdrachtfout %1$u";
 
 /* Status highlight that delivery is uncertain. */
 "Comms Issue" = "Communicatieprobleem";
@@ -75,7 +75,7 @@
 "Critical Pod Error" = "Kritieke Podfout";
 
 /* Recovery suggestion when unexpected address received */
-"Crosstalk possible. Please move to a new location" = "Mogelijk overspraak. Probeer een andere locatie";
+"Crosstalk possible. Please move to a new location" = "Overspraak mogelijk. Probeer een andere locatie";
 
 /* Pod state when pod has been deactivated */
 "Deactivated" = "Gedeactiveerd";
@@ -126,7 +126,7 @@
 "Finish setup " = "Voltooi installatie";
 
 /* Description for finish setup reminder */
-"Finish setup reminder" = "Voltooi Instellingen herinnering";
+"Finish setup reminder" = "Voltooi instelling van herinnering";
 
 /* Pod inititialized */
 "Initialized" = "Geinitialiseerd";
@@ -162,7 +162,7 @@
 "Invalid Setting" = "Ongeldige Instelling";
 
 /* Pod state when running with fifty or less units */
-"Low reservoir" = "Reservoir Bijna Leeg";
+"Low reservoir" = "Reservoir bijna leeg";
 
 /* Alert content title for lowReservoir pod alert */
 "Low Reservoir" = "Reservoir Bijna Leeg";
@@ -180,7 +180,7 @@
 "Make sure your pod is filled and nearby." = "Zorg ervoor dat je pod gevuld en binnen bereik is.";
 
 /* Recovery suggestion when no RileyLink is available */
-"Make sure your RileyLink is nearby and powered on" = "Zorg ervoor dat je RileyLink dicht bij is en aan staat";
+"Make sure your RileyLink is nearby and powered on" = "Zorg ervoor dat je RileyLink dichtbij is en aan staat";
 
 /* Status highlight when manual temp basal is running. */
 "Manual Basal" = "Handmatig Basaal";
@@ -206,7 +206,7 @@
 
 /* Status highlight message for emptyReservoir alarm.
    Status highlight that a pump is out of insulin. */
-"No Insulin" = "Geen insuline";
+"No Insulin" = "Geen Insuline";
 
 /* Status highlight that when no pod is paired. */
 "No Pod" = "Geen Pod";
@@ -215,7 +215,7 @@
 "No pod paired" = "Geen pod gekoppeld";
 
 /* Error message for PodCommsError.noPodsFound */
-"No pods found" = "Geen pod gevonden";
+"No pods found" = "Geen pods gevonden";
 
 /* Error message shown when no response from pod was received */
 "No response from pod" = "Geen reactie van pod";
@@ -241,7 +241,7 @@
 
 /* Acknowledge button label for RileyLink low battery alert
    Alert acknowledgment OK button */
-"OK" = "OK";
+"OK" = "Ok";
 
 /* Generic title of the omnipod pump manager */
 "Omnipod" = "Omnipod";
@@ -250,7 +250,7 @@
 "oneNotUsed" = "eenNietGebruikt";
 
 /* Pod status after pairing */
-"Paired" = "Verbonden";
+"Paired" = "Gekoppeld";
 
 /* Pod status when pairing completed */
 "Pairing completed" = "Koppelen voltooid";
@@ -259,7 +259,7 @@
 "Parsing Error: %1$@ in (%2$@)" = "Parseerfout: %1$@ in (%2$@)";
 
 /* Recovery suggestion on unexpected pod change */
-"Please bring only original pod in range or deactivate original pod" = "Breng alleen de oude pod binnen bereik of deactiveer de oude pod";
+"Please bring only original pod in range or deactivate original pod" = "Breng alleen de oude pod binnen bereik of deactiveer de originele pod";
 
 /* Recovery suggestion when no response is received from pod */
 "Please bring your pod closer to the RileyLink and try again" = "Breng de pod dichter bij de RileyLink en probeer opnieuw";
@@ -268,7 +268,7 @@
 "Please finish pairing your pod." = "Voltooi het koppelen van je pod.";
 
 /* Recover suggestion shown when no pod is paired */
-"Please pair a new pod" = "Verbind een nieuwe pod";
+"Please pair a new pod" = "Koppel een nieuwe pod";
 
 /* Recovery suggestion when pairing signal strength is too high */
 "Please reposition the RileyLink further from the pod" = "Plaats de RileyLink verder van de pod";
@@ -280,13 +280,13 @@
 "Please try repositioning the pod or the RileyLink and try again" = "Probeer de pod of de RileyLink te herpositioneren en probeer het opnieuw";
 
 /* Error message shown when user cannot pair because pod is already paired */
-"Pod already paired" = "Pod al verbonden";
+"Pod already paired" = "Pod al gekoppeld";
 
 /* Error message shown when prime is attempted, but pod is already primed */
 "Pod already primed" = "Pod is al voorbereid";
 
 /* Status highlight message for other alarm. */
-"Pod Error" = "Pod fout";
+"Pod Error" = "Podfout";
 
 /* Description for expiration advisory alarm */
 "Pod expiration advisory alarm" = "Pod vervaltijd advies alarm";
@@ -295,10 +295,10 @@
 "Pod Expiration Notice" = "Pod vervaltijd aankondiging";
 
 /* Alert content title for userPodExpiration pod alert */
-"Pod Expiration Reminder" = "Herinnering vervaldatum Pod";
+"Pod Expiration Reminder" = "Herinnering Vervaldatum Pod";
 
 /* Description for Pod expired pod fault */
-"Pod expired" = "Pod verlopen";
+"Pod expired" = "Pod is verlopen";
 
 /* Alert content title for podExpireImminent pod alert
    Alert content title for podExpiring pod alert
@@ -356,7 +356,7 @@
 "Reminder initialized" = "Herinnering geïnitialiseerd";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
-"Resume" = "Hervat";
+"Resume" = "Hervatten";
 
 /* Recovery suggestion when pod is suspended */
 "Resume delivery" = "Hervat toediening";
@@ -371,7 +371,7 @@
 "Scheduled basal" = "Gepland basaal";
 
 /* Delivery status when basal is running */
-"Scheduled Basal" = "Gepland Basaal";
+"Scheduled Basal" = "Ingesteld Basaal";
 
 /* Description for shutdown imminent */
 "Shutdown imminent" = "Afsluiting nadert";
@@ -383,7 +383,7 @@
 "Signal Loss" = "Signaalverlies";
 
 /* Format string for pod signal strength too high */
-"Signal strength too high" = "Signaalsterkte te sterk";
+"Signal strength too high" = "Signaalsterkte te hoog";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
 "Suspend" = "Onderbreek";
@@ -423,7 +423,7 @@
 "TempBasal: %1$@ U/hour %2$@ %3$@ %4$@ U %5$@" = "Tijdelijk basaal: %1$@ E/uur %2$@ %3$@ %4$@ E %5$@";
 
 /* Alert content body for suspendEnded pod alert */
-"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "De insulineonderbrekingsperiode is verstreken.\n\nJe kunt de toediening hervatten op het startscherm of via uw pompinstellingenscherm. Over 15 minuten word je er opnieuw aan herinnerd.";
+"The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes." = "De insulineonderbrekingsperiode is verstreken.\n\nJe kunt de toediening hervatten op het startscherm of via je pompinstellingenscherm. Over 15 minuten wordt je er opnieuw aan herinnerd.";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "De tijd op je pomp is anders dan de huidige tijd. Je kunt de tijd op de pomp bekijken en synchroniseren met de huidige tijd in instellingen.";
@@ -450,7 +450,7 @@
 "Uncertain" = "Onzeker";
 
 /* Description for MessageError invalidSequence */
-"Unexpected message sequence number" = "Onverwacht berichtreeksnummer";
+"Unexpected message sequence number" = "Onverwacht volgnummer van bericht";
 
 /* Format string for unexpected pod change */
 "Unexpected pod change" = "Onverwachte podwissel";
@@ -471,7 +471,7 @@
 "Wait for existing bolus to finish, or cancel bolus" = "Wacht tot huidige bolus is voltooid, of annuleer bolus";
 
 /* Recovery suggestion when operation could not be completed due to existing temp basal in progress */
-"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot huidig tijdelijk basaal is voltooid, of onderbreek om te annuleren";
+"Wait for existing temp basal to finish, or suspend to cancel" = "Wacht tot de huidig tijdelijk basaalsnelheid is voltooid, of onderbreek om te annuleren";
 
 /* Description waiting for pairing reminder */
 "Waiting for pairing reminder" = "Wacht op herinnering om te verbinden";

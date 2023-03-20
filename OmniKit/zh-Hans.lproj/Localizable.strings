@@ -139,7 +139,7 @@
 "Suspend: %1$@ %2$@" = "暂停输注: %1$@ %2$@";
 
 /* Delivery status when insulin delivery is suspended */
-"Suspended" = "已暂停";
+"Suspended" = "暂停";
 
 /* Pod tank fill completed */
 "Tank fill completed" = "已向Pod注入胰岛素";

@@ -38,10 +38,10 @@
 "Change Time" = "修改时间";
 
 /* The title of the command to change pump time zone */
-"Change Time Zone" = "改变时区";
+"Change Time Zone" = "更改时区";
 
 /* Progress message for changing pump time. */
-"Changing time…" = "正在修改时间…";
+"Changing time…" = "更改时间";
 
 /* The title of the section describing commands */
 "Commands" = "命令";
@@ -54,6 +54,9 @@
 
 /* The title of the cell showing BLE connection state */
 "Connection State" = "连接状态";
+
+/* Text for continue button */
+"Continue" = "继续";
 
 /* Button title to delete pump
    Title text for the button to remove a pump from Loop */
@@ -78,7 +81,7 @@
 "Enabled Diagnostic LEDs" = "正在打开状态LED指示灯";
 
 /* The alert title for a resume error */
-"Error Resuming" = "无法恢复";
+"Error Resuming" = "恢复输注错误";
 
 /* The alert title for a suspend error */
 "Error Suspending" = "无法暂停";
@@ -177,6 +180,9 @@
 /* Title of button to save basal profile to pump
    Title of button to save delivery limit settings to pump */
 "Save to Pump…" = "同步设置到泵…";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "预设基础率";
 
 /* The title of the command to send a button press */
 "Send Button Press" = "发送亮屏指令";

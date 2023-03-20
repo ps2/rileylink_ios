@@ -19,6 +19,10 @@
 /* The title of the section describing the pump */
 "Pump" = "المضخة";
 
+/* The title of the cell showing pump ID
+   The title text for the pump ID config value */
+"Pump ID" = "Pump ID";
+
 /* Button title to retry sentry setup */
 "Retry" = "أعد المحاولة";
 

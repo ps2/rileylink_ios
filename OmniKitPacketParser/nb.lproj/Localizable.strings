@@ -71,7 +71,7 @@
 "Initialized" = "Klargjort";
 
 /* Pod state when inserting cannula */
-"Inserting cannula" = "Fører inn kanyle";
+"Inserting cannula" = "Skyter inn kanyle";
 
 /* The format string for Internal pod fault (1: The fault code value) */
 "Internal pod fault %1$03d" = "Intern pod-feil %1$03d";

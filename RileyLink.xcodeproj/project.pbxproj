@@ -1233,6 +1233,8 @@
 		7D9BF15323371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF15423371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF15523371408005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C100C66429C8091A00A1BC7A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/MinimedPumpManager.strings; sourceTree = "<group>"; };
+		C100C66529C8091A00A1BC7A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4211,6 +4213,7 @@
 				F5E0BE2627E1DF280033557E /* he */,
 				C1C247932995823200371B88 /* sk */,
 				C121D8DA29C7866D00DA0520 /* cs */,
+				C100C66429C8091A00A1BC7A /* ar */,
 			);
 			name = MinimedPumpManager.storyboard;
 			sourceTree = "<group>";
@@ -4268,6 +4271,7 @@
 				C1DEE898298309EA0008194D /* sk */,
 				C12BCD0729BBFA490066A158 /* cs */,
 				C1FAB5CB29C786B000D25073 /* hi */,
+				C100C66529C8091A00A1BC7A /* ar */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

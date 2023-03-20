@@ -78,6 +78,9 @@
    Button title to deactivate pod */
 "Deactivate Pod" = "解除Pod";
 
+/* Label text showing pod is deactivated */
+"Deactivated" = "已解除";
+
 /* Button title to delete Omnipod PumpManager */
 "Delete Omnipod" = "删除Omnipod";
 
@@ -103,7 +106,7 @@
 "Error Resuming" = "恢复输注错误";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "暂停输注错误";
+"Error Suspending" = "无法暂停";
 
 /* The title of the cell showing the pod expiration reminder date */
 "Expiration Reminder" = "Pod到期提醒";
@@ -147,6 +150,9 @@
 /* The title of the command to pair new pod */
 "Pair New Pod" = "配对新Pod";
 
+/* Label text indicating pairing finished. */
+"Paired" = "已配对";
+
 /* The text of the loading label when pairing */
 "Pairing…" = "配对中";
 
@@ -164,6 +170,9 @@
 
 /* Label describing pod age view */
 "Pod Age" = "Pod使用天数";
+
+/* Label for pod life state when within pod expiration window */
+"Pod expired" = "Pod已到期";
 
 /* Title of the pod settings view controller */
 "Pod Settings" = "Pod设置";
@@ -187,8 +196,16 @@
 /* The title of the cell showing reservoir status */
 "Reservoir" = "胰岛素容量";
 
+/* Action button description for deactivate after failed attempt
+   Cannula insertion button text while showing error
+   Pod pairing action button text while showing error */
+"Retry" = "重试";
+
 /* Button title for retrying pod deactivation */
 "Retry Pod Deactivation" = "重新尝试解绑";
+
+/* Navigation title for RileyLinkSetupView */
+"RileyLink Setup" = "RileyLink设置";
 
 /* Title of button to save delivery limit settings
    Title of button to sync basal profile when no pod paired */
@@ -196,6 +213,12 @@
 
 /* The detail text of the basal row when pod is running scheduled basal */
 "Schedule" = "预设";
+
+/* Title of insulin delivery section */
+"Scheduled Basal" = "预设基础率";
+
+/* Title for setup complete screen */
+"Setup Complete" = "设置完成";
 
 /* The title of the status section in settings */
 "Status" = "状态";

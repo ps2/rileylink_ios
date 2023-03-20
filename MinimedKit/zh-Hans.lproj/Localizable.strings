@@ -41,7 +41,7 @@
 "Lithium" = "锂铁电池";
 
 /* Recovery suggestion */
-"Make sure your RileyLink is nearby and powered on" = "请确认Rileylink靠近手机并且已打开";
+"Make sure your RileyLink is nearby and powered on" = "确保Rileylink与Pod保持比较近的距离";
 
 /* Pump error code describing max setting exceeded */
 "Max setting exceeded" = "超过最大限制";
@@ -71,10 +71,13 @@
 "PumpMessage(%1$@, %2$@, %3$@, %4$@)" = "泵的信息(%1$@, %2$@, %3$@, %4$@)";
 
 /* Describing the reservoir insulin data source */
-"Reservoir" = "储药器";
+"Reservoir" = "胰岛素容量";
 
 /* Error description */
 "RileyLink radio tune failed" = "RileyLink调频失败";
+
+/* Event title for starting scheduled basal */
+"Scheduled Basal" = "预设基础率";
 
 /* The format string description of a TempBasalPumpEvent. (1: The rate of the temp basal in minutes) */
 "Temporary Basal: %1$.3f U/hour" = "临时基础率: %1$.3f U/小时";

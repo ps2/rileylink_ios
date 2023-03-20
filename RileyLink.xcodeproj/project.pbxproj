@@ -305,6 +305,7 @@
 		C1271B061A9A34E900B7C949 /* Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Log.m; sourceTree = "<group>"; };
 		C1271B081A9A350400B7C949 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		C1274F7C1D82411C0002912B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		C12B52E029C8142E0025DA95 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C12BCD0329BBFA490066A158 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C12BCD0429BBFA490066A158 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/LoopKit.strings; sourceTree = "<group>"; };
 		C12BCD0529BBFA490066A158 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = "cs.lproj/RileyLink-InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1159,6 +1160,7 @@
 				C1DEE898298309EA0008194D /* sk */,
 				C12BCD0729BBFA490066A158 /* cs */,
 				C1FAB5CB29C786B000D25073 /* hi */,
+				C12B52E029C8142E0025DA95 /* ar */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
